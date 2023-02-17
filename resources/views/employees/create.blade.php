@@ -23,15 +23,16 @@
                 </ul>
             </div>
         </div>
-        <div class="tab-content">
-            <div id="emp_profile" class="pro-overview tab-pane fade show active" role="tabpanel">
-                <div class="card-body">
-                    <form action="/employee" method="POST" enctype="multipart/form-data">
-                        @csrf
+        <form action="/employee" method="POST" enctype="multipart/form-data">
+            @csrf
+            <div class="tab-content">
+                <div id="emp_profile" class="pro-overview tab-pane fade show active" role="tabpanel">
+                    <div class="card-body">
+                    
                         <div class="row">
                             <div class="col-sm-6">
                                 <div class="form-group">
-                                    <label class="">Employee ID <span class="text-danger">*</span></label>
+                                    <label class="">Employee ID</label>
                                     <input type="text" class="form-control" id="number_employee" name="number_employee" value="{{$data['code']}}">
                                 </div>
                             </div>
@@ -39,12 +40,14 @@
                                 <div class="form-group">
                                     <label class="">Name (KH) <span class="text-danger">*</span></label>
                                     <input class="form-control" type="text" id="employee_name_kh" name="employee_name_kh">
+                                    <p class="text-danger">{!! $errors->first('employee_name_kh') !!}</p>
                                 </div>
                             </div>
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label class="">Name (EN) <span class="text-danger">*</span></label>
                                     <input class="form-control" type="text" id="employee_name_en" name="employee_name_en">
+                                    <p class="text-danger">{!! $errors->first('employee_name_en') !!}</p>
                                 </div>
                             </div>
                             
@@ -53,6 +56,7 @@
                                     <label>Date Of Birth <span class="text-danger">*</span></label>
                                     <div class="cal-icon">
                                         <input class="form-control datetimepicker" type="text" id="date_of_birth" name="date_of_birth">
+                                        <p class="text-danger">{!! $errors->first('date_of_birth') !!}</p>
                                     </div>
                                 </div>
                             </div>
@@ -64,7 +68,7 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>Gender <span class="text-danger">*</span></label>
+                                    <label>Gender</label>
                                     <select class="select" id="gender" name="gender">
                                         <option value="1">Male</option>
                                         <option value="2">FeMale</option>
@@ -80,6 +84,7 @@
                                             <option value="{{$item->id}}">{{$item->name}}</option>
                                         @endforeach
                                     </select>
+                                    <p class="text-danger">{!! $errors->first('department_id') !!}</p>
                                 </div>
                             </div>
                             
@@ -91,6 +96,7 @@
                                             <option value="{{$item->id}}">{{$item->branch_name_kh}}</option>
                                         @endforeach
                                     </select>
+                                    <p class="text-danger">{!! $errors->first('branch_id') !!}</p>
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -101,6 +107,7 @@
                                             <option value="{{$item->id}}">{{$item->name_khmer}}</option>
                                         @endforeach
                                     </select>
+                                    <p class="text-danger">{!! $errors->first('position_id') !!}</p>
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -115,12 +122,13 @@
                                     <input type="number" class="form-control" id="level" name="level">
                                 </div>
                             </div>
-                           
+                            
                             <div class="col-sm-6">
                                 <div class="form-group">
-                                    <label class="">Date Of Commencement <span class="text-danger">*</span></label>
+                                    <label class="">Join Date <span class="text-danger">*</span></label>
                                     <div class="cal-icon">
                                         <input class="form-control datetimepicker" id="date_of_commencement" name="date_of_commencement" type="text">
+                                        <p class="text-danger">{!! $errors->first('date_of_commencement') !!}</p>
                                     </div>
                                 </div>
                             </div>
@@ -141,7 +149,7 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>Nationality <span class="text-danger">*</span></label>
+                                    <label>Nationality</label>
                                     <select class="select" id="nationality" name="nationality">
                                         <option value="Khmer">Khmer</option>
                                         <option value="Chinese">Chinese</option>
@@ -211,24 +219,28 @@
                                 <div class="form-group">
                                     <label class="">Personal Phone</label>
                                     <input class="form-control" type="number" id="personal_phone_number" name="personal_phone_number">
+                                    <p class="text-danger">{!! $errors->first('personal_phone_number') !!}</p>
                                 </div>
                             </div>
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label class="">Company Phone</label>
                                     <input class="form-control" type="number" id="company_phone_number" name="company_phone_number">
+                                    <p class="text-danger">{!! $errors->first('company_phone_number') !!}</p>
                                 </div>
                             </div>
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label class="">Agency Phone </label>
                                     <input class="form-control" type="number" id="agency_phone_number" name="agency_phone_number">
+                                    <p class="text-danger">{!! $errors->first('agency_phone_number') !!}</p>
                                 </div>
                             </div>
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label class="">Email <span class="text-danger">*</span></label>
                                     <input class="form-control" type="email" id="email" name="email">
+                                    <p class="text-danger">{!! $errors->first('email') !!}</p>
                                 </div>
                             </div>
         
@@ -308,19 +320,19 @@
                                 <button class="btn btn-primary submit-btn">Submit</button>
                             </div>
                         </div>
-                    </form>
+                    </div>
                 </div>
-            </div>
 
-            <div class="tab-pane fade" id="education" role="tabpanel">
-                @component('fields.employee.education')
-                @endcomponent
-            </div>
-            <div class="tab-pane fade" id="experience" role="tabpanel">
-                @component('fields.employee.experience')
-                @endcomponent
-            </div>
-        </div>        
+                <div class="tab-pane fade" id="education" role="tabpanel">
+                    @component('fields.employee.education')
+                    @endcomponent
+                </div>
+                <div class="tab-pane fade" id="experience" role="tabpanel">
+                    @component('fields.employee.experience')
+                    @endcomponent
+                </div>
+            </div>     
+        </form>
     </div>
 </div>
 @endsection

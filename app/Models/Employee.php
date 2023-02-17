@@ -14,6 +14,7 @@ use Illuminate\Support\Str;
 use App\Traits\AddressTrait;
 use App\Models\StaffPromoted;
 use App\Models\StaffTraining;
+use Illuminate\Support\Carbon;
 use App\Traits\UploadFiles\UploadFIle;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -179,6 +180,9 @@ class Employee extends Model
     
     public function getEmployeeBrnachAttribute(){
         return optional($this->branch)->branch_name_kh;
+    }
+    public function getjoinOfDateAttribute(){
+        return Carbon::parse($this->date_of_commencement)->format('d-M-Y');
     }
     //// GET EN ADRESS
     public function getCityEnAttribute()

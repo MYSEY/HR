@@ -74,8 +74,7 @@
     </div>
 @endsection
 
-<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+@include('includs.index')
 <script>
     $(function(){
         $("#DataTables_Table_0 tbody").delegate("#delete_department", "click", function(){

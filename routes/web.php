@@ -40,7 +40,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('address', [AddressController::class,'index'])->name('address');
     Route::get('/dashboad/employee', [DashboadController::class, 'dashboadEmployee']);
     Route::get('/dashboad/admin', [DashboadController::class, 'dashboadAdmin']);
-    Route::get('/employee/profile', [EmployeeProfileController::class, 'employeeProfile']);
+    Route::get('/employee/profile/{id}', [EmployeeProfileController::class, 'employeeProfile'])->name('employee.profile');
     Route::get('/holidays', [HolidayController::class, 'index']);
     Route::get('/attendance/admin', [AttendanceAdminController::class, 'index']);
     Route::get('/attendance/employee', [AttendanceEmployeeController::class, 'index']);

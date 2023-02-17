@@ -12,19 +12,25 @@ use App\Traits\GeneratingCode;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\EmployeeRequest;
 use App\Traits\UploadFiles\UploadFIle;
 use Illuminate\Support\Facades\Session;
+use App\Repositories\Admin\EmployeeRepository;
 
 class EmployeeController extends Controller
 {
     use GeneratingCode;
     use UploadFIle;
-
+    private $employeeRepo;
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
+    public function __construct(EmployeeRepository $employeeRepo) 
+    {
+        $this->employeeRepo = $employeeRepo;
+    }
     public function index()
     {
         $data = Employee::all();
@@ -51,7 +57,7 @@ class EmployeeController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(EmployeeRequest $request)
     {
         $guarantee_letter = $this->singleUpload('guarantee_letter',$request,false);
         $employment_book = $this->singleUpload('employment_book',$request,false);

@@ -11,12 +11,7 @@ class EmployeeRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
-    {
-        // only allow updates if the user is logged in
-        return backpack_auth()->check();
-    }
-
+  
     /**
      * Get the validation rules that apply to the request.
      *
@@ -28,6 +23,7 @@ class EmployeeRequest extends FormRequest
             'employee_name_kh' => 'required|max:255',
             'employee_name_en' => 'required|max:255',
             'date_of_birth' => 'required',
+            'date_of_commencement' => 'required',
             'branch_id' => 'required|integer',
             'position_id' => 'required',
             'department_id' => 'required|integer',

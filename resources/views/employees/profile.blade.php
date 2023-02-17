@@ -8,7 +8,7 @@
                     <h3 class="page-title">Profile</h3>
                     <ul class="breadcrumb">
                         <li class="breadcrumb-item"><a href="{{url('/dashboad/employee')}}">Dashboard</a></li>
-                        <li class="breadcrumb-item active">Profile</li>
+                        <li class="breadcrumb-item active"><a href="{{url('employee')}}">Profile</a></li>
                     </ul>
                 </div>
             </div>
@@ -28,11 +28,11 @@
                                 <div class="row">
                                     <div class="col-md-5">
                                         <div class="profile-info-left">
-                                            <h3 class="user-name m-t-0 mb-0">John Doe</h3>
-                                            <h6 class="text-muted">UI/UX Design Team</h6>
-                                            <small class="text-muted">Web Designer</small>
-                                            <div class="staff-id">Employee ID : FT-0001</div>
-                                            <div class="small doj text-muted">Date of Join : 1st Jan 2013</div>
+                                            <h3 class="user-name m-t-0 mb-0">{{$data->employee_name_en}}</h3>
+                                            <h6 class="text-muted">{{$data->EmployeeDepartment}}</h6>
+                                            <small class="text-muted">{{$data->EmployeePosition}}</small>
+                                            <div class="staff-id">Employee ID : {{$data->number_employee}}</div>
+                                            <div class="small doj text-muted">Date of Join : {{$data->joinOfDate}}</div>
                                             <div class="staff-msg"><a class="btn btn-custom" href="">Send Message</a></div>
                                         </div>
                                     </div>
@@ -40,15 +40,15 @@
                                         <ul class="personal-info">
                                             <li>
                                                 <div class="title">Phone:</div>
-                                                <div class="text"><a href="">9876543210</a></div>
+                                                <div class="text"><a href="">{{$data->personal_phone_number}}</a></div>
                                             </li>
                                             <li>
                                                 <div class="title">Email:</div>
-                                                <div class="text"><a href="">johndoe@example.com</a></div>
+                                                <div class="text"><a href="">{{$data->email}}</a></div>
                                             </li>
                                             <li>
                                                 <div class="title">Birthday:</div>
-                                                <div class="text">24th July</div>
+                                                <div class="text">{{\Carbon\Carbon::parse($data->date_of_birth)->format('d-M-Y') ?? ''}}</div>
                                             </li>
                                             <li>
                                                 <div class="title">Address:</div>
@@ -111,11 +111,11 @@
                                     </li>
                                     <li>
                                         <div class="title">Tel</div>
-                                        <div class="text"><a href="">9876543210</a></div>
+                                        <div class="text"><a href="">{{$data->personal_phone_number}}</a></div>
                                     </li>
                                     <li>
                                         <div class="title">Nationality</div>
-                                        <div class="text">Indian</div>
+                                        <div class="text">{{$data->nationality}}</div>
                                     </li>
                                     <li>
                                         <div class="title">Religion</div>
@@ -131,7 +131,7 @@
                                     </li>
                                     <li>
                                         <div class="title">No. of children</div>
-                                        <div class="text">2</div>
+                                        <div class="text">{{$data->number_of_children}}</div>
                                     </li>
                                 </ul>
                             </div>
@@ -184,19 +184,15 @@
                                 <ul class="personal-info">
                                     <li>
                                         <div class="title">Bank name</div>
-                                        <div class="text">ICICI Bank</div>
+                                        <div class="text">{{$data->bank_name}}</div>
                                     </li>
                                     <li>
                                         <div class="title">Bank account No.</div>
-                                        <div class="text">159843014641</div>
+                                        <div class="text">{{$data->account_number}}</div>
                                     </li>
                                     <li>
-                                        <div class="title">IFSC Code</div>
-                                        <div class="text">ICI24504</div>
-                                    </li>
-                                    <li>
-                                        <div class="title">PAN No</div>
-                                        <div class="text">TC000Y56</div>
+                                        <div class="title">Account Name</div>
+                                        <div class="text">{{$data->account_name}}</div>
                                     </li>
                                 </ul>
                             </div>
