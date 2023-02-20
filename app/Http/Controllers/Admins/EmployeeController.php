@@ -14,7 +14,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\EmployeeRequest;
 use App\Traits\UploadFiles\UploadFIle;
-use Illuminate\Support\Facades\Session;
 use App\Repositories\Admin\EmployeeRepository;
 
 class EmployeeController extends Controller
@@ -59,6 +58,8 @@ class EmployeeController extends Controller
      */
     public function store(EmployeeRequest $request)
     {
+        dd($request->all());
+        $current_addtress = $request->village ? : $request->commune ? : $request->distric ? : $request->city;
         $guarantee_letter = $this->singleUpload('guarantee_letter',$request,false);
         $employment_book = $this->singleUpload('employment_book',$request,false);
         $profile = $this->singleUpload('profile',$request,false);
@@ -67,19 +68,13 @@ class EmployeeController extends Controller
             $data['guarantee_letter']   = $guarantee_letter;
             $data['employment_book']    = $employment_book;
             $data['profile']            = $profile;
+            $data['current_addtress']   = $current_addtress;
             $data['created_by']         = Auth::user()->id;
             Employee::create($data);
             return redirect()->route('employee.index')->with('status','Employee created successfully!');
             DB::commit();
         } catch (\Throwable $exp) {
             DB::rollBack();
-        }
-    }
-
-    public function putSession($request)
-    {
-        foreach ($this->fields() as $field) {
-            Session::put($field, $request->{$field});
         }
     }
     /**

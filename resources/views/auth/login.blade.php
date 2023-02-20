@@ -118,7 +118,7 @@
         <div class="main-wrapper">
             <div class="account-content">
                 <div class="container">
-                    <h3 class="account-title" style="text-align: center;">Login</h3>
+                    {{-- <h3 class="account-title" style="text-align: center;">Login</h3> --}}
                     <div class="account-box" style="width: 366px;">
                         <div class="account-wrapper">
                             <div class="account-logo">
