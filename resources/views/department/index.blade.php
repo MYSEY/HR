@@ -72,7 +72,7 @@
     </div>
 @endsection
 
-@include('includs.index')
+@include('includs.script')
 <script>
     $(function(){
         $("#DataTables_Table_0 tbody").delegate("#delete_department", "click", function(){

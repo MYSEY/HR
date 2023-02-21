@@ -26,10 +26,6 @@ class CreateEmployeesTable extends Migration
             $table->integer('gender')->nullable();
             $table->date('date_of_birth');
             $table->string('nationality')->nullable();
-            $table->string('current_house_no')->nullable();
-            $table->string('current_street_no')->nullable();
-            $table->string('permanent_house_no')->nullable();
-            $table->string('permanent_street_no')->nullable();
             $table->date('date_of_commencement')->nullable();
             $table->string('email');
             $table->longText('profile')->nullable();
@@ -40,7 +36,11 @@ class CreateEmployeesTable extends Migration
             $table->date('issue_date')->nullable();
             $table->date('issue_expired_date')->nullable();
             $table->string('current_addtress')->nullable();
+            $table->string('current_house_no')->nullable();
+            $table->string('current_street_no')->nullable();
             $table->string('permanent_addtress')->nullable();
+            $table->string('permanent_house_no')->nullable();
+            $table->string('permanent_street_no')->nullable();
             $table->string('company_phone_number')->nullable();
             $table->string('personal_phone_number')->nullable();
             $table->string('agency_phone_number')->nullable();

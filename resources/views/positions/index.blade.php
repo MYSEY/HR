@@ -74,7 +74,7 @@
     </div>
 @endsection
 
-@include('includs.index')
+@include('includs.script')
 
 <script>
     $(function(){
