@@ -28,8 +28,6 @@ class EmployeeRequest extends FormRequest
             'position_id' => 'required',
             'department_id' => 'required|integer',
             'personal_phone_number' => 'required|min:9|max:15',
-            'company_phone_number' => 'required|min:9|max:15',
-            'agency_phone_number' => 'required|min:9|max:15',
             // 'current_addtress'       => 'sometimes|nullable|numeric',
             'email'          => 'required|email',
         ];

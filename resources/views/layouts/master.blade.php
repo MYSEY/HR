@@ -322,8 +322,7 @@
                         <span>{{ Auth::user()->name }}</span>
                     </a>
                     <div class="dropdown-menu">
-                        <a class="dropdown-item" href="{{url('/employee/profile')}}">My Profile</a>
-                        {{-- <a class="dropdown-item" href="{{ route('logout') }}">Logout</a> --}}
+                        <a class="dropdown-item" href="{{url('/employee/profile',Auth::user()->id)}}">My Profile</a>
                         <a class="dropdown-item" href="{{ route('logout') }}"
                             onclick="event.preventDefault(); document.getElementById('logout-form').submit();"> {{ __('Logout') }}
                         </a>
@@ -339,7 +338,7 @@
             <div class="dropdown mobile-user-menu">
                 <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
                 <div class="dropdown-menu dropdown-menu-right">
-                    <a class="dropdown-item" href="{{url('/employee/profile')}}">My Profile</a>
+                    <a class="dropdown-item" href="{{url('/employee/profile',Auth::user()->id)}}">My Profile</a>
                     <a class="dropdown-item" href="{{ route('logout') }}"
                         onclick="event.preventDefault(); document.getElementById('logout-form').submit();"> {{ __('Logout') }}
                     </a>
@@ -349,7 +348,6 @@
                     </form>
                 </div>
             </div>
-
         </div>
         
 
@@ -375,7 +373,7 @@
                                         </li>
                                     </ul>
                                 </li>
-                                <li class="submenu">
+                                {{-- <li class="submenu">
                                     <a href=""><i class="la la-cube"></i> <span> Apps</span> <span class="menu-arrow"></span></a>
                                     <ul style="display: none;">
                                         <li class=""><a href="">Chat</a>
@@ -398,25 +396,25 @@
                                         </li>
                                         <li><a class="" href="">File Manager</a></li>
                                     </ul>
-                                </li>
+                                </li> --}}
                                 <li class="menu-title">
                                     <span>Employees</span>
                                 </li>
                                 <li class="submenu">
                                     <a href="#"  class="noti-dot"><i class="la la-user"></i> <span> Employees</span> <span class="menu-arrow"></span></a>
                                     <ul style="display: none;">
-                                        <li><a class="" href="/employee">All Employees</a></li>
-                                        <li><a class="" href="/holidays">Holidays</a></li>
-                                        <li><a class="" href="/leaves/admin">Leaves(Admin) <span class="badge rounded-pill bg-primary float-end">1</span></a></li>
-                                        <li><a class="" href="/leaves/employee">Leaves (Employee)</a></li>
-                                        <li><a class="" href="/attendance/admin">Attendance(Admin)</a></li>
-                                        <li><a class="" href="">Attendance(Employee)</a></li>
-                                        <li><a class="" href="/department">Departments</a></li>
+                                        <li><a class="" href="{{url('employee')}}">All Employees</a></li>
+                                        {{-- <li><a class="" href="{{url('holidays')}}">Holidays</a></li>
+                                        <li><a class="" href="{{url('leaves/admin')}}">Leaves(Admin) <span class="badge rounded-pill bg-primary float-end">1</span></a></li>
+                                        <li><a class="" href="{{url('leaves/employee')}}">Leaves (Employee)</a></li>
+                                        <li><a class="" href="{{url('/attendance/admin')}}">Attendance(Admin)</a></li>
+                                        <li><a class="" href="{{url('attendance/employee')}}">Attendance(Employee)</a></li> --}}
+                                        <li><a class="" href="{{url('department')}}">Departments</a></li>
                                     </ul>
                                 </li>
                                 <li class="">
                                 
-                                <li class="menu-title">
+                                {{-- <li class="menu-title">
                                     <span>HR</span>
                                 </li>
                                 <li class="submenu">
@@ -429,9 +427,9 @@
                                         <li><a class="" href="">Provident Fund</a></li>
                                         <li><a class="" href="">Taxes</a></li>
                                     </ul>
-                                </li>
+                                </li> --}}
                             </ul>
-                            <button class="viewmoremenu">More Menu</button>
+                            {{-- <button class="viewmoremenu">More Menu</button>
                             <ul class="hidden-links hidden">
                                 <li class="submenu">
                                     <a href=""><i class="la la-money"></i> <span> Payroll </span> <span class="menu-arrow"></span></a>
@@ -450,7 +448,7 @@
                                     </ul>
                                 </li>
                                 <li class=""><a href=""><i class="la la-bullhorn"></i> <span>Promotion</span></a></li>
-                            </ul>
+                            </ul> --}}
                         </nav>
 
                         {{-- mobil --}}
@@ -465,7 +463,7 @@
                                     <li><a class="" href="{{url('/dashboad/employee')}}">Employee Dashboard</a></li>
                                 </ul>
                             </li>
-                            <li class="submenu">
+                            {{-- <li class="submenu">
                                 <a href=""><i  class="la la-cube"></i> <span> Apps</span> <span class="menu-arrow"></span></a>
                                 <ul style="display: none;">
                                     <li class=""><a href="">Chat</a></li>
@@ -483,24 +481,24 @@
                                     <li class="" href=""><a href="">Email</a></li>
                                     <li><a class="" href="">File Manager</a></li>
                                 </ul>
-                            </li>
+                            </li> --}}
                             <li class="menu-title">
                                 <span>Employees</span>
                             </li>
                             <li class="submenu">
                                 <a href="#" class="noti-dot"><i class="la la-user"></i> <span> Employees</span> <span class="menu-arrow"></span></a>
                                 <ul style="display: none;">
-                                    <li><a class="" href="/employee">All Employees</a></li>
-                                    <li><a class="" href="/holidays">Holidays</a></li>
-                                    <li><a class="" href="/leaves/admin">Leaves (Admin) <span class="badge rounded-pill bg-primary float-end">1</span></a></li>
-                                    <li><a class="" href="/leaves/employee">Leaves (Employee)</a></li>
-                                    <li><a class="" href="/attendance/admin">Attendance(Admin)</a></li>
-                                    <li><a class="" href="/attendance/employee">Attendance(Employee)</a></li>
-                                    <li><a class="" href="/department">Departments</a></li>
+                                    <li><a class="" href="{{url('employee')}}">All Employees</a></li>
+                                    {{-- <li><a class="" href="{{url('holidays')}}">Holidays</a></li>
+                                    <li><a class="" href="{{url('leaves/admin')}}">Leaves (Admin) <span class="badge rounded-pill bg-primary float-end">1</span></a></li>
+                                    <li><a class="" href="{{url('leaves/employee')}}">Leaves (Employee)</a></li>
+                                    <li><a class="" href="{{url('attendance/admin')}}">Attendance(Admin)</a></li>
+                                    <li><a class="" href="{{url('attendance/employee')}}">Attendance(Employee)</a></li> --}}
+                                    <li><a class="" href="{{url('department')}}">Departments</a></li>
                                 </ul>
                             </li>
                             
-                            <li class="menu-title">
+                            {{-- <li class="menu-title">
                                 <span>HR</span>
                             </li>
                             
@@ -532,7 +530,7 @@
                                     <li class=""><a href=""> OTP</a></li>
                                     <li class=""><a href="">Lock Screen </a></li>
                                 </ul>
-                            </li>
+                            </li> --}}
                         </ul>
                     </div>
                 </div>

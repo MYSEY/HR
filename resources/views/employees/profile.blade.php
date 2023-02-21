@@ -52,7 +52,7 @@
                                             </li>
                                             <li>
                                                 <div class="title">Address:</div>
-                                                <div class="text">1861 Bayonne Ave, Manchester Township, NJ, 08759</div>
+                                                <div class="text">{{$data->FullAddressEn ?? ''}}</div>
                                             </li>
                                             <li>
                                                 <div class="title">Gender:</div>
