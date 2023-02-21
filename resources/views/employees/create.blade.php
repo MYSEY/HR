@@ -59,6 +59,7 @@
                             <div class="form-group">
                                 <label>Gender</label>
                                 <select class="select" id="gender" name="gender" value="{{old('profile')}}">
+                                    <option value="">select gender</option>
                                     <option value="1">Male</option>
                                     <option value="2">FeMale</option>
                                     <option value="3">Other</option>
@@ -67,36 +68,36 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>Department <span class="text-danger">*</span></label>
+                                <label>Department</label>
                                 <select class="select" id="department_id" name="department_id" value="{{old('department_id')}}">
                                     @foreach ($department as $item)
                                         <option value="{{$item->id}}">{{$item->name}}</option>
                                     @endforeach
                                 </select>
-                                <p class="text-danger">{!! $errors->first('department_id') !!}</p>
+                                {{-- <p class="text-danger">{!! $errors->first('department_id') !!}</p> --}}
                             </div>
                         </div>
                         
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>Branch <span class="text-danger">*</span></label>
+                                <label>Branch</label>
                                 <select class="select form-control" id="branch_id" name="branch_id" value="{{old('branch_id')}}">
                                     @foreach ($branch as $item)
                                         <option value="{{$item->id}}">{{$item->branch_name_kh}}</option>
                                     @endforeach
                                 </select>
-                                <p class="text-danger">{!! $errors->first('branch_id') !!}</p>
+                                {{-- <p class="text-danger">{!! $errors->first('branch_id') !!}</p> --}}
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>Position <span class="text-danger">*</span></label>
+                                <label>Position</label>
                                 <select class="select" id="position_id" name="position_id" value="{{old('position_id')}}">
                                     @foreach ($position as $item)
                                         <option value="{{$item->id}}">{{$item->name_khmer}}</option>
                                     @endforeach
                                 </select>
-                                <p class="text-danger">{!! $errors->first('position_id') !!}</p>
+                                {{-- <p class="text-danger">{!! $errors->first('position_id') !!}</p> --}}
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -149,6 +150,7 @@
                             <div class="form-group">
                                 <label class="">Guarantee Letter</label>
                                 <input class="form-control" type="file" id="guarantee_letter" name="guarantee_letter" value="{{old('guarantee_letter')}}">
+                                <p class="text-danger">{!! $errors->first('guarantee_letter') !!}</p>
                             </div>
                         </div>
                         <div class="col-sm-6">
@@ -226,6 +228,7 @@
                                 <label class="">Identity Type</label>
                                 <div class="form-group">
                                     <select class="select" id="identity_type" name="identity_type" value="{{old('identity_type')}}">
+                                        <option value="">select identity type</option>
                                         <option value="1">Family Book</option>
                                         <option value="2">ID Card</option>
                                     </select>

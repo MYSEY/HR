@@ -58,25 +58,29 @@ class EmployeeController extends Controller
      */
     public function store(EmployeeRequest $request)
     {
-        $permanent_addtress = $request->permanet_addre_village ? : $request->permanet_addre_commune ? : $request->permanet_addre_distric ? : $request->permanet_addre_city;
-        $current_address = $request->current_addre_village ? : $request->current_addre_commune ? : $request->current_addre_distric ? : $request->current_addre_city;
-        $guarantee_letter = $this->singleUpload('guarantee_letter',$request,false);
-        $employment_book = $this->singleUpload('employment_book',$request,false);
-        $profile = $this->singleUpload('profile',$request,false);
-        try {
+        if($request->hasFile('guarantee_letter')) {
+            $file = $request->file('guarantee_letter');
+            $filename =  $file->getClientOriginalName();
+            $file->move(public_path('uploads/files'), $filename);
+        }
+        dd($filename);
+        // $guarantee_letter = $this->uploadGuarateeLetter('guarantee_letter',$request,false);
+        // $employment_book = $this->singleUpload('employment_book',$request,false);
+        // $profile = $this->singleUpload('profile',$request,false);
+        // try {
             $data = $request->all();
-            $data['guarantee_letter']   = $guarantee_letter;
-            $data['employment_book']    = $employment_book;
-            $data['profile']            = $profile;
-            $data['current_addtress']   = $current_address;
-            $data['permanent_addtress']   = $permanent_addtress;
+            $data['guarantee_letter']   = $filename;
+            // $data['employment_book']    = $employment_book;
+            // $data['profile']            = $profile;
+            $data['current_addtress']   = $request->current_addre_village ? : $request->current_addre_commune ? : $request->current_addre_distric ? : $request->current_addre_city;
+            $data['permanent_addtress']   = $request->permanet_addre_village ? : $request->permanet_addre_commune ? : $request->permanet_addre_distric ? : $request->permanet_addre_city;
             $data['created_by']         = Auth::user()->id;
             Employee::create($data);
-            return redirect()->route('employee.index')->with('status','Employee created successfully!');
-            DB::commit();
-        } catch (\Throwable $exp) {
-            DB::rollBack();
-        }
+        //     return redirect()->route('employee.index')->with('status','Employee created successfully!');
+        //     DB::commit();
+        // } catch (\Throwable $exp) {
+        //     DB::rollBack();
+        // }
     }
     /**
      * Display the specified resource.
