@@ -24,7 +24,7 @@ class EmployeeRequest extends FormRequest
             'employee_name_en' => 'required|max:255',
             'date_of_birth' => 'required',
             'date_of_commencement' => 'required',
-            'guarantee_letter' => 'required|mimes:pdf|max:2048',
+            // 'guarantee_letter' => 'required|nullable|mimes:pdf|max:2048',
             // 'branch_id' => 'required|integer',
             // 'position_id' => 'required',
             // 'department_id' => 'required|integer',

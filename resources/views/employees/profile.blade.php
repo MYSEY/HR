@@ -58,7 +58,7 @@
                                                 <div class="title">Gender:</div>
                                                 <div class="text">Male</div>
                                             </li>
-                                            <li>
+                                            {{-- <li>
                                                 <div class="title">Reports to:</div>
                                                 <div class="text">
                                                     <div class="avatar-box">
@@ -70,7 +70,7 @@
                                                         Jeffery Lalor
                                                     </a>
                                                 </div>
-                                            </li>
+                                            </li> --}}
                                         </ul>
                                     </div>
                                 </div>
@@ -86,7 +86,7 @@
                 <div class="col-lg-12 col-md-12 col-sm-12 line-tabs">
                     <ul class="nav nav-tabs nav-tabs-bottom" role="tablist">
                         <li class="nav-item" role="presentation"><a href="#emp_profile" data-bs-toggle="tab" class="nav-link active" aria-selected="true" role="tab">Profile</a></li>
-                        <li class="nav-item" role="presentation"><a href="#emp_projects" data-bs-toggle="tab" class="nav-link" aria-selected="false" tabindex="-1" role="tab">Projects</a></li>
+                        <li class="nav-item" role="presentation"><a href="#document" data-bs-toggle="tab" class="nav-link" aria-selected="false" tabindex="-1" role="tab">Document</a></li>
                         <li class="nav-item" role="presentation"><a href="#bank_statutory" data-bs-toggle="tab" class="nav-link" aria-selected="false" tabindex="-1" role="tab">Bank &amp; Statutory <small class="text-danger">(Admin Only)</small></a></li>
                     </ul>
                 </div>
@@ -324,19 +324,12 @@
             </div>
 
 
-            <div class="tab-pane fade" id="emp_projects" role="tabpanel">
+            <div class="tab-pane fade" id="document" role="tabpanel">
                 <div class="row">
                     <div class="col-lg-4 col-sm-6 col-md-4 col-xl-3">
                         <div class="card">
                             <div class="card-body">
-                                <div class="dropdown profile-action">
-                                    <a aria-expanded="false" data-bs-toggle="dropdown" class="action-icon dropdown-toggle" href="#"><i class="material-icons">more_vert</i></a>
-                                    <div class="dropdown-menu dropdown-menu-right">
-                                        <a data-bs-target="#edit_project" data-bs-toggle="modal" href="#" class="dropdown-item"><i class="fa fa-pencil m-r-5"></i> Edit</a>
-                                        <a data-bs-target="#delete_project" data-bs-toggle="modal" href="#" class="dropdown-item"><i class="fa fa-trash-o m-r-5"></i> Delete</a>
-                                    </div>
-                                </div>
-                                <h4 class="project-title"><a href="">Office Management</a></h4>
+                                <h4 class="project-title"><a href="">Guarantee Letter</a></h4>
                                 <small class="block text-ellipsis m-b-15">
                                     <span class="text-xs">1</span> <span class="text-muted">open tasks, </span>
                                     <span class="text-xs">9</span> <span class="text-muted">tasks completed</span>
@@ -345,54 +338,21 @@
                                     typesetting industry. When an unknown printer took a galley of type and
                                     scrambled it...
                                 </p>
-                                <div class="pro-deadline m-b-15">
-                                    <div class="sub-title">
-                                        Deadline:
-                                    </div>
-                                    <div class="text-muted">
-                                        17 Apr 2019
-                                    </div>
-                                </div>
-                                <div class="project-members m-b-15">
-                                    <div>Project Leader :</div>
-                                    <ul class="team-members">
-                                        <li>
-                                            <a href="#" data-bs-toggle="tooltip" aria-label="Jeffery Lalor"><img alt="" src="{{asset('admin/img/avatar-16.jpg')}}"></a>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="project-members m-b-15">
-                                    <div>Team :</div>
-                                    <ul class="team-members">
-                                        <li>
-                                            <a href="#" data-bs-toggle="tooltip" aria-label="John Doe">
-                                                <img alt="" src="{{asset('admin/img/avatar-02.jpg')}}">
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#" data-bs-toggle="tooltip" aria-label="Richard Miles">
-                                                <img alt="" src="{{asset('admin/img/avatar-09.jpg')}}">
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#" data-bs-toggle="tooltip" aria-label="John Smith">
-                                                <img alt="" src="{{asset('admin/img/avatar-10.jpg')}}">
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#" data-bs-toggle="tooltip" aria-label="Mike Litorus">
-                                                <img alt="" src="{{asset('admin/img/avatar-05.jpg')}}">
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#" class="all-users">+15</a>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <p class="m-b-5">Progress <span class="text-success float-end">40%</span></p>
-                                <div class="progress progress-xs mb-0">
-                                    <div style="width: 40%" title="" data-bs-toggle="tooltip" role="progressbar" class="progress-bar bg-success" data-original-title="40%"></div>
-                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-sm-6 col-md-4 col-xl-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="project-title"><a href="">Employment Book</a></h4>
+                                <small class="block text-ellipsis m-b-15">
+                                    <span class="text-xs">1</span> <span class="text-muted">open tasks, </span>
+                                    <span class="text-xs">9</span> <span class="text-muted">tasks completed</span>
+                                </small>
+                                <p class="text-muted">Lorem Ipsum is simply dummy text of the printing and
+                                    typesetting industry. When an unknown printer took a galley of type and
+                                    scrambled it...
+                                </p>
                             </div>
                         </div>
                     </div>

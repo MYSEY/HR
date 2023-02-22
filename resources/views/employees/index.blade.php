@@ -55,10 +55,16 @@
                                                     <td>{{$item->id}}</td>
                                                     <td class="sorting_1">
                                                         <h2 class="table-avatar">
-                                                            <a href="{{route('employee.profile',$item->id)}}"  class="avatar"><img alt="" src="{{asset('admin/img/avatar-13.jpg')}}"></a>
+                                                            @if ($item->profile != null)
+                                                                <a href="{{route('employee.profile',$item->id)}}"  class="avatar">
+                                                                    <img alt="" src="{{asset('/uploads/images/'.$item->profile)}}">
+                                                                </a>
+                                                            @else
+                                                                <a href="#"  class="avatar"><img alt="" src="{{asset('admin/img/avatar-13.jpg')}}"></a>
+                                                            @endif
                                                         </h2>
                                                     </td>
-                                                    <td>{{$item->number_employee}}</td>
+                                                    <td><a href="{{route('employee.profile',$item->id)}}">{{$item->number_employee}}</a></td>
                                                     <td>{{$item->employee_name_kh}}</td>
                                                     <td>{{$item->employee_name_en}}</td>
                                                     <td>{{$item->email}}</td>
@@ -77,7 +83,7 @@
                                                             <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i  class="material-icons">more_vert</i></a>
                                                             <div class="dropdown-menu dropdown-menu-right">
                                                                 <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#edit_employee"><i class="fa fa-pencil m-r-5"></i> Edit</a>
-                                                                <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#delete_employee"><i class="fa fa-trash-o m-r-5"></i> Delete</a>
+                                                                <a class="dropdown-item" href="#" data-id="{{$item->id}}" id="bnt_delete"><i class="fa fa-trash-o m-r-5"></i> Delete</a>
                                                             </div>
                                                         </div>
                                                     </td>
@@ -98,3 +104,39 @@
         </div>
     </div>
 @endsection
+
+@include('includs.script')
+<script>
+    $(function(){
+        $("#DataTables_Table_0 tbody").delegate("#bnt_delete", "click", function(){
+            let delId = $(this).data("id");
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#17a2b8',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'YES',
+                cancelButtonText: 'No',
+            }).then((result) => {
+                if (result.value) {
+                    $.ajax({
+                        type: "DELETE",
+                        url: "/employee/delete",
+                        data: {
+                            "_token": "{{ csrf_token() }}",
+                            id   : delId
+                        },
+                        success: function (response) {
+                            if(response.status==1){
+                                Swal.fire('Deleted!','Your file has been deleted.','success')
+                                window.location.reload();
+                            }
+                        }
+                    });
+                }
+            });
+        });
+    });
+</script>

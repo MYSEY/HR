@@ -26,7 +26,6 @@ class PermissionSeeder extends Seeder
         ], [
             'name' => 'Sey',
             'last_name' => 'Admin',
-            'phone' => '+0889377310',
             'password' => Hash::make('admin@009')
         ]);
         // $user->roles()->syncWithoutDetaching([

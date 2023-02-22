@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admins\UserController;
 use App\Http\Controllers\Admins\BranchController;
 use App\Http\Controllers\Admins\AddressController;
 use App\Http\Controllers\Admins\HolidayController;
@@ -36,7 +37,7 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::middleware(['auth:sanctum'])->group(function(){
-    Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+    Route::get('/dashboad/employee', [App\Http\Controllers\HomeController::class, 'index'])->name('dashboad.employee');
     Route::get('address', [AddressController::class,'index'])->name('address');
     Route::get('permanent/address', [AddressController::class,'permanentAddress'])->name('permanent.address');
     Route::get('/dashboad/employee', [DashboadController::class, 'dashboadEmployee']);
@@ -51,4 +52,5 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::Resource('/department', DepartmentController::class);
     Route::Resource('/position', PositionController::class);
     Route::Resource('/branch', BranchController::class);
+    Route::Resource('/users', UserController::class);
 });

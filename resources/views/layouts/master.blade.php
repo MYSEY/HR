@@ -14,8 +14,7 @@
 
     <link rel="shortcut icon" type="image/x-icon" href="https://smarthr.dreamguystech.com/laravel/template/public/assets/img/favicon.png">
 
-    {{-- <link rel="stylesheet" href="{{asset('/admin/css/bootstrap.min.css')}}"> --}}
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{asset('/admin/css/bootstrap.min.css')}}">
     <link rel="stylesheet" href="{{asset('/admin/css/font-awesome.min.css')}}">
     <link rel="stylesheet" href="{{asset('/admin/css/line-awesome.min.css')}}">
     <link rel="stylesheet" href="{{asset('/admin/css/material.css')}}">
@@ -355,102 +354,6 @@
             <div class="slimScrollDiv" style="position: relative; overflow: hidden; width: 100%; height: 346px;">
                 <div class="sidebar-inner slimscroll" style="overflow: hidden; width: 100%; height: 346px;">
                     <div id="sidebar-menu" class="sidebar-menu">
-                        <nav class="greedys sidebar-horizantal">
-                            <ul class="list-inline-item list-unstyled links">
-                                <li class="menu-title">
-                                    <span>Main</span>
-                                </li>
-                                <li class="submenu">
-                                    <a href="#">
-                                        <i class="la la-dashboard"></i> <span> Dashboard</span> <span class="menu-arrow"></span>
-                                    </a>
-                                    <ul style="display: none;">
-                                        <li>
-                                            <a class=""  href="{{url('/dashboad/admin')}}">Admin Dashboard</a>
-                                        </li>
-                                        <li>
-                                            <a class="" href="{{url('/dashboad/employee')}}">Employee Dashboard</a>
-                                        </li>
-                                    </ul>
-                                </li>
-                                {{-- <li class="submenu">
-                                    <a href=""><i class="la la-cube"></i> <span> Apps</span> <span class="menu-arrow"></span></a>
-                                    <ul style="display: none;">
-                                        <li class=""><a href="">Chat</a>
-                                        </li>
-                                        <li class="submenu">
-                                            <a href=""><span> Calls</span> <span class="menu-arrow"></span></a>
-                                            <ul style="display: none;">
-                                                <li class=""><a href="">Voice Call</a></li>
-                                                <li class=""><a href="">Video Call</a></li>
-                                                <li class=""><a href="">Outgoing Call</a></li>
-                                                <li class=""><a href="">Incoming Call</a></li>
-                                            </ul>
-                                        </li>
-                                        <li><a class="" href="">Calendar</a>
-                                        </li>
-                                        <li><a class="" href="">Contacts</a>
-                                        </li>
-                                        <li class=""
-                                            href=""><a href="">Email</a>
-                                        </li>
-                                        <li><a class="" href="">File Manager</a></li>
-                                    </ul>
-                                </li> --}}
-                                <li class="menu-title">
-                                    <span>Employees</span>
-                                </li>
-                                <li class="submenu">
-                                    <a href="#"  class="noti-dot"><i class="la la-user"></i> <span> Employees</span> <span class="menu-arrow"></span></a>
-                                    <ul style="display: none;">
-                                        <li><a class="" href="{{url('employee')}}">All Employees</a></li>
-                                        {{-- <li><a class="" href="{{url('holidays')}}">Holidays</a></li>
-                                        <li><a class="" href="{{url('leaves/admin')}}">Leaves(Admin) <span class="badge rounded-pill bg-primary float-end">1</span></a></li>
-                                        <li><a class="" href="{{url('leaves/employee')}}">Leaves (Employee)</a></li>
-                                        <li><a class="" href="{{url('/attendance/admin')}}">Attendance(Admin)</a></li>
-                                        <li><a class="" href="{{url('attendance/employee')}}">Attendance(Employee)</a></li> --}}
-                                        <li><a class="" href="{{url('department')}}">Departments</a></li>
-                                    </ul>
-                                </li>
-                                <li class="">
-                                
-                                {{-- <li class="menu-title">
-                                    <span>HR</span>
-                                </li>
-                                <li class="submenu">
-                                    <a href=""><i class="la la-files-o"></i> <span> Sales </span> <span class="menu-arrow"></span></a>
-                                    <ul style="display: none;">
-                                        <li><a class="" href="">Estimates</a></li>
-                                        <li><a class="" href="">Invoices</a></li>
-                                        <li><a class="" href="">Payments</a></li>
-                                        <li><a class="" href="">Expenses</a></li>
-                                        <li><a class="" href="">Provident Fund</a></li>
-                                        <li><a class="" href="">Taxes</a></li>
-                                    </ul>
-                                </li> --}}
-                            </ul>
-                            {{-- <button class="viewmoremenu">More Menu</button>
-                            <ul class="hidden-links hidden">
-                                <li class="submenu">
-                                    <a href=""><i class="la la-money"></i> <span> Payroll </span> <span class="menu-arrow"></span></a>
-                                    <ul style="display: none;">
-                                        <li><a class=""  href="">Employee Salary </a></li>
-                                        <li><a class="" href="">Payslip </a></li>
-                                        <li><a class="" href=""> Payroll Items </a></li>
-                                    </ul>
-                                </li>
-                                <li class="submenu">
-                                    <a href=""><i class="la la-edit"></i> <span> Training </span> <span class="menu-arrow"></span></a>
-                                    <ul style="display: none;">
-                                        <li><a class="" href=""> Training List </a></li>
-                                        <li><a class="" href=""> Trainers</a></li>
-                                        <li><a class="" href=""> Training Type </a></li>
-                                    </ul>
-                                </li>
-                                <li class=""><a href=""><i class="la la-bullhorn"></i> <span>Promotion</span></a></li>
-                            </ul> --}}
-                        </nav>
-
                         {{-- mobil --}}
                         <ul class="sidebar-vertical">
                             <li class="menu-title">
@@ -494,7 +397,15 @@
                                     <li><a class="" href="{{url('leaves/employee')}}">Leaves (Employee)</a></li>
                                     <li><a class="" href="{{url('attendance/admin')}}">Attendance(Admin)</a></li>
                                     <li><a class="" href="{{url('attendance/employee')}}">Attendance(Employee)</a></li> --}}
+                                    {{-- <li><a class="" href="{{url('department')}}">Departments</a></li> --}}
+                                </ul>
+                            </li>
+                            <li class="submenu">
+                                <a href="#"><i class="la la-cog"></i> <span> Setting</span> <span class="menu-arrow"></span></a>
+                                <ul style="display: none;">
                                     <li><a class="" href="{{url('department')}}">Departments</a></li>
+                                    <li><a class="" href="{{url('position')}}">Position</a></li>
+                                    <li><a class="" href="{{url('branch')}}">Branch</a></li>
                                 </ul>
                             </li>
                             

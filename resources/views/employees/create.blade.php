@@ -1,9 +1,10 @@
 @extends('layouts.master')
 @section('content')
 <div class="content container-fluid">
+    
     <div class="page-header">
-        <div class="row align-items-center">
-            <div class="col">
+        <div class="row">
+            <div class="col col-sm-12">
                 <h3 class="page-title">Employee</h3>
                 <ul class="breadcrumb">
                     <li class="breadcrumb-item"><a  href="{{url('/dashboad/employee')}}">Dashboard</a></li>
@@ -12,8 +13,9 @@
             </div>
         </div>
     </div>
+
     
-    <div  class="card">
+    <div class="card">
         <form action="{{url('employee')}}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="pro-overview" role="tabpanel">
@@ -58,7 +60,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Gender</label>
-                                <select class="select" id="gender" name="gender" value="{{old('profile')}}">
+                                <select class="select" id="gender" name="gender" value="{{old('gender')}}">
                                     <option value="">select gender</option>
                                     <option value="1">Male</option>
                                     <option value="2">FeMale</option>
@@ -74,7 +76,6 @@
                                         <option value="{{$item->id}}">{{$item->name}}</option>
                                     @endforeach
                                 </select>
-                                {{-- <p class="text-danger">{!! $errors->first('department_id') !!}</p> --}}
                             </div>
                         </div>
                         
@@ -86,7 +87,6 @@
                                         <option value="{{$item->id}}">{{$item->branch_name_kh}}</option>
                                     @endforeach
                                 </select>
-                                {{-- <p class="text-danger">{!! $errors->first('branch_id') !!}</p> --}}
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -97,7 +97,6 @@
                                         <option value="{{$item->id}}">{{$item->name_khmer}}</option>
                                     @endforeach
                                 </select>
-                                {{-- <p class="text-danger">{!! $errors->first('position_id') !!}</p> --}}
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -157,6 +156,7 @@
                             <div class="form-group">
                                 <label class="">Employment Book</label>
                                 <input class="form-control" type="file" id="employment_book" name="employment_book" value="{{old('employment_book')}}">
+                                <p class="text-danger">{!! $errors->first('employment_book') !!}</p>
                             </div>
                         </div>
                         

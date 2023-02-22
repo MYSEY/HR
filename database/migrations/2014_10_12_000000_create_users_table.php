@@ -18,13 +18,8 @@ class CreateUsersTable extends Migration
             $table->string('name');
             $table->string('last_name')->nullable();
             $table->string('email')->unique();
-            $table->string('date_of_birth')->nullable();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('phone')->nullable();
-            $table->longText('profile')->nullable();
-            $table->string('position_id')->nullable();
-            $table->integer('department_id')->nullable();
             $table->string('password');
+            $table->timestamp('email_verified_at')->nullable();
             $table->boolean('active')->default(1);
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();
