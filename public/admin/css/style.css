@@ -1717,7 +1717,7 @@ input[type=file].form-control {
 }
 .form-focus .form-control {
   height: 50px;
-  padding: 21px 12px 6px;
+  /* padding: 21px 12px 6px; */
 }
 .form-focus .form-control:focus {
   border-color: #ff9b44;
@@ -8692,6 +8692,7 @@ button.close {
   border-radius: 50%;
   height: 120px;
   width: 120px;
+  object-fit: cover;
 }
 .profile-view .profile-img {
   width: 120px;

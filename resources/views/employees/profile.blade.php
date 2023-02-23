@@ -21,7 +21,15 @@
                         <div class="profile-view">
                             <div class="profile-img-wrap">
                                 <div class="profile-img">
-                                    <a href="#"><img alt="" src="{{asset('admin/img/avatar-02.jpg')}}"></a>
+                                    @if ($data->profile != null)
+                                        <a href="#">
+                                            <img alt="" src="{{asset('/uploads/images/'.$data->profile)}}">
+                                        </a>
+                                    @else
+                                        <a href="#">
+                                            <img alt="" src="{{asset('admin/img/defuals/default-user-icon.png')}}">
+                                        </a>
+                                    @endif
                                 </div>
                             </div>
                             <div class="profile-basic">
@@ -51,26 +59,13 @@
                                                 <div class="text">{{\Carbon\Carbon::parse($data->date_of_birth)->format('d-M-Y') ?? ''}}</div>
                                             </li>
                                             <li>
+                                                <div class="title">Gender:</div>
+                                                <div class="text">{{$data->gender == 1 ? "Male" : 'FeMale'}}</div>
+                                            </li>
+                                            <li>
                                                 <div class="title">Address:</div>
                                                 <div class="text">{{$data->FullAddressEn ?? ''}}</div>
                                             </li>
-                                            <li>
-                                                <div class="title">Gender:</div>
-                                                <div class="text">Male</div>
-                                            </li>
-                                            {{-- <li>
-                                                <div class="title">Reports to:</div>
-                                                <div class="text">
-                                                    <div class="avatar-box">
-                                                        <div class="avatar avatar-xs">
-                                                            <img src="{{asset('admin/img/avatar-16.jpg')}}" alt="">
-                                                        </div>
-                                                    </div>
-                                                    <a href="">
-                                                        Jeffery Lalor
-                                                    </a>
-                                                </div>
-                                            </li> --}}
                                         </ul>
                                     </div>
                                 </div>
@@ -102,36 +97,40 @@
                                 <h3 class="card-title">Personal Informations <a href="#" class="edit-icon" data-bs-toggle="modal" data-bs-target="#personal_info_modal"><i class="fa fa-pencil"></i></a></h3>
                                 <ul class="personal-info">
                                     <li>
-                                        <div class="title">Passport No.</div>
-                                        <div class="text">9876543210</div>
+                                        <div class="title">Identity Type</div>
+                                        <label for="">{{$data->identity_type}}</label>
                                     </li>
                                     <li>
-                                        <div class="title">Passport Exp Date.</div>
-                                        <div class="text">9876543210</div>
+                                        <div class="title">Identity Number</div>
+                                        <label for="">{{$data->identity_number}}</label>
+                                    </li>
+                                    <li>
+                                        <div class="title">Issue Date</div>
+                                        <label for="">{{$data->issue_date}}</label>
+                                    </li>
+                                    <li>
+                                        <div class="title">Issue Expired Date</div>
+                                        <label for="">{{$data->issue_expired_date}}</label>
                                     </li>
                                     <li>
                                         <div class="title">Tel</div>
-                                        <div class="text"><a href="">{{$data->personal_phone_number}}</a></div>
+                                        <label for=""><a href="">{{$data->personal_phone_number}}</a></label>
                                     </li>
                                     <li>
                                         <div class="title">Nationality</div>
-                                        <div class="text">{{$data->nationality}}</div>
-                                    </li>
-                                    <li>
-                                        <div class="title">Religion</div>
-                                        <div class="text">Christian</div>
+                                        <label for="">{{$data->nationality}}</label>
                                     </li>
                                     <li>
                                         <div class="title">Marital status</div>
-                                        <div class="text">Married</div>
-                                    </li>
-                                    <li>
-                                        <div class="title">Employment of spouse</div>
-                                        <div class="text">No</div>
+                                        <label for="">{{$data->marital_status}}</label>
                                     </li>
                                     <li>
                                         <div class="title">No. of children</div>
-                                        <div class="text">{{$data->number_of_children}}</div>
+                                        <label for="">{{$data->number_of_children}}</label>
+                                    </li>
+                                    <li>
+                                        <div class="title">Permanent Addtress</div>
+                                        <label for="">{{$data->FullPermanentAddress}}</label>
                                     </li>
                                 </ul>
                             </div>
@@ -243,34 +242,22 @@
                                 <h3 class="card-title">Education Informations <a href="#" class="edit-icon" data-bs-toggle="modal" data-bs-target="#education_info"><i class="fa fa-pencil"></i></a></h3>
                                 <div class="experience-box">
                                     <ul class="experience-list">
-                                        <li>
-                                            <div class="experience-user">
-                                                <div class="before-circle"></div>
-                                            </div>
-                                            <div class="experience-content">
-                                                <div class="timeline-content">
-                                                    <a href="#/" class="name">International College of Arts and
-                                                        Science
-                                                        (UG)</a>
-                                                    <div>Bsc Computer Science</div>
-                                                    <span class="time">2000 - 2003</span>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="experience-user">
-                                                <div class="before-circle"></div>
-                                            </div>
-                                            <div class="experience-content">
-                                                <div class="timeline-content">
-                                                    <a href="#/" class="name">International College of Arts and
-                                                        Science
-                                                        (PG)</a>
-                                                    <div>Msc Computer Science</div>
-                                                    <span class="time">2000 - 2003</span>
-                                                </div>
-                                            </div>
-                                        </li>
+                                        @if (count($data->educations)> 0)
+                                            @foreach ($data->educations as $item)
+                                                <li>
+                                                    <div class="experience-user">
+                                                        <div class="before-circle"></div>
+                                                    </div>
+                                                    <div class="experience-content">
+                                                        <div class="timeline-content">
+                                                            <a href="#" class="name">{{$item->EdcutionFieldOfStudy}}</a>
+                                                            <div>{{$item->Edcutiondegree}}</div>
+                                                            <span class="time">{{$item->EducationStartDateEdnDate}}</span>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            @endforeach
+                                        @endif
                                     </ul>
                                 </div>
                             </div>
@@ -323,6 +310,91 @@
                 </div>
             </div>
 
+            <div id="education_info" class="modal custom-modal fade" style="display: none;" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form>
+                                {{-- @csrf --}}
+                                <div class="form-scroll" id="btn_education">
+                                    <div class="row" id="education-container-repeatable-elements">
+                                        <div class="education-repeatable-element repeatable-element">
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <h3 class="card-title">Education Informations <a href="javascript:void(0);" class="delete-icon education-delete-element"><i class="fa fa-trash-o"></i></a></h3>
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <div class="form-group form-focus focused">
+                                                                <input type="text" value="" id="school[]" name="school[]" class="form-control floating">
+                                                                <label class="focus-label">Institution</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="form-group form-focus focused">
+                                                                <select class="form-control" id="field_of_study[]" name="field_of_study[]" value="">
+                                                                    <option value="">select field of study</option>
+                                                                    @foreach ($optionOfStudy as $item)
+                                                                        <option value="{{$item->id}}">{{$item->name_khmer}}</option>
+                                                                    @endforeach
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="form-group form-focus focused">
+                                                                <div class="cal-icon">
+                                                                    <input type="text" value="" name="start_date[]" class="form-control floating datetimepicker">
+                                                                </div>
+                                                                <label class="focus-label">Starting Date</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="form-group form-focus focused">
+                                                                <div class="cal-icon">
+                                                                    <input type="text" value="" name="end_date[]" class="form-control floating datetimepicker">
+                                                                </div>
+                                                                <label class="focus-label">Complete Date</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="form-group form-focus focused">
+                                                                <select class="form-control" id="degree[]" name="degree[]" value="">
+                                                                    <option value="">select degree</option>
+                                                                    @foreach ($optionDegree as $item)
+                                                                        <option value="{{$item->id}}">{{$item->name_khmer}}</option>
+                                                                    @endforeach
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="form-group form-focus focused">
+                                                                <input type="text" value="" id="grade[]" name="grade[]" class="form-control floating">
+                                                                <label class="focus-label">Grade</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="add-more">
+                                    <a class="add-repeatable-element-button" id="btnAddEducation"><i class="fa fa-plus-circle"></i> Add More</button>
+                                </div>
+                                <div class="submit-section">
+                                    <input type="hidden" name="employee_id" id="employee_id" value="{{$data->id}}">
+                                    <a href="#" class="btn btn-primary" id="bntSubmit">Submit</a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
 
             <div class="tab-pane fade" id="document" role="tabpanel">
                 <div class="row">
@@ -330,14 +402,8 @@
                         <div class="card">
                             <div class="card-body">
                                 <h4 class="project-title"><a href="">Guarantee Letter</a></h4>
-                                <small class="block text-ellipsis m-b-15">
-                                    <span class="text-xs">1</span> <span class="text-muted">open tasks, </span>
-                                    <span class="text-xs">9</span> <span class="text-muted">tasks completed</span>
-                                </small>
-                                <p class="text-muted">Lorem Ipsum is simply dummy text of the printing and
-                                    typesetting industry. When an unknown printer took a galley of type and
-                                    scrambled it...
-                                </p>
+                                <span class="text-xs">Preview guarantee letter click this link</span>
+                                <a href="{{url('uploads/images/',$data->guarantee_letter)}}" target="_blank">{{$data->guarantee_letter}}</a>
                             </div>
                         </div>
                     </div>
@@ -346,13 +412,9 @@
                             <div class="card-body">
                                 <h4 class="project-title"><a href="">Employment Book</a></h4>
                                 <small class="block text-ellipsis m-b-15">
-                                    <span class="text-xs">1</span> <span class="text-muted">open tasks, </span>
-                                    <span class="text-xs">9</span> <span class="text-muted">tasks completed</span>
+                                    <span class="text-xs">Preview employment book click this link</span>
                                 </small>
-                                <p class="text-muted">Lorem Ipsum is simply dummy text of the printing and
-                                    typesetting industry. When an unknown printer took a galley of type and
-                                    scrambled it...
-                                </p>
+                                <a href="{{url('uploads/images/',$data->employment_book)}}" target="_blank">{{$data->employment_book}}</a>
                             </div>
                         </div>
                     </div>
@@ -585,3 +647,51 @@
         </div>
     </div>
 @endsection
+
+@include('includs.script')
+<script>
+    $(function() {
+        $('#btnAddEducation').on('click', function() {
+            $('.education-repeatable-element:first').clone().appendTo('#education-container-repeatable-elements');
+            var lastRepeatableElement = $('.education-repeatable-element:last');
+            var input = lastRepeatableElement.find('input');
+            var textarea = lastRepeatableElement.find('textarea');
+            var select = lastRepeatableElement.find('select');
+            input.val('');
+            textarea.val('');
+            select.prop('selectedIndex', 0)
+        });
+        $('body').on('click', '.education-delete-element', function() {
+            if ($('.education-repeatable-element').length > 1) {
+                $(this).closest('.education-repeatable-element').remove();
+            }
+        });
+        $('#bntSubmit').on('click',function(){
+            var employee_id = $("input[name='employee_id']").val();
+            var school = $("input[name='school[]']").map(function(){return $(this).val();}).get();
+            var field_of_study = $('select[name="field_of_study[]"]').map(function(){if ($(this).val()) return $(this).val();}).get();
+            var degree = $('select[name="degree[]"]').map(function(){if ($(this).val()) return $(this).val();}).get();
+            var start_date = $("input[name='start_date[]']").map(function(){return $(this).val();}).get();
+            var end_date = $("input[name='end_date[]']").map(function(){return $(this).val();}).get();
+            var grade = $("input[name='grade[]']").map(function(){return $(this).val();}).get();
+            $.ajax({
+                type: "POST",
+                url: "/employee/education",
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    employee_id : employee_id,
+                    school : school,
+                    field_of_study : field_of_study,
+                    degree : degree,
+                    start_date : start_date,
+                    end_date : end_date,
+                    grade : grade,
+                },
+                dataType: "JSON",
+                success: function (response) {
+                    console.log(response.success);
+                }
+            });
+        });
+    });
+</script>

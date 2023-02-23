@@ -215,34 +215,34 @@ class Employee extends Model
     // GET KH ADDRESS
     public function getCityKhAttribute()
     {
-        return $this->getAddress('city', 'kh', $this->permanent_addtress);
+        return $this->getAddress('city', 'en', $this->permanent_addtress);
     }
 
     public function getDistrictKhAttribute()
     {
-        return $this->getAddress('district', 'kh', $this->permanent_addtress);
+        return $this->getAddress('district', 'en', $this->permanent_addtress);
     }
 
     public function getCommuneKhAttribute()
     {
-        return $this->getAddress('commune', 'kh', $this->permanent_addtress);
+        return $this->getAddress('commune', 'en', $this->permanent_addtress);
     }
 
     public function getVillageKhAttribute()
     {
-        return $this->getAddress('village', 'kh', $this->permanent_addtress);
+        return $this->getAddress('village', 'en', $this->permanent_addtress);
     }
 
-    public function getFullAddressKhAttribute()
+    public function getFullPermanentAddressAttribute()
     {
         $houseNo = $streetNo = '';
         if (!empty($this->permanent_house_no)) {
-            $houseNo = 'ផ្ទះលេខ ' . $this->permanent_house_no ?? '';
+            $houseNo = 'House ' . $this->permanent_house_no ?? '';
         }
         if (!empty($this->permanent_street_no)) {
-            $streetNo = 'ផ្លូវ ' . $this->permanent_street_no ?? '';
+            $streetNo = 'Street ' . $this->permanent_street_no ?? '';
         }
-        return $houseNo . ' ' .$streetNo .' '. $this->getAddress('full', 'kh', $this->permanent_addtress);
+        return $houseNo . ' ' .$streetNo .' '. $this->getAddress('full', 'en', $this->permanent_addtress);
     }
    
     /*

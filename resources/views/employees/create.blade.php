@@ -62,9 +62,9 @@
                                 <label>Gender</label>
                                 <select class="select" id="gender" name="gender" value="{{old('gender')}}">
                                     <option value="">select gender</option>
-                                    <option value="1">Male</option>
-                                    <option value="2">FeMale</option>
-                                    <option value="3">Other</option>
+                                    @foreach ($optionGender as $item)
+                                        <option value="{{$item->id}}">{{$item->name_khmer}}</option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
@@ -147,14 +147,14 @@
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="">Guarantee Letter</label>
+                                <label class="">Guarantee Letter <span class="text-danger">*</span></label>
                                 <input class="form-control" type="file" id="guarantee_letter" name="guarantee_letter" value="{{old('guarantee_letter')}}">
                                 <p class="text-danger">{!! $errors->first('guarantee_letter') !!}</p>
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="">Employment Book</label>
+                                <label class="">Employment Book <span class="text-danger">*</span></label>
                                 <input class="form-control" type="file" id="employment_book" name="employment_book" value="{{old('employment_book')}}">
                                 <p class="text-danger">{!! $errors->first('employment_book') !!}</p>
                             </div>
@@ -229,8 +229,9 @@
                                 <div class="form-group">
                                     <select class="select" id="identity_type" name="identity_type" value="{{old('identity_type')}}">
                                         <option value="">select identity type</option>
-                                        <option value="1">Family Book</option>
-                                        <option value="2">ID Card</option>
+                                        @foreach ($optionIdentityType as $item)
+                                            <option value="{{$item->id}}">{{$item->name_khmer}}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                             </div>

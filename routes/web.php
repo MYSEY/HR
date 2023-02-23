@@ -43,12 +43,15 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('/dashboad/employee', [DashboadController::class, 'dashboadEmployee']);
     Route::get('/dashboad/admin', [DashboadController::class, 'dashboadAdmin']);
     Route::get('/employee/profile/{id}', [EmployeeProfileController::class, 'employeeProfile'])->name('employee.profile');
-    Route::get('/holidays', [HolidayController::class, 'index']);
-    Route::get('/attendance/admin', [AttendanceAdminController::class, 'index']);
-    Route::get('/attendance/employee', [AttendanceEmployeeController::class, 'index']);
+    Route::post('employee/education', [EmployeeProfileController::class, 'employeeEducation'])->name('employee.education');
+    // Route::get('/holidays', [HolidayController::class, 'index']);
+    // Route::get('/attendance/admin', [AttendanceAdminController::class, 'index']);
+    // Route::get('/attendance/employee', [AttendanceEmployeeController::class, 'index']);
+    // Route::Resource('/leaves/admin', LeavesAdminController::class);
+    // Route::Resource('/leaves/employee', LeavesEmployeeController::class);
+    
     Route::Resource('employee', EmployeeController::class);
-    Route::Resource('/leaves/admin', LeavesAdminController::class);
-    Route::Resource('/leaves/employee', LeavesEmployeeController::class);
+
     Route::Resource('/department', DepartmentController::class);
     Route::Resource('/position', PositionController::class);
     Route::Resource('/branch', BranchController::class);

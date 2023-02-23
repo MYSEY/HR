@@ -18,26 +18,134 @@ class OptionSeeder extends Seeder
     {
         //education
         Option::firstOrCreate([
-            'name_khmer' => 'Economics and Management',
-            'name_english'=>'Economics and Management',
+            'name_khmer' => 'HR Management',
+            'name_english'=>'HR Management',
             'type' => 'field_of_study',
             'created_by'    => Auth::id(),
         ]);
         Option::firstOrCreate([
-            'name_khmer' => 'Business Analytics',
-            'name_english'=>'Business Analytics',
+            'name_khmer' => 'Maketing',
+            'name_english'=>'Maketing',
             'type' => 'field_of_study',
             'created_by'    => Auth::id(),
         ]);
         Option::firstOrCreate([
-            'name_khmer' => 'Master Degree',
-            'name_english'=>'Master Degree',
+            'name_khmer' => 'Banking And Financail',
+            'name_english'=>'Banking And Financail',
+            'type' => 'field_of_study',
+            'created_by'    => Auth::id(),
+        ]);
+        Option::firstOrCreate([
+            'name_khmer' => 'Managerment',
+            'name_english'=>'Managerment',
+            'type' => 'field_of_study',
+            'created_by'    => Auth::id(),
+        ]);
+        Option::firstOrCreate([
+            'name_khmer' => 'Finance and Accounting',
+            'name_english'=>'Finance and Accounting',
+            'type' => 'field_of_study',
+            'created_by'    => Auth::id(),
+        ]);
+        Option::firstOrCreate([
+            'name_khmer' => 'Public Law',
+            'name_english'=>'Public Law',
+            'type' => 'field_of_study',
+            'created_by'    => Auth::id(),
+        ]);
+        Option::firstOrCreate([
+            'name_khmer' => 'Public Administration',
+            'name_english'=>'Public Administration',
+            'type' => 'field_of_study',
+            'created_by'    => Auth::id(),
+        ]);
+        Option::firstOrCreate([
+            'name_khmer' => 'Information Technology',
+            'name_english'=>'Information Technology',
+            'type' => 'field_of_study',
+            'created_by'    => Auth::id(),
+        ]);
+        Option::firstOrCreate([
+            'name_khmer' => 'Computer Science',
+            'name_english'=>'Computer Science',
+            'type' => 'field_of_study',
+            'created_by'    => Auth::id(),
+        ]);
+        Option::firstOrCreate([
+            'name_khmer' => 'Computer Engineering',
+            'name_english'=>'Computer Engineering',
+            'type' => 'field_of_study',
+            'created_by'    => Auth::id(),
+        ]);
+        Option::firstOrCreate([
+            'name_khmer' => 'Internatoinal Business',
+            'name_english'=>'Internatoinal Business',
+            'type' => 'field_of_study',
+            'created_by'    => Auth::id(),
+        ]);
+        Option::firstOrCreate([
+            'name_khmer' => 'Business Economic',
+            'name_english'=>'Business Economic',
+            'type' => 'field_of_study',
+            'created_by'    => Auth::id(),
+        ]);
+        Option::firstOrCreate([
+            'name_khmer' => 'English Language and Literature',
+            'name_english'=>'English Language and Literature',
+            'type' => 'field_of_study',
+            'created_by'    => Auth::id(),
+        ]);
+        Option::firstOrCreate([
+            'name_khmer' => 'Hotel &Tourism Managerment',
+            'name_english'=>'Hotel &Tourism Managerment',
+            'type' => 'field_of_study',
+            'created_by'    => Auth::id(),
+        ]);
+        Option::firstOrCreate([
+            'name_khmer' => 'Internatoinal Relation',
+            'name_english'=>'Internatoinal Relation',
+            'type' => 'field_of_study',
+            'created_by'    => Auth::id(),
+        ]);
+        Option::firstOrCreate([
+            'name_khmer' => 'International Business',
+            'name_english'=>'International Business',
+            'type' => 'field_of_study',
+            'created_by'    => Auth::id(),
+        ]);
+        Option::firstOrCreate([
+            'name_khmer' => 'Secondary School',
+            'name_english'=>'Secondary School',
             'type' => 'degree',
             'created_by'    => Auth::id(),
         ]);
         Option::firstOrCreate([
-            'name_khmer' => 'Bachelor degree',
-            'name_english'=>'Bachelor degree',
+            'name_khmer' => 'High School',
+            'name_english'=>'High School',
+            'type' => 'degree',
+            'created_by'    => Auth::id(),
+        ]);
+        Option::firstOrCreate([
+            'name_khmer' => 'Associate degree',
+            'name_english'=>'Associate degree',
+            'type' => 'degree',
+            'created_by'    => Auth::id(),
+        ]);
+        Option::firstOrCreate([
+            'name_khmer' => "Bachelor's degree",
+            'name_english'=>"Bachelor's degree",
+            'type' => 'degree',
+            'created_by'    => Auth::id(),
+        ]);
+        Option::firstOrCreate([
+            'name_khmer' => "Master's degree",
+            'name_english'=>"Master's degree",
+            'type' => 'degree',
+            'created_by'    => Auth::id(),
+        ]);
+        Option::firstOrCreate([
+            'name_khmer' => "PHD/Doctoral degree",
+            'name_english'=>"PHD/Doctoral degree",
             'type' => 'degree',
             'created_by'    => Auth::id(),
         ]);

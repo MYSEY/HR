@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admins;
 
 use Carbon\Carbon;
+use App\Models\Option;
 use App\Models\Branchs;
 use App\Models\Employee;
 use App\Models\Position;
@@ -26,10 +27,6 @@ class EmployeeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function __construct(EmployeeRepository $employeeRepo) 
-    {
-        $this->employeeRepo = $employeeRepo;
-    }
     public function index()
     {
         $data = Employee::all();
@@ -46,8 +43,10 @@ class EmployeeController extends Controller
         $department = Department::all();
         $position = Position::all();
         $branch = Branchs::all();
+        $optionIdentityType = Option::where('type','identity_type')->get();
+        $optionGender = Option::where('type','gender')->get();
         $data['code']   = $this->generate_EmployeeId(Carbon::today())['number_employee'];
-        return view('employees.create',compact('data','department','position','branch'));
+        return view('employees.create',compact('data','department','position','branch','optionIdentityType','optionGender'));
     }
 
     /**

@@ -60,7 +60,9 @@
                                                                     <img alt="" src="{{asset('/uploads/images/'.$item->profile)}}">
                                                                 </a>
                                                             @else
-                                                                <a href="#"  class="avatar"><img alt="" src="{{asset('admin/img/avatar-13.jpg')}}"></a>
+                                                                <a href="{{route('employee.profile',$item->id)}}">
+                                                                    <img alt="" src="{{asset('admin/img/defuals/default-user-icon.png')}}">
+                                                                </a>
                                                             @endif
                                                         </h2>
                                                     </td>
