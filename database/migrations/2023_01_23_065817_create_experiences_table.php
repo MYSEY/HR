@@ -19,6 +19,7 @@ class CreateExperiencesTable extends Migration
             $table->string('title')->nullable();
             $table->integer('employment_type')->nullable();
             $table->string('company_name')->nullable();
+            $table->string('position')->nullable();
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();
             $table->string('location')->nullable();

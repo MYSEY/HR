@@ -11,6 +11,7 @@ use App\Http\Controllers\Admins\EmployeeController;
 use App\Http\Controllers\Admins\PositionController;
 use App\Http\Controllers\Admins\DepartmentController;
 use App\Http\Controllers\Admins\LeavesAdminController;
+use App\Http\Controllers\Admins\RolePermissionConroller;
 use App\Http\Controllers\Admins\LeavesEmployeeController;
 use App\Http\Controllers\Admins\AttendanceAdminController;
 use App\Http\Controllers\Admins\EmployeeProfileController;
@@ -44,6 +45,8 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('/dashboad/admin', [DashboadController::class, 'dashboadAdmin']);
     Route::get('/employee/profile/{id}', [EmployeeProfileController::class, 'employeeProfile'])->name('employee.profile');
     Route::post('employee/education', [EmployeeProfileController::class, 'employeeEducation'])->name('employee.education');
+    Route::post('employee/experience', [EmployeeProfileController::class, 'updateOrCreateExperience'])->name('employee.experience');
+    Route::post('employee/promote', [EmployeeProfileController::class, 'updateOrCreatePromote'])->name('employee.promote');
     // Route::get('/holidays', [HolidayController::class, 'index']);
     // Route::get('/attendance/admin', [AttendanceAdminController::class, 'index']);
     // Route::get('/attendance/employee', [AttendanceEmployeeController::class, 'index']);
@@ -51,6 +54,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     // Route::Resource('/leaves/employee', LeavesEmployeeController::class);
     
     Route::Resource('employee', EmployeeController::class);
+    Route::Resource('role-permission', RolePermissionConroller::class);
 
     Route::Resource('/department', DepartmentController::class);
     Route::Resource('/position', PositionController::class);

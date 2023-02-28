@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -28,9 +29,5 @@ class PermissionSeeder extends Seeder
             'last_name' => 'Admin',
             'password' => Hash::make('admin@009')
         ]);
-        // $user->roles()->syncWithoutDetaching([
-        //     $this->roles('admin'),
-        //     $this->roles('developer')
-        // ]);
     }
 }

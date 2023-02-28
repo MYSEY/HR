@@ -198,8 +198,7 @@
                             </ul>
                         </div>
                         <div class="topnav-dropdown-footer">
-                            <a href="">View all
-                                Notifications</a>
+                            <a href="">View all Notifications</a>
                         </div>
                     </div>
                 </li>
@@ -400,6 +399,9 @@
                                     {{-- <li><a class="" href="{{url('department')}}">Departments</a></li> --}}
                                 </ul>
                             </li>
+                            <li class="active">
+                                <a href="{{url('role-permission')}}"><i class="la la-key"></i> <span>Roles &amp; Permissions</span></a>
+                            </li>
                             <li class="submenu">
                                 <a href="#"><i class="la la-cog"></i> <span> Setting</span> <span class="menu-arrow"></span></a>
                                 <ul style="display: none;">
@@ -493,6 +495,7 @@
     <script src="{{asset('/admin/js/greedynav.js.download')}}"></script>
 
     <script src="{{asset('/admin/js/app.js.download')}}"></script>
+    <script src="{{asset('/admin/js/bootstrap.min.js')}}"></script>
 
     <div class="sidebar-overlay"></div>
     {{-- <gdiv class="ginger-extension-writer" style="display: none;">

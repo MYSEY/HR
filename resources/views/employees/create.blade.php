@@ -72,6 +72,7 @@
                             <div class="form-group">
                                 <label>Department</label>
                                 <select class="select" id="department_id" name="department_id" value="{{old('department_id')}}">
+                                    <option value="">Please select department</option>
                                     @foreach ($department as $item)
                                         <option value="{{$item->id}}">{{$item->name}}</option>
                                     @endforeach
@@ -83,6 +84,7 @@
                             <div class="form-group">
                                 <label>Branch</label>
                                 <select class="select form-control" id="branch_id" name="branch_id" value="{{old('branch_id')}}">
+                                    <option value="">Please select branch</option>
                                     @foreach ($branch as $item)
                                         <option value="{{$item->id}}">{{$item->branch_name_kh}}</option>
                                     @endforeach
@@ -93,6 +95,7 @@
                             <div class="form-group">
                                 <label>Position</label>
                                 <select class="select" id="position_id" name="position_id" value="{{old('position_id')}}">
+                                    <option value="">Please select position</option>
                                     @foreach ($position as $item)
                                         <option value="{{$item->id}}">{{$item->name_khmer}}</option>
                                     @endforeach

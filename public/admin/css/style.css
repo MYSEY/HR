@@ -1930,6 +1930,7 @@ input[type=file].form-control {
   -webkit-transition: all 0.2s ease;
   -ms-transition: all 0.2s ease;
   transition: all 0.2s ease;
+  padding-top: 9px;
 }
 .header .header-left .logo {
   display: inline-block;
@@ -1952,6 +1953,7 @@ input[type=file].form-control {
   .header #toggle_btn .bar-icon {
     display: inline-block;
     width: 21px;
+    padding-top: 20px;
   }
   .header #toggle_btn .bar-icon span {
     background-color: #ffffff;
@@ -8762,6 +8764,7 @@ button.close {
   text-align: center;
   width: 26px;
   border-radius: 24px;
+  padding-top: 5px;
 }
 
 .personal-info li {
