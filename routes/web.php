@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admins\RoleConroller;
 use App\Http\Controllers\Admins\UserController;
 use App\Http\Controllers\Admins\BranchController;
 use App\Http\Controllers\Admins\AddressController;
@@ -10,8 +11,8 @@ use App\Http\Controllers\Admins\DashboadController;
 use App\Http\Controllers\Admins\EmployeeController;
 use App\Http\Controllers\Admins\PositionController;
 use App\Http\Controllers\Admins\DepartmentController;
+use App\Http\Controllers\Admins\PermissionController;
 use App\Http\Controllers\Admins\LeavesAdminController;
-use App\Http\Controllers\Admins\RolePermissionConroller;
 use App\Http\Controllers\Admins\LeavesEmployeeController;
 use App\Http\Controllers\Admins\AttendanceAdminController;
 use App\Http\Controllers\Admins\EmployeeProfileController;
@@ -31,12 +32,8 @@ use App\Http\Controllers\Admins\AttendanceEmployeeController;
 Route::get('/', function () {
     return view('auth.login');
 });
-// Route::get('/', function () {
-//     return view('layouts.master');
-// });
 
 Auth::routes();
-
 Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('/dashboad/employee', [App\Http\Controllers\HomeController::class, 'index'])->name('dashboad.employee');
     Route::get('address', [AddressController::class,'index'])->name('address');
@@ -54,7 +51,11 @@ Route::middleware(['auth:sanctum'])->group(function(){
     // Route::Resource('/leaves/employee', LeavesEmployeeController::class);
     
     Route::Resource('employee', EmployeeController::class);
-    Route::Resource('role-permission', RolePermissionConroller::class);
+    Route::get('role', [RoleConroller::class,'index']);
+    Route::post('role/store', [RoleConroller::class,'store']);
+    Route::post('role/update', [RoleConroller::class,'update']);
+    Route::post('role/delete', [RoleConroller::class,'destroy']);
+    Route::Resource('permission', PermissionController::class);
 
     Route::Resource('/department', DepartmentController::class);
     Route::Resource('/position', PositionController::class);

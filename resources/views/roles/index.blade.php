@@ -18,8 +18,10 @@
                     <ul>
                         @if (count($role)>0)
                            @foreach ($role as $item)
-                                <li class="{{ $loop->first ? 'active' : '' }}">
-                                    <a href="javascript:void(0);">{{$item->name}}
+                                <li class="{{ $loop->first ? 'active' : '' }}" at="{{$item->id ?? 0}}" value="{{$item->id ?? 0}}">
+                                    <span hidden class="id">{{ $item->id }}</span>
+                                    <a href="javascript:void(0);" at="{{$item->id ?? 0}}" value="{{$item->id ?? 0}}">
+                                        <span class="roleNmae">{{$item->name ?? ''}}</span>
                                         <span class="role-action">
                                             <span class="action-circle large rolesUpdate" data-toggle="modal" data-id="{{$item->id}}" data-target="#edit_role">
                                                 <i class="material-icons">edit</i>
@@ -36,66 +38,27 @@
                 </div>
             </div>
             <div class="col-sm-8 col-md-8 col-lg-8 col-xl-9">
-                <h6 class="card-title m-b-20">Module Access</h6>
-                <div class="m-b-30">
-                    <ul class="list-group notification-list">
-                        <li class="list-group-item">
-                            Employee
-                            <div class="status-toggle">
-                                <input type="checkbox" id="staff_module" class="check">
-                                <label for="staff_module" class="checktoggle">checkbox</label>
-                            </div>
-                        </li>
-                        <li class="list-group-item">
-                            Holidays
-                            <div class="status-toggle">
-                                <input type="checkbox" id="holidays_module" class="check" checked="">
-                                <label for="holidays_module" class="checktoggle">checkbox</label>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-                <div class="table-responsive">
-                    <table class="table table-striped custom-table">
-                        <thead>
-                            <tr>
-                                <th>Permission</th>
-                                <th class="text-center">Read</th>
-                                <th class="text-center">Write</th>
-                                <th class="text-center">Create</th>
-                                <th class="text-center">Delete</th>
-                                <th class="text-center">Import</th>
-                                <th class="text-center">Export</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @if (count($permision)>0)
-                                @foreach ($permision as $itme)
+                <div class="card">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped custom-table">
+                                <thead>
                                     <tr>
-                                        <td>{{$itme->permission_name}}</td>
-                                        <td class="text-center">
-                                            <input type="checkbox" @if ($itme->read== 'Y') checked @endif>
-                                        </td>
-                                        <td class="text-center">
-                                            <input type="checkbox" @if ($itme->write== 'Y') checked @endif>
-                                        </td>
-                                        <td class="text-center">
-                                            <input type="checkbox" @if ($itme->create== 'Y') checked @endif>
-                                        </td>
-                                        <td class="text-center">
-                                            <input type="checkbox" @if ($itme->delete== 'Y') checked @endif>
-                                        </td>
-                                        <td class="text-center">
-                                            <input type="checkbox" @if ($itme->import== 'Y') checked @endif>
-                                        </td>
-                                        <td class="text-center">
-                                            <input type="checkbox" @if ($itme->export== 'Y') checked @endif>
-                                        </td>
+                                        <th>Permission</th>
+                                        <th>Read</th>
+                                        <th>Write</th>
+                                        <th>Create</th>
+                                        <th>Delete</th>
+                                        <th>Import</th>
+                                        <th>Export</th>
                                     </tr>
-                                @endforeach
-                            @endif
-                        </tbody>
-                    </table>
+                                </thead>
+                                <tbody>
+                                    
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -110,11 +73,11 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form action="{{url('role-permission')}}" method="POST" enctype="multipart/form-data">
+                    <form action="{{url('role/store')}}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="form-group">
                             <label>Role Name <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" value="{{ old('name') }}" placeholder="Enter role name">
+                            <input type="text" class="form-control @error('roleName') is-invalid @enderror" id="roleName" name="roleName" value="{{ old('roleName') }}" placeholder="Enter role name">
                         </div>
                         <div class="submit-section">
                             <button class="btn btn-primary submit-btn">Submit</button>
@@ -125,7 +88,7 @@
         </div>
     </div>
 
-    <div id="edit_role" class="modal custom-modal fade" role="dialog">
+    {{-- <div id="edit_role" class="modal custom-modal fade" role="dialog">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content modal-md">
                 <div class="modal-header">
@@ -134,13 +97,39 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form action="{{ url('role-permission/update') }}" method="POST">
+                    <form action="{{ url('role/update') }}" method="POST" enctype="multipart/form-data"> 
                         @csrf
-                        @method('PUT')
                         <div class="form-group">
                             <input type="hidden" name="id" id="e_id" value="">
                             <label>Role Name <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="e_roleNmae" name="name" value="">
+                            <input type="text" class="form-control" id="e_roleNmae" name="roleNmae" value="">
+                        </div>
+                        <div class="submit-section">
+                            <button type="submit" class="btn btn-primary submit-btn">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div> --}}
+    
+
+    <!-- Edit Role Modal -->
+    <div id="edit_role" class="modal custom-modal fade" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content modal-md">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="{{ url('role/update') }}" method="POST" enctype="multipart/form-data"> 
+                        @csrf
+                        <div class="form-group">
+                            <input type="hidden" name="id" id="e_id" value="">
+                            <label>Role Name <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="e_roleNmae" name="roleNmae" value="">
                         </div>
                         <div class="submit-section">
                             <button type="submit" class="btn btn-primary submit-btn">Save</button>
@@ -150,6 +139,7 @@
             </div>
         </div>
     </div>
+    <!-- /Edit Role Modal -->
 
     <div class="modal custom-modal fade" id="delete_role" role="dialog">
         <div class="modal-dialog modal-dialog-centered">
@@ -160,7 +150,7 @@
                         <p>Are you sure want to delete?</p>
                     </div>
                     <div class="modal-btn delete-action">
-                        <form action="{{ url('role-permission') }}" method="POST">
+                        <form action="{{ url('role') }}" method="POST">
                             @csrf
                             @method("delete")
                             <input type="hidden" name="id" class="e_id" value="">
@@ -182,18 +172,106 @@
 @include('includs.script')
 
 <script>
-    $(document).on('click','.rolesUpdate',function()
-    {
-        var _this = $(this).closest("li");
-        $('#e_id').val(_this.find('.id').text());
-        $('#e_roleNmae').val(_this.find('.name').text());
+    $(function(){
+        role_click_change(role_active_id());
+        
+        $('.roles-menu ul li').on('click',function(){
+            $('.roles-menu ul li').removeClass('active');
+            $(this).addClass('active');
+            role_click_change($(this).attr('at'));
+        });
+        $('.rolesUpdate').on('click',function(){
+            var _this = $(this).closest("li");
+            $('#e_id').val(_this.find('.id').text());
+            $('#e_roleNmae').val(_this.find('.roleNmae').text());
+        });
+        $('.rolesDelete').on('click',function(){
+            var _this = $(this).closest("li");
+            $('.e_id').val(_this.find('.id').text());
+        });
     });
-</script>
 
-<script>
-    $(document).on('click','.rolesDelete',function()
-    {
-        var _this = $(this).closest("li");
-        $('.e_id').val(_this.find('.id').text());
-    });
+    function role_active_id(){
+        var role_active_id=0;
+        $('.roles-menu ul li').each(function(){
+            if($(this).hasClass('active')){
+                role_active_id=$(this).attr('at');
+            }
+        })
+        return role_active_id;
+    }
+
+    function role_click_change(role_id){
+        $.ajax({
+            type: "GET",
+            url: "/permission",
+            data: {
+                role_id:role_id
+            },
+            dataType: "JSON",
+            success: function (response) {
+                $('table tbody').empty();
+               $.each(response.success,function(index,value){
+                    var view_check="";
+                    var add_check="";
+                    var update_check="";
+                    var delete_check="";
+                    var import_check="";
+                    var export_check="";
+                    if(value._view>0){
+                        view_check="checked";
+                    }
+
+                    if(value._add>0){
+                        add_check="checked";
+                    }
+
+                    if(value._update>0){
+                        update_check="checked";
+                    }
+                    if(value._delete>0){
+                        delete_check="checked";
+                    }
+                    if(value._import>0){
+                        import_check="checked";
+                    }
+                    if(value._import>0){
+                        export_check="checked";
+                    }
+                    var tr='<tr>'+
+                            '<td>'+value.name+'</td>'+
+                            '<td><input type="checkbox" name="view" id="" onclick="PermissionAndRole(this,'+value.id+',1);" '+view_check+'></td>'+
+                            '<td><input type="checkbox" name="view" id="" onclick="PermissionAndRole(this,'+value.id+',2);" '+add_check+'></td>'+
+                            '<td><input type="checkbox" name="view" id="" onclick="PermissionAndRole(this,'+value.id+',3);" '+update_check+'></td>'+
+                            '<td><input type="checkbox" name="view" id="" onclick="PermissionAndRole(this,'+value.id+',4);" '+delete_check+'></td>'+
+                            '<td><input type="checkbox" name="view" id="" onclick="PermissionAndRole(this,'+value.id+',5);" '+import_check+'></td>'+
+                            '<td><input type="checkbox" name="view" id="" onclick="PermissionAndRole(this,'+value.id+',6);" '+export_check+'></td>'+
+                        '</tr>';
+                    $('table').append(tr);
+               });
+            }
+        });
+    }
+    function PermissionAndRole(e,table_id,permission_type){
+        var role_id=role_active_id();
+        if(e.checked){
+            insert_update=1;
+        }else{
+            insert_update=0;
+        }
+        $.ajax({
+            type:'POST',
+            url:'/permission',
+            data:{
+                "_token": "{{ csrf_token() }}",
+                table_id:table_id,
+                permission_type_id:permission_type,
+                role_id:role_id,
+                checked:insert_update
+            },
+            success:function(data){
+                console.log(data);
+            }
+        });
+    }
 </script>

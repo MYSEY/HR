@@ -17,21 +17,17 @@ return new class extends Migration
         Schema::create('roles', function (Blueprint $table) {
             $table->id();
             $table->string('name')->nullable();
+            $table->integer('status')->default(1);
             $table->timestamps();
         });
         DB::table('roles')->insert(
-        [
-            ['name' => 'Administrator'],
-            ['name' => 'CEO'],
-            ['name' => 'Manager'],
-            ['name' => 'Team Leader'],
-            ['name' => 'Accountant'],
-            ['name' => 'Web Developer'],
-            ['name' => 'Web Designer'],
-            ['name' => 'HR'],
-            ['name' => 'UI/UX Developer'],
-            ['name' => 'SEO Analyst'],
-        ]);
+            [
+                'name'=>'Administrator',
+                'status'=>1,
+                'created_at'=>now(),
+                'updated_at'=>now()
+            ]
+        );
     }
 
     /**

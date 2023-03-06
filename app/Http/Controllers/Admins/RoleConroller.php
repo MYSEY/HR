@@ -3,26 +3,24 @@
 namespace App\Http\Controllers\Admins;
 
 use App\Models\Role;
-use App\Models\RoleType;
-use App\Models\Permision;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Brian2694\Toastr\Facades\Toastr;
 
-class RolePermissionConroller extends Controller
+class RoleConroller extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $role = Role::all();
-        $role_types = RoleType::all();
-        $permision = Permision::all();
-        return view('roles.index',compact('role','role_types','permision'));
+        $sql="SELECT t.id,t.name,(SELECT COUNT(*) FROM permissions p_view WHERE p_view.status=1 and p_view.table_id=t.id and p_view.permission_type_id=1) as _view,(SELECT COUNT(*) FROM permissions p_view WHERE p_view.status=1 and p_view.table_id=t.id and p_view.permission_type_id=2) as _add,(SELECT COUNT(*) FROM permissions p_view WHERE p_view.status=1 and p_view.table_id=t.id and p_view.permission_type_id=3) as _update,(SELECT COUNT(*) FROM permissions p_view WHERE p_view.status=1 and p_view.table_id=t.id and p_view.permission_type_id=4) as _delete FROM tables t WHERE t.status=1";
+        $permissionList=DB::select($sql);
+        $role=Role::where('status',1)->get();
+        return view('roles.index',compact('role','permissionList'));
     }
 
     /**
@@ -43,15 +41,19 @@ class RolePermissionConroller extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'roleName' => 'required|string|max:255',
+        ]);
         try{
             Role::create([
-                'name'  => $request->name
+                'name'      => $request->roleName,
+                'status'    => 1
             ]);
             Toastr::success('Create new role successfully :)','Success');
             return redirect()->back();
         }catch(\Exception $e){
             DB::rollback();
-            Toastr::error('Add new employee fail :)','Error');
+            Toastr::error('Add new role fail :)','Error');
             return redirect()->back();
         }
     }
@@ -85,9 +87,20 @@ class RolePermissionConroller extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        try{
+            Role::where('id',$request->id)->update([
+                'name'  => $request->roleNmae,
+                'status'    => 1
+            ]);
+            Toastr::success('Create new role successfully :)','Success');
+            return redirect()->back();
+        }catch(\Exception $e){
+            DB::rollback();
+            Toastr::error('Add new employee fail :)','Error');
+            return redirect()->back();
+        }
     }
 
     /**
@@ -102,7 +115,6 @@ class RolePermissionConroller extends Controller
             Role::destroy($request->id);
             Toastr::success('Role Name deleted successfully :)','Success');
             return redirect()->back();
-        
         }catch(\Exception $e){
             DB::rollback();
             Toastr::error('Role Name delete fail :)','Error');

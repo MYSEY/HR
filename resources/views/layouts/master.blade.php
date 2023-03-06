@@ -36,6 +36,8 @@
     <link href="{{asset('/admin/css/fullcalendar.min.css')}}" rel="stylesheet" type="text/css">
 
     <link rel="stylesheet" href="{{asset('/admin/css/style.css')}}">
+    {{-- message toastr --}}
+	<link rel="stylesheet" href="{{ asset('admin/css/toastr.min.css') }}">
 </head>
 
 <body>
@@ -399,8 +401,11 @@
                                     {{-- <li><a class="" href="{{url('department')}}">Departments</a></li> --}}
                                 </ul>
                             </li>
+                            <li class="">
+                                <a href="{{url('role')}}"><i class="la la-key"></i> <span>Roles &amp; Permissions</span></a>
+                            </li>
                             <li class="active">
-                                <a href="{{url('role-permission')}}"><i class="la la-key"></i> <span>Roles &amp; Permissions</span></a>
+                                <a href="{{url('users')}}"><i class="la la-user-plus"></i> <span>Users</span></a>
                             </li>
                             <li class="submenu">
                                 <a href="#"><i class="la la-cog"></i> <span> Setting</span> <span class="menu-arrow"></span></a>
@@ -496,7 +501,8 @@
 
     <script src="{{asset('/admin/js/app.js.download')}}"></script>
     <script src="{{asset('/admin/js/bootstrap.min.js')}}"></script>
-
+    <script src="{{ asset('admin/js/toastr_jquery.min.js') }}"></script>
+    <script src="{{ asset('admin/js/toastr.min.js') }}"></script>
     <div class="sidebar-overlay"></div>
     {{-- <gdiv class="ginger-extension-writer" style="display: none;">
         <gdiv class="ginger-extension-writer-frame"><iframe
