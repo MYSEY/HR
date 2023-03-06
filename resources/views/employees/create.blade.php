@@ -60,7 +60,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Gender</label>
-                                <select class="select" id="gender" name="gender" value="{{old('gender')}}">
+                                <select class="select form-control" id="gender" name="gender" value="{{old('gender')}}">
                                     <option value="">select gender</option>
                                     @foreach ($optionGender as $item)
                                         <option value="{{$item->id}}">{{$item->name_khmer}}</option>
@@ -71,7 +71,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Department</label>
-                                <select class="select" id="department_id" name="department_id" value="{{old('department_id')}}">
+                                <select class="select form-control" id="department_id" name="department_id" value="{{old('department_id')}}">
                                     <option value="">Please select department</option>
                                     @foreach ($department as $item)
                                         <option value="{{$item->id}}">{{$item->name}}</option>
@@ -94,7 +94,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Position</label>
-                                <select class="select" id="position_id" name="position_id" value="{{old('position_id')}}">
+                                <select class="select form-control" id="position_id" name="position_id" value="{{old('position_id')}}">
                                     <option value="">Please select position</option>
                                     @foreach ($position as $item)
                                         <option value="{{$item->id}}">{{$item->name_khmer}}</option>
@@ -133,7 +133,7 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="">Marital status</label>
-                                <select class="select" id="marital_status" name="marital_status" value="{{old('marital_status')}}">
+                                <select class="select form-control" id="marital_status" name="marital_status" value="{{old('marital_status')}}">
                                     <option value="Married">Married</option>
                                     <option value="Single">Single</option>
                                 </select>
@@ -142,7 +142,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Nationality</label>
-                                <select class="select" id="nationality" name="nationality" value="{{old('nationality')}}">
+                                <select class="select form-control" id="nationality" name="nationality" value="{{old('nationality')}}">
                                     <option value="Khmer">Khmer</option>
                                     <option value="Chinese">Chinese</option>
                                 </select>
@@ -230,7 +230,7 @@
                             <div class="form-group">
                                 <label class="">Identity Type</label>
                                 <div class="form-group">
-                                    <select class="select" id="identity_type" name="identity_type" value="{{old('identity_type')}}">
+                                    <select class="select form-control" id="identity_type" name="identity_type" value="{{old('identity_type')}}">
                                         <option value="">select identity type</option>
                                         @foreach ($optionIdentityType as $item)
                                             <option value="{{$item->id}}">{{$item->name_khmer}}</option>

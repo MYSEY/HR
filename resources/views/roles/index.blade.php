@@ -150,9 +150,8 @@
                         <p>Are you sure want to delete?</p>
                     </div>
                     <div class="modal-btn delete-action">
-                        <form action="{{ url('role') }}" method="POST">
+                        <form action="{{ url('role/delete') }}" method="POST">
                             @csrf
-                            @method("delete")
                             <input type="hidden" name="id" class="e_id" value="">
                             <div class="row">
                                 <div class="col-6">
