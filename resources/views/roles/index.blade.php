@@ -2,7 +2,6 @@
 
 @section('content')
     <div class="content container-fluid">
-
         <div class="page-header">
             <div class="row">
                 <div class="col-sm-12">
@@ -87,32 +86,6 @@
             </div>
         </div>
     </div>
-
-    {{-- <div id="edit_role" class="modal custom-modal fade" role="dialog">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content modal-md">
-                <div class="modal-header">
-                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form action="{{ url('role/update') }}" method="POST" enctype="multipart/form-data"> 
-                        @csrf
-                        <div class="form-group">
-                            <input type="hidden" name="id" id="e_id" value="">
-                            <label>Role Name <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="e_roleNmae" name="roleNmae" value="">
-                        </div>
-                        <div class="submit-section">
-                            <button type="submit" class="btn btn-primary submit-btn">Save</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div> --}}
-    
 
     <!-- Edit Role Modal -->
     <div id="edit_role" class="modal custom-modal fade" role="dialog">
@@ -203,7 +176,7 @@
     function role_click_change(role_id){
         $.ajax({
             type: "GET",
-            url: "/permission",
+            url: "{{url('permission')}}",
             data: {
                 role_id:role_id
             },
@@ -260,7 +233,7 @@
         }
         $.ajax({
             type:'POST',
-            url:'/permission',
+            url:"{{url('permission')}}",
             data:{
                 "_token": "{{ csrf_token() }}",
                 table_id:table_id,

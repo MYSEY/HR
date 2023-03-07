@@ -11,11 +11,6 @@ class UserRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
-    {
-        // only allow updates if the user is logged in
-        return backpack_auth()->check();
-    }
 
     /**
      * Get the validation rules that apply to the request.
@@ -26,13 +21,11 @@ class UserRequest extends FormRequest
     {
         return [
             'name' => 'required|max:255',
-            'last_name' => 'required|max:255',
-            'phone' => 'required',
-            'email' => 'required',
-            'password' => 'required',
-            'position' => 'required',
+            'email'     => 'required|string|email|max:255|unique:users',
+            'phone'     => 'required|min:11|numeric',
+            'position_id' => 'required',
+            'role_id' => 'required',
             'department_id' => 'required',
-            'date_of_birth' => 'required',
             'password' => [
                 'sometimes',
                 'nullable',

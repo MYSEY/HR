@@ -14,60 +14,113 @@
 
                 </div>
                 <div class="col-auto float-end ms-auto">
-                    <a href="{{ url('users/create') }}" class="btn add-btn"><i class="fa fa-plus"></i> Add New</a>
+                    <a href="{{ url('users/create') }}" class="btn add-btn" data-toggle="modal" data-target="#add_user"><i class="fa fa-plus"></i> Add New</a>
                 </div>
             </div>
         </div>
-        @if ($message = Session::get('status'))
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                <strong>{{ $message }}</strong>
-                <button type="button" class="btn-close btn-sm" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        @endif
+        {!! Toastr::message() !!}
         <div class="row">
             <div class="col-md-12">
                 <div class="table-responsive">
                     <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                         <div class="row">
                             <div class="col-sm-12">
-                                <table class="table table-striped custom-table datatable dataTable no-footer"
-                                    id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
+                                <table class="table table-striped custom-table datatable dataTable no-footer" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
                                     <thead>
                                         <tr>
                                             <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 291.163px;">Name</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending" style="width: 227px;"> Email</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Company: activate to sort column ascending" style="width: 202.6px;">Company</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Created Date: activate to sort column ascending" style="width: 114.95px;">Created Date</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending" style="width: 227px;"> Phone</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Company: activate to sort column ascending" style="width: 202.6px;">Position</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Company: activate to sort column ascending" style="width: 202.6px;">Departement</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Role: activate to sort column ascending" style="width: 80.8125px;">Role</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Created Date: activate to sort column ascending" style="width: 114.95px;">Created Date</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Role: activate to sort column ascending" style="width: 80.8125px;">Status</th>
                                             <th class="text-end sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Action: activate to sort column ascending" style="width: 60.675px;">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr class="odd">
-                                            <td class="sorting_1">
-                                                <h2 class="table-avatar">
-                                                    <a href="https://smarthr.dreamguystech.com/laravel/template/public/profile" class="avatar">
-                                                        <img src="https://smarthr.dreamguystech.com/laravel/template/public/assets/img/profiles/avatar-19.jpg" alt="">
-                                                    </a>
-                                                    <a href="https://smarthr.dreamguystech.com/laravel/template/public/profile">Barry Cuda <span>Global Technologies</span></a>
-                                                </h2>
-                                            </td>
-                                            <td>barrycuda@example.com</td>
-                                            <td>Global Technologies</td>
-                                            <td>1 Jan 2013</td>
-                                            <td>
-                                                <span class="badge bg-inverse-info">Client</span>
-                                            </td>
-                                            <td class="text-end">
-                                                <div class="dropdown dropdown-action">
-                                                    <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
-                                                    <div class="dropdown-menu dropdown-menu-right">
-                                                        <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#edit_user"><i class="fa fa-pencil m-r-5"></i> Edit</a>
-                                                        <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#delete_user"><i  class="fa fa-trash-o m-r-5"></i> Delete</a>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                        </tr>
+                                        @if (count($data)>0)
+                                            @foreach ($data as $item)
+                                                <tr class="odd">
+                                                    <td class="sorting_1">
+                                                        <span hidden class="image">{{ $item->profile}}</span>
+                                                        <h2 class="table-avatar">
+                                                            @if ($item->profile != null)
+                                                                <a href=""  class="avatar">
+                                                                    <img alt="" src="{{asset('/uploads/images/'.$item->profile)}}">
+                                                                </a>
+                                                                <a href="" class="name">{{$item->name}}</a>
+                                                            @else
+                                                                <a href="" class="avatar">
+                                                                    <img alt="" src="{{asset('admin/img/defuals/default-user-icon.png')}}">
+                                                                </a>
+                                                                <a href="" class="name">{{$item->name}}</a>
+                                                            @endif
+                                                        </h2>
+                                                    </td>
+                                                    <td hidden class="ids">{{ $item->id }}</td>
+                                                    <td class="email">{{$item->email}}</td>
+                                                    <td class="phone_number">{{ $item->phone }}</td>
+                                                    <td class="position">{{$item->position_id}}</td>
+                                                    <td class="department">{{$item->department_id}}</td>
+                                                    <td>
+                                                        <span class="badge bg-inverse-success role_name">{{ $item->role_id }}</span>
+                                                    </td>
+                                                    <td>{{$item->created_at}}</td>
+                                                    <td>
+                                                        <div class="dropdown action-label">
+                                                            @if ($item->status=='Active')
+                                                                <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
+                                                                    <i class="fa fa-dot-circle-o text-success"></i>
+                                                                    <span class="statuss">{{ $item->status }}</span>
+                                                                </a>
+                                                            @elseif ($item->status=='Inactive')
+                                                                <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
+                                                                    <i class="fa fa-dot-circle-o text-info"></i>
+                                                                    <span class="statuss">{{ $item->status }}</span>
+                                                                </a>
+                                                            @elseif ($item->status=='Disable')
+                                                                <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
+                                                                    <i class="fa fa-dot-circle-o text-danger"></i>
+                                                                    <span class="statuss">{{ $item->status }}</span>
+                                                                </a>
+                                                            @elseif ($item->status=='')
+                                                                <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
+                                                                    <i class="fa fa-dot-circle-o text-dark"></i>
+                                                                    <span class="statuss">N/A</span>
+                                                                </a>
+                                                            @endif
+                                                            
+                                                            <div class="dropdown-menu dropdown-menu-right">
+                                                                <a class="dropdown-item" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-success"></i> Active
+                                                                </a>
+                                                                <a class="dropdown-item" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-warning"></i> Inactive
+                                                                </a>
+                                                                <a class="dropdown-item" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-danger"></i> Disable
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td class="text-end">
+                                                        <div class="dropdown dropdown-action">
+                                                            <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
+                                                            <div class="dropdown-menu dropdown-menu-right">
+                                                                <a class="dropdown-item userUpdate" data-toggle="modal" data-id="{{$item->id}}" data-target="#edit_user"><i class="fa fa-pencil m-r-5"></i> Edit</a>
+                                                                <a class="dropdown-item userDelete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_user"><i class="fa fa-trash-o m-r-5"></i> Delete</a>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        @else
+                                            <tr>
+                                                <td colspan="6" style="text-align: center">No record to display</td>
+                                            </tr>
+                                        @endif
                                     </tbody>
                                 </table>
                             </div>
@@ -78,219 +131,276 @@
         </div>
 
 
+        <!-- Add User Modal -->
         <div id="add_user" class="modal custom-modal fade" role="dialog">
             <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Add User</h5>
-                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">×</span>
+                        <h5 class="modal-title">Add New User</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form>
-                            <div class="row">
-                                <div class="col-sm-6">
+                        <form action="{{url('users/store')}}" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            <div class="row"> 
+                                <div class="col-sm-6"> 
                                     <div class="form-group">
-                                        <label>First Name <span class="text-danger">*</span></label>
-                                        <input class="form-control" type="text">
+                                        <label>Full Name <span class="text-danger">*</span></label>
+                                        <input class="form-control @error('name') is-invalid @enderror" type="text" id="" name="name" value="{{ old('name') }}" placeholder="Enter Name">
                                     </div>
                                 </div>
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <label>Last Name</label>
-                                        <input class="form-control" type="text">
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <label>Username <span class="text-danger">*</span></label>
-                                        <input class="form-control" type="text">
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <label>Email <span class="text-danger">*</span></label>
-                                        <input class="form-control" type="email">
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <label>Password</label>
-                                        <input class="form-control" type="password">
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <label>Confirm Password</label>
-                                        <input class="form-control" type="password">
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <label>Phone </label>
-                                        <input class="form-control" type="text">
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <label>Role</label>
-                                        <select class="select select2-hidden-accessible"
-                                            data-select2-id="select2-data-10-z86m" tabindex="-1" aria-hidden="true">
-                                            <option data-select2-id="select2-data-12-vnam">Admin</option>
-                                            <option>Client</option>
-                                            <option>Employee</option>
-                                        </select><span class="select2 select2-container select2-container--default"
-                                            dir="ltr" data-select2-id="select2-data-11-se8q" style="width: 100%;"><span
-                                                class="selection"><span class="select2-selection select2-selection--single"
-                                                    role="combobox" aria-haspopup="true" aria-expanded="false"
-                                                    tabindex="0" aria-disabled="false"
-                                                    aria-labelledby="select2-tr8k-container"
-                                                    aria-controls="select2-tr8k-container"><span
-                                                        class="select2-selection__rendered" id="select2-tr8k-container"
-                                                        role="textbox" aria-readonly="true" title="Admin">Admin</span><span
-                                                        class="select2-selection__arrow" role="presentation"><b
-                                                            role="presentation"></b></span></span></span><span
-                                                class="dropdown-wrapper" aria-hidden="true"></span></span>
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <label>Company</label>
-                                        <select class="select select2-hidden-accessible"
-                                            data-select2-id="select2-data-13-3in7" tabindex="-1" aria-hidden="true">
-                                            <option data-select2-id="select2-data-15-mqb3">Global Technologies</option>
-                                            <option>Delta Infotech</option>
-                                        </select><span class="select2 select2-container select2-container--default"
-                                            dir="ltr" data-select2-id="select2-data-14-4enj" style="width: 100%;"><span
-                                                class="selection"><span class="select2-selection select2-selection--single"
-                                                    role="combobox" aria-haspopup="true" aria-expanded="false"
-                                                    tabindex="0" aria-disabled="false"
-                                                    aria-labelledby="select2-2wb7-container"
-                                                    aria-controls="select2-2wb7-container"><span
-                                                        class="select2-selection__rendered" id="select2-2wb7-container"
-                                                        role="textbox" aria-readonly="true"
-                                                        title="Global Technologies">Global Technologies</span><span
-                                                        class="select2-selection__arrow" role="presentation"><b
-                                                            role="presentation"></b></span></span></span><span
-                                                class="dropdown-wrapper" aria-hidden="true"></span></span>
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <label>Employee ID <span class="text-danger">*</span></label>
-                                        <input type="text" class="form-control floating">
-                                    </div>
+                                <div class="col-sm-6"> 
+                                    <label>Emaill <span class="text-danger">*</span></label>
+                                    <input class="form-control @error('email') is-invalid @enderror" type="email" id="" name="email"  placeholder="Enter Email">
                                 </div>
                             </div>
-                            <div class="table-responsive m-t-15">
-                                <table class="table table-striped custom-table">
-                                    <thead>
-                                        <tr>
-                                            <th>Module Permission</th>
-                                            <th class="text-center">Read</th>
-                                            <th class="text-center">Write</th>
-                                            <th class="text-center">Create</th>
-                                            <th class="text-center">Delete</th>
-                                            <th class="text-center">Import</th>
-                                            <th class="text-center">Export</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>Employee</td>
-                                            <td class="text-center">
-                                                <input checked="" type="checkbox">
-                                            </td>
-                                            <td class="text-center">
-                                                <input checked="" type="checkbox">
-                                            </td>
-                                            <td class="text-center">
-                                                <input checked="" type="checkbox">
-                                            </td>
-                                            <td class="text-center">
-                                                <input checked="" type="checkbox">
-                                            </td>
-                                            <td class="text-center">
-                                                <input checked="" type="checkbox">
-                                            </td>
-                                            <td class="text-center">
-                                                <input checked="" type="checkbox">
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Holidays</td>
-                                            <td class="text-center">
-                                                <input checked="" type="checkbox">
-                                            </td>
-                                            <td class="text-center">
-                                                <input checked="" type="checkbox">
-                                            </td>
-                                            <td class="text-center">
-                                                <input checked="" type="checkbox">
-                                            </td>
-                                            <td class="text-center">
-                                                <input checked="" type="checkbox">
-                                            </td>
-                                            <td class="text-center">
-                                                <input checked="" type="checkbox">
-                                            </td>
-                                            <td class="text-center">
-                                                <input checked="" type="checkbox">
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Leaves</td>
-                                            <td class="text-center">
-                                                <input checked="" type="checkbox">
-                                            </td>
-                                            <td class="text-center">
-                                                <input checked="" type="checkbox">
-                                            </td>
-                                            <td class="text-center">
-                                                <input checked="" type="checkbox">
-                                            </td>
-                                            <td class="text-center">
-                                                <input checked="" type="checkbox">
-                                            </td>
-                                            <td class="text-center">
-                                                <input checked="" type="checkbox">
-                                            </td>
-                                            <td class="text-center">
-                                                <input checked="" type="checkbox">
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Events</td>
-                                            <td class="text-center">
-                                                <input checked="" type="checkbox">
-                                            </td>
-                                            <td class="text-center">
-                                                <input checked="" type="checkbox">
-                                            </td>
-                                            <td class="text-center">
-                                                <input checked="" type="checkbox">
-                                            </td>
-                                            <td class="text-center">
-                                                <input checked="" type="checkbox">
-                                            </td>
-                                            <td class="text-center">
-                                                <input checked="" type="checkbox">
-                                            </td>
-                                            <td class="text-center">
-                                                <input checked="" type="checkbox">
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                            <div class="row"> 
+                                <div class="col-sm-6"> 
+                                    <label>Role Name <span class="text-danger">*</span></label>
+                                    <select class="select form-control @error('role_id') is-invalid @enderror" name="role_id" id="role_id">
+                                        <option selected disabled> --Select --</option>
+                                        @foreach ($role as $itme )
+                                            <option value="{{ $itme->name }}">{{ $itme->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col-sm-6"> 
+                                    <label>Position <span class="text-danger">*</span></label>
+                                    <select class="select form-control @error('position_id') is-invalid @enderror" name="position_id" id="position_id">
+                                        <option selected disabled> --Select --</option>
+                                        @foreach ($position as $positions )
+                                            <option value="{{ $positions->name_khmer }}">{{ $positions->name_khmer }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row"> 
+                                <div class="col-sm-6"> 
+                                    <div class="form-group">
+                                        <label>Phone <span class="text-danger">*</span></label>
+                                        <input class="form-control @error('phone') is-invalid @enderror" type="tel" id="" name="phone" placeholder="Enter Phone">
+                                    </div>
+                                </div>
+                                <div class="col-sm-6"> 
+                                    <label>Department <span class="text-danger">*</span></label>
+                                    <select class="select form-control @error('department_id') is-invalid @enderror" name="department_id" id="department_id">
+                                        <option selected disabled> --Select --</option>
+                                        @foreach ($department as $item )
+                                            <option value="{{ $item->name }}">{{ $item->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row"> 
+                                <div class="col-sm-6"> 
+                                    <label>Status</label>
+                                    <select class="select form-control" name="status" id="status">
+                                        <option selected disabled> --Select --</option>
+                                        <option value="Active">Active</option>
+                                        <option value="Inactive">Inactive</option>
+                                        <option value="Disable">Disable</option>
+                                    </select>
+                                </div>
+                                <div class="col-sm-6"> 
+                                    <label>Photo</label>
+                                    <input class="form-control" type="file" id="image" name="image">
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row"> 
+                                <div class="col-sm-6"> 
+                                    <div class="form-group">
+                                        <label>Password <span class="text-danger">*</span></label>
+                                        <input type="password" class="form-control @error('password') is-invalid @enderror" name="password" placeholder="Enter Password">
+                                    </div>
+                                </div>
+                                <div class="col-sm-6"> 
+                                    <label>Confirm Password</label>
+                                    <input type="password" class="form-control" name="password_confirmation" placeholder="Confirm Password">
+                                </div>
                             </div>
                             <div class="submit-section">
-                                <button class="btn btn-primary submit-btn">Submit</button>
+                                <button type="submit" class="btn btn-primary submit-btn">Submit</button>
                             </div>
                         </form>
                     </div>
                 </div>
             </div>
         </div>
+        <!-- /Add User Modal -->
+
+
+        <!-- Edit User Modal -->
+        <div id="edit_user" class="modal custom-modal fade" role="dialog">
+            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Edit User</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <br>
+                    <div class="modal-body">
+                        <form action="{{url('users/update')}}" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            <input type="hidden" name="id" class="e_id" value="">
+                            <div class="row"> 
+                                <div class="col-sm-6"> 
+                                    <div class="form-group">
+                                        <label>Full Name <span class="text-danger">*</span></label>
+                                        <input class="form-control" type="text" id="e_name" name="name" value="{{ old('name') }}" placeholder="Enter Name">
+                                    </div>
+                                </div>
+                                <div class="col-sm-6"> 
+                                    <label>Emaill <span class="text-danger">*</span></label>
+                                    <input class="form-control" type="email" id="e_email" name="email"  placeholder="Enter Email">
+                                </div>
+                            </div>
+                            <div class="row"> 
+                                <div class="col-sm-6"> 
+                                    <label>Role Name <span class="text-danger">*</span></label>
+                                    <select class="select form-control" name="role_id" id="e_role_name">
+                                        <option selected disabled> --Select --</option>
+                                        @foreach ($role as $itme )
+                                            <option value="{{ $itme->name }}">{{ $itme->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col-sm-6"> 
+                                    <label>Position <span class="text-danger">*</span></label>
+                                    <select class="select form-control" name="position_id" id="e_position">
+                                        <option selected disabled> --Select --</option>
+                                        @foreach ($position as $item )
+                                            <option value="{{ $item->name_khmer }}">{{ $item->name_khmer }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row"> 
+                                <div class="col-sm-6"> 
+                                    <div class="form-group">
+                                        <label>Phone <span class="text-danger">*</span></label>
+                                        <input class="form-control" type="tel" id="e_phone_number" name="phone" placeholder="Enter Phone">
+                                    </div>
+                                </div>
+                                <div class="col-sm-6"> 
+                                    <label>Department <span class="text-danger">*</span></label>
+                                    <select class="select form-control" name="department_id" id="e_department">
+                                        <option selected disabled> --Select --</option>
+                                        @foreach ($department as $item )
+                                            <option value="{{ $item->name }}">{{ $item->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row"> 
+                                <div class="col-sm-6"> 
+                                    <label>Status</label>
+                                    <select class="select form-control" name="status" id="e_status">
+                                        <option selected disabled> --Select --</option>
+                                        <option value="Active">Active</option>
+                                        <option value="Inactive">Inactive</option>
+                                        <option value="Disable">Disable</option>
+                                    </select>
+                                </div>
+                                <div class="col-sm-6"> 
+                                    <label>Profile</label>
+                                    <input class="form-control" type="file" id="image" name="image">
+                                    <input type="hidden" name="hidden_image" id="e_image" value="">
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row"> 
+                                <div class="col-sm-6"> 
+                                    <div class="form-group">
+                                        <label>Password <span class="text-danger">*</span></label>
+                                        <input type="password" class="form-control" name="password" placeholder="Enter Password">
+                                    </div>
+                                </div>
+                                <div class="col-sm-6"> 
+                                    <label>Confirm Password</label>
+                                    <input type="password" class="form-control" name="password_confirmation" placeholder="Confirm Password">
+                                </div>
+                            </div>
+                            <div class="submit-section">
+                                <button type="submit" class="btn btn-primary submit-btn">Submit</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /Edit Salary Modal -->
+
+
+         <!-- Delete User Modal -->
+         <div class="modal custom-modal fade" id="delete_user" role="dialog">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <div class="form-header">
+                            <h3>Delete User</h3>
+                            <p>Are you sure want to delete?</p>
+                        </div>
+                        <div class="modal-btn delete-action">
+                            <form action="{{url('users/delete')}}" method="POST">
+                                @csrf
+                                <input type="hidden" name="id" class="e_id" value="">
+                                <input type="hidden" name="hidden_image" id="e_image" value="">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <button type="submit" class="btn btn-primary continue-btn submit-btn">Delete</button>
+                                    </div>
+                                    <div class="col-6">
+                                        <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-primary cancel-btn">Cancel</a>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /Delete User Modal -->
     </div>
 @endsection
+@include('includs.script')
+
+<script>
+    $(function(){
+        $('.userUpdate').on('click',function(){
+            var _this = $(this).parents('tr');
+            $('.e_id').val(_this.find('.ids').text());
+            $('#e_name').val(_this.find('.name').text());
+            $('#e_email').val(_this.find('.email').text());
+            $('#e_phone_number').val(_this.find('.phone_number').text());
+            $('#e_image').val(_this.find('.image').text());
+
+            var name_role = (_this.find(".role_name").text());
+            var _option = '<option selected value="' + name_role+ '">' + _this.find('.role_name').text() + '</option>'
+            $( _option).appendTo("#e_role_name");
+
+            var position = (_this.find(".position").text());
+            var _option = '<option selected value="' +position+ '">' + _this.find('.position').text() + '</option>'
+            $( _option).appendTo("#e_position");
+
+            var department = (_this.find(".department").text());
+            var _option = '<option selected value="' +department+ '">' + _this.find('.department').text() + '</option>'
+            $( _option).appendTo("#e_department");
+
+            var statuss = (_this.find(".statuss").text());
+            var _option = '<option selected value="' +statuss+ '">' + _this.find('.statuss').text() + '</option>'
+            $( _option).appendTo("#e_status");
+        });
+        $('.userDelete').on('click',function(){
+            var _this = $(this).parents('tr');
+            $('.e_id').val(_this.find('.ids').text());
+            $('.e_image').val(_this.find('.image').text());
+        });
+    });
+</script>

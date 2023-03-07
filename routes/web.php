@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admins\RoleConroller;
+use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Admins\UserController;
 use App\Http\Controllers\Admins\BranchController;
 use App\Http\Controllers\Admins\AddressController;
@@ -32,7 +33,7 @@ use App\Http\Controllers\Admins\AttendanceEmployeeController;
 Route::get('/', function () {
     return view('auth.login');
 });
-
+Route::post('/login', [LoginController::class, 'login']);
 Auth::routes();
 Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('/dashboad/employee', [App\Http\Controllers\HomeController::class, 'index'])->name('dashboad.employee');
@@ -60,5 +61,9 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::Resource('/department', DepartmentController::class);
     Route::Resource('/position', PositionController::class);
     Route::Resource('/branch', BranchController::class);
-    Route::Resource('/users', UserController::class);
+
+    Route::get('users', [UserController::class,'index']);
+    Route::post('users/store', [UserController::class,'store']);
+    Route::post('users/update', [UserController::class,'update']);
+    Route::post('users/delete', [UserController::class,'destroy']);
 });

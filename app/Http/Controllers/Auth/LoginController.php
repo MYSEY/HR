@@ -2,8 +2,14 @@
 
 namespace App\Http\Controllers\Auth;
 
+use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Brian2694\Toastr\Facades\Toastr;
+use Illuminate\Support\Facades\Auth;
 use App\Providers\RouteServiceProvider;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
 class LoginController extends Controller
@@ -35,6 +41,68 @@ class LoginController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest')->except('logout');
+        $this->middleware('guest')->except([
+            'logout',
+            'locked',
+            'unlock'
+        ]);
+    }
+
+
+    public function login(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|string|email',
+            'password' => 'required|string',
+        ]);
+
+        $email    = $request->email;
+        $password = $request->password;
+
+        $dt         = Carbon::now();
+        $todayDate  = $dt->toDayDateTimeString();
+
+        $activityLog = [
+            'name'        => $email,
+            'email'       => $email,
+            'description' => 'has log in',
+            'date_time'   => $todayDate,
+        ];
+        if (Auth::attempt(['email'=>$email,'password'=>$password,'status'=>'Active'])) {
+            DB::table('activity_logs')->insert($activityLog);
+            Toastr::success('Login successfully :)','Success');
+            return redirect()->intended('dashboad/employee');
+        }elseif (Auth::attempt(['email'=>$email,'password'=>$password,'status'=> null])) {
+            DB::table('activity_logs')->insert($activityLog);
+            Toastr::success('Login successfully :)','Success');
+            return redirect()->intended('dashboad/employee');
+        }else{
+            Toastr::error('fail, WRONG USERNAME OR PASSWORD :)','Error');
+            return redirect('login');
+        }
+    }
+
+
+    public function logout()
+    {
+        $user = Auth::User();
+        Session::put('user', $user);
+        $user=Session::get('user');
+
+        $name       = $user->name;
+        $email      = $user->email;
+        $dt         = Carbon::now();
+        $todayDate  = $dt->toDayDateTimeString();
+
+        $activityLog = [
+            'name'        => $name,
+            'email'       => $email,
+            'description' => 'has logged out',
+            'date_time'   => $todayDate,
+        ];
+        DB::table('activity_logs')->insert($activityLog);
+        Auth::logout();
+        Toastr::success('Logout successfully :)','Success');
+        return redirect('login');
     }
 }

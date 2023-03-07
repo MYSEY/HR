@@ -18,13 +18,16 @@ class CreateUsersTable extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('email');
+            $table->string('email')->unique();
             $table->string('email_verified_at')->nullable();
             $table->string('password');
-            $table->integer('role_id')->nullable();
-            $table->string('profile')->nullable();
+            $table->string('role_id')->nullable();
+            $table->string('position_id')->nullable();
+            $table->string('department_id')->nullable();
+            $table->longText('profile')->nullable();
+            $table->string('phone')->nullable();
             $table->boolean('users_permission')->nullable();
-            $table->boolean('status')->nullable();
+            $table->string('status')->nullable();
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();
             $table->dateTime('deleted_at')->nullable();
@@ -39,8 +42,8 @@ class CreateUsersTable extends Migration
                 'password'=>Hash::make('ASDasd12345$$'),
                 'role_id'=>1,
                 'users_permission'=>1,
-                'status'=>1,
-                'profile'=>'profiles/admin_user.jpg',
+                'status'=> 'Active',
+                'profile'=>'',
                 'created_at'=>now(),
                 'updated_at'=>now()
             ]

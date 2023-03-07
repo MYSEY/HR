@@ -25,13 +25,10 @@ class UserUpdated extends FormRequest
     {
         return [
             'name' => 'required|max:255',
-            'last_name' => 'required|max:255',
-            'phone' => 'required',
+            'phone'     => 'required|min:11|numeric',
             'email' => 'required',
-            'password' => 'required',
             'position_id' => 'required',
             'department_id' => 'required',
-            'date_of_birth' => 'required',
             'password' => [
                 'sometimes',
                 'nullable',

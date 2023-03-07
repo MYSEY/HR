@@ -111,6 +111,8 @@
     <link href="{{asset('/admin/css/fullcalendar.min.css')}}" rel="stylesheet" type="text/css">
 
     <link rel="stylesheet" href="{{asset('/admin/css/style.css')}}">
+    {{-- message toastr --}}
+	<link rel="stylesheet" href="{{ asset('admin/css/toastr.min.css') }}">
 </head>
 
 <body class="account-page">
@@ -119,6 +121,7 @@
             <div class="account-content">
                 <div class="container">
                     {{-- <h3 class="account-title" style="text-align: center;">Login</h3> --}}
+                    {!! Toastr::message() !!}
                     <div class="account-box" style="width: 366px;">
                         <div class="account-wrapper">
                             <div class="account-logo">
@@ -129,16 +132,14 @@
                                 @csrf
                                 <div class="form-group">
                                     <label>Email</label>
-                                    {{-- <input type="text" placeholder="Email" id="email" class="form-control" name="email" value="admin@dreamguys.co.in"> --}}
-
                                     <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
-        
                                     @error('email')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>
                                     @enderror
                                 </div>
+
                                 <div class="form-group Password-icon">
                                     <div class="row">
                                         <div class="col">
@@ -151,11 +152,7 @@
                                         </div>
                                     </div>
                                     <div class="position-relative">
-                                        {{-- <input type="password" placeholder="Password" id="password" class="form-control pass-input" name="password" value="123456"><span class="fa fa-eye-slash toggle-password"></span>
-                                        <div class="text-danger pt-2">
-                                        </div> --}}
                                         <input id="password" type="password" class="form-control pass-input @error('password') is-invalid @enderror" name="password" required autocomplete="current-password"><span class="fa fa-eye-slash toggle-password"></span>
-
                                         @error('password')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
@@ -204,11 +201,13 @@
     <script src="{{asset('/admin/js/task.js.download')}}"></script>
 
     <script src="{{asset('/admin/js/layout.js.download')}}"></script>
-    {{-- <script src="{{asset('/admin/js/theme-settings.js.download')}}"></script> --}}
     <script src="{{asset('/admin/js/greedynav.js.download')}}"></script>
 
     <script src="{{asset('/admin/js/app.js.download')}}"></script>
-
+    <script src="{{asset('admin/js/jquery.slimscroll.min.js') }}"></script>
+    <script src="{{asset('/admin/js/bootstrap.min.js')}}"></script>
+    <script src="{{asset('admin/js/toastr_jquery.min.js') }}"></script>
+    <script src="{{asset('admin/js/toastr.min.js') }}"></script>
 </body>
 
 </html>

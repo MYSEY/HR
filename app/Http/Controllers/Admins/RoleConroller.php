@@ -94,7 +94,7 @@ class RoleConroller extends Controller
                 'name'  => $request->roleNmae,
                 'status'    => 1
             ]);
-            Toastr::success('Create new role successfully :)','Success');
+            Toastr::success('Updated role successfully :)','Success');
             return redirect()->back();
         }catch(\Exception $e){
             DB::rollback();

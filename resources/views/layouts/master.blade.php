@@ -12,7 +12,7 @@
     <meta name="keywords" content="admin, estimates, bootstrap, business, corporate, creative, management, minimal, modern, accounts, invoice, html5, responsive, CRM, Projects">
     <meta name="author" content="Dreamguys - Bootstrap Admin Template">
     <meta name="robots" content="noindex, nofollow">
-    <title>Dashboard - HRMS admin template</title>
+    <title>HRMS</title>
 
     <link rel="shortcut icon" type="image/x-icon" href="https://smarthr.dreamguystech.com/laravel/template/public/assets/img/favicon.png">
 
@@ -497,9 +497,8 @@
     <script src="{{ asset('admin/js/theme-settings.js.download') }}"></script>
     <script src="{{ asset('admin/js/greedynav.js.download') }}"></script>
 
-    <script src="{{ asset('admin/js/app.js.download') }}"></script>
+	<script src="{{ URL::to('admin/js/app.js.download') }}"></script>
 
-    <script src="{{asset('/admin/js/app.js.download')}}"></script>
 	<script src="{{asset('admin/js/jquery.slimscroll.min.js') }}"></script>
     <script src="{{asset('/admin/js/bootstrap.min.js')}}"></script>
     <script src="{{asset('admin/js/toastr_jquery.min.js') }}"></script>
