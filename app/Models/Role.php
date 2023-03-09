@@ -12,4 +12,19 @@ class Role extends Model
         'id',
         'name',
     ];
+
+
+    public function createdBy()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+    public function upldatedBy()
+    {
+        return $this->belongsTo(User::class ,'updated_by');
+    }
+
+
+    public function getFullNameCreatedByAttribute(){
+        return optional($this->createdBy)->name;
+    }
 }

@@ -6,6 +6,7 @@ use App\Models\Department;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\DepartmentRequest;
 
@@ -23,16 +24,6 @@ class DepartmentController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        return view('department.create');
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -43,8 +34,10 @@ class DepartmentController extends Controller
         try {
             $data = $request->all();
             $data['created_by']    = Auth::user()->id;
+            $data['head_department']    = Auth::user()->id;
             Department::create($data);
-            return redirect()->route('department.index')->with('status','Department created successfully!');
+            Toastr::success('Department created successfully! :)','Success');
+            return redirect()->back();
             DB::commit();
         } catch (\Throwable $exp) {
             DB::rollBack();
@@ -81,17 +74,20 @@ class DepartmentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        try {
-            Department::where('id',$id)->update([
-                'name'  => $request->name,
+        try{
+            Department::where('id',$request->id)->update([
+                'name_khmer'  => $request->name_khmer,
+                'name_english'  => $request->name_english,
                 'updated_by'    => Auth::user()->id 
             ]);
-            return redirect()->route('department.index')->with('status','Department updated successfully!');
-            DB::commit();
-        } catch (\Throwable $exp) {
-            DB::rollBack();
+            Toastr::success('Department Updated successfully :)','Success');
+            return redirect()->back();
+        }catch(\Exception $e){
+            DB::rollback();
+            Toastr::error('Department Updated fail :)','Error');
+            return redirect()->back();
         }
     }
 
@@ -103,7 +99,14 @@ class DepartmentController extends Controller
      */
     public function destroy(Request $request)
     {
-        Department::where('id',$request->id)->delete();
-        return response()->json(['status'=>true]);
+        try{
+            Department::destroy($request->id);
+            Toastr::success('Department deleted successfully :)','Success');
+            return redirect()->back();
+        }catch(\Exception $e){
+            DB::rollback();
+            Toastr::error('Department delete fail :)','Error');
+            return redirect()->back();
+        }
     }
 }

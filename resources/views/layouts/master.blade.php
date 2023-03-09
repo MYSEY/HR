@@ -143,7 +143,12 @@
                 <li class="nav-item dropdown has-arrow main-drop">
                     <a href=""
                         class="dropdown-toggle nav-link" data-bs-toggle="dropdown">
-                        <span class="user-img"><img src="{{asset('/admin/img/avatar-21.jpg')}}" alt="">
+                        <span class="user-img">
+                            @if (Auth::user()->profile==null)
+                                <img src="{{asset('/admin/img/avatar-21.jpg')}}" alt="">
+                            @else
+                                <img src="{{asset('/uploads/images/'.Auth::user()->profile)}}" alt="">
+                            @endif
                             <span class="status online"></span></span>
                         <span>Admin</span>
                     </a>
@@ -214,7 +219,6 @@
                                     </ul>
                                 </li>
 
-                                
                             <li class="menu-title">
                                 <span>HR</span>
                             </li>
@@ -246,17 +250,6 @@
                                 </li> --}}
                                 <li class="">
                                     <a href="{{url('users')}}"><i class="la la-user-plus"></i> <span>Users</span></a>
-                                </li>
-                                <li class="submenu">
-                                    <a href=""><i class="la la-key"></i> <span> Authentication </span> <span class="menu-arrow"></span></a>
-                                    <ul style="display: none;">
-                                        <li class=""><a href="">Login </a></li>
-                                        {{-- <li class=""><a href="">Register </a></li>
-                                        <li class=""><a href="">Forgot Password </a></li> --}}
-                                    </ul>
-                                </li>
-                                <li class="submenu">
-                                    <a href="{{url('role')}}"><i class="la la-key"></i> <span>Roles &amp; Permissions</span></a>
                                 </li>
                             </ul>
                         </nav>
@@ -290,9 +283,7 @@
                                     <li><a class="" href="{{url('department')}}">Departments</a></li>
                                 </ul>
                             </li>
-                            <li class="">
-                                <a href="{{url('role')}}"><i class="la la-key"></i> <span>Roles &amp; Permissions</span> </a>
-                            </li>
+                            
                             
                             {{-- <li class="menu-title">
                                 <span>HR</span>
@@ -324,17 +315,20 @@
                             <li class="">
                                 <a href="{{url('users')}}"><i class="la la-user-plus"></i> <span>Users</span></a>
                             </li>
-                            <li class="submenu">
-                                <a href=""><i class="la la-key"></i> <span> Authentication </span> <span class="menu-arrow"></span></a>
-                                <ul style="display: none;">
-                                    <li class=""><a  href="">Login </a></li>
-                                    {{-- <li class=""><a href="">Register </a></li>
-                                    <li class=""><a href=""> Forgot Password </a></li> --}}
-                                </ul>
+                            <li class="">
+                                <a href="{{url('role')}}"><i class="la la-key"></i> <span>Roles &amp; Permissions</span></a>
                             </li>
                             {{-- <li class="submenu">
                                 <a href="{{url('role')}}"><i class="la la-key"></i> <span>Roles &amp; Permissions</span></a>
                             </li> --}}
+
+                            <li class="submenu">
+                                <a href=""><i class="la la-key"></i> <span> Configuration </span> <span class="menu-arrow"></span></a>
+                                <ul style="display: none;">
+                                    <li class=""><a  href="{{url('position')}}">Postion</a></li>
+                                    <li class=""><a  href="{{url('branch')}}">Branch</a></li>
+                                </ul>
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -437,15 +431,6 @@
                                 </li>
                             </ul>
                         </div>
-                        <div class="tab-pane fade" id="v-pills-authentication" role="tabpanel"
-                            aria-labelledby="v-pills-authentication-tab">
-                            <p>Authentication</p>
-                            <ul>
-                                <li class=""><a href="">Login </a></li>
-                                {{-- <li class=""><a href="">Register </a></li>
-                                <li class=""><a href="">Forgot Password </a></li> --}}
-                            </ul>
-                        </div>
                         <div class="tab-pane fade" id="v-pills-authentication" role="tabpanel" aria-labelledby="v-pills-authentication-tab">
                             <a href="{{url('role')}}"><i class="la la-key"></i> <span>Roles &amp; Permissions</span> </a>
                         </div>
@@ -464,45 +449,41 @@
         </div>
     </div>
 
-    <script src="{{ asset('/admin/js/jquery.min.js.download') }}"></script>
+    <script src="{{asset('/admin/js/jquery.min.js.download')}}"></script>
 
-    <script src="{{ asset('admin/js/bootstrap.bundle.min.js.download') }}"></script>
+    <script src="{{asset('/admin/js/bootstrap.bundle.min.js.download')}}"></script>
 
-    <script src="{{ asset('admin/js/jquery.slimscroll.min.js.download') }}"></script>
-    <script src="{{ asset('admin/js/moment.min.js.download') }}"></script>
-    <script src="{{ asset('admin/js/jquery-ui.min.js.download') }}"></script>
+    <script src="{{asset('/admin/js/jquery.slimscroll.min.js.download')}}"></script>
+    <script src="{{asset('/admin/js/moment.min.js.download')}}"></script>
+    <script src="{{asset('/admin/js/jquery-ui.min.js.download')}}"></script>
 
-    <script src="{{ asset('admin/js/select2.min.js.download') }}"></script>
+    <script src="{{asset('/admin/js/select2.min.js.download')}}"></script>
 
-    <script src="{{ asset('admin/js/jquery.dataTables.min.js.download') }}"></script>
-    <script src="{{ asset('admin/js/dataTables.bootstrap4.min.js.download') }}"></script>
+    <script src="{{asset('/admin/js/jquery.dataTables.min.js.download')}}"></script>
+    <script src="{{asset('/admin/js/dataTables.bootstrap4.min.js.download')}}"></script>
 
-    <script src="{{ asset('admin/js/bootstrap-datetimepicker.min.js.download') }}"></script>
-    <script src="{{ asset('admin/js/daterangepicker.js.download') }}"></script>
+    <script src="{{asset('/admin/js/bootstrap-datetimepicker.min.js.download')}}"></script>
+    <script src="{{asset('/admin/js/daterangepicker.js.download')}}"></script>
 
-    <script src="{{ asset('admin/js/bootstrap-tagsinput.min.js.download') }}"></script>
+    <script src="{{asset('/admin/js/bootstrap-tagsinput.min.js.download')}}"></script>
 
-    <script src="{{ asset('admin/js/sticky-kit.min.js.download') }}"></script>
+    <script src="{{asset('/admin/js/sticky-kit.min.js.download')}}"></script>
 
-    <script src="{{ asset('admin/js/summernote-bs4.js.download') }}"></script>
+    <script src="{{asset('/admin/js/summernote-bs4.js.download')}}"></script>
 
-    <script src="{{ asset('admin/js/fullcalendar.min.js.download') }}"></script>
-    <script src="{{ asset('admin/js/jquery.fullcalendar.js.download') }}"></script>
+    <script src="{{asset('/admin/js/fullcalendar.min.js.download')}}"></script>
+    <script src="{{asset('/admin/js/jquery.fullcalendar.js.download')}}"></script>
 
-    <script src="{{ asset('admin/js/jquery.maskedinput.js.download') }}"></script>
+    <script src="{{asset('/admin/js/jquery.maskedinput.js.download')}}"></script>
 
-    <script src="{{ asset('admin/js/task.js.download') }}"></script>
+    <script src="{{asset('/admin/js/task.js.download')}}"></script>
 
-    <script src="{{ asset('admin/js/layout.js.download') }}"></script>
-    <script src="{{ asset('admin/js/theme-settings.js.download') }}"></script>
-    <script src="{{ asset('admin/js/greedynav.js.download') }}"></script>
+    <script src="{{asset('/admin/js/layout.js.download')}}"></script>
+    <script src="{{asset('/admin/js/theme-settings.js.download')}}"></script>
+    <script src="{{asset('/admin/js/greedynav.js.download')}}"></script>
 
-	<script src="{{ URL::to('admin/js/app.js.download') }}"></script>
-
-	<script src="{{asset('admin/js/jquery.slimscroll.min.js') }}"></script>
     <script src="{{asset('/admin/js/bootstrap.min.js')}}"></script>
-    <script src="{{asset('admin/js/toastr_jquery.min.js') }}"></script>
-    <script src="{{asset('admin/js/toastr.min.js') }}"></script>
+    <script src="{{asset('/admin/js/app.js.download')}}"></script>
     <div class="sidebar-overlay"></div>
     {{-- <gdiv class="ginger-extension-writer" style="display: none;">
         <gdiv class="ginger-extension-writer-frame"><iframe

@@ -53,8 +53,8 @@ class Department extends Model
     | ACCESSORS
     |--------------------------------------------------------------------------
     */
-    public function getCreateByAttribute(){
-        return optional($this->createdBy)->name. ' '.optional($this->createdBy)->last_name;
+    public function getFullNameCreatedByAttribute(){
+        return optional($this->createdBy)->name;
     }
     /*
     |--------------------------------------------------------------------------

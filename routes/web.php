@@ -58,9 +58,20 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('role/delete', [RoleConroller::class,'destroy']);
     Route::Resource('permission', PermissionController::class);
 
-    Route::Resource('/department', DepartmentController::class);
-    Route::Resource('/position', PositionController::class);
-    Route::Resource('/branch', BranchController::class);
+    Route::get('/department', [DepartmentController::class,'index']);
+    Route::post('/department/store', [DepartmentController::class,'store']);
+    Route::post('/department/delete', [DepartmentController::class,'destroy']);
+    Route::post('/department/update', [DepartmentController::class,'update']);
+
+    Route::get('/position', [PositionController::class,'index']);
+    Route::post('/position/store', [PositionController::class,'store']);
+    Route::post('/position/delete', [PositionController::class,'destroy']);
+    Route::post('/position/update', [PositionController::class,'destroy']);
+
+    Route::get('/branch', [BranchController::class,'index']);
+    Route::post('/branch/store', [BranchController::class,'store']);
+    Route::post('/branch/delete', [BranchController::class,'destroy']);
+    Route::post('/branch/update', [BranchController::class,'update']);
 
     Route::get('users', [UserController::class,'index']);
     Route::post('users/store', [UserController::class,'store']);

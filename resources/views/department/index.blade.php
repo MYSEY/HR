@@ -15,25 +15,20 @@
                 </div>
             </div>
         </div>
-        @if ($message = Session::get('status'))
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                <strong>{{ $message }}</strong>
-                <button type="button" class="btn-close btn-sm" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        @endif 
+        {!! Toastr::message() !!}
 
         <div class="row">
             <div class="col-md-12">
-                <div>
+                <div class="table-responsive">
                     <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                         <div class="row">
                             <div class="col-sm-12">
-                                <table class="table table-striped custom-table mb-0 datatable dataTable no-footer"
-                                    id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
+                                <table class="table table-striped custom-table datatable dataTable no-footer" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
                                     <thead>
                                         <tr>
                                             <th style="width: 30px;" class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="#: activate to sort column descending">#</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department Name: activate to sort column ascending" style="width: 772.237px;">Name</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department Name: activate to sort column ascending" style="width: 772.237px;">Name(KH)</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department Name: activate to sort column ascending" style="width: 772.237px;">Name(EN)</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department Name: activate to sort column ascending" style="width: 772.237px;">Create By</th>
                                             <th class="text-end sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Action: activate to sort column ascending" style="width: 300.962px;">Action</th>
                                         </tr>
@@ -42,15 +37,16 @@
                                         @if (count($data)>0)
                                             @foreach ($data as $item)
                                                 <tr class="odd">
-                                                    <td class="sorting_1">{{$item->id}}</td>
-                                                    <td>{{$item->name}}</td>
-                                                    <td>{{$item->FullName}}</td>
+                                                    <td class="sorting_1 ids">{{$item->id}}</td>
+                                                    <td class="name_khmer">{{$item->name_khmer}}</td>
+                                                    <td class="name_english">{{$item->name_english}}</td>
+                                                    <td>{{$item->FullNameCreatedBy}}</td>
                                                     <td class="text-end">
                                                         <div class="dropdown dropdown-action">
                                                             <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
                                                             <div class="dropdown-menu dropdown-menu-right">
-                                                                <a class="dropdown-item" href="{{route('department.edit',$item->id)}}"><i class="fa fa-pencil m-r-5"></i> Edit</a>
-                                                                <a class="dropdown-item" href="#" data-id="{{$item->id}}" id="delete_department"><i class="fa fa-trash-o m-r-5"></i> Delete</a>
+                                                                <a class="dropdown-item update" data-toggle="modal" data-id="{{$item->id}}" data-target="#edit_department"><i class="fa fa-pencil m-r-5"></i> Edit</a>
+                                                                <a class="dropdown-item delete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_department"><i class="fa fa-trash-o m-r-5"></i> Delete</a>
                                                             </div>
                                                         </div>
                                                     </td>
@@ -74,71 +70,105 @@
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
+                        <h5 class="modal-title">Add New Department</h5>
                         <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">×</span>
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form action="{{url('role')}}" method="POST" enctype="multipart/form-data">
+                        <form action="{{url('department/store')}}" method="POST" enctype="multipart/form-data">
                             @csrf
                             <div class="form-group">
-                                <label>Name <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" value="{{ old('name') }}" placeholder="Enter role name">
+                                <label>Name(kh) <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control @error('name_khmer') is-invalid @enderror" id="name_khmer" name="name_khmer">
+                            </div>
+                            <div class="form-group">
+                                <label>Name(EN) <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control @error('name_english') is-invalid @enderror" id="name_english" name="name_english">
                             </div>
                             <div class="submit-section">
-                                <button class="btn btn-primary submit-btn">Submit</button>
+                                <button type="submit" class="btn btn-primary submit-btn">Submit</button>
                             </div>
                         </form>
                     </div>
                 </div>
             </div>
         </div>
+
+        <div id="edit_department" class="modal custom-modal fade" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Edit Department</h5>
+                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="{{url('department/update')}}" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            <input type="hidden" name="id" class="e_id" value="">
+                            <div class="form-group">
+                                <label>Name(kh) <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control @error('name_khmer') is-invalid @enderror" id="e_name_khmer" name="name_khmer">
+                            </div>
+                            <div class="form-group">
+                                <label>Name(EN) <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control @error('name_english') is-invalid @enderror" id="e_name_english" name="name_english">
+                            </div>
+                            <div class="submit-section">
+                                <button type="submit" class="btn btn-primary submit-btn">Submit</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Delete Department Modal -->
+        <div class="modal custom-modal fade" id="delete_department" role="dialog">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <div class="form-header">
+                            <h3>Delete</h3>
+                            <p>Are you sure want to delete?</p>
+                        </div>
+                        <div class="modal-btn delete-action">
+                            <form action="{{url('department/delete')}}" method="POST">
+                                @csrf
+                                <input type="hidden" name="id" class="e_id" value="">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <button type="submit" class="btn btn-primary continue-btn submit-btn">Delete</button>
+                                    </div>
+                                    <div class="col-6">
+                                        <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-primary cancel-btn">Cancel</a>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /Delete Department Modal -->
     </div>
 @endsection
 
 @include('includs.script')
 <script>
     $(function(){
-        $("#DataTables_Table_0 tbody").delegate("#delete_department", "click", function(){
-            let delId = $(this).data("id");
-            Swal.fire({
-                title: 'Are you sure?',
-                text: "You won't be able to revert this!?",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#17a2b8',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'YES',
-                cancelButtonText: 'No',
-            }).then((result) => {
-                if (result.value) {
-                    $.ajax({
-                        type: "DELETE",
-                        url: "/department/delete",
-                        data: {
-                            "_token": "{{ csrf_token() }}",
-                            id   : delId
-                        },
-                        success: function (response) {
-                            if(response.status==1){
-                                Swal.fire('Deleted!','Your file has been deleted.','success')
-                                window.location.reload();
-                            }
-                        }
-                    });
-                }
-            });
+        $('.update').on('click',function(){
+            var _this = $(this).parents('tr');
+            $('.e_id').val(_this.find('.ids').text());
+            $('#e_name_khmer').val(_this.find('.name_khmer').text());
+            $('#e_name_english').val(_this.find('.name_english').text());
         });
 
-        function department(){
-            $.ajax({
-                type: "GET",
-                url: "/department",
-                dataType: "JSON",
-                success: function (response) {
-                    console.log(response.data);
-                }
-            });
-        }
+        $('.delete').on('click',function(){
+            var _this = $(this).parents('tr');
+            $('.e_id').val(_this.find('.ids').text());
+        });
     });
 </script>

@@ -23,9 +23,9 @@ class UserRequest extends FormRequest
             'name' => 'required|max:255',
             'email'     => 'required|string|email|max:255|unique:users',
             'phone'     => 'required|min:11|numeric',
-            'position_id' => 'required',
-            'role_id' => 'required',
-            'department_id' => 'required',
+            'position_id' => 'required|string',
+            'role_id' => 'required|string',
+            'department_id' => 'required|string',
             'password' => [
                 'sometimes',
                 'nullable',

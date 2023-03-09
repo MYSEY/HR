@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Brian2694\Toastr\Facades\Toastr;
+use Illuminate\Support\Facades\Auth;
 
 class RoleConroller extends Controller
 {
@@ -47,7 +48,8 @@ class RoleConroller extends Controller
         try{
             Role::create([
                 'name'      => $request->roleName,
-                'status'    => 1
+                'status'    => 1,
+                'created_by'    => Auth::user()->id
             ]);
             Toastr::success('Create new role successfully :)','Success');
             return redirect()->back();
@@ -92,7 +94,8 @@ class RoleConroller extends Controller
         try{
             Role::where('id',$request->id)->update([
                 'name'  => $request->roleNmae,
-                'status'    => 1
+                'status'    => 1,
+                'updated_by'    => Auth::user()->id
             ]);
             Toastr::success('Updated role successfully :)','Success');
             return redirect()->back();

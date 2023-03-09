@@ -14,7 +14,7 @@
 
                 </div>
                 <div class="col-auto float-end ms-auto">
-                    <a href="{{ url('users/create') }}" class="btn add-btn" data-toggle="modal" data-target="#add_user"><i class="fa fa-plus"></i> Add New</a>
+                    <a href="#" class="btn add-btn" data-toggle="modal" data-target="#add_user"><i class="fa fa-plus"></i> Add New</a>
                 </div>
             </div>
         </div>
@@ -28,6 +28,7 @@
                                 <table class="table table-striped custom-table datatable dataTable no-footer" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
                                     <thead>
                                         <tr>
+                                            <th style="width: 30px;" class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="#: activate to sort column descending">#</th>
                                             <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 291.163px;">Name</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending" style="width: 227px;"> Email</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending" style="width: 227px;"> Phone</th>
@@ -43,23 +44,23 @@
                                         @if (count($data)>0)
                                             @foreach ($data as $item)
                                                 <tr class="odd">
+                                                    <td class="ids">{{ $item->id }}</td>
                                                     <td class="sorting_1">
                                                         <span hidden class="image">{{ $item->profile}}</span>
                                                         <h2 class="table-avatar">
                                                             @if ($item->profile != null)
                                                                 <a href=""  class="avatar">
-                                                                    <img alt="" src="{{asset('/uploads/images/'.$item->profile)}}">
+                                                                    <img alt="avatar" src="{{asset('/uploads/images/'.$item->profile)}}">
                                                                 </a>
                                                                 <a href="" class="name">{{$item->name}}</a>
                                                             @else
                                                                 <a href="" class="avatar">
-                                                                    <img alt="" src="{{asset('admin/img/defuals/default-user-icon.png')}}">
+                                                                    <img alt="avatar" src="{{asset('admin/img/defuals/default-user-icon.png')}}">
                                                                 </a>
                                                                 <a href="" class="name">{{$item->name}}</a>
                                                             @endif
                                                         </h2>
                                                     </td>
-                                                    <td hidden class="ids">{{ $item->id }}</td>
                                                     <td class="email">{{$item->email}}</td>
                                                     <td class="phone_number">{{ $item->phone }}</td>
                                                     <td class="position">{{$item->position_id}}</td>
@@ -232,7 +233,6 @@
         </div>
         <!-- /Add User Modal -->
 
-
         <!-- Edit User Modal -->
         <div id="edit_user" class="modal custom-modal fade" role="dialog">
             <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
@@ -337,14 +337,13 @@
         </div>
         <!-- /Edit Salary Modal -->
 
-
-         <!-- Delete User Modal -->
-         <div class="modal custom-modal fade" id="delete_user" role="dialog">
+        <!-- Delete User Modal -->
+        <div class="modal custom-modal fade" id="delete_user" role="dialog">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-body">
                         <div class="form-header">
-                            <h3>Delete User</h3>
+                            <h3>Delete</h3>
                             <p>Are you sure want to delete?</p>
                         </div>
                         <div class="modal-btn delete-action">

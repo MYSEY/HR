@@ -19,7 +19,8 @@ class DepartmentRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|max:255'
+            'name_khmer' => 'required|string|max:255',
+            'name_english' => 'required|string|max:255'
         ];
     }
 

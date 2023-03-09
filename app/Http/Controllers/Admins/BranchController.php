@@ -6,6 +6,7 @@ use App\Models\Branchs;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\BranchsRequest;
 
@@ -23,16 +24,6 @@ class BranchController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        return view('branchs.create');
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -44,7 +35,8 @@ class BranchController extends Controller
             $data = $request->all();
             $data['created_by']    = Auth::user()->id;
             Branchs::create($data);
-            return redirect()->route('branch.index')->with('status','Branch created successfully!');
+            Toastr::success('Branch created successfully! :)','Success');
+            return redirect()->back();
             DB::commit();
         } catch (\Throwable $exp) {
             DB::rollBack();
@@ -81,18 +73,20 @@ class BranchController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        try {
-            Branchs::where('id',$id)->update([
+        try{
+            Branchs::where('id',$request->id)->update([
                 'branch_name_kh'  => $request->branch_name_kh,
                 'branch_name_en'  => $request->branch_name_en,
                 'updated_by'    => Auth::user()->id 
             ]);
-            return redirect()->route('branch.index')->with('status','Branch updated successfully!');
-            DB::commit();
-        } catch (\Throwable $exp) {
-            DB::rollBack();
+            Toastr::success('Branch Updated successfully :)','Success');
+            return redirect()->back();
+        }catch(\Exception $e){
+            DB::rollback();
+            Toastr::error('Department Updated fail :)','Error');
+            return redirect()->back();
         }
     }
 
@@ -104,7 +98,14 @@ class BranchController extends Controller
      */
     public function destroy(Request $request)
     {
-        Branchs::where('id',$request->id)->delete();
-        return response()->json(['status'=>true]);
+        try{
+            Branchs::destroy($request->id);
+            Toastr::success('Branch deleted successfully :)','Success');
+            return redirect()->back();
+        }catch(\Exception $e){
+            DB::rollback();
+            Toastr::error('Branch delete fail :)','Error');
+            return redirect()->back();
+        }
     }
 }

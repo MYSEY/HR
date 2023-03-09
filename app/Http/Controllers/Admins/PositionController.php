@@ -6,6 +6,7 @@ use App\Models\Position;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\PositionRequest;
 
@@ -44,7 +45,8 @@ class PositionController extends Controller
             $data = $request->all();
             $data['created_by']    = Auth::user()->id;
             Position::create($data);
-            return redirect()->route('position.index')->with('status','Position created successfully!');
+            Toastr::success('Position created successfully! :)','Success');
+            return redirect()->back();
             DB::commit();
         } catch (\Throwable $exp) {
             DB::rollBack();
@@ -81,18 +83,20 @@ class PositionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        try {
-            Position::where('id',$id)->update([
+        try{
+            Position::where('id',$request->id)->update([
                 'name_khmer'  => $request->name_khmer,
                 'name_english'  => $request->name_english,
                 'updated_by'    => Auth::user()->id 
             ]);
-            return redirect()->route('position.index')->with('status','Department updated successfully!');
-            DB::commit();
-        } catch (\Throwable $exp) {
-            DB::rollBack();
+            Toastr::success('Position Updated successfully :)','Success');
+            return redirect()->back();
+        }catch(\Exception $e){
+            DB::rollback();
+            Toastr::error('Position Updated fail :)','Error');
+            return redirect()->back();
         }
     }
 
@@ -104,7 +108,14 @@ class PositionController extends Controller
      */
     public function destroy(Request $request)
     {
-        Position::where('id',$request->id)->delete();
-        return response()->json(['status'=>true]);
+        try{
+            Position::destroy($request->id);
+            Toastr::success('Position deleted successfully :)','Success');
+            return redirect()->back();
+        }catch(\Exception $e){
+            DB::rollback();
+            Toastr::error('Position delete fail :)','Error');
+            return redirect()->back();
+        }
     }
 }

@@ -21,7 +21,8 @@ class BranchsRequest extends FormRequest
     public function rules()
     {
         return [
-            'branch_name_kh' => 'required|min:5|max:255'
+            'branch_name_kh' => 'required|string|max:255',
+            'branch_name_en' => 'required|string|max:255',
         ];
     }
 
