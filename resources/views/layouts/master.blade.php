@@ -46,7 +46,6 @@
 <body>
 
     <div class="main-wrapper">
-
         <div class="header">
             <div class="header-left">
                 <a href="" class="logo">
@@ -66,13 +65,12 @@
             </a>
 
             <div class="page-title-box">
-                <h3>Dreamguy's Technologies</h3>
+                <h3>CAMMA</h3>
             </div>
 
             <a id="mobile_btn" class="mobile_btn" href=""><i class="fa fa-bars"></i></a>
 
             <ul class="nav user-menu">
-
                 <li class="nav-item">
                     <div class="top-nav-search">
                         <a href="javascript:void(0);" class="responsive-search">
@@ -141,20 +139,19 @@
                 </li>
 
                 <li class="nav-item dropdown has-arrow main-drop">
-                    <a href=""
-                        class="dropdown-toggle nav-link" data-bs-toggle="dropdown">
-                        <span class="user-img">
+                    <a href="" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">
+                        <span class="avatar">
                             @if (Auth::user()->profile==null)
-                                <img src="{{asset('/admin/img/avatar-21.jpg')}}" alt="">
+                                {{-- <img src="{{asset('/admin/img/avatar-21.jpg')}}" alt=""> --}}
+                                <img alt="avatar" src="{{asset('admin/img/defuals/default-user-icon.png')}}">
                             @else
                                 <img src="{{asset('/uploads/images/'.Auth::user()->profile)}}" alt="">
                             @endif
                             <span class="status online"></span></span>
-                        <span>Admin</span>
+                        <span>{{Auth::user()->name}}</span>
                     </a>
                     <div class="dropdown-menu">
                         <a class="dropdown-item" href="">My Profile</a>
-                        {{-- <a class="dropdown-item" href="{{ route('logout') }}">Logout</a> --}}
                         <a class="dropdown-item" href="{{ route('logout') }}"
                             onclick="event.preventDefault(); document.getElementById('logout-form').submit();"> {{ __('Logout') }}
                         </a>
@@ -170,7 +167,6 @@
                 <a href="" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
                 <div class="dropdown-menu dropdown-menu-right">
                     <a class="dropdown-item" href="">My Profile</a>
-                    {{-- <a class="dropdown-item" href="{{ route('logout') }}">Logout</a> --}}
                     <a class="dropdown-item" href="{{ route('logout') }}"
                         onclick="event.preventDefault(); document.getElementById('logout-form').submit();"> {{ __('Logout') }}
                     </a>
@@ -262,8 +258,8 @@
                             <li class="submenu">
                                 <a href=""><i class="la la-dashboard"></i> <span> Dashboard</span> <span class="menu-arrow"></span></a>
                                 <ul style="display: none;">
-                                    <li><a class="" href="">Admin Dashboard</a></li>
-                                    <li><a class="" href="">Employee Dashboard</a></li>
+                                    <li><a class="" href="{{url('dashboad/admin')}}">Admin Dashboard</a></li>
+                                    <li><a class="" href="{{url('dashboad/employee')}}">Employee Dashboard</a></li>
                                 </ul>
                             </li>
                             
@@ -337,104 +333,6 @@
                 </div>
                 <div class="slimScrollRail"
                     style="width: 7px; height: 100%; position: absolute; top: 0px; display: none; border-radius: 7px; background: rgb(51, 51, 51); opacity: 0.2; z-index: 90; right: 1px;">
-                </div>
-            </div>
-        </div>
-
-
-        <div class="two-col-bar" id="two-col-bar">
-            <div class="sidebar sidebar-twocol" id="navbar-nav">
-                <div class="slimScrollDiv"
-                    style="position: relative; overflow: hidden; width: 100%; height: 346px;">
-                    <div class="sidebar-left slimscroll" style="overflow: hidden; width: 100%; height: 366px;">
-                        
-                    </div>
-                    <div class="slimScrollBar"
-                        style="background: rgb(204, 204, 204); width: 7px; position: absolute; top: 0px; opacity: 0.4; display: block; border-radius: 7px; z-index: 99; right: 1px;">
-                    </div>
-                    <div class="slimScrollRail"
-                        style="width: 7px; height: 100%; position: absolute; top: 0px; display: none; border-radius: 7px; background: rgb(51, 51, 51); opacity: 0.2; z-index: 90; right: 1px;">
-                    </div>
-                </div>
-                <div class="sidebar-right">
-                    <div class="tab-content" id="v-pills-tabContent">
-                        <div class="tab-pane fade show active" id="v-pills-dashboard" role="tabpanel"
-                            aria-labelledby="v-pills-dashboard-tab">
-                            <p>Dashboard</p>
-                            <ul>
-                                <li>
-                                    <a class="" href="">Admin Dashboard</a>
-                                </li>
-                                <li>
-                                    <a class="" href="">Employee Dashboard</a>
-                                </li>
-                            </ul>
-                        </div>
-                        
-                        <div class="tab-pane fade" id="v-pills-employees" role="tabpanel"
-                            aria-labelledby="v-pills-employees-tab">
-                            <p>Employees</p>
-                            <ul>
-                                <li><a class="" href="{{url('employee')}}">All Employees</a></li>
-                                <li><a class="" href="">Holidays</a></li>
-                                {{-- <li><a class="" href="">Leaves(Admin) <span class="badge rounded-pill bg-primary float-end">1</span></a></li>
-                                <li><a class="" href="">Leaves(Employee)</a></li>
-                                <li><a class="" href="">Leave Settings</a></li>
-                                <li><a class="" href="">Attendance(Admin)</a></li>
-                                <li><a class="" href="">Attendance(Employee)</a></li> --}}
-                                <li><a class="" href="{{url('department')}}">Departments</a></li>
-                            </ul>
-                        </div>
-                        
-                        {{-- <div class="tab-pane fade" id="v-pills-payroll" role="tabpanel"
-                            aria-labelledby="v-pills-payroll-tab">
-                            <p>Payroll</p>
-                            <ul>
-                                <li><a class="" href="">Employee Salary </a></li>
-                                <li><a class="" href="">Payslip </a></li>
-                                <li><a class="" href="">Payroll Items </a></li>
-                            </ul>
-                        </div>
-                        
-                        <div class="tab-pane fade" id="v-pills-training" role="tabpanel"
-                            aria-labelledby="v-pills-training-tab">
-                            <p>Training</p>
-                            <ul>
-                                <li><a class="" href="">Training List </a></li>
-                                <li><a class="" href="">Trainers</a></li>
-                                <li><a class="" href=""> Training Type </a></li>
-                            </ul>
-                        </div>
-                        <div class="tab-pane fade" id="v-pills-promotion" role="tabpanel"
-                            aria-labelledby="v-pills-promotion-tab">
-                            <p>Promotion</p>
-                            <ul>
-                                <li class=""><a href=""> Promotion </a></li>
-                            </ul>
-                        </div>
-                        
-                        <div class="tab-pane fade" id="v-pills-activities" role="tabpanel"
-                            aria-labelledby="v-pills-activities-tab">
-                            <p>Activities</p>
-                            <ul>
-                                <li class="">
-                                    <a href=""><i class="la la-bell"></i> <span>Activities</span></a>
-                                </li>
-                            </ul>
-                        </div> --}}
-                        <div class="tab-pane fade" id="v-pills-users" role="tabpanel"
-                            aria-labelledby="v-pills-activities-tab">
-                            <p>Users</p>
-                            <ul>
-                                <li class="">
-                                    <a href="{{url('users')}}"><i class="la la-user-plus"></i> <span>Users</span></a>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="tab-pane fade" id="v-pills-authentication" role="tabpanel" aria-labelledby="v-pills-authentication-tab">
-                            <a href="{{url('role')}}"><i class="la la-key"></i> <span>Roles &amp; Permissions</span> </a>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>

@@ -83,7 +83,7 @@ class User extends Authenticatable
         return optional($this->position)->name_khmer;
     }
     public function getEmployeeDepartmentAttribute(){
-        return optional($this->department)->name;
+        return optional($this->department)->name_khmer;
     }
     public function getRolePermissionAttribute(){
         return optional($this->role)->name;

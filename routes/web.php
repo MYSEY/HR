@@ -77,4 +77,5 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('users/store', [UserController::class,'store']);
     Route::post('users/update', [UserController::class,'update']);
     Route::post('users/delete', [UserController::class,'destroy']);
+    Route::get('users/edit', [UserController::class,'edit']);
 });

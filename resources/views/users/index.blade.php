@@ -63,10 +63,13 @@
                                                     </td>
                                                     <td class="email">{{$item->email}}</td>
                                                     <td class="phone_number">{{ $item->phone }}</td>
-                                                    <td class="position">{{$item->position_id}}</td>
-                                                    <td class="department">{{$item->department_id}}</td>
+                                                    <td class="position">{{$item->EmployeePosition}}</td>
+                                                    <td class="department">{{$item->EmployeeDepartment}}
+                                                        <span hidden class="badge bg-inverse-success department_id">{{ $item->department == null ? "" : $item->department->id }}</span>
+                                                    </td>
                                                     <td>
-                                                        <span class="badge bg-inverse-success role_name">{{ $item->role_id }}</span>
+                                                        <span class="badge bg-inverse-success role_name">{{ $item->role == null ? "" : $item->role->name }}</span>
+                                                        <span hidden class="badge bg-inverse-success role_id">{{ $item->role == null ? "" : $item->role->id }}</span>
                                                     </td>
                                                     <td>{{$item->created_at}}</td>
                                                     <td>
@@ -110,7 +113,8 @@
                                                         <div class="dropdown dropdown-action">
                                                             <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
                                                             <div class="dropdown-menu dropdown-menu-right">
-                                                                <a class="dropdown-item userUpdate" data-toggle="modal" data-id="{{$item->id}}" data-target="#edit_user"><i class="fa fa-pencil m-r-5"></i> Edit</a>
+                                                                <a class="dropdown-item userUpdate" data-id="{{$item->id}}"><i class="fa fa-pencil m-r-5"></i> Edit</a>
+                                                                {{-- <a class="dropdown-item userUpdate" data-toggle="modal" data-id="{{$item->id}}" data-target="#edit_user"><i class="fa fa-pencil m-r-5"></i> Edit</a> --}}
                                                                 <a class="dropdown-item userDelete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_user"><i class="fa fa-trash-o m-r-5"></i> Delete</a>
                                                             </div>
                                                         </div>
@@ -130,7 +134,6 @@
                 </div>
             </div>
         </div>
-
 
         <!-- Add User Modal -->
         <div id="add_user" class="modal custom-modal fade" role="dialog">
@@ -163,7 +166,7 @@
                                     <select class="select form-control @error('role_id') is-invalid @enderror" name="role_id" id="role_id">
                                         <option selected disabled> --Select --</option>
                                         @foreach ($role as $itme )
-                                            <option value="{{ $itme->name }}">{{ $itme->name }}</option>
+                                            <option value="{{ $itme->id }}">{{ $itme->name }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -172,7 +175,7 @@
                                     <select class="select form-control @error('position_id') is-invalid @enderror" name="position_id" id="position_id">
                                         <option selected disabled> --Select --</option>
                                         @foreach ($position as $positions )
-                                            <option value="{{ $positions->name_khmer }}">{{ $positions->name_khmer }}</option>
+                                            <option value="{{ $positions->id }}">{{ $positions->name_khmer }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -190,7 +193,7 @@
                                     <select class="select form-control @error('department_id') is-invalid @enderror" name="department_id" id="department_id">
                                         <option selected disabled> --Select --</option>
                                         @foreach ($department as $item )
-                                            <option value="{{ $item->name }}">{{ $item->name }}</option>
+                                            <option value="{{ $item->id }}">{{ $item->name_khmer }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -252,7 +255,7 @@
                                 <div class="col-sm-6"> 
                                     <div class="form-group">
                                         <label>Full Name <span class="text-danger">*</span></label>
-                                        <input class="form-control" type="text" id="e_name" name="name" value="{{ old('name') }}" placeholder="Enter Name">
+                                        <input class="form-control" type="text" id="e_name" name="name" value="" placeholder="Enter Name">
                                     </div>
                                 </div>
                                 <div class="col-sm-6"> 
@@ -263,20 +266,20 @@
                             <div class="row"> 
                                 <div class="col-sm-6"> 
                                     <label>Role Name <span class="text-danger">*</span></label>
-                                    <select class="select form-control" name="role_id" id="e_role_name">
-                                        <option selected disabled> --Select --</option>
-                                        @foreach ($role as $itme )
-                                            <option value="{{ $itme->name }}">{{ $itme->name }}</option>
-                                        @endforeach
+                                    <select class="select form-control" name="role_id" id="e_role_id">
+                                        {{-- <option selected disabled> --Select --</option> --}}
+                                        {{-- @foreach ($role as $itme)
+                                            <option value="{{ $itme->id }}">{{ $itme->name }}</option>
+                                        @endforeach --}}
                                     </select>
                                 </div>
                                 <div class="col-sm-6"> 
                                     <label>Position <span class="text-danger">*</span></label>
                                     <select class="select form-control" name="position_id" id="e_position">
-                                        <option selected disabled> --Select --</option>
-                                        @foreach ($position as $item )
-                                            <option value="{{ $item->name_khmer }}">{{ $item->name_khmer }}</option>
-                                        @endforeach
+                                        {{-- <option selected disabled> --Select --</option> --}}
+                                        {{-- @foreach ($position as $item )
+                                            <option value="{{ $item->id }}">{{ $item->name_khmer }}</option>
+                                        @endforeach --}}
                                     </select>
                                 </div>
                             </div>
@@ -293,7 +296,7 @@
                                     <select class="select form-control" name="department_id" id="e_department">
                                         <option selected disabled> --Select --</option>
                                         @foreach ($department as $item )
-                                            <option value="{{ $item->name }}">{{ $item->name }}</option>
+                                            <option value="{{ $item->id }}">{{ $item->name_khmer }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -351,6 +354,7 @@
                                 @csrf
                                 <input type="hidden" name="id" class="e_id" value="">
                                 <input type="hidden" name="hidden_image" id="e_image" value="">
+
                                 <div class="row">
                                     <div class="col-6">
                                         <button type="submit" class="btn btn-primary continue-btn submit-btn">Delete</button>
@@ -373,28 +377,49 @@
 <script>
     $(function(){
         $('.userUpdate').on('click',function(){
-            var _this = $(this).parents('tr');
-            $('.e_id').val(_this.find('.ids').text());
-            $('#e_name').val(_this.find('.name').text());
-            $('#e_email').val(_this.find('.email').text());
-            $('#e_phone_number').val(_this.find('.phone_number').text());
-            $('#e_image').val(_this.find('.image').text());
+            let id = $(this).data("id");
+            $.ajax({
+                type: "GET",
+                url: "{{url('users/edit')}}",
+                data: {
+                    id : id
+                },
+                dataType: "JSON",
+                success: function (response) {
+                    $('#edit_user').modal('show');
+                    $('#e_id').val(response.success.id);
+                    $('#e_name').val(response.success.name);
+                    $('#e_email').val(response.success.email);
+                    $('#e_phone_number').val(response.success.phone);
+                    $('#e_image').val(response.success.profile);
+                    response.role.forEach(element => {
+                        $("#e_role_id").append('<option selected value="' + element.id + '">' + element.name + '</option>');
+                    });
+                }
+            });
+            // var _this = $(this).parents('tr');
+            // $('.e_id').val(_this.find('.ids').text());
+            // $('#e_name').val(_this.find('.name').text());
+            // $('#e_email').val(_this.find('.email').text());
+            // $('#e_phone_number').val(_this.find('.phone_number').text());
+            // $('#e_image').val(_this.find('.image').text());
+            
+            // var name_role = (_this.find(".role_id").text());
+            // var name_name = (_this.find(".role_name").text());
+            // var _option = '<option selected value="' + name_role+ '">' '</option>'
+            // $( _option).appendTo("#e_role_name");
 
-            var name_role = (_this.find(".role_name").text());
-            var _option = '<option selected value="' + name_role+ '">' + _this.find('.role_name').text() + '</option>'
-            $( _option).appendTo("#e_role_name");
+            // var position = (_this.find(".position").text());
+            // var _option = '<option selected value="' +position+ '">' + _this.find('.position').text() + '</option>'
+            // $( _option).appendTo("#e_position");
 
-            var position = (_this.find(".position").text());
-            var _option = '<option selected value="' +position+ '">' + _this.find('.position').text() + '</option>'
-            $( _option).appendTo("#e_position");
+            // var department_id = (_this.find(".department_id").text());
+            // var _option = '<option selected value="' +department_id+ '">' + _this.find('.department').text() + '</option>'
+            // $( _option).appendTo("#e_department");
 
-            var department = (_this.find(".department").text());
-            var _option = '<option selected value="' +department+ '">' + _this.find('.department').text() + '</option>'
-            $( _option).appendTo("#e_department");
-
-            var statuss = (_this.find(".statuss").text());
-            var _option = '<option selected value="' +statuss+ '">' + _this.find('.statuss').text() + '</option>'
-            $( _option).appendTo("#e_status");
+            // var statuss = (_this.find(".statuss").text());
+            // var _option = '<option selected value="' +statuss+ '">' + _this.find('.statuss').text() + '</option>'
+            // $( _option).appendTo("#e_status");
         });
         $('.userDelete').on('click',function(){
             var _this = $(this).parents('tr');

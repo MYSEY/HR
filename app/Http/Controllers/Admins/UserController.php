@@ -23,7 +23,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $data = User::all();
+        $data = User::with('role')->with('department')->get();
         $role = Role::all();
         $position = Position::all();
         $department = Department::all();
@@ -48,8 +48,11 @@ class UserController extends Controller
      */
     public function store(UserRequest $request)
     {
-        $filename = time().'.'.$request->image->extension();
-        $request->image->move(public_path('uploads/images'), $filename);
+        if($request->hasFile('image')) {
+            $image = $request->file('image');
+            $filename = time().'.'.$image->getClientOriginalName();
+            $image->move(public_path('uploads/images'), $filename);
+        }
         try{
             $data = $request->all();
             $data['password']   = Hash::make($request->password);
@@ -82,9 +85,11 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request)
     {
-        //
+        $data = User::where('id',$request->id)->with('role')->first();
+        $role = Role::all();
+        return response()->json(['success'=>$data,'role'=>$role]);
     }
 
     /**
@@ -103,7 +108,6 @@ class UserController extends Controller
         }else{
             $filename = $request->hidden_image;
         }
-
         try{
             User::where('id',$request->id)->update([
                 'name'  => $request->name,
@@ -134,7 +138,9 @@ class UserController extends Controller
     {
         try{
             User::destroy($request->id);
-            unlink('uploads/images/'.$request->profile);
+            if ($request->profile) {
+                unlink('uploads/images/'.$request->profile);
+            }
             Toastr::success('User deleted successfully :)','Success');
             return redirect()->back();
         }catch(\Exception $e){

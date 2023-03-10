@@ -1,36 +1,14 @@
 <?php
 
-namespace App\Helpers;
+use App\Models\permissions;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
-class RolePermission
+function RolePermission($table_id,$permission_type_id)
 {
-    /**
-     * @param string $moduleName
-     * @param object $crud backpack crud ($this->crud)
-     * @return string
-     */
-    public static function checkPermission($crud, $moduleName)
-    {
-        // DENY CREATE
-        if (!backpack_user()->can('create ' . $moduleName)) :
-            $crud->denyAccess('create');
-        endif;
-        // DENY UPDATE
-        if (!backpack_user()->can('update ' . $moduleName)) :
-            $crud->denyAccess('update');
-        endif;
-        // DENY SHOW
-        if (!backpack_user()->can('show ' . $moduleName)) :
-            $crud->denyAccess('show');
-        endif;
-        // DENY LIST
-        if (!backpack_user()->can('list ' . $moduleName)) :
-            Abort(404);
-        endif;
-        // DENY DELETE
-        if (!backpack_user()->can('delete ' . $moduleName)) :
-            $crud->denyAccess('delete');
-            $crud->denyAccess('bulkDelete');
-        endif;
+    $id=Auth::user()->role_id;
+    $role_permission = permissions::where('role_id',$id)->where('table_id',$table_id)->where('permission_type_id',$permission_type_id)->get();
+    if(count($role_permission)>0){
+        return true;
     }
 }

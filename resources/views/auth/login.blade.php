@@ -120,7 +120,6 @@
         <div class="main-wrapper">
             <div class="account-content">
                 <div class="container">
-                    {{-- <h3 class="account-title" style="text-align: center;">Login</h3> --}}
                     {!! Toastr::message() !!}
                     <div class="account-box" style="width: 366px;">
                         <div class="account-wrapper">
@@ -132,7 +131,7 @@
                                 @csrf
                                 <div class="form-group">
                                     <label>Email</label>
-                                    <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
+                                    <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}"  autocomplete="email" autofocus>
                                     @error('email')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
