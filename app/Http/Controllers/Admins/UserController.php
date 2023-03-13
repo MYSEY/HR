@@ -89,7 +89,9 @@ class UserController extends Controller
     {
         $data = User::where('id',$request->id)->with('role')->first();
         $role = Role::all();
-        return response()->json(['success'=>$data,'role'=>$role]);
+        $position = Position::all();
+        $department = Department::all();
+        return response()->json(['success'=>$data,'role'=>$role,'position'=>$position,'department'=>$department]);
     }
 
     /**

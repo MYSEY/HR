@@ -237,7 +237,7 @@
         <!-- /Add User Modal -->
 
         <!-- Edit User Modal -->
-        <div id="edit_user" class="modal custom-modal fade" role="dialog">
+        <div id="editUserModal" class="modal custom-modal fade" role="dialog">
             <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -267,19 +267,13 @@
                                 <div class="col-sm-6"> 
                                     <label>Role Name <span class="text-danger">*</span></label>
                                     <select class="select form-control" name="role_id" id="e_role_id">
-                                        {{-- <option selected disabled> --Select --</option> --}}
-                                        {{-- @foreach ($role as $itme)
-                                            <option value="{{ $itme->id }}">{{ $itme->name }}</option>
-                                        @endforeach --}}
+                                        <option selected disabled> --Select --</option>
                                     </select>
                                 </div>
                                 <div class="col-sm-6"> 
                                     <label>Position <span class="text-danger">*</span></label>
                                     <select class="select form-control" name="position_id" id="e_position">
-                                        {{-- <option selected disabled> --Select --</option> --}}
-                                        {{-- @foreach ($position as $item )
-                                            <option value="{{ $item->id }}">{{ $item->name_khmer }}</option>
-                                        @endforeach --}}
+                                        <option selected disabled> --Select --</option>
                                     </select>
                                 </div>
                             </div>
@@ -295,9 +289,6 @@
                                     <label>Department <span class="text-danger">*</span></label>
                                     <select class="select form-control" name="department_id" id="e_department">
                                         <option selected disabled> --Select --</option>
-                                        @foreach ($department as $item )
-                                            <option value="{{ $item->id }}">{{ $item->name_khmer }}</option>
-                                        @endforeach
                                     </select>
                                 </div>
                             </div>
@@ -386,40 +377,50 @@
                 },
                 dataType: "JSON",
                 success: function (response) {
-                    $('#edit_user').modal('show');
-                    $('#e_id').val(response.success.id);
-                    $('#e_name').val(response.success.name);
-                    $('#e_email').val(response.success.email);
-                    $('#e_phone_number').val(response.success.phone);
-                    $('#e_image').val(response.success.profile);
-                    response.role.forEach(element => {
-                        $("#e_role_id").append('<option selected value="' + element.id + '">' + element.name + '</option>');
-                    });
+                    console.log(response.success);
+                    if (response.success) {
+                        if (response.role != '') {
+                            $('#e_role_id').html('<option selected disabled> --Select --</option>');
+                            $.each(response.role, function(i, item) {
+                                $('#e_role_id').append($('<option>', {
+                                    value: item.id,
+                                    text: item.name,
+                                    selected: item.id == response.success.role_id
+                                }));
+                            });
+                        }
+
+                        if (response.position != '') {
+                            $('#e_position').html('<option selected disabled> --Select --</option>');
+                            $.each(response.position, function(i, item) {
+                                $('#e_position').append($('<option>', {
+                                    value: item.id,
+                                    text: item.name_khmer,
+                                    selected: item.id == response.success.position_id
+                                }));
+                            });
+                        }
+                        
+                        if (response.department != '') {
+                            $('#e_department').html('<option selected disabled> --Select --</option>');
+                            $.each(response.department, function(i, item) {
+                                $('#e_department').append($('<option>', {
+                                    value: item.id,
+                                    text: item.name_khmer,
+                                    selected: item.id == response.success.department_id
+                                }));
+                            });
+                        }
+                        $('#e_id').val(response.success.id);
+                        $('#e_name').val(response.success.name);
+                        $('#e_email').val(response.success.email);
+                        $('#e_phone_number').val(response.success.phone);
+                        $('#e_image').val(response.success.profile);
+                        $('#e_status').val(response.success.status);
+                        $('#editUserModal').modal('show');
+                    }
                 }
             });
-            // var _this = $(this).parents('tr');
-            // $('.e_id').val(_this.find('.ids').text());
-            // $('#e_name').val(_this.find('.name').text());
-            // $('#e_email').val(_this.find('.email').text());
-            // $('#e_phone_number').val(_this.find('.phone_number').text());
-            // $('#e_image').val(_this.find('.image').text());
-            
-            // var name_role = (_this.find(".role_id").text());
-            // var name_name = (_this.find(".role_name").text());
-            // var _option = '<option selected value="' + name_role+ '">' '</option>'
-            // $( _option).appendTo("#e_role_name");
-
-            // var position = (_this.find(".position").text());
-            // var _option = '<option selected value="' +position+ '">' + _this.find('.position').text() + '</option>'
-            // $( _option).appendTo("#e_position");
-
-            // var department_id = (_this.find(".department_id").text());
-            // var _option = '<option selected value="' +department_id+ '">' + _this.find('.department').text() + '</option>'
-            // $( _option).appendTo("#e_department");
-
-            // var statuss = (_this.find(".statuss").text());
-            // var _option = '<option selected value="' +statuss+ '">' + _this.find('.statuss').text() + '</option>'
-            // $( _option).appendTo("#e_status");
         });
         $('.userDelete').on('click',function(){
             var _this = $(this).parents('tr');
