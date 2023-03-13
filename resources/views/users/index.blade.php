@@ -203,9 +203,9 @@
                                     <label>Status</label>
                                     <select class="select form-control" name="status" id="status">
                                         <option selected disabled> --Select --</option>
-                                        <option value="Active">Active</option>
-                                        <option value="Inactive">Inactive</option>
-                                        <option value="Disable">Disable</option>
+                                        @foreach ($optionStatus as $item )
+                                            <option value="{{ $item->name_khmer }}">{{ $item->name_khmer }}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                                 <div class="col-sm-6"> 
@@ -297,9 +297,6 @@
                                     <label>Status</label>
                                     <select class="select form-control" name="status" id="e_status">
                                         <option selected disabled> --Select --</option>
-                                        <option value="Active">Active</option>
-                                        <option value="Inactive">Inactive</option>
-                                        <option value="Disable">Disable</option>
                                     </select>
                                 </div>
                                 <div class="col-sm-6"> 
@@ -377,7 +374,6 @@
                 },
                 dataType: "JSON",
                 success: function (response) {
-                    console.log(response.success);
                     if (response.success) {
                         if (response.role != '') {
                             $('#e_role_id').html('<option selected disabled> --Select --</option>');
@@ -411,12 +407,22 @@
                                 }));
                             });
                         }
+                        if (response.optionStatus != '') {
+                            $('#e_status').html('<option selected disabled> --Select --</option>');
+                            $.each(response.optionStatus, function(i, item) {
+                                $('#e_status').append($('<option>', {
+                                    value: item.name_khmer,
+                                    text: item.name_khmer,
+                                    selected: item.name_khmer == response.success.status
+                                }));
+                            });
+                        }
+                        
                         $('#e_id').val(response.success.id);
                         $('#e_name').val(response.success.name);
                         $('#e_email').val(response.success.email);
                         $('#e_phone_number').val(response.success.phone);
                         $('#e_image').val(response.success.profile);
-                        $('#e_status').val(response.success.status);
                         $('#editUserModal').modal('show');
                     }
                 }

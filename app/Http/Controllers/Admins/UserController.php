@@ -11,6 +11,7 @@ use App\Http\Requests\UserRequest;
 use App\Http\Requests\UserUpdated;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Models\Option;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Hash;
 
@@ -27,7 +28,8 @@ class UserController extends Controller
         $role = Role::all();
         $position = Position::all();
         $department = Department::all();
-        return view('users.index',compact('data','role','position','department'));
+        $optionStatus = Option::where('type','status')->get();
+        return view('users.index',compact('data','role','position','department','optionStatus'));
     }
 
     /**
@@ -91,7 +93,8 @@ class UserController extends Controller
         $role = Role::all();
         $position = Position::all();
         $department = Department::all();
-        return response()->json(['success'=>$data,'role'=>$role,'position'=>$position,'department'=>$department]);
+        $optionStatus = Option::where('type','status')->get();
+        return response()->json(['success'=>$data,'role'=>$role,'position'=>$position,'department'=>$department,'optionStatus'=>$optionStatus]);
     }
 
     /**

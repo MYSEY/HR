@@ -215,5 +215,24 @@ class OptionSeeder extends Seeder
             'type' => 'experience',
             'created_by'    => Auth::id(),
         ]);
+        // user
+        Option::firstOrCreate([
+            'name_khmer' => 'Active',
+            'name_english'=>'Active',
+            'type' => 'status',
+            'created_by'    => Auth::id(),
+        ]);
+        Option::firstOrCreate([
+            'name_khmer' => 'Inactive',
+            'name_english'=>'Inactive',
+            'type' => 'status',
+            'created_by'    => Auth::id(),
+        ]);
+        Option::firstOrCreate([
+            'name_khmer' => 'Disable',
+            'name_english'=>'Disable',
+            'type' => 'status',
+            'created_by'    => Auth::id(),
+        ]);
     }
 }
