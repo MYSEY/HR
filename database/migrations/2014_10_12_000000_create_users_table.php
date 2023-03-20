@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
@@ -63,7 +64,8 @@ class CreateUsersTable extends Migration
             $table->string('account_name')->nullable();
             $table->string('account_number')->nullable();
             $table->boolean('users_permission')->nullable();
-            $table->string('status')->default('Probation');
+            $table->string('status')->nullable();
+            $table->string('emp_status')->default('Probation');
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();
             $table->dateTime('deleted_at')->nullable();
@@ -73,16 +75,18 @@ class CreateUsersTable extends Migration
 
         DB::table('users')->insert(
             [
+                'number_employee'=>'230-0001',
                 'employee_name_kh'=>'Administrator',
                 'employee_name_en'=>'Administrator',
                 'email'=>'administrator@gmail.com',
                 'password'=>Hash::make('ASDasd12345$$'),
                 'role_id'=>'1',
                 'users_permission'=>1,
-                'status'=> '',
+                'status'=> 'Active',
                 'profile'=>'',
                 'created_at'=>now(),
-                'updated_at'=>now()
+                'updated_at'=>now(),
+                'created_by'    => Auth::id(),
             ]
         );
 

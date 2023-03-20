@@ -1930,7 +1930,7 @@ input[type=file].form-control {
   -webkit-transition: all 0.2s ease;
   -ms-transition: all 0.2s ease;
   transition: all 0.2s ease;
-  padding-top: 9px;
+  padding-top: 3px;
 }
 .header .header-left .logo {
   display: inline-block;

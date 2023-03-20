@@ -101,8 +101,10 @@ class UserController extends Controller
         $role = Role::all();
         $position = Position::all();
         $department = Department::all();
-        $optionStatus = Option::where('type','status')->get();
-        return response()->json(['success'=>$data,'role'=>$role,'position'=>$position,'department'=>$department,'optionStatus'=>$optionStatus]);
+        $optionGender = Option::where('type','gender')->get();
+        $branch = Branchs::all();
+        $optionIdentityType = Option::where('type','identity_type')->get();
+        return response()->json(['success'=>$data,'role'=>$role,'position'=>$position,'department'=>$department,'optionGender'=>$optionGender,'branch'=>$branch,'optionIdentityType'=>$optionIdentityType]);
     }
 
     /**

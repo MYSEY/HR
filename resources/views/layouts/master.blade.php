@@ -49,10 +49,10 @@
         <div class="header">
             <div class="header-left">
                 <a href="" class="logo">
-                    <img src="{{ asset('/admin/img/logo.png') }}" width="40" height="40" alt="">
+                    <img src="{{ asset('/admin/img/logo/cammalogo.png') }}" width="100" height="100" alt="">
                 </a>
                 <a href="" class="logo2">
-                    <img src="{{ asset('/admin/img/logo2.png') }}" width="40" height="40" alt="">
+                    <img src="{{ asset('/admin/img/logo/cammalogo.png') }}" width="100" height="100" alt="">
                 </a>
             </div>
 

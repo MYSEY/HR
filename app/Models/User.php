@@ -147,6 +147,9 @@ class User extends Authenticatable
     public function training(){
         return $this->hasMany(StaffTraining::class,'employee_id','id');
     }
+    public function gender(){
+        return $this->hasMany(Option::class,'gender','id');
+    }
 
 
 

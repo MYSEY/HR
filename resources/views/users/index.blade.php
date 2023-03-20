@@ -76,7 +76,7 @@
                                                     <td>{{$item->joinOfDate}}</td>
                                                     <td>
                                                         <div class="dropdown">
-                                                            <a href="" class="btn btn-white btn-sm btn-rounded dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">{{$item->status}}</a>
+                                                            <a href="" class="btn btn-white btn-sm btn-rounded dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">{{$item->emp_status}}</a>
                                                         </div>
                                                     </td>
                                                     <td class="text-end">
@@ -136,9 +136,17 @@
                                         <input class="form-control @error('employee_name_en') is-invalid @enderror" type="text" id="employee_name_en" name="employee_name_en" value="{{old('employee_name_en')}}">
                                     </div>
                                 </div>
-                                <div class="col-sm-6"> 
-                                    <label>Emaill <span class="text-danger">*</span></label>
-                                    <input class="form-control @error('email') is-invalid @enderror" type="email" id="" name="email"  placeholder="Enter Email" {{old('email')}}>
+                                
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>Gender</label>
+                                        <select class="select form-control" id="gender" name="gender" value="{{old('gender')}}">
+                                            <option value="">select gender</option>
+                                            @foreach ($optionGender as $item)
+                                                <option value="{{$item->id}}">{{$item->name_khmer}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
                             <div class="row"> 
@@ -155,13 +163,13 @@
                                 </div>
                                 <div class="col-sm-6"> 
                                     <div class="form-group">
-                                    <label>Position <span class="text-danger">*</span></label>
-                                    <select class="select form-control @error('position_id') is-invalid @enderror" name="position_id" id="position_id">
-                                        <option selected disabled> --Select --</option>
-                                        @foreach ($position as $positions )
-                                            <option value="{{ $positions->id }}">{{ $positions->name_khmer }}</option>
-                                        @endforeach
-                                    </select>
+                                        <label>Position <span class="text-danger">*</span></label>
+                                        <select class="select form-control @error('position_id') is-invalid @enderror" name="position_id" id="position_id">
+                                            <option selected disabled> --Select --</option>
+                                            @foreach ($position as $positions )
+                                                <option value="{{ $positions->id }}">{{ $positions->name_khmer }}</option>
+                                            @endforeach
+                                        </select>
                                     </div>
                                 </div>
                             </div>
@@ -294,16 +302,9 @@
                                         <input class="form-control" type="number" id="agency_phone_number" name="agency_phone_number" value="{{old('agency_phone_number')}}">
                                     </div>
                                 </div>
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <label>Gender</label>
-                                        <select class="select form-control" id="gender" name="gender" value="{{old('gender')}}">
-                                            <option value="">select gender</option>
-                                            @foreach ($optionGender as $item)
-                                                <option value="{{$item->id}}">{{$item->name_khmer}}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
+                                <div class="col-sm-6"> 
+                                    <label>Emaill <span class="text-danger">*</span></label>
+                                    <input class="form-control @error('email') is-invalid @enderror" type="email" id="" name="email"  placeholder="Enter Email" {{old('email')}}>
                                 </div>
                             </div>
                             <div class="row"> 
@@ -532,71 +533,377 @@
                     <div class="modal-body">
                         <form action="{{url('users/update')}}" method="POST" enctype="multipart/form-data">
                             @csrf
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label class="">Employee ID</label>
+                                        <input type="text" class="form-control" id="e_number_employee" name="number_employee" value="">
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="">
+                                        <label class="">Name (KH) <span class="text-danger">*</span></label>
+                                        <input class="form-control @error('employee_name_kh') is-invalid @enderror" type="text" id="e_employee_name_kh" name="employee_name_kh" value="{{old('employee_name_kh')}}">
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label class="">Name (EN) <span class="text-danger">*</span></label>
+                                        <input class="form-control @error('employee_name_en') is-invalid @enderror" type="text" id="e_employee_name_en" name="employee_name_en" value="{{old('employee_name_en')}}">
+                                    </div>
+                                </div>
+                                
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>Gender</label>
+                                        <select class="select form-control" id="e_gender" name="gender">
+                                            <option value="">select gender</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="row"> 
                                 <div class="col-sm-6"> 
                                     <div class="form-group">
-                                        <label>Full Name <span class="text-danger">*</span></label>
-                                        <input class="form-control" type="text" id="e_name" name="name" value="" placeholder="Enter Name">
+                                        <label>Role Name <span class="text-danger">*</span></label>
+                                        <select class="select form-control" name="role_id" id="e_role_id">
+                                            <option selected disabled> --Select --</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6"> 
+                                    <div class="form-group">
+                                        <label>Position <span class="text-danger">*</span></label>
+                                        <select class="select form-control" name="position_id" id="e_position">
+                                            <option selected disabled> --Select --</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Date Of Birth <span class="text-danger">*</span></label>
+                                        <div class="cal-icon">
+                                            <input class="form-control datetimepicker @error('date_of_birth') is-invalid @enderror" type="text" id="e_date_of_birth" name="date_of_birth" value="{{old('date_of_birth')}}">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label class="">Profile</label>
+                                        <input class="form-control" type="file" id="profile" name="profile" value="{{old('profile')}}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Department <span class="text-danger">*</span></label>
+                                        <select class="select form-control" name="department_id" id="e_department">
+                                            <option selected disabled> --Select --</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Branch</label>
+                                        <select class="select form-control" id="e_branch_id" name="branch_id" value="{{old('branch_id')}}">
+                                            <option value="">Please select branch</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Unit</label>
+                                        <input type="text" class="form-control" id="e_unit" name="unit" value="{{old('unit')}}">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="">
+                                        <label>level</label>
+                                        <input type="number" class="form-control" id="e_level" name="level" value="{{old('level')}}">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="">
+                                        <label class="">Join Date <span class="text-danger">*</span></label>
+                                        <div class="cal-icon">
+                                            <input class="form-control datetimepicker @error('date_of_commencement') is-invalid @enderror" id="e_date_of_commencement" name="date_of_commencement" type="text" value="{{old('date_of_commencement')}}">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label class="">Number Of Children</label>
+                                        <input class="form-control" type="number" id="e_number_of_children" name="number_of_children" value="{{old('number_of_children')}}">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label class="">Marital status</label>
+                                        <select class="select form-control" id="e_marital_status" name="marital_status" value="{{old('marital_status')}}">
+                                            <option value="Married">Married</option>
+                                            <option value="Single">Single</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Nationality</label>
+                                        <select class="select form-control" id="e_nationality" name="nationality" value="{{old('nationality')}}">
+                                            <option value="Khmer">Khmer</option>
+                                            <option value="Chinese">Chinese</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="">
+                                        <label class="">Guarantee Letter <span class="text-danger">*</span></label>
+                                        <input class="form-control @error('guarantee_letter') is-invalid @enderror" type="file" id="e_guarantee_letter" name="guarantee_letter" value="{{old('guarantee_letter')}}">
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label class="">Employment Book <span class="text-danger">*</span></label>
+                                        <input class="form-control @error('employment_book') is-invalid @enderror" type="file" id="employment_book" name="employment_book" value="{{old('employment_book')}}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label class="">Personal Phone <span class="text-danger">*</span></label>
+                                        <input class="form-control @error('personal_phone_number') is-invalid @enderror" type="number" id="e_personal_phone_number" name="personal_phone_number" value="{{old('personal_phone_number')}}">
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label class="">Company Phone</label>
+                                        <input class="form-control" type="number" id="e_company_phone_number" name="company_phone_number" value="{{old('company_phone_number')}}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label class="">Agency Phone </label>
+                                        <input class="form-control" type="number" id="e_agency_phone_number" name="agency_phone_number" value="{{old('agency_phone_number')}}">
                                     </div>
                                 </div>
                                 <div class="col-sm-6"> 
                                     <label>Emaill <span class="text-danger">*</span></label>
-                                    <input class="form-control" type="email" id="e_email" name="email"  placeholder="Enter Email">
+                                    <input class="form-control @error('email') is-invalid @enderror" type="email" id="e_email" name="email"  placeholder="Enter Email" {{old('email')}}>
                                 </div>
                             </div>
-                            <div class="row"> 
-                                <div class="col-sm-6"> 
-                                    <label>Role Name <span class="text-danger">*</span></label>
-                                    <select class="select form-control" name="role_id" id="e_role_id">
-                                        <option selected disabled> --Select --</option>
-                                    </select>
-                                </div>
-                                <div class="col-sm-6"> 
-                                    <label>Position <span class="text-danger">*</span></label>
-                                    <select class="select form-control" name="position_id" id="e_position">
-                                        <option selected disabled> --Select --</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <br>
-                            <div class="row"> 
-                                <div class="col-sm-6"> 
-                                    <div class="form-group">
-                                        <label>Phone <span class="text-danger">*</span></label>
-                                        <input class="form-control" type="tel" id="e_phone_number" name="phone" placeholder="Enter Phone">
-                                    </div>
-                                </div>
-                                <div class="col-sm-6"> 
-                                    <label>Department <span class="text-danger">*</span></label>
-                                    <select class="select form-control" name="department_id" id="e_department">
-                                        <option selected disabled> --Select --</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="row"> 
-                                <div class="col-sm-6"> 
-                                    <label>Status</label>
-                                    <select class="select form-control" name="status" id="e_status">
-                                        <option selected disabled> --Select --</option>
-                                    </select>
-                                </div>
-                                <div class="col-sm-6"> 
-                                    <label>Profile</label>
-                                    <input class="form-control" type="file" id="image" name="image">
-                                    <input type="hidden" name="hidden_image" id="e_image" value="">
-                                </div>
-                            </div>
-                            <br>
                             <div class="row"> 
                                 <div class="col-sm-6"> 
                                     <div class="form-group">
                                         <label>Password <span class="text-danger">*</span></label>
-                                        <input type="password" class="form-control" name="password" placeholder="Enter Password">
+                                        <input type="password" class="form-control @error('password') is-invalid @enderror" name="password" placeholder="Enter Password">
                                     </div>
                                 </div>
                                 <div class="col-sm-6"> 
                                     <label>Confirm Password</label>
                                     <input type="password" class="form-control" name="password_confirmation" placeholder="Confirm Password">
+                                </div>
+                            </div>
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label class="">Remark</label>
+                                    <textarea type="text" rows="3" class="form-control" name="remark" id="e_remark" value="{{old('remark')}}"></textarea>
+                                </div>
+                            </div>
+                            
+                            {{-- Bank Info --}}
+                            <div class="form-group col-md-12 col-12" element="div" bp-field-wrapper="true" bp-field-name="Identity" bp-field-type="custom_html">
+                                <label class="navbar-brand custom-navbar-brand mb-0" style="width: 100%; background: #dfe6e9; padding: 6px;font-size: 15px;font-weight: normal !important;">Bank Info</label>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label class="">Bank Name</label>
+                                        <input class="form-control" type="text" id="e_bank_name" name="bank_name" value="{{old('bank_name')}}">
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label class="">Account Name</label>
+                                        <input class="form-control" type="text" id="e_account_name" name="account_name" value="{{old('account_name')}}">
+                                    </div>
+                                </div>
+                            </div>
+                           <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label class="">Account Number</label>
+                                        <input class="form-control" type="text" id="e_account_number" name="account_number" value="{{old('account_number')}}">
+                                    </div>
+                                </div>
+                           </div>
+                            {{-- Identities --}}
+                            <div class="form-group col-md-12 col-12" element="div" bp-field-wrapper="true" bp-field-name="Identity" bp-field-type="custom_html">
+                                <label class="navbar-brand custom-navbar-brand mb-0" style="width: 100%; background: #dfe6e9; padding: 6px;font-size: 15px;font-weight: normal !important;">Identities</label>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label class="">Identity Type</label>
+                                        <select class="select form-control" id="e_identity_type" name="identity_type" value="{{old('identity_type')}}">
+                                            <option value="">select identity type</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label class="">Identity Number</label>
+                                        <input class="form-control" type="number" id="e_identity_number" name="identity_number" value="{{old('identity_number')}}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Issue Date</label>
+                                        <div class="cal-icon">
+                                            <input class="form-control datetimepicker" type="text" id="e_issue_date" name="issue_date" value="{{old('issue_date')}}">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Issue Expired Date</label>
+                                        <div class="cal-icon">
+                                            <input class="form-control datetimepicker" type="text" id="e_issue_expired_date" name="issue_expired_date" value="{{old('issue_expired_date')}}">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+        
+                            {{-- Current Address --}}
+                            <div class="form-group col-md-12 col-12" element="div" bp-field-wrapper="true" bp-field-name="Identity" bp-field-type="custom_html">
+                                <label class="navbar-brand custom-navbar-brand mb-0" style="width: 100%; background: #dfe6e9; padding: 6px;font-size: 15px;font-weight: normal !important;">Current Address</label>
+                            </div>
+    
+                            <div id="CurrentAddress">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Province/City</label>
+                                            <select class="form-control" @change="cityChange" name="current_addre_city" v-model="frm.city" :disabled="JSON.stringify(cities).length==2" value="{{old('city')}}">
+                                                <option v-for="(item,text) in cities" :value="text">@{{item}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>District/Khan</label>
+                                            <select class="form-control" @change="districChange" name="current_addre_distric" v-model="frm.distric" :disabled="JSON.stringify(districs).length==2" value="{{old('distric')}}">
+                                                <option v-for="(item, text) in districs" :value="text">@{{item}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="no-error-label">Commune/Sangkat</label>
+                                            <select class="form-control no-error-border" @change="communeChange" name="current_addre_commune" v-model="frm.commune" :disabled="JSON.stringify(communes).length==2" value="{{old('commune')}}">
+                                                <option v-for="(item, text) in communes" :value="text">@{{item}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="no-error-label">Village</label>
+                                            <select class="form-control no-error-border" @change="villageChange" name="current_addre_village" v-model="frm.village" :disabled="JSON.stringify(villages).length==2" value="{{old('village')}}">
+                                                <option v-for="(item, text) in villages" :value="text">@{{item}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>House No</label>
+                                        <input class="form-control" type="text" id="current_house_no" name="current_house_no">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Street No</label>
+                                        <input class="form-control" type="text" id="current_street_no" name="current_street_no">
+                                    </div>
+                                </div>
+                            </div>
+
+                            {{-- Permanent Address --}}
+                            <div class="form-group col-md-12 col-12" element="div" bp-field-wrapper="true" bp-field-name="Identity" bp-field-type="custom_html">
+                                <label class="navbar-brand custom-navbar-brand mb-0" style="width: 100%; background: #dfe6e9; padding: 6px;font-size: 15px;font-weight: normal !important;">Permanent Address</label>
+                            </div>
+    
+                            <div id="PermanentAddress">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Province/City</label>
+                                            <select class="form-control" @change="cityChange" name="permanet_addre_city" v-model="frm.city" :disabled="JSON.stringify(cities).length==2" value="{{old('city')}}">
+                                                <option v-for="(item,text) in cities" :value="text">@{{item}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>District/Khan</label>
+                                            <select class="form-control" @change="districChange" name="permanet_addre_distric" v-model="frm.distric" :disabled="JSON.stringify(districs).length==2" value="{{old('distric')}}">
+                                                <option v-for="(item, text) in districs" :value="text">@{{item}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-md-6">
+                                        <div class="form-group ">
+                                            <label class="no-error-label">Commune/Sangkat</label>
+                                            <select class="form-control no-error-border" @change="communeChange" name="permanet_addre_commune" v-model="frm.commune" :disabled="JSON.stringify(communes).length==2" value="{{old('commune')}}">
+                                                <option v-for="(item, text) in communes" :value="text">@{{item}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="no-error-label">Village</label>
+                                            <select class="form-control no-error-border" @change="villageChange" name="permanet_addre_village" v-model="frm.village" :disabled="JSON.stringify(villages).length==2" value="{{old('village')}}">
+                                                <option v-for="(item, text) in villages" :value="text">@{{item}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>House No</label>
+                                        <input class="form-control" type="text" id="permanent_house_no" name="permanent_house_no">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Street No</label>
+                                        <input class="form-control" type="text" id="permanent_street_no" name="permanent_street_no">
+                                    </div>
                                 </div>
                             </div>
                             <input type="hidden" name="id" id="e_id">
@@ -689,21 +996,60 @@
                                     }));
                                 });
                             }
-                            if (response.optionStatus != '') {
-                                $('#e_status').html('<option selected disabled> --Select --</option>');
-                                $.each(response.optionStatus, function(i, item) {
-                                    $('#e_status').append($('<option>', {
+                            if (response.optionGender != '') {
+                                $('#e_gender').html('<option selected disabled> --Select --</option>');
+                                $.each(response.optionGender, function(i, item) {
+                                    $('#e_gender').append($('<option>', {
                                         value: item.name_khmer,
                                         text: item.name_khmer,
-                                        selected: item.name_khmer == response.success.status
+                                        selected: item.id == response.success.gender
+                                    }));
+                                });
+                            }
+                            if (response.branch != '') {
+                                $('#e_branch_id').html('<option selected disabled> --Select --</option>');
+                                $.each(response.branch, function(i, item) {
+                                    $('#e_branch_id').append($('<option>', {
+                                        value: item.branch_name_kh,
+                                        text: item.branch_name_kh,
+                                        selected: item.id == response.success.branch_id
+                                    }));
+                                });
+                            }
+                            if (response.optionIdentityType != '') {
+                                $('#e_identity_type').html('<option selected disabled> --Select --</option>');
+                                $.each(response.optionIdentityType, function(i, item) {
+                                    $('#e_identity_type').append($('<option>', {
+                                        value: item.name_khmer,
+                                        text: item.name_khmer,
+                                        selected: item.id == response.success.identity_type
                                     }));
                                 });
                             }
                             
                             $('#e_id').val(response.success.id);
-                            $('#e_name').val(response.success.name);
+                            $('#e_number_employee').val(response.success.number_employee);
+                            $('#e_employee_name_kh').val(response.success.employee_name_kh);
+                            $('#e_employee_name_en').val(response.success.employee_name_en);
+                            $('#e_date_of_birth').val(response.success.date_of_birth);
+                            $('#e_unit').val(response.success.unit);
+                            $('#e_level').val(response.success.level);
+                            $('#e_level').val(response.success.level);
+                            $('#e_date_of_commencement').val(response.success.date_of_commencement);
+                            $('#e_number_of_children').val(response.success.number_of_children);
+                            $('#e_marital_status').val(response.success.marital_status);
+                            $('#e_nationality').val(response.success.nationality);
+                            $('#e_personal_phone_number').val(response.success.personal_phone_number);
+                            $('#e_company_phone_number').val(response.success.company_phone_number);
+                            $('#e_agency_phone_number').val(response.success.agency_phone_number);
                             $('#e_email').val(response.success.email);
-                            $('#e_phone_number').val(response.success.phone);
+                            $('#e_remark').val(response.success.remark);
+                            $('#e_bank_name').val(response.success.bank_name);
+                            $('#e_account_name').val(response.success.account_name);
+                            $('#e_account_number').val(response.success.account_number);
+                            $('#e_identity_number').val(response.success.identity_number);
+                            $('#e_issue_date').val(response.success.issue_date);
+                            $('#e_issue_expired_date').val(response.success.issue_expired_date);
                             $('#e_image').val(response.success.profile);
                             $('#editUserModal').modal('show');
                         }
