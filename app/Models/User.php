@@ -148,6 +148,32 @@ class User extends Authenticatable
         return $this->hasMany(StaffTraining::class,'employee_id','id');
     }
 
+
+
+
+    public function getMediumProfileAttribute()
+    {
+        return Helper::isUrl($this->profile) ? $this->profile : asset($this->getUploadImage($this->profile, 'medium', 'default_user'));
+    }
+    public function setProfileAttribute($value)
+    {
+        if (!empty(request()->profile)) {
+            if (Str::startsWith($value, 'data:image')) {
+                $this->attributes['profile'] = $this->base64Upload($value);
+                $this->deleteFiel($this->getOriginal('profile'));
+            } else {
+                if (request()->hasFile('profile')) {
+                    $this->attributes['profile'] = $this->singleUpload('profile', request());
+                    $this->deleteFiel($this->getOriginal('profile'));
+                }
+            }
+        } elseif (Helper::isUrl($value)) {
+            $this->attributes['profile'] = $value;
+        } else {
+            $this->attributes['profile'] = $this->base64Upload($value);
+        }
+    }
+
     public function getRolePermissionAttribute(){
         return optional($this->role)->name;
     }

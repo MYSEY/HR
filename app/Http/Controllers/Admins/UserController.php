@@ -62,19 +62,11 @@ class UserController extends Controller
      */
     public function store(UserRequest $request)
     {
-        if($request->hasFile('image')) {
-            $image = $request->file('image');
-            $filename = time().'.'.$image->getClientOriginalName();
-            $image->move(public_path('uploads/images'), $filename);
-        }else{
-            $filename = null;
-        }
         try{
             $data = $request->all();
             $data['current_addtress']   = $request->current_addre_village ? : $request->current_addre_commune ? : $request->current_addre_distric ? : $request->current_addre_city;
             $data['permanent_addtress'] = $request->permanet_addre_village ? : $request->permanet_addre_commune ? : $request->permanet_addre_distric ? : $request->permanet_addre_city;
             $data['password']   = Hash::make($request->password);
-            $data['profile']    = $filename;
             User::create($data);
             DB::commit();
             Toastr::success('Employee create successfully :)','Success');

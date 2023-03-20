@@ -58,7 +58,7 @@ class CreateUsersTable extends Migration
             $table->date('resign_date')->nullable();
             $table->string('resign_reason')->nullable();
             $table->string('remark')->nullable();
-            $table->integer('number_of_children')->default(0);
+            $table->integer('number_of_children')->nullable();
             $table->string('bank_name')->nullable();
             $table->string('account_name')->nullable();
             $table->string('account_number')->nullable();
