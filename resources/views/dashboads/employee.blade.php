@@ -5,11 +5,10 @@
             <div class="col-md-12">
                 <div class="welcome-box">
                     <div class="welcome-img">
-                        <img alt=""
-                            src="https://smarthr.dreamguystech.com/laravel/template/public/assets/img/profiles/avatar-02.jpg">
+                        <img alt="" src="https://smarthr.dreamguystech.com/laravel/template/public/assets/img/profiles/avatar-02.jpg">
                     </div>
                     <div class="welcome-det">
-                        <h3>Welcome, John Doe</h3>
+                        <h3>Welcome, {{Auth::user()->employee_name_en}}</h3>
                         <p>Monday, 20 May 2019</p>
                     </div>
                 </div>

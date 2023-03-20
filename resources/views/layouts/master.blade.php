@@ -147,7 +147,7 @@
                                 <img src="{{asset('/uploads/images/'.Auth::user()->profile)}}" alt="">
                             @endif
                             <span class="status online"></span></span>
-                        <span>{{Auth::user()->name}}</span>
+                        <span>{{Auth::user()->employee_name_en}}</span>
                     </a>
                     <div class="dropdown-menu">
                         <a class="dropdown-item" href="">My Profile</a>
