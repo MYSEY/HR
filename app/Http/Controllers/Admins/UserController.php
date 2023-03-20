@@ -4,19 +4,27 @@ namespace App\Http\Controllers\Admins;
 
 use App\Models\Role;
 use App\Models\User;
+use App\Models\Option;
+use App\Models\Branchs;
 use App\Models\Position;
 use App\Models\Department;
 use Illuminate\Http\Request;
+use App\Traits\GeneratingCode;
+use Illuminate\Support\Carbon;
 use App\Http\Requests\UserRequest;
 use App\Http\Requests\UserUpdated;
 use Illuminate\Support\Facades\DB;
+
 use App\Http\Controllers\Controller;
-use App\Models\Option;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Hash;
+use App\Traits\UploadFiles\UploadFIle;
 
 class UserController extends Controller
 {
+    use GeneratingCode;
+    use UploadFIle;
+    private $employeeRepo;
     /**
      * Display a listing of the resource.
      *
@@ -29,7 +37,11 @@ class UserController extends Controller
         $position = Position::all();
         $department = Department::all();
         $optionStatus = Option::where('type','status')->get();
-        return view('users.index',compact('data','role','position','department','optionStatus'));
+        $autoEmpId   = $this->generate_EmployeeId(Carbon::today())['number_employee'];
+        $optionGender = Option::where('type','gender')->get();
+        $branch = Branchs::all();
+        $optionIdentityType = Option::where('type','identity_type')->get();
+        return view('users.index',compact('data','role','position','department','optionStatus','autoEmpId','optionGender','branch','optionIdentityType'));
     }
 
     /**
@@ -54,18 +66,22 @@ class UserController extends Controller
             $image = $request->file('image');
             $filename = time().'.'.$image->getClientOriginalName();
             $image->move(public_path('uploads/images'), $filename);
+        }else{
+            $filename = null;
         }
         try{
             $data = $request->all();
+            $data['current_addtress']   = $request->current_addre_village ? : $request->current_addre_commune ? : $request->current_addre_distric ? : $request->current_addre_city;
+            $data['permanent_addtress'] = $request->permanet_addre_village ? : $request->permanet_addre_commune ? : $request->permanet_addre_distric ? : $request->permanet_addre_city;
             $data['password']   = Hash::make($request->password);
             $data['profile']    = $filename;
             User::create($data);
             DB::commit();
-            Toastr::success('Create new account successfully :)','Success');
+            Toastr::success('Employee create successfully :)','Success');
             return redirect()->back();
         }catch(\Exception $e){
             DB::rollback();
-            Toastr::error('User add new account fail :)','Error');
+            Toastr::error('Employee create fail :)','Error');
             return redirect()->back();
         }
     }

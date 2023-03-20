@@ -19,6 +19,7 @@ class CreateEmployeesTable extends Migration
             $table->string('employee_name_kh');
             $table->string('employee_name_en');
             $table->integer('department_id')->nullable();
+            $table->integer('role_id')->nullable();
             $table->integer('branch_id')->nullable();
             $table->string('position_id')->nullable();
             $table->string('unit')->nullable();
@@ -53,7 +54,7 @@ class CreateEmployeesTable extends Migration
             $table->date('resign_date')->nullable();
             $table->string('resign_reason')->nullable();
             $table->string('remark')->nullable();
-            $table->integer('number_of_children')->nullable();
+            $table->integer('number_of_children')->default(0);
             $table->string('bank_name')->nullable();
             $table->string('account_name')->nullable();
             $table->string('account_number')->nullable();

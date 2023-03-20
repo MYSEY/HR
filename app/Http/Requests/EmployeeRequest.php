@@ -22,15 +22,12 @@ class EmployeeRequest extends FormRequest
         return [
             'employee_name_kh' => 'required|max:255',
             'employee_name_en' => 'required|max:255',
+            'email'          => 'required|email',
             'date_of_birth' => 'required',
             'date_of_commencement' => 'required',
             'guarantee_letter' => 'required|nullable|mimes:pdf|max:2048',
             'employment_book' => 'required|nullable|mimes:pdf|max:2048',
-            // 'branch_id' => 'required|integer',
-            // 'position_id' => 'required',
-            // 'department_id' => 'required|integer',
             'personal_phone_number' => 'required|min:9|max:15',
-            'email'          => 'required|email',
         ];
     }
 

@@ -12,8 +12,10 @@ use Illuminate\Http\Request;
 use App\Traits\GeneratingCode;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\EmployeeRequest;
+use App\Models\Role;
 use App\Traits\UploadFiles\UploadFIle;
 use App\Repositories\Admin\EmployeeRepository;
 
@@ -30,7 +32,14 @@ class EmployeeController extends Controller
     public function index()
     {
         $data = Employee::all();
-        return view('employees.index',compact('data'));
+        $department = Department::all();
+        $position = Position::all();
+        $branch = Branchs::all();
+        $role = Role::all();
+        $optionIdentityType = Option::where('type','identity_type')->get();
+        $optionGender = Option::where('type','gender')->get();
+        $autoEmpId   = $this->generate_EmployeeId(Carbon::today())['number_employee'];
+        return view('employees.index',compact('data','department','position','branch','optionIdentityType','optionGender','autoEmpId','role'));
     }
 
     /**
@@ -56,17 +65,21 @@ class EmployeeController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(EmployeeRequest $request)
-    {        
-        try {
+    {
+        try{
             $data = $request->all();
             $data['current_addtress']   = $request->current_addre_village ? : $request->current_addre_commune ? : $request->current_addre_distric ? : $request->current_addre_city;
             $data['permanent_addtress'] = $request->permanet_addre_village ? : $request->permanet_addre_commune ? : $request->permanet_addre_distric ? : $request->permanet_addre_city;
             $data['created_by']         = Auth::user()->id;
+            $data['role_id']            = Auth::user()->role_id;
             Employee::create($data);
-            return redirect()->route('employee.index')->with('status','Employee created successfully!');
             DB::commit();
-        } catch (\Throwable $exp) {
-            DB::rollBack();
+            Toastr::success('Employee created successfully :)','Success');
+            return redirect()->back();
+        }catch(\Exception $e){
+            DB::rollback();
+            Toastr::error('Employee created fail :)','Error');
+            return redirect()->back();
         }
     }
     /**

@@ -74,7 +74,7 @@
                                 <select class="select form-control" id="department_id" name="department_id" value="{{old('department_id')}}">
                                     <option value="">Please select department</option>
                                     @foreach ($department as $item)
-                                        <option value="{{$item->id}}">{{$item->name}}</option>
+                                        <option value="{{$item->id}}">{{$item->name_khmer}}</option>
                                     @endforeach
                                 </select>
                             </div>

@@ -24,6 +24,7 @@ class UserUpdated extends FormRequest
     public function rules()
     {
         return [
+            'role_id' => 'required|string',
             'name' => 'required|max:255',
             'phone'     => 'required|min:11|numeric',
             'email' => 'required',

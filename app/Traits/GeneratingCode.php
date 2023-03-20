@@ -3,7 +3,7 @@
 namespace App\Traits;
 
 use Carbon\Carbon;
-use App\Models\Employee;
+use App\Models\User;
 
 trait GeneratingCode
 {
@@ -13,7 +13,7 @@ trait GeneratingCode
     {
         $count = 0;
         $employeeDate = Carbon::parse($date);
-        $lastInId = Employee::whereYear('created_by', $employeeDate->format('y'))->orderBy('number_employee', 'asc')->get();
+        $lastInId = User::whereYear('created_by', $employeeDate->format('y'))->orderBy('number_employee', 'asc')->get();
         if (!empty($lastInId)) {
             for ($i = 0; $i < count($lastInId); $i++) {
                 $current = (int) substr(strrchr($lastInId[$i]->number_employee, "-"), 1);
@@ -31,7 +31,7 @@ trait GeneratingCode
 
         do {
             $eployeeId =  $employeeDate->format('y').'0' . '-' . str_pad(($count + 1), 4, "0", STR_PAD_LEFT);
-            $alreadyExist = Employee::select('number_employee')->where('number_employee', $eployeeId)->first()->number_employee ?? null;
+            $alreadyExist = User::select('number_employee')->where('number_employee', $eployeeId)->first()->number_employee ?? null;
             $count++;
         } while ($alreadyExist);
         return [

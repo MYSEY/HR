@@ -51,7 +51,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     // Route::Resource('/leaves/admin', LeavesAdminController::class);
     // Route::Resource('/leaves/employee', LeavesEmployeeController::class);
     
-    Route::Resource('employee', EmployeeController::class);
+    // Route::Resource('employee', EmployeeController::class);
     Route::get('role', [RoleConroller::class,'index']);
     Route::post('role/store', [RoleConroller::class,'store']);
     Route::post('role/update', [RoleConroller::class,'update']);

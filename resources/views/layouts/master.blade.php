@@ -142,7 +142,6 @@
                     <a href="" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">
                         <span class="avatar">
                             @if (Auth::user()->profile==null)
-                                {{-- <img src="{{asset('/admin/img/avatar-21.jpg')}}" alt=""> --}}
                                 <img alt="avatar" src="{{asset('admin/img/defuals/default-user-icon.png')}}">
                             @else
                                 <img src="{{asset('/uploads/images/'.Auth::user()->profile)}}" alt="">
@@ -176,83 +175,14 @@
                 </div>
             </div>
         </div>
-
+       
         <div class="sidebar" id="sidebar">
             <div class="slimScrollDiv" style="position: relative; overflow: hidden; width: 100%; height: 346px;">
                 <div class="sidebar-inner slimscroll" style="overflow: hidden; width: 100%; height: 346px;">
                     <div id="sidebar-menu" class="sidebar-menu">
-                        <nav class="greedys sidebar-horizantal">
-                            <ul class="list-inline-item list-unstyled links">
-                                <li class="menu-title">
-                                    <span>Main</span>
-                                </li>
-                                <li class="submenu">
-                                    <a href=""><i class="la la-dashboard"></i> <span> Dashboard</span> <span class="menu-arrow"></span></a>
-                                    <ul style="display: none;">
-                                        <li>
-                                            <a class="" href="">Admin Dashboard</a>
-                                        </li>
-                                        <li>
-                                            <a class=""href="">Employee Dashboard</a>
-                                        </li>
-                                    </ul>
-                                </li>
-                                
-                                <li class="menu-title">
-                                    <span>Employees</span>
-                                </li>
-                                <li class="submenu">
-                                    <a href=""class="noti-dot"><i class="la la-user"></i> <span> Employees</span> <span class="menu-arrow"></span></a>
-                                    <ul style="display: none;">
-                                        <li><a class="" href="{{url('employee')}}">All Employees</a></li>
-                                        {{-- <li><a class="" href="">Holidays</a></li>
-                                        <li><a class="" href="">Leaves (Admin) <span class="badge rounded-pill bg-primary float-end">1</span></a></li>
-                                        <li><a class="" href="">Leaves (Employee)</a></li>
-                                        <li><a class="" href="">Leave Settings</a></li>
-                                        <li><a class="" href="">Attendance(Admin)</a></li>
-                                        <li><a class="" href="">Attendance(Employee)</a></li> --}}
-                                        <li><a class="{{url('department')}}" href="">Departments</a></li>
-                                    </ul>
-                                </li>
-
-                            <li class="menu-title">
-                                <span>HR</span>
-                            </li>
-                            <button class="viewmoremenu">More Menu</button>
-                            <ul class="hidden-links hidden">
-                                {{-- <li class="submenu">
-                                    <a href=""><i class="la la-money"></i> <span> Payroll </span> <span class="menu-arrow"></span></a>
-                                    <ul style="display: none;">
-                                        <li><a class="" href=""> Employee Salary </a></li>
-                                        <li><a class="" href=""> Payslip </a></li>
-                                        <li><a class="" href=""> Payroll Items </a></li>
-                                    </ul>
-                                </li> --}}
-                                
-                                {{-- <li class="submenu">
-                                    <a href=""><i class="la la-edit"></i> <span> Training </span> <span class="menu-arrow"></span></a>
-                                    <ul style="display: none;">
-                                        <li><a class="" href="">Training List </a></li>
-                                        <li><a class="" href="">Trainers</a></li>
-                                        <li><a class="" href="">Training Type </a></li>
-                                    </ul>
-                                </li> --}}
-                                <li class=""><a href=""><i class="la la-bullhorn"></i> <span>Promotion</span></a></li>
-                                <li class="menu-title">
-                                    <span>Administration</span>
-                                </li>
-                                {{-- <li class="">
-                                    <a href=""><i class="la la-bell"></i> <span>Activities</span></a>
-                                </li> --}}
-                                <li class="">
-                                    <a href="{{url('users')}}"><i class="la la-user-plus"></i> <span>Users</span></a>
-                                </li>
-                            </ul>
-                        </nav>
-
-
                         <ul class="sidebar-vertical">
-                            <li class="menu-title">
+                            
+                            {{-- <li class="menu-title">
                                 <span>Main</span>
                             </li>
                             <li class="submenu">
@@ -270,53 +200,19 @@
                                 <a href="" class="noti-dot"><i class="la la-user"></i> <span> Employees</span> <span class="menu-arrow"></span></a>
                                 <ul style="display: none;">
                                     <li><a class="" href="{{url('employee')}}">All Employees</a></li>
-                                    {{-- <li><a class="" href="">Holidays</a></li>
-                                    <li><a class="" href="">Leaves(Admin) <span class="badge rounded-pill bg-primary float-end">1</span></a></li>
-                                    <li><a class="" href="">Leaves (Employee)</a></li>
-                                    <li><a class="" href="">Leave Settings</a></li>
-                                    <li><a class="" href="">Attendance (Admin)</a></li>
-                                    <li><a class="" href="">Attendance (Employee)</a></li> --}}
                                     <li><a class="" href="{{url('department')}}">Departments</a></li>
                                 </ul>
                             </li>
                             
-                            
-                            {{-- <li class="menu-title">
-                                <span>HR</span>
-                            </li>
-                            <li class="submenu">
-                                <a href=""><i class="la la-money"></i> <span> Payroll </span> <span class="menu-arrow"></span></a>
-                                <ul style="display: none;">
-                                    <li><a class="" href=""> Employee Salary </a></li>
-                                    <li><a class="" href=""> Payslip </a></li>
-                                    <li><a class="" href=""> Payroll Items </a></li>
-                                </ul>
-                            </li>
-                            
-                            <li class="submenu">
-                                <a href=""><i class="la la-edit"></i> <span> Training </span> <span class="menu-arrow"></span></a>
-                                <ul style="display: none;">
-                                    <li><a class="" href="">Training List </a></li>
-                                    <li><a class="" href="">Trainers</a></li>
-                                    <li><a class="" href="">Training Type </a></li>
-                                </ul>
-                            </li>
-                            <li class=""><a href=""><i class="la la-bullhorn"></i> <span>Promotion</span></a></li> --}}
                             <li class="menu-title">
                                 <span>Administration</span>
                             </li>
-                            {{-- <li class="">
-                                <a href=""><i class="la la-bell"></i> <span>Activities</span></a>
-                            </li> --}}
                             <li class="">
                                 <a href="{{url('users')}}"><i class="la la-user-plus"></i> <span>Users</span></a>
                             </li>
                             <li class="">
                                 <a href="{{url('role')}}"><i class="la la-key"></i> <span>Roles &amp; Permissions</span></a>
                             </li>
-                            {{-- <li class="submenu">
-                                <a href="{{url('role')}}"><i class="la la-key"></i> <span>Roles &amp; Permissions</span></a>
-                            </li> --}}
 
                             <li class="submenu">
                                 <a href=""><i class="la la-key"></i> <span> Configuration </span> <span class="menu-arrow"></span></a>
@@ -324,7 +220,44 @@
                                     <li class=""><a  href="{{url('position')}}">Postion</a></li>
                                     <li class=""><a  href="{{url('branch')}}">Branch</a></li>
                                 </ul>
-                            </li>
+                            </li> --}}
+
+                            @foreach (menu() as $key=>$menu)
+                                @if (isset($menu['child']))
+                                    @if (RolePermission($menu['table'],$menu['permission']))
+                                        <li class="menu-title">
+                                            <span>{{$menu['name']}}</span>
+                                        </li>
+                                        <li class="sidebar-menu-item">
+                                            <a class="sidebar-menu-button" data-toggle="collapse" href="#dropdown-{{$key}}">
+                                                {!! $menu['icon'] !!}
+                                                <span class="sidebar-menu-text">{{$menu['value']}}</span>
+                                                <span class="ml-auto sidebar-menu-toggle-icon"></span>
+                                            </a>
+                                            <ul style="display: none;">
+                                                @foreach ($menu['child'] as $sub_menu)
+                                                    @if (RolePermission($sub_menu['table'],$sub_menu['permission']))
+                                                        <li class="sidebar-menu-item">
+                                                            <a class="sidebar-menu-button" href="{{url($sub_menu['url'])}}">
+                                                                <span class="sidebar-menu-text">{{$sub_menu['value']}}</span>
+                                                            </a>
+                                                        </li>
+                                                    @endif
+                                                @endforeach
+                                            </ul>
+                                        </li>
+                                    @endif
+                                @else
+                                    @if (RolePermission($menu['table'],$menu['permission']))
+                                        <li class="sidebar-menu-item">
+                                            <a class="sidebar-menu-button" href="{{url($menu['url'])}}">
+                                                {!! $menu['icon'] !!}
+                                                <span class="sidebar-menu-text">{{$menu['value']}}</span>
+                                            </a>
+                                        </li>
+                                    @endif
+                                @endif
+                            @endforeach
                         </ul>
                     </div>
                 </div>

@@ -4,10 +4,10 @@
         <div class="page-header">
             <div class="row align-items-center">
                 <div class="col">
-                    <h3 class="page-title">Users</h3>
+                    <h3 class="page-title">Employee</h3>
                     <ul class="breadcrumb">
                         <li class="breadcrumb-item"><a href="{{ url('/dashboad/employee') }}">Dashboard</a></li>
-                        <li class="breadcrumb-item active">User</li>
+                        <li class="breadcrumb-item active">Employee</li>
                     </ul>
                 </div>
                 <div class="col-auto float-end ms-auto">
@@ -28,93 +28,62 @@
                                 <table class="table table-striped custom-table datatable dataTable no-footer" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
                                     <thead>
                                         <tr>
-                                            <th style="width: 30px;" class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="#: activate to sort column descending">#</th>
-                                            <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 291.163px;">Name</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending" style="width: 227px;"> Email</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending" style="width: 227px;"> Phone</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Company: activate to sort column ascending" style="width: 202.6px;">Position</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Company: activate to sort column ascending" style="width: 202.6px;">Departement</th>
+                                            <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Profle: activate to sort column descending" style="width: 265.913px;">#</th>
+                                            <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Profle: activate to sort column descending" style="width: 265.913px;">Profle</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Employee ID: activate to sort column ascending" style="width: 94.0625px;">Employee ID</th>
+                                            <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 265.913px;">Name(kh)</th>
+                                            <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 265.913px;">Name(en)</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending" style="width: 218.762px;">Email</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Role: activate to sort column ascending" style="width: 80.8125px;">Role</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Created Date: activate to sort column ascending" style="width: 114.95px;">Created Date</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Role: activate to sort column ascending" style="width: 80.8125px;">Status</th>
-                                            <th class="text-end sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Action: activate to sort column ascending" style="width: 60.675px;">Action</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending" style="width: 218.762px;">Position</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending" style="width: 218.762px;">Department</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending" style="width: 218.762px;">Branch</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Mobile: activate to sort column ascending" style="width: 83.3625px;">Mobile</th>
+                                            <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending" style="width: 87.1125px;">Join Date</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Role: activate to sort column ascending" style="width: 135.163px;">Status</th>
+                                            <th class="text-end no-sort sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Action: activate to sort column ascending" style="width: 50.825px;">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @if (count($data)>0)
                                             @foreach ($data as $item)
                                                 <tr class="odd">
-                                                    <td class="ids">{{ $item->id }}</td>
+                                                    <td>{{$item->id}}</td>
                                                     <td class="sorting_1">
-                                                        <span hidden class="image">{{ $item->profile}}</span>
                                                         <h2 class="table-avatar">
                                                             @if ($item->profile != null)
-                                                                <a href=""  class="avatar">
-                                                                    <img alt="avatar" src="{{asset('/uploads/images/'.$item->profile)}}">
+                                                                <a href="{{route('employee.profile',$item->id)}}"  class="avatar">
+                                                                    <img alt="" src="{{asset('/uploads/images/'.$item->profile)}}">
                                                                 </a>
-                                                                <a href="" class="name">{{$item->name}}</a>
                                                             @else
-                                                                <a href="" class="avatar">
-                                                                    <img alt="avatar" src="{{asset('admin/img/defuals/default-user-icon.png')}}">
+                                                                <a href="{{route('employee.profile',$item->id)}}">
+                                                                    <img alt="" src="{{asset('admin/img/defuals/default-user-icon.png')}}">
                                                                 </a>
-                                                                <a href="" class="name">{{$item->name}}</a>
                                                             @endif
                                                         </h2>
                                                     </td>
-                                                    <td class="email">{{$item->email}}</td>
-                                                    <td class="phone_number">{{ $item->phone }}</td>
-                                                    <td class="position">{{$item->EmployeePosition}}</td>
-                                                    <td class="department">{{$item->EmployeeDepartment}}
-                                                        <span hidden class="badge bg-inverse-success department_id">{{ $item->department == null ? "" : $item->department->id }}</span>
-                                                    </td>
+                                                    <td><a href="{{route('employee.profile',$item->id)}}">{{$item->number_employee}}</a></td>
+                                                    <td>{{$item->employee_name_kh}}</td>
+                                                    <td>{{$item->employee_name_en}}</td>
+                                                    <td>{{$item->email}}</td>
                                                     <td>
-                                                        <span class="badge bg-inverse-success role_name">{{ $item->role == null ? "" : $item->role->name }}</span>
-                                                        <span hidden class="badge bg-inverse-success role_id">{{ $item->role == null ? "" : $item->role->id }}</span>
+                                                        <span class="badge bg-inverse-success">{{ $item->role == null ? "" : $item->role->name }}</span>
                                                     </td>
-                                                    <td>{{$item->created_at}}</td>
+                                                    <td>{{$item->EmployeePosition}}</td>
+                                                    <td>{{$item->EmployeeDepartment}}</td>
+                                                    <td>{{$item->EmployeeBrnach}}</td>
+                                                    <td>{{$item->personal_phone_number}}</td>
+                                                    <td>{{$item->joinOfDate}}</td>
                                                     <td>
-                                                        <div class="dropdown action-label">
-                                                            @if ($item->status=='Active')
-                                                                <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
-                                                                    <i class="fa fa-dot-circle-o text-success"></i>
-                                                                    <span class="statuss">{{ $item->status }}</span>
-                                                                </a>
-                                                            @elseif ($item->status=='Inactive')
-                                                                <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
-                                                                    <i class="fa fa-dot-circle-o text-info"></i>
-                                                                    <span class="statuss">{{ $item->status }}</span>
-                                                                </a>
-                                                            @elseif ($item->status=='Disable')
-                                                                <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
-                                                                    <i class="fa fa-dot-circle-o text-danger"></i>
-                                                                    <span class="statuss">{{ $item->status }}</span>
-                                                                </a>
-                                                            @elseif ($item->status=='')
-                                                                <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
-                                                                    <i class="fa fa-dot-circle-o text-dark"></i>
-                                                                    <span class="statuss">N/A</span>
-                                                                </a>
-                                                            @endif
-                                                            
-                                                            <div class="dropdown-menu dropdown-menu-right">
-                                                                <a class="dropdown-item" href="#">
-                                                                    <i class="fa fa-dot-circle-o text-success"></i> Active
-                                                                </a>
-                                                                <a class="dropdown-item" href="#">
-                                                                    <i class="fa fa-dot-circle-o text-warning"></i> Inactive
-                                                                </a>
-                                                                <a class="dropdown-item" href="#">
-                                                                    <i class="fa fa-dot-circle-o text-danger"></i> Disable
-                                                                </a>
-                                                            </div>
+                                                        <div class="dropdown">
+                                                            <a href="" class="btn btn-white btn-sm btn-rounded dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">{{$item->status}}</a>
                                                         </div>
                                                     </td>
                                                     <td class="text-end">
                                                         <div class="dropdown dropdown-action">
-                                                            <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
+                                                            <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i  class="material-icons">more_vert</i></a>
                                                             <div class="dropdown-menu dropdown-menu-right">
                                                                 <a class="dropdown-item userUpdate" data-id="{{$item->id}}"><i class="fa fa-pencil m-r-5"></i> Edit</a>
-                                                                {{-- <a class="dropdown-item userUpdate" data-toggle="modal" data-id="{{$item->id}}" data-target="#edit_user"><i class="fa fa-pencil m-r-5"></i> Edit</a> --}}
                                                                 <a class="dropdown-item userDelete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_user"><i class="fa fa-trash-o m-r-5"></i> Delete</a>
                                                             </div>
                                                         </div>
@@ -123,7 +92,7 @@
                                             @endforeach
                                         @else
                                             <tr>
-                                                <td colspan="6" style="text-align: center">No record to display</td>
+                                                <td colspan="16" style="text-align: center">No record to display</td>
                                             </tr>
                                         @endif
                                     </tbody>
@@ -148,29 +117,44 @@
                     <div class="modal-body">
                         <form action="{{url('users/store')}}" method="POST" enctype="multipart/form-data">
                             @csrf
-                            <div class="row"> 
-                                <div class="col-sm-6"> 
+                            <div class="row">
+                                <div class="col-sm-6">
                                     <div class="form-group">
-                                        <label>Full Name <span class="text-danger">*</span></label>
-                                        <input class="form-control @error('name') is-invalid @enderror" type="text" id="" name="name" value="{{ old('name') }}" placeholder="Enter Name">
+                                        <label class="">Employee ID</label>
+                                        <input type="text" class="form-control" id="number_employee" name="number_employee" value="{{$autoEmpId}}">
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="">
+                                        <label class="">Name (KH) <span class="text-danger">*</span></label>
+                                        <input class="form-control @error('employee_name_kh') is-invalid @enderror" type="text" id="employee_name_kh" name="employee_name_kh" value="{{old('employee_name_kh')}}">
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label class="">Name (EN) <span class="text-danger">*</span></label>
+                                        <input class="form-control @error('employee_name_en') is-invalid @enderror" type="text" id="employee_name_en" name="employee_name_en" value="{{old('employee_name_en')}}">
                                     </div>
                                 </div>
                                 <div class="col-sm-6"> 
                                     <label>Emaill <span class="text-danger">*</span></label>
-                                    <input class="form-control @error('email') is-invalid @enderror" type="email" id="" name="email"  placeholder="Enter Email">
+                                    <input class="form-control @error('email') is-invalid @enderror" type="email" id="" name="email"  placeholder="Enter Email" {{old('email')}}>
                                 </div>
                             </div>
                             <div class="row"> 
                                 <div class="col-sm-6"> 
-                                    <label>Role Name <span class="text-danger">*</span></label>
-                                    <select class="select form-control @error('role_id') is-invalid @enderror" name="role_id" id="role_id">
-                                        <option selected disabled> --Select --</option>
-                                        @foreach ($role as $itme )
-                                            <option value="{{ $itme->id }}">{{ $itme->name }}</option>
-                                        @endforeach
-                                    </select>
+                                    <div class="form-group">
+                                        <label>Role Name <span class="text-danger">*</span></label>
+                                        <select class="select form-control @error('role_id') is-invalid @enderror" name="role_id" id="role_id">
+                                            <option selected disabled> --Select --</option>
+                                            @foreach ($role as $itme )
+                                                <option value="{{ $itme->id }}">{{ $itme->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
                                 </div>
                                 <div class="col-sm-6"> 
+                                    <div class="form-group">
                                     <label>Position <span class="text-danger">*</span></label>
                                     <select class="select form-control @error('position_id') is-invalid @enderror" name="position_id" id="position_id">
                                         <option selected disabled> --Select --</option>
@@ -178,42 +162,150 @@
                                             <option value="{{ $positions->id }}">{{ $positions->name_khmer }}</option>
                                         @endforeach
                                     </select>
-                                </div>
-                            </div>
-                            <br>
-                            <div class="row"> 
-                                <div class="col-sm-6"> 
-                                    <div class="form-group">
-                                        <label>Phone <span class="text-danger">*</span></label>
-                                        <input class="form-control @error('phone') is-invalid @enderror" type="tel" id="" name="phone" placeholder="Enter Phone">
                                     </div>
                                 </div>
-                                <div class="col-sm-6"> 
-                                    <label>Department <span class="text-danger">*</span></label>
-                                    <select class="select form-control @error('department_id') is-invalid @enderror" name="department_id" id="department_id">
-                                        <option selected disabled> --Select --</option>
-                                        @foreach ($department as $item )
-                                            <option value="{{ $item->id }}">{{ $item->name_khmer }}</option>
-                                        @endforeach
-                                    </select>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Date Of Birth <span class="text-danger">*</span></label>
+                                        <div class="cal-icon">
+                                            <input class="form-control datetimepicker @error('date_of_birth') is-invalid @enderror" type="text" id="date_of_birth" name="date_of_birth" value="{{old('date_of_birth')}}">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label class="">Profile</label>
+                                        <input class="form-control" type="file" id="profile" name="profile" value="{{old('profile')}}">
+                                    </div>
                                 </div>
                             </div>
-                            <div class="row"> 
-                                <div class="col-sm-6"> 
-                                    <label>Status</label>
-                                    <select class="select form-control" name="status" id="status">
-                                        <option selected disabled> --Select --</option>
-                                        @foreach ($optionStatus as $item )
-                                            <option value="{{ $item->name_khmer }}">{{ $item->name_khmer }}</option>
-                                        @endforeach
-                                    </select>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Department</label>
+                                        <select class="select form-control" id="department_id" name="department_id" value="{{old('department_id')}}">
+                                            <option value="">Please select department</option>
+                                            @foreach ($department as $item)
+                                                <option value="{{$item->id}}">{{$item->name_khmer}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
                                 </div>
-                                <div class="col-sm-6"> 
-                                    <label>Photo</label>
-                                    <input class="form-control" type="file" id="image" name="image">
+                                
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Branch</label>
+                                        <select class="select form-control" id="branch_id" name="branch_id" value="{{old('branch_id')}}">
+                                            <option value="">Please select branch</option>
+                                            @foreach ($branch as $item)
+                                                <option value="{{$item->id}}">{{$item->branch_name_kh}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
-                            <br>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Unit</label>
+                                        <input type="text" class="form-control" id="unit" name="unit" value="{{old('unit')}}">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="">
+                                        <label>level</label>
+                                        <input type="number" class="form-control" id="level" name="level" value="{{old('level')}}">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="">
+                                        <label class="">Join Date <span class="text-danger">*</span></label>
+                                        <div class="cal-icon">
+                                            <input class="form-control datetimepicker @error('date_of_commencement') is-invalid @enderror" id="date_of_commencement" name="date_of_commencement" type="text" value="{{old('date_of_commencement')}}">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label class="">Number Of Children</label>
+                                        <input class="form-control" type="number" id="number_of_children" name="number_of_children" value="{{old('number_of_children')}}">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label class="">Marital status</label>
+                                        <select class="select form-control" id="marital_status" name="marital_status" value="{{old('marital_status')}}">
+                                            <option value="Married">Married</option>
+                                            <option value="Single">Single</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Nationality</label>
+                                        <select class="select form-control" id="nationality" name="nationality" value="{{old('nationality')}}">
+                                            <option value="Khmer">Khmer</option>
+                                            <option value="Chinese">Chinese</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="">
+                                        <label class="">Guarantee Letter <span class="text-danger">*</span></label>
+                                        <input class="form-control @error('guarantee_letter') is-invalid @enderror" type="file" id="guarantee_letter" name="guarantee_letter" value="{{old('guarantee_letter')}}">
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label class="">Employment Book <span class="text-danger">*</span></label>
+                                        <input class="form-control @error('employment_book') is-invalid @enderror" type="file" id="employment_book" name="employment_book" value="{{old('employment_book')}}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label class="">Personal Phone <span class="text-danger">*</span></label>
+                                        <input class="form-control @error('personal_phone_number') is-invalid @enderror" type="number" id="personal_phone_number" name="personal_phone_number" value="{{old('personal_phone_number')}}">
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label class="">Company Phone</label>
+                                        <input class="form-control" type="number" id="company_phone_number" name="company_phone_number" value="{{old('company_phone_number')}}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label class="">Agency Phone </label>
+                                        <input class="form-control" type="number" id="agency_phone_number" name="agency_phone_number" value="{{old('agency_phone_number')}}">
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>Gender</label>
+                                        <select class="select form-control" id="gender" name="gender" value="{{old('gender')}}">
+                                            <option value="">select gender</option>
+                                            @foreach ($optionGender as $item)
+                                                <option value="{{$item->id}}">{{$item->name_khmer}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="row"> 
                                 <div class="col-sm-6"> 
                                     <div class="form-group">
@@ -226,6 +318,196 @@
                                     <input type="password" class="form-control" name="password_confirmation" placeholder="Confirm Password">
                                 </div>
                             </div>
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label class="">Remark</label>
+                                    <textarea type="text" rows="3" class="form-control" name="remark" id="remark" value="{{old('remark')}}"></textarea>
+                                </div>
+                            </div>
+                            
+                            {{-- Bank Info --}}
+                            <div class="form-group col-md-12 col-12" element="div" bp-field-wrapper="true" bp-field-name="Identity" bp-field-type="custom_html">
+                                <label class="navbar-brand custom-navbar-brand mb-0" style="width: 100%; background: #dfe6e9; padding: 6px;font-size: 15px;font-weight: normal !important;">Bank Info</label>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label class="">Bank Name</label>
+                                        <input class="form-control" type="text" id="bank_name" name="bank_name" value="{{old('bank_name')}}">
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label class="">Account Name</label>
+                                        <input class="form-control" type="text" id="account_name" name="account_name" value="{{old('account_name')}}">
+                                    </div>
+                                </div>
+                            </div>
+                           <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label class="">Account Number</label>
+                                        <input class="form-control" type="text" id="account_number" name="account_number" value="{{old('account_number')}}">
+                                    </div>
+                                </div>
+                           </div>
+                            {{-- Identities --}}
+                            <div class="form-group col-md-12 col-12" element="div" bp-field-wrapper="true" bp-field-name="Identity" bp-field-type="custom_html">
+                                <label class="navbar-brand custom-navbar-brand mb-0" style="width: 100%; background: #dfe6e9; padding: 6px;font-size: 15px;font-weight: normal !important;">Identities</label>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label class="">Identity Type</label>
+                                        <select class="select form-control" id="identity_type" name="identity_type" value="{{old('identity_type')}}">
+                                            <option value="">select identity type</option>
+                                            @foreach ($optionIdentityType as $item)
+                                                <option value="{{$item->id}}">{{$item->name_khmer}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label class="">Identity Number</label>
+                                        <input class="form-control" type="number" id="identity_number" name="identity_number" value="{{old('identity_number')}}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Issue Date</label>
+                                        <div class="cal-icon">
+                                            <input class="form-control datetimepicker" type="text" id="issue_date" name="issue_date" value="{{old('issue_date')}}">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Issue Expired Date</label>
+                                        <div class="cal-icon">
+                                            <input class="form-control datetimepicker" type="text" id="issue_expired_date" name="issue_expired_date" value="{{old('issue_expired_date')}}">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+        
+                            {{-- Current Address --}}
+                            <div class="form-group col-md-12 col-12" element="div" bp-field-wrapper="true" bp-field-name="Identity" bp-field-type="custom_html">
+                                <label class="navbar-brand custom-navbar-brand mb-0" style="width: 100%; background: #dfe6e9; padding: 6px;font-size: 15px;font-weight: normal !important;">Current Address</label>
+                            </div>
+    
+                            <div id="CurrentAddress">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Province/City</label>
+                                            <select class="form-control" @change="cityChange" name="current_addre_city" v-model="frm.city" :disabled="JSON.stringify(cities).length==2" value="{{old('city')}}">
+                                                <option v-for="(item,text) in cities" :value="text">@{{item}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>District/Khan</label>
+                                            <select class="form-control" @change="districChange" name="current_addre_distric" v-model="frm.distric" :disabled="JSON.stringify(districs).length==2" value="{{old('distric')}}">
+                                                <option v-for="(item, text) in districs" :value="text">@{{item}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="no-error-label">Commune/Sangkat</label>
+                                            <select class="form-control no-error-border" @change="communeChange" name="current_addre_commune" v-model="frm.commune" :disabled="JSON.stringify(communes).length==2" value="{{old('commune')}}">
+                                                <option v-for="(item, text) in communes" :value="text">@{{item}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="no-error-label">Village</label>
+                                            <select class="form-control no-error-border" @change="villageChange" name="current_addre_village" v-model="frm.village" :disabled="JSON.stringify(villages).length==2" value="{{old('village')}}">
+                                                <option v-for="(item, text) in villages" :value="text">@{{item}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>House No</label>
+                                        <input class="form-control" type="text" id="current_house_no" name="current_house_no">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Street No</label>
+                                        <input class="form-control" type="text" id="current_street_no" name="current_street_no">
+                                    </div>
+                                </div>
+                            </div>
+
+                            {{-- Permanent Address --}}
+                            <div class="form-group col-md-12 col-12" element="div" bp-field-wrapper="true" bp-field-name="Identity" bp-field-type="custom_html">
+                                <label class="navbar-brand custom-navbar-brand mb-0" style="width: 100%; background: #dfe6e9; padding: 6px;font-size: 15px;font-weight: normal !important;">Permanent Address</label>
+                            </div>
+    
+                            <div id="PermanentAddress">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Province/City</label>
+                                            <select class="form-control" @change="cityChange" name="permanet_addre_city" v-model="frm.city" :disabled="JSON.stringify(cities).length==2" value="{{old('city')}}">
+                                                <option v-for="(item,text) in cities" :value="text">@{{item}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>District/Khan</label>
+                                            <select class="form-control" @change="districChange" name="permanet_addre_distric" v-model="frm.distric" :disabled="JSON.stringify(districs).length==2" value="{{old('distric')}}">
+                                                <option v-for="(item, text) in districs" :value="text">@{{item}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-md-6">
+                                        <div class="form-group ">
+                                            <label class="no-error-label">Commune/Sangkat</label>
+                                            <select class="form-control no-error-border" @change="communeChange" name="permanet_addre_commune" v-model="frm.commune" :disabled="JSON.stringify(communes).length==2" value="{{old('commune')}}">
+                                                <option v-for="(item, text) in communes" :value="text">@{{item}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="no-error-label">Village</label>
+                                            <select class="form-control no-error-border" @change="villageChange" name="permanet_addre_village" v-model="frm.village" :disabled="JSON.stringify(villages).length==2" value="{{old('village')}}">
+                                                <option v-for="(item, text) in villages" :value="text">@{{item}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>House No</label>
+                                        <input class="form-control" type="text" id="permanent_house_no" name="permanent_house_no">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Street No</label>
+                                        <input class="form-control" type="text" id="permanent_street_no" name="permanent_street_no">
+                                    </div>
+                                </div>
+                            </div>
+                            
                             <div class="submit-section">
                                 <button type="submit" class="btn btn-primary submit-btn">Submit</button>
                             </div>
@@ -250,7 +532,6 @@
                     <div class="modal-body">
                         <form action="{{url('users/update')}}" method="POST" enctype="multipart/form-data">
                             @csrf
-                            <input type="hidden" name="id" class="e_id" value="">
                             <div class="row"> 
                                 <div class="col-sm-6"> 
                                     <div class="form-group">
@@ -318,6 +599,7 @@
                                     <input type="password" class="form-control" name="password_confirmation" placeholder="Confirm Password">
                                 </div>
                             </div>
+                            <input type="hidden" name="id" id="e_id">
                             <div class="submit-section">
                                 <button type="submit" class="btn btn-primary submit-btn">Submit</button>
                             </div>
@@ -326,7 +608,7 @@
                 </div>
             </div>
         </div>
-        <!-- /Edit Salary Modal -->
+        <!-- /Edit User Modal -->
 
         <!-- Delete User Modal -->
         <div class="modal custom-modal fade" id="delete_user" role="dialog">
@@ -364,74 +646,198 @@
 
 <script>
     $(function(){
-        $('.userUpdate').on('click',function(){
-            let id = $(this).data("id");
-            $.ajax({
-                type: "GET",
-                url: "{{url('users/edit')}}",
-                data: {
-                    id : id
-                },
-                dataType: "JSON",
-                success: function (response) {
-                    if (response.success) {
-                        if (response.role != '') {
-                            $('#e_role_id').html('<option selected disabled> --Select --</option>');
-                            $.each(response.role, function(i, item) {
-                                $('#e_role_id').append($('<option>', {
-                                    value: item.id,
-                                    text: item.name,
-                                    selected: item.id == response.success.role_id
-                                }));
-                            });
-                        }
+            $('.userUpdate').on('click',function(){
+                let id = $(this).data("id");
+                $.ajax({
+                    type: "GET",
+                    url: "{{url('users/edit')}}",
+                    data: {
+                        id : id
+                    },
+                    dataType: "JSON",
+                    success: function (response) {
+                        if (response.success) {
+                            if (response.role != '') {
+                                $('#e_role_id').html('<option selected disabled> --Select --</option>');
+                                $.each(response.role, function(i, item) {
+                                    $('#e_role_id').append($('<option>', {
+                                        value: item.id,
+                                        text: item.name,
+                                        selected: item.id == response.success.role_id
+                                    }));
+                                });
+                            }
 
-                        if (response.position != '') {
-                            $('#e_position').html('<option selected disabled> --Select --</option>');
-                            $.each(response.position, function(i, item) {
-                                $('#e_position').append($('<option>', {
-                                    value: item.id,
-                                    text: item.name_khmer,
-                                    selected: item.id == response.success.position_id
-                                }));
-                            });
+                            if (response.position != '') {
+                                $('#e_position').html('<option selected disabled> --Select --</option>');
+                                $.each(response.position, function(i, item) {
+                                    $('#e_position').append($('<option>', {
+                                        value: item.id,
+                                        text: item.name_khmer,
+                                        selected: item.id == response.success.position_id
+                                    }));
+                                });
+                            }
+                            
+                            if (response.department != '') {
+                                $('#e_department').html('<option selected disabled> --Select --</option>');
+                                $.each(response.department, function(i, item) {
+                                    $('#e_department').append($('<option>', {
+                                        value: item.id,
+                                        text: item.name_khmer,
+                                        selected: item.id == response.success.department_id
+                                    }));
+                                });
+                            }
+                            if (response.optionStatus != '') {
+                                $('#e_status').html('<option selected disabled> --Select --</option>');
+                                $.each(response.optionStatus, function(i, item) {
+                                    $('#e_status').append($('<option>', {
+                                        value: item.name_khmer,
+                                        text: item.name_khmer,
+                                        selected: item.name_khmer == response.success.status
+                                    }));
+                                });
+                            }
+                            
+                            $('#e_id').val(response.success.id);
+                            $('#e_name').val(response.success.name);
+                            $('#e_email').val(response.success.email);
+                            $('#e_phone_number').val(response.success.phone);
+                            $('#e_image').val(response.success.profile);
+                            $('#editUserModal').modal('show');
                         }
-                        
-                        if (response.department != '') {
-                            $('#e_department').html('<option selected disabled> --Select --</option>');
-                            $.each(response.department, function(i, item) {
-                                $('#e_department').append($('<option>', {
-                                    value: item.id,
-                                    text: item.name_khmer,
-                                    selected: item.id == response.success.department_id
-                                }));
-                            });
-                        }
-                        if (response.optionStatus != '') {
-                            $('#e_status').html('<option selected disabled> --Select --</option>');
-                            $.each(response.optionStatus, function(i, item) {
-                                $('#e_status').append($('<option>', {
-                                    value: item.name_khmer,
-                                    text: item.name_khmer,
-                                    selected: item.name_khmer == response.success.status
-                                }));
-                            });
-                        }
-                        
-                        $('#e_id').val(response.success.id);
-                        $('#e_name').val(response.success.name);
-                        $('#e_email').val(response.success.email);
-                        $('#e_phone_number').val(response.success.phone);
-                        $('#e_image').val(response.success.profile);
-                        $('#editUserModal').modal('show');
+                    }
+                });
+            });
+            $('.userDelete').on('click',function(){
+                var _this = $(this).parents('tr');
+                $('.e_id').val(_this.find('.ids').text());
+                $('.e_image').val(_this.find('.image').text());
+            });
+
+            window.onload = function () {
+            var main = new Vue({
+                el: '#CurrentAddress',
+                data() {
+                    return {
+                        cities:{},
+                        districs:{},
+                        communes:{},
+                        villages:{},
+                        frm:{},
+                    }
+                },
+                mounted() {
+                    this.getData();
+                },
+                methods:{
+                    cityChange: async function(){
+                        var me = this;
+                        this.hidden = this.frm.city;
+                        await this.getData(this.frm.city).then(function(response){
+                        me.districs = response.data;
+                        me.communes={};
+                        me.villages={};
+                    });
+                },
+                districChange: async function(){
+                    var me = this;
+                    this.hidden = this.frm.distric;
+                    await this.getData(this.frm.distric).then(function(response){
+                        me.communes = response.data;
+                        me.villages={};
+                    });
+                },
+                communeChange: async function(){
+                    var me = this;
+                    this.hidden = this.frm.commune;
+                    await this.getData(this.frm.commune).then(function(response){
+                        me.villages = response.data;
+                    });
+                },
+                villageChange:function(){
+                    this.hidden = this.frm.village;
+                },
+                getData:function(code=''){
+                    if(code){ 
+                        return axios.get('{{route("address")}}?code='+code)
+                    }
+                    else
+                    { 
+                        return axios.get('{{route("address")}}')
                     }
                 }
+            },
+        
+            created: async function(){
+                var me = this;
+                    this.getData().then(function(response){
+                        me.cities = response.data;
+                    });
+                }
             });
-        });
-        $('.userDelete').on('click',function(){
-            var _this = $(this).parents('tr');
-            $('.e_id').val(_this.find('.ids').text());
-            $('.e_image').val(_this.find('.image').text());
-        });
+
+            var main = new Vue({
+                el: '#PermanentAddress',
+                data() {
+                    return {
+                        cities:{},
+                        districs:{},
+                        communes:{},
+                        villages:{},
+                        frm:{},
+                    }
+                },
+                mounted() {
+                    this.getData();
+                },
+                methods:{
+                    cityChange: async function(){
+                        var me = this;
+                        this.hidden = this.frm.city;
+                        await this.getData(this.frm.city).then(function(response){
+                        me.districs = response.data;
+                        me.communes={};
+                        me.villages={};
+                    });
+                },
+                districChange: async function(){
+                    var me = this;
+                    this.hidden = this.frm.distric;
+                    await this.getData(this.frm.distric).then(function(response){
+                        me.communes = response.data;
+                        me.villages={};
+                    });
+                },
+                communeChange: async function(){
+                    var me = this;
+                    this.hidden = this.frm.commune;
+                    await this.getData(this.frm.commune).then(function(response){
+                        me.villages = response.data;
+                    });
+                },
+                villageChange:function(){
+                    this.hidden = this.frm.village;
+                },
+                getData:function(code=''){
+                    if(code){ 
+                        return axios.get('{{route("address")}}?code='+code)
+                    }
+                    else
+                    { 
+                        return axios.get('{{route("address")}}')
+                    }
+                }
+            },
+        
+            created: async function(){
+                var me = this;
+                    this.getData().then(function(response){
+                        me.cities = response.data;
+                    });
+                }
+            });
+        }
     });
 </script>
