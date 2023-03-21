@@ -64,7 +64,7 @@
                                             </li>
                                             <li>
                                                 <div class="title">Gender:</div>
-                                                <div class="text">{{ $data->gender == 1 ? 'Male' : 'FeMale' }}</div>
+                                                <div class="text">{{ $data->gender == 1 ? 'Male' : 'Female' }}</div>
                                             </li>
                                             <li>
                                                 <div class="title">Address:</div>

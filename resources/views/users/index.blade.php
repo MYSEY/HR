@@ -31,8 +31,8 @@
                                             <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Profle: activate to sort column descending" style="width: 265.913px;">#</th>
                                             <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Profle: activate to sort column descending" style="width: 265.913px;">Profle</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Employee ID: activate to sort column ascending" style="width: 94.0625px;">Employee ID</th>
-                                            <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 265.913px;">Name(kh)</th>
-                                            <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 265.913px;">Name(en)</th>
+                                            <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 265.913px;">Name(KH)</th>
+                                            <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 265.913px;">Name(EN)</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending" style="width: 218.762px;">Email</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Role: activate to sort column ascending" style="width: 80.8125px;">Role</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending" style="width: 218.762px;">Position</th>
@@ -109,7 +109,7 @@
             <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Add New User</h5>
+                        <h5 class="modal-title">Add New Employee</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -524,7 +524,7 @@
             <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Edit User</h5>
+                        <h5 class="modal-title">Edit employee</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -593,6 +593,7 @@
                                     <div class="form-group">
                                         <label class="">Profile</label>
                                         <input class="form-control" type="file" id="profile" name="profile" value="{{old('profile')}}">
+                                        <input type="hidden" name="hidden_image" id="e_profile" value="">
                                     </div>
                                 </div>
                             </div>
@@ -671,14 +672,16 @@
                             <div class="row">
                                 <div class="col-sm-6">
                                     <div class="">
-                                        <label class="">Guarantee Letter <span class="text-danger">*</span></label>
-                                        <input class="form-control @error('guarantee_letter') is-invalid @enderror" type="file" id="e_guarantee_letter" name="guarantee_letter" value="{{old('guarantee_letter')}}">
+                                        <label class="">Guarantee Letter(PDF) <span class="text-danger">*</span></label>
+                                        <input class="form-control @error('guarantee_letter') is-invalid @enderror" type="file" id="guarantee_letter" name="guarantee_letter" value="{{old('guarantee_letter')}}">
+                                        <input type="hidden" name="hidden_file_guarantee" id="e_guarantee_letter" value="">
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
                                     <div class="form-group">
-                                        <label class="">Employment Book <span class="text-danger">*</span></label>
+                                        <label class="">Employment Book(PDF) <span class="text-danger">*</span></label>
                                         <input class="form-control @error('employment_book') is-invalid @enderror" type="file" id="employment_book" name="employment_book" value="{{old('employment_book')}}">
+                                        <input type="hidden" name="hidden_file_employment_book" id="e_employment_book" value="">
                                     </div>
                                 </div>
                             </div>
@@ -712,7 +715,7 @@
                                 <div class="col-sm-6"> 
                                     <div class="form-group">
                                         <label>Password <span class="text-danger">*</span></label>
-                                        <input type="password" class="form-control @error('password') is-invalid @enderror" name="password" placeholder="Enter Password">
+                                        <input type="password" class="form-control @error('password') is-invalid @enderror" id="e_password" name="password" placeholder="Enter Password">
                                     </div>
                                 </div>
                                 <div class="col-sm-6"> 
@@ -839,13 +842,13 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>House No</label>
-                                        <input class="form-control" type="text" id="current_house_no" name="current_house_no">
+                                        <input class="form-control" type="text" id="e_current_house_no" name="current_house_no">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>Street No</label>
-                                        <input class="form-control" type="text" id="current_street_no" name="current_street_no">
+                                        <input class="form-control" type="text" id="e_current_street_no" name="current_street_no">
                                     </div>
                                 </div>
                             </div>
@@ -896,13 +899,13 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>House No</label>
-                                        <input class="form-control" type="text" id="permanent_house_no" name="permanent_house_no">
+                                        <input class="form-control" type="text" id="e_permanent_house_no" name="permanent_house_no">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>Street No</label>
-                                        <input class="form-control" type="text" id="permanent_street_no" name="permanent_street_no">
+                                        <input class="form-control" type="text" id="e_permanent_street_no" name="permanent_street_no">
                                     </div>
                                 </div>
                             </div>
@@ -930,7 +933,7 @@
                             <form action="{{url('users/delete')}}" method="POST">
                                 @csrf
                                 <input type="hidden" name="id" class="e_id" value="">
-                                <input type="hidden" name="hidden_image" id="e_image" value="">
+                                <input type="hidden" name="hidden_image" id="e_profile" value="">
 
                                 <div class="row">
                                     <div class="col-6">
@@ -963,6 +966,7 @@
                     },
                     dataType: "JSON",
                     success: function (response) {
+                        console.log(response.success);
                         if (response.success) {
                             if (response.role != '') {
                                 $('#e_role_id').html('<option selected disabled> --Select --</option>');
@@ -1000,7 +1004,7 @@
                                 $('#e_gender').html('<option selected disabled> --Select --</option>');
                                 $.each(response.optionGender, function(i, item) {
                                     $('#e_gender').append($('<option>', {
-                                        value: item.name_khmer,
+                                        value: item.id,
                                         text: item.name_khmer,
                                         selected: item.id == response.success.gender
                                     }));
@@ -1050,7 +1054,13 @@
                             $('#e_identity_number').val(response.success.identity_number);
                             $('#e_issue_date').val(response.success.issue_date);
                             $('#e_issue_expired_date').val(response.success.issue_expired_date);
-                            $('#e_image').val(response.success.profile);
+                            $('#e_profile').val(response.success.profile);
+                            $('#e_guarantee_letter').val(response.success.guarantee_letter);
+                            $('#e_employment_book').val(response.success.employment_book);
+                            $('#e_current_house_no').val(response.success.current_house_no);
+                            $('#e_current_street_no').val(response.success.current_street_no);
+                            $('#e_permanent_house_no').val(response.success.permanent_house_no);
+                            $('#e_permanent_street_no').val(response.success.permanent_street_no);
                             $('#editUserModal').modal('show');
                         }
                     }
@@ -1059,7 +1069,7 @@
             $('.userDelete').on('click',function(){
                 var _this = $(this).parents('tr');
                 $('.e_id').val(_this.find('.ids').text());
-                $('.e_image').val(_this.find('.image').text());
+                $('.e_profile').val(_this.find('.image').text());
             });
 
             window.onload = function () {

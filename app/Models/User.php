@@ -180,6 +180,7 @@ class User extends Authenticatable
     public function getRolePermissionAttribute(){
         return optional($this->role)->name;
     }
+
     public function setGuaranteeLetterAttribute($value)
     {
         if (!is_array(request()->guarantee_letter) && Str::startsWith($value, 'data:image')) {
@@ -201,6 +202,7 @@ class User extends Authenticatable
             $this->attributes['employment_book'] = $this->singleUpload('employment_book', request(), false);
         }
     }
+    
     public function getEmploymentBookOriginalAttribute()
     {
         return asset($this->getUploadImage($this->employment_book, 'original', 'default_user'));

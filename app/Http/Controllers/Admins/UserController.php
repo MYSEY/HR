@@ -8,13 +8,13 @@ use App\Models\Option;
 use App\Models\Branchs;
 use App\Models\Position;
 use App\Models\Department;
+use App\Traits\AddressTrait;
 use Illuminate\Http\Request;
 use App\Traits\GeneratingCode;
 use Illuminate\Support\Carbon;
 use App\Http\Requests\UserRequest;
 use App\Http\Requests\UserUpdated;
 use Illuminate\Support\Facades\DB;
-
 use App\Http\Controllers\Controller;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Hash;
@@ -23,6 +23,7 @@ use App\Traits\UploadFiles\UploadFIle;
 class UserController extends Controller
 {
     use GeneratingCode;
+    use AddressTrait;
     use UploadFIle;
     private $employeeRepo;
     /**
@@ -116,23 +117,65 @@ class UserController extends Controller
      */
     public function update(UserUpdated $request)
     {
-        if($request->hasFile('image')) {
-            $image = $request->file('image');
+        if($request->hasFile('profile')) {
+            $image = $request->file('profile');
             $filename = time().'.'.$image->getClientOriginalName();
             $image->move(public_path('uploads/images'), $filename);
         }else{
             $filename = $request->hidden_image;
         }
+
+        if ($request->hasFile('guarantee_letter')) {
+            $file = $request->file('guarantee_letter');
+            $filenameGuarant = time().'.'.$file->getClientOriginalName();
+            $file->move(public_path('uploads/images'), $filenameGuarant);
+        }else{
+            $filenameGuarant = $request->hidden_file_guarantee;
+        }
+        if ($request->hasFile('employment_book')) {
+            $file = $request->file('employment_book');
+            $filenameBook = time().'.'.$file->getClientOriginalName();
+            $file->move(public_path('uploads/images'), $filenameBook);
+        }else{
+            $filenameBook = $request->hidden_file_employment_book;
+        }
         try{
             User::where('id',$request->id)->update([
-                'name'  => $request->name,
-                'email'  => $request->email,
+                'number_employee'  => $request->number_employee,
+                'employee_name_kh'  => $request->employee_name_kh,
+                'employee_name_en'  => $request->employee_name_en,
+                'gender'  => $request->gender,
                 'role_id'  => $request->role_id,
                 'position_id'  => $request->position_id,
-                'phone'  => $request->phone,
                 'department_id'  => $request->department_id,
-                'status'  => $request->status,
-                'profile'  => $filename
+                'date_of_birth'  => $request->date_of_birth,
+                'email'  => $request->email,
+                'branch_id'  => $request->branch_id,
+                'unit'  => $request->unit,
+                'level'  => $request->level,
+                'date_of_commencement'  => $request->date_of_commencement,
+                'number_of_children'  => $request->number_of_children,
+                'marital_status'  => $request->marital_status,
+                'nationality'  => $request->nationality,
+                'personal_phone_number'  => $request->personal_phone_number,
+                'company_phone_number'  => $request->company_phone_number,
+                'agency_phone_number'  => $request->agency_phone_number,
+                'password'  => Hash::make($request->password),
+                'remark'  => $request->remark,
+                'bank_name'  => $request->bank_name,
+                'account_name'  => $request->account_name,
+                'account_number'  => $request->account_number,
+                'identity_type'  => $request->identity_type,
+                'identity_number'  => $request->identity_number,
+                'issue_date'  => $request->issue_date,
+                'issue_expired_date'  => $request->issue_expired_date,
+                'current_house_no'  => $request->current_house_no,
+                'current_street_no'  => $request->current_street_no,
+                'permanent_house_no'  => $request->permanent_house_no,
+                'permanent_street_no'  => $request->permanent_street_no,
+                'profile'  => $filename,
+                'guarantee_letter'  => $filenameGuarant,
+                'employment_book'  => $filenameBook,
             ]);
             Toastr::success('Updated account successfully :)','Success');
             return redirect()->back();

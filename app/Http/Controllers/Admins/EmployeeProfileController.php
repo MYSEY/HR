@@ -13,13 +13,14 @@ use App\Models\StaffPromoted;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Auth;
 
 class EmployeeProfileController extends Controller
 {
     public function employeeProfile(Request $request){
-        $data = Employee::with(['educations','experiences'])->where('id',$request->id)->first();
+        $data = User::with(['educations','experiences'])->where('id',$request->id)->first();
         $optionOfStudy = Option::where('type','field_of_study')->get();
         $optionDegree = Option::where('type','degree')->get();
         $department = Department::all();

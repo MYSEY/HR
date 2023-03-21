@@ -25,17 +25,15 @@ class UserUpdated extends FormRequest
     {
         return [
             'role_id' => 'required|string',
-            'name' => 'required|max:255',
-            'phone'     => 'required|min:11|numeric',
             'email' => 'required',
             'position_id' => 'required',
             'department_id' => 'required',
-            'password' => [
-                'sometimes',
-                'nullable',
-                'string',
-                'confirmed'
-            ]
+            // 'password' => [
+            //     'sometimes',
+            //     'nullable',
+            //     'string',
+            //     'confirmed'
+            // ]
         ];
     }
 }
