@@ -39,8 +39,10 @@
     <link href="{{ asset('admin/css/fullcalendar.min.css') }}" rel="stylesheet" type="text/css">
 
     <link rel="stylesheet" href="{{ asset('admin/css/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('admin/css/noty.css') }}">
     {{-- message toastr --}}
 	<link rel="stylesheet" href="{{ asset('admin/css/toastr.min.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
 </head>
 
 <body>
@@ -315,6 +317,9 @@
 
     <script src="{{asset('/admin/js/bootstrap.min.js')}}"></script>
     <script src="{{asset('/admin/js/app.js.download')}}"></script>
+    <script src="{{asset('/admin/js/noty.js')}}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+
     <div class="sidebar-overlay"></div>
     {{-- <gdiv class="ginger-extension-writer" style="display: none;">
         <gdiv class="ginger-extension-writer-frame"><iframe

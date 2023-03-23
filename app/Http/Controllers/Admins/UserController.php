@@ -207,4 +207,42 @@ class UserController extends Controller
             return redirect()->back();
         }
     }
+
+    public function processing(Request $request)
+    {
+        try {
+            if ($request->emp_status == 1) {
+                User::where('id',$request->id)->update([
+                    'emp_status' => $request->emp_status,
+                    'fdc_date' => $request->start_date,
+                    'fdc_end' => $request->end_dete,
+                    'resign_reason' => $request->resign_reason
+                ]);
+            }else if($request->emp_status == 2){
+                User::where('id',$request->id)->update([
+                    'emp_status' => $request->emp_status,
+                    'fdc_date' => null,
+                    'fdc_end' => null,
+                    'resign_reason' => $request->resign_reason
+                ]);
+            }else{
+                User::where('id',$request->id)->update([
+                    'emp_status' => $request->emp_status,
+                    'resign_date' => $request->resign_date,
+                    'resign_reason' => $request->resign_reason,
+                    'fdc_date' => null,
+                    'fdc_end' => null,
+                ]);
+            }
+            
+
+            DB::commit();
+            return response()->json([
+                'message' => 'The process has been successfully.'
+            ]);
+        } catch (\Exception $exp) {
+            DB::rollBack();
+            return response()->json(['message' => $exp->getMessage()], 500);
+        }
+    }
 }

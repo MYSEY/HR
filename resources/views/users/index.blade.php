@@ -75,8 +75,89 @@
                                                     <td>{{$item->personal_phone_number}}</td>
                                                     <td>{{$item->joinOfDate}}</td>
                                                     <td>
-                                                        <div class="dropdown">
-                                                            <a href="" class="btn btn-white btn-sm btn-rounded dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">{{$item->emp_status}}</a>
+                                                        <div class="dropdown action-label">
+                                                            @if ($item->emp_status=='Probation')
+                                                                <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
+                                                                    <i class="fa fa-dot-circle-o text-success"></i>
+                                                                    <span>{{ $item->emp_status }}</span>
+                                                                </a>
+                                                            @elseif ($item->emp_status=='1')
+                                                                <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
+                                                                    <i class="fa fa-dot-circle-o text-info"></i>
+                                                                    <span>FDC</span>
+                                                                </a>
+                                                            @elseif ($item->emp_status=='2')
+                                                                <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
+                                                                    <i class="fa fa-dot-circle-o text-danger"></i>
+                                                                    <span>UDC</span>
+                                                                </a>
+                                                            @elseif ($item->emp_status=='3')
+                                                                <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
+                                                                    <i class="fa fa-dot-circle-o text-dark"></i>
+                                                                    <span>Resignation</span>
+                                                                </a>
+                                                            @elseif ($item->emp_status=='4')
+                                                                <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
+                                                                    <i class="fa fa-dot-circle-o text-dark"></i>
+                                                                    <span>Termination</span>
+                                                                </a>
+                                                            @elseif ($item->emp_status=='5')
+                                                                <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
+                                                                    <i class="fa fa-dot-circle-o text-dark"></i>
+                                                                    <span>Death</span>
+                                                                </a>
+                                                            @elseif ($item->emp_status=='6')
+                                                                <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
+                                                                    <i class="fa fa-dot-circle-o text-dark"></i>
+                                                                    <span>Retired</span>
+                                                                </a>
+                                                            @elseif ($item->emp_status=='7')
+                                                                <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
+                                                                    <i class="fa fa-dot-circle-o text-dark"></i>
+                                                                    <span>Lay off</span>
+                                                                </a>
+                                                            @elseif ($item->emp_status=='8')
+                                                                <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
+                                                                    <i class="fa fa-dot-circle-o text-dark"></i>
+                                                                    <span>Suspension</span>
+                                                                </a>
+                                                            @elseif ($item->emp_status=='9')
+                                                                <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
+                                                                    <i class="fa fa-dot-circle-o text-dark"></i>
+                                                                    <span>Others</span>
+                                                                </a>
+                                                            @endif
+                                                            
+                                                            <div class="dropdown-menu dropdown-menu-right" id="btn-emp-status">
+                                                                <input type="hidden" id="employee_id" value="{{$item->id}}">
+                                                                <a class="dropdown-item" data-id="1" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-success"></i> FDC
+                                                                </a>
+                                                                <a class="dropdown-item" data-id="2" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-warning"></i> UDC
+                                                                </a>
+                                                                <a class="dropdown-item" data-id="3" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-danger"></i> Resignation
+                                                                </a>
+                                                                <a class="dropdown-item" data-id="4" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-success"></i> Termination
+                                                                </a>
+                                                                <a class="dropdown-item" data-id="5" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-danger"></i> Death
+                                                                </a>
+                                                                <a class="dropdown-item" data-id="6" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-warning"></i> Retired
+                                                                </a>
+                                                                <a class="dropdown-item" data-id="7" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-danger"></i> Lay off
+                                                                </a>
+                                                                <a class="dropdown-item" data-id="8" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-danger"></i> Suspension
+                                                                </a>
+                                                                <a class="dropdown-item" data-id="9" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-danger"></i> Others
+                                                                </a>
+                                                            </div>
                                                         </div>
                                                     </td>
                                                     <td class="text-end">
@@ -966,7 +1047,6 @@
                     },
                     dataType: "JSON",
                     success: function (response) {
-                        console.log(response.success);
                         if (response.success) {
                             if (response.role != '') {
                                 $('#e_role_id').html('<option selected disabled> --Select --</option>');
@@ -1070,6 +1150,203 @@
                 var _this = $(this).parents('tr');
                 $('.e_id').val(_this.find('.ids').text());
                 $('.e_profile').val(_this.find('.image').text());
+            });
+
+            $('body').on('click', '#btn-emp-status a', function() {
+                let status = $(this).data('id');
+                let id = $("#employee_id").val();
+                if (status == 1) {
+                    $.confirm({
+                        title: 'Employee Status!',
+                        contentClass: 'text-center',
+                        backgroundDismiss: 'cancel',
+                        content: ''+
+                            '<form method="post">'+
+                                '<div class="form-group">'+
+                                    '<div class="form-group">'+
+                                        '<label>Start date <span class="text-danger">*</span></label>'+
+                                        '<input type="date" class="form-control start_date" id="" name="" value="">'+
+                                        '<input type="hidden" class="form-control emp_status" id="" name="" value="'+status+'">'+
+                                        '<input type="hidden" class="form-control id" id="" name="" value="'+id+'">'+
+                                    '</div>'+
+                                    '<div class="form-group">'+
+                                        '<label>End date</label>'+
+                                        '<input type="date" class="form-control end_dete" id="" name="" value="">'+
+                                    '</div>'+
+                                    '<label>Reason</label>'+
+                                    '<textarea class="form-control resign_reason"></textarea>'+
+                                '</div>'+
+                            '</form>',
+                        buttons: {
+                            confirm: {
+                                text: 'Submit',
+                                btnClass: 'btn-blue',
+                                action: function() {
+                                    var emp_status = this.$content.find('.emp_status').val();
+                                    var id = this.$content.find('.id').val();
+                                    var start_date = this.$content.find('.start_date').val();
+                                    var end_dete = this.$content.find('.end_dete').val();
+                                    var resign_reason = this.$content.find('.resign_reason').val();
+
+                                    if (!start_date) {
+                                        $.alert({
+                                            title: '<span class="text-danger">Requiered</span>',
+                                            content: 'Please input start date.',
+                                        });
+                                        return false;
+                                    }
+                                    
+                                    axios.post('{{ URL('employee/status') }}', {
+                                            'emp_status': emp_status,
+                                            'id': id,
+                                            'start_date': start_date,
+                                            'end_dete': end_dete,
+                                            'resign_reason': resign_reason
+                                        }).then(function(response) {
+                                        new Noty({
+                                            title: "",
+                                            text: "The process has been successfully.",
+                                            type: "success",
+                                            icon: true
+                                        }).show();
+                                        $('.card-footer').remove();
+                                        window.location.replace("{{ URL('users') }}");
+                                    }).catch(function(error) {
+                                        new Noty({
+                                            title: "",
+                                            text: "Something went wrong please try again later.",
+                                            type: "error",
+                                            icon: true
+                                        }).show();
+                                    });
+                                }
+                            },
+                            cancel: {
+                                text: 'Cancel',
+                                btnClass: 'btn-red btn-sm',
+                            },
+                        }
+                    });
+                }else if(status==2){
+                    $.confirm({
+                        title: 'Employee Status!',
+                        contentClass: 'text-center',
+                        backgroundDismiss: 'cancel',
+                        content: ''+
+                            '<form>'+
+                                '<div class="form-group">'+
+                                    '<input type="hidden" class="form-control emp_status" id="" name="" value="'+status+'">'+
+                                    '<input type="hidden" class="form-control id" id="" name="" value="'+id+'">'+
+                                '</div>'+
+                                '<div class="form-group">'+
+                                    '<label>Reason</label>'+
+                                    '<textarea class="form-control resign_reason"></textarea>'+
+                                '</div>'+
+                            '</form>',
+                        buttons: {
+                            confirm: {
+                                text: 'Submit',
+                                btnClass: 'btn-blue',
+                                action: function() {
+                                    var emp_status = this.$content.find('.emp_status').val();
+                                    var id = this.$content.find('.id').val();
+                                    var resign_reason = this.$content.find('.resign_reason').val();
+                                    axios.post('{{ URL('employee/status') }}', {
+                                            'id': id,
+                                            'emp_status': emp_status,
+                                            'resign_reason': resign_reason
+                                        }).then(function(response) {
+                                        new Noty({
+                                            title: "",
+                                            text: "The process has been successfully.",
+                                            type: "success",
+                                            icon: true
+                                        }).show();
+                                        $('.card-footer').remove();
+                                        window.location.replace("{{ URL('users') }}");
+                                    }).catch(function(error) {
+                                        new Noty({
+                                            title: "",
+                                            text: "Something went wrong please try again later.",
+                                            type: "error",
+                                            icon: true
+                                        }).show();
+                                    });
+                                }
+                            },
+                            cancel: {
+                                text: 'Cancel',
+                                btnClass: 'btn-red btn-sm',
+                            },
+                        }
+                    }); 
+                }else{
+                    $.confirm({
+                        title: 'Employee Status!',
+                        contentClass: 'text-center',
+                        backgroundDismiss: 'cancel',
+                        content: ''+
+                            '<form method="post">'+
+                                '<div class="form-group">'+
+                                    '<div class="form-group">'+
+                                        '<label>date <span class="text-danger">*</span></label>'+
+                                        '<input type="date" class="form-control resign_date" id="" name="" value="">'+
+                                        '<input type="hidden" class="form-control emp_status" id="" name="" value="'+status+'">'+
+                                        '<input type="hidden" class="form-control id" id="" name="" value="'+id+'">'+
+                                    '</div>'+
+                                    '<label>Reason</label>'+
+                                    '<textarea class="form-control resign_reason"></textarea>'+
+                                '</div>'+
+                            '</form>',
+                        buttons: {
+                            confirm: {
+                                text: 'Submit',
+                                btnClass: 'btn-blue',
+                                action: function() {
+                                    var emp_status = this.$content.find('.emp_status').val();
+                                    var id = this.$content.find('.id').val();
+                                    var resign_date = this.$content.find('.resign_date').val();
+                                    var resign_reason = this.$content.find('.resign_reason').val();
+
+                                    if (!resign_date) {
+                                        $.alert({
+                                            title: '<span class="text-danger">Requiered</span>',
+                                            content: 'Please input date.',
+                                        });
+                                        return false;
+                                    }
+                                    
+                                    axios.post('{{ URL('employee/status') }}', {
+                                            'id': id,
+                                            'emp_status': emp_status,
+                                            'resign_date': resign_date,
+                                            'resign_reason': resign_reason
+                                        }).then(function(response) {
+                                        new Noty({
+                                            title: "",
+                                            text: "The process has been successfully.",
+                                            type: "success",
+                                            icon: true
+                                        }).show();
+                                        $('.card-footer').remove();
+                                        window.location.replace("{{ URL('users') }}");
+                                    }).catch(function(error) {
+                                        new Noty({
+                                            title: "",
+                                            text: "Something went wrong please try again later.",
+                                            type: "error",
+                                            icon: true
+                                        }).show();
+                                    });
+                                }
+                            },
+                            cancel: {
+                                text: 'Cancel',
+                                btnClass: 'btn-red btn-sm',
+                            },
+                        }
+                    });
+                }
             });
 
             window.onload = function () {
