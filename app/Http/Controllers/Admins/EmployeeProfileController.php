@@ -28,7 +28,7 @@ class EmployeeProfileController extends Controller
         return view('employees.profile',compact('data','optionOfStudy','optionDegree','department','position'));
     }
     public function employeeEducation(Request $request){
-        try {
+        try{
             $schools = $request->school;
             if (is_array($schools) && count($schools)) {
                 foreach ($schools as $key => $school) :
@@ -46,18 +46,19 @@ class EmployeeProfileController extends Controller
                     endif;
                 endforeach;
             }
-            return response()->json(['success'=>'Update education successfully.']);
-        } catch (\Exception $exp) {
-            /*
-            * ERROR
-            */
+            DB::commit();
+            Toastr::success('Update education successfully. :)','Success');
+            return redirect()->back();
+        }catch(\Exception $e){
+            DB::rollback();
+            Toastr::error('Update education fail :)','Error');
+            return redirect()->back();
         }
     }
 
     public function updateOrCreateExperience(Request $request)
     {
         try {
-            Experience::where('employee_id', $request->employee_id)->delete();
             $titles = $request->title;
             if (is_array($titles) && count($titles)) {
                 foreach ($titles as $key => $title) :
@@ -77,11 +78,13 @@ class EmployeeProfileController extends Controller
                     endif;
                 endforeach;
             }
-            return response()->json(['success'=>'Update experience successfully.']);
-        } catch (\Exception $exp) {
-            /*
-            * ERROR
-            */
+            DB::commit();
+            Toastr::success('Update experience successfully. :)','Success');
+            return redirect()->back();
+        }catch(\Exception $e){
+            DB::rollback();
+            Toastr::error('Update experience fail :)','Error');
+            return redirect()->back();
         }
     }
     public function updateOrCreatePromote(Request $request){

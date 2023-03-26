@@ -485,16 +485,24 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label>Province/City</label>
-                                            <select class="form-control" @change="cityChange" name="current_addre_city" v-model="frm.city" :disabled="JSON.stringify(cities).length==2" value="{{old('city')}}">
-                                                <option v-for="(item,text) in cities" :value="text">@{{item}}</option>
+                                            {{-- <select class="form-control" @change="cityChange" name="current_province" v-model="frm.city" :disabled="JSON.stringify(cities).length==2" value="{{old('city')}}">
+                                                <option v-for="(item,text) in Provinces" :value="text">@{{item}}</option>
+                                            </select> --}}
+                                            <select v-if="Provinces" class="form-control" name="current_province" v-model="provinc" @change="updateValueProvice">
+                                                <option :value="null">--select--</option>
+                                                <option v-for="(text,item) in Provinces" :value="item.id">@{{item.name_en}}</option>
                                             </select>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label>District/Khan</label>
-                                            <select class="form-control" @change="districChange" name="current_addre_distric" v-model="frm.distric" :disabled="JSON.stringify(districs).length==2" value="{{old('distric')}}">
+                                            {{-- <select class="form-control" @change="districChange" name="current_district" v-model="frm.distric" :disabled="JSON.stringify(districs).length==2" value="{{old('distric')}}">
                                                 <option v-for="(item, text) in districs" :value="text">@{{item}}</option>
+                                            </select> --}}
+                                            <select class="form-control" name="current_district" v-model="distric" @change="updateValueDistrict()">
+                                                <option :value="null">--select--</option>
+                                                <option v-for="(text,item) in Districts" :value="item.id">@{{item.name_en}} </option>
                                             </select>
                                         </div>
                                     </div>
@@ -502,16 +510,24 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label class="no-error-label">Commune/Sangkat</label>
-                                            <select class="form-control no-error-border" @change="communeChange" name="current_addre_commune" v-model="frm.commune" :disabled="JSON.stringify(communes).length==2" value="{{old('commune')}}">
+                                            {{-- <select class="form-control no-error-border" @change="communeChange" name="current_commune" v-model="frm.commune" :disabled="JSON.stringify(communes).length==2" value="{{old('commune')}}">
                                                 <option v-for="(item, text) in communes" :value="text">@{{item}}</option>
+                                            </select> --}}
+                                            <select class="form-control" name="current_commune" v-model="commun" @change="updateValueCommune()">
+                                                <option :value="null">--select--</option>
+                                                <option v-for="(text,item) in Communes" :value="item.id">@{{item.name_en}} </option>
                                             </select>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label class="no-error-label">Village</label>
-                                            <select class="form-control no-error-border" @change="villageChange" name="current_addre_village" v-model="frm.village" :disabled="JSON.stringify(villages).length==2" value="{{old('village')}}">
+                                            {{-- <select class="form-control no-error-border" @change="villageChange" name="current_village" v-model="frm.village" :disabled="JSON.stringify(villages).length==2" value="{{old('village')}}">
                                                 <option v-for="(item, text) in villages" :value="text">@{{item}}</option>
+                                            </select> --}}
+                                            <select class="form-control" name="current_village" v-model="villag">
+                                                <option :value="null">--select--</option>
+                                                <option v-for="(text,item) in Villages" :value="item.id">@{{item.name_en}} </option>
                                             </select>
                                         </div>
                                     </div>
@@ -543,7 +559,7 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label>Province/City</label>
-                                            <select class="form-control" @change="cityChange" name="permanet_addre_city" v-model="frm.city" :disabled="JSON.stringify(cities).length==2" value="{{old('city')}}">
+                                            <select class="form-control" @change="cityChange" name="permanent_province" v-model="frm.city" :disabled="JSON.stringify(cities).length==2" value="{{old('city')}}">
                                                 <option v-for="(item,text) in cities" :value="text">@{{item}}</option>
                                             </select>
                                         </div>
@@ -551,7 +567,7 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label>District/Khan</label>
-                                            <select class="form-control" @change="districChange" name="permanet_addre_distric" v-model="frm.distric" :disabled="JSON.stringify(districs).length==2" value="{{old('distric')}}">
+                                            <select class="form-control" @change="districChange" name="permanent_district" v-model="frm.distric" :disabled="JSON.stringify(districs).length==2" value="{{old('distric')}}">
                                                 <option v-for="(item, text) in districs" :value="text">@{{item}}</option>
                                             </select>
                                         </div>
@@ -560,7 +576,7 @@
                                     <div class="col-md-6">
                                         <div class="form-group ">
                                             <label class="no-error-label">Commune/Sangkat</label>
-                                            <select class="form-control no-error-border" @change="communeChange" name="permanet_addre_commune" v-model="frm.commune" :disabled="JSON.stringify(communes).length==2" value="{{old('commune')}}">
+                                            <select class="form-control no-error-border" @change="communeChange" name="permanent_commune" v-model="frm.commune" :disabled="JSON.stringify(communes).length==2" value="{{old('commune')}}">
                                                 <option v-for="(item, text) in communes" :value="text">@{{item}}</option>
                                             </select>
                                         </div>
@@ -568,7 +584,7 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label class="no-error-label">Village</label>
-                                            <select class="form-control no-error-border" @change="villageChange" name="permanet_addre_village" v-model="frm.village" :disabled="JSON.stringify(villages).length==2" value="{{old('village')}}">
+                                            <select class="form-control no-error-border" @change="villageChange" name="permanent_village" v-model="frm.village" :disabled="JSON.stringify(villages).length==2" value="{{old('village')}}">
                                                 <option v-for="(item, text) in villages" :value="text">@{{item}}</option>
                                             </select>
                                         </div>
@@ -886,15 +902,15 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label>Province/City</label>
-                                            <select class="form-control" @change="cityChange" name="current_addre_city" v-model="frm.city" :disabled="JSON.stringify(cities).length==2" value="{{old('city')}}">
-                                                <option v-for="(item,text) in cities" :value="text">@{{item}}</option>
+                                            <select class="form-control" @change="cityChange" id="e_current_province" name="current_province" v-model="frm.city" :disabled="JSON.stringify(cities).length==2" value="{{old('city')}}">
+                                                {{-- <option v-for="(item,text) in cities" :value="text">@{{item}}</option> --}}
                                             </select>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label>District/Khan</label>
-                                            <select class="form-control" @change="districChange" name="current_addre_distric" v-model="frm.distric" :disabled="JSON.stringify(districs).length==2" value="{{old('distric')}}">
+                                            <select class="form-control" @change="districChange" id="e_current_district" name="current_district" v-model="frm.distric" :disabled="JSON.stringify(districs).length==2" value="{{old('distric')}}">
                                                 <option v-for="(item, text) in districs" :value="text">@{{item}}</option>
                                             </select>
                                         </div>
@@ -903,7 +919,7 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label class="no-error-label">Commune/Sangkat</label>
-                                            <select class="form-control no-error-border" @change="communeChange" name="current_addre_commune" v-model="frm.commune" :disabled="JSON.stringify(communes).length==2" value="{{old('commune')}}">
+                                            <select class="form-control no-error-border" @change="communeChange" name="current_commune" v-model="frm.commune" :disabled="JSON.stringify(communes).length==2" value="{{old('commune')}}">
                                                 <option v-for="(item, text) in communes" :value="text">@{{item}}</option>
                                             </select>
                                         </div>
@@ -911,7 +927,7 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label class="no-error-label">Village</label>
-                                            <select class="form-control no-error-border" @change="villageChange" name="current_addre_village" v-model="frm.village" :disabled="JSON.stringify(villages).length==2" value="{{old('village')}}">
+                                            <select class="form-control no-error-border" @change="villageChange" name="current_village" v-model="frm.village" :disabled="JSON.stringify(villages).length==2" value="{{old('village')}}">
                                                 <option v-for="(item, text) in villages" :value="text">@{{item}}</option>
                                             </select>
                                         </div>
@@ -944,7 +960,7 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label>Province/City</label>
-                                            <select class="form-control" @change="cityChange" name="permanet_addre_city" v-model="frm.city" :disabled="JSON.stringify(cities).length==2" value="{{old('city')}}">
+                                            <select class="form-control" @change="cityChange" name="permanent_province" v-model="frm.city" :disabled="JSON.stringify(cities).length==2" value="{{old('city')}}">
                                                 <option v-for="(item,text) in cities" :value="text">@{{item}}</option>
                                             </select>
                                         </div>
@@ -952,7 +968,7 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label>District/Khan</label>
-                                            <select class="form-control" @change="districChange" name="permanet_addre_distric" v-model="frm.distric" :disabled="JSON.stringify(districs).length==2" value="{{old('distric')}}">
+                                            <select class="form-control" @change="districChange" name="permanent_district" v-model="frm.distric" :disabled="JSON.stringify(districs).length==2" value="{{old('distric')}}">
                                                 <option v-for="(item, text) in districs" :value="text">@{{item}}</option>
                                             </select>
                                         </div>
@@ -961,7 +977,7 @@
                                     <div class="col-md-6">
                                         <div class="form-group ">
                                             <label class="no-error-label">Commune/Sangkat</label>
-                                            <select class="form-control no-error-border" @change="communeChange" name="permanet_addre_commune" v-model="frm.commune" :disabled="JSON.stringify(communes).length==2" value="{{old('commune')}}">
+                                            <select class="form-control no-error-border" @change="communeChange" name="permanent_commune" v-model="frm.commune" :disabled="JSON.stringify(communes).length==2" value="{{old('commune')}}">
                                                 <option v-for="(item, text) in communes" :value="text">@{{item}}</option>
                                             </select>
                                         </div>
@@ -969,7 +985,7 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label class="no-error-label">Village</label>
-                                            <select class="form-control no-error-border" @change="villageChange" name="permanet_addre_village" v-model="frm.village" :disabled="JSON.stringify(villages).length==2" value="{{old('village')}}">
+                                            <select class="form-control no-error-border" @change="villageChange" name="permanent_village" v-model="frm.village" :disabled="JSON.stringify(villages).length==2" value="{{old('village')}}">
                                                 <option v-for="(item, text) in villages" :value="text">@{{item}}</option>
                                             </select>
                                         </div>
@@ -1037,440 +1053,443 @@
 
 <script>
     $(function(){
-            $('.userUpdate').on('click',function(){
-                let id = $(this).data("id");
-                $.ajax({
-                    type: "GET",
-                    url: "{{url('users/edit')}}",
-                    data: {
-                        id : id
-                    },
-                    dataType: "JSON",
-                    success: function (response) {
-                        if (response.success) {
-                            if (response.role != '') {
-                                $('#e_role_id').html('<option selected disabled> --Select --</option>');
-                                $.each(response.role, function(i, item) {
-                                    $('#e_role_id').append($('<option>', {
-                                        value: item.id,
-                                        text: item.name,
-                                        selected: item.id == response.success.role_id
-                                    }));
-                                });
-                            }
+        window.onload = function () {
+            var main = new Vue({
+                el: '#CurrentAddress',
+                data(){
+                    return{
+                        validate: [],
+                        provinc:null,
+                        distric:null,
+                        commun:null,
+                        villag:null,
+                        provinc_name:[],
+                        distric_name:null,
+                        commun_name:null,
+                        villag_name:null,
 
-                            if (response.position != '') {
-                                $('#e_position').html('<option selected disabled> --Select --</option>');
-                                $.each(response.position, function(i, item) {
-                                    $('#e_position').append($('<option>', {
-                                        value: item.id,
-                                        text: item.name_khmer,
-                                        selected: item.id == response.success.position_id
-                                    }));
-                                });
-                            }
-                            
-                            if (response.department != '') {
-                                $('#e_department').html('<option selected disabled> --Select --</option>');
-                                $.each(response.department, function(i, item) {
-                                    $('#e_department').append($('<option>', {
-                                        value: item.id,
-                                        text: item.name_khmer,
-                                        selected: item.id == response.success.department_id
-                                    }));
-                                });
-                            }
-                            if (response.optionGender != '') {
-                                $('#e_gender').html('<option selected disabled> --Select --</option>');
-                                $.each(response.optionGender, function(i, item) {
-                                    $('#e_gender').append($('<option>', {
-                                        value: item.id,
-                                        text: item.name_khmer,
-                                        selected: item.id == response.success.gender
-                                    }));
-                                });
-                            }
-                            if (response.branch != '') {
-                                $('#e_branch_id').html('<option selected disabled> --Select --</option>');
-                                $.each(response.branch, function(i, item) {
-                                    $('#e_branch_id').append($('<option>', {
-                                        value: item.branch_name_kh,
-                                        text: item.branch_name_kh,
-                                        selected: item.id == response.success.branch_id
-                                    }));
-                                });
-                            }
-                            if (response.optionIdentityType != '') {
-                                $('#e_identity_type').html('<option selected disabled> --Select --</option>');
-                                $.each(response.optionIdentityType, function(i, item) {
-                                    $('#e_identity_type').append($('<option>', {
-                                        value: item.name_khmer,
-                                        text: item.name_khmer,
-                                        selected: item.id == response.success.identity_type
-                                    }));
-                                });
-                            }
-                            
-                            $('#e_id').val(response.success.id);
-                            $('#e_number_employee').val(response.success.number_employee);
-                            $('#e_employee_name_kh').val(response.success.employee_name_kh);
-                            $('#e_employee_name_en').val(response.success.employee_name_en);
-                            $('#e_date_of_birth').val(response.success.date_of_birth);
-                            $('#e_unit').val(response.success.unit);
-                            $('#e_level').val(response.success.level);
-                            $('#e_level').val(response.success.level);
-                            $('#e_date_of_commencement').val(response.success.date_of_commencement);
-                            $('#e_number_of_children').val(response.success.number_of_children);
-                            $('#e_marital_status').val(response.success.marital_status);
-                            $('#e_nationality').val(response.success.nationality);
-                            $('#e_personal_phone_number').val(response.success.personal_phone_number);
-                            $('#e_company_phone_number').val(response.success.company_phone_number);
-                            $('#e_agency_phone_number').val(response.success.agency_phone_number);
-                            $('#e_email').val(response.success.email);
-                            $('#e_remark').val(response.success.remark);
-                            $('#e_bank_name').val(response.success.bank_name);
-                            $('#e_account_name').val(response.success.account_name);
-                            $('#e_account_number').val(response.success.account_number);
-                            $('#e_identity_number').val(response.success.identity_number);
-                            $('#e_issue_date').val(response.success.issue_date);
-                            $('#e_issue_expired_date').val(response.success.issue_expired_date);
-                            $('#e_profile').val(response.success.profile);
-                            $('#e_guarantee_letter').val(response.success.guarantee_letter);
-                            $('#e_employment_book').val(response.success.employment_book);
-                            $('#e_current_house_no').val(response.success.current_house_no);
-                            $('#e_current_street_no').val(response.success.current_street_no);
-                            $('#e_permanent_house_no').val(response.success.permanent_house_no);
-                            $('#e_permanent_street_no').val(response.success.permanent_street_no);
-                            $('#editUserModal').modal('show');
-                        }
+                        Provinces:null,
+                        Districts:null,
+                        Communes:null,
+                        Villages:null,
+                        ProvincesData:null,
+                        DistrictsData:null,
+                        CommunesData:null,
+                        VillagesData:null,
                     }
-                });
-            });
-            $('.userDelete').on('click',function(){
-                var _this = $(this).parents('tr');
-                $('.e_id').val(_this.find('.ids').text());
-                $('.e_profile').val(_this.find('.image').text());
-            });
-
-            $('body').on('click', '#btn-emp-status a', function() {
-                let status = $(this).data('id');
-                let id = $("#employee_id").val();
-                if (status == 1) {
-                    $.confirm({
-                        title: 'Employee Status!',
-                        contentClass: 'text-center',
-                        backgroundDismiss: 'cancel',
-                        content: ''+
-                            '<form method="post">'+
-                                '<div class="form-group">'+
-                                    '<div class="form-group">'+
-                                        '<label>Start date <span class="text-danger">*</span></label>'+
-                                        '<input type="date" class="form-control start_date" id="" name="" value="">'+
-                                        '<input type="hidden" class="form-control emp_status" id="" name="" value="'+status+'">'+
-                                        '<input type="hidden" class="form-control id" id="" name="" value="'+id+'">'+
-                                    '</div>'+
-                                    '<div class="form-group">'+
-                                        '<label>End date</label>'+
-                                        '<input type="date" class="form-control end_dete" id="" name="" value="">'+
-                                    '</div>'+
-                                    '<label>Reason</label>'+
-                                    '<textarea class="form-control resign_reason"></textarea>'+
-                                '</div>'+
-                            '</form>',
-                        buttons: {
-                            confirm: {
-                                text: 'Submit',
-                                btnClass: 'btn-blue',
-                                action: function() {
-                                    var emp_status = this.$content.find('.emp_status').val();
-                                    var id = this.$content.find('.id').val();
-                                    var start_date = this.$content.find('.start_date').val();
-                                    var end_dete = this.$content.find('.end_dete').val();
-                                    var resign_reason = this.$content.find('.resign_reason').val();
-
-                                    if (!start_date) {
-                                        $.alert({
-                                            title: '<span class="text-danger">Requiered</span>',
-                                            content: 'Please input start date.',
-                                        });
-                                        return false;
-                                    }
-                                    
-                                    axios.post('{{ URL('employee/status') }}', {
-                                            'emp_status': emp_status,
-                                            'id': id,
-                                            'start_date': start_date,
-                                            'end_dete': end_dete,
-                                            'resign_reason': resign_reason
-                                        }).then(function(response) {
-                                        new Noty({
-                                            title: "",
-                                            text: "The process has been successfully.",
-                                            type: "success",
-                                            icon: true
-                                        }).show();
-                                        $('.card-footer').remove();
-                                        window.location.replace("{{ URL('users') }}");
-                                    }).catch(function(error) {
-                                        new Noty({
-                                            title: "",
-                                            text: "Something went wrong please try again later.",
-                                            type: "error",
-                                            icon: true
-                                        }).show();
-                                    });
-                                }
-                            },
-                            cancel: {
-                                text: 'Cancel',
-                                btnClass: 'btn-red btn-sm',
-                            },
+                },
+                methods:{
+                    getCountryInfo(){
+                        axios.get('provinces').then(response=>{
+                            this.ProvincesData=response.data;
+                            this.Provinces=Object.values(this.ProvincesData.data);
+                        });
+                        axios.get('district').then(response=>{
+                            this.DistrictsData=response.data;
+                        });
+                        axios.get('communes').then(response=>{
+                            this.CommunesData=response.data;
+                        });
+                        axios.get('villages').then(response=>{
+                            this.VillagesData=response.data;
+                        });
+                    },
+                    updateValueProvice(){
+                        this.distric=null;
+                        this.commun=null;
+                        this.villag=null;
+                    },
+                    updateValueDistrict(){
+                        this.commun=null;
+                        this.villag=null;
+                    },
+                    updateValueCommune(){
+                        this.villag=null;
+                    },
+                },
+                watch:{
+                    provinc(value){
+                        if(value){
+                            this.provinc_name=this.ProvincesData.data.filter(element=>element.id==value);
+                            this.provinc_name=this.provinc_name[0].name_en;
+                            this.provinc=value;
+                            this.Districts=this.DistrictsData.data.filter(element=>element.province_id==value);
+                            this.Communes=null;
+                            this.Villages=null;
                         }
-                    });
-                }else if(status==2){
-                    $.confirm({
-                        title: 'Employee Status!',
-                        contentClass: 'text-center',
-                        backgroundDismiss: 'cancel',
-                        content: ''+
-                            '<form>'+
+                    },
+                    distric(value){
+                        if(value){
+                            this.distric_name=this.DistrictsData.data.filter(element=>element.id==value);
+                            this.distric_name=this.distric_name[0].name_en;
+                            this.distric=value;
+                            this.Communes=this.CommunesData.data.filter(element=>element.district_id==value);
+                        }
+                    },
+                    commun(value){
+                        if(value){
+                            this.commun_name=this.CommunesData.data.filter(element=>element.id==value);
+                            this.commun_name=this.commun_name[0].name_en;
+                            this.commun=value;
+                            this.Villages=this.VillagesData.data.filter(element=>element.commune_id==value);
+                        }
+                    },
+                    villag(value){
+                        if(value){
+                            this.villag_name=this.VillagesData.data.filter(element=>element.id==value);
+                            this.villag_name=this.villag_name[0].name_en;
+                            this.villag=value;
+                        }
+                    },
+                },
+                mounted(){
+                    this.getScreendMobleOrComputer();
+                },
+                created(){
+                    this.getCountryInfo();
+                }
+            });
+        };
+        
+        
+        $('.userUpdate').on('click',function(){
+            let id = $(this).data("id");
+            $.ajax({
+                type: "GET",
+                url: "{{url('users/edit')}}",
+                data: {
+                    id : id
+                },
+                dataType: "JSON",
+                success: function (response) {
+                    if (response.success) {
+                        if (response.role != '') {
+                            $('#e_role_id').html('<option selected disabled> --Select --</option>');
+                            $.each(response.role, function(i, item) {
+                                $('#e_role_id').append($('<option>', {
+                                    value: item.id,
+                                    text: item.name,
+                                    selected: item.id == response.success.role_id
+                                }));
+                            });
+                        }
+
+                        if (response.position != '') {
+                            $('#e_position').html('<option selected disabled> --Select --</option>');
+                            $.each(response.position, function(i, item) {
+                                $('#e_position').append($('<option>', {
+                                    value: item.id,
+                                    text: item.name_khmer,
+                                    selected: item.id == response.success.position_id
+                                }));
+                            });
+                        }
+                        
+                        if (response.department != '') {
+                            $('#e_department').html('<option selected disabled> --Select --</option>');
+                            $.each(response.department, function(i, item) {
+                                $('#e_department').append($('<option>', {
+                                    value: item.id,
+                                    text: item.name_khmer,
+                                    selected: item.id == response.success.department_id
+                                }));
+                            });
+                        }
+                        if (response.optionGender != '') {
+                            $('#e_gender').html('<option selected disabled> --Select --</option>');
+                            $.each(response.optionGender, function(i, item) {
+                                $('#e_gender').append($('<option>', {
+                                    value: item.id,
+                                    text: item.name_khmer,
+                                    selected: item.id == response.success.gender
+                                }));
+                            });
+                        }
+                        if (response.branch != '') {
+                            $('#e_branch_id').html('<option selected disabled> --Select --</option>');
+                            $.each(response.branch, function(i, item) {
+                                $('#e_branch_id').append($('<option>', {
+                                    value: item.branch_name_kh,
+                                    text: item.branch_name_kh,
+                                    selected: item.id == response.success.branch_id
+                                }));
+                            });
+                        }
+                        if (response.optionIdentityType != '') {
+                            $.each(response.optionIdentityType, function(i, item) {
+                                $('#e_identity_type').append($('<option>', {
+                                    value: item.name_khmer,
+                                    text: item.name_khmer,
+                                    selected: item.id == response.success.identity_type
+                                }));
+                            });
+                        }
+                        
+                        if (response.address != '') {
+                            $.each(response.address, function(i, item) {
+                                $('#e_current_province').append($('<option>', {
+                                    value: item._code,
+                                    text: item._name_en,
+                                    selected: item._code == response.success.current_province
+                                }));
+                            });
+                        }
+                        console.log(response.address);
+                        if (response.address != '') {
+                            $.each(response.address, function(i, item) {
+                                $('#e_current_district').append($('<option>', {
+                                    value: item._code,
+                                    text: item._name_en,
+                                    selected: item._code == response.success.current_province
+                                }));
+                            });
+                        }
+                        
+                        $('#e_id').val(response.success.id);
+                        $('#e_number_employee').val(response.success.number_employee);
+                        $('#e_employee_name_kh').val(response.success.employee_name_kh);
+                        $('#e_employee_name_en').val(response.success.employee_name_en);
+                        $('#e_date_of_birth').val(response.success.date_of_birth);
+                        $('#e_unit').val(response.success.unit);
+                        $('#e_level').val(response.success.level);
+                        $('#e_date_of_commencement').val(response.success.date_of_commencement);
+                        $('#e_number_of_children').val(response.success.number_of_children);
+                        $('#e_marital_status').val(response.success.marital_status);
+                        $('#e_nationality').val(response.success.nationality);
+                        $('#e_personal_phone_number').val(response.success.personal_phone_number);
+                        $('#e_company_phone_number').val(response.success.company_phone_number);
+                        $('#e_agency_phone_number').val(response.success.agency_phone_number);
+                        $('#e_email').val(response.success.email);
+                        $('#e_remark').val(response.success.remark);
+                        $('#e_bank_name').val(response.success.bank_name);
+                        $('#e_account_name').val(response.success.account_name);
+                        $('#e_account_number').val(response.success.account_number);
+                        $('#e_identity_number').val(response.success.identity_number);
+                        $('#e_issue_date').val(response.success.issue_date);
+                        $('#e_issue_expired_date').val(response.success.issue_expired_date);
+                        $('#e_profile').val(response.success.profile);
+                        $('#e_guarantee_letter').val(response.success.guarantee_letter);
+                        $('#e_employment_book').val(response.success.employment_book);
+                        $('#e_current_house_no').val(response.success.current_house_no);
+                        $('#e_current_street_no').val(response.success.current_street_no);
+                        $('#e_permanent_house_no').val(response.success.permanent_house_no);
+                        $('#e_permanent_street_no').val(response.success.permanent_street_no);
+                        $('#e_current_district').val(response.success.current_district);
+                        $('#editUserModal').modal('show');
+                    }
+                }
+            });
+        });
+        $('.userDelete').on('click',function(){
+            var _this = $(this).parents('tr');
+            $('.e_id').val(_this.find('.ids').text());
+            $('.e_profile').val(_this.find('.image').text());
+        });
+
+        $('body').on('click', '#btn-emp-status a', function() {
+            let status = $(this).data('id');
+            let id = $("#employee_id").val();
+            if (status == 1) {
+                $.confirm({
+                    title: 'Employee Status!',
+                    contentClass: 'text-center',
+                    backgroundDismiss: 'cancel',
+                    content: ''+
+                        '<form method="post">'+
+                            '<div class="form-group">'+
                                 '<div class="form-group">'+
+                                    '<label>Start date <span class="text-danger">*</span></label>'+
+                                    '<input type="date" class="form-control start_date" id="" name="" value="">'+
                                     '<input type="hidden" class="form-control emp_status" id="" name="" value="'+status+'">'+
                                     '<input type="hidden" class="form-control id" id="" name="" value="'+id+'">'+
                                 '</div>'+
                                 '<div class="form-group">'+
-                                    '<label>Reason</label>'+
-                                    '<textarea class="form-control resign_reason"></textarea>'+
+                                    '<label>End date</label>'+
+                                    '<input type="date" class="form-control end_dete" id="" name="" value="">'+
                                 '</div>'+
-                            '</form>',
-                        buttons: {
-                            confirm: {
-                                text: 'Submit',
-                                btnClass: 'btn-blue',
-                                action: function() {
-                                    var emp_status = this.$content.find('.emp_status').val();
-                                    var id = this.$content.find('.id').val();
-                                    var resign_reason = this.$content.find('.resign_reason').val();
-                                    axios.post('{{ URL('employee/status') }}', {
-                                            'id': id,
-                                            'emp_status': emp_status,
-                                            'resign_reason': resign_reason
-                                        }).then(function(response) {
-                                        new Noty({
-                                            title: "",
-                                            text: "The process has been successfully.",
-                                            type: "success",
-                                            icon: true
-                                        }).show();
-                                        $('.card-footer').remove();
-                                        window.location.replace("{{ URL('users') }}");
-                                    }).catch(function(error) {
-                                        new Noty({
-                                            title: "",
-                                            text: "Something went wrong please try again later.",
-                                            type: "error",
-                                            icon: true
-                                        }).show();
+                                '<label>Reason</label>'+
+                                '<textarea class="form-control resign_reason"></textarea>'+
+                            '</div>'+
+                        '</form>',
+                    buttons: {
+                        confirm: {
+                            text: 'Submit',
+                            btnClass: 'btn-blue',
+                            action: function() {
+                                var emp_status = this.$content.find('.emp_status').val();
+                                var id = this.$content.find('.id').val();
+                                var start_date = this.$content.find('.start_date').val();
+                                var end_dete = this.$content.find('.end_dete').val();
+                                var resign_reason = this.$content.find('.resign_reason').val();
+
+                                if (!start_date) {
+                                    $.alert({
+                                        title: '<span class="text-danger">Requiered</span>',
+                                        content: 'Please input start date.',
                                     });
+                                    return false;
                                 }
-                            },
-                            cancel: {
-                                text: 'Cancel',
-                                btnClass: 'btn-red btn-sm',
-                            },
-                        }
-                    }); 
-                }else{
-                    $.confirm({
-                        title: 'Employee Status!',
-                        contentClass: 'text-center',
-                        backgroundDismiss: 'cancel',
-                        content: ''+
-                            '<form method="post">'+
+                                
+                                axios.post('{{ URL('employee/status') }}', {
+                                        'emp_status': emp_status,
+                                        'id': id,
+                                        'start_date': start_date,
+                                        'end_dete': end_dete,
+                                        'resign_reason': resign_reason
+                                    }).then(function(response) {
+                                    new Noty({
+                                        title: "",
+                                        text: "The process has been successfully.",
+                                        type: "success",
+                                        icon: true
+                                    }).show();
+                                    $('.card-footer').remove();
+                                    window.location.replace("{{ URL('users') }}");
+                                }).catch(function(error) {
+                                    new Noty({
+                                        title: "",
+                                        text: "Something went wrong please try again later.",
+                                        type: "error",
+                                        icon: true
+                                    }).show();
+                                });
+                            }
+                        },
+                        cancel: {
+                            text: 'Cancel',
+                            btnClass: 'btn-red btn-sm',
+                        },
+                    }
+                });
+            }else if(status==2){
+                $.confirm({
+                    title: 'Employee Status!',
+                    contentClass: 'text-center',
+                    backgroundDismiss: 'cancel',
+                    content: ''+
+                        '<form>'+
+                            '<div class="form-group">'+
+                                '<input type="hidden" class="form-control emp_status" id="" name="" value="'+status+'">'+
+                                '<input type="hidden" class="form-control id" id="" name="" value="'+id+'">'+
+                            '</div>'+
+                            '<div class="form-group">'+
+                                '<label>Reason</label>'+
+                                '<textarea class="form-control resign_reason"></textarea>'+
+                            '</div>'+
+                        '</form>',
+                    buttons: {
+                        confirm: {
+                            text: 'Submit',
+                            btnClass: 'btn-blue',
+                            action: function() {
+                                var emp_status = this.$content.find('.emp_status').val();
+                                var id = this.$content.find('.id').val();
+                                var resign_reason = this.$content.find('.resign_reason').val();
+                                axios.post('{{ URL('employee/status') }}', {
+                                        'id': id,
+                                        'emp_status': emp_status,
+                                        'resign_reason': resign_reason
+                                    }).then(function(response) {
+                                    new Noty({
+                                        title: "",
+                                        text: "The process has been successfully.",
+                                        type: "success",
+                                        icon: true
+                                    }).show();
+                                    $('.card-footer').remove();
+                                    window.location.replace("{{ URL('users') }}");
+                                }).catch(function(error) {
+                                    new Noty({
+                                        title: "",
+                                        text: "Something went wrong please try again later.",
+                                        type: "error",
+                                        icon: true
+                                    }).show();
+                                });
+                            }
+                        },
+                        cancel: {
+                            text: 'Cancel',
+                            btnClass: 'btn-red btn-sm',
+                        },
+                    }
+                }); 
+            }else{
+                $.confirm({
+                    title: 'Employee Status!',
+                    contentClass: 'text-center',
+                    backgroundDismiss: 'cancel',
+                    content: ''+
+                        '<form method="post">'+
+                            '<div class="form-group">'+
                                 '<div class="form-group">'+
-                                    '<div class="form-group">'+
-                                        '<label>date <span class="text-danger">*</span></label>'+
-                                        '<input type="date" class="form-control resign_date" id="" name="" value="">'+
-                                        '<input type="hidden" class="form-control emp_status" id="" name="" value="'+status+'">'+
-                                        '<input type="hidden" class="form-control id" id="" name="" value="'+id+'">'+
-                                    '</div>'+
-                                    '<label>Reason</label>'+
-                                    '<textarea class="form-control resign_reason"></textarea>'+
+                                    '<label>date <span class="text-danger">*</span></label>'+
+                                    '<input type="date" class="form-control resign_date" id="" name="" value="">'+
+                                    '<input type="hidden" class="form-control emp_status" id="" name="" value="'+status+'">'+
+                                    '<input type="hidden" class="form-control id" id="" name="" value="'+id+'">'+
                                 '</div>'+
-                            '</form>',
-                        buttons: {
-                            confirm: {
-                                text: 'Submit',
-                                btnClass: 'btn-blue',
-                                action: function() {
-                                    var emp_status = this.$content.find('.emp_status').val();
-                                    var id = this.$content.find('.id').val();
-                                    var resign_date = this.$content.find('.resign_date').val();
-                                    var resign_reason = this.$content.find('.resign_reason').val();
+                                '<label>Reason</label>'+
+                                '<textarea class="form-control resign_reason"></textarea>'+
+                            '</div>'+
+                        '</form>',
+                    buttons: {
+                        confirm: {
+                            text: 'Submit',
+                            btnClass: 'btn-blue',
+                            action: function() {
+                                var emp_status = this.$content.find('.emp_status').val();
+                                var id = this.$content.find('.id').val();
+                                var resign_date = this.$content.find('.resign_date').val();
+                                var resign_reason = this.$content.find('.resign_reason').val();
 
-                                    if (!resign_date) {
-                                        $.alert({
-                                            title: '<span class="text-danger">Requiered</span>',
-                                            content: 'Please input date.',
-                                        });
-                                        return false;
-                                    }
-                                    
-                                    axios.post('{{ URL('employee/status') }}', {
-                                            'id': id,
-                                            'emp_status': emp_status,
-                                            'resign_date': resign_date,
-                                            'resign_reason': resign_reason
-                                        }).then(function(response) {
-                                        new Noty({
-                                            title: "",
-                                            text: "The process has been successfully.",
-                                            type: "success",
-                                            icon: true
-                                        }).show();
-                                        $('.card-footer').remove();
-                                        window.location.replace("{{ URL('users') }}");
-                                    }).catch(function(error) {
-                                        new Noty({
-                                            title: "",
-                                            text: "Something went wrong please try again later.",
-                                            type: "error",
-                                            icon: true
-                                        }).show();
+                                if (!resign_date) {
+                                    $.alert({
+                                        title: '<span class="text-danger">Requiered</span>',
+                                        content: 'Please input date.',
                                     });
+                                    return false;
                                 }
-                            },
-                            cancel: {
-                                text: 'Cancel',
-                                btnClass: 'btn-red btn-sm',
-                            },
-                        }
-                    });
-                }
-            });
-
-            window.onload = function () {
-            var main = new Vue({
-                el: '#CurrentAddress',
-                data() {
-                    return {
-                        cities:{},
-                        districs:{},
-                        communes:{},
-                        villages:{},
-                        frm:{},
+                                
+                                axios.post('{{ URL('employee/status') }}', {
+                                        'id': id,
+                                        'emp_status': emp_status,
+                                        'resign_date': resign_date,
+                                        'resign_reason': resign_reason
+                                    }).then(function(response) {
+                                    new Noty({
+                                        title: "",
+                                        text: "The process has been successfully.",
+                                        type: "success",
+                                        icon: true
+                                    }).show();
+                                    $('.card-footer').remove();
+                                    window.location.replace("{{ URL('users') }}");
+                                }).catch(function(error) {
+                                    new Noty({
+                                        title: "",
+                                        text: "Something went wrong please try again later.",
+                                        type: "error",
+                                        icon: true
+                                    }).show();
+                                });
+                            }
+                        },
+                        cancel: {
+                            text: 'Cancel',
+                            btnClass: 'btn-red btn-sm',
+                        },
+                    },
+                    onContentReady: function() {
+                        // bind to events
+                        var jc = this;
+                        this.$content.find('form').on('submit', function(e) {
+                            // if the user submits the form by pressing enter in the field.
+                            e.preventDefault();
+                            jc.$$formSubmit.trigger('click'); // reference the button and click it
+                        });
                     }
-                },
-                mounted() {
-                    this.getData();
-                },
-                methods:{
-                    cityChange: async function(){
-                        var me = this;
-                        this.hidden = this.frm.city;
-                        await this.getData(this.frm.city).then(function(response){
-                        me.districs = response.data;
-                        me.communes={};
-                        me.villages={};
-                    });
-                },
-                districChange: async function(){
-                    var me = this;
-                    this.hidden = this.frm.distric;
-                    await this.getData(this.frm.distric).then(function(response){
-                        me.communes = response.data;
-                        me.villages={};
-                    });
-                },
-                communeChange: async function(){
-                    var me = this;
-                    this.hidden = this.frm.commune;
-                    await this.getData(this.frm.commune).then(function(response){
-                        me.villages = response.data;
-                    });
-                },
-                villageChange:function(){
-                    this.hidden = this.frm.village;
-                },
-                getData:function(code=''){
-                    if(code){ 
-                        return axios.get('{{route("address")}}?code='+code)
-                    }
-                    else
-                    { 
-                        return axios.get('{{route("address")}}')
-                    }
-                }
-            },
-        
-            created: async function(){
-                var me = this;
-                    this.getData().then(function(response){
-                        me.cities = response.data;
-                    });
-                }
-            });
-
-            var main = new Vue({
-                el: '#PermanentAddress',
-                data() {
-                    return {
-                        cities:{},
-                        districs:{},
-                        communes:{},
-                        villages:{},
-                        frm:{},
-                    }
-                },
-                mounted() {
-                    this.getData();
-                },
-                methods:{
-                    cityChange: async function(){
-                        var me = this;
-                        this.hidden = this.frm.city;
-                        await this.getData(this.frm.city).then(function(response){
-                        me.districs = response.data;
-                        me.communes={};
-                        me.villages={};
-                    });
-                },
-                districChange: async function(){
-                    var me = this;
-                    this.hidden = this.frm.distric;
-                    await this.getData(this.frm.distric).then(function(response){
-                        me.communes = response.data;
-                        me.villages={};
-                    });
-                },
-                communeChange: async function(){
-                    var me = this;
-                    this.hidden = this.frm.commune;
-                    await this.getData(this.frm.commune).then(function(response){
-                        me.villages = response.data;
-                    });
-                },
-                villageChange:function(){
-                    this.hidden = this.frm.village;
-                },
-                getData:function(code=''){
-                    if(code){ 
-                        return axios.get('{{route("address")}}?code='+code)
-                    }
-                    else
-                    { 
-                        return axios.get('{{route("address")}}')
-                    }
-                }
-            },
-        
-            created: async function(){
-                var me = this;
-                    this.getData().then(function(response){
-                        me.cities = response.data;
-                    });
-                }
-            });
-        }
+                });
+            }
+        });
     });
 </script>

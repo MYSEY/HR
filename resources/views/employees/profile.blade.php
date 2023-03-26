@@ -309,6 +309,7 @@
                     </div>
                 </div>
             </div>
+            {!! Toastr::message() !!}
 
             {{-- education_info --}}
             <div id="education_info" class="modal custom-modal fade" style="display: none;" aria-hidden="true">
@@ -320,17 +321,14 @@
                             </button>
                         </div>
                         <div class="modal-body">
-                            <form>
-                                {{-- @csrf --}}
+                            <form action="{{url('/employee/education')}}" method="POST">
+                                @csrf
                                 <div class="form-scroll" id="btn_education">
                                     <div class="row" id="education-container-repeatable-elements">
                                         <div class="education-repeatable-element repeatable-element">
                                             <div class="card">
                                                 <div class="card-body">
-                                                    <h3 class="card-title">Education Informations <a
-                                                            href="javascript:void(0);"
-                                                            class="delete-icon education-delete-element"><i
-                                                                class="fa fa-trash-o"></i></a></h3>
+                                                    <h3 class="card-title">Education Informations <a href="javascript:void(0);" class="delete-icon education-delete-element"><i class="fa fa-trash-o"></i></a></h3>
                                                     <div class="row">
                                                         <div class="col-md-6">
                                                             <div class="form-group form-focus focused">
@@ -345,8 +343,7 @@
                                                                     name="field_of_study[]" value="">
                                                                     <option value="">select field of study</option>
                                                                     @foreach ($optionOfStudy as $item)
-                                                                        <option value="{{ $item->id }}">
-                                                                            {{ $item->name_khmer }}</option>
+                                                                        <option value="{{ $item->id }}">{{ $item->name_khmer }}</option>
                                                                     @endforeach
                                                                 </select>
                                                             </div>
@@ -354,9 +351,7 @@
                                                         <div class="col-md-6">
                                                             <div class="form-group form-focus focused">
                                                                 <div class="cal-icon">
-                                                                    <input type="text" value=""
-                                                                        name="start_date[]"
-                                                                        class="form-control floating datetimepicker">
+                                                                    <input type="text" value="" name="start_date[]" class="form-control floating datetimepicker">
                                                                 </div>
                                                                 <label class="focus-label">Starting Date</label>
                                                             </div>
@@ -396,13 +391,11 @@
                                     </div>
                                 </div>
                                 <div class="add-more">
-                                    <a class="add-repeatable-element-button" id="btnAddEducation"><i
-                                            class="fa fa-plus-circle"></i> Add More</button>
+                                    <a class="add-repeatable-element-button" id="btnAddEducation"><i class="fa fa-plus-circle"></i> Add More</button>
                                 </div>
                                 <div class="submit-section">
-                                    <input type="hidden" name="employee_id" id="employee_id"
-                                        value="{{ $data->id }}">
-                                    <a href="#" class="btn btn-primary" id="bntEducation">Submit</a>
+                                    <input type="hidden" name="employee_id" id="employee_id" value="{{ $data->id }}">
+                                    <button type="submit" class="btn btn-primary" id="bntEducation">Submit</button>
                                 </div>
                             </form>
                         </div>
@@ -420,8 +413,9 @@
                             </button>
                         </div>
                         <div class="modal-body">
-                            <form>
-                                <div class="form-scroll">
+                            <form action="{{url('/employee/experience')}}" method="POST">
+                                @csrf
+                                <div class="form-scroll" id="btnExperience">
                                     <div class="row" id="experience-container-repeatable-elements">
                                         <div class="card experience-repeatable-element">
                                             <div class="card-body">
@@ -492,9 +486,8 @@
                                     </div>
                                 </div>
                                 <div class="submit-section">
-                                    <input type="hidden" name="employee_id" id="employee_id"
-                                        value="{{ $data->id }}">
-                                    <a href="#" class="btn btn-primary" id="bntExperience">Submit</a>
+                                    <input type="hidden" name="employee_id" id="employee_id" value="{{ $data->id }}">
+                                    <button type="submit" class="btn btn-primary" id="bntExperience">Submit</abutton>
                                 </div>
                             </form>
                         </div>
@@ -813,10 +806,8 @@
 @include('includs.script')
 <script>
     $(function() {
-
         $('#btnAddEducation').on('click', function() {
-            $('.education-repeatable-element:first').clone().appendTo(
-                '#education-container-repeatable-elements');
+            $('.education-repeatable-element:first').clone().appendTo('#education-container-repeatable-elements');
             var lastRepeatableElement = $('.education-repeatable-element:last');
             var input = lastRepeatableElement.find('input');
             var textarea = lastRepeatableElement.find('textarea');
@@ -845,90 +836,50 @@
                 $(this).closest('.experience-repeatable-element').remove();
             }
         });
+
         $('#bntEducation').on('click', function() {
-            var employee_id = $("input[name='employee_id']").val();
-            var school = $("input[name='school[]']").map(function() {
-                return $(this).val();
-            }).get();
-            var field_of_study = $('select[name="field_of_study[]"]').map(function() {
-                if ($(this).val()) return $(this).val();
-            }).get();
-            var degree = $('select[name="degree[]"]').map(function() {
-                if ($(this).val()) return $(this).val();
-            }).get();
-            var start_date = $("input[name='start_date[]']").map(function() {
-                return $(this).val();
-            }).get();
-            var end_date = $("input[name='end_date[]']").map(function() {
-                return $(this).val();
-            }).get();
-            var grade = $("input[name='grade[]']").map(function() {
-                return $(this).val();
-            }).get();
-            $.ajax({
-                type: "POST",
-                url: "/employee/education",
-                data: {
-                    "_token": "{{ csrf_token() }}",
-                    employee_id: employee_id,
-                    school: school,
-                    field_of_study: field_of_study,
-                    degree: degree,
-                    start_date: start_date,
-                    end_date: end_date,
-                    grade: grade,
-                },
-                dataType: "JSON",
-                success: function(response) {
-                    if (response.success) {
-                        Swal.fire(
-                            'Update education successfully.!',
-                            'You clicked the button!',
-                            'success'
-                        )
-                        window.location.reload();
-                    }
-                }
-            });
+            $('#btn_education').modal('show');
         });
 
         $('#bntExperience').on('click',function(){
-            var employee_id = $("input[name='employee_id']").val();
-            var title = $("input[name='title[]']").map(function() {return $(this).val();}).get();
-            var company_name = $("input[name='company_name[]']").map(function() {return $(this).val();}).get();
-            var employment_type = $('select[name="employment_type[]"]').map(function() {if ($(this).val()) return $(this).val();}).get();
-            var position = $("input[name='position[]']").map(function() {return $(this).val();}).get();
-            var start_date_experience = $("input[name='start_date_experience[]']").map(function() {return $(this).val();}).get();
-            var end_date_experience = $("input[name='end_date_experience[]']").map(function() {return $(this).val();}).get();
-            var location = $("input[name='location[]']").map(function() {return $(this).val();}).get();
-            var description = $("input[name='description[]']").map(function() {return $(this).val();}).get();
-            $.ajax({
-                type: "POST",
-                url: "/employee/experience",
-                data: {
-                    "_token": "{{ csrf_token() }}",
-                    employee_id: employee_id,
-                    title : title,
-                    company_name : company_name,
-                    employment_type : employment_type,
-                    position : position,
-                    start_date_experience : start_date_experience,
-                    end_date_experience : end_date_experience,
-                    location : location,
-                    description : description
-                },
-                dataType: "JSON",
-                success: function (response) {
-                    if (response.success) {
-                        Swal.fire(
-                            'Update education successfully.!',
-                            'You clicked the button!',
-                            'success'
-                        )
-                        window.location.reload();
-                    }
-                }
-            });
+            $('#btnExperience').modal('show');
+            
+            // var employee_id = $("input[name='employee_id']").val();
+            // var title = $("input[name='title[]']").map(function() {return $(this).val();}).get();
+            // var company_name = $("input[name='company_name[]']").map(function() {return $(this).val();}).get();
+            // var employment_type = $('select[name="employment_type[]"]').map(function() {if ($(this).val()) return $(this).val();}).get();
+            // var position = $("input[name='position[]']").map(function() {return $(this).val();}).get();
+            // var start_date_experience = $("input[name='start_date_experience[]']").map(function() {return $(this).val();}).get();
+            // var end_date_experience = $("input[name='end_date_experience[]']").map(function() {return $(this).val();}).get();
+            // var location = $("input[name='location[]']").map(function() {return $(this).val();}).get();
+            // var description = $("input[name='description[]']").map(function() {return $(this).val();}).get();
+            // $.ajax({
+            //     type: "POST",
+            //     url: "/employee/experience",
+            //     data: {
+            //         "_token": "{{ csrf_token() }}",
+            //         employee_id: employee_id,
+            //         title : title,
+            //         company_name : company_name,
+            //         employment_type : employment_type,
+            //         position : position,
+            //         start_date_experience : start_date_experience,
+            //         end_date_experience : end_date_experience,
+            //         location : location,
+            //         description : description
+            //     },
+            //     dataType: "JSON",
+            //     success: function (response) {
+            //         if (response.success) {
+            //             Swal.fire(
+            //                 'Update education successfully.!',
+            //                 'You clicked the button!',
+            //                 'success'
+            //             )
+            //             window.location.reload();
+            //         }
+            //     }
+            // });
         });
 
         $('#bntEmpPromote').on('click',function(){

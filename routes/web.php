@@ -79,4 +79,11 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('users/delete', [UserController::class,'destroy']);
     Route::get('users/edit', [UserController::class,'edit']);
     Route::post('employee/status', [UserController::class,'processing']);
+
+
+    // Location API Front-end
+    Route::get('villages',[AddressController::class,'villages']);
+    Route::get('communes',[AddressController::class,'communes']);
+    Route::get('district',[AddressController::class,'district']);
+    Route::get('provinces',[AddressController::class,'provinces']);
 });

@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Admins;
-
+use App\Address;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\Option;
@@ -65,8 +65,14 @@ class UserController extends Controller
     {
         try{
             $data = $request->all();
-            $data['current_addtress']   = $request->current_addre_village ? : $request->current_addre_commune ? : $request->current_addre_distric ? : $request->current_addre_city;
-            $data['permanent_addtress'] = $request->permanet_addre_village ? : $request->permanet_addre_commune ? : $request->permanet_addre_distric ? : $request->permanet_addre_city;
+            $data['current_province']   = $request->current_province;
+            $data['current_district']   = $request->current_district;
+            $data['current_commune']   = $request->current_commune;
+            $data['current_village']   = $request->current_village;
+            $data['permanent_province'] = $request->permanent_province;
+            $data['permanent_district'] = $request->permanent_district;
+            $data['permanent_commune'] = $request->permanent_commune;
+            $data['permanent_village'] = $request->permanent_village;
             $data['password']   = Hash::make($request->password);
             User::create($data);
             DB::commit();
@@ -98,14 +104,26 @@ class UserController extends Controller
      */
     public function edit(Request $request)
     {
+        $_code = '_code';
+        $_name_en = '_name_en';
         $data = User::where('id',$request->id)->with('role')->first();
         $role = Role::all();
         $position = Position::all();
         $department = Department::all();
         $optionGender = Option::where('type','gender')->get();
         $branch = Branchs::all();
+        $address =  Address::where($_code,'Like',$request->code."__")->orderBy($_name_en)->get();
         $optionIdentityType = Option::where('type','identity_type')->get();
-        return response()->json(['success'=>$data,'role'=>$role,'position'=>$position,'department'=>$department,'optionGender'=>$optionGender,'branch'=>$branch,'optionIdentityType'=>$optionIdentityType]);
+        return response()->json([
+            'success'=>$data,
+            'role'=>$role,
+            'position'=>$position,
+            'department'=>$department,
+            'optionGender'=>$optionGender,
+            'branch'=>$branch,
+            'optionIdentityType'=>$optionIdentityType,
+            'address'=>$address
+        ]);
     }
 
     /**
