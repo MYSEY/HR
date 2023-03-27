@@ -2,18 +2,20 @@
 
 namespace App\Http\Controllers\Admins;
 
+use App\Models\User;
 use App\Models\Option;
-use App\Models\Employee;
+use App\Models\Branchs;
 use App\Models\Position;
 use App\Models\Education;
 use App\Models\Department;
 use App\Models\Experience;
+use App\Models\Transferred;
 use Illuminate\Http\Request;
 use App\Models\StaffPromoted;
+use App\Models\StaffTraining;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use App\Models\User;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Auth;
 
@@ -26,7 +28,10 @@ class EmployeeProfileController extends Controller
         $optionDegree = Option::where('type','degree')->get();
         $department = Department::all();
         $position = Position::all();
-        return view('employees.profile',compact('data','optionOfStudy','optionDegree','department','position','empPromoted'));
+        $branch = Branchs::all();
+        $transferred = Transferred::all();
+        $training = StaffTraining::all();
+        return view('employees.profile',compact('data','optionOfStudy','optionDegree','department','position','empPromoted','branch','transferred','training'));
     }
     public function employeeEducation(Request $request){
         try{
@@ -106,6 +111,45 @@ class EmployeeProfileController extends Controller
         }catch(\Exception $e){
             DB::rollback();
             Toastr::error('Update promoted fail :)','Error');
+            return redirect()->back();
+        }
+    }
+
+    public function updatedTransferred(Request $request){
+        try{
+            Transferred::create([
+                'employee_id'   => $request->employee_id,
+                'branch_id'      => $request->branch_id,
+                'date'          => $request->date,
+                'updated_by'    => Auth::id(),
+            ]);
+
+            DB::commit();
+            Toastr::success('Update branch successfully. :)','Success');
+            return redirect()->back();
+        }catch(\Exception $e){
+            DB::rollback();
+            Toastr::error('Update branch fail :)','Error');
+            return redirect()->back();
+        }
+    }
+
+    public function updatedTraining(Request $request){
+        try{
+            StaffTraining::create([
+                'employee_id'   => $request->employee_id,
+                'title'         => $request->title,
+                'start_date'    => $request->start_date,
+                'end_date'      => $request->end_date,
+                'updated_by'    => Auth::id(),
+            ]);
+
+            DB::commit();
+            Toastr::success('Update training successfully. :)','Success');
+            return redirect()->back();
+        }catch(\Exception $e){
+            DB::rollback();
+            Toastr::error('Update training fail :)','Error');
             return redirect()->back();
         }
     }

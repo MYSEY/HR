@@ -41,8 +41,6 @@
                                             <small class="text-muted">{{ $data->EmployeePosition }}</small>
                                             <div class="staff-id">Employee ID : {{ $data->number_employee }}</div>
                                             <div class="small doj text-muted">Date of Join : {{ $data->joinOfDate }}</div>
-                                            <div class="staff-msg"><a class="btn btn-custom" href="">Send Message</a>
-                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-md-7">
@@ -74,7 +72,6 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="pro-edit"><a data-bs-target="#profile_info" data-bs-toggle="modal" class="edit-icon" href="#"><i class="fa fa-pencil"></i></a></div>
                         </div>
                     </div>
                 </div>
@@ -87,6 +84,8 @@
                         <li class="nav-item" role="presentation"><a href="#emp_profile" data-bs-toggle="tab" class="nav-link active" aria-selected="true" role="tab">Profile</a></li>
                         <li class="nav-item" role="presentation"><a href="#document" data-bs-toggle="tab" class="nav-link" aria-selected="false" tabindex="-1" role="tab">Document</a></li>
                         <li class="nav-item" role="presentation"><a href="#promote" data-bs-toggle="tab" class="nav-link" aria-selected="false" tabindex="-1" role="tab">Promoted</a></li>
+                        <li class="nav-item" role="presentation"><a href="#transferred" data-bs-toggle="tab" class="nav-link" aria-selected="false" tabindex="-1" role="tab">Transferred</a></li>
+                        <li class="nav-item" role="presentation"><a href="#training" data-bs-toggle="tab" class="nav-link" aria-selected="false" tabindex="-1" role="tab">Training</a></li>
                         <li class="nav-item" role="presentation"><a href="#bank_statutory" data-bs-toggle="tab" class="nav-link" aria-selected="false" tabindex="-1" role="tab">Bank &amp; Statutory <small class="text-danger">(Admin Only)</small></a></li>
                     </ul>
                 </div>
@@ -310,7 +309,7 @@
 
             {{-- education_info --}}
             <div id="education_info" class="modal custom-modal fade" style="display: none;" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                <div class="modal-dialog modal-dialog-centered modal-md" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
@@ -616,6 +615,143 @@
                                         <label>Promotion Date <span class="text-danger">*</span></label>
                                         <div class="cal-icon">
                                             <input type="text" id="promote_date" name="promote_date" class="form-control datetimepicker">
+                                        </div>
+                                    </div>
+                                    <div class="submit-section">
+                                        <input type="hidden" name="employee_id" id="employee_id" value="{{ $data->id }}">
+                                        <button type="submit" class="btn btn-primary" id="bntEmpPromote">Submit</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="transferred" role="tabpanel">
+                <div class="col-md-12 d-flex">
+                    <div class="card profile-box flex-fill">
+                        <div class="card-body">
+                            <h3 class="card-title">Transferred <a href="#" class="edit-icon" data-bs-toggle="modal" data-bs-target="#TransferrendModal"><i class="fa fa-pencil"></i></a></h3>
+                            <div class="table-responsive">
+                                <table class="table table-nowrap">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Branch</th>
+                                            <th>Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if (count($transferred)>0)
+                                            @foreach ($transferred as $item)
+                                                <tr>
+                                                    <td>{{$item->id}}</td>
+                                                    <td>{{$item->BranchName}}</td>
+                                                    <td>{{$item->date}}</td>
+                                                </tr>
+                                            @endforeach
+                                        @endif
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="TransferrendModal" class="modal custom-modal fade" aria-hidden="true" style="display: none;">
+                    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="{{url('/employee/transferred')}}" method="POST" data-select2-id="select2-data-9-apez">
+                                    @csrf
+                                    <div class="form-group">
+                                        <label>Branch<span class="text-danger">*</span></label>
+                                        <select class="select" id="branch_id" name="branch_id">
+                                            <option value="">Please selecte branch</option>
+                                            @if (count($branch)>0)
+                                                @foreach ($branch as $item)
+                                                    <option value="{{$item->id}}">{{$item->branch_name_kh}}</option>
+                                                @endforeach
+                                            @endif
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Date</label>
+                                        <div class="cal-icon">
+                                            <input type="text" id="date" name="date" class="form-control datetimepicker">
+                                        </div>
+                                    </div>
+                                    <div class="submit-section">
+                                        <input type="hidden" name="employee_id" id="employee_id" value="{{ $data->id }}">
+                                        <button type="submit" class="btn btn-primary" id="bntEmpPromote">Submit</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="training" role="tabpanel">
+                <div class="col-md-12 d-flex">
+                    <div class="card profile-box flex-fill">
+                        <div class="card-body">
+                            <h3 class="card-title">Training <a href="#" class="edit-icon" data-bs-toggle="modal" data-bs-target="#TrainingModal"><i class="fa fa-pencil"></i></a></h3>
+                            <div class="table-responsive">
+                                <table class="table table-nowrap">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Title</th>
+                                            <th>Start Date</th>
+                                            <th>End Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if (count($training)>0)
+                                            @foreach ($training as $item)
+                                                <tr>
+                                                    <td>{{$item->id}}</td>
+                                                    <td>{{$item->title}}</td>
+                                                    <td>{{$item->start_date}}</td>
+                                                    <td>{{$item->end_date}}</td>
+                                                </tr>
+                                            @endforeach
+                                        @endif
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="TrainingModal" class="modal custom-modal fade" aria-hidden="true" style="display: none;">
+                    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="{{url('/employee/training')}}" method="POST" data-select2-id="select2-data-9-apez">
+                                    @csrf
+                                    <div class="form-group">
+                                        <label>Title<span class="text-danger">*</span></label>
+                                        <input type="text" id="title" name="title" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Start Date</label>
+                                        <div class="cal-icon">
+                                            <input type="text" id="start_date" name="start_date" class="form-control datetimepicker">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>End Date</label>
+                                        <div class="cal-icon">
+                                            <input type="text" id="end_date" name="end_date" class="form-control datetimepicker">
                                         </div>
                                     </div>
                                     <div class="submit-section">

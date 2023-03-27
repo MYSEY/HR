@@ -45,6 +45,8 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('employee/education', [EmployeeProfileController::class, 'employeeEducation'])->name('employee.education');
     Route::post('employee/experience', [EmployeeProfileController::class, 'updateOrCreateExperience'])->name('employee.experience');
     Route::post('employee/promote', [EmployeeProfileController::class, 'updateOrCreatePromote'])->name('employee.promote');
+    Route::post('employee/transferred', [EmployeeProfileController::class, 'updatedTransferred'])->name('employee.transferred');
+    Route::post('employee/training', [EmployeeProfileController::class, 'updatedTraining'])->name('employee.training');
     // Route::get('/holidays', [HolidayController::class, 'index']);
     // Route::get('/attendance/admin', [AttendanceAdminController::class, 'index']);
     // Route::get('/attendance/employee', [AttendanceEmployeeController::class, 'index']);
@@ -79,11 +81,4 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('users/delete', [UserController::class,'destroy']);
     Route::get('users/edit', [UserController::class,'edit']);
     Route::post('employee/status', [UserController::class,'processing']);
-
-
-    // Location API Front-end
-    Route::get('villages',[AddressController::class,'villages']);
-    Route::get('communes',[AddressController::class,'communes']);
-    Route::get('district',[AddressController::class,'district']);
-    Route::get('provinces',[AddressController::class,'provinces']);
 });

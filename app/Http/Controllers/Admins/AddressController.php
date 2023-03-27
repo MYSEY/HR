@@ -35,18 +35,4 @@ class AddressController extends Controller
             ->pluck($_code,$_name_en);     
         }
     }
-
-
-    public function villages(){
-        return response()->file(public_path('country/villages.json'));
-    }
-    public function communes(){
-        return response()->file(public_path('country/communes.json'));
-    }
-    public function district(){
-        return response()->file(public_path('country/district.json'));
-    }
-    public function provinces(){
-        return response()->file(public_path('country/provinces.json'));
-    }
 }
