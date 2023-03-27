@@ -29,10 +29,7 @@ class UserRequest extends FormRequest
             'employment_book' => 'required|nullable|mimes:pdf|max:2048',
             'personal_phone_number' => 'required|min:9|max:15',
             'email'     => 'required|string',
-            // 'email'     => 'required|string|email|max:255|unique:users',
-            'position_id' => 'required|string',
             'role_id' => 'required|string',
-            'department_id' => 'required|string',
             'password' => [
                 'sometimes',
                 'nullable',

@@ -119,8 +119,7 @@
                                     </li>
                                     <li>
                                         <div class="title">Tel</div>
-                                        <label for=""><a
-                                                href="">{{ $data->personal_phone_number }}</a></label>
+                                        <label for=""><a href="">{{ $data->personal_phone_number }}</a></label>
                                     </li>
                                     <li>
                                         <div class="title">Nationality</div>
@@ -253,9 +252,7 @@
                     <div class="col-md-6 d-flex">
                         <div class="card profile-box flex-fill">
                             <div class="card-body">
-                                <h3 class="card-title">Education Informations <a href="#" class="edit-icon"
-                                        data-bs-toggle="modal" data-bs-target="#education_info"><i
-                                            class="fa fa-pencil"></i></a></h3>
+                                <h3 class="card-title">Education Informations <a href="#" class="edit-icon" data-bs-toggle="modal" data-bs-target="#education_info"><i class="fa fa-pencil"></i></a></h3>
                                 <div class="experience-box">
                                     <ul class="experience-list">
                                         @if (count($data->educations) > 0)
@@ -323,7 +320,7 @@
                         <div class="modal-body">
                             <form action="{{url('/employee/education')}}" method="POST">
                                 @csrf
-                                <div class="form-scroll" id="btn_education">
+                                <div class="form-scroll" id="educationModal">
                                     <div class="row" id="education-container-repeatable-elements">
                                         <div class="education-repeatable-element repeatable-element">
                                             <div class="card">
@@ -415,7 +412,7 @@
                         <div class="modal-body">
                             <form action="{{url('/employee/experience')}}" method="POST">
                                 @csrf
-                                <div class="form-scroll" id="btnExperience">
+                                <div class="form-scroll" id="experienceModal">
                                     <div class="row" id="experience-container-repeatable-elements">
                                         <div class="card experience-repeatable-element">
                                             <div class="card-body">
@@ -487,7 +484,7 @@
                                 </div>
                                 <div class="submit-section">
                                     <input type="hidden" name="employee_id" id="employee_id" value="{{ $data->id }}">
-                                    <button type="submit" class="btn btn-primary" id="bntExperience">Submit</abutton>
+                                    <button type="submit" class="btn btn-primary" id="bntExperience">Submit</button>
                                 </div>
                             </form>
                         </div>
@@ -521,58 +518,113 @@
             </div>
 
             <div class="tab-pane fade" id="promote" role="tabpanel">
-                <div class="card">
-                    <div class="card-body">
-                        <h3 class="card-title">employee promoted</h3>
-                        <form data-select2-id="select2-data-9-apez">
-                            <div class="form-group col-md-12 col-12" element="div" bp-field-wrapper="true" bp-field-name="Identity" bp-field-type="custom_html">
-                                <label class="navbar-brand custom-navbar-brand mb-0" style="width: 100%; background: #dfe6e9; padding: 6px;font-size: 15px;font-weight: normal !important;">Position</label>
+                <div class="col-md-12 d-flex">
+                    <div class="card profile-box flex-fill">
+                        <div class="card-body">
+                            <h3 class="card-title">Promotion <a href="#" class="edit-icon" data-bs-toggle="modal" data-bs-target="#PromotionModal"><i class="fa fa-pencil"></i></a></h3>
+                            <div class="table-responsive">
+                                <table class="table table-nowrap">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Department From</th>
+                                            <th>Department To</th>
+                                            <th>Position from</th>
+                                            <th>Position To</th>
+                                            <th>Promotion Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if (count($empPromoted)>0)
+                                            @foreach ($empPromoted as $item)   
+                                                <tr>
+                                                    <td>{{$item->id}}</td>
+                                                    <td>{{$item->depart_id}}</td>
+                                                    <td style="color:#26AF49">
+                                                        {{$item->department_promoted_to}}
+                                                    </td>
+                                                    <td>{{$item->posit_id}}</td>
+                                                    <td style="color:#26AF49">{{$item->position_promoted_to}}</td>
+                                                    <td>{{$item->date}}</td>
+                                                    {{-- <td class="text-end">
+                                                        <div class="dropdown dropdown-action">
+                                                            <a aria-expanded="false" data-bs-toggle="dropdown" class="action-icon dropdown-toggle" href="#"><i class="material-icons">more_vert</i></a>
+                                                            <div class="dropdown-menu dropdown-menu-right">
+                                                                <a href="#" class="dropdown-item"><i class="fa fa-pencil m-r-5"></i> Edit</a>
+                                                                <a href="#" class="dropdown-item"><i class="fa fa-trash-o m-r-5"></i> Delete</a>
+                                                            </div>
+                                                        </div>
+                                                    </td> --}}
+                                                </tr>
+                                            @endforeach
+                                        @endif
+                                    </tbody>
+                                </table>
                             </div>
-                            <div class="form-group">
-                                <label>Promotion From <span class="text-danger">*</span></label>
-                                <input class="form-control" type="text" value="{{$data->EmployeePosition}}" readonly="">
+                        </div>
+                    </div>
+                </div>
+                <div id="PromotionModal" class="modal custom-modal fade" aria-hidden="true" style="display: none;">
+                    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
                             </div>
-                            <div class="form-group">
-                                <label>Promotion To <span class="text-danger">*</span></label>
-                                <select class="select" id="posit_id" name="posit_id">
-                                    <option value="">Please selecte position</option>
-                                    @if (count($position)>0)
-                                        @foreach ($position as $item)
-                                            <option value="{{$item->id}}">{{$item->name_khmer}}</option>
-                                        @endforeach
-                                    @endif
-                                </select>
+                            <div class="modal-body">
+                                <form action="{{url('/employee/promote')}}" method="POST" data-select2-id="select2-data-9-apez">
+                                    @csrf
+                                    <div class="form-group col-md-12 col-12" element="div" bp-field-wrapper="true" bp-field-name="Identity" bp-field-type="custom_html">
+                                        <label class="navbar-brand custom-navbar-brand mb-0" style="width: 100%; background: #dfe6e9; padding: 6px;font-size: 15px;font-weight: normal !important;">Position</label>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Promotion From <span class="text-danger">*</span></label>
+                                        <input class="form-control" type="text" id="posit_id" name="posit_id" value="{{$data->EmployeePosition}}" readonly="">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Promotion To <span class="text-danger">*</span></label>
+                                        <select class="select" id="position_promoted_to" name="position_promoted_to">
+                                            <option value="">Please selecte position</option>
+                                            @if (count($position)>0)
+                                                @foreach ($position as $item)
+                                                    <option value="{{$item->name_khmer}}">{{$item->name_khmer}}</option>
+                                                @endforeach
+                                            @endif
+                                        </select>
+                                    </div>
+        
+                                    <div class="form-group col-md-12 col-12" element="div" bp-field-wrapper="true" bp-field-name="Identity" bp-field-type="custom_html">
+                                        <label class="navbar-brand custom-navbar-brand mb-0" style="width: 100%; background: #dfe6e9; padding: 6px;font-size: 15px;font-weight: normal !important;">Department</label>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Promotion From <span class="text-danger">*</span></label>
+                                        <input class="form-control" type="text" id="depart_id" name="depart_id" value="{{$data->EmployeeDepartment}}" readonly="">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Promotion To <span class="text-danger">*</span></label>
+                                        <select class="select" id="department_promoted_to" name="department_promoted_to">
+                                            <option value="">Please selecte department</option>
+                                            @if (count($department)>0)
+                                                @foreach ($department as $item)
+                                                    <option value="{{$item->name_khmer}}">{{$item->name_khmer}}</option>
+                                                @endforeach
+                                            @endif
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Promotion Date <span class="text-danger">*</span></label>
+                                        <div class="cal-icon">
+                                            <input type="text" id="promote_date" name="promote_date" class="form-control datetimepicker">
+                                        </div>
+                                    </div>
+                                    <div class="submit-section">
+                                        <input type="hidden" name="employee_id" id="employee_id" value="{{ $data->id }}">
+                                        <button type="submit" class="btn btn-primary" id="bntEmpPromote">Submit</button>
+                                    </div>
+                                </form>
                             </div>
-
-                            <div class="form-group col-md-12 col-12" element="div" bp-field-wrapper="true" bp-field-name="Identity" bp-field-type="custom_html">
-                                <label class="navbar-brand custom-navbar-brand mb-0" style="width: 100%; background: #dfe6e9; padding: 6px;font-size: 15px;font-weight: normal !important;">Department</label>
-                            </div>
-                            <div class="form-group">
-                                <label>Promotion From <span class="text-danger">*</span></label>
-                                <input class="form-control" type="text" value="{{$data->EmployeeDepartment}}" readonly="">
-                            </div>
-                            <div class="form-group">
-                                <label>Promotion To <span class="text-danger">*</span></label>
-                                <select class="select" id="depart_id" name="depart_id">
-                                    <option value="">Please selecte department</option>
-                                    @if (count($department)>0)
-                                        @foreach ($department as $item)
-                                            <option value="{{$item->id}}">{{$item->name}}</option>
-                                        @endforeach
-                                    @endif
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label>Promotion Date <span class="text-danger">*</span></label>
-                                <div class="cal-icon">
-                                    <input type="text" id="promote_date" name="promote_date" class="form-control datetimepicker">
-                                </div>
-                            </div>
-                            <div class="submit-section">
-                                <input type="hidden" name="employee_id" id="employee_id" value="{{ $data->id }}">
-                                <a href="#" class="btn btn-primary" id="bntEmpPromote">Submit</a>
-                            </div>
-                        </form>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -835,74 +887,6 @@
             if ($('.experience-repeatable-element').length > 1) {
                 $(this).closest('.experience-repeatable-element').remove();
             }
-        });
-
-        $('#bntEducation').on('click', function() {
-            $('#btn_education').modal('show');
-        });
-
-        $('#bntExperience').on('click',function(){
-            $('#btnExperience').modal('show');
-            
-            // var employee_id = $("input[name='employee_id']").val();
-            // var title = $("input[name='title[]']").map(function() {return $(this).val();}).get();
-            // var company_name = $("input[name='company_name[]']").map(function() {return $(this).val();}).get();
-            // var employment_type = $('select[name="employment_type[]"]').map(function() {if ($(this).val()) return $(this).val();}).get();
-            // var position = $("input[name='position[]']").map(function() {return $(this).val();}).get();
-            // var start_date_experience = $("input[name='start_date_experience[]']").map(function() {return $(this).val();}).get();
-            // var end_date_experience = $("input[name='end_date_experience[]']").map(function() {return $(this).val();}).get();
-            // var location = $("input[name='location[]']").map(function() {return $(this).val();}).get();
-            // var description = $("input[name='description[]']").map(function() {return $(this).val();}).get();
-            // $.ajax({
-            //     type: "POST",
-            //     url: "/employee/experience",
-            //     data: {
-            //         "_token": "{{ csrf_token() }}",
-            //         employee_id: employee_id,
-            //         title : title,
-            //         company_name : company_name,
-            //         employment_type : employment_type,
-            //         position : position,
-            //         start_date_experience : start_date_experience,
-            //         end_date_experience : end_date_experience,
-            //         location : location,
-            //         description : description
-            //     },
-            //     dataType: "JSON",
-            //     success: function (response) {
-            //         if (response.success) {
-            //             Swal.fire(
-            //                 'Update education successfully.!',
-            //                 'You clicked the button!',
-            //                 'success'
-            //             )
-            //             window.location.reload();
-            //         }
-            //     }
-            // });
-        });
-
-        $('#bntEmpPromote').on('click',function(){
-            var employee_id = $("#employee_id").val();
-            var posit_id    = $("#posit_id").val();
-            var depart_id    = $("#depart_id").val();
-            var promote_date = $("#promote_date").val();
-
-            $.ajax({
-                type: "POST",
-                url: "/employee/promote",
-                data: {
-                    "_token": "{{ csrf_token() }}",
-                    employee_id     : employee_id,
-                    posit_id        : posit_id,
-                    depart_id       : depart_id,
-                    promote_date    : promote_date
-                },
-                dataType: "JSON",
-                success: function (response) {
-                    toastr.success("Message here","Title here");
-                }
-            });
         });
     });
 </script>

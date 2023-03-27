@@ -244,7 +244,7 @@
                                 </div>
                                 <div class="col-sm-6"> 
                                     <div class="form-group">
-                                        <label>Position <span class="text-danger">*</span></label>
+                                        <label>Position</label>
                                         <select class="select form-control @error('position_id') is-invalid @enderror" name="position_id" id="position_id">
                                             <option selected disabled> --Select --</option>
                                             @foreach ($position as $positions )
@@ -670,7 +670,7 @@
                                 </div>
                                 <div class="col-sm-6"> 
                                     <div class="form-group">
-                                        <label>Position <span class="text-danger">*</span></label>
+                                        <label>Position</label>
                                         <select class="select form-control" name="position_id" id="e_position">
                                             <option selected disabled> --Select --</option>
                                         </select>
@@ -697,7 +697,7 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label>Department <span class="text-danger">*</span></label>
+                                        <label>Department</label>
                                         <select class="select form-control" name="department_id" id="e_department">
                                             <option selected disabled> --Select --</option>
                                         </select>
@@ -902,7 +902,7 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label>Province/City</label>
-                                            <select class="form-control" @change="cityChange" id="e_current_province" name="current_province" v-model="frm.city" :disabled="JSON.stringify(cities).length==2" value="{{old('city')}}">
+                                            <select class="form-control" @change="updateValueProvice" id="e_current_province" name="current_province" v-model="frm.city" :disabled="JSON.stringify(cities).length==2" value="{{old('city')}}">
                                                 {{-- <option v-for="(item,text) in cities" :value="text">@{{item}}</option> --}}
                                             </select>
                                         </div>
@@ -1105,7 +1105,7 @@
                     },
                     updateValueCommune(){
                         this.villag=null;
-                    },
+                    }
                 },
                 watch:{
                     provinc(value){
@@ -1149,137 +1149,140 @@
                     this.getCountryInfo();
                 }
             });
+
+            $('.userUpdate').on('click',function(){
+                let id = $(this).data("id");
+                $.ajax({
+                    type: "GET",
+                    url: "{{url('users/edit')}}",
+                    data: {
+                        id : id
+                    },
+                    dataType: "JSON",
+                    success: function (response) {
+                        if (response.success) {
+                            if (response.role != '') {
+                                $('#e_role_id').html('<option selected disabled> --Select --</option>');
+                                $.each(response.role, function(i, item) {
+                                    $('#e_role_id').append($('<option>', {
+                                        value: item.id,
+                                        text: item.name,
+                                        selected: item.id == response.success.role_id
+                                    }));
+                                });
+                            }
+
+                            if (response.position != '') {
+                                $('#e_position').html('<option selected disabled> --Select --</option>');
+                                $.each(response.position, function(i, item) {
+                                    $('#e_position').append($('<option>', {
+                                        value: item.id,
+                                        text: item.name_khmer,
+                                        selected: item.id == response.success.position_id
+                                    }));
+                                });
+                            }
+                            
+                            if (response.department != '') {
+                                $('#e_department').html('<option selected disabled> --Select --</option>');
+                                $.each(response.department, function(i, item) {
+                                    $('#e_department').append($('<option>', {
+                                        value: item.id,
+                                        text: item.name_khmer,
+                                        selected: item.id == response.success.department_id
+                                    }));
+                                });
+                            }
+                            if (response.optionGender != '') {
+                                $('#e_gender').html('<option selected disabled> --Select --</option>');
+                                $.each(response.optionGender, function(i, item) {
+                                    $('#e_gender').append($('<option>', {
+                                        value: item.id,
+                                        text: item.name_khmer,
+                                        selected: item.id == response.success.gender
+                                    }));
+                                });
+                            }
+                            if (response.branch != '') {
+                                $('#e_branch_id').html('<option selected disabled> --Select --</option>');
+                                $.each(response.branch, function(i, item) {
+                                    $('#e_branch_id').append($('<option>', {
+                                        value: item.branch_name_kh,
+                                        text: item.branch_name_kh,
+                                        selected: item.id == response.success.branch_id
+                                    }));
+                                });
+                            }
+                            if (response.optionIdentityType != '') {
+                                $.each(response.optionIdentityType, function(i, item) {
+                                    $('#e_identity_type').append($('<option>', {
+                                        value: item.name_khmer,
+                                        text: item.name_khmer,
+                                        selected: item.id == response.success.identity_type
+                                    }));
+                                });
+                            }
+                            
+                            if (response.address != '') {
+                                $.each(response.address, function(i, item) {
+                                    $('#e_current_province').append($('<option>', {
+                                        value: item._code,
+                                        text: item._name_en,
+                                        selected: item._code == response.success.current_province
+                                    }));
+                                });
+                            }
+                            console.log(response.address);
+                            // console.log(response.address.length);
+                            if (response.address != '') {
+                                $.each(response.address, function(i, item) {
+                                    $('#e_current_district').append($('<option>', {
+                                        value: item._code,
+                                        text: item._name_en,
+                                        selected: item._code == response.success.current_province
+                                    }));
+                                });
+                            }
+                            
+                            $('#e_id').val(response.success.id);
+                            $('#e_number_employee').val(response.success.number_employee);
+                            $('#e_employee_name_kh').val(response.success.employee_name_kh);
+                            $('#e_employee_name_en').val(response.success.employee_name_en);
+                            $('#e_date_of_birth').val(response.success.date_of_birth);
+                            $('#e_unit').val(response.success.unit);
+                            $('#e_level').val(response.success.level);
+                            $('#e_date_of_commencement').val(response.success.date_of_commencement);
+                            $('#e_number_of_children').val(response.success.number_of_children);
+                            $('#e_marital_status').val(response.success.marital_status);
+                            $('#e_nationality').val(response.success.nationality);
+                            $('#e_personal_phone_number').val(response.success.personal_phone_number);
+                            $('#e_company_phone_number').val(response.success.company_phone_number);
+                            $('#e_agency_phone_number').val(response.success.agency_phone_number);
+                            $('#e_email').val(response.success.email);
+                            $('#e_remark').val(response.success.remark);
+                            $('#e_bank_name').val(response.success.bank_name);
+                            $('#e_account_name').val(response.success.account_name);
+                            $('#e_account_number').val(response.success.account_number);
+                            $('#e_identity_number').val(response.success.identity_number);
+                            $('#e_issue_date').val(response.success.issue_date);
+                            $('#e_issue_expired_date').val(response.success.issue_expired_date);
+                            $('#e_profile').val(response.success.profile);
+                            $('#e_guarantee_letter').val(response.success.guarantee_letter);
+                            $('#e_employment_book').val(response.success.employment_book);
+                            $('#e_current_house_no').val(response.success.current_house_no);
+                            $('#e_current_street_no').val(response.success.current_street_no);
+                            $('#e_permanent_house_no').val(response.success.permanent_house_no);
+                            $('#e_permanent_street_no').val(response.success.permanent_street_no);
+                            $('#e_current_district').val(response.success.current_district);
+                            $('#editUserModal').modal('show');
+                        }
+                    }
+                });
+            });
         };
         
         
-        $('.userUpdate').on('click',function(){
-            let id = $(this).data("id");
-            $.ajax({
-                type: "GET",
-                url: "{{url('users/edit')}}",
-                data: {
-                    id : id
-                },
-                dataType: "JSON",
-                success: function (response) {
-                    if (response.success) {
-                        if (response.role != '') {
-                            $('#e_role_id').html('<option selected disabled> --Select --</option>');
-                            $.each(response.role, function(i, item) {
-                                $('#e_role_id').append($('<option>', {
-                                    value: item.id,
-                                    text: item.name,
-                                    selected: item.id == response.success.role_id
-                                }));
-                            });
-                        }
-
-                        if (response.position != '') {
-                            $('#e_position').html('<option selected disabled> --Select --</option>');
-                            $.each(response.position, function(i, item) {
-                                $('#e_position').append($('<option>', {
-                                    value: item.id,
-                                    text: item.name_khmer,
-                                    selected: item.id == response.success.position_id
-                                }));
-                            });
-                        }
-                        
-                        if (response.department != '') {
-                            $('#e_department').html('<option selected disabled> --Select --</option>');
-                            $.each(response.department, function(i, item) {
-                                $('#e_department').append($('<option>', {
-                                    value: item.id,
-                                    text: item.name_khmer,
-                                    selected: item.id == response.success.department_id
-                                }));
-                            });
-                        }
-                        if (response.optionGender != '') {
-                            $('#e_gender').html('<option selected disabled> --Select --</option>');
-                            $.each(response.optionGender, function(i, item) {
-                                $('#e_gender').append($('<option>', {
-                                    value: item.id,
-                                    text: item.name_khmer,
-                                    selected: item.id == response.success.gender
-                                }));
-                            });
-                        }
-                        if (response.branch != '') {
-                            $('#e_branch_id').html('<option selected disabled> --Select --</option>');
-                            $.each(response.branch, function(i, item) {
-                                $('#e_branch_id').append($('<option>', {
-                                    value: item.branch_name_kh,
-                                    text: item.branch_name_kh,
-                                    selected: item.id == response.success.branch_id
-                                }));
-                            });
-                        }
-                        if (response.optionIdentityType != '') {
-                            $.each(response.optionIdentityType, function(i, item) {
-                                $('#e_identity_type').append($('<option>', {
-                                    value: item.name_khmer,
-                                    text: item.name_khmer,
-                                    selected: item.id == response.success.identity_type
-                                }));
-                            });
-                        }
-                        
-                        if (response.address != '') {
-                            $.each(response.address, function(i, item) {
-                                $('#e_current_province').append($('<option>', {
-                                    value: item._code,
-                                    text: item._name_en,
-                                    selected: item._code == response.success.current_province
-                                }));
-                            });
-                        }
-                        console.log(response.address);
-                        if (response.address != '') {
-                            $.each(response.address, function(i, item) {
-                                $('#e_current_district').append($('<option>', {
-                                    value: item._code,
-                                    text: item._name_en,
-                                    selected: item._code == response.success.current_province
-                                }));
-                            });
-                        }
-                        
-                        $('#e_id').val(response.success.id);
-                        $('#e_number_employee').val(response.success.number_employee);
-                        $('#e_employee_name_kh').val(response.success.employee_name_kh);
-                        $('#e_employee_name_en').val(response.success.employee_name_en);
-                        $('#e_date_of_birth').val(response.success.date_of_birth);
-                        $('#e_unit').val(response.success.unit);
-                        $('#e_level').val(response.success.level);
-                        $('#e_date_of_commencement').val(response.success.date_of_commencement);
-                        $('#e_number_of_children').val(response.success.number_of_children);
-                        $('#e_marital_status').val(response.success.marital_status);
-                        $('#e_nationality').val(response.success.nationality);
-                        $('#e_personal_phone_number').val(response.success.personal_phone_number);
-                        $('#e_company_phone_number').val(response.success.company_phone_number);
-                        $('#e_agency_phone_number').val(response.success.agency_phone_number);
-                        $('#e_email').val(response.success.email);
-                        $('#e_remark').val(response.success.remark);
-                        $('#e_bank_name').val(response.success.bank_name);
-                        $('#e_account_name').val(response.success.account_name);
-                        $('#e_account_number').val(response.success.account_number);
-                        $('#e_identity_number').val(response.success.identity_number);
-                        $('#e_issue_date').val(response.success.issue_date);
-                        $('#e_issue_expired_date').val(response.success.issue_expired_date);
-                        $('#e_profile').val(response.success.profile);
-                        $('#e_guarantee_letter').val(response.success.guarantee_letter);
-                        $('#e_employment_book').val(response.success.employment_book);
-                        $('#e_current_house_no').val(response.success.current_house_no);
-                        $('#e_current_street_no').val(response.success.current_street_no);
-                        $('#e_permanent_house_no').val(response.success.permanent_house_no);
-                        $('#e_permanent_street_no').val(response.success.permanent_street_no);
-                        $('#e_current_district').val(response.success.current_district);
-                        $('#editUserModal').modal('show');
-                    }
-                }
-            });
-        });
+       
         $('.userDelete').on('click',function(){
             var _this = $(this).parents('tr');
             $('.e_id').val(_this.find('.ids').text());

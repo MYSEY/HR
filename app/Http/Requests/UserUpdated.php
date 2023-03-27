@@ -26,8 +26,6 @@ class UserUpdated extends FormRequest
         return [
             'role_id' => 'required|string',
             'email' => 'required',
-            'position_id' => 'required',
-            'department_id' => 'required',
             // 'password' => [
             //     'sometimes',
             //     'nullable',

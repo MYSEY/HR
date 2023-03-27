@@ -16,8 +16,10 @@ class CreateStaffPromotedsTable extends Migration
         Schema::create('staff_promoteds', function (Blueprint $table) {
             $table->id();
             $table->integer('employee_id')->nullable();
-            $table->integer('posit_id')->nullable();
-            $table->integer('depart_id')->nullable();
+            $table->text('posit_id')->nullable();
+            $table->text('position_promoted_to')->nullable();
+            $table->text('depart_id')->nullable();
+            $table->text('department_promoted_to')->nullable();
             $table->date('date')->nullable();
             $table->bigInteger('created_by')->unsigned()->nullable();
             $table->bigInteger('updated_by')->unsigned()->nullable();

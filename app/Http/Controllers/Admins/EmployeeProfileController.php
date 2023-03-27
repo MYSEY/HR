@@ -21,11 +21,12 @@ class EmployeeProfileController extends Controller
 {
     public function employeeProfile(Request $request){
         $data = User::with(['educations','experiences'])->where('id',$request->id)->first();
+        $empPromoted = StaffPromoted::where('employee_id',$request->id)->get();
         $optionOfStudy = Option::where('type','field_of_study')->get();
         $optionDegree = Option::where('type','degree')->get();
         $department = Department::all();
         $position = Position::all();
-        return view('employees.profile',compact('data','optionOfStudy','optionDegree','department','position'));
+        return view('employees.profile',compact('data','optionOfStudy','optionDegree','department','position','empPromoted'));
     }
     public function employeeEducation(Request $request){
         try{
@@ -88,20 +89,23 @@ class EmployeeProfileController extends Controller
         }
     }
     public function updateOrCreatePromote(Request $request){
-        DB::beginTransaction();
         try{
             StaffPromoted::create([
                 'employee_id'   => $request->employee_id,
                 'posit_id'      => $request->posit_id,
+                'position_promoted_to'      => $request->position_promoted_to,
                 'depart_id'     => $request->depart_id,
+                'department_promoted_to'     => $request->department_promoted_to,
                 'date'          => $request->promote_date,
                 'updated_by'    => Auth::id(),
             ]);
+
             DB::commit();
-            return response()->json(['success'=>'Update experience successfully.']);
+            Toastr::success('Update promoted successfully. :)','Success');
+            return redirect()->back();
         }catch(\Exception $e){
             DB::rollback();
-            Toastr::error('Add new employee fail :)','Error');
+            Toastr::error('Update promoted fail :)','Error');
             return redirect()->back();
         }
     }

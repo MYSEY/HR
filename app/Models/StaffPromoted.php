@@ -18,7 +18,9 @@ class StaffPromoted extends Model
     protected $fillable = [
         'employee_id',
         'posit_id',
+        'position_promoted_to',
         'depart_id',
+        'department_promoted_to',
         'date',
         'created_by',
         'updated_by'
@@ -35,6 +37,6 @@ class StaffPromoted extends Model
         return optional($this->position)->name_khmer;
     }
     public function getDepartmentPromotedAttribute(){
-        return optional($this->department)->name;
+        return optional($this->department)->name_khmer;
     }
 }
