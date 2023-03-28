@@ -248,19 +248,19 @@ class User extends Authenticatable
     //// GET EN ADRESS
     public function getCityEnAttribute()
     {
-        return $this->getAddress('city', 'en', $this->current_addtress);
+        return $this->getAddress('city', 'en', $this->current_province);
     }
     public function getDistrictEnAttribute()
     {
-        return $this->getAddress('district', 'en', $this->current_addtress);
+        return $this->getAddress('district', 'en', $this->current_district);
     }
     public function getCommuneEnAttribute()
     {
-        return $this->getAddress('commune', 'en', $this->current_addtress);
+        return $this->getAddress('commune', 'en', $this->current_commune);
     }
     public function getVillageEnAttribute()
     {
-        return $this->getAddress('village', 'en', $this->current_addtress);
+        return $this->getAddress('village', 'en', $this->current_village);
     }
     public function getFullAddressEnAttribute()
     {
@@ -271,29 +271,29 @@ class User extends Authenticatable
         if (!empty($this->current_street_no)) {
             $streetNo = 'Street ' . $this->current_street_no . ',' ?? '';
         }
-        return $houseNo . $streetNo . $this->getAddress('full', 'en', $this->current_addtress);
+        return $houseNo . $streetNo . $this->getAddress('full', 'en', $this->current_village);
     }
 
 
     // GET KH ADDRESS
     public function getCityKhAttribute()
     {
-        return $this->getAddress('city', 'en', $this->permanent_addtress);
+        return $this->getAddress('city', 'en', $this->permanent_province);
     }
 
     public function getDistrictKhAttribute()
     {
-        return $this->getAddress('district', 'en', $this->permanent_addtress);
+        return $this->getAddress('district', 'en', $this->permanent_district);
     }
 
     public function getCommuneKhAttribute()
     {
-        return $this->getAddress('commune', 'en', $this->permanent_addtress);
+        return $this->getAddress('commune', 'en', $this->permanent_commune);
     }
 
     public function getVillageKhAttribute()
     {
-        return $this->getAddress('village', 'en', $this->permanent_addtress);
+        return $this->getAddress('village', 'en', $this->permanent_village);
     }
 
     public function getFullPermanentAddressAttribute()
@@ -305,6 +305,6 @@ class User extends Authenticatable
         if (!empty($this->permanent_street_no)) {
             $streetNo = 'Street ' . $this->permanent_street_no ?? '';
         }
-        return $houseNo . ' ' .$streetNo .' '. $this->getAddress('full', 'en', $this->permanent_addtress);
+        return $houseNo . ' ' .$streetNo .' '. $this->getAddress('full', 'en', $this->permanent_village);
     }
 }

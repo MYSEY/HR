@@ -5,11 +5,15 @@
             <div class="col-md-12">
                 <div class="welcome-box">
                     <div class="welcome-img">
-                        <img alt="" src="https://smarthr.dreamguystech.com/laravel/template/public/assets/img/profiles/avatar-02.jpg">
+                        @if (Auth::user()->profile != null)
+                            <img alt="" src="{{ asset('/uploads/images/' . Auth::user()->profile) }}">
+                        @else
+                            <img alt="" src="{{ asset('admin/img/defuals/default-user-icon.png') }}">
+                        @endif
                     </div>
                     <div class="welcome-det">
                         <h3>Welcome, {{Auth::user()->employee_name_en}}</h3>
-                        <p>Monday, 20 May 2019</p>
+                        <p>{{Carbon\Carbon::parse(Auth::user()->date_of_commencement)->format('d-M-Y')}}</p>
                     </div>
                 </div>
             </div>

@@ -18,7 +18,7 @@ function menu(){
             'name'=>'Main',
             'icon'=>'<i class="la la-dashboard"></i> <span></span> <span class="menu-arrow"></span>',
             'value'=>'Dashboard',
-            'table'=>1,
+            'table'=>2,
             'permission'=>1,
             'child'=>[
                 [
@@ -30,7 +30,7 @@ function menu(){
                 [
                     'value'=>'Dashboard Employee',
                     'url'=>"dashboad/employee",
-                    'table'=>1,
+                    'table'=>2,
                     'permission'=>1
                 ],
             ]

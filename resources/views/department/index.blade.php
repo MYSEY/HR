@@ -29,7 +29,7 @@
                                             <th style="width: 30px;" class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="#: activate to sort column descending">#</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department Name: activate to sort column ascending" style="width: 772.237px;">Name(KH)</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department Name: activate to sort column ascending" style="width: 772.237px;">Name(EN)</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department Name: activate to sort column ascending" style="width: 772.237px;">Create By</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department Name: activate to sort column ascending" style="width: 772.237px;">Create At</th>
                                             <th class="text-end sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Action: activate to sort column ascending" style="width: 300.962px;">Action</th>
                                         </tr>
                                     </thead>
@@ -40,7 +40,7 @@
                                                     <td class="sorting_1 ids">{{$item->id}}</td>
                                                     <td class="name_khmer">{{$item->name_khmer}}</td>
                                                     <td class="name_english">{{$item->name_english}}</td>
-                                                    <td>{{$item->FullNameCreatedBy}}</td>
+                                                    <td>{{$item->created_at}}</td>
                                                     <td class="text-end">
                                                         <div class="dropdown dropdown-action">
                                                             <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
@@ -79,7 +79,7 @@
                         <form action="{{url('department/store')}}" method="POST" enctype="multipart/form-data">
                             @csrf
                             <div class="form-group">
-                                <label>Name(kh) <span class="text-danger">*</span></label>
+                                <label>Name(KH) <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control @error('name_khmer') is-invalid @enderror" id="name_khmer" name="name_khmer">
                             </div>
                             <div class="form-group">

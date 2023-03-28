@@ -23,13 +23,13 @@ return new class extends Migration
         DB::table('tables')->insert(
             [
                 [
-                    'name'=>'Admin Dashboard',
+                    'name'=>'Dashboard Admin',
                     'status'=>1,
                     'created_at'=>now(),
                     'updated_at'=>now()
                 ],
                 [
-                    'name'=>'Employee Dashboard',
+                    'name'=>'Dashboard Employee',
                     'status'=>1,
                     'created_at'=>now(),
                     'updated_at'=>now()
