@@ -177,8 +177,7 @@
                                                     </div>
                                                     <div class="experience-content">
                                                         <div class="timeline-content">
-                                                            <a href="#"
-                                                                class="name">{{ $item->EdcutionFieldOfStudy }}</a>
+                                                            <a href="#" class="name">{{ $item->EdcutionFieldOfStudy == null ? $item->school : $item->EdcutionFieldOfStudy}}</a>
                                                             <div>{{ $item->Edcutiondegree }}</div>
                                                             <span class="time">{{ $item->EducationStartDateEdnDate }}</span>
                                                         </div>
@@ -224,7 +223,7 @@
 
             {{-- education_info --}}
             <div id="education_info" class="modal custom-modal fade" style="display: none;" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+                <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
@@ -250,8 +249,7 @@
                                                         </div>
                                                         <div class="col-md-6">
                                                             <div class="form-group form-focus focused">
-                                                                <select class="form-control" id="field_of_study[]"
-                                                                    name="field_of_study[]" value="">
+                                                                <select class="form-control" id="field_of_study[]" name="field_of_study[]" value="">
                                                                     <option value="">select field of study</option>
                                                                     @foreach ($optionOfStudy as $item)
                                                                         <option value="{{ $item->id }}">{{ $item->name_khmer }}</option>

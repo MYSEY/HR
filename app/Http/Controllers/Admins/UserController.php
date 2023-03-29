@@ -19,6 +19,7 @@ use App\Http\Controllers\Controller;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Hash;
 use App\Traits\UploadFiles\UploadFIle;
+use PhpParser\Node\Expr\Cast\Object_;
 
 class UserController extends Controller
 {
@@ -106,15 +107,7 @@ class UserController extends Controller
     {
         $_code = '_code';
         $_name_en = '_name_en';
-        if(session()->get('locale') == 'kh'){
-            $address = Address::where($_code,'Like',$request->code."__")
-            ->orderBy($_name_en)
-            ->pluck($_code,'_name_kh');  
-        }else{
-            $address = Address::where($_code,'Like',$request->code."__")
-            ->orderBy($_name_en)
-            ->pluck($_code,$_name_en);     
-        }
+        $address = Address::where($_code,'Like',$request->code."__")->orderBy($_name_en)->pluck($_code,$_name_en);     
         $data = User::where('id',$request->id)->with('role')->first();
         $role = Role::all();
         $position = Position::all();

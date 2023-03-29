@@ -34,15 +34,16 @@ class EmployeeProfileController extends Controller
         return view('employees.profile',compact('data','optionOfStudy','optionDegree','department','position','empPromoted','branch','transferred','training'));
     }
     public function employeeEducation(Request $request){
-        try{
+        // try{
             $schools = $request->school;
             if (is_array($schools) && count($schools)) {
                 foreach ($schools as $key => $school) :
+                    // dd($request->field_of_study[$key]);
                     if (!empty($school)) :
                         Education::create([
                             'employee_id'       => $request->employee_id,
                             'school'            => $school ?? '',
-                            'field_of_study'    => $request->field_of_study[$key] ?? '',
+                            'field_of_study'    => $request->field_of_study[$key] ?? null,
                             'degree'            => $request->degree[$key] ?? '',
                             'grade'             => $request->grade[$key] ?? '',
                             'start_date'        => !empty($request->start_date[$key]) ? Carbon::parse($request->start_date[$key])->format('Y-m-d') : '',
@@ -55,11 +56,11 @@ class EmployeeProfileController extends Controller
             DB::commit();
             Toastr::success('Update education successfully. :)','Success');
             return redirect()->back();
-        }catch(\Exception $e){
-            DB::rollback();
-            Toastr::error('Update education fail :)','Error');
-            return redirect()->back();
-        }
+        // }catch(\Exception $e){
+        //     DB::rollback();
+        //     Toastr::error('Update education fail :)','Error');
+        //     return redirect()->back();
+        // }
     }
 
     public function updateOrCreateExperience(Request $request)

@@ -164,7 +164,7 @@
                                                         <div class="dropdown dropdown-action">
                                                             <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i  class="material-icons">more_vert</i></a>
                                                             <div class="dropdown-menu dropdown-menu-right">
-                                                                <a class="dropdown-item userUpdate" @click="showRegister()" data-id="{{$item->id}}"><i class="fa fa-pencil m-r-5"></i> Edit</a>
+                                                                <a class="dropdown-item userUpdate" data-id="{{$item->id}}"><i class="fa fa-pencil m-r-5"></i> Edit</a>
                                                                 <a class="dropdown-item userDelete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_user"><i class="fa fa-trash-o m-r-5"></i> Delete</a>
                                                             </div>
                                                         </div>
@@ -501,7 +501,7 @@
                             <div class="form-group col-md-12 col-12" element="div" bp-field-wrapper="true" bp-field-name="Identity" bp-field-type="custom_html">
                                 <label class="navbar-brand custom-navbar-brand mb-0" style="width: 100%; background: #dfe6e9; padding: 6px;font-size: 15px;font-weight: normal !important;">Permanent Address</label>
                             </div>
-                            
+
                            @include('fields.permanent_address')
                             
                             <div class="row">
@@ -814,7 +814,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>Province/City</label>
-                                        <select class="form-control" @change="cityChange" id="e_current_province" name="current_province" v-model="frm.city" :disabled="JSON.stringify(cities).length==2" value="{{old('city')}}">
+                                        <select class="form-control cityChange" id="e_current_province" name="current_province" v-model="frm.city" :disabled="JSON.stringify(cities).length==2" value="{{old('city')}}">
                                             {{-- <option v-for="(item,text) in cities" :value="text">@{{item}}</option> --}}
                                         </select>
                                     </div>
@@ -822,8 +822,8 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>District/Khan</label>
-                                        <select class="form-control" @change="districChange" name="current_district" v-model="frm.distric" :disabled="JSON.stringify(districs).length==2" value="{{old('distric')}}">
-                                            <option v-for="(item, text) in districs" :value="text">@{{item}}</option>
+                                        <select class="form-control" @change="districChange" id="e_current_district" name="current_district" v-model="frm.distric" :disabled="JSON.stringify(districs).length==2" value="{{old('distric')}}">
+                                            {{-- <option v-for="(item, text) in districs" :value="text">@{{item}}</option> --}}
                                         </select>
                                     </div>
                                 </div>
@@ -964,7 +964,6 @@
 
 <script>
     $(function(){
-        
         $('.userUpdate').on('click',function(){
             let id = $(this).data("id");
             $.ajax({
@@ -1028,6 +1027,7 @@
                                 }));
                             });
                         }
+
                         if (response.optionIdentityType != '') {
                             $.each(response.optionIdentityType, function(i, item) {
                                 $('#e_identity_type').append($('<option>', {
@@ -1037,23 +1037,28 @@
                                 }));
                             });
                         }
-
+                        // console.log(response.address);
                         if (response.address != '') {
-                            $.each(response.address, function(i, item) {
-                                $('#e_current_province').append($('<option>', {
-                                    value: item,
-                                    text: item,
-                                    selected: item == response.success.current_province
-                                }));
+                            $.each(response.address, function(text, item) {
+                                if (item.length==2) {
+                                    $('#e_current_province').append($('<option>', {
+                                        value: item,
+                                        text: text,
+                                        selected: item == response.success.current_province
+                                    }));   
+                                }
                             });
                         }
                         if (response.address != '') {
-                            $.each(response.address, function(i, item) {
-                                $('#e_current_district').append($('<option>', {
-                                    value: item._code,
-                                    text: item._name_en,
-                                    selected: item._code == response.success.current_province
-                                }));
+                            $.each(response.address, function(text, item) {
+                                console.log(item);
+                                if (item.length==2) {
+                                    $('#e_current_district').append($('<option>', {
+                                        value: item.item,
+                                        text: text,
+                                        selected: item.item == response.success.current_province
+                                    }));   
+                                }
                             });
                         }
                         

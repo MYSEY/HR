@@ -33,7 +33,7 @@ class Education extends Model
                 $FieldOfStudy = $item->name_khmer;
             }
         }
-        return $FieldOfStudy;
+        return $FieldOfStudy ?? null;
     }
     public function getEdcutiondegreeAttribute(){
         $data = Option::where('type','degree')->get();
@@ -42,7 +42,7 @@ class Education extends Model
                 $dataDegree = $item->name_khmer;
             }
         }
-        return $dataDegree;
+        return $dataDegree ?? null;
     }
 
     public function getEducationStartDateEdnDateAttribute(){
