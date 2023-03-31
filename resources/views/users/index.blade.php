@@ -14,7 +14,9 @@
 
                 </div>
                 <div class="col-auto float-end ms-auto">
-                    <a href="#" class="btn add-btn" data-toggle="modal" data-target="#add_user"><i class="fa fa-plus"></i> Add New</a>
+                    @if (Auth::user()->RolePermission == 'Administrator')
+                        <a href="#" class="btn add-btn" data-toggle="modal" data-target="#add_user"><i class="fa fa-plus"></i> Add New</a>
+                    @endif
                 </div>
             </div>
         </div>
@@ -129,46 +131,49 @@
                                                                     <span>Others</span>
                                                                 </a>
                                                             @endif
-                                                            
-                                                            <div class="dropdown-menu dropdown-menu-right" id="btn-emp-status">
-                                                                <input type="hidden" id="employee_id" value="{{$item->id}}">
-                                                                <a class="dropdown-item" data-id="1" href="#">
-                                                                    <i class="fa fa-dot-circle-o text-success"></i> FDC
-                                                                </a>
-                                                                <a class="dropdown-item" data-id="2" href="#">
-                                                                    <i class="fa fa-dot-circle-o text-warning"></i> UDC
-                                                                </a>
-                                                                <a class="dropdown-item" data-id="3" href="#">
-                                                                    <i class="fa fa-dot-circle-o text-danger"></i> Resignation
-                                                                </a>
-                                                                <a class="dropdown-item" data-id="4" href="#">
-                                                                    <i class="fa fa-dot-circle-o text-success"></i> Termination
-                                                                </a>
-                                                                <a class="dropdown-item" data-id="5" href="#">
-                                                                    <i class="fa fa-dot-circle-o text-danger"></i> Death
-                                                                </a>
-                                                                <a class="dropdown-item" data-id="6" href="#">
-                                                                    <i class="fa fa-dot-circle-o text-warning"></i> Retired
-                                                                </a>
-                                                                <a class="dropdown-item" data-id="7" href="#">
-                                                                    <i class="fa fa-dot-circle-o text-danger"></i> Lay off
-                                                                </a>
-                                                                <a class="dropdown-item" data-id="8" href="#">
-                                                                    <i class="fa fa-dot-circle-o text-danger"></i> Suspension
-                                                                </a>
-                                                                <a class="dropdown-item" data-id="9" href="#">
-                                                                    <i class="fa fa-dot-circle-o text-danger"></i> Others
-                                                                </a>
-                                                            </div>
+                                                            @if (Auth::user()->RolePermission == 'Administrator')
+                                                                <div class="dropdown-menu dropdown-menu-right" id="btn-emp-status">
+                                                                    <input type="hidden" id="employee_id" value="{{$item->id}}">
+                                                                    <a class="dropdown-item" data-id="1" href="#">
+                                                                        <i class="fa fa-dot-circle-o text-success"></i> FDC
+                                                                    </a>
+                                                                    <a class="dropdown-item" data-id="2" href="#">
+                                                                        <i class="fa fa-dot-circle-o text-warning"></i> UDC
+                                                                    </a>
+                                                                    <a class="dropdown-item" data-id="3" href="#">
+                                                                        <i class="fa fa-dot-circle-o text-danger"></i> Resignation
+                                                                    </a>
+                                                                    <a class="dropdown-item" data-id="4" href="#">
+                                                                        <i class="fa fa-dot-circle-o text-success"></i> Termination
+                                                                    </a>
+                                                                    <a class="dropdown-item" data-id="5" href="#">
+                                                                        <i class="fa fa-dot-circle-o text-danger"></i> Death
+                                                                    </a>
+                                                                    <a class="dropdown-item" data-id="6" href="#">
+                                                                        <i class="fa fa-dot-circle-o text-warning"></i> Retired
+                                                                    </a>
+                                                                    <a class="dropdown-item" data-id="7" href="#">
+                                                                        <i class="fa fa-dot-circle-o text-danger"></i> Lay off
+                                                                    </a>
+                                                                    <a class="dropdown-item" data-id="8" href="#">
+                                                                        <i class="fa fa-dot-circle-o text-danger"></i> Suspension
+                                                                    </a>
+                                                                    <a class="dropdown-item" data-id="9" href="#">
+                                                                        <i class="fa fa-dot-circle-o text-danger"></i> Others
+                                                                    </a>
+                                                                </div>
+                                                            @endif
                                                         </div>
                                                     </td>
                                                     <td class="text-end">
                                                         <div class="dropdown dropdown-action">
                                                             <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i  class="material-icons">more_vert</i></a>
-                                                            <div class="dropdown-menu dropdown-menu-right">
-                                                                <a class="dropdown-item userUpdate" data-id="{{$item->id}}"><i class="fa fa-pencil m-r-5"></i> Edit</a>
-                                                                <a class="dropdown-item userDelete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_user"><i class="fa fa-trash-o m-r-5"></i> Delete</a>
-                                                            </div>
+                                                            @if (Auth::user()->RolePermission == 'Administrator')
+                                                                <div class="dropdown-menu dropdown-menu-right">
+                                                                    <a class="dropdown-item userUpdate" data-id="{{$item->id}}"><i class="fa fa-pencil m-r-5"></i> Edit</a>
+                                                                    <a class="dropdown-item userDelete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_user"><i class="fa fa-trash-o m-r-5"></i> Delete</a>
+                                                                </div>
+                                                            @endif
                                                         </div>
                                                     </td>
                                                 </tr>

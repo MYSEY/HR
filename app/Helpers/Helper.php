@@ -99,7 +99,11 @@ class Helper
         }
         return null;
     }
-
+ // ROTANA : FIND LEAD YEAR
+ static function is_leap_year($year)
+ {
+     return ((($year % 4) == 0) && ((($year % 100) != 0) || (($year % 400) == 0)));
+ }
     // PHONE FORMAT AND REMOVE +855
     static function formatPhoneNumber($number)
     {

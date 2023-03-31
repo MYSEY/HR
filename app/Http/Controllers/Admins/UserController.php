@@ -5,6 +5,7 @@ use App\Address;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\Option;
+use App\Helpers\Helper;
 use App\Models\Branchs;
 use App\Models\Position;
 use App\Models\Department;
@@ -17,9 +18,11 @@ use App\Http\Requests\UserUpdated;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Brian2694\Toastr\Facades\Toastr;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use App\Traits\UploadFiles\UploadFIle;
 use PhpParser\Node\Expr\Cast\Object_;
+use App\Traits\UploadFiles\UploadFIle;
+use App\Repositories\Admin\EmployeeRepository;
 
 class UserController extends Controller
 {
@@ -32,9 +35,14 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    public function __construct(EmployeeRepository $employeeRepo)
+    {
+        $this->employeeRepo = $employeeRepo;
+    }
     public function index()
     {
-        $data = User::with('role')->with('department')->get();
+        $data = $this->employeeRepo->getAllUsers();
         $role = Role::all();
         $position = Position::all();
         $department = Department::all();
@@ -65,17 +73,7 @@ class UserController extends Controller
     public function store(UserRequest $request)
     {
         try{
-            $data = $request->all();
-            $data['current_province']   = $request->current_province;
-            $data['current_district']   = $request->current_district;
-            $data['current_commune']   = $request->current_commune;
-            $data['current_village']   = $request->current_village;
-            $data['permanent_province'] = $request->permanent_province;
-            $data['permanent_district'] = $request->permanent_district;
-            $data['permanent_commune'] = $request->permanent_commune;
-            $data['permanent_village'] = $request->permanent_village;
-            $data['password']   = Hash::make($request->password);
-            User::create($data);
+            $this->employeeRepo->createUsers($request);
             DB::commit();
             Toastr::success('Employee create successfully :)','Success');
             return redirect()->back();
@@ -115,7 +113,6 @@ class UserController extends Controller
         $department = Department::all();
         $optionGender = Option::where('type','gender')->get();
         $branch = Branchs::all();
-        // $address =  Address::where($_code,'Like',$request->code."__")->orderBy($_name_en)->get();
         $optionIdentityType = Option::where('type','identity_type')->get();
         return response()->json([
             'success'=>$data,
@@ -181,7 +178,7 @@ class UserController extends Controller
                 'personal_phone_number'  => $request->personal_phone_number,
                 'company_phone_number'  => $request->company_phone_number,
                 'agency_phone_number'  => $request->agency_phone_number,
-                'password'  => Hash::make($request->password),
+                'password'  => $request->password == "" ? Auth::user()->password : Hash::make($request->password),
                 'remark'  => $request->remark,
                 'bank_name'  => $request->bank_name,
                 'account_name'  => $request->account_name,
