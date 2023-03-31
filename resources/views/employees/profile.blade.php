@@ -22,13 +22,9 @@
                             <div class="profile-img-wrap">
                                 <div class="profile-img">
                                     @if ($data->profile != null)
-                                        <a href="#">
-                                            <img alt="" src="{{ asset('/uploads/images/' . $data->profile) }}">
-                                        </a>
+                                        <img alt="profile" src="{{ asset('/uploads/images/' . $data->profile) }}">
                                     @else
-                                        <a href="#">
-                                            <img alt="" src="{{ asset('admin/img/defuals/default-user-icon.png') }}">
-                                        </a>
+                                        <img alt="profile" src="{{ asset('admin/img/defuals/default-user-icon.png') }}">
                                     @endif
                                 </div>
                             </div>
@@ -92,7 +88,6 @@
             </div>
         </div>
         <div class="tab-content">
-
             <div id="emp_profile" class="pro-overview tab-pane fade show active" role="tabpanel">
                 <div class="row">
                     <div class="col-md-6 d-flex">
@@ -117,8 +112,12 @@
                                         <label for="">{{ $data->issue_expired_date }}</label>
                                     </li>
                                     <li>
-                                        <div class="title">Tel</div>
-                                        <label for=""><a href="">{{ $data->personal_phone_number }}</a></label>
+                                        <div class="title">Unit</div>
+                                        <label for="">{{$data->unit}}</label>
+                                    </li>
+                                    <li>
+                                        <div class="title">Level</div>
+                                        <label for="">{{ $data->level }}</label>
                                     </li>
                                     <li>
                                         <div class="title">Nationality</div>
@@ -406,23 +405,25 @@
 
             <div class="tab-pane fade" id="document" role="tabpanel">
                 <div class="row">
-                    <div class="col-lg-4 col-sm-6 col-md-4 col-xl-3">
+                    <div class="col-md-6">
                         <div class="card">
                             <div class="card-body">
                                 <h4 class="project-title"><a href="">Guarantee Letter</a></h4>
-                                <span class="text-xs">Preview guarantee letter click this link</span>
-                                <a href="{{ url('uploads/images/', $data->guarantee_letter) }}" target="_blank">{{ $data->guarantee_letter }}</a>
+                                <small class="block text-ellipsis m-b-15">
+                                    <span class="text-xs">Preview guarantee letter click this <a href="{{ url('uploads/images/', $data->guarantee_letter) }}" target="_blank">link</a></span>
+                                </small>
+                                <embed src="{{url('uploads/images/', $data->guarantee_letter)}}" style="width:100%; height:100%;">
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-4 col-sm-6 col-md-4 col-xl-3">
+                    <div class="col-sm-6">
                         <div class="card">
                             <div class="card-body">
                                 <h4 class="project-title"><a href="">Employment Book</a></h4>
                                 <small class="block text-ellipsis m-b-15">
-                                    <span class="text-xs">Preview employment book click this link</span>
+                                    <span class="text-xs">Preview employment book click this <a href="{{ url('uploads/images/', $data->employment_book) }}" target="_blank">link</a></span>
                                 </small>
-                                <a href="{{ url('uploads/images/', $data->employment_book) }}" target="_blank">{{ $data->employment_book }}</a>
+                                <embed src="{{url('uploads/images/', $data->employment_book)}}" style="width:100%; height:100%;">
                             </div>
                         </div>
                     </div>

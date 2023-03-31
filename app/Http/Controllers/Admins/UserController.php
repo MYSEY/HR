@@ -107,7 +107,8 @@ class UserController extends Controller
     {
         $_code = '_code';
         $_name_en = '_name_en';
-        $address = Address::where($_code,'Like',$request->code."__")->orderBy($_name_en)->pluck($_code,$_name_en);     
+        $address = Address::where($_code,'Like',$request->code."__")->orderBy($_name_en)->pluck($_code,$_name_en);
+
         $data = User::where('id',$request->id)->with('role')->first();
         $role = Role::all();
         $position = Position::all();
@@ -191,6 +192,14 @@ class UserController extends Controller
                 'issue_expired_date'  => $request->issue_expired_date,
                 'current_house_no'  => $request->current_house_no,
                 'current_street_no'  => $request->current_street_no,
+                'current_province'   => $request->current_province,
+                'current_district'   => $request->current_district,
+                'current_commune'   => $request->current_commune,
+                'current_village'   => $request->current_village,
+                'permanent_province' => $request->permanent_province,
+                'permanent_district' => $request->permanent_district,
+                'permanent_commune' => $request->permanent_commune,
+                'permanent_village' => $request->permanent_village,
                 'permanent_house_no'  => $request->permanent_house_no,
                 'permanent_street_no'  => $request->permanent_street_no,
                 'profile'  => $filename,

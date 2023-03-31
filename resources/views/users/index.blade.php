@@ -34,6 +34,7 @@
                                             <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 265.913px;">Name(KH)</th>
                                             <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 265.913px;">Name(EN)</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending" style="width: 218.762px;">Email</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending" style="width: 218.762px;">DOB</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Role: activate to sort column ascending" style="width: 80.8125px;">Role</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending" style="width: 218.762px;">Position</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending" style="width: 218.762px;">Department</th>
@@ -64,8 +65,9 @@
                                                     </td>
                                                     <td><a href="{{route('employee.profile',$item->id)}}">{{$item->number_employee}}</a></td>
                                                     <td><a href="{{route('employee.profile',$item->id)}}">{{$item->employee_name_kh}}</a></td>
-                                                    <td>{{$item->employee_name_en}}</td>
+                                                    <td><a href="{{route('employee.profile',$item->id)}}">{{$item->employee_name_en}}</a></td>
                                                     <td>{{$item->email}}</td>
+                                                    <td>{{$item->DOB ?? ''}}</td>
                                                     <td>
                                                         <span class="badge bg-inverse-success">{{ $item->role == null ? "" : $item->role->name }}</span>
                                                     </td>
@@ -474,14 +476,16 @@
                                     </div>
                                 </div>
                             </div>
-        
-                            {{-- Current Address --}}
+                       
+                            {{-- Created Current Address --}}
+                            @php
+                                $field = array("name" => "current_addtress", "name" => "permanent_addtress");
+                            @endphp
                             <div class="form-group col-md-12 col-12" element="div" bp-field-wrapper="true" bp-field-name="Identity" bp-field-type="custom_html">
                                 <label class="navbar-brand custom-navbar-brand mb-0" style="width: 100%; background: #dfe6e9; padding: 6px;font-size: 15px;font-weight: normal !important;">Current Address</label>
                             </div>
-    
-                           @include('fields.current_address')
-                            
+                            @include('fields.current_address')
+                          
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
@@ -497,12 +501,12 @@
                                 </div>
                             </div>
 
-                            {{-- Permanent Address --}}
+                            {{-- Created Permanent Address --}}
                             <div class="form-group col-md-12 col-12" element="div" bp-field-wrapper="true" bp-field-name="Identity" bp-field-type="custom_html">
                                 <label class="navbar-brand custom-navbar-brand mb-0" style="width: 100%; background: #dfe6e9; padding: 6px;font-size: 15px;font-weight: normal !important;">Permanent Address</label>
                             </div>
 
-                           @include('fields.permanent_address')
+                            @include('fields.permanent_address')
                             
                             <div class="row">
                                 <div class="col-md-6">
@@ -810,12 +814,12 @@
                                 <label class="navbar-brand custom-navbar-brand mb-0" style="width: 100%; background: #dfe6e9; padding: 6px;font-size: 15px;font-weight: normal !important;">Current Address</label>
                             </div>
     
-                            <div class="row">
+                            <div class="row" id="duptateCurrentAddress">
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>Province/City</label>
-                                        <select class="form-control cityChange" id="e_current_province" name="current_province" v-model="frm.city" :disabled="JSON.stringify(cities).length==2" value="{{old('city')}}">
-                                            {{-- <option v-for="(item,text) in cities" :value="text">@{{item}}</option> --}}
+                                        <select class="form-control" @change="cityChange" id="e_current_province" name="current_province" v-model="frm.city" :disabled="JSON.stringify(cities).length==2" value="{{old('city')}}">
+                                            <option v-for="(item,text) in cities" :value="text">@{{item}}</option>
                                         </select>
                                     </div>
                                 </div>
@@ -823,7 +827,7 @@
                                     <div class="form-group">
                                         <label>District/Khan</label>
                                         <select class="form-control" @change="districChange" id="e_current_district" name="current_district" v-model="frm.distric" :disabled="JSON.stringify(districs).length==2" value="{{old('distric')}}">
-                                            {{-- <option v-for="(item, text) in districs" :value="text">@{{item}}</option> --}}
+                                            <option v-for="(item, text) in districs" :value="text">@{{item}}</option>
                                         </select>
                                     </div>
                                 </div>
@@ -861,12 +865,12 @@
                                 </div>
                             </div>
 
-                            {{-- Permanent Address --}}
+                            {{-- updated Permanent Address --}}
                             <div class="form-group col-md-12 col-12" element="div" bp-field-wrapper="true" bp-field-name="Identity" bp-field-type="custom_html">
                                 <label class="navbar-brand custom-navbar-brand mb-0" style="width: 100%; background: #dfe6e9; padding: 6px;font-size: 15px;font-weight: normal !important;">Permanent Address</label>
                             </div>
     
-                            <div id="PermanentAddress">
+                            <div id="updatedPermanentAddress">
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
@@ -964,6 +968,130 @@
 
 <script>
     $(function(){
+        // duptateCurrentAddress
+        var main = new Vue({
+            el: '#duptateCurrentAddress',
+            data() {
+                return {
+                    cities:{},
+                    districs:{},
+                    communes:{},
+                    villages:{},
+                    frm:{},
+                }
+            },
+            mounted() {
+                this.getData();
+            },
+            methods:{
+                cityChange: async function(){
+                    var me = this;
+                    this.hidden = this.frm.city;
+                    await this.getData(this.frm.city).then(function(response){
+                        me.districs = response.data;
+                        me.communes={};
+                        me.villages={};
+                    });
+                },
+                districChange: async function(){
+                    var me = this;
+                    this.hidden = this.frm.distric;
+                    await this.getData(this.frm.distric).then(function(response){
+                        me.communes = response.data;
+                        me.villages={};
+                    });
+                },
+                communeChange: async function(){
+                    var me = this;
+                    this.hidden = this.frm.commune;
+                    await this.getData(this.frm.commune).then(function(response){
+                        me.villages = response.data;
+                    });
+                },
+                villageChange:function(){
+                    this.hidden = this.frm.village;
+                },
+                getData:function(code=''){
+                    if(code){ 
+                        return axios.get('{{route("address")}}?code='+code)
+                    }
+                    else
+                    { 
+                        return axios.get('{{route("address")}}')
+                    }
+                }
+            },
+
+            created: async function(){
+                var me = this;
+                this.getData().then(function(response){
+                    me.cities = response.data;
+                });
+            }
+        });
+
+        // updatedPermanentAddress
+        var main = new Vue({
+            el: '#updatedPermanentAddress',
+            data() {
+                return {
+                    cities:{},
+                    districs:{},
+                    communes:{},
+                    villages:{},
+                    frm:{},
+                }
+            },
+            mounted() {
+                this.getData();
+            },
+            methods:{
+                cityChange: async function(){
+                    var me = this;
+                    this.hidden = this.frm.city;
+                    await this.getData(this.frm.city).then(function(response){
+                        me.districs = response.data;
+                        me.communes={};
+                        me.villages={};
+                    });
+                },
+                districChange: async function(){
+                    var me = this;
+                    this.hidden = this.frm.distric;
+                    await this.getData(this.frm.distric).then(function(response){
+                        me.communes = response.data;
+                        me.villages={};
+                    });
+                },
+                communeChange: async function(){
+                    var me = this;
+                    this.hidden = this.frm.commune;
+                    await this.getData(this.frm.commune).then(function(response){
+                        me.villages = response.data;
+                    });
+                },
+                villageChange:function(){
+                    this.hidden = this.frm.village;
+                },
+                getData:function(code=''){
+                    if(code){ 
+                        return axios.get('{{route("address")}}?code='+code)
+                    }
+                    else
+                    { 
+                        return axios.get('{{route("address")}}')
+                    }
+                }
+            },
+
+            created: async function(){
+                var me = this;
+                this.getData().then(function(response){
+                    me.cities = response.data;
+                });
+            }
+        });
+
         $('.userUpdate').on('click',function(){
             let id = $(this).data("id");
             $.ajax({
@@ -1038,29 +1166,24 @@
                             });
                         }
                         // console.log(response.address);
-                        if (response.address != '') {
-                            $.each(response.address, function(text, item) {
-                                if (item.length==2) {
-                                    $('#e_current_province').append($('<option>', {
-                                        value: item,
-                                        text: text,
-                                        selected: item == response.success.current_province
-                                    }));   
-                                }
-                            });
-                        }
-                        if (response.address != '') {
-                            $.each(response.address, function(text, item) {
-                                console.log(item);
-                                if (item.length==2) {
-                                    $('#e_current_district').append($('<option>', {
-                                        value: item.item,
-                                        text: text,
-                                        selected: item.item == response.success.current_province
-                                    }));   
-                                }
-                            });
-                        }
+                        // if (response.address != '') {
+                        //     $.each(response.address, function(text, item) {
+                        //         $('#e_current_province').append($('<option>', {
+                        //             value: item,
+                        //             text: text,
+                        //             selected: item == response.success.current_province
+                        //         })); 
+                        //     });
+                        // }
+                        // if (response.address != '') {
+                        //     $.each(response.address, function(text, item) {
+                        //         $('#e_current_district').append($('<option>', {
+                        //             value: item,
+                        //             text: text,
+                        //             selected: item.length==2 == response.success.current_district
+                        //         })); 
+                        //     });
+                        // }
                         
                         $('#e_id').val(response.success.id);
                         $('#e_number_employee').val(response.success.number_employee);
@@ -1091,7 +1214,6 @@
                         $('#e_current_street_no').val(response.success.current_street_no);
                         $('#e_permanent_house_no').val(response.success.permanent_house_no);
                         $('#e_permanent_street_no').val(response.success.permanent_street_no);
-                        $('#e_current_district').val(response.success.current_district);
                         $('#editUserModal').modal('show');
                     }
                 }
