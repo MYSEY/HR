@@ -483,9 +483,6 @@
                             </div>
                        
                             {{-- Created Current Address --}}
-                            @php
-                                $field = array("name" => "current_addtress", "name" => "permanent_addtress");
-                            @endphp
                             <div class="form-group col-md-12 col-12" element="div" bp-field-wrapper="true" bp-field-name="Identity" bp-field-type="custom_html">
                                 <label class="navbar-brand custom-navbar-brand mb-0" style="width: 100%; background: #dfe6e9; padding: 6px;font-size: 15px;font-weight: normal !important;">Current Address</label>
                             </div>

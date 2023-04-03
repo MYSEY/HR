@@ -38,12 +38,12 @@ function menu(){
         [
             'name'=>'Employee',
             'icon'=>'<i class="la la-user"></i> <span></span> <span class="menu-arrow"></span>',
-            'value'=>'Employee',
+            'value'=>'Employees',
             'table'=>2,
             'permission'=>1,
             'child'=>[
                 [
-                    'value'=>'Employee',
+                    'value'=>'All Employees',
                     'url'=>"users",
                     'table'=>2,
                     'permission'=>1

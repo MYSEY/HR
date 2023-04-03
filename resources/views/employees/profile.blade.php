@@ -8,7 +8,7 @@
                     <h3 class="page-title">Profile</h3>
                     <ul class="breadcrumb">
                         <li class="breadcrumb-item"><a href="{{ url('/dashboad/employee') }}">Dashboard</a></li>
-                        <li class="breadcrumb-item active"><a href="{{ url('employee') }}">Profile</a></li>
+                        <li class="breadcrumb-item active"><a href="{{ url('users') }}">Profile</a></li>
                     </ul>
                 </div>
             </div>
