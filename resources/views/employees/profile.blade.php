@@ -429,7 +429,6 @@
                     </div>
                 </div>
             </div>
-
             <div class="tab-pane fade" id="promote" role="tabpanel">
                 <div class="col-md-12 d-flex">
                     <div class="card profile-box flex-fill">
@@ -491,9 +490,15 @@
                                     <div class="form-group col-md-12 col-12" element="div" bp-field-wrapper="true" bp-field-name="Identity" bp-field-type="custom_html">
                                         <label class="navbar-brand custom-navbar-brand mb-0" style="width: 100%; background: #dfe6e9; padding: 6px;font-size: 15px;font-weight: normal !important;">Position</label>
                                     </div>
+                                    
                                     <div class="form-group">
                                         <label>Promotion From <span class="text-danger">*</span></label>
-                                        <input class="form-control" type="text" id="posit_id" name="posit_id" value="{{$data->EmployeePosition}}" readonly="">
+                                        @if (count($empPromoted) > 0)
+                                            <input class="form-control" type="text" id="posit_id" name="posit_id" value="{{$empPromoted[0]->department_promoted_to}}" readonly="">
+                                        @else
+                                            <input class="form-control" type="text" id="posit_id" name="posit_id" value="{{$data->EmployeePosition}}" readonly="">
+                                        @endif
+
                                     </div>
                                     <div class="form-group">
                                         <label>Promotion To <span class="text-danger">*</span></label>

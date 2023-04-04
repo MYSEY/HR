@@ -14,7 +14,8 @@
     <meta name="robots" content="noindex, nofollow">
     <title>HRMS</title>
 
-    <link rel="shortcut icon" type="image/x-icon" href="https://smarthr.dreamguystech.com/laravel/template/public/assets/img/favicon.png">
+    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('/admin/img/logo/cammalogo.png') }}">
+    {{-- <link rel="shortcut icon" type="image/x-icon" href="https://smarthr.dreamguystech.com/laravel/template/public/assets/img/favicon.png"> --}}
 
     <link rel="stylesheet" href="{{ asset('admin/css/bootstrap.min.css') }}">
 
@@ -73,7 +74,7 @@
             <a id="mobile_btn" class="mobile_btn" href=""><i class="fa fa-bars"></i></a>
 
             <ul class="nav user-menu">
-                <li class="nav-item">
+                {{-- <li class="nav-item">
                     <div class="top-nav-search">
                         <a href="javascript:void(0);" class="responsive-search">
                             <i class="fa fa-search"></i>
@@ -83,7 +84,7 @@
                             <button class="btn" type="submit"><i class="fa fa-search"></i></button>
                         </form>
                     </div>
-                </li>
+                </li> --}}
 
 
                 <li class="nav-item dropdown has-arrow flag-nav">
@@ -96,6 +97,9 @@
                             <img src="{{asset('/admin/img/us.png')}}" alt="" height="16"> English
                         </a>
                         <a href="javascript:void(0);" class="dropdown-item">
+                            <img src="{{asset('/admin/img/flag-of-cambodia-logo.png')}}" alt="" height="16"> Khmer
+                        </a>
+                        {{-- <a href="javascript:void(0);" class="dropdown-item">
                             <img src="{{asset('/admin/img/fr.png')}}" alt="" height="16"> French
                         </a>
                         <a href="javascript:void(0);" class="dropdown-item">
@@ -103,14 +107,14 @@
                         </a>
                         <a href="javascript:void(0);" class="dropdown-item">
                             <img src="{{asset('/admin/img/de.png')}}" alt="" height="16"> German
-                        </a>
+                        </a> --}}
                     </div>
                 </li>
 
                 <li class="nav-item dropdown">
-                    <a href="" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">
+                    {{-- <a href="" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">
                         <i class="fa fa-bell-o"></i> <span class="badge rounded-pill">3</span>
-                    </a>
+                    </a> --}}
                     {{-- <div class="dropdown-menu notifications">
                         <div class="topnav-dropdown-header">
                             <span class="notification-title">Notifications</span>
