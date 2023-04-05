@@ -8,6 +8,7 @@ use App\Models\Option;
 use App\Helpers\Helper;
 use App\Models\Branchs;
 use App\Models\Position;
+use App\Models\Province;
 use App\Models\Department;
 use App\Traits\AddressTrait;
 use Illuminate\Http\Request;
@@ -50,8 +51,9 @@ class UserController extends Controller
         $autoEmpId   = $this->generate_EmployeeId(Carbon::today())['number_employee'];
         $optionGender = Option::where('type','gender')->get();
         $branch = Branchs::all();
+        $province = Province::all();
         $optionIdentityType = Option::where('type','identity_type')->get();
-        return view('users.index',compact('data','role','position','department','optionStatus','autoEmpId','optionGender','branch','optionIdentityType'));
+        return view('users.index',compact('data','role','position','department','optionStatus','autoEmpId','optionGender','branch','optionIdentityType', 'province'));
     }
 
     /**

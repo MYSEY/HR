@@ -486,7 +486,47 @@
                             <div class="form-group col-md-12 col-12" element="div" bp-field-wrapper="true" bp-field-name="Identity" bp-field-type="custom_html">
                                 <label class="navbar-brand custom-navbar-brand mb-0" style="width: 100%; background: #dfe6e9; padding: 6px;font-size: 15px;font-weight: normal !important;">Current Address</label>
                             </div>
-                            @include('fields.current_address')
+
+                            {{-- CurrentAddress --}}
+                            <div id="CurrentAddress">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Province/City</label>
+                                            <select class="form-control" id="current_province" name="current_province" value="{{old('current_province')}}">
+                                                <option selected disabled> --Select --</option>
+                                                @if (count($province)>0)
+                                                    @foreach ($province as $item)
+                                                        <option value="{{$item->code}}" >{{$item->name_en}}</option>
+                                                    @endforeach
+                                                @endif
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>District/Khan</label>
+                                            <select class="form-control" id="current_district" name="current_district" value="{{old('current_district')}}">
+                                            </select>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="no-error-label">Commune/Sangkat</label>
+                                            <select class="form-control no-error-border" id="current_commune" name="current_commune" value="{{old('current_commune')}}">
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="no-error-label">Village</label>
+                                            <select class="form-control no-error-border" id="current_village" name="current_village" value="{{old('current_village')}}">
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                           
                             <div class="row">
                                 <div class="col-md-6">
@@ -508,7 +548,46 @@
                                 <label class="navbar-brand custom-navbar-brand mb-0" style="width: 100%; background: #dfe6e9; padding: 6px;font-size: 15px;font-weight: normal !important;">Permanent Address</label>
                             </div>
 
-                            @include('fields.permanent_address')
+                            {{-- PermanentAddress --}}
+                            <div id="PermanentAddress">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Province/City</label>
+                                            <select class="form-control" id="permanent_province" name="permanent_province" value="{{old('permanent_province')}}">
+                                                <option selected disabled> --Select --</option>
+                                                @if (count($province)>0)
+                                                    @foreach ($province as $item)
+                                                        <option value="{{$item->code}}" >{{$item->name_en}}</option>
+                                                    @endforeach
+                                                @endif
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>District/Khan</label>
+                                            <select class="form-control" id="permanent_district" name="permanent_district" value="{{old('permanent_district')}}">
+                                            </select>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-md-6">
+                                        <div class="form-group ">
+                                            <label class="no-error-label">Commune/Sangkat</label>
+                                            <select class="form-control no-error-border" id="permanent_commune" name="permanent_commune" value="{{old('permanent_commune')}}">
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="no-error-label">Village</label>
+                                            <select class="form-control no-error-border" id="permanent_village" name="permanent_village" value="{{old('permanent_village')}}">
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             
                             <div class="row">
                                 <div class="col-md-6">
@@ -970,6 +1049,7 @@
 
 <script>
     $(function(){
+
         // duptateCurrentAddress
         var main = new Vue({
             el: '#duptateCurrentAddress',
@@ -1093,6 +1173,43 @@
                 });
             }
         });
+
+        // block Current Address
+        $("#current_province").on("change", function(){
+            let id = $("#current_province").val();
+            let optionSelect = "currentProvince";
+            districtData(id, optionSelect);
+        });
+
+        $("#current_district").on("change", function(){
+            let id = $("#current_district").val();
+            let optionSelect = "currentDistrict";
+            districtData(id, optionSelect);
+        });
+
+        $("#current_commune").on("change", function(){
+            let id = $("#current_commune").val();
+            let optionSelect = "currentCommune";
+            districtData(id, optionSelect);
+        });
+
+        // block Permanent Address
+        $("#permanent_province").on("change", function(){
+            let id = $("#permanent_province").val();
+            let optionSelect = "permanentProvince";
+            districtData(id, optionSelect);
+        });
+        $("#permanent_district").on("change", function(){
+            let id = $("#permanent_district").val();
+            let optionSelect = "permanentDistrict";
+            districtData(id, optionSelect);
+        });
+        $("#permanent_commune").on("change", function(){
+            let id = $("#permanent_commune").val();
+            let optionSelect = "permanentCommune";
+            districtData(id, optionSelect);
+        });
+
 
         $('.userUpdate').on('click',function(){
             let id = $(this).data("id");
@@ -1433,4 +1550,80 @@
             }
         });
     });
+
+    function districtData(id, optionSelect){
+        let url = "";
+        let data = {
+            "_token": "{{ csrf_token() }}",
+        };
+
+        // block Current Address
+        if (optionSelect == "currentProvince") {
+            url = "{{url('district')}}"
+            data.province_id = id
+            $('#current_district').html('<option selected disabled> --Select --</option>');
+            $('#current_commune').html('<option selected disabled> --Select --</option>');
+            $('#current_village').html('<option selected disabled> --Select --</option>');
+        }else if (optionSelect == "currentDistrict") {
+            url = "{{url('commune')}}"
+            data.district_id = id
+            $('#current_commune').html('<option selected disabled> --Select --</option>');
+            $('#current_village').html('<option selected disabled> --Select --</option>');
+        }else if (optionSelect == "currentCommune") {
+            url = "{{url('village')}}"
+            data.commune_id = id
+            $('#current_village').html('<option selected disabled> --Select --</option>');
+        };
+
+        // block Permanent Address
+        if (optionSelect == "permanentProvince") {
+            url = "{{url('district')}}"
+            data.province_id = id
+            $('#permanent_district').html('<option selected disabled> --Select --</option>');
+            $('#permanent_commune').html('<option selected disabled> --Select --</option>');
+            $('#permanent_village').html('<option selected disabled> --Select --</option>');
+        }else if (optionSelect == "permanentDistrict") {
+            url = "{{url('commune')}}"
+            data.district_id = id
+            $('#permanent_commune').html('<option selected disabled> --Select --</option>');
+            $('#permanent_village').html('<option selected disabled> --Select --</option>');
+        }else if (optionSelect == "permanentCommune") {
+            url = "{{url('village')}}"
+            data.commune_id = id
+            $('#permanent_village').html('<option selected disabled> --Select --</option>');
+        }
+
+        $.ajax({
+            type: "POST",
+            url,
+            data,
+            dataType: "JSON",
+            success: function (response) {
+                var data = response.data;
+                if (data != '') {
+                    let option = {value: "",text: ""}
+                    $.each(data, function(i, item) {
+                        option = {
+                            value: item.code,
+                            text: item.name_en,
+                        }
+                        if (optionSelect == "currentProvince") {
+                            $('#current_district').append($('<option>', option));
+                        }else if(optionSelect == "currentDistrict"){
+                            $('#current_commune').append($('<option>', option));
+                        }else if (optionSelect == "currentCommune") {
+                            $('#current_village').append($('<option>', option));
+                        }else if (optionSelect == "permanentProvince") {
+                            $('#permanent_district').append($('<option>', option));
+                        }else if (optionSelect == "permanentDistrict") {
+                            $('#permanent_commune').append($('<option>', option));
+                        }else if (optionSelect == "permanentCommune") {
+                            $('#permanent_village').append($('<option>', option));
+                        }
+                    
+                    });
+                }
+            }
+        });
+    }
 </script>

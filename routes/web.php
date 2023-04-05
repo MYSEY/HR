@@ -18,6 +18,7 @@ use App\Http\Controllers\Admins\LeavesEmployeeController;
 use App\Http\Controllers\Admins\AttendanceAdminController;
 use App\Http\Controllers\Admins\EmployeeProfileController;
 use App\Http\Controllers\Admins\AttendanceEmployeeController;
+use App\Http\Controllers\Admins\ProvinceController;
 
 /*
 |--------------------------------------------------------------------------
@@ -53,7 +54,8 @@ Route::middleware(['auth:sanctum'])->group(function(){
     // Route::Resource('/leaves/admin', LeavesAdminController::class);
     // Route::Resource('/leaves/employee', LeavesEmployeeController::class);
     
-    // Route::Resource('employee', EmployeeController::class);
+    Route::Resource('employee', EmployeeController::class);
+
     Route::get('role', [RoleConroller::class,'index']);
     Route::post('role/store', [RoleConroller::class,'store']);
     Route::post('role/update', [RoleConroller::class,'update']);
@@ -81,4 +83,10 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('users/delete', [UserController::class,'destroy']);
     Route::get('users/edit', [UserController::class,'edit']);
     Route::post('employee/status', [UserController::class,'processing']);
+
+    // route province
+    Route::get('province', [ProvinceController::class,'index']);
+    Route::post('district', [ProvinceController::class,'showDistrict']);
+    Route::post('commune', [ProvinceController::class,'showCommune']);
+    Route::post('village', [ProvinceController::class,'showVillage']);
 });
