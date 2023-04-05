@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admins;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class LeavesEmployeeController extends Controller
+class EmployeeReportController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,7 +14,7 @@ class LeavesEmployeeController extends Controller
      */
     public function index()
     {
-        return view('leaves_employee.index');
+        return view('employee_reports.index');
     }
 
     /**
@@ -22,7 +22,10 @@ class LeavesEmployeeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-  
+    public function create()
+    {
+        //
+    }
 
     /**
      * Store a newly created resource in storage.

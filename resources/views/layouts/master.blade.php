@@ -187,47 +187,6 @@
                 <div class="sidebar-inner slimscroll" style="overflow: hidden; width: 100%; height: 346px;">
                     <div id="sidebar-menu" class="sidebar-menu">
                         <ul class="sidebar-vertical">
-                            
-                            {{-- <li class="menu-title">
-                                <span>Main</span>
-                            </li>
-                            <li class="submenu">
-                                <a href=""><i class="la la-dashboard"></i> <span> Dashboard</span> <span class="menu-arrow"></span></a>
-                                <ul style="display: none;">
-                                    <li><a class="" href="{{url('dashboad/admin')}}">Admin Dashboard</a></li>
-                                    <li><a class="" href="{{url('dashboad/employee')}}">Employee Dashboard</a></li>
-                                </ul>
-                            </li>
-                            
-                            <li class="menu-title">
-                                <span>Employees</span>
-                            </li>
-                            <li class="submenu">
-                                <a href="" class="noti-dot"><i class="la la-user"></i> <span> Employees</span> <span class="menu-arrow"></span></a>
-                                <ul style="display: none;">
-                                    <li><a class="" href="{{url('employee')}}">All Employees</a></li>
-                                    <li><a class="" href="{{url('department')}}">Departments</a></li>
-                                </ul>
-                            </li>
-                            
-                            <li class="menu-title">
-                                <span>Administration</span>
-                            </li>
-                            <li class="">
-                                <a href="{{url('users')}}"><i class="la la-user-plus"></i> <span>Users</span></a>
-                            </li>
-                            <li class="">
-                                <a href="{{url('role')}}"><i class="la la-key"></i> <span>Roles &amp; Permissions</span></a>
-                            </li>
-
-                            <li class="submenu">
-                                <a href=""><i class="la la-key"></i> <span> Configuration </span> <span class="menu-arrow"></span></a>
-                                <ul style="display: none;">
-                                    <li class=""><a  href="{{url('position')}}">Postion</a></li>
-                                    <li class=""><a  href="{{url('branch')}}">Branch</a></li>
-                                </ul>
-                            </li> --}}
-
                             @foreach (menu() as $key=>$menu)
                                 @if (isset($menu['child']))
                                     @if (RolePermission($menu['table'],$menu['permission']))
@@ -255,6 +214,9 @@
                                     @endif
                                 @else
                                     @if (RolePermission($menu['table'],$menu['permission']))
+                                        <li class="menu-title">
+                                            <span>{{$menu['name']}}</span>
+                                        </li>
                                         <li class="sidebar-menu-item">
                                             <a class="sidebar-menu-button" href="{{url($menu['url'])}}">
                                                 {!! $menu['icon'] !!}
@@ -267,12 +229,8 @@
                         </ul>
                     </div>
                 </div>
-                <div class="slimScrollBar"
-                    style="background: rgb(204, 204, 204); width: 7px; position: absolute; top: 0px; opacity: 0.4; display: none; border-radius: 7px; z-index: 99; right: 1px; height: 68.5659px;">
-                </div>
-                <div class="slimScrollRail"
-                    style="width: 7px; height: 100%; position: absolute; top: 0px; display: none; border-radius: 7px; background: rgb(51, 51, 51); opacity: 0.2; z-index: 90; right: 1px;">
-                </div>
+                <div class="slimScrollBar" style="background: rgb(204, 204, 204); width: 7px; position: absolute; top: 0px; opacity: 0.4; display: none; border-radius: 7px; z-index: 99; right: 1px; height: 68.5659px;"></div>
+                <div class="slimScrollRail" style="width: 7px; height: 100%; position: absolute; top: 0px; display: none; border-radius: 7px; background: rgb(51, 51, 51); opacity: 0.2; z-index: 90; right: 1px;"></div>
             </div>
         </div>
     </div>
@@ -325,10 +283,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
 
     <div class="sidebar-overlay"></div>
-    {{-- <gdiv class="ginger-extension-writer" style="display: none;">
-        <gdiv class="ginger-extension-writer-frame"><iframe
-                src="./Dashboard - HRMS admin template_files/index.html"></iframe></gdiv>
-    </gdiv> --}}
 </body>
 
 </html>

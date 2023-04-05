@@ -57,11 +57,27 @@ function menu(){
             ]
         ],
         [
+            'name'=>'HR',
             'icon'=>'<i class="la la-key"></i> <span></span>',
             'value'=>'Roles Permissions',
             'table'=>4,
             'permission'=>1,
             'url'=>"role",
+        ],
+        [
+            'name'=>'',
+            'icon'=>'<i class="la la-pie-chart"></i> <span></span> <span class="menu-arrow"></span>',
+            'value'=>'Reports',
+            'table'=>2,
+            'permission'=>1,
+            'child'=>[
+                [
+                    'value'=>'Employee Reports',
+                    'url'=>"users",
+                    'table'=>2,
+                    'permission'=>1
+                ],
+            ]
         ],
         [
             'name'=>'',

@@ -14,6 +14,7 @@ use App\Http\Controllers\Admins\PositionController;
 use App\Http\Controllers\Admins\DepartmentController;
 use App\Http\Controllers\Admins\PermissionController;
 use App\Http\Controllers\Admins\LeavesAdminController;
+use App\Http\Controllers\Admins\EmployeeReportController;
 use App\Http\Controllers\Admins\LeavesEmployeeController;
 use App\Http\Controllers\Admins\AttendanceAdminController;
 use App\Http\Controllers\Admins\EmployeeProfileController;
@@ -52,7 +53,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     // Route::get('/attendance/admin', [AttendanceAdminController::class, 'index']);
     // Route::get('/attendance/employee', [AttendanceEmployeeController::class, 'index']);
     // Route::Resource('/leaves/admin', LeavesAdminController::class);
-    // Route::Resource('/leaves/employee', LeavesEmployeeController::class);
+    Route::Resource('/leaves/employee', LeavesEmployeeController::class);
     
     Route::Resource('employee', EmployeeController::class);
 
@@ -89,4 +90,6 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('district', [ProvinceController::class,'showDistrict']);
     Route::post('commune', [ProvinceController::class,'showCommune']);
     Route::post('village', [ProvinceController::class,'showVillage']);
+    Route::get('employee-report',[EmployeeReportController::class,'index']);
+    
 });
