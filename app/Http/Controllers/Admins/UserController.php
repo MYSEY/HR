@@ -179,6 +179,7 @@ class UserController extends Controller
 
     public function processing(Request $request)
     {
+        dd('status'.$request->emp_status.'====' .'user'.$request->id);
         try {
             if ($request->emp_status == 1) {
                 User::where('id',$request->id)->update([

@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers\Admins;
 
-use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class EmployeeReportController extends Controller
 {
@@ -14,7 +15,8 @@ class EmployeeReportController extends Controller
      */
     public function index()
     {
-        return view('employee_reports.index');
+        $users = User::where('emp_status',1)->get();
+        return view('employee_reports.index',compact('users'));
     }
 
     /**

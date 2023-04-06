@@ -49,8 +49,8 @@ function menu(){
                     'permission'=>1
                 ],
                 [
-                    'value'=>'Department',
-                    'url'=>"department",
+                    'value'=>'Leaves Employee',
+                    'url'=>"employee/report",
                     'table'=>6,
                     'permission'=>1
                 ],
@@ -73,7 +73,7 @@ function menu(){
             'child'=>[
                 [
                     'value'=>'Employee Reports',
-                    'url'=>"users",
+                    'url'=>"employee/report",
                     'table'=>2,
                     'permission'=>1
                 ],
@@ -96,6 +96,12 @@ function menu(){
                     'value'=>'Branch',
                     'url'=>"branch",
                     'table'=>8,
+                    'permission'=>1
+                ],
+                [
+                    'value'=>'Department',
+                    'url'=>"department",
+                    'table'=>6,
                     'permission'=>1
                 ],
             ]

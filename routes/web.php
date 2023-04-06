@@ -53,9 +53,8 @@ Route::middleware(['auth:sanctum'])->group(function(){
     // Route::get('/attendance/admin', [AttendanceAdminController::class, 'index']);
     // Route::get('/attendance/employee', [AttendanceEmployeeController::class, 'index']);
     // Route::Resource('/leaves/admin', LeavesAdminController::class);
-    Route::Resource('/leaves/employee', LeavesEmployeeController::class);
-    
-    Route::Resource('employee', EmployeeController::class);
+    Route::get('/leaves/employee', [LeavesEmployeeController::class,'index']);
+    Route::get('/employee/report',[EmployeeReportController::class,'index']);
 
     Route::get('role', [RoleConroller::class,'index']);
     Route::post('role/store', [RoleConroller::class,'store']);
@@ -83,13 +82,11 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('users/update', [UserController::class,'update']);
     Route::post('users/delete', [UserController::class,'destroy']);
     Route::get('users/edit', [UserController::class,'edit']);
-    Route::post('employee/status', [UserController::class,'processing']);
+    Route::post('/employee/status', [UserController::class,'processing']);
 
     // route province
     Route::get('province', [ProvinceController::class,'index']);
     Route::post('district', [ProvinceController::class,'showDistrict']);
     Route::post('commune', [ProvinceController::class,'showCommune']);
-    Route::post('village', [ProvinceController::class,'showVillage']);
-    Route::get('employee-report',[EmployeeReportController::class,'index']);
-    
+    Route::post('village', [ProvinceController::class,'showVillage']);    
 });

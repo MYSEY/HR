@@ -25,7 +25,8 @@
                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Employee Type: activate to sort column ascending" style="width: 108.188px;">Employee Type</th>
                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending" style="width: 191.625px;">Email</th>
                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department: activate to sort column ascending" style="width: 125.15px;">Department</th>
-                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Joining Date: activate to sort column ascending" style="width: 89.6px;">Joining Date</th>
+                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Joining Date: activate to sort column ascending" style="width: 89.6px;">Start Date</th>
+                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Joining Date: activate to sort column ascending" style="width: 89.6px;">End Date</th>
                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="DOB: activate to sort column ascending" style="width: 81.0625px;">DOB</th>
                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Martial Status: activate to sort column ascending" style="width: 100.25px;">Martial Status</th>
                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Gender: activate to sort column ascending" style="width: 52.95px;">Gender</th>
@@ -35,26 +36,33 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr class="odd">
-                                        <td class="sorting_1">
-                                            <h2 class="table-avatar">
-                                                <a href="https://smarthr.dreamguystech.com/laravel/template/public/profile" class="avatar"><img alt="" src="https://smarthr.dreamguystech.com/laravel/template/public/assets/img/profiles/avatar-02.jpg"></a>
-                                                <a href="https://smarthr.dreamguystech.com/laravel/template/public/profile" class="text-primary">John Doe <span>#0001</span></a>
-                                            </h2>
-                                        </td>
-                                        <td>Employee</td>
-                                        <td class="text-info">johndoe@example.com</td>
-                                        <td>Design</td>
-                                        <td>20 Aug 2020</td>
-                                        <td>03 Mar 1992</td>
-                                        <td>Married</td>
-                                        <td>Male</td>
-                                        <td>$20000</td>
-                                        <td>
-                                            1861 Bayonne Ave, Manchester Township, NJ, 08759
-                                        </td>
-                                        <td><button class="btn btn-outline-success btn-sm">tr</button></td>
-                                    </tr>
+                                    @if (count($users)>0)
+                                        @foreach ($users as $item)
+                                            <tr class="odd">
+                                                <td class="sorting_1">
+                                                    <h2 class="table-avatar">
+                                                        <a href="{{asset('/uploads/images/'.$item->profile)}}" class="avatar">
+                                                            <img alt="" src="{{asset('/uploads/images/'.$item->profile)}}">
+                                                        </a>
+                                                        <a href="{{asset('/uploads/images/'.$item->profile)}}" class="text-primary">{{$item->employee_name_en}} <span>#{{$item->number_employee}}</span></a>
+                                                    </h2>
+                                                </td>
+                                                <td>Employee</td>
+                                                <td class="text-info">{{$item->email}}</td>
+                                                <td>{{$item->EmployeeDepartment}}</td>
+                                                <td>{{$item->FDCStartDate}}</td>
+                                                <td>{{$item->FDCEndDate}}</td>
+                                                <td>{{$item->DOB ?? ''}}</td>
+                                                <td>{{$item->marital_status}}</td>
+                                                <td>{{ $item->gender == 1 ? 'Male' : 'Female' }}</td>
+                                                <td>$20000</td>
+                                                <td>
+                                                   {{$item->FullAddressEn}}
+                                                </td>
+                                                <td><button class="btn btn-outline-success btn-sm">{{ $item->emp_status == 1 ? "FDC" : ""}}</button></td>
+                                            </tr>
+                                        @endforeach
+                                    @endif
                                 </tbody>
                             </table>
                         </div>

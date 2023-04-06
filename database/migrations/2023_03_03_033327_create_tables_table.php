@@ -76,6 +76,12 @@ return new class extends Migration
                     'created_at'=>now(),
                     'updated_at'=>now()
                 ],
+                [
+                    'name'=>'Leaves Employee',
+                    'status'=>1,
+                    'created_at'=>now(),
+                    'updated_at'=>now()
+                ],
             ]
         );
     }

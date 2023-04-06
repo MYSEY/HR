@@ -148,7 +148,7 @@
                         </div>
                         <div class="form-group">
                             <label>Leave Reason <span class="text-danger">*</span></label>
-                            <textarea rows="4" class="form-control"></textarea>
+                            <textarea rows="4" id="leave_reason" name="leave_reason" class="form-control"></textarea>
                         </div>
                         <div class="submit-section">
                             <button class="btn btn-primary submit-btn">Submit</button>

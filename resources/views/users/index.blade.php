@@ -899,14 +899,14 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>Province/City</label>
-                                        <select class="form-control" id="e_current_province" value="{{old('city')}}">
+                                        <select class="form-control" id="e_current_province" name="current_province" value="{{old('current_province')}}">
                                         </select>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>District/Khan</label>
-                                        <select class="form-control" id="e_current_district" value="{{old('distric')}}">
+                                        <select class="form-control" id="e_current_district" name="current_district" value="{{old('current_district')}}">
                                         </select>
                                     </div>
                                 </div>
@@ -914,14 +914,14 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label class="no-error-label">Commune/Sangkat</label>
-                                        <select class="form-control no-error-border" id="e_current_commune" name="current_commune" value="{{old('commune')}}">
+                                        <select class="form-control no-error-border" id="e_current_commune" name="current_commune" value="{{old('current_commune')}}">
                                         </select>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label class="no-error-label">Village</label>
-                                        <select class="form-control no-error-border" id="e_current_village" name="current_village" value="{{old('village')}}">
+                                        <select class="form-control no-error-border" id="e_current_village" name="current_village" value="{{old('current_village')}}">
                                         </select>
                                     </div>
                                 </div>
