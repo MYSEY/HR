@@ -133,32 +133,31 @@
                                                             @endif
                                                             @if (Auth::user()->RolePermission == 'Administrator')
                                                                 <div class="dropdown-menu dropdown-menu-right" id="btn-emp-status">
-                                                                    <input type="hidden" id="employee_id" value="{{$item->id}}">
-                                                                    <a class="dropdown-item" data-id="1" href="#">
+                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-id="1" href="#">
                                                                         <i class="fa fa-dot-circle-o text-success"></i> FDC
                                                                     </a>
-                                                                    <a class="dropdown-item" data-id="2" href="#">
+                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-id="2" href="#">
                                                                         <i class="fa fa-dot-circle-o text-warning"></i> UDC
                                                                     </a>
-                                                                    <a class="dropdown-item" data-id="3" href="#">
+                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-id="3" href="#">
                                                                         <i class="fa fa-dot-circle-o text-danger"></i> Resignation
                                                                     </a>
-                                                                    <a class="dropdown-item" data-id="4" href="#">
+                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-id="4" href="#">
                                                                         <i class="fa fa-dot-circle-o text-success"></i> Termination
                                                                     </a>
-                                                                    <a class="dropdown-item" data-id="5" href="#">
+                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-id="5" href="#">
                                                                         <i class="fa fa-dot-circle-o text-danger"></i> Death
                                                                     </a>
-                                                                    <a class="dropdown-item" data-id="6" href="#">
+                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-id="6" href="#">
                                                                         <i class="fa fa-dot-circle-o text-warning"></i> Retired
                                                                     </a>
-                                                                    <a class="dropdown-item" data-id="7" href="#">
+                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-id="7" href="#">
                                                                         <i class="fa fa-dot-circle-o text-danger"></i> Lay off
                                                                     </a>
-                                                                    <a class="dropdown-item" data-id="8" href="#">
+                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-id="8" href="#">
                                                                         <i class="fa fa-dot-circle-o text-danger"></i> Suspension
                                                                     </a>
-                                                                    <a class="dropdown-item" data-id="9" href="#">
+                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-id="9" href="#">
                                                                         <i class="fa fa-dot-circle-o text-danger"></i> Others
                                                                     </a>
                                                                 </div>
@@ -731,7 +730,7 @@
                                     <div class="">
                                         <label class="">Join Date <span class="text-danger">*</span></label>
                                         <div class="cal-icon">
-                                            <input class="form-control datetimepicker @error('date_of_commencement') is-invalid @enderror" id="e_date_of_commencement" name="date_of_commencement" type="text" value="{{old('date_of_commencement')}}">
+                                            <input class="form-control datetimepicker  @error('date_of_commencement') is-invalid @enderror" id="e_date_of_commencement" name="date_of_commencement" type="text" value="{{old('date_of_commencement')}}">
                                         </div>
                                     </div>
                                 </div>
@@ -1336,8 +1335,8 @@
         });
 
         $('body').on('click', '#btn-emp-status a', function() {
+            let id = $(this).attr('data-emp-id');
             let status = $(this).data('id');
-            let id = $("#employee_id").val();
             if (status == 1) {
                 $.confirm({
                     title: 'Employee Status!',
