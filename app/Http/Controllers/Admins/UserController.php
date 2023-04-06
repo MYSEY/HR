@@ -18,6 +18,9 @@ use App\Http\Requests\UserRequest;
 use App\Http\Requests\UserUpdated;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Models\Conmmunes;
+use App\Models\District;
+use App\Models\Villages;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -105,10 +108,6 @@ class UserController extends Controller
      */
     public function edit(Request $request)
     {
-        $_code = '_code';
-        $_name_en = '_name_en';
-        $address = Address::where($_code,'Like',$request->code."__")->orderBy($_name_en)->pluck($_code,$_name_en);
-
         $data = User::where('id',$request->id)->with('role')->first();
         $role = Role::all();
         $position = Position::all();
@@ -116,6 +115,10 @@ class UserController extends Controller
         $optionGender = Option::where('type','gender')->get();
         $branch = Branchs::all();
         $optionIdentityType = Option::where('type','identity_type')->get();
+        $province = Province::all();
+        $district = District::where('province_id',$data->current_province)->orWhere("province_id",$data->permanent_province )->get();
+        $conmmunes = Conmmunes::where('district_id',$data->current_district)->orWhere('district_id',$data->permanent_district)->get();
+        $villages = Villages::where('commune_id',$data->current_commune)->orWhere('commune_id',$data->permanent_commune)->get();
         return response()->json([
             'success'=>$data,
             'role'=>$role,
@@ -124,7 +127,10 @@ class UserController extends Controller
             'optionGender'=>$optionGender,
             'branch'=>$branch,
             'optionIdentityType'=>$optionIdentityType,
-            'address'=>$address
+            'province'=>$province,
+            'district'=>$district,
+            'conmmunes'=>$conmmunes,
+            'villages'=>$villages,
         ]);
     }
 

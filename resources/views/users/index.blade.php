@@ -15,7 +15,7 @@
                 </div>
                 <div class="col-auto float-end ms-auto">
                     @if (Auth::user()->RolePermission == 'Administrator')
-                        <a href="#" class="btn add-btn" data-toggle="modal" data-target="#add_user"><i class="fa fa-plus"></i> Add New</a>
+                        <a href="#" class="btn add-btn" data-toggle="modal" id="add_new"><i class="fa fa-plus"></i> Add New</a>
                     @endif
                 </div>
             </div>
@@ -198,7 +198,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">Add New Employee</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <button type="button" class="close btn-close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
@@ -620,7 +620,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">Edit employee</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <button type="button" class="close btn-close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
@@ -899,16 +899,14 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>Province/City</label>
-                                        <select class="form-control" @change="cityChange" id="e_current_province" name="current_province" v-model="frm.city" :disabled="JSON.stringify(cities).length==2" value="{{old('city')}}">
-                                            <option v-for="(item,text) in cities" :value="text">@{{item}}</option>
+                                        <select class="form-control" id="e_current_province" value="{{old('city')}}">
                                         </select>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>District/Khan</label>
-                                        <select class="form-control" @change="districChange" id="e_current_district" name="current_district" v-model="frm.distric" :disabled="JSON.stringify(districs).length==2" value="{{old('distric')}}">
-                                            <option v-for="(item, text) in districs" :value="text">@{{item}}</option>
+                                        <select class="form-control" id="e_current_district" value="{{old('distric')}}">
                                         </select>
                                     </div>
                                 </div>
@@ -916,16 +914,14 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label class="no-error-label">Commune/Sangkat</label>
-                                        <select class="form-control no-error-border" @change="communeChange" name="current_commune" v-model="frm.commune" :disabled="JSON.stringify(communes).length==2" value="{{old('commune')}}">
-                                            <option v-for="(item, text) in communes" :value="text">@{{item}}</option>
+                                        <select class="form-control no-error-border" id="e_current_commune" name="current_commune" value="{{old('commune')}}">
                                         </select>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label class="no-error-label">Village</label>
-                                        <select class="form-control no-error-border" @change="villageChange" name="current_village" v-model="frm.village" :disabled="JSON.stringify(villages).length==2" value="{{old('village')}}">
-                                            <option v-for="(item, text) in villages" :value="text">@{{item}}</option>
+                                        <select class="form-control no-error-border" id="e_current_village" name="current_village" value="{{old('village')}}">
                                         </select>
                                     </div>
                                 </div>
@@ -956,16 +952,16 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label>Province/City</label>
-                                            <select class="form-control" @change="cityChange" name="permanent_province" v-model="frm.city" :disabled="JSON.stringify(cities).length==2" value="{{old('city')}}">
-                                                <option v-for="(item,text) in cities" :value="text">@{{item}}</option>
+                                            <select class="form-control" name="permanent_province" id="e_permanent_province" value="{{old('city')}}">
+                                                {{-- <option v-for="(item,text) in cities" :value="text">@{{item}}</option> --}}
                                             </select>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label>District/Khan</label>
-                                            <select class="form-control" @change="districChange" name="permanent_district" v-model="frm.distric" :disabled="JSON.stringify(districs).length==2" value="{{old('distric')}}">
-                                                <option v-for="(item, text) in districs" :value="text">@{{item}}</option>
+                                            <select class="form-control" id="e_permanent_district" name="permanent_district" value="{{old('distric')}}">
+                                                {{-- <option v-for="(item, text) in districs" :value="text">@{{item}}</option> --}}
                                             </select>
                                         </div>
                                     </div>
@@ -973,15 +969,15 @@
                                     <div class="col-md-6">
                                         <div class="form-group ">
                                             <label class="no-error-label">Commune/Sangkat</label>
-                                            <select class="form-control no-error-border" @change="communeChange" name="permanent_commune" v-model="frm.commune" :disabled="JSON.stringify(communes).length==2" value="{{old('commune')}}">
-                                                <option v-for="(item, text) in communes" :value="text">@{{item}}</option>
+                                            <select class="form-control no-error-border" id="e_permanent_commune" name="permanent_commune" value="{{old('commune')}}">
+                                                {{-- <option v-for="(item, text) in communes" :value="text">@{{item}}</option> --}}
                                             </select>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label class="no-error-label">Village</label>
-                                            <select class="form-control no-error-border" @change="villageChange" name="permanent_village" v-model="frm.village" :disabled="JSON.stringify(villages).length==2" value="{{old('village')}}">
+                                            <select class="form-control no-error-border" id="e_permanent_village" name="permanent_village" value="{{old('village')}}">
                                                 <option v-for="(item, text) in villages" :value="text">@{{item}}</option>
                                             </select>
                                         </div>
@@ -1049,169 +1045,93 @@
 
 <script>
     $(function(){
-
-        // duptateCurrentAddress
-        var main = new Vue({
-            el: '#duptateCurrentAddress',
-            data() {
-                return {
-                    cities:{},
-                    districs:{},
-                    communes:{},
-                    villages:{},
-                    frm:{},
-                }
-            },
-            mounted() {
-                this.getData();
-            },
-            methods:{
-                cityChange: async function(){
-                    var me = this;
-                    this.hidden = this.frm.city;
-                    await this.getData(this.frm.city).then(function(response){
-                        me.districs = response.data;
-                        me.communes={};
-                        me.villages={};
-                    });
-                },
-                districChange: async function(){
-                    var me = this;
-                    this.hidden = this.frm.distric;
-                    await this.getData(this.frm.distric).then(function(response){
-                        me.communes = response.data;
-                        me.villages={};
-                    });
-                },
-                communeChange: async function(){
-                    var me = this;
-                    this.hidden = this.frm.commune;
-                    await this.getData(this.frm.commune).then(function(response){
-                        me.villages = response.data;
-                    });
-                },
-                villageChange:function(){
-                    this.hidden = this.frm.village;
-                },
-                getData:function(code=''){
-                    if(code){ 
-                        return axios.get('{{route("address")}}?code='+code)
-                    }
-                    else
-                    { 
-                        return axios.get('{{route("address")}}')
-                    }
-                }
-            },
-
-            created: async function(){
-                var me = this;
-                this.getData().then(function(response){
-                    me.cities = response.data;
-                });
-            }
-        });
-
-        // updatedPermanentAddress
-        var main = new Vue({
-            el: '#updatedPermanentAddress',
-            data() {
-                return {
-                    cities:{},
-                    districs:{},
-                    communes:{},
-                    villages:{},
-                    frm:{},
-                }
-            },
-            mounted() {
-                this.getData();
-            },
-            methods:{
-                cityChange: async function(){
-                    var me = this;
-                    this.hidden = this.frm.city;
-                    await this.getData(this.frm.city).then(function(response){
-                        me.districs = response.data;
-                        me.communes={};
-                        me.villages={};
-                    });
-                },
-                districChange: async function(){
-                    var me = this;
-                    this.hidden = this.frm.distric;
-                    await this.getData(this.frm.distric).then(function(response){
-                        me.communes = response.data;
-                        me.villages={};
-                    });
-                },
-                communeChange: async function(){
-                    var me = this;
-                    this.hidden = this.frm.commune;
-                    await this.getData(this.frm.commune).then(function(response){
-                        me.villages = response.data;
-                    });
-                },
-                villageChange:function(){
-                    this.hidden = this.frm.village;
-                },
-                getData:function(code=''){
-                    if(code){ 
-                        return axios.get('{{route("address")}}?code='+code)
-                    }
-                    else
-                    { 
-                        return axios.get('{{route("address")}}')
-                    }
-                }
-            },
-
-            created: async function(){
-                var me = this;
-                this.getData().then(function(response){
-                    me.cities = response.data;
-                });
-            }
-        });
-
         // block Current Address
-        $("#current_province").on("change", function(){
-            let id = $("#current_province").val();
+        $("#current_province, #e_current_province").on("change", function(){
+            let id = $("#current_province").val() ?? $("#current_province").val() ?? $("#e_current_province").val() ?? $("#e_current_province").val();
             let optionSelect = "currentProvince";
-            districtData(id, optionSelect);
+
+            $('#current_district').html('<option selected disabled> --Select --</option>');
+            $('#current_commune').html('<option selected disabled> --Select --</option>');
+            $('#current_village').html('<option selected disabled> --Select --</option>');
+
+            $('#e_current_district').html('<option selected disabled> --Select --</option>');
+            $('#e_current_commune').html('<option selected disabled> --Select --</option>');
+            $('#e_current_village').html('<option selected disabled> --Select --</option>');
+
+            showProvince(id, optionSelect);
         });
 
-        $("#current_district").on("change", function(){
-            let id = $("#current_district").val();
+        $("#current_district, #e_current_district").on("change", function(){
+            let id = $("#current_district").val() ?? $("#current_district").val() ?? $("#e_current_district").val() ?? $("#e_current_district").val();
             let optionSelect = "currentDistrict";
-            districtData(id, optionSelect);
+            $('#current_commune').html('<option selected disabled> --Select --</option>');
+            $('#current_village').html('<option selected disabled> --Select --</option>');
+
+            $('#e_current_commune').html('<option selected disabled> --Select --</option>');
+            $('#e_current_village').html('<option selected disabled> --Select --</option>');
+            showProvince(id, optionSelect);
         });
 
-        $("#current_commune").on("change", function(){
-            let id = $("#current_commune").val();
+        $("#current_commune, #e_current_commune").on("change", function(){
+            let id = $("#current_commune").val() ?? $("#current_commune").val() ?? $("#e_current_commune").val() ?? $("#e_current_commune").val();
             let optionSelect = "currentCommune";
-            districtData(id, optionSelect);
+            $('#current_village').html('<option selected disabled> --Select --</option>');
+            $('#e_current_village').html('<option selected disabled> --Select --</option>');
+            showProvince(id, optionSelect);
         });
 
         // block Permanent Address
-        $("#permanent_province").on("change", function(){
-            let id = $("#permanent_province").val();
+        $("#permanent_province, #e_permanent_province").on("change", function(){
+            let id = $("#permanent_province").val() ?? $("#permanent_province").val() ?? $("#e_permanent_province").val() ?? $("#e_permanent_province").val();
             let optionSelect = "permanentProvince";
-            districtData(id, optionSelect);
+            $('#permanent_district').html('<option selected disabled> --Select --</option>');
+            $('#permanent_commune').html('<option selected disabled> --Select --</option>');
+            $('#permanent_village').html('<option selected disabled> --Select --</option>');
+
+            $('#e_permanent_district').html('<option selected disabled> --Select --</option>');
+            $('#e_permanent_commune').html('<option selected disabled> --Select --</option>');
+            $('#e_permanent_village').html('<option selected disabled> --Select --</option>');
+            showProvince(id, optionSelect);
         });
-        $("#permanent_district").on("change", function(){
-            let id = $("#permanent_district").val();
+        $("#permanent_district, #e_permanent_district").on("change", function(){
+            let id = $("#permanent_district").val() ?? $("#permanent_district").val() ?? $("#e_permanent_district").val() ?? $("#e_permanent_district").val();
             let optionSelect = "permanentDistrict";
-            districtData(id, optionSelect);
+            $('#permanent_commune').html('<option selected disabled> --Select --</option>');
+            $('#permanent_village').html('<option selected disabled> --Select --</option>');
+
+            $('#e_permanent_commune').html('<option selected disabled> --Select --</option>');
+            $('#e_permanent_village').html('<option selected disabled> --Select --</option>');
+            showProvince(id, optionSelect);
         });
-        $("#permanent_commune").on("change", function(){
-            let id = $("#permanent_commune").val();
+        $("#permanent_commune, #e_permanent_commune").on("change", function(){
+            let id = $("#permanent_commune").val() ?? $("#permanent_commune").val() ?? $("#e_permanent_commune").val() ?? $("#e_permanent_commune").val();
             let optionSelect = "permanentCommune";
-            districtData(id, optionSelect);
+            $('#permanent_village').html('<option selected disabled> --Select --</option>');
+            $('#e_permanent_village').html('<option selected disabled> --Select --</option>');
+            showProvince(id, optionSelect);
         });
 
+        $("#add_new").on("click", function (){
+            $('#current_district').html('<option selected disabled> --Select --</option>');
+            $('#current_commune').html('<option selected disabled> --Select --</option>');
+            $('#current_village').html('<option selected disabled> --Select --</option>');
+            $('#add_user').modal('show');
+        });
+        $(".btn-close").on("click", function(){
+            $("#add_user").modal('hide')
+            $("#editUserModal").modal('hide')
+        });
 
         $('.userUpdate').on('click',function(){
+            $('#e_current_province').html('<option selected disabled> --Select --</option>');
+            $('#e_current_district').html('<option selected disabled> --Select --</option>');
+            $('#e_current_commune').html('<option selected disabled> --Select --</option>');
+            $('#e_current_village').html('<option selected disabled> --Select --</option>');
+
+            $('#e_permanent_province').html('<option selected disabled> --Select --</option>');
+            $('#e_permanent_district').html('<option selected disabled> --Select --</option>');
+            $('#e_permanent_commune').html('<option selected disabled> --Select --</option>');
+            $('#e_permanent_village').html('<option selected disabled> --Select --</option>');
             let id = $(this).data("id");
             $.ajax({
                 type: "GET",
@@ -1284,16 +1204,87 @@
                                 }));
                             });
                         }
-                        // console.log(response.address);
-                        // if (response.address != '') {
-                        //     $.each(response.address, function(text, item) {
-                        //         $('#e_current_province').append($('<option>', {
-                        //             value: item,
-                        //             text: text,
-                        //             selected: item == response.success.current_province
-                        //         })); 
-                        //     });
-                        // }
+                        
+                        if (response.province != '') {
+                            $.each(response.province, function(i,item) {
+                                let option = {
+                                    value: item.code,
+                                    text: item.name_en,
+                                }
+                                $('#e_current_province').append($('<option>', {...option, selected: item.code == response.success.current_province})); 
+                                $('#e_permanent_province').append($('<option>', {...option, selected: item.code == response.success.permanent_province})); 
+                            });
+                        }
+
+                        if (response.district != '') {
+                            $.each(response.district, function(i,item) {
+                                if (item.province_id == response.success.current_province) {
+                                    let cur_option = {}
+                                    cur_option= {
+                                        value:item.code,
+                                        text: item.name_en,
+                                        selected: item.code == response.success.current_district
+                                    };
+                                    $('#e_current_district').append($('<option>', cur_option));
+                                }
+                                if (item.province_id == response.success.permanent_province) {
+                                    let per_option = {}
+                                    per_option= {
+                                        value:item.code,
+                                        text: item.name_en,
+                                        selected: item.code == response.success.permanent_district
+                                    };
+                                    $('#e_permanent_district').append($('<option>', per_option));
+                                } 
+                            });
+                        }
+
+                        if (response.conmmunes != '') {
+                            $.each(response.conmmunes, function(i,item) {
+                                if (item.district_id == response.success.current_district) {
+                                    let cur_option = {}
+                                    cur_option= {
+                                        value:item.code,
+                                        text: item.name_en,
+                                        selected: item.code == response.success.current_commune
+                                    };
+                                    $('#e_current_commune').append($('<option>', cur_option));
+                                }
+                                if (item.district_id == response.success.permanent_district) {
+                                    let per_option = {}
+                                    per_option= {
+                                        value:item.code,
+                                        text: item.name_en,
+                                        selected: item.code == response.success.permanent_commune
+                                    };
+                                    $('#e_permanent_commune').append($('<option>', per_option));
+                                }
+                            });
+                        }
+
+                        if (response.villages != '') {
+                            $.each(response.villages, function(i,item) {
+                                if (item.commune_id == response.success.current_commune) {
+                                    let cur_option = {}
+                                    cur_option= {
+                                        value:item.code,
+                                        text: item.name_en,
+                                        selected: item.code == response.success.current_village
+                                    };
+                                    $('#e_current_village').append($('<option>', cur_option));
+                                }
+                                if (item.commune_id == response.success.permanent_commune) {
+                                    let per_option = {}
+                                    per_option= {
+                                        value:item.code,
+                                        text: item.name_en,
+                                        selected: item.code == response.success.permanent_village
+                                    };
+                                    $('#e_permanent_village').append($('<option>', per_option));
+                                }
+                            });
+                        }
+
                         // if (response.address != '') {
                         //     $.each(response.address, function(text, item) {
                         //         $('#e_current_district').append($('<option>', {
@@ -1551,7 +1542,7 @@
         });
     });
 
-    function districtData(id, optionSelect){
+    function showProvince(id, optionSelect){
         let url = "";
         let data = {
             "_token": "{{ csrf_token() }}",
@@ -1561,36 +1552,24 @@
         if (optionSelect == "currentProvince") {
             url = "{{url('district')}}"
             data.province_id = id
-            $('#current_district').html('<option selected disabled> --Select --</option>');
-            $('#current_commune').html('<option selected disabled> --Select --</option>');
-            $('#current_village').html('<option selected disabled> --Select --</option>');
         }else if (optionSelect == "currentDistrict") {
             url = "{{url('commune')}}"
             data.district_id = id
-            $('#current_commune').html('<option selected disabled> --Select --</option>');
-            $('#current_village').html('<option selected disabled> --Select --</option>');
         }else if (optionSelect == "currentCommune") {
             url = "{{url('village')}}"
             data.commune_id = id
-            $('#current_village').html('<option selected disabled> --Select --</option>');
         };
 
         // block Permanent Address
         if (optionSelect == "permanentProvince") {
             url = "{{url('district')}}"
             data.province_id = id
-            $('#permanent_district').html('<option selected disabled> --Select --</option>');
-            $('#permanent_commune').html('<option selected disabled> --Select --</option>');
-            $('#permanent_village').html('<option selected disabled> --Select --</option>');
         }else if (optionSelect == "permanentDistrict") {
             url = "{{url('commune')}}"
             data.district_id = id
-            $('#permanent_commune').html('<option selected disabled> --Select --</option>');
-            $('#permanent_village').html('<option selected disabled> --Select --</option>');
         }else if (optionSelect == "permanentCommune") {
             url = "{{url('village')}}"
             data.commune_id = id
-            $('#permanent_village').html('<option selected disabled> --Select --</option>');
         }
 
         $.ajax({
@@ -1609,16 +1588,22 @@
                         }
                         if (optionSelect == "currentProvince") {
                             $('#current_district').append($('<option>', option));
+                            $('#e_current_district').append($('<option>', option));
                         }else if(optionSelect == "currentDistrict"){
                             $('#current_commune').append($('<option>', option));
+                            $('#e_current_commune').append($('<option>', option));
                         }else if (optionSelect == "currentCommune") {
                             $('#current_village').append($('<option>', option));
+                            $('#e_current_village').append($('<option>', option));
                         }else if (optionSelect == "permanentProvince") {
                             $('#permanent_district').append($('<option>', option));
+                            $('#e_permanent_district').append($('<option>', option));
                         }else if (optionSelect == "permanentDistrict") {
                             $('#permanent_commune').append($('<option>', option));
+                            $('#e_permanent_commune').append($('<option>', option));
                         }else if (optionSelect == "permanentCommune") {
                             $('#permanent_village').append($('<option>', option));
+                            $('#e_permanent_village').append($('<option>', option));
                         }
                     
                     });
