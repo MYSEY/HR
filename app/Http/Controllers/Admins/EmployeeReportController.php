@@ -13,75 +13,29 @@ class EmployeeReportController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+
+    public function employeeProbation(){
+        $users = User::where('emp_status','Probation')->get();
+        return view('employee_reports.probation',compact('users'));
+    }
+    public function employeeFdc()
     {
         $users = User::where('emp_status',1)->get();
-        return view('employee_reports.index',compact('users'));
+        return view('employee_reports.fdc',compact('users'));
     }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function employeeUdc()
     {
-        //
+        $users = User::where('emp_status',2)->get();
+        return view('employee_reports.udc',compact('users'));
     }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function employeeResignation()
     {
-        //
+        $users = User::where('emp_status',3)->get();
+        return view('employee_reports.resignation',compact('users'));
     }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
+    public function employeeTermination()
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        $users = User::where('emp_status',4)->get();
+        return view('employee_reports.termination',compact('users'));
     }
 }

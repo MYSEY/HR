@@ -251,6 +251,9 @@ class User extends Authenticatable
     public function getFDCEndDateAttribute(){
         return Carbon::parse($this->fdc_end)->format('d-M-Y');
     }
+    public function getResignDatesAttribute(){
+        return Carbon::parse($this->resign_date)->format('d-M-Y');
+    }
     public function getDOBAttribute(){
         return Carbon::parse($this->date_of_birth)->format('d-M-Y');
     }

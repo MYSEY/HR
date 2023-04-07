@@ -54,7 +54,11 @@ Route::middleware(['auth:sanctum'])->group(function(){
     // Route::get('/attendance/employee', [AttendanceEmployeeController::class, 'index']);
     // Route::Resource('/leaves/admin', LeavesAdminController::class);
     Route::get('/leaves/employee', [LeavesEmployeeController::class,'index']);
-    Route::get('/employee/report',[EmployeeReportController::class,'index']);
+    Route::get('/employee/probation',[EmployeeReportController::class,'employeeProbation']);
+    Route::get('/employee/fdc',[EmployeeReportController::class,'employeeFdc']);
+    Route::get('/employee/udc',[EmployeeReportController::class,'employeeUdc']);
+    Route::get('/employee/resignation',[EmployeeReportController::class,'employeeResignation']);
+    Route::get('/employee/termination',[EmployeeReportController::class,'employeeTermination']);
 
     Route::get('role', [RoleConroller::class,'index']);
     Route::post('role/store', [RoleConroller::class,'store']);

@@ -66,26 +66,9 @@
                     <span></span>
                 </span>
             </a>
-
-            <div class="page-title-box">
-                <h3>CAMMA</h3>
-            </div>
-
             <a id="mobile_btn" class="mobile_btn" href=""><i class="fa fa-bars"></i></a>
 
             <ul class="nav user-menu">
-                {{-- <li class="nav-item">
-                    <div class="top-nav-search">
-                        <a href="javascript:void(0);" class="responsive-search">
-                            <i class="fa fa-search"></i>
-                        </a>
-                        <form action="">
-                            <input class="form-control" type="text" placeholder="Search here">
-                            <button class="btn" type="submit"><i class="fa fa-search"></i></button>
-                        </form>
-                    </div>
-                </li> --}}
-
 
                 <li class="nav-item dropdown has-arrow flag-nav">
                     <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="" role="button">
@@ -99,15 +82,6 @@
                         <a href="javascript:void(0);" class="dropdown-item">
                             <img src="{{asset('/admin/img/flag-of-cambodia-logo.png')}}" alt="" height="16"> Khmer
                         </a>
-                        {{-- <a href="javascript:void(0);" class="dropdown-item">
-                            <img src="{{asset('/admin/img/fr.png')}}" alt="" height="16"> French
-                        </a>
-                        <a href="javascript:void(0);" class="dropdown-item">
-                            <img src="{{asset('/admin/img/es.png')}}" alt="" height="16"> Spanish
-                        </a>
-                        <a href="javascript:void(0);" class="dropdown-item">
-                            <img src="{{asset('/admin/img/de.png')}}" alt="" height="16"> German
-                        </a> --}}
                     </div>
                 </li>
 
