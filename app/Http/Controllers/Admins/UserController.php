@@ -80,11 +80,11 @@ class UserController extends Controller
         try{
             $this->employeeRepo->createUsers($request);
             DB::commit();
-            Toastr::success('Employee create successfully :)','Success');
+            Toastr::success('Employee create successfully.','Success');
             return redirect()->back();
         }catch(\Exception $e){
             DB::rollback();
-            Toastr::error('Employee create fail :)','Error');
+            Toastr::error('Employee create fail','Error');
             return redirect()->back();
         }
     }
@@ -146,11 +146,11 @@ class UserController extends Controller
         try{
             $this->employeeRepo->updatedUsers($request);
             DB::commit();
-            Toastr::success('Updated account successfully :)','Success');
+            Toastr::success('Updated account successfully.','Success');
             return redirect()->back();
         }catch(\Exception $e){
             DB::rollback();
-            Toastr::error('User update fail :)','Error');
+            Toastr::error('User update fail','Error');
             return redirect()->back();
         }
     }
@@ -168,7 +168,7 @@ class UserController extends Controller
             if ($request->profile) {
                 unlink('uploads/images/'.$request->profile);
             }
-            Toastr::success('User deleted successfully :)','Success');
+            Toastr::success('User deleted successfully.','Success');
             return redirect()->back();
         }catch(\Exception $e){
             DB::rollback();

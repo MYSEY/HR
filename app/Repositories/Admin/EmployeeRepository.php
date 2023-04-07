@@ -2,12 +2,13 @@
 
 namespace App\Repositories\Admin;
 
+use Carbon\Carbon;
 use App\Models\User;
+use Dflydev\DotAccessData\Data;
 use App\Repositories\BaseRepository;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Traits\UploadFiles\UploadFIle;
-use Dflydev\DotAccessData\Data;
 
 class EmployeeRepository extends BaseRepository
 {
@@ -45,6 +46,8 @@ class EmployeeRepository extends BaseRepository
     }
     public function createUsers($request){
         $data = $request->all();
+        $newDateTime = Carbon::parse($data['date_of_commencement'])->addMonths(3);
+        $data['fdc_date'] = $newDateTime;
         $data['password']   = Hash::make($request->password);
         return User::create($data);
     }
