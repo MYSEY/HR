@@ -50,7 +50,7 @@ function menu(){
                 ],
                 [
                     'value'=>'Leaves Employee',
-                    'url'=>"employee/report",
+                    'url'=>"leaves/employee",
                     'table'=>6,
                     'permission'=>1
                 ],

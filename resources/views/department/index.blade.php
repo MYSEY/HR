@@ -80,11 +80,11 @@
                             @csrf
                             <div class="form-group">
                                 <label>Name(KH) <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control @error('name_khmer') is-invalid @enderror" id="name_khmer" name="name_khmer">
+                                <input type="text" class="form-control @error('name_khmer') is-invalid @enderror" id="name_khmer" name="name_khmer" required>
                             </div>
                             <div class="form-group">
                                 <label>Name(EN) <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control @error('name_english') is-invalid @enderror" id="name_english" name="name_english">
+                                <input type="text" class="form-control @error('name_english') is-invalid @enderror" id="name_english" name="name_english" required>
                             </div>
                             <div class="submit-section">
                                 <button type="submit" class="btn btn-primary submit-btn">Submit</button>
@@ -109,7 +109,7 @@
                             @csrf
                             <input type="hidden" name="id" class="e_id" value="">
                             <div class="form-group">
-                                <label>Name(kh) <span class="text-danger">*</span></label>
+                                <label>Name(KH) <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control @error('name_khmer') is-invalid @enderror" id="e_name_khmer" name="name_khmer">
                             </div>
                             <div class="form-group">

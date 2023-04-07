@@ -36,7 +36,7 @@ class DepartmentController extends Controller
             $data['created_by']    = Auth::user()->id;
             $data['head_department']    = Auth::user()->id;
             Department::create($data);
-            Toastr::success('Department created successfully! :)','Success');
+            Toastr::success('Department created successfully.','Success');
             return redirect()->back();
             DB::commit();
         } catch (\Throwable $exp) {
@@ -82,11 +82,11 @@ class DepartmentController extends Controller
                 'name_english'  => $request->name_english,
                 'updated_by'    => Auth::user()->id 
             ]);
-            Toastr::success('Department Updated successfully :)','Success');
+            Toastr::success('Department Updated successfully.','Success');
             return redirect()->back();
         }catch(\Exception $e){
             DB::rollback();
-            Toastr::error('Department Updated fail :)','Error');
+            Toastr::error('Department Updated fail.','Error');
             return redirect()->back();
         }
     }
@@ -101,11 +101,11 @@ class DepartmentController extends Controller
     {
         try{
             Department::destroy($request->id);
-            Toastr::success('Department deleted successfully :)','Success');
+            Toastr::success('Department deleted successfully.','Success');
             return redirect()->back();
         }catch(\Exception $e){
             DB::rollback();
-            Toastr::error('Department delete fail :)','Error');
+            Toastr::error('Department delete fail.','Error');
             return redirect()->back();
         }
     }

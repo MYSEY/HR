@@ -45,11 +45,12 @@ class PositionController extends Controller
             $data = $request->all();
             $data['created_by']    = Auth::user()->id;
             Position::create($data);
-            Toastr::success('Position created successfully! :)','Success');
+            Toastr::success('Position created successfully.','Success');
             return redirect()->back();
             DB::commit();
         } catch (\Throwable $exp) {
-            DB::rollBack();
+            DB::rollback();
+            Toastr::error('Position created fail.','Error');
         }
     }
 
@@ -91,11 +92,11 @@ class PositionController extends Controller
                 'name_english'  => $request->name_english,
                 'updated_by'    => Auth::user()->id 
             ]);
-            Toastr::success('Position Updated successfully :)','Success');
+            Toastr::success('Position Updated successfully.','Success');
             return redirect()->back();
         }catch(\Exception $e){
             DB::rollback();
-            Toastr::error('Position Updated fail :)','Error');
+            Toastr::error('Position Updated fail.','Error');
             return redirect()->back();
         }
     }
@@ -110,11 +111,11 @@ class PositionController extends Controller
     {
         try{
             Position::destroy($request->id);
-            Toastr::success('Position deleted successfully :)','Success');
+            Toastr::success('Position deleted successfully.','Success');
             return redirect()->back();
         }catch(\Exception $e){
             DB::rollback();
-            Toastr::error('Position delete fail :)','Error');
+            Toastr::error('Position delete fail.','Error');
             return redirect()->back();
         }
     }

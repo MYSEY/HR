@@ -78,15 +78,13 @@
                     <div class="modal-body">
                         <form action="{{url('branch/store')}}" method="POST" enctype="multipart/form-data">
                             @csrf
-                            <div class="">
+                            <div class="form-group">
                                 <label>Name (KH) <span class="text-danger">*</span></label>
-                                <input class="form-control @error('branch_name_kh') is-invalid @enderror" type="text" name="branch_name_kh">
-                                <p class="text-danger">{!! $errors->first('branch_name_kh') !!}</p>
+                                <input class="form-control @error('branch_name_kh') is-invalid @enderror" type="text" name="branch_name_kh" required>
                             </div>
-                            <div class="">
+                            <div class="form-group">
                                 <label>Name (EN) <span class="text-danger">*</span></label>
-                                <input class="form-control @error('branch_name_en') is-invalid @enderror" type="text" name="branch_name_en">
-                                <p class="text-danger">{!! $errors->first('branch_name_en') !!}</p>
+                                <input class="form-control @error('branch_name_en') is-invalid @enderror" type="text" name="branch_name_en" required>
                             </div>
                             <div class="submit-section">
                                 <button type="submit" class="btn btn-primary submit-btn">Submit</button>
@@ -111,15 +109,13 @@
                         <form action="{{url('branch/update')}}" method="POST" enctype="multipart/form-data">
                             @csrf
                             <input type="hidden" name="id" class="e_id" value="">
-                            <div class="">
+                            <div class="form-group">
                                 <label>Name (KH) <span class="text-danger">*</span></label>
                                 <input class="form-control @error('branch_name_kh') is-invalid @enderror" type="text" id="e_branch_name_kh" name="branch_name_kh">
-                                <p class="text-danger">{!! $errors->first('branch_name_kh') !!}</p>
                             </div>
-                            <div class="">
+                            <div class="form-group">
                                 <label>Name (EN) <span class="text-danger">*</span></label>
                                 <input class="form-control @error('branch_name_en') is-invalid @enderror" type="text" id="e_branch_name_en" name="branch_name_en">
-                                <p class="text-danger">{!! $errors->first('branch_name_en') !!}</p>
                             </div>
                             <div class="submit-section">
                                 <button type="submit" class="btn btn-primary submit-btn">Submit</button>

@@ -79,15 +79,13 @@
                     <div class="modal-body">
                         <form action="{{url('position/store')}}" method="POST" enctype="multipart/form-data">
                             @csrf
-                            <div class="">
+                            <div class="form-group">
                                 <label>Name (KH) <span class="text-danger">*</span></label>
-                                <input class="form-control @error('name_khmer') is-invalid @enderror" type="text" name="name_khmer">
-                                <p class="text-danger">{!! $errors->first('name_khmer') !!}</p>
+                                <input class="form-control @error('name_khmer') is-invalid @enderror" type="text" name="name_khmer" required>
                             </div>
-                            <div class="">
+                            <div class="form-group">
                                 <label>Name (EN) <span class="text-danger">*</span></label>
-                                <input class="form-control @error('name_english') is-invalid @enderror" type="text" name="name_english">
-                                <p class="text-danger">{!! $errors->first('name_english') !!}</p>
+                                <input class="form-control @error('name_english') is-invalid @enderror" type="text" name="name_english" required>
                             </div>
                             <div class="submit-section">
                                 <button type="submit" class="btn btn-primary submit-btn">Submit</button>
@@ -111,15 +109,13 @@
                         <form action="{{url('position/update')}}" method="POST" enctype="multipart/form-data">
                             @csrf
                             <input type="hidden" name="id" class="e_id" value="">
-                            <div class="">
+                            <div class="form-group">
                                 <label>Name (KH) <span class="text-danger">*</span></label>
                                 <input class="form-control @error('name_khmer') is-invalid @enderror" type="text" id="e_name_khmer" name="name_khmer">
-                                <p class="text-danger">{!! $errors->first('name_khmer') !!}</p>
                             </div>
-                            <div class="">
+                            <div class="form-group">
                                 <label>Name (EN) <span class="text-danger">*</span></label>
                                 <input class="form-control @error('name_english') is-invalid @enderror" type="text" id="e_name_english" name="name_english">
-                                <p class="text-danger">{!! $errors->first('name_english') !!}</p>
                             </div>
                             <div class="submit-section">
                                 <button type="submit" class="btn btn-primary submit-btn">Submit</button>

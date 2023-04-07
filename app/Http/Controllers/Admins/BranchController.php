@@ -35,11 +35,12 @@ class BranchController extends Controller
             $data = $request->all();
             $data['created_by']    = Auth::user()->id;
             Branchs::create($data);
-            Toastr::success('Branch created successfully! :)','Success');
+            Toastr::success('Branch created successfully.','Success');
             return redirect()->back();
             DB::commit();
         } catch (\Throwable $exp) {
-            DB::rollBack();
+            Toastr::error('Branch created fail.','Error');
+            return redirect()->back();
         }
     }
 
@@ -81,11 +82,11 @@ class BranchController extends Controller
                 'branch_name_en'  => $request->branch_name_en,
                 'updated_by'    => Auth::user()->id 
             ]);
-            Toastr::success('Branch Updated successfully :)','Success');
+            Toastr::success('Branch updated successfully.','Success');
             return redirect()->back();
         }catch(\Exception $e){
             DB::rollback();
-            Toastr::error('Department Updated fail :)','Error');
+            Toastr::error('Branch updated fail.','Error');
             return redirect()->back();
         }
     }
@@ -100,11 +101,11 @@ class BranchController extends Controller
     {
         try{
             Branchs::destroy($request->id);
-            Toastr::success('Branch deleted successfully :)','Success');
+            Toastr::success('Branch deleted successfully.','Success');
             return redirect()->back();
         }catch(\Exception $e){
             DB::rollback();
-            Toastr::error('Branch delete fail :)','Error');
+            Toastr::error('Branch delete fail.','Error');
             return redirect()->back();
         }
     }
