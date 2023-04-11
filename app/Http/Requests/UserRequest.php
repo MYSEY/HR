@@ -30,12 +30,13 @@ class UserRequest extends FormRequest
             'personal_phone_number' => 'required|min:9|max:15',
             'email'     => 'required|string',
             'role_id' => 'required|string',
-            'password' => [
-                'sometimes',
-                'nullable',
-                'string',
-                'confirmed'
-            ]
+            'password' => 'required|confirmed|min:6',
+            // 'password' => [
+            //     'sometimes',
+            //     'nullable',
+            //     'string',
+            //     'confirmed'
+            // ]
         ];
     }
 

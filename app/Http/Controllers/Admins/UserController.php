@@ -172,7 +172,7 @@ class UserController extends Controller
             return redirect()->back();
         }catch(\Exception $e){
             DB::rollback();
-            Toastr::error('User delete fail :)','Error');
+            Toastr::error('User delete fail','Error');
             return redirect()->back();
         }
     }
@@ -211,6 +211,26 @@ class UserController extends Controller
         } catch (\Exception $exp) {
             DB::rollBack();
             return response()->json(['message' => $exp->getMessage()], 500);
+        }
+    }
+
+
+    public function changePassword(Request $request){
+        $hashedPassword = Auth::user()->password;
+        if (Hash::check($request->current_password , $hashedPassword)) {
+            if ($request->new_password == $request->password_confirmation) {
+                User::where('id',$request->id)->update([
+                    'password'  =>  Hash::make($request->new_password)
+                ]);
+                Toastr::success('password updated successfully','Success');
+                return redirect()->back();
+            }else{
+                Toastr::error('new password can not be the old password!','Error');
+                return redirect()->back();
+            } 
+        }else{
+            Toastr::error('current password doesnt matched.','Error');
+            return redirect()->back();
         }
     }
 }

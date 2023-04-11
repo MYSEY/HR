@@ -81,6 +81,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('/branch/delete', [BranchController::class,'destroy']);
     Route::post('/branch/update', [BranchController::class,'update']);
 
+    // users
     Route::get('users', [UserController::class,'index']);
     Route::post('users/search', [UserController::class,'index']);
     Route::post('users/store', [UserController::class,'store']);
@@ -88,6 +89,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('users/delete', [UserController::class,'destroy']);
     Route::get('users/edit', [UserController::class,'edit']);
     Route::post('/employee/status', [UserController::class,'processing']);
+    Route::post('change-password', [UserController::class, 'changePassword']);
 
     // route province
     Route::get('province', [ProvinceController::class,'index']);

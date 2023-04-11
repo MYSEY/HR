@@ -26,46 +26,48 @@
                 </div>
             </div>
         </div>
-        <form action="{{url('users/search')}}" method="POST">
-            @csrf
-            <div class="row filter-row"> 
-                <div class="col-sm-6 col-md-3"> 
-                    <div class="form-group">
-                        <input type="text" class="form-control" name="employee_id" id="number_employee" placeholder="Employee ID" value="{{old('number_employee')}}">
+        @if (Auth::user()->RolePermission == 'Administrator')
+            <form action="{{url('users/search')}}" method="POST">
+                @csrf
+                <div class="row filter-row"> 
+                    <div class="col-sm-6 col-md-3"> 
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="employee_id" id="number_employee" placeholder="Employee ID" value="{{old('number_employee')}}">
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-3"> 
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="employee_name" id="employee_name" placeholder="Employee name" value="{{old('employee_name')}}">
+                        </div>
+                    </div>
+                    {{-- <div class="col-sm-6 col-md-3"> 
+                        <div class="form-group form-focus select-focus focused">
+                            <select class="select form-control floating select2-hidden-accessible" data-select2-id="select2-data-1-cyfe" name="position_id" tabindex="-1" aria-hidden="true">
+                                <option value="" data-select2-id="select2-data-3-c0n2">Select Position</option>
+                                @foreach ($position as $positions )
+                                    <option value="{{ $positions->id }}">{{ $positions->name_khmer }}</option>
+                                @endforeach
+                            </select>
+                            <label class="focus-label">Position</label>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-3">
+                        <div class="form-group form-focus select-focus">
+                            <select class="select form-control" id="department_id" data-select2-id="select2-data-2-c0n2" name="department_id">
+                                <option value="" data-select2-id="select2-data-2-c0n2">Selected department</option>
+                                @foreach ($department as $item)
+                                    <option value="{{$item->id}}">{{$item->name_khmer}}</option>
+                                @endforeach
+                            </select>
+                            <label class="focus-label">Department</label>
+                        </div>
+                    </div> --}}
+                    <div class="col-sm-6 col-md-2">
+                        <button type="submit" class="btn btn-success w-100" data-dismiss="modal">Search</button>
                     </div>
                 </div>
-                <div class="col-sm-6 col-md-3"> 
-                    <div class="form-group">
-                        <input type="text" class="form-control" name="employee_name" id="employee_name" placeholder="Employee name" value="{{old('employee_name')}}">
-                    </div>
-                </div>
-                {{-- <div class="col-sm-6 col-md-3"> 
-                    <div class="form-group form-focus select-focus focused">
-                        <select class="select form-control floating select2-hidden-accessible" data-select2-id="select2-data-1-cyfe" name="position_id" tabindex="-1" aria-hidden="true">
-                            <option value="" data-select2-id="select2-data-3-c0n2">Select Position</option>
-                            @foreach ($position as $positions )
-                                <option value="{{ $positions->id }}">{{ $positions->name_khmer }}</option>
-                            @endforeach
-                        </select>
-                        <label class="focus-label">Position</label>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-md-3">
-                    <div class="form-group form-focus select-focus">
-                        <select class="select form-control" id="department_id" data-select2-id="select2-data-2-c0n2" name="department_id">
-                            <option value="" data-select2-id="select2-data-2-c0n2">Selected department</option>
-                            @foreach ($department as $item)
-                                <option value="{{$item->id}}">{{$item->name_khmer}}</option>
-                            @endforeach
-                        </select>
-                        <label class="focus-label">Department</label>
-                    </div>
-                </div> --}}
-                <div class="col-sm-6 col-md-2">
-                    <button type="submit" class="btn btn-success w-100" data-dismiss="modal">Search</button>
-                </div>
-            </div>
-        </form>
+            </form>
+        @endif
        
         {!! Toastr::message() !!}
         <div class="row">
@@ -90,6 +92,7 @@
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending" style="width: 218.762px;">Branch</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Mobile: activate to sort column ascending" style="width: 83.3625px;">Mobile</th>
                                             <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending" style="width: 87.1125px;">Join Date</th>
+                                            <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending" style="width: 87.1125px;">Pass Date</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Role: activate to sort column ascending" style="width: 135.163px;">Status</th>
                                             <th class="text-end no-sort sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Action: activate to sort column ascending" style="width: 50.825px;">Action</th>
                                         </tr>
@@ -102,11 +105,11 @@
                                                     <td class="sorting_1">
                                                         <h2 class="table-avatar">
                                                             @if ($item->profile != null)
-                                                                <a href="{{route('employee.profile',$item->id)}}"  class="avatar">
+                                                                <a href="{{asset('/uploads/images/'.$item->profile)}}"  class="avatar">
                                                                     <img alt="" src="{{asset('/uploads/images/'.$item->profile)}}">
                                                                 </a>
                                                             @else
-                                                                <a href="{{route('employee.profile',$item->id)}}">
+                                                                <a href="{{asset('admin/img/defuals/default-user-icon.png')}}">
                                                                     <img alt="" src="{{asset('admin/img/defuals/default-user-icon.png')}}">
                                                                 </a>
                                                             @endif
@@ -125,6 +128,7 @@
                                                     <td>{{$item->EmployeeBrnach}}</td>
                                                     <td>{{$item->personal_phone_number}}</td>
                                                     <td>{{$item->joinOfDate}}</td>
+                                                    <td>{{$item->PassDate}}</td>
                                                     <td>
                                                         <div class="dropdown action-label">
                                                             @if ($item->emp_status=='Probation')
@@ -180,31 +184,31 @@
                                                             @endif
                                                             @if (Auth::user()->RolePermission == 'Administrator')
                                                                 <div class="dropdown-menu dropdown-menu-right" id="btn-emp-status">
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-id="1" href="#">
+                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-id="1" href="#">
                                                                         <i class="fa fa-dot-circle-o text-success"></i> FDC
                                                                     </a>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-id="2" href="#">
+                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-id="2" href="#">
                                                                         <i class="fa fa-dot-circle-o text-warning"></i> UDC
                                                                     </a>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-id="3" href="#">
+                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-id="3" href="#">
                                                                         <i class="fa fa-dot-circle-o text-danger"></i> Resignation
                                                                     </a>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-id="4" href="#">
+                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-id="4" href="#">
                                                                         <i class="fa fa-dot-circle-o text-success"></i> Termination
                                                                     </a>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-id="5" href="#">
+                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-id="5" href="#">
                                                                         <i class="fa fa-dot-circle-o text-danger"></i> Death
                                                                     </a>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-id="6" href="#">
+                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-id="6" href="#">
                                                                         <i class="fa fa-dot-circle-o text-warning"></i> Retired
                                                                     </a>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-id="7" href="#">
+                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-id="7" href="#">
                                                                         <i class="fa fa-dot-circle-o text-danger"></i> Lay off
                                                                     </a>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-id="8" href="#">
+                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-id="8" href="#">
                                                                         <i class="fa fa-dot-circle-o text-danger"></i> Suspension
                                                                     </a>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-id="9" href="#">
+                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-id="9" href="#">
                                                                         <i class="fa fa-dot-circle-o text-danger"></i> Others
                                                                     </a>
                                                                 </div>
@@ -564,6 +568,7 @@
         $('body').on('click', '#btn-emp-status a', function() {
             let id = $(this).attr('data-emp-id');
             let status = $(this).data('id');
+            let start_date = $(this).attr('data-start-date');
             if (status == 1) {
                 $.confirm({
                     title: 'Employee Status!',
@@ -574,7 +579,7 @@
                             '<div class="form-group">'+
                                 '<div class="form-group">'+
                                     '<label>Start date <span class="text-danger">*</span></label>'+
-                                    '<input type="date" class="form-control start_date" id="" name="" value="">'+
+                                    '<input type="date" class="form-control start_date" value="'+start_date+'">'+
                                     '<input type="hidden" class="form-control emp_status" id="" name="" value="'+status+'">'+
                                     '<input type="hidden" class="form-control id" id="" name="" value="'+id+'">'+
                                 '</div>'+

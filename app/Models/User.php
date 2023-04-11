@@ -245,6 +245,9 @@ class User extends Authenticatable
     public function getjoinOfDateAttribute(){
         return Carbon::parse($this->date_of_commencement)->format('d-M-Y');
     }
+    public function getPassDateAttribute(){
+        return Carbon::parse($this->fdc_date)->format('d-M-Y');
+    }
     public function getFDCStartDateAttribute(){
         return Carbon::parse($this->fdc_date)->format('d-M-Y');
     }

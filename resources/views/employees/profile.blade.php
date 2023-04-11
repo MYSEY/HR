@@ -37,18 +37,21 @@
                                             <small class="text-muted">{{ $data->EmployeePosition }}</small>
                                             <div class="staff-id">Employee ID : {{ $data->number_employee }}</div>
                                             <div class="small doj text-muted">Date of Join : {{ $data->joinOfDate }}</div>
+                                            <div class="staff-msg">
+                                                <a href="#" class="btn btn-custom" data-bs-toggle="modal" data-bs-target="#ChangePassword">Change Password</a>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-md-7">
                                         <ul class="personal-info">
                                             <li>
                                                 <div class="title">Phone:</div>
-                                                <div class="text"><a href="">{{ $data->personal_phone_number }}</a>
+                                                <div class="text"><a href="#">{{ $data->personal_phone_number }}</a>
                                                 </div>
                                             </li>
                                             <li>
                                                 <div class="title">Email:</div>
-                                                <div class="text"><a href="">{{ $data->email }}</a></div>
+                                                <div class="text"><a href="#">{{ $data->email }}</a></div>
                                             </li>
                                             <li>
                                                 <div class="title">Birthday:</div>
@@ -82,7 +85,7 @@
                         <li class="nav-item" role="presentation"><a href="#promote" data-bs-toggle="tab" class="nav-link" aria-selected="false" tabindex="-1" role="tab">Promoted</a></li>
                         <li class="nav-item" role="presentation"><a href="#transferred" data-bs-toggle="tab" class="nav-link" aria-selected="false" tabindex="-1" role="tab">Transferred</a></li>
                         <li class="nav-item" role="presentation"><a href="#training" data-bs-toggle="tab" class="nav-link" aria-selected="false" tabindex="-1" role="tab">Training</a></li>
-                        <li class="nav-item" role="presentation"><a href="#bank_statutory" data-bs-toggle="tab" class="nav-link" aria-selected="false" tabindex="-1" role="tab">Bank &amp; Statutory <small class="text-danger">(Admin Only)</small></a></li>
+                        {{-- <li class="nav-item" role="presentation"><a href="#bank_statutory" data-bs-toggle="tab" class="nav-link" aria-selected="false" tabindex="-1" role="tab">Bank &amp; Statutory <small class="text-danger">(Admin Only)</small></a></li> --}}
                     </ul>
                 </div>
             </div>
@@ -403,6 +406,7 @@
                 </div>
             </div>
 
+            {{-- document --}}
             <div class="tab-pane fade" id="document" role="tabpanel">
                 <div class="row">
                     <div class="col-md-6">
@@ -429,6 +433,9 @@
                     </div>
                 </div>
             </div>
+            {{-- End document --}}
+
+            {{-- promote --}}
             <div class="tab-pane fade" id="promote" role="tabpanel">
                 <div class="col-md-12 d-flex">
                     <div class="card profile-box flex-fill">
@@ -546,6 +553,57 @@
                     </div>
                 </div>
             </div>
+            {{-- End promote --}}
+
+            {{-- Change Password --}}
+            <div id="ChangePassword" class="modal custom-modal fade" aria-hidden="true" style="display: none;">
+                <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="{{url('change-password')}}" method="POST" data-select2-id="select2-data-9-apez">
+                                @csrf
+                                <div class="form-group Password-icon">
+                                    <label for="password">Current Password <span class="text-danger">*</span></label>
+                                    <div class="position-relative">
+                                        <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="current_password" required autocomplete="current-password"><span class="fa fa-eye-slash toggle-password"></span>
+                                    </div>
+                                    @error('password')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="password">New Password <span class="text-danger">*</span></label>
+                                    <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="new_password" required autocomplete="new-password">
+                                    @error('password')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                                <div class="form-group">
+                                    <label for="password-confirm">Confirm New Password</label>
+                                    <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required autocomplete="confirm-assword">
+                                </div>
+                                <div class="submit-section">
+                                    <input type="hidden" name="id" id="id" value="{{ $data->id }}">
+                                    <button type="submit" class="btn btn-primary" id="bntEmpPromote">Submit</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {{-- End Change Password --}}
+
+            {{-- Transferred --}}
             <div class="tab-pane fade" id="transferred" role="tabpanel">
                 <div class="col-md-12 d-flex">
                     <div class="card profile-box flex-fill">
@@ -614,6 +672,9 @@
                     </div>
                 </div>
             </div>
+            {{-- end Transferred --}}
+
+            {{-- Training --}}
             <div class="tab-pane fade" id="training" role="tabpanel">
                 <div class="col-md-12 d-flex">
                     <div class="card profile-box flex-fill">
@@ -683,6 +744,8 @@
                     </div>
                 </div>
             </div>
+            {{-- End Training --}}
+
             <div class="tab-pane fade" id="bank_statutory" role="tabpanel">
                 <div class="card">
                     <div class="card-body">

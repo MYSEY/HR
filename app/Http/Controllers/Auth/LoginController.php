@@ -70,11 +70,11 @@ class LoginController extends Controller
         ];
         if (Auth::attempt(['email'=>$email,'password'=>$password,'status'=>'Active'])) {
             DB::table('activity_logs')->insert($activityLog);
-            Toastr::success('Login successfully :)','Success');
+            Toastr::success('Login successfully.','Success');
             return redirect()->intended('dashboad/employee');
         }elseif (Auth::attempt(['email'=>$email,'password'=>$password,'status'=> null])) {
             DB::table('activity_logs')->insert($activityLog);
-            Toastr::success('Login successfully :)','Success');
+            Toastr::success('Login successfully.','Success');
             return redirect()->intended('dashboad/employee');
         }else{
             Toastr::error('fail, WRONG USERNAME OR PASSWORD :)','Error');
