@@ -1,4 +1,10 @@
 @extends('layouts.master')
+<style>
+    .filter-row .btn {
+        min-height: 44px !important;
+        padding: 9px !important;
+    }
+</style>
 @section('content')
     <div class="content container-fluid">
         <div class="page-header">
@@ -20,6 +26,47 @@
                 </div>
             </div>
         </div>
+        <form action="{{url('users/search')}}" method="POST">
+            @csrf
+            <div class="row filter-row"> 
+                <div class="col-sm-6 col-md-3"> 
+                    <div class="form-group">
+                        <input type="text" class="form-control" name="employee_id" id="number_employee" placeholder="Employee ID" value="{{old('number_employee')}}">
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-3"> 
+                    <div class="form-group">
+                        <input type="text" class="form-control" name="employee_name" id="employee_name" placeholder="Employee name" value="{{old('employee_name')}}">
+                    </div>
+                </div>
+                {{-- <div class="col-sm-6 col-md-3"> 
+                    <div class="form-group form-focus select-focus focused">
+                        <select class="select form-control floating select2-hidden-accessible" data-select2-id="select2-data-1-cyfe" name="position_id" tabindex="-1" aria-hidden="true">
+                            <option value="" data-select2-id="select2-data-3-c0n2">Select Position</option>
+                            @foreach ($position as $positions )
+                                <option value="{{ $positions->id }}">{{ $positions->name_khmer }}</option>
+                            @endforeach
+                        </select>
+                        <label class="focus-label">Position</label>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-3">
+                    <div class="form-group form-focus select-focus">
+                        <select class="select form-control" id="department_id" data-select2-id="select2-data-2-c0n2" name="department_id">
+                            <option value="" data-select2-id="select2-data-2-c0n2">Selected department</option>
+                            @foreach ($department as $item)
+                                <option value="{{$item->id}}">{{$item->name_khmer}}</option>
+                            @endforeach
+                        </select>
+                        <label class="focus-label">Department</label>
+                    </div>
+                </div> --}}
+                <div class="col-sm-6 col-md-2">
+                    <button type="submit" class="btn btn-success w-100" data-dismiss="modal">Search</button>
+                </div>
+            </div>
+        </form>
+       
         {!! Toastr::message() !!}
         <div class="row">
             <div class="col-md-12">

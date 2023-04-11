@@ -44,9 +44,9 @@ class UserController extends Controller
     {
         $this->employeeRepo = $employeeRepo;
     }
-    public function index()
+    public function index(Request $request)
     {
-        $data = $this->employeeRepo->getAllUsers();
+        $data = $this->employeeRepo->getAllUsers($request);
         $role = Role::all();
         $position = Position::all();
         $department = Department::all();
