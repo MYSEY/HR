@@ -567,11 +567,9 @@
                         <div class="modal-body">
                             <form action="{{url('change-password')}}" method="POST" data-select2-id="select2-data-9-apez">
                                 @csrf
-                                <div class="form-group Password-icon">
+                                <div class="form-group">
                                     <label for="password">Current Password <span class="text-danger">*</span></label>
-                                    <div class="position-relative">
-                                        <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="current_password" required autocomplete="current-password"><span class="fa fa-eye-slash toggle-password"></span>
-                                    </div>
+                                    <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="current_password" required autocomplete="current-password">
                                     @error('password')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>

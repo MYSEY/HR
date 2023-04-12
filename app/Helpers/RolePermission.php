@@ -67,37 +67,13 @@ function menu(){
         [
             'name'=>'',
             'icon'=>'<i class="la la-pie-chart"></i> <span></span> <span class="menu-arrow"></span>',
-            'value'=>'Employee Reports',
+            'value'=>'Reports',
             'table'=>2,
             'permission'=>1,
             'child'=>[
                 [
-                    'value'=>'Employee Probation',
-                    'url'=>"employee/probation",
-                    'table'=>2,
-                    'permission'=>1
-                ],
-                [
-                    'value'=>'Employee (FDC)',
-                    'url'=>"employee/fdc",
-                    'table'=>2,
-                    'permission'=>1
-                ],
-                [
-                    'value'=>'Employee (UDC)',
-                    'url'=>"employee/udc",
-                    'table'=>2,
-                    'permission'=>1
-                ],
-                [
-                    'value'=>'Resignation',
-                    'url'=>"employee/resignation",
-                    'table'=>2,
-                    'permission'=>1
-                ],
-                [
-                    'value'=>'Termination',
-                    'url'=>"employee/termination",
+                    'value'=>'Employee Report',
+                    'url'=>"employee/report",
                     'table'=>2,
                     'permission'=>1
                 ],

@@ -1,4 +1,10 @@
 @extends('layouts.master')
+<style>
+    .filter-row .btn {
+        min-height: 44px !important;
+        padding: 9px !important;
+    }
+</style>
 @section('content')
     <div class="page-header">
         <div class="row align-items-center">
@@ -11,6 +17,35 @@
             </div>
         </div>
     </div>
+    @if (Auth::user()->RolePermission == 'Administrator')
+        <form action="{{url('report/search')}}" method="POST">
+            @csrf
+            <div class="row filter-row"> 
+                <div class="col-sm-6 col-md-3">
+                    <div class="form-group form-focus select-focus">
+                        <select class="select form-control" id="emp_status" data-select2-id="select2-data-2-c0n2" name="emp_status">
+                            <option value="" data-select2-id="select2-data-2-c0n2">employee status</option>
+                            <option value="Probation">Probation</option>
+                            <option value="1">FDC</option>
+                            <option value="2">UDC</option>
+                            <option value="3">Resignation</option>
+                            <option value="4">Termination</option>
+                            <option value="5">Death</option>
+                            <option value="6">Retired</option>
+                            <option value="7">Lay off</option>
+                            <option value="8">Suspension</option>
+                            <option value="9">Others</option>
+                        </select>
+                        <label class="focus-label">Filter</label>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-2">
+                    <button type="submit" class="btn btn-success w-100" data-dismiss="modal">Search</button>
+                </div>
+            </div>
+        </form>
+    @endif
+    
     <div class="row">
         <div class="col-md-12">
             <div class="table-responsive">
@@ -26,6 +61,7 @@
                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending" style="width: 191.625px;">Email</th>
                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department: activate to sort column ascending" style="width: 125.15px;">Department</th>
                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department: activate to sort column ascending" style="width: 125.15px;">Position</th>
+                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department: activate to sort column ascending" style="width: 125.15px;">Branch</th>
                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Joining Date: activate to sort column ascending" style="width: 89.6px;">Start Date</th>
                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Joining Date: activate to sort column ascending" style="width: 89.6px;">End Date</th>
                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="DOB: activate to sort column ascending" style="width: 81.0625px;">DOB</th>
@@ -52,6 +88,7 @@
                                                 <td class="text-info">{{$item->email}}</td>
                                                 <td>{{$item->EmployeeDepartment}}</td>
                                                 <td>{{$item->EmployeePosition}}</td>
+                                                <td>{{$item->EmployeeBrnach}}</td>
                                                 <td>{{$item->FDCStartDate}}</td>
                                                 <td>{{$item->FDCEndDate}}</td>
                                                 <td>{{$item->DOB ?? ''}}</td>
@@ -62,7 +99,27 @@
                                                    {{$item->FullAddressEn}}
                                                 </td>
                                                 <td>
-                                                    <button class="btn btn-outline-success btn-sm">{{ $item->emp_status == 1 ? "FDC" : ""}}</button>
+                                                    @if ($item->emp_status=='Probation')
+                                                        <button class="btn btn-outline-success btn-sm">{{ $item->emp_status}}</button>
+                                                    @elseif ($item->emp_status=='1')
+                                                        <button class="btn btn-outline-success btn-sm">FDC</button>
+                                                    @elseif ($item->emp_status=='2')
+                                                        <button class="btn btn-outline-success btn-sm">UDC</button>
+                                                    @elseif ($item->emp_status=='3')
+                                                        <button class="btn btn-outline-success btn-sm">Resignation</button>
+                                                    @elseif ($item->emp_status=='4')
+                                                        <button class="btn btn-outline-success btn-sm">Termination</button>
+                                                    @elseif ($item->emp_status=='5')
+                                                        <button class="btn btn-outline-success btn-sm">Death</button>
+                                                    @elseif ($item->emp_status=='6')
+                                                        <button class="btn btn-outline-success btn-sm">Retired</button>
+                                                    @elseif ($item->emp_status=='7')
+                                                        <button class="btn btn-outline-success btn-sm">Lay off</button>
+                                                    @elseif ($item->emp_status=='8')
+                                                        <button class="btn btn-outline-success btn-sm">Suspension</button>
+                                                    @elseif ($item->emp_status=='9')
+                                                        <button class="btn btn-outline-success btn-sm">Others</button>
+                                                    @endif
                                                 </td>
                                             </tr>
                                         @endforeach

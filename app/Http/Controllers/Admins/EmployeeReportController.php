@@ -14,28 +14,13 @@ class EmployeeReportController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function employeeProbation(){
-        $users = User::where('emp_status','Probation')->get();
-        return view('employee_reports.probation',compact('users'));
-    }
-    public function employeeFdc()
-    {
-        $users = User::where('emp_status',1)->get();
-        return view('employee_reports.fdc',compact('users'));
-    }
-    public function employeeUdc()
-    {
-        $users = User::where('emp_status',2)->get();
-        return view('employee_reports.udc',compact('users'));
-    }
-    public function employeeResignation()
-    {
-        $users = User::where('emp_status',3)->get();
-        return view('employee_reports.resignation',compact('users'));
-    }
-    public function employeeTermination()
-    {
-        $users = User::where('emp_status',4)->get();
-        return view('employee_reports.termination',compact('users'));
+    public function index(Request $request){
+        if ($request->emp_status!=null) {
+            $users = User::where('emp_status',$request->emp_status)->get();
+            return view('employee_reports.report',compact('users'));
+        } else {
+            $users = User::all();
+            return view('employee_reports.report',compact('users'));
+        }
     }
 }
