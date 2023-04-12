@@ -19,6 +19,7 @@ use App\Http\Controllers\Admins\LeavesEmployeeController;
 use App\Http\Controllers\Admins\AttendanceAdminController;
 use App\Http\Controllers\Admins\EmployeeProfileController;
 use App\Http\Controllers\Admins\AttendanceEmployeeController;
+use App\Http\Controllers\Admins\BankController;
 use App\Http\Controllers\Admins\ProvinceController;
 
 /*
@@ -70,8 +71,8 @@ Route::middleware(['auth:sanctum'])->group(function(){
 
     Route::get('/position', [PositionController::class,'index']);
     Route::post('/position/store', [PositionController::class,'store']);
+    Route::post('/position/update', [PositionController::class,'update']);
     Route::post('/position/delete', [PositionController::class,'destroy']);
-    Route::post('/position/update', [PositionController::class,'destroy']);
 
     Route::get('/branch', [BranchController::class,'index']);
     Route::post('/branch/store', [BranchController::class,'store']);
@@ -92,5 +93,11 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('province', [ProvinceController::class,'index']);
     Route::post('district', [ProvinceController::class,'showDistrict']);
     Route::post('commune', [ProvinceController::class,'showCommune']);
-    Route::post('village', [ProvinceController::class,'showVillage']);    
+    Route::post('village', [ProvinceController::class,'showVillage']);
+    
+    // route banks
+    Route::get('/bank', [BankController::class,'index']);
+    Route::post('/bank/store', [BankController::class,'store']);
+    Route::post('/bank/update', [BankController::class,'update']);
+    Route::post('/bank/delete', [BankController::class,'destroy']);
 });

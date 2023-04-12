@@ -87,6 +87,27 @@ function menu(){
             'permission'=>1,
             'child'=>[
                 [
+                    'value'=>'Taxes',
+                    'url'=>"",
+                    'table'=>7,
+                    'permission'=>1
+                ],
+            ]
+        ],
+        [
+            'name'=>'',
+            'icon'=>'<i class="la la-cog"></i> <span> </span> <span class="menu-arrow"></span>',
+            'value'=>'Settings',
+            'table'=>7,
+            'permission'=>1,
+            'child'=>[
+                [
+                    'value'=>'Banks',
+                    'url'=>"bank",
+                    'table'=>7,
+                    'permission'=>1
+                ],
+                [
                     'value'=>'Position',
                     'url'=>"position",
                     'table'=>7,
