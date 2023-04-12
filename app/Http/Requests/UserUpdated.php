@@ -24,8 +24,12 @@ class UserUpdated extends FormRequest
     public function rules()
     {
         return [
+            'employee_name_kh' => 'required|max:255',
+            'employee_name_en' => 'required|max:255',
+            'date_of_birth' => 'required',
+            'date_of_commencement' => 'required',
+            'personal_phone_number' => 'required|min:9|max:15',
             'role_id' => 'required|string',
-            'email' => 'required',
             // 'password' => [
             //     'sometimes',
             //     'nullable',

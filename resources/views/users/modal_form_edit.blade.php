@@ -157,7 +157,7 @@
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="">Employment Book(PDF) <span class="text-danger">*</span></label>
+                                <label class="">Employment Book(PDF)</label>
                                 <input class="form-control @error('employment_book') is-invalid @enderror" type="file" id="employment_book" name="employment_book" value="{{old('employment_book')}}">
                                 <input type="hidden" name="hidden_file_employment_book" id="e_employment_book" value="">
                             </div>
@@ -185,7 +185,7 @@
                             </div>
                         </div>
                         <div class="col-sm-6"> 
-                            <label>Emaill <span class="text-danger">*</span></label>
+                            <label>Email</label>
                             <input class="form-control @error('email') is-invalid @enderror" type="email" id="e_email" name="email"  placeholder="Enter Email" {{old('email')}}>
                         </div>
                     </div>

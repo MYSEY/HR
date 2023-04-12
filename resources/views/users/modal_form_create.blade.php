@@ -163,13 +163,13 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="">
-                                <label class="">Guarantee Letter <span class="text-danger">*</span></label>
+                                <label class="">Guarantee Letter(PDF) <span class="text-danger">*</span></label>
                                 <input class="form-control @error('guarantee_letter') is-invalid @enderror" type="file" id="guarantee_letter" required name="guarantee_letter" value="{{old('guarantee_letter')}}">
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="">Employment Book <span class="text-danger">*</span></label>
+                                <label class="">Employment Book(PDF)</label>
                                 <input class="form-control @error('employment_book') is-invalid @enderror" type="file" id="employment_book" required name="employment_book" value="{{old('employment_book')}}">
                             </div>
                         </div>
@@ -196,7 +196,7 @@
                             </div>
                         </div>
                         <div class="col-sm-6">
-                            <label>Emaill <span class="text-danger">*</span></label>
+                            <label>Email</label>
                             <input class="form-control @error('email') is-invalid @enderror" type="email" id="" required name="email" placeholder="Enter Email" {{old('email')}}>
                         </div>
                     </div>

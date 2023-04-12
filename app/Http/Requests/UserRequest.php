@@ -20,23 +20,14 @@ class UserRequest extends FormRequest
     public function rules()
     {
         return [
-            
             'employee_name_kh' => 'required|max:255',
             'employee_name_en' => 'required|max:255',
             'date_of_birth' => 'required',
             'date_of_commencement' => 'required',
             'guarantee_letter' => 'required|nullable|mimes:pdf|max:2048',
-            'employment_book' => 'required|nullable|mimes:pdf|max:2048',
             'personal_phone_number' => 'required|min:9|max:15',
-            'email'     => 'required|string',
             'role_id' => 'required|string',
-            'password' => 'required|confirmed|min:6',
-            // 'password' => [
-            //     'sometimes',
-            //     'nullable',
-            //     'string',
-            //     'confirmed'
-            // ]
+            'password' => 'required|confirmed|min:6'
         ];
     }
 

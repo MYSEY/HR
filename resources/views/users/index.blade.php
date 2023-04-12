@@ -649,6 +649,8 @@
                     content: ''+
                         '<form>'+
                             '<div class="form-group">'+
+                                '<label>End date <span class="text-danger">*</span></label>'+
+                                '<input type="date" class="form-control start_date" value="'+start_date+'">'+
                                 '<input type="hidden" class="form-control emp_status" id="" name="" value="'+status+'">'+
                                 '<input type="hidden" class="form-control id" id="" name="" value="'+id+'">'+
                             '</div>'+
