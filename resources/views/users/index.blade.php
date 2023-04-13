@@ -179,36 +179,44 @@
                                                             @elseif ($item->emp_status=='9')
                                                                 <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
                                                                     <i class="fa fa-dot-circle-o text-dark"></i>
+                                                                    <span>Fall Probation</span>
+                                                                </a>
+                                                            @elseif ($item->emp_status=='10')
+                                                                <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
+                                                                    <i class="fa fa-dot-circle-o text-dark"></i>
                                                                     <span>Others</span>
                                                                 </a>
                                                             @endif
                                                             @if (Auth::user()->RolePermission == 'Administrator')
                                                                 <div class="dropdown-menu dropdown-menu-right" id="btn-emp-status">
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-id="1" href="#">
+                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="1" href="#">
                                                                         <i class="fa fa-dot-circle-o text-success"></i> FDC
                                                                     </a>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-id="2" href="#">
+                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="2" href="#">
                                                                         <i class="fa fa-dot-circle-o text-warning"></i> UDC
                                                                     </a>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-id="3" href="#">
+                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="3" href="#">
                                                                         <i class="fa fa-dot-circle-o text-danger"></i> Resignation
                                                                     </a>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-id="4" href="#">
+                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="4" href="#">
                                                                         <i class="fa fa-dot-circle-o text-success"></i> Termination
                                                                     </a>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-id="5" href="#">
+                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="5" href="#">
                                                                         <i class="fa fa-dot-circle-o text-danger"></i> Death
                                                                     </a>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-id="6" href="#">
+                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="6" href="#">
                                                                         <i class="fa fa-dot-circle-o text-warning"></i> Retired
                                                                     </a>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-id="7" href="#">
+                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="7" href="#">
                                                                         <i class="fa fa-dot-circle-o text-danger"></i> Lay off
                                                                     </a>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-id="8" href="#">
+                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="8" href="#">
                                                                         <i class="fa fa-dot-circle-o text-danger"></i> Suspension
                                                                     </a>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-id="9" href="#">
+                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="9" href="#">
+                                                                        <i class="fa fa-dot-circle-o text-danger"></i> Fall Probation
+                                                                    </a>
+                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="10" href="#">
                                                                         <i class="fa fa-dot-circle-o text-danger"></i> Others
                                                                     </a>
                                                                 </div>
@@ -568,15 +576,40 @@
         $('body').on('click', '#btn-emp-status a', function() {
             let id = $(this).attr('data-emp-id');
             let status = $(this).data('id');
+            if (status == 1) {
+                var emp_status = "FDC";
+            } else if(status == 2) {
+                var emp_status = "UDC";
+            }else if(status == 3){
+                var emp_status = "Resignation";
+            }else if(status == 4){
+                var emp_status = "Termination";
+            }else if(status == 5){
+                var emp_status = "Death";
+            }else if(status == 6){
+                var emp_status = "Retired";
+            }else if(status == 7){
+                var emp_status = "Lay off";
+            }else if(status == 8){
+                var emp_status = "Suspension";
+            }else if(status == 9){
+                var emp_status = "Fall Probation";
+            }else if(status == 10){
+                var emp_status = "Other";
+            }
             let start_date = $(this).attr('data-start-date');
+            let end_date = $(this).attr('data-end-date');
             if (status == 1) {
                 $.confirm({
                     title: 'Employee Status!',
                     contentClass: 'text-center',
                     backgroundDismiss: 'cancel',
                     content: ''+
-                        '<form method="post">'+
+                        '<form method="post" class="formName">'+
                             '<div class="form-group">'+
+                                '<div class="form-group">'+
+                                    '<label><a href="#">'+emp_status+'</a></label>'+
+                                '</div>'+
                                 '<div class="form-group">'+
                                     '<label>Start date <span class="text-danger">*</span></label>'+
                                     '<input type="date" class="form-control start_date" value="'+start_date+'">'+
@@ -649,8 +682,11 @@
                     content: ''+
                         '<form>'+
                             '<div class="form-group">'+
+                                '<label><a href="#">'+emp_status+'</a></label>'+
+                            '</div>'+
+                            '<div class="form-group">'+
                                 '<label>End date <span class="text-danger">*</span></label>'+
-                                '<input type="date" class="form-control start_date" value="'+start_date+'">'+
+                                '<input type="date" class="form-control end_date" value="'+end_date+'">'+
                                 '<input type="hidden" class="form-control emp_status" id="" name="" value="'+status+'">'+
                                 '<input type="hidden" class="form-control id" id="" name="" value="'+id+'">'+
                             '</div>'+
@@ -665,11 +701,22 @@
                             btnClass: 'btn-blue',
                             action: function() {
                                 var emp_status = this.$content.find('.emp_status').val();
+                                var end_date = this.$content.find('.end_date').val();
                                 var id = this.$content.find('.id').val();
                                 var resign_reason = this.$content.find('.resign_reason').val();
+
+                                if (!end_date) {
+                                    $.alert({
+                                        title: '<span class="text-danger">Requiered</span>',
+                                        content: 'Please input end date.',
+                                    });
+                                    return false;
+                                }
+
                                 axios.post('{{ URL('employee/status') }}', {
                                         'id': id,
                                         'emp_status': emp_status,
+                                        'end_date': end_date,
                                         'resign_reason': resign_reason
                                     }).then(function(response) {
                                     new Noty({
@@ -703,6 +750,9 @@
                     backgroundDismiss: 'cancel',
                     content: ''+
                         '<form method="post">'+
+                            '<div class="form-group">'+
+                                '<label><a href="#">'+emp_status+'</a></label>'+
+                            '</div>'+
                             '<div class="form-group">'+
                                 '<div class="form-group">'+
                                     '<label>date <span class="text-danger">*</span></label>'+

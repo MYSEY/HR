@@ -234,5 +234,36 @@ class OptionSeeder extends Seeder
             'type' => 'status',
             'created_by'    => Auth::id(),
         ]);
+        // Emergency Contact
+        Option::firstOrCreate([
+            'name_khmer' => 'Father',
+            'name_english'=>'Father',
+            'type' => 'relationship',
+            'created_by'    => Auth::id(),
+        ]);
+        Option::firstOrCreate([
+            'name_khmer' => 'Mother',
+            'name_english'=>'Mother',
+            'type' => 'relationship',
+            'created_by'    => Auth::id(),
+        ]);
+        Option::firstOrCreate([
+            'name_khmer' => 'Husband',
+            'name_english'=>'Husband',
+            'type' => 'relationship',
+            'created_by'    => Auth::id(),
+        ]);
+        Option::firstOrCreate([
+            'name_khmer' => 'Wife',
+            'name_english'=>'Wife',
+            'type' => 'relationship',
+            'created_by'    => Auth::id(),
+        ]);
+        Option::firstOrCreate([
+            'name_khmer' => 'Brother',
+            'name_english'=>'Brother',
+            'type' => 'relationship',
+            'created_by'    => Auth::id(),
+        ]);
     }
 }

@@ -191,16 +191,14 @@ class UserController extends Controller
                 User::where('id',$request->id)->update([
                     'emp_status' => $request->emp_status,
                     'fdc_date' => null,
-                    'fdc_end' => null,
+                    'fdc_end' => $request->end_date,
                     'resign_reason' => $request->resign_reason
                 ]);
             }else{
                 User::where('id',$request->id)->update([
                     'emp_status' => $request->emp_status,
                     'resign_date' => $request->resign_date,
-                    'resign_reason' => $request->resign_reason,
-                    'fdc_date' => null,
-                    'fdc_end' => null,
+                    'resign_reason' => $request->resign_reason
                 ]);
             }
             

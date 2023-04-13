@@ -46,12 +46,11 @@
                                         <ul class="personal-info">
                                             <li>
                                                 <div class="title">Phone:</div>
-                                                <div class="text"><a href="#">{{ $data->personal_phone_number }}</a>
-                                                </div>
+                                                <div class="text">{{ $data->personal_phone_number }}</div>
                                             </li>
                                             <li>
                                                 <div class="title">Email:</div>
-                                                <div class="text"><a href="#">{{ $data->email }}</a></div>
+                                                <div class="text">{{ $data->email }}</div>
                                             </li>
                                             <li>
                                                 <div class="title">Birthday:</div>
@@ -62,6 +61,10 @@
                                             <li>
                                                 <div class="title">Gender:</div>
                                                 <div class="text">{{ $data->gender == 1 ? 'Male' : 'Female' }}</div>
+                                            </li>
+                                            <li>
+                                                <div class="title">Marital status</div>
+                                                <div class="text">{{ $data->marital_status }}</div>
                                             </li>
                                             <li>
                                                 <div class="title">Address:</div>
@@ -99,8 +102,20 @@
                                 <h3 class="card-title">Personal Informations </a></h3>
                                 <ul class="personal-info">
                                     <li>
+                                        <div class="title">Bank Name</div>
+                                        <label>{{ $data->bank_name }}</label>
+                                    </li>
+                                    <li>
+                                        <div class="title">Bank Account No.</div>
+                                        <label>{{ $data->account_number }}</label>
+                                    </li>
+                                    <li>
+                                        <div class="title">Account Name</div>
+                                        <label>{{ $data->account_name }}</label>
+                                    </li>
+                                    <li>
                                         <div class="title">Identity Type</div>
-                                        <label for="">{{ $data->identity_type }}</label>
+                                        <label for="">{{ $data->EmployeeIdentityType }}</label>
                                     </li>
                                     <li>
                                         <div class="title">Identity Number</div>
@@ -108,11 +123,11 @@
                                     </li>
                                     <li>
                                         <div class="title">Issue Date</div>
-                                        <label for="">{{ $data->issue_date }}</label>
+                                        <label for="">{{ \Carbon\Carbon::parse($data->issue_date)->format('d-M-Y') ?? '' }}</label>
                                     </li>
                                     <li>
                                         <div class="title">Issue Expired Date</div>
-                                        <label for="">{{ $data->issue_expired_date }}</label>
+                                        <div>{{ \Carbon\Carbon::parse($data->issue_expired_date)->format('d-M-Y') ?? '' }}</div>
                                     </li>
                                     <li>
                                         <div class="title">Unit</div>
@@ -125,10 +140,6 @@
                                     <li>
                                         <div class="title">Nationality</div>
                                         <label for="">{{ $data->nationality }}</label>
-                                    </li>
-                                    <li>
-                                        <div class="title">Marital status</div>
-                                        <label for="">{{ $data->marital_status }}</label>
                                     </li>
                                     <li>
                                         <div class="title">No. of children</div>
@@ -145,21 +156,23 @@
                     <div class="col-md-6 d-flex">
                         <div class="card profile-box flex-fill">
                             <div class="card-body">
-                                <h3 class="card-title">Bank information</h3>
+                                <h3 class="card-title">Emergency Contact <a href="" class="edit-icon" data-bs-toggle="modal" data-bs-target="#emergency_contact_modal"><i class="fa fa-pencil"></i></a></h3>
+                                <h5 class="section-title">Primary</h5>
                                 <ul class="personal-info">
                                     <li>
-                                        <div class="title">Bank name</div>
-                                        <div class="text">{{ $data->bank_name }}</div>
+                                        <div class="title">Name</div>
+                                        <div class="text">John Doe</div>
                                     </li>
                                     <li>
-                                        <div class="title">Bank account No.</div>
-                                        <div class="text">{{ $data->account_number }}</div>
+                                        <div class="title">Relationship</div>
+                                        <div class="text">Father</div>
                                     </li>
                                     <li>
-                                        <div class="title">Account Name</div>
-                                        <div class="text">{{ $data->account_name }}</div>
+                                        <div class="title">Phone </div>
+                                        <div class="text">9876543210</div>
                                     </li>
                                 </ul>
+                                <hr>
                             </div>
                         </div>
                     </div>

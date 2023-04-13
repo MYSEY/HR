@@ -186,7 +186,7 @@
                         </div>
                         <div class="col-sm-6"> 
                             <label>Email</label>
-                            <input class="form-control @error('email') is-invalid @enderror" type="email" id="e_email" name="email"  placeholder="Enter Email" {{old('email')}}>
+                            <input class="form-control @error('email') is-invalid @enderror" type="email" id="e_email" name="email"  placeholder="" {{old('email')}}>
                         </div>
                     </div>
                     {{-- <div class="row"> 

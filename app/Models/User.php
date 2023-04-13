@@ -236,7 +236,7 @@ class User extends Authenticatable
                 $IdentityType = $item->name_khmer;
             }
         }
-        return $IdentityType;
+        return $IdentityType ?? "";
     }
     
     public function getEmployeeBrnachAttribute(){

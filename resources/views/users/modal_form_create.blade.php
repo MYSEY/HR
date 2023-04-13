@@ -197,19 +197,19 @@
                         </div>
                         <div class="col-sm-6">
                             <label>Email</label>
-                            <input class="form-control @error('email') is-invalid @enderror" type="email" id="" required name="email" placeholder="Enter Email" {{old('email')}}>
+                            <input class="form-control @error('email') is-invalid @enderror" type="email" id="" required name="email" placeholder="" {{old('email')}}>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label>Password <span class="text-danger">*</span></label>
-                                <input type="password" class="form-control @error('password') is-invalid @enderror" required name="password" placeholder="Enter Password">
+                                <input type="password" class="form-control @error('password') is-invalid @enderror" required name="password" placeholder="">
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <label>Confirm Password</label>
-                            <input type="password" class="form-control" required name="password_confirmation" placeholder="Confirm Password">
+                            <input type="password" class="form-control" required name="password_confirmation" placeholder="">
                         </div>
                     </div>
                     <div class="col-sm-12">
