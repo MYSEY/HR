@@ -21,6 +21,7 @@ use App\Http\Controllers\Admins\EmployeeProfileController;
 use App\Http\Controllers\Admins\AttendanceEmployeeController;
 use App\Http\Controllers\Admins\BankController;
 use App\Http\Controllers\Admins\ProvinceController;
+use App\Http\Controllers\Admins\TaxesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -100,4 +101,11 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('/bank/store', [BankController::class,'store']);
     Route::post('/bank/update', [BankController::class,'update']);
     Route::post('/bank/delete', [BankController::class,'destroy']);
+
+    // route Taxes
+    Route::get('/taxes', [TaxesController::class,'index']);
+    Route::post('/taxes/store', [TaxesController::class,'store']);
+    Route::post('/taxes/update', [TaxesController::class,'update']);
+    Route::post('/taxes/delete', [TaxesController::class,'destroy']);
+    Route::post('/taxes/status', [TaxesController::class,'processing']);
 });

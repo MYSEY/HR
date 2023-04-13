@@ -88,7 +88,7 @@ function menu(){
             'child'=>[
                 [
                     'value'=>'Taxes',
-                    'url'=>"",
+                    'url'=>"taxes",
                     'table'=>7,
                     'permission'=>1
                 ],
