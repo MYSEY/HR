@@ -227,7 +227,13 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="">Bank Name</label>
-                                <input class="form-control" type="text" id="bank_name" name="bank_name" value="{{old('bank_name')}}">
+                                <select class="select form-control" id="bank_name" name="bank_name" value="{{old('bank_name')}}">
+                                    <option value="">--Select</option>
+                                    @foreach ($bank as $item)
+                                        <option value="{{$item->id}}">{{$item->name}}</option>
+                                    @endforeach
+                                </select>
+                                {{-- <input class="form-control" type="text" id="bank_name" name="bank_name" value="{{old('bank_name')}}"> --}}
                             </div>
                         </div>
                         <div class="col-sm-6">

@@ -18,6 +18,7 @@ use App\Http\Requests\UserRequest;
 use App\Http\Requests\UserUpdated;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Models\Bank;
 use App\Models\Conmmunes;
 use App\Models\District;
 use App\Models\Villages;
@@ -55,8 +56,9 @@ class UserController extends Controller
         $optionGender = Option::where('type','gender')->get();
         $branch = Branchs::all();
         $province = Province::all();
+        $bank = Bank::all();
         $optionIdentityType = Option::where('type','identity_type')->get();
-        return view('users.index',compact('data','role','position','department','optionStatus','autoEmpId','optionGender','branch','optionIdentityType', 'province'));
+        return view('users.index',compact('data','role','position','department','optionStatus','autoEmpId','optionGender','branch','optionIdentityType', 'province','bank'));
     }
 
     /**
@@ -115,6 +117,7 @@ class UserController extends Controller
         $optionGender = Option::where('type','gender')->get();
         $branch = Branchs::all();
         $optionIdentityType = Option::where('type','identity_type')->get();
+        $bank = Bank::all();
         $province = Province::all();
         $district = District::where('province_id',$data->current_province)->orWhere("province_id",$data->permanent_province )->get();
         $conmmunes = Conmmunes::where('district_id',$data->current_district)->orWhere('district_id',$data->permanent_district)->get();
@@ -127,6 +130,7 @@ class UserController extends Controller
             'optionGender'=>$optionGender,
             'branch'=>$branch,
             'optionIdentityType'=>$optionIdentityType,
+            'bank'=>$bank,
             'province'=>$province,
             'district'=>$district,
             'conmmunes'=>$conmmunes,

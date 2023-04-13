@@ -216,7 +216,10 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="">Bank Name</label>
-                                <input class="form-control" type="text" id="e_bank_name" name="bank_name" value="{{old('bank_name')}}">
+                                <select class="select form-control" id="e_bank_name" name="bank_name" value="{{old('bank_name')}}">
+                                    {{-- <option value=""></option> --}}
+                                </select>
+                                {{-- <input class="form-control" type="text" id="e_bank_name" name="bank_name" value="{{old('bank_name')}}"> --}}
                             </div>
                         </div>
                         <div class="col-sm-6">

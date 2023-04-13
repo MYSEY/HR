@@ -371,6 +371,8 @@
         });
 
         $('.userUpdate').on('click',function(){
+            $('#e_bank_name').html('<option selected value=""> </option>');
+            
             $('#e_current_province').html('<option selected value="">--Select --</option>');
             $('#e_current_district').html('<option selected value=""> </option>');
             $('#e_current_commune').html('<option selected value=""> </option>');
@@ -449,6 +451,16 @@
                                     value: item.name_khmer,
                                     text: item.name_khmer,
                                     selected: item.id == response.success.identity_type
+                                }));
+                            });
+                        }
+                        
+                        if (response.bank != '') {
+                            $.each(response.bank, function(i, item) {
+                                $('#e_bank_name').append($('<option>', {
+                                    value: item.id,
+                                    text: item.name,
+                                    selected: item.id == response.success.bank_name
                                 }));
                             });
                         }

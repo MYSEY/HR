@@ -42,7 +42,7 @@ class EmployeeRepository extends BaseRepository
                 if ($request->employee_id && $request->employee_name =="") {
 
                     $dataUser = User::with('role')->with('department')
-                            ->where('number_employee', '=', $request->employee_id);
+                            ->where('number_employee', 'LIKE', '%'.$request->employee_id.'%');
                 }
 
                 if ($request->employee_name && $request->empolyee_id =="") {
