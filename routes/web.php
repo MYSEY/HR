@@ -41,8 +41,6 @@ Route::post('/login', [LoginController::class, 'login']);
 Auth::routes();
 Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('/dashboad/employee', [App\Http\Controllers\HomeController::class, 'index'])->name('dashboad.employee');
-    Route::get('address', [AddressController::class,'index'])->name('address');
-    Route::get('permanent/address', [AddressController::class,'permanentAddress'])->name('permanent.address');
     Route::get('/dashboad/employee', [DashboadController::class, 'dashboadEmployee']);
     Route::get('/dashboad/admin', [DashboadController::class, 'dashboadAdmin']);
     Route::get('/employee/profile/{id}', [EmployeeProfileController::class, 'employeeProfile'])->name('employee.profile');

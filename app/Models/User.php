@@ -6,12 +6,15 @@ use App\Models\Role;
 use App\Models\Option;
 use App\Helpers\Helper;
 use App\Models\Branchs;
+use App\Models\District;
 use App\Models\Position;
+use App\Models\Province;
+use App\Models\Villages;
+use App\Models\Conmmunes;
 use App\Models\Education;
 use App\Models\Department;
 use App\Models\Experience;
 use Illuminate\Support\Str;
-use App\Traits\AddressTrait;
 use App\Models\StaffPromoted;
 use App\Models\StaffTraining;
 use Illuminate\Support\Carbon;
@@ -29,7 +32,6 @@ class User extends Authenticatable
     use HasApiTokens, HasFactory, Notifiable;
     use UploadFIle;
     use SoftDeletes;
-    use AddressTrait;
 
 
     /**
@@ -279,47 +281,38 @@ class User extends Authenticatable
     }
     public function getFullAddressEnAttribute()
     {
-        $houseNo = $streetNo = '';
+        $houseNo = $streetNo = $provice_name = $district_name = $conmmunes_name = $villages_name = '';
         if (!empty($this->current_house_no)) {
-            $houseNo = 'House ' . $this->current_house_no . ',' ?? '';
+            $houseNo = 'House ' . $this->current_house_no . ' ' ?? '';
         }
         if (!empty($this->current_street_no)) {
-            $streetNo = 'Street ' . $this->current_street_no . ',' ?? '';
+            $streetNo = 'Street ' . $this->current_street_no . ' ' ?? '';
         }
-        return $houseNo . $streetNo . $this->getAddress('full', 'en', $this->current_village);
-    }
-
-
-    // GET KH ADDRESS
-    public function getCityKhAttribute()
-    {
-        return $this->getAddress('city', 'en', $this->permanent_province);
-    }
-
-    public function getDistrictKhAttribute()
-    {
-        return $this->getAddress('district', 'en', $this->permanent_district);
-    }
-
-    public function getCommuneKhAttribute()
-    {
-        return $this->getAddress('commune', 'en', $this->permanent_commune);
-    }
-
-    public function getVillageKhAttribute()
-    {
-        return $this->getAddress('village', 'en', $this->permanent_village);
-    }
-
-    public function getFullPermanentAddressAttribute()
-    {
-        $houseNo = $streetNo = '';
-        if (!empty($this->permanent_house_no)) {
-            $houseNo = 'House ' . $this->permanent_house_no ?? '';
+        $province = Province::all();
+        foreach($province as $item){
+            if($this->current_province == $item->code){
+                $provice_name = $item->address_en;
+            }
         }
-        if (!empty($this->permanent_street_no)) {
-            $streetNo = 'Street ' . $this->permanent_street_no ?? '';
+        $district = District::where('province_id',$this->current_province)->get();
+        foreach($district as $item){
+            if($this->current_district == $item->code){
+                $district_name = $item->full_name_en;
+            }
         }
-        return $houseNo . ' ' .$streetNo .' '. $this->getAddress('full', 'en', $this->permanent_village);
+        $Conmmunes = Conmmunes::where('district_id',$this->current_district)->get();
+        foreach($Conmmunes as $item){
+            if($this->current_commune == $item->code){
+                $conmmunes_name = $item->full_name_en;
+            }
+        }
+        $villages = Villages::where('district_id',$this->current_village)->get();
+        foreach($villages as $item){
+            if($this->current_village == $item->code){
+                $villages_name = $item->full_name_en;
+            }
+        }
+
+        return $houseNo . $streetNo .$villages_name.' '.$conmmunes_name.' '.$district_name.' '.$provice_name;
     }
 }

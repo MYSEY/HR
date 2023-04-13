@@ -10,7 +10,6 @@ use App\Models\Branchs;
 use App\Models\Position;
 use App\Models\Province;
 use App\Models\Department;
-use App\Traits\AddressTrait;
 use Illuminate\Http\Request;
 use App\Traits\GeneratingCode;
 use Illuminate\Support\Carbon;
@@ -32,7 +31,6 @@ use App\Repositories\Admin\EmployeeRepository;
 class UserController extends Controller
 {
     use GeneratingCode;
-    use AddressTrait;
     use UploadFIle;
     private $employeeRepo;
     /**

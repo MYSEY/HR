@@ -23,18 +23,16 @@ class EmployeeProfileController extends Controller
 {
     public function employeeProfile(Request $request){
         $data = User::with(['educations','experiences'])->where('id',$request->id)->first();
-        // $empPromoted = StaffPromoted::where('employee_id',$request->id)->get();
         $optionOfStudy = Option::where('type','field_of_study')->get();
         $optionDegree = Option::where('type','degree')->get();
+        $relationship = Option::where('type','relationship')->get();
         $department = Department::all();
         $position = Position::all();
         $branch = Branchs::all();
         $transferred = Transferred::all();
         $training = StaffTraining::all();
-        $empPromoted = StaffPromoted::where('employee_id',$request->id)
-                        ->orderBy('id', 'DESC')
-                        ->get();
-        return view('employees.profile',compact('data','optionOfStudy','optionDegree','department','position','empPromoted','branch','transferred','training'));
+        $empPromoted = StaffPromoted::where('employee_id',$request->id)->orderBy('id', 'DESC')->get();
+        return view('employees.profile',compact('data','optionOfStudy','optionDegree','department','position','empPromoted','branch','transferred','training','relationship'));
     }
     public function employeeEducation(Request $request){
         try{
