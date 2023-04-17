@@ -228,7 +228,7 @@
                             <div class="form-group">
                                 <label class="">Bank Name</label>
                                 <select class="select form-control" id="bank_name" name="bank_name" value="{{old('bank_name')}}">
-                                    <option value="">--Select</option>
+                                    <option value="">--Select--</option>
                                     @foreach ($bank as $item)
                                         <option value="{{$item->id}}">{{$item->name}}</option>
                                     @endforeach
