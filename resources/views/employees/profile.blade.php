@@ -544,7 +544,7 @@
                                     </div>
                                     
                                     <div class="form-group">
-                                        <label>Promotion From <span class="text-danger">*</span></label>
+                                        <label>Promotion From</label>
                                         @if (count($empPromoted) > 0)
                                             <input class="form-control" type="text" id="posit_id" name="posit_id" value="{{$empPromoted[0]->department_promoted_to}}" readonly="">
                                         @else
@@ -554,7 +554,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label>Promotion To <span class="text-danger">*</span></label>
-                                        <select class="select" id="position_promoted_to" name="position_promoted_to">
+                                        <select class="select" id="position_promoted_to" name="position_promoted_to" required>
                                             <option value="">Please selecte position</option>
                                             @if (count($position)>0)
                                                 @foreach ($position as $item)
@@ -568,12 +568,12 @@
                                         <label class="navbar-brand custom-navbar-brand mb-0" style="width: 100%; background: #dfe6e9; padding: 6px;font-size: 15px;font-weight: normal !important;">Department</label>
                                     </div>
                                     <div class="form-group">
-                                        <label>Promotion From <span class="text-danger">*</span></label>
+                                        <label>Promotion From</label>
                                         <input class="form-control" type="text" id="depart_id" name="depart_id" value="{{$data->EmployeeDepartment}}" readonly="">
                                     </div>
                                     <div class="form-group">
                                         <label>Promotion To <span class="text-danger">*</span></label>
-                                        <select class="select" id="department_promoted_to" name="department_promoted_to">
+                                        <select class="select" id="department_promoted_to" name="department_promoted_to" required>
                                             <option value="">Please selecte department</option>
                                             @if (count($department)>0)
                                                 @foreach ($department as $item)
@@ -585,7 +585,7 @@
                                     <div class="form-group">
                                         <label>Promotion Date <span class="text-danger">*</span></label>
                                         <div class="cal-icon">
-                                            <input type="text" id="promote_date" name="promote_date" class="form-control datetimepicker">
+                                            <input type="text" id="promote_date" name="promote_date" class="form-control datetimepicker" required>
                                         </div>
                                     </div>
                                     <div class="submit-section">
@@ -613,6 +613,7 @@
                                             <th>#</th>
                                             <th>Branch</th>
                                             <th>Date</th>
+                                            <th>Descrition</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -622,6 +623,7 @@
                                                     <td>{{$item->id}}</td>
                                                     <td>{{$item->BranchName}}</td>
                                                     <td>{{$item->date}}</td>
+                                                    <td>{{$item->descrition}}</td>
                                                 </tr>
                                             @endforeach
                                         @else
@@ -646,7 +648,7 @@
                                     @csrf
                                     <div class="form-group">
                                         <label>Branch<span class="text-danger">*</span></label>
-                                        <select class="select" id="branch_id" name="branch_id">
+                                        <select class="select" id="branch_id" name="branch_id" required>
                                             <option value="">Please selecte branch</option>
                                             @if (count($branch)>0)
                                                 @foreach ($branch as $item)
@@ -656,10 +658,14 @@
                                         </select>
                                     </div>
                                     <div class="form-group">
-                                        <label>Date</label>
+                                        <label>Transferred Date</label>
                                         <div class="cal-icon">
                                             <input type="text" id="date" name="date" class="form-control datetimepicker">
                                         </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Descrition</label>
+                                        <textarea class="form-control" rows="4" spellcheck="false" id="descrition" name="descrition" style="position: relative;"></textarea>
                                     </div>
                                     <div class="submit-section">
                                         <input type="hidden" name="employee_id" id="employee_id" value="{{ $data->id }}">
@@ -687,6 +693,7 @@
                                             <th>Title</th>
                                             <th>Start Date</th>
                                             <th>End Date</th>
+                                            <th>Descrition</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -697,10 +704,11 @@
                                                     <td>{{$item->title}}</td>
                                                     <td>{{$item->start_date}}</td>
                                                     <td>{{$item->end_date}}</td>
+                                                    <td>{{$item->descrition}}</td>
                                                 </tr>
                                             @endforeach
                                         @else
-                                            <td colspan="4" style="text-align: center">No record to display</td>
+                                            <td colspan="5" style="text-align: center">No record to display</td>
                                         @endif
                                     </tbody>
                                 </table>
@@ -720,20 +728,24 @@
                                 <form action="{{url('/employee/training')}}" method="POST" data-select2-id="select2-data-9-apez">
                                     @csrf
                                     <div class="form-group">
-                                        <label>Title<span class="text-danger">*</span></label>
-                                        <input type="text" id="title" name="title" class="form-control">
+                                        <label>Title <span class="text-danger">*</span></label>
+                                        <input type="text" id="title" name="title" class="form-control" required>
                                     </div>
                                     <div class="form-group">
-                                        <label>Start Date</label>
+                                        <label>Start Date <span class="text-danger">*</span></label>
                                         <div class="cal-icon">
-                                            <input type="text" id="start_date" name="start_date" class="form-control datetimepicker">
+                                            <input type="text" id="start_date" name="start_date" class="form-control datetimepicker" required>
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label>End Date</label>
+                                        <label>End Date <span class="text-danger">*</span></label>
                                         <div class="cal-icon">
-                                            <input type="text" id="end_date" name="end_date" class="form-control datetimepicker">
+                                            <input type="text" id="end_date" name="end_date" class="form-control datetimepicker" required>
                                         </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Descrition</label>
+                                        <textarea class="form-control" rows="4" spellcheck="false" id="descrition" name="descrition" style="position: relative;"></textarea>
                                     </div>
                                     <div class="submit-section">
                                         <input type="hidden" name="employee_id" id="employee_id" value="{{ $data->id }}">

@@ -18,6 +18,7 @@ return new class extends Migration
             $table->integer('employee_id')->nullable();
             $table->string('branch_id')->nullable();
             $table->date('date')->nullable();
+            $table->string('descrition')->nullable();
             $table->bigInteger('created_by')->unsigned()->nullable();
             $table->bigInteger('updated_by')->unsigned()->nullable();
             $table->dateTime('deleted_at')->nullable();

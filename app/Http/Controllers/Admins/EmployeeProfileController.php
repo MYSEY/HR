@@ -121,6 +121,7 @@ class EmployeeProfileController extends Controller
                 'employee_id'   => $request->employee_id,
                 'branch_id'      => $request->branch_id,
                 'date'          => $request->date,
+                'descrition'    => $request->descrition,
                 'updated_by'    => Auth::id(),
             ]);
 
@@ -141,6 +142,7 @@ class EmployeeProfileController extends Controller
                 'title'         => $request->title,
                 'start_date'    => $request->start_date,
                 'end_date'      => $request->end_date,
+                'descrition'    => $request->descrition,
                 'updated_by'    => Auth::id(),
             ]);
 

@@ -18,6 +18,7 @@ class StaffTraining extends Model
         'title',
         'start_date',
         'end_date',
+        'descrition',
         'updated_by'
     ];
 }

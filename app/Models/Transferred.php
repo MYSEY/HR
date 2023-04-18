@@ -17,6 +17,7 @@ class Transferred extends Model
         'employee_id',
         'branch_id',
         'date',
+        'descrition',
         'updated_by'
     ];
 
