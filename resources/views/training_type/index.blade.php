@@ -4,14 +4,14 @@
         <div class="page-header">
             <div class="row align-items-center">
                 <div class="col">
-                    <h3 class="page-title">Taxes</h3>
+                    <h3 class="page-title">Training Type</h3>
                     <ul class="breadcrumb">
                         <li class="breadcrumb-item"><a href="{{url('/dashboad/employee')}}">Dashboard</a></li>
-                        <li class="breadcrumb-item active">Taxes</li>
+                        <li class="breadcrumb-item active">Training Type</li>
                     </ul>
                 </div>
                 <div class="col-auto float-end ms-auto">
-                    <a href="#" class="btn add-btn" data-bs-toggle="modal" data-bs-target="#add_taxes"><i class="fa fa-plus"></i> Add New</a>
+                    <a href="#" class="btn add-btn" data-bs-toggle="modal" data-bs-target="#add_training_type"><i class="fa fa-plus"></i> Add New</a>
                 </div>
             </div>
         </div>
@@ -26,9 +26,9 @@
                                     id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
                                     <thead>
                                         <tr>
-                                            <th style="width: 30px;" class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="#: activate to sort column descending">#</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department Name: activate to sort column ascending" style="width: 772.237px;">Tax Name</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department Name: activate to sort column ascending" style="width: 772.237px;">Tax percentage(%)</th>
+                                            <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="#: activate to sort column descending" style="width: 30px;">#</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department Name: activate to sort column ascending" style="width: 772.237px;">Type</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department Name: activate to sort column ascending" style="width: 772.237px;">Description</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department Name: activate to sort column ascending" style="width: 772.237px;">Status</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department Name: activate to sort column ascending" style="width: 772.237px;">Create at</th>
                                             <th class="text-end sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Action: activate to sort column ascending" style="width: 300.962px;">Action</th>
@@ -39,31 +39,28 @@
                                             @foreach ($data as $item)
                                                 <tr class="odd">
                                                     <td class="sorting_1 ids">{{$item->id}}</td>
-                                                    <td class="name">{{$item->name}}</td>
-                                                    <td>
-                                                        {{$item->percentage}}%
-                                                        <input type="hidden" class="percentage" value="{{$item->percentage}}">
-                                                    </td>
+                                                    <td class="type_name">{{$item->type_name}}</td>
+                                                    <td class="description">{{$item->description}}</td>
                                                     <td>
                                                         <input type="hidden" class="status" value="{{$item->status}}">
                                                         <div class="dropdown action-label">
-                                                            @if ($item->status=='pending')
+                                                            @if ($item->status=='1')
                                                                 <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
                                                                     <i class="fa fa-dot-circle-o text-danger"></i>
-                                                                    <span>{{$item->status}}</span>
+                                                                    <span>Active</span>
                                                                 </a>
-                                                            @elseif ($item->status=='approved')
+                                                            @elseif ($item->status=='0')
                                                                 <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
                                                                     <i class="fa fa-dot-circle-o text-success"></i>
-                                                                    <span>{{$item->status}}</span>
+                                                                    <span>Inactive</span>
                                                                 </a>
                                                             @endif
                                                                 <div class="dropdown-menu dropdown-menu-right" id="btn-status">
-                                                                    <a class="dropdown-item" data-id="{{$item->id}}" data-name="pending" data-status-old="{{$item->status}}" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-danger"></i> Pending
+                                                                    <a class="dropdown-item" data-id="{{$item->id}}" data-name="1" data-status-old="{{$item->status}}" href="#">
+                                                                        <i class="fa fa-dot-circle-o text-danger"></i> Active
                                                                     </a>
-                                                                    <a class="dropdown-item" data-id="{{$item->id}}" data-name="approved" data-status-old="{{$item->status}}" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-success"></i> Approved
+                                                                    <a class="dropdown-item" data-id="{{$item->id}}" data-name="0" data-status-old="{{$item->status}}" href="#">
+                                                                        <i class="fa fa-dot-circle-o text-success"></i> Inactive
                                                                     </a>
                                                                 </div>
                                                         </div>
@@ -73,8 +70,8 @@
                                                         <div class="dropdown dropdown-action">
                                                             <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
                                                             <div class="dropdown-menu dropdown-menu-right">
-                                                                <a class="dropdown-item update" data-toggle="modal" data-id="{{$item->id}}" data-target="#edit_taxes"><i class="fa fa-pencil m-r-5"></i> Edit</a>
-                                                                <a class="dropdown-item delete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_taxes"><i class="fa fa-trash-o m-r-5"></i> Delete</a>
+                                                                <a class="dropdown-item update" data-toggle="modal" data-id="{{$item->id}}" data-target="#edit_training_type"><i class="fa fa-pencil m-r-5"></i> Edit</a>
+                                                                {{-- <a class="dropdown-item delete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_training_type"><i class="fa fa-trash-o m-r-5"></i> Delete</a> --}}
                                                             </div>
                                                         </div>
                                                     </td>
@@ -94,31 +91,31 @@
             </div>
         </div>
 
-        <div id="add_taxes" class="modal custom-modal fade" role="dialog">
+        <div id="add_training_type" class="modal custom-modal fade" role="dialog">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Add New Tax</h5>
+                        <h5 class="modal-title">Add New Type</h5>
                         <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">×</span>
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form action="{{url('taxes/store')}}" method="POST" enctype="multipart/form-data">
+                        <form action="{{url('training-type/store')}}" method="POST" enctype="multipart/form-data">
                             @csrf
                             <div class="form-group">
-                                <label>Name <span class="text-danger">*</span></label>
-                                <input class="form-control @error('name') is-invalid @enderror" type="text" name="name" required>
+                                <label>Type <span class="text-danger">*</span></label>
+                                <input class="form-control @error('type_name') is-invalid @enderror" type="text" name="type_name" required>
                             </div>
                             <div class="form-group">
-                                <label>Percentage(%) <span class="text-danger">*</span></label>
-                                <input class="form-control @error('percentage') is-invalid @enderror" type="number" name="percentage" required>
+                                <label class="">Description</label>
+                                <textarea type="text" rows="3" class="form-control" name="description" id="description" value="{{old('description')}}"></textarea>
                             </div>
                             <div class="form-group">
                                 <label>Status <span class="text-danger">*</span></label>
-                                <select class="select form-control" id="taxes_status" name="status" value="{{old('status')}}" required>
-                                    <option value="pending">Pending</option>
-                                    <option value="approved">Approved</option>
+                                <select class="select form-control" id="type_status" name="status" value="{{old('status')}}" required>
+                                    <option value="1">Active</option>
+                                    <option value="0">Inative</option>
                                 </select>
                             </div>
                             <div class="submit-section">
@@ -130,30 +127,32 @@
             </div>
         </div>
 
-        <div id="edit_taxes" class="modal custom-modal fade" aria-hidden="true">
+        <div id="edit_training_type" class="modal custom-modal fade" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Edit Tax</h5>
-                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <h5 class="modal-title">Edit Type</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">×</span>
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form action="{{url('taxes/update')}}" method="POST" enctype="multipart/form-data">
+                        <form action="{{url('training-type/update')}}" method="POST" enctype="multipart/form-data">
                             @csrf
                             <input type="hidden" name="id" class="e_id">
                             <div class="form-group">
-                                <label>Name <span class="text-danger">*</span></label>
-                                <input class="form-control @error('name') is-invalid @enderror" type="text" id="e_name" name="name">
+                                <label>Type <span class="text-danger">*</span></label>
+                                <input class="form-control @error('name') is-invalid @enderror" type="text" id="e_type_name" name="type_name">
                             </div>
                             <div class="form-group">
-                                <label>Percentage(%) <span class="text-danger">*</span></label>
-                                <input class="form-control @error('percentage') is-invalid @enderror" type="number" id="e_percentage" name="percentage">
+                                <label>Description</label>
+                                <textarea type="text" rows="3" class="form-control" name="description" id="e_description" value="{{old('description')}}"></textarea>
                             </div>
                             <div class="form-group">
                                 <label>Status <span class="text-danger">*</span></label>
                                 <select class="select form-control" name="status" id="e_status" value="{{old('status')}}">
+                                    <option value="1">Active</option>
+                                    <option value="0">Inactive</option>
                                 </select>
                             </div>
                             <div class="submit-section">
@@ -165,8 +164,8 @@
             </div>
         </div>
 
-        <!-- Delete Taxes Modal -->
-        <div class="modal custom-modal fade" id="delete_taxes" role="dialog">
+        <!-- Delete training type Modal -->
+        <div class="modal custom-modal fade" id="delete_training_type" role="dialog">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-body">
@@ -175,7 +174,8 @@
                             <p>Are you sure want to delete?</p>
                         </div>
                         <div class="modal-btn delete-action">
-                            <form action="{{url('taxes/delete')}}" method="POST">
+                            <form action="{{url('training-type/delete')}}" method="POST">
+                            <form >
                                 @csrf
                                 <input type="hidden" name="id" class="e_id" value="">
                                 <div class="row">
@@ -203,15 +203,16 @@
             $('#e_status').html('<option value=""></option>');
             var _this = $(this).parents('tr');
             $('.e_id').val(_this.find('.ids').text());
-            $('#e_name').val(_this.find('.name').text());
-            $('#e_percentage').val(_this.find('.percentage').val());
+            $('#e_type_name').val(_this.find('.type_name').text());
+            $('#e_description').text(_this.find('.description').text());
             let status = _this.find('.status').val();
-            if (status == "pending") {
-                $('#e_status').append('<option selected value="pending">Pending</option> <option value="approved">Approved</option>');
-            }else if(status == "approved"){
-                $('#e_status').append('<option selected value="approved">Approved</option> <option value="pending">Pending</option>');
+            if (status == "1") {
+                $('#e_status').append('<option selected value="1">Active</option> <option value="0">Inactive</option>');
+            }else if(status == "0"){
+                $('#e_status').append('<option selected value="0">Inactive</option> <option value="1">Active</option>');
             }
         });
+
         $('.delete').on('click',function(){
             var _this = $(this).parents('tr');
             $('.e_id').val(_this.find('.ids').text());
@@ -222,29 +223,35 @@
             let status = $(this).attr('data-name');
             let old_status = $(this).attr('data-status-old');
             let text_status = "";
-            if (status == "pending") {
-                text_status = "Pending"
-            }else if(status == "approved"){
-                text_status = "Approved"
+            let text_old_status = "";
+            if (old_status == "0") {
+                text_old_status = "Inactive"
+            }else if(old_status == "1"){
+                text_old_status = "Active"
+            }
+            if (status == "0") {
+                text_status = "Inactive"
+            }else if(status == "1"){
+                text_status = "Active"
             }
             $.confirm({
                 title: 'Change Status!',
                 contentClass: 'text-center',
                 backgroundDismiss: 'cancel',
                 content: ''+
-                        '<label>Are you sure want change status '+'<label style="color:red">'+old_status+'</label>'+' to '+'<label style="color:red">'+text_status+'</label>'+'?</label>'+
-                        '<input type="hidden" class="form-control taxes_status" id="" name="" value="'+status+'">'+
+                        '<label>Are you sure want change status '+'<label style="color:red">'+text_old_status+'</label>'+' to '+'<label style="color:red">'+text_status+'</label>'+'?</label>'+
+                        '<input type="hidden" class="form-control type_status" id="" name="" value="'+status+'">'+
                         '<input type="hidden" class="form-control id" id="" name="" value="'+id+'">',
                 buttons: {
                     confirm: {
                         text: 'Submit',
                         btnClass: 'btn-blue',
                         action: function() {
-                            var taxes_status = this.$content.find('.taxes_status').val();
+                            var type_status = this.$content.find('.type_status').val();
                             var id = this.$content.find('.id').val();
                             
-                            axios.post('{{ URL('taxes/status') }}', {
-                                    'taxes_status': taxes_status,
+                            axios.post('{{ URL('training-type/status') }}', {
+                                    'type_status': type_status,
                                     'id': id,
                                 }).then(function(response) {
                                 new Noty({
@@ -254,7 +261,7 @@
                                     icon: true
                                 }).show();
                                 $('.card-footer').remove();
-                                window.location.replace("{{ URL('taxes') }}");
+                                window.location.replace("{{ URL('training-type/list') }}");
                             }).catch(function(error) {
                                 new Noty({
                                     title: "",
@@ -272,6 +279,5 @@
                 }
             });
         });
-
     });
 </script>

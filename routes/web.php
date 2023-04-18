@@ -22,6 +22,9 @@ use App\Http\Controllers\Admins\AttendanceEmployeeController;
 use App\Http\Controllers\Admins\BankController;
 use App\Http\Controllers\Admins\ProvinceController;
 use App\Http\Controllers\Admins\TaxesController;
+use App\Http\Controllers\Admins\TrainerController;
+use App\Http\Controllers\Admins\TrainingController;
+use App\Http\Controllers\Admins\TrainingTypeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -106,4 +109,25 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('/taxes/update', [TaxesController::class,'update']);
     Route::post('/taxes/delete', [TaxesController::class,'destroy']);
     Route::post('/taxes/status', [TaxesController::class,'processing']);
+
+    // route trainings
+    Route::get('/training/list', [TrainingController::class,'index']);
+    // Route::post('/training/store', [TrainingController::class,'store']);
+    // Route::post('/training/update', [TrainingController::class,'update']);
+    // Route::post('/training/delete', [TrainingController::class,'destroy']);
+    // Route::post('/training/status', [TrainingController::class,'processing']);
+
+    // route trainer
+    Route::get('/trainer/list', [TrainerController::class,'index']);
+    Route::post('/trainer/store', [TrainerController::class,'store']);
+    Route::post('/trainer/update', [TrainerController::class,'update']);
+    Route::post('/trainer/delete', [TrainerController::class,'destroy']);
+    Route::post('/trainer/status', [TrainerController::class,'processing']);
+
+    // route trainings type
+    Route::get('/training-type/list', [TrainingTypeController::class,'index']);
+    Route::post('/training-type/store', [TrainingTypeController::class,'store']);
+    Route::post('/training-type/update', [TrainingTypeController::class,'update']);
+    Route::post('/training-type/delete', [TrainingTypeController::class,'destroy']);
+    Route::post('/training-type/status', [TrainingTypeController::class,'processing']);
 });
