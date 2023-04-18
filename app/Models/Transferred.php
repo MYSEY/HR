@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Branchs;
+use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -28,5 +29,10 @@ class Transferred extends Model
 
     public function getBranchNameAttribute(){
         return optional($this->branch)->branch_name_kh;
+    }
+    public function getTransterDateAttribute(){
+        if ($this->date) {
+            return Carbon::parse($this->date)->format('d-M-Y');
+        }
     }
 }

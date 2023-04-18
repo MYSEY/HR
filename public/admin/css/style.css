@@ -8787,8 +8787,6 @@ button.close {
 }
 .personal-info li .text {
   color: #888888;
-  display: block;
-  overflow: hidden;
 }
 .personal-info li .text .avatar-box {
   float: left;

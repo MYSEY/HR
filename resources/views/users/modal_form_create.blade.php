@@ -170,7 +170,7 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="">Employment Book(PDF)</label>
-                                <input class="form-control @error('employment_book') is-invalid @enderror" type="file" id="employment_book" required name="employment_book" value="{{old('employment_book')}}">
+                                <input class="form-control @error('employment_book') is-invalid @enderror" type="file" id="employment_book" name="employment_book" value="{{old('employment_book')}}">
                             </div>
                         </div>
                     </div>

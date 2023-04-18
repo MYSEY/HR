@@ -59,7 +59,7 @@
                                             </li>
                                             <li>
                                                 <div class="title">Address:</div>
-                                                <label class="text">{{ $data->FullCurrentAddress ?? '' }}</label>
+                                                <label style="display: block;overflow: hidden;color: #888888;">{{ $data->FullCurrentAddress ?? '' }}</label>
                                             </li>
                                         </ul>
                                     </div>
@@ -94,55 +94,55 @@
                                 <ul class="personal-info">
                                     <li>
                                         <div class="title">Bank Name</div>
-                                        <label>{{ $data->bank_name }}</label>
+                                        <label class="text">{{ $data->bank_name }}</label>
                                     </li>
                                     <li>
                                         <div class="title">Bank Account No.</div>
-                                        <label>{{ $data->account_number }}</label>
+                                        <label class="text">{{ $data->account_number }}</label>
                                     </li>
                                     <li>
                                         <div class="title">Account Name</div>
-                                        <label>{{ $data->account_name }}</label>
+                                        <label class="text">{{ $data->account_name }}</label>
                                     </li>
                                     <li>
                                         <div class="title">Identity Type</div>
-                                        <label for="">{{ $data->EmployeeIdentityType }}</label>
+                                        <label class="text">{{ $data->EmployeeIdentityType }}</label>
                                     </li>
                                     <li>
                                         <div class="title">Identity Number</div>
-                                        <label for="">{{ $data->identity_number }}</label>
+                                        <label class="text">{{ $data->identity_number }}</label>
                                     </li>
                                     <li>
                                         <div class="title">Issue Date</div>
-                                        <label for="">{{ \Carbon\Carbon::parse($data->issue_date)->format('d-M-Y') ?? '' }}</label>
+                                        <label class="text">{{ \Carbon\Carbon::parse($data->issue_date)->format('d-M-Y') ?? '' }}</label>
                                     </li>
                                     <li>
                                         <div class="title">Issue Expired Date</div>
-                                        <div>{{ \Carbon\Carbon::parse($data->issue_expired_date)->format('d-M-Y') ?? '' }}</div>
+                                        <div class="text">{{ \Carbon\Carbon::parse($data->issue_expired_date)->format('d-M-Y') ?? '' }}</div>
                                     </li>
                                     <li>
                                         <div class="title">Unit</div>
-                                        <label for="">{{$data->unit}}</label>
+                                        <label class="text">{{$data->unit}}</label>
                                     </li>
                                     <li>
                                         <div class="title">Level</div>
-                                        <label for="">{{ $data->level }}</label>
+                                        <label class="text">{{ $data->level }}</label>
                                     </li>
                                     <li>
                                         <div class="title">Nationality</div>
-                                        <label for="">{{ $data->nationality }}</label>
+                                        <label class="text">{{ $data->nationality }}</label>
                                     </li>
                                     <li>
                                         <div class="title">No. of children</div>
-                                        <label for="">{{ $data->number_of_children }}</label>
+                                        <label class="text">{{ $data->number_of_children }}</label>
                                     </li>
                                     <li>
                                         <div class="title">Marital status</div>
-                                        <label>{{ $data->marital_status }}</label>
+                                        <label class="text">{{ $data->marital_status }}</label>
                                     </li>
                                     <li>
                                         <div class="title">Permanent Addtress</div>
-                                        <label for="">{{ $data->FullPermanentAddress }}</label>
+                                        <label style="display: block;overflow: hidden;color: #888888;">{{ $data->FullPermanentAddress }}</label>
                                     </li>
                                 </ul>
                             </div>
@@ -516,7 +516,7 @@
                                                     </td>
                                                     <td>{{$item->posit_id}}</td>
                                                     <td style="color:#26AF49">{{$item->position_promoted_to}}</td>
-                                                    <td>{{$item->date}}</td>
+                                                    <td>{{$item->PormotDate}}</td>
                                                 </tr>
                                             @endforeach
                                         @else
@@ -622,7 +622,7 @@
                                                 <tr>
                                                     <td>{{$item->id}}</td>
                                                     <td>{{$item->BranchName}}</td>
-                                                    <td>{{$item->date}}</td>
+                                                    <td>{{$item->TransterDate}}</td>
                                                     <td>{{$item->descrition}}</td>
                                                 </tr>
                                             @endforeach
@@ -702,8 +702,8 @@
                                                 <tr>
                                                     <td>{{$item->id}}</td>
                                                     <td>{{$item->title}}</td>
-                                                    <td>{{$item->start_date}}</td>
-                                                    <td>{{$item->end_date}}</td>
+                                                    <td>{{$item->TrainingStartDate}}</td>
+                                                    <td>{{$item->TrainingStartEndDate}}</td>
                                                     <td>{{$item->descrition}}</td>
                                                 </tr>
                                             @endforeach
