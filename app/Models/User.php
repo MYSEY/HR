@@ -245,48 +245,45 @@ class User extends Authenticatable
         return optional($this->branch)->branch_name_kh;
     }
     public function getjoinOfDateAttribute(){
-        return Carbon::parse($this->date_of_commencement)->format('d-M-Y');
+        if ($this->date_of_commencement) {
+            return Carbon::parse($this->date_of_commencement)->format('d-M-Y');
+        }
     }
     public function getPassDateAttribute(){
-        return Carbon::parse($this->fdc_date)->format('d-M-Y');
+        if ($this->fdc_date) {
+            return Carbon::parse($this->fdc_date)->format('d-M-Y');
+        }
     }
     public function getFDCStartDateAttribute(){
-        return Carbon::parse($this->fdc_date)->format('d-M-Y');
+        if ($this->fdc_date) {
+            return Carbon::parse($this->fdc_date)->format('d-M-Y');
+        }
     }
     public function getFDCEndDateAttribute(){
-        return Carbon::parse($this->fdc_end)->format('d-M-Y');
+        if ($this->fdc_end) {
+            return Carbon::parse($this->fdc_end)->format('d-M-Y');
+        }
     }
     public function getResignDatesAttribute(){
-        return Carbon::parse($this->resign_date)->format('d-M-Y');
+        if ($this->resign_date) {
+            return Carbon::parse($this->resign_date)->format('d-M-Y');
+        }
     }
     public function getDOBAttribute(){
-        return Carbon::parse($this->date_of_birth)->format('d-M-Y');
+        if ($this->date_of_birth) {
+            return Carbon::parse($this->date_of_birth)->format('d-M-Y');
+        }
     }
-    //// GET EN ADRESS
-    public function getCityEnAttribute()
-    {
-        return $this->getAddress('city', 'en', $this->current_province);
-    }
-    public function getDistrictEnAttribute()
-    {
-        return $this->getAddress('district', 'en', $this->current_district);
-    }
-    public function getCommuneEnAttribute()
-    {
-        return $this->getAddress('commune', 'en', $this->current_commune);
-    }
-    public function getVillageEnAttribute()
-    {
-        return $this->getAddress('village', 'en', $this->current_village);
-    }
-    public function getFullAddressEnAttribute()
+
+    //// GET Current address
+    public function getFullCurrentAddressAttribute()
     {
         $houseNo = $streetNo = $provice_name = $district_name = $conmmunes_name = $villages_name = '';
         if (!empty($this->current_house_no)) {
-            $houseNo = 'House ' . $this->current_house_no . ' ' ?? '';
+            $houseNo = 'House ' . $this->current_house_no . ',' ?? '';
         }
         if (!empty($this->current_street_no)) {
-            $streetNo = 'Street ' . $this->current_street_no . ' ' ?? '';
+            $streetNo = 'Street ' . $this->current_street_no . ',' ?? '';
         }
         $province = Province::all();
         foreach($province as $item){
@@ -306,13 +303,49 @@ class User extends Authenticatable
                 $conmmunes_name = $item->full_name_en;
             }
         }
-        $villages = Villages::where('district_id',$this->current_village)->get();
+        $villages = Villages::all();
         foreach($villages as $item){
             if($this->current_village == $item->code){
                 $villages_name = $item->full_name_en;
             }
         }
+        return $houseNo . $streetNo .$villages_name.', '.$conmmunes_name.', '.$district_name.', '.$provice_name;
+    }
 
-        return $houseNo . $streetNo .$villages_name.' '.$conmmunes_name.' '.$district_name.' '.$provice_name;
+    //// GET Permanent address
+    public function getFullPermanentAddressAttribute()
+    {
+        $houseNo = $streetNo = $provice_name = $district_name = $conmmunes_name = $villages_name = '';
+        if (!empty($this->permanent_house_no)) {
+            $houseNo = 'House ' . $this->permanent_house_no . ',' ?? '';
+        }
+        if (!empty($this->permanent_street_no)) {
+            $streetNo = 'Street ' . $this->permanent_street_no . ',' ?? '';
+        }
+        $province = Province::all();
+        foreach($province as $item){
+            if($this->permanent_province == $item->code){
+                $provice_name = $item->address_en;
+            }
+        }
+        $district = District::where('province_id',$this->permanent_province)->get();
+        foreach($district as $item){
+            if($this->permanent_district == $item->code){
+                $district_name = $item->full_name_en;
+            }
+        }
+        $Conmmunes = Conmmunes::where('district_id',$this->permanent_district)->get();
+        foreach($Conmmunes as $item){
+            if($this->permanent_commune == $item->code){
+                $conmmunes_name = $item->full_name_en;
+            }
+        }
+        $villages = Villages::all();
+        foreach($villages as $item){
+            if($this->permanent_village == $item->code){
+                $villages_name = $item->full_name_en;
+            }
+        }
+        return $houseNo . $streetNo .$villages_name.', '.$conmmunes_name.', '.$district_name.', '.$provice_name;
     }
 }

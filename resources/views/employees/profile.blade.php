@@ -37,38 +37,29 @@
                                             <small class="text-muted">{{ $data->EmployeePosition }}</small>
                                             <div class="staff-id">Employee ID : {{ $data->number_employee }}</div>
                                             <div class="small doj text-muted">Date of Join : {{ $data->joinOfDate }}</div>
-                                            <div class="staff-msg">
-                                                <a href="#" class="btn btn-custom" data-bs-toggle="modal" data-bs-target="#ChangePassword">Change Password</a>
-                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-md-7">
                                         <ul class="personal-info">
                                             <li>
                                                 <div class="title">Phone:</div>
-                                                <div class="text">{{ $data->personal_phone_number }}</div>
+                                                <label class="text">{{ $data->personal_phone_number }}</label>
                                             </li>
                                             <li>
                                                 <div class="title">Email:</div>
-                                                <div class="text">{{ $data->email }}</div>
+                                                <label class="text">{{ $data->email }}</label>
                                             </li>
                                             <li>
                                                 <div class="title">Birthday:</div>
-                                                <div class="text">
-                                                    {{ \Carbon\Carbon::parse($data->date_of_birth)->format('d-M-Y') ?? '' }}
-                                                </div>
+                                                <label class="text">{{ \Carbon\Carbon::parse($data->date_of_birth)->format('d-M-Y') ?? '' }}</label>
                                             </li>
                                             <li>
                                                 <div class="title">Gender:</div>
-                                                <div class="text">{{ $data->gender == 1 ? 'Male' : 'Female' }}</div>
-                                            </li>
-                                            <li>
-                                                <div class="title">Marital status</div>
-                                                <div class="text">{{ $data->marital_status }}</div>
+                                                <label class="text">{{ $data->gender == 1 ? 'Male' : 'Female' }}</label>
                                             </li>
                                             <li>
                                                 <div class="title">Address:</div>
-                                                <div class="text">{{ $data->FullAddressEn ?? '' }}</div>
+                                                <label class="text">{{ $data->FullCurrentAddress ?? '' }}</label>
                                             </li>
                                         </ul>
                                     </div>
@@ -146,6 +137,10 @@
                                         <label for="">{{ $data->number_of_children }}</label>
                                     </li>
                                     <li>
+                                        <div class="title">Marital status</div>
+                                        <label>{{ $data->marital_status }}</label>
+                                    </li>
+                                    <li>
                                         <div class="title">Permanent Addtress</div>
                                         <label for="">{{ $data->FullPermanentAddress }}</label>
                                     </li>
@@ -157,22 +152,25 @@
                         <div class="card profile-box flex-fill">
                             <div class="card-body">
                                 <h3 class="card-title">Emergency Contact <a href="" class="edit-icon" data-bs-toggle="modal" data-bs-target="#emergency_contact_modal"><i class="fa fa-pencil"></i></a></h3>
-                                <h5 class="section-title">Primary</h5>
-                                <ul class="personal-info">
-                                    <li>
-                                        <div class="title">Name</div>
-                                        <div class="text">John Doe</div>
-                                    </li>
-                                    <li>
-                                        <div class="title">Relationship</div>
-                                        <div class="text">Father</div>
-                                    </li>
-                                    <li>
-                                        <div class="title">Phone </div>
-                                        <div class="text">9876543210</div>
-                                    </li>
-                                </ul>
-                                <hr>
+                                @if (count($contact)>0)
+                                    @foreach ($contact as $item)
+                                        <ul class="personal-info">
+                                            <li>
+                                                <div class="title">Name</div>
+                                                <div class="text">{{$item->name}}</div>
+                                            </li>
+                                            <li>
+                                                <div class="title">Relationship</div>
+                                                <div class="text">{{$item->EmergencyContact}}</div>
+                                            </li>
+                                            <li>
+                                                <div class="title">Phone </div>
+                                                <div class="text">{{$item->phone}},{{$item->phone_2}}</div>
+                                            </li>
+                                        </ul>
+                                        <hr>
+                                    @endforeach
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -187,19 +185,20 @@
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <form>
+                                <form action="{{url('employee/contact')}}" method="POST">
+                                    @csrf
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label>Name <span class="text-danger">*</span></label>
-                                                <input type="text" class="form-control" required>
+                                                <input type="text" class="form-control" id="name" name="name" required>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label>Relationship <span class="text-danger">*</span></label>
-                                                <select class="form-control select" id="field_of_study[]" name="field_of_study[]" value="">
-                                                    <option value="">select Relationship</option>
+                                                <select class="form-control select" id="relationship" name="relationship" value="">
+                                                    <option value="">select relationship</option>
                                                     @foreach ($relationship as $item)
                                                         <option value="{{ $item->id }}">{{ $item->name_khmer }}</option>
                                                     @endforeach
@@ -209,17 +208,18 @@
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label>Phone <span class="text-danger">*</span></label>
-                                                <input class="form-control" type="text" required>
+                                                <input class="form-control" type="text" id="phone" name="phone" required>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label>Phone 2</label>
-                                                <input class="form-control" type="text">
+                                                <input class="form-control" type="text" id="phone_2" name="phone_2">
                                             </div>
                                         </div>
                                     </div>
                                     <div class="submit-section">
+                                        <input type="hidden" name="employee_id" id="employee_id" value="{{ $data->id }}">
                                         <button class="btn btn-primary submit-btn">Submit</button>
                                     </div>
                                 </form>
@@ -307,9 +307,8 @@
                                                     <div class="row">
                                                         <div class="col-md-6">
                                                             <div class="form-group form-focus focused">
-                                                                <input type="text" value="" id="school[]"
-                                                                    name="school[]" class="form-control floating">
-                                                                <label class="focus-label">Institution</label>
+                                                                <input type="text" value="" id="school[]" name="school[]" class="form-control floating" required>
+                                                                <label class="focus-label">Institution <span class="text-danger">*</span></label>
                                                             </div>
                                                         </div>
                                                         <div class="col-md-6">
@@ -325,19 +324,17 @@
                                                         <div class="col-md-6">
                                                             <div class="form-group form-focus focused">
                                                                 <div class="cal-icon">
-                                                                    <input type="text" value="" name="start_date[]" class="form-control floating datetimepicker">
+                                                                    <input type="text" value="" name="start_date[]" class="form-control floating datetimepicker" required>
                                                                 </div>
-                                                                <label class="focus-label">Starting Date</label>
+                                                                <label class="focus-label">Starting Date <span class="text-danger">*</span></label>
                                                             </div>
                                                         </div>
                                                         <div class="col-md-6">
                                                             <div class="form-group form-focus focused">
                                                                 <div class="cal-icon">
-                                                                    <input type="text" value=""
-                                                                        name="end_date[]"
-                                                                        class="form-control floating datetimepicker">
+                                                                    <input type="text" value="" name="end_date[]" class="form-control floating datetimepicker" required>
                                                                 </div>
-                                                                <label class="focus-label">Complete Date</label>
+                                                                <label class="focus-label">Complete Date <span class="text-danger">*</span></label>
                                                             </div>
                                                         </div>
                                                         <div class="col-md-6">
@@ -397,14 +394,8 @@
                                                 <div class="row">
                                                     <div class="col-md-6">
                                                         <div class="form-group form-focus focused">
-                                                            <input type="text" class="form-control floating" id="title[]" name="title[]" value="">
-                                                            <label class="focus-label">Title</label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <div class="form-group form-focus focused">
-                                                            <input type="text" class="form-control floating" id="company_name[]" name="company_name[]" value="">
-                                                            <label class="focus-label">Company Name</label>
+                                                            <input type="text" class="form-control floating" id="company_name[]" name="company_name[]" value="" required>
+                                                            <label class="focus-label">Company Name <span class="text-danger">*</span></label>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
@@ -419,36 +410,30 @@
                                                     
                                                     <div class="col-md-6">
                                                         <div class="form-group form-focus focused">
-                                                            <input type="text" class="form-control floating" id="position[]" name="position[]" value="">
-                                                            <label class="focus-label">Job Position</label>
+                                                            <input type="text" class="form-control floating" id="position[]" name="position[]" value="" required>
+                                                            <label class="focus-label">Job Position <span class="text-danger">*</span></label>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="form-group form-focus focused">
                                                             <div class="">
-                                                                <input type="text" class="form-control floating datetimepicker" id="start_date_experience[]" name="start_date_experience[]" value="">
+                                                                <input type="text" class="form-control floating datetimepicker" id="start_date_experience[]" name="start_date_experience[]" value="" required>
                                                             </div>
-                                                            <label class="focus-label">Period From</label>
+                                                            <label class="focus-label">Period From <span class="text-danger">*</span></label>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="form-group form-focus focused">
                                                             <div class="">
-                                                                <input type="text" class="form-control floating datetimepicker" id="end_date_experience[]" name="end_date_experience[]" value="">
+                                                                <input type="text" class="form-control floating datetimepicker" id="end_date_experience[]" name="end_date_experience[]" value="" required>
                                                             </div>
-                                                            <label class="focus-label">Period To</label>
+                                                            <label class="focus-label">Period To <span class="text-danger">*</span></label>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="form-group form-focus focused">
                                                             <input type="text" class="form-control floating" id="location[]" name="location[]" value="">
                                                             <label class="focus-label">Location</label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <div class="form-group form-focus focused">
-                                                            <input type="text" class="form-control floating" id="description[]" name="description[]" value="">
-                                                            <label class="focus-label">description</label>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -487,10 +472,14 @@
                         <div class="card">
                             <div class="card-body">
                                 <h4 class="project-title"><a href="">Employment Book</a></h4>
-                                <small class="block text-ellipsis m-b-15">
-                                    <span class="text-xs">Preview employment book click this <a href="{{ url('uploads/images/', $data->employment_book) }}" target="_blank">link</a></span>
-                                </small>
-                                <embed src="{{url('uploads/images/', $data->employment_book)}}" style="width:100%; height:100%;">
+                                @if ($data->employment_book !=null)
+                                    <small class="block text-ellipsis m-b-15">
+                                        <span class="text-xs">Preview employment book click this <a href="{{ url('uploads/images/', $data->employment_book) }}" target="_blank">link</a></span>
+                                    </small>
+                                    <embed src="{{url('uploads/images/', $data->employment_book)}}" style="width:100%; height:100%;">
+                                @else
+                                    <span class="text-xs">Preview employment book not found</span>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -528,17 +517,10 @@
                                                     <td>{{$item->posit_id}}</td>
                                                     <td style="color:#26AF49">{{$item->position_promoted_to}}</td>
                                                     <td>{{$item->date}}</td>
-                                                    {{-- <td class="text-end">
-                                                        <div class="dropdown dropdown-action">
-                                                            <a aria-expanded="false" data-bs-toggle="dropdown" class="action-icon dropdown-toggle" href="#"><i class="material-icons">more_vert</i></a>
-                                                            <div class="dropdown-menu dropdown-menu-right">
-                                                                <a href="#" class="dropdown-item"><i class="fa fa-pencil m-r-5"></i> Edit</a>
-                                                                <a href="#" class="dropdown-item"><i class="fa fa-trash-o m-r-5"></i> Delete</a>
-                                                            </div>
-                                                        </div>
-                                                    </td> --}}
                                                 </tr>
                                             @endforeach
+                                        @else
+                                            <td colspan="7" style="text-align: center">No record to display</td>
                                         @endif
                                     </tbody>
                                 </table>
@@ -618,52 +600,6 @@
             </div>
             {{-- End promote --}}
 
-            {{-- Change Password --}}
-            <div id="ChangePassword" class="modal custom-modal fade" aria-hidden="true" style="display: none;">
-                <div class="modal-dialog modal-dialog-centered modal-md" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">×</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <form action="{{url('change-password')}}" method="POST" data-select2-id="select2-data-9-apez">
-                                @csrf
-                                <div class="form-group">
-                                    <label for="password">Current Password <span class="text-danger">*</span></label>
-                                    <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="current_password" required autocomplete="current-password">
-                                    @error('password')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="password">New Password <span class="text-danger">*</span></label>
-                                    <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="new_password" required autocomplete="new-password">
-                                    @error('password')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
-                                <div class="form-group">
-                                    <label for="password-confirm">Confirm New Password</label>
-                                    <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required autocomplete="confirm-assword">
-                                </div>
-                                <div class="submit-section">
-                                    <input type="hidden" name="id" id="id" value="{{ $data->id }}">
-                                    <button type="submit" class="btn btn-primary" id="bntEmpPromote">Submit</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {{-- End Change Password --}}
-
             {{-- Transferred --}}
             <div class="tab-pane fade" id="transferred" role="tabpanel">
                 <div class="col-md-12 d-flex">
@@ -688,6 +624,8 @@
                                                     <td>{{$item->date}}</td>
                                                 </tr>
                                             @endforeach
+                                        @else
+                                            <td colspan="4" style="text-align: center">No record to display</td>
                                         @endif
                                     </tbody>
                                 </table>
@@ -761,6 +699,8 @@
                                                     <td>{{$item->end_date}}</td>
                                                 </tr>
                                             @endforeach
+                                        @else
+                                            <td colspan="4" style="text-align: center">No record to display</td>
                                         @endif
                                     </tbody>
                                 </table>

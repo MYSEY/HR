@@ -197,7 +197,7 @@
                         </div>
                         <div class="col-sm-6">
                             <label>Email</label>
-                            <input class="form-control @error('email') is-invalid @enderror" type="email" id="" required name="email" placeholder="" {{old('email')}}>
+                            <input class="form-control @error('email') is-invalid @enderror" type="email" id="" name="email" placeholder="" {{old('email')}}>
                         </div>
                     </div>
                     <div class="row">

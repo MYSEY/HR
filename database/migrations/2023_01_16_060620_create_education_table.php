@@ -17,8 +17,8 @@ class CreateEducationTable extends Migration
             $table->id();
             $table->integer('employee_id')->nullable();
             $table->string('school')->nullable();
-            $table->integer('degree')->nullable();
-            $table->integer('field_of_study')->nullable();
+            $table->string('degree')->nullable();
+            $table->string('field_of_study')->nullable();
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();
             $table->string('grade')->nullable();

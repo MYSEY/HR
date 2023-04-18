@@ -49,6 +49,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('employee/promote', [EmployeeProfileController::class, 'updateOrCreatePromote'])->name('employee.promote');
     Route::post('employee/transferred', [EmployeeProfileController::class, 'updatedTransferred'])->name('employee.transferred');
     Route::post('employee/training', [EmployeeProfileController::class, 'updatedTraining'])->name('employee.training');
+    Route::post('employee/contact', [EmployeeProfileController::class, 'employeeContact'])->name('employee.contact');
     // Route::get('/holidays', [HolidayController::class, 'index']);
     // Route::get('/attendance/admin', [AttendanceAdminController::class, 'index']);
     // Route::get('/attendance/employee', [AttendanceEmployeeController::class, 'index']);
@@ -86,7 +87,6 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('users/delete', [UserController::class,'destroy']);
     Route::get('users/edit', [UserController::class,'edit']);
     Route::post('/employee/status', [UserController::class,'processing']);
-    Route::post('change-password', [UserController::class, 'changePassword']);
 
     // route province
     Route::get('province', [ProvinceController::class,'index']);

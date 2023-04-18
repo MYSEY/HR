@@ -30,12 +30,6 @@ class UserUpdated extends FormRequest
             'date_of_commencement' => 'required',
             'personal_phone_number' => 'required|min:9|max:15',
             'role_id' => 'required|string',
-            // 'password' => [
-            //     'sometimes',
-            //     'nullable',
-            //     'string',
-            //     'confirmed'
-            // ]
         ];
     }
 }

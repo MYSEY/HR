@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admins;
 use App\Models\User;
 use App\Models\Option;
 use App\Models\Branchs;
+use App\Models\Contact;
 use App\Models\Position;
 use App\Models\Education;
 use App\Models\Department;
@@ -31,8 +32,9 @@ class EmployeeProfileController extends Controller
         $branch = Branchs::all();
         $transferred = Transferred::all();
         $training = StaffTraining::all();
+        $contact = Contact::all();
         $empPromoted = StaffPromoted::where('employee_id',$request->id)->orderBy('id', 'DESC')->get();
-        return view('employees.profile',compact('data','optionOfStudy','optionDegree','department','position','empPromoted','branch','transferred','training','relationship'));
+        return view('employees.profile',compact('data','optionOfStudy','optionDegree','department','position','empPromoted','branch','transferred','training','relationship','contact'));
     }
     public function employeeEducation(Request $request){
         try{
@@ -54,11 +56,11 @@ class EmployeeProfileController extends Controller
                 endforeach;
             }
             DB::commit();
-            Toastr::success('Update education successfully. :)','Success');
+            Toastr::success('Update education successfully.','Success');
             return redirect()->back();
         }catch(\Exception $e){
             DB::rollback();
-            Toastr::error('Update education fail :)','Error');
+            Toastr::error('Update education fail','Error');
             return redirect()->back();
         }
     }
@@ -66,18 +68,15 @@ class EmployeeProfileController extends Controller
     public function updateOrCreateExperience(Request $request)
     {
         try {
-            $titles = $request->title;
-            if (is_array($titles) && count($titles)) {
-                foreach ($titles as $key => $title) :
-                    if (!empty($title)) :
+            if (is_array($request->company_name) && count($request->company_name)) {
+                foreach ($request->company_name as $key => $item) :
+                    if (!empty($item)) :
                         Experience::updateOrCreate([
                             'employee_id'       => $request->employee_id,
-                            'title'             => $title ?? '',
                             'employment_type'   => $request->employment_type[$key] ?? '',
                             'company_name'      => $request->company_name[$key] ?? '',
                             'position'          => $request->position[$key] ?? '',
                             'location'          => $request->location[$key] ?? '',
-                            'description'       => $request->description[$key] ?? '',
                             'start_date'        => !empty($request->start_date_experience[$key]) ? Carbon::parse($request->start_date_experience[$key])->format('Y-m-d') : '',
                             'end_date'          => !empty($request->end_date_experience[$key]) ? Carbon::parse($request->end_date_experience[$key])->format('Y-m-d') : '',
                             'updated_by'        => Auth::id(),
@@ -86,11 +85,11 @@ class EmployeeProfileController extends Controller
                 endforeach;
             }
             DB::commit();
-            Toastr::success('Update experience successfully. :)','Success');
+            Toastr::success('Update experience successfully.','Success');
             return redirect()->back();
         }catch(\Exception $e){
             DB::rollback();
-            Toastr::error('Update experience fail :)','Error');
+            Toastr::error('Update experience fail','Error');
             return redirect()->back();
         }
     }
@@ -107,11 +106,11 @@ class EmployeeProfileController extends Controller
             ]);
 
             DB::commit();
-            Toastr::success('Update promoted successfully. :)','Success');
+            Toastr::success('Update promoted successfully.','Success');
             return redirect()->back();
         }catch(\Exception $e){
             DB::rollback();
-            Toastr::error('Update promoted fail :)','Error');
+            Toastr::error('Update promoted fail','Error');
             return redirect()->back();
         }
     }
@@ -126,11 +125,11 @@ class EmployeeProfileController extends Controller
             ]);
 
             DB::commit();
-            Toastr::success('Update branch successfully. :)','Success');
+            Toastr::success('Update branch successfully.','Success');
             return redirect()->back();
         }catch(\Exception $e){
             DB::rollback();
-            Toastr::error('Update branch fail :)','Error');
+            Toastr::error('Update branch fail','Error');
             return redirect()->back();
         }
     }
@@ -146,11 +145,30 @@ class EmployeeProfileController extends Controller
             ]);
 
             DB::commit();
-            Toastr::success('Update training successfully. :)','Success');
+            Toastr::success('Update training successfully.','Success');
             return redirect()->back();
         }catch(\Exception $e){
             DB::rollback();
-            Toastr::error('Update training fail :)','Error');
+            Toastr::error('Update training fail','Error');
+            return redirect()->back();
+        }
+    }
+    public function employeeContact(Request $request){
+        try{
+            Contact::create([
+                'employee_id'   => $request->employee_id,
+                'name'          => $request->name,
+                'relationship'  => $request->relationship,
+                'phone'         => $request->phone,
+                'phone_2'       => $request->phone_2,
+                'updated_by'    => Auth::id(),
+            ]);
+            DB::commit();
+            Toastr::success('Create emergency contact successfully.','Success');
+            return redirect()->back();
+        }catch(\Exception $e){
+            DB::rollback();
+            Toastr::error('emergency contact fail','Error');
             return redirect()->back();
         }
     }

@@ -21,13 +21,13 @@
                         <div class="col-sm-6">
                             <div class="">
                                 <label class="">Name (KH) <span class="text-danger">*</span></label>
-                                <input class="form-control @error('employee_name_kh') is-invalid @enderror" type="text" id="e_employee_name_kh" name="employee_name_kh" value="{{old('employee_name_kh')}}">
+                                <input class="form-control @error('employee_name_kh') is-invalid @enderror" type="text" id="e_employee_name_kh" required name="employee_name_kh" value="{{old('employee_name_kh')}}">
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="">Name (EN) <span class="text-danger">*</span></label>
-                                <input class="form-control @error('employee_name_en') is-invalid @enderror" type="text" id="e_employee_name_en" name="employee_name_en" value="{{old('employee_name_en')}}">
+                                <input class="form-control @error('employee_name_en') is-invalid @enderror" type="text" id="e_employee_name_en" required name="employee_name_en" value="{{old('employee_name_en')}}">
                             </div>
                         </div>
                         
@@ -44,7 +44,7 @@
                         <div class="col-sm-6"> 
                             <div class="form-group">
                                 <label>Role Name <span class="text-danger">*</span></label>
-                                <select class="select form-control" name="role_id" id="e_role_id">
+                                <select class="select form-control" name="role_id" id="e_role_id" required>
                                     <option selected disabled> --Select --</option>
                                 </select>
                             </div>
@@ -63,7 +63,7 @@
                             <div class="form-group">
                                 <label>Date Of Birth <span class="text-danger">*</span></label>
                                 <div class="cal-icon">
-                                    <input class="form-control datetimepicker @error('date_of_birth') is-invalid @enderror" type="text" id="e_date_of_birth" name="date_of_birth" value="{{old('date_of_birth')}}">
+                                    <input class="form-control datetimepicker @error('date_of_birth') is-invalid @enderror" type="text" id="e_date_of_birth" required name="date_of_birth" value="{{old('date_of_birth')}}">
                                 </div>
                             </div>
                         </div>
@@ -114,7 +114,7 @@
                             <div class="">
                                 <label class="">Join Date <span class="text-danger">*</span></label>
                                 <div class="cal-icon">
-                                    <input class="form-control datetimepicker  @error('date_of_commencement') is-invalid @enderror" id="e_date_of_commencement" name="date_of_commencement" type="text" value="{{old('date_of_commencement')}}">
+                                    <input class="form-control datetimepicker  @error('date_of_commencement') is-invalid @enderror" id="e_date_of_commencement" required name="date_of_commencement" type="text" value="{{old('date_of_commencement')}}">
                                 </div>
                             </div>
                         </div>
@@ -151,7 +151,7 @@
                         <div class="col-sm-6">
                             <div class="">
                                 <label class="">Guarantee Letter(PDF) <span class="text-danger">*</span></label>
-                                <input class="form-control @error('guarantee_letter') is-invalid @enderror" type="file" id="guarantee_letter" name="guarantee_letter" value="{{old('guarantee_letter')}}">
+                                <input class="form-control @error('guarantee_letter') is-invalid @enderror" type="file" id="guarantee_letter" required name="guarantee_letter" value="{{old('guarantee_letter')}}">
                                 <input type="hidden" name="hidden_file_guarantee" id="e_guarantee_letter" value="">
                             </div>
                         </div>
@@ -167,7 +167,7 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="">Personal Phone <span class="text-danger">*</span></label>
-                                <input class="form-control @error('personal_phone_number') is-invalid @enderror" type="number" id="e_personal_phone_number" name="personal_phone_number" value="{{old('personal_phone_number')}}">
+                                <input class="form-control @error('personal_phone_number') is-invalid @enderror" type="number" id="e_personal_phone_number" required name="personal_phone_number" value="{{old('personal_phone_number')}}">
                             </div>
                         </div>
                         <div class="col-sm-6">
@@ -216,10 +216,7 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="">Bank Name</label>
-                                <select class="select form-control" id="e_bank_name" name="bank_name" value="{{old('bank_name')}}">
-                                    {{-- <option value=""></option> --}}
-                                </select>
-                                {{-- <input class="form-control" type="text" id="e_bank_name" name="bank_name" value="{{old('bank_name')}}"> --}}
+                                <select class="select form-control" id="e_bank_name" name="bank_name" value="{{old('bank_name')}}"></select>
                             </div>
                         </div>
                         <div class="col-sm-6">
@@ -338,34 +335,26 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Province/City</label>
-                                    <select class="select form-control" name="permanent_province" id="e_permanent_province" value="{{old('city')}}">
-                                        {{-- <option v-for="(item,text) in cities" :value="text">@{{item}}</option> --}}
-                                    </select>
+                                    <select class="select form-control" name="permanent_province" id="e_permanent_province" value="{{old('city')}}"></select>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>District/Khan</label>
-                                    <select class="select form-control" id="e_permanent_district" name="permanent_district" value="{{old('distric')}}">
-                                        {{-- <option v-for="(item, text) in districs" :value="text">@{{item}}</option> --}}
-                                    </select>
+                                    <select class="select form-control" id="e_permanent_district" name="permanent_district" value="{{old('distric')}}"></select>
                                 </div>
                             </div>
                             
                             <div class="col-md-6">
                                 <div class="form-group ">
                                     <label class="no-error-label">Commune/Sangkat</label>
-                                    <select class="select form-control no-error-border" id="e_permanent_commune" name="permanent_commune" value="{{old('commune')}}">
-                                        {{-- <option v-for="(item, text) in communes" :value="text">@{{item}}</option> --}}
-                                    </select>
+                                    <select class="select form-control no-error-border" id="e_permanent_commune" name="permanent_commune" value="{{old('commune')}}"></select>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="no-error-label">Village</label>
-                                    <select class="select form-control no-error-border" id="e_permanent_village" name="permanent_village" value="{{old('village')}}">
-                                        {{-- <option v-for="(item, text) in villages" :value="text">@{{item}}</option> --}}
-                                    </select>
+                                    <select class="select form-control no-error-border" id="e_permanent_village" name="permanent_village" value="{{old('village')}}"></select>
                                 </div>
                             </div>
                         </div>

@@ -260,6 +260,12 @@ class OptionSeeder extends Seeder
             'created_by'    => Auth::id(),
         ]);
         Option::firstOrCreate([
+            'name_khmer' => 'Sister',
+            'name_english'=>'Sister',
+            'type' => 'relationship',
+            'created_by'    => Auth::id(),
+        ]);
+        Option::firstOrCreate([
             'name_khmer' => 'Brother',
             'name_english'=>'Brother',
             'type' => 'relationship',

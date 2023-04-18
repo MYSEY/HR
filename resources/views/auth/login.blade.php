@@ -57,7 +57,7 @@
                                 <p id="show_change_password" hidden></p>
                                 <div class="form-group">
                                     <label>Employee ID <span class="text-danger">*</span></label>
-                                    <input id="number_employee" type="text" class="form-control @error('number_employee') is-invalid @enderror" name="number_employee" value="{{ old('number_employee') }}" autocomplete="Number employee" autofocus>
+                                    <input id="number_employee" type="text" class="form-control @error('number_employee') is-invalid @enderror" name="number_employee" value="{{ old('number_employee') }}">
                                     @error('number_employee')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
