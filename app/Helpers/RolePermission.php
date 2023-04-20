@@ -54,6 +54,12 @@ function menu(){
                     'table'=>6,
                     'permission'=>1
                 ],
+                [
+                    'value'=>'Public Holiday',
+                    'url'=>"holidays",
+                    'table'=>6,
+                    'permission'=>1
+                ],
             ]
         ],
         [

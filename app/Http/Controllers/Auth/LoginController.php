@@ -50,42 +50,38 @@ class LoginController extends Controller
         ]);
     }
 
-
+    // change password
     public function login(Request $request)
     {
-        // change password
         $change_password= "";
+        $hashedPassword = User::select('employee_name_en','number_employee', 'password','email')->where('number_employee', $request->number_employee)->first();
         if ($request->new_password && $request->password_confirmation) {
-            $hashedPassword = User::select('number_employee', 'password')->where('number_employee', $request->number_employee)->get();
-            if (Hash::check($request->current_password, $hashedPassword[0]["password"])) {
+            if (Hash::check($request->current_password, $hashedPassword->password)) {
                 if ($request->new_password == $request->password_confirmation) {
                     User::where('number_employee', $request->number_employee)->update([
                         'password'  =>  Hash::make($request->new_password)
                     ]);
                     $change_password = $request->new_password;
                     Toastr::success('password updated successfully', 'Success');
-                    // return redirect()->back();
                 }else {
                     Toastr::error('new password can not be the old password!', 'Error');
                     return redirect()->back();
                 }
             } else {
-                Toastr::error('current password doesnt matched.', 'Error');
+                Toastr::error('Wrong employee ID Or current password', 'Error');
                 return redirect()->back();
             }
         }else{
             $request->validate([
-                // 'email' => 'required|string|email',
                 'number_employee' => 'required|string|max:255',
                 'password' => 'required|string',
             ]);
         }
         
-        $name    = $request->name;
-        $email    = $request->email;
+        $name    = $hashedPassword->employee_name_en;
+        $email    = $hashedPassword->email;
         $number_employee    = $request->number_employee;
         $password = $change_password ? $change_password : $request->password;
-        // $password = $request->password;
         
         $dt         = Carbon::now();
         $todayDate  = $dt->toDayDateTimeString();
@@ -100,13 +96,13 @@ class LoginController extends Controller
         if (Auth::attempt(['number_employee' => $number_employee, 'password' => $password, 'status' => 'Active'])) {
             DB::table('activity_logs')->insert($activityLog);
             Toastr::success('Login successfully.', 'Success');
-            return redirect()->intended('dashboad/employee');
+            return redirect('dashboad/admin');
         } elseif (Auth::attempt(['number_employee' => $number_employee, 'password' => $password, 'status' => null])) {
             DB::table('activity_logs')->insert($activityLog);
             Toastr::success('Login successfully.', 'Success');
-            return redirect()->intended('dashboad/employee');
+            return redirect('dashboad/employee');
         } else {
-            Toastr::error('fail, WRONG USERNAME OR PASSWORD :)', 'Error');
+            Toastr::error('Wrong employee ID Or password', 'Error');
             return redirect('login');
         }
     }
@@ -117,7 +113,7 @@ class LoginController extends Controller
         $user = Auth::User();
         Session::put('user', $user);
         $user = Session::get('user');
-
+        
         $name       = $user->name;
         $email      = $user->email;
         $number_employee      = $user->number_employee;
@@ -133,7 +129,7 @@ class LoginController extends Controller
         ];
         DB::table('activity_logs')->insert($activityLog);
         Auth::logout();
-        Toastr::success('Logout successfully :)', 'Success');
+        Toastr::success('Logout successfully', 'Success');
         return redirect('login');
     }
 }
