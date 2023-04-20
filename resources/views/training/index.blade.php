@@ -1,4 +1,9 @@
 @extends('layouts.master')
+<style>
+    .custom-table td {
+        padding: 10px 10px !important;
+    }
+</style>
 @section('content')
     <div class="content container-fluid">
         <div class="page-header">
@@ -37,154 +42,143 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr class="odd">
-                                            <td class="">1</td>
-                                            <td>Git Training</td>
-                                            <td>
-                                                <h2 class="table-avatar">
-                                                    <a href="https://smarthr.dreamguystech.com/laravel/template/public/profile" class="avatar"><img alt="" src="https://smarthr.dreamguystech.com/laravel/template/public/assets/img/profiles/avatar-02.jpg"></a>
-                                                    <a href="https://smarthr.dreamguystech.com/laravel/template/public/profile">John Doe </a>
-                                                </h2>
-                                            </td>
-                                            <td>
-                                                <ul class="team-members">
-                                                    <li>
-                                                        <a href="#" data-bs-toggle="tooltip" aria-label="Bernardo Galaviz"><img alt="" src="https://smarthr.dreamguystech.com/laravel/template/public/assets/img/profiles/avatar-10.jpg"></a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#" data-bs-toggle="tooltip" aria-label="Richard Miles"><img alt="" src="https://smarthr.dreamguystech.com/laravel/template/public/assets/img/profiles/avatar-09.jpg"></a>
-                                                    </li>
-                                                    <li class="dropdown avatar-dropdown">
-                                                        <a href="#" class="all-users dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">+15</a>
-                                                        <div class="dropdown-menu dropdown-menu-right">
-                                                            <div class="avatar-group">
-                                                                <a class="avatar avatar-xs" href="#">
-                                                                    <img alt="" src="https://smarthr.dreamguystech.com/laravel/template/public/assets/img/profiles/avatar-02.jpg">
-                                                                </a>
-                                                                <a class="avatar avatar-xs" href="#">
-                                                                    <img alt="" src="https://smarthr.dreamguystech.com/laravel/template/public/assets/img/profiles/avatar-09.jpg">
-                                                                </a>
-                                                                <a class="avatar avatar-xs" href="#">
-                                                                    <img alt="" src="https://smarthr.dreamguystech.com/laravel/template/public/assets/img/profiles/avatar-10.jpg">
-                                                                </a>
-                                                                <a class="avatar avatar-xs" href="#">
-                                                                    <img alt="" src="https://smarthr.dreamguystech.com/laravel/template/public/assets/img/profiles/avatar-05.jpg">
-                                                                </a>
-                                                                <a class="avatar avatar-xs" href="#">
-                                                                    <img alt="" src="https://smarthr.dreamguystech.com/laravel/template/public/assets/img/profiles/avatar-11.jpg">
-                                                                </a>
-                                                                <a class="avatar avatar-xs" href="#">
-                                                                    <img alt="" src="https://smarthr.dreamguystech.com/laravel/template/public/assets/img/profiles/avatar-12.jpg">
-                                                                </a>
-                                                                <a class="avatar avatar-xs" href="#">
-                                                                    <img alt="" src="https://smarthr.dreamguystech.com/laravel/template/public/assets/img/profiles/avatar-13.jpg">
-                                                                </a>
-                                                                <a class="avatar avatar-xs" href="#">
-                                                                    <img alt="" src="https://smarthr.dreamguystech.com/laravel/template/public/assets/img/profiles/avatar-01.jpg">
-                                                                </a>
-                                                                <a class="avatar avatar-xs" href="#">
-                                                                    <img alt="" src="https://smarthr.dreamguystech.com/laravel/template/public/assets/img/profiles/avatar-16.jpg">
-                                                                </a>
-                                                            </div>
-                                                            <div class="avatar-pagination">
-                                                                <ul class="pagination">
-                                                                    <li class="page-item">
-                                                                        <a class="page-link" href="#" aria-label="Previous">
-                                                                            <span aria-hidden="true">«</span>
-                                                                            <span class="visually-hidden">Previous</span>
-                                                                        </a>
-                                                                    </li>
-                                                                    <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                                                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                                                    <li class="page-item">
-                                                                        <a class="page-link" href="#" aria-label="Next">
-                                                                            <span aria-hidden="true">»</span>
-                                                                            <span class="visually-hidden">Next</span>
-                                                                        </a>
-                                                                    </li>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-                                                    </li>
-                                                </ul>
-                                            </td>
-                                            <td class="sorting_1">7 May 2019 - 10 May 2019</td>
-                                            <td>Lorem ipsum dollar</td>
-                                            <td>$400</td>
-                                            <td>
-                                                <div class="dropdown action-label">
-                                                    <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">
-                                                        <i class="fa fa-dot-circle-o text-success"></i> Active
-                                                    </a>
-                                                    <div class="dropdown-menu">
-                                                        <a class="dropdown-item" href="#"><i class="fa fa-dot-circle-o text-success"></i> Active</a>
-                                                        <a class="dropdown-item" href="#"><i class="fa fa-dot-circle-o text-danger"></i> Inactive</a>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="text-end">
-                                                <div class="dropdown dropdown-action">
-                                                    <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
-                                                    <div class="dropdown-menu dropdown-menu-right" style="">
-                                                        <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#edit_training"><i class="fa fa-pencil m-r-5"></i> Edit</a>
-                                                        <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#delete_training"><i class="fa fa-trash-o m-r-5"></i>
-                                                            Delete
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            </tr>
-
-                                        {{-- @if (count($data)>0) --}}
-                                            {{-- @foreach ($data as $item)
+                                        @if (count($dataTrainings) > 0)
+                                            @foreach ($dataTrainings as $item)
                                                 <tr class="odd">
                                                     <td class="sorting_1 ids">{{$item->id}}</td>
-                                                    <td class="name">{{$item->name}}</td>
+                                                    <td class="training_type_name">{{$item->TrainingTypeName}}</td>
                                                     <td>
-                                                        {{$item->percentage}}%
-                                                        <input type="hidden" class="percentage" value="{{$item->percentage}}">
+                                                        <ul class="team-members">
+                                                            <?php $count = 1; ?>
+                                                            @foreach ($item->trainers as $tr)
+                                                                <li>
+                                                                    <a href="#" data-bs-toggle="tooltip" aria-label="Bernardo Galaviz"><img alt="" src="{{asset('/uploads/images/')}}"></a>
+                                                                </li>
+                                                                <?php if($count == 2) break; ?>
+                                                                <?php $count++; ?>
+                                                            @endforeach
+                                                            <li class="dropdown avatar-dropdown">
+                                                                <a href="#" class="all-users dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">+{{count($item->trainers)}}</a>
+                                                                <div class="dropdown-menu dropdown-menu-right">
+                                                                    <div class="avatar-group">
+                                                                        @foreach ($item->trainers as $tr)
+                                                                            <a class="avatar avatar-xs" href="#">
+                                                                                <img alt="" src="{{asset('/uploads/images/' )}}">
+                                                                            </a>
+                                                                        @endforeach
+                                                                    </div>
+                                                                    <div class="avatar-pagination">
+                                                                        <ul class="pagination">
+                                                                            <li class="page-item">
+                                                                                <a class="page-link" href="#" aria-label="Previous">
+                                                                                    <span aria-hidden="true">«</span>
+                                                                                    <span class="visually-hidden">Previous</span>
+                                                                                </a>
+                                                                            </li>
+                                                                            <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                                                            <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                                                            <li class="page-item">
+                                                                                <a class="page-link" href="#" aria-label="Next">
+                                                                                    <span aria-hidden="true">»</span>
+                                                                                    <span class="visually-hidden">Next</span>
+                                                                                </a>
+                                                                            </li>
+                                                                        </ul>
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+                                                        </ul>
+
+                                                        {{-- <h2 class="table-avatar">
+                                                            <a href="#" class="avatar"><img alt="" src=""></a>
+                                                            <a href="#">{{$item->trainers[0]["name_en"]}} </a>
+                                                        </h2> --}}
                                                     </td>
+                                                    <td>
+                                                        <ul class="team-members">
+                                                            <?php $count = 1; ?>
+                                                            @foreach ($item->employees as $emp)
+                                                                <li>
+                                                                    <a href="#" data-bs-toggle="tooltip" aria-label="{{$emp["employee_name_en"]}}"><img alt="" src="{{asset('/uploads/images/'.$emp["profile"])}}"></a>
+                                                                </li>
+                                                                <?php if($count == 2) break; ?>
+                                                                <?php $count++; ?>
+                                                            @endforeach
+                                                            <li class="dropdown avatar-dropdown">
+                                                                <a href="#" class="all-users dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">+{{count($item->employees)}}</a>
+                                                                <div class="dropdown-menu dropdown-menu-right">
+                                                                    <div class="avatar-group">
+                                                                        @foreach ($item->employees as $emp)
+                                                                            <a class="avatar avatar-xs" href="#">
+                                                                                <img alt="" src="{{asset('/uploads/images/'.$emp["profile"])}}">
+                                                                            </a>
+                                                                        @endforeach
+                                                                    </div>
+                                                                    <div class="avatar-pagination">
+                                                                        <ul class="pagination">
+                                                                            <li class="page-item">
+                                                                                <a class="page-link" href="#" aria-label="Previous">
+                                                                                    <span aria-hidden="true">«</span>
+                                                                                    <span class="visually-hidden">Previous</span>
+                                                                                </a>
+                                                                            </li>
+                                                                            <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                                                            <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                                                            <li class="page-item">
+                                                                                <a class="page-link" href="#" aria-label="Next">
+                                                                                    <span aria-hidden="true">»</span>
+                                                                                    <span class="visually-hidden">Next</span>
+                                                                                </a>
+                                                                            </li>
+                                                                        </ul>
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+                                                        </ul>
+                                                    </td>
+                                                    <td class="sorting_1">{{$item->start_date}} - {{$item->end_date}}</td>
+                                                    <td>{{$item->description}}</td>
+                                                    <td>${{$item->cost_price}}</td>
                                                     <td>
                                                         <input type="hidden" class="status" value="{{$item->status}}">
                                                         <div class="dropdown action-label">
-                                                            @if ($item->status=='pending')
-                                                                <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
-                                                                    <i class="fa fa-dot-circle-o text-danger"></i>
-                                                                    <span>{{$item->status}}</span>
-                                                                </a>
-                                                            @elseif ($item->status=='approved')
+                                                            @if ($item->status=='1')
                                                                 <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
                                                                     <i class="fa fa-dot-circle-o text-success"></i>
-                                                                    <span>{{$item->status}}</span>
+                                                                    <span>Active</span>
+                                                                </a>
+                                                            @elseif ($item->status=='0')
+                                                                <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
+                                                                    <i class="fa fa-dot-circle-o text-danger"></i>
+                                                                    <span>Inactive</span>
                                                                 </a>
                                                             @endif
-                                                                <div class="dropdown-menu dropdown-menu-right" id="btn-status">
-                                                                    <a class="dropdown-item" data-id="{{$item->id}}" data-name="pending" data-status-old="{{$item->status}}" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-danger"></i> Pending
-                                                                    </a>
-                                                                    <a class="dropdown-item" data-id="{{$item->id}}" data-name="approved" data-status-old="{{$item->status}}" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-success"></i> Approved
-                                                                    </a>
-                                                                </div>
+                                                            <div class="dropdown-menu dropdown-menu-right" id="btn-status">
+                                                                <a class="dropdown-item" data-id="{{$item->id}}" data-name="1" data-status-old="{{$item->status}}" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-success"></i> Active
+                                                                </a>
+                                                                <a class="dropdown-item" data-id="{{$item->id}}" data-name="0" data-status-old="{{$item->status}}" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-danger"></i> Inactive
+                                                                </a>
+                                                            </div>
                                                         </div>
                                                     </td>
-                                                    <td>{{$item->created_at}}</td>
                                                     <td class="text-end">
                                                         <div class="dropdown dropdown-action">
                                                             <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
                                                             <div class="dropdown-menu dropdown-menu-right">
-                                                                <a class="dropdown-item update" data-toggle="modal" data-id="{{$item->id}}" data-target="#edit_taxes"><i class="fa fa-pencil m-r-5"></i> Edit</a>
-                                                                <a class="dropdown-item delete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_taxes"><i class="fa fa-trash-o m-r-5"></i> Delete</a>
+                                                                <a class="dropdown-item update" data-toggle="modal" data-id="{{$item->id}}" data-target="#edit_training"><i class="fa fa-pencil m-r-5"></i> Edit</a>
+                                                                <a class="dropdown-item delete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_training"><i class="fa fa-trash-o m-r-5"></i> Delete</a>
                                                             </div>
                                                         </div>
                                                     </td>
                                                 </tr>
-                                            @endforeach --}}
-                                        {{-- @else --}}
-                                            {{-- <tr>
+                                            @endforeach
+                                        @else
+                                            <tr>
                                                 <td colspan="9" style="text-align: center">No record to display</td>
-                                            </tr> --}}
-                                        {{-- @endif --}}
+                                            </tr>
+                                        @endif
                                     </tbody>
                                 </table>
                             </div>
@@ -215,7 +209,7 @@
                                         <button type="submit" class="btn btn-primary continue-btn submit-btn">Delete</button>
                                     </div>
                                     <div class="col-6">
-                                        <a href="javascript:void(0);" data-bs-dismiss="modal" class="btn btn-primary cancel-btn">Cancel</a>
+                                        <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-primary cancel-btn">Cancel</a>
                                     </div>
                                 </div>
                             </form>
@@ -231,6 +225,153 @@
 
 <script>
     $(function(){
-        
+        $('.update').on('click',function(){
+            $('#e_status').html('<option value=""></option>');
+            var _this = $(this).parents('tr');
+            $('.e_id').val(_this.find('.ids').text());
+            let status = _this.find('.status').val();
+            if (status == "1") {
+                $('#e_status').append('<option selected value="1">Active</option> <option value="0">Inactive</option>');
+            }else if(status == "0"){
+                $('#e_status').append('<option selected value="0">Inactive</option> <option value="1">Active</option>');
+            }
+            let id = $(this).data("id");
+            $("#e_id").val(id)
+            $.ajax({
+                type: "GET",
+                url: "{{url('training/edit')}}",
+                data: {
+                    id : id
+                },
+                dataType: "JSON",
+                success: function (response) {
+                    console.log("response: ", response);
+                    if (response.success) {
+                        if (response.trainingType != '') {
+                            $('#e_training_type').html();
+                            $.each(response.trainingType, function(i, item) {
+                                $('#e_training_type').append($('<option>', {
+                                    value: item.id,
+                                    text: item.type_name,
+                                    selected: item.id == response.success.training_type_id
+                                }));
+                            });
+                        }
+                        if (response.trainer !='') {
+                            $('#e_trainer').html('');
+                            $.each(response.trainer, function(i, item) {
+                                let id = item.id.toString();
+                                let index = response.success.trainer_id.indexOf(id);
+                                if (index > -1) {
+                                    $('#e_trainer').append($('<option>', {
+                                        value: item.id,
+                                        text: item.name_en,
+                                        selected: true
+                                    }));
+                                }else{
+                                    $('#e_trainer').append($('<option>', {
+                                        value: item.id,
+                                        text: item.name_en,
+                                        selected: false
+                                    }));
+                                }
+                            });
+                        }
+                        if (response.trainingType !='') {
+                            $('#e_employee').html('');
+                            $.each(response.employee, function(i, item) {
+                                let id = item.id.toString();
+                                let index = response.success.employee_id.indexOf(id);
+                                if (index > -1) {
+                                    $('#e_employee').append($('<option>', {
+                                        value: item.id,
+                                        text: item.employee_name_en,
+                                        selected: true
+                                    }));
+                                }else{
+                                    $('#e_employee').append($('<option>', {
+                                        value: item.id,
+                                        text: item.employee_name_en,
+                                        selected: false
+                                    }));
+                                }
+                            });
+                        }
+                        $('#e_cost_price').val(response.success.cost_price);
+                        $('#e_start_date').val(response.success.start_date);
+                        $('#e_end_date').val(response.success.end_date);
+                        $('#e_description').val(response.success.description);
+                    }
+                }
+            });
+
+        });
+
+        $('body').on('click', '#btn-status a', function() {
+            let id = $(this).attr('data-id');
+            let status = $(this).attr('data-name');
+            let old_status = $(this).attr('data-status-old');
+            let text_status = "";
+            let text_old_status = "";
+            if (old_status == "0") {
+                text_old_status = "Inactive"
+            }else if(old_status == "1"){
+                text_old_status = "Active"
+            }
+            if (status == "0") {
+                text_status = "Inactive"
+            }else if(status == "1"){
+                text_status = "Active"
+            }
+            $.confirm({
+                title: 'Change Status!',
+                contentClass: 'text-center',
+                backgroundDismiss: 'cancel',
+                content: ''+
+                        '<label>Are you sure want change status '+'<label style="color:red">'+text_old_status+'</label>'+' to '+'<label style="color:red">'+text_status+'</label>'+'?</label>'+
+                        '<input type="hidden" class="form-control training_status" id="" name="" value="'+status+'">'+
+                        '<input type="hidden" class="form-control id" id="" name="" value="'+id+'">',
+                buttons: {
+                    confirm: {
+                        text: 'Submit',
+                        btnClass: 'btn-blue',
+                        action: function() {
+                            var training_status = this.$content.find('.training_status').val();
+                            var id = this.$content.find('.id').val();
+                            
+                            axios.post('{{ URL('training/status') }}', {
+                                    'training_status': training_status,
+                                    'id': id,
+                                }).then(function(response) {
+                                new Noty({
+                                    title: "",
+                                    text: "The process has been successfully.",
+                                    type: "success",
+                                    icon: true
+                                }).show();
+                                $('.card-footer').remove();
+                                window.location.replace("{{ URL('training/list') }}");
+                            }).catch(function(error) {
+                                new Noty({
+                                    title: "",
+                                    text: "Something went wrong please try again later.",
+                                    type: "error",
+                                    icon: true
+                                }).show();
+                            });
+                        }
+                    },
+                    cancel: {
+                        text: 'Cancel',
+                        btnClass: 'btn-red btn-sm',
+                    },
+                }
+            });
+        });
+
+        $('.delete').on('click',function(){
+            var _this = $(this).parents('tr');
+            $('.e_id').val(_this.find('.ids').text());
+        });
     });
 </script>

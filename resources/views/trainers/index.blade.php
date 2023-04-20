@@ -53,21 +53,21 @@
                                                         <div class="dropdown action-label">
                                                             @if ($item->status=='1')
                                                                 <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
-                                                                    <i class="fa fa-dot-circle-o text-danger"></i>
+                                                                    <i class="fa fa-dot-circle-o text-success"></i>
                                                                     <span>Active</span>
                                                                 </a>
                                                             @elseif ($item->status=='0')
                                                                 <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
-                                                                    <i class="fa fa-dot-circle-o text-success"></i>
+                                                                    <i class="fa fa-dot-circle-o text-danger"></i>
                                                                     <span>Inactive</span>
                                                                 </a>
                                                             @endif
                                                                 <div class="dropdown-menu dropdown-menu-right" id="btn-status">
                                                                     <a class="dropdown-item" data-id="{{$item->id}}" data-name="1" data-status-old="{{$item->status}}" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-danger"></i> Active
+                                                                        <i class="fa fa-dot-circle-o text-success"></i> Active
                                                                     </a>
                                                                     <a class="dropdown-item" data-id="{{$item->id}}" data-name="0" data-status-old="{{$item->status}}" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-success"></i> Inactive
+                                                                        <i class="fa fa-dot-circle-o text-danger"></i> Inactive
                                                                     </a>
                                                                 </div>
                                                         </div>

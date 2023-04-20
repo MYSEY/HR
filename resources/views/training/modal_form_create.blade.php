@@ -1,5 +1,5 @@
 <div id="add_training" class="modal custom-modal fade" role="dialog">
-    <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Add New Training</h5>
@@ -8,30 +8,37 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form action="{{url('taxes/store')}}" method="POST" enctype="multipart/form-data">
+                <form action="{{url('training/store')}}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label>Training Type</label>
-                                <select class="select form-control" id="training_type" name="training_type" value="{{old('training_type')}}">
+                                <select class="select form-control" name="training_type_id">
                                     <option value="">Select type</option>
+                                    @foreach ($trainingType as $item)
+                                        <option value="{{$item->id}}">{{$item->type_name}}</option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label>Trainer</label>
-                                <select class="select form-control" id="trainer" name="trainer" value="{{old('trainer')}}">
-                                    <option value="">Select trainer</option>
+                                <select class="select form-control" multiple="" name="trainer_id[]">
+                                    @foreach($trainer as $aKey => $item)
+                                        <option value="{{$item->id}}">{{$item->name_en}}</option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="">Employees</label>
-                                <select class="select form-control" id="employee" name="employee" value="{{old('employee')}}">
-                                    <option value="">Select employee</option>
+                                <select class="select form-control" multiple="" name="employee_id[]">
+                                    @foreach ($employee as $item)
+                                        <option value="{{$item->id}}">{{$item->employee_name_en}}</option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
@@ -71,9 +78,9 @@
                         <div class="col-sm-12">
                             <div class="form-group">
                                 <label class="">Status</label>
-                                <select class="select form-control" id="sttus" name="sttus" value="{{old('sttus')}}">
-                                    <option value="true">Active</option>
-                                    <option value="false">Inactive</option>
+                                <select class="select form-control" id="status" name="status">
+                                    <option value="1">Active</option>
+                                    <option value="0">Inactive</option>
                                 </select>
                             </div>
                         </div>

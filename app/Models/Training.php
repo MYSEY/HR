@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\TrainingType;
 
 class Training extends Model
 {
@@ -11,6 +13,49 @@ class Training extends Model
 
     protected $table = 'trainings';
     protected $guarded = ['id'];
+
+    protected $fillable = [
+       'training_type_id',
+       'trainer_id',
+       'employee_id',
+       'cost_price',
+       'start_date',
+       'end_date',
+       'description',
+       'status',
+       'created_by',
+       'updated_by',
+       'deleted_at',
+    ];
+
+    /**
+     * Get the user's first name.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute
+     */
+    protected function trainerId(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => json_decode($value, true),
+            set: fn ($value) => json_encode($value),
+        );
+    } 
+    protected function employeeId(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => json_decode($value, true),
+            set: fn ($value) => json_encode($value),
+        );
+    } 
+
+    public function trainingType(){
+        return $this->belongsTo(TrainingType::class,'training_type_id');
+    }
+
+    public function getTrainingTypeNameAttribute(){
+        return optional($this->trainingType)->type_name;
+    }
+
 
     public function createdBy()
     {
