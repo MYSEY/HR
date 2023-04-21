@@ -70,7 +70,7 @@
                                             @enderror
                                         </div>
                                     </div>
-                                    <div style="display: none;" class="new_change_password form-group">
+                                    <div style="display: none;" class="new_change_password">
                                         <label for="password-confirm">Confirm New Password</label>
                                         <div class="position-relative">
                                             <input id="password-confirm" type="password" class="form-control pass-input" name="password_confirmation" autocomplete="confirm-assword"><span class="fa fa-eye-slash toggle-password"></span>

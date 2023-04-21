@@ -30,8 +30,8 @@ class EmployeeProfileController extends Controller
         $department = Department::all();
         $position = Position::all();
         $branch = Branchs::all();
-        $transferred = Transferred::all();
-        $training = StaffTraining::all();
+        $transferred = Transferred::where('employee_id',$request->id)->get();
+        $training = StaffTraining::where('employee_id',$request->id)->get();
         $contact = Contact::all();
         $empPromoted = StaffPromoted::where('employee_id',$request->id)->orderBy('id', 'DESC')->get();
         return view('employees.profile',compact('data','optionOfStudy','optionDegree','department','position','empPromoted','branch','transferred','training','relationship','contact'));
@@ -126,11 +126,11 @@ class EmployeeProfileController extends Controller
             ]);
 
             DB::commit();
-            Toastr::success('Update branch successfully.','Success');
+            Toastr::success('Update transferred successfully.','Success');
             return redirect()->back();
         }catch(\Exception $e){
             DB::rollback();
-            Toastr::error('Update branch fail','Error');
+            Toastr::error('transferred fail','Error');
             return redirect()->back();
         }
     }

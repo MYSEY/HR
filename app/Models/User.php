@@ -14,6 +14,7 @@ use App\Models\Conmmunes;
 use App\Models\Education;
 use App\Models\Department;
 use App\Models\Experience;
+use App\Models\Transferred;
 use Illuminate\Support\Str;
 use App\Models\StaffPromoted;
 use App\Models\StaffTraining;
