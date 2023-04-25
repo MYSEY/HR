@@ -4,29 +4,30 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admins\RoleConroller;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Admins\BankController;
 use App\Http\Controllers\Admins\UserController;
+use App\Http\Controllers\Admins\TaxesController;
 use App\Http\Controllers\Admins\BranchController;
 use App\Http\Controllers\Admins\AddressController;
 use App\Http\Controllers\Admins\HolidayController;
+use App\Http\Controllers\Admins\TrainerController;
 use App\Http\Controllers\Admins\DashboadController;
 use App\Http\Controllers\Admins\EmployeeController;
 use App\Http\Controllers\Admins\PositionController;
+use App\Http\Controllers\Admins\ProvinceController;
+use App\Http\Controllers\Admins\TrainingController;
 use App\Http\Controllers\Admins\DepartmentController;
 use App\Http\Controllers\Admins\PermissionController;
 use App\Http\Controllers\Admins\LeavesAdminController;
+use App\Http\Controllers\Admins\ExchangeRateController;
+use App\Http\Controllers\Admins\TrainingTypeController;
+use App\Http\Controllers\Admins\PayrollReportController;
 use App\Http\Controllers\Admins\EmployeeReportController;
 use App\Http\Controllers\Admins\LeavesEmployeeController;
 use App\Http\Controllers\Admins\AttendanceAdminController;
+use App\Http\Controllers\Admins\EmployeePayrollController;
 use App\Http\Controllers\Admins\EmployeeProfileController;
 use App\Http\Controllers\Admins\AttendanceEmployeeController;
-use App\Http\Controllers\Admins\BankController;
-use App\Http\Controllers\Admins\ExchangeRateController;
-use App\Http\Controllers\Admins\PayrollReportController;
-use App\Http\Controllers\Admins\ProvinceController;
-use App\Http\Controllers\Admins\TaxesController;
-use App\Http\Controllers\Admins\TrainerController;
-use App\Http\Controllers\Admins\TrainingController;
-use App\Http\Controllers\Admins\TrainingTypeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -93,6 +94,8 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('users/edit', [UserController::class,'edit']);
     Route::post('/employee/status', [UserController::class,'processing']);
 
+    //Employee Payroll
+    Route::get('payroll',[EmployeePayrollController::class,'index']);
     // route province
     Route::get('province', [ProvinceController::class,'index']);
     Route::post('district', [ProvinceController::class,'showDistrict']);

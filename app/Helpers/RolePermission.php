@@ -70,6 +70,12 @@ function menu(){
             'permission'=>1,
             'child'=>[
                 [
+                    'value'=>'Employee Salary',
+                    'url'=>"",
+                    'table'=>2,
+                    'permission'=>1
+                ],
+                [
                     'value'=>'Motor Rentel',
                     'url'=>"",
                     'table'=>2,

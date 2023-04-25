@@ -767,212 +767,72 @@
                             <div class="row">
                                 <div class="col-sm-4">
                                     <div class="form-group">
-                                        <label class="col-form-label">Salary basis <span
-                                                class="text-danger">*</span></label>
-                                        <select class="select select2-hidden-accessible"
-                                            data-select2-id="select2-data-1-rz5a" tabindex="-1" aria-hidden="true">
-                                            <option data-select2-id="select2-data-3-kj4f">Select salary basis type</option>
-                                            <option>Hourly</option>
-                                            <option>Daily</option>
-                                            <option>Weekly</option>
-                                            <option>Monthly</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-sm-4">
-                                    <div class="form-group">
-                                        <label class="col-form-label">Salary amount <small class="text-muted">per
-                                                month</small></label>
+                                        <label class="col-form-label">Basic Salary</label>
                                         <div class="input-group">
                                             <span class="input-group-text">$</span>
-                                            <input type="text" class="form-control"
-                                                placeholder="Type your salary amount" value="0.00">
+                                            <input type="text" class="form-control" id="salary" name="salary" placeholder="Type your salary amount" value="">
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-sm-4">
                                     <div class="form-group">
-                                        <label class="col-form-label">Payment type</label>
-                                        <select class="select select2-hidden-accessible"
-                                            data-select2-id="select2-data-4-9wvp" tabindex="-1" aria-hidden="true">
-                                            <option data-select2-id="select2-data-6-w4a8">Select payment type</option>
-                                            <option>Bank transfer</option>
-                                            <option>Check</option>
-                                            <option>Cash</option>
-                                        </select>
+                                        <label class="col-form-label">Total rate</label>
+                                        <input type="text" class="form-control" id="" name="" placeholder="" value="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label class="col-form-label">New Salary</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text">$</span>
+                                            <input type="text" class="form-control" id="new_salary" name="new_salary" placeholder="new salary amount" value="">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label class="col-form-label">Total work day</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" id="total_work_day" name="total_work_day" placeholder="" value="">
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                             <hr>
-                            <h3 class="card-title"> PF Information</h3>
-                            <div class="row">
-                                <div class="col-sm-4">
-                                    <div class="form-group">
-                                        <label class="col-form-label">PF contribution</label>
-                                        <select class="select select2-hidden-accessible"
-                                            data-select2-id="select2-data-7-5olp" tabindex="-1" aria-hidden="true">
-                                            <option data-select2-id="select2-data-9-dfst">Select PF contribution</option>
-                                            <option>Yes</option>
-                                            <option>No</option>
-                                        </select>
+                            <h3 class="card-title"> Benefits Information</h3>
+
+                            <div id="benefit-information">
+                                <div class="row information">
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label">Title</label>
+                                            <input type="text" class="form-control" id="title" name="title" placeholder="" value="">
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-sm-4">
-                                    <div class="form-group">
-                                        <label class="col-form-label">PF No. <span class="text-danger">*</span></label>
-                                        <select class="select select2-hidden-accessible"
-                                            data-select2-id="select2-data-10-78yd" tabindex="-1" aria-hidden="true">
-                                            <option data-select2-id="select2-data-12-k8pv">Select PF contribution</option>
-                                            <option>Yes</option>
-                                            <option>No</option>
-                                        </select>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="col-form-label">Amount</label>
+                                            <input type="text" class="form-control" id="amount" name="amount" placeholder="" value="">
+                                        </div>
                                     </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-4">
-                                    <div class="form-group">
-                                        <label class="col-form-label">Employee PF rate</label>
-                                        <select class="select select2-hidden-accessible"
-                                            data-select2-id="select2-data-13-b077" tabindex="-1" aria-hidden="true">
-                                            <option data-select2-id="select2-data-15-avom">Select PF contribution</option>
-                                            <option>Yes</option>
-                                            <option>No</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-sm-4">
-                                    <div class="form-group">
-                                        <label class="col-form-label">Additional rate <span
-                                                class="text-danger">*</span></label>
-                                        <select class="select select2-hidden-accessible"
-                                            data-select2-id="select2-data-16-27z9" tabindex="-1" aria-hidden="true">
-                                            <option data-select2-id="select2-data-18-8pn4">Select additional rate</option>
-                                            <option>0%</option>
-                                            <option>1%</option>
-                                            <option>2%</option>
-                                            <option>3%</option>
-                                            <option>4%</option>
-                                            <option>5%</option>
-                                            <option>6%</option>
-                                            <option>7%</option>
-                                            <option>8%</option>
-                                            <option>9%</option>
-                                            <option>10%</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-sm-4">
-                                    <div class="form-group">
-                                        <label class="col-form-label">Total rate</label>
-                                        <input type="text" class="form-control" placeholder="N/A" value="11%">
+                                    <div class="col-sm-4" style="padding-top: 45px;">
+                                        <div class="form-group">
+                                            <a class="btn btn-success btn-sm" id="btnAddBenefit"><i class="fa fa-plus-circle"></i></a>
+                                            <a href="javascript:void(0);" class="btn btn-danger btn-sm"><i class="fa fa-trash-o"></i></a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-sm-4">
-                                    <div class="form-group">
-                                        <label class="col-form-label">Employee PF rate</label>
-                                        <select class="select select2-hidden-accessible"
-                                            data-select2-id="select2-data-19-3dv9" tabindex="-1" aria-hidden="true">
-                                            <option data-select2-id="select2-data-21-susa">Select PF contribution</option>
-                                            <option>Yes</option>
-                                            <option>No</option>
-                                        </select>
-                                    </div>
+                            <div class="col-lg-9">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="gender" id="khmer_new_year" value="khmer_new_year">
+                                    <label class="form-check-label" for="khmer_new_year">Khmer new year bonus</label>
                                 </div>
-                                <div class="col-sm-4">
-                                    <div class="form-group">
-                                        <label class="col-form-label">Additional rate <span
-                                                class="text-danger">*</span></label>
-                                        <select class="select select2-hidden-accessible"
-                                            data-select2-id="select2-data-22-5lnh" tabindex="-1" aria-hidden="true">
-                                            <option data-select2-id="select2-data-24-nc3j">Select additional rate</option>
-                                            <option>0%</option>
-                                            <option>1%</option>
-                                            <option>2%</option>
-                                            <option>3%</option>
-                                            <option>4%</option>
-                                            <option>5%</option>
-                                            <option>6%</option>
-                                            <option>7%</option>
-                                            <option>8%</option>
-                                            <option>9%</option>
-                                            <option>10%</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-sm-4">
-                                    <div class="form-group">
-                                        <label class="col-form-label">Total rate</label>
-                                        <input type="text" class="form-control" placeholder="N/A" value="11%">
-                                    </div>
-                                </div>
-                            </div>
-                            <hr>
-                            <h3 class="card-title"> ESI Information</h3>
-                            <div class="row">
-                                <div class="col-sm-4">
-                                    <div class="form-group">
-                                        <label class="col-form-label">ESI contribution</label>
-                                        <select class="select select2-hidden-accessible"
-                                            data-select2-id="select2-data-25-t1lm" tabindex="-1" aria-hidden="true">
-                                            <option data-select2-id="select2-data-27-9e7b">Select ESI contribution</option>
-                                            <option>Yes</option>
-                                            <option>No</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-sm-4">
-                                    <div class="form-group">
-                                        <label class="col-form-label">ESI No. <span class="text-danger">*</span></label>
-                                        <select class="select select2-hidden-accessible"
-                                            data-select2-id="select2-data-28-5tzz" tabindex="-1" aria-hidden="true">
-                                            <option data-select2-id="select2-data-30-q4mj">Select ESI contribution</option>
-                                            <option>Yes</option>
-                                            <option>No</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-4">
-                                    <div class="form-group">
-                                        <label class="col-form-label">Employee ESI rate</label>
-                                        <select class="select select2-hidden-accessible"
-                                            data-select2-id="select2-data-31-8f3g" tabindex="-1" aria-hidden="true">
-                                            <option data-select2-id="select2-data-33-71qi">Select ESI contribution</option>
-                                            <option>Yes</option>
-                                            <option>No</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-sm-4">
-                                    <div class="form-group">
-                                        <label class="col-form-label">Additional rate <span
-                                                class="text-danger">*</span></label>
-                                        <select class="select select2-hidden-accessible"
-                                            data-select2-id="select2-data-34-fcb7" tabindex="-1" aria-hidden="true">
-                                            <option data-select2-id="select2-data-36-s2z0">Select additional rate</option>
-                                            <option>0%</option>
-                                            <option>1%</option>
-                                            <option>2%</option>
-                                            <option>3%</option>
-                                            <option>4%</option>
-                                            <option>5%</option>
-                                            <option>6%</option>
-                                            <option>7%</option>
-                                            <option>8%</option>
-                                            <option>9%</option>
-                                            <option>10%</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-sm-4">
-                                    <div class="form-group">
-                                        <label class="col-form-label">Total rate</label>
-                                        <input type="text" class="form-control" placeholder="N/A" value="11%">
-                                    </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="gender" id="pchumBen_bonus" value="pchumBen_bonus">
+                                    <label class="form-check-label" for="pchumBen_bonus">PchumBen Bonus</label>
                                 </div>
                             </div>
                             <div class="submit-section">
@@ -992,6 +852,16 @@
         $('#btnAddEducation').on('click', function() {
             $('.education-repeatable-element:first').clone().appendTo('#education-container-repeatable-elements');
             var lastRepeatableElement = $('.education-repeatable-element:last');
+            var input = lastRepeatableElement.find('input');
+            var textarea = lastRepeatableElement.find('textarea');
+            var select = lastRepeatableElement.find('select');
+            input.val('');
+            textarea.val('');
+            select.prop('selectedIndex', 0)
+        });
+        $('#btnAddBenefit').on('click', function() {
+            $('.information:first').clone().appendTo('#benefit-information');
+            var lastRepeatableElement = $('.benefits information:last');
             var input = lastRepeatableElement.find('input');
             var textarea = lastRepeatableElement.find('textarea');
             var select = lastRepeatableElement.find('select');
