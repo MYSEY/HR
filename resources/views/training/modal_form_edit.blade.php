@@ -13,24 +13,24 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label>Training Type</label>
-                                <select class="select form-control" id="e_training_type" name="training_type_id" value="{{old('training_type')}}">
+                                <label>Training Type <span class="text-danger">*</span></label>
+                                <select class="select form-control" id="e_training_type" name="training_type_id" required value="{{old('training_type')}}">
                                     {{-- <option value="">Select type</option> --}}
                                 </select>
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label>Trainer</label>
-                                <select class="select form-control" id="e_trainer" multiple="" name="trainer_id[]" value="{{old('trainer')}}">
+                                <label>Trainer <span class="text-danger">*</span></label>
+                                <select class="select form-control" id="e_trainer" multiple="" name="trainer_id[]" required value="{{old('trainer')}}">
                                     {{-- <option value="">Select trainer</option> --}}
                                 </select>
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="">Employees</label>
-                                <select class="select form-control" id="e_employee" multiple="" name="employee_id[]" value="{{old('employee')}}">
+                                <label class="">Employees <span class="text-danger">*</span></label>
+                                <select class="select form-control" id="e_employee" multiple="" name="employee_id[]" required value="{{old('employee')}}">
                                     {{-- <option value="">Select employee</option> --}}
                                 </select>
                             </div>
@@ -39,7 +39,7 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label>Cost Price</label>
-                                <input class="form-control @error('cost_price') is-invalid @enderror" type="number" id="e_cost_price" name="cost_price" required>
+                                <input class="form-control @error('cost_price') is-invalid @enderror" type="number" id="e_cost_price" name="cost_price">
                             </div>
                         </div>
 

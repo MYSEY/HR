@@ -20,6 +20,8 @@ use App\Http\Controllers\Admins\AttendanceAdminController;
 use App\Http\Controllers\Admins\EmployeeProfileController;
 use App\Http\Controllers\Admins\AttendanceEmployeeController;
 use App\Http\Controllers\Admins\BankController;
+use App\Http\Controllers\Admins\ExchangeRateController;
+use App\Http\Controllers\Admins\PayrollReportController;
 use App\Http\Controllers\Admins\ProvinceController;
 use App\Http\Controllers\Admins\TaxesController;
 use App\Http\Controllers\Admins\TrainerController;
@@ -131,4 +133,14 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('/training-type/update', [TrainingTypeController::class,'update']);
     Route::post('/training-type/delete', [TrainingTypeController::class,'destroy']);
     Route::post('/training-type/status', [TrainingTypeController::class,'processing']);
+
+    // route exchange rate
+    Route::get('/exchange-rate/list', [ExchangeRateController::class,'index']);
+    Route::post('/exchange-rate/store', [ExchangeRateController::class,'store']);
+    Route::post('/exchange-rate/update', [ExchangeRateController::class,'update']);
+    Route::post('/exchange-rate/delete', [ExchangeRateController::class,'destroy']);
+    Route::post('/exchange-rate/status', [ExchangeRateController::class,'processing']);
+
+    // route block reports
+    Route::get('/reports/payroll-report', [PayrollReportController::class,'index']);
 });

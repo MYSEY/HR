@@ -13,8 +13,8 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label>Training Type</label>
-                                <select class="select form-control" name="training_type_id">
+                                <label>Training Type <span class="text-danger">*</span></label>
+                                <select class="select form-control" name="training_type_id" required>
                                     <option value="">Select type</option>
                                     @foreach ($trainingType as $item)
                                         <option value="{{$item->id}}">{{$item->type_name}}</option>
@@ -24,8 +24,8 @@
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label>Trainer</label>
-                                <select class="select form-control" multiple="" name="trainer_id[]">
+                                <label>Trainer <span class="text-danger">*</span></label>
+                                <select class="select form-control" multiple="" name="trainer_id[]" required>
                                     @foreach($trainer as $aKey => $item)
                                         <option value="{{$item->id}}">{{$item->name_en}}</option>
                                     @endforeach
@@ -34,8 +34,8 @@
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="">Employees</label>
-                                <select class="select form-control" multiple="" name="employee_id[]">
+                                <label class="">Employees <span class="text-danger">*</span></label>
+                                <select class="select form-control" multiple="" name="employee_id[]" required>
                                     @foreach ($employee as $item)
                                         <option value="{{$item->id}}">{{$item->employee_name_en}}</option>
                                     @endforeach
@@ -46,7 +46,7 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label>Cost Price</label>
-                                <input class="form-control @error('cost_price') is-invalid @enderror" type="number" name="cost_price" required>
+                                <input class="form-control @error('cost_price') is-invalid @enderror" type="number" name="cost_price">
                             </div>
                         </div>
 

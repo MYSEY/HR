@@ -138,7 +138,7 @@
                                                     </td>
                                                     <td class="sorting_1">{{$item->start_date}} - {{$item->end_date}}</td>
                                                     <td>{{$item->description}}</td>
-                                                    <td>${{$item->cost_price}}</td>
+                                                    <td>${{$item->cost_price ? $item->cost_price : 0}}</td>
                                                     <td>
                                                         <input type="hidden" class="status" value="{{$item->status}}">
                                                         <div class="dropdown action-label">

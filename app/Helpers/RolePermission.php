@@ -83,6 +83,12 @@ function menu(){
                     'table'=>2,
                     'permission'=>1
                 ],
+                [
+                    'value'=>'Payroll Report',
+                    'url'=>"reports/payroll-report",
+                    'table'=>2,
+                    'permission'=>1
+                ],
             ]
         ],
         [
@@ -122,6 +128,12 @@ function menu(){
                 [
                     'value'=>'Taxes',
                     'url'=>"taxes",
+                    'table'=>7,
+                    'permission'=>1
+                ],
+                [
+                    'value'=>'Exchange Rate',
+                    'url'=>"exchange-rate/list",
                     'table'=>7,
                     'permission'=>1
                 ],
