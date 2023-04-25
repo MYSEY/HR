@@ -64,11 +64,18 @@ function menu(){
         ],
         [
             'name'=>'HR',
-            'icon'=>'<i class="la la-key"></i> <span></span>',
-            'value'=>'Roles Permissions',
-            'table'=>4,
+            'icon'=>'<i class="la la-money"></i> <span></span> <span class="menu-arrow"></span>',
+            'value'=>'Payrolls',
+            'table'=>2,
             'permission'=>1,
-            'url'=>"role",
+            'child'=>[
+                [
+                    'value'=>'Motor Rentel',
+                    'url'=>"",
+                    'table'=>2,
+                    'permission'=>1
+                ],
+            ]
         ],
         [
             'name'=>'',
@@ -91,6 +98,7 @@ function menu(){
                 ],
             ]
         ],
+        
         [
             'name'=>'',
             'icon'=>'<i class="la la-edit"></i> <span></span> <span class="menu-arrow"></span>',
@@ -171,6 +179,14 @@ function menu(){
                     'permission'=>1
                 ],
             ]
+        ],
+        [
+            'name'=>'',
+            'icon'=>'<i class="la la-key"></i> <span></span>',
+            'value'=>'Roles Permissions',
+            'table'=>4,
+            'permission'=>1,
+            'url'=>"role",
         ],
     ];
 }
