@@ -28,6 +28,7 @@ use App\Http\Controllers\Admins\AttendanceAdminController;
 use App\Http\Controllers\Admins\EmployeePayrollController;
 use App\Http\Controllers\Admins\EmployeeProfileController;
 use App\Http\Controllers\Admins\AttendanceEmployeeController;
+use App\Http\Controllers\Admins\MotorRentelController;
 
 /*
 |--------------------------------------------------------------------------
@@ -96,6 +97,13 @@ Route::middleware(['auth:sanctum'])->group(function(){
 
     //Employee Payroll
     Route::get('payroll',[EmployeePayrollController::class,'index']);
+    Route::get('motor-rentel/list',[MotorRentelController::class,'index']);
+    Route::get('motor-rentel/edit',[MotorRentelController::class,'edit']);
+    Route::get('motor-rentel/detail/{id}',[MotorRentelController::class,'detail']);
+    Route::post('motor-rentel/store',[MotorRentelController::class,'store']);
+    Route::post('motor-rentel/update',[MotorRentelController::class,'update']);
+    Route::post('motor-rentel/delete',[MotorRentelController::class,'destroy']);
+
     // route province
     Route::get('province', [ProvinceController::class,'index']);
     Route::post('district', [ProvinceController::class,'showDistrict']);
@@ -146,4 +154,5 @@ Route::middleware(['auth:sanctum'])->group(function(){
 
     // route block reports
     Route::get('/reports/payroll-report', [PayrollReportController::class,'index']);
+    Route::get('/reports/motor-rentel-report', [PayrollReportController::class,'motorrentel']);
 });

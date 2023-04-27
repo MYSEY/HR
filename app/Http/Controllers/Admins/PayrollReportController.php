@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admins;
 
 use App\Http\Controllers\Controller;
+use App\Models\MotorRentel;
 use Illuminate\Http\Request;
 
 class PayrollReportController extends Controller
@@ -15,6 +16,12 @@ class PayrollReportController extends Controller
     public function index()
     {
         return view('reports.payroll_report');
+    }
+
+    public function motorrentel()
+    {
+        $data = MotorRentel::orderBy('id', 'desc')->get();
+        return view('reports.motor_rentel_report', compact('data'));
     }
 
     /**

@@ -77,7 +77,7 @@ function menu(){
                 ],
                 [
                     'value'=>'Motor Rentel',
-                    'url'=>"",
+                    'url'=>"motor-rentel/list",
                     'table'=>2,
                     'permission'=>1
                 ],
@@ -99,6 +99,12 @@ function menu(){
                 [
                     'value'=>'Payroll Report',
                     'url'=>"reports/payroll-report",
+                    'table'=>2,
+                    'permission'=>1
+                ],
+                [
+                    'value'=>'Motor Rentel Report',
+                    'url'=>"reports/motor-rentel-report",
                     'table'=>2,
                     'permission'=>1
                 ],

@@ -230,7 +230,7 @@ class User extends Authenticatable
                 $Gender = $item->name_khmer;
             }
         }
-        return $Gender;
+        return $Gender ?? "";
     }
     public function getEmployeeIdentityTypeAttribute(){
         $data = Option::where('type','identity_type')->get();
