@@ -1,0 +1,106 @@
+@import url('https://fonts.googleapis.com/css?family=Nunito:200,600');
+@import url('https://fonts.googleapis.com/css?family=Nokora');
+a{
+    text-decoration: none;
+ }
+/* #ivoice{
+    background-color:white !important;
+} */
+.table-a {
+    font-family: 'Nunito','Nokora', sans-serif, serif;
+    border-collapse: collapse;
+    width: 33%;
+    color: #4747d1;
+    
+}
+
+.dddd{
+    padding-left:8px ;
+}
+.sssss{
+    justify-content: center;
+    padding:10px;
+}
+
+.table-aaww{
+    justify-content: center;
+    text-align: center;
+    font-family: 'Nunito','Nokora', sans-serif, serif;
+    height: 47px;
+    border-left: 1px solid #4747d1;
+    border-bottom: 1px solid #4747d1;
+    border-right: 1px solid #4747d1;
+    width: 32.7%;
+}
+.table-a th, td{
+    border: 1px solid #4747d1;
+}
+.table-aa{
+    font-family: 'Nunito','Nokora', sans-serif, serif;
+    border-collapse: collapse;
+    width: 33%;
+    color: #4747d1;
+}
+.table_print{
+    font-family: 'Nunito','Nokora', sans-serif, serif;
+    color: #4747d1;
+    border-collapse: collapse;
+    margin-left:auto; 
+    width: 33%;
+    margin-top: -192px;
+}
+.table_print thead,th{
+    border-collapse: collapse;
+    border: 1px solid #4747d1;
+}
+.tbody_print tr, td{
+    /* text-align: center; */
+    border: 1px solid #4747d1;
+}
+.table_c{
+    margin-left:auto;
+    margin-top:0.8%;
+    color: #4747d1;
+    /* line-height: 0.2; */
+    /* padding: 10px; */
+    /* font-size: 12px; */
+    font-family: 'Nunito','Nokora', sans-serif, serif;
+    border-collapse: collapse;
+    width: 33%;
+    
+}
+.table-d {
+    color: #4747d1;
+    /* margin-left: auto; */
+    margin-top:30px;
+    /* line-height: 0.2; */
+    /* padding: 10px; */
+    /* font-size: 10px; */
+    font-family: 'Nunito','Nokora', sans-serif, serif;
+    border-collapse: collapse;
+    width: 100%;
+    
+}
+.table_dd {
+    font-family: 'Nunito','Nokora', sans-serif, serif;
+    width: 100%;
+    color: #4747d1;
+    /* border: 1px solid #4747d1 !important; */
+    border-collapse: collapse;
+}
+.border_print{
+    padding:7px; 
+    border-bottom: 0px solid #ffffff !important;
+    border-left: 0px solid #ffffff !important
+}
+.remove_border_botton_print{
+    font-size: 14px;
+    border-bottom: 0px solid #ffffff !important;
+}
+.remove_border_top_print{
+    border-top: 0px solid #ffffff !important;
+}
+.one-font{
+    font-family: 'Nunito','Nokora', sans-serif, serif;
+}
+

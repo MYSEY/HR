@@ -42,7 +42,7 @@ class MotorRentel extends Model
     }
 
     public function getMotorEmployeeAttribute(){
-        $user = User::where("id", $this->employee_id)->first();
+        $user = User::where("number_employee", $this->employee_id)->first();
         return $user;
     }
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admins;
 
+use App\Exports\ExportMotorRentel;
 use App\Http\Controllers\Controller;
 use App\Models\MotorRentel;
 use App\Models\User;
@@ -11,6 +12,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Laravel\Ui\Presets\React;
+use Maatwebsite\Excel\Facades\Excel;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+
+// use Excel;
 
 class MotorRentelController extends Controller
 {
@@ -23,7 +28,7 @@ class MotorRentelController extends Controller
     {
         $data = MotorRentel::orderBy('id', 'desc')->get();
         $employees = User::all();
-        return view('motor_rentels.index', compact('data','employees'));
+        return view('motor_rentels.index', compact('data', 'employees'));
     }
 
     public function detail(Request $request)
@@ -50,19 +55,19 @@ class MotorRentelController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {   
-            // $product_year = Carbon::createFromDate($request->product_year)->format('Y');
-            // $expried_year = Carbon::createFromDate($request->expired_year)->format('Y');
+    {
+        // $product_year = Carbon::createFromDate($request->product_year)->format('Y');
+        // $expried_year = Carbon::createFromDate($request->expired_year)->format('Y');
         try {
             $data = $request->all();
             $data['created_by'] = Auth::user()->id;
             MotorRentel::create($data);
-            Toastr::success('Created successfully.','Success');
+            Toastr::success('Created successfully.', 'Success');
             return redirect()->back();
             DB::commit();
         } catch (\Throwable $exp) {
             DB::rollback();
-            Toastr::error('Created fail.','Error');
+            Toastr::error('Created fail.', 'Error');
         }
     }
 
@@ -88,9 +93,57 @@ class MotorRentelController extends Controller
         $data = MotorRentel::where("id", $request->id)->first();
         $employee = User::all();
         return response()->json([
-            'success'=>$data,
-            'employee'=>$employee,
+            'success' => $data,
+            'employee' => $employee,
         ]);
+    }
+
+    public function export()
+    {
+        $export = new ExportMotorRentel;
+        return Excel::download($export, 'MotorRentel.xlsx');
+    }
+
+    public function import(Request $request)
+    {
+        $file = $request->file;
+        $filesize = filesize($file);
+        $extension = $request->file->extension();
+        $spreadsheet = IOFactory::load($file);
+        $allDataInSheet = $spreadsheet->getActiveSheet()->toArray();
+
+        if ($extension == "xlsx" || $extension == "xls" || $extension == "csv") {
+            $userID = Auth::user()->id;
+            $i = 0;
+            $re = 1;
+            foreach ($allDataInSheet as $csv) {
+                $i++;
+                if ($i != 1) {
+                    $start_date = Carbon::createFromDate($csv[2])->format('Y-m-d'); // 2023-04-19
+                    $end_date = Carbon::createFromDate($csv[3])->format('Y-m-d'); // 2023-04-19
+                    $arr = [
+                        'employee_id'     => $csv[0],
+                        'gasoline_price_per_liter'  => $csv[1],
+                        'start_date'  => $start_date,
+                        'end_date'  => $end_date,
+                        'product_year'  => $csv[4],
+                        'expired_year'  => $csv[5],
+                        'shelt_life'  => $csv[6],
+                        'number_plate'  => $csv[7],
+                        'total_gasoline'  => $csv[8],
+                        'total_work_day'  => $csv[9],
+                        'price_engine_oil'  => $csv[10],
+                        'price_motor_rentel'  => $csv[11],
+                        'tax_rate'  => $csv[12],
+                        'created_by'        => $userID,
+                    ];
+                    DB::table('motor_rentels')->insert($arr);
+                }
+            }
+            return 1;
+        } else {
+            return 0;
+        }
     }
 
     /**
@@ -102,7 +155,7 @@ class MotorRentelController extends Controller
      */
     public function update(Request $request)
     {
-        try{
+        try {
             $dataUpdate = [
                 'employee_id' => $request->employee_id,
                 'gasoline_price_per_liter' => $request->gasoline_price_per_liter,
@@ -116,14 +169,14 @@ class MotorRentelController extends Controller
                 'price_engine_oil' => $request->price_engine_oil,
                 'price_motor_rentel' => $request->price_motor_rentel,
                 'tax_rate' => $request->tax_rate,
-                'updated_by' => Auth::user()->id 
+                'updated_by' => Auth::user()->id
             ];
-            MotorRentel::where('id',$request->id)->update($dataUpdate);
-            Toastr::success('Updated successfully.','Success');
+            MotorRentel::where('id', $request->id)->update($dataUpdate);
+            Toastr::success('Updated successfully.', 'Success');
             return redirect()->back();
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             DB::rollback();
-            Toastr::error('Updated fail.','Error');
+            Toastr::error('Updated fail.', 'Error');
             return redirect()->back();
         }
     }
@@ -136,13 +189,13 @@ class MotorRentelController extends Controller
      */
     public function destroy(Request $request)
     {
-        try{
+        try {
             MotorRentel::destroy($request->id);
-            Toastr::success('Deleted successfully.','Success');
+            Toastr::success('Deleted successfully.', 'Success');
             return redirect()->back();
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             DB::rollback();
-            Toastr::error('Delete fail.','Error');
+            Toastr::error('Delete fail.', 'Error');
             return redirect()->back();
         }
     }

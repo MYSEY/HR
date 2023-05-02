@@ -104,6 +104,9 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('motor-rentel/update',[MotorRentelController::class,'update']);
     Route::post('motor-rentel/delete',[MotorRentelController::class,'destroy']);
 
+    // test export excel
+    Route::get('motor-rentel/export',[MotorRentelController::class,'export']);
+    Route::post('motor-rentel/import',[MotorRentelController::class,'import']);
     // route province
     Route::get('province', [ProvinceController::class,'index']);
     Route::post('district', [ProvinceController::class,'showDistrict']);

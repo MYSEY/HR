@@ -20,13 +20,17 @@
                         <li class="breadcrumb-item active">Motor rentel</li>
                     </ul>
                 </div>
-                <div class="col-auto float-end ms-auto">
 
+                <div class="col-auto float-end ms-auto">
+                    @if (Auth::user()->RolePermission == 'Administrator')
+                        <a href="#" class="btn add-btn" data-toggle="modal" data-toggle="modal" id="add_new"><i class="fa fa-plus"></i>
+                            Add New</a>
+                    @endif
                 </div>
                 <div class="col-auto float-end ms-auto">
                     @if (Auth::user()->RolePermission == 'Administrator')
-                        <a href="#" class="btn add-btn" data-toggle="modal" id="add_new"><i class="fa fa-plus"></i>
-                            Add New</a>
+                        <a href="#" class="btn add-btn" data-toggle="modal" id="import_new_motor_rentel"><i class="fa fa-plus"></i>
+                            Import Data</a>
                     @endif
                 </div>
             </div>
@@ -190,6 +194,7 @@
 
         @include('motor_rentels.modal_form_create')
         @include('motor_rentels.modal_form_edit')
+        @include('motor_rentels.import')
 
         <!-- Delete Training Modal -->
         <div class="modal custom-modal fade" id="delete_motor_rentel" role="dialog">
@@ -259,6 +264,12 @@
                 newYearExpireted = newYear;
             }
             calculatorYearExpire(currentY, newYearExpireted);
+        });
+
+        $("#import_new_motor_rentel").on("click", function() {
+            $(".thanLess").hide();
+            $("#thanLess").text("");
+            $('#import_motor_rentel').modal('show');
         });
 
         $("#add_new").on("click", function() {
