@@ -136,6 +136,7 @@ class MotorRentelController extends Controller
                         'price_motor_rentel'  => $csv[11],
                         'tax_rate'  => $csv[12],
                         'created_by'        => $userID,
+                        'created_at'       => Carbon::now(),
                     ];
                     DB::table('motor_rentels')->insert($arr);
                 }

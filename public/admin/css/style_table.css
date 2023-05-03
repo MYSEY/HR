@@ -9,41 +9,26 @@ a{
 .table-a {
     font-family: 'Nunito','Nokora', sans-serif, serif;
     border-collapse: collapse;
-    width: 33%;
-    color: #4747d1;
+    width: 100%;
     
 }
-
-.dddd{
-    padding-left:8px ;
-}
-.sssss{
-    justify-content: center;
-    padding:10px;
-}
-
 .table-aaww{
     justify-content: center;
     text-align: center;
     font-family: 'Nunito','Nokora', sans-serif, serif;
     height: 47px;
-    border-left: 1px solid #4747d1;
-    border-bottom: 1px solid #4747d1;
-    border-right: 1px solid #4747d1;
     width: 32.7%;
 }
-.table-a th, td{
+/* .table-a th, td{
     border: 1px solid #4747d1;
-}
+} */
 .table-aa{
     font-family: 'Nunito','Nokora', sans-serif, serif;
     border-collapse: collapse;
     width: 33%;
-    color: #4747d1;
 }
 .table_print{
     font-family: 'Nunito','Nokora', sans-serif, serif;
-    color: #4747d1;
     border-collapse: collapse;
     margin-left:auto; 
     width: 33%;
@@ -51,11 +36,13 @@ a{
 }
 .table_print thead,th{
     border-collapse: collapse;
-    border: 1px solid #4747d1;
 }
 .tbody_print tr, td{
-    /* text-align: center; */
-    border: 1px solid #4747d1;
+    padding: 1.5%;
+    border: 0.5px solid #dee2e6;
+}
+.tbody_print tr,th, .float-end{
+    float: right!important;
 }
 .table_c{
     margin-left:auto;

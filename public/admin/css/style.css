@@ -8916,6 +8916,12 @@ button.close {
   text-transform: uppercase;
   margin: 0 0 20px;
 }
+.payslip-title-center {
+  text-align: center;
+  /* text-decoration: underline; */
+  /* text-transform: uppercase; */
+  margin: 0 0 20px;
+}
 
 .inv-logo {
   height: auto;

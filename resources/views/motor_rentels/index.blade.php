@@ -136,7 +136,7 @@
                                         @foreach ($data as $item)
                                             <tr class="odd">
                                                 <td class="ids">{{ $item->id }}</td>
-                                                <td class="number_employee_id">{{ $item->MotorEmployee->number_employee }}
+                                                <td class="number_employee_id"><a href="{{ url('/motor-rentel/detail', $item->id) }}">{{ $item->MotorEmployee->number_employee }}</a>
                                                 </td>
                                                 <td>{{ $item->MotorEmployee->employee_name_en }}</td>
                                                 <td>{{ $item->MotorEmployee->EmployeeGender }}</td>
