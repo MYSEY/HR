@@ -11,7 +11,6 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Laravel\Ui\Presets\React;
 use Maatwebsite\Excel\Facades\Excel;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 
@@ -100,7 +99,8 @@ class MotorRentelController extends Controller
 
     public function export()
     {
-        $export = new ExportMotorRentel;
+        $dataMotorrentels = MotorRentel::orderBy('id', 'desc')->get();
+        $export = new ExportMotorRentel($dataMotorrentels);
         return Excel::download($export, 'MotorRentel.xlsx');
     }
 
