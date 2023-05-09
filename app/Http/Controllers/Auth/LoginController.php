@@ -55,6 +55,10 @@ class LoginController extends Controller
     {
         $change_password= "";
         $hashedPassword = User::select('employee_name_en','number_employee', 'password','email')->where('number_employee', $request->number_employee)->first();
+        if($hashedPassword == null){
+            Toastr::error('Wrong employee ID Or password', 'Error');
+            return redirect('login');
+        }
         if ($request->new_password && $request->password_confirmation) {
             if (Hash::check($request->current_password, $hashedPassword->password)) {
                 if ($request->new_password == $request->password_confirmation) {

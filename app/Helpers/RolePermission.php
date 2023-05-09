@@ -71,7 +71,7 @@ function menu(){
             'child'=>[
                 [
                     'value'=>'Employee Salary',
-                    'url'=>"",
+                    'url'=>"payroll",
                     'table'=>2,
                     'permission'=>1
                 ],

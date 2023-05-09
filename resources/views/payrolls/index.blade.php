@@ -10,7 +10,7 @@
                 </ul>
             </div>
             <div class="col-auto float-end ms-auto">
-                <a href="#" class="btn add-btn" data-bs-toggle="modal" data-bs-target="#add_salary"><i class="fa fa-plus"></i> Add Salary</a>
+                <a href="#" class="btn add-btn" data-bs-toggle="modal" data-bs-target="#add_salary"><i class="fa fa-plus"></i> Add New</a>
             </div>
         </div>
     </div>
@@ -75,6 +75,90 @@
                             </table>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="add_salary" class="modal custom-modal fade" style="display: none;" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Staff Salary</h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="{{url('payroll/store')}}" method="POST">
+                        @csrf
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>Employee <span class="text-danger">*</span></label>
+                                    <select class="select select2-hidden-accessible" data-select2-id="select2-data-7-pany" name="employee_id" id="employee_id" tabindex="-1" aria-hidden="true" required>
+                                        @foreach ($user as $item)
+                                            <option value="{{$item->id}}">{{$item->employee_name_en}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-gorup">
+                                    <label>Net Salary <span class="text-danger">*</span></label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">$</span>
+                                        <input type="number" class="form-control" id="net_salary" name="net_salary" placeholder="net salary amount" value="" required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label class="col-form-label">Phone allowance</label>
+                                    <input class="form-control" type="number" name="phone_allowance" id="phone_allowance">
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label class="col-form-label">Monthly and quarterly bonuses</label>
+                                    <input type="number" class="form-control" name="monthly_quarterly_bonuses" id="monthly_quarterly_bonuses">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="" class="col-form-label">Khmer new year Or Pchum Ben allowance(%)</label>
+                                    <input type="number" class="form-control" name="khmer_new_year_pchum_ben_allowance" id="khmer_new_year_pchum_ben_allowance">
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label class="col-form-label">Annual Incentive Bonus</label>
+                                    <input type="number" class="form-control" name="annual_incentive_bonus" id="annual_incentive_bonus">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label class="col-form-label">Other allowances</label>
+                                    <input type="number" class="form-control" name="other_allowances" id="other_allowances">
+                                    {{-- <textarea type="number" rows="3" class="form-control" name="other_allowances" id="other_allowances" value=""></textarea> --}}
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label class="col-form-label">Spouse</label>
+                                    <input type="number" class="form-control" name="spouse" id="spouse">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="submit-section">
+                            <button type="submit" class="btn btn-primary submit-btn">Submit</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>

@@ -107,6 +107,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     // test export excel
     Route::get('motor-rentel/export',[MotorRentelController::class,'export']);
     Route::post('motor-rentel/import',[MotorRentelController::class,'import']);
+    Route::post('payroll/store',[EmployeePayrollController::class,'store']);
     // route province
     Route::get('province', [ProvinceController::class,'index']);
     Route::post('district', [ProvinceController::class,'showDistrict']);
