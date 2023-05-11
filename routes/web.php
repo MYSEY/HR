@@ -104,11 +104,8 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('motor-rentel/update',[MotorRentelController::class,'update']);
     Route::post('motor-rentel/delete',[MotorRentelController::class,'destroy']);
     Route::post('motor-rentel/list',[MotorRentelController::class,'index']);
-
-    // test export excel
-    Route::get('motor-rentel/export',[MotorRentelController::class,'export']);
-    Route::post('motor-rentel/import',[MotorRentelController::class,'import']);
     Route::post('payroll/store',[EmployeePayrollController::class,'store']);
+
     // route province
     Route::get('province', [ProvinceController::class,'index']);
     Route::post('district', [ProvinceController::class,'showDistrict']);
@@ -160,4 +157,9 @@ Route::middleware(['auth:sanctum'])->group(function(){
     // route block reports
     Route::get('/reports/payroll-report', [PayrollReportController::class,'index']);
     Route::get('/reports/motor-rentel-report', [PayrollReportController::class,'motorrentel']);
+    Route::post('/reports/motor-rentel-report', [PayrollReportController::class,'motorrentel']);
+    
+    // test export excel
+    Route::get('motor-rentel/export',[MotorRentelController::class,'export']);
+    Route::post('motor-rentel/import',[MotorRentelController::class,'import']);
 });

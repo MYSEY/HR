@@ -43,7 +43,17 @@ class MotorRentel extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class ,'employee_id')->select(['id', 'employee_name_en', 'employee_name_kh', 'number_employee', 'department_id', 'position_id', 'gender'])->with('department')->with('position')->with('gender');
+        return $this->belongsTo(User::class ,'employee_id')
+        ->select([
+            'id', 
+            'employee_name_en',
+            'employee_name_kh',
+            'number_employee',
+            'department_id',
+            'position_id',
+            'branch_id',
+            'gender'])
+        ->with('department')->with('position')->with('gender')->with('branch');
     }
 
     public function getMotorEmployeeAttribute(){
