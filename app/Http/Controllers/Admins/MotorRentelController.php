@@ -25,169 +25,44 @@ class MotorRentelController extends Controller
      */
     public function index(Request $request)
     {
-        $data = [];
-        if($request->employee_id || $request->employee_name ||  $request->from_date || $request->to_date){
-            if ($request->employee_name !="" && $request->employee_id =="" && $request->from_date =="" && $request->to_date =="") {
-                $data = MotorRentel::with('user')->join('users', 'motor_rentels.employee_id', '=', 'users.id')
-                ->select(
-                    'users.employee_name_en',
-                    'users.employee_name_kh',
-                    'users.number_employee',
-                    'motor_rentels.*'
-                )
-                ->orWhere('users.employee_name_en', 'LIKE', '%'.$request->employee_name.'%')
-                ->orWhere('users.employee_name_kh', 'LIKE', '%'.$request->employee_name.'%')
-               ->orderBy('motor_rentels.id', 'desc')->get();
-            }else if ($request->employee_name =="" && $request->employee_id !="" && $request->from_date =="" && $request->to_date =="") {
-                $data =  MotorRentel::with('user')->join('users', 'motor_rentels.employee_id', '=', 'users.id')
-                ->select(
-                    'users.employee_name_en',
-                    'users.employee_name_kh',
-                    'users.number_employee',
-                    'motor_rentels.*'
-                )
-                ->where('users.number_employee', 'LIKE', '%'.$request->employee_id.'%')
-                ->orderBy('motor_rentels.id', 'desc')->get();
-            }else if ($request->employee_name && $request->employee_id && $request->from_date =="" && $request->to_date =="") {
-                $data =  MotorRentel::with('user')->join('users', 'motor_rentels.employee_id', '=', 'users.id')
-                ->select(
-                    'users.employee_name_en',
-                    'users.employee_name_kh',
-                    'users.number_employee',
-                    'motor_rentels.*'
-                )
-                ->where('users.employee_name_en', 'LIKE', '%'.$request->employee_name.'%')
-                ->where('users.employee_name_kh', 'LIKE', '%'.$request->employee_name.'%')
-                ->where('users.number_employee', 'LIKE', '%'.$request->employee_id.'%')
-                ->orderBy('motor_rentels.id', 'desc')->get();
-            }else if ($request->employee_name && $request->employee_id && $request->from_date && $request->to_date =="") {
-                $from_date = Carbon::createFromDate($request->from_date)->format('Y-m-d H:i:s'); //2023-05-09
-                $data =  MotorRentel::with('user')->join('users', 'motor_rentels.employee_id', '=', 'users.id')
-                ->select(
-                    'users.employee_name_en',
-                    'users.employee_name_kh',
-                    'users.number_employee',
-                    'motor_rentels.*'
-                )
-                ->where('users.employee_name_en', 'LIKE', '%'.$request->employee_name.'%')
-                ->where('users.employee_name_kh', 'LIKE', '%'.$request->employee_name.'%')
-                ->where('users.number_employee', 'LIKE', '%'.$request->employee_id.'%')
-                ->where('motor_rentels.created_at', '>=', $from_date)
-                ->orderBy('motor_rentels.id', 'desc')->get();
-            }else if ($request->employee_name && $request->employee_id && $request->from_date && $request->to_date) {
-                $from_date = Carbon::createFromDate($request->from_date)->format('Y-m-d H:i:s'); //2023-05-09
-                $to_date = Carbon::createFromDate($request->to_date.' '.'23:59:59')->format('Y-m-d H:i:s');
-                $data =  MotorRentel::with('user')->join('users', 'motor_rentels.employee_id', '=', 'users.id')
-                ->select(
-                    'users.employee_name_en',
-                    'users.employee_name_kh',
-                    'users.number_employee',
-                    'motor_rentels.*'
-                )
-                ->where('users.employee_name_en', 'LIKE', '%'.$request->employee_name.'%')
-                ->where('users.employee_name_kh', 'LIKE', '%'.$request->employee_name.'%')
-                ->where('users.number_employee', 'LIKE', '%'.$request->employee_id.'%')
-                ->whereBetween('motor_rentels.created_at', [$from_date, $to_date])
-                ->orderBy('motor_rentels.id', 'desc')->get();
-            }else if ($request->employee_name =="" && $request->employee_id =="" && $request->from_date && $request->to_date) {
-                $from_date = Carbon::createFromDate($request->from_date)->format('Y-m-d H:i:s'); //2023-05-09
-                $to_date = Carbon::createFromDate($request->to_date.' '.'23:59:59')->format('Y-m-d H:i:s');
-                $data =  MotorRentel::with('user')->join('users', 'motor_rentels.employee_id', '=', 'users.id')
-                ->select(
-                    'users.employee_name_en',
-                    'users.employee_name_kh',
-                    'users.number_employee',
-                    'motor_rentels.*'
-                )
-                ->whereBetween('motor_rentels.created_at', [$from_date, $to_date])
-                ->orderBy('motor_rentels.id', 'desc')->get();
-            }else if ($request->employee_name =="" && $request->employee_id =="" && $request->from_date && $request->to_date =="")
-             {
-                $from_date = Carbon::createFromDate($request->from_date)->format('Y-m-d H:i:s'); //2023-05-09
-                $data =  MotorRentel::with('user')->join('users', 'motor_rentels.employee_id', '=', 'users.id')
-                ->select(
-                    'users.employee_name_en',
-                    'users.employee_name_kh',
-                    'users.number_employee',
-                    'motor_rentels.*'
-                )
-                ->where('motor_rentels.created_at', '>=', $from_date)
-                ->orderBy('motor_rentels.id', 'desc')->get();
-            }else if($request->employee_name =="" && $request->employee_id =="" && $request->from_date =="" && $request->to_date){
-                $to_date = Carbon::createFromDate($request->to_date.' '.'23:59:59')->format('Y-m-d H:i:s');//2023-05-09
-                $data =  MotorRentel::with('user')->join('users', 'motor_rentels.employee_id', '=', 'users.id')
-                ->select(
-                    'users.employee_name_en',
-                    'users.employee_name_kh',
-                    'users.number_employee',
-                    'motor_rentels.*'
-                )
-                ->where('motor_rentels.created_at', '<=', $to_date)
-                ->orderBy('motor_rentels.id', 'desc')->get();
-            }else if($request->employee_name && $request->employee_id =="" && $request->from_date && $request->to_date ==""){
-                $from_date = Carbon::createFromDate($request->from_date)->format('Y-m-d H:i:s');//2023-05-09
-                $data =  MotorRentel::with('user')->join('users', 'motor_rentels.employee_id', '=', 'users.id')
-                ->select(
-                    'users.employee_name_en',
-                    'users.employee_name_kh',
-                    'users.number_employee',
-                    'motor_rentels.*'
-                )
-                ->where('users.employee_name_en', 'LIKE', '%'.$request->employee_name.'%')
-                ->where('users.employee_name_kh', 'LIKE', '%'.$request->employee_name.'%')
-                ->where('motor_rentels.created_at', '>=', $from_date)
-                ->orderBy('motor_rentels.id', 'desc')->get();
-            }else if($request->employee_name && $request->employee_id =="" && $request->from_date =="" && $request->to_date){
-                $to_date = Carbon::createFromDate($request->to_date.' '.'23:59:59')->format('Y-m-d H:i:s');//2023-05-09
-                $data =  MotorRentel::with('user')->join('users', 'motor_rentels.employee_id', '=', 'users.id')
-                ->select(
-                    'users.employee_name_en',
-                    'users.employee_name_kh',
-                    'users.number_employee',
-                    'motor_rentels.*'
-                )
-                ->where('users.employee_name_en', 'LIKE', '%'.$request->employee_name.'%')
-                ->where('users.employee_name_kh', 'LIKE', '%'.$request->employee_name.'%')
-                ->where('motor_rentels.created_at', '<=', $to_date)
-                ->orderBy('motor_rentels.id', 'desc')->get();
-            }else if($request->employee_name =="" && $request->employee_id && $request->from_date && $request->to_date ==""){
-                $from_date = Carbon::createFromDate($request->from_date)->format('Y-m-d H:i:s');//2023-05-09
-                $data =  MotorRentel::with('user')->join('users', 'motor_rentels.employee_id', '=', 'users.id')
-                ->select(
-                    'users.employee_name_en',
-                    'users.employee_name_kh',
-                    'users.number_employee',
-                    'motor_rentels.*'
-                )
-                ->where('users.number_employee', 'LIKE', '%'.$request->employee_id.'%')
-                ->where('motor_rentels.created_at', '>=', $from_date)
-                ->orderBy('motor_rentels.id', 'desc')->get();
-            }else if($request->employee_name =="" && $request->employee_id && $request->from_date =="" && $request->to_date){
-                $to_date = Carbon::createFromDate($request->to_date.' '.'23:59:59')->format('Y-m-d H:i:s');//2023-05-09
-                $data =  MotorRentel::with('user')->join('users', 'motor_rentels.employee_id', '=', 'users.id')
-                ->select(
-                    'users.employee_name_en',
-                    'users.employee_name_kh',
-                    'users.number_employee',
-                    'motor_rentels.*'
-                )
-                ->where('users.number_employee', 'LIKE', '%'.$request->employee_id.'%')
-                ->where('motor_rentels.created_at', '<=', $to_date)
-                ->orderBy('motor_rentels.id', 'desc')->get();
-            }
-            return response()->json(['data'=>$data]);
-        }else{
-            $data =  MotorRentel::join('users', 'motor_rentels.employee_id', '=', 'users.id')
+        $from_date = null;
+        $to_date = null;
+        if ($request->from_date || $request->to_date) {
+            $from_date = Carbon::createFromDate($request->from_date)->format('Y-m-d H:i:s'); //2023-05-09 00:00:00
+            $to_date = Carbon::createFromDate($request->to_date.' '.'23:59:59')->format('Y-m-d H:i:s'); //2023-05-09 23:59:59
+        }
+        
+        $data = MotorRentel::with('user')->join('users', 'motor_rentels.employee_id', '=', 'users.id')
             ->select(
+                'motor_rentels.*',
                 'users.employee_name_en',
                 'users.employee_name_kh',
                 'users.number_employee',
-                'motor_rentels.*'
-            )->orderBy('motor_rentels.id', 'desc')->get();
-        }
+                'users.branch_id',
+            )
+            ->when($request->employee_id, function ($query, $employee_id) {
+                $query->where('users.number_employee', 'LIKE', '%'.$employee_id.'%');
+            })
+            ->when($request->employee_name, function ($query, $employee_name) {
+                $query->orWhere('users.employee_name_en', 'LIKE', '%'.$employee_name.'%');
+                $query->orWhere('users.employee_name_kh', 'LIKE', '%'.$employee_name.'%');
+            })
+            ->when($from_date, function ($query, $from_date) {
+                $query->where('motor_rentels.created_at', '>=', $from_date);
+            })
+            ->when($to_date, function ($query, $to_date) {
+                $query->where('motor_rentels.created_at','<=', $to_date);
+            })
+            ->orderBy('id', 'desc')
+            ->get();
        
         $employees = User::all();
-        return view('motor_rentels.index', compact('data', 'employees'));
+        if ($request->research) {
+            return response()->json(['data'=>$data]);
+        }else {
+            return view('motor_rentels.index', compact('data', 'employees'));
+        }
+        // return view('motor_rentels.index', compact('data', 'employees'));
     }
 
     public function detail(Request $request)

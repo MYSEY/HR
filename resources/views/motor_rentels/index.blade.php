@@ -343,6 +343,7 @@
 
         $(".btn-search").on("click", function() {
             axios.post('{{ URL('motor-rentel/list') }}', {
+                'research':true,
                 'employee_id': $("#employee_id").val(),
                 'employee_name': $("#employee_name").val(),
                 'from_date': $("#from_date").val(),
