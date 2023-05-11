@@ -22,7 +22,7 @@
                 </div>
                 <div class="col-auto float-end ms-auto">
                     @if (Auth::user()->RolePermission == 'Administrator')
-                        <a href="{{ url('motor-rentel/export') }}" class="btn add-btn"><i class="fa fa-plus"></i>
+                        <a href="#" class="btn add-btn btn-export"><i class="fa fa-plus"></i>
                             Export Data</a>
                     @endif
                 </div>
@@ -246,6 +246,17 @@
 
 <script>
     $(function() {
+        $(".btn-export").on("click", function(){
+            var query = {
+                'employee_id': $("#employee_id").val(),
+                'employee_name': $("#employee_name").val(),
+                'branch_id': $("#branch_id").val(),
+                'from_date': $("#from_date").val(),
+                'to_date': $("#to_date").val(),
+            }
+            var url = "{{URL::to('motor-rentel/export')}}?" + $.param(query)
+            window.location = url;
+        });
         $(".btn-search").on("click", function() {
             axios.post('{{ URL('reports/motor-rentel-report') }}', {
                 'research':true,

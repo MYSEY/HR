@@ -160,6 +160,6 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('/reports/motor-rentel-report', [PayrollReportController::class,'motorrentel']);
     
     // test export excel
-    Route::get('motor-rentel/export',[MotorRentelController::class,'export']);
+    Route::get('motor-rentel/export',[PayrollReportController::class,'export']);
     Route::post('motor-rentel/import',[MotorRentelController::class,'import']);
 });
