@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('motor_rentels', function (Blueprint $table) {
             $table->id();
-            $table->string('employee_id')->references('number_employee')->on('users');
+            $table->string('employee_id');
             $table->decimal('gasoline_price_per_liter')->nullable();
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();

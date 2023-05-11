@@ -76,7 +76,7 @@ function menu(){
                     'permission'=>1
                 ],
                 [
-                    'value'=>'Motor Rentel',
+                    'value'=>'Motor Rental',
                     'url'=>"motor-rentel/list",
                     'table'=>2,
                     'permission'=>1
@@ -103,7 +103,7 @@ function menu(){
                     'permission'=>1
                 ],
                 [
-                    'value'=>'Motor Rentel Report',
+                    'value'=>'Motor Rental Report',
                     'url'=>"reports/motor-rentel-report",
                     'table'=>2,
                     'permission'=>1
@@ -111,33 +111,33 @@ function menu(){
             ]
         ],
         
-        [
-            'name'=>'',
-            'icon'=>'<i class="la la-edit"></i> <span></span> <span class="menu-arrow"></span>',
-            'value'=>'Training',
-            'table'=>2,
-            'permission'=>1,
-            'child'=>[
-                [
-                    'value'=>'Training List',
-                    'url'=>"training/list",
-                    'table'=>2,
-                    'permission'=>1
-                ],
-                [
-                    'value'=>'Trainers',
-                    'url'=>"trainer/list",
-                    'table'=>2,
-                    'permission'=>1
-                ],
-                [
-                    'value'=>'Training Type',
-                    'url'=>"training-type/list",
-                    'table'=>2,
-                    'permission'=>1
-                ],
-            ]
-        ],
+        // [
+        //     'name'=>'',
+        //     'icon'=>'<i class="la la-edit"></i> <span></span> <span class="menu-arrow"></span>',
+        //     'value'=>'Training',
+        //     'table'=>2,
+        //     'permission'=>1,
+        //     'child'=>[
+        //         [
+        //             'value'=>'Training List',
+        //             'url'=>"training/list",
+        //             'table'=>2,
+        //             'permission'=>1
+        //         ],
+        //         [
+        //             'value'=>'Trainers',
+        //             'url'=>"trainer/list",
+        //             'table'=>2,
+        //             'permission'=>1
+        //         ],
+        //         [
+        //             'value'=>'Training Type',
+        //             'url'=>"training-type/list",
+        //             'table'=>2,
+        //             'permission'=>1
+        //         ],
+        //     ]
+        // ],
         [
             'name'=>'',
             'icon'=>'<i class="la la-key"></i> <span> </span> <span class="menu-arrow"></span>',

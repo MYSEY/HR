@@ -14,22 +14,24 @@
         <div class="row align-items-center">
             <div class="row align-items-center">
                 <div class="col">
-                    <h3 class="page-title">Motor rentel</h3>
+                    <h3 class="page-title">Motor rental</h3>
                     <ul class="breadcrumb">
                         <li class="breadcrumb-item"><a href="{{ url('/dashboad/employee') }}">Dashboard</a></li>
-                        <li class="breadcrumb-item active">Motor rentel</li>
+                        <li class="breadcrumb-item active">Motor rental</li>
                     </ul>
                 </div>
 
                 <div class="col-auto float-end ms-auto">
                     @if (Auth::user()->RolePermission == 'Administrator')
-                        <a href="#" class="btn add-btn" data-toggle="modal" data-toggle="modal" id="add_new"><i class="fa fa-plus"></i>
+                        <a href="#" class="btn add-btn" data-toggle="modal" data-toggle="modal" id="add_new"><i
+                                class="fa fa-plus"></i>
                             Add New</a>
                     @endif
                 </div>
                 <div class="col-auto float-end ms-auto">
                     @if (Auth::user()->RolePermission == 'Administrator')
-                        <a href="#" class="btn add-btn" data-toggle="modal" id="import_new_motor_rentel"><i class="fa fa-plus"></i>
+                        <a href="#" class="btn add-btn" data-toggle="modal" id="import_new_motor_rentel"><i
+                                class="fa fa-plus"></i>
                             Import Data</a>
                     @endif
                 </div>
@@ -37,44 +39,41 @@
         </div>
     </div>
     @if (Auth::user()->RolePermission == 'Administrator')
-        <form action="{{ url('motor-rentel/search') }}" method="POST">
-            @csrf
-            <div class="row filter-row">
-                <div class="col-sm-6 col-md-3">
-                    <div class="form-group form-focus select-focus">
-                        <input type="text" class="form-control" name="employee_id" id="employee_id"
-                            placeholder="Employee ID" value="{{ old('employee_id') }}">
-                        <label class="focus-label">Filter</label>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-md-3">
-                    <div class="form-group form-focus select-focus">
-                        <input type="text" class="form-control" name="employee_name" id="employee_name"
-                            placeholder="Employee Name" value="{{ old('employee_name') }}">
-                        <label class="focus-label">Filter</label>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-md-3 col-lg-3 col-xl-2 col-12">
-                    <div class="form-group form-focus focused">
-                        <div class="cal-icon">
-                            <input class="form-control floating datetimepicker" type="text">
-                        </div>
-                        <label class="focus-label">From</label>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-md-3 col-lg-3 col-xl-2 col-12">
-                    <div class="form-group form-focus focused">
-                        <div class="cal-icon">
-                            <input class="form-control floating datetimepicker" type="text">
-                        </div>
-                        <label class="focus-label">To</label>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-md-2">
-                    <button type="submit" class="btn btn-success w-100" data-dismiss="modal">Search</button>
+        <div class="row filter-row">
+            <div class="col-sm-6 col-md-3">
+                <div class="form-group form-focus select-focus">
+                    <input type="text" class="form-control" name="employee_id" id="employee_id" placeholder="Employee ID"
+                        value="{{ old('employee_id') }}">
+                    <label class="focus-label">Filter</label>
                 </div>
             </div>
-        </form>
+            <div class="col-sm-6 col-md-3">
+                <div class="form-group form-focus select-focus">
+                    <input type="text" class="form-control" name="employee_name" id="employee_name"
+                        placeholder="Employee Name" value="{{ old('employee_name') }}">
+                    <label class="focus-label">Filter</label>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-3 col-lg-3 col-xl-2 col-12">
+                <div class="form-group form-focus focused">
+                    <div class="cal-icon">
+                        <input type="text" class="form-control floating datetimepicker" name="from_date" id="from_date" value="">
+                    </div>
+                    <label class="focus-label">From</label>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-3 col-lg-3 col-xl-2 col-12">
+                <div class="form-group form-focus focused">
+                    <div class="cal-icon">
+                        <input type="text" class="form-control floating datetimepicker" name="to_date" id="to_date" value="">
+                    </div>
+                    <label class="focus-label">To</label>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-2">
+                <button class="btn btn-success w-100 btn-search" data-dismiss="modal">Search</button>
+            </div>
+        </div>
     @endif
 
     <div class="row">
@@ -83,14 +82,14 @@
                 <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                     <div class="row">
                         <div class="col-sm-12">
-                            <table class="table table-striped custom-table mb-0 datatable dataTable no-footer"
+                            <table class="table table-striped custom-table mb-0 datatable dataTable no-footer tbl-motor"
                                 id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
                                 <thead>
                                     <tr>
                                         <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
                                             rowspan="1" colspan="1" aria-sort="ascending"
                                             aria-label="Profle: activate to sort column descending"
-                                            style="width: 265.913px;">#</th>
+                                            style="width: 94.0625px;">#</th>
                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1"
                                             colspan="1" aria-label="Employee ID: activate to sort column ascending"
                                             style="width: 94.0625px;">Employee ID</th>
@@ -101,26 +100,18 @@
                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1"
                                             colspan="1" aria-label="Gender: activate to sort column ascending"
                                             style="width: 125.15px;">Gender</th>
-                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1"
-                                            colspan="1" aria-label="Position: activate to sort column ascending"
+                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                            rowspan="1" colspan="1"
+                                            aria-label="Position: activate to sort column ascending"
                                             style="width: 125.15px;">Position</th>
                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                             rowspan="1" colspan="1"
                                             aria-label="Department: activate to sort column ascending"
                                             style="width: 125.15px;">Department</th>
-                                        {{-- <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Start Date: activate to sort column ascending" style="width: 89.6px;">Start Date</th>
-                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="End Date: activate to sort column ascending" style="width: 89.6px;">End Date</th>
-                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Year of manufature: activate to sort column ascending" style="width: 89.6px;">Year of manufature</th>
-                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Expiretion year: activate to sort column ascending" style="width: 89.6px;">Expiretion year</th>
-                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Shelt life: activate to sort column ascending" style="width: 89.6px;">Shelt life</th>
-                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Number plate: activate to sort column ascending" style="width: 125.15px;">Number plate</th>
-                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Total gasoline: activate to sort column ascending" style="width: 89.6px;">Total gasoline</th>
-                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Total working days: activate to sort column ascending" style="width: 89.6px;">Total working days</th>
-                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Total gasoline liters: activate to sort column ascending" style="width: 89.6px;">Total gasoline liters</th>
-                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Total price gasoline: activate to sort column ascending" style="width: 89.6px;">Total price gasoline</th>
-                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Price engine oil: activate to sort column ascending" style="width: 89.6px;">Price engine oil</th>
-                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Price motor rentel: activate to sort column ascending" style="width: 89.6px;">Price motor rentel</th>
-                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Tax rate: activate to sort column ascending" style="width: 89.6px;">Tax rate</th> --}}
+                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                            rowspan="1" colspan="1"
+                                            aria-label="Create at: activate to sort column ascending"
+                                            style="width: 51.475px;">Created At</th>
                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                             rowspan="1" colspan="1"
                                             aria-label="Amount: activate to sort column ascending"
@@ -136,28 +127,17 @@
                                         @foreach ($data as $item)
                                             <tr class="odd">
                                                 <td class="ids">{{ $item->id }}</td>
-                                                <td class="number_employee_id"><a href="{{ url('/motor-rentel/detail', $item->id) }}">{{ $item->MotorEmployee->number_employee }}</a>
+                                                <td class="number_employee_id"><a
+                                                        href="{{ url('/motor-rentel/detail', $item->id) }}">{{ $item->MotorEmployee->number_employee }}</a>
                                                 </td>
                                                 <td>{{ $item->MotorEmployee->employee_name_en }}</td>
                                                 <td>{{ $item->MotorEmployee->EmployeeGender }}</td>
                                                 <td>{{ $item->MotorEmployee->EmployeePosition }}</td>
                                                 <td>{{ $item->MotorEmployee->EmployeeDepartment }}</td>
-                                                {{-- <td class="start_date">{{$item->start_date}}</td>
-                                                <td class="end_date">{{$item->end_date}}</td>
-                                                <td class="product_year">{{$item->product_year}}</td>
-                                                <td class="expired_year">{{$item->expired_year}}</td>
-                                                <td class="shelt_life">{{$item->shelt_life}}</td>
-                                                <td class="number_plate">{{$item->number_plate}}</td>
-                                                <td class="total_gasoline">{{$item->total_gasoline}}</td>
-                                                <td class="total_work_day">{{$item->total_work_day}}</td>
-
-                                                <td >{{$item->total_gasoline * $item->total_work_day}}</td>
-                                                <td >{{round(($item->total_gasoline * $item->total_work_day) * $item->gasoline_price_per_liter,2)}}</td>
-                                                <td class="price_engine_oil">{{$item->price_engine_oil}}</td>
-                                                <td class="price_motor_rentel">{{$item->price_motor_rentel}}</td>
-                                                <td class="tax_rate">{{$item->tax_rate}}</td> --}}
-
+                                                <td>{{ \Carbon\Carbon::parse($item->created_at)->format('M-d-Y') ?? '' }}
+                                                </td>
                                                 <td>{{ $item->price_motor_rentel - ($item->price_motor_rentel * $item->tax_rate) / 100 }}
+                                                </td>
                                                 </td>
                                                 <td class="text-end">
                                                     <div class="dropdown dropdown-action">
@@ -206,15 +186,17 @@
                             <p>Are you sure want to delete?</p>
                         </div>
                         <div class="modal-btn delete-action">
-                            <form action="{{url('motor-rentel/delete')}}" method="POST">
+                            <form action="{{ url('motor-rentel/delete') }}" method="POST">
                                 @csrf
                                 <input type="hidden" name="id" class="e_id" value="">
                                 <div class="row">
                                     <div class="col-6">
-                                        <button type="submit" class="btn btn-primary continue-btn submit-btn">Delete</button>
+                                        <button type="submit"
+                                            class="btn btn-primary continue-btn submit-btn">Delete</button>
                                     </div>
                                     <div class="col-6">
-                                        <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-primary cancel-btn">Cancel</a>
+                                        <a href="javascript:void(0);" data-dismiss="modal"
+                                            class="btn btn-primary cancel-btn">Cancel</a>
                                     </div>
                                 </div>
                             </form>
@@ -238,7 +220,7 @@
             $('#e_expired_year').html('<option value=""> </option>');
             let dateYear = moment(new Date(`01/01/${$(this).val()}`)).format('YYYY-MM-DD');
             let ageMotorrentel = calculateAge(dateYear);
-            
+
             $("#shelt_life").val(ageMotorrentel);
             $('#e_shelt_life').val(ageMotorrentel);
 
@@ -252,7 +234,7 @@
             } else if (ageMotorrentel > 7 && ageMotorrentel <= 10) {
                 $("#price_motor_rentel").val(20);
                 $('#e_price_motor_rentel').val(20);
-            }else{
+            } else {
                 $("#price_motor_rentel").val(0);
                 $('#e_price_motor_rentel').val(0);
             }
@@ -311,7 +293,8 @@
                                 $('#e_employee_id').append($('<option>', {
                                     value: item.id,
                                     text: item.employee_name_en,
-                                    selected: item.id == response.success.employee_id
+                                    selected: item.id == response
+                                        .success.employee_id
                                 }));
                             });
                         }
@@ -321,23 +304,25 @@
                             .gasoline_price_per_liter);
                         $('#e_start_date').val(response.success.start_date);
                         $('#e_end_date').val(response.success.end_date);
-                        [...Array(currentDiff >= 0 ? currentDiff + 1 : 0).keys()].map((num) => {
-                                let year = currentYear + num;
-                                let option = {
-                                    value: year,
-                                    text: year,
-                                    selected: false
-                                }
-                                if (year == response.success.product_year) {
-                                    option.selected = true;
-                                }
-                                $('#e_product_year').append($('<option>', option));
+                        [...Array(currentDiff >= 0 ? currentDiff + 1 : 0).keys()].map((
+                            num) => {
+                            let year = currentYear + num;
+                            let option = {
+                                value: year,
+                                text: year,
+                                selected: false
+                            }
+                            if (year == response.success.product_year) {
+                                option.selected = true;
+                            }
+                            $('#e_product_year').append($('<option>', option));
                         });
                         let newYearExpireted = Number(response.success.product_year) + 11;
                         if (newYearExpireted <= Number(newYear)) {
                             newYearExpireted = newYear;
                         }
-                        calculatorYearExpire(response.success.product_year, newYearExpireted);
+                        calculatorYearExpire(response.success.product_year,
+                            newYearExpireted);
                         $('#e_shelt_life').val(response.success.shelt_life);
                         $('#e_number_plate').val(response.success.number_plate);
                         $('#e_total_gasoline').val(response.success.total_gasoline);
@@ -351,9 +336,58 @@
                 }
             });
         });
-        $('.delete').on('click',function(){
+        $('.delete').on('click', function() {
             var _this = $(this).parents('tr');
             $('.e_id').val(_this.find('.ids').text());
+        });
+
+        $(".btn-search").on("click", function() {
+            axios.post('{{ URL('motor-rentel/list') }}', {
+                'employee_id': $("#employee_id").val(),
+                'employee_name': $("#employee_name").val(),
+                'from_date': $("#from_date").val(),
+                'to_date': $("#to_date").val(),
+            }).then(function(response) {
+                var rows = response.data.data;
+                if (rows.length > 0) {
+                    var tr = "";
+                    $(rows).each(function(e, row) {
+                        let createdAt = moment(row.created_at).format('MMM-D-YYYY')
+                        tr += '<tr class="odd">' +
+                            '<td class="ids">' + (row.id) + '</td>' +
+                            '<td class="number_employee_id"><a href="{{url("motor-rentel/detail")}}/'+row.id+'">' + (row.number_employee) + '</a></td>' +
+                            '<td>' + (row.employee_name_en) + '</td>' +
+                            '<td>' + (row.user.gender == null ? "" : row.user.gender.name_english) + '</td>' +
+                            '<td>' + (row.user.position ? row.user.position.name_khmer : "") + '</td>' +
+                            '<td>' + (row.user.department.name_khmer) + '</td>' +
+                            '<td>' + (createdAt) + '</td>' +
+                            '<td>' + (row.price_motor_rentel - (row.price_motor_rentel * row.tax_rate) / 100) + '</td>' +
+                            '<td class="text-end">' +
+                            '<div class="dropdown dropdown-action">' +
+                            '<a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">' +
+                            '<i class="material-icons">more_vert</i>' +
+                            '</a>' +
+                            '<div class="dropdown-menu dropdown-menu-right">' +
+                            '<a class="dropdown-item motor_detail" data-id="{{'(row.id)'}}" href="{{url("motor-rentel/detail")}}/'+row.id+'">' +
+                            '<i class="fa fa-eye m-r-5"></i> View' +
+                            '</a>' +
+                            ' <a class="dropdown-item update" data-id="{{'(row.id)'}}">' +
+                            '<i class="fa fa-pencil m-r-5"></i> Edit' +
+                            '</a>' +
+                            '<a class="dropdown-item delete" href="#" data-toggle="modal" data-id="{{'(row.id)'}}" data-target="#delete_motor_rentel">' +
+                            '<i class="fa fa-trash-o m-r-5"></i> Delete' +
+                            '</a>' +
+                            '</div>' +
+                            '</div>' +
+                            '</td>' +
+                            ' </tr>';
+                    });
+                } else {
+                    var tr =
+                        '<tr><td colspan=9 align="center">ពុំមានទិន្នន័យសម្រាប់បង្ហាញ</td></tr>';
+                }
+                $(".tbl-motor tbody").html(tr);
+            })
         });
     });
 

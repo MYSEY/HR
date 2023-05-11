@@ -14,10 +14,10 @@
         <div class="row align-items-center">
             <div class="row align-items-center">
                 <div class="col">
-                    <h3 class="page-title">Motor rentel report</h3>
+                    <h3 class="page-title">Motor rental report</h3>
                     <ul class="breadcrumb">
                         <li class="breadcrumb-item"><a href="{{ url('/dashboad/employee') }}">Dashboard</a></li>
-                        <li class="breadcrumb-item active">Motor rentel report</li>
+                        <li class="breadcrumb-item active">Motor rental report</li>
                     </ul>
                 </div>
                 <div class="col-auto float-end ms-auto">
