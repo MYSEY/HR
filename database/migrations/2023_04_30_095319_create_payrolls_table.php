@@ -19,6 +19,7 @@ return new class extends Migration
             $table->decimal('net_salary')->default(0);
             $table->integer('spouse')->nullable();
             $table->decimal('payment_amount')->nullable();
+            $table->integer('children')->nullable();
             $table->decimal('total_child_allowance')->nullable();
             $table->decimal('phone_allowance')->nullable();
             $table->decimal('monthly_quarterly_bonuses')->nullable();
@@ -38,6 +39,9 @@ return new class extends Migration
             $table->decimal('total_tax_seniority')->nullable();
             $table->decimal('other_allowances')->nullable();
             $table->decimal('total_salary')->nullable();
+            $table->bigInteger('created_by')->unsigned()->nullable();
+            $table->bigInteger('updated_by')->unsigned()->nullable();
+            $table->dateTime('deleted_at')->nullable();
             $table->timestamps();
         });
     }

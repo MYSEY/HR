@@ -14,6 +14,7 @@
             </div>
         </div>
     </div>
+    {!! Toastr::message() !!}
     <div class="row">
         <div class="col-md-12">
             <div class="table-responsive">
@@ -24,53 +25,58 @@
                                 id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
                                 <thead>
                                     <tr>
-                                        <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Employee: activate to sort column descending" style="width: 273.8px;">Employee</th>
-                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Employee ID: activate to sort column ascending" style="width: 88.675px;">Employee ID</th>
-                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending" style="width: 208.438px;">Email</th>
-                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending" style="width: 67.3px;">Join Date</th>
-                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Role: activate to sort column ascending" style="width: 149.337px;">Role</th>
-                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Salary: activate to sort column ascending" style="width: 51.1625px;">Salary</th>
-                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Payslip: activate to sort column ascending" style="width: 101.438px;">Payslip</th>
-                                        <th class="text-end sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Action: activate to sort column ascending" style="width: 47.1375px;">Action</th>
+                                        <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Employee: activate to sort column descending">Profile</th>
+                                        <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Employee: activate to sort column descending">Name</th>
+                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1">Employee ID</th>
+                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending">Department</th>
+                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending">Branch</th>
+                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending">DOB</th>
+                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">Join Date</th>
+                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Salary: activate to sort column ascending">Salary</th>
+                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Salary: activate to sort column ascending">Created At</th>
+                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Payslip: activate to sort column ascending">Payslip</th>
+                                        <th class="text-end sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Action: activate to sort column ascending">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr class="odd">
-                                        <td class="sorting_1">
-                                            <h2 class="table-avatar">
-                                                <a href="https://smarthr.dreamguystech.com/laravel/template/public/profile" class="avatar">
-                                                    <img src="https://smarthr.dreamguystech.com/laravel/template/public/assets/img/profiles/avatar-13.jpg" alt="">
-                                                </a>
-                                                <a href="https://smarthr.dreamguystech.com/laravel/template/public/profile">Bernardo Galaviz <span>Web Developer</span></a>
-                                            </h2>
-                                        </td>
-                                        <td>FT-0007</td>
-                                        <td>bernardogalaviz@example.com</td>
-                                        <td>1 Jan 2014</td>
-                                        <td>
-                                            <div class="dropdown">
-                                                <a href="" class="btn btn-white btn-sm btn-rounded dropdown-toggle"
-                                                    data-bs-toggle="dropdown" aria-expanded="false">Web Developer </a>
-                                                <div class="dropdown-menu">
-                                                    <a class="dropdown-item" href="#">Software Engineer</a>
-                                                    <a class="dropdown-item" href="#">Software Tester</a>
-                                                    <a class="dropdown-item" href="#">Frontend Developer</a>
-                                                    <a class="dropdown-item" href="#">UI/UX Developer</a>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>$38400</td>
-                                        <td><a class="btn btn-sm btn-primary" href="https://smarthr.dreamguystech.com/laravel/template/public/salary-view">Generate Slip</a></td>
-                                        <td class="text-end">
-                                            <div class="dropdown dropdown-action">
-                                                <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
-                                                <div class="dropdown-menu dropdown-menu-right">
-                                                    <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#edit_salary"><i class="fa fa-pencil m-r-5"></i> Edit</a>
-                                                    <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#delete_salary"><i class="fa fa-trash-o m-r-5"></i> Delete</a>
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
+                                    @if (count($data) > 0)
+                                        @foreach ($data as $item)
+                                            <tr class="odd">
+                                                <td class="sorting_1">
+                                                    @if ($item->profile != null)
+                                                        <a href="#" class="avatar">
+                                                            <img src="{{asset('/uploads/images/'.$item->users->profile)}}" alt="">
+                                                        </a>
+                                                    @else
+                                                        <a href="{{asset('admin/img/defuals/default-user-icon.png')}}">
+                                                            <img alt="" src="{{asset('admin/img/defuals/default-user-icon.png')}}">
+                                                        </a>
+                                                    @endif
+                                                </td>
+                                                <td> <a href="#">{{$item->users == null ? "" : $item->users->employee_name_en}}</span></a></td>
+                                                <td>{{$item->users == null ? "" : $item->users->number_employee}}</td>
+                                                <td>{{$item->users == null ? "" : $item->users->EmployeeDepartment}}</td>
+                                                <td>{{$item->users == null ? "" : $item->users->EmployeeBrnach}}</td>
+                                                <td>{{$item->users == null ? "" : $item->users->DOB}}</td>
+                                                <td>{{$item->users == null ? "" : $item->users->joinOfDate}}</td>
+                                                <td>${{$item->total_salary}}</td>
+                                                <td>{{$item->created_at}}</td>
+                                                <td><a class="btn btn-sm btn-primary" href="#">Generate Slip</a></td>
+                                                <td class="text-end">
+                                                    <div class="dropdown dropdown-action">
+                                                        <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
+                                                        <div class="dropdown-menu dropdown-menu-right">
+                                                            <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#edit_salary"><i class="fa fa-pencil m-r-5"></i> Edit</a>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    @else
+                                        <tr>
+                                            <td colspan="16" style="text-align: center">No record to display</td>
+                                        </tr>
+                                    @endif
                                 </tbody>
                             </table>
                         </div>
@@ -107,7 +113,7 @@
                                     <label>Net Salary <span class="text-danger">*</span></label>
                                     <div class="input-group">
                                         <span class="input-group-text">$</span>
-                                        <input type="number" class="form-control" id="net_salary" name="net_salary" placeholder="net salary amount" value="" required>
+                                        <input type="number" class="form-control" id="net_salary" name="net_salary" placeholder="" value="" required>
                                     </div>
                                 </div>
                             </div>
@@ -151,7 +157,7 @@
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label class="col-form-label">Spouse</label>
-                                    <input type="number" class="form-control" name="spouse" id="spouse">
+                                    <input type="number" class="form-control" name="spouse" id="spouse" maxlength="1" placeholder="">
                                 </div>
                             </div>
                         </div>
@@ -164,3 +170,4 @@
         </div>
     </div>
 @endsection
+@include('includs.script')

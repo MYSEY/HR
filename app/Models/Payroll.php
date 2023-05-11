@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Payroll extends Model
 {
@@ -17,7 +18,8 @@ class Payroll extends Model
         'net_salary',
         'spouse',
         'payment_amount',
-        'child_allowance',
+        'children',
+        'total_child_allowance',
         'phone_allowance',
         'monthly_quarterly_bonuses',
         'khmer_new_year_pchum_ben_allowance',
@@ -38,4 +40,10 @@ class Payroll extends Model
         'created_by',
         'updated_by',
     ];
+
+
+    public function users()
+    {
+        return $this->belongsTo(User::class ,'employee_id');
+    }
 }
