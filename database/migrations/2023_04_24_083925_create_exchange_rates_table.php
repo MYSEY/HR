@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('exchange_rates', function (Blueprint $table) {
             $table->id();
-            $table->boolean('currency');
-            $table->decimal('amount');
+            $table->integer('amount_usd');
+            $table->string('amount_riel');
             $table->string('description')->nullable();
             $table->bigInteger('created_by')->unsigned()->nullable();
             $table->bigInteger('updated_by')->unsigned()->nullable();

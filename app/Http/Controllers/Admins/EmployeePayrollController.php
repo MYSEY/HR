@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Helpers\Helper;
 use App\Models\Payroll;
 use Faker\Calculator\Inn;
+use App\Models\ExchangeRate;
 use Illuminate\Http\Request;
 use Ramsey\Uuid\Type\Integer;
 use Illuminate\Support\Carbon;
@@ -13,17 +14,24 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Auth;
+use App\Repositories\Admin\PayrollRepository;
 
 class EmployeePayrollController extends Controller
 {
+    private $payrollRepo;
+    public function __construct(PayrollRepository $payrollRepo)
+    {
+        $this->payrollRepo = $payrollRepo;
+    }
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $data = Payroll::with('users')->get();
+        $data = $this->payrollRepo->getAllPayroll($request);
         $user = User::all();
         return view('payrolls.index',compact('data','user'));
     }
@@ -47,7 +55,9 @@ class EmployeePayrollController extends Controller
     public function store(Request $request)
     {
         try{
-            $amount_exchang = '4065';
+            // get exchang rate
+            $exChange= ExchangeRate::first();
+            $amount_exchang =  $exChange->amount_riel;    
             $pension_contribution = 5.91;
            
             //calculated khmer_new_year and pchumBen_bonus
@@ -146,7 +156,7 @@ class EmployeePayrollController extends Controller
             }
 
             $children = $employee->number_of_children;
-    
+            $role_id = $employee->role_id;
             // អត្រា ពន្ធ(%)
             if ($employee->number_of_children == null && $request->spouse == null) {
                 
@@ -423,6 +433,7 @@ class EmployeePayrollController extends Controller
             // dd($children);
             $data   = $request->all();
             $data['employee_id']    = $request->employee_id;
+            $data['role_id']    = $role_id;
             $data['net_salary']    = number_format($request->net_salary,2);
             $data['payment_amount']    = number_format($request->net_salary,2);
             $data['children']    = $children;

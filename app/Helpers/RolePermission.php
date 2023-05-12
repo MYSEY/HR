@@ -45,13 +45,13 @@ function menu(){
                 [
                     'value'=>'All Employees',
                     'url'=>"users",
-                    'table'=>2,
+                    'table'=>3,
                     'permission'=>1
                 ],
                 [
                     'value'=>'Leaves Employee',
                     'url'=>"leaves/employee",
-                    'table'=>6,
+                    'table'=>12,
                     'permission'=>1
                 ],
                 [
@@ -196,7 +196,7 @@ function menu(){
             'name'=>'',
             'icon'=>'<i class="la la-key"></i> <span></span>',
             'value'=>'Roles Permissions',
-            'table'=>4,
+            'table'=>6,
             'permission'=>1,
             'url'=>"role",
         ],

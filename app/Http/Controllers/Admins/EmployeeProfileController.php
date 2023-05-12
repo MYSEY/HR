@@ -32,7 +32,7 @@ class EmployeeProfileController extends Controller
         $branch = Branchs::all();
         $transferred = Transferred::where('employee_id',$request->id)->get();
         $training = StaffTraining::where('employee_id',$request->id)->get();
-        $contact = Contact::all();
+        $contact = Contact::where('employee_id',$request->id)->get();
         $empPromoted = StaffPromoted::where('employee_id',$request->id)->orderBy('id', 'DESC')->get();
         return view('employees.profile',compact('data','optionOfStudy','optionDegree','department','position','empPromoted','branch','transferred','training','relationship','contact'));
     }

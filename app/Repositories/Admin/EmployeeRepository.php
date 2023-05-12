@@ -50,40 +50,12 @@ class EmployeeRepository extends BaseRepository
                     ->orWhere('employee_name_en', 'LIKE', '%'.$request->employee_name.'%');
                 }
 
-                // if ($request->position_id && $request->employee_name =="" && $request->empolyee_id =="" && $request->department_id =="") {
-                //     $dataUser= User::with('role')->with('department')
-                //     ->where('position_id', '=', $request->position_id);
-                // }
-
-                // if ($request->department_id && $request->employee_name =="" && $request->empolyee_id =="" && $request->position_id =="") {
-                //     $dataUser= User::with('role')->with('department')
-                //     ->where('department_id', '=', $request->department_id);
-                // }
-
                 if ($request->employee_name && $request->employee_id) {
                     $dataUser = User::with('role')->with('department')
                     ->where('number_employee', '=', $request->employee_id)
                     ->where('employee_name_kh', 'LIKE', '%'.$request->employee_name.'%')
                     ->where('employee_name_en', 'LIKE', '%'.$request->employee_name.'%');
                 }
-
-                // if ($request->employee_id && $request->employee_name &&  $request->position_id && $request->department_id =="") {
-                //     $dataUser = User::with('role')->with('department')
-                //             ->where('number_employee', '=', $request->employee_id)
-                //             ->where('employee_name_kh', 'LIKE', '%'.$request->employee_name.'%')
-                //             ->where('employee_name_en', 'LIKE', '%'.$request->employee_name.'%')
-                //             ->where('position_id', '=', $request->position_id);
-                // }
-                
-                // if ($request->employee_id && $request->employee_name &&  $request->position_id && $request->department_id) {
-                //     $dataUser = User::with('role')->with('department')
-                //             ->where('number_employee', '=', $request->employee_id)
-                //             ->where('employee_name_kh', 'LIKE', '%'.$request->employee_name.'%')
-                //             ->where('employee_name_en', 'LIKE', '%'.$request->employee_name.'%')
-                //             ->where('position_id', '=', $request->position_id)
-                //             ->where('department_id', '=', $request->department_id);
-                // }
-
                 return $dataUser->get();
             }else{
                 return User::with('role')->with('department')->get();

@@ -56,7 +56,8 @@
                                 id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
                                 <thead>
                                     <tr>
-                                        <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Employee Name: activate to sort column descending" style="width: 178px;">Employee Name</th>
+                                        <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Employee Name: activate to sort column descending" style="width: 178px;">Profile</th>
+                                        <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Employee Name: activate to sort column descending" style="width: 178px;">Name</th>
                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Employee Type: activate to sort column ascending" style="width: 108.188px;">Role</th>
                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending" style="width: 191.625px;">Email</th>
                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department: activate to sort column ascending" style="width: 125.15px;">Department</th>
@@ -77,13 +78,19 @@
                                         @foreach ($users as $item)
                                             <tr class="odd">
                                                 <td class="sorting_1">
-                                                    <h2 class="table-avatar">
-                                                        <a href="{{asset('/uploads/images/'.$item->profile)}}" class="avatar">
-                                                            <img alt="" src="{{asset('/uploads/images/'.$item->profile)}}">
-                                                        </a>
-                                                        <a href="{{asset('/uploads/images/'.$item->profile)}}" class="text-primary">{{$item->employee_name_en}} <span>#{{$item->number_employee}}</span></a>
+                                                    <h2 class="">
+                                                        @if ($item->profile != null)
+                                                            <a href="#" class="avatar">
+                                                                <img src="{{asset('/uploads/images/'.$item->profile)}}" alt="">
+                                                            </a>
+                                                        @else
+                                                            <a href="{{asset('admin/img/defuals/default-user-icon.png')}}">
+                                                                <img alt="" src="{{asset('admin/img/defuals/default-user-icon.png')}}">
+                                                            </a>
+                                                        @endif
                                                     </h2>
                                                 </td>
+                                                <td><a href="#">{{$item->employee_name_en}}</a></td>
                                                 <td>{{$item->RolePermission}}</td>
                                                 <td class="text-info">{{$item->email}}</td>
                                                 <td>{{$item->EmployeeDepartment}}</td>

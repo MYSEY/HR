@@ -42,7 +42,7 @@
                     <div class="card-body">
                         <span class="dash-widget-icon"><i class="fa fa-user"></i></span>
                         <div class="dash-widget-info">
-                            <h3>218</h3>
+                            <h3>{{count($employee)}}</h3>
                             <span>Employees</span>
                         </div>
                     </div>
@@ -78,7 +78,7 @@
                             {{-- <div class="progress mb-2" style="height: 5px;">
                                 <div class="progress-bar bg-primary" role="progressbar" style="width: 70%;" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
                             </div> --}}
-                            <p class="mb-0">Previous Month <span class="text-muted">$1,15,852</span></p>
+                            <p class="mb-0">Overall Employees 218</p>
                         </div>
                     </div>
                 </div>
@@ -86,3 +86,4 @@
         </div>
     </div>
 @endsection
+@include('includs.script')

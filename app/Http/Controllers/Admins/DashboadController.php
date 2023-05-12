@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admins;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class DashboadController extends Controller
@@ -11,6 +12,7 @@ class DashboadController extends Controller
         return view('dashboads.employee');
     }
     public function dashboadAdmin(){
-        return view('dashboads.admin');
+        $employee = User::all();
+        return view('dashboads.admin',compact('employee'));
     }
 }

@@ -583,16 +583,16 @@ strong {
   color: #ffffff;
   display: inline-block;
   font-weight: 500;
-  height: 34px;
+  height: 40px;
   line-height: 38px;
   text-align: center;
   text-decoration: none;
   text-transform: uppercase;
   vertical-align: middle;
-  width: 34px;
+  /* width: 34px; */
   position: relative;
   white-space: nowrap;
-  margin: 0 10px 0 0;
+  /* margin: 0 10px 0 0; */
   border-radius: 50%;
 }
 .avatar.avatar-xs {
@@ -1930,7 +1930,7 @@ input[type=file].form-control {
   -webkit-transition: all 0.2s ease;
   -ms-transition: all 0.2s ease;
   transition: all 0.2s ease;
-  padding-top: 3px;
+  padding-top: 2px;
 }
 .header .header-left .logo {
   display: inline-block;

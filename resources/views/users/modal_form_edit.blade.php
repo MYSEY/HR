@@ -151,7 +151,7 @@
                         <div class="col-sm-6">
                             <div class="">
                                 <label class="">Guarantee Letter(PDF) <span class="text-danger">*</span></label>
-                                <input class="form-control @error('guarantee_letter') is-invalid @enderror" type="file" id="guarantee_letter" required name="guarantee_letter" value="{{old('guarantee_letter')}}">
+                                <input class="form-control @error('guarantee_letter') is-invalid @enderror" type="file" id="guarantee_letter" name="guarantee_letter" value="{{old('guarantee_letter')}}">
                                 <input type="hidden" name="hidden_file_guarantee" id="e_guarantee_letter" value="">
                             </div>
                         </div>

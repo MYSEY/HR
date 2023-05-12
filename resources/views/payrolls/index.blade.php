@@ -10,7 +10,9 @@
                 </ul>
             </div>
             <div class="col-auto float-end ms-auto">
-                <a href="#" class="btn add-btn" data-bs-toggle="modal" data-bs-target="#add_salary"><i class="fa fa-plus"></i> Add New</a>
+                @if (Auth::user()->RolePermission == 'Administrator')
+                    <a href="#" class="btn add-btn" data-bs-toggle="modal" data-bs-target="#add_salary"><i class="fa fa-plus"></i> Add New</a>
+                @endif
             </div>
         </div>
     </div>
@@ -60,13 +62,15 @@
                                                 <td>{{$item->users == null ? "" : $item->users->DOB}}</td>
                                                 <td>{{$item->users == null ? "" : $item->users->joinOfDate}}</td>
                                                 <td>${{$item->total_salary}}</td>
-                                                <td>{{$item->created_at}}</td>
+                                                <td>{{$item->Created}}</td>
                                                 <td><a class="btn btn-sm btn-primary" href="#">Generate Slip</a></td>
                                                 <td class="text-end">
                                                     <div class="dropdown dropdown-action">
                                                         <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
                                                         <div class="dropdown-menu dropdown-menu-right">
-                                                            <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#edit_salary"><i class="fa fa-pencil m-r-5"></i> Edit</a>
+                                                            @if (Auth::user()->RolePermission == 'Administrator')
+                                                                <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#edit_salary"><i class="fa fa-pencil m-r-5"></i> Edit</a>
+                                                            @endif
                                                         </div>
                                                     </div>
                                                 </td>

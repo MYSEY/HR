@@ -86,16 +86,16 @@ class ExchangeRateController extends Controller
     {
         try{
             ExchangeRate::where('id',$request->id)->update([
-                'currency' => $request->currency,
-                'amount' => $request->amount,
+                'amount_usd' => $request->amount_usd,
+                'amount_riel' => $request->amount_riel,
                 'description' => $request->description,
                 'updated_by' => Auth::user()->id 
             ]);
-            Toastr::success('Exchange rate Updated successfully.','Success');
+            Toastr::success('Exchange rate successfully.','Success');
             return redirect()->back();
         }catch(\Exception $e){
             DB::rollback();
-            Toastr::error('Exchange rate Updated fail.','Error');
+            Toastr::error('Exchange rate fail.','Error');
             return redirect()->back();
         }
     }

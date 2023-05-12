@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('payrolls', function (Blueprint $table) {
             $table->id();
             $table->integer('employee_id');
+            $table->integer('role_id');
             $table->decimal('net_salary')->default(0);
             $table->integer('spouse')->nullable();
             $table->decimal('payment_amount')->nullable();

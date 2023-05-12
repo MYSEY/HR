@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\User;
+use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -15,6 +16,7 @@ class Payroll extends Model
 
     protected $fillable = [
         'employee_id',
+        'role_id',
         'net_salary',
         'spouse',
         'payment_amount',
@@ -45,5 +47,11 @@ class Payroll extends Model
     public function users()
     {
         return $this->belongsTo(User::class ,'employee_id');
+    }
+
+    public function getCreatedAttribute(){
+        if ($this->created_at) {
+            return Carbon::parse($this->created_at)->format('d-M-Y');
+        }
     }
 }

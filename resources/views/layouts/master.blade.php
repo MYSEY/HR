@@ -14,7 +14,7 @@
     <meta name="robots" content="noindex, nofollow">
     <title>HRMS</title>
 
-    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('/admin/img/logo/cammalogo.png') }}">
+    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('/admin/img/logo/commalogo1.png') }}">
     {{-- <link rel="shortcut icon" type="image/x-icon" href="https://smarthr.dreamguystech.com/laravel/template/public/assets/img/favicon.png"> --}}
 
     <link rel="stylesheet" href="{{ asset('admin/css/bootstrap.min.css') }}">
@@ -51,11 +51,11 @@
     <div class="main-wrapper">
         <div class="header">
             <div class="header-left">
-                <a href="" class="logo">
-                    <img src="{{ asset('/admin/img/logo/cammalogo.png') }}" width="100" height="100" alt="">
+                <a href="#" class="logo">
+                    <img src="{{ asset('/admin/img/logo/commalogo1.png') }}" width="100" height="100" alt="">
                 </a>
-                <a href="" class="logo2">
-                    <img src="{{ asset('/admin/img/logo/cammalogo.png') }}" width="100" height="100" alt="">
+                <a href="#" class="logo2">
+                    <img src="{{ asset('/admin/img/logo/commalogo1.png') }}" width="100" height="100" alt="">
                 </a>
             </div>
 

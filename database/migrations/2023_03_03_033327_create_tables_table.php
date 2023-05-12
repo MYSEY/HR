@@ -41,6 +41,18 @@ return new class extends Migration
                     'updated_at'=>now()
                 ],
                 [
+                    'name'=>'Employee Salary',
+                    'status'=>1,
+                    'created_at'=>now(),
+                    'updated_at'=>now()
+                ],
+                [
+                    'name'=>'Motor Rental',
+                    'status'=>1,
+                    'created_at'=>now(),
+                    'updated_at'=>now()
+                ],
+                [
                     'name'=>'Roles & Permissions',
                     'status'=>1,
                     'created_at'=>now(),
