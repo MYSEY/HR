@@ -31,10 +31,12 @@ class EmployeeProfileController extends Controller
         $position = Position::all();
         $branch = Branchs::all();
         $transferred = Transferred::where('employee_id',$request->id)->get();
+        $educations = Education::where('employee_id',$request->id)->get();
+        $experiences = Experience::where('employee_id',$request->id)->get();
         $training = StaffTraining::where('employee_id',$request->id)->get();
         $contact = Contact::where('employee_id',$request->id)->get();
         $empPromoted = StaffPromoted::where('employee_id',$request->id)->orderBy('id', 'DESC')->get();
-        return view('employees.profile',compact('data','optionOfStudy','optionDegree','department','position','empPromoted','branch','transferred','training','relationship','contact'));
+        return view('employees.profile',compact('data','optionOfStudy','optionDegree','department','position','empPromoted','branch','transferred','training','relationship','contact','educations','experiences'));
     }
     public function employeeEducation(Request $request){
         try{

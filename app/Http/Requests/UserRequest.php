@@ -27,7 +27,7 @@ class UserRequest extends FormRequest
             'guarantee_letter' => 'required|nullable|mimes:pdf|max:2048',
             'personal_phone_number' => 'required|min:9|max:15',
             'role_id' => 'required|string',
-            'password' => 'required|confirmed|min:6'
+            'password' => 'required|confirmed|min:8'
         ];
     }
 

@@ -190,6 +190,12 @@ function menu(){
                     'table'=>6,
                     'permission'=>1
                 ],
+                [
+                    'value'=>'Change Password',
+                    'url'=>"change/password",
+                    'table'=>6,
+                    'permission'=>1
+                ],
             ]
         ],
         [

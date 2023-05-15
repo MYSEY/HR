@@ -14,7 +14,9 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Auth;
+use App\Models\NationalSocialSecurityFund;
 use App\Repositories\Admin\PayrollRepository;
+use Spatie\LaravelIgnition\Http\Controllers\HealthCheckController;
 
 class EmployeePayrollController extends Controller
 {
@@ -57,9 +59,33 @@ class EmployeePayrollController extends Controller
         try{
             // get exchang rate
             $exChange= ExchangeRate::first();
-            $amount_exchang =  $exChange->amount_riel;    
-            $pension_contribution = 5.91;
+            $amount_exchang =  $exChange->amount_riel;
            
+            //National Social Security Fund (NSSF) Formula
+            $totalExchangeRielPreTax =  $amount_exchang * $request->net_salary;
+            if ($totalExchangeRielPreTax >= 1200000) {
+                $AverageWage    = 1200000;
+            }else if($totalExchangeRielPreTax >= 400000){
+                $AverageWage    = 400000;
+            }
+            $OccupationalRisk = (0.008 * $AverageWage);
+            $HealthCare = (0.026 * $AverageWage);
+            $WorkerContribution_usd = ($AverageWage * 0.02);
+            $WorkerContribution_riel = ($WorkerContribution_usd / $amount_exchang);
+            $dataNSSF = NationalSocialSecurityFund::create([
+                'employee_id'   => $request->employee_id,
+                'total_pre_tax_salary_usd'   => number_format($request->net_salary,2),
+                'total_pre_tax_salary_riel'   => number_format($totalExchangeRielPreTax),
+                'total_average_wage'   => number_format($AverageWage),
+                'total_occupational_risk'   => number_format($OccupationalRisk),
+                'total_health_care'   => number_format($HealthCare),
+                'pension_contribution_usd'   => number_format($WorkerContribution_usd),
+                'pension_contribution_riel'   => round($WorkerContribution_riel,2),
+                'corporate_contribution'   => number_format($WorkerContribution_usd),
+                'created_by'   => Auth::user()->id,
+            ]);
+            $pension_contribution = $dataNSSF->pension_contribution_riel;
+            
             //calculated khmer_new_year and pchumBen_bonus
             $employee = User::where('id',$request->employee_id)->first();
             $userJoinDate = $employee->date_of_commencement;

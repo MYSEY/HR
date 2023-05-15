@@ -72,6 +72,7 @@ class EmployeeRepository extends BaseRepository
         $data = $request->all();
         $newDateTime = Carbon::parse($data['date_of_commencement'])->addMonths(3);
         $data['fdc_date'] = $newDateTime;
+        $data['created_by'] = Auth::user()->id;
         $data['password']   = Hash::make($request->password);
         return User::create($data);
     }
@@ -118,7 +119,7 @@ class EmployeeRepository extends BaseRepository
             'personal_phone_number'  => $request->personal_phone_number,
             'company_phone_number'  => $request->company_phone_number,
             'agency_phone_number'  => $request->agency_phone_number,
-            'password'  => $request->password == "" ? Auth::user()->password : Hash::make($request->password),
+            // 'password'  => $request->password == "" ? Auth::user()->password : Hash::make($request->password),
             'remark'  => $request->remark,
             'bank_name'  => $request->bank_name,
             'account_name'  => $request->account_name,
@@ -142,6 +143,7 @@ class EmployeeRepository extends BaseRepository
             'profile'  => $filename,
             'guarantee_letter'  => $filenameGuarant,
             'employment_book'  => $filenameBook,
+            'updated_by'  => Auth::user()->id,
         ]);
     }
 }

@@ -61,7 +61,7 @@
                                                 <td>{{$item->users == null ? "" : $item->users->EmployeeBrnach}}</td>
                                                 <td>{{$item->users == null ? "" : $item->users->DOB}}</td>
                                                 <td>{{$item->users == null ? "" : $item->users->joinOfDate}}</td>
-                                                <td>${{$item->total_salary}}</td>
+                                                <td>$<a href="#">{{$item->total_salary}}</a></td>
                                                 <td>{{$item->Created}}</td>
                                                 <td><a class="btn btn-sm btn-primary" href="#">Generate Slip</a></td>
                                                 <td class="text-end">

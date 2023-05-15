@@ -79,7 +79,6 @@
                         <li class="nav-item" role="presentation"><a href="#promote" data-bs-toggle="tab" class="nav-link" aria-selected="false" tabindex="-1" role="tab">Promoted</a></li>
                         <li class="nav-item" role="presentation"><a href="#transferred" data-bs-toggle="tab" class="nav-link" aria-selected="false" tabindex="-1" role="tab">Transferred</a></li>
                         <li class="nav-item" role="presentation"><a href="#training" data-bs-toggle="tab" class="nav-link" aria-selected="false" tabindex="-1" role="tab">Training</a></li>
-                        <li class="nav-item" role="presentation"><a href="#bank_statutory" data-bs-toggle="tab" class="nav-link" aria-selected="false" tabindex="-1" role="tab">Bank &amp; Statutory <small class="text-danger">(Admin Only)</small></a></li>
                     </ul>
                 </div>
             </div>
@@ -234,8 +233,8 @@
                                 <h3 class="card-title">Education Informations <a href="#" class="edit-icon" data-bs-toggle="modal" data-bs-target="#education_info"><i class="fa fa-pencil"></i></a></h3>
                                 <div class="experience-box">
                                     <ul class="experience-list">
-                                        @if (count($data->educations) > 0)
-                                            @foreach ($data->educations as $item)
+                                        @if (count($educations) > 0)
+                                            @foreach ($educations as $item)
                                                 <li>
                                                     <div class="experience-user">
                                                         <div class="before-circle"></div>
@@ -259,10 +258,10 @@
                     <div class="col-md-6 d-flex">
                         <div class="card profile-box flex-fill">
                             <div class="card-body">
-                                <h3 class="card-title">Experience <a href="#" class="edit-icon" data-bs-toggle="modal" data-bs-target="#experience_info"><i class="fa fa-pencil"></i></a></h3>
+                                <h3 class="card-title">Experience Informations <a href="#" class="edit-icon" data-bs-toggle="modal" data-bs-target="#experience_info"><i class="fa fa-pencil"></i></a></h3>
                                 <div class="experience-box">
-                                    @if (count($data->experiences)>0)
-                                        @foreach ($data->experiences as $item)
+                                    @if (count($experiences)>0)
+                                        @foreach ($experiences as $item)
                                             <ul class="experience-list">
                                                 <li>
                                                     <div class="experience-user">
@@ -758,90 +757,6 @@
                 </div>
             </div>
             {{-- End Training --}}
-
-            <div class="tab-pane fade" id="bank_statutory" role="tabpanel">
-                <div class="card">
-                    <div class="card-body">
-                        <h3 class="card-title"> Basic Salary Information</h3>
-                        <form>
-                            <div class="row">
-                                <div class="col-sm-4">
-                                    <div class="form-group">
-                                        <label class="col-form-label">Basic Salary</label>
-                                        <div class="input-group">
-                                            <span class="input-group-text">$</span>
-                                            <input type="text" class="form-control" id="salary" name="salary" placeholder="Type your salary amount" value="">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-4">
-                                    <div class="form-group">
-                                        <label class="col-form-label">Total rate</label>
-                                        <input type="text" class="form-control" id="" name="" placeholder="" value="">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-4">
-                                    <div class="form-group">
-                                        <label class="col-form-label">New Salary</label>
-                                        <div class="input-group">
-                                            <span class="input-group-text">$</span>
-                                            <input type="text" class="form-control" id="new_salary" name="new_salary" placeholder="new salary amount" value="">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-4">
-                                    <div class="form-group">
-                                        <label class="col-form-label">Total work day</label>
-                                        <div class="input-group">
-                                            <input type="text" class="form-control" id="total_work_day" name="total_work_day" placeholder="" value="">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <hr>
-                            <h3 class="card-title"> Benefits Information</h3>
-
-                            <div id="benefit-information">
-                                <div class="row information">
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label class="col-form-label">Title</label>
-                                            <input type="text" class="form-control" id="title" name="title" placeholder="" value="">
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label class="col-form-label">Amount</label>
-                                            <input type="text" class="form-control" id="amount" name="amount" placeholder="" value="">
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-4" style="padding-top: 45px;">
-                                        <div class="form-group">
-                                            <a class="btn btn-success btn-sm" id="btnAddBenefit"><i class="fa fa-plus-circle"></i></a>
-                                            <a href="javascript:void(0);" class="btn btn-danger btn-sm"><i class="fa fa-trash-o"></i></a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-9">
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="gender" id="khmer_new_year" value="khmer_new_year">
-                                    <label class="form-check-label" for="khmer_new_year">Khmer new year bonus</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="gender" id="pchumBen_bonus" value="pchumBen_bonus">
-                                    <label class="form-check-label" for="pchumBen_bonus">PchumBen Bonus</label>
-                                </div>
-                            </div>
-                            <div class="submit-section">
-                                <button class="btn btn-primary submit-btn" type="submit">Save</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 @endsection
