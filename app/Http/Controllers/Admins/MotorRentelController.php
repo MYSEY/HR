@@ -40,6 +40,9 @@ class MotorRentelController extends Controller
                 'users.number_employee',
                 'users.branch_id',
             )
+            ->when(Auth::user()->RolePermission != "Administrator", function ($query, $rolePermission) {
+                $query->where('motor_rentels.employee_id', Auth::user()->id);
+            })
             ->when($request->employee_id, function ($query, $employee_id) {
                 $query->where('users.number_employee', 'LIKE', '%'.$employee_id.'%');
             })
@@ -145,7 +148,6 @@ class MotorRentelController extends Controller
         $extension = $request->file->extension();
         $spreadsheet = IOFactory::load($file);
         $allDataInSheet = $spreadsheet->getActiveSheet()->toArray();
-
         if ($extension == "xlsx" || $extension == "xls" || $extension == "csv") {
             $userID = Auth::user()->id;
             $i = 0;

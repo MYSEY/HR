@@ -58,8 +58,8 @@
             var fileSize = file_data['size'];
             form_data.append('file', file_data);
             form_data.append('_token', "{{ csrf_token() }}");
-
             if (fileExtension == "xls" || fileExtension == "xlsx" || fileExtension == "csv" && fileSize < 1048576) {
+               
                 $("#import_motor_rentel").modal("show");
                 $.ajax({
                     type: 'POST',
@@ -69,6 +69,7 @@
                     cache: false,
                     processData: false,
                     success: function(data) {
+                        // alert(data);
                         if (data == 1) {
                             $("#import_motor_rentel").modal("hide");
                             toastr.success('Data has been save success');

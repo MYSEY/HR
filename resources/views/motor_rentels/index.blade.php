@@ -175,7 +175,7 @@
         @include('motor_rentels.modal_form_create')
         @include('motor_rentels.modal_form_edit')
         @include('motor_rentels.import')
-
+        
         <!-- Delete Training Modal -->
         <div class="modal custom-modal fade" id="delete_motor_rentel" role="dialog">
             <div class="modal-dialog modal-dialog-centered">
@@ -210,7 +210,10 @@
 
 @include('includs.script')
 
+{{-- <script src="{{asset('/admin/js/simple-chart.js')}}"></script> --}}
+{{-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> --}}
 <script>
+    
     $(function() {
         var currentYear = 2010;
         var newYear = moment(new Date()).format('YYYY');
