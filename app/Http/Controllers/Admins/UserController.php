@@ -77,16 +77,16 @@ class UserController extends Controller
      */
     public function store(UserRequest $request)
     {
-        try{
+        // try{
             $this->employeeRepo->createUsers($request);
             DB::commit();
             Toastr::success('Employee create successfully.','Success');
             return redirect()->back();
-        }catch(\Exception $e){
-            DB::rollback();
-            Toastr::error('Employee create fail','Error');
-            return redirect()->back();
-        }
+        // }catch(\Exception $e){
+        //     DB::rollback();
+        //     Toastr::error('Employee create fail','Error');
+        //     return redirect()->back();
+        // }
     }
 
     /**
