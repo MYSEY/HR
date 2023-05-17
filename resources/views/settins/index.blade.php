@@ -34,11 +34,11 @@
                                 </div>
                                 {!! Toastr::message() !!}
 
-                                <form method="POST" action="{{ route('login') }}">
+                                <form method="POST" action="{{ url('update/password') }}">
                                     @csrf
                                     <div class="form-group">
                                         <label>Employee ID <span class="text-danger">*</span></label>
-                                        <input id="number_employee" type="text" class="form-control @error('number_employee') is-invalid @enderror" required name="number_employee" value="{{ old('number_employee') }}">
+                                        <input type="text" class="form-control @error('number_employee') is-invalid @enderror" required name="number_employee" value="{{ old('number_employee') }}">
                                         @error('number_employee')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
@@ -47,7 +47,7 @@
                                     </div>
                                     <div class="form-group">
                                         <div class="position-relative">
-                                            <input id="password" type="password" class="form-control pass-input " name="password" autocomplete="current-password"><span class="fa fa-eye-slash toggle-password"></span>
+                                            <input type="password" class="form-control pass-input " name="password" autocomplete="current-password"><span class="fa fa-eye-slash toggle-password"></span>
                                             @error('password')
                                                 <span class="invalid-feedback" role="alert">
                                                     <strong>{{ $message }}</strong>
@@ -58,7 +58,7 @@
                                     <div class="form-group">
                                         <label for="password-confirm">Confirm Password</label>
                                         <div class="position-relative">
-                                            <input id="password-confirm" type="password" class="form-control pass-input" name="password_confirmation" autocomplete="confirm-assword"><span class="fa fa-eye-slash toggle-password"></span>
+                                            <input type="password" class="form-control pass-input" name="password_confirmation" autocomplete="confirm-assword"><span class="fa fa-eye-slash toggle-password"></span>
                                         </div>
                                     </div>
                                     <div class="text-center">

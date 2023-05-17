@@ -166,4 +166,5 @@ Route::middleware(['auth:sanctum'])->group(function(){
 
     //change password
     Route::get('change/password',[SettingController::class,'changePassword']);
+    Route::post('update/password',[SettingController::class,'updatePassword']);
 });

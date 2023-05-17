@@ -15,7 +15,7 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="">Employee ID</label>
-                                <input type="text" class="form-control" id="e_number_employee" name="number_employee" value="">
+                                <input type="text" class="form-control" id="e_number_employee" name="number_employee" value="" disabled>
                             </div>
                         </div>
                         <div class="col-sm-6">

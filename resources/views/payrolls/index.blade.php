@@ -114,7 +114,7 @@
                             </div>
                             <div class="col-sm-6">
                                 <div class="form-gorup">
-                                    <label>Net Salary <span class="text-danger">*</span></label>
+                                    <label>Basic Salary <span class="text-danger">*</span></label>
                                     <div class="input-group">
                                         <span class="input-group-text">$</span>
                                         <input type="number" class="form-control" id="net_salary" name="net_salary" placeholder="" value="" required>
