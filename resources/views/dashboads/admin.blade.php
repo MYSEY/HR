@@ -153,9 +153,10 @@
             ]
         };
         // for achived by branches
-        const dataAchive = {
+        let dataAchive = {
             // labels: ['HO','ANS','TKM','KPB','KPS','SAB','KTB','Total',],
-            datasets: [{
+            datasets: [
+                {
                     label: 'Total Staff',
                     data: [31, 17, 17, 15, 15, 10, 10, 80],
                     backgroundColor: [
@@ -171,16 +172,35 @@
                     ],
                     stack: 'Stack 1',
                 },
-                {
-                    label: '% Achivement',
-                    data: [3, 2, 3, 3, 3, 2, 2, 40],
-                    backgroundColor: [
-                        "red"
-                    ],
-                    stack: 'Stack 2',
-                },
+                // {
+                //     label: '% Achivement',
+                //     // data: [3, 2, 3, 3, 3, 2, 2, 40],
+                //     data: [],
+                //     data: [],
+                //     backgroundColor: [
+                //         "red"
+                //     ],
+                //     stack: 'Stack 2',
+                // },
             ]
         };
+
+        let dataAchRed = [];
+        dataAchive.datasets[0].data.map((da, index) => {
+            dataAchRed.push(
+                Math.round((dataAchive.datasets[1].data[index] / da) * 100)
+            )
+        });
+        console.log("dataAchRed: ",dataAchRed);
+        dataAchive.datasets.push({
+            label: '% Achivement',
+            data: dataAchRed,
+            backgroundColor: [
+                "red"
+            ],
+            stack: 'Stack 2',
+        })
+        
 
         // for staff take leave
         const dataStaffTakeLeave = {
@@ -319,14 +339,38 @@
                         text = db.name == "HRMS_dashboards" ? "HRMS Dashboards" : '% ACHIEVED BY BRANCHES';
                         option = {
                             plugins: {
+                                legend: {
+                                    labels: {
+                                        render: 'percentage',
+                                        precision: 2,
+                                    }
+                                },
                                 datalabels: {
                                     anchor: 'end',
                                     align: 'top',
-                                    formatter: Math.round,
+                                    // formatter: Math.round,
                                     font: {
                                         weight: 'bold',
-                                        size: 16
-                                    }
+                                        size: 10
+                                    },
+                                    align: 'center',
+                                    // formatter: (value, context)=>{
+                                       
+                                        
+                                    //     if (db.name != "HRMS_dashboards") {
+                                    //         console.log("value: ",context);
+                                    //         // console.log("data: ",context.chart.data.datasets[1].data);
+                                    //         const achiveGreen = context.chart.data.datasets[0].data;
+                                    //         const achiveYallow = context.chart.data.datasets[1].data;
+                                    //         let dataRed = [];
+                                    //         let percentageValue = 0;
+
+                                    //         $.each(achiveGreen, function(i, achg) {
+                                    //             let percentage = ((achiveYallow[i] / achg) * 100);
+                                    //             dataRed.push(`${Math.round(percentage)}%`);
+                                    //         });
+                                    //     }
+                                    // },
                                 },
                                 title: {
                                     display: true,
@@ -335,9 +379,6 @@
                                
                             },
                             responsive: true,
-                            // interaction: {
-                            //     intersect: false,
-                            // },
                             scales: {
                                 x: {
                                     stacked: true,
@@ -359,22 +400,30 @@
                                 legend: {
                                     position: 'right',
                                     rtl : true,
-                                    labels: {
-                                        legend: {
-                                            pointStyle: 'circle',
-                                            generateLabels(chart) {
-                                                const dataset = chart.data.datasets[0];
-                                                const meta = chart.getDatasetMeta(0);
-                                                const total = meta.total;
-                                                const legendItems = Chart.controllers.doughnut.overrides.plugins.legend.labels.generateLabels(chart);
-                                                for (const item of legendItems) {
-                                                    const value = dataset.data[item.index];
-                                                    const percentage = value / total * 100
-                                                    item.text = item.text + ': ' + value + ' / ' + percentage.toFixed(0) + '%';
-                                                }
-                                                return legendItems;
-                                            }
-                                        },
+                                },
+                                // tooltip: {
+                                //     enabled: false
+                                // },
+                                datalabels: {
+                                    font: {
+                                        size: 10
+                                    },
+                                    align: 'center',
+                                    formatter: (value, context)=>{ 
+                                        // console.log("data: ",context.chart.data.datasets[0].data);
+                                        const datapoints = context.chart.data.datasets[0].data;
+                                        function totalSum(total, datapoints){
+                                            return total + datapoints;
+                                        }
+                                        const totalvalue = datapoints.reduce(totalSum, 0);
+                                        const percentageValue = (value / totalvalue * 100)
+                                        if (db.name == "staff_resignation" ) {
+                                            return `${Math.round(percentageValue)}%`;
+                                           
+                                        }else{
+                                            return `${percentageValue.toFixed(2)}%`;
+                                        }
+                                        // return `${percentageValue}%`;
                                     }
                                 },
                                 title: {
@@ -416,7 +465,7 @@
                         type,
                         data,
                         options: option,
-                        // plugins:[ChartDataLabels]
+                        plugins:[ChartDataLabels]
                     });
                 });
             }
