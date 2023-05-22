@@ -189,7 +189,7 @@
                                                 </td>
                                                 <td>{{ $item->MotorEmployee->employee_name_en }}</td>
                                                 <td>{{ $item->MotorEmployee->EmployeeGender }}</td>
-                                                <td>{{ $item->MotorEmployee->EmployeeBrnach }}</td>
+                                                <td>{{ $item->MotorEmployee->EmployeeBranch }}</td>
                                                 <td>{{ $item->MotorEmployee->EmployeePosition }}</td>
                                                 <td>{{ $item->MotorEmployee->EmployeeDepartment }}</td>
                                                 <td>{{ \Carbon\Carbon::parse($item->created_at)->format('M-d-Y') ?? '' }}</td>

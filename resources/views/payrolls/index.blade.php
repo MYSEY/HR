@@ -34,7 +34,8 @@
                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending">Branch</th>
                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending">DOB</th>
                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">Join Date</th>
-                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Salary: activate to sort column ascending">Salary</th>
+                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Salary: activate to sort column ascending">Net Salary</th>
+                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Salary: activate to sort column ascending">Payment Date</th>
                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Salary: activate to sort column ascending">Created At</th>
                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Payslip: activate to sort column ascending">Payslip</th>
                                         <th class="text-end sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Action: activate to sort column ascending">Action</th>
@@ -58,12 +59,13 @@
                                                 <td> <a href="#">{{$item->users == null ? "" : $item->users->employee_name_en}}</span></a></td>
                                                 <td>{{$item->users == null ? "" : $item->users->number_employee}}</td>
                                                 <td>{{$item->users == null ? "" : $item->users->EmployeeDepartment}}</td>
-                                                <td>{{$item->users == null ? "" : $item->users->EmployeeBrnach}}</td>
+                                                <td>{{$item->users == null ? "" : $item->users->EmployeeBranch}}</td>
                                                 <td>{{$item->users == null ? "" : $item->users->DOB}}</td>
                                                 <td>{{$item->users == null ? "" : $item->users->joinOfDate}}</td>
-                                                <td>$<a href="#">{{$item->total_salary}}</a></td>
+                                                <td>$ <a href="#">{{$item->total_salary}}</a></td>
+                                                <td>{{$item->PayrollDate}}</td>
                                                 <td>{{$item->Created}}</td>
-                                                <td><a class="btn btn-sm btn-primary" href="#">Generate Slip</a></td>
+                                                <td><a class="btn btn-sm btn-primary" href="{{url('payslip',$item->employee_id)}}">Generate Slip</a></td>
                                                 <td class="text-end">
                                                     <div class="dropdown dropdown-action">
                                                         <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
@@ -117,7 +119,7 @@
                                     <label>Basic Salary <span class="text-danger">*</span></label>
                                     <div class="input-group">
                                         <span class="input-group-text">$</span>
-                                        <input type="number" class="form-control" id="net_salary" name="net_salary" placeholder="" value="" required>
+                                        <input type="number" class="form-control" id="basic_salary" name="basic_salary" placeholder="" value="" required>
                                     </div>
                                 </div>
                             </div>
@@ -125,43 +127,38 @@
                         <div class="row">
                             <div class="col-sm-6">
                                 <div class="form-group">
-                                    <label class="col-form-label">Phone allowance</label>
+                                    <label class="col-form-label">Phone Allowance</label>
                                     <input class="form-control" type="number" name="phone_allowance" id="phone_allowance">
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label class="col-form-label">Monthly and quarterly bonuses</label>
-                                    <input type="number" class="form-control" name="monthly_quarterly_bonuses" id="monthly_quarterly_bonuses">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label for="" class="col-form-label">Khmer new year Or Pchum Ben allowance(%)</label>
-                                    <input type="number" class="form-control" name="khmer_new_year_pchum_ben_allowance" id="khmer_new_year_pchum_ben_allowance">
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label class="col-form-label">Annual Incentive Bonus</label>
-                                    <input type="number" class="form-control" name="annual_incentive_bonus" id="annual_incentive_bonus">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label class="col-form-label">Other allowances</label>
-                                    <input type="number" class="form-control" name="other_allowances" id="other_allowances">
-                                    {{-- <textarea type="number" rows="3" class="form-control" name="other_allowances" id="other_allowances" value=""></textarea> --}}
                                 </div>
                             </div>
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label class="col-form-label">Spouse</label>
                                     <input type="number" class="form-control" name="spouse" id="spouse" maxlength="1" placeholder="">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="" class="col-form-label">Khmer new year Or Pchum Ben Allowance(%)</label>
+                                    <input type="number" class="form-control" name="khmer_new_year_pchum_ben_allowance" id="khmer_new_year_pchum_ben_allowance">
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label class="col-form-label">Other Allowances</label>
+                                    <input type="number" class="form-control" name="other_allowances" id="other_allowances">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label class="col-form-label">Payment Date</label>
+                                    <div class="cal-icon">
+                                        <input class="form-control datetimepicker @error('payment_date') is-invalid @enderror" id="payment_date" name="payment_date" type="text" value="" required>
+                                    </div>
                                 </div>
                             </div>
                         </div>

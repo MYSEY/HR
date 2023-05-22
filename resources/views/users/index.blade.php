@@ -120,7 +120,7 @@
                                                     
                                                     <td>{{$item->EmployeePosition}}</td>
                                                     <td>{{$item->EmployeeDepartment}}</td>
-                                                    <td>{{$item->EmployeeBrnach}}</td>
+                                                    <td>{{$item->EmployeeBranch}}</td>
                                                     <td>{{$item->personal_phone_number}}</td>
                                                     <td>
                                                         <span class="badge bg-inverse-success">{{ $item->role == null ? "" : $item->role->name }}</span>

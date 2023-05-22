@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers\Admins;
 
+use DateTime;
 use App\Models\User;
-use App\Helpers\Helper;
+use App\Models\Bonus;
 use App\Models\Payroll;
-use Faker\Calculator\Inn;
 use App\Models\ExchangeRate;
 use Illuminate\Http\Request;
-use Ramsey\Uuid\Type\Integer;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -16,7 +15,6 @@ use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Auth;
 use App\Models\NationalSocialSecurityFund;
 use App\Repositories\Admin\PayrollRepository;
-use Spatie\LaravelIgnition\Http\Controllers\HealthCheckController;
 
 class EmployeePayrollController extends Controller
 {
@@ -63,56 +61,83 @@ class EmployeePayrollController extends Controller
 
             // $nowTimeDate = Carbon::now()->format('m');
             // dd($nowTimeDate == 05);
-
-            // $employee = User::where('id',$request->employee_id)->where('emp_status',1)->first();
-            // $months = Carbon::now()->diffInMonths($employee->fdc_date);
-            // dd($months);
-
+            
+            
+            $employee = User::where('id',$request->employee_id)->where('emp_status','1')->first();
+            if ($employee->fdc_date != null) {
+                $Ldate = new DateTime($employee->fdc_date);
+                $totalLdate = (int)$Ldate->format('d');
+                $payrolle = Payroll::where('employee_id',$request->employee_id)->first();
+                if($totalLdate <= 15){
+                    $totalSalaryPrevious = $payrolle->basic_salary / 2;
+                }
+                $sDate = Carbon::now()->diffInDays($employee->fdc_date);
+                if ($sDate >= $totalLdate) {
+                    $totalSalaryCurrent  = $request->basic_salary / 2;
+                }
+                dd($totalSalaryCurrent + $totalSalaryPrevious);
+            }
+            
+            dd(99);
             //National Social Security Fund (NSSF) Formula
-            $totalExchangeRielPreTax =  $amount_exchang * $request->net_salary;
+            $totalExchangeRielPreTax =  $amount_exchang * $request->basic_salary;
             if ($totalExchangeRielPreTax >= 1200000) {
                 $AverageWage    = 1200000;
             }else if($totalExchangeRielPreTax >= 400000){
                 $AverageWage    = $totalExchangeRielPreTax;
+            }else{
+                $AverageWage = 400000;
             }
             $OccupationalRisk = (0.008 * $totalExchangeRielPreTax);
             $HealthCare = (0.026 * $totalExchangeRielPreTax);
             $WorkerContribution_usd = ($AverageWage * 0.02);
             $WorkerContribution_riel = (round($WorkerContribution_usd, -2) / $amount_exchang);
-            // $dataNSSF = NationalSocialSecurityFund::create([
-            //     'employee_id'   => $request->employee_id,
-            //     'total_pre_tax_salary_usd'   => number_format($request->net_salary, 2),
-            //     'total_pre_tax_salary_riel'   => number_format($totalExchangeRielPreTax),
-            //     'total_average_wage'   => number_format($AverageWage),
-            //     'total_occupational_risk'   => round($OccupationalRisk, -2),
-            //     'total_health_care'   => round($HealthCare, -2),
-            //     'pension_contribution_usd'   => round($WorkerContribution_usd, -2),
-            //     'pension_contribution_riel'   => round($WorkerContribution_riel, 2),
-            //     'corporate_contribution'   => round($WorkerContribution_usd, -2),
-            //     'created_by'   => Auth::user()->id,
-            // ]);
+            $dataNSSF = NationalSocialSecurityFund::create([
+                'employee_id'   => $request->employee_id,
+                'total_pre_tax_salary_usd'   => number_format($request->basic_salary, 2),
+                'total_pre_tax_salary_riel'   => number_format($totalExchangeRielPreTax),
+                'total_average_wage'   => number_format($AverageWage),
+                'total_occupational_risk'   => number_format($OccupationalRisk),
+                'total_health_care'   => number_format($HealthCare),
+                'pension_contribution_usd'   => number_format($WorkerContribution_usd),
+                'pension_contribution_riel'   => round($WorkerContribution_riel, 2),
+                'corporate_contribution'   => number_format($WorkerContribution_usd),
+                'created_by'   => Auth::user()->id,
+            ]);
 
             //total NSSF
-            $pension_contribution = '5.9';
-            // $pension_contribution = $dataNSSF->pension_contribution_riel;
+            // $pension_contribution = '5.9';
+            $pension_contribution = $dataNSSF->pension_contribution_riel;
             
             //calculated khmer_new_year and pchumBen_bonus
             $employee = User::where('id',$request->employee_id)->first();
             $userJoinDate = $employee->date_of_commencement;
-            $days = Carbon::now()->diffInDays($userJoinDate);
-            dd($days);
+            $days = Carbon::now()->diffInDays($userJoinDate) + 1;
             $years = Carbon::now()->diffInYears($userJoinDate);
             $dayOf365 = 365;
+            $totalBunusKHBun = 0;
             if($request->khmer_new_year_pchum_ben_allowance != null){
-                if ($years == 0) {
-                    $totalSalaryDay = ($request->net_salary * $days) / $dayOf365;
-                    $totalSalaryKhmerPchumBen = $totalSalaryDay + $request->net_salary;
+                if ($years != 0) {
+                    $percent = $request->khmer_new_year_pchum_ben_allowance / 100;
+                    $totalAllowance = ($request->basic_salary * $percent);
                 } else {
-                    $percentSalary = ($request->net_salary * $request->khmer_new_year_pchum_ben_allowance) / 100;
-                    $totalSalaryKhmerPchumBen = $percentSalary + $request->net_salary;
+                    $percent = $request->khmer_new_year_pchum_ben_allowance / 100;
+                    $totalPercent = ($request->basic_salary * $percent);
+                    $percentSalary = $totalPercent * $days;
+                    $totalAllowance = $percentSalary / $dayOf365;
                 }
+                $bonus = Bonus::create([
+                    'employee_id'   => $request->employee_id,
+                    'number_of_working_days'    => $days,
+                    'base_salary'   => $request->basic_salary,
+                    'base_salary_received'  => $request->basic_salary,
+                    'total_allowance'   => $totalAllowance,
+                    'created_by'    => Auth::user()->id,
+                ]);
+                $totalBunusKHBun = $bonus;
             }
             
+            $totalBunus = $totalBunusKHBun;
             // sum benefit children
             if ($employee->number_of_children == null) {
                 $totalAmountChild = 0;
@@ -128,9 +153,9 @@ class EmployeePayrollController extends Controller
     
             //sum salary and sum other benefit
             if ($request->khmer_new_year_pchum_ben_allowance != null) {
-                $totalPaseSsalaryReceivedUsd = $totalSalaryKhmerPchumBen + $request->phone_allowance + $request->monthly_quarterly_bonuses + $request->annual_incentive_bonus + $request->other_allowances + $totalAmountChild - $pension_contribution;
+                $totalPaseSsalaryReceivedUsd = $request->basic_salary + $totalBunus->total_allowance + $request->phone_allowance + $request->monthly_quarterly_bonuses + $request->annual_incentive_bonus + $request->other_allowances + $totalAmountChild - $pension_contribution;
             } else {
-                $totalPaseSsalaryReceivedUsd = $request->net_salary + $request->phone_allowance + $request->monthly_quarterly_bonuses + $request->annual_incentive_bonus + $request->other_allowances + $totalAmountChild - $pension_contribution;
+                $totalPaseSsalaryReceivedUsd = $request->basic_salary + $request->phone_allowance + $request->monthly_quarterly_bonuses + $request->annual_incentive_bonus + $request->other_allowances + $totalAmountChild - $pension_contribution;
             }
             
             //total exchange rate
@@ -474,14 +499,14 @@ class EmployeePayrollController extends Controller
             $data   = $request->all();
             $data['employee_id']    = $request->employee_id;
             $data['role_id']    = $role_id;
-            $data['net_salary']    = number_format($request->net_salary,2);
-            $data['payment_amount']    = number_format($request->net_salary,2);
+            $data['basic_salary']    = number_format($request->basic_salary,2);
+            $data['payment_amount']    = 0;
+            $data['payment_date']    = $request->payment_date;
             $data['children']    = $children;
-            $data['total_gross_salary']    = number_format($request->net_salary,2);
+            $data['total_gross_salary']    = number_format($request->basic_salary,2);
             $data['total_child_allowance']    = $totalAmountChild;
             $data['phone_allowance']    = $request->phone_allowance;
             $data['monthly_quarterly_bonuses']    = $request->monthly_quarterly_bonuses;
-            $data['khmer_new_year_pchum_ben_allowance']    = $request->khmer_new_year_pchum_ben_allowance;
             $data['annual_incentive_bonus']    = $request->annual_incentive_bonus;
             $data['base_salary_received_usd']    = number_format($totalPaseSsalaryReceivedUsd,2);
             $data['base_salary_received_riel']    = number_format($totalExchangeRiel);
@@ -547,5 +572,11 @@ class EmployeePayrollController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function paySlip(Request $request){
+        $payslip = Payroll::with('users')->with('bunus')->with('NSSF')
+        ->where('employee_id',$request->employee_id)->first();
+        return view('payrolls.payslip',compact('payslip'));
     }
 }

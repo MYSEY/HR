@@ -16,43 +16,43 @@ class BranchSeeder extends Seeder
     public function run()
     {
         Branchs::firstOrCreate([
-            'branch_name_kh' => 'Head Quarter',
-            'branch_name_en'=> 'ការិយាល័យកណ្តាល',
+            'branch_name_kh' => 'ការិយាល័យកណ្តាល',
+            'branch_name_en'=> 'Head Quarter',
             'abbreviations' => 'HQ'
         ]);
         Branchs::firstOrCreate([
-            'branch_name_kh' => 'Operation Unit',
-            'branch_name_en'=> 'ការិយាល័យប្រតិបត្តិការ',
+            'branch_name_kh' => 'ការិយាល័យប្រតិបត្តិការ',
+            'branch_name_en'=> 'Operation Unit',
             'abbreviations' => 'HO'
         ]);
         Branchs::firstOrCreate([
-            'branch_name_kh' => 'Angsnoul Branch',
-            'branch_name_en'=> 'សាខាស្រុកអង្គស្នួល',
+            'branch_name_kh' => 'សាខាស្រុកអង្គស្នួល',
+            'branch_name_en'=> 'Angsnoul Branch',
             'abbreviations' => 'ANS'
         ]);
         Branchs::firstOrCreate([
-            'branch_name_kh' => 'Takmao Branch',
-            'branch_name_en'=> 'សាខាក្រុងតាខ្មៅ',
+            'branch_name_kh' => 'សាខាក្រុងតាខ្មៅ',
+            'branch_name_en'=> 'Takmao Branch',
             'abbreviations' => 'TKM'
         ]);
         Branchs::firstOrCreate([
-            'branch_name_kh' => 'Kongpisei Branch',
-            'branch_name_en'=> 'សាខាគងពិសី',
+            'branch_name_kh' => 'សាខាគងពិសី',
+            'branch_name_en'=> 'Kongpisei Branch',
             'abbreviations' => 'KPB'
         ]);
         Branchs::firstOrCreate([
-            'branch_name_kh' => 'Kampong Speu',
-            'branch_name_en'=> 'កំពង់ស្ពឺ',
+            'branch_name_kh' => 'កំពង់ស្ពឺ',
+            'branch_name_en'=> 'Kampong Speu',
             'abbreviations' => 'KPS'
         ]);
         Branchs::firstOrCreate([
-            'branch_name_kh' => 'Sa-Ang Branch',
-            'branch_name_en'=> 'សាខាស្អាង',
+            'branch_name_kh' => 'សាខាស្អាង',
+            'branch_name_en'=> 'Sa-Ang Branch',
             'abbreviations' => 'SAB'
         ]);
         Branchs::firstOrCreate([
-            'branch_name_kh' => 'Kompong Trach',
-            'branch_name_en'=> 'សាខាកំពង់ត្រាច',
+            'branch_name_kh' => 'សាខាកំពង់ត្រាច',
+            'branch_name_en'=> 'Kompong Trach',
             'abbreviations' => 'KTB'
         ]);
     }

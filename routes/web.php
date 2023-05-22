@@ -107,7 +107,9 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('motor-rentel/update',[MotorRentelController::class,'update']);
     Route::post('motor-rentel/delete',[MotorRentelController::class,'destroy']);
     Route::post('motor-rentel/list',[MotorRentelController::class,'index']);
+
     Route::post('payroll/store',[EmployeePayrollController::class,'store']);
+    Route::get('payslip/{employee_id}',[EmployeePayrollController::class,'paySlip']);
 
     // route province
     Route::get('province', [ProvinceController::class,'index']);

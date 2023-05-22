@@ -176,7 +176,7 @@ class Employee extends Model
         return $IdentityType;
     }
     
-    public function getEmployeeBrnachAttribute(){
+    public function getEmployeeBranchAttribute(){
         return optional($this->branch)->branch_name_kh;
     }
     public function getjoinOfDateAttribute(){

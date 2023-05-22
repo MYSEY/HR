@@ -95,7 +95,7 @@
                                                 <td class="text-info">{{$item->email}}</td>
                                                 <td>{{$item->EmployeeDepartment}}</td>
                                                 <td>{{$item->EmployeePosition}}</td>
-                                                <td>{{$item->EmployeeBrnach}}</td>
+                                                <td>{{$item->EmployeeBranch}}</td>
                                                 <td>{{$item->FDCStartDate}}</td>
                                                 <td>{{$item->FDCEndDate}}</td>
                                                 <td>{{$item->DOB ?? ''}}</td>

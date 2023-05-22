@@ -42,7 +42,7 @@ class ExportMotorRentel implements FromCollection, WithColumnWidths, WithHeading
                 "employee_name_en" => $value->MotorEmployee->employee_name_en,
                 "employee_gender" => $value->MotorEmployee->EmployeeGender,
                 "employee_position" => $value->MotorEmployee->EmployeePosition,
-                "employee_branch" => $value->MotorEmployee->EmployeeBrnach,
+                "employee_branch" => $value->MotorEmployee->EmployeeBranch,
                 "start_date" => $value->start_date,
                 "end_date" => $value->end_date,
                 "product_year" => $value->product_year,
