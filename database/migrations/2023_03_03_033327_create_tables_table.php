@@ -94,6 +94,12 @@ return new class extends Migration
                     'created_at'=>now(),
                     'updated_at'=>now()
                 ],
+                [
+                    'name'=>'Recruitment',
+                    'status'=>1,
+                    'created_at'=>now(),
+                    'updated_at'=>now()
+                ],
             ]
         );
     }

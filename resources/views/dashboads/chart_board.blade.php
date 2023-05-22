@@ -22,10 +22,10 @@
         <div class="card dash-widget">
             <div class="card-body">
                 <div style="position: relative; display: table-cell; width:100%; text-align: -webkit-center;">
-                    <canvas id="staff_resignation" style="max-width:350px; max-height: 250px;"></canvas>
+                    <canvas id="staff_resignation" style="max-width:400px; max-height: 300px;"></canvas>
                 </div>
-                {{-- <div style="position: relative; display: table-cell; width:50%; vertical-align:middle">
-                    <div id="status-legend" style="margin-left: 25%">
+                {{-- <div style="position: relative; display: table-cell; width:40%; vertical-align:middle">
+                    <div id="status-legend">
                         <div style="display:table">
                             <div style="display: table-row" class="table_row">
                                 <div style="display: table-cell">
@@ -110,15 +110,15 @@
             <div class="card-body">
                 <div style="position: relative; display: table-cell; width:100%; text-align: -webkit-center;">
                     <canvas id="reasons_staff_resignation"
-                        style="max-width:350px; max-height: 250px;"class="chartjs-render-monitor"></canvas>
+                        style="max-width:400px; max-height: 300px;"class="chartjs-render-monitor"></canvas>
                 </div>
-                {{-- <div style="position: relative; display: table-cell; width:50%; vertical-align:middle">
-                    <div id="status-legend" style="margin-left: 25%">
+                {{-- <div style="position: relative; display: table-cell; width:40%; vertical-align:middle">
+                    <div id="status-legend">
                         <div style="display:table">
                             <div style="display: table-row" class="table_row">
                                 <div style="display: table-cell">
                                     <p class="legend-left legend-text"><span class="legend-indicator"
-                                            style="background-color:rgba(0, 136, 204)">&nbsp;</span>&nbsp;HQ</p>
+                                            style="background-color:rgba(0, 136, 204)">&nbsp;</span>&nbsp;មានការងារធ្វើថ្មី (Get now job)</p>
                                 </div>
                                 <div style="display: table-cell; padding-left:10px">
                                     <p class="legend-right legend-text">0 (0.0%)</p>
@@ -127,7 +127,7 @@
                             <div style="display: table-row" class="table_row">
                                 <div style="display: table-cell">
                                     <p class="legend-left legend-text"><span class="legend-indicator"
-                                            style="background-color:rgba(255, 102, 0)">&nbsp;</span>&nbsp;HO</p>
+                                            style="background-color:rgba(255, 102, 0)">&nbsp;</span>&nbsp;ធ្វើអាជីវកម្មផ្ទាល់ខ្លួន (Owner Business)</p>
                                 </div>
                                 <div style="display: table-cell; padding-left:10px">
                                     <p class="legend-right legend-text">0 (0.0%)</p>
@@ -136,7 +136,7 @@
                             <div style="display: table-row" class="table_row">
                                 <div style="display: table-cell">
                                     <p class="legend-left legend-text"><span class="legend-indicator"
-                                            style="background-color:rgb(128,128,128)">&nbsp;</span>&nbsp;ANS</p>
+                                            style="background-color:rgb(128,128,128)">&nbsp;</span>&nbsp;ផ្លាស់ប្តូរទីតាំងរស់នៅ​ (Relocate Resident)</p>
                                 </div>
                                 <div style="display: table-cell; padding-left:10px">
                                     <p class="legend-right legend-text">0 (0.00%)</p>
@@ -145,7 +145,7 @@
                             <div style="display: table-row" class="table_row">
                                 <div style="display: table-cell">
                                     <p class="legend-left legend-text"><span class="legend-indicator"
-                                            style="background-color:rgb(255, 204, 0)">&nbsp;</span>&nbsp;TKM</p>
+                                            style="background-color:rgb(255, 204, 0)">&nbsp;</span>&nbsp;បន្តការសិក្សា (Contiue stadies)</p>
                                 </div>
                                 <div style="display: table-cell; padding-left:10px">
                                     <p class="legend-right legend-text">0 (0.00%)</p>
@@ -154,7 +154,7 @@
                             <div style="display: table-row" class="table_row">
                                 <div style="display: table-cell">
                                     <p class="legend-left legend-text"><span class="legend-indicator"
-                                            style="background-color:rgb(0, 136, 204)">&nbsp;</span>&nbsp;KPB</p>
+                                            style="background-color:rgb(0, 136, 204)">&nbsp;</span>&nbsp;បញ្ហាសុខភាព (Health Issue)</p>
                                 </div>
                                 <div style="display: table-cell; padding-left:10px">
                                     <p class="legend-right legend-text">0 (0.00%)</p>
@@ -163,7 +163,7 @@
                             <div style="display: table-row" class="table_row">
                                 <div style="display: table-cell">
                                     <p class="legend-left legend-text"><span class="legend-indicator"
-                                            style="background-color:rgb(83, 198, 83)">&nbsp;</span>&nbsp;KPS</p>
+                                            style="background-color:rgb(83, 198, 83)">&nbsp;</span>&nbsp;គ្រួសារ (Fimaly)</p>
                                 </div>
                                 <div style="display: table-cell; padding-left:10px">
                                     <p class="legend-right legend-text">0 (0.00%)</p>
@@ -172,7 +172,7 @@
                             <div style="display: table-row" class="table_row">
                                 <div style="display: table-cell">
                                     <p class="legend-left legend-text"><span class="legend-indicator"
-                                            style="background-color:rgb(0, 51, 102)">&nbsp;</span>&nbsp;SAB</p>
+                                            style="background-color:rgb(0, 51, 102)">&nbsp;</span>&nbsp;បណ្តេញចេញ​/បញ្ឈប់ពីការងារ​ (Misconducts)</p>
                                 </div>
                                 <div style="display: table-cell; padding-left:10px">
                                     <p class="legend-right legend-text">0 (0.00%)</p>
@@ -181,7 +181,34 @@
                             <div style="display: table-row" class="table_row">
                                 <div style="display: table-cell">
                                     <p class="legend-left legend-text"><span class="legend-indicator"
-                                            style="background-color:rgb(230, 115, 0)">&nbsp;</span>&nbsp;KTB</p>
+                                            style="background-color:rgb(230, 115, 0)">&nbsp;</span>&nbsp;ការបន្លំលួច/ក្លែបន្លំ (Fraud)</p>
+                                </div>
+                                <div style="display: table-cell; padding-left:10px">
+                                    <p class="legend-right legend-text">0 (0.0%)</p>
+                                </div>
+                            </div>
+                            <div style="display: table-row" class="table_row">
+                                <div style="display: table-cell">
+                                    <p class="legend-left legend-text"><span class="legend-indicator"
+                                            style="background-color:rgb(230, 115, 0)">&nbsp;</span>&nbsp;មរណះភាព (Death)</p>
+                                </div>
+                                <div style="display: table-cell; padding-left:10px">
+                                    <p class="legend-right legend-text">0 (0.0%)</p>
+                                </div>
+                            </div>
+                            <div style="display: table-row" class="table_row">
+                                <div style="display: table-cell">
+                                    <p class="legend-left legend-text"><span class="legend-indicator"
+                                            style="background-color:rgb(230, 115, 0)">&nbsp;</span>&nbsp;ចូលនិវត្តន៏ (Retirement)</p>
+                                </div>
+                                <div style="display: table-cell; padding-left:10px">
+                                    <p class="legend-right legend-text">0 (0.0%)</p>
+                                </div>
+                            </div>
+                            <div style="display: table-row" class="table_row">
+                                <div style="display: table-cell">
+                                    <p class="legend-left legend-text"><span class="legend-indicator"
+                                            style="background-color:rgb(230, 115, 0)">&nbsp;</span>&nbsp;ផ្សេងៗ (Others)</p>
                                 </div>
                                 <div style="display: table-cell; padding-left:10px">
                                     <p class="legend-right legend-text">0 (0.0%)</p>
@@ -208,8 +235,8 @@
                             <tr>
                                 <th>#</th>
                                 <th>ID Card</th>
-                                <th>Employee Name kh</th>
-                                <th>Employee Name EN</th>
+                                <th>Name kh</th>
+                                <th>Name EN</th>
                                 <th>Gender</th>
                                 <th>Position</th>
                                 <th>Dept/ Branch</th>
@@ -295,8 +322,8 @@
                             <tr>
                                 <th>#</th>
                                 <th>ID Card</th>
-                                <th>Employee Name kh</th>
-                                <th>Employee Name EN</th>
+                                <th>Name kh</th>
+                                <th>Name EN</th>
                                 <th>Gender</th>
                                 <th>Position</th>
                                 <th>Dept/ Branch</th>

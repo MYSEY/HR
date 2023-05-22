@@ -22,6 +22,27 @@
             </div>
         </div>
 
+        <div class="row filter-row">
+            <div class="col-sm-6 col-md-3">
+                <div class="form-group form-focus focused">
+                    <div class="cal-icon">
+                        <input class="form-control floating datetimepicker" type="text" id="from_date">
+                    </div>
+                    <label class="focus-label">From</label>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-3">
+                <div class="form-group form-focus">
+                    <div class="cal-icon">
+                        <input class="form-control floating datetimepicker" type="text" id="to_date">
+                    </div>
+                    <label class="focus-label">To</label>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-3">
+                <a href="#" class="btn btn-success w-100" id="btn-reseach"> Search </a>
+            </div>
+        </div>
         <div class="row">
             <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
                 <div class="card dash-widget">
@@ -121,20 +142,42 @@
 @include('includs.script')
 <script>
     $(function() {
-        var deshboard = [
-            {"name": "HRMS_dashboards"},
-            {"name": "achived_by_branches"},
-            {"name": "staff_resignation"},
-            {"name": "reasons_staff_resignation"},
-            {"name": "staff_take_leave"},
-            {"name": "staff_Training_by_branch"},
-        ];
+        showDashboard()
+        $("#btn-reseach").on("click", function() {
+            let researchs = {
+                "from_date": $("#from_date").val(),
+                "to_date": $("#to_date").val()
+            }
+            showDashboard(researchs)
+        });
 
+    });
+
+    function showDashboard(researchs) {
+        
+        var deshboard = [{
+                "name": "HRMS_dashboards"
+            },
+            {
+                "name": "achived_by_branches"
+            },
+            {
+                "name": "staff_resignation"
+            },
+            {
+                "name": "reasons_staff_resignation"
+            },
+            {
+                "name": "staff_take_leave"
+            },
+            {
+                "name": "staff_Training_by_branch"
+            },
+        ];
         // for HRMS Dashboard
         const dataHRMSdashboards = {
             // labels: [],
-            datasets: [
-                {
+            datasets: [{
                     label: 'Total',
                     data: [],
                     backgroundColor: [
@@ -155,8 +198,7 @@
         // for achived by branches
         let dataAchive = {
             // labels: ['HO','ANS','TKM','KPB','KPS','SAB','KTB','Total',],
-            datasets: [
-                {
+            datasets: [{
                     label: 'Total Staff',
                     data: [31, 17, 17, 15, 15, 10, 10, 80],
                     backgroundColor: [
@@ -191,7 +233,6 @@
                 Math.round((dataAchive.datasets[1].data[index] / da) * 100)
             )
         });
-        console.log("dataAchRed: ",dataAchRed);
         dataAchive.datasets.push({
             label: '% Achivement',
             data: dataAchRed,
@@ -200,7 +241,6 @@
             ],
             stack: 'Stack 2',
         })
-        
 
         // for staff take leave
         const dataStaffTakeLeave = {
@@ -215,16 +255,15 @@
                 'Total',
             ],
             datasets: [{
-                    label: 'Total Staff',
-                    data: [31, 17, 17, 15, 15, 10, 10, 80],
-                    backgroundColor: [
-                        "red"
-                    ],
-                    stack: 'Stack 0',
-                },
-            ]
+                label: 'Total Staff',
+                data: [31, 17, 17, 15, 15, 10, 10, 80],
+                backgroundColor: [
+                    "red"
+                ],
+                stack: 'Stack 0',
+            }, ]
         };
-        
+
         // for staff training
         const dataStaffTraining = {
             labels: [
@@ -238,30 +277,19 @@
                 'Total',
             ],
             datasets: [{
-                    label: 'Total Staff',
-                    data: [31, 17, 17, 15, 15, 10, 10, 80],
-                    backgroundColor: [
-                        "green"
-                    ],
-                    stack: 'Stack 0',
-                },
-            ]
+                label: 'Total Staff',
+                data: [31, 17, 17, 15, 15, 10, 10, 80],
+                backgroundColor: [
+                    "green"
+                ],
+                stack: 'Stack 0',
+            }, ]
         };
 
         // for staff resignation
         const dataStaffResignation = {
-            labels: [
-                'HQ',
-                'HO',
-                'ANS',
-                'TKM',
-                'KPB',
-                'KPS',
-                'SAB',
-                'KTB',
-            ],
             datasets: [{
-                data: [70, 31, 17, 17, 15, 15, 10, 10],
+                // data: [70, 31, 17, 17, 15, 15, 10, 10],
                 backgroundColor: [
                     "rgba(0, 136, 204)",
                     "rgba(255, 102, 0)",
@@ -274,14 +302,44 @@
                 ],
             }, ]
         };
-
-
+        // Reasons of Staff Resignation
+        const dataReasonStaffResignation = {
+            labels: [
+                'Get now job',
+                'Owner Business',
+                'Relocate Resident',
+                'Contiue stadies',
+                'Health Issue',
+                'Fimaly',
+                'Misconducts',
+                'Fraud',
+                'Death',
+                'Retirement',
+                'Others',
+            ],
+            datasets: [{
+                data: [70, 31, 17, 17, 15, 15, 10, 10, 0, 0, 0],
+                backgroundColor: [
+                    "rgba(0, 136, 204)",
+                    "rgba(255, 102, 0)",
+                    "rgb(128,128,128)",
+                    "rgb(255, 204, 0)",
+                    "rgb(0, 136, 204)",
+                    "rgb(83, 198, 83)",
+                    "rgb(0, 51, 102)",
+                    "rgb(230, 115, 0)",
+                ],
+            }, ]
+        };
         $.ajax({
             type: "GET",
-            url: "{{url('dashboad/show')}}",
-            data: {},
+            url: "{{ url('dashboad/show') }}",
+            data: {
+                "from_date": researchs ? researchs.from_date : null,
+                "to_date": researchs ? researchs.to_date : null,
+            },
             dataType: "JSON",
-            success: function (response) {
+            success: function(response) {
                 let dataEmployee = response.data;
                 let branches = response.branches;
                 let totalEmployees = dataEmployee.length;
@@ -290,31 +348,54 @@
                 let totalHRMSData = [];
                 let totalHRMSFemale = [];
                 let labelAchive = [];
+
+                let labelStaffResignation = [];
+                let staffResignationData = [];
                 branches.map((br) => {
                     let totalValue = 0;
                     let totalFemale = 0;
+                    let totalValueStaffResignation = 0;
                     let female = 0;
-                    dataEmployee.map((em) => {
-                        if (em.gender) {
-                            if (em.gender.type == "gender" &&  em.gender.name_english == "Female") { female ++ } 
-                        }
-                        if (em.branch_id == br.id) {
-                            totalValue ++;
-                        }
-                        if (em.gender) {
-                            if (em.branch_id == br.id && em.gender.type == "gender" &&  em.gender.name_english == "Female") {
-                                totalFemale++;
-                            } 
-                        } 
-                    })
+                     // for all data employee
+                   if (dataEmployee.length > 0) {
+                        dataEmployee.map((em) => {
+                            if (em.gender) {
+                                if (em.gender.type == "gender" && em.gender
+                                    .name_english == "Female") {
+                                    female++
+                                }
+                            }
+                            if (em.branch_id == br.id) {
+                                totalValue++;
+                            }
+                            if (em.gender) {
+                                if (em.branch_id == br.id && em.gender.type ==
+                                    "gender" && em.gender.name_english == "Female") {
+                                    totalFemale++;
+                                }
+                            }
+                        })
+                   }
+                   if (response.staffResignations.length > 0) {
+                        response.staffResignations.map((sta) => {
+                            if (sta.branch_id == br.id) {
+                                totalValueStaffResignation++;
+                            }
+                        });
+                   }
+
                     totalEmployeeFemale = female;
                     totalHRMSData.push(totalValue);
                     totalHRMSFemale.push(totalFemale);
                     labelsHRMS.push(br.abbreviations);
-                    if (br.abbreviations !="HQ") {
+
+                    labelStaffResignation.push(br.abbreviations);
+                    staffResignationData.push(totalValueStaffResignation);
+                    if (br.abbreviations != "HQ") {
                         labelAchive.push(br.abbreviations);
                     }
                 });
+
                 labelsHRMS.push('total');
                 labelAchive.push('total');
                 totalHRMSData.push(totalEmployees);
@@ -324,8 +405,6 @@
                 dataHRMSdashboards.datasets[1].data = totalHRMSFemale;
 
                 //for achived by branch
-                // let data = (8 / 16) * 100;
-                // alert(Math.round(data));
                 dataAchive.labels = labelAchive;
                 
                 $.each(deshboard, function(i, db) {
@@ -333,10 +412,13 @@
                     let data = {};
                     let type = "";
                     let option = {};
+                   
                     if (db.name == "HRMS_dashboards" || db.name == "achived_by_branches") {
                         type = "bar";
-                        data = db.name == "HRMS_dashboards" ? dataHRMSdashboards : dataAchive;
-                        text = db.name == "HRMS_dashboards" ? "HRMS Dashboards" : '% ACHIEVED BY BRANCHES';
+                        data = db.name == "HRMS_dashboards" ? dataHRMSdashboards :
+                            dataAchive;
+                        text = db.name == "HRMS_dashboards" ? "HRMS Dashboards" :
+                            '% ACHIEVED BY BRANCHES';
                         option = {
                             plugins: {
                                 legend: {
@@ -354,29 +436,12 @@
                                         size: 10
                                     },
                                     align: 'center',
-                                    // formatter: (value, context)=>{
-                                       
-                                        
-                                    //     if (db.name != "HRMS_dashboards") {
-                                    //         console.log("value: ",context);
-                                    //         // console.log("data: ",context.chart.data.datasets[1].data);
-                                    //         const achiveGreen = context.chart.data.datasets[0].data;
-                                    //         const achiveYallow = context.chart.data.datasets[1].data;
-                                    //         let dataRed = [];
-                                    //         let percentageValue = 0;
-
-                                    //         $.each(achiveGreen, function(i, achg) {
-                                    //             let percentage = ((achiveYallow[i] / achg) * 100);
-                                    //             dataRed.push(`${Math.round(percentage)}%`);
-                                    //         });
-                                    //     }
-                                    // },
                                 },
                                 title: {
                                     display: true,
                                     text
                                 },
-                               
+
                             },
                             responsive: true,
                             scales: {
@@ -389,17 +454,25 @@
                                 }
                             }
                         }
-                    } else if (db.name == "staff_resignation" || db.name == "reasons_staff_resignation") {
+                    } else if (db.name == "staff_resignation" || db.name ==
+                        "reasons_staff_resignation") {
                         type = "pie";
-                        data = db.name == "staff_resignation" ? dataStaffResignation : dataStaffResignation;
-                        text = db.name == "staff_resignation" ? '% Staff Resignation' :
-                            '% Reasons of Staff Resignation';
+                        if (db.name == "staff_resignation") {
+                            dataStaffResignation.labels = labelStaffResignation;
+                            dataStaffResignation.datasets[0].data = staffResignationData;
+                            data = dataStaffResignation;
+                            text = '% Staff Resignation';
+                        } else {
+                            data = dataReasonStaffResignation;
+                            text = '% Reasons of Staff Resignation';
+                        }
                         option = {
                             responsive: true,
                             plugins: {
                                 legend: {
+                                    display: true,
                                     position: 'right',
-                                    rtl : true,
+                                    rtl: true,
                                 },
                                 // tooltip: {
                                 //     enabled: false
@@ -409,22 +482,21 @@
                                         size: 10
                                     },
                                     align: 'center',
-                                    formatter: (value, context)=>{ 
-                                        // console.log("data: ",context.chart.data.datasets[0].data);
-                                        const datapoints = context.chart.data.datasets[0].data;
-                                        function totalSum(total, datapoints){
-                                            return total + datapoints;
-                                        }
-                                        const totalvalue = datapoints.reduce(totalSum, 0);
-                                        const percentageValue = (value / totalvalue * 100)
-                                        if (db.name == "staff_resignation" ) {
-                                            return `${Math.round(percentageValue)}%`;
-                                           
-                                        }else{
-                                            return `${percentageValue.toFixed(2)}%`;
-                                        }
-                                        // return `${percentageValue}%`;
-                                    }
+                                    // formatter: (value, context)=>{ 
+                                    //     // console.log("data: ",context.chart.data.datasets[0].data);
+                                    //     const datapoints = context.chart.data.datasets[0].data;
+                                    //     function totalSum(total, datapoints){
+                                    //         return total + datapoints;
+                                    //     }
+                                    //     const totalvalue = datapoints.reduce(totalSum, 0);
+                                    //     const percentageValue = (value / totalvalue * 100)
+                                    //     if (db.name == "staff_resignation" ) {
+                                    //         return `${Math.round(percentageValue)}%`;
+
+                                    //     }else{
+                                    //         return `${percentageValue.toFixed(2)}%`;
+                                    //     }
+                                    // }
                                 },
                                 title: {
                                     display: true,
@@ -432,10 +504,13 @@
                                 },
                             },
                         }
-                    }else if (db.name == "staff_take_leave" || db.name == "staff_Training_by_branch") {
+                    } else if (db.name == "staff_take_leave" || db.name ==
+                        "staff_Training_by_branch") {
                         type = "bar";
-                        data = db.name == "staff_take_leave" ? dataStaffTakeLeave : dataStaffTraining;
-                        text = db.name == "staff_take_leave" ? 'Staff Take Leave' : 'Staff Training by Branch';
+                        data = db.name == "staff_take_leave" ? dataStaffTakeLeave :
+                            dataStaffTraining;
+                        text = db.name == "staff_take_leave" ? 'Staff Take Leave' :
+                            'Staff Training by Branch';
                         option = {
                             plugins: {
                                 legend: {
@@ -460,15 +535,23 @@
                             }
                         }
                     }
-
-                    new Chart(db.name, {
+                    var myChart = null;
+                    let dataChart = {
                         type,
                         data,
                         options: option,
-                        plugins:[ChartDataLabels]
-                    });
+                        plugins: [ChartDataLabels]
+                    }
+                    
+                    // if (myChart !=null) {
+                    //     myChart.destroy();
+                    // } else {
+                        myChart = new Chart(db.name, dataChart);
+                    // }
+                    // }
+                    // showChart(db.name,dataChart);
                 });
             }
         });
-    });
+    }
 </script>

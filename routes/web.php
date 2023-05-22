@@ -30,6 +30,7 @@ use App\Http\Controllers\Admins\AttendanceAdminController;
 use App\Http\Controllers\Admins\EmployeePayrollController;
 use App\Http\Controllers\Admins\EmployeeProfileController;
 use App\Http\Controllers\Admins\AttendanceEmployeeController;
+use App\Http\Controllers\Admins\RecruitmentPlanController;
 
 /*
 |--------------------------------------------------------------------------
@@ -168,4 +169,11 @@ Route::middleware(['auth:sanctum'])->group(function(){
     //change password
     Route::get('change/password',[SettingController::class,'changePassword']);
     Route::post('update/password',[SettingController::class,'updatePassword']);
+
+    // route block recruitment
+    Route::get('/recruitment/plan-list', [RecruitmentPlanController::class,'index']);
+    Route::post('/recruitment/plan-store', [RecruitmentPlanController::class,'store']);
+    Route::post('/recruitment/plan-update', [RecruitmentPlanController::class,'update']);
+    Route::post('/recruitment/plan-delete', [RecruitmentPlanController::class,'destroy']);
+    Route::get('/recruitment/plan-edit', [RecruitmentPlanController::class,'edit']);
 });
