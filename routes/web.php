@@ -53,6 +53,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('/dashboad/employee', [DashboadController::class, 'dashboadEmployee']);
     Route::get('/dashboad/admin', [DashboadController::class, 'dashboadAdmin']);
     Route::get('/dashboad/show', [DashboadController::class, 'show']);
+
     Route::get('/employee/profile/{id}', [EmployeeProfileController::class, 'employeeProfile'])->name('employee.profile');
     Route::post('employee/education', [EmployeeProfileController::class, 'employeeEducation'])->name('employee.education');
     Route::post('employee/experience', [EmployeeProfileController::class, 'updateOrCreateExperience'])->name('employee.experience');

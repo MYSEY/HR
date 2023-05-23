@@ -35,4 +35,9 @@ class RecruitmentPlan extends Model
     {
         return $this->belongsTo(Branchs::class ,'branch_id');
     }
+
+    // public function getBranchByPlanAttribute(){
+    //     return optional($this->branch)->abbreviations;
+    // }
+
 }

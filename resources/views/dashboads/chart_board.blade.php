@@ -230,7 +230,7 @@
             </div>
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-nowrap custom-table mb-0">
+                    <table class="table table-nowrap custom-table mb-0 table-new-staff">
                         <thead>
                             <tr>
                                 <th>#</th>
@@ -242,64 +242,9 @@
                                 <th>Dept/ Branch</th>
                                 <th>Join Date</th>
                                 <th>Rmark</th>
-                                <th>Status</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td><a
-                                        href="https://smarthr.dreamguystech.com/laravel/template/public/invoice-view">230-0001</a>
-                                </td>
-                                <td>
-                                    <h2><a href="#">Global</a></h2>
-                                </td>
-                                <td>Global Technologies</td>
-                                <td>Male</td>
-                                <td>ID DEVELOPER</td>
-                                <td>11 Mar 2019</td>
-                                <td>11 Mar 2019</td>
-                                <td>ABC</td>
-                                <td>
-                                    <span class="badge bg-inverse-warning">Partially Paid</span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>1</td>
-                                <td><a
-                                        href="https://smarthr.dreamguystech.com/laravel/template/public/invoice-view">230-0002</a>
-                                </td>
-                                <td>
-                                    <h2><a href="#">Global</a></h2>
-                                </td>
-                                <td>Global Technologies</td>
-                                <td>Male</td>
-                                <td>ID DEVELOPER</td>
-                                <td>11 Mar 2019</td>
-                                <td>11 Mar 2019</td>
-                                <td>ABC</td>
-                                <td>
-                                    <span class="badge bg-inverse-warning">Partially Paid</span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>1</td>
-                                <td><a
-                                        href="https://smarthr.dreamguystech.com/laravel/template/public/invoice-view">230-0003</a>
-                                </td>
-                                <td>
-                                    <h2><a href="#">Global</a></h2>
-                                </td>
-                                <td>Global Technologies</td>
-                                <td>Male</td>
-                                <td>ID DEVELOPER</td>
-                                <td>11 Mar 2019</td>
-                                <td>11 Mar 2019</td>
-                                <td>ABC</td>
-                                <td>
-                                    <span class="badge bg-inverse-warning">Partially Paid</span>
-                                </td>
-                            </tr>
                             
                         </tbody>
                     </table>

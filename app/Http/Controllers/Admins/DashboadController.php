@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admins;
 
 use App\Http\Controllers\Controller;
 use App\Models\Branchs;
+use App\Models\RecruitmentPlan;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -29,27 +30,35 @@ class DashboadController extends Controller
             $staff_from_date = Carbon::createFromDate($request->from_date)->format('Y-m-d');
             $staff_to_date = Carbon::createFromDate($request->to_date)->format('Y-m-d');
         }
-        
-        $employee = User::when($from_date, function ($query, $from_date) {
-            $query->where('created_at', '>=', $from_date);
-        })
-        ->when($to_date, function ($query, $to_date) {
-            $query->where('created_at','<=', $to_date);
-        })->get();
-        
-        $staffResignations = User::whereNotIn('emp_status',['1','2','Probation'])
-        ->when($staff_from_date, function ($query, $staff_from_date) {
-            $query->where('date_of_commencement', '>=', $staff_from_date);
-        })
-        ->when($staff_to_date, function ($query, $staff_to_date) {
-            $query->where('date_of_commencement','<=', $staff_to_date);
-        })->get();
-
         $branches = Branchs::all();
+
+        $employee = User::with("gender")->with('position')->with('branch')->when($from_date, function ($query, $from_date) {
+            $query->where('created_at', '>=', $from_date);
+            })
+            ->when($to_date, function ($query, $to_date) {
+                $query->where('created_at','<=', $to_date);
+            })->get();
+
+
+        $currentYear = Carbon::now()->format('Y');
+        $year = Carbon::createFromDate('01-01-'.$currentYear)->format('Y-m-d');
+        $staffResignations = User::whereNotIn('emp_status',['1','2','Probation'])
+            ->when($year, function ($query, $year) {
+                $query->where('resign_date', '>=', $year);
+            })->get();
+
+        $recruitmentPlans = RecruitmentPlan::with('branch')->get();
+        $achieveBranchs = User::with('branch')->whereIn('emp_status',['1','2','Probation'])
+          ->when($year, function ($query, $year) {
+              $query->where('date_of_commencement', '>=', $year);
+          })->get();
+
         return response()->json([
+            'branches'=>$branches,
             'data'=>$employee,
             'staffResignations'=>$staffResignations,
-            'branches'=>$branches,
+            'recruitmentPlans'=>$recruitmentPlans,
+            'achieveBranchs'=>$achieveBranchs,
         ]);
     }
 }

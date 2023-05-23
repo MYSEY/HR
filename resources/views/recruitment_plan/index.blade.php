@@ -29,7 +29,7 @@
                                             <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="#: activate to sort column descending" style="width: 30px;">#</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Position Name: activate to sort column ascending" style="width: 772.237px;">Position Name</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Branch Name: activate to sort column ascending" style="width: 772.237px;">Branch Name</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Year: activate to sort column ascending" style="width: 772.237px;">Year</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Year: activate to sort column ascending" style="width: 772.237px;">Plan of Year</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Description: activate to sort column ascending" style="width: 772.237px;">Description</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Created at: activate to sort column ascending" style="width: 772.237px;">Total Staff</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Created at: activate to sort column ascending" style="width: 772.237px;">Create at</th>
@@ -46,7 +46,7 @@
                                                     <td >{{$item->plan_year}}</td>
                                                     <td >{{$item->description}}</td>
                                                     <td >{{$item->total_staff}}</td>
-                                                    <td>{{$item->created_at}}</td>
+                                                    <td>{{ \Carbon\Carbon::parse($item->start_date)->format('M-d-Y') ?? '' }}</td>
                                                     <td class="text-end">
                                                         <div class="dropdown dropdown-action">
                                                             <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
@@ -109,7 +109,7 @@
                                 </div>
                                 <div class="col-sm-6">
                                     <div class="form-group">
-                                        <label>Plan in Year <span class="text-danger">*</span></label>
+                                        <label>Plan of Year <span class="text-danger">*</span></label>
                                         <div class="cal-icon">
                                             <select id="plan_year" name="plan_year"  class="form-control floating select select2-hidden-accessible" >
                                             </select>
@@ -171,7 +171,7 @@
                                 </div>
                                 <div class="col-sm-6">
                                     <div class="form-group">
-                                        <label>Plan in Year <span class="text-danger">*</span></label>
+                                        <label>Plan of Year <span class="text-danger">*</span></label>
                                         <div class="cal-icon">
                                             <input class="form-control @error('plan_year') is-invalid @enderror" type="number" id="e_plan_year" name="plan_year" required>
                                         </div>
