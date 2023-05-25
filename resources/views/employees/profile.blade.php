@@ -657,6 +657,17 @@
                                         </select>
                                     </div>
                                     <div class="form-group">
+                                        <label>Position<span class="text-danger">*</span></label>
+                                        <select class="select" id="position_id" name="position_id" required>
+                                            <option value="">Please selecte position</option>
+                                            @if (count($position)>0)
+                                                @foreach ($position as $item)
+                                                    <option value="{{$item->id}}">{{$item->name_khmer}}</option>
+                                                @endforeach
+                                            @endif
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
                                         <label>Transferred Date</label>
                                         <div class="cal-icon">
                                             <input type="text" id="date" name="date" class="form-control datetimepicker">

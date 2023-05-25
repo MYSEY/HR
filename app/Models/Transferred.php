@@ -17,6 +17,7 @@ class Transferred extends Model
     protected $fillable = [
         'employee_id',
         'branch_id',
+        'position_id',
         'date',
         'descrition',
         'updated_by'
@@ -25,6 +26,14 @@ class Transferred extends Model
     public function branch()
     {
         return $this->belongsTo(Branchs::class ,'branch_id');
+    }
+    public function position()
+    {
+        return $this->belongsTo(Position::class ,'position_id');
+    }
+    public function employee()
+    {
+        return $this->belongsTo(User::class ,'employee_id')->with("branch")->with("position");
     }
 
     public function getBranchNameAttribute(){

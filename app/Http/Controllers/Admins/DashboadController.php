@@ -5,6 +5,10 @@ namespace App\Http\Controllers\Admins;
 use App\Http\Controllers\Controller;
 use App\Models\Branchs;
 use App\Models\RecruitmentPlan;
+use App\Models\StaffPromoted;
+use App\Models\Trainer;
+use App\Models\Training;
+use App\Models\Transferred;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -22,13 +26,9 @@ class DashboadController extends Controller
     public function show(Request $request){
         $from_date = null;
         $to_date = null;
-        $staff_from_date = null;
-        $staff_to_date = null;
         if ($request->from_date || $request->to_date) {
             $from_date = Carbon::createFromDate($request->from_date)->format('Y-m-d H:i:s'); //2023-05-09 00:00:00
             $to_date = Carbon::createFromDate($request->to_date.' '.'23:59:59')->format('Y-m-d H:i:s'); //2023-05-09 23:59:59
-            $staff_from_date = Carbon::createFromDate($request->from_date)->format('Y-m-d');
-            $staff_to_date = Carbon::createFromDate($request->to_date)->format('Y-m-d');
         }
         $branches = Branchs::all();
 
@@ -53,12 +53,44 @@ class DashboadController extends Controller
               $query->where('date_of_commencement', '>=', $year);
           })->get();
 
+          $staffPromotes = StaffPromoted::with("employee")->limit(5)->get();
+          $transferred = Transferred::with("employee")->with("branch")->with("position")->limit(5)->get();
+
+        $data = Training::with('trainingType')->limit(5)->get();
+        $dataTrainings = [];
+        foreach ($data as $key => $item) {
+            // $trainers = [];
+            // foreach ($item->trainer_id as $key => $trai) {
+            //     $dataTrainer = Trainer::where('id', $trai)->first();
+            //     $trainers[] = [
+            //         "name_kh" => $dataTrainer->name_kh,
+            //         "name_en" => $dataTrainer->name_en,
+            //         "email" =>  $dataTrainer->email,
+            //         "role" =>  $dataTrainer->role,
+            //         "number_phone" => $dataTrainer->number_phone,
+            //         "description" => $dataTrainer->description,
+            //         "status" => $dataTrainer->status
+            //     ];
+
+            // }
+            $employees = [];
+            foreach ($item->employee_id as $key => $empl) {
+                $em =  User::where('id', $empl)->with("gender")->with("branch")->with("position")->limit(5)->get();
+                $employees[] = $em;
+            }
+            // $item["trainers"] = $trainers;
+            $item["employees"] = $employees;
+            $dataTrainings[] = $item;
+        }
         return response()->json([
             'branches'=>$branches,
             'data'=>$employee,
             'staffResignations'=>$staffResignations,
             'recruitmentPlans'=>$recruitmentPlans,
             'achieveBranchs'=>$achieveBranchs,
+            'staffPromotes'=>$staffPromotes,
+            'transferred'=> $transferred,
+            'dataTrainings'=> $dataTrainings,
         ]);
     }
 }

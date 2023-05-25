@@ -100,34 +100,6 @@ function menu(){
         ],
         [
             'name'=>'',
-            'icon'=>'<i class="la la-pie-chart"></i> <span></span> <span class="menu-arrow"></span>',
-            'value'=>'Reports',
-            'table'=>2,
-            'permission'=>1,
-            'child'=>[
-                [
-                    'value'=>'Employee Report',
-                    'url'=>"employee/report",
-                    'table'=>2,
-                    'permission'=>1
-                ],
-                [
-                    'value'=>'Payroll Report',
-                    'url'=>"reports/payroll-report",
-                    'table'=>2,
-                    'permission'=>1
-                ],
-                [
-                    'value'=>'Motor Rental Report',
-                    'url'=>"reports/motor-rentel-report",
-                    'table'=>2,
-                    'permission'=>1
-                ],
-            ]
-        ],
-        
-        [
-            'name'=>'',
             'icon'=>'<i class="la la-edit"></i> <span></span> <span class="menu-arrow"></span>',
             'value'=>'Training',
             'table'=>2,
@@ -148,6 +120,33 @@ function menu(){
                 [
                     'value'=>'Training Type',
                     'url'=>"training-type/list",
+                    'table'=>2,
+                    'permission'=>1
+                ],
+            ]
+        ],
+        [
+            'name'=>'',
+            'icon'=>'<i class="la la-pie-chart"></i> <span></span> <span class="menu-arrow"></span>',
+            'value'=>'Reports',
+            'table'=>2,
+            'permission'=>1,
+            'child'=>[
+                [
+                    'value'=>'Employee Report',
+                    'url'=>"employee/report",
+                    'table'=>2,
+                    'permission'=>1
+                ],
+                [
+                    'value'=>'Payroll Report',
+                    'url'=>"reports/payroll-report",
+                    'table'=>2,
+                    'permission'=>1
+                ],
+                [
+                    'value'=>'Motor Rental Report',
+                    'url'=>"reports/motor-rentel-report",
                     'table'=>2,
                     'permission'=>1
                 ],

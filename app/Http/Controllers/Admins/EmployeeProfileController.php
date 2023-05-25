@@ -122,6 +122,7 @@ class EmployeeProfileController extends Controller
             Transferred::create([
                 'employee_id'   => $request->employee_id,
                 'branch_id'      => $request->branch_id,
+                'position_id'      => $request->position_id,
                 'date'          => $request->date,
                 'descrition'    => $request->descrition,
                 'updated_by'    => Auth::id(),

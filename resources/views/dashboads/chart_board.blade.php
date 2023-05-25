@@ -251,7 +251,7 @@
                 </div>
             </div>
             <div class="card-footer">
-                <a href="https://smarthr.dreamguystech.com/laravel/template/public/invoices">View all invoices</a>
+                <a href="#">View all</a>
             </div>
         </div>
     </div>
@@ -262,7 +262,7 @@
             </div>
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table custom-table table-nowrap mb-0">
+                    <table class="table custom-table table-nowrap mb-0 table-resigned-staff">
                         <thead>
                             <tr>
                                 <th>#</th>
@@ -274,71 +274,16 @@
                                 <th>Dept/ Branch</th>
                                 <th>Join Date</th>
                                 <th>Rmark</th>
-                                <th>Status</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td><a
-                                        href="https://smarthr.dreamguystech.com/laravel/template/public/invoice-view">230-0001</a>
-                                </td>
-                                <td>
-                                    <h2><a href="#">Global</a></h2>
-                                </td>
-                                <td>Global Technologies</td>
-                                <td>Male</td>
-                                <td>ID DEVELOPER</td>
-                                <td>11 Mar 2019</td>
-                                <td>11 Mar 2019</td>
-                                <td>ABC</td>
-                                <td>
-                                    <span class="badge bg-inverse-warning">Partially Paid</span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>1</td>
-                                <td><a
-                                        href="https://smarthr.dreamguystech.com/laravel/template/public/invoice-view">230-0002</a>
-                                </td>
-                                <td>
-                                    <h2><a href="#">Global</a></h2>
-                                </td>
-                                <td>Global Technologies</td>
-                                <td>Male</td>
-                                <td>ID DEVELOPER</td>
-                                <td>11 Mar 2019</td>
-                                <td>11 Mar 2019</td>
-                                <td>ABC</td>
-                                <td>
-                                    <span class="badge bg-inverse-warning">Partially Paid</span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>1</td>
-                                <td><a
-                                        href="https://smarthr.dreamguystech.com/laravel/template/public/invoice-view">230-0003</a>
-                                </td>
-                                <td>
-                                    <h2><a href="#">Global</a></h2>
-                                </td>
-                                <td>Global Technologies</td>
-                                <td>Male</td>
-                                <td>ID DEVELOPER</td>
-                                <td>11 Mar 2019</td>
-                                <td>11 Mar 2019</td>
-                                <td>ABC</td>
-                                <td>
-                                    <span class="badge bg-inverse-warning">Partially Paid</span>
-                                </td>
-                            </tr>
                             
                         </tbody>
                     </table>
                 </div>
             </div>
             <div class="card-footer">
-                <a href="payments">View all payments</a>
+                <a href="#">View all</a>
             </div>
         </div>
     </div>
@@ -351,7 +296,7 @@
             </div>
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-nowrap custom-table mb-0">
+                    <table class="table table-nowrap custom-table mb-0 table-staff-promote">
                         <thead>
                             <tr>
                                 <th>#</th>
@@ -363,29 +308,12 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>Global Technologies</td>
-                                <td>TKM</td>
-                                <td>Credit Officer</td>
-                                <td>Senior Credit Officer</td>
-                                <td>01-02-23</td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>Mrs. Keo Dany</td>
-                                <td>KPB</td>
-                                <td>Cleaner</td>
-                                <td>Junior Credit Officer</td>
-                                <td>01-03-23</td>
-                            </tr>
-                            
                         </tbody>
                     </table>
                 </div>
             </div>
             <div class="card-footer">
-                <a href="https://smarthr.dreamguystech.com/laravel/template/public/invoices">View all invoices</a>
+                <a href="#">View all</a>
             </div>
         </div>
     </div>
@@ -396,50 +324,29 @@
             </div>
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table custom-table table-nowrap mb-0">
+                    <table class="table custom-table table-nowrap mb-0 table-staff-transferred">
                         <thead>
                             <tr>
-                                <th>#</th>
-                                <th>Name</th>
+                                <th rowspan="2">Name</th>
                                 <th colspan="2" style="text-align: center">Location</th>
                                 <th colspan="2" style="text-align: center">Position</th>
-                                <th>Effective Date</th>
+                                <th rowspan="2">Effective Date</th>
                               </tr>
                               <tr>
-                                <th></th>
-                                <th></th>
                                 <th>Previous</th>
                                 <th>Current</th>
                                 <th>Previous</th>
                                 <th>Current</th>
-                                <th></th>
                               </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>Global Technologies</td>
-                                <td>KPS</td>
-                                <td>HQ</td>
-                                <td>Senior Credit Officer</td>
-                                <td>Loan Recovery Officer</td>
-                                <td>01-02-23</td>
-                            </tr>
-                            <tr>
-                                <td>1</td>
-                                <td>Global Technologies</td>
-                                <td>KPS</td>
-                                <td>HQ</td>
-                                <td>Senior Credit Officer</td>
-                                <td>Loan Recovery Officer</td>
-                                <td>01-02-23</td>
-                            </tr>
+                            
                         </tbody>
                     </table>
                 </div>
             </div>
             <div class="card-footer">
-                <a href="payments">View all payments</a>
+                <a href="#">View all</a>
             </div>
         </div>
     </div>
@@ -470,62 +377,29 @@
             </div>
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-nowrap custom-table mb-0">
+                    <table class="table table-nowrap custom-table mb-0 table-training">
                         <thead>
                             <tr>
-                                <th>Invoice ID</th>
-                                <th>Client</th>
-                                <th>Due Date</th>
-                                <th>Total</th>
-                                <th>Status</th>
+                                <th>#</th>
+                                <th>Name Kh</th>
+                                <th>Nane En</th>
+                                <th>Gender</th>
+                                <th>Position</th>
+                                <th>Dept/Branch</th>
+                                <th>Name</th>
+                                <th>Start Date</th>
+                                <th>End Date</th>
+                                <th>Remark</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td><a
-                                        href="https://smarthr.dreamguystech.com/laravel/template/public/invoice-view">#INV-0001</a>
-                                </td>
-                                <td>
-                                    <h2><a href="#">Global Technologies</a></h2>
-                                </td>
-                                <td>11 Mar 2019</td>
-                                <td>$380</td>
-                                <td>
-                                    <span class="badge bg-inverse-warning">Partially Paid</span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><a
-                                        href="https://smarthr.dreamguystech.com/laravel/template/public/invoice-view">#INV-0002</a>
-                                </td>
-                                <td>
-                                    <h2><a href="#">Delta Infotech</a></h2>
-                                </td>
-                                <td>8 Feb 2019</td>
-                                <td>$500</td>
-                                <td>
-                                    <span class="badge bg-inverse-success">Paid</span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><a
-                                        href="https://smarthr.dreamguystech.com/laravel/template/public/invoice-view">#INV-0003</a>
-                                </td>
-                                <td>
-                                    <h2><a href="#">Cream Inc</a></h2>
-                                </td>
-                                <td>23 Jan 2019</td>
-                                <td>$60</td>
-                                <td>
-                                    <span class="badge bg-inverse-danger">Unpaid</span>
-                                </td>
-                            </tr>
+                            
                         </tbody>
                     </table>
                 </div>
             </div>
             <div class="card-footer">
-                <a href="https://smarthr.dreamguystech.com/laravel/template/public/invoices">View all invoices</a>
+                <a href="#">View all</a>
             </div>
         </div>
     </div>

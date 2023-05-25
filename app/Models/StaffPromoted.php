@@ -33,6 +33,9 @@ class StaffPromoted extends Model
     public function department(){
         return $this->belongsTo(Department::class,'depart_id');
     }
+    public function employee(){
+        return $this->belongsTo(User::class,'employee_id')->with("branch");
+    }
 
     public function getPostionPromotedAttribute(){
         return optional($this->position)->name_khmer;

@@ -7,6 +7,10 @@
         overflow: hidden;
         margin-right: 1px;
     }
+    .table-transfer, th, td {
+        border: 1px solid black;
+        border-collapse: collapse;
+    }
 </style>
 @section('content')
     <div class="content container-fluid">
@@ -169,11 +173,18 @@
                     branches: response.branches,
                     staffResignations: response.staffResignations,
                 }
+                let dataTable ={
+                    employees: response.data,
+                    transferred: response.transferred,
+                    staffPromotes: response.staffPromotes,
+                    dataTrainings: response.dataTrainings,
+                }
+                
                 showDashboard(datas);
                 dashbaordHRMS(dataHRMS);
                 dashboadAchieveBranch(dataAchieve);
                 dashboardStaffResign(dataStaffResign);
-                dataTableNewStaff(response.data);
+                dataTables(dataTable);
             }
         });
       
@@ -188,36 +199,121 @@
 
     });
 
-    function dataTableNewStaff(datas){
-        if (datas.length > 0) {
-            var tr = "";
-            let i = 0;
-            $(datas).each(function(e, row) {
+    function dataTables(datas){
+        if (datas.employees.length > 0) {
+            var trNewStaff = "";
+            var trResignStaff = "";
+            let ns = 0;
+            let rs = 0;
+            $(datas.employees).each(function(e, row) {
                 if (row.emp_status == "Probation") {
-                    i++;
-                    let createdAt = moment(row.created_at).format('MMM-D-YYYY')
-                    let date_of_commencement = moment(row.date_of_commencement).format('MMM-D-YYYY')
-                    tr += '<tr class="odd">' +
-                        '<td>'+ (row.id) + '</td>' +
-                        '<td class="number_employee_id">' + (row.number_employee) + '</a></td>' +
-                        '<td>' + (row.employee_name_kh) + '</td>' +
-                        '<td>' + (row.employee_name_en) + '</td>' +
-                        '<td>' + (row.gender == null ? "" : row.gender.name_english) + '</td>' +
-                        '<td>' + (row.position ? row.position.name_khmer : "") + '</td>' +
-                        '<td>' + (row.branch ? row.branch.branch_name_en: "") + '</td>' +
-                        '<td>' + (date_of_commencement) + '</td>' +
-                        '<td>' + (row.remark ? row.remark : "") + '</td>' +
-                        ' </tr>';
-                }
-                if (i == 3) {
-                    return false;
+                    ns++;
+                    if (ns <=5) {
+                        let date_of_commencement = moment(row.date_of_commencement).format('MMM-D-YYYY')
+                        trNewStaff += '<tr class="odd">' +
+                            '<td>'+ (row.id) + '</td>' +
+                            '<td class="number_employee_id">' + (row.number_employee) + '</a></td>' +
+                            '<td>' + (row.employee_name_kh) + '</td>' +
+                            '<td>' + (row.employee_name_en) + '</td>' +
+                            '<td>' + (row.gender == null ? "" : row.gender.name_english) + '</td>' +
+                            '<td>' + (row.position ? row.position.name_khmer : "") + '</td>' +
+                            '<td>' + (row.branch ? row.branch.branch_name_en: "") + '</td>' +
+                            '<td>' + (date_of_commencement) + '</td>' +
+                            '<td>' + (row.remark ? row.remark : "") + '</td>' +
+                            '</tr>';
+                    }
+                }else if (row.emp_status != "Probation" || row.emp_status != "1" || row.emp_status != "2") {
+                    rs++;
+                    if (rs <=5) {
+                        let date_of_commencement = moment(row.date_of_commencement).format('MMM-D-YYYY')
+                        trResignStaff += '<tr class="odd">' +
+                            '<td>' + (row.id) + '</td>' +
+                            '<td>' + (row.number_employee) + '</a></td>' +
+                            '<td>' + (row.employee_name_kh) + '</td>' +
+                            '<td>' + (row.employee_name_en) + '</td>' +
+                            '<td>' + (row.gender == null ? "" : row.gender.name_english) + '</td>' +
+                            '<td>' + (row.position ? row.position.name_khmer : "") + '</td>' +
+                            '<td>' + (row.branch ? row.branch.branch_name_en: "") + '</td>' +
+                            '<td>' + (date_of_commencement) + '</td>' +
+                            '<td>' + (row.remark ? row.remark : "") + '</td>' +
+                            '</tr>';
+                    }
                 }
             });
         } else {
-            var tr =
-                '<tr><td colspan=9 align="center">ពុំមានទិន្នន័យសម្រាប់បង្ហាញ</td></tr>';
+            var trNewStaff = '<tr><td colspan=9 align="center">ពុំមានទិន្នន័យសម្រាប់បង្ហាញ</td></tr>';
+            var trResignStaff = '<tr><td colspan=9 align="center">ពុំមានទិន្នន័យសម្រាប់បង្ហាញ</td></tr>';
+        };
+       
+        if (datas.staffPromotes.length > 0) {
+            var trSP = "";
+            $(datas.staffPromotes).each(function(e, row) {
+                let date = moment(row.date).format('MMM-D-YYYY')
+                trSP += '<tr class="odd">' +
+                    '<td>'+ (row.id) + '</td>' +
+                    '<td>' + (row.employee.employee_name_en) + '</a></td>' +
+                    '<td>' +(row.employee.branch.abbreviations)+ '</td>' +
+                    '<td>' + (row.posit_id) + '</td>' +
+                    '<td>' + (row.position_promoted_to) + '</td>' +
+                    '<td>' + (date) + '</td>' +
+                    '</tr>';
+            });
+        }else{
+            var trSP = '<tr><td colspan=6 align="center">ពុំមានទិន្នន័យសម្រាប់បង្ហាញ</td></tr>';
         }
-        $(".table-new-staff tbody").html(tr);
+
+        if (datas.transferred.length > 0) {
+            var trST = "";
+            let branch_name = "";
+            let position_name = "";
+            $(datas.transferred).each(function(e, row) {
+                let date = moment(row.date).format('MMM-D-YYYY')
+                trST += '<tr class="odd">' +
+                    '<td>' + (row.employee.employee_name_en) + '</a></td>' +
+                    '<td>' +(e == 0 ? row.employee.branch.abbreviations: branch_name)+ '</td>' +
+                    '<td>' +(row.branch.abbreviations)+ '</td>' +
+                    '<td>' +(e == 0 ? row.employee.position.name_khmer : position_name)+ '</td>' +
+                    '<td>' +(row.position.name_khmer)+ '</td>' +
+                    '<td>' + (date) + '</td>' +
+                    '</tr>';
+                branch_name = row.branch.abbreviations;
+                position_name = row.position.name_khmer;
+            });
+        }else{
+            var trST = '<tr><td colspan=6 align="center">ពុំមានទិន្នន័យសម្រាប់បង្ហាញ</td></tr>';
+        }
+
+        if (datas.dataTrainings.length > 0) {
+            var trT = "";
+            $(datas.dataTrainings).each(function(e, row) {
+              
+                let start_date = moment(row.start_date).format('MMM-D-YYYY')
+                let ent_date = moment(row.ent_date).format('MMM-D-YYYY')
+                row.employees.map((em)=>{
+                    console.log(em[0]);
+                    trT += '<tr class="odd">' +
+                        '<td>' + (em[0].id) + '</td>' +
+                        '<td>' + (em[0].employee_name_kh) + '</td>' +
+                        '<td>' + (em[0].employee_name_en) + '</td>' +
+                        '<td>' + (em[0].gender ? em[0].gender.name_english: "") + '</td>' +
+                        '<td>' +(em[0].position ? em[0].position.name_khmer: "")+ '</td>' +
+                        '<td>' +(em[0].branch ? em[0].branch.abbreviations: "")+ '</td>' +
+                        '<td>' +(row.training_type.type_name)+ '</td>' +
+                        '<td>' + (start_date) + '</td>' +
+                        '<td>' + (ent_date) + '</td>' +
+                        '<td>' + (row.description) + '</td>' +
+                        '</tr>';
+                });
+            });
+        }else{
+            var trT = '<tr><td colspan=10 align="center">ពុំមានទិន្នន័យសម្រាប់បង្ហាញ</td></tr>';
+        }
+
+        $(".table-new-staff tbody").html(trNewStaff);
+        $(".table-resigned-staff tbody").html(trResignStaff);
+        $(".table-staff-promote tbody").html(trSP);
+        $(".table-staff-transferred tbody").html(trST);
+        $(".table-training tbody").html(trT);
     }
 
     function showDashboard(data) {
@@ -592,7 +688,6 @@
                 }
             })
         }
-
         branches.map((br) => {
             if (br.abbreviations != "HQ") {
                 let totalValueAchieve = 0;
@@ -611,7 +706,6 @@
                         }
                     })
                 }
-                
                 labelAchive.push(br.abbreviations);
                 dataValueAchive.push(totalValueAchieve);
                 dataValuePlanAchive.push(totalValuePlanAchieveBybranch);
@@ -627,10 +721,18 @@
 
         let dataAchRed = [];
         dataAchive.datasets[0].data.map((da, index) => {
-            dataAchRed.push(
-                Math.round((dataAchive.datasets[1].data[index] / da) * 100)
-            )
+            if (da == 0) {
+                dataAchRed.push(
+                    0
+                )
+            }else{
+                dataAchRed.push(
+                    Math.round((dataAchive.datasets[1].data[index] / da) * 100)
+                )
+            }
+           
         });
+       
         dataAchive.datasets.push({
             label: '% Achivement',
             data: dataAchRed,
