@@ -31,6 +31,7 @@ use App\Http\Controllers\Admins\EmployeePayrollController;
 use App\Http\Controllers\Admins\EmployeeProfileController;
 use App\Http\Controllers\Admins\AttendanceEmployeeController;
 use App\Http\Controllers\Admins\RecruitmentPlanController;
+use App\Http\Controllers\Admins\ReportsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -164,6 +165,14 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('/reports/payroll-report', [PayrollReportController::class,'index']);
     Route::get('/reports/motor-rentel-report', [PayrollReportController::class,'motorrentel']);
     Route::post('/reports/motor-rentel-report', [PayrollReportController::class,'motorrentel']);
+    Route::get('/reports/new_staff-report', [ReportsController::class,'newStaff']);
+    Route::post('/reports/new_staff-report', [ReportsController::class,'newStaff']);
+    Route::get('/reports/staff-resigned-report', [ReportsController::class,'staffResigned']);
+    Route::post('/reports/staff-resigned-report', [ReportsController::class,'staffResigned']);
+    Route::get('/reports/promoted-staff-report', [ReportsController::class,'staffPromoted']);
+    Route::post('/reports/promoted-staff-report', [ReportsController::class,'staffPromoted']);
+    Route::get('/reports/transferred-staff-report', [ReportsController::class,'staffTransferred']);
+    Route::post('/reports/transferred-staff-report', [ReportsController::class,'staffTransferred']);
     
     // test export excel
     Route::get('motor-rentel/export',[PayrollReportController::class,'export']);

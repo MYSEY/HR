@@ -36,8 +36,15 @@ class Transferred extends Model
         return $this->belongsTo(User::class ,'employee_id')->with("branch")->with("position");
     }
 
-    public function getBranchNameAttribute(){
-        return optional($this->branch)->branch_name_kh;
+    public function getTransferredBranchAttribute(){
+        return optional($this->branch);
+    }
+    public function getTransferredPositionAttribute(){
+        return optional($this->position);
+    }
+
+    public function getTransferEmpAttribute(){
+        return optional($this->employee);
     }
     public function getTransterDateAttribute(){
         if ($this->date) {

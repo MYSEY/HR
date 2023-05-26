@@ -222,10 +222,11 @@
                             '<td>' + (row.remark ? row.remark : "") + '</td>' +
                             '</tr>';
                     }
-                }else if (row.emp_status != "Probation" || row.emp_status != "1" || row.emp_status != "2") {
+                }else if (row.emp_status != "Probation" && row.emp_status != "1" && row.emp_status != "2") {
                     rs++;
                     if (rs <=5) {
                         let date_of_commencement = moment(row.date_of_commencement).format('MMM-D-YYYY')
+                        let resign_date = moment(row.resign_date).format('MMM-D-YYYY')
                         trResignStaff += '<tr class="odd">' +
                             '<td>' + (row.id) + '</td>' +
                             '<td>' + (row.number_employee) + '</a></td>' +
@@ -235,6 +236,7 @@
                             '<td>' + (row.position ? row.position.name_khmer : "") + '</td>' +
                             '<td>' + (row.branch ? row.branch.branch_name_en: "") + '</td>' +
                             '<td>' + (date_of_commencement) + '</td>' +
+                            '<td>' + (resign_date) + '</td>' +
                             '<td>' + (row.remark ? row.remark : "") + '</td>' +
                             '</tr>';
                     }

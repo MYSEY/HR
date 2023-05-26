@@ -123,6 +123,12 @@ function menu(){
                     'table'=>2,
                     'permission'=>1
                 ],
+                [
+                    'value'=>'Training Type',
+                    'url'=>"training-type/list",
+                    'table'=>2,
+                    'permission'=>1
+                ],
             ]
         ],
         [
@@ -147,6 +153,30 @@ function menu(){
                 [
                     'value'=>'Motor Rental Report',
                     'url'=>"reports/motor-rentel-report",
+                    'table'=>2,
+                    'permission'=>1
+                ],
+                [
+                    'value'=>'New Staff Report',
+                    'url'=>"reports/new_staff-report",
+                    'table'=>2,
+                    'permission'=>1
+                ],
+                [
+                    'value'=>'Staff Resigned Report',
+                    'url'=>"reports/staff-resigned-report",
+                    'table'=>2,
+                    'permission'=>1
+                ],
+                [
+                    'value'=>'Promoted Staff Report',
+                    'url'=>"reports/promoted-staff-report",
+                    'table'=>2,
+                    'permission'=>1
+                ],
+                [
+                    'value'=>'Transferred Staff Report',
+                    'url'=>"reports/transferred-staff-report",
                     'table'=>2,
                     'permission'=>1
                 ],

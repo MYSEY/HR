@@ -59,26 +59,11 @@ class DashboadController extends Controller
         $data = Training::with('trainingType')->limit(5)->get();
         $dataTrainings = [];
         foreach ($data as $key => $item) {
-            // $trainers = [];
-            // foreach ($item->trainer_id as $key => $trai) {
-            //     $dataTrainer = Trainer::where('id', $trai)->first();
-            //     $trainers[] = [
-            //         "name_kh" => $dataTrainer->name_kh,
-            //         "name_en" => $dataTrainer->name_en,
-            //         "email" =>  $dataTrainer->email,
-            //         "role" =>  $dataTrainer->role,
-            //         "number_phone" => $dataTrainer->number_phone,
-            //         "description" => $dataTrainer->description,
-            //         "status" => $dataTrainer->status
-            //     ];
-
-            // }
             $employees = [];
             foreach ($item->employee_id as $key => $empl) {
                 $em =  User::where('id', $empl)->with("gender")->with("branch")->with("position")->limit(5)->get();
                 $employees[] = $em;
             }
-            // $item["trainers"] = $trainers;
             $item["employees"] = $employees;
             $dataTrainings[] = $item;
         }

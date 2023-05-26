@@ -251,7 +251,7 @@
                 </div>
             </div>
             <div class="card-footer">
-                <a href="#">View all</a>
+                <a href="{{ url('/reports/new_staff-report') }}">View all</a>
             </div>
         </div>
     </div>
@@ -273,6 +273,7 @@
                                 <th>Position</th>
                                 <th>Dept/ Branch</th>
                                 <th>Join Date</th>
+                                <th>Leave of absence</th>
                                 <th>Rmark</th>
                             </tr>
                         </thead>
@@ -283,7 +284,7 @@
                 </div>
             </div>
             <div class="card-footer">
-                <a href="#">View all</a>
+                <a href="{{ url('/reports/staff-resigned-report') }}">View all</a>
             </div>
         </div>
     </div>
@@ -313,7 +314,7 @@
                 </div>
             </div>
             <div class="card-footer">
-                <a href="#">View all</a>
+                <a href="{{ url('/reports/promoted-staff-report') }}">View all</a>
             </div>
         </div>
     </div>
@@ -346,7 +347,7 @@
                 </div>
             </div>
             <div class="card-footer">
-                <a href="#">View all</a>
+                <a href="{{ url('/reports/transferred-staff-report') }}">View all</a>
             </div>
         </div>
     </div>

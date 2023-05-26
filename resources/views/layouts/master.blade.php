@@ -157,10 +157,10 @@
         </div>
        
         <div class="sidebar" id="sidebar">
-            <div class="slimScrollDiv" style="position: relative; overflow: hidden; width: 100%; height: 346px;">
-                <div class="sidebar-inner slimscroll" style="overflow: hidden; width: 100%; height: 346px;">
+            <div class="slimScrollDiv" style="position: relative; overflow:hidden; width: 100%; height: 346px;">
+                <div class="sidebar-inner slimscroll" style="overflow: auto; width: 100%; height: 346px;">
                     <div id="sidebar-menu" class="sidebar-menu">
-                        <ul class="sidebar-vertical">
+                        <ul class="sidebar-vertical" >
                             @foreach (menu() as $key=>$menu)
                                 @if (isset($menu['child']))
                                     @if (RolePermission($menu['table'],$menu['permission']))
@@ -207,16 +207,16 @@
                 <div class="slimScrollRail" style="width: 7px; height: 100%; position: absolute; top: 0px; display: none; border-radius: 7px; background: rgb(51, 51, 51); opacity: 0.2; z-index: 90; right: 1px;"></div>
             </div>
         </div>
-    </div>
-
-
-    <div class="page-wrapper" style="min-height: 406px;">
-        <div class="content container-fluid">
-            <div class="content-wrapper">
-                @yield('content')
+        <div class="page-wrapper" style="min-height: 406px;">
+            <div class="content container-fluid">
+                <div class="content-wrapper">
+                    @yield('content')
+                </div>
             </div>
         </div>
     </div>
+
+   
 
     <script src="{{asset('/admin/js/jquery.min.js.download')}}"></script>
 
