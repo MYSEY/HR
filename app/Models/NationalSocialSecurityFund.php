@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\User;
+use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class NationalSocialSecurityFund extends Model
 {
@@ -25,4 +27,10 @@ class NationalSocialSecurityFund extends Model
         'created_by',
         'updated_by',
     ];
+
+    //RelationShip
+    public function users()
+    {
+        return $this->belongsTo(User::class ,'employee_id');
+    }
 }

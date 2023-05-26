@@ -60,7 +60,7 @@
                                 <select class="select form-control @error('position_id') is-invalid @enderror" name="position_id" id="position_id">
                                     <option selected disabled> --Select --</option>
                                     @foreach ($position as $positions )
-                                    <option value="{{ $positions->id }}">{{ $positions->name_khmer }}</option>
+                                    <option value="{{ $positions->id }}">{{ $positions->name_english }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -89,7 +89,7 @@
                                 <select class="select form-control" id="department_id" name="department_id" value="{{old('department_id')}}">
                                     <option value="">Please select department</option>
                                     @foreach ($department as $item)
-                                    <option value="{{$item->id}}">{{$item->name_khmer}}</option>
+                                    <option value="{{$item->id}}">{{$item->name_english}}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -101,7 +101,7 @@
                                 <select class="select form-control" id="branch_id" name="branch_id" value="{{old('branch_id')}}">
                                     <option value="">Please select branch</option>
                                     @foreach ($branch as $item)
-                                    <option value="{{$item->id}}">{{$item->branch_name_kh}}</option>
+                                    <option value="{{$item->id}}">{{$item->branch_name_en}}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -262,7 +262,7 @@
                                 <select class="select form-control" id="identity_type" name="identity_type" value="{{old('identity_type')}}">
                                     <option value="">select identity type</option>
                                     @foreach ($optionIdentityType as $item)
-                                    <option value="{{$item->id}}">{{$item->name_khmer}}</option>
+                                    <option value="{{$item->id}}">{{$item->name_english}}</option>
                                     @endforeach
                                 </select>
                             </div>

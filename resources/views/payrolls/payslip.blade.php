@@ -30,7 +30,7 @@
             <div class="card">
                 <div class="card-body">
                     <h4 class="payslip-title">EMPLOYEE PAYSLIP</h4>
-                    <h5 class="payslip-title" style="color: red">Monthly Payroll : {{Carbon\Carbon::parse($payslip->payment_date)->format('M Y')}}</h5>
+                    <h5 class="payslip-title" style="color: red">Monthly Payroll : {{Carbon\Carbon::now()->format('M Y')}}</h5>
                     <div class="row">
                         <div class="col-sm-6 m-b-20">
                             <img src="{{ asset('/admin/img/logo/commalogo1.png') }}" class="inv-logo" alt="">
@@ -39,24 +39,25 @@
                                 <li>289 Samdech Pen Nuth (St. 289), Phnom Penh</li>
                             </ul>
                         </div>
-                        <div class="col-sm-6 m-b-20">
+                        {{-- <div class="col-sm-6 m-b-20">
                             <div class="invoice-details">
                                 <h3 class="text-uppercase">Payslip #49029</h3>
                                 <ul class="list-unstyled">
-                                    <li>Salary Month: <span>March, 2019</span></li>
+                                    <li>Salary Month: <span>{{Carbon\Carbon::now()->format('M Y')}}</span></li>
                                 </ul>
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
                     <div class="row">
                         <div class="col-lg-12 m-b-20">
                             <ul class="list-unstyled">
-                                <li>Employee Name  : <strong>{{$payslip->users == null ? "" : $payslip->users->employee_name_en}}</strong></li>
+                                <li>Employee ID : {{$payslip->users == null ? "" : $payslip->users->number_employee}}</li>
+                                <li>Employee Name  : {{$payslip->users == null ? "" : $payslip->users->employee_name_en}}</li>
                                 <li>Departement : {{$payslip->users == null ? "" : $payslip->users->EmployeeDepartment}}</li>
                                 <li>Position : {{$payslip->users == null ? "" : $payslip->users->EmployeePosition}}</li>
                                 <li>Branch : {{$payslip->users == null ? "" : $payslip->users->EmployeeBranch}}</li>
-                                <li>Employee ID : {{$payslip->users == null ? "" : $payslip->users->number_employee}}</li>
-                                <li>Joining Date : {{$payslip->users == null ? "" : $payslip->users->joinOfDate}}</li>
+                                <li><span>Joining Date</span> : {{$payslip->users == null ? "" : $payslip->users->joinOfDate}}</li>
+                                <li><span>Basic Rate</span> : {{$payslip->total_rate}}%</li>
                             </ul>
                         </div>
                     </div>
@@ -67,7 +68,7 @@
                                 <table class="table table-bordered">
                                     <tbody>
                                         <tr>
-                                            <td>Gross Salary <span class="float-end">$6500</span></td>
+                                            <td>Gross Salary <span class="float-end">${{$payslip->total_gross_salary}}</span></td>
                                         </tr>
                                         <tr>
                                             <td>Increasment <span class="float-end">$55</span></td>
@@ -91,10 +92,10 @@
                                             <td>Leaves  (+/-) <span class="float-end">$55</span></td>
                                         </tr>
                                         <tr>
-                                            <td>Phone <span class="float-end">$55</span></td>
+                                            <td>Phone <span class="float-end">${{$payslip->phone_allowance}}</span></td>
                                         </tr>
                                         <tr>
-                                            <td>Other Allowence <span class="float-end">$55</span></td>
+                                            <td>Other Allowence <span class="float-end">${{$payslip->other_allowances}}</span></td>
                                         </tr>
                                         <tr>
                                             <td><strong>Total Earnings</strong> <span class="float-end"><strong>$55</strong></span></td>

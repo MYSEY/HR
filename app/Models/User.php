@@ -218,7 +218,7 @@ class User extends Authenticatable
     }
 
     public function getEmployeePositionAttribute(){
-        return optional($this->position)->name_khmer;
+        return optional($this->position)->name_english;
     }
     public function getEmployeeDepartmentAttribute(){
         return optional($this->department)->name_khmer;
@@ -243,7 +243,10 @@ class User extends Authenticatable
     }
     
     public function getEmployeeBranchAttribute(){
-        return optional($this->branch)->branch_name_kh;
+        return optional($this->branch)->branch_name_en;
+    }
+    public function getEmployeeBranchAbbreviationsAttribute(){
+        return optional($this->branch)->abbreviations;
     }
     public function getjoinOfDateAttribute(){
         if ($this->date_of_commencement) {

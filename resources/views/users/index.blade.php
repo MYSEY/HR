@@ -407,7 +407,7 @@
                             $.each(response.position, function(i, item) {
                                 $('#e_position').append($('<option>', {
                                     value: item.id,
-                                    text: item.name_khmer,
+                                    text: item.name_english,
                                     selected: item.id == response.success.position_id
                                 }));
                             });
@@ -418,7 +418,7 @@
                             $.each(response.department, function(i, item) {
                                 $('#e_department').append($('<option>', {
                                     value: item.id,
-                                    text: item.name_khmer,
+                                    text: item.name_english,
                                     selected: item.id == response.success.department_id
                                 }));
                             });
@@ -428,7 +428,7 @@
                             $.each(response.optionGender, function(i, item) {
                                 $('#e_gender').append($('<option>', {
                                     value: item.id,
-                                    text: item.name_khmer,
+                                    text: item.name_english,
                                     selected: item.id == response.success.gender
                                 }));
                             });
@@ -438,7 +438,7 @@
                             $.each(response.branch, function(i, item) {
                                 $('#e_branch_id').append($('<option>', {
                                     value: item.id,
-                                    text: item.branch_name_kh,
+                                    text: item.branch_name_en,
                                     selected: item.id == response.success.branch_id
                                 }));
                             });
@@ -447,8 +447,8 @@
                         if (response.optionIdentityType != '') {
                             $.each(response.optionIdentityType, function(i, item) {
                                 $('#e_identity_type').append($('<option>', {
-                                    value: item.name_khmer,
-                                    text: item.name_khmer,
+                                    value: item.name_english,
+                                    text: item.name_english,
                                     selected: item.id == response.success.identity_type
                                 }));
                             });
