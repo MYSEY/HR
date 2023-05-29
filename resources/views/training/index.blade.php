@@ -136,7 +136,7 @@
                                                             </li>
                                                         </ul>
                                                     </td>
-                                                    <td class="sorting_1">{{$item->start_date}} - {{$item->end_date}}</td>
+                                                    <td class="sorting_1">{{ \Carbon\Carbon::parse($item->start_date)->format('d-M-Y') ?? '' }} - {{ \Carbon\Carbon::parse($item->end_date)->format('d-M-Y') ?? '' }}</td>
                                                     <td>{{$item->description}}</td>
                                                     <td>${{$item->cost_price ? $item->cost_price : 0}}</td>
                                                     <td>
@@ -167,6 +167,7 @@
                                                         <div class="dropdown dropdown-action">
                                                             <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
                                                             <div class="dropdown-menu dropdown-menu-right">
+                                                                <a class="dropdown-item detail" href="{{ url('/training/detail', $item->id) }}"><i class="fa fa-eye m-r-5"></i> View Details</a>
                                                                 <a class="dropdown-item update" data-toggle="modal" data-id="{{$item->id}}" data-target="#edit_training"><i class="fa fa-pencil m-r-5"></i> Edit</a>
                                                                 <a class="dropdown-item delete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_training"><i class="fa fa-trash-o m-r-5"></i> Delete</a>
                                                             </div>

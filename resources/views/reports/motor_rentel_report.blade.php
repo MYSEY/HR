@@ -192,9 +192,9 @@
                                                 <td>{{ $item->MotorEmployee->EmployeeBranch }}</td>
                                                 <td>{{ $item->MotorEmployee->EmployeePosition }}</td>
                                                 <td>{{ $item->MotorEmployee->EmployeeDepartment }}</td>
-                                                <td>{{ \Carbon\Carbon::parse($item->created_at)->format('M-d-Y') ?? '' }}</td>
-                                                <td class="start_date">{{ \Carbon\Carbon::parse($item->start_date)->format('M-d-Y') ?? '' }}</td>
-                                                <td class="end_date">{{  \Carbon\Carbon::parse($item->end_date)->format('M-d-Y') ?? '' }}</td>
+                                                <td>{{ \Carbon\Carbon::parse($item->created_at)->format('d-M-Y') ?? '' }}</td>
+                                                <td class="start_date">{{ \Carbon\Carbon::parse($item->start_date)->format('d-M-Y') ?? '' }}</td>
+                                                <td class="end_date">{{  \Carbon\Carbon::parse($item->end_date)->format('d-M-Y') ?? '' }}</td>
                                                 <td class="product_year">{{ $item->product_year }}</td>
                                                 <td class="expired_year">{{ $item->expired_year }}</td>
                                                 <td class="shelt_life">{{ $item->shelt_life }}</td>
@@ -270,9 +270,9 @@
                 if (rows.length > 0) {
                     var tr = "";
                     $(rows).each(function(e, row) {
-                        let created_at = moment(row.created_at).format('MMM-D-YYYY')
-                        let start_date = moment(row.start_date).format('MMM-D-YYYY')
-                        let end_date = moment(row.end_date).format('MMM-D-YYYY')
+                        let created_at = moment(row.created_at).format('D-MMM-YYYY')
+                        let start_date = moment(row.start_date).format('D-MMM-YYYY')
+                        let end_date = moment(row.end_date).format('D-MMM-YYYY')
                         tr += '<tr class="odd">'+
                                     '<td class="ids">'+(row.id)+'</td>'+
                                     '<td class="number_employee_id"><a href="{{url("motor-rentel/detail")}}/'+row.id+'">' + (row.number_employee) + '</a></td>'+

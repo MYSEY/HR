@@ -106,7 +106,7 @@
                                                 <td>{{ $item->TransferredBranch->abbreviations }}</td>
                                                 <td>{{ $key == 0 ? $item->TransferEmp->position->name_english : $position_name}}</td>
                                                 <td>{{ $item->TransferredPosition->name_english}}</td>
-                                                <td>{{ \Carbon\Carbon::parse($item->date)->format('M-d-Y') ?? '' }}</td>
+                                                <td>{{ \Carbon\Carbon::parse($item->date)->format('d-M-Y') ?? '' }}</td>
                                             </tr>
                                             @php
                                                 $branch_name = $item->TransferredBranch->abbreviations;
@@ -141,7 +141,7 @@
                     let branch_name = "";
                     let position_name = "";
                     $(rows).each(function(e, row) {
-                        let date = moment(row.date).format('MMM-D-YYYY');
+                        let date = moment(row.date).format('D-MMM-YYYY');
                         tr += '<tr class="odd">'+
                                 '<td>' + (row.employee.employee_name_en) + '</a></td>' +
                                 '<td>' +(e == 0 ? row.employee.branch.abbreviations: branch_name)+ '</td>' +

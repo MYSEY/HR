@@ -42,7 +42,7 @@
                                                     <td class="amount_usd">{{$item->amount_usd}}</td>
                                                     <td class="amount_riel">{{$item->amount_riel}}</td>
                                                     <td class="description">{{$item->description}}</td>
-                                                    <td>{{$item->updated_at}}</td>
+                                                    <td>{{ \Carbon\Carbon::parse($item->updated_at)->format('d-M-Y') ?? '' }}</td>
                                                     <td class="text-end">
                                                         <div class="dropdown dropdown-action">
                                                             <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>

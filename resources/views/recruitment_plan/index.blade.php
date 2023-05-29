@@ -46,7 +46,7 @@
                                                     <td >{{$item->plan_year}}</td>
                                                     <td >{{$item->description}}</td>
                                                     <td >{{$item->total_staff}}</td>
-                                                    <td>{{ \Carbon\Carbon::parse($item->start_date)->format('M-d-Y') ?? '' }}</td>
+                                                    <td>{{ \Carbon\Carbon::parse($item->start_date)->format('d-M-Y') ?? '' }}</td>
                                                     <td class="text-end">
                                                         <div class="dropdown dropdown-action">
                                                             <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>

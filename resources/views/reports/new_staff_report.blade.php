@@ -135,7 +135,7 @@
                                                 <td>{{ $item->EmployeeGender }}</td>
                                                 <td>{{ $item->position ? $item->position->name_khmer : "" }}</td>
                                                 <td>{{ $item->branch ? $item->branch->branch_name_en: "" }}</td>
-                                                <td>{{ \Carbon\Carbon::parse($item->date_of_commencement)->format('M-d-Y') ?? '' }}</td>
+                                                <td>{{ \Carbon\Carbon::parse($item->date_of_commencement)->format('d-M-Y') ?? '' }}</td>
                                                 <td>{{ $item->remark }}</td>
                                                 {{-- <td>
                                                     <div class="dropdown dropdown-action">
@@ -194,7 +194,7 @@
                 if (rows.length > 0) {
                     var tr = "";
                     $(rows).each(function(e, row) {
-                        let date_of_commencement = moment(row.date_of_commencement).format('MMM-D-YYYY');
+                        let date_of_commencement = moment(row.date_of_commencement).format('D-MMM-YYYY');
                         tr += '<tr class="odd">'+
                                     '<td class="ids">'+(row.id)+'</td>'+
                                     '<td><a href="#">' + (row.number_employee) + '</a></td>'+

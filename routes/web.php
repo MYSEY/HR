@@ -139,6 +139,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('/training/edit', [TrainingController::class,'edit']);
     Route::post('/training/delete', [TrainingController::class,'destroy']);
     Route::post('/training/status', [TrainingController::class,'processing']);
+    Route::get('/training/detail/{id}', [TrainingController::class,'detail']);
 
     // route trainer
     Route::get('/trainer/list', [TrainerController::class,'index']);

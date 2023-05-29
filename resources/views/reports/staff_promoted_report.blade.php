@@ -117,7 +117,7 @@
                                                 <td>{{ $item->employee->EmployeeBranchAbbreviations }}</td>
                                                 <td>{{ $item->posit_id }}</td>
                                                 <td>{{ $item->position_promoted_to}}</td>
-                                                <td>{{ \Carbon\Carbon::parse($item->date)->format('M-d-Y') ?? '' }}</td>
+                                                <td>{{ \Carbon\Carbon::parse($item->date)->format('d-M-Y') ?? '' }}</td>
                                             </tr>
                                         @endforeach
                                     @endif
@@ -147,7 +147,7 @@
                 if (rows.length > 0) {
                     var tr = "";
                     $(rows).each(function(e, row) {
-                        let date = moment(row.date).format('MMM-D-YYYY');
+                        let date = moment(row.date).format('d-MMM-YYYY');
                         tr += '<tr class="odd">'+
                                     '<td class="ids">'+(row.id)+'</td>'+
                                     '<td><a href="#">' + (row.employee.employee_name_en) + '</a></td>'+

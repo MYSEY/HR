@@ -209,7 +209,7 @@
                 if (row.emp_status == "Probation") {
                     ns++;
                     if (ns <=5) {
-                        let date_of_commencement = moment(row.date_of_commencement).format('MMM-D-YYYY')
+                        let date_of_commencement = moment(row.date_of_commencement).format('D-MMM-YYYY')
                         trNewStaff += '<tr class="odd">' +
                             '<td>'+ (row.id) + '</td>' +
                             '<td class="number_employee_id">' + (row.number_employee) + '</a></td>' +
@@ -225,8 +225,8 @@
                 }else if (row.emp_status != "Probation" && row.emp_status != "1" && row.emp_status != "2") {
                     rs++;
                     if (rs <=5) {
-                        let date_of_commencement = moment(row.date_of_commencement).format('MMM-D-YYYY')
-                        let resign_date = moment(row.resign_date).format('MMM-D-YYYY')
+                        let date_of_commencement = moment(row.date_of_commencement).format('D-MMM-YYYY')
+                        let resign_date = moment(row.resign_date).format('D-MMM-YYYY')
                         trResignStaff += '<tr class="odd">' +
                             '<td>' + (row.id) + '</td>' +
                             '<td>' + (row.number_employee) + '</a></td>' +
@@ -250,7 +250,7 @@
         if (datas.staffPromotes.length > 0) {
             var trSP = "";
             $(datas.staffPromotes).each(function(e, row) {
-                let date = moment(row.date).format('MMM-D-YYYY')
+                let date = moment(row.date).format('D-MMM-YYYY')
                 trSP += '<tr class="odd">' +
                     '<td>'+ (row.id) + '</td>' +
                     '<td>' + (row.employee.employee_name_en) + '</a></td>' +
@@ -269,7 +269,7 @@
             let branch_name = "";
             let position_name = "";
             $(datas.transferred).each(function(e, row) {
-                let date = moment(row.date).format('MMM-D-YYYY')
+                let date = moment(row.date).format('D-MMM-YYYY')
                 trST += '<tr class="odd">' +
                     '<td>' + (row.employee.employee_name_en) + '</a></td>' +
                     '<td>' +(e == 0 ? row.employee.branch.abbreviations: branch_name)+ '</td>' +
@@ -289,8 +289,8 @@
             var trT = "";
             $(datas.dataTrainings).each(function(e, row) {
               
-                let start_date = moment(row.start_date).format('MMM-D-YYYY')
-                let ent_date = moment(row.ent_date).format('MMM-D-YYYY')
+                let start_date = moment(row.start_date).format('D-MMM-YYYY')
+                let ent_date = moment(row.ent_date).format('D-MMM-YYYY')
                 row.employees.map((em)=>{
                     console.log(em[0]);
                     trT += '<tr class="odd">' +

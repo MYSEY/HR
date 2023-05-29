@@ -58,6 +58,13 @@ class TrainingController extends Controller
         
         return view('training.index', compact('data', 'trainer', 'trainingType', 'employee', 'dataTrainings'));
     }
+    public function detail(Request $request)
+    {
+        $training = Training::with('trainingType')->where("id", $request->id)->first();
+        $trainer = Trainer::whereIn('id', $training->trainer_id)->get();
+        $employees = User::whereIn("id", $training->employee_id)->get();
+        return view('training.training_detail', compact('training','trainer','employees'));
+    }
 
     /**
      * Show the form for creating a new resource.

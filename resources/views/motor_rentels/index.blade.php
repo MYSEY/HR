@@ -134,7 +134,7 @@
                                                 <td>{{ $item->MotorEmployee->EmployeeGender }}</td>
                                                 <td>{{ $item->MotorEmployee->EmployeePosition }}</td>
                                                 <td>{{ $item->MotorEmployee->EmployeeDepartment }}</td>
-                                                <td>{{ \Carbon\Carbon::parse($item->created_at)->format('M-d-Y') ?? '' }}
+                                                <td>{{ \Carbon\Carbon::parse($item->created_at)->format('d-M-Y') ?? '' }}
                                                 </td>
                                                 <td>{{ $item->price_motor_rentel - ($item->price_motor_rentel * $item->tax_rate) / 100 }}
                                                 </td>
