@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Bank;
 use App\Models\Role;
 use App\Models\Option;
 use App\Helpers\Helper;
@@ -160,7 +161,9 @@ class User extends Authenticatable
         return $this->belongsTo(Option::class,'gender','id');
     }
 
-
+    public function banks(){
+        return $this->belongsTo(Bank::class,'bank_name','id');
+    }
 
 
     public function getMediumProfileAttribute()

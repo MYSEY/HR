@@ -92,18 +92,6 @@
                                 <h3 class="card-title">Personal Informations </a></h3>
                                 <ul class="personal-info">
                                     <li>
-                                        <div class="title">Bank Name</div>
-                                        <label class="text">{{ $data->bank_name }}</label>
-                                    </li>
-                                    <li>
-                                        <div class="title">Bank Account No.</div>
-                                        <label class="text">{{ $data->account_number }}</label>
-                                    </li>
-                                    <li>
-                                        <div class="title">Account Name</div>
-                                        <label class="text">{{ $data->account_name }}</label>
-                                    </li>
-                                    <li>
                                         <div class="title">Identity Type</div>
                                         <label class="text">{{ $data->EmployeeIdentityType }}</label>
                                     </li>
@@ -132,16 +120,12 @@
                                         <label class="text">{{ $data->nationality }}</label>
                                     </li>
                                     <li>
-                                        <div class="title">No. of children</div>
-                                        <label class="text">{{ $data->number_of_children }}</label>
-                                    </li>
-                                    <li>
                                         <div class="title">Marital status</div>
                                         <label class="text">{{ $data->marital_status }}</label>
                                     </li>
                                     <li>
                                         <div class="title">Permanent Addtress</div>
-                                        <label style="display: block;overflow: hidden;color: #888888;">{{ $data->FullPermanentAddress }}</label>
+                                        <label style="display: block;overflow: hidden;color: #888888;">{{ $data->FullPermanentAddress ?? "" }}</label>
                                     </li>
                                 </ul>
                             </div>
@@ -175,10 +159,10 @@
                     </div>
                 </div>
                 <div id="emergency_contact_modal" class="modal custom-modal fade" style="display: none;" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title">Personal Information</h5>
+                                <h5 class="modal-title">Emergency Contact</h5>
                                 <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">×</span>
                                 </button>
@@ -187,13 +171,15 @@
                                 <form action="{{url('employee/contact')}}" method="POST">
                                     @csrf
                                     <div class="row">
-                                        <div class="col-md-6">
+                                        <div class="col-md-12">
                                             <div class="form-group">
                                                 <label>Name <span class="text-danger">*</span></label>
                                                 <input type="text" class="form-control" id="name" name="name" required>
                                             </div>
                                         </div>
-                                        <div class="col-md-6">
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
                                             <div class="form-group">
                                                 <label>Relationship <span class="text-danger">*</span></label>
                                                 <select class="form-control select" id="relationship" name="relationship" value="">
@@ -204,13 +190,17 @@
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="col-md-6">
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
                                             <div class="form-group">
                                                 <label>Phone <span class="text-danger">*</span></label>
                                                 <input class="form-control" type="text" id="phone" name="phone" required>
                                             </div>
                                         </div>
-                                        <div class="col-md-6">
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
                                             <div class="form-group">
                                                 <label>Phone 2</label>
                                                 <input class="form-control" type="text" id="phone_2" name="phone_2">
@@ -226,6 +216,61 @@
                         </div>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-md-6 d-flex">
+                        <div class="card profile-box flex-fill">
+                            <div class="card-body">
+                                <h3 class="card-title">Bank information</h3>
+                                <ul class="personal-info">
+                                    <li>
+                                        <div class="title">Bank Name</div>
+                                        <div class="text">{{ $data->banks == null ? "" : $data->banks->name }}</div>
+                                    </li>
+                                    <li>
+                                        <div class="title">Bank Account No.</div>
+                                        <div class="text">{{ $data->account_number }}</div>
+                                    </li>
+                                    <li>
+                                        <div class="title">Account Name</div>
+                                        <label class="text">{{ $data->account_name }}</label>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 d-flex">
+                        <div class="card profile-box flex-fill">
+                            <div class="card-body">
+                                <h3 class="card-title">Children Informations <a href="#" class="edit-icon" data-bs-toggle="modal" data-bs-target="#family_info_modal"><i class="fa fa-pencil"></i></a></h3>
+                                <div class="table-responsive">
+                                    <table class="table table-nowrap">
+                                        <thead>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Date of Birth</th>
+                                                <th>Sex</th>
+                                                <th>Age</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @if (count($childrenInfor))
+                                               @foreach ($childrenInfor as $item)
+                                                <tr>
+                                                    <td>{{$item->name}}</td>
+                                                    <td>{{$item->DateofBirthChildren}}</td>
+                                                    <td>{{$item->sex}}</td>
+                                                    <td>{{$item->YearsOfChildren}}</td>
+                                                </tr>
+                                               @endforeach
+                                            @endif
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="row">
                     <div class="col-md-6 d-flex">
                         <div class="card profile-box flex-fill">
@@ -285,6 +330,62 @@
             </div>
             {!! Toastr::message() !!}
 
+            {{-- Children information --}}
+            <div id="family_info_modal" class="modal custom-modal fade" aria-hidden="true" style="display: none;">
+                <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="{{url('employee/children')}}" method="POST">
+                                @csrf
+                                <div class="form-scroll" id="">
+                                    <div class="row" id="children-container-repeatable-elements">
+                                        <div class="card children-repeatable-element">
+                                            <div class="card-body">
+                                                <h3 class="card-title">Children Informations <a href="javascript:void(0);" class="delete-icon children-delete-element"><i class="fa fa-trash-o"></i></a></h3>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label>Name <span class="text-danger">*</span></label>
+                                                            <input class="form-control" type="text" name="name[]" id="name[]">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group form-focus focused">
+                                                            <label>Date of Birth <span class="text-danger">*</span></label>
+                                                            <div class="cal-icon">
+                                                                <input type="text" value="" name="date_of_birth[]" id="date_of_birth[]" class="form-control floating datetimepicker" required>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label>Sex</label>
+                                                            <input class="form-control" type="text" name="sex[]" id="sex[]">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="add-more">
+                                        <a href="javascript:void(0);" id="btn-add-children"><i class="fa fa-plus-circle"></i> Add More</a>
+                                    </div>
+                                </div>
+                                <div class="submit-section">
+                                    <input type="hidden" name="employee_id" id="employee_id" value="{{ $data->id }}">
+                                    <button type="submit" class="btn btn-primary" id="bntChildren">Submit</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
             {{-- education_info --}}
             <div id="education_info" class="modal custom-modal fade" style="display: none;" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
@@ -810,9 +911,26 @@
             textarea.val('');
             select.prop('selectedIndex', 0)
         });
+        
         $('body').on('click', '.experience-delete-element', function() {
             if ($('.experience-repeatable-element').length > 1) {
                 $(this).closest('.experience-repeatable-element').remove();
+            }
+        });
+
+        $('body').on('click', '#btn-add-children', function() {
+            $('.children-repeatable-element:first').clone().appendTo('#children-container-repeatable-elements');
+            var lastRepeatableElement = $('.children-repeatable-element:last');
+            var input = lastRepeatableElement.find('input');
+            var textarea = lastRepeatableElement.find('textarea');
+            var select = lastRepeatableElement.find('select');
+            input.val('');
+            textarea.val('');
+            select.prop('selectedIndex', 0)
+        });
+        $('body').on('click', '.children-delete-element', function() {
+            if ($('.children-repeatable-element').length > 1) {
+                $(this).closest('.children-repeatable-element').remove();
             }
         });
     });

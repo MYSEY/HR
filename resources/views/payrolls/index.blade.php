@@ -28,6 +28,9 @@
                         <li class="nav-item" role="presentation">
                             <a class="nav-link" data-bs-toggle="tab" href="#tab_NSSF" aria-selected="false" role="tab" tabindex="-1">NSSF</a>
                         </li>
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link" data-bs-toggle="tab" href="#tab_Seniority" aria-selected="false" role="tab" tabindex="-1">Seniority</a>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -125,7 +128,7 @@
                                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending">Gender</th>
                                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending">Position</th>
                                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">Join Date</th>
-                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Salary: activate to sort column ascending">Total salary before tax in dollars</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Salary: activate to sort column ascending">Total salary before tax dollars</th>
                                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Salary: activate to sort column ascending">Total salary before tax Riel</th>
                                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Salary: activate to sort column ascending">Average wage</th>
                                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Payslip: activate to sort column ascending">Occupational risk</th>
@@ -155,6 +158,63 @@
                                                             <td><span>៛</span> {{$item->pension_contribution_riel}}</td>
                                                             <td>{{$item->corporate_contribution}}</td>
                                                             <td>{{$item->users == null ? "" : $item->users->EmployeeBranchAbbreviations}}</td>
+                                                            <td>{{Carbon\Carbon::parse($item->created_at)->format('d-M-Y')}}</td>
+                                                        </tr>
+                                                    @endforeach
+                                                @else
+                                                    <tr>
+                                                        <td colspan="16" style="text-align: center">No record to display</td>
+                                                    </tr>
+                                                @endif
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-pane show" id="tab_Seniority" role="tabpanel">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="table-responsive">
+                            <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <table class="table table-striped custom-table datatable dataTable no-footer" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
+                                            <thead>
+                                                <tr>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1">Employee ID</th>
+                                                    <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Employee: activate to sort column descending">Full Name</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending">Gender</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending">Position</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Payslip: activate to sort column ascending">Work location</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">Join Date</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Payslip: activate to sort column ascending">Number of working days</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Payslip: activate to sort column ascending">Total Average Salary</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Payslip: activate to sort column ascending">Number of years</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Payslip: activate to sort column ascending">Total Salary Receive</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Payslip: activate to sort column ascending">Taxable Salary</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Salary: activate to sort column ascending">Created At</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @if (count($dataSeniority) > 0)
+                                                    @foreach ($dataSeniority as $item)
+                                                        <tr class="odd">
+                                                            <td><a href="#">{{$item->users == null ? "" : $item->users->number_employee}}</a></td>
+                                                            <td><a href="#">{{$item->users == null ? "" : $item->users->employee_name_en}}</a></td>
+                                                            <td>{{$item->users == null ? "" : $item->users->EmployeeGender}}</td>
+                                                            <td>{{$item->users == null ? "" : $item->users->EmployeePosition}}</td>
+                                                            <td>{{$item->users == null ? "" : $item->users->EmployeeBranchAbbreviations}}</td>
+                                                            <td>{{$item->users == null ? "" : $item->users->joinOfDate}}</td>
+                                                            <td>{{$item->users == null ? "" : $item->users->NumberofWorkingDays}} days</td>
+                                                            <td>{{$item->users == null ? "" : $item->users->NumberofYears}} days</td>
+                                                            <td>{{$item->total_average_salary}}</td>
+                                                            <td>{{$item->total_salary_receive}}</td>
+                                                            <td>{{$item->taxable_salary}}</td>
                                                             <td>{{Carbon\Carbon::parse($item->created_at)->format('d-M-Y')}}</td>
                                                         </tr>
                                                     @endforeach
@@ -218,7 +278,7 @@
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label class="col-form-label">Spouse</label>
-                                    <input type="number" class="form-control" name="spouse" id="spouse" maxlength="1" placeholder="">
+                                    <input type="number" class="form-control" name="spouse" id="spouse" maxlength="2" placeholder="">
                                 </div>
                             </div>
                         </div>

@@ -12,6 +12,7 @@ use App\Models\Department;
 use App\Models\Experience;
 use App\Models\Transferred;
 use Illuminate\Http\Request;
+use App\Models\ChildrenInfor;
 use App\Models\StaffPromoted;
 use App\Models\StaffTraining;
 use Illuminate\Support\Carbon;
@@ -23,7 +24,7 @@ use Illuminate\Support\Facades\Auth;
 class EmployeeProfileController extends Controller
 {
     public function employeeProfile(Request $request){
-        $data = User::with(['educations','experiences'])->where('id',$request->id)->first();
+        $data = User::with(['educations','experiences','banks'])->where('id',$request->id)->first();
         $optionOfStudy = Option::where('type','field_of_study')->get();
         $optionDegree = Option::where('type','degree')->get();
         $relationship = Option::where('type','relationship')->get();
@@ -35,8 +36,9 @@ class EmployeeProfileController extends Controller
         $experiences = Experience::where('employee_id',$request->id)->get();
         $training = StaffTraining::where('employee_id',$request->id)->get();
         $contact = Contact::where('employee_id',$request->id)->get();
+        $childrenInfor = ChildrenInfor::where('employee_id',$request->id)->get();
         $empPromoted = StaffPromoted::where('employee_id',$request->id)->orderBy('id', 'DESC')->get();
-        return view('employees.profile',compact('data','optionOfStudy','optionDegree','department','position','empPromoted','branch','transferred','training','relationship','contact','educations','experiences'));
+        return view('employees.profile',compact('data','optionOfStudy','optionDegree','department','position','empPromoted','branch','transferred','training','relationship','contact','educations','experiences','childrenInfor'));
     }
     public function employeeEducation(Request $request){
         try{
@@ -174,6 +176,31 @@ class EmployeeProfileController extends Controller
         }catch(\Exception $e){
             DB::rollback();
             Toastr::error('emergency contact fail','Error');
+            return redirect()->back();
+        }
+    }
+
+    public function employeeChildren(Request $request){
+        try{
+            if (is_array($request->name) && count($request->name)) {
+                foreach ($request->name as $key => $item) :
+                    if (!empty($item)) :
+                        ChildrenInfor::updateOrCreate([
+                            'employee_id'       => $request->employee_id,
+                            'name'              => $request->name[$key] ?? '',
+                            'date_of_birth'     => $request->date_of_birth[$key] ?? '',
+                            'sex'               => $request->sex[$key] ?? '',
+                            'created_by'        => Auth::id(),
+                        ]);
+                    endif;
+                endforeach;
+            }
+            DB::commit();
+            Toastr::success('Create Children successfully.','Success');
+            return redirect()->back();
+        }catch(\Exception $e){
+            DB::rollback();
+            Toastr::error('Create Children fail','Error');
             return redirect()->back();
         }
     }

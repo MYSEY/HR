@@ -9,6 +9,7 @@ use App\Models\Payroll;
 use App\Models\Seniority;
 use App\Models\ExchangeRate;
 use Illuminate\Http\Request;
+use App\Models\ChildrenInfor;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -16,8 +17,6 @@ use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Auth;
 use App\Models\NationalSocialSecurityFund;
 use App\Repositories\Admin\PayrollRepository;
-use PhpOffice\PhpSpreadsheet\Calculation\Statistical\Averages;
-use Illuminate\Support\Facades\Date;
 
 class EmployeePayrollController extends Controller
 {
@@ -37,7 +36,8 @@ class EmployeePayrollController extends Controller
         $data = $this->payrollRepo->getAllPayroll($request);
         $user = User::all();
         $dataNSSF   = NationalSocialSecurityFund::with('users')->get();
-        return view('payrolls.index',compact('data','user','dataNSSF'));
+        $dataSeniority   = Seniority::with('users')->get();
+        return view('payrolls.index',compact('data','user','dataNSSF','dataSeniority'));
     }
 
     /**
@@ -58,32 +58,6 @@ class EmployeePayrollController extends Controller
      */
     public function store(Request $request)
     {
-        // $currentDate= Carbon::createFromDate($request->payment_date)->format('m');
-        // if ($currentDate == 6 || $currentDate == 12) {
-        //     $nextYear = Carbon::createFromDate($request->payment_date)->format('Y');
-        //     $currentYear = null;
-        //     $currentMonth = null;
-        //     $employee = User::where('id',$request->employee_id)->first();
-        //     $preYear = Carbon::createFromDate($employee->fdc_date)->format('Y');
-        //     if($currentDate == 6){
-        //         if ($preYear == $nextYear) {
-        //             $currentYear = $employee->fdc_date;
-        //         }else{
-        //             $currentYear =  Carbon::createFromDate($nextYear.'-01-01')->format('Y-m-d') ;
-        //         }
-        //     }
-
-        //     if ($currentDate == 12) {
-        //         $currentMonth = Carbon::createFromDate($nextYear.'-07-01')->format('Y-m-d');
-        //     }
-            
-        //     $totalSalary = Payroll::where('employee_id', $request->employee_id)->when($currentYear ,function ($query, $fdc_date) {
-        //         $query->where('payment_date', '>=',$fdc_date);
-        //     })->when($currentMonth, function($query, $currentMonth){
-        //         $query->where('payment_date', '>=',$currentMonth);
-        //     })->pluck('total_gross_salary')->avg();
-        // }
-
         // try{
             // get exchang rate
             $exChange= ExchangeRate::first();
@@ -168,17 +142,30 @@ class EmployeePayrollController extends Controller
             }
             
             $totalBunus = $totalBunusKHBun;
-            // sum benefit children
-            if ($employee->number_of_children == null) {
-                $totalAmountChild = 0;
-            } else if($employee->number_of_children == 1) {
-                $totalAmountChild = 10;
-            }else if($employee->number_of_children == 2){
-                $totalAmountChild = 20;
-            }else if($employee->number_of_children == 3){
-                $totalAmountChild = 30;
-            }else if($employee->number_of_children == 4){
-                $totalAmountChild = 40;
+            
+            // sum benefit children < 18
+            $dataDateOfBirth = [];
+            $dataChildren = ChildrenInfor::where('employee_id',$request->employee_id)->get();
+            foreach ($dataChildren as $value) {
+                $yearsOfChild = Carbon::parse($value->date_of_birth)->age;
+                if ($yearsOfChild <= 18) {
+                    $dataDateOfBirth[] = $value;
+                }
+            }
+            
+            $number_of_children = count($dataDateOfBirth);
+            if ($number_of_children) {
+                if ($number_of_children == null) {
+                    $totalAmountChild = 0;
+                } else if($number_of_children == 1) {
+                    $totalAmountChild = 10;
+                }else if($number_of_children == 2){
+                    $totalAmountChild = 20;
+                }else if($number_of_children == 3){
+                    $totalAmountChild = 30;
+                }else if($number_of_children == 4){
+                    $totalAmountChild = 40;
+                }
             }
     
             //sum salary and sum other benefit
@@ -194,61 +181,60 @@ class EmployeePayrollController extends Controller
             //total that បូកបន្ថែមលើបន្ទុកកូននិងប្រពន្ធ
             $totalChargesReducedChild = 150000;
             $totalChargesReducedSpouse = 150000;
-            // dd($employee->number_of_children * $totalChargesReducedChild);
             //not have child and sposes child 1
-            if($employee->number_of_children == null && $request->spouse == null){
+            if($number_of_children == null && $request->spouse == null){
                 $totalChargesReduced = 0;
-            }else if($employee->number_of_children == null && $request->spouse == null){
+            }else if($number_of_children == null && $request->spouse == null){
                 $totalChargesReduced = $totalChargesReducedSpouse;
-            }else if($employee->number_of_children == 1 && $request->spouse == null){
+            }else if($number_of_children == 1 && $request->spouse == null){
                 $totalChargesReduced = $totalChargesReducedChild;
-            }else if($employee->number_of_children == null && $request->spouse == 1){
+            }else if($number_of_children == null && $request->spouse == 1){
                 $totalChargesReduced = $totalChargesReducedSpouse;
-            }else if($employee->number_of_children == 1 && $request->spouse == 1){
-                $totalChargesReduced = ($employee->number_of_children * $totalChargesReducedChild) + $totalChargesReducedSpouse;
-            }else if($employee->number_of_children == 2 && $request->spouse == null){
-                $totalChargesReduced = $employee->number_of_children * $totalChargesReducedChild;
-            }else if($employee->number_of_children == 2 && $request->spouse == 1){
-                $totalChargesReduced = ($employee->number_of_children * $totalChargesReducedChild) + $totalChargesReducedSpouse;
-            }else if($employee->number_of_children == 3 && $request->spouse == null){
-                $totalChargesReduced = $employee->number_of_children * $totalChargesReducedChild;
-            }else if($employee->number_of_children == 3 && $request->spouse == 1){
-                $totalChargesReduced = ($employee->number_of_children * $totalChargesReducedChild) + $totalChargesReducedSpouse;
-            }else if($employee->number_of_children == 4 && $request->spouse == null){
-                $totalChargesReduced = $employee->number_of_children * $totalChargesReducedChild;
-            }else if($employee->number_of_children == 4 && $request->spouse == 1){
-                $totalChargesReduced = ($employee->number_of_children * $totalChargesReducedChild) + $totalChargesReducedSpouse;
+            }else if($number_of_children == 1 && $request->spouse == 1){
+                $totalChargesReduced = ($number_of_children * $totalChargesReducedChild) + $totalChargesReducedSpouse;
+            }else if($number_of_children == 2 && $request->spouse == null){
+                $totalChargesReduced = $number_of_children * $totalChargesReducedChild;
+            }else if($number_of_children == 2 && $request->spouse == 1){
+                $totalChargesReduced = ($number_of_children * $totalChargesReducedChild) + $totalChargesReducedSpouse;
+            }else if($number_of_children == 3 && $request->spouse == null){
+                $totalChargesReduced = $number_of_children * $totalChargesReducedChild;
+            }else if($number_of_children == 3 && $request->spouse == 1){
+                $totalChargesReduced = ($number_of_children * $totalChargesReducedChild) + $totalChargesReducedSpouse;
+            }else if($number_of_children == 4 && $request->spouse == null){
+                $totalChargesReduced = $number_of_children * $totalChargesReducedChild;
+            }else if($number_of_children == 4 && $request->spouse == 1){
+                $totalChargesReduced = ($number_of_children * $totalChargesReducedChild) + $totalChargesReducedSpouse;
             }
 
             // dd($totalChargesReduced);
 
             //កាត់មូលដ្ឋានគិតពន្ធ
-            if ($employee->number_of_children == null && $request->spouse == null) {
+            if ($number_of_children == null && $request->spouse == null) {
                 $totalTtaxBbaseRiel = $totalExchangeRiel;
-            } else if($employee->number_of_children == 1 && $request->spouse == null) {
+            } else if($number_of_children == 1 && $request->spouse == null) {
                 $totalTtaxBbaseRiel = $totalExchangeRiel - $totalChargesReduced;
-            }else if($employee->number_of_children == null && $request->spouse == 1) {
+            }else if($number_of_children == null && $request->spouse == 1) {
                 $totalTtaxBbaseRiel = $totalExchangeRiel - $totalChargesReduced;
-            }else if($employee->number_of_children == 1 && $request->spouse == 1) {
+            }else if($number_of_children == 1 && $request->spouse == 1) {
                 $totalTtaxBbaseRiel = $totalExchangeRiel - $totalChargesReduced;
-            }else if($employee->number_of_children == 2 &&  $request->spouse == null){
+            }else if($number_of_children == 2 &&  $request->spouse == null){
                 $totalTtaxBbaseRiel = $totalExchangeRiel - $totalChargesReduced;
-            }else if($employee->number_of_children == 2 &&  $request->spouse == 1){
+            }else if($number_of_children == 2 &&  $request->spouse == 1){
                 $totalTtaxBbaseRiel = $totalExchangeRiel - $totalChargesReduced;
-            }else if($employee->number_of_children == 3 &&  $request->spouse == null){
+            }else if($number_of_children == 3 &&  $request->spouse == null){
                 $totalTtaxBbaseRiel = $totalExchangeRiel - $totalChargesReduced;
-            }else if($employee->number_of_children == 3 &&  $request->spouse == 1){
+            }else if($number_of_children == 3 &&  $request->spouse == 1){
                 $totalTtaxBbaseRiel = $totalExchangeRiel - $totalChargesReduced;
-            }else if($employee->number_of_children == 4 &&  $request->spouse == null){
+            }else if($number_of_children == 4 &&  $request->spouse == null){
                 $totalTtaxBbaseRiel = $totalExchangeRiel - $totalChargesReduced;
-            }else if($employee->number_of_children == 4 &&  $request->spouse == 1){
+            }else if($number_of_children == 4 &&  $request->spouse == 1){
                 $totalTtaxBbaseRiel = $totalExchangeRiel - $totalChargesReduced;
             }
-            // dd($totalTtaxBbaseRiel);
-            $children = $employee->number_of_children;
+
+            $children = $number_of_children;
 
             // អត្រា ពន្ធ(%)
-            if ($employee->number_of_children == null && $request->spouse == null) {
+            if ($number_of_children == null && $request->spouse == null) {
                 
                 if($totalExchangeRiel >= 0 && $totalExchangeRiel <= 1500000){
                     $totalTax = 0;
@@ -261,7 +247,7 @@ class EmployeePayrollController extends Controller
                 }else{
                     $totalTax = 20;
                 }
-        
+                
                 //​cululate salaray Taxable
                 if($totalExchangeRiel <= 1500000){
                     $totalSalaryTaxRiel = 0;
@@ -280,7 +266,7 @@ class EmployeePayrollController extends Controller
 
                 //ពន្ធលើប្រាក់បៀវត្ស ដុល្លារ/USD
                 $totalSalaryAfterTax = $totalPaseSsalaryReceivedUsd - $totalSalaryTaxUsd;
-            } else if($employee->number_of_children == 1 && $request->spouse == null) {
+            } else if($number_of_children == 1 && $request->spouse == null) {
 
                 if($totalTtaxBbaseRiel >= 0 && $totalTtaxBbaseRiel <= 1500000){
                     $totalTax = 0;
@@ -312,7 +298,7 @@ class EmployeePayrollController extends Controller
                 //ពន្ធលើប្រាក់បៀវត្ស ដុល្លារ/USD
                 $totalSalaryAfterTax = $totalPaseSsalaryReceivedUsd - $totalSalaryTaxUsd;
 
-            }else if($employee->number_of_children == 1 && $request->spouse == 1) {
+            }else if($number_of_children == 1 && $request->spouse == 1) {
     
                 if($totalTtaxBbaseRiel >= 0 && $totalTtaxBbaseRiel <= 1500000){
                     $totalTax = 0;
@@ -343,7 +329,7 @@ class EmployeePayrollController extends Controller
                 $totalSalaryTaxUsd = round($totalSalaryTaxRiel / $amount_exchang,2);
                 //ពន្ធលើប្រាក់បៀវត្ស ដុល្លារ/USD
                 $totalSalaryAfterTax = $totalPaseSsalaryReceivedUsd - $totalSalaryTaxUsd;
-            }else if($employee->number_of_children == 2 && $request->spouse == null){
+            }else if($number_of_children == 2 && $request->spouse == null){
                 if($totalTtaxBbaseRiel >= 0 && $totalTtaxBbaseRiel <= 1500000){
                     $totalTax = 0;
                 }elseif($totalTtaxBbaseRiel >= 1500001 && $totalTtaxBbaseRiel <= 2000000){
@@ -373,7 +359,7 @@ class EmployeePayrollController extends Controller
                 $totalSalaryTaxUsd = round($totalSalaryTaxRiel / $amount_exchang,2);
                 //ពន្ធលើប្រាក់បៀវត្ស ដុល្លារ/USD
                 $totalSalaryAfterTax = $totalPaseSsalaryReceivedUsd - $totalSalaryTaxUsd;
-            }else if($employee->number_of_children == 2 && $request->spouse == 1){
+            }else if($number_of_children == 2 && $request->spouse == 1){
                 if($totalTtaxBbaseRiel >= 0 && $totalTtaxBbaseRiel <= 1500000){
                     $totalTax = 0;
                 }elseif($totalTtaxBbaseRiel >= 1500001 && $totalTtaxBbaseRiel <= 2000000){
@@ -403,7 +389,7 @@ class EmployeePayrollController extends Controller
                 $totalSalaryTaxUsd = round($totalSalaryTaxRiel / $amount_exchang,2);
                 //ពន្ធលើប្រាក់បៀវត្ស ដុល្លារ/USD
                 $totalSalaryAfterTax = $totalPaseSsalaryReceivedUsd - $totalSalaryTaxUsd;
-            }else if($employee->number_of_children == 3 && $request->spouse == null){
+            }else if($number_of_children == 3 && $request->spouse == null){
                 if($totalTtaxBbaseRiel >= 0 && $totalTtaxBbaseRiel <= 1500000){
                     $totalTax = 0;
                 }elseif($totalTtaxBbaseRiel >= 1500001 && $totalTtaxBbaseRiel <= 2000000){
@@ -433,7 +419,7 @@ class EmployeePayrollController extends Controller
                 $totalSalaryTaxUsd = round($totalSalaryTaxRiel / $amount_exchang,2);
                 //ពន្ធលើប្រាក់បៀវត្ស ដុល្លារ/USD
                 $totalSalaryAfterTax = $totalPaseSsalaryReceivedUsd - $totalSalaryTaxUsd;
-            }else if($employee->number_of_children == 3 && $request->spouse == 1){
+            }else if($number_of_children == 3 && $request->spouse == 1){
                 if($totalTtaxBbaseRiel >= 0 && $totalTtaxBbaseRiel <= 1500000){
                     $totalTax = 0;
                 }elseif($totalTtaxBbaseRiel >= 1500001 && $totalTtaxBbaseRiel <= 2000000){
@@ -463,7 +449,7 @@ class EmployeePayrollController extends Controller
                 $totalSalaryTaxUsd = round($totalSalaryTaxRiel / $amount_exchang,2);
                 //ពន្ធលើប្រាក់បៀវត្ស ដុល្លារ/USD
                 $totalSalaryAfterTax = $totalPaseSsalaryReceivedUsd - $totalSalaryTaxUsd;
-            }else if($employee->number_of_children == 4 && $request->spouse == null){
+            }else if($number_of_children == 4 && $request->spouse == null){
                 if($totalTtaxBbaseRiel >= 0 && $totalTtaxBbaseRiel <= 1500000){
                     $totalTax = 0;
                 }elseif($totalTtaxBbaseRiel >= 1500001 && $totalTtaxBbaseRiel <= 2000000){
@@ -493,7 +479,7 @@ class EmployeePayrollController extends Controller
                 $totalSalaryTaxUsd = round($totalSalaryTaxRiel / $amount_exchang,2);
                 //ពន្ធលើប្រាក់បៀវត្ស ដុល្លារ/USD
                 $totalSalaryAfterTax = $totalPaseSsalaryReceivedUsd - $totalSalaryTaxUsd;
-            }else if($employee->number_of_children == 4 && $request->spouse == 1){
+            }else if($number_of_children == 4 && $request->spouse == 1){
                 if($totalTtaxBbaseRiel >= 0 && $totalTtaxBbaseRiel <= 1500000){
                     $totalTax = 0;
                 }elseif($totalTtaxBbaseRiel >= 1500001 && $totalTtaxBbaseRiel <= 2000000){
@@ -579,14 +565,14 @@ class EmployeePayrollController extends Controller
                         })->when($currentMonth, function($query, $currentMonth){
                             $query->where('payment_date', '>=',$currentMonth);
                         })->pluck('total_gross_salary')->avg();
-                        $totalSalary = ($totalSalary / 22) * 7.5;
-                        $totaltaxableSalary = $totalSalary - $totalSalary;
+                        $totalSalaryReceive = ($totalSalary / 22) * 7.5;
+                        $totaltaxableSalary = $totalSalaryReceive - $totalSalaryReceive;
                         $paymentOfMonth = $monthForPayment;
                         $seniority = Seniority::create([
                             'employee_id'   => $request->employee_id,
                             'total_average_salary'  => $totalSalary,
-                            'total_salary_receive'  => round($totalSalary, 2),
-                            'tax_exemption_salary'  => round($totalSalary, 2),
+                            'total_salary_receive'  => round($totalSalaryReceive, 2),
+                            'tax_exemption_salary'  => round($totalSalaryReceive, 2),
                             'taxable_salary'        => $totaltaxableSalary,
                             'payment_of_month'        => $paymentOfMonth,
                             'created_by'        => Auth::user()->id,
