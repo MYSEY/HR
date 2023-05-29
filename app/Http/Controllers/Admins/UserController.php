@@ -179,6 +179,13 @@ class UserController extends Controller
         }
     }
 
+    public function reasonOption(Request $request){
+        $options = Option::where("type", "emp_status")->get();
+        return response()->json([
+            'options' => $options
+        ]);
+    }
+
     public function processing(Request $request)
     {
         try {

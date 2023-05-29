@@ -271,5 +271,55 @@ class OptionSeeder extends Seeder
             'type' => 'relationship',
             'created_by'    => Auth::id(),
         ]);
+
+        // employee_status
+       
+            // 'Misconducts',
+            // 'Death',
+            // 'Retirement',
+            // 'Others',
+        Option::firstOrCreate([
+            'name_khmer' => 'មានការងារធ្វើថ្មី',
+            'name_english'=> 'Get new job',
+            'type' => 'emp_status',
+            'created_by'    => Auth::id(),
+        ]);
+        Option::firstOrCreate([
+            'name_khmer' => 'ធ្វើអាជីវកម្មផ្ទាល់ខ្លួន',
+            'name_english'=> 'Owner Business',
+            'type' => 'emp_status',
+            'created_by'    => Auth::id(),
+        ]);
+        Option::firstOrCreate([
+            'name_khmer' => 'ផ្លាស់ប្តូរទីតាំងរស់នៅ​',
+            'name_english'=> 'Relocate Resident',
+            'type' => 'emp_status',
+            'created_by'    => Auth::id(),
+        ]);
+        Option::firstOrCreate([
+            'name_khmer' => 'បន្តការសិក្សា',
+            'name_english'=> 'Contiue stadies',
+            'type' => 'emp_status',
+            'created_by'    => Auth::id(),
+        ]);
+        Option::firstOrCreate([
+            'name_khmer' => 'បញ្ហាសុខភាព',
+            'name_english'=> 'Health Issue',
+            'type' => 'emp_status',
+            'created_by'    => Auth::id(),
+        ]);
+        Option::firstOrCreate([
+            'name_khmer' => 'គ្រួសារ',
+            'name_english'=> 'Fimaly',
+            'type' => 'emp_status',
+            'created_by'    => Auth::id(),
+        ]);
+        Option::firstOrCreate([
+            'name_khmer' => 'ការបន្លំលួច/ក្លែបន្លំ',
+            'name_english'=> 'Fraud',
+            'type' => 'emp_status',
+            'created_by'    => Auth::id(),
+        ]);
+
     }
 }

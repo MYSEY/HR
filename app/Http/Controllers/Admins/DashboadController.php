@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admins;
 
 use App\Http\Controllers\Controller;
 use App\Models\Branchs;
+use App\Models\Option;
 use App\Models\RecruitmentPlan;
 use App\Models\StaffPromoted;
 use App\Models\Trainer;
@@ -30,7 +31,9 @@ class DashboadController extends Controller
             $from_date = Carbon::createFromDate($request->from_date)->format('Y-m-d H:i:s'); //2023-05-09 00:00:00
             $to_date = Carbon::createFromDate($request->to_date.' '.'23:59:59')->format('Y-m-d H:i:s'); //2023-05-09 23:59:59
         }
+
         $branches = Branchs::all();
+        $options = Option::where("type", "emp_status")->get();
 
         $employee = User::with("gender")->with('position')->with('branch')->when($from_date, function ($query, $from_date) {
             $query->where('created_at', '>=', $from_date);
@@ -67,7 +70,9 @@ class DashboadController extends Controller
             $item["employees"] = $employees;
             $dataTrainings[] = $item;
         }
+        
         return response()->json([
+            'options'=>$options,
             'branches'=>$branches,
             'data'=>$employee,
             'staffResignations'=>$staffResignations,

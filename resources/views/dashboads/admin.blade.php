@@ -173,6 +173,10 @@
                     branches: response.branches,
                     staffResignations: response.staffResignations,
                 }
+                let dataReasonStaff ={
+                    options: response.options,
+                    staffResignations: response.staffResignations,
+                }
                 let dataTable ={
                     employees: response.data,
                     transferred: response.transferred,
@@ -184,6 +188,7 @@
                 dashbaordHRMS(dataHRMS);
                 dashboadAchieveBranch(dataAchieve);
                 dashboardStaffResign(dataStaffResign);
+                dascboardReasonOffStaff(dataReasonStaff);
                 dataTables(dataTable);
             }
         });
@@ -292,7 +297,6 @@
                 let start_date = moment(row.start_date).format('D-MMM-YYYY')
                 let ent_date = moment(row.ent_date).format('D-MMM-YYYY')
                 row.employees.map((em)=>{
-                    console.log(em[0]);
                     trT += '<tr class="odd">' +
                         '<td>' + (em[0].id) + '</td>' +
                         '<td>' + (em[0].employee_name_kh) + '</td>' +
@@ -320,12 +324,6 @@
 
     function showDashboard(data) {
         var deshboard = [
-            // {
-            //     "name": "staff_resignation"
-            // },
-            {
-                "name": "reasons_staff_resignation"
-            },
             {
                 "name": "staff_take_leave"
             },
@@ -376,134 +374,13 @@
                 stack: 'Stack 0',
             }, ]
         };
-
-        // for staff resignation
-        const dataStaffResignation = {
-            datasets: [{
-                // data: [70, 31, 17, 17, 15, 15, 10, 10],
-                backgroundColor: [
-                    "rgba(0, 136, 204)",
-                    "rgba(255, 102, 0)",
-                    "rgb(128,128,128)",
-                    "rgb(255, 204, 0)",
-                    "rgb(0, 136, 204)",
-                    "rgb(83, 198, 83)",
-                    "rgb(0, 51, 102)",
-                    "rgb(230, 115, 0)",
-                ],
-            }, ]
-        };
-        // Reasons of Staff Resignation
-        const dataReasonStaffResignation = {
-            labels: [
-                'Get now job',
-                'Owner Business',
-                'Relocate Resident',
-                'Contiue stadies',
-                'Health Issue',
-                'Fimaly',
-                'Misconducts',
-                'Fraud',
-                'Death',
-                'Retirement',
-                'Others',
-            ],
-            datasets: [{
-                data: [70, 31, 17, 17, 15, 15, 10, 10, 0, 0, 0],
-                backgroundColor: [
-                    "rgba(0, 136, 204)",
-                    "rgba(255, 102, 0)",
-                    "rgb(128,128,128)",
-                    "rgb(255, 204, 0)",
-                    "rgb(0, 136, 204)",
-                    "rgb(83, 198, 83)",
-                    "rgb(0, 51, 102)",
-                    "rgb(230, 115, 0)",
-                ],
-            }, ]
-        };
-        let dataEmployee = data.employees;
-        let branches = data.branches;
-        let totalEmployees = dataEmployee.length;
-        let staffResignations = data.staffResignations;
         
-        let labelStaffResignation = [];
-        let staffResignationData = [];
-
-        branches.map((br) => {
-            let totalValue = 0;
-            let totalFemale = 0;
-            let totalValueStaffResignation = 0;
-            let female = 0;
-
-            // For block chart board Staff Resignation
-            if (staffResignations.length > 0) {
-                staffResignations.map((sta) => {
-                    if (sta.branch_id == br.id) {
-                        totalValueStaffResignation++;
-                    }
-                });
-            }
-            labelStaffResignation.push(br.abbreviations);
-            staffResignationData.push(totalValueStaffResignation);
-            
-        });
         $.each(deshboard, function(i, db) {
             let text = "";
             let data = {};
             let type = "";
             let option = {};
-            if (db.name == "reasons_staff_resignation") {
-                type = "pie";
-                // if (db.name == "staff_resignation") {
-                //     dataStaffResignation.labels = labelStaffResignation;
-                //     dataStaffResignation.datasets[0].data = staffResignationData;
-                //     data = dataStaffResignation;
-                //     text = '% Staff Resignation';
-                // } else {
-                    data = dataReasonStaffResignation;
-                    text = '% Reasons of Staff Resignation';
-                // }
-                option = {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            display: true,
-                            position: 'right',
-                            rtl: true,
-                        },
-                        // tooltip: {
-                        //     enabled: false
-                        // },
-                        datalabels: {
-                            font: {
-                                size: 10
-                            },
-                            align: 'center',
-                            // formatter: (value, context)=>{ 
-                            //     // console.log("data: ",context.chart.data.datasets[0].data);
-                            //     const datapoints = context.chart.data.datasets[0].data;
-                            //     function totalSum(total, datapoints){
-                            //         return total + datapoints;
-                            //     }
-                            //     const totalvalue = datapoints.reduce(totalSum, 0);
-                            //     const percentageValue = (value / totalvalue * 100)
-                            //     if (db.name == "staff_resignation" ) {
-                            //         return `${Math.round(percentageValue)}%`;
-
-                            //     }else{
-                            //         return `${percentageValue.toFixed(2)}%`;
-                            //     }
-                            // }
-                        },
-                        title: {
-                            display: true,
-                            text
-                        },
-                    },
-                }
-            } else if (db.name == "staff_take_leave" || db.name ==
-                "staff_Training_by_branch") {
+            if (db.name == "staff_take_leave" || db.name == "staff_Training_by_branch") {
                 type = "bar";
                 data = db.name == "staff_take_leave" ? dataStaffTakeLeave :
                     dataStaffTraining;
@@ -866,6 +743,93 @@
         }
         new Chart('staff_resignation', dataChart);
     }
+
+    function dascboardReasonOffStaff(datas){
+        let dataReasonStaffResignation = {
+            labels: [
+                // 'Get new job',
+                // 'Owner Business',
+                // 'Relocate Resident',
+                // 'Contiue stadies',
+                // 'Health Issue',
+                // 'Fimaly',
+                // 'Fraud',
+                // 'Misconducts',
+                // 'Death',
+                // 'Retirement',
+                // 'Others',
+            ],
+            datasets: [{
+                data: [],
+                backgroundColor: [
+                    "rgba(0, 136, 204)",
+                    "rgba(255, 102, 0)",
+                    "rgb(128,128,128)",
+                    "rgb(255, 204, 0)",
+                    "rgb(0, 136, 204)",
+                    "rgb(83, 198, 83)",
+                    "rgb(0, 51, 102)",
+                    "rgb(230, 115, 0)",
+                ],
+            }, ]
+        };
+
+        let options = datas.options;
+        let staffResignations = datas.staffResignations;
+        let totalStaffResign = datas.staffResignations.length;
+        let labelStaffResignation = [];
+        let staffResignationData = [];
+        options.map((reason) => {
+            let totalValueStaffResignation = 0;
+            if (totalStaffResign > 0) {
+                staffResignations.map((sta) => {
+                    if (reason.id == sta.resign_reason) {
+                        totalValueStaffResignation += 1;
+                    }
+                });
+            }
+            labelStaffResignation.push(reason.name_english);
+            staffResignationData.push((totalValueStaffResignation / totalStaffResign) *100);
+        });
+        dataReasonStaffResignation.labels = labelStaffResignation;
+        dataReasonStaffResignation.datasets[0].data = staffResignationData;
+        let data = dataReasonStaffResignation;
+        let text = '% Reasons of Staff Resignation';
+        let option = {
+            responsive: true,
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'right',
+                    rtl: true,
+                },
+                // tooltip: {
+                //     enabled: false
+                // },
+                datalabels: {
+                    font: {
+                        size: 10
+                    },
+                    align: 'center',
+                    formatter: (value, context)=>{ 
+                        return `${Math.round(value)}%`;
+                    }
+                },
+                title: {
+                    display: true,
+                    text
+                },
+            },
+        }
+        let dataChart = {
+            type: "pie",
+            data,
+            options: option,
+            plugins: [ChartDataLabels]
+        }
+        new Chart("reasons_staff_resignation", dataChart);
+    }
+
     function monthDiff(dateFrom, dateTo) {
         return dateTo.getMonth() - dateFrom.getMonth() + (12 * (dateTo.getFullYear() - dateFrom.getFullYear()))
     }

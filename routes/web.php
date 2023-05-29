@@ -99,6 +99,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('users/delete', [UserController::class,'destroy']);
     Route::get('users/edit', [UserController::class,'edit']);
     Route::post('/employee/status', [UserController::class,'processing']);
+    Route::get('users/reasonoption', [UserController::class, 'reasonOption']);
 
     //Employee Payroll
     Route::get('payroll',[EmployeePayrollController::class,'index']);

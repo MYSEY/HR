@@ -754,7 +754,90 @@
                         },
                     }
                 }); 
-            }else{
+            }else if(status == 3){
+                var selectOption = '<select class="select form-control resign_reason" name="department_id"></select>';
+                axios.get('{{ URL('users/reasonoption') }}', {
+                }).then(function(response) {
+                    var options = response.data.options
+                    $.each(options, function(i, item) {
+                        let option = {
+                            value: item.id,
+                            text: item.name_english,
+                        }
+                        $('.resign_reason').append($('<option>', option));
+                    });
+                });
+                $.confirm({
+                    title: 'Employee Status!',
+                    contentClass: 'text-center',
+                    backgroundDismiss: 'cancel',
+                    content: ''+
+                        '<form method="post">'+
+                            '<div class="form-group">'+
+                                '<label><a href="#">'+emp_status+'</a></label>'+
+                            '</div>'+
+                            '<div class="form-group">'+
+                                '<div class="form-group">'+
+                                    '<label>date <span class="text-danger">*</span></label>'+
+                                    '<input type="date" class="form-control resign_date" id="" name="" value="">'+
+                                    '<input type="hidden" class="form-control emp_status" id="" name="" value="'+status+'">'+
+                                    '<input type="hidden" class="form-control id" id="" name="" value="'+id+'">'+
+                                '</div>'+
+                                '<div class="form-group">'+
+                                    '<label>Reason</label>'+
+                                    selectOption+
+                                '</div>'+
+                            '</div>'+
+                        '</form>',
+                    buttons: {
+                        confirm: {
+                            text: 'Submit',
+                            btnClass: 'btn-blue',
+                            action: function() {
+                                var emp_status = this.$content.find('.emp_status').val();
+                                var id = this.$content.find('.id').val();
+                                var resign_date = this.$content.find('.resign_date').val();
+                                var resign_reason = this.$content.find('.resign_reason').val();
+
+                                if (!resign_date) {
+                                    $.alert({
+                                        title: '<span class="text-danger">Requiered</span>',
+                                        content: 'Please input date.',
+                                    });
+                                    return false;
+                                }
+                                
+                                axios.post('{{ URL('employee/status') }}', {
+                                        'id': id,
+                                        'emp_status': emp_status,
+                                        'resign_date': resign_date,
+                                        'resign_reason': resign_reason
+                                    }).then(function(response) {
+                                    new Noty({
+                                        title: "",
+                                        text: "The process has been successfully.",
+                                        type: "success",
+                                        icon: true
+                                    }).show();
+                                    $('.card-footer').remove();
+                                    window.location.replace("{{ URL('users') }}");
+                                }).catch(function(error) {
+                                    new Noty({
+                                        title: "",
+                                        text: "Something went wrong please try again later.",
+                                        type: "error",
+                                        icon: true
+                                    }).show();
+                                });
+                            }
+                        },
+                        cancel: {
+                            text: 'Cancel',
+                            btnClass: 'btn-red btn-sm',
+                        },
+                    }
+                });
+            }else {
                 $.confirm({
                     title: 'Employee Status!',
                     contentClass: 'text-center',
