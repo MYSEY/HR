@@ -7,7 +7,6 @@ use App\Models\Branchs;
 use App\Models\Option;
 use App\Models\RecruitmentPlan;
 use App\Models\StaffPromoted;
-use App\Models\Trainer;
 use App\Models\Training;
 use App\Models\Transferred;
 use App\Models\User;
@@ -20,8 +19,7 @@ class DashboadController extends Controller
         return view('dashboads.employee');
     }
     public function dashboadAdmin(){
-        $employee = User::all();
-        return view('dashboads.admin',compact('employee'));
+        return view('dashboads.admin');
     }
 
     public function show(Request $request){
@@ -40,7 +38,7 @@ class DashboadController extends Controller
             })
             ->when($to_date, function ($query, $to_date) {
                 $query->where('created_at','<=', $to_date);
-            })->get();
+            })->orderBy('id', 'desc')->get();
 
 
         $currentYear = Carbon::now()->format('Y');
@@ -48,7 +46,7 @@ class DashboadController extends Controller
         $staffResignations = User::whereNotIn('emp_status',['1','2','Probation'])
             ->when($year, function ($query, $year) {
                 $query->where('resign_date', '>=', $year);
-            })->get();
+            })->orderBy('id', 'desc')->get();
 
         $recruitmentPlans = RecruitmentPlan::with('branch')->get();
         $achieveBranchs = User::with('branch')->whereIn('emp_status',['1','2','Probation'])
@@ -56,21 +54,12 @@ class DashboadController extends Controller
               $query->where('date_of_commencement', '>=', $year);
           })->get();
 
-          $staffPromotes = StaffPromoted::with("employee")->limit(5)->get();
-          $transferred = Transferred::with("employee")->with("branch")->with("position")->limit(5)->get();
+        $totalStaff =  User::whereIn('emp_status',['1','2','Probation'])->get()->count();
+        $newStaff = User::where('emp_status', "Probation")->get()->count();
+        $staffPromotes = StaffPromoted::all()->count();
+        $transferred = Transferred::all()->count();
+        $dataTrainings = Training::all()->count();
 
-        $data = Training::with('trainingType')->limit(5)->get();
-        $dataTrainings = [];
-        foreach ($data as $key => $item) {
-            $employees = [];
-            foreach ($item->employee_id as $key => $empl) {
-                $em =  User::where('id', $empl)->with("gender")->with("branch")->with("position")->limit(5)->get();
-                $employees[] = $em;
-            }
-            $item["employees"] = $employees;
-            $dataTrainings[] = $item;
-        }
-        
         return response()->json([
             'options'=>$options,
             'branches'=>$branches,
@@ -81,6 +70,8 @@ class DashboadController extends Controller
             'staffPromotes'=>$staffPromotes,
             'transferred'=> $transferred,
             'dataTrainings'=> $dataTrainings,
+            'newStaff'=> $newStaff,
+            'totalStaff'=> $totalStaff,
         ]);
     }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admins;
 
 use App\Http\Controllers\Controller;
 use App\Models\Trainer;
+use App\Models\User;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -18,8 +19,10 @@ class TrainerController extends Controller
      */
     public function index()
     {
-        $data = Trainer::all();
-        return view('trainers.index', compact('data'));
+        $data = Trainer::with("employee")->get();
+        // dd($data);
+        $employee = User::all();
+        return view('trainers.index', compact('data', 'employee'));
     }
 
     /**
@@ -86,12 +89,12 @@ class TrainerController extends Controller
     {
         try{
             Trainer::where('id',$request->id)->update([
+                'employee_id' => $request->employee_id,
                 'name_en' => $request->name_en,
                 'name_kh' => $request->name_kh,
-                'role' => $request->role,
                 'email' => $request->email,
                 'number_phone' => $request->number_phone,
-                'description' => $request->description,
+                'remark' => $request->remark,
                 'status' => $request->status,
                 'updated_by' => Auth::user()->id 
             ]);

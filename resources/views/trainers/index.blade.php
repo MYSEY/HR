@@ -27,11 +27,12 @@
                                     <thead>
                                         <tr>
                                             <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="#: activate to sort column descending" style="width: 30px;">#</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Type: activate to sort column ascending" style="width: 772.237px;">Type</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department Name: activate to sort column ascending" style="width: 772.237px;">Name (EN)</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department Name: activate to sort column ascending" style="width: 772.237px;">Name (KH)</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department Name: activate to sort column ascending" style="width: 772.237px;">Contact Numer</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department Name: activate to sort column ascending" style="width: 772.237px;">Phone Numer</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department Name: activate to sort column ascending" style="width: 772.237px;">Email</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department Name: activate to sort column ascending" style="width: 772.237px;">Description</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department Name: activate to sort column ascending" style="width: 772.237px;">Remark</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department Name: activate to sort column ascending" style="width: 772.237px;">Status</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department Name: activate to sort column ascending" style="width: 772.237px;">Create at</th>
                                             <th class="text-end sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Action: activate to sort column ascending" style="width: 300.962px;">Action</th>
@@ -42,13 +43,14 @@
                                             @foreach ($data as $item)
                                                 <tr class="odd">
                                                     <td class="sorting_1 ids">{{$item->id}}</td>
+                                                    <td >{{$item->type == 1 ? "Internal": "External"}}</td>
                                                     <td class="name_en">{{$item->name_en}}</td>
                                                     <td class="name_kh">{{$item->name_kh}}</td>
                                                     <td class="number_phone">{{$item->number_phone}}</td>
                                                     <td class="email">{{$item->email}}</td>
-                                                    <td class="description">{{$item->description}}</td>
+                                                    <td >{{$item->remark}}</td>
                                                     <td>
-                                                        <input type="hidden" class="role" value="{{$item->role}}">
+                                                        {{-- <input type="hidden" class="role" value="{{$item->role}}"> --}}
                                                         <input type="hidden" class="status" value="{{$item->status}}">
                                                         <div class="dropdown action-label">
                                                             @if ($item->status=='1')
@@ -99,7 +101,7 @@
         </div>
 
         <div id="add_trainer" class="modal custom-modal fade" role="dialog">
-            <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">Add New Trainer</h5>
@@ -113,41 +115,54 @@
                             <div class="row">
                                 <div class="col-sm-6">
                                     <div class="form-group">
+                                        <label>Type <span class="text-danger">*</span></label>
+                                        <select class="select form-control" id="change-type" name="type" required>
+                                            <option value="1">Internal</option>
+                                            <option value="2">External</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 trainer-internal">
+                                    <div class="form-group">
+                                        <label class="">Trainer <span class="text-danger">*</span></label>
+                                        <select class="select form-control" name="employee_id">
+                                            @foreach ($employee as $item)
+                                                <option value="{{$item->id}}">{{$item->employee_name_en}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group trainer-external">
                                         <label>Name (EN)<span class="text-danger">*</span></label>
-                                        <input class="form-control @error('name_en') is-invalid @enderror" type="text" name="name_en" required>
+                                        <input class="form-control @error('name_en') is-invalid @enderror" type="text" name="name_en">
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
-                                    <div class="form-group">
+                                    <div class="form-group trainer-external">
                                         <label>Name (KH)<span class="text-danger">*</span></label>
-                                        <input class="form-control @error('name_kh') is-invalid @enderror" type="text" name="name_kh" required>
+                                        <input class="form-control @error('name_kh') is-invalid @enderror" type="text" name="name_kh">
                                     </div>
                                 </div>
+
                                 <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <label>Role <span class="text-danger">*</span></label>
-                                        <input class="form-control @error('role') is-invalid @enderror" type="text" name="role" required>
+                                    <div class="form-group trainer-external">
+                                        <label>Phone </label>
+                                        <input class="form-control @error('number_phone') is-invalid @enderror" type="number" name="number_phone">
                                     </div>
                                 </div>
-        
+                            
                                 <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <label>Email <span class="text-danger">*</span></label>
-                                        <input class="form-control @error('email') is-invalid @enderror" type="email" name="email" required>
-                                    </div>
-                                </div>
-        
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <label>Phone <span class="text-danger">*</span></label>
-                                        <input class="form-control @error('number_phone') is-invalid @enderror" type="number" name="number_phone" required>
+                                    <div class="form-group trainer-external">
+                                        <label>Email</label>
+                                        <input class="form-control @error('email') is-invalid @enderror" type="email" name="email">
                                     </div>
                                 </div>
         
                                 <div class="col-sm-6">
                                     <div class="form-group">
-                                        <label>Status <span class="text-danger">*</span></label>
-                                        <select class="select form-control" id="trainer_status" name="status" value="{{old('status')}}" required>
+                                        <label>Status</label>
+                                        <select class="select form-control" id="trainer_status" name="status" value="{{old('status')}}">
                                             <option value="1">Active</option>
                                             <option value="0">Inactive</option>
                                         </select>
@@ -156,8 +171,8 @@
         
                                 <div class="col-sm-12">
                                     <div class="form-group">
-                                        <label class="">Description</label>
-                                        <textarea type="text" rows="3" class="form-control" name="description" id="description" value="{{old('description')}}"></textarea>
+                                        <label class="">Remark</label>
+                                        <textarea type="text" rows="3" class="form-control" name="remark" id="remark" value="{{old('remark')}}"></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -277,13 +292,32 @@
 
 <script>
     $(function(){
+        let id = $("#change-type").val();
+        if (id == 1) {
+            $(".trainer-external").hide();
+            $(".trainer-internal").show();
+        }else{
+            $(".trainer-internal").hide();
+            $(".trainer-external").show();
+        }
+        $("#change-type").on("change", function(){
+            let id = $("#change-type").val();
+            if (id == 1) {
+                $(".trainer-external").hide();
+                $(".trainer-internal").show();
+            }else{
+                $(".trainer-internal").hide();
+                $(".trainer-external").show();
+            }
+        });
+
         $('.update').on('click',function(){
             $('#e_status').html('<option value=""></option>');
             var _this = $(this).parents('tr');
             $('.e_id').val(_this.find('.ids').text());
             $('#e_name_en').val(_this.find('.name_en').text());
             $('#e_name_kh').val(_this.find('.name_kh').text());
-            $('#e_role').val(_this.find('.role').val());
+            // $('#e_role').val(_this.find('.role').val());
             $('#e_email').val(_this.find('.email').text());
             $('#e_number_phone').val(_this.find('.number_phone').text());
             $('#e_description').text(_this.find('.description').text());

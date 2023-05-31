@@ -222,137 +222,6 @@
     </div>
 </div>
 
-<div class="row">
-    <div class="col-md-6 d-flex">
-        <div class="card card-table flex-fill">
-            <div class="card-header">
-                <h3 class="card-title mb-0">New Staff</h3>
-            </div>
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-nowrap custom-table mb-0 table-new-staff">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>ID Card</th>
-                                <th>Name kh</th>
-                                <th>Name EN</th>
-                                <th>Gender</th>
-                                <th>Position</th>
-                                <th>Dept/ Branch</th>
-                                <th>Join Date</th>
-                                <th>Rmark</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <div class="card-footer">
-                <a href="{{ url('/reports/new_staff-report') }}">View all</a>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-6 d-flex">
-        <div class="card card-table flex-fill">
-            <div class="card-header">
-                <h3 class="card-title mb-0">Resigned Staff</h3>
-            </div>
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table custom-table table-nowrap mb-0 table-resigned-staff">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>ID Card</th>
-                                <th>Name kh</th>
-                                <th>Name EN</th>
-                                <th>Gender</th>
-                                <th>Position</th>
-                                <th>Dept/ Branch</th>
-                                <th>Join Date</th>
-                                <th>Leave of absence</th>
-                                <th>Rmark</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <div class="card-footer">
-                <a href="{{ url('/reports/staff-resigned-report') }}">View all</a>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="row">
-    <div class="col-md-6 d-flex">
-        <div class="card card-table flex-fill">
-            <div class="card-header">
-                <h3 class="card-title mb-0">Promoted Staff </h3>
-            </div>
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-nowrap custom-table mb-0 table-staff-promote">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Name</th>
-                                <th>Location</th>
-                                <th>Prev. Position</th>
-                                <th>Curr. Position</th>
-                                <th>Effective Date</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <div class="card-footer">
-                <a href="{{ url('/reports/promoted-staff-report') }}">View all</a>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-6 d-flex">
-        <div class="card card-table flex-fill">
-            <div class="card-header">
-                <h3 class="card-title mb-0">Transferred Staff</h3>
-            </div>
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table custom-table table-nowrap mb-0 table-staff-transferred">
-                        <thead>
-                            <tr>
-                                <th rowspan="2">Name</th>
-                                <th colspan="2" style="text-align: center">Location</th>
-                                <th colspan="2" style="text-align: center">Position</th>
-                                <th rowspan="2">Effective Date</th>
-                              </tr>
-                              <tr>
-                                <th>Previous</th>
-                                <th>Current</th>
-                                <th>Previous</th>
-                                <th>Current</th>
-                              </tr>
-                        </thead>
-                        <tbody>
-                            
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <div class="card-footer">
-                <a href="{{ url('/reports/transferred-staff-report') }}">View all</a>
-            </div>
-        </div>
-    </div>
-</div>
-
 {{--  block chart board type bar --}}
 <div class="row">
     <div class="col-md-6">
@@ -370,7 +239,7 @@
         </div>
     </div>
 </div>
-<div class="row">
+{{-- <div class="row">
     <div class="col-md-12 d-flex">
         <div class="card card-table flex-fill">
             <div class="card-header">
@@ -404,4 +273,4 @@
             </div>
         </div>
     </div>
-</div>
+</div> --}}

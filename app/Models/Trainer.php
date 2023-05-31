@@ -11,6 +11,23 @@ class Trainer extends Model
 
     protected $table = 'trainers';
     protected $guarded = ['id'];
+    protected $fillable = [
+        'employee_id',
+        'type',
+        'name_en',
+        'name_kh',
+        'number_phone',
+        'email',
+        'remark',
+        'status',
+        'created_by',
+        'updated_by',
+        'deleted_at',
+     ];
+
+    public function employee(){
+        return $this->belongsTo(User::class,'employee_id');
+    }
 
     public function createdBy()
     {

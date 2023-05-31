@@ -15,12 +15,13 @@ return new class extends Migration
     {
         Schema::create('trainers', function (Blueprint $table) {
             $table->id();
-            $table->string('name_kh');
-            $table->string('name_en');
-            $table->string('email')->unique();
-            $table->string('role')->nullable();
+            $table->string('type');
+            $table->string("employee_id")->nullable();
+            $table->string('name_kh')->nullable();
+            $table->string('name_en')->nullable();
+            $table->string('email')->nullable();
             $table->string('number_phone')->nullable();
-            $table->string('description')->nullable();
+            $table->string('remark')->nullable();
             $table->boolean('status')->nullable();
             $table->bigInteger('created_by')->unsigned()->nullable();
             $table->bigInteger('updated_by')->unsigned()->nullable();

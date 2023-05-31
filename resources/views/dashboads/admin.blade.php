@@ -53,15 +53,70 @@
                     <div class="card-body">
                         <span class="dash-widget-icon"><i class="fa fa-user"></i></span>
                         <div class="dash-widget-info">
-                            <h3>{{ count($employee) }}</h3>
+                            <h3 id="total-staff"></h3>
                             <span>Employees</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
+                <div class="card dash-widget">
+                    <div class="card-body">
+                        <span class="dash-widget-icon"><i class="fa fa-user"></i></span>
+                        <div class="dash-widget-info">
+                            <h3 id="total-new-staff"></h3>
+                            <span>New Employees</span><a href="{{ url('/reports/new_staff-report') }}">View Detail</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
+                <div class="card dash-widget">
+                    <div class="card-body">
+                        <span class="dash-widget-icon"><i class="fa fa-user"></i></span>
+                        <div class="dash-widget-info">
+                            <h3 id="total-resigned-staff"></h3>
+                            <span>Resigned Staff</span><a href="{{ url('/reports/staff-resigned-report') }}">View Detail</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
+                <div class="card dash-widget">
+                    <div class="card-body">
+                        <span class="dash-widget-icon"><i class="fa fa-user"></i></span>
+                        <div class="dash-widget-info">
+                            <h3 id="total-promoted-staff"></h3>
+                            <span>Promoted Staff</span><a href="{{ url('/reports/promoted-staff-report') }}">View Detail</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
+                <div class="card dash-widget">
+                    <div class="card-body">
+                        <span class="dash-widget-icon"><i class="fa fa-user"></i></span>
+                        <div class="dash-widget-info">
+                            <h3 id="total-transferred-staff"></h3>
+                            <span>Transferred Staff</span><a href="{{ url('/reports/transferred-staff-report') }}">View Detail</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
+                <div class="card dash-widget">
+                    <div class="card-body">
+                        <span class="dash-widget-icon"><i class="la la-edit"></i></span>
+                        <div class="dash-widget-info">
+                            <h3 id="total-training"></h3>
+                            <span>Training</span><a href="{{ url('/reports/transferred-staff-report') }}">View Detail</a>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="row">
+        {{-- <div class="row">
             <div class="col-md-12">
                 <div class="card-group m-b-30">
                     <div class="card">
@@ -138,7 +193,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
         @include('dashboads.chart_board')
     </div>
 @endsection
@@ -154,6 +209,14 @@
             },
             dataType: "JSON",
             success: function(response) {
+                
+                $("#total-staff").text(response.totalStaff);
+                $("#total-new-staff").text(response.newStaff);
+                $("#total-resigned-staff").text(response.staffResignations.length);
+                $("#total-promoted-staff").text(response.staffPromotes);
+                $("#total-transferred-staff").text(response.transferred);
+                $("#total-training").text(response.dataTrainings);
+                
                 let dataHRMS = {
                     branches : response.branches,
                     employees : response.data,
@@ -177,150 +240,14 @@
                     options: response.options,
                     staffResignations: response.staffResignations,
                 }
-                let dataTable ={
-                    employees: response.data,
-                    transferred: response.transferred,
-                    staffPromotes: response.staffPromotes,
-                    dataTrainings: response.dataTrainings,
-                }
-                
                 showDashboard(datas);
                 dashbaordHRMS(dataHRMS);
                 dashboadAchieveBranch(dataAchieve);
                 dashboardStaffResign(dataStaffResign);
                 dascboardReasonOffStaff(dataReasonStaff);
-                dataTables(dataTable);
             }
         });
-      
-
-        // $("#btn-reseach").on("click", function() {
-        //     let researchs = {
-        //         "from_date": $("#from_date").val(),
-        //         "to_date": $("#to_date").val()
-        //     }
-        //     showDashboard(researchs)
-        // });
-
     });
-
-    function dataTables(datas){
-        if (datas.employees.length > 0) {
-            var trNewStaff = "";
-            var trResignStaff = "";
-            let ns = 0;
-            let rs = 0;
-            $(datas.employees).each(function(e, row) {
-                if (row.emp_status == "Probation") {
-                    ns++;
-                    if (ns <=5) {
-                        let date_of_commencement = moment(row.date_of_commencement).format('D-MMM-YYYY')
-                        trNewStaff += '<tr class="odd">' +
-                            '<td>'+ (row.id) + '</td>' +
-                            '<td class="number_employee_id">' + (row.number_employee) + '</a></td>' +
-                            '<td>' + (row.employee_name_kh) + '</td>' +
-                            '<td>' + (row.employee_name_en) + '</td>' +
-                            '<td>' + (row.gender == null ? "" : row.gender.name_english) + '</td>' +
-                            '<td>' + (row.position ? row.position.name_khmer : "") + '</td>' +
-                            '<td>' + (row.branch ? row.branch.branch_name_en: "") + '</td>' +
-                            '<td>' + (date_of_commencement) + '</td>' +
-                            '<td>' + (row.remark ? row.remark : "") + '</td>' +
-                            '</tr>';
-                    }
-                }else if (row.emp_status != "Probation" && row.emp_status != "1" && row.emp_status != "2") {
-                    rs++;
-                    if (rs <=5) {
-                        let date_of_commencement = moment(row.date_of_commencement).format('D-MMM-YYYY')
-                        let resign_date = moment(row.resign_date).format('D-MMM-YYYY')
-                        trResignStaff += '<tr class="odd">' +
-                            '<td>' + (row.id) + '</td>' +
-                            '<td>' + (row.number_employee) + '</a></td>' +
-                            '<td>' + (row.employee_name_kh) + '</td>' +
-                            '<td>' + (row.employee_name_en) + '</td>' +
-                            '<td>' + (row.gender == null ? "" : row.gender.name_english) + '</td>' +
-                            '<td>' + (row.position ? row.position.name_khmer : "") + '</td>' +
-                            '<td>' + (row.branch ? row.branch.branch_name_en: "") + '</td>' +
-                            '<td>' + (date_of_commencement) + '</td>' +
-                            '<td>' + (resign_date) + '</td>' +
-                            '<td>' + (row.remark ? row.remark : "") + '</td>' +
-                            '</tr>';
-                    }
-                }
-            });
-        } else {
-            var trNewStaff = '<tr><td colspan=9 align="center">ពុំមានទិន្នន័យសម្រាប់បង្ហាញ</td></tr>';
-            var trResignStaff = '<tr><td colspan=9 align="center">ពុំមានទិន្នន័យសម្រាប់បង្ហាញ</td></tr>';
-        };
-       
-        if (datas.staffPromotes.length > 0) {
-            var trSP = "";
-            $(datas.staffPromotes).each(function(e, row) {
-                let date = moment(row.date).format('D-MMM-YYYY')
-                trSP += '<tr class="odd">' +
-                    '<td>'+ (row.id) + '</td>' +
-                    '<td>' + (row.employee.employee_name_en) + '</a></td>' +
-                    '<td>' +(row.employee.branch.abbreviations)+ '</td>' +
-                    '<td>' + (row.posit_id) + '</td>' +
-                    '<td>' + (row.position_promoted_to) + '</td>' +
-                    '<td>' + (date) + '</td>' +
-                    '</tr>';
-            });
-        }else{
-            var trSP = '<tr><td colspan=6 align="center">ពុំមានទិន្នន័យសម្រាប់បង្ហាញ</td></tr>';
-        }
-
-        if (datas.transferred.length > 0) {
-            var trST = "";
-            let branch_name = "";
-            let position_name = "";
-            $(datas.transferred).each(function(e, row) {
-                let date = moment(row.date).format('D-MMM-YYYY')
-                trST += '<tr class="odd">' +
-                    '<td>' + (row.employee.employee_name_en) + '</a></td>' +
-                    '<td>' +(e == 0 ? row.employee.branch.abbreviations: branch_name)+ '</td>' +
-                    '<td>' +(row.branch.abbreviations)+ '</td>' +
-                    '<td>' +(e == 0 ? row.employee.position.name_khmer : position_name)+ '</td>' +
-                    '<td>' +(row.position.name_khmer)+ '</td>' +
-                    '<td>' + (date) + '</td>' +
-                    '</tr>';
-                branch_name = row.branch.abbreviations;
-                position_name = row.position.name_khmer;
-            });
-        }else{
-            var trST = '<tr><td colspan=6 align="center">ពុំមានទិន្នន័យសម្រាប់បង្ហាញ</td></tr>';
-        }
-
-        if (datas.dataTrainings.length > 0) {
-            var trT = "";
-            $(datas.dataTrainings).each(function(e, row) {
-              
-                let start_date = moment(row.start_date).format('D-MMM-YYYY')
-                let ent_date = moment(row.ent_date).format('D-MMM-YYYY')
-                row.employees.map((em)=>{
-                    trT += '<tr class="odd">' +
-                        '<td>' + (em[0].id) + '</td>' +
-                        '<td>' + (em[0].employee_name_kh) + '</td>' +
-                        '<td>' + (em[0].employee_name_en) + '</td>' +
-                        '<td>' + (em[0].gender ? em[0].gender.name_english: "") + '</td>' +
-                        '<td>' +(em[0].position ? em[0].position.name_khmer: "")+ '</td>' +
-                        '<td>' +(em[0].branch ? em[0].branch.abbreviations: "")+ '</td>' +
-                        '<td>' +(row.training_type.type_name)+ '</td>' +
-                        '<td>' + (start_date) + '</td>' +
-                        '<td>' + (ent_date) + '</td>' +
-                        '<td>' + (row.description) + '</td>' +
-                        '</tr>';
-                });
-            });
-        }else{
-            var trT = '<tr><td colspan=10 align="center">ពុំមានទិន្នន័យសម្រាប់បង្ហាញ</td></tr>';
-        }
-
-        $(".table-new-staff tbody").html(trNewStaff);
-        $(".table-resigned-staff tbody").html(trResignStaff);
-        $(".table-staff-promote tbody").html(trSP);
-        $(".table-staff-transferred tbody").html(trST);
-        $(".table-training tbody").html(trT);
-    }
 
     function showDashboard(data) {
         var deshboard = [

@@ -3,6 +3,61 @@
     .profile-info-left {
         border-right: 0px dashed #cccccc !important;
     }
+    .lds-ellipsis {
+  display: inline-block;
+  position: relative;
+  width: 70px;
+  height: 28px;
+}
+.lds-ellipsis div {
+  position: absolute;
+  top: 10px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #fff;
+  animation-timing-function: cubic-bezier(0, 1, 1, 0);
+}
+.lds-ellipsis div:nth-child(1) {
+  left: 8px;
+  animation: lds-ellipsis1 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(2) {
+  left: 8px;
+  animation: lds-ellipsis2 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(3) {
+  left: 32px;
+  animation: lds-ellipsis2 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(4) {
+  left: 56px;
+  animation: lds-ellipsis3 0.6s infinite;
+}
+@keyframes lds-ellipsis1 {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes lds-ellipsis3 {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0);
+  }
+}
+@keyframes lds-ellipsis2 {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(24px, 0);
+  }
+}
 </style>
 @section('content')
     <div class="content container-fluid">
@@ -21,10 +76,15 @@
                     </button>&nbsp; --}}
                 </div>
                 <div class="col-auto float-end ms-auto">
-                    <div class="btn-group btn-group-sm">
+                    <div class="btn-group">
                         @if (Auth::user()->RolePermission == 'Administrator')
-                            <a href="#" class="btn add-btn"  id="tast_print"><i class="fa fa-print fa-lg"></i>
-                                Print</a>
+                            <a href="#" class="btn add-btn"  id="tast_print">
+                                <label for=""><i class="fa fa-print fa-lg"></i>
+                                    Print</label>
+                                 {{-- <div id="btn-loadding" class="lds-ellipsis"><div></div><div></div><div></div><div></div></div> --}}
+
+                            </a>
+                                
                         @endif
                         {{-- <button class="btn btn-white" id="tast_print"><i class="fa fa-print fa-lg"></i> Print</button> --}}
                     </div>
@@ -32,7 +92,8 @@
 
             </div>
         </div>
-
+       
+        
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
@@ -66,7 +127,7 @@
                                 <ul class="list-unstyled">
                                     <li><strong>Employee ID:</strong> {{ $data->MotorEmployee->number_employee }}</li>
                                     <li><strong>Name:</strong> {{ $data->MotorEmployee->employee_name_en }}</li>
-                                    <li><strong>Gender:</strong> {{ $data->MotorEmployee->gender == 1 ? 'Male' : 'Female' }}
+                                    <li><strong>Gender:</strong> {{ $data->MotorEmployee->EmployeeGender}}
                                     </li>
                                     <li><strong>Position:</strong> {{ $data->MotorEmployee->EmployeePosition }}</li>
                                 </ul>
@@ -146,7 +207,7 @@
             <div>
                 <span><strong>Employee ID:</strong> {{ $data->MotorEmployee->number_employee }}</span><br>
                 <span><strong>Name:</strong> {{ $data->MotorEmployee->employee_name_en }}</span><br>
-                <span><strong>Gender:</strong> {{ $data->MotorEmployee->gender == 1 ? 'Male' : 'Female' }}</span><br>
+                <span><strong>Gender:</strong> {{ $data->MotorEmployee->EmployeeGender}}</span><br>
                 <span><strong>Position:</strong> {{ $data->MotorEmployee->EmployeePosition }}</span>
             </div><br>
 
