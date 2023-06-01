@@ -43,12 +43,12 @@
                                             @foreach ($data as $item)
                                                 <tr class="odd">
                                                     <td class="sorting_1 ids">{{$item->id}}</td>
-                                                    <td >{{$item->type == 1 ? "Internal": "External"}}</td>
-                                                    <td class="name_en">{{$item->name_en}}</td>
-                                                    <td class="name_kh">{{$item->name_kh}}</td>
-                                                    <td class="number_phone">{{$item->number_phone}}</td>
-                                                    <td class="email">{{$item->email}}</td>
-                                                    <td >{{$item->remark}}</td>
+                                                    <td class="type">{{$item->type == 1 ? "Internal": "External"}}</td>
+                                                    <td class="name_en">{{$item->type == 1 ? $item->EmployeeIn->employee_name_en : $item->name_en}}</td>
+                                                    <td class="name_kh">{{$item->type == 1 ? $item->EmployeeIn->employee_name_kh : $item->name_kh}}</td>
+                                                    <td class="number_phone">{{$item->type == 1 ? $item->EmployeeIn->personal_phone_number : $item->number_phone}}</td>
+                                                    <td class="email">{{$item->type == 1 ? $item->EmployeeIn->email : $item->email}}</td>
+                                                    <td >{{$item->type == 1 ? $item->EmployeeIn->remark : $item->remark}}</td>
                                                     <td>
                                                         {{-- <input type="hidden" class="role" value="{{$item->role}}"> --}}
                                                         <input type="hidden" class="status" value="{{$item->status}}">
@@ -186,7 +186,7 @@
         </div>
 
         <div id="edit_trainer" class="modal custom-modal fade" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">Edit Trainer</h5>
@@ -201,41 +201,54 @@
                             <div class="row">
                                 <div class="col-sm-6">
                                     <div class="form-group">
+                                        <label>Type <span class="text-danger">*</span></label>
+                                        <select class="select form-control" id="e_change_type" name="type" required>
+                                            {{-- <option value="1">Internal</option>
+                                            <option value="2">External</option> --}}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 e-trainer-internal">
+                                    <div class="form-group">
+                                        <label class="">Trainer <span class="text-danger">*</span></label>
+                                        <select class="select form-control data-clear" id="e_employee_id" name="employee_id">
+                                            @foreach ($employee as $item)
+                                                <option value="{{$item->id}}">{{$item->employee_name_en}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group e-trainer-external">
                                         <label>Name (EN)<span class="text-danger">*</span></label>
-                                        <input class="form-control @error('name_en') is-invalid @enderror" type="text" id="e_name_en" name="name_en" required>
+                                        <input class="form-control data-clear @error('name_en') is-invalid @enderror" type="text" id="e_name_en" name="name_en">
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
-                                    <div class="form-group">
+                                    <div class="form-group e-trainer-external">
                                         <label>Name (KH)<span class="text-danger">*</span></label>
-                                        <input class="form-control @error('name_kh') is-invalid @enderror" type="text" id="e_name_kh" name="name_kh" required>
+                                        <input class="form-control data-clear @error('name_kh') is-invalid @enderror" type="text" id="e_name_kh" name="name_kh">
                                     </div>
                                 </div>
+
                                 <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <label>Role <span class="text-danger">*</span></label>
-                                        <input class="form-control @error('role') is-invalid @enderror" type="text" id="e_role" name="role" required>
+                                    <div class="form-group e-trainer-external">
+                                        <label>Phone </label>
+                                        <input class="form-control data-clear @error('number_phone') is-invalid @enderror" type="number" id="e_number_phone" name="number_phone">
                                     </div>
                                 </div>
-        
+                            
                                 <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <label>Email <span class="text-danger">*</span></label>
-                                        <input class="form-control @error('email') is-invalid @enderror" type="email" id="e_email" name="email" required>
-                                    </div>
-                                </div>
-        
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <label>Phone <span class="text-danger">*</span></label>
-                                        <input class="form-control @error('number_phone') is-invalid @enderror" type="number" id="e_number_phone" name="number_phone" required>
+                                    <div class="form-group e-trainer-external">
+                                        <label>Email</label>
+                                        <input class="form-control data-clear @error('email') is-invalid @enderror" type="email" id="e_email" name="email">
                                     </div>
                                 </div>
         
                                 <div class="col-sm-6">
                                     <div class="form-group">
-                                        <label>Status <span class="text-danger">*</span></label>
-                                        <select class="select form-control" id="e_status" name="status" value="{{old('status')}}" required>
+                                        <label>Status</label>
+                                        <select class="select form-control" id="e_status" name="status" value="{{old('status')}}">
                                             <option value="1">Active</option>
                                             <option value="0">Inactive</option>
                                         </select>
@@ -244,8 +257,8 @@
         
                                 <div class="col-sm-12">
                                     <div class="form-group">
-                                        <label class="">Description</label>
-                                        <textarea type="text" rows="3" class="form-control" name="description" id="e_description" value="{{old('description')}}"></textarea>
+                                        <label class="">Remark</label>
+                                        <textarea type="text" rows="3" class="form-control" name="remark" id="e_remark" value="{{old('remark')}}"></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -300,8 +313,9 @@
             $(".trainer-internal").hide();
             $(".trainer-external").show();
         }
-        $("#change-type").on("change", function(){
+        $("#change-type, #e_change_type").on("change", function(){
             let id = $("#change-type").val();
+            let e_id = $("#e_change_type").val();
             if (id == 1) {
                 $(".trainer-external").hide();
                 $(".trainer-internal").show();
@@ -309,23 +323,64 @@
                 $(".trainer-internal").hide();
                 $(".trainer-external").show();
             }
+            if (e_id == 1) {
+                $(".e-trainer-external").hide();
+                $(".e-trainer-internal").show();
+                $(".data-clear").val("");
+            }else{
+                $(".data-clear").val("");
+                $(".e-trainer-internal").hide();
+                $(".e-trainer-external").show();
+            }
         });
 
         $('.update').on('click',function(){
+            $('#e_change_type').html('<option value=""></option>');
             $('#e_status').html('<option value=""></option>');
             var _this = $(this).parents('tr');
+           
             $('.e_id').val(_this.find('.ids').text());
             $('#e_name_en').val(_this.find('.name_en').text());
             $('#e_name_kh').val(_this.find('.name_kh').text());
-            // $('#e_role').val(_this.find('.role').val());
             $('#e_email').val(_this.find('.email').text());
             $('#e_number_phone').val(_this.find('.number_phone').text());
-            $('#e_description').text(_this.find('.description').text());
+            $('#e_remark').text(_this.find('.remark').text());
             let status = _this.find('.status').val();
+            let type = _this.find('.type').text();
             if (status == "1") {
                 $('#e_status').append('<option selected value="1">Active</option> <option value="0">Inactive</option>');
             }else if(status == "0"){
                 $('#e_status').append('<option selected value="0">Inactive</option> <option value="1">Active</option>');
+            }
+            if (type == "Internal") {
+                $(".e-trainer-external").hide();
+                $(".e-trainer-internal").show();
+                $('#e_change_type').append('<option selected value="1">Internal</option> <option value="2">External</option>');
+                let _id = _this.find('.ids').text();
+                $.ajax({
+                        type: "GET",
+                        url: "{{url('trainer/edit')}}",
+                        data: {
+                            id : _id
+                    },
+                    dataType: "JSON",
+                    success: function (response) {
+                        if (response.employee != '') {
+                            $('#e_employee_id').html('<option selected disabled> --Select --</option>');
+                            $.each(response.employee, function(i, item) {
+                                $('#e_employee_id').append($('<option>', {
+                                    value: item.id,
+                                    text: item.employee_name_en,
+                                    selected: item.id == response.trainer.employee_id
+                                }));
+                            });
+                        }
+                    }
+                });
+            }else if(type == "External"){
+                $(".e-trainer-internal").hide();
+                $(".e-trainer-external").show();
+                $('#e_change_type').append('<option selected value="2">External</option> <option value="1">Internal</option>');
             }
         });
 

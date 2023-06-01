@@ -117,12 +117,12 @@ function menu(){
                     'table'=>2,
                     'permission'=>1
                 ],
-                [
-                    'value'=>'Training Type',
-                    'url'=>"training-type/list",
-                    'table'=>2,
-                    'permission'=>1
-                ],
+                // [
+                //     'value'=>'Training Type',
+                //     'url'=>"training-type/list",
+                //     'table'=>2,
+                //     'permission'=>1
+                // ],
             ]
         ],
         [

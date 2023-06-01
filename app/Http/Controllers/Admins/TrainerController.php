@@ -20,8 +20,7 @@ class TrainerController extends Controller
     public function index()
     {
         $data = Trainer::with("employee")->get();
-        // dd($data);
-        $employee = User::all();
+        $employee = User::whereIn("emp_status", ['1','2'])->get();
         return view('trainers.index', compact('data', 'employee'));
     }
 
@@ -73,9 +72,14 @@ class TrainerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request)
     {
-        //
+        $data = Trainer::where("id", $request->id)->first();
+        $employee = User::whereIn("emp_status", ['1','2'])->get();
+        return response()->json([
+            'trainer'=>$data,
+            'employee'=>$employee
+        ]);
     }
 
     /**
@@ -89,6 +93,7 @@ class TrainerController extends Controller
     {
         try{
             Trainer::where('id',$request->id)->update([
+                'type' => $request->type,
                 'employee_id' => $request->employee_id,
                 'name_en' => $request->name_en,
                 'name_kh' => $request->name_kh,
