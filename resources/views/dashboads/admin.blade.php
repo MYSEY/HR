@@ -7,7 +7,10 @@
         overflow: hidden;
         margin-right: 1px;
     }
-    .table-transfer, th, td {
+
+    .table-transfer,
+    th,
+    td {
         border: 1px solid black;
         border-collapse: collapse;
     }
@@ -25,41 +28,8 @@
                 </div>
             </div>
         </div>
-
-        {{-- <div class="row filter-row">
-            <div class="col-sm-6 col-md-3">
-                <div class="form-group form-focus focused">
-                    <div class="cal-icon">
-                        <input class="form-control floating datetimepicker" type="text" id="from_date">
-                    </div>
-                    <label class="focus-label">From</label>
-                </div>
-            </div>
-            <div class="col-sm-6 col-md-3">
-                <div class="form-group form-focus">
-                    <div class="cal-icon">
-                        <input class="form-control floating datetimepicker" type="text" id="to_date">
-                    </div>
-                    <label class="focus-label">To</label>
-                </div>
-            </div>
-            <div class="col-sm-6 col-md-3">
-                <a href="#" class="btn btn-success w-100" id="btn-reseach"> Search </a>
-            </div>
-        </div> --}}
-        <div class="row">
-            <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
-                <div class="card dash-widget">
-                    <div class="card-body">
-                        <span class="dash-widget-icon"><i class="fa fa-user"></i></span>
-                        <div class="dash-widget-info">
-                            <h3 id="total-staff"></h3>
-                            <span>Employees</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
+         <div class="row">
+            {{-- <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
                 <div class="card dash-widget">
                     <div class="card-body">
                         <span class="dash-widget-icon"><i class="fa fa-user"></i></span>
@@ -69,14 +39,15 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> --}}
             <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
                 <div class="card dash-widget">
                     <div class="card-body">
                         <span class="dash-widget-icon"><i class="fa fa-user"></i></span>
                         <div class="dash-widget-info">
                             <h3 id="total-resigned-staff"></h3>
-                            <span>Resigned Staff</span><a href="{{ url('/reports/staff-resigned-report') }}">View Detail</a>
+                            <span>Resigned Staff</span><a href="{{ url('/reports/staff-resigned-report') }}">View
+                                Detail</a>
                         </div>
                     </div>
                 </div>
@@ -87,7 +58,8 @@
                         <span class="dash-widget-icon"><i class="fa fa-user"></i></span>
                         <div class="dash-widget-info">
                             <h3 id="total-promoted-staff"></h3>
-                            <span>Promoted Staff</span><a href="{{ url('/reports/promoted-staff-report') }}">View Detail</a>
+                            <span>Promoted Staff</span><a href="{{ url('/reports/promoted-staff-report') }}">View
+                                Detail</a>
                         </div>
                     </div>
                 </div>
@@ -98,7 +70,8 @@
                         <span class="dash-widget-icon"><i class="fa fa-user"></i></span>
                         <div class="dash-widget-info">
                             <h3 id="total-transferred-staff"></h3>
-                            <span>Transferred Staff</span><a href="{{ url('/reports/transferred-staff-report') }}">View Detail</a>
+                            <span>Transferred Staff</span><a href="{{ url('/reports/transferred-staff-report') }}">View
+                                Detail</a>
                         </div>
                     </div>
                 </div>
@@ -110,6 +83,94 @@
                         <div class="dash-widget-info">
                             <h3 id="total-training"></h3>
                             <span>Training</span><a href="{{ url('/reports/transferred-staff-report') }}">View Detail</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 col-lg-6 col-xl-4 d-flex">
+                <div class="card flex-fill">
+                    <div class="card-body">
+                        <h4 class="card-title">Employees</h4>
+                        <div class="statistics">
+                            <div class="row">
+                                <div class="col-md-6 col-6 text-center">
+                                    <div class="stats-box mb-4">
+                                        <p>Total Employee</p>
+                                        <h3 id="total-staff"></h3>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-6 text-center">
+                                    <div class="stats-box mb-4">
+                                        <p>Total Female</p>
+                                        <h3 id="total-female"></h3>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="progress mb-4">
+                            <div class="progress-bar bg-purple" role="progressbar" style="width: 30%" aria-valuenow="30"
+                                aria-valuemin="0" aria-valuemax="100"><span id="percentage-interview">0%</span></div>
+                            <div class="progress-bar bg-success" role="progressbar" style="width: 22%" aria-valuenow="18"
+                                aria-valuemin="0" aria-valuemax="100"><span id="percantage-probation"></span></div>
+                            <div class="progress-bar bg-text-info" role="progressbar" style="width: 24%" aria-valuenow="12"
+                                aria-valuemin="0" aria-valuemax="100"><span id="percantage-fdc"></span></div>
+                            <div class="progress-bar bg-danger" role="progressbar" style="width: 26%" aria-valuenow="14"
+                                aria-valuemin="0" aria-valuemax="100"><span id="percantage-udc"></span></div>
+                        </div>
+                        <div>
+                            <p><i class="fa fa-dot-circle-o text-purple me-2"></i>Interview <span
+                                    id="total-interview" class="float-end">0</span></p>
+                            <p><i class="fa fa-dot-circle-o text-success me-2"></i>Probation <span
+                                    id="total-probation" class="float-end">0</span></p>
+                            <p><i class="fa fa-dot-circle-o text-info me-2"></i>FDC <span
+                                    id="total-fdc" class="float-end">0</span></p>
+                            <p><i class="fa fa-dot-circle-o text-danger me-2"></i>UDC <span
+                                    id="total-udc" class="float-end">0</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12 col-lg-12 col-xl-4 d-flex">
+                <div class="card flex-fill dash-statistics">
+                    <div class="card-body">
+                        <h5 class="card-title">Star Age of Staff</h5>
+                        <p><span class="me-2">Age</span><i class="fa fa-dot-circle-o text-info"></i></p>
+                        <div class="stats-list">
+                            <div class="stats-info">
+                                <p>18 - 24 <strong>{{--<small id="percen-age-18"></small> / --}}<small id="total-age-18"></small></strong></p>
+                                <div class="progress">
+                                    <div class="progress-bar bg-info" role="progressbar" 
+                                        id="progressbar-18" aria-valuemin="0"></div>
+                                </div>
+                            </div>
+                            <div class="stats-info">
+                                <p>25 - 44 <strong id="total-age-25">0</strong></p>
+                                <div class="progress">
+                                    <div class="progress-bar bg-info" role="progressbar"
+                                        id="progressbar-25" aria-valuemin="0"></div>
+                                </div>
+                            </div>
+                            <div class="stats-info">
+                                <p>45 - 60 <strong id="total-age-45">0</strong></p>
+                                <div class="progress">
+                                    <div class="progress-bar bg-info" role="progressbar"
+                                    id="progressbar-45" aria-valuemin="0"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-12 col-lg-6 col-xl-4 d-flex">
+                <div class="card flex-fill">
+                    <div class="card-body">
+                        <h4 class="card-title">Birthday Reminder <span class="badge bg-inverse-danger ms-2" id="total-date-birthday">0</span></h4>
+                        <div id="birthday-staff"></div>
+                        <div class="load-more text-center">
+                            <a class="text-dark" href="javascript:void(0);">More</a>
                         </div>
                     </div>
                 </div>
@@ -205,38 +266,137 @@
             url: "{{ url('dashboad/show') }}",
             data: {
                 "from_date": $("#from_date").val() ? $("#from_date").val() : null,
-                "to_date":  $("#to_date").val() ?  $("#to_date").val() : null,
+                "to_date": $("#to_date").val() ? $("#to_date").val() : null,
             },
             dataType: "JSON",
             success: function(response) {
-                
-                $("#total-staff").text(response.totalStaff);
-                $("#total-new-staff").text(response.newStaff);
+                let totalStaff = response.totalStaff;
+                if (totalStaff.length > 0 ) {
+                    let total_female = 0;
+                    let total_probatio = 0;
+                    let total_fdc = 0;
+                    let total_udc = 0;
+                    let total_age_18 = 0;
+                    let total_age_25 = 0;
+                    let total_age_45 = 0;
+                    let total_date_birthday = 0;
+                    let start_date = moment().format("MM-DD");
+                    let ent_date = moment().add(14, "days").format("MM-DD");
+                    let data_birthday =  [];
+                    totalStaff.map((emp) =>{
+                        if (emp.gender && emp.gender.name_english == "Female") {
+                            total_female++;
+                        } 
+                        if (emp.emp_status == "Probation") {
+                            total_probatio ++;
+                        } 
+                        if (emp.emp_status == "1") {
+                            total_fdc++;
+                        } 
+                        if (emp.emp_status == "2") {
+                            total_udc++;
+                        }
+
+                        let date = moment().diff(emp.date_of_birth, 'years',false);
+                        if (date >= 18 && date <= 24) {
+                            total_age_18++;
+                        }
+                        if (date >= 25 && date <= 44) {
+                            total_age_25++;
+                        }
+                        if (date >= 45 && date <= 60) {
+                            total_age_45++;
+                        }
+
+                        let date_birthday =  moment(emp.date_of_birth).format("MM-DD");
+                        if (date_birthday >= start_date && date_birthday <= ent_date) {
+                            data_birthday.push(emp);
+                            total_date_birthday++;
+                        }
+                    });
+                    const sortedAsc = data_birthday.sort(
+                        (objA, objB) => Number(moment(objA.date_of_birth).format("DD")) - Number(moment(objB.date_of_birth).format("DD")),
+                    );
+                    var div = ""; 
+                    var film = sortedAsc.filter((emp, idx) => idx < 2).map(emp => {
+                        let date_of_daymonth = moment(emp.date_of_birth).format("MM-DD");
+                        let current_year = moment().format("YYYY");
+                        let date_of_birth = moment(date_of_daymonth+'-'+current_year).format("D-MMM-YYYY");
+                        div += '<div>'+
+                            '<div class="leave-info-box">'+
+                                '<div class="media d-flex align-items-center">'+
+                                    '<a href="#" class="avatar">'+
+                                        '<img alt="" id="profile-imge" src="{{asset("/uploads/images")}}/'+(emp.profile)+'">'+
+                                    '</a>'+
+                                    '<div class="media-body flex-grow-1">'+
+                                        '<div class="text-sm my-0" >'+(emp.employee_name_en)+'</div>'+
+                                    '</div>'+
+                                '</div>'+
+                                '<div class="row align-items-center mt-3">'+
+                                    '<div class="col-6">'+
+                                        '<h6 class="mb-0">'+(date_of_birth)+'</h6>'+
+                                        '<span class="text-sm text-muted">Birthday</span>'+
+                                    '</div>'+
+                                    '<div class="col-6 text-end">'+
+                                        '<span class="badge bg-inverse-danger">Happy Birthday</span>'+
+                                    '</div>'+
+                                '</div>'+
+                            '</div>'+
+                        '</div>';
+                    });
+
+                    $("#birthday-staff").append(div);
+
+                    $("#total-female").text(total_female);
+                    $("#total-probation").text(total_probatio);
+                    $("#total-fdc").text(total_fdc);
+                    $("#total-udc").text(total_udc);
+                    $("#percantage-probation").text(Math.round((total_probatio / totalStaff.length)*100)+"%");
+                    $("#percantage-fdc").text(Math.round((total_fdc / totalStaff.length)*100)+"%");
+                    $("#percantage-udc").text(Math.round((total_udc / totalStaff.length)*100)+"%");
+
+                    $("#total-age-18").text(total_age_18);
+                    $('#progressbar-18').attr('aria-valuenow', total_age_18).css('width', total_age_18+'%');
+                    $('#progressbar-18').attr('aria-valuemax', totalStaff.length);
+
+                    $("#total-age-25").text(total_age_25);
+                    $('#progressbar-25').attr('aria-valuenow', total_age_25).css('width', total_age_25+'%');
+                    $('#progressbar-25').attr('aria-valuemax', totalStaff.length);
+
+                    $("#total-age-45").text(total_age_45);
+                    $('#progressbar-45').attr('aria-valuenow', total_age_45).css('width', total_age_45+'%');
+                    $('#progressbar-45').attr('aria-valuemax', totalStaff.length);
+
+                    $('#total-date-birthday').text(total_date_birthday);
+                }
+
+                $("#total-staff").text(response.totalStaff.length);
+                // $("#total-new-staff").text(response.newStaff);
                 $("#total-resigned-staff").text(response.staffResignations.length);
                 $("#total-promoted-staff").text(response.staffPromotes);
                 $("#total-transferred-staff").text(response.transferred);
                 $("#total-training").text(response.dataTrainings);
-                
+
                 let dataHRMS = {
-                    branches : response.branches,
-                    employees : response.data,
+                    branches: response.branches,
+                    employees: response.data,
 
                 };
                 let dataAchieve = {
-                    branches : response.branches,
-                    recruitmentPlans : response.recruitmentPlans,
-                    achieveBranchs : response.achieveBranchs,
+                    branches: response.branches,
+                    recruitmentPlans: response.recruitmentPlans,
+                    achieveBranchs: response.achieveBranchs,
                 }
-                let datas ={
-                    branches : response.branches,
-                    employees : response.data,
-                    staffResignations : response.staffResignations,
+                let datas = {
+                    branches: response.branches,
+                    employees: response.data,
+                    staffResignations: response.staffResignations,
                 }
-                let dataStaffResign ={
+                let dataStaffResign = {
                     branches: response.branches,
                     staffResignations: response.staffResignations,
                 }
-                let dataReasonStaff ={
+                let dataReasonStaff = {
                     options: response.options,
                     staffResignations: response.staffResignations,
                 }
@@ -250,8 +410,7 @@
     });
 
     function showDashboard(data) {
-        var deshboard = [
-            {
+        var deshboard = [{
                 "name": "staff_take_leave"
             },
             {
@@ -301,7 +460,7 @@
                 stack: 'Stack 0',
             }, ]
         };
-        
+
         $.each(deshboard, function(i, db) {
             let text = "";
             let data = {};
@@ -348,7 +507,7 @@
         });
     }
 
-    function dashbaordHRMS(datas){
+    function dashbaordHRMS(datas) {
         const dataHRMSdashboards = {
             // labels: [],
             datasets: [{
@@ -376,7 +535,7 @@
         let labelsHRMS = [];
         let totalHRMSData = [];
         let totalHRMSFemale = [];
-        
+
         branches.map((br) => {
             let totalValue = 0;
             let totalFemale = 0;
@@ -392,7 +551,8 @@
                         totalValue++;
                     }
                     if (em.gender) {
-                        if (em.branch_id == br.id && em.gender.type == "gender" && em.gender.name_english == "Female") {
+                        if (em.branch_id == br.id && em.gender.type == "gender" && em.gender
+                            .name_english == "Female") {
                             totalFemale++;
                         }
                     }
@@ -402,7 +562,7 @@
             totalHRMSData.push(totalValue);
             totalHRMSFemale.push(totalFemale);
             labelsHRMS.push(br.abbreviations);
-            
+
         });
         labelsHRMS.push('total');
         totalHRMSData.push(totalEmployees);
@@ -453,11 +613,11 @@
         new Chart('HRMS_dashboards', dataChart);
     }
 
-    function dashboadAchieveBranch(datas){
+    function dashboadAchieveBranch(datas) {
         let dataAchive = {
             datasets: [{
                     label: 'Total Staff',
-                    data:[],
+                    data: [],
                     backgroundColor: [
                         "green"
                     ],
@@ -465,7 +625,7 @@
                 },
                 {
                     label: 'Current & Recruited 2023',
-                    data:[],
+                    data: [],
                     backgroundColor: [
                         "yellow"
                     ],
@@ -482,14 +642,14 @@
         let totalCurrentStaff = 0;
         if (datas.achieveBranchs.length > 0) {
             datas.achieveBranchs.map((ach) => {
-                if (ach.branch.abbreviations !="HQ") {
+                if (ach.branch.abbreviations != "HQ") {
                     totalCurrentStaff++;
                 }
             })
         }
         if (datas.recruitmentPlans.length > 0) {
             datas.recruitmentPlans.map((plan) => {
-                if (plan.branch.abbreviations !="HQ") {
+                if (plan.branch.abbreviations != "HQ") {
                     totalPlan += plan.total_staff;
                 }
             })
@@ -515,7 +675,7 @@
                 labelAchive.push(br.abbreviations);
                 dataValueAchive.push(totalValueAchieve);
                 dataValuePlanAchive.push(totalValuePlanAchieveBybranch);
-                dataValuePlanPercentage.push((totalValueAchieve / totalValuePlanAchieveBybranch) *100)
+                dataValuePlanPercentage.push((totalValueAchieve / totalValuePlanAchieveBybranch) * 100)
             }
         });
         labelAchive.push('total');
@@ -531,14 +691,14 @@
                 dataAchRed.push(
                     0
                 )
-            }else{
+            } else {
                 dataAchRed.push(
                     Math.round((dataAchive.datasets[1].data[index] / da) * 100)
                 )
             }
-           
+
         });
-       
+
         dataAchive.datasets.push({
             label: '% Achivement',
             data: dataAchRed,
@@ -547,7 +707,7 @@
             ],
             stack: 'Stack 2',
         })
-        
+
         let option = {
             plugins: {
                 // tooltip: {
@@ -563,7 +723,7 @@
                     },
                     align: 'center',
                     _actives: false,
-                    formatter: (value, context)=>{ 
+                    formatter: (value, context) => {
                         if (context.chart.$datalabels._datasets[2]) {
                             return `${Math.round(value)}%`;
                         }
@@ -594,11 +754,11 @@
         new Chart('achived_by_branches', dataChart);
     }
 
-    function dashboardStaffResign(datas){
+    function dashboardStaffResign(datas) {
         let branches = datas.branches;
         let staffResignations = datas.staffResignations;
         const dataStaffResignation = {
-            labels:[],
+            labels: [],
             datasets: [{
                 data: [],
                 backgroundColor: [
@@ -615,10 +775,10 @@
         };
         let labelStaffResignation = [];
         let staffResignationData = [];
-        let date =  new Date();
-        let year =  date.getFullYear();
+        let date = new Date();
+        let year = date.getFullYear();
         let month = date.getMonth();
-        let totalMonth = monthDiff(new Date(year, 01), new Date(year, month+1))
+        let totalMonth = monthDiff(new Date(year, 01), new Date(year, month + 1))
         branches.map((br) => {
             let totalValue = 0;
             let totalFemale = 0;
@@ -632,7 +792,7 @@
                 });
             }
             labelStaffResignation.push(br.abbreviations);
-            staffResignationData.push((totalValueStaffResignation / totalMonth) *100 );
+            staffResignationData.push((totalValueStaffResignation / totalMonth) * 100);
         });
         let data = {};
         dataStaffResignation.labels = labelStaffResignation;
@@ -651,7 +811,7 @@
                         size: 10
                     },
                     align: 'center',
-                    formatter: (value, context)=>{
+                    formatter: (value, context) => {
                         return `${Math.round(value)}%`;
                     }
                 },
@@ -671,7 +831,7 @@
         new Chart('staff_resignation', dataChart);
     }
 
-    function dascboardReasonOffStaff(datas){
+    function dascboardReasonOffStaff(datas) {
         let dataReasonStaffResignation = {
             labels: [
                 // 'Get new job',
@@ -716,7 +876,7 @@
                 });
             }
             labelStaffResignation.push(reason.name_english);
-            staffResignationData.push((totalValueStaffResignation / totalStaffResign) *100);
+            staffResignationData.push((totalValueStaffResignation / totalStaffResign) * 100);
         });
         dataReasonStaffResignation.labels = labelStaffResignation;
         dataReasonStaffResignation.datasets[0].data = staffResignationData;
@@ -738,7 +898,7 @@
                         size: 10
                     },
                     align: 'center',
-                    formatter: (value, context)=>{ 
+                    formatter: (value, context) => {
                         return `${Math.round(value)}%`;
                     }
                 },
@@ -760,5 +920,4 @@
     function monthDiff(dateFrom, dateTo) {
         return dateTo.getMonth() - dateFrom.getMonth() + (12 * (dateTo.getFullYear() - dateFrom.getFullYear()))
     }
-
 </script>

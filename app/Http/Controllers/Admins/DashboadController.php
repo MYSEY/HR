@@ -54,7 +54,7 @@ class DashboadController extends Controller
               $query->where('date_of_commencement', '>=', $year);
           })->get();
 
-        $totalStaff =  User::whereIn('emp_status',['1','2','Probation'])->get()->count();
+        $totalStaff =  User::with("gender")->whereIn('emp_status',['1','2','Probation'])->get();
         $newStaff = User::where('emp_status', "Probation")->get()->count();
         $staffPromotes = StaffPromoted::all()->count();
         $transferred = Transferred::all()->count();
