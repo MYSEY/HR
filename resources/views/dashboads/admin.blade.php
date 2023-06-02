@@ -176,85 +176,6 @@
                 </div>
             </div>
         </div>
-
-        {{-- <div class="row">
-            <div class="col-md-12">
-                <div class="card-group m-b-30">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between mb-3">
-                                <div>
-                                    <span class="d-block">New Employees</span>
-                                </div>
-                                <div>
-                                    <span class="text-success">+10%</span>
-                                </div>
-                            </div>
-                            <h3 class="mb-3">{{ count($employee) }}</h3>
-                            <div class="progress mb-2" style="height: 5px;">
-                                <div class="progress-bar bg-primary" role="progressbar" style="width: 70%;"
-                                    aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                            <p class="mb-0">Overall Employees 218</p>
-                        </div>
-                    </div>
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between mb-3">
-                                <div>
-                                    <span class="d-block">Earnings</span>
-                                </div>
-                                <div>
-                                    <span class="text-success">+12.5%</span>
-                                </div>
-                            </div>
-                            <h3 class="mb-3">$1,42,300</h3>
-                            <div class="progress mb-2" style="height: 5px;">
-                                <div class="progress-bar bg-primary" role="progressbar" style="width: 70%;"
-                                    aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                            <p class="mb-0">Previous Month <span class="text-muted">$1,15,852</span></p>
-                        </div>
-                    </div>
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between mb-3">
-                                <div>
-                                    <span class="d-block">Expenses</span>
-                                </div>
-                                <div>
-                                    <span class="text-danger">-2.8%</span>
-                                </div>
-                            </div>
-                            <h3 class="mb-3">$8,500</h3>
-                            <div class="progress mb-2" style="height: 5px;">
-                                <div class="progress-bar bg-primary" role="progressbar" style="width: 70%;"
-                                    aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                            <p class="mb-0">Previous Month <span class="text-muted">$7,500</span></p>
-                        </div>
-                    </div>
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between mb-3">
-                                <div>
-                                    <span class="d-block">Profit</span>
-                                </div>
-                                <div>
-                                    <span class="text-danger">-75%</span>
-                                </div>
-                            </div>
-                            <h3 class="mb-3">$1,12,000</h3>
-                            <div class="progress mb-2" style="height: 5px;">
-                                <div class="progress-bar bg-primary" role="progressbar" style="width: 70%;"
-                                    aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                            <p class="mb-0">Previous Month <span class="text-muted">$1,42,000</span></p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div> --}}
         @include('dashboads.chart_board')
     </div>
 @endsection
@@ -375,7 +296,7 @@
                 $("#total-resigned-staff").text(response.staffResignations.length);
                 $("#total-promoted-staff").text(response.staffPromotes);
                 $("#total-transferred-staff").text(response.transferred);
-                $("#total-training").text(response.dataTrainings);
+                $("#total-training").text(response.dataTrainings.length);
 
                 let dataHRMS = {
                     branches: response.branches,
@@ -400,11 +321,18 @@
                     options: response.options,
                     staffResignations: response.staffResignations,
                 }
+
+                let dataTraining = {
+                    employeeTrainings: response.dataEmployeeTrainings.flat(1),
+                    branches: response.branches,
+                }
                 showDashboard(datas);
                 dashbaordHRMS(dataHRMS);
                 dashboadAchieveBranch(dataAchieve);
                 dashboardStaffResign(dataStaffResign);
                 dascboardReasonOffStaff(dataReasonStaff);
+                
+                dashboardTraining(dataTraining);
             }
         });
     });
@@ -412,9 +340,6 @@
     function showDashboard(data) {
         var deshboard = [{
                 "name": "staff_take_leave"
-            },
-            {
-                "name": "staff_Training_by_branch"
             },
         ];
         // for staff take leave
@@ -476,6 +401,15 @@
                     plugins: {
                         legend: {
                             display: false,
+                        },
+                        datalabels: {
+                            anchor: 'end',
+                            align: 'top',
+                            font: {
+                                weight: 'bold',
+                                size: 10
+                            },
+                            align: 'center',
                         },
                         title: {
                             display: true,
@@ -915,6 +849,80 @@
             plugins: [ChartDataLabels]
         }
         new Chart("reasons_staff_resignation", dataChart);
+    }
+
+    function dashboardTraining(datas){
+        console.log("datas: ", datas);
+
+        let dataStaffTraining = {
+            labels: [],
+            datasets: [{
+                label: 'Total Staff',
+                data: [],
+                backgroundColor: [
+                    "green"
+                ],
+                stack: 'Stack 0',
+            }, ]
+        };
+        if (datas.branches.length > 0) {
+            datas.branches.map((br) => {
+                let totalValue = 0;
+                if (datas.employeeTrainings.length > 0) {
+                    datas.employeeTrainings.map((emp) => {
+                        if (emp.branch_id == br.id) {
+                            totalValue++;
+                        }
+                    })
+                }
+                dataStaffTraining.labels.push(br.abbreviations);
+                dataStaffTraining.datasets[0].data.push(totalValue);
+            });
+        } 
+        dataStaffTraining.labels.push("Total");
+        dataStaffTraining.datasets[0].data.push(datas.employeeTrainings.length);
+        let type = "bar";
+        let data = dataStaffTraining;
+        let text = 'Staff Training by Branch';
+        let option = {
+            plugins: {
+                legend: {
+                    display: false,
+                },
+                datalabels: {
+                    anchor: 'end',
+                    align: 'top',
+                    font: {
+                        weight: 'bold',
+                        size: 10
+                    },
+                    align: 'center',
+                },
+                title: {
+                    display: true,
+                    text
+                },
+            },
+            responsive: true,
+            interaction: {
+                intersect: false,
+            },
+            scales: {
+                x: {
+                    stacked: true,
+                },
+                y: {
+                    stacked: true
+                }
+            }
+        }
+        let dataChart = {
+            type,
+            data,
+            options: option,
+            plugins: [ChartDataLabels]
+        }
+        new Chart('staff_Training_by_branch', dataChart);
     }
 
     function monthDiff(dateFrom, dateTo) {

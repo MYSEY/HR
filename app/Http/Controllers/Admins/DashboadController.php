@@ -58,7 +58,14 @@ class DashboadController extends Controller
         $newStaff = User::where('emp_status', "Probation")->get()->count();
         $staffPromotes = StaffPromoted::all()->count();
         $transferred = Transferred::all()->count();
-        $dataTrainings = Training::all()->count();
+
+        $Monthly= Carbon::now()->format('m');
+        $yearLy = Carbon::now()->format('Y');
+        $dataTrainings = Training::whereMonth("created_at", $Monthly)->whereYear("created_at", $yearLy)->get();
+        $dataEmployeeTrainings = [];
+        foreach ($dataTrainings as $key => $item) {
+            $dataEmployeeTrainings[] = User::whereIn('id', $item->employee_id)->select("employee_name_kh", "employee_name_en", "branch_id", "profile")->with('branch')->get();
+        }
 
         return response()->json([
             'options'=>$options,
@@ -69,9 +76,10 @@ class DashboadController extends Controller
             'achieveBranchs'=>$achieveBranchs,
             'staffPromotes'=>$staffPromotes,
             'transferred'=> $transferred,
-            'dataTrainings'=> $dataTrainings,
             'newStaff'=> $newStaff,
             'totalStaff'=> $totalStaff,
+            'dataTrainings'=> $dataTrainings,
+            'dataEmployeeTrainings'=> $dataEmployeeTrainings,
         ]);
     }
 }
