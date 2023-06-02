@@ -16,7 +16,10 @@ class CreateHolidaysTable extends Migration
         Schema::create('holidays', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->date('month');
+            $table->integer('amount_percent')->nullable();
+            $table->date('period_month')->nullable();
+            $table->date('from');
+            $table->date('to')->nullable();
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();
             $table->dateTime('deleted_at')->nullable();

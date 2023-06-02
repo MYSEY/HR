@@ -23,6 +23,7 @@ class UserRequest extends FormRequest
             'employee_name_kh' => 'required|max:255',
             'employee_name_en' => 'required|max:255',
             'date_of_birth' => 'required',
+            'basic_salary' => 'required',
             'date_of_commencement' => 'required',
             'guarantee_letter' => 'required|nullable|mimes:pdf|max:2048',
             'personal_phone_number' => 'required|min:9|max:15',

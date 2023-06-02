@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\User;
+use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Model;
 // use Backpack\CRUD\app\Models\Traits\CrudTrait;
 
@@ -56,6 +57,29 @@ class Holiday extends Model
     */
     public function getFullNameAttribute(){
         return $this->name.' '.$this->last_name;
+    }
+
+    public function getPeriodPaymentAttribute(){
+        if ($this->period_month) {
+            return Carbon::parse($this->period_month)->format('d-M-Y');
+        }
+    }
+    public function getDateFromAttribute(){
+        if ($this->from) {
+            return Carbon::parse($this->from)->format('d-M-Y');
+        }
+    }
+    public function getDateToAttribute(){
+        if ($this->to) {
+            return Carbon::parse($this->to)->format('d-M-Y');
+        }
+    }
+    public function getDaysAttribute(){
+        $to = Carbon::parse($this->to);
+        $from = Carbon::parse($this->from);
+
+        $diff_in_days = $to->diffInDays($from);
+        return $diff_in_days;
     }
     /*
     |--------------------------------------------------------------------------

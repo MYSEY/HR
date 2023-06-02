@@ -29,16 +29,10 @@
                                 <input class="form-control @error('employee_name_en') is-invalid @enderror" type="text" id="employee_name_en" required name="employee_name_en" value="{{old('employee_name_en')}}">
                             </div>
                         </div>
-
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label>Gender</label>
-                                <select class="select form-control" id="gender" name="gender" value="{{old('gender')}}">
-                                    <option value="">select gender</option>
-                                    @foreach ($optionGender as $item)
-                                    <option value="{{$item->id}}">{{$item->name_khmer}}</option>
-                                    @endforeach
-                                </select>
+                                <label class="">Profile</label>
+                                <input class="form-control" type="file" id="profile" name="profile" value="{{old('profile')}}">
                             </div>
                         </div>
                     </div>
@@ -75,10 +69,16 @@
                                 </div>
                             </div>
                         </div>
+                        
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="">Profile</label>
-                                <input class="form-control" type="file" id="profile" name="profile" value="{{old('profile')}}">
+                                <label>Gender</label>
+                                <select class="select form-control" id="gender" name="gender" value="{{old('gender')}}">
+                                    <option value="">select gender</option>
+                                    @foreach ($optionGender as $item)
+                                    <option value="{{$item->id}}">{{$item->name_khmer}}</option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
                     </div>
@@ -117,7 +117,7 @@
                         <div class="col-md-6">
                             <div class="">
                                 <label>level</label>
-                                <input type="number" class="form-control" id="level" name="level" value="{{old('level')}}">
+                                <input type="text" class="form-control" id="level" name="level" value="{{old('level')}}">
                             </div>
                         </div>
                     </div>
@@ -133,28 +133,28 @@
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="">Number Of Children</label>
-                                <input class="form-control" type="number" id="number_of_children" name="number_of_children" value="{{old('number_of_children')}}">
+                                <label class="">Spouse</label>
+                                <input type="number" class="form-control" name="spouse" id="spouse" maxlength="2" placeholder="">
                             </div>
                         </div>
                     </div>
 
                     <div class="row">
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label class="">Marital status</label>
-                                <select class="select form-control" id="marital_status" name="marital_status" value="{{old('marital_status')}}">
-                                    <option value="Married">Married</option>
-                                    <option value="Single">Single</option>
-                                </select>
-                            </div>
-                        </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Nationality</label>
                                 <select class="select form-control" id="nationality" name="nationality" value="{{old('nationality')}}">
                                     <option value="Khmer">Khmer</option>
                                     <option value="Chinese">Chinese</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="">Marital status</label>
+                                <select class="select form-control" id="marital_status" name="marital_status" value="{{old('marital_status')}}">
+                                    <option value="Married">Married</option>
+                                    <option value="Single">Single</option>
                                 </select>
                             </div>
                         </div>
@@ -218,10 +218,33 @@
                             <textarea type="text" rows="3" class="form-control" name="remark" id="remark" value="{{old('remark')}}"></textarea>
                         </div>
                     </div>
-
-                    {{-- Bank Info --}}
+                    {{-- basic salary infor --}}
                     <div class="form-group col-md-12 col-12" element="div" bp-field-wrapper="true" bp-field-name="Identity" bp-field-type="custom_html">
-                        <label class="navbar-brand custom-navbar-brand mb-0" style="width: 100%; background: #dfe6e9; padding: 6px;font-size: 15px;font-weight: normal !important;">Bank Info</label>
+                        <label class="navbar-brand custom-navbar-brand mb-0" style="width: 100%; background: #dfe6e9; padding: 6px;font-size: 15px;font-weight: normal !important;">Basic Salary</label>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>Basic Salary <span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <span class="input-group-text">$</span>
+                                    <input type="number" class="form-control" id="basic_salary" name="basic_salary" placeholder="" value="{{old('basic_salary')}}" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>Phone Allowance</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">$</span>
+                                    <input class="form-control" type="number" name="phone_allowance" id="phone_allowance" value="{{old('phone_allowance')}}">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {{-- Bank Infor --}}
+                    <div class="form-group col-md-12 col-12" element="div" bp-field-wrapper="true" bp-field-name="Identity" bp-field-type="custom_html">
+                        <label class="navbar-brand custom-navbar-brand mb-0" style="width: 100%; background: #dfe6e9; padding: 6px;font-size: 15px;font-weight: normal !important;">Bank Infor</label>
                     </div>
                     <div class="row">
                         <div class="col-sm-6">

@@ -89,6 +89,7 @@
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending" style="width: 218.762px;">Branch</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Mobile: activate to sort column ascending" style="width: 83.3625px;">Mobile</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Role: activate to sort column ascending" style="width: 80.8125px;">Role</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Role: activate to sort column ascending" style="width: 80.8125px;">Basic Salary</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending" style="width: 218.762px;">DOB</th>
                                             <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending" style="width: 87.1125px;">Join Date</th>
                                             <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending" style="width: 87.1125px;">Pass Date</th>
@@ -125,6 +126,7 @@
                                                     <td>
                                                         <span class="badge bg-inverse-success">{{ $item->role == null ? "" : $item->role->name }}</span>
                                                     </td>
+                                                    <td>$ {{$item->basic_salary}}</td>
                                                     <td>{{$item->DOB ?? ''}}</td>
                                                     <td>{{$item->joinOfDate}}</td>
                                                     <td>{{$item->PassDate}}</td>
@@ -550,7 +552,10 @@
                         $('#e_employee_name_en').val(response.success.employee_name_en);
                         $('#e_date_of_birth').val(response.success.date_of_birth);
                         $('#e_unit').val(response.success.unit);
-                        $('#e_level').val(response.success.level);
+                        $('#e_unit').val(response.success.unit);
+                        $('#e_basic_salary').val(response.success.basic_salary);
+                        $('#e_phone_allowance').val(response.success.phone_allowance);
+                        $('#e_spouse').val(response.success.spouse);
                         $('#e_date_of_commencement').val(response.success.date_of_commencement);
                         $('#e_number_of_children').val(response.success.number_of_children);
                         $('#e_marital_status').val(response.success.marital_status);

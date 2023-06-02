@@ -22,6 +22,8 @@ class CreateUsersTable extends Migration
             $table->string('employee_name_kh');
             $table->string('employee_name_en');
             $table->string('email')->nullable();
+            $table->decimal('basic_salary')->default(0);
+            $table->decimal('phone_allowance')->nullable();
             $table->string('email_verified_at')->nullable();
             $table->string('password');
             $table->string('role_id')->nullable();
@@ -32,6 +34,7 @@ class CreateUsersTable extends Migration
             $table->string('unit')->nullable();
             $table->string('level')->nullable();
             $table->integer('gender')->nullable();
+            $table->integer('spouse')->nullable();
             $table->date('date_of_birth')->nullable();
             $table->string('nationality')->nullable();
             $table->date('date_of_commencement')->nullable();

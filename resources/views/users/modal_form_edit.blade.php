@@ -33,12 +33,12 @@
                         
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label>Gender</label>
-                                <select class="select form-control" id="e_gender" name="gender">
-                                    <option value="">select gender</option>
-                                </select>
+                                <label class="">Profile</label>
+                                <input class="form-control" type="file" id="profile" name="profile" value="{{old('profile')}}">
+                                <input type="hidden" name="hidden_image" id="e_profile" value="">
                             </div>
                         </div>
+                        
                     </div>
                     <div class="row"> 
                         <div class="col-sm-6"> 
@@ -67,11 +67,13 @@
                                 </div>
                             </div>
                         </div>
+                        
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="">Profile</label>
-                                <input class="form-control" type="file" id="profile" name="profile" value="{{old('profile')}}">
-                                <input type="hidden" name="hidden_image" id="e_profile" value="">
+                                <label>Gender</label>
+                                <select class="select form-control" id="e_gender" name="gender">
+                                    <option value="">select gender</option>
+                                </select>
                             </div>
                         </div>
                     </div>
@@ -104,7 +106,7 @@
                         <div class="col-md-6">
                             <div class="">
                                 <label>level</label>
-                                <input type="number" class="form-control" id="e_level" name="level" value="{{old('level')}}">
+                                <input type="text" class="form-control" id="e_level" name="level" value="{{old('level')}}">
                             </div>
                         </div>
                     </div>
@@ -120,8 +122,8 @@
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="">Number Of Children</label>
-                                <input class="form-control" type="number" id="e_number_of_children" name="number_of_children" value="{{old('number_of_children')}}">
+                                <label class="">Spouse</label>
+                                <input type="number" class="form-control" name="spouse" id="e_spouse" maxlength="2" placeholder="">
                             </div>
                         </div>
                     </div>
@@ -201,12 +203,37 @@
                             <input type="password" class="form-control" name="password_confirmation" placeholder="Confirm Password">
                         </div>
                     </div>
+                    --}}
                     <div class="col-sm-12">
                         <div class="form-group">
                             <label class="">Remark</label>
                             <textarea type="text" rows="3" class="form-control" name="remark" id="e_remark" value="{{old('remark')}}"></textarea>
                         </div>
-                    </div> --}}
+                    </div>
+                    {{-- basic salary infor --}}
+                    <div class="form-group col-md-12 col-12" element="div" bp-field-wrapper="true" bp-field-name="Identity" bp-field-type="custom_html">
+                        <label class="navbar-brand custom-navbar-brand mb-0" style="width: 100%; background: #dfe6e9; padding: 6px;font-size: 15px;font-weight: normal !important;">Basic Salary</label>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>Basic Salary <span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <span class="input-group-text">$</span>
+                                    <input type="number" class="form-control" id="e_basic_salary" name="basic_salary" placeholder="" value="" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>Phone Allowance</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">$</span>
+                                    <input class="form-control" type="number" name="phone_allowance" id="e_phone_allowance" value="">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     
                     {{-- Bank Info --}}
                     <div class="form-group col-md-12 col-12" element="div" bp-field-wrapper="true" bp-field-name="Identity" bp-field-type="custom_html">

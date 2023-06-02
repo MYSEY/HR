@@ -64,6 +64,9 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('employee/contact', [EmployeeProfileController::class, 'employeeContact'])->name('employee.contact');
     Route::post('employee/children', [EmployeeProfileController::class, 'employeeChildren'])->name('employee.children');
     Route::get('/holidays', [HolidayController::class, 'index']);
+    Route::post('/holidays/create', [HolidayController::class, 'store']);
+    Route::get('/holidays/edit', [HolidayController::class, 'edit']);
+    Route::post('/holidays/update', [HolidayController::class, 'update']);
     // Route::get('/attendance/admin', [AttendanceAdminController::class, 'index']);
     // Route::get('/attendance/employee', [AttendanceEmployeeController::class, 'index']);
     // Route::Resource('/leaves/admin', LeavesAdminController::class);

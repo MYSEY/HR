@@ -105,6 +105,7 @@ class EmployeeRepository extends BaseRepository
             'employee_name_en'  => $request->employee_name_en,
             'gender'  => $request->gender,
             'role_id'  => $request->role_id,
+            'basic_salary'  => $request->basic_salary,
             'position_id'  => $request->position_id,
             'department_id'  => $request->department_id,
             'date_of_birth'  => $request->date_of_birth,
