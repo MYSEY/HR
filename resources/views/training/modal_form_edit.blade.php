@@ -14,7 +14,7 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label>Training Type <span class="text-danger">*</span></label>
-                                <select class="select form-control" id="e_training_type" name="training_type_id" required value="{{old('training_type')}}">
+                                <select class="select form-control" id="e_training_type" name="training_type" required value="{{old('training_type')}}">
                                     {{-- <option value="">Select type</option> --}}
                                 </select>
                             </div>
@@ -63,8 +63,8 @@
 
                         <div class="col-sm-12">
                             <div class="form-group">
-                                <label class="">Description</label>
-                                <textarea type="text" rows="3" class="form-control" name="description" id="e_description" value="{{old('description')}}"></textarea>
+                                <label class="">Remark</label>
+                                <textarea type="text" rows="3" class="form-control" name="remark" id="e_remark" value="{{old('remark')}}"></textarea>
                             </div>
                         </div>
 

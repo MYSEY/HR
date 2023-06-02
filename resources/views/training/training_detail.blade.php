@@ -9,10 +9,13 @@
         <div class="page-header">
             <div class="row align-items-center">
                 <div class="col">
-                    <h3 class="page-title">Detail For Training <label for="" style="color: red">{{$training->TrainingTypeName}}</label></h3>
+                    <h3 class="page-title">Detail For Training</h3>
                     <ul class="breadcrumb">
                         <li class="breadcrumb-item"><a href="{{ url('/dashboad/employee') }}">Dashboard</a></li>
                         <li class="breadcrumb-item active">Training Detail</li>
+                    </ul>
+                    <ul class="breadcrumb">
+                        <li class="breadcrumb-item ">Cost name: <label for="" style="color: red">{{$training->remark}}</label></li>
                     </ul>
                 </div>
                 <div class="col-auto float-end ms-auto">
@@ -33,11 +36,11 @@
                                 <thead>
                                     <tr>
                                         <th>#</th>
+                                        <th>Type</th>
                                         <th>Name kh</th>
                                         <th>Name EN</th>
                                         <th>Contact Number</th>
                                         <th>Email</th>
-                                        <th>Role</th>
                                         <th>Remark</th>
                                         <th>Created At</th>
                                     </tr>
@@ -47,12 +50,12 @@
                                         @foreach ($trainer as $item)
                                             <tr>
                                                 <td >{{$item->id}}</td>
-                                                <td >{{$item->name_kh}}</td>
-                                                <td >{{$item->name_en}}</td>
-                                                <td >{{$item->number_phone}}</td>
-                                                <td >{{$item->email}}</td>
-                                                <td >{{$item->role}}</td>
-                                                <td >{{$item->description}}</td>
+                                                <td >{{$item->type == 1 ? "Internal" : "External"}}</td>
+                                                <td >{{$item->type == 1 ? $item->EmployeeIn->employee_name_kh : $item->name_kh}}</td>
+                                                <td >{{$item->type == 1 ? $item->EmployeeIn->employee_name_en : $item->name_en}}</td>
+                                                <td >{{$item->type == 1 ? $item->EmployeeIn->personal_phone_number : $item->number_phone}}</td>
+                                                <td >{{$item->type == 1 ? $item->EmployeeIn->email : $item->email}}</td>
+                                                <td >{{$item->type == 1 ? $item->EmployeeIn->remark : $item->remark}}</td>
                                                 <td >{{ \Carbon\Carbon::parse($item->created_at)->format('d-M-Y') ?? '' }}</td>
                                             </tr>
                                         @endforeach

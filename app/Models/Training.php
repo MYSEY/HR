@@ -15,13 +15,13 @@ class Training extends Model
     protected $guarded = ['id'];
 
     protected $fillable = [
-       'training_type_id',
+       'training_type',
        'trainer_id',
        'employee_id',
        'cost_price',
        'start_date',
        'end_date',
-       'description',
+       'remark',
        'status',
        'created_by',
        'updated_by',
@@ -47,15 +47,6 @@ class Training extends Model
             set: fn ($value) => json_encode($value),
         );
     } 
-
-    public function trainingType(){
-        return $this->belongsTo(TrainingType::class,'training_type_id');
-    }
-
-    public function getTrainingTypeNameAttribute(){
-        return optional($this->trainingType)->type_name;
-    }
-
 
     public function createdBy()
     {
