@@ -29,6 +29,8 @@ class DashboadController extends Controller
             $from_date = Carbon::createFromDate($request->from_date)->format('Y-m-d H:i:s'); //2023-05-09 00:00:00
             $to_date = Carbon::createFromDate($request->to_date.' '.'23:59:59')->format('Y-m-d H:i:s'); //2023-05-09 23:59:59
         }
+        $Monthly= Carbon::now()->format('m');
+        $yearLy = Carbon::now()->format('Y');
 
         $branches = Branchs::all();
         $options = Option::where("type", "emp_status")->get();
@@ -47,7 +49,7 @@ class DashboadController extends Controller
                 $query->where('resign_date', '>=', $year);
             })->orderBy('id', 'desc')->get();
 
-        $recruitmentPlans = RecruitmentPlan::with('branch')->get();
+        $recruitmentPlans = RecruitmentPlan::with('branch')->whereMonth("plan_date", 12)->whereYear("plan_date",$yearLy)->get();
         $achieveBranchs = User::with('branch')->whereIn('emp_status',['1','2','Probation'])
           ->when($year, function ($query, $year) {
               $query->where('date_of_commencement', '>=', $year);
@@ -58,8 +60,6 @@ class DashboadController extends Controller
         $staffPromotes = StaffPromoted::all()->count();
         $transferred = Transferred::all()->count();
 
-        $Monthly= Carbon::now()->format('m');
-        $yearLy = Carbon::now()->format('Y');
         $dataTrainings = Training::whereMonth("created_at", $Monthly)->whereYear("created_at", $yearLy)->get();
         $dataEmployeeTrainings = [];
         foreach ($dataTrainings as $key => $item) {

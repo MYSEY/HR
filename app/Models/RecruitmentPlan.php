@@ -13,9 +13,9 @@ class RecruitmentPlan extends Model
     protected $fillable = [
         'position_id',
         'branch_id',
-        'plan_year',
+        'plan_date',
         'total_staff',
-        'description',
+        'remark',
         'created_by',
         'updated_by'
     ];

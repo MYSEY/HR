@@ -17,9 +17,9 @@ return new class extends Migration
             $table->id();
             $table->string('position_id');
             $table->string('branch_id');
-            $table->string('plan_year')->nullable();
+            $table->date('plan_date');
             $table->integer('total_staff');
-            $table->string('description')->nullable();
+            $table->string('remark')->nullable();
             $table->bigInteger('created_by')->unsigned()->nullable();
             $table->bigInteger('updated_by')->unsigned()->nullable();
             $table->dateTime('deleted_at')->nullable();

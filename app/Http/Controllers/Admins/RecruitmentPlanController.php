@@ -100,9 +100,9 @@ class RecruitmentPlanController extends Controller
             RecruitmentPlan::where('id',$request->id)->update([
                 'position_id' => $request->position_id,
                 'branch_id' => $request->branch_id,
-                'plan_year' => $request->plan_year,
+                'plan_date' => $request->plan_date,
                 'total_staff' => $request->total_staff,
-                'description' => $request->description,
+                'remark' => $request->remark,
                 'updated_by' => Auth::user()->id 
             ]);
             Toastr::success('Recruitment plan updated successfully.','Success');
