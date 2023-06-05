@@ -40,7 +40,6 @@ class DashboadController extends Controller
                 $query->where('created_at','<=', $to_date);
             })->orderBy('id', 'desc')->get();
 
-
         $currentYear = Carbon::now()->format('Y');
         $year = Carbon::createFromDate('01-01-'.$currentYear)->format('Y-m-d');
         $staffResignations = User::whereNotIn('emp_status',['1','2','Probation'])

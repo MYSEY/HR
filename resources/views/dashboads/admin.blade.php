@@ -169,7 +169,7 @@
                     <div class="card-body">
                         <h4 class="card-title">Birthday Reminder <span class="badge bg-inverse-danger ms-2" id="total-date-birthday">0</span></h4>
                         <div id="birthday-staff"></div>
-                        <div class="load-more text-center">
+                        <div class="load-more text-center" id="btn-more">
                             <a class="text-dark" href="javascript:void(0);">More</a>
                         </div>
                     </div>
@@ -235,6 +235,9 @@
                             total_date_birthday++;
                         }
                     });
+                    if (total_date_birthday == 0) {
+                        $("#btn-more").hide();
+                    }
                     const sortedAsc = data_birthday.sort(
                         (objA, objB) => Number(moment(objA.date_of_birth).format("DD")) - Number(moment(objB.date_of_birth).format("DD")),
                     );
@@ -316,10 +319,12 @@
                 let dataStaffResign = {
                     branches: response.branches,
                     staffResignations: response.staffResignations,
+                    employees: response.data,
                 }
                 let dataReasonStaff = {
                     options: response.options,
                     staffResignations: response.staffResignations,
+                    totalEmployee: response.data.length,
                 }
 
                 let dataTraining = {
@@ -331,7 +336,6 @@
                 dashboadAchieveBranch(dataAchieve);
                 dashboardStaffResign(dataStaffResign);
                 dascboardReasonOffStaff(dataReasonStaff);
-                
                 dashboardTraining(dataTraining);
             }
         });
@@ -700,7 +704,7 @@
                     "rgba(255, 102, 0)",
                     "rgb(128,128,128)",
                     "rgb(255, 204, 0)",
-                    "rgb(0, 136, 204)",
+                    "#B22222",
                     "rgb(83, 198, 83)",
                     "rgb(0, 51, 102)",
                     "rgb(230, 115, 0)",
@@ -709,10 +713,10 @@
         };
         let labelStaffResignation = [];
         let staffResignationData = [];
-        let date = new Date();
-        let year = date.getFullYear();
-        let month = date.getMonth();
-        let totalMonth = monthDiff(new Date(year, 01), new Date(year, month + 1))
+        // let date = new Date();
+        // let year = date.getFullYear();
+        // let month = date.getMonth();
+        // let totalMonth = monthDiff(new Date(year, 01), new Date(year, month + 1))
         branches.map((br) => {
             let totalValue = 0;
             let totalFemale = 0;
@@ -725,8 +729,16 @@
                     }
                 });
             }
+            let totalEmployee = 0;
+            if(datas.employees.length > 0){
+                datas.employees.map((emp)=>{
+                    if(emp.branch_id == br.id){
+                        totalEmployee += 1;
+                    }
+                });
+            }
             labelStaffResignation.push(br.abbreviations);
-            staffResignationData.push((totalValueStaffResignation / totalMonth) * 100);
+            staffResignationData.push(totalValueStaffResignation == 0 ? 0 : (totalValueStaffResignation / totalEmployee) * 100);
         });
         let data = {};
         dataStaffResignation.labels = labelStaffResignation;
@@ -767,30 +779,21 @@
 
     function dascboardReasonOffStaff(datas) {
         let dataReasonStaffResignation = {
-            labels: [
-                // 'Get new job',
-                // 'Owner Business',
-                // 'Relocate Resident',
-                // 'Contiue stadies',
-                // 'Health Issue',
-                // 'Fimaly',
-                // 'Fraud',
-                // 'Misconducts',
-                // 'Death',
-                // 'Retirement',
-                // 'Others',
-            ],
+            labels: [],
             datasets: [{
                 data: [],
                 backgroundColor: [
                     "rgba(0, 136, 204)",
-                    "rgba(255, 102, 0)",
+                    "#9368e9",
                     "rgb(128,128,128)",
                     "rgb(255, 204, 0)",
-                    "rgb(0, 136, 204)",
+                    "#B22222",
                     "rgb(83, 198, 83)",
                     "rgb(0, 51, 102)",
                     "rgb(230, 115, 0)",
+                    "#FFA07A",
+                    "#556B2F",
+                    "#FF0000",
                 ],
             }, ]
         };
@@ -810,8 +813,34 @@
                 });
             }
             labelStaffResignation.push(reason.name_english);
-            staffResignationData.push((totalValueStaffResignation / totalStaffResign) * 100);
+            staffResignationData.push((totalValueStaffResignation / datas.totalEmployee) * 100);
         });
+        if (totalStaffResign > 0) {
+            let dataSumTermination = 0;
+            let dataSumDeath = 0;
+            let dataSumLayoff = 0;
+            let dataSumSuspension = 0;
+            let dataSumFallProbation = 0;
+            staffResignations.map((sta) => {
+                if (sta.emp_status == 4) {
+                    dataSumTermination += 1;
+                }
+                if (sta.emp_status == 5) {
+                    dataSumDeath += 1;
+                }
+                if (sta.emp_status == 7) {
+                    dataSumLayoff += 1;
+                }
+                if (sta.emp_status == 8) {
+                    dataSumSuspension += 1;
+                }
+                if (sta.emp_status == 9) {
+                    dataSumFallProbation += 1;
+                }
+            });
+            staffResignationData.push(dataSumTermination, dataSumDeath, dataSumLayoff, dataSumSuspension, dataSumFallProbation);
+        }
+        labelStaffResignation.push("Termination","Death","Lay off", "Suspension", "Fall Probation");
         dataReasonStaffResignation.labels = labelStaffResignation;
         dataReasonStaffResignation.datasets[0].data = staffResignationData;
         let data = dataReasonStaffResignation;
@@ -852,8 +881,6 @@
     }
 
     function dashboardTraining(datas){
-        console.log("datas: ", datas);
-
         let dataStaffTraining = {
             labels: [],
             datasets: [{

@@ -182,11 +182,11 @@
                                                                     <i class="fa fa-dot-circle-o text-dark"></i>
                                                                     <span>Fall Probation</span>
                                                                 </a>
-                                                            @elseif ($item->emp_status=='10')
+                                                            {{-- @elseif ($item->emp_status=='10')
                                                                 <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
                                                                     <i class="fa fa-dot-circle-o text-dark"></i>
                                                                     <span>Others</span>
-                                                                </a>
+                                                                </a> --}}
                                                             @endif
                                                             @if (Auth::user()->RolePermission == 'Administrator')
                                                                 <div class="dropdown-menu dropdown-menu-right" id="btn-emp-status">
@@ -217,9 +217,9 @@
                                                                     <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="9" href="#">
                                                                         <i class="fa fa-dot-circle-o text-danger"></i> Fall Probation
                                                                     </a>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="10" href="#">
+                                                                    {{-- <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="10" href="#">
                                                                         <i class="fa fa-dot-circle-o text-danger"></i> Others
-                                                                    </a>
+                                                                    </a> --}}
                                                                 </div>
                                                             @endif
                                                         </div>
@@ -610,9 +610,10 @@
                 var emp_status = "Suspension";
             }else if(status == 9){
                 var emp_status = "Fall Probation";
-            }else if(status == 10){
-                var emp_status = "Other";
             }
+            // else if(status == 10){
+            //     var emp_status = "Other";
+            // }
             let start_date = $(this).attr('data-start-date');
             let end_date = $(this).attr('data-end-date');
             if (status == 1) {
