@@ -209,9 +209,7 @@
 @endsection
 
 @include('includs.script')
-
-{{-- <script src="{{asset('/admin/js/simple-chart.js')}}"></script> --}}
-{{-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> --}}
+<script src="{{asset('/admin/js/validation-field.js')}}"></script>
 <script>
     
     $(function() {

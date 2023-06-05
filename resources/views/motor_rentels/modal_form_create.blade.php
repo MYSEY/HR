@@ -8,14 +8,14 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form action="{{url('motor-rentel/store')}}" method="POST" enctype="multipart/form-data">
+                <form action="{{url('motor-rentel/store')}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
                     @csrf
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label>Employee</label>
-                                <select class="select form-control" id="employee_id" name="employee_id" value="{{old('employee_id')}}" required>
-                                    <option value="">select employee</option>
+                                <select class="form-control" id="employee_id" name="employee_id" value="{{old('employee_id')}}" required>
+                                    <option selected disabled value="">Select employee...</option>
                                     @foreach ($employees as $item)
                                         <option value="{{$item->id}}">{{$item->employee_name_en}}</option>
                                     @endforeach

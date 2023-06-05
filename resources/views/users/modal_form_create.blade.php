@@ -8,7 +8,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form action="{{url('users/store')}}" method="POST" enctype="multipart/form-data">
+                <form action="{{url('users/store')}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
                     @csrf
                     <div class="row">
                         <div class="col-sm-6">
@@ -40,7 +40,7 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label>Role Name <span class="text-danger">*</span></label>
-                                <select class="select form-control @error('role_id') is-invalid @enderror" name="role_id" id="role_id" required>
+                                <select class="form-control @error('role_id') is-invalid @enderror" name="role_id" id="role_id" required>
                                     <option selected disabled value=""> --Select --</option>
                                     @foreach ($role as $itme )
                                     <option value="{{ $itme->id }}">{{ $itme->name }}</option>

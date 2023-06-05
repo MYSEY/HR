@@ -287,7 +287,7 @@
     </div>
 @endsection
 @include('includs.script')
-
+<script src="{{asset('/admin/js/validation-field.js')}}"></script>
 <script>
     $(function(){
         // block Current Address

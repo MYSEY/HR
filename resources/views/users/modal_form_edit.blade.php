@@ -9,7 +9,7 @@
             </div>
             <br>
             <div class="modal-body">
-                <form action="{{url('users/update')}}" method="POST" enctype="multipart/form-data">
+                <form action="{{url('users/update')}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
                     @csrf
                     <div class="row">
                         <div class="col-sm-6">
@@ -44,7 +44,7 @@
                         <div class="col-sm-6"> 
                             <div class="form-group">
                                 <label>Role Name <span class="text-danger">*</span></label>
-                                <select class="select form-control" name="role_id" id="e_role_id" required>
+                                <select class="form-control" name="role_id" id="e_role_id" required>
                                     <option selected disabled> --Select --</option>
                                 </select>
                             </div>

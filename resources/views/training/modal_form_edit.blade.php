@@ -8,7 +8,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form action="{{url('training/update')}}" method="POST" enctype="multipart/form-data">
+                <form action="{{url('training/update')}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
                     @csrf
                     <div class="row">
                         <div class="col-sm-6">

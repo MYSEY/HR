@@ -8,13 +8,13 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form action="{{url('training/store')}}" method="POST" enctype="multipart/form-data">
+                <form action="{{url('training/store')}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
                     @csrf
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label>Training Type <span class="text-danger">*</span></label>
-                                <select class="select form-control" name="training_type" id="training_type" required>
+                                <select class="form-control" name="training_type" id="training_type" required>
                                     {{-- <option value=""></option>
                                     <option value="1">Internal</option>
                                     <option value="2">External</option> --}}
@@ -27,7 +27,8 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label>Trainer <span class="text-danger">*</span></label>
-                                <select class="select form-control" multiple="" name="trainer_id[]" id="trainer" required>
+                                <select class="form-control select" multiple="" name="trainer_id[]" id="trainer" required>
+                                    <option selected disabled value="">Choose...</option>
                                     {{-- @foreach($trainer as $aKey => $item)
                                         <option value="{{$item->id}}">{{$item->name_en}}</option>
                                     @endforeach --}}

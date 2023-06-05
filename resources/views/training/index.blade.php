@@ -205,7 +205,7 @@
 @endsection
 
 @include('includs.script')
-
+<script src="{{asset('/admin/js/validation-field.js')}}"></script>
 <script>
     $(function() {
         $("#btn_add_training").on("click", function() {
@@ -214,7 +214,7 @@
             $("#e_training_type").val("");
             $('#training_type').val('');
             $('#training_type').append(
-                '<option value=""></option>'+
+                '<option selected disabled value="">Choose...</option>'+
                 '<option value="1">Internal</option>'+
                 '<option value="2">External</option>'
             );
