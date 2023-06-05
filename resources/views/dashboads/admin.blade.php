@@ -14,6 +14,12 @@
         border: 1px solid black;
         border-collapse: collapse;
     }
+    .card-detail {
+        width: auto;
+        height: 250px;
+        overflow-y: scroll;
+        display: flex;
+    }
 </style>
 @section('content')
     <div class="content container-fluid">
@@ -168,7 +174,9 @@
                 <div class="card flex-fill">
                     <div class="card-body">
                         <h4 class="card-title">Birthday Reminder <span class="badge bg-inverse-danger ms-2" id="total-date-birthday">0</span></h4>
-                        <div id="birthday-staff"></div>
+                        <div class="card-detail">
+                            <div id="birthday-staff" style="width: -webkit-fill-available"></div>
+                        </div>
                         <div class="load-more text-center" id="btn-more">
                             <a class="text-dark" href="javascript:void(0);">More</a>
                         </div>
@@ -242,31 +250,30 @@
                         (objA, objB) => Number(moment(objA.date_of_birth).format("DD")) - Number(moment(objB.date_of_birth).format("DD")),
                     );
                     var div = ""; 
-                    var film = sortedAsc.filter((emp, idx) => idx < 2).map(emp => {
+                    // var film = sortedAsc.filter((emp, idx) => idx < 3).map(emp => {
+                    var film = sortedAsc.map(emp => {
                         let date_of_daymonth = moment(emp.date_of_birth).format("MM-DD");
                         let current_year = moment().format("YYYY");
                         let date_of_birth = moment(date_of_daymonth+'-'+current_year).format("D-MMM-YYYY");
-                        div += '<div>'+
-                            '<div class="leave-info-box">'+
-                                '<div class="media d-flex align-items-center">'+
-                                    '<a href="#" class="avatar">'+
-                                        '<img alt="" id="profile-imge" src="{{asset("/uploads/images")}}/'+(emp.profile)+'">'+
-                                    '</a>'+
-                                    '<div class="media-body flex-grow-1">'+
-                                        '<div class="text-sm my-0" >'+(emp.employee_name_en)+'</div>'+
+                        div += '<div class="leave-info-box">'+
+                                    '<div class="media d-flex align-items-center">'+
+                                        '<a href="#" class="avatar">'+
+                                            '<img alt="" id="profile-imge" src="{{asset("/uploads/images")}}/'+(emp.profile)+'">'+
+                                        '</a>'+
+                                        '<div class="media-body flex-grow-1">'+
+                                            '<div class="text-sm my-0" >'+(emp.employee_name_en)+'</div>'+
+                                        '</div>'+
                                     '</div>'+
-                                '</div>'+
-                                '<div class="row align-items-center mt-3">'+
-                                    '<div class="col-6">'+
-                                        '<h6 class="mb-0">'+(date_of_birth)+'</h6>'+
-                                        '<span class="text-sm text-muted">Birthday</span>'+
+                                    '<div class="row align-items-center mt-3">'+
+                                        '<div class="col-6">'+
+                                            '<h6 class="mb-0">'+(date_of_birth)+'</h6>'+
+                                            '<span class="text-sm text-muted">Birthday</span>'+
+                                        '</div>'+
+                                        '<div class="col-6 text-end">'+
+                                            '<span class="badge bg-inverse-danger">Happy Birthday</span>'+
+                                        '</div>'+
                                     '</div>'+
-                                    '<div class="col-6 text-end">'+
-                                        '<span class="badge bg-inverse-danger">Happy Birthday</span>'+
-                                    '</div>'+
-                                '</div>'+
-                            '</div>'+
-                        '</div>';
+                                '</div>';
                     });
 
                     $("#birthday-staff").append(div);
