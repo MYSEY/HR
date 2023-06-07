@@ -74,7 +74,7 @@ class CreateUsersTable extends Migration
             $table->string('account_number')->nullable();
             $table->boolean('users_permission')->nullable();
             $table->string('status')->nullable();
-            $table->string('emp_status')->default('Probation');
+            $table->string('emp_status')->nullable();
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();
             $table->dateTime('deleted_at')->nullable();

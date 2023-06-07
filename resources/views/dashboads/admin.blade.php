@@ -52,8 +52,7 @@
                         <span class="dash-widget-icon"><i class="fa fa-user"></i></span>
                         <div class="dash-widget-info">
                             <h3 id="total-resigned-staff"></h3>
-                            <span>Resigned Staff</span><a href="{{ url('/reports/staff-resigned-report') }}">View
-                                Detail</a>
+                           <a href="{{ url('/reports/staff-resigned-report') }}"> <span>Resigned Staff</span></a>
                         </div>
                     </div>
                 </div>
@@ -64,8 +63,7 @@
                         <span class="dash-widget-icon"><i class="fa fa-user"></i></span>
                         <div class="dash-widget-info">
                             <h3 id="total-promoted-staff"></h3>
-                            <span>Promoted Staff</span><a href="{{ url('/reports/promoted-staff-report') }}">View
-                                Detail</a>
+                            <a href="{{ url('/reports/promoted-staff-report') }}"><span>Promoted Staff</span></a>
                         </div>
                     </div>
                 </div>
@@ -76,8 +74,7 @@
                         <span class="dash-widget-icon"><i class="fa fa-user"></i></span>
                         <div class="dash-widget-info">
                             <h3 id="total-transferred-staff"></h3>
-                            <span>Transferred Staff</span><a href="{{ url('/reports/transferred-staff-report') }}">View
-                                Detail</a>
+                            <a href="{{ url('/reports/transferred-staff-report') }}"> <span>Transferred Staff</span></a>
                         </div>
                     </div>
                 </div>
@@ -88,7 +85,7 @@
                         <span class="dash-widget-icon"><i class="la la-edit"></i></span>
                         <div class="dash-widget-info">
                             <h3 id="total-training"></h3>
-                            <span>Training</span><a href="{{ url('/reports/transferred-staff-report') }}">View Detail</a>
+                            <a href="{{ url('/reports/transferred-staff-report') }}"><span>Training</span></a>
                         </div>
                     </div>
                 </div>
@@ -142,20 +139,18 @@
                 <div class="card flex-fill dash-statistics">
                     <div class="card-body">
                         <h5 class="card-title">Star Age of Staff</h5>
-                        <p><span class="me-2">Age</span><i class="fa fa-dot-circle-o text-info"></i></p>
+                        <p><i class="fa fa-dot-circle-o text-info"></i> <span class="me-2">Age</span></p>
                         <div class="stats-list">
                             <div class="stats-info">
                                 <p>18 - 24 <strong>{{--<small id="percen-age-18"></small> / --}}<small id="total-age-18"></small></strong></p>
                                 <div class="progress">
-                                    <div class="progress-bar bg-info" role="progressbar" 
-                                        id="progressbar-18" aria-valuemin="0"></div>
+                                    <div class="progress-bar bg-info" role="progressbar" id="progressbar-18" aria-valuemin="0"></div>
                                 </div>
                             </div>
                             <div class="stats-info">
                                 <p>25 - 44 <strong id="total-age-25">0</strong></p>
                                 <div class="progress">
-                                    <div class="progress-bar bg-info" role="progressbar"
-                                        id="progressbar-25" aria-valuemin="0"></div>
+                                    <div class="progress-bar bg-info" role="progressbar" id="progressbar-25" aria-valuemin="0"></div>
                                 </div>
                             </div>
                             <div class="stats-info">

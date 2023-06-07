@@ -98,6 +98,7 @@ class User extends Authenticatable
         'account_number',
         'users_permission',
         'status',
+        'emp_status',
         'created_by',
         'updated_by',
     ];

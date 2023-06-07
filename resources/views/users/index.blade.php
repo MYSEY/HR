@@ -92,7 +92,7 @@
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Role: activate to sort column ascending" style="width: 80.8125px;">Basic Salary</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending" style="width: 218.762px;">DOB</th>
                                             <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending" style="width: 87.1125px;">Join Date</th>
-                                            <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending" style="width: 87.1125px;">Pass Date</th>
+                                            <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending" style="width: 87.1125px;">Past Date</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Role: activate to sort column ascending" style="width: 135.163px;">Status</th>
                                             <th class="text-end no-sort sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Action: activate to sort column ascending" style="width: 50.825px;">Action</th>
                                         </tr>
@@ -182,11 +182,6 @@
                                                                     <i class="fa fa-dot-circle-o text-dark"></i>
                                                                     <span>Fall Probation</span>
                                                                 </a>
-                                                            {{-- @elseif ($item->emp_status=='10')
-                                                                <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
-                                                                    <i class="fa fa-dot-circle-o text-dark"></i>
-                                                                    <span>Others</span>
-                                                                </a> --}}
                                                             @endif
                                                             @if (Auth::user()->RolePermission == 'Administrator')
                                                                 <div class="dropdown-menu dropdown-menu-right" id="btn-emp-status">
@@ -217,9 +212,6 @@
                                                                     <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="9" href="#">
                                                                         <i class="fa fa-dot-circle-o text-danger"></i> Fall Probation
                                                                     </a>
-                                                                    {{-- <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="10" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-danger"></i> Others
-                                                                    </a> --}}
                                                                 </div>
                                                             @endif
                                                         </div>
@@ -611,9 +603,7 @@
             }else if(status == 9){
                 var emp_status = "Fall Probation";
             }
-            // else if(status == 10){
-            //     var emp_status = "Other";
-            // }
+
             let start_date = $(this).attr('data-start-date');
             let end_date = $(this).attr('data-end-date');
             if (status == 1) {
@@ -703,6 +693,7 @@
                             '</div>'+
                             '<div class="form-group">'+
                                 '<label>End date <span class="text-danger">*</span></label>'+
+                                '<input type="hidden" class="form-control start_date" value="'+start_date+'">'+
                                 '<input type="date" class="form-control end_date" value="'+end_date+'">'+
                                 '<input type="hidden" class="form-control emp_status" id="" name="" value="'+status+'">'+
                                 '<input type="hidden" class="form-control id" id="" name="" value="'+id+'">'+
@@ -718,6 +709,7 @@
                             btnClass: 'btn-blue',
                             action: function() {
                                 var emp_status = this.$content.find('.emp_status').val();
+                                var start_date = this.$content.find('.start_date').val();
                                 var end_date = this.$content.find('.end_date').val();
                                 var id = this.$content.find('.id').val();
                                 var resign_reason = this.$content.find('.resign_reason').val();
@@ -734,6 +726,7 @@
                                         'id': id,
                                         'emp_status': emp_status,
                                         'end_date': end_date,
+                                        'start_date': start_date,
                                         'resign_reason': resign_reason
                                     }).then(function(response) {
                                     new Noty({

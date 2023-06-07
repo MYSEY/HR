@@ -100,13 +100,13 @@
                                                 <td>{{$item->FDCEndDate}}</td>
                                                 <td>{{$item->DOB ?? ''}}</td>
                                                 <td>{{$item->marital_status}}</td>
-                                                <td>{{ $item->gender == 1 ? 'Male' : 'Female' }}</td>
-                                                <td>$20000</td>
+                                                <td>{{ $item->EmployeeGender }}</td>
+                                                <td>$ {{$item->basic_salary}}</td>
                                                 <td>
                                                    {{$item->FullAddressEn}}
                                                 </td>
                                                 <td>
-                                                    @if ($item->emp_status=='Probation')
+                                                    {{-- @if ($item->emp_status=='Probation')
                                                         <button class="btn btn-outline-success btn-sm">{{ $item->emp_status}}</button>
                                                     @elseif ($item->emp_status=='1')
                                                         <button class="btn btn-outline-success btn-sm">FDC</button>
@@ -126,7 +126,60 @@
                                                         <button class="btn btn-outline-success btn-sm">Suspension</button>
                                                     @elseif ($item->emp_status=='9')
                                                         <button class="btn btn-outline-success btn-sm">Others</button>
-                                                    @endif
+                                                    @endif --}}
+                                                    <div class="dropdown action-label">
+                                                        @if ($item->emp_status=='Probation')
+                                                            <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
+                                                                <i class="fa fa-dot-circle-o text-success"></i>
+                                                                <span>{{ $item->emp_status }}</span>
+                                                            </a>
+                                                        @elseif ($item->emp_status=='1')
+                                                            <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
+                                                                <i class="fa fa-dot-circle-o text-info"></i>
+                                                                <span>FDC</span>
+                                                            </a>
+                                                        @elseif ($item->emp_status=='2')
+                                                            <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
+                                                                <i class="fa fa-dot-circle-o text-danger"></i>
+                                                                <span>UDC</span>
+                                                            </a>
+                                                        @elseif ($item->emp_status=='3')
+                                                            <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
+                                                                <i class="fa fa-dot-circle-o text-dark"></i>
+                                                                <span>Resignation</span>
+                                                            </a>
+                                                        @elseif ($item->emp_status=='4')
+                                                            <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
+                                                                <i class="fa fa-dot-circle-o text-dark"></i>
+                                                                <span>Termination</span>
+                                                            </a>
+                                                        @elseif ($item->emp_status=='5')
+                                                            <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
+                                                                <i class="fa fa-dot-circle-o text-dark"></i>
+                                                                <span>Death</span>
+                                                            </a>
+                                                        @elseif ($item->emp_status=='6')
+                                                            <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
+                                                                <i class="fa fa-dot-circle-o text-dark"></i>
+                                                                <span>Retired</span>
+                                                            </a>
+                                                        @elseif ($item->emp_status=='7')
+                                                            <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
+                                                                <i class="fa fa-dot-circle-o text-dark"></i>
+                                                                <span>Lay off</span>
+                                                            </a>
+                                                        @elseif ($item->emp_status=='8')
+                                                            <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
+                                                                <i class="fa fa-dot-circle-o text-dark"></i>
+                                                                <span>Suspension</span>
+                                                            </a>
+                                                        @elseif ($item->emp_status=='9')
+                                                            <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
+                                                                <i class="fa fa-dot-circle-o text-dark"></i>
+                                                                <span>Fall Probation</span>
+                                                            </a>
+                                                        @endif
+                                                    </div>
                                                 </td>
                                             </tr>
                                         @endforeach

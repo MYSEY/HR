@@ -80,6 +80,10 @@
                                                     </th>
                                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                         rowspan="1" colspan="1"
+                                                        aria-label="Salary: activate to sort column ascending">Payment Date
+                                                    </th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                        rowspan="1" colspan="1"
                                                         aria-label="Salary: activate to sort column ascending">Created At
                                                     </th>
                                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
@@ -109,11 +113,8 @@
                                                                     </a>
                                                                 @endif
                                                             </td>
-                                                            <td> <a
-                                                                    href="#">{{ $item->users == null ? '' : $item->users->employee_name_en }}</span></a>
-                                                            </td>
-                                                            <td>{{ $item->users == null ? '' : $item->users->number_employee }}
-                                                            </td>
+                                                            <td> <a href="#">{{ $item->users == null ? '' : $item->users->employee_name_en }}</span></a></td>
+                                                            <td>{{ $item->users == null ? '' : $item->users->number_employee }}</td>
                                                             <td>{{ $item->users == null ? '' : $item->users->EmployeeDepartment }}
                                                             </td>
                                                             <td>{{ $item->users == null ? '' : $item->users->EmployeeBranch }}
@@ -121,6 +122,7 @@
                                                             <td>{{ $item->users == null ? '' : $item->users->joinOfDate }}
                                                             </td>
                                                             <td>$ <a href="#">{{ $item->total_salary }}</a></td>
+                                                            <td>{{ $item->PayrollDate }}</td>
                                                             <td>{{ $item->Created }}</td>
                                                             <td><a class="btn btn-sm btn-primary"
                                                                     href="{{ url('payslip', $item->employee_id) }}">Generate
@@ -222,10 +224,6 @@
                                                         pension contribution</th>
                                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                         rowspan="1" colspan="1"
-                                                        aria-label="Payslip: activate to sort column ascending">Work
-                                                        location</th>
-                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                        rowspan="1" colspan="1"
                                                         aria-label="Salary: activate to sort column ascending">Created At
                                                     </th>
                                                 </tr>
@@ -256,8 +254,6 @@
                                                             </td>
                                                             <td><span></span> {{ $item->pension_contribution_riel }}</td>
                                                             <td>{{ $item->corporate_contribution }}</td>
-                                                            <td>{{ $item->users == null ? '' : $item->users->EmployeeBranchAbbreviations }}
-                                                            </td>
                                                             <td>{{ Carbon\Carbon::parse($item->created_at)->format('d-M-Y') }}
                                                             </td>
                                                         </tr>
@@ -289,86 +285,39 @@
                                             id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
                                             <thead>
                                                 <tr>
-                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                        rowspan="1" colspan="1">Employee ID</th>
-                                                    <th class="sorting sorting_asc" tabindex="0"
-                                                        aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
-                                                        aria-sort="ascending"
-                                                        aria-label="Employee: activate to sort column descending">Full Name
-                                                    </th>
-                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                        rowspan="1" colspan="1"
-                                                        aria-label="Email: activate to sort column ascending">Gender</th>
-                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                        rowspan="1" colspan="1"
-                                                        aria-label="Email: activate to sort column ascending">Position</th>
-                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                        rowspan="1" colspan="1"
-                                                        aria-label="Payslip: activate to sort column ascending">Work
-                                                        location</th>
-                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                        rowspan="1" colspan="1"
-                                                        aria-label="Join Date: activate to sort column ascending">Join Date
-                                                    </th>
-                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                        rowspan="1" colspan="1"
-                                                        aria-label="Payslip: activate to sort column ascending">Number of
-                                                        working days</th>
-                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                        rowspan="1" colspan="1"
-                                                        aria-label="Payslip: activate to sort column ascending">Total
-                                                        Average Salary</th>
-                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                        rowspan="1" colspan="1"
-                                                        aria-label="Payslip: activate to sort column ascending">Number of
-                                                        years</th>
-                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                        rowspan="1" colspan="1"
-                                                        aria-label="Payslip: activate to sort column ascending">Total
-                                                        Salary Receive</th>
-                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                        rowspan="1" colspan="1"
-                                                        aria-label="Payslip: activate to sort column ascending">Taxable
-                                                        Salary</th>
-                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                        rowspan="1" colspan="1"
-                                                        aria-label="Salary: activate to sort column ascending">Created At
-                                                    </th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1">Employee ID</th>
+                                                    <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Employee: activate to sort column descending">Full Name</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending">Gender</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending">Position</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">Join Date</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">Months</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Payslip: activate to sort column ascending">Total Average Salary</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Payslip: activate to sort column ascending">Total Salary Receive</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Payslip: activate to sort column ascending">Tax Exemption Salary</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Payslip: activate to sort column ascending">Taxable Salary</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Salary: activate to sort column ascending">Created At</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 @if (count($dataSeniority) > 0)
                                                     @foreach ($dataSeniority as $item)
                                                         <tr class="odd">
-                                                            <td><a
-                                                                    href="#">{{ $item->users == null ? '' : $item->users->number_employee }}</a>
-                                                            </td>
-                                                            <td><a
-                                                                    href="#">{{ $item->users == null ? '' : $item->users->employee_name_en }}</a>
-                                                            </td>
-                                                            <td>{{ $item->users == null ? '' : $item->users->EmployeeGender }}
-                                                            </td>
-                                                            <td>{{ $item->users == null ? '' : $item->users->EmployeePosition }}
-                                                            </td>
-                                                            <td>{{ $item->users == null ? '' : $item->users->EmployeeBranchAbbreviations }}
-                                                            </td>
-                                                            <td>{{ $item->users == null ? '' : $item->users->joinOfDate }}
-                                                            </td>
-                                                            <td>{{ $item->users == null ? '' : $item->users->NumberofWorkingDays }}
-                                                                days</td>
-                                                            <td>{{ $item->users == null ? '' : $item->users->NumberofYears }}
-                                                                days</td>
+                                                            <td><a href="#">{{ $item->users == null ? '' : $item->users->number_employee }}</a></td>
+                                                            <td><a href="#">{{ $item->users == null ? '' : $item->users->employee_name_en }}</a></td>
+                                                            <td>{{ $item->users == null ? '' : $item->users->EmployeeGender }}</td>
+                                                            <td>{{ $item->users == null ? '' : $item->users->EmployeePosition }}</td>
+                                                            <td>{{ $item->users == null ? '' : $item->users->joinOfDate }}</td>
+                                                            <td>{{ $item->payment_of_month }}</td>
                                                             <td>{{ $item->total_average_salary }}</td>
                                                             <td>{{ $item->total_salary_receive }}</td>
+                                                            <td>{{ $item->tax_exemption_salary }}</td>
                                                             <td>{{ $item->taxable_salary }}</td>
-                                                            <td>{{ Carbon\Carbon::parse($item->created_at)->format('d-M-Y') }}
-                                                            </td>
+                                                            <td>{{ Carbon\Carbon::parse($item->created_at)->format('d-M-Y') }}</td>
                                                         </tr>
                                                     @endforeach
                                                 @else
                                                     <tr>
-                                                        <td colspan="16" style="text-align: center">No record to display
-                                                        </td>
+                                                        <td colspan="16" style="text-align: center">No record to display</td>
                                                     </tr>
                                                 @endif
                                             </tbody>
@@ -426,7 +375,7 @@
                                 <div class="form-group">
                                     <label>Payment Date</label>
                                     <div class="cal-icon">
-                                        <input class="form-control datetimepicker" type="text" id="payment_date" name="payment_date">
+                                        <input class="form-control datetimepicker" type="text" id="payment_date" name="payment_date" required>
                                     </div>
                                 </div>
                             </div>

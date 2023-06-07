@@ -65,19 +65,28 @@
                                         <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Employee Name: activate to sort column descending" style="width: 178px;">Employee Name</th>
                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department: activate to sort column ascending" style="width: 125.15px;">Department</th>
                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department: activate to sort column ascending" style="width: 125.15px;">Position</th>
-                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Joining Date: activate to sort column ascending" style="width: 89.6px;">Start Date</th>
-                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Joining Date: activate to sort column ascending" style="width: 89.6px;">End Date</th>
-                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Salary: activate to sort column ascending" style="width: 51.475px;">Salary</th>
+                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department: activate to sort column ascending" style="width: 125.15px;">Branch</th>
+                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Joining Date: activate to sort column ascending" style="width: 89.6px;">Payment Date</th>
+                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Salary: activate to sort column ascending" style="width: 51.475px;">Net Salary</th>
                                         <th class="text-center sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Status: activate to sort column ascending" style="width: 55.5625px;">Status</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {{-- @if (count($users)>0)
-                                        @foreach ($users as $item)
+                                    @if (count($payroll)>0)
+                                        @foreach ($payroll as $item)
                                             <tr class="odd">
+                                                <td>{{ $item->id}}</td>
+                                                <td>{{ $item->users == null ? '' : $item->users->number_employee }}</td>
+                                                <td>{{ $item->users == null ? '' : $item->users->employee_name_en }}</td>
+                                                <td>{{$item->users == null ? '' : $item->users->EmployeeDepartment}}</td>
+                                                <td>{{ $item->users == null ? '' : $item->users->EmployeePosition}}</td>
+                                                <td>{{ $item->users == null ? '' : $item->users->EmployeeBranch}}</td>
+                                                <td>{{ $item->payment_date}}</td>
+                                                <td>$ {{ $item->total_salary}}</td>
+                                                <td>{{ $item->status}}</td>
                                             </tr>
                                         @endforeach
-                                    @endif --}}
+                                    @endif
                                 </tbody>
                             </table>
                         </div>

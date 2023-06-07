@@ -9,6 +9,7 @@ use App\Models\Holiday;
 use App\Models\Payroll;
 use App\Models\Seniority;
 use App\Models\ExchangeRate;
+use App\Models\SeverancePay;
 use Illuminate\Http\Request;
 use App\Models\ChildrenInfor;
 use Illuminate\Support\Carbon;
@@ -60,6 +61,10 @@ class EmployeePayrollController extends Controller
      */
     public function store(Request $request)
     {
+        // $severancePay = Payroll::where('employee_id', 2)->where('payment_date', '>=','2023-03-05')->sum('total_gross_salary');
+        // dd($severancePay);
+        // $totalSalary = Payroll::where('employee_id', 2)->where('payment_date','>=','2023-03-05')->pluck('total_gross_salary')->avg();
+        // dd($totalSalary);
         // try{
             // get exchang rate
             // $exChange= ExchangeRate::first();
@@ -84,18 +89,23 @@ class EmployeePayrollController extends Controller
             //     dd($totalSalaryCurrent);
             // }
             
-            $employee = User::all();
+            $employee = User::where('date_of_commencement','<=',$request->payment_date)->whereIn('emp_status',['Probation','1','2'])->get();
             foreach ($employee as $item) {
+
                 //National Social Security Fund (NSSF) Formula
                 $totalExchangeRielPreTax =  $request->exchange_rate * $item->basic_salary;
-
-                if ($totalExchangeRielPreTax >= 1200000) {
-                    $AverageWage    = 1200000;
-                }else if($totalExchangeRielPreTax >= 400000){
-                    $AverageWage    = $totalExchangeRielPreTax;
+                if ($totalExchangeRielPreTax) {
+                    if ($totalExchangeRielPreTax >= 1200000) {
+                        $AverageWage    = 1200000;
+                    }else if($totalExchangeRielPreTax >= 400000){
+                        $AverageWage    = $totalExchangeRielPreTax;
+                    }else{
+                        $AverageWage = 400000;
+                    }
                 }else{
-                    $AverageWage = 400000;
+                    $AverageWage = 0;
                 }
+                
                 $OccupationalRisk = (0.008 * $totalExchangeRielPreTax);
                 $HealthCare = (0.026 * $totalExchangeRielPreTax);
                 $WorkerContribution_usd = ($AverageWage * 0.02);
@@ -550,58 +560,82 @@ class EmployeePayrollController extends Controller
                 $data['created_by']                     = Auth::user()->id;
 
                 $payrolle = Payroll::create($data);
-            }
-            //function create Seniority
-            if ($payrolle) {
-                $monthForPayment = Carbon::parse($request->payment_date)->format('M');
-                $employee = User::where('id',$item->id)->first();
-                $totalSeniority = 0;
-                if ($employee->emp_status == 1) {
 
-                    $currentDate= Carbon::createFromDate($request->payment_date)->format('m');
-                    if ($currentDate == 6 || $currentDate == 12) {
-                        $nextYear = Carbon::now()->format('Y');
-                        $currentYear = null;
-                        $currentMonth = null;
-                        $preYear = Carbon::createFromDate($employee->fdc_date)->format('Y');
-                        if($currentDate == 6){
-                            if ($preYear == $nextYear) {
-                                $currentYear = $employee->fdc_date;
-                            }else{
-                                $currentYear =  Carbon::createFromDate($nextYear.'-01-01')->format('Y-m-d') ;
+                //function create Seniority
+                if ($payrolle) {
+                    $PaymentOfMonth = Carbon::parse($request->payment_date)->format('M-Y');
+                    // $employee = User::where('id',$item->id)->first();
+                    $totalSeniority = 0;
+                    if ($item->emp_status == 1) {
+                        $currentDate = Carbon::createFromDate($request->payment_date)->format('m');
+                        if ($currentDate == 6 || $currentDate == 12) {
+                            $nextYear = Carbon::createFromDate($item->fdc_date)->format('Y');
+                            // $nextYear = Carbon::now()->format('Y');
+                            $currentYear = null;
+                            $currentMonth = null;
+                            $preYear = Carbon::createFromDate($item->fdc_date)->format('Y');
+                            if($currentDate == 6){
+                                if ($preYear == $nextYear) {
+                                    $currentYear = $item->fdc_date;
+                                }else{
+                                    $currentYear =  Carbon::createFromDate($nextYear.'-01-01')->format('Y-m-d');
+                                }
                             }
+                            if ($currentDate == 12) {
+                                $currentMonth = Carbon::createFromDate($nextYear.'-07-01')->format('Y-m-d');
+                            }
+                            
+                            $totalSalary = Payroll::where('employee_id', $item->id)->when($currentYear ,function ($query, $fdc_date) {
+                                $query->where('payment_date', '>=',$fdc_date);
+                            })->when($currentMonth, function($query, $currentMonth){
+                                $query->where('payment_date', '>=',$currentMonth);
+                            })->pluck('total_gross_salary')->avg();
+
+                            $totalSalaryReceive = ($totalSalary / 22) * 7.5;
+                            $totaltaxableSalary = $totalSalaryReceive - $totalSalaryReceive;
+                            $paymentOfMonth = $PaymentOfMonth;
+                            $seniority = Seniority::create([
+                                'employee_id'   => $item->id,
+                                'total_average_salary'  => $totalSalary,
+                                'total_salary_receive'  => round($totalSalaryReceive, 2),
+                                'tax_exemption_salary'  => round($totalSalaryReceive, 2),
+                                'taxable_salary'        => $totaltaxableSalary,
+                                'payment_of_month'        => $paymentOfMonth,
+                                'created_by'        => Auth::user()->id,
+                            ]);
+                            $totalSeniority = $seniority->total_salary_receive ?? 0;
+                            $totalNetSalary = $totalSeniority + $payrolle->total_salary;
+                            Payroll::where('id',$payrolle->id)->update([
+                                'total_salary'  => $totalNetSalary, 
+                            ]);
                         }
-            
-                        if ($currentDate == 12) {
-                            $currentMonth = Carbon::createFromDate($nextYear.'-07-01')->format('Y-m-d');
+                    }
+                    if ($item->emp_status == 2) {
+                        $payroll = Payroll::where('employee_id',2)->where('payment_date','>=',$item->fdc_date)->get();
+                        foreach ($payroll as $key => $value) {
+                            $monthPaymentSeverance = $key + 1;
                         }
                         
-                        $totalSalary = Payroll::where('employee_id', $item->id)->when($currentYear ,function ($query, $fdc_date) {
-                            $query->where('payment_date', '>=',$fdc_date);
-                        })->when($currentMonth, function($query, $currentMonth){
-                            $query->where('payment_date', '>=',$currentMonth);
-                        })->pluck('total_gross_salary')->avg();
-                        $totalSalaryReceive = ($totalSalary / 22) * 7.5;
-                        $totaltaxableSalary = $totalSalaryReceive - $totalSalaryReceive;
-                        $paymentOfMonth = $monthForPayment;
-                        $seniority = Seniority::create([
-                            'employee_id'   => $item->id,
-                            'total_average_salary'  => $totalSalary,
-                            'total_salary_receive'  => round($totalSalaryReceive, 2),
-                            'tax_exemption_salary'  => round($totalSalaryReceive, 2),
-                            'taxable_salary'        => $totaltaxableSalary,
-                            'payment_of_month'        => $paymentOfMonth,
-                            'created_by'        => Auth::user()->id,
-                        ]);
-                        $dataSeniority = $seniority;
-                        $totalSeniority = $dataSeniority->total_salary_receive ?? 0;
-                        $totalNetSalary = $totalSeniority + $payrolle->total_salary;
-                        Payroll::where('id',$payrolle->id)->update([
-                            'total_salary'  => $totalNetSalary, 
-                        ]);
+                        if ($monthPaymentSeverance == 12) {
+                            $severancePay = Payroll::where('employee_id', $item->id)->where('payment_date', '>=',$item->fdc_date)->sum('total_gross_salary');
+                            $totalContractSeverancePay = $severancePay * 0.05;
+
+                            $dataSeverance = SeverancePay::create([
+                                'employee_id'                   => $item->id,
+                                'total_severanec_pay'           => $severancePay,
+                                'total_contract_severance_pay'  => $totalContractSeverancePay,
+                                'created_by'                    => Auth::user()->id,
+                            ]);
+                            $totalSeverancePay = $dataSeverance->total_contract_severance_pay ?? 0;
+                            $totalNetSalary = $totalSeverancePay + $payrolle->total_salary;
+                            Payroll::where('id',$payrolle->id)->update([
+                                'total_salary'  => $totalNetSalary, 
+                            ]);
+                        }
                     }
                 }
             }
+            
             //end function create Seniority
             Toastr::success('Created prayroll successfully.','Success');
             return redirect()->back();

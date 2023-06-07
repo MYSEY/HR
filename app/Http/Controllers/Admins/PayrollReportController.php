@@ -6,6 +6,8 @@ use App\Exports\ExportMotorRentel;
 use App\Http\Controllers\Controller;
 use App\Models\Branchs;
 use App\Models\MotorRentel;
+use App\Models\Payroll;
+use App\Models\User;
 use App\Repositories\Admin\MotorRentalRepository;
 use Brian2694\Toastr\Facades\Toastr;
 use Carbon\Carbon;
@@ -27,7 +29,8 @@ class PayrollReportController extends Controller
     }
     public function index()
     {
-        return view('reports.payroll_report');
+        $payroll = Payroll::with('users')->get();
+        return view('reports.payroll_report',compact('payroll'));
     }
 
     public function motorrentel(Request $request)

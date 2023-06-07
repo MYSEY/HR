@@ -199,7 +199,7 @@ class UserController extends Controller
             }else if($request->emp_status == 2){
                 User::where('id',$request->id)->update([
                     'emp_status' => $request->emp_status,
-                    'fdc_date' => null,
+                    'fdc_date' => $request->start_date,
                     'fdc_end' => $request->end_date,
                     'resign_reason' => $request->resign_reason
                 ]);
