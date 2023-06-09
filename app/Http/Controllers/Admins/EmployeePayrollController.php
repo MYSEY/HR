@@ -61,33 +61,10 @@ class EmployeePayrollController extends Controller
      */
     public function store(Request $request)
     {
-        // $severancePay = Payroll::where('employee_id', 2)->where('payment_date', '>=','2023-03-05')->sum('total_gross_salary');
-        // dd($severancePay);
-        // $totalSalary = Payroll::where('employee_id', 2)->where('payment_date','>=','2023-03-05')->pluck('total_gross_salary')->avg();
-        // dd($totalSalary);
         // try{
             // get exchang rate
             // $exChange= ExchangeRate::first();
             // $request->exchange_rate =  $exChange->amount_riel;
-
-            // $nowTimeDate = Carbon::now()->format('m');
-            // dd($nowTimeDate == 05);
-            
-            // $employee = User::where('id',$request->employee_id)->where('emp_status','1')->first();
-            // if ($employee->fdc_date != null) {
-            //     $Ldate = new DateTime($employee->fdc_date);
-            //     $totalLdate = (int)$Ldate->format('d');
-            //     $payrolle = Payroll::where('employee_id',$request->employee_id)->first();
-            //     if($totalLdate >= 1 || $totalLdate <= 15){
-            //         $totalSalaryPrevious = $payrolle->basic_salary / 2;
-            //     }
-            //     $sDate = Carbon::now()->diffInDays($employee->fdc_date);
-            //     dd($sDate);
-            //     if ($sDate <= 30) {
-            //         $totalSalaryCurrent  = $item->basic_salary / 2;
-            //     }
-            //     dd($totalSalaryCurrent);
-            // }
             
             $employee = User::where('date_of_commencement','<=',$request->payment_date)->whereIn('emp_status',['Probation','1','2'])->get();
             foreach ($employee as $item) {
@@ -569,8 +546,8 @@ class EmployeePayrollController extends Controller
                     if ($item->emp_status == 1) {
                         $currentDate = Carbon::createFromDate($request->payment_date)->format('m');
                         if ($currentDate == 6 || $currentDate == 12) {
-                            $nextYear = Carbon::createFromDate($item->fdc_date)->format('Y');
-                            // $nextYear = Carbon::now()->format('Y');
+                            // $nextYear = Carbon::createFromDate($item->fdc_date)->format('Y');
+                            $nextYear = Carbon::now()->format('Y');
                             $currentYear = null;
                             $currentMonth = null;
                             $preYear = Carbon::createFromDate($item->fdc_date)->format('Y');
@@ -693,7 +670,7 @@ class EmployeePayrollController extends Controller
     }
 
     public function paySlip(Request $request){
-        $payslip = Payroll::with('users')->with('bunus')->with('NSSF')
+        $payslip = Payroll::with('users')->with('bunus')->with('NSSF')->with('seniority')->with('severancePay')
         ->where('employee_id',$request->employee_id)->first();
         return view('payrolls.payslip',compact('payslip'));
     }

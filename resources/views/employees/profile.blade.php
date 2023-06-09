@@ -168,13 +168,13 @@
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <form action="{{url('employee/contact')}}" method="POST">
+                                <form action="{{url('employee/contact')}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
                                     @csrf
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="form-group">
                                                 <label>Name <span class="text-danger">*</span></label>
-                                                <input type="text" class="form-control" id="name" name="name" required>
+                                                <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" value="{{old('name')}}" required>
                                             </div>
                                         </div>
                                     </div>
@@ -182,8 +182,8 @@
                                         <div class="col-md-12">
                                             <div class="form-group">
                                                 <label>Relationship <span class="text-danger">*</span></label>
-                                                <select class="form-control select" id="relationship" name="relationship" value="">
-                                                    <option value="">select relationship</option>
+                                                <select class="form-control @error('relationship') is-invalid @enderror" id="relationship" name="relationship" value="{{old('relationship')}}" required>
+                                                    <option selected disabled value=""> --Select relationship --</option>
                                                     @foreach ($relationship as $item)
                                                         <option value="{{ $item->id }}">{{ $item->name_khmer }}</option>
                                                     @endforeach
@@ -195,7 +195,7 @@
                                         <div class="col-md-12">
                                             <div class="form-group">
                                                 <label>Phone <span class="text-danger">*</span></label>
-                                                <input class="form-control" type="text" id="phone" name="phone" required>
+                                                <input class="form-control @error('phone') is-invalid @enderror" type="text" id="phone" name="phone" value="{{old('phone')}}" required>
                                             </div>
                                         </div>
                                     </div>
@@ -340,7 +340,7 @@
                             </button>
                         </div>
                         <div class="modal-body">
-                            <form action="{{url('employee/children')}}" method="POST">
+                            <form action="{{url('employee/children')}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
                                 @csrf
                                 <div class="form-scroll" id="">
                                     <div class="row" id="children-container-repeatable-elements">
@@ -351,7 +351,7 @@
                                                     <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label>Name <span class="text-danger">*</span></label>
-                                                            <input class="form-control" type="text" name="name[]" id="name[]">
+                                                            <input class="form-control" type="text" name="name[]" id="name[]" required>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
@@ -396,7 +396,7 @@
                             </button>
                         </div>
                         <div class="modal-body">
-                            <form action="{{url('/employee/education')}}" method="POST">
+                            <form action="{{url('/employee/education')}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
                                 @csrf
                                 <div class="form-scroll" id="educationModal">
                                     <div class="row" id="education-container-repeatable-elements">
@@ -484,7 +484,7 @@
                             </button>
                         </div>
                         <div class="modal-body">
-                            <form action="{{url('/employee/experience')}}" method="POST">
+                            <form action="{{url('/employee/experience')}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
                                 @csrf
                                 <div class="form-scroll" id="experienceModal">
                                     <div class="row" id="experience-container-repeatable-elements">
@@ -874,6 +874,7 @@
 @endsection
 
 @include('includs.script')
+<script src="{{asset('/admin/js/validation-field.js')}}"></script>
 <script>
     $(function() {
         $('#btnAddEducation').on('click', function() {

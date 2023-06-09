@@ -68,7 +68,7 @@
                                 <table class="table table-bordered">
                                     <tbody>
                                         <tr>
-                                            <td>Gross Salary <span class="float-end">${{$payslip->total_gross_salary}}</span></td>
+                                            <td>Gross Salary <span class="float-end">$ {{$payslip->total_gross_salary}}</span></td>
                                         </tr>
                                         <tr>
                                             <td>Increasment <span class="float-end">$55</span></td>
@@ -77,13 +77,13 @@
                                             <td>Incentive <span class="float-end">$55</span></td>
                                         </tr>
                                         <tr>
-                                            <td>Bonus(Annual/PB/KNY) <span class="float-end">$55</span></td>
+                                            <td>Bonus(Annual/PB/KNY) <span class="float-end">$ {{$payslip->bunus == null ? 0 : $payslip->bunus->total_allowance}}</span></td>
                                         </tr>
                                         <tr>
-                                            <td>Seniority pay <span class="float-end">$55</span></td>
+                                            <td>Seniority pay <span class="float-end">$ {{$payslip->seniority == null ? 0 : $payslip->seniority->total_salary_receive}}</span></td>
                                         </tr>
                                         <tr>
-                                            <td>Severance Pay <span class="float-end">$55</span></td>
+                                            <td>Severance Pay <span class="float-end">$ {{$payslip->severancePay == null ? 0 : $payslip->severancePay->total_contract_severance_pay}}</span></td>
                                         </tr>
                                         <tr>
                                             <td>Adjustment(+/-) <span class="float-end">$55</span></td>
@@ -92,13 +92,10 @@
                                             <td>Leaves  (+/-) <span class="float-end">$55</span></td>
                                         </tr>
                                         <tr>
-                                            <td>Phone <span class="float-end">${{$payslip->phone_allowance}}</span></td>
+                                            <td>Phone <span class="float-end">$ {{$payslip->phone_allowance == null ? 0 : $payslip->phone_allowance}}</span></td>
                                         </tr>
                                         <tr>
-                                            <td>Other Allowence <span class="float-end">${{$payslip->other_allowances}}</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td><strong>Total Earnings</strong> <span class="float-end"><strong>$55</strong></span></td>
+                                            <td><strong>Total Earnings</strong> <span class="float-end"><strong>$ {{$payslip->total_gross_salary}}</strong></span></td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -117,9 +114,6 @@
                                         </tr>
                                         <tr>
                                             <td>Staff loan <span class="float-end">$550</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Other Deduction <span class="float-end">$300</span></td>
                                         </tr>
                                         <tr>
                                             <td><strong>Total Deductions</strong> <span class="float-end"><strong>$59698</strong></span></td>

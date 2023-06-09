@@ -20,6 +20,8 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\ChildrenRequest;
+use App\Http\Requests\EmployeeContactRequest;
 
 class EmployeeProfileController extends Controller
 {
@@ -160,7 +162,7 @@ class EmployeeProfileController extends Controller
             return redirect()->back();
         }
     }
-    public function employeeContact(Request $request){
+    public function employeeContact(EmployeeContactRequest $request){
         try{
             Contact::create([
                 'employee_id'   => $request->employee_id,
@@ -180,7 +182,7 @@ class EmployeeProfileController extends Controller
         }
     }
 
-    public function employeeChildren(Request $request){
+    public function employeeChildren(ChildrenRequest $request){
         try{
             if (is_array($request->name) && count($request->name)) {
                 foreach ($request->name as $key => $item) :

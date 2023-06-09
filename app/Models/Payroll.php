@@ -4,6 +4,8 @@ namespace App\Models;
 
 use App\Models\User;
 use App\Models\Bonus;
+use App\Models\Seniority;
+use App\Models\SeverancePay;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\NationalSocialSecurityFund;
@@ -66,6 +68,12 @@ class Payroll extends Model
     }
     public function NSSF(){
         return $this->belongsTo(NationalSocialSecurityFund::class ,'employee_id');
+    }
+    public function seniority(){
+        return $this->belongsTo(Seniority::class ,'employee_id');
+    }
+    public function severancePay(){
+        return $this->belongsTo(SeverancePay::class ,'employee_id');
     }
 
     public function getCreatedAttribute(){
