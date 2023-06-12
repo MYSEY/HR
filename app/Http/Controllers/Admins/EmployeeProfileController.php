@@ -206,4 +206,28 @@ class EmployeeProfileController extends Controller
             return redirect()->back();
         }
     }
+    public function editChildrenInformation(Request $request){
+        $data = ChildrenInfor::where('id',$request->id)->first();
+        return response()->json([
+            'success'=>$data,
+        ]);
+    }
+    public function childrenUpdate(Request $request){
+        try{
+            ChildrenInfor::where('id',$request->id)->where('employee_id',$request->employee_id)->update([
+                'employee_id'       => $request->employee_id,
+                'name'              => $request->name,
+                'date_of_birth'     => $request->date_of_birth,
+                'sex'               => $request->sex,
+                'updated_by'        => Auth::id(),
+            ]);
+            DB::commit();
+            Toastr::success('Updated Children successfully.','Success');
+            return redirect()->back();
+        }catch(\Exception $e){
+            DB::rollback();
+            Toastr::error('Updated Children fail','Error');
+            return redirect()->back();
+        }
+    }
 }

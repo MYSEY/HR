@@ -83,8 +83,8 @@ class EmployeePayrollController extends Controller
                     $AverageWage = 0;
                 }
                 
-                $OccupationalRisk = (0.008 * $totalExchangeRielPreTax);
-                $HealthCare = (0.026 * $totalExchangeRielPreTax);
+                $OccupationalRisk = (0.008 * $AverageWage);
+                $HealthCare = (0.026 * $AverageWage);
                 $WorkerContribution_usd = ($AverageWage * 0.02);
                 $WorkerContribution_riel = (round($WorkerContribution_usd, -2) / $request->exchange_rate);
                 $dataNSSF = NationalSocialSecurityFund::create([
@@ -519,16 +519,15 @@ class EmployeePayrollController extends Controller
                 $data   = $request->all();
                 $data['employee_id']                    = $item->id;
                 $data['basic_salary']                   = number_format($item->basic_salary,2);
-                $data['payment_amount']                 = 0;
                 $data['children']                       = $children;
                 $data['total_gross_salary']             = number_format($item->basic_salary,2);
                 $data['total_child_allowance']          = $totalAmountChild;
-                $data['phone_allowance']                = $request->phone_allowance;
+                $data['phone_allowance']                = $item->phone_allowance;
                 $data['monthly_quarterly_bonuses']      = $request->monthly_quarterly_bonuses;
                 $data['annual_incentive_bonus']         = $request->annual_incentive_bonus;
                 $data['base_salary_received_usd']       = number_format($totalPaseSsalaryReceivedUsd,2);
                 $data['base_salary_received_riel']      = number_format($totalExchangeRiel);
-                $data['tax_base_riel']                  = number_format($totalTtaxBbaseRiel);
+                $data['total_tax_base_riel']            = number_format($totalTtaxBbaseRiel);
                 $data['total_charges_reduced']          = number_format($totalChargesReduced);
                 $data['total_rate']                     = $totalTax;
                 $data['total_salary_tax_riel']          = number_format($totalSalaryTaxRiel);
@@ -541,7 +540,6 @@ class EmployeePayrollController extends Controller
                 //function create Seniority
                 if ($payrolle) {
                     $PaymentOfMonth = Carbon::parse($request->payment_date)->format('M-Y');
-                    // $employee = User::where('id',$item->id)->first();
                     $totalSeniority = 0;
                     if ($item->emp_status == 1) {
                         $currentDate = Carbon::createFromDate($request->payment_date)->format('m');

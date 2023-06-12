@@ -212,9 +212,7 @@ class UserController extends Controller
             }
             
             DB::commit();
-            return response()->json([
-                'message' => 'The process has been successfully.'
-            ]);
+            return ['message' => 'successfull'];
         } catch (\Exception $exp) {
             DB::rollBack();
             return response()->json(['message' => $exp->getMessage()], 500);

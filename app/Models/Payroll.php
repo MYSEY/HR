@@ -21,7 +21,6 @@ class Payroll extends Model
     protected $fillable = [
         'employee_id',
         'basic_salary',
-        'payment_amount',
         'total_gross_salary',
         'payment_date',
         'children',
@@ -30,7 +29,6 @@ class Payroll extends Model
         'phone_allowance',
         'monthly_quarterly_bonuses',
         'annual_incentive_bonus',
-        'other_allowances',
         'seniority_payable_tax',
         'base_salary_received_usd',
         'base_salary_received_riel',

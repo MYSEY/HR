@@ -280,6 +280,9 @@
 @endsection
 @include('includs.script')
 <script src="{{asset('/admin/js/validation-field.js')}}"></script>
+<link rel="stylesheet" href="{{ asset('admin/css/noty.css') }}">
+<script src="{{asset('/admin/js/noty.js')}}"></script>
+
 <script>
     $(function(){
         // block Current Address
@@ -657,14 +660,16 @@
                                         'end_dete': end_dete,
                                         'resign_reason': resign_reason
                                     }).then(function(response) {
-                                    new Noty({
-                                        title: "",
-                                        text: "The process has been successfully.",
-                                        type: "success",
-                                        icon: true
-                                    }).show();
-                                    $('.card-footer').remove();
-                                    window.location.replace("{{ URL('users') }}");
+                                    if (response.data.message == 'successfull') {
+                                        new Noty({
+                                            title: "",
+                                            text: "The process has been successfully.",
+                                            type: "success",
+                                            icon: true
+                                        }).show();
+                                        $('.card-footer').remove();
+                                        window.location.replace("{{ URL('users') }}"); 
+                                    }
                                 }).catch(function(error) {
                                     new Noty({
                                         title: "",
