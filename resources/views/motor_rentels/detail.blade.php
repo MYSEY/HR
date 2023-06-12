@@ -3,61 +3,22 @@
     .profile-info-left {
         border-right: 0px dashed #cccccc !important;
     }
-    .lds-ellipsis {
-  display: inline-block;
-  position: relative;
-  width: 70px;
-  height: 28px;
-}
-.lds-ellipsis div {
-  position: absolute;
-  top: 10px;
-  width: 9px;
-  height: 9px;
-  border-radius: 50%;
-  background: #fff;
-  animation-timing-function: cubic-bezier(0, 1, 1, 0);
-}
-.lds-ellipsis div:nth-child(1) {
-  left: 8px;
-  animation: lds-ellipsis1 0.6s infinite;
-}
-.lds-ellipsis div:nth-child(2) {
-  left: 8px;
-  animation: lds-ellipsis2 0.6s infinite;
-}
-.lds-ellipsis div:nth-child(3) {
-  left: 32px;
-  animation: lds-ellipsis2 0.6s infinite;
-}
-.lds-ellipsis div:nth-child(4) {
-  left: 56px;
-  animation: lds-ellipsis3 0.6s infinite;
-}
-@keyframes lds-ellipsis1 {
-  0% {
-    transform: scale(0);
-  }
-  100% {
-    transform: scale(1);
-  }
-}
-@keyframes lds-ellipsis3 {
-  0% {
-    transform: scale(1);
-  }
-  100% {
-    transform: scale(0);
-  }
-}
-@keyframes lds-ellipsis2 {
-  0% {
-    transform: translate(0, 0);
-  }
-  100% {
-    transform: translate(24px, 0);
-  }
-}
+
+    .td-border {
+        border: none !important
+    }
+
+    .tr-bckground-ch {
+        background-color: chocolate !important
+    }
+
+    .tr-background-83 {
+        background-color: #83d85c;
+    }
+
+    .td-background-cc {
+        background-color: #cccccc !important;
+    }
 </style>
 @section('content')
     <div class="content container-fluid">
@@ -78,22 +39,22 @@
                 <div class="col-auto float-end ms-auto">
                     <div class="btn-group">
                         @if (Auth::user()->RolePermission == 'Administrator')
-                            <a href="#" class="btn add-btn"  id="tast_print">
+                        <div class="btn-group btn-group-sm">
+                            <button class="btn btn-white" id="tast_print"><i class="fa fa-print fa-lg"></i> Print</button>
+                        </div>
+                            {{-- <a href="#" class="btn add-btn" id="tast_print">
                                 <label for=""><i class="fa fa-print fa-lg"></i>
-                                    Print</label>
-                                 {{-- <div id="btn-loadding" class="lds-ellipsis"><div></div><div></div><div></div><div></div></div> --}}
+                                    Print</label> --}}
+                                {{-- <div id="btn-loadding" class="lds-ellipsis"><div></div><div></div><div></div><div></div></div> --}}
 
                             </a>
-                                
                         @endif
-                        {{-- <button class="btn btn-white" id="tast_print"><i class="fa fa-print fa-lg"></i> Print</button> --}}
                     </div>
                 </div>
 
             </div>
         </div>
-       
-        
+
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
@@ -111,9 +72,9 @@
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <div class="profile-info-left">
-                                                    <h3 class="payslip-title-center">ខេមា មីក្រូហិរញ្ញវត្ថុ លីមីតធីត</h3>
-                                                    <p class="payslip-title-center">ថ្លៃឈ្នួលម៉ូតូសម្រាប់ខែ​ &nbsp;
-                                                        <strong>{{ \Carbon\Carbon::parse($data->created_at)->format('M-d') ?? '' }}</strong>
+                                                    <h3 class="payslip-title-center">EMPLOYEE PAYSLIP</h3>
+                                                    <p class="payslip-title-center">Monthly Motor Rental Fee: &nbsp;
+                                                        <strong>{{ \Carbon\Carbon::parse($data->created_at)->format('M-Y') ?? '' }}</strong>
                                                     </p>
                                                 </div>
                                             </div>
@@ -123,63 +84,123 @@
                             </div>
                         </div>
                         <div class="row mt-5">
-                            <div class="col-lg-12 m-b-20">
+                            <div class="col-lg-6 m-b-20">
                                 <ul class="list-unstyled">
                                     <li><strong>Employee ID:</strong> {{ $data->MotorEmployee->number_employee }}</li>
-                                    <li><strong>Name:</strong> {{ $data->MotorEmployee->employee_name_en }}</li>
-                                    <li><strong>Gender:</strong> {{ $data->MotorEmployee->EmployeeGender}}
-                                    </li>
                                     <li><strong>Position:</strong> {{ $data->MotorEmployee->EmployeePosition }}</li>
+                                    <li><strong>Date of Commencement :</strong>
+                                        {{ \Carbon\Carbon::parse($data->MotorEmployee->date_of_commencement)->format('d-M-Y') }}
+                                    </li>
+                                    <li><strong>Total Amount of workday:</strong> {{ $data->total_work_day }}</li>
+                                    <li><strong>Total Casoline (Month):</strong>
+                                        {{ number_format($data->total_gasoline * $data->total_work_day * $data->gasoline_price_per_liter) }}
+                                        ៛</li>
+                                </ul>
+                            </div>
+                            <div class="col-lg-6 m-b-20">
+                                <ul class="list-unstyled">
+                                    <li><strong>Name:</strong> {{ $data->MotorEmployee->employee_name_en }}</li>
+                                    <li><strong>Department:</strong> {{ $data->MotorEmployee->department->name_khmer }}</li>
+                                    <li><strong>Branch:</strong> {{ $data->MotorEmployee->branch->branch_name_en }}</li>
+                                    <li><strong>Average Unit Price (Gasoline/1L) :</strong>
+                                        {{ number_format($data->gasoline_price_per_liter) }} ៛ </li>
                                 </ul>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-sm-12">
-                                <div>
-                                    {{-- <h4 class="m-b-10"><strong>Earnings</strong></h4> --}}
-                                    <table class="table table-bordered">
-                                        <tbody>
-                                            <tr>
-                                                <td>Price motor rentel {{-- ថ្លៃឈ្នួលម៉ូតូ --}} ៖ <span class="float-end">$
-                                                        {{ $data->price_motor_rentel }}</span>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>Fee tax {{-- ពន្ធលើថ្លៃឈ្នួល --}}៖ <span class="float-end">$
-                                                        {{ number_format($data->price_motor_rentel - ($data->price_motor_rentel * $data->tax_rate) / 100, 2) }}</span>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>Price engine oil {{-- ថ្លៃប្រេងម៉ាស៊ីន --}} ៖ <span class="float-end">$
-                                                        {{ $data->price_engine_oil }}</span>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td><strong>Money to be received after tax {{-- ប្រាក់ត្រូវទទួលបានបន្ទាប់ពីដកពន្ធ --}} </strong>
-                                                    <span class="float-end"><strong> $
-                                                            {{ number_format($data->price_motor_rentel - ($data->price_motor_rentel - ($data->price_motor_rentel * $data->tax_rate) / 100) + $data->price_engine_oil, 2) }}</strong></span>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>Total price gasoline {{-- ថ្លៃសាំងម៉ូតូ --}} ៖ <span
-                                                        class="float-end">{{ number_format($data->total_gasoline * $data->total_work_day * $data->gasoline_price_per_liter, 2) }}
-                                                        ៛</span></td>
-                                            </tr>
-                                            <tr>
-                                                <td><strong>Money must be paid for gasoline {{-- ប្រាក់ត្រូវទទួលបានថ្លៃសាំងម៉ូតូ --}}</strong>
-                                                    <span class="float-end"><strong>{{ number_format($data->total_gasoline * $data->total_work_day * $data->gasoline_price_per_liter, 2) }}
-                                                            ៛</strong></span></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr class="tr-bckground-ch">
+                                            <th>Earning </th>
+                                            <th>Amount</th>
+                                            <th>Deduction </th>
+                                            <th>Amount</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Gross Motor rental fee ($) :</td>
+                                            <td>
+                                                <span class="float-end">$
+                                                    {{ number_format($data->price_motor_rentel - ($data->price_motor_rentel * $data->tax_rate) / 100, 2) }}</span>
+                                            </td>
+                                            <td>Motor rental fee Tax (10%) : </td>
+                                            <td>
+                                                <span class="float-end">$
+                                                    {{ number_format(($data->price_motor_rentel * $data->tax_rate) / 100, 2) }}</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Gross Taplab fee ($): </td>
+                                            <td><span class="float-end">$
+                                                {{ number_format($data->price_taplab_rentel - ($data->price_taplab_rentel * $data->tax_rate) / 100, 2) }}</span></td>
+                                            <td>Taplab fee Tax (10%) :</td>
+                                            <td>
+                                                <span class="float-end">$
+                                                    {{ number_format(($data->price_taplab_rentel * $data->tax_rate) / 100, 2) }}</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Engine oil ($):</td>
+                                            <td><span class="float-end">$ {{ $data->price_engine_oil }}</span></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Gasoline (Reil)</td>
+                                            <td>
+                                                <span class="float-end">៛
+                                                    {{ number_format($data->gasoline_price_per_liter) }} </span>
+                                            </td>
+                                            <td>Other Deduction: </td>
+                                            <td>
+
+                                            </td>
+                                        </tr>
+                                        <tr class="tr-background-83">
+                                            <td>Total Earnings ($): </td>
+                                            <td>
+
+                                            </td>
+                                            <td>Total Deductions ($): </td>
+                                            <td>
+
+                                            </td>
+                                        </tr>
+                                        <tr class="tr-background-83">
+                                            <td>Total Earnings (Reil): </td>
+                                            <td>
+
+                                            </td>
+                                            <td>Total Deductions (Reil): </td>
+                                            <td>
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="td-border"></td>
+                                            <td class="td-border"></td>
+                                            <td class="td-background-cc">Total Net Pay ($):</td>
+                                            <td class="td-background-cc"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="td-border"> </td>
+                                            <td class="td-border"></td>
+                                            <td class="td-background-cc">Total Net Pay (Reil):</td>
+                                            <td class="td-background-cc">
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
                             <div class="col-sm-3 payslip-title-center mt-3">
-                                <p><strong>អ្នកប្រគល់</strong></p><br><br>
+                                <p><strong>Employer Signature</strong></p><br><br><br>
                                 <p>......... /............. /..........</p>
                             </div>
                             <div class="col-sm-3 payslip-title-center mt-3">
-                                <p><strong>អ្នកទទួល</strong></p><br><br>
+                                <p><strong>Employee Signature</strong></p><br><br><br>
                                 <p>......... /............ /..........</p>
                             </div>
                         </div>
@@ -188,89 +209,11 @@
             </div>
         </div>
     </div>
-
-    <div id="print_purchase" hidden>
-        <div class="card-header">
-
-            {{-- logo company --}}
-            <div style="margin-top: 10px">
-                <img style="width:auto;height: 80px;"alt='White' id="image_logo_print"
-                    src="http://127.0.0.1:8000/admin/img/logo/cammalogo.png">&nbsp;&nbsp;
-            </div>
-
-            <div style="margin-top:-75px; margin-left:243px">
-                <h3 class="payslip-title-center">ខេមា មីក្រូហិរញ្ញវត្ថុ លីមីតធីត</h3>
-                <p class="payslip-title-center">ថ្លៃឈ្នួលម៉ូតូសម្រាប់ខែ​ &nbsp;
-                    <strong>{{ \Carbon\Carbon::parse($data->created_at)->format('M-d') ?? '' }}</strong></p>
-            </div>
-
-            <div>
-                <span><strong>Employee ID:</strong> {{ $data->MotorEmployee->number_employee }}</span><br>
-                <span><strong>Name:</strong> {{ $data->MotorEmployee->employee_name_en }}</span><br>
-                <span><strong>Gender:</strong> {{ $data->MotorEmployee->EmployeeGender}}</span><br>
-                <span><strong>Position:</strong> {{ $data->MotorEmployee->EmployeePosition }}</span>
-            </div><br>
-
-            <span>
-                <table class="table-a">
-                    <thead>
-                        <tr>
-                            <th style="padding: 6px" colspan="6"></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Price motor rentel {{-- ថ្លៃឈ្នួលម៉ូតូ --}} ៖ <span class="float-end">$
-                                    {{ $data->price_motor_rentel }}</span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Fee tax {{-- ពន្ធលើថ្លៃឈ្នួល --}}៖ <span class="float-end">$
-                                    {{ number_format($data->price_motor_rentel - ($data->price_motor_rentel * $data->tax_rate) / 100, 2) }}</span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Price engine oil {{-- ថ្លៃប្រេងម៉ាស៊ីន --}} ៖ <span class="float-end">$
-                                    {{ $data->price_engine_oil }}</span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><strong>Money to be received after tax {{-- ប្រាក់ត្រូវទទួលបានបន្ទាប់ពីដកពន្ធ --}} </strong> <span
-                                    class="float-end"><strong> $
-                                        {{ number_format($data->price_motor_rentel - ($data->price_motor_rentel - ($data->price_motor_rentel * $data->tax_rate) / 100) + $data->price_engine_oil, 2) }}</strong></span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Total price gasoline {{-- ថ្លៃសាំងម៉ូតូ --}} ៖ <span
-                                    class="float-end">{{ number_format($data->total_gasoline * $data->total_work_day * $data->gasoline_price_per_liter, 2) }}
-                                    ៛</span></td>
-                        </tr>
-                        <tr>
-                            <td><strong>Money must be paid for gasoline {{-- ប្រាក់ត្រូវទទួលបានថ្លៃសាំងម៉ូតូ --}}</strong> <span
-                                    class="float-end"><strong>{{ number_format($data->total_gasoline * $data->total_work_day * $data->gasoline_price_per_liter, 2) }}
-                                        ៛</strong></span></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </span><br>
-            <div  style="display: flex">
-                <div class="payslip-title-center">
-                    <p style="text-align: center"><strong>អ្នកប្រគល់</strong></p><br><br><br>
-                    <p>......... /............. /..........</p>
-                </div>
-                <div class="payslip-title-center" style="margin-left: 20%">
-                    <p style="text-align: center"><strong>អ្នកទទួល</strong></p><br><br><br>
-                    <p>......... /............ /..........</p>
-                </div>
-            </div>
-        </div>
-    </div>
+    @include('motor_rentels.termplate_print')
 @endsection
 
 @include('includs.script')
-
 <script type="text/javascript" src="{{ asset('/admin/js/printThis.js') }}"></script>
-
 <script type="text/javascript">
     $(function() {
         $("#tast_print").on("click", function() {

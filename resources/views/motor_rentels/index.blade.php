@@ -110,12 +110,12 @@
                                             style="width: 125.15px;">Department</th>
                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                             rowspan="1" colspan="1"
-                                            aria-label="Create at: activate to sort column ascending"
-                                            style="width: 51.475px;">Created At</th>
-                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                            rowspan="1" colspan="1"
                                             aria-label="Amount: activate to sort column ascending"
                                             style="width: 51.475px;">Amount</th>
+                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                            rowspan="1" colspan="1"
+                                            aria-label="Create at: activate to sort column ascending"
+                                            style="width: 51.475px;">Created At</th>
                                         <th class="text-center sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                             rowspan="1" colspan="1"
                                             aria-label="Status: activate to sort column ascending"
@@ -134,11 +134,8 @@
                                                 <td>{{ $item->MotorEmployee->EmployeeGender }}</td>
                                                 <td>{{ $item->MotorEmployee->EmployeePosition }}</td>
                                                 <td>{{ $item->MotorEmployee->EmployeeDepartment }}</td>
-                                                <td>{{ \Carbon\Carbon::parse($item->created_at)->format('d-M-Y') ?? '' }}
-                                                </td>
-                                                <td>{{ $item->price_motor_rentel - ($item->price_motor_rentel * $item->tax_rate) / 100 }}
-                                                </td>
-                                                </td>
+                                                <td>{{ ($item->price_motor_rentel - ($item->price_motor_rentel * $item->tax_rate) / 100) + ($item->price_taplab_rentel - ($item->price_taplab_rentel * $item->tax_rate) / 100 ) }}</td>
+                                                <td>{{ \Carbon\Carbon::parse($item->created_at)->format('d-M-Y') ?? '' }}</td>
                                                 <td class="text-end">
                                                     <div class="dropdown dropdown-action">
                                                         <a href="#" class="action-icon dropdown-toggle"

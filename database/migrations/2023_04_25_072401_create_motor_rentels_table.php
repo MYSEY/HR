@@ -27,6 +27,8 @@ return new class extends Migration
             $table->integer('total_work_day')->nullable();
             $table->decimal('price_engine_oil')->nullable();
             $table->decimal('price_motor_rentel')->nullable();
+            $table->string('taplab_rentel')->nullable();
+            $table->decimal('price_taplab_rentel')->nullable();
             $table->integer('tax_rate')->nullable();
             $table->bigInteger('created_by')->unsigned()->nullable();
             $table->bigInteger('updated_by')->unsigned()->nullable();

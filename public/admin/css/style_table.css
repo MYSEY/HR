@@ -12,70 +12,74 @@ a{
     width: 100%;
     
 }
-.table-aaww{
+/* .table-aaww{
     justify-content: center;
     text-align: center;
     font-family: 'Nunito','Nokora', sans-serif, serif;
     height: 47px;
     width: 32.7%;
-}
+} */
 /* .table-a th, td{
     border: 1px solid #4747d1;
 } */
-.table-aa{
+/* .table-aa{
     font-family: 'Nunito','Nokora', sans-serif, serif;
     border-collapse: collapse;
     width: 33%;
-}
-.table_print{
+} */
+/* .table_print{
     font-family: 'Nunito','Nokora', sans-serif, serif;
     border-collapse: collapse;
     margin-left:auto; 
     width: 33%;
     margin-top: -192px;
-}
-.table_print thead,th{
+} */
+/* .table_print thead,th{
     border-collapse: collapse;
-}
-.tbody_print tr, td{
+} */
+.tbody_print tr, th, td{
     padding: 1.5%;
     border: 0.5px solid #dee2e6;
 }
-.tbody_print tr,th, .float-end{
-    float: right!important;
+.td-border {
+    border: none !important
 }
-.table_c{
+.tr-bckground-ch {
+    background-color: chocolate !important
+}
+.tr-background-83 {
+    background-color: #83d85c;
+}
+.td-background-cc {
+    background-color: #cccccc !important;
+}
+/* .tbody_print tr,th, .float-end{
+    float: right!important;
+} */
+/* .table_c{
     margin-left:auto;
     margin-top:0.8%;
     color: #4747d1;
-    /* line-height: 0.2; */
-    /* padding: 10px; */
-    /* font-size: 12px; */
     font-family: 'Nunito','Nokora', sans-serif, serif;
     border-collapse: collapse;
     width: 33%;
     
-}
-.table-d {
+} */
+/* .table-d {
     color: #4747d1;
-    /* margin-left: auto; */
     margin-top:30px;
-    /* line-height: 0.2; */
-    /* padding: 10px; */
-    /* font-size: 10px; */
     font-family: 'Nunito','Nokora', sans-serif, serif;
     border-collapse: collapse;
     width: 100%;
     
-}
-.table_dd {
+} */
+/* .table_dd {
     font-family: 'Nunito','Nokora', sans-serif, serif;
     width: 100%;
     color: #4747d1;
-    /* border: 1px solid #4747d1 !important; */
     border-collapse: collapse;
-}
-.border_print{
+} */
+/* .border_print{
     padding:7px; 
     border-bottom: 0px solid #ffffff !important;
     border-left: 0px solid #ffffff !important
@@ -89,5 +93,5 @@ a{
 }
 .one-font{
     font-family: 'Nunito','Nokora', sans-serif, serif;
-}
+} */
 

@@ -26,6 +26,8 @@ class MotorRentel extends Model
         'total_work_day',
         'price_engine_oil',
         'price_motor_rentel',
+        'taplab_rentel',
+        'price_taplab_rentel',
         'tax_rate',
         'created_by',
         'updated_by',
