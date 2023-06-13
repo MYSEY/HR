@@ -173,7 +173,7 @@
                             <div id="birthday-staff" style="width: -webkit-fill-available"></div>
                         </div>
                         <div class="load-more text-center" id="btn-more">
-                            <a class="text-dark" href="javascript:void(0);">More</a>
+                            <a class="text-dark" href="{{ url('/users/birthday') }}">More</a>
                         </div>
                     </div>
                 </div>
