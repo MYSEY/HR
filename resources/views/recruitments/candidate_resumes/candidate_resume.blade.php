@@ -64,6 +64,7 @@
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Concten Number: activate to sort column ascending" >Concten Number</th>
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Recruitement Status: activate to sort column ascending" >Status</th>
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Remark: activate to sort column ascending" >Remark</th>
+                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Action: activate to sort column ascending" >Action</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -73,7 +74,7 @@
                                                                 <td class="ids">{{$item->id}}</td>
                                                                 <td >{{$item->name_kh }}</td>
                                                                 <td >{{$item->name_en}}</td>
-                                                                <td >{{$item->gender}}</td>
+                                                                <td >{{$item->CandidateGender}}</td>
                                                                 <td >{{$item->current_position}}</td>
                                                                 <td >{{$item->companey_name}}</td>
                                                                 <td >{{$item->current_address}}</td>
@@ -108,6 +109,24 @@
                                                                     </div>
                                                                 </td>
                                                                 <td>{{ $item->remark }}</td>
+                                                                <td class="text-end">
+                                                                    <div class="dropdown dropdown-action">
+                                                                        <a href="#" class="action-icon dropdown-toggle"
+                                                                            data-bs-toggle="dropdown" aria-expanded="false"><i
+                                                                                class="material-icons">more_vert</i></a>
+                                                                        @if (Auth::user()->RolePermission == 'Administrator')
+                                                                            <div class="dropdown-menu dropdown-menu-right">
+                                                                                <a class="dropdown-item update"
+                                                                                    data-id="{{ $item->id }}"><i
+                                                                                        class="fa fa-pencil m-r-5"></i> Edit</a>
+                                                                                <a class="dropdown-item delete" href="#"
+                                                                                    data-toggle="modal" data-id="{{ $item->id }}"
+                                                                                    data-target="#delete_candidate"><i
+                                                                                        class="fa fa-trash-o m-r-5"></i> Delete</a>
+                                                                            </div>
+                                                                        @endif
+                                                                    </div>
+                                                                </td>
                                                             </tr>
                                                         @endforeach
                                                     @else
@@ -124,7 +143,6 @@
                         </div>
                     </div>
                 </div>
-    
     
                 <div class="tab-pane show" id="tab_short_list" role="tabpanel">
                     <div class="row">
@@ -198,7 +216,7 @@
         </div>
 
         <!-- Delete training type Modal -->
-        <div class="modal custom-modal fade" id="delete_plan" role="dialog">
+        <div class="modal custom-modal fade" id="delete_candidate" role="dialog">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-body">
@@ -207,7 +225,7 @@
                             <p>Are you sure want to delete?</p>
                         </div>
                         <div class="modal-btn delete-action">
-                            <form action="{{url('recruitment/plan-delete')}}" method="POST">
+                            <form action="{{url('recruitment/candidate-resume/delete')}}" method="POST">
                                 @csrf
                                 <input type="hidden" name="id" class="e_id" value="">
                                 <div class="row">
@@ -225,6 +243,7 @@
             </div>
         </div>
         @include('recruitments.candidate_resumes.modal_form_create')
+        @include('recruitments.candidate_resumes.modal_form_edit')
     </div>
 @endsection
 
@@ -241,6 +260,70 @@
         $("#btn_tab_interviewed_result").on("click", function(){
             let tab_status = $(this).attr('data-tab-id');
             showDatas(tab_status);
+        });
+        $('.delete').on('click', function() {
+            var _this = $(this).parents('tr');
+            $('.e_id').val(_this.find('.ids').text());
+        });
+        $('.update').on('click', function() {
+            let id = $(this).data("id");
+            $("#e_id").val(id)
+            $.ajax({
+                type: "GET",
+                url: "{{ url('recruitment/candidate-resume/edit') }}",
+                data: {
+                    id: id
+                },
+                dataType: "JSON",
+                success: function(response) {
+                    console.log(response.success);
+                    if (response.success) {
+                        if (response.position != '') {
+                            $('#e_position_applied').html('');
+                            $.each(response.position, function(i, item) {
+                                $('#e_position_applied').append($('<option>', {
+                                    value: item.id,
+                                    text: item.name_english,
+                                    selected: item.id == response.success.position_applied
+                                }));
+                            });
+                        }
+                        if (response.branch != '') {
+                            $('#e_location_applied').html('');
+                            $.each(response.branch, function(i, item) {
+                                $('#e_location_applied').append($('<option>', {
+                                    value: item.id,
+                                    text: item.branch_name_en,
+                                    selected: item.id == response.success.location_applied
+                                }));
+                            });
+                        }
+                        if (response.gender != '') {
+                            $('#e_gender').html('');
+                            $.each(response.gender, function(i, item) {
+                                $('#e_gender').append($('<option>', {
+                                    value: item.id,
+                                    text: item.name_english,
+                                    selected: item.id == response.success.gender
+                                }));
+                            });
+                        }
+                        $('#e_name_kh').val(response.success.name_kh);
+                        $('#e_name_en').val(response.success.name_en);
+                        $('#e_current_position').val(response.success.current_position);
+                        $('#e_companey_name').val(response.success.companey_name);
+                        $('#e_current_address').val(response.success.current_address);
+                        $('#e_received_date').val(response.success.received_date);
+                        $('#e_recruitment_channel').val(response.success.recruitment_channel);
+                        $('#e_contact_number').val(response.success.contact_number);
+                        $('#hidden_cv').val(response.success.cv);
+                        $('#e_remark').val(response.success.remark);
+                        $('#status').val(response.success.status);
+                    }
+
+                    $('#edit_staff').modal('show');
+                }
+            });
         });
         $('body').on('click', '#btn-status a', function() {
             let id = $(this).attr('data-emp-id');
@@ -604,11 +687,17 @@
                                 text_status = "Interviewed";
                                 tag_i = '<i class="fa fa-dot-circle-o text-info"></i>'
                             };
+                            let cv =  "";
+                            if (staff.cv) {
+                                cv = '<small class="block text-ellipsis">'+
+                                        '<a href="{{asset("/uploads/images")}}/'+(staff.cv)+'" target="_blank" class="subdrop"><i class="la la-file-pdf"></i> <span>Preview CV</span></a>'+
+                                    '</small>'
+                            }
                             tr += '<tr class="odd">'+
                                 '<td class="ids">'+(staff.id)+'</td>'+
                                 '<td >'+(staff.name_kh)+' </td>'+
                                 '<td >'+(staff.name_en)+'</td>'+
-                                '<td >'+(staff.gender)+'</td>'+
+                                '<td >'+(staff.option.name_english)+'</td>'+
                                 '<td >'+(staff.position.name_english)+'</td>'+
                                 '<td >'+(staff.branch.branch_name_en)+'</td>'+
                                 '<td >'+(interviewed_date)+'</td>'+
@@ -632,8 +721,10 @@
                                             '</a>'+
                                         '</div>'+
                                     '</div>'+
-                            '</td>'+
-                                '<td ></td>'+
+                                '</td>'+
+                                '<td >'+
+                                    cv+
+                                '</td>'+
                             '</tr>';
                         });
                     }else if (btn_tab == 3) {
@@ -677,7 +768,7 @@
                                 '<td class="ids">'+(staff_result.id)+'</td>'+
                                 '<td >'+(staff_result.name_kh )+'</td>'+
                                 '<td >'+(staff_result.name_en)+'</td>'+
-                                '<td >'+(staff_result.gender)+'</td>'+
+                                '<td >'+(staff_result.option.name_english)+'</td>'+
                                 '<td >'+(staff_result.position.name_english)+'</td>'+
                                 '<td >'+(staff_result.branch.branch_name_en)+'</td>'+
                                 '<td >'+(interviewed_date)+'</td>'+

@@ -204,5 +204,8 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('/recruitment/candidate-resume/list', [CandidateResumeController::class,'index']);
     Route::get('/recruitment/candidate-resume/show', [CandidateResumeController::class,'show']);
     Route::post('/recruitment/candidate-resume/store', [CandidateResumeController::class,'store']);
+    Route::get('/recruitment/candidate-resume/edit', [CandidateResumeController::class,'edit']);
+    Route::post('/recruitment/candidate-resume/update', [CandidateResumeController::class,'update']);
     Route::post('/recruitment/candidate-resume/status', [CandidateResumeController::class,'processing']);
+    Route::post('/recruitment/candidate-resume/delete', [CandidateResumeController::class,'destroy']);
 });

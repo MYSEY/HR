@@ -6,26 +6,33 @@ use App\Http\Controllers\Controller;
 use App\Models\Branchs;
 use App\Models\CandidateResume;
 use App\Models\Department;
+use App\Models\Option;
 use App\Models\Position;
+use App\Models\User;
+use App\Traits\GeneratingCode;
 use Brian2694\Toastr\Facades\Toastr;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class CandidateResumeController extends Controller
 {
+    use GeneratingCode;
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
+    
     public function index()
     {
         $position = Position::all();
         $branch = Branchs::all();
-        $department = Department::all();
+        $gender = Option::where('type','gender')->get();
         $data = CandidateResume::where("status", "1")->get();
-        return view('recruitments.candidate_resumes.candidate_resume', compact(["position", "branch", "department", "data" ]));
+        return view('recruitments.candidate_resumes.candidate_resume', compact(["position", "branch", "gender", "data" ]));
     }
 
     /**
@@ -68,7 +75,7 @@ class CandidateResumeController extends Controller
      */
     public function show(Request $request)
     {
-        $datas = CandidateResume::where("status", $request->status)->with("branch")->with("position")->get();
+        $datas = CandidateResume::where("status", $request->status)->with("branch")->with("position")->with("option")->get();
         return response()->json(['datas'=>$datas]);
     }
 
@@ -78,9 +85,18 @@ class CandidateResumeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request)
     {
-        //
+        $position = Position::all();
+        $branch = Branchs::all();
+        $data = CandidateResume::where("id", $request->id)->first();
+        $gender = Option::where('type','gender')->get();
+        return response()->json([
+            'success'=>$data,
+            'gender'=>$gender,
+            'position'=>$position,
+            'branch'=>$branch,
+        ]);
     }
 
     /**
@@ -90,9 +106,40 @@ class CandidateResumeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        try{
+            if ($request->hasFile('cv')) {
+                $file = $request->file('cv');
+                $filenameGuarant = time().'.'.$file->getClientOriginalName();
+                $file->move(public_path('uploads/images'), $filenameGuarant);
+            }else{
+                $filenameGuarant = $request->hidden_cv;
+            }
+            $dataUpdate = [
+                'name_kh' => $request->name_kh,
+                'name_en' => $request->name_en,
+                'gender' => $request->gender,
+                'current_position' => $request->current_position,
+                'companey_name' => $request->companey_name,
+                'position_applied' => $request->position_applied,
+                'current_address' => $request->current_address,
+                'location_applied' => $request->location_applied,
+                'received_date' => $request->received_date,
+                'recruitment_channel' => $request->recruitment_channel,
+                'contact_number' => $request->contact_number,
+                'status' => $request->status,
+                'cv' => $filenameGuarant,
+                'updated_by' => Auth::user()->id 
+            ];
+            CandidateResume::where('id',$request->id)->update($dataUpdate);
+            Toastr::success('Candidate resume updated successfully.','Success');
+            return redirect()->back();
+        }catch(\Exception $e){
+            DB::rollback();
+            Toastr::error('Candidate resume update fail.','Error');
+            return redirect()->back();
+        }
     }
 
     /**
@@ -101,9 +148,17 @@ class CandidateResumeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+        try{
+            CandidateResume::destroy($request->id);
+            Toastr::success('Candidate resume deleted successfully.','Success');
+            return redirect()->back();
+        }catch(\Exception $e){
+            DB::rollback();
+            Toastr::error('Candidate resume delete fail.','Error');
+            return redirect()->back();
+        }
     }
     public function processing(Request $request)
     {
@@ -170,7 +225,25 @@ class CandidateResumeController extends Controller
                 ];
             }
             CandidateResume::where('id',$request->id)->update($dataUpdate);
-            
+            if ($request->status == "4") {
+                $dataCandidate = CandidateResume::where("id", $request->id)->first();
+                $newDateTime = Carbon::parse($dataCandidate->join_date)->addMonths(3);
+                $dataEmployee = [
+                    'number_employee' => $this->generate_EmployeeId(Carbon::today())['number_employee'],
+                    'employee_name_kh' => $dataCandidate->name_kh,
+                    'employee_name_en' => $dataCandidate->name_en,
+                    'password' => Hash::make("camma@newstaff@12"),
+                    'personal_phone_number' => $dataCandidate->contact_number,
+                    'position_id' => $dataCandidate->position_applied,
+                    'branch_id' => $dataCandidate->location_applied,
+                    'gender' => $dataCandidate->gender,
+                    'date_of_commencement' => $dataCandidate->join_date,
+                    'fdc_date' => $newDateTime,
+                    'emp_status' => "Probation",
+                    'basic_salary' => 0,
+                ];
+                User::create($dataEmployee);
+            }
             DB::commit();
             return ['message' => 'successfull'];
         } catch (\Exception $exp) {
