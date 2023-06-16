@@ -30,6 +30,7 @@ use App\Http\Controllers\Admins\AttendanceAdminController;
 use App\Http\Controllers\Admins\EmployeePayrollController;
 use App\Http\Controllers\Admins\EmployeeProfileController;
 use App\Http\Controllers\Admins\AttendanceEmployeeController;
+use App\Http\Controllers\Admins\CandidateResumeController;
 use App\Http\Controllers\Admins\RecruitmentPlanController;
 use App\Http\Controllers\Admins\ReportsController;
 
@@ -199,4 +200,9 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('/recruitment/plan-update', [RecruitmentPlanController::class,'update']);
     Route::post('/recruitment/plan-delete', [RecruitmentPlanController::class,'destroy']);
     Route::get('/recruitment/plan-edit', [RecruitmentPlanController::class,'edit']);
+    // route block recruitment candidate resume
+    Route::get('/recruitment/candidate-resume/list', [CandidateResumeController::class,'index']);
+    Route::get('/recruitment/candidate-resume/show', [CandidateResumeController::class,'show']);
+    Route::post('/recruitment/candidate-resume/store', [CandidateResumeController::class,'store']);
+    Route::post('/recruitment/candidate-resume/status', [CandidateResumeController::class,'processing']);
 });

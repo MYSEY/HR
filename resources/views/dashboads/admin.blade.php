@@ -142,9 +142,9 @@
                         <p><i class="fa fa-dot-circle-o text-info"></i> <span class="me-2">Age</span></p>
                         <div class="stats-list">
                             <div class="stats-info">
-                                <p>18 - 24 <strong>{{--<small id="percen-age-18"></small> / --}}<small id="total-age-18"></small></strong></p>
+                                <p>18 - 24 <strong><small id="total-age-18"></small></strong></p>
                                 <div class="progress">
-                                    <div class="progress-bar bg-info" role="progressbar" id="progressbar-18" aria-valuemin="0"></div>
+                                    <div class="progress-bar bg-success" role="progressbar" id="progressbar-18" aria-valuemin="0"></div>
                                 </div>
                             </div>
                             <div class="stats-info">
@@ -156,7 +156,7 @@
                             <div class="stats-info">
                                 <p>45 - 60 <strong id="total-age-45">0</strong></p>
                                 <div class="progress">
-                                    <div class="progress-bar bg-info" role="progressbar"
+                                    <div class="progress-bar bg-danger" role="progressbar"
                                     id="progressbar-45" aria-valuemin="0"></div>
                                 </div>
                             </div>

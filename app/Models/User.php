@@ -254,6 +254,9 @@ class User extends Authenticatable
     public function getEmployeeBranchAbbreviationsAttribute(){
         return optional($this->branch)->abbreviations;
     }
+    public function getBranchAddressAttribute(){
+        return optional($this->branch)->address;
+    }
     public function getjoinOfDateAttribute(){
         if ($this->date_of_commencement) {
             return Carbon::parse($this->date_of_commencement)->format('d-M-Y');

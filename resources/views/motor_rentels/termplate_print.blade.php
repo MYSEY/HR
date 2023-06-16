@@ -12,8 +12,12 @@
                 <strong>{{ \Carbon\Carbon::parse($data->created_at)->format('M-Y') ?? '' }}</strong>
             </p>
         </div>
-
-        <div style="display:flex; margin-top: 10%;">
+        <div style="width: 35%">
+            <label>Camma Microfinance Limited</label>
+            <span>{{$data->MotorEmployee->BranchAddress}}</span>
+        </div>
+        <div style="display:flex; margin-top: 5%;">
+            
             <div style="width: 350%">
                 <span><strong>Employee ID:</strong> {{ $data->MotorEmployee->number_employee }}</span><br>
                 <span><strong>Position:</strong> {{ $data->MotorEmployee->EmployeePosition }}</span><br>
@@ -48,7 +52,7 @@
                         <td>Gross Motor rental fee ($) :</td>
                         <td>
                             <span class="float-end">$
-                                {{ number_format($data->price_motor_rentel - ($data->price_motor_rentel * $data->tax_rate) / 100, 2) }}</span>
+                                {{ number_format($data->price_motor_rentel, 2) }}</span>
                         </td>
                         <td>Motor rental fee Tax (10%) : </td>
                         <td>
@@ -59,7 +63,7 @@
                     <tr>
                         <td>Gross Taplab fee ($): </td>
                         <td><span class="float-end">$
-                            {{ number_format($data->price_taplab_rentel - ($data->price_taplab_rentel * $data->tax_rate) / 100, 2) }}</span></td>
+                            {{ number_format($data->price_taplab_rentel, 2) }}</span></td>
                         <td>Taplab fee Tax (10%) :</td>
                         <td>
                             <span class="float-end">$
@@ -85,35 +89,39 @@
                     <tr class="tr-background-83">
                         <td>Total Earnings ($): </td>
                         <td>
-
+                            <span class="float-end">$ {{ number_format($data->price_motor_rentel + $data->price_taplab_rentel + $data->price_engine_oil, 2) }}</span>
                         </td>
                         <td>Total Deductions ($): </td>
                         <td>
-
+                            <span class="float-end">$
+                                {{ number_format((($data->price_taplab_rentel * $data->tax_rate) + ($data->price_motor_rentel * $data->tax_rate)) / 100, 2) }}</span>
                         </td>
                     </tr>
                     <tr class="tr-background-83">
                         <td>Total Earnings (Reil): </td>
                         <td>
-
+                            <span class="float-end">៛
+                                {{ number_format($data->gasoline_price_per_liter) }} </span>    
                         </td>
                         <td>Total Deductions (Reil): </td>
                         <td>
-
+                            <span class="float-end">៛ 0.00</span>
                         </td>
                     </tr>
                     <tr>
                         <td class="td-border"></td>
                         <td class="td-border"></td>
                         <td class="td-background-cc">Total Net Pay ($):</td>
-                        <td class="td-background-cc"></td>
+                        <td class="td-background-cc">
+                            <span class="float-end">$ {{number_format(($data->price_motor_rentel + $data->price_taplab_rentel + $data->price_engine_oil) - ((($data->price_taplab_rentel * $data->tax_rate) + ($data->price_motor_rentel * $data->tax_rate)) / 100), 2) }} </span>
+                        </td>
                     </tr>
                     <tr>
                         <td class="td-border"> </td>
                         <td class="td-border"></td>
                         <td class="td-background-cc">Total Net Pay (Reil):</td>
                         <td class="td-background-cc">
-
+                            <span class="float-end">៛ {{ number_format(($data->total_gasoline * $data->total_work_day) * $data->gasoline_price_per_liter) }}</span>
                         </td>
                     </tr>
                 </tbody>
@@ -124,7 +132,7 @@
                 <p style="text-align: center"><strong>Employer Signature</strong></p><br><br><br>
                 <p>......... /............. /..........</p>
             </div>
-            <div class="payslip-title-center" style="margin-left: 20%">
+            <div class="payslip-title-center" style="margin-left: 58%">
                 <p style="text-align: center"><strong>Employee Signature</strong></p><br><br><br>
                 <p>......... /............ /..........</p>
             </div>

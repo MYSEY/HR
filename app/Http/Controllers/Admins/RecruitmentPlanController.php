@@ -23,7 +23,7 @@ class RecruitmentPlanController extends Controller
         $data = RecruitmentPlan::with('position')->with('branch')->orderBy('id', 'desc')->get();
         $positions = Position::all();
         $branchs = Branchs::all();
-        return view('recruitment_plan.index', compact('data', 'positions', 'branchs'));
+        return view('recruitments.plans.recruitment_plan', compact('data', 'positions', 'branchs'));
     }
 
     /**

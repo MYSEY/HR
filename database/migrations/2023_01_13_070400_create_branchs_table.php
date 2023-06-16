@@ -18,6 +18,7 @@ class CreateBranchsTable extends Migration
             $table->string('branch_name_kh');
             $table->string('branch_name_en')->nullable();
             $table->string('abbreviations')->nullable();
+            $table->string('address')->nullable();
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();
             $table->dateTime('deleted_at')->nullable();

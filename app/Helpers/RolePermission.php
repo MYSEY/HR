@@ -86,13 +86,19 @@ function menu(){
         [
             'name'=>'',
             'icon'=>'<i class="la la-briefcase"></i> <span></span> <span class="menu-arrow"></span>',
-            'value'=>'Recruitment',
+            'value'=>'Recruitments',
             'table'=>2,
             'permission'=>1,
             'child'=>[
                 [
                     'value'=>'Recruitment Plan',
                     'url'=>"recruitment/plan-list",
+                    'table'=>2,
+                    'permission'=>1
+                ],
+                [
+                    'value'=>'Candidate Resume',
+                    'url'=>"recruitment/candidate-resume/list",
                     'table'=>2,
                     'permission'=>1
                 ],
