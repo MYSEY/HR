@@ -10,6 +10,7 @@ use App\Http\Controllers\Admins\TaxesController;
 use App\Http\Controllers\Admins\BranchController;
 use App\Http\Controllers\Admins\AddressController;
 use App\Http\Controllers\Admins\HolidayController;
+use App\Http\Controllers\Admins\ReportsController;
 use App\Http\Controllers\Admins\SettingController;
 use App\Http\Controllers\Admins\TrainerController;
 use App\Http\Controllers\Admins\DashboadController;
@@ -27,12 +28,11 @@ use App\Http\Controllers\Admins\PayrollReportController;
 use App\Http\Controllers\Admins\EmployeeReportController;
 use App\Http\Controllers\Admins\LeavesEmployeeController;
 use App\Http\Controllers\Admins\AttendanceAdminController;
+use App\Http\Controllers\Admins\CandidateResumeController;
 use App\Http\Controllers\Admins\EmployeePayrollController;
 use App\Http\Controllers\Admins\EmployeeProfileController;
-use App\Http\Controllers\Admins\AttendanceEmployeeController;
-use App\Http\Controllers\Admins\CandidateResumeController;
 use App\Http\Controllers\Admins\RecruitmentPlanController;
-use App\Http\Controllers\Admins\ReportsController;
+use App\Http\Controllers\Admins\AttendanceEmployeeController;
 
 /*
 |--------------------------------------------------------------------------

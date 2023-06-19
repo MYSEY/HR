@@ -541,7 +541,7 @@ class EmployeePayrollController extends Controller
                 if ($payrolle) {
                     $PaymentOfMonth = Carbon::parse($request->payment_date)->format('M-Y');
                     $totalSeniority = 0;
-                    if ($item->emp_status == 1) {
+                    if ($item->emp_status == 2) {
                         $currentDate = Carbon::createFromDate($request->payment_date)->format('m');
                         if ($currentDate == 6 || $currentDate == 12) {
                             // $nextYear = Carbon::createFromDate($item->fdc_date)->format('Y');
@@ -585,7 +585,7 @@ class EmployeePayrollController extends Controller
                             ]);
                         }
                     }
-                    if ($item->emp_status == 2) {
+                    if ($item->emp_status == 1) {
                         $payroll = Payroll::where('employee_id',2)->where('payment_date','>=',$item->fdc_date)->get();
                         foreach ($payroll as $key => $value) {
                             $monthPaymentSeverance = $key + 1;

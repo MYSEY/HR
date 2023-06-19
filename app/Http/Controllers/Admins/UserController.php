@@ -1,14 +1,21 @@
 <?php
 
 namespace App\Http\Controllers\Admins;
+use DateTime;
+use DatePeriod;
 use App\Address;
+use DateInterval;
+use App\Models\Bank;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\Option;
 use App\Helpers\Helper;
 use App\Models\Branchs;
+use App\Models\District;
 use App\Models\Position;
 use App\Models\Province;
+use App\Models\Villages;
+use App\Models\Conmmunes;
 use App\Models\Department;
 use Illuminate\Http\Request;
 use App\Traits\GeneratingCode;
@@ -17,10 +24,6 @@ use App\Http\Requests\UserRequest;
 use App\Http\Requests\UserUpdated;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use App\Models\Bank;
-use App\Models\Conmmunes;
-use App\Models\District;
-use App\Models\Villages;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -92,6 +95,39 @@ class UserController extends Controller
      */
     public function store(UserRequest $request)
     {
+         
+        //total day in months
+        $currentYear = Carbon::createFromDate($request->date_of_commencement)->format('Y-m');
+        $begin = new DateTime($currentYear.'-'.'01');
+        
+        //total day in months
+        $endMonth = Carbon::createFromDate($request->date_of_commencement)->format('m');
+        $totalDayInMonth = Carbon::now()->month($endMonth)->daysInMonth;
+        $end = new DateTime($currentYear.'-'.$totalDayInMonth);
+
+        $end = $end->modify('+1 day');
+        $interval = new DateInterval('P1D');
+        $daterange = new DatePeriod($begin, $interval, $end);
+
+        $holidays = [];
+        foreach ($daterange as $date) {
+            $sunday = date('w', strtotime($date->format("Y-m-d")));
+            if ($sunday == 0) {
+                $holidays[] = $date->format("Y-m-d");
+            } else {
+                echo'';
+            }
+        }
+        // dd($holidays);
+        $startDate = Carbon::parse($request->date_of_commencement);
+        $endDate = Carbon::parse($currentYear.'-'.$totalDayInMonth);
+        // dd($endDate);
+        $days = $startDate->diffInDaysFiltered(function (Carbon $date) use ($holidays) {
+            return $date->isWeekday() && !in_array($date, $holidays);
+        }, $endDate);
+
+        $totalSalary = $days * ($request->basic_salary / 22);
+        dd($totalSalary);
         try{
             $this->employeeRepo->createUsers($request);
             DB::commit();
