@@ -76,7 +76,7 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form action="{{url('branch/store')}}" method="POST" enctype="multipart/form-data">
+                        <form action="{{url('branch/store')}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
                             @csrf
                             <div class="form-group">
                                 <label>Name (KH) <span class="text-danger">*</span></label>
@@ -87,7 +87,10 @@
                                 <input class="form-control @error('branch_name_en') is-invalid @enderror" type="text" name="branch_name_en" required>
                             </div>
                             <div class="submit-section">
-                                <button type="submit" class="btn btn-primary submit-btn">Submit</button>
+                                <button type="submit" class="btn btn-primary submit-btn">
+                                    <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading </span>
+                                    <span class="btn-txt">{{ __('Submit') }}</span>
+                                </button>
                             </div>
                         </form>
                     </div>
@@ -106,7 +109,7 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form action="{{url('branch/update')}}" method="POST" enctype="multipart/form-data">
+                        <form action="{{url('branch/update')}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
                             @csrf
                             <input type="hidden" name="id" class="e_id" value="">
                             <div class="form-group">
@@ -118,7 +121,10 @@
                                 <input class="form-control @error('branch_name_en') is-invalid @enderror" type="text" id="e_branch_name_en" name="branch_name_en">
                             </div>
                             <div class="submit-section">
-                                <button type="submit" class="btn btn-primary submit-btn">Submit</button>
+                                <button type="submit" class="btn btn-primary submit-btn">
+                                    <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading </span>
+                                    <span class="btn-txt">{{ __('Submit') }}</span>
+                                </button>
                             </div>
                         </form>
                     </div>
@@ -156,6 +162,7 @@
 @endsection
 
 @include('includs.script')
+<script src="{{asset('/admin/js/validation-field.js')}}"></script>
 <script>
     $(function(){
         $('.update').on('click',function(){

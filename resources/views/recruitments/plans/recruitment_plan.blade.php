@@ -143,7 +143,10 @@
                                 </div>
                             </div>
                             <div class="submit-section">
-                                <button type="submit" class="btn btn-primary submit-btn">Submit</button>
+                                <button type="submit" class="btn btn-primary submit-btn">
+                                    <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading </span>
+                                    <span class="btn-txt">{{ __('Submit') }}</span>
+                                </button>
                             </div>
                         </form>
                     </div>
@@ -205,7 +208,10 @@
                                 </div>
                             </div>
                             <div class="submit-section">
-                                <button type="submit" class="btn btn-primary submit-btn">Submit</button>
+                                <button type="submit" class="btn btn-primary submit-btn">
+                                    <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading </span>
+                                    <span class="btn-txt">{{ __('Submit') }}</span>
+                                </button>
                             </div>
                         </form>
                     </div>

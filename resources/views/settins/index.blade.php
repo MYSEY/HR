@@ -46,6 +46,7 @@
                                         @enderror
                                     </div>
                                     <div class="form-group">
+                                        <label for="password-new">New Password</label>
                                         <div class="position-relative">
                                             <input type="password" class="form-control pass-input " name="password" autocomplete="current-password"><span class="fa fa-eye-slash toggle-password"></span>
                                             @error('password')

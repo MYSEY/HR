@@ -171,7 +171,9 @@ class MotorRentelController extends Controller
                         'total_work_day'  => $csv[9],
                         'price_engine_oil'  => $csv[10],
                         'price_motor_rentel'  => $csv[11],
-                        'tax_rate'  => $csv[12],
+                        'taplab_rentel'  => $csv[12],
+                        'price_taplab_rentel'  => $csv[13],
+                        'tax_rate'  => $csv[14],
                         'created_by'        => $userID,
                         'created_at'       => Carbon::now(),
                     ];

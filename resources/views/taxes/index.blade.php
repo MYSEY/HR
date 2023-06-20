@@ -104,7 +104,7 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form action="{{url('taxes/store')}}" method="POST" enctype="multipart/form-data">
+                        <form action="{{url('taxes/store')}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
                             @csrf
                             <div class="form-group">
                                 <label>Name <span class="text-danger">*</span></label>
@@ -122,7 +122,10 @@
                                 </select>
                             </div>
                             <div class="submit-section">
-                                <button type="submit" class="btn btn-primary submit-btn">Submit</button>
+                                <button type="submit" class="btn btn-primary submit-btn">
+                                    <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading </span>
+                                    <span class="btn-txt">{{ __('Submit') }}</span>
+                                </button>
                             </div>
                         </form>
                     </div>
@@ -140,7 +143,7 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form action="{{url('taxes/update')}}" method="POST" enctype="multipart/form-data">
+                        <form action="{{url('taxes/update')}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
                             @csrf
                             <input type="hidden" name="id" class="e_id">
                             <div class="form-group">
@@ -157,7 +160,10 @@
                                 </select>
                             </div>
                             <div class="submit-section">
-                                <button type="submit" class="btn btn-primary submit-btn">Submit</button>
+                                <button type="submit" class="btn btn-primary submit-btn">
+                                    <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading </span>
+                                    <span class="btn-txt">{{ __('Submit') }}</span>
+                                </button>
                             </div>
                         </form>
                     </div>
@@ -196,7 +202,7 @@
 @endsection
 
 @include('includs.script')
-
+<script src="{{asset('/admin/js/validation-field.js')}}"></script>
 <script>
     $(function(){
         $('.update').on('click',function(){

@@ -70,7 +70,10 @@
                 </div>
             </div>
             <div class="col-sm-6 col-md-2">
-                <button type="submit" class="btn btn-success w-100 btn-search" data-dismiss="modal">Search</button>
+                <button type="submit" class="btn btn-success w-100 btn-search" data-dismiss="modal">
+                    <span class="btn-text-search">Search</span>
+                    <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading</span>
+                </button>
             </div>
         </div>
     @endif
@@ -258,6 +261,9 @@
             window.location = url;
         });
         $(".btn-search").on("click", function() {
+            $(this).prop('disabled', true);
+            $(".btn-text-search").hide();
+            $("#btn-text-loading").css('display', 'block');
             axios.post('{{ URL('reports/motor-rentel-report') }}', {
                 'research':true,
                 'employee_id': $("#employee_id").val(),
@@ -318,6 +324,9 @@
                         '<tr><td colspan=9 align="center">ពុំមានទិន្នន័យសម្រាប់បង្ហាញ</td></tr>';
                 }
                 $(".tbl-motor-rport tbody").html(tr);
+                $("#btn-text-loading").hide();
+                $(".btn-text-search").show();
+                $(".btn-search").prop("disabled",false);
             })
         });
     });

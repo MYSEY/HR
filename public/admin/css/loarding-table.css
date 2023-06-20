@@ -1,0 +1,66 @@
+.main-item {
+    padding: 10px;
+    background-color: #fff;
+    width: 700px;
+  }
+  
+  .background-masker {
+    background-color: #fff;
+    position: absolute;
+  }
+  
+  @keyframes placeHolderShimmer {
+    0% {
+      background-position: -800px 0
+    }
+    100% {
+      background-position: 800px 0
+    }
+  }
+  .animated-background {
+    animation-duration: 3s;
+    animation-fill-mode: forwards;
+    animation-iteration-count: infinite;
+    animation-name: placeHolderShimmer;
+    animation-timing-function: linear;
+    background-color: #f6f7f8;
+    background: linear-gradient(to right, #fff 8%, #bbbbbb 18%, #eeeeee 33%);
+    background-size: 800px 104px;
+    height: 30px;
+    position: relative;
+  }
+  .table tr td {
+    border: none
+  }
+
+  /* block style loarding button */
+  .loader--text {
+    /* position: absolute; */
+    left: 0;
+    right: 0;
+    width: 4rem;
+    margin: auto;
+    /* color: #e2e5e8; */
+    display: none;
+  }
+  .loader--text:after {
+    content: "Loading";
+    font-weight: bold;
+    animation-name: loading-text;
+    animation-duration: 3s;
+    animation-iteration-count: infinite;
+  }
+  @keyframes loading-text {
+    0% {
+      content: "Loading";
+    }
+    25% {
+      content: "Loading.";
+    }
+    50% {
+      content: "Loading..";
+    }
+    75% {
+      content: "Loading...";
+    }
+  }

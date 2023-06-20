@@ -9,6 +9,7 @@
         display: none;
     }
 </style>
+<link rel="stylesheet" href="{{ asset('admin/css/loarding-table.css') }}">
 @section('content')
     <div class="page-header">
         <div class="row align-items-center">
@@ -70,8 +71,12 @@
                     <label class="focus-label">To</label>
                 </div>
             </div>
+           
             <div class="col-sm-6 col-md-2">
-                <button class="btn btn-success w-100 btn-search" data-dismiss="modal">Search</button>
+                <button class="btn btn-success w-100 btn-search" data-dismiss="modal" >
+                    <span class="btn-text-search">Search</span>
+                    <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading</span>
+                </button>
             </div>
         </div>
     @endif
@@ -160,8 +165,11 @@
                                                 </td>
                                             </tr>
                                         @endforeach
+                                    @else
+                                       
                                     @endif
                                 </tbody>
+                                {{-- @include('components.loarding-table', ["column"=> 9, "rol"=> 7]) --}}
                             </table>
                         </div>
                     </div>
@@ -172,7 +180,7 @@
         @include('motor_rentels.modal_form_create')
         @include('motor_rentels.modal_form_edit')
         @include('motor_rentels.import')
-        
+        {{-- @include('components.loarding-table', ["column"=> 9, "rol"=> 7]) --}}
         <!-- Delete Training Modal -->
         <div class="modal custom-modal fade" id="delete_motor_rentel" role="dialog">
             <div class="modal-dialog modal-dialog-centered">
@@ -208,7 +216,6 @@
 @include('includs.script')
 <script src="{{asset('/admin/js/validation-field.js')}}"></script>
 <script>
-    
     $(function() {
         var currentYear = 2010;
         var newYear = moment(new Date()).format('YYYY');
@@ -271,7 +278,6 @@
             });
             $('#add_motor_rentel').modal('show');
         });
-
 
         $('.update').on('click', function() {
             $('#e_expired_year').html('<option value=""> </option>');
@@ -340,6 +346,9 @@
         });
 
         $(".btn-search").on("click", function() {
+            $(this).prop('disabled', true);
+            $(".btn-text-search").hide();
+            $("#btn-text-loading").css('display', 'block');
             axios.post('{{ URL('motor-rentel/list') }}', {
                 'research':true,
                 'employee_id': $("#employee_id").val(),
@@ -386,6 +395,9 @@
                         '<tr><td colspan=9 align="center">ពុំមានទិន្នន័យសម្រាប់បង្ហាញ</td></tr>';
                 }
                 $(".tbl-motor tbody").html(tr);
+                $("#btn-text-loading").hide();
+                $(".btn-text-search").show();
+                $(".btn-search").prop("disabled",false);
             })
         });
     });

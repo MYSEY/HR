@@ -123,7 +123,7 @@
                                 aria-valuemin="0" aria-valuemax="100"><span id="percantage-udc"></span></div>
                         </div>
                         <div>
-                            <p><i class="fa fa-dot-circle-o text-purple me-2"></i>Interview <span
+                            <p><i class="fa fa-dot-circle-o text-purple me-2"></i>Up-Caming <span
                                     id="total-interview" class="float-end">0</span></p>
                             <p><i class="fa fa-dot-circle-o text-success me-2"></i>Probation <span
                                     id="total-probation" class="float-end">0</span></p>
@@ -270,7 +270,7 @@
                                     '</div>'+
                                 '</div>';
                     });
-
+                    
                     $("#birthday-staff").append(div);
 
                     $("#total-female").text(total_female);
@@ -301,6 +301,7 @@
                 $("#total-resigned-staff").text(response.staffResignations.length);
                 $("#total-promoted-staff").text(response.staffPromotes);
                 $("#total-transferred-staff").text(response.transferred);
+                $("#total-interview").text(response.candidateResumes);
                 $("#total-training").text(response.dataTrainings.length);
 
                 let dataHRMS = {
@@ -343,6 +344,7 @@
         });
     });
 
+    // Staff Take Leave
     function showDashboard(data) {
         var deshboard = [{
                 "name": "staff_take_leave"

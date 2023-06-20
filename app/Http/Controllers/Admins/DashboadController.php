@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admins;
 
 use App\Http\Controllers\Controller;
 use App\Models\Branchs;
+use App\Models\CandidateResume;
 use App\Models\Option;
 use App\Models\RecruitmentPlan;
 use App\Models\StaffPromoted;
@@ -54,12 +55,11 @@ class DashboadController extends Controller
           ->when($year, function ($query, $year) {
               $query->where('date_of_commencement', '>=', $year);
           })->get();
-
         $totalStaff =  User::with("gender")->whereIn('emp_status',['1','2','Probation'])->get();
         $newStaff = User::where('emp_status', "Probation")->get()->count();
         $staffPromotes = StaffPromoted::all()->count();
         $transferred = Transferred::all()->count();
-
+        $candidateResumes = CandidateResume::where("status", "4")->get()->count();
         $dataTrainings = Training::whereMonth("created_at", $Monthly)->whereYear("created_at", $yearLy)->get();
         $dataEmployeeTrainings = [];
         foreach ($dataTrainings as $key => $item) {
@@ -78,6 +78,7 @@ class DashboadController extends Controller
             'newStaff'=> $newStaff,
             'totalStaff'=> $totalStaff,
             'dataTrainings'=> $dataTrainings,
+            "candidateResumes"=>$candidateResumes,
             'dataEmployeeTrainings'=> $dataEmployeeTrainings,
         ]);
     }

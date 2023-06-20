@@ -309,13 +309,13 @@
                                     if (index > -1) {
                                         $('#e_trainer').append($('<option>', {
                                             value: item.id,
-                                            text: item.employee.employee_name_en,
+                                            text: item.employee ? item.employee.employee_name_en: item.name_en,
                                             selected: true
                                         }));
                                     } else {
                                         $('#e_trainer').append($('<option>', {
                                             value: item.id,
-                                            text: item.employee.employee_name_en,
+                                            text: item.employee ? item.employee.employee_name_en: item.name_en,
                                             selected: false
                                         }));
                                     }
@@ -341,8 +341,7 @@
                             $('#e_employee').html('');
                             $.each(response.employee, function(i, item) {
                                 let id = item.id.toString();
-                                let index = response.success.employee_id.indexOf(
-                                id);
+                                let index = response.success.employee_id.indexOf(id);
                                 if (index > -1) {
                                     $('#e_employee').append($('<option>', {
                                         value: item.id,

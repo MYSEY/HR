@@ -23,7 +23,10 @@
                         </div><br>
                         <div class="btn-group " style="padding-left: 2%;">
                             <div>
-                                <a href="javascript:" class="btn btn-primary submit-btn upload_file_data">submit</a>
+                                <a href="javascript:" class="btn btn-primary submit-btn upload_file_data">
+                                    <span class="btn-text-submit">submit</span>
+                                    <span id="btn-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading</span>
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -50,7 +53,6 @@
                 $(".thanLess").show();
                 return false;
             }
-
             var file_data = $('#result_file').prop('files')[0];
             var fileName = file_data['name'];
             var form_data = new FormData();
@@ -59,7 +61,10 @@
             form_data.append('file', file_data);
             form_data.append('_token', "{{ csrf_token() }}");
             if (fileExtension == "xls" || fileExtension == "xlsx" || fileExtension == "csv" && fileSize < 1048576) {
-               
+                $(".upload_file_data").prop('disabled', true);
+                $(".btn-text-submit").hide();
+                $("#btn-loading").css('display', 'block');
+
                 $("#import_motor_rentel").modal("show");
                 $.ajax({
                     type: 'POST',
@@ -69,7 +74,6 @@
                     cache: false,
                     processData: false,
                     success: function(data) {
-                        // alert(data);
                         if (data == 1) {
                             $("#import_motor_rentel").modal("hide");
                             toastr.success('Data has been save success');
@@ -88,6 +92,9 @@
                                 ).css("color", "red");
                             $(".thanLess").show();
                         }
+                        $("#btn-loading").hide();
+                        $(".btn-text-submit").show();
+                        $(".upload_file_data").prop("disabled",false);
                     }
                 });
             }else{

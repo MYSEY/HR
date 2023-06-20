@@ -6,11 +6,20 @@ $(function(){
     Array.prototype.slice.call(forms)
         .forEach(function (form) {
         form.addEventListener('submit', function (event) {
+            $(".loading-icon").css('display', 'block');
+            $(".submit-btn").attr("disabled", true);
+            $(".btn-txt").css("display", "none");
+            setTimeout(function () {
+                $(".submit-btn").attr('disabled',false);
+                $(".loading-icon").css('display', 'none');
+                $(".btn-txt").css("display", 'block');
+            }, 500);
             if (!form.checkValidity()) {
                 event.preventDefault()
                 event.stopPropagation()
             }
             form.classList.add('was-validated');
         }, false)
+        
     })
 });

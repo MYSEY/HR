@@ -5,6 +5,7 @@
         padding: 9px !important;
     }
 </style>
+<link rel="stylesheet" href="{{ asset('admin/css/loarding-table.css') }}">
 @section('content')
     <div class="content container-fluid">
         <div class="page-header">
@@ -233,8 +234,9 @@
                                             <tr>
                                                 <td colspan="16" style="text-align: center">No record to display</td>
                                             </tr>
-                                        @endif
+                                         @endif
                                     </tbody>
+                                    {{-- @include('components.loarding-table', ["column"=> 16, "rol"=> 7]) --}}
                                 </table>
                             </div>
                         </div>
@@ -242,9 +244,10 @@
                 </div>
             </div>
         </div>
-
+        
         @include('users.modal_form_create')
         @include('users.modal_form_edit')
+       
 
         <!-- Delete User Modal -->
         <div class="modal custom-modal fade" id="delete_user" role="dialog">
