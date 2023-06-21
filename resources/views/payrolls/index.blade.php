@@ -182,9 +182,6 @@
                                                     </th>
                                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                         rowspan="1" colspan="1"
-                                                        aria-label="Email: activate to sort column ascending">Gender</th>
-                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                        rowspan="1" colspan="1"
                                                         aria-label="Email: activate to sort column ascending">Position</th>
                                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                         rowspan="1" colspan="1"
@@ -232,16 +229,8 @@
                                                 @if (count($dataNSSF) > 0)
                                                     @foreach ($dataNSSF as $item)
                                                         <tr class="odd">
-                                                            <td><a
-                                                                    href="#">{{ $item->users == null ? '' : $item->users->number_employee }}</a>
-                                                            </td>
-                                                            <td><a
-                                                                    href="#">{{ $item->users == null ? '' : $item->users->employee_name_en }}</a>
-                                                            </td>
-                                                            <td>{{ $item->users == null ? '' : $item->users->EmployeeGender }}
-                                                            </td>
-                                                            <td>{{ $item->users == null ? '' : $item->users->EmployeePosition }}
-                                                            </td>
+                                                            <td><a href="#">{{ $item->users == null ? '' : $item->users->number_employee }}</a></td>
+                                                            <td><a href="#">{{ $item->users == null ? '' : $item->users->employee_name_en }}</a></td></td></td>
                                                             <td>{{ $item->users == null ? '' : $item->users->joinOfDate }}
                                                             </td>
                                                             <td>$ {{ $item->total_pre_tax_salary_usd }}
@@ -287,7 +276,6 @@
                                                 <tr>
                                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1">Employee ID</th>
                                                     <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Employee: activate to sort column descending">Full Name</th>
-                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending">Gender</th>
                                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending">Position</th>
                                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">Join Date</th>
                                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">Months</th>
@@ -304,7 +292,6 @@
                                                         <tr class="odd">
                                                             <td><a href="#">{{ $item->users == null ? '' : $item->users->number_employee }}</a></td>
                                                             <td><a href="#">{{ $item->users == null ? '' : $item->users->employee_name_en }}</a></td>
-                                                            <td>{{ $item->users == null ? '' : $item->users->EmployeeGender }}</td>
                                                             <td>{{ $item->users == null ? '' : $item->users->EmployeePosition }}</td>
                                                             <td>{{ $item->users == null ? '' : $item->users->joinOfDate }}</td>
                                                             <td>{{ $item->payment_of_month }}</td>

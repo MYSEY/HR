@@ -199,7 +199,7 @@
                                                             @endif
                                                             @if (Auth::user()->RolePermission == 'Administrator')
                                                                 <div class="dropdown-menu dropdown-menu-right" id="btn-emp-status">
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="1" href="#">
+                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-basic-salary="{{$item->basic_salary}}" data-id="1" href="#">
                                                                         <i class="fa fa-dot-circle-o text-success"></i> FDC
                                                                     </a>
                                                                     <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="2" href="#">
@@ -629,6 +629,7 @@
                 var emp_status = "Fall Probation";
             }
 
+            let new_salary = $(this).attr('data-basic-salary');
             let start_date = $(this).attr('data-start-date');
             let end_date = $(this).attr('data-end-date');
             if (status == 1) {
@@ -645,12 +646,16 @@
                                 '<div class="form-group">'+
                                     '<label>Start date <span class="text-danger">*</span></label>'+
                                     '<input type="date" class="form-control start_date" value="'+start_date+'">'+
-                                    '<input type="hidden" class="form-control emp_status" id="" name="" value="'+status+'">'+
-                                    '<input type="hidden" class="form-control id" id="" name="" value="'+id+'">'+
+                                    '<input type="hidden" class="form-control emp_status" value="'+status+'">'+
+                                    '<input type="hidden" class="form-control id" value="'+id+'">'+
                                 '</div>'+
                                 '<div class="form-group">'+
                                     '<label>End date</label>'+
-                                    '<input type="date" class="form-control end_dete" id="" name="" value="">'+
+                                    '<input type="date" class="form-control end_dete" value="">'+
+                                '</div>'+
+                                '<div class="form-group">'+
+                                    '<label>Salary</label>'+
+                                    '<input type="number" class="form-control new_salary" value="'+new_salary+'">'+
                                 '</div>'+
                                 '<label>Reason</label>'+
                                 '<textarea class="form-control resign_reason"></textarea>'+
@@ -665,6 +670,7 @@
                                 var id = this.$content.find('.id').val();
                                 var start_date = this.$content.find('.start_date').val();
                                 var end_dete = this.$content.find('.end_dete').val();
+                                var new_salary = this.$content.find('.new_salary').val();
                                 var resign_reason = this.$content.find('.resign_reason').val();
 
                                 if (!start_date) {
@@ -680,6 +686,7 @@
                                         'id': id,
                                         'start_date': start_date,
                                         'end_dete': end_dete,
+                                        'new_salary': new_salary,
                                         'resign_reason': resign_reason
                                     }).then(function(response) {
                                     if (response.data.message == 'successfull') {

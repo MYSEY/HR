@@ -3,13 +3,11 @@
 namespace App\Http\Controllers\Admins;
 use DateTime;
 use DatePeriod;
-use App\Address;
 use DateInterval;
 use App\Models\Bank;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\Option;
-use App\Helpers\Helper;
 use App\Models\Branchs;
 use App\Models\District;
 use App\Models\Position;
@@ -25,9 +23,6 @@ use App\Http\Requests\UserUpdated;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Brian2694\Toastr\Facades\Toastr;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use PhpParser\Node\Expr\Cast\Object_;
 use App\Traits\UploadFiles\UploadFIle;
 use App\Repositories\Admin\EmployeeRepository;
 
@@ -95,39 +90,6 @@ class UserController extends Controller
      */
     public function store(UserRequest $request)
     {
-         
-        //total day in months
-        $currentYear = Carbon::createFromDate($request->date_of_commencement)->format('Y-m');
-        $begin = new DateTime($currentYear.'-'.'01');
-        
-        //total day in months
-        $endMonth = Carbon::createFromDate($request->date_of_commencement)->format('m');
-        $totalDayInMonth = Carbon::now()->month($endMonth)->daysInMonth;
-        $end = new DateTime($currentYear.'-'.$totalDayInMonth);
-
-        $end = $end->modify('+1 day');
-        $interval = new DateInterval('P1D');
-        $daterange = new DatePeriod($begin, $interval, $end);
-
-        $holidays = [];
-        foreach ($daterange as $date) {
-            $sunday = date('w', strtotime($date->format("Y-m-d")));
-            if ($sunday == 0) {
-                $holidays[] = $date->format("Y-m-d");
-            } else {
-                echo'';
-            }
-        }
-        // dd($holidays);
-        $startDate = Carbon::parse($request->date_of_commencement);
-        $endDate = Carbon::parse($currentYear.'-'.$totalDayInMonth);
-        // dd($endDate);
-        $days = $startDate->diffInDaysFiltered(function (Carbon $date) use ($holidays) {
-            return $date->isWeekday() && !in_array($date, $holidays);
-        }, $endDate);
-
-        $totalSalary = $days * ($request->basic_salary / 22);
-        dd($totalSalary);
         try{
             $this->employeeRepo->createUsers($request);
             DB::commit();
@@ -241,10 +203,33 @@ class UserController extends Controller
     {
         try {
             if ($request->emp_status == 1) {
+                //total day in months
+                $endMonth = Carbon::createFromDate($request->start_date)->format('m');
+                $totalDayInMonth = Carbon::now()->month($endMonth)->daysInMonth;
+            
+                //find start date employee join date
+                $date_of_month = Carbon::createFromDate($request->start_date)->format('Y-m');
+                $currentYear = $date_of_month.'-'.$totalDayInMonth;
+
+                //find total working day in month
+                $startDate = Carbon::parse($request->start_date);
+                $endDate = Carbon::parse($currentYear);
+
+                // new salary and new total days
+                $totalNewDays = $startDate->diffInDays($endDate) + 1;
+                $totalnewSalary = ($request->new_salary / $totalDayInMonth) * $totalNewDays;
+
+                //old salary and total old days
+                $dataSalary = User::where('id',$request->id)->first();
+                $totalOldDay = $totalDayInMonth - $totalNewDays;
+                $totalOldSalary = ($dataSalary->basic_salary / $totalDayInMonth)  * $totalOldDay;
+                
+                $totalSalary = $totalnewSalary + $totalOldSalary;
                 User::where('id',$request->id)->update([
                     'emp_status' => $request->emp_status,
                     'fdc_date' => $request->start_date,
                     'fdc_end' => $request->end_dete,
+                    'basic_salary' => number_format($totalSalary, 2),
                     'resign_reason' => $request->resign_reason
                 ]);
             }else if($request->emp_status == 2){
