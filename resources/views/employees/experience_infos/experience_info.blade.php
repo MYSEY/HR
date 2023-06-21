@@ -23,11 +23,11 @@
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group form-focus focused">
-                                                <select class="select" id="employment_type[]" name="employment_type[]">
+                                                <label class="focus-label">Employment Type</label>
+                                                <select class="form-control form-select" id="employment_type[]" name="employment_type[]">
                                                     <option value="1">Full-Time</option>
                                                     <option value="2">Path-Time</option>
                                                 </select>
-                                                <label class="focus-label">Employment Type</label>
                                             </div>
                                         </div>
                                         
@@ -69,7 +69,10 @@
                     </div>
                     <div class="submit-section">
                         <input type="hidden" name="employee_id" id="employee_id" value="{{ $data->id }}">
-                        <button type="submit" class="btn btn-primary" id="bntExperience">Submit</button>
+                        <button type="submit" class="btn btn-primary submit-btn" id="bntExperience">
+                            <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading </span>
+                            <span class="btn-txt">{{ __('Submit') }}</span>
+                        </button>
                     </div>
                 </form>
             </div>

@@ -4,6 +4,10 @@
         min-height: 44px !important;
         padding: 9px !important;
     }
+    .reset-btn{
+        background: #ffbc34 !important;
+        color: #fff !important
+    }
 </style>
 @section('content')
     <div class="page-header">
@@ -18,7 +22,7 @@
         </div>
     </div>
     @if (Auth::user()->RolePermission == 'Administrator')
-        <form action="{{url('report/search')}}" method="POST">
+        <form action="{{url('employee/report')}}" method="POST" class="needs-validation" novalidate>
             @csrf
             <div class="row filter-row"> 
                 <div class="col-sm-6 col-md-3">
@@ -40,7 +44,16 @@
                     </div>
                 </div>
                 <div class="col-sm-6 col-md-2">
-                    <button type="submit" class="btn btn-success w-100" data-dismiss="modal">Search</button>
+                    <button type="submit" class="btn btn-success w-100 submit-btn" data-dismiss="modal">
+                        <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading </span>
+                        <span class="btn-txt">{{ __('Search') }}</span>
+                    </button>
+                </div>
+                <div class="col-sm-6 col-md-2">
+                    <button type="button" class="btn w-100 reset-btn">
+                        <span class="btn-text-reset">Reset</span>
+                        <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading</span>
+                    </button>
                 </div>
             </div>
         </form>
@@ -168,3 +181,15 @@
         </div>
     </div>
 @endsection
+@include('includs.script')
+<script src="{{asset('/admin/js/validation-field.js')}}"></script>
+<script>
+    $(function(){
+        $(".reset-btn").on("click", function() {
+            $(this).prop('disabled', true);
+            $(".btn-text-reset").hide();
+            $("#btn-text-loading").css('display', 'block');
+            window.location.replace("{{ URL('employee/report') }}"); 
+        });
+    });
+</script>

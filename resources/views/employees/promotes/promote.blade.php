@@ -47,7 +47,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form action="{{url('/employee/promote')}}" method="POST" data-select2-id="select2-data-9-apez">
+                    <form action="{{url('/employee/promote')}}" method="POST" data-select2-id="select2-data-9-apez" class="needs-validation" novalidate>
                         @csrf
                         <div class="form-group col-md-12 col-12" element="div" bp-field-wrapper="true" bp-field-name="Identity" bp-field-type="custom_html">
                             <label class="navbar-brand custom-navbar-brand mb-0" style="width: 100%; background: #dfe6e9; padding: 6px;font-size: 15px;font-weight: normal !important;">Position</label>
@@ -64,7 +64,7 @@
                         </div>
                         <div class="form-group">
                             <label>Promotion To <span class="text-danger">*</span></label>
-                            <select class="select" id="position_promoted_to" name="position_promoted_to" required>
+                            <select class="form-control form-select" id="position_promoted_to" name="position_promoted_to" required>
                                 <option value="">Please selecte position</option>
                                 @if (count($position)>0)
                                     @foreach ($position as $item)
@@ -83,7 +83,7 @@
                         </div>
                         <div class="form-group">
                             <label>Promotion To <span class="text-danger">*</span></label>
-                            <select class="select" id="department_promoted_to" name="department_promoted_to" required>
+                            <select class="form-control form-select" id="department_promoted_to" name="department_promoted_to" required>
                                 <option value="">Please selecte department</option>
                                 @if (count($department)>0)
                                     @foreach ($department as $item)
@@ -100,7 +100,10 @@
                         </div>
                         <div class="submit-section">
                             <input type="hidden" name="employee_id" id="employee_id" value="{{ $data->id }}">
-                            <button type="submit" class="btn btn-primary" id="bntEmpPromote">Submit</button>
+                            <button type="submit" class="btn btn-primary submit-btn" id="bntEmpPromote">
+                                <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading </span>
+                                <span class="btn-txt">{{ __('Submit') }}</span>
+                            </button>
                         </div>
                     </form>
                 </div>
@@ -108,3 +111,4 @@
         </div>
     </div>
 </div>
+<script src="{{asset('/admin/js/validation-field.js')}}"></script>

@@ -4,6 +4,10 @@
         min-height: 44px !important;
         padding: 9px !important;
     }
+    .reset-btn{
+        background: #ffbc34 !important;
+        color: #fff !important
+    }
 </style>
 <link rel="stylesheet" href="{{ asset('admin/css/loarding-table.css') }}">
 @section('content')
@@ -28,9 +32,9 @@
             </div>
         </div>
         @if (Auth::user()->RolePermission == 'Administrator')
-            <form action="{{url('users/search')}}" method="POST">
+            <form action="{{url('users')}}" method="POST" class="needs-validation" novalidate>
                 @csrf
-                <div class="row filter-row"> 
+                <div class="row filter-row">
                     <div class="col-sm-6 col-md-3"> 
                         <div class="form-group">
                             <input type="text" class="form-control" name="employee_id" id="number_employee" placeholder="Employee ID" value="{{old('number_employee')}}">
@@ -64,7 +68,16 @@
                         </div>
                     </div> --}}
                     <div class="col-sm-6 col-md-2">
-                        <button type="submit" class="btn btn-success w-100" data-dismiss="modal">Search</button>
+                        <button type="submit" class="btn btn-success w-100 submit-btn" data-dismiss="modal">
+                            <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading </span>
+                            <span class="btn-txt">{{ __('Search') }}</span>
+                        </button>
+                    </div>
+                    <div class="col-sm-6 col-md-2">
+                        <button type="button" class="btn w-100 reset-btn">
+                            <span class="btn-text-reset">Reset</span>
+                            <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading</span>
+                        </button>
                     </div>
                 </div>
             </form>
@@ -288,6 +301,12 @@
 
 <script>
     $(function(){
+        $(".reset-btn").on("click", function() {
+            $(this).prop('disabled', true);
+            $(".btn-text-reset").hide();
+            $("#btn-text-loading").css('display', 'block');
+            window.location.replace("{{ URL('users') }}"); 
+        });
         // block Current Address
         $("#current_province, #e_current_province").on("change", function(){
             let id = $("#current_province").val() ?? $("#current_province").val() ?? $("#e_current_province").val() ?? $("#e_current_province").val();

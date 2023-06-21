@@ -43,7 +43,10 @@
                     <div class="submit-section">
                         <input type="hidden" name="id" id="e_id" value="">
                         <input type="hidden" name="employee_id" id="e_employee_id" value="">
-                        <button type="submit" class="btn btn-primary" id="bntChildren">Submit</button>
+                        <button type="submit" class="btn btn-primary submit-btn" id="bntChildren">
+                            <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading </span>
+                            <span class="btn-txt">{{ __('Submit') }}</span>
+                        </button>
                     </div>
                 </form>
             </div>

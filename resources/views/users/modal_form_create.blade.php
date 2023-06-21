@@ -439,7 +439,10 @@
                     </div>
 
                     <div class="submit-section">
-                        <button type="submit" class="btn btn-primary submit-btn" data-dismiss="modal">Submit</button>
+                        <button type="submit" class="btn btn-primary submit-btn" data-dismiss="modal">
+                            <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading </span>
+                            <span class="btn-txt">{{ __('Submit') }}</span>
+                        </button>
                     </div>
                 </form>
             </div>

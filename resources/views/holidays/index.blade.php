@@ -83,7 +83,7 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form action="{{url('holidays/create')}}" method="POST">
+                        <form action="{{url('holidays/create')}}" method="POST" class="needs-validation" novalidate>
                             @csrf
                             <div class="form-group">
                                 <label>Title <span class="text-danger">*</span></label>
@@ -112,7 +112,10 @@
                                 </div>
                             </div>
                             <div class="submit-section">
-                                <button class="btn btn-primary submit-btn">Submit</button>
+                                <button class="btn btn-primary submit-btn">
+                                    <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading </span>
+                                    <span class="btn-txt">{{ __('Submit') }}</span>
+                                </button>
                             </div>
                         </form>
                     </div>
@@ -160,7 +163,10 @@
                             </div>
                             <div class="submit-section">
                                 <input type="hidden" name="id" id="e_id" class="e_id" value="">
-                                <button class="btn btn-primary submit-btn">Submit</button>
+                                <button class="btn btn-primary submit-btn">
+                                    <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading </span>
+                                    <span class="btn-txt">{{ __('Submit') }}</span>
+                                </button>
                             </div>
                         </form>
                     </div>
@@ -170,6 +176,7 @@
     </div>
 @endsection
 @include('includs.script')
+<script src="{{asset('/admin/js/validation-field.js')}}"></script>
 <script>
     $(function(){
         $('.update').on('click',function(){

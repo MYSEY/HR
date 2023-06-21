@@ -67,7 +67,10 @@
                         </div>
                         <div class="submit-section">
                             <input type="hidden" name="employee_id" id="employee_id" value="{{ $data->id }}">
-                            <button type="submit" class="btn btn-primary" id="bntEmpPromote">Submit</button>
+                            <button type="submit" class="btn btn-primary submit-btn" id="bntEmpPromote">
+                                <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading </span>
+                                <span class="btn-txt">{{ __('Submit') }}</span>
+                            </button>
                         </div>
                     </form>
                 </div>

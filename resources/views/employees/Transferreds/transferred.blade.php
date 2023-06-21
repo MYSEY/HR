@@ -45,7 +45,7 @@
                         @csrf
                         <div class="form-group">
                             <label>Branch<span class="text-danger">*</span></label>
-                            <select class="select" id="branch_id" name="branch_id" required>
+                            <select class="form-control form-select" id="branch_id" name="branch_id" required>
                                 <option value="">Please selecte branch</option>
                                 @if (count($branch)>0)
                                     @foreach ($branch as $item)
@@ -56,7 +56,7 @@
                         </div>
                         <div class="form-group">
                             <label>Position<span class="text-danger">*</span></label>
-                            <select class="select" id="position_id" name="position_id" required>
+                            <select class="form-control form-select" id="position_id" name="position_id" required>
                                 <option value="">Please selecte position</option>
                                 @if (count($position)>0)
                                     @foreach ($position as $item)
@@ -77,7 +77,10 @@
                         </div>
                         <div class="submit-section">
                             <input type="hidden" name="employee_id" id="employee_id" value="{{ $data->id }}">
-                            <button type="submit" class="btn btn-primary" id="bntEmpPromote">Submit</button>
+                            <button type="submit" class="btn btn-primary submit-btn" id="bntEmpPromote">
+                                <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading </span>
+                                <span class="btn-txt">{{ __('Submit') }}</span>
+                            </button>
                         </div>
                     </form>
                 </div>

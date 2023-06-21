@@ -10,7 +10,6 @@ use App\Http\Controllers\Admins\TaxesController;
 use App\Http\Controllers\Admins\BranchController;
 use App\Http\Controllers\Admins\AddressController;
 use App\Http\Controllers\Admins\HolidayController;
-use App\Http\Controllers\Admins\ReportsController;
 use App\Http\Controllers\Admins\SettingController;
 use App\Http\Controllers\Admins\TrainerController;
 use App\Http\Controllers\Admins\DashboadController;
@@ -28,11 +27,12 @@ use App\Http\Controllers\Admins\PayrollReportController;
 use App\Http\Controllers\Admins\EmployeeReportController;
 use App\Http\Controllers\Admins\LeavesEmployeeController;
 use App\Http\Controllers\Admins\AttendanceAdminController;
-use App\Http\Controllers\Admins\CandidateResumeController;
 use App\Http\Controllers\Admins\EmployeePayrollController;
 use App\Http\Controllers\Admins\EmployeeProfileController;
-use App\Http\Controllers\Admins\RecruitmentPlanController;
 use App\Http\Controllers\Admins\AttendanceEmployeeController;
+use App\Http\Controllers\Admins\CandidateResumeController;
+use App\Http\Controllers\Admins\RecruitmentPlanController;
+use App\Http\Controllers\Admins\ReportsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -75,7 +75,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     // Route::Resource('/leaves/admin', LeavesAdminController::class);
     Route::get('/leaves/employee', [LeavesEmployeeController::class,'index']);
     Route::get('/employee/report',[EmployeeReportController::class,'index']);
-    Route::post('report/search',[EmployeeReportController::class,'index']);
+    Route::post('employee/report',[EmployeeReportController::class,'index']);
 
     Route::get('role', [RoleConroller::class,'index']);
     Route::post('role/store', [RoleConroller::class,'store']);
@@ -100,7 +100,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
 
     // users
     Route::get('users', [UserController::class,'index']);
-    Route::post('users/search', [UserController::class,'index']);
+    Route::post('users', [UserController::class,'index']);
     Route::post('users/store', [UserController::class,'store']);
     Route::post('users/update', [UserController::class,'update']);
     Route::post('users/delete', [UserController::class,'destroy']);
