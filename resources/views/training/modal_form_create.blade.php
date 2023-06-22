@@ -15,13 +15,13 @@
                             <div class="form-group">
                                 <label>Training Type <span class="text-danger">*</span></label>
                                 <select class="form-control" name="training_type" id="training_type" required>
-                                    {{-- <option value=""></option>
-                                    <option value="1">Internal</option>
-                                    <option value="2">External</option> --}}
-                                    {{-- @foreach ($trainingType as $item)
-                                        <option value="{{$item->id}}">{{$item->type_name}}</option>
-                                    @endforeach --}}
                                 </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>Course Name <span class="text-danger">*</span></label>
+                                <input class="form-control @error('course_name') is-invalid @enderror" type="text" name="course_name">
                             </div>
                         </div>
                         <div class="col-sm-6">
@@ -29,9 +29,6 @@
                                 <label>Trainer <span class="text-danger">*</span></label>
                                 <select class="form-control select" multiple="" name="trainer_id[]" id="trainer" required>
                                     <option selected disabled value="">Choose...</option>
-                                    {{-- @foreach($trainer as $aKey => $item)
-                                        <option value="{{$item->id}}">{{$item->name_en}}</option>
-                                    @endforeach --}}
                                 </select>
                             </div>
                         </div>
@@ -45,14 +42,6 @@
                                 </select>
                             </div>
                         </div>
-
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label>Cost Price</label>
-                                <input class="form-control @error('cost_price') is-invalid @enderror" type="number" name="cost_price">
-                            </div>
-                        </div>
-
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label>Start Date <span class="text-danger">*</span></label>
@@ -70,21 +59,33 @@
                                 </div>
                             </div>
                         </div>
-
-                        <div class="col-sm-12">
+                        <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="">Remark</label>
-                                <textarea type="text" rows="3" class="form-control" name="remark" id="remark" value="{{old('remark')}}"></textarea>
+                                <label>Cost Price</label>
+                                <input class="form-control @error('cost_price') is-invalid @enderror" type="number" name="cost_price">
+                            </div>
+                        </div>
+                        <div class="col-sm-6 hidden" id="inp_contract">
+                            <div class="form-group">
+                                <label class="">Contract</label>
+                                <select class="select form-control" id="status" name="status">
+                                    <option selected value="0">No</option>
+                                    <option value="1">Yes</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6 hidden" id="inp_duration">
+                            <div class="form-group">
+                                <label>Duration (Month) <span class="text-danger">*</span></label>
+                                <input class="form-control @error('duration_month') is-invalid @enderror" type="number"  name="duration_month" id="duration" value="{{old('duration_month')}}">
                             </div>
                         </div>
 
                         <div class="col-sm-12">
                             <div class="form-group">
-                                <label class="">Status</label>
-                                <select class="select form-control" id="status" name="status">
-                                    <option value="1">Active</option>
-                                    <option value="0">Inactive</option>
-                                </select>
+                                <label class="">Remark</label>
+                                <textarea type="text" rows="3" class="form-control" name="remark" id="remark" value="{{old('remark')}}"></textarea>
                             </div>
                         </div>
                     </div>

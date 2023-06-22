@@ -59,7 +59,7 @@ class DashboadController extends Controller
         $newStaff = User::where('emp_status', "Probation")->get()->count();
         $staffPromotes = StaffPromoted::all()->count();
         $transferred = Transferred::all()->count();
-        $candidateResumes = CandidateResume::where("status", "4")->get()->count();
+        $candidateResumes = CandidateResume::get();
         $dataTrainings = Training::whereMonth("created_at", $Monthly)->whereYear("created_at", $yearLy)->get();
         $dataEmployeeTrainings = [];
         foreach ($dataTrainings as $key => $item) {

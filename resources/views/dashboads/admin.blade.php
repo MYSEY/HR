@@ -114,7 +114,7 @@
                         </div>
                         <div class="progress mb-4">
                             <div class="progress-bar bg-purple" role="progressbar" style="width: 30%" aria-valuenow="30"
-                                aria-valuemin="0" aria-valuemax="100"><span id="percentage-interview">0%</span></div>
+                                aria-valuemin="0" aria-valuemax="100"><span id="percentage-interview"></span></div>
                             <div class="progress-bar bg-success" role="progressbar" style="width: 22%" aria-valuenow="18"
                                 aria-valuemin="0" aria-valuemax="100"><span id="percantage-probation"></span></div>
                             <div class="progress-bar bg-text-info" role="progressbar" style="width: 24%" aria-valuenow="12"
@@ -301,8 +301,19 @@
                 $("#total-resigned-staff").text(response.staffResignations.length);
                 $("#total-promoted-staff").text(response.staffPromotes);
                 $("#total-transferred-staff").text(response.transferred);
-                $("#total-interview").text(response.candidateResumes);
+                
                 $("#total-training").text(response.dataTrainings.length);
+
+                let totalCandidateSignedContract = 0;
+                if (response.candidateResumes.length > 0) {
+                    response.candidateResumes.map((candi) =>{
+                        if (candi.status == 4) {
+                            totalCandidateSignedContract ++;
+                        }
+                    });
+                }
+                $("#total-interview").text(totalCandidateSignedContract);
+                $("#percentage-interview").text(Math.round((totalCandidateSignedContract / response.candidateResumes.length) * 100, 2)+ "%");
 
                 let dataHRMS = {
                     branches: response.branches,

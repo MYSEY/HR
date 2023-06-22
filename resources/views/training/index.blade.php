@@ -3,6 +3,10 @@
     .custom-table td {
         padding: 10px 10px !important;
     }
+    .hidden {
+        /* visibility:hidden; */
+        display: none !important
+    }
 </style>
 @section('content')
     <div class="content container-fluid">
@@ -41,6 +45,10 @@
                                                 style="width: 110.95px;">Training Type</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                 rowspan="1" colspan="1"
+                                                aria-label="Course Name: activate to sort column ascending"
+                                                style="width: 141.175px;">Course Name</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                rowspan="1" colspan="1"
                                                 aria-label="Trainer: activate to sort column ascending"
                                                 style="width: 141.175px;">Total trainer</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
@@ -53,16 +61,16 @@
                                                 style="width: 170.062px;" aria-sort="ascending">Time Duration</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                 rowspan="1" colspan="1"
-                                                aria-label="Description : activate to sort column ascending"
-                                                style="width: 129.65px;">Remark </th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                rowspan="1" colspan="1"
                                                 aria-label="Cost : activate to sort column ascending"
                                                 style="width: 34.575px;">Cost Price </th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                 rowspan="1" colspan="1"
-                                                aria-label="Status : activate to sort column ascending"
-                                                style="width: 97.15px;">Status </th>
+                                                aria-label="Contract : activate to sort column ascending"
+                                                style="width: 97.15px;">Contract </th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                rowspan="1" colspan="1"
+                                                aria-label="Description : activate to sort column ascending"
+                                                style="width: 129.65px;">Remark </th>
                                             <th class="text-end sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                 rowspan="1" colspan="1"
                                                 aria-label="Action: activate to sort column ascending"
@@ -75,6 +83,7 @@
                                                 <tr class="odd">
                                                     <td class="sorting_1 ids">{{ $item->id }}</td>
                                                     <td class="training_type_name">{{ $item->training_type == 1 ? "Internal" : "External" }}</td>
+                                                    <td class="course_name">{{ $item->course_name }}</td>
                                                     <td>
                                                         <ul class="team-members">
                                                             <li class="dropdown avatar-dropdown">
@@ -98,41 +107,10 @@
                                                         -
                                                         {{ \Carbon\Carbon::parse($item->end_date)->format('d-M-Y') ?? '' }}
                                                     </td>
-                                                    <td>{{ $item->remark }}</td>
+                                                   
                                                     <td>${{ $item->cost_price ? $item->cost_price : 0 }}</td>
-                                                    <td>
-                                                        <input type="hidden" class="status" value="{{ $item->status }}">
-                                                        <div class="dropdown action-label">
-                                                            @if ($item->status == '1')
-                                                                <a class="btn btn-white btn-sm btn-rounded dropdown-toggle"
-                                                                    href="#" data-toggle="dropdown"
-                                                                    aria-expanded="false">
-                                                                    <i class="fa fa-dot-circle-o text-success"></i>
-                                                                    <span>Active</span>
-                                                                </a>
-                                                            @elseif ($item->status == '0')
-                                                                <a class="btn btn-white btn-sm btn-rounded dropdown-toggle"
-                                                                    href="#" data-toggle="dropdown"
-                                                                    aria-expanded="false">
-                                                                    <i class="fa fa-dot-circle-o text-danger"></i>
-                                                                    <span>Inactive</span>
-                                                                </a>
-                                                            @endif
-                                                            <div class="dropdown-menu dropdown-menu-right"
-                                                                id="btn-status">
-                                                                <a class="dropdown-item" data-id="{{ $item->id }}"
-                                                                    data-name="1" data-status-old="{{ $item->status }}"
-                                                                    href="#">
-                                                                    <i class="fa fa-dot-circle-o text-success"></i> Active
-                                                                </a>
-                                                                <a class="dropdown-item" data-id="{{ $item->id }}"
-                                                                    data-name="0" data-status-old="{{ $item->status }}"
-                                                                    href="#">
-                                                                    <i class="fa fa-dot-circle-o text-danger"></i> Inactive
-                                                                </a>
-                                                            </div>
-                                                        </div>
-                                                    </td>
+                                                    <td>{{ $item->status == 1 ? "Yes" : "No" }} </td>
+                                                    <td>{{ $item->remark }}</td>
                                                     <td class="text-end">
                                                         <div class="dropdown dropdown-action">
                                                             <a href="#" class="action-icon dropdown-toggle"
@@ -157,7 +135,7 @@
                                             @endforeach
                                         @else
                                             <tr>
-                                                <td colspan="9" style="text-align: center">No record to display</td>
+                                                <td colspan="10" style="text-align: center">No record to display</td>
                                             </tr>
                                         @endif
                                     </tbody>
@@ -221,6 +199,26 @@
             $("#add_training").modal("show")
         });
 
+        $("#status,  #e_status").on("change", function(){
+            let _this = $(this).val();
+            if (_this == 0) {
+                $('#inp_duration').addClass("hidden");
+                $('#duration').removeAttr('required');
+                $('#duration').val('');
+
+                $('#e_inp_duration').addClass("hidden");
+                $('#e_duration').removeAttr('required');
+                $('#e_duration').val('');
+            }
+            if (_this == 1) {
+                $('#inp_duration').removeClass("hidden");
+                $('#duration').attr('required', true);
+                
+                $('#e_inp_duration').removeClass("hidden");
+                $('#e_duration').attr('required', true);
+            }
+        });
+        
         $("#training_type, #e_training_type").on("change", function() {
             $('#trainer').html('');
             $('#e_trainer').html('');
@@ -230,6 +228,25 @@
             }
             if ($("#e_training_type").val()) {
                 value_id = $("#e_training_type").val();
+            }
+            if (value_id == 1) {
+                $('#inp_contract').addClass("hidden");
+                $('#inp_duration').addClass("hidden");
+                $('#duration').removeAttr('required');
+                $('#duration').val('');
+
+                $('#e_inp_contract').addClass("hidden");
+                $('#e_inp_duration').addClass("hidden");
+                $('#e_duration').removeAttr('required');
+            }
+            if (value_id == 2) {
+                $('#status').html('');
+                $('#inp_contract').removeClass("hidden");
+                $('#status').append(
+                    '<option value="1">Yes</option> <option selected value="0">No</option>'
+                );
+
+                $('#e_inp_contract').removeClass("hidden");
             }
             $.ajax({
                 type: "GET",
@@ -242,7 +259,7 @@
                             if (value_id == 1 && train.type == 1) {
                                 option ={
                                     value: train.id,
-                                    text: train.employee.employee_name_en,
+                                    text: train.employee ? train.employee.employee_name_en: "",
                                     selected: false
                                 }
                                 $('#trainer').append($('<option>',option)); 
@@ -268,16 +285,6 @@
             $('#e_status').html('<option value=""></option>');
             var _this = $(this).parents('tr');
             $('.e_id').val(_this.find('.ids').text());
-            let status = _this.find('.status').val();
-            if (status == "1") {
-                $('#e_status').append(
-                    '<option selected value="1">Active</option> <option value="0">Inactive</option>'
-                    );
-            } else if (status == "0") {
-                $('#e_status').append(
-                    '<option selected value="0">Inactive</option> <option value="1">Active</option>'
-                    );
-            }
             let id = $(this).data("id");
             $("#e_id").val(id)
             $.ajax({
@@ -289,6 +296,16 @@
                 dataType: "JSON",
                 success: function(response) {
                     if (response.success) {
+                        if (response.success.status == "1") {
+                            $('#e_status').append(
+                                '<option selected value="1">Yes</option> <option value="0">No</option>'
+                            );
+                            $('#e_inp_duration').removeClass("hidden");
+                        } else if (response.success.status == "0") {
+                            $('#e_status').append(
+                                '<option selected value="0">No</option> <option value="1">Yes</option>'
+                            );
+                        };
                         $('#e_training_type').html('');
                         if (response.success.training_type == "1") {
                             $('#e_training_type').append(
@@ -299,6 +316,7 @@
                             $('#e_training_type').append(
                                 '<option selected value="2">External</option> <option value="1">Internal</option>'
                             );
+                            $('#e_inp_contract').removeClass("hidden");
                         }
                         if (response.trainer != '') {
                             $('#e_trainer').html('');
@@ -357,83 +375,85 @@
                                 }
                             });
                         }
+                        $('#e_course_name').val(response.success.course_name);
                         $('#e_cost_price').val(response.success.cost_price);
                         $('#e_start_date').val(response.success.start_date);
                         $('#e_end_date').val(response.success.end_date);
-                        $('#e_description').val(response.success.description);
+                        $('#e_duration').val(response.success.duration_month);
+                        $('#e_remark').val(response.success.remark);
                     }
                 }
             });
 
         });
 
-        $('body').on('click', '#btn-status a', function() {
-            let id = $(this).attr('data-id');
-            let status = $(this).attr('data-name');
-            let old_status = $(this).attr('data-status-old');
-            let text_status = "";
-            let text_old_status = "";
-            if (old_status == "0") {
-                text_old_status = "Inactive"
-            } else if (old_status == "1") {
-                text_old_status = "Active"
-            }
-            if (status == "0") {
-                text_status = "Inactive"
-            } else if (status == "1") {
-                text_status = "Active"
-            }
-            $.confirm({
-                title: 'Change Status!',
-                contentClass: 'text-center',
-                backgroundDismiss: 'cancel',
-                content: '' +
-                    '<label>Are you sure want change status ' + '<label style="color:red">' +
-                    text_old_status + '</label>' + ' to ' + '<label style="color:red">' +
-                    text_status + '</label>' + '?</label>' +
-                    '<input type="hidden" class="form-control training_status" id="" name="" value="' +
-                    status + '">' +
-                    '<input type="hidden" class="form-control id" id="" name="" value="' + id +
-                    '">',
-                buttons: {
-                    confirm: {
-                        text: 'Submit',
-                        btnClass: 'btn-blue',
-                        action: function() {
-                            var training_status = this.$content.find('.training_status')
-                                .val();
-                            var id = this.$content.find('.id').val();
+        // $('body').on('click', '#btn-status a', function() {
+        //     let id = $(this).attr('data-id');
+        //     let status = $(this).attr('data-name');
+        //     let old_status = $(this).attr('data-status-old');
+        //     let text_status = "";
+        //     let text_old_status = "";
+        //     if (old_status == "0") {
+        //         text_old_status = "Inactive"
+        //     } else if (old_status == "1") {
+        //         text_old_status = "Active"
+        //     }
+        //     if (status == "0") {
+        //         text_status = "Inactive"
+        //     } else if (status == "1") {
+        //         text_status = "Active"
+        //     }
+        //     $.confirm({
+        //         title: 'Change Status!',
+        //         contentClass: 'text-center',
+        //         backgroundDismiss: 'cancel',
+        //         content: '' +
+        //             '<label>Are you sure want change status ' + '<label style="color:red">' +
+        //             text_old_status + '</label>' + ' to ' + '<label style="color:red">' +
+        //             text_status + '</label>' + '?</label>' +
+        //             '<input type="hidden" class="form-control training_status" id="" name="" value="' +
+        //             status + '">' +
+        //             '<input type="hidden" class="form-control id" id="" name="" value="' + id +
+        //             '">',
+        //         buttons: {
+        //             confirm: {
+        //                 text: 'Submit',
+        //                 btnClass: 'btn-blue',
+        //                 action: function() {
+        //                     var training_status = this.$content.find('.training_status')
+        //                         .val();
+        //                     var id = this.$content.find('.id').val();
 
-                            axios.post('{{ URL('training/status') }}', {
-                                'training_status': training_status,
-                                'id': id,
-                            }).then(function(response) {
-                                new Noty({
-                                    title: "",
-                                    text: "The process has been successfully.",
-                                    type: "success",
-                                    icon: true
-                                }).show();
-                                $('.card-footer').remove();
-                                window.location.replace(
-                                    "{{ URL('training/list') }}");
-                            }).catch(function(error) {
-                                new Noty({
-                                    title: "",
-                                    text: "Something went wrong please try again later.",
-                                    type: "error",
-                                    icon: true
-                                }).show();
-                            });
-                        }
-                    },
-                    cancel: {
-                        text: 'Cancel',
-                        btnClass: 'btn-red btn-sm',
-                    },
-                }
-            });
-        });
+        //                     axios.post('{{ URL('training/status') }}', {
+        //                         'training_status': training_status,
+        //                         'id': id,
+        //                     }).then(function(response) {
+        //                         new Noty({
+        //                             title: "",
+        //                             text: "The process has been successfully.",
+        //                             type: "success",
+        //                             icon: true
+        //                         }).show();
+        //                         $('.card-footer').remove();
+        //                         window.location.replace(
+        //                             "{{ URL('training/list') }}");
+        //                     }).catch(function(error) {
+        //                         new Noty({
+        //                             title: "",
+        //                             text: "Something went wrong please try again later.",
+        //                             type: "error",
+        //                             icon: true
+        //                         }).show();
+        //                     });
+        //                 }
+        //             },
+        //             cancel: {
+        //                 text: 'Cancel',
+        //                 btnClass: 'btn-red btn-sm',
+        //             },
+        //         }
+        //     });
+        // });
 
         $('.delete').on('click', function() {
             var _this = $(this).parents('tr');

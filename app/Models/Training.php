@@ -16,11 +16,13 @@ class Training extends Model
 
     protected $fillable = [
        'training_type',
+       'course_name',
        'trainer_id',
        'employee_id',
        'cost_price',
        'start_date',
        'end_date',
+       'duration_month',
        'remark',
        'status',
        'created_by',

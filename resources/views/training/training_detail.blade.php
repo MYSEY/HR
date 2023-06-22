@@ -15,7 +15,17 @@
                         <li class="breadcrumb-item active">Training Detail</li>
                     </ul>
                     <ul class="breadcrumb">
-                        <li class="breadcrumb-item ">Cost name: <label for="" style="color: red">{{$training->remark}}</label></li>
+                        <li class="breadcrumb-item ">Training Type: <label for="" style="color: red">{{$training->training_type == 1 ? "Internal" : "External" }}</label></li>
+                    </ul>
+                    <ul class="breadcrumb">
+                        <li class="breadcrumb-item ">Course name: <label for="" style="color: red">{{$training->course_name}}</label></li>
+                    </ul>
+                    <ul class="breadcrumb">
+                        <li class="breadcrumb-item ">Time Duration: <label for="" style="color: red">
+                            {{ \Carbon\Carbon::parse($training->start_date)->format('d-M-Y') ?? '' }}
+                            -
+                            {{ \Carbon\Carbon::parse($training->end_date)->format('d-M-Y') ?? '' }}
+                        </label></li>
                     </ul>
                 </div>
                 <div class="col-auto float-end ms-auto">

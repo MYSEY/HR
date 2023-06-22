@@ -21,6 +21,12 @@
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
+                                <label>Course Name <span class="text-danger">*</span></label>
+                                <input class="form-control @error('course_name') is-invalid @enderror" type="text" name="course_name" id="e_course_name">
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
                                 <label>Trainer <span class="text-danger">*</span></label>
                                 <select class="select form-control" id="e_trainer" multiple="" name="trainer_id[]" required value="{{old('trainer')}}">
                                     {{-- <option value="">Select trainer</option> --}}
@@ -33,13 +39,6 @@
                                 <select class="select form-control" id="e_employee" multiple="" name="employee_id[]" required value="{{old('employee')}}">
                                     {{-- <option value="">Select employee</option> --}}
                                 </select>
-                            </div>
-                        </div>
-
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label>Cost Price</label>
-                                <input class="form-control @error('cost_price') is-invalid @enderror" type="number" id="e_cost_price" name="cost_price">
                             </div>
                         </div>
 
@@ -61,20 +60,33 @@
                             </div>
                         </div>
 
-                        <div class="col-sm-12">
+                        <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="">Remark</label>
-                                <textarea type="text" rows="3" class="form-control" name="remark" id="e_remark" value="{{old('remark')}}"></textarea>
+                                <label>Cost Price</label>
+                                <input class="form-control @error('cost_price') is-invalid @enderror" type="number" id="e_cost_price" name="cost_price">
+                            </div>
+                        </div>
+                        <div class="col-sm-6 hidden" id="e_inp_contract">
+                            <div class="form-group">
+                                <label class="">Contract</label>
+                                <select class="select form-control" id="e_status" name="status">
+                                    <option selected value="0">No</option>
+                                    <option value="1">Yes</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6 hidden" id="e_inp_duration">
+                            <div class="form-group">
+                                <label>Duration (Month) <span class="text-danger">*</span></label>
+                                <input class="form-control @error('duration_month') is-invalid @enderror" type="number"  name="duration_month" id="e_duration" value="{{old('duration_month')}}">
                             </div>
                         </div>
 
                         <div class="col-sm-12">
                             <div class="form-group">
-                                <label class="">Status</label>
-                                <select class="select form-control" id="e_status" name="status" value="{{old('sttus')}}">
-                                    <option value="true">Active</option>
-                                    <option value="false">Inactive</option>
-                                </select>
+                                <label class="">Remark</label>
+                                <textarea type="text" rows="3" class="form-control" name="remark" id="e_remark" value="{{old('remark')}}"></textarea>
                             </div>
                         </div>
                     </div>

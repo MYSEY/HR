@@ -92,8 +92,9 @@ class TrainerController extends Controller
     public function update(Request $request)
     {
         try{
-            Trainer::where('id',$request->id)->update([
+            $dataUpdate =[
                 'type' => $request->type,
+                'company_name' => $request->company_name,
                 'employee_id' => $request->employee_id,
                 'name_en' => $request->name_en,
                 'name_kh' => $request->name_kh,
@@ -102,7 +103,8 @@ class TrainerController extends Controller
                 'remark' => $request->remark,
                 'status' => $request->status,
                 'updated_by' => Auth::user()->id 
-            ]);
+            ];
+            Trainer::where('id',$request->id)->update($dataUpdate);
             Toastr::success('Training type Updated successfully.','Success');
             return redirect()->back();
         }catch(\Exception $e){

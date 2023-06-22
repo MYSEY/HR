@@ -28,13 +28,14 @@
                                         <tr>
                                             <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="#: activate to sort column descending" style="width: 30px;">#</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Type: activate to sort column ascending" style="width: 772.237px;">Type</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department Name: activate to sort column ascending" style="width: 772.237px;">Name (EN)</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department Name: activate to sort column ascending" style="width: 772.237px;">Name (KH)</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department Name: activate to sort column ascending" style="width: 772.237px;">Phone Numer</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department Name: activate to sort column ascending" style="width: 772.237px;">Email</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department Name: activate to sort column ascending" style="width: 772.237px;">Remark</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department Name: activate to sort column ascending" style="width: 772.237px;">Status</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department Name: activate to sort column ascending" style="width: 772.237px;">Create at</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Company Name: activate to sort column ascending" style="width: 772.237px;">Company Name</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Name (KH): activate to sort column ascending" style="width: 772.237px;">Name (KH)</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Name (EN): activate to sort column ascending" style="width: 772.237px;">Name (EN)</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Phone Numer: activate to sort column ascending" style="width: 772.237px;">Phone Numer</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending" style="width: 772.237px;">Email</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Remark: activate to sort column ascending" style="width: 772.237px;">Remark</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Status: activate to sort column ascending" style="width: 772.237px;">Status</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Create at: activate to sort column ascending" style="width: 772.237px;">Create at</th>
                                             <th class="text-end sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Action: activate to sort column ascending" style="width: 300.962px;">Action</th>
                                         </tr>
                                     </thead>
@@ -44,13 +45,13 @@
                                                 <tr class="odd">
                                                     <td class="sorting_1 ids">{{$item->id}}</td>
                                                     <td class="type">{{$item->type == 1 ? "Internal": "External"}}</td>
-                                                    <td class="name_en">{{$item->type == 1 ? $item->EmployeeIn->employee_name_en : $item->name_en}}</td>
+                                                    <td class="company_name">{{$item->company_name ? $item->company_name : ""}}</td>
                                                     <td class="name_kh">{{$item->type == 1 ? $item->EmployeeIn->employee_name_kh : $item->name_kh}}</td>
+                                                    <td class="name_en">{{$item->type == 1 ? $item->EmployeeIn->employee_name_en : $item->name_en}}</td>
                                                     <td class="number_phone">{{$item->type == 1 ? $item->EmployeeIn->personal_phone_number : $item->number_phone}}</td>
                                                     <td class="email">{{$item->type == 1 ? $item->EmployeeIn->email : $item->email}}</td>
                                                     <td >{{$item->type == 1 ? $item->EmployeeIn->remark : $item->remark}}</td>
                                                     <td>
-                                                        {{-- <input type="hidden" class="role" value="{{$item->role}}"> --}}
                                                         <input type="hidden" class="status" value="{{$item->status}}">
                                                         <div class="dropdown action-label">
                                                             @if ($item->status=='1')
@@ -88,7 +89,7 @@
                                             @endforeach
                                         @else
                                             <tr>
-                                                <td colspan="9" style="text-align: center">No record to display</td>
+                                                <td colspan="11" style="text-align: center">No record to display</td>
                                             </tr>
                                         @endif
                                     </tbody>
@@ -134,14 +135,20 @@
                                 </div>
                                 <div class="col-sm-6">
                                     <div class="form-group trainer-external">
-                                        <label>Name (EN)<span class="text-danger">*</span></label>
-                                        <input class="form-control @error('name_en') is-invalid @enderror" type="text" name="name_en">
+                                        <label>Company Name<span class="text-danger">*</span></label>
+                                        <input class="form-control @error('name_en') is-invalid @enderror" type="text" name="company_name">
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
                                     <div class="form-group trainer-external">
                                         <label>Name (KH)<span class="text-danger">*</span></label>
                                         <input class="form-control @error('name_kh') is-invalid @enderror" type="text" name="name_kh">
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group trainer-external">
+                                        <label>Name (EN)<span class="text-danger">*</span></label>
+                                        <input class="form-control @error('name_en') is-invalid @enderror" type="text" name="name_en">
                                     </div>
                                 </div>
 
@@ -159,7 +166,7 @@
                                     </div>
                                 </div>
         
-                                <div class="col-sm-6">
+                                <div class="col-sm-12">
                                     <div class="form-group">
                                         <label>Status</label>
                                         <select class="select form-control" id="trainer_status" name="status" value="{{old('status')}}">
@@ -223,8 +230,8 @@
                                 </div>
                                 <div class="col-sm-6">
                                     <div class="form-group e-trainer-external">
-                                        <label>Name (EN)<span class="text-danger">*</span></label>
-                                        <input class="form-control data-clear @error('name_en') is-invalid @enderror" type="text" id="e_name_en" name="name_en">
+                                        <label>Company Name<span class="text-danger">*</span></label>
+                                        <input class="form-control data-clear @error('name_en') is-invalid @enderror" type="text" id="e_company_name" name="company_name">
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
@@ -233,7 +240,12 @@
                                         <input class="form-control data-clear @error('name_kh') is-invalid @enderror" type="text" id="e_name_kh" name="name_kh">
                                     </div>
                                 </div>
-
+                                <div class="col-sm-6">
+                                    <div class="form-group e-trainer-external">
+                                        <label>Name (EN)<span class="text-danger">*</span></label>
+                                        <input class="form-control data-clear @error('name_en') is-invalid @enderror" type="text" id="e_name_en" name="name_en">
+                                    </div>
+                                </div>
                                 <div class="col-sm-6">
                                     <div class="form-group e-trainer-external">
                                         <label>Phone </label>
@@ -248,7 +260,7 @@
                                     </div>
                                 </div>
         
-                                <div class="col-sm-6">
+                                <div class="col-sm-12">
                                     <div class="form-group">
                                         <label>Status</label>
                                         <select class="select form-control" id="e_status" name="status" value="{{old('status')}}">
@@ -346,6 +358,7 @@
             var _this = $(this).parents('tr');
            
             $('.e_id').val(_this.find('.ids').text());
+            $('#e_company_name').val(_this.find('.company_name').text());
             $('#e_name_en').val(_this.find('.name_en').text());
             $('#e_name_kh').val(_this.find('.name_kh').text());
             $('#e_email').val(_this.find('.email').text());

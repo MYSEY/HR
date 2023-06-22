@@ -12,6 +12,7 @@ class Trainer extends Model
     protected $table = 'trainers';
     protected $guarded = ['id'];
     protected $fillable = [
+        'company_name',
         'employee_id',
         'type',
         'name_en',

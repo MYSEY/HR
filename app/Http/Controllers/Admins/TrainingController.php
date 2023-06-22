@@ -88,17 +88,17 @@ class TrainingController extends Controller
      */
     public function store(Request $request)
     {
-        try {
+        // try {
             $data = $request->all();
             $data['created_by'] = Auth::user()->id;
             Training::create($data);
             Toastr::success('Training created successfully.','Success');
             return redirect()->back();
             DB::commit();
-        } catch (\Throwable $exp) {
-            DB::rollback();
-            Toastr::error('Training created fail.','Error');
-        }
+        // } catch (\Throwable $exp) {
+        //     DB::rollback();
+        //     Toastr::error('Training created fail.','Error');
+        // }
     }
 
     /**
@@ -143,11 +143,13 @@ class TrainingController extends Controller
         try{
             $dataUpdate = [
                 'training_type' => $request->training_type,
+                'course_name' => $request->course_name,
                 'trainer_id' => $request->trainer_id,
                 'employee_id' => $request->employee_id,
                 'cost_price' => $request->cost_price,
                 'start_date' => $request->start_date,
                 'end_date' => $request->end_date,
+                'duration_month' => $request->duration_month,
                 'remark' => $request->remark,
                 'status' => $request->status,
                 'updated_by' => Auth::user()->id 
