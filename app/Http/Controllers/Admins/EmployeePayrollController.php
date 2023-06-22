@@ -14,6 +14,7 @@ use App\Models\ExchangeRate;
 use App\Models\SeverancePay;
 use Illuminate\Http\Request;
 use App\Models\ChildrenInfor;
+use App\Models\GrossSalaryPay;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -75,51 +76,6 @@ class EmployeePayrollController extends Controller
             $employee = User::where('date_of_commencement','<=',$request->payment_date)->whereIn('emp_status',['Probation','1','2'])->get();
             foreach ($employee as $item) {
 
-                $PaymentOfMonth = Carbon::parse($request->payment_date)->format('M-Y');
-                $totalSeniority = 0;
-                if ($item->emp_status == 2) {
-                    $currentDate = Carbon::createFromDate($request->payment_date)->format('m');
-                    if ($currentDate == 6 || $currentDate == 12) {
-                        $nextYear = Carbon::now()->format('Y');
-                        $currentYear = null;
-                        $currentMonth = null;
-                        $preYear = Carbon::createFromDate($item->fdc_end)->format('Y');
-                        
-                        if($currentDate == 6){
-                            if ($preYear == $nextYear) {
-                                $currentYear = $item->fdc_end;
-                            }else{
-                                $currentYear =  Carbon::createFromDate($nextYear.'-01-01')->format('Y-m-d');
-                            }
-                        }
-
-                        if ($currentDate == 12) {
-                            $currentMonth = Carbon::createFromDate($nextYear.'-07-01')->format('Y-m-d');
-                        }
-                        $totalSalary = Payroll::where('employee_id', $item->id)->when($currentYear ,function ($query, $fdc_end) {
-                            $query->where('payment_date', '>=',$fdc_end);
-                        })->when($currentMonth, function($query, $currentMonth){
-                            $query->where('payment_date', '>=',$currentMonth);
-                        })->pluck('total_gross_salary')->avg();
-
-                        $totalSalaryReceive = ($totalSalary / 22) * 7.5;
-                        dd($totalSalaryReceive);
-
-                        $totaltaxableSalary = $totalSalaryReceive - $totalSalaryReceive;
-                        $paymentOfMonth = $PaymentOfMonth;
-                        $seniority = Seniority::create([
-                            'employee_id'           => $item->id,
-                            'total_average_salary'  => $totalSalary,
-                            'total_salary_receive'  => round($totalSalaryReceive, 2),
-                            'tax_exemption_salary'  => round($totalSalaryReceive, 2),
-                            'taxable_salary'        => $totaltaxableSalary,
-                            'payment_of_month'      => $paymentOfMonth,
-                            'created_by'            => Auth::user()->id,
-                        ]);
-                        $totalSeniority = $seniority->taxable_salary ?? 0;
-                    }
-                }
-                
                 //function first month join work
                 if (count(Payroll::where('employee_id',$item->id)->get()) == 0) {
                     //total day in months
@@ -148,10 +104,10 @@ class EmployeePayrollController extends Controller
                     $startDate = Carbon::parse($item->date_of_commencement);
                     $endDate = Carbon::parse($currentYear.'-'.$totalDayInMonth);
                     // dd($endDate);
-                    $days = $startDate->diffInDaysFiltered(function (Carbon $date) use ($holidays) {
+                    $totalDays = $startDate->diffInDaysFiltered(function (Carbon $date) use ($holidays) {
                         return $date->isWeekday() && !in_array($date, $holidays);
                     }, $endDate) + 1;
-                    $totalBasicSalary = $days * ($item->basic_salary / 22);
+                    $totalBasicSalary = $totalDays * ($item->basic_salary / 22);
                 } else {
                     $totalBasicSalary = $item->basic_salary;
                 }
@@ -192,45 +148,46 @@ class EmployeePayrollController extends Controller
                 $pension_contribution = $dataNSSF->pension_contribution_riel;
                 
                 //calculated khmer_new_year and pchumBen_bonus
-                $userJoinDate = $item->date_of_commencement;
-                $totdayDays = Carbon::now()->diffInDays($userJoinDate) + 1;
-                $years = Carbon::now()->diffInYears($userJoinDate);
-                $dayOf365 = 365;
-                $totalBunusKHBun = 0;
-                
-                $periodDate = '';
-                $totalFromDate= '';
-                $dataHolidayBunuse = Holiday::all();
-                foreach ($dataHolidayBunuse as $value) {
-                    $periodDate = Carbon::parse($value->period_month);
-                    $totalFromDate = Carbon::parse($value->from);
-                    $totalDaysBunuse = $periodDate->diffInDays($totalFromDate) - 1;
+                $totalBunus = 0;
+                if ($item->emp_status == 1) {
+                    $userJoinDate = $item->date_of_commencement;
+                    $totdayDays = Carbon::now()->diffInDays($userJoinDate) + 1;
+                    $years = Carbon::now()->diffInYears($userJoinDate);
+                    $dayOf365 = 365;
+                    $periodDate = '';
+                    $totalFromDate= '';
+                    $dataHolidayBunuse = Holiday::all();
+                    foreach ($dataHolidayBunuse as $value) {
+                        $periodDate = Carbon::parse($value->period_month);
+                        $totalFromDate = Carbon::parse($value->from);
+                        $totalDaysBunuse = $periodDate->diffInDays($totalFromDate) - 1;
 
-                    $days = $totdayDays + $totalDaysBunuse;
-                    if ($value->period_month == $request->payment_date) {
-                        if ($years != 0) {
-                            $percent = $value->amount_percent / 100;
-                            $totalAllowance = ($totalBasicSalary * $percent);
-                        } else {
-                            $percent = $value->amount_percent / 100;
-                            $totalPercent = ($totalBasicSalary * $percent);
-                            $percentSalary = $totalPercent * $days;
-                            $totalAllowance = $percentSalary / $dayOf365;
+                        $days = $totdayDays + $totalDaysBunuse;
+                        if ($value->period_month == $request->payment_date) {
+                            if ($years != 0) {
+                                $percent = $value->amount_percent / 100;
+                                $totalAllowance = ($totalBasicSalary * $percent);
+                            } else {
+                                $percent = $value->amount_percent / 100;
+                                $totalPercent = ($totalBasicSalary * $percent);
+                                $percentSalary = $totalPercent * $days;
+                                $totalAllowance = $percentSalary / $dayOf365;
+                            }
+                            $dataBonus = Bonus::create([
+                                'employee_id'   => $item->id,
+                                'number_of_working_days'    => $days,
+                                'base_salary'   => $totalBasicSalary,
+                                'base_salary_received'  => $totalBasicSalary,
+                                'total_allowance'   => $totalAllowance,
+                                'bouns_type'   => $value->title,
+                                'created_by'    => Auth::user()->id,
+                            ]);
                         }
-                        $bonus = Bonus::create([
-                            'employee_id'   => $item->id,
-                            'number_of_working_days'    => $days,
-                            'base_salary'   => $totalBasicSalary,
-                            'base_salary_received'  => $totalBasicSalary,
-                            'total_allowance'   => $totalAllowance,
-                            'bouns_type'   => $value->title,
-                            'created_by'    => Auth::user()->id,
-                        ]);
-                        $totalBunusKHBun = $bonus;
+                        $totalBunus = $dataBonus->total_allowance ?? 0;
                     }
                 }
-                $totalBunus = $totalBunusKHBun;
-                
+                // dd($totalBunus);
+
                 // sum benefit children < 18
                 $dataDateOfBirth = [];
                 $dataChildren = ChildrenInfor::where('employee_id',$item->id)->get();
@@ -257,16 +214,64 @@ class EmployeePayrollController extends Controller
                 }else{
                     $totalAmountChild = 0;
                 }
-        
-                //sum salary and sum other benefit
-                if ($request->khmer_new_year_pchum_ben_allowance != null) {
-                    $totalPaseSsalaryReceivedUsd = $totalBasicSalary + $totalBunus->total_allowance + $request->phone_allowance + $request->monthly_quarterly_bonuses + $request->annual_incentive_bonus + $totalAmountChild - $pension_contribution;
-                } else {
-                    $totalPaseSsalaryReceivedUsd = $totalBasicSalary + $request->phone_allowance + $request->monthly_quarterly_bonuses + $request->annual_incentive_bonus + $totalAmountChild - $pension_contribution;
+                
+                $grossSalary = $totalBasicSalary + $totalBunus + $item->phone_allowance + $totalAmountChild - $pension_contribution;
+                $dataGrossSalary = GrossSalaryPay::create([
+                    'employee_id'           => $item->id,
+                    'basic_salary'          => number_format($totalBasicSalary,2),
+                    'total_gross_salary'    => $grossSalary,
+                    'payment_date'          => $request->payment_date,
+                    'created_by'            => Auth::user()->id
+                ]);
+
+                //function Seniority pay
+                $PaymentOfMonth = Carbon::parse($request->payment_date)->format('M-Y');
+                if ($item->emp_status == 2) {
+                    $currentDate = Carbon::createFromDate($request->payment_date)->format('m');
+                    if ($currentDate == 6 || $currentDate == 12) {
+                        // $nextYear = Carbon::createFromDate($item->fdc_date)->format('Y');
+                        $nextYear = Carbon::now()->format('Y');
+                        $currentYear = null;
+                        $currentMonth = null;
+                        $preYear = Carbon::createFromDate($item->fdc_end)->format('Y');
+                        if($currentDate == 6){
+                            if ($preYear == $nextYear) {
+                                $currentYear = $item->fdc_end;
+                            }else{
+                                $currentYear =  Carbon::createFromDate($nextYear.'-01-01')->format('Y-m-d');
+                            }
+                        }
+                        if ($currentDate == 12) {
+                            $currentMonth = Carbon::createFromDate($nextYear.'-07-01')->format('Y-m-d');
+                        }
+                        
+                        $totalSalary = GrossSalaryPay::where('employee_id', $item->id)->when($currentYear ,function ($query, $fdc_end) {
+                            $query->where('payment_date', '>=',$fdc_end);
+                        })->when($currentMonth, function($query, $currentMonth){
+                            $query->where('payment_date', '>=',$currentMonth);
+                        })->pluck('total_gross_salary')->avg();
+
+                        $totalSalaryReceive = ($totalSalary / 22) * 7.5;
+                        $totaltaxableSalary = $totalSalaryReceive - $totalSalaryReceive;
+                        $paymentOfMonth = $PaymentOfMonth;
+                        $seniority = Seniority::create([
+                            'employee_id'   => $item->id,
+                            'total_average_salary'  => $totalSalary,
+                            'total_salary_receive'  => round($totalSalaryReceive, 2),
+                            'tax_exemption_salary'  => round($totalSalaryReceive, 2),
+                            'taxable_salary'        => $totaltaxableSalary,
+                            'payment_of_month'        => $paymentOfMonth,
+                            'created_by'        => Auth::user()->id,
+                        ]);
+                        $totalSeniority = $seniority->taxable_salary ?? 0;
+                    }
                 }
+                
+                //sum salary and sum other benefit
+                $totalGrossSalary = $dataGrossSalary->total_gross_salary;
 
                 //total exchange rate
-                $totalExchangeRiel =  $request->exchange_rate * $totalPaseSsalaryReceivedUsd;
+                $totalExchangeRiel =  $request->exchange_rate * $totalGrossSalary;
                 
                 //total that បូកបន្ថែមលើបន្ទុកកូននិងប្រពន្ធ
                 $totalChargesReducedChild = 150000;
@@ -355,7 +360,7 @@ class EmployeePayrollController extends Controller
                     $totalSalaryTaxUsd = round($totalSalaryTaxRiel / $request->exchange_rate,2);
 
                     //ពន្ធលើប្រាក់បៀវត្ស ដុល្លារ/USD
-                    $totalSalaryAfterTax = $totalPaseSsalaryReceivedUsd - $totalSalaryTaxUsd;
+                    $totalSalaryAfterTax = $totalGrossSalary - $totalSalaryTaxUsd;
                 } else if($number_of_children == 1 && $item->spouse == null) {
 
                     if($totalTtaxBbaseRiel >= 0 && $totalTtaxBbaseRiel <= 1500000){
@@ -386,7 +391,7 @@ class EmployeePayrollController extends Controller
                     $totalSalaryTaxUsd = round($totalSalaryTaxRiel / $request->exchange_rate, 2);
 
                     //ពន្ធលើប្រាក់បៀវត្ស ដុល្លារ/USD
-                    $totalSalaryAfterTax = $totalPaseSsalaryReceivedUsd - $totalSalaryTaxUsd;
+                    $totalSalaryAfterTax = $totalGrossSalary - $totalSalaryTaxUsd;
 
                 }else if($number_of_children == 1 && $item->spouse == 1) {
         
@@ -418,7 +423,7 @@ class EmployeePayrollController extends Controller
                     //ពន្ធលើប្រាក់បៀវត្ស រៀល/Riel
                     $totalSalaryTaxUsd = round($totalSalaryTaxRiel / $request->exchange_rate,2);
                     //ពន្ធលើប្រាក់បៀវត្ស ដុល្លារ/USD
-                    $totalSalaryAfterTax = $totalPaseSsalaryReceivedUsd - $totalSalaryTaxUsd;
+                    $totalSalaryAfterTax = $totalGrossSalary - $totalSalaryTaxUsd;
                 }else if($number_of_children == 2 && $item->spouse == null){
                     if($totalTtaxBbaseRiel >= 0 && $totalTtaxBbaseRiel <= 1500000){
                         $totalTax = 0;
@@ -448,7 +453,7 @@ class EmployeePayrollController extends Controller
                     //ពន្ធលើប្រាក់បៀវត្ស រៀល/Riel
                     $totalSalaryTaxUsd = round($totalSalaryTaxRiel / $request->exchange_rate,2);
                     //ពន្ធលើប្រាក់បៀវត្ស ដុល្លារ/USD
-                    $totalSalaryAfterTax = $totalPaseSsalaryReceivedUsd - $totalSalaryTaxUsd;
+                    $totalSalaryAfterTax = $totalGrossSalary - $totalSalaryTaxUsd;
                 }else if($number_of_children == 2 && $item->spouse == 1){
                     if($totalTtaxBbaseRiel >= 0 && $totalTtaxBbaseRiel <= 1500000){
                         $totalTax = 0;
@@ -478,7 +483,7 @@ class EmployeePayrollController extends Controller
                     //ពន្ធលើប្រាក់បៀវត្ស រៀល/Riel
                     $totalSalaryTaxUsd = round($totalSalaryTaxRiel / $request->exchange_rate,2);
                     //ពន្ធលើប្រាក់បៀវត្ស ដុល្លារ/USD
-                    $totalSalaryAfterTax = $totalPaseSsalaryReceivedUsd - $totalSalaryTaxUsd;
+                    $totalSalaryAfterTax = $totalGrossSalary - $totalSalaryTaxUsd;
                 }else if($number_of_children == 3 && $item->spouse == null){
                     if($totalTtaxBbaseRiel >= 0 && $totalTtaxBbaseRiel <= 1500000){
                         $totalTax = 0;
@@ -508,7 +513,7 @@ class EmployeePayrollController extends Controller
                     //ពន្ធលើប្រាក់បៀវត្ស រៀល/Riel
                     $totalSalaryTaxUsd = round($totalSalaryTaxRiel / $request->exchange_rate,2);
                     //ពន្ធលើប្រាក់បៀវត្ស ដុល្លារ/USD
-                    $totalSalaryAfterTax = $totalPaseSsalaryReceivedUsd - $totalSalaryTaxUsd;
+                    $totalSalaryAfterTax = $totalGrossSalary - $totalSalaryTaxUsd;
                 }else if($number_of_children == 3 && $item->spouse == 1){
                     if($totalTtaxBbaseRiel >= 0 && $totalTtaxBbaseRiel <= 1500000){
                         $totalTax = 0;
@@ -538,7 +543,7 @@ class EmployeePayrollController extends Controller
                     //ពន្ធលើប្រាក់បៀវត្ស រៀល/Riel
                     $totalSalaryTaxUsd = round($totalSalaryTaxRiel / $request->exchange_rate,2);
                     //ពន្ធលើប្រាក់បៀវត្ស ដុល្លារ/USD
-                    $totalSalaryAfterTax = $totalPaseSsalaryReceivedUsd - $totalSalaryTaxUsd;
+                    $totalSalaryAfterTax = $totalGrossSalary - $totalSalaryTaxUsd;
                 }else if($number_of_children == 4 && $item->spouse == null){
                     if($totalTtaxBbaseRiel >= 0 && $totalTtaxBbaseRiel <= 1500000){
                         $totalTax = 0;
@@ -568,7 +573,7 @@ class EmployeePayrollController extends Controller
                     //ពន្ធលើប្រាក់បៀវត្ស រៀល/Riel
                     $totalSalaryTaxUsd = round($totalSalaryTaxRiel / $request->exchange_rate,2);
                     //ពន្ធលើប្រាក់បៀវត្ស ដុល្លារ/USD
-                    $totalSalaryAfterTax = $totalPaseSsalaryReceivedUsd - $totalSalaryTaxUsd;
+                    $totalSalaryAfterTax = $totalGrossSalary - $totalSalaryTaxUsd;
                 }else if($number_of_children == 4 && $item->spouse == 1){
                     if($totalTtaxBbaseRiel >= 0 && $totalTtaxBbaseRiel <= 1500000){
                         $totalTax = 0;
@@ -598,96 +603,48 @@ class EmployeePayrollController extends Controller
                     //ពន្ធលើប្រាក់បៀវត្ស រៀល/Riel
                     $totalSalaryTaxUsd = round($totalSalaryTaxRiel / $request->exchange_rate,2);
                     //ពន្ធលើប្រាក់បៀវត្ស ដុល្លារ/USD
-                    $totalSalaryAfterTax = $totalPaseSsalaryReceivedUsd - $totalSalaryTaxUsd;
+                    $totalSalaryAfterTax = $totalGrossSalary - $totalSalaryTaxUsd;
                 }
-                // dd($children);
-            
+
+                //function Severance Pay
+                if ($item->emp_status == 1) {
+                    $severancePay = GrossSalaryPay::where('employee_id',$item->id)->get();
+                    if (count($severancePay) == 15) {
+                        $dataSeveranc = GrossSalaryPay::where('employee_id', $item->id)->where('payment_date', '>=',$item->fdc_date)->sum('total_gross_salary');
+                        $totalContractSeverancePay = $dataSeveranc * 0.05;
+                        $dataSeverance = SeverancePay::create([
+                            'employee_id'                   => $item->id,
+                            'total_severanec_pay'           => $dataSeveranc,
+                            'total_contract_severance_pay'  => $totalContractSeverancePay,
+                            'created_by'                    => Auth::user()->id,
+                        ]);
+                        $totalSeverancePay = $dataSeverance->total_contract_severance_pay;
+                    }else{
+                        $totalSeverancePay = 0;
+                    }
+                }else{
+                    $totalSeverancePay = 0;
+                }
+                
+                $totalNetSalary = $totalSalaryAfterTax + $totalSeverancePay;
 
                 $data   = $request->all();
                 $data['employee_id']                    = $item->id;
                 $data['basic_salary']                   = number_format($totalBasicSalary,2);
                 $data['children']                       = $children;
-                $data['total_gross_salary']             = number_format($totalBasicSalary,2);
+                $data['total_gross_salary']             = number_format($grossSalary,2);
                 $data['total_child_allowance']          = $totalAmountChild;
                 $data['phone_allowance']                = $item->phone_allowance;
-                $data['monthly_quarterly_bonuses']      = $request->monthly_quarterly_bonuses;
-                $data['annual_incentive_bonus']         = $request->annual_incentive_bonus;
-                $data['base_salary_received_usd']       = number_format($totalPaseSsalaryReceivedUsd,2);
+                $data['base_salary_received_usd']       = number_format($totalGrossSalary,2);
                 $data['base_salary_received_riel']      = number_format($totalExchangeRiel);
                 $data['total_tax_base_riel']            = number_format($totalTtaxBbaseRiel);
                 $data['total_charges_reduced']          = number_format($totalChargesReduced);
                 $data['total_rate']                     = $totalTax;
                 $data['total_salary_tax_riel']          = number_format($totalSalaryTaxRiel);
                 $data['total_salary_tax_usd']           = $totalSalaryTaxUsd;
-                $data['total_salary']                   = round($totalSalaryAfterTax,2);
+                $data['total_salary']                   = round($totalNetSalary,2);
                 $data['created_by']                     = Auth::user()->id;
-
-                $payrolle = Payroll::create($data);
-
-                //function create Seniority
-                if ($payrolle) {
-                    $PaymentOfMonth = Carbon::parse($request->payment_date)->format('M-Y');
-                    $totalSeniority = 0;
-                    if ($item->emp_status == 2) {
-                        $currentDate = Carbon::createFromDate($request->payment_date)->format('m');
-                        if ($currentDate == 6 || $currentDate == 12) {
-                            // $nextYear = Carbon::createFromDate($item->fdc_date)->format('Y');
-                            $nextYear = Carbon::now()->format('Y');
-                            $currentYear = null;
-                            $currentMonth = null;
-                            $preYear = Carbon::createFromDate($item->fdc_end)->format('Y');
-                            if($currentDate == 6){
-                                if ($preYear == $nextYear) {
-                                    $currentYear = $item->fdc_end;
-                                }else{
-                                    $currentYear =  Carbon::createFromDate($nextYear.'-01-01')->format('Y-m-d');
-                                }
-                            }
-                            if ($currentDate == 12) {
-                                $currentMonth = Carbon::createFromDate($nextYear.'-07-01')->format('Y-m-d');
-                            }
-                            
-                            $totalSalary = Payroll::where('employee_id', $item->id)->when($currentYear ,function ($query, $fdc_end) {
-                                $query->where('payment_date', '>=',$fdc_end);
-                            })->when($currentMonth, function($query, $currentMonth){
-                                $query->where('payment_date', '>=',$currentMonth);
-                            })->pluck('total_gross_salary')->avg();
-
-                            $totalSalaryReceive = ($totalSalary / 22) * 7.5;
-                            $totaltaxableSalary = $totalSalaryReceive - $totalSalaryReceive;
-                            $paymentOfMonth = $PaymentOfMonth;
-                            $seniority = Seniority::create([
-                                'employee_id'   => $item->id,
-                                'total_average_salary'  => $totalSalary,
-                                'total_salary_receive'  => round($totalSalaryReceive, 2),
-                                'tax_exemption_salary'  => round($totalSalaryReceive, 2),
-                                'taxable_salary'        => $totaltaxableSalary,
-                                'payment_of_month'        => $paymentOfMonth,
-                                'created_by'        => Auth::user()->id,
-                            ]);
-                            $totalSeniority = $seniority->taxable_salary ?? 0;
-                        }
-                    }
-
-                    if ($item->emp_status == 1) {
-                        $severancePay = Payroll::where('employee_id',$item->id)->get();
-                        if (count($severancePay) == 15) {
-                            $totalSeverancePay = Payroll::where('employee_id', $item->id)->where('payment_date', '>=',$item->fdc_date)->sum('total_gross_salary');
-                            $totalContractSeverancePay = $totalSeverancePay * 0.05;
-                            $dataSeverance = SeverancePay::create([
-                                'employee_id'                   => $item->id,
-                                'total_severanec_pay'           => $totalSeverancePay,
-                                'total_contract_severance_pay'  => $totalContractSeverancePay,
-                                'created_by'                    => Auth::user()->id,
-                            ]);
-                            $totalSeverancePay = $dataSeverance->total_contract_severance_pay ?? 0;
-                            $totalNetSalary = $totalSeverancePay + $payrolle->total_salary;
-                            Payroll::where('id',$payrolle->id)->update([
-                                'total_salary'  => $totalNetSalary, 
-                            ]);
-                        }
-                    }
-                }
+                Payroll::create($data);
             }
             
             //end function create Seniority

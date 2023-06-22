@@ -21,8 +21,6 @@ return new class extends Migration
             $table->date('payment_date')->nullable();
             $table->decimal('total_child_allowance')->nullable();
             $table->decimal('phone_allowance')->nullable();
-            $table->decimal('monthly_quarterly_bonuses')->nullable();
-            $table->integer('annual_incentive_bonus')->nullable();
             $table->decimal('seniority_payable_tax')->nullable();
             $table->decimal('base_salary_received_usd')->nullable();
             $table->string('base_salary_received_riel')->nullable();

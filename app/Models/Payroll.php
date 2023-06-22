@@ -27,8 +27,6 @@ class Payroll extends Model
         'spouse',
         'total_child_allowance',
         'phone_allowance',
-        'monthly_quarterly_bonuses',
-        'annual_incentive_bonus',
         'seniority_payable_tax',
         'base_salary_received_usd',
         'base_salary_received_riel',

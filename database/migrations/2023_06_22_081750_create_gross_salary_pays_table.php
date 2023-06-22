@@ -13,14 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('bonuses', function (Blueprint $table) {
+        Schema::create('gross_salary_pays', function (Blueprint $table) {
             $table->id();
-            $table->integer('employee_id');
-            $table->string('number_of_working_days')->nullable();
-            $table->decimal('base_salary')->default(0);
-            $table->decimal('base_salary_received')->default(0);
-            $table->decimal('total_allowance')->default(0);
-            $table->string('bouns_type')->nullable();
+            $table->integer('employee_id')->nullable();
+            $table->decimal('basic_salary')->default(0);
+            $table->decimal('total_gross_salary')->default(0);
+            $table->date('payment_date')->nullable();
             $table->bigInteger('created_by')->unsigned()->nullable();
             $table->bigInteger('updated_by')->unsigned()->nullable();
             $table->dateTime('deleted_at')->nullable();
@@ -35,6 +33,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('bonuses');
+        Schema::dropIfExists('gross_salary_pays');
     }
 };

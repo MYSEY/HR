@@ -11,8 +11,7 @@
             </div>
             <div class="col-auto float-end ms-auto">
                 @if (Auth::user()->RolePermission == 'Administrator')
-                    <a href="#" class="btn add-btn" data-bs-toggle="modal" data-bs-target="#add_salary"><i
-                            class="fa fa-plus"></i> Add New</a>
+                    <a href="#" class="btn add-btn" data-bs-toggle="modal" data-bs-target="#add_salary"><i class="fa fa-plus"></i> Add New</a>
                 @endif
             </div>
         </div>
@@ -24,16 +23,13 @@
                 <div class="col-sm-12">
                     <ul class="nav nav-tabs nav-tabs-bottom" role="tablist">
                         <li class="nav-item" role="presentation">
-                            <a class="nav-link active" data-bs-toggle="tab" href="#tab_basic_salary" aria-selected="true"
-                                role="tab">Basic Salary</a>
+                            <a class="nav-link active" data-bs-toggle="tab" href="#tab_basic_salary" aria-selected="true" role="tab">Basic Salary</a>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <a class="nav-link" data-bs-toggle="tab" href="#tab_NSSF" aria-selected="false" role="tab"
-                                tabindex="-1">NSSF</a>
+                            <a class="nav-link" data-bs-toggle="tab" href="#tab_NSSF" aria-selected="false" role="tab" tabindex="-1">NSSF</a>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <a class="nav-link" data-bs-toggle="tab" href="#tab_Seniority" aria-selected="false"
-                                role="tab" tabindex="-1">Seniority</a>
+                            <a class="nav-link" data-bs-toggle="tab" href="#tab_Seniority" aria-selected="false" role="tab" tabindex="-1">Seniority</a>
                         </li>
                     </ul>
                 </div>
@@ -52,6 +48,7 @@
                                             id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
                                             <thead>
                                                 <tr>
+                                                    <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Profle: activate to sort column descending" style="width: 265.913px;">#</th>
                                                     <th class="sorting sorting_asc" tabindex="0"
                                                         aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
                                                         aria-sort="ascending"
@@ -73,6 +70,18 @@
                                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                         rowspan="1" colspan="1"
                                                         aria-label="Join Date: activate to sort column ascending">Join Date
+                                                    </th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                        rowspan="1" colspan="1"
+                                                        aria-label="Join Date: activate to sort column ascending">Basic Salary
+                                                    </th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                        rowspan="1" colspan="1"
+                                                        aria-label="Join Date: activate to sort column ascending">Total Gross Salary
+                                                    </th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                        rowspan="1" colspan="1"
+                                                        aria-label="Join Date: activate to sort column ascending">Phone Allowance
                                                     </th>
                                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                         rowspan="1" colspan="1"
@@ -99,34 +108,32 @@
                                                 @if (count($data) > 0)
                                                     @foreach ($data as $item)
                                                         <tr class="odd">
+                                                            <td class="ids">{{$item->id}}</td>
                                                             <td class="sorting_1">
-                                                                @if ($item->profile != null)
-                                                                    <a href="#" class="avatar">
-                                                                        <img src="{{ asset('/uploads/images/' . $item->users->profile) }}"
-                                                                            alt="">
-                                                                    </a>
-                                                                @else
-                                                                    <a
-                                                                        href="{{ asset('admin/img/defuals/default-user-icon.png') }}">
-                                                                        <img alt=""
-                                                                            src="{{ asset('admin/img/defuals/default-user-icon.png') }}">
-                                                                    </a>
-                                                                @endif
+                                                                <h2 class="table-avatar">
+                                                                    @if ($item->profile != null)
+                                                                        <a href="{{ asset('/uploads/images/' . $item->users->profile) }}" class="avatar">
+                                                                            <img src="{{ asset('/uploads/images/' . $item->users->profile) }}" alt="">
+                                                                        </a>
+                                                                    @else
+                                                                        <a href="{{asset('admin/img/defuals/default-user-icon.png')}}">
+                                                                            <img alt="" src="{{asset('admin/img/defuals/default-user-icon.png')}}">
+                                                                        </a>
+                                                                    @endif
+                                                                </h2>
                                                             </td>
                                                             <td> <a href="#">{{ $item->users == null ? '' : $item->users->employee_name_en }}</span></a></td>
                                                             <td>{{ $item->users == null ? '' : $item->users->number_employee }}</td>
-                                                            <td>{{ $item->users == null ? '' : $item->users->EmployeeDepartment }}
-                                                            </td>
-                                                            <td>{{ $item->users == null ? '' : $item->users->EmployeeBranch }}
-                                                            </td>
-                                                            <td>{{ $item->users == null ? '' : $item->users->joinOfDate }}
-                                                            </td>
+                                                            <td>{{ $item->users == null ? '' : $item->users->EmployeeDepartment }}</td>
+                                                            <td>{{ $item->users == null ? '' : $item->users->EmployeeBranch }}</td>
+                                                            <td>{{ $item->users == null ? '' : $item->users->joinOfDate }}</td>
+                                                            <td>$ <a href="#">{{ $item->basic_salary }}</a></td>
+                                                            <td>$ <a href="#">{{ $item->total_gross_salary }}</a></td>
+                                                            <td>{{ $item->phone_allowance }}</td>
                                                             <td>$ <a href="#">{{ $item->total_salary }}</a></td>
                                                             <td>{{ $item->PayrollDate }}</td>
                                                             <td>{{ $item->Created }}</td>
-                                                            <td><a class="btn btn-sm btn-primary"
-                                                                    href="{{ url('payslip', $item->employee_id) }}">Generate
-                                                                    Slip</a></td>
+                                                            <td><a class="btn btn-sm btn-primary" href="{{ url('payslip', $item->employee_id) }}">Generate Slip</a></td>
                                                             <td class="text-end">
                                                                 <div class="dropdown dropdown-action">
                                                                     <a href="#" class="action-icon dropdown-toggle"
@@ -169,10 +176,10 @@
                             <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                                 <div class="row">
                                     <div class="col-sm-12">
-                                        <table class="table table-striped custom-table datatable dataTable no-footer"
-                                            id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
+                                        <table class="table table-striped custom-table datatable dataTable no-footer" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
                                             <thead>
                                                 <tr>
+                                                    
                                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                         rowspan="1" colspan="1">Employee ID</th>
                                                     <th class="sorting sorting_asc" tabindex="0"
@@ -231,26 +238,21 @@
                                                         <tr class="odd">
                                                             <td><a href="#">{{ $item->users == null ? '' : $item->users->number_employee }}</a></td>
                                                             <td><a href="#">{{ $item->users == null ? '' : $item->users->employee_name_en }}</a></td></td></td>
-                                                            <td>{{ $item->users == null ? '' : $item->users->joinOfDate }}
-                                                            </td>
-                                                            <td>$ {{ $item->total_pre_tax_salary_usd }}
-                                                            </td>
+                                                            <td>{{ $item->users == null ? '' : $item->users->joinOfDate }}</td>
+                                                            <td>$ {{ $item->total_pre_tax_salary_usd }}</td>
                                                             <td><span>៛</span> {{ $item->total_pre_tax_salary_riel }}</td>
                                                             <td>{{ $item->total_average_wage }}</td>
                                                             <td>{{ $item->total_occupational_risk }}</td>
                                                             <td>{{ $item->total_health_care }}</td>
-                                                            <td>$ {{ $item->pension_contribution_usd }}
-                                                            </td>
+                                                            <td>$ {{ $item->pension_contribution_usd }}</td>
                                                             <td><span></span> {{ $item->pension_contribution_riel }}</td>
                                                             <td>{{ $item->corporate_contribution }}</td>
-                                                            <td>{{ Carbon\Carbon::parse($item->created_at)->format('d-M-Y') }}
-                                                            </td>
+                                                            <td>{{ Carbon\Carbon::parse($item->created_at)->format('d-M-Y') }}</td>
                                                         </tr>
                                                     @endforeach
                                                 @else
                                                     <tr>
-                                                        <td colspan="16" style="text-align: center">No record to display
-                                                        </td>
+                                                        <td colspan="18" style="text-align: center">No record to display</td>
                                                     </tr>
                                                 @endif
                                             </tbody>
