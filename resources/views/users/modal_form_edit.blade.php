@@ -38,7 +38,6 @@
                                 <input type="hidden" name="hidden_image" id="e_profile" value="">
                             </div>
                         </div>
-                        
                     </div>
                     <div class="row"> 
                         <div class="col-sm-6"> 
@@ -204,6 +203,22 @@
                         </div>
                     </div>
                     --}}
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="">Position Type</label>
+                                <select class="select form-control" id="e_position_type" name="position_type" value="{{old('position_type')}}">
+                                    <option value="">Please select position type</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <label>Loan</label>
+                            <select class="select form-control" id="e_is_loan" name="is_loan" value="{{old('is_loan')}}">
+                                <option value="">Please select loan</option>
+                            </select>
+                        </div>
+                    </div>
                     <div class="col-sm-12">
                         <div class="form-group">
                             <label class="">Remark</label>

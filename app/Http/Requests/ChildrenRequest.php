@@ -24,8 +24,8 @@ class ChildrenRequest extends FormRequest
     public function rules()
     {
         return [
-            'employee_id' => 'required|integer',
-            'name' => 'required|string|max:255',
+            'employee_id' => 'required',
+            'name' => 'required',
             'date_of_birth' => 'required',
         ];
     }

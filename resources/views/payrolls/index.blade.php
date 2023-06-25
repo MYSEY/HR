@@ -77,11 +77,19 @@
                                                     </th>
                                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                         rowspan="1" colspan="1"
-                                                        aria-label="Join Date: activate to sort column ascending">Total Gross Salary
+                                                        aria-label="Join Date: activate to sort column ascending">Child Allowance
                                                     </th>
                                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                         rowspan="1" colspan="1"
                                                         aria-label="Join Date: activate to sort column ascending">Phone Allowance
+                                                    </th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                        rowspan="1" colspan="1"
+                                                        aria-label="Join Date: activate to sort column ascending">KNY / Pchum Ben
+                                                    </th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                        rowspan="1" colspan="1"
+                                                        aria-label="Join Date: activate to sort column ascending">Total Gross Salary
                                                     </th>
                                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                         rowspan="1" colspan="1"
@@ -128,8 +136,10 @@
                                                             <td>{{ $item->users == null ? '' : $item->users->EmployeeBranch }}</td>
                                                             <td>{{ $item->users == null ? '' : $item->users->joinOfDate }}</td>
                                                             <td>$ <a href="#">{{ $item->basic_salary }}</a></td>
+                                                            <td>$ <a href="#">{{ $item->total_child_allowance }}</a></td>
+                                                            <td>$ <a href="#">{{ $item->phone_allowance }}</a></td>
+                                                            <td>$ <a href="#">{{ $item->total_kny_phcumben}}</a></td>
                                                             <td>$ <a href="#">{{ $item->total_gross_salary }}</a></td>
-                                                            <td>{{ $item->phone_allowance }}</td>
                                                             <td>$ <a href="#">{{ $item->total_salary }}</a></td>
                                                             <td>{{ $item->PayrollDate }}</td>
                                                             <td>{{ $item->Created }}</td>
@@ -179,7 +189,6 @@
                                         <table class="table table-striped custom-table datatable dataTable no-footer" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
                                             <thead>
                                                 <tr>
-                                                    
                                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                         rowspan="1" colspan="1">Employee ID</th>
                                                     <th class="sorting sorting_asc" tabindex="0"
@@ -187,9 +196,6 @@
                                                         aria-sort="ascending"
                                                         aria-label="Employee: activate to sort column descending">Full Name
                                                     </th>
-                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                        rowspan="1" colspan="1"
-                                                        aria-label="Email: activate to sort column ascending">Position</th>
                                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                         rowspan="1" colspan="1"
                                                         aria-label="Join Date: activate to sort column ascending">Join Date

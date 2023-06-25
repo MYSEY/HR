@@ -43,18 +43,18 @@
                                 <select class="form-control @error('role_id') is-invalid @enderror" name="role_id" id="role_id" required>
                                     <option selected disabled value=""> --Select --</option>
                                     @foreach ($role as $itme )
-                                    <option value="{{ $itme->id }}">{{ $itme->name }}</option>
+                                        <option value="{{ $itme->id }}">{{ $itme->name }}</option>
                                     @endforeach
                                 </select>
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label>Position</label>
-                                <select class="select form-control @error('position_id') is-invalid @enderror" name="position_id" id="position_id">
-                                    <option selected disabled> --Select --</option>
+                                <label>Position <span class="text-danger">*</span></label>
+                                <select class="form-control @error('position_id') is-invalid @enderror" name="position_id" id="position_id" required>
+                                    <option selected disabled value=""> --Select --</option>
                                     @foreach ($position as $positions )
-                                    <option value="{{ $positions->id }}">{{ $positions->name_english }}</option>
+                                        <option value="{{ $positions->id }}">{{ $positions->name_english }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -101,7 +101,7 @@
                                 <select class="select form-control" id="branch_id" name="branch_id" value="{{old('branch_id')}}">
                                     <option value="">Please select branch</option>
                                     @foreach ($branch as $item)
-                                    <option value="{{$item->id}}">{{$item->branch_name_en}}</option>
+                                        <option value="{{$item->id}}">{{$item->branch_name_en}}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -210,6 +210,28 @@
                         <div class="col-sm-6">
                             <label>Confirm Password</label>
                             <input type="password" class="form-control" required name="password_confirmation" placeholder="">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="">Position Type</label>
+                                <select class="select form-control" id="position_type" name="position_type" value="{{old('position_type')}}">
+                                    <option value="">Please select position type</option>
+                                    @foreach ($optionPositionType as $item)
+                                        <option value="{{$item->id}}">{{$item->name_english}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <label>Loan</label>
+                            <select class="select form-control" id="is_loan" name="is_loan" value="{{old('is_loan')}}">
+                                <option value="">Please select loan</option>
+                                @foreach ($optionLoan as $item)
+                                    <option value="{{$item->id}}">{{$item->name_english}}</option>
+                                @endforeach
+                            </select>
                         </div>
                     </div>
                     <div class="col-sm-12">

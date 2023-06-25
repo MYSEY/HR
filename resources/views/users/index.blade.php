@@ -410,6 +410,7 @@
                 dataType: "JSON",
                 success: function (response) {
                     if (response.success) {
+                        console.log(response.success);
                         if (response.role != '') {
                             $('#e_role_id').html('<option selected disabled> --Select --</option>');
                             $.each(response.role, function(i, item) {
@@ -469,6 +470,25 @@
                                     value: item.name_english,
                                     text: item.name_english,
                                     selected: item.id == response.success.identity_type
+                                }));
+                            });
+                        }
+
+                        if (response.optionPositionType != '') {
+                            $.each(response.optionPositionType, function(i, item) {
+                                $('#e_position_type').append($('<option>', {
+                                    value: item.id,
+                                    text: item.name_english,
+                                    selected: item.id == response.success.position_type
+                                }));
+                            });
+                        }
+                        if (response.optionLoan != '') {
+                            $.each(response.optionLoan, function(i, item) {
+                                $('#e_is_loan').append($('<option>', {
+                                    value: item.id,
+                                    text: item.name_english,
+                                    selected: item.id == response.success.is_loan
                                 }));
                             });
                         }

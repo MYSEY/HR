@@ -27,6 +27,7 @@ class Payroll extends Model
         'spouse',
         'total_child_allowance',
         'phone_allowance',
+        'total_kny_phcumben',
         'seniority_payable_tax',
         'base_salary_received_usd',
         'base_salary_received_riel',
@@ -57,10 +58,6 @@ class Payroll extends Model
             'branch_id',
             'date_of_commencement'])
         ->with('department')->with('position')->with('branch');
-    }
-
-    public function bunus(){
-        return $this->belongsTo(Bonus::class ,'employee_id');
     }
     public function NSSF(){
         return $this->belongsTo(NationalSocialSecurityFund::class ,'employee_id');

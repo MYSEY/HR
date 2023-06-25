@@ -320,6 +320,33 @@ class OptionSeeder extends Seeder
             'type' => 'emp_status',
             'created_by'    => Auth::id(),
         ]);
+        
+        //position type
+        Option::firstOrCreate([
+            'name_khmer' => 'Supporting Staff',
+            'name_english'=> 'Supporting Staff',
+            'type' => 'position_type',
+            'created_by'    => Auth::id(),
+        ]);
+        Option::firstOrCreate([
+            'name_khmer' => 'Field Staff',
+            'name_english'=> 'Field Staff',
+            'type' => 'position_type',
+            'created_by'    => Auth::id(),
+        ]);
+        // loan
+        Option::firstOrCreate([
+            'name_khmer' => 'Yes',
+            'name_english'=> 'Yes',
+            'type' => 'loan',
+            'created_by'    => Auth::id(),
+        ]);
+        Option::firstOrCreate([
+            'name_khmer' => 'No',
+            'name_english'=> 'No',
+            'type' => 'loan',
+            'created_by'    => Auth::id(),
+        ]);
 
     }
 }

@@ -50,11 +50,26 @@ class UserController extends Controller
         $optionStatus = Option::where('type','status')->get();
         $autoEmpId   = $this->generate_EmployeeId(Carbon::today())['number_employee'];
         $optionGender = Option::where('type','gender')->get();
+        $optionPositionType = Option::where('type','position_type')->get();
+        $optionLoan = Option::where('type','loan')->get();
         $branch = Branchs::all();
         $province = Province::all();
         $bank = Bank::all();
         $optionIdentityType = Option::where('type','identity_type')->get();
-        return view('users.index',compact('data','role','position','department','optionStatus','autoEmpId','optionGender','branch','optionIdentityType', 'province','bank'));
+        return view('users.index',compact('data',
+                                            'role',
+                                            'position',
+                                            'department',
+                                            'optionStatus',
+                                            'autoEmpId',
+                                            'optionGender',
+                                            'branch',
+                                            'optionIdentityType', 
+                                            'province',
+                                            'bank',
+                                            'optionPositionType',
+                                            'optionLoan'
+                                        ));
     }
 
     public function showDetailBirthday (Request $request){
@@ -128,6 +143,8 @@ class UserController extends Controller
         $optionGender = Option::where('type','gender')->get();
         $branch = Branchs::all();
         $optionIdentityType = Option::where('type','identity_type')->get();
+        $optionPositionType = Option::where('type','position_type')->get();
+        $optionLoan = Option::where('type','loan')->get();
         $bank = Bank::all();
         $province = Province::all();
         $district = District::where('province_id',$data->current_province)->orWhere("province_id",$data->permanent_province )->get();
@@ -146,6 +163,8 @@ class UserController extends Controller
             'district'=>$district,
             'conmmunes'=>$conmmunes,
             'villages'=>$villages,
+            'optionPositionType'=>$optionPositionType,
+            'optionLoan'=>$optionLoan
         ]);
     }
 

@@ -107,7 +107,9 @@ class EmployeeRepository extends BaseRepository
             'gender'  => $request->gender,
             'role_id'  => $request->role_id,
             'basic_salary'  => $request->basic_salary,
+            'phone_allowance'  => $request->phone_allowance,
             'position_id'  => $request->position_id,
+            'position_type'  => $request->position_type,
             'department_id'  => $request->department_id,
             'date_of_birth'  => $request->date_of_birth,
             'email'  => $request->email,
@@ -144,6 +146,7 @@ class EmployeeRepository extends BaseRepository
             'guarantee_letter'  => $filenameGuarant,
             'employment_book'  => $filenameBook,
             'updated_by'  => Auth::user()->id,
+            'is_loan'  => $request->is_loan
         ]);
     }
 }
