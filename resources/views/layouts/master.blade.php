@@ -40,6 +40,9 @@
     <link href="{{ asset('admin/css/fullcalendar.min.css') }}" rel="stylesheet" type="text/css">
 
     <link rel="stylesheet" href="{{ asset('admin/css/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('admin/css/noty.css')}}">
+    {{-- <link rel="stylesheet" href="{{ asset('admin/css/noty.css.map')}}"> --}}
+    <link rel="stylesheet" href="{{ asset('admin/css/mint.css')}}">
     {{-- message toastr --}}
 	<link rel="stylesheet" href="{{ asset('admin/css/toastr.min.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
@@ -257,6 +260,8 @@
     {{-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> --}}
     <script src="{{asset('/admin/js/chart_board.js')}}"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0/dist/chartjs-plugin-datalabels.min.js"></script>
+    <script type="text/javascript" src="{{asset('/admin/js/noty.js')}}"></script>
+    <script type="text/javascript" src="{{asset('/admin/js/noty.min.js')}}"></script>
 
     <div class="sidebar-overlay"></div>
 </body>

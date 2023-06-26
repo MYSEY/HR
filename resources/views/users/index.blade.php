@@ -714,9 +714,9 @@
                                             title: "",
                                             text: "The process has been successfully.",
                                             type: "success",
+                                            timeout: 3000,
                                             icon: true
                                         }).show();
-                                        $('.card-footer').remove();
                                         window.location.replace("{{ URL('users') }}"); 
                                     }
                                 }).catch(function(error) {

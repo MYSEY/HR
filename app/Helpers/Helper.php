@@ -29,7 +29,13 @@ class Helper
         }
         return $val;
     }
-    
+    static function isUrl($value)
+    {
+        if (!empty($value) && filter_var($value, FILTER_VALIDATE_URL) !== false) {
+            return true;
+        }
+        return false;
+    }
     /**
      * @param int $value
      * @param int $length

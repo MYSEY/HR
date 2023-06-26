@@ -243,12 +243,14 @@ class UserController extends Controller
                 $totalOldDay = $totalDayInMonth - $totalNewDays;
                 $totalOldSalary = ($dataSalary->basic_salary / $totalDayInMonth)  * $totalOldDay;
                 
-                $totalSalary = $totalnewSalary + $totalOldSalary;
+                $totalPreSalary = $totalnewSalary + $totalOldSalary;
+                // dd($totalPreSalary);
                 User::where('id',$request->id)->update([
                     'emp_status' => $request->emp_status,
                     'fdc_date' => $request->start_date,
                     'fdc_end' => $request->end_dete,
-                    'basic_salary' => number_format($totalSalary, 2),
+                    'basic_salary' => number_format($request->new_salary, 2),
+                    'pre_salary' => number_format($totalPreSalary, 2),
                     'resign_reason' => $request->resign_reason
                 ]);
             }else if($request->emp_status == 2){
