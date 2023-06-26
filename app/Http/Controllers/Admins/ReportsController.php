@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Branchs;
 use App\Models\Position;
 use App\Models\StaffPromoted;
+use App\Models\Trainer;
+use App\Models\Training;
 use App\Models\Transferred;
 use App\Models\User;
 use Carbon\Carbon;
@@ -165,6 +167,42 @@ class ReportsController extends Controller
         }
     }
 
+    public function trainingReport(Request $request){
+        $start_date = null;
+        $end_date = null;
+        if ($request->start_date) {
+            $start_date = Carbon::createFromDate($request->start_date)->format('Y-m-d H:i:s');
+        }
+        if ($request->end_date) {
+            $end_date = Carbon::createFromDate($request->end_date)->format('Y-m-d H:i:s');
+        }
+        $data = Training::
+        when($start_date, function ($query, $start_date) {
+            $query->where('start_date', '>=', $start_date);
+        })
+        ->when($end_date, function ($query, $end_date) {
+            $query->where('end_date','<=', $end_date);
+        })
+        ->get();
+        $dataTrainings = [];
+        foreach ($data as $key => $item) {
+            $dataTrainer = Trainer::whereIn('id', $item->trainer_id)->with("employee")->get();
+            $em =  User::whereIn('id', $item->employee_id)
+            ->when($request->employee_id, function ($query, $employee_id) {
+                $query->where('number_employee', 'LIKE', '%'.$employee_id.'%');
+            })
+            ->when($request->employee_name, function ($query, $employee_name) {
+                $query->where('employee_name_en', 'LIKE', '%'.$employee_name.'%');
+                $query->orWhere('employee_name_kh', 'LIKE', '%'.$employee_name.'%');
+            })
+            ->with("gender")->with("position")->with("branch")
+            ->get();
+            $item["trainers"] = $dataTrainer;
+            $item["employees"] = $em;
+            $dataTrainings[] = $item;
+        }
+        return view('reports.training_report', compact("dataTrainings"));
+    }
     /**
      * Show the form for creating a new resource.
      *

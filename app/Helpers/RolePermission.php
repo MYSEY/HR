@@ -123,6 +123,12 @@ function menu(){
                     'table'=>2,
                     'permission'=>1
                 ],
+                [
+                    'value'=>'Training Report',
+                    'url'=>"reports/training-report",
+                    'table'=>2,
+                    'permission'=>1
+                ],
                 // [
                 //     'value'=>'Training Type',
                 //     'url'=>"training-type/list",

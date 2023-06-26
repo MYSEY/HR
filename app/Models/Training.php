@@ -20,6 +20,7 @@ class Training extends Model
        'trainer_id',
        'employee_id',
        'cost_price',
+       'discount',
        'start_date',
        'end_date',
        'duration_month',

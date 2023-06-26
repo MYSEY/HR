@@ -19,10 +19,11 @@ return new class extends Migration
             $table->string('course_name');
             $table->json('trainer_id'); //integer('trainer_id');
             $table->json('employee_id'); //integer('employee_id');
-            $table->decimal('cost_price')->nullable();
+            $table->decimal('cost_price')->default(0)->nullable();
+            $table->integer('discount')->default(0)->nullable();
             $table->date('start_date');
             $table->date('end_date');
-            $table->integer('duration_month')->nullable();;
+            $table->integer('duration_month')->nullable();
             $table->string('remark')->nullable();
             $table->boolean('status')->nullable();
             $table->bigInteger('created_by')->unsigned()->nullable();

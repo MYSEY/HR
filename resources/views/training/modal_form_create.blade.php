@@ -75,6 +75,13 @@
                             </div>
                         </div>
 
+                        <div class="col-sm-6 hidden" id="inp_discount">
+                            <div class="form-group">
+                                <label>Discount</label>
+                                <input class="form-control " type="number"  name="discount" id="discount" value="{{old('discount')}}">
+                            </div>
+                        </div>
+
                         <div class="col-sm-6 hidden" id="inp_duration">
                             <div class="form-group">
                                 <label>Duration (Month) <span class="text-danger">*</span></label>

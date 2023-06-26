@@ -324,6 +324,12 @@ class User extends Authenticatable
         return $houseNo . $streetNo .$villages_name.', '.$conmmunes_name.', '.$district_name.', '.$provice_name;
     }
 
+    public function getSeniorityYearsOfEmployeeAttribute(){
+        $seniority = Carbon::createFromDate($this->date_of_commencement)->diff(Carbon::now())->format('%y years, %m months, %d days');
+        if ($this->date_of_commencement) {
+            return $seniority;
+        }
+    }
     //// GET Permanent address
     public function getFullPermanentAddressAttribute()
     {

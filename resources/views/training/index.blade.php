@@ -203,18 +203,24 @@
             let _this = $(this).val();
             if (_this == 0) {
                 $('#inp_duration').addClass("hidden");
+                $('#inp_discount').addClass("hidden");
                 $('#duration').removeAttr('required');
                 $('#duration').val('');
+                $('#discount').val('');
 
                 $('#e_inp_duration').addClass("hidden");
+                $('#e_inp_discount').addClass("hidden");
                 $('#e_duration').removeAttr('required');
                 $('#e_duration').val('');
+                $('#e_discount').val('');
             }
             if (_this == 1) {
                 $('#inp_duration').removeClass("hidden");
+                $('#inp_discount').removeClass("hidden");
                 $('#duration').attr('required', true);
                 
                 $('#e_inp_duration').removeClass("hidden");
+                $('#e_inp_discount').removeClass("hidden");
                 $('#e_duration').attr('required', true);
             }
         });
@@ -232,11 +238,14 @@
             if (value_id == 1) {
                 $('#inp_contract').addClass("hidden");
                 $('#inp_duration').addClass("hidden");
+                $('#inp_discount').addClass("hidden");
                 $('#duration').removeAttr('required');
                 $('#duration').val('');
+                $('#discount').val('');
 
                 $('#e_inp_contract').addClass("hidden");
                 $('#e_inp_duration').addClass("hidden");
+                $('#e_inp_discount').addClass("hidden");
                 $('#e_duration').removeAttr('required');
             }
             if (value_id == 2) {
@@ -301,6 +310,7 @@
                                 '<option selected value="1">Yes</option> <option value="0">No</option>'
                             );
                             $('#e_inp_duration').removeClass("hidden");
+                            $('#e_inp_discount').removeClass("hidden");
                         } else if (response.success.status == "0") {
                             $('#e_status').append(
                                 '<option selected value="0">No</option> <option value="1">Yes</option>'
@@ -379,6 +389,7 @@
                         $('#e_cost_price').val(response.success.cost_price);
                         $('#e_start_date').val(response.success.start_date);
                         $('#e_end_date').val(response.success.end_date);
+                        $('#e_discount').val(response.success.discount);
                         $('#e_duration').val(response.success.duration_month);
                         $('#e_remark').val(response.success.remark);
                     }

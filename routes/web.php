@@ -185,6 +185,8 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('/reports/promoted-staff-report', [ReportsController::class,'staffPromoted']);
     Route::get('/reports/transferred-staff-report', [ReportsController::class,'staffTransferred']);
     Route::post('/reports/transferred-staff-report', [ReportsController::class,'staffTransferred']);
+    Route::get('/reports/training-report', [ReportsController::class,'trainingReport']);
+    Route::post('/reports/training-report', [ReportsController::class,'trainingReport']);
     
     // test export excel
     Route::get('motor-rentel/export',[PayrollReportController::class,'export']);
