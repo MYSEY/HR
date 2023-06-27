@@ -2,14 +2,14 @@
 <style>
     .filter-row .btn {
         min-height: 44px !important;
-        padding: 9px !important;
+        padding: 10px !important;
     }
 
     .ui-datepicker-calendar {
         display: none;
     }
     .reset-btn{
-        background: #ffbc34 !important;
+        /* background: #ffbc34 !important; */
         color: #fff !important
     }
 </style>
@@ -38,19 +38,30 @@
     @if (Auth::user()->RolePermission == 'Administrator')
         <form action="{{url('/reports/training-report')}}" method="POST" class="needs-validation" novalidate>
             @csrf
+            
             <div class="row filter-row">
                 <div class="col-sm-6 col-md-2">
                     <div class="form-group">
-                        <input type="text" class="form-control" name="employee_id" id="employee_id" placeholder="Employee ID"
+                        <input type="text" class="form-control" name="employee_id" placeholder="Employee ID"
                             value="{{ old('employee_id') }}">
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-3 col-lg-3 col-xl-2 col-12">
+                    <div class="form-group">
+                        <input class="form-control floating" type="text" id="employee_name" name="employee_name"
+                            placeholder="Employee name">
                     </div>
                 </div>
                 <div class="col-sm-6 col-md-2">
                     <div class="form-group">
-                        <input type="text" class="form-control" name="employee_name" id="employee_name"
-                            placeholder="Employee Name" value="{{ old('employee_name') }}">
+                        <select class="select form-control" data-select2-id="select2-data-2-c0n2" name="traing_type">
+                            <option value="" data-select2-id="select2-data-2-c0n2">All Training Type</option>
+                            <option value="1">Internal</option>
+                            <option value="2">External</option>
+                        </select>
                     </div>
                 </div>
+                
                 <div class="col-sm-6 col-md-3 col-lg-3 col-xl-2 col-12">
                     <div class="form-group">
                         <div class="cal-icon">
@@ -68,23 +79,17 @@
                     </div>
                 </div>
                 <div class="col-sm-6 col-md-2">
-                    <button type="submit" class="btn btn-success w-100 submit-btn" data-dismiss="modal">
-                        <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading </span>
-                        <span class="btn-txt">{{ __('Search') }}</span>
-                    </button>
+                    <div style="display: flex" class="float-end">
+                        <button type="submit" class="btn btn-success  submit-btn me-2" data-dismiss="modal">
+                            <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> </span>
+                            <span class="btn-txt">{{ __('Search') }}</span>
+                        </button>
+                        <button type="button" class="btn ms-auto btn-warning reset-btn">
+                            <span class="btn-text-reset">Reset</span>
+                            <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
+                        </button>
+                    </div>
                 </div>
-                <div class="col-sm-6 col-md-2">
-                    <button type="button" class="btn w-100 reset-btn">
-                        <span class="btn-text-reset">Reset</span>
-                        <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading</span>
-                    </button>
-                </div>
-                {{-- <div class="col-sm-6 col-md-2">
-                    <button type="submit" class="btn btn-success w-100 btn-search" data-dismiss="modal">
-                        <span class="btn-text-search">Search</span>
-                        <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading</span>
-                    </button>
-                </div> --}}
             </div>
         </form>
     @endif
@@ -148,6 +153,10 @@
                                             style="width: 125.15px;">End Date</th>
                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                             rowspan="1" colspan="1"
+                                            aria-label="Duration of service: activate to sort column ascending"
+                                            style="width: 125.15px;">Duration of service</th>
+                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                            rowspan="1" colspan="1"
                                             aria-label="Price/Unit: activate to sort column ascending"
                                             style="width: 125.15px;">Price/Unit</th>
                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
@@ -193,7 +202,7 @@
                                                     }
                                                 }
                                             @endphp
-                                            @foreach ($item->employees as $emp)
+                                            @foreach ($item->employees as $key=>$emp)
                                                 <tr class="odd">
                                                     <td class="ids">{{ $item->id }}</td>
                                                     <td>{{ $emp->number_employee }}</td>
@@ -207,6 +216,9 @@
                                                     <td>{{$emp->EmployeeBranch}}</td>
                                                     <td>{{ \Carbon\Carbon::parse($item->start_date)->format('d-M-Y') ?? '' }}</td>
                                                     <td>{{ \Carbon\Carbon::parse($item->end_date)->format('d-M-Y') ?? '' }}</td>
+                                                    <td>
+                                                        <span class="badge bg-inverse-danger">{{ $item->duration_month ? \Carbon\Carbon::parse($item->end_date)->addMonth($item->duration_month)->format('d-M-Y'): 0}}</span>
+                                                    </td>
                                                     <td>$ {{round($price, 2)}}</td>
                                                     <td>$ {{round($discount, 2)}}</td>
                                                     <td>$ {{round($total, 2)}}</td>

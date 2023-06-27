@@ -1,4 +1,4 @@
-@extends('layouts.master')
+@extends('layouts.master_print')
 <style>
     .profile-info-left {
         border-right: 0px dashed #cccccc !important;
@@ -28,8 +28,20 @@
                         </label></li>
                     </ul>
                 </div>
-                <div class="col-auto float-end ms-auto">
+                {{-- <div class="col-auto float-end ms-auto">
                     <h4 class=""><a href="{{url('/training/list')}}">Back to list</a></h4>
+                </div> --}}
+                <div class="col-auto float-end ms-auto">
+                    <div class="btn-group">
+                        @if (Auth::user()->RolePermission == 'Administrator')
+                        <div class="btn-group btn-group-sm">
+                            <button class="btn btn-white" id="btn_print">
+                                <span class="btn-text-print"><i class="fa fa-print fa-lg"></i> Print</span>
+                                <span id="btn-print-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading</span>
+                            </button>
+                        </div>
+                        @endif
+                    </div>
                 </div>
             </div>
         </div>
@@ -123,10 +135,38 @@
     </div>
 
 @endsection
-
+@include('training.termplate_print')
 @include('includs.script')
-
+<script type="text/javascript" src="{{ asset('/admin/js/printThis.js') }}"></script>
 <script type="text/javascript">
     $(function() {
+        $("#btn_print").on("click", function() {
+            print_pdf();
+        });
     });
+    function print_pdf(type) {
+        $("#print_purchase").show();
+
+        $("#btn-print-loading").css('display', 'block');
+        $("#btn_print").prop('disabled', true);
+        $(".btn-text-print").hide();
+
+        window.setTimeout(function() {
+            $("#print_purchase").hide();
+            $("#btn_print").prop('disabled', false);
+            $(".btn-text-print").show();
+            $("#btn-print-loading").css('display', 'none');
+
+        }, 2000);
+        $("#print_purchase").printThis({
+            importCSS: false,
+            importStyle: true,
+            loadCSS: "/admin/css/style_table.css",
+            header: "",
+            printDelay: 1000,
+            formValues: false,
+            canvas: false,
+            doctypeString: "",
+        });
+    }
 </script>

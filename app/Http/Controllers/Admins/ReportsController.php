@@ -177,7 +177,10 @@ class ReportsController extends Controller
             $end_date = Carbon::createFromDate($request->end_date)->format('Y-m-d H:i:s');
         }
         $data = Training::
-        when($start_date, function ($query, $start_date) {
+        when($request->traing_type, function ($query, $traing_type) {
+            $query->where('training_type', $traing_type);
+        })
+        ->when($start_date, function ($query, $start_date) {
             $query->where('start_date', '>=', $start_date);
         })
         ->when($end_date, function ($query, $end_date) {
