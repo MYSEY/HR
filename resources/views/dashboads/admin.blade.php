@@ -297,7 +297,6 @@
                 }
 
                 $("#total-staff").text(response.totalStaff.length);
-                // $("#total-new-staff").text(response.newStaff);
                 $("#total-resigned-staff").text(response.staffResignations.length);
                 $("#total-promoted-staff").text(response.staffPromotes);
                 $("#total-transferred-staff").text(response.transferred);
@@ -340,6 +339,9 @@
                     staffResignations: response.staffResignations,
                     totalEmployee: response.data.length,
                 }
+                let typeOfStaff = {
+                    employee_position_type: response.totalStaff
+                };
 
                 let dataTraining = {
                     employeeTrainings: response.dataEmployeeTrainings.flat(1),
@@ -350,6 +352,7 @@
                 dashboadAchieveBranch(dataAchieve);
                 dashboardStaffResign(dataStaffResign);
                 dascboardReasonOffStaff(dataReasonStaff);
+                dashboardTypeOfStaff(typeOfStaff);
                 dashboardTraining(dataTraining);
             }
         });
@@ -410,12 +413,11 @@
             let data = {};
             let type = "";
             let option = {};
-            if (db.name == "staff_take_leave" || db.name == "staff_Training_by_branch") {
+            if (db.name == "staff_take_leave") {
                 type = "bar";
                 data = db.name == "staff_take_leave" ? dataStaffTakeLeave :
                     dataStaffTraining;
-                text = db.name == "staff_take_leave" ? 'Staff Take Leave' :
-                    'Staff Training by Branch';
+                text = 'Staff Training by Branch';
                 option = {
                     plugins: {
                         legend: {
@@ -893,6 +895,137 @@
             plugins: [ChartDataLabels]
         }
         new Chart("reasons_staff_resignation", dataChart);
+    }
+
+    function dashboardTypeOfStaff(datas) {
+        let dataTypeStaff = {
+            datasets: [
+                {
+                    label: '% Male',
+                    data: [],
+                    backgroundColor: [
+                        "green"
+                    ],
+                    stack: 'Stack 0',
+                },
+                {
+                    label: '% Female',
+                    data: [],
+                    backgroundColor: [
+                        "LightGray"
+                    ],
+                    stack: 'Stack 1',
+                },
+            ]
+        };
+
+        let supporting = {
+            male:0,
+            female:0,
+            total:0
+        };
+        let fieldStaff = {
+            male:0,
+            female:0,
+            total:0
+        };
+        if (datas.employee_position_type.length > 0) {
+            datas.employee_position_type.map((emp) => {
+                if (emp.position_type == 1) {
+                    if (emp.gender) {
+                        if (emp.gender.name_english === "Male") {
+                            supporting.male ++;
+                        }
+                        if (emp.gender.name_english =="Female") {
+                            supporting.female ++;
+                        }
+                    }
+                    supporting.total ++;
+                }
+                if (emp.position_type == 2) {
+                    if (emp.gender) {
+                        if (emp.gender.name_english === "Male") {
+                            fieldStaff.male ++;
+                        }
+                        if (emp.gender.name_english =="Female") {
+                            fieldStaff.female ++;
+                        }
+                    }
+                    fieldStaff.total ++;
+                }
+            })
+        }
+        dataTypeStaff.labels = ['Supporting Staff','Field Staff','total'];
+        dataTypeStaff.datasets[0].data = [
+            (supporting.male / datas.employee_position_type.length)*100,
+            ((fieldStaff.male / datas.employee_position_type.length)*100),
+            (supporting.total / datas.employee_position_type.length)*100,
+        ];
+        dataTypeStaff.datasets[1].data = [
+            (supporting.femal / datas.employee_position_type.length)*100,
+            ((fieldStaff.female / datas.employee_position_type.length)*100),
+            ((fieldStaff.total / datas.employee_position_type.length)*100),
+        ];
+
+        let dataTypeStaffRed = [
+            (supporting.total / datas.employee_position_type.length)*100,
+            (fieldStaff.total / datas.employee_position_type.length)*100,
+            ((supporting.total + fieldStaff.total) / datas.employee_position_type.length)*100,
+        ];
+        dataTypeStaff.datasets.push(
+            {
+                label: 'Total',
+                data: dataTypeStaffRed,
+                backgroundColor: [
+                    "red"
+                ],
+                stack: 'Stack 2',
+            }
+        )
+        let option = {
+            plugins: {
+                legend: {
+                    // display: true,
+                    // position: 'bottom',
+                    // rtl: true,
+                },
+                datalabels: {
+                    events: [],
+                    anchor: 'end',
+                    align: 'top',
+                    font: {
+                        weight: 'bold',
+                        size: 10
+                    },
+                    align: 'center',
+                    _actives: false,
+                    formatter: (value, context) => {
+                        return `${value}%`;
+                    }
+                },
+                title: {
+                    display: true,
+                    text: '% Type of Staff'
+                },
+            },
+            responsive: true,
+            scales: {
+                x: {
+                    stacked: true,
+                },
+                y: {
+                    beginAtZero: true,
+                    stacked: true
+                }
+            }
+        }
+        let dataChart = {
+            type: 'bar',
+            data: dataTypeStaff,
+            options: option,
+            plugins: [ChartDataLabels]
+        }
+        new Chart('type_of_staff', dataChart);
     }
 
     function dashboardTraining(datas){

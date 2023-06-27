@@ -227,14 +227,14 @@
     <div class="col-md-6">
         <div class="card dash-widget">
             <div class="card-body">
-                <canvas id="staff_take_leave"></canvas>
+                <canvas id="type_of_staff"></canvas>
             </div>
         </div>
     </div>
     <div class="col-md-6">
         <div class="card dash-widget">
             <div class="card-body">
-                <canvas id="staff_Training_by_branch"></canvas>
+                <canvas id="staff_take_leave"></canvas>
             </div>
         </div>
     </div>
@@ -274,3 +274,13 @@
         </div>
     </div>
 </div> --}}
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card dash-widget">
+            <div class="card-body">
+                <canvas id="staff_Training_by_branch"></canvas>
+            </div>
+        </div>
+    </div>
+</div>

@@ -36,27 +36,28 @@ class DashboadController extends Controller
         $branches = Branchs::all();
         $options = Option::where("type", "emp_status")->get();
 
-        $employee = User::with("gender")->with('position')->with('branch')->when($from_date, function ($query, $from_date) {
+        $employee = User::with("gender")->with('position')->with('branch')
+        ->when($from_date, function ($query, $from_date) {
             $query->where('created_at', '>=', $from_date);
-            })
-            ->when($to_date, function ($query, $to_date) {
-                $query->where('created_at','<=', $to_date);
-            })->orderBy('id', 'desc')->get();
+        })
+        ->when($to_date, function ($query, $to_date) {
+            $query->where('created_at','<=', $to_date);
+        })->orderBy('id', 'desc')->get();
 
         $currentYear = Carbon::now()->format('Y');
         $year = Carbon::createFromDate('01-01-'.$currentYear)->format('Y-m-d');
         $staffResignations = User::whereNotIn('emp_status',['1','2','Probation'])
-            ->when($year, function ($query, $year) {
-                $query->where('resign_date', '>=', $year);
-            })->orderBy('id', 'desc')->get();
+        ->when($year, function ($query, $year) {
+            $query->where('resign_date', '>=', $year);
+        })->orderBy('id', 'desc')->get();
 
         $recruitmentPlans = RecruitmentPlan::with('branch')->whereMonth("plan_date", 12)->whereYear("plan_date",$yearLy)->get();
         $achieveBranchs = User::with('branch')->whereIn('emp_status',['1','2','Probation'])
-          ->when($year, function ($query, $year) {
-              $query->where('date_of_commencement', '>=', $year);
-          })->get();
+        ->when($year, function ($query, $year) {
+            $query->where('date_of_commencement', '>=', $year);
+        })->get();
+        
         $totalStaff =  User::with("gender")->whereIn('emp_status',['1','2','Probation'])->get();
-        $newStaff = User::where('emp_status', "Probation")->get()->count();
         $staffPromotes = StaffPromoted::all()->count();
         $transferred = Transferred::all()->count();
         $candidateResumes = CandidateResume::get();
@@ -65,7 +66,7 @@ class DashboadController extends Controller
         foreach ($dataTrainings as $key => $item) {
             $dataEmployeeTrainings[] = User::whereIn('id', $item->employee_id)->select("employee_name_kh", "employee_name_en", "branch_id", "profile")->with('branch')->get();
         }
-
+        
         return response()->json([
             'options'=>$options,
             'branches'=>$branches,
@@ -75,7 +76,6 @@ class DashboadController extends Controller
             'achieveBranchs'=>$achieveBranchs,
             'staffPromotes'=>$staffPromotes,
             'transferred'=> $transferred,
-            'newStaff'=> $newStaff,
             'totalStaff'=> $totalStaff,
             'dataTrainings'=> $dataTrainings,
             "candidateResumes"=>$candidateResumes,
