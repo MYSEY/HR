@@ -108,11 +108,11 @@ class UserController extends Controller
         try{
             $this->employeeRepo->createUsers($request);
             DB::commit();
-            Toastr::success('Employee create successfully.','Success');
+            Toastr::success('Create employee successfully.','Success');
             return redirect()->back();
         }catch(\Exception $e){
             DB::rollback();
-            Toastr::error('Employee create fail','Error');
+            Toastr::error('Create employee fail','Error');
             return redirect()->back();
         }
     }
@@ -184,7 +184,7 @@ class UserController extends Controller
             return redirect()->back();
         }catch(\Exception $e){
             DB::rollback();
-            Toastr::error('User update fail','Error');
+            Toastr::error('Update employee fail','Error');
             return redirect()->back();
         }
     }

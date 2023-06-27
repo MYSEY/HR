@@ -50,9 +50,9 @@
                         </div>
                         <div class="col-sm-6"> 
                             <div class="form-group">
-                                <label>Position</label>
-                                <select class="select form-control" name="position_id" id="e_position">
-                                    <option selected disabled> --Select --</option>
+                                <label>Position <span class="text-danger">*</span></label>
+                                <select class="form-control @error('position_id') is-invalid @enderror" name="position_id" id="e_position" required>
+                                    <option selected disabled value=""> --Select --</option>
                                 </select>
                             </div>
                         </div>

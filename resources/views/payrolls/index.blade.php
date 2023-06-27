@@ -48,7 +48,6 @@
                                             id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
                                             <thead>
                                                 <tr>
-                                                    <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Profle: activate to sort column descending" style="width: 265.913px;">#</th>
                                                     <th class="sorting sorting_asc" tabindex="0"
                                                         aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
                                                         aria-sort="ascending"
@@ -116,7 +115,6 @@
                                                 @if (count($data) > 0)
                                                     @foreach ($data as $item)
                                                         <tr class="odd">
-                                                            <td class="ids">{{$item->id}}</td>
                                                             <td class="sorting_1">
                                                                 <h2 class="table-avatar">
                                                                     @if ($item->profile != null)

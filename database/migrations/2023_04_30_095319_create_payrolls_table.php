@@ -20,7 +20,7 @@ return new class extends Migration
             $table->decimal('total_gross_salary')->default(0);
             $table->date('payment_date')->nullable();
             $table->decimal('total_child_allowance')->default(0);
-            $table->decimal('phone_allowance')->default(0);
+            $table->decimal('phone_allowance')->nullable();
             $table->decimal('total_kny_phcumben')->default(0);
             $table->decimal('seniority_payable_tax',15,2)->default(0);
             $table->decimal('base_salary_received_usd',15,2)->default(0);
