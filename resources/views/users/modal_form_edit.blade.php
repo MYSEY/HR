@@ -70,8 +70,8 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label>Gender</label>
-                                <select class="select form-control" id="e_gender" name="gender">
-                                    <option value="">select gender</option>
+                                <select class="form-control" id="e_gender" name="gender">
+                                    <option selected disabled value=""> --Select --</option>
                                 </select>
                             </div>
                         </div>
@@ -80,7 +80,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Department</label>
-                                <select class="select form-control" name="department_id" id="e_department">
+                                <select class="form-control" name="department_id" id="e_department">
                                     <option selected disabled> --Select --</option>
                                 </select>
                             </div>
@@ -88,9 +88,9 @@
                         
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>Branch</label>
-                                <select class="select form-control" id="e_branch_id" name="branch_id" value="{{old('branch_id')}}">
-                                    <option value="">Please select branch</option>
+                                <label>Branch <span class="text-danger">*</span></label>
+                                <select class="form-control" id="e_branch_id" name="branch_id" value="{{old('branch_id')}}">
+                                    <option selected disabled value=""> --Select --</option>
                                 </select>
                             </div>
                         </div>
@@ -131,7 +131,7 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="">Marital status</label>
-                                <select class="select form-control" id="e_marital_status" name="marital_status" value="{{old('marital_status')}}">
+                                <select class="form-control" id="e_marital_status" name="marital_status" value="{{old('marital_status')}}">
                                     <option value="Married">Married</option>
                                     <option value="Single">Single</option>
                                 </select>
@@ -140,7 +140,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Nationality</label>
-                                <select class="select form-control" id="e_nationality" name="nationality" value="{{old('nationality')}}">
+                                <select class="form-control" id="e_nationality" name="nationality" value="{{old('nationality')}}">
                                     <option value="Khmer">Khmer</option>
                                     <option value="Chinese">Chinese</option>
                                 </select>
@@ -207,15 +207,15 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="">Position Type</label>
-                                <select class="select form-control" id="e_position_type" name="position_type" value="{{old('position_type')}}">
-                                    <option value="">Please select position type</option>
+                                <select class="form-control" id="e_position_type" name="position_type" value="{{old('position_type')}}">
+                                    <option selected disabled> --Select --</option>
                                 </select>
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <label>Loan</label>
-                            <select class="select form-control" id="e_is_loan" name="is_loan" value="{{old('is_loan')}}">
-                                <option value="">Please select loan</option>
+                            <select class="form-control" id="e_is_loan" name="is_loan" value="{{old('is_loan')}}">
+                                <option selected disabled> --Select --</option>
                             </select>
                         </div>
                     </div>
@@ -284,8 +284,8 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="">Identity Type</label>
-                                <select class="select form-control" id="e_identity_type" name="identity_type" value="{{old('identity_type')}}">
-                                    <option value="">select identity type</option>
+                                <select class="form-control" id="e_identity_type" name="identity_type" value="{{old('identity_type')}}">
+                                    <option selected disabled> --Select --</option>
                                 </select>
                             </div>
                         </div>
@@ -324,14 +324,14 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Province/City</label>
-                                <select class="select form-control" id="e_current_province" name="current_province" value="{{old('current_province')}}">
+                                <select class="form-control" id="e_current_province" name="current_province" value="{{old('current_province')}}">
                                 </select>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>District/Khan</label>
-                                <select class="select form-control" id="e_current_district" name="current_district" value="{{old('current_district')}}">
+                                <select class="form-control" id="e_current_district" name="current_district" value="{{old('current_district')}}">
                                 </select>
                             </div>
                         </div>
@@ -339,14 +339,14 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="no-error-label">Commune/Sangkat</label>
-                                <select class="select form-control no-error-border" id="e_current_commune" name="current_commune" value="{{old('current_commune')}}">
+                                <select class="form-control no-error-border" id="e_current_commune" name="current_commune" value="{{old('current_commune')}}">
                                 </select>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="no-error-label">Village</label>
-                                <select class="select form-control no-error-border" id="e_current_village" name="current_village" value="{{old('current_village')}}">
+                                <select class="form-control no-error-border" id="e_current_village" name="current_village" value="{{old('current_village')}}">
                                 </select>
                             </div>
                         </div>
@@ -377,26 +377,26 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Province/City</label>
-                                    <select class="select form-control" name="permanent_province" id="e_permanent_province" value="{{old('city')}}"></select>
+                                    <select class="form-control" name="permanent_province" id="e_permanent_province" value="{{old('city')}}"></select>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>District/Khan</label>
-                                    <select class="select form-control" id="e_permanent_district" name="permanent_district" value="{{old('distric')}}"></select>
+                                    <select class="form-control" id="e_permanent_district" name="permanent_district" value="{{old('distric')}}"></select>
                                 </div>
                             </div>
                             
                             <div class="col-md-6">
                                 <div class="form-group ">
                                     <label class="no-error-label">Commune/Sangkat</label>
-                                    <select class="select form-control no-error-border" id="e_permanent_commune" name="permanent_commune" value="{{old('commune')}}"></select>
+                                    <select class="form-control no-error-border" id="e_permanent_commune" name="permanent_commune" value="{{old('commune')}}"></select>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="no-error-label">Village</label>
-                                    <select class="select form-control no-error-border" id="e_permanent_village" name="permanent_village" value="{{old('village')}}"></select>
+                                    <select class="form-control no-error-border" id="e_permanent_village" name="permanent_village" value="{{old('village')}}"></select>
                                 </div>
                             </div>
                         </div>

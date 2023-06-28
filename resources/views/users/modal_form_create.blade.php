@@ -73,10 +73,9 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label>Gender</label>
-                                <select class="select form-control" id="gender" name="gender" value="{{old('gender')}}">
-                                    <option value="">select gender</option>
+                                <select class="form-control" id="gender" name="gender" value="{{old('gender')}}">
                                     @foreach ($optionGender as $item)
-                                    <option value="{{$item->id}}">{{$item->name_khmer}}</option>
+                                        <option value="{{$item->id}}">{{$item->name_khmer}}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -86,10 +85,10 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Department</label>
-                                <select class="select form-control" id="department_id" name="department_id" value="{{old('department_id')}}">
-                                    <option value="">Please select department</option>
+                                <select class="form-control" id="department_id" name="department_id" value="{{old('department_id')}}">
+                                    <option selected disabled value=""> --Select --</option>
                                     @foreach ($department as $item)
-                                    <option value="{{$item->id}}">{{$item->name_english}}</option>
+                                        <option value="{{$item->id}}">{{$item->name_english}}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -97,9 +96,9 @@
 
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>Branch</label>
-                                <select class="select form-control" id="branch_id" name="branch_id" value="{{old('branch_id')}}">
-                                    <option value="">Please select branch</option>
+                                <label>Branch <span class="text-danger">*</span></label>
+                                <select class="form-control" id="branch_id" name="branch_id" value="{{old('branch_id')}}" required>
+                                    <option selected disabled value=""> --Select --</option>
                                     @foreach ($branch as $item)
                                         <option value="{{$item->id}}">{{$item->branch_name_en}}</option>
                                     @endforeach
@@ -143,7 +142,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Nationality</label>
-                                <select class="select form-control" id="nationality" name="nationality" value="{{old('nationality')}}">
+                                <select class="form-control" id="nationality" name="nationality" value="{{old('nationality')}}">
                                     <option value="Khmer">Khmer</option>
                                     <option value="Chinese">Chinese</option>
                                 </select>
@@ -152,7 +151,7 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="">Marital status</label>
-                                <select class="select form-control" id="marital_status" name="marital_status" value="{{old('marital_status')}}">
+                                <select class="form-control" id="marital_status" name="marital_status" value="{{old('marital_status')}}">
                                     <option value="Married">Married</option>
                                     <option value="Single">Single</option>
                                 </select>
@@ -216,8 +215,7 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="">Position Type</label>
-                                <select class="select form-control" id="position_type" name="position_type" value="{{old('position_type')}}">
-                                    <option value="">Please select position type</option>
+                                <select class="form-control" id="position_type" name="position_type" value="{{old('position_type')}}">
                                     @foreach ($optionPositionType as $item)
                                         <option value="{{$item->id}}">{{$item->name_english}}</option>
                                     @endforeach
@@ -226,8 +224,7 @@
                         </div>
                         <div class="col-sm-6">
                             <label>Loan</label>
-                            <select class="select form-control" id="is_loan" name="is_loan" value="{{old('is_loan')}}">
-                                <option value="">Please select loan</option>
+                            <select class="form-control" id="is_loan" name="is_loan" value="{{old('is_loan')}}">
                                 @foreach ($optionLoan as $item)
                                     <option value="{{$item->id}}">{{$item->name_english}}</option>
                                 @endforeach
@@ -272,13 +269,12 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="">Bank Name</label>
-                                <select class="select form-control" id="bank_name" name="bank_name" value="{{old('bank_name')}}">
+                                <select class="form-control" id="bank_name" name="bank_name" value="{{old('bank_name')}}">
                                     <option value="">--Select--</option>
                                     @foreach ($bank as $item)
                                         <option value="{{$item->id}}">{{$item->name}}</option>
                                     @endforeach
                                 </select>
-                                {{-- <input class="form-control" type="text" id="bank_name" name="bank_name" value="{{old('bank_name')}}"> --}}
                             </div>
                         </div>
                         <div class="col-sm-6">
@@ -304,10 +300,10 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="">Identity Type</label>
-                                <select class="select form-control" id="identity_type" name="identity_type" value="{{old('identity_type')}}">
-                                    <option value="">select identity type</option>
+                                <select class="form-control" id="identity_type" name="identity_type" value="{{old('identity_type')}}">
+                                    <option selected disabled> --Select --</option>
                                     @foreach ($optionIdentityType as $item)
-                                    <option value="{{$item->id}}">{{$item->name_english}}</option>
+                                        <option value="{{$item->id}}">{{$item->name_english}}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -349,12 +345,12 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Province/City</label>
-                                    <select class="select form-control" id="current_province" name="current_province" value="{{old('current_province')}}">
+                                    <select class="form-control" id="current_province" name="current_province" value="{{old('current_province')}}">
                                         <option selected disabled> --Select --</option>
                                         @if (count($province)>0)
-                                        @foreach ($province as $item)
-                                        <option value="{{$item->code}}">{{$item->name_en}}</option>
-                                        @endforeach
+                                            @foreach ($province as $item)
+                                                <option value="{{$item->code}}">{{$item->name_en}}</option>
+                                            @endforeach
                                         @endif
                                     </select>
                                 </div>
@@ -362,7 +358,8 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>District/Khan</label>
-                                    <select class="select form-control" id="current_district" name="current_district" value="{{old('current_district')}}">
+                                    <select class="form-control" id="current_district" name="current_district" value="{{old('current_district')}}">
+                                        
                                     </select>
                                 </div>
                             </div>
@@ -370,14 +367,14 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="no-error-label">Commune/Sangkat</label>
-                                    <select class="select form-control no-error-border" id="current_commune" name="current_commune" value="{{old('current_commune')}}">
+                                    <select class="form-control no-error-border" id="current_commune" name="current_commune" value="{{old('current_commune')}}">
                                     </select>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="no-error-label">Village</label>
-                                    <select class="select form-control no-error-border" id="current_village" name="current_village" value="{{old('current_village')}}">
+                                    <select class="form-control no-error-border" id="current_village" name="current_village" value="{{old('current_village')}}">
                                     </select>
                                 </div>
                             </div>
@@ -410,12 +407,12 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Province/City</label>
-                                    <select class="select form-control" id="permanent_province" name="permanent_province" value="{{old('permanent_province')}}">
+                                    <select class="form-control" id="permanent_province" name="permanent_province" value="{{old('permanent_province')}}">
                                         <option selected disabled> --Select --</option>
                                         @if (count($province)>0)
-                                        @foreach ($province as $item)
-                                        <option value="{{$item->code}}">{{$item->name_en}}</option>
-                                        @endforeach
+                                            @foreach ($province as $item)
+                                                <option value="{{$item->code}}">{{$item->name_en}}</option>
+                                            @endforeach
                                         @endif
                                     </select>
                                 </div>
@@ -423,7 +420,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>District/Khan</label>
-                                    <select class="select form-control" id="permanent_district" name="permanent_district" value="{{old('permanent_district')}}">
+                                    <select class="form-control" id="permanent_district" name="permanent_district" value="{{old('permanent_district')}}">
                                     </select>
                                 </div>
                             </div>
@@ -431,14 +428,14 @@
                             <div class="col-md-6">
                                 <div class="form-group ">
                                     <label class="no-error-label">Commune/Sangkat</label>
-                                    <select class="select form-control no-error-border" id="permanent_commune" name="permanent_commune" value="{{old('permanent_commune')}}">
+                                    <select class="form-control no-error-border" id="permanent_commune" name="permanent_commune" value="{{old('permanent_commune')}}">
                                     </select>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="no-error-label">Village</label>
-                                    <select class="select form-control no-error-border" id="permanent_village" name="permanent_village" value="{{old('permanent_village')}}">
+                                    <select class="form-control no-error-border" id="permanent_village" name="permanent_village" value="{{old('permanent_village')}}">
                                     </select>
                                 </div>
                             </div>

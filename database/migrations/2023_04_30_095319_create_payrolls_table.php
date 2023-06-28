@@ -22,7 +22,9 @@ return new class extends Migration
             $table->decimal('total_child_allowance')->default(0);
             $table->decimal('phone_allowance')->nullable();
             $table->decimal('total_kny_phcumben')->default(0);
-            $table->decimal('seniority_payable_tax',15,2)->default(0);
+            $table->decimal('total_pension_fund')->default(0);
+            $table->decimal('total_severance_pay')->default(0);
+            $table->decimal('total_seniority_pay',15,2)->default(0);
             $table->decimal('base_salary_received_usd',15,2)->default(0);
             $table->string('base_salary_received_riel',15,2)->default(0);
             $table->integer('spouse')->default(0);
