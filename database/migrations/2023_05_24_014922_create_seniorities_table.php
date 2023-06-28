@@ -16,10 +16,10 @@ return new class extends Migration
         Schema::create('seniorities', function (Blueprint $table) {
             $table->id();
             $table->integer('employee_id');
-            $table->decimal('total_average_salary')->nullable();
-            $table->string('total_salary_receive')->nullable();
-            $table->string('tax_exemption_salary')->nullable();
-            $table->string('taxable_salary')->nullable();
+            $table->decimal('total_average_salary',50,2)->nullable();
+            $table->string('total_salary_receive',50,2)->nullable();
+            $table->string('tax_exemption_salary',50,2)->nullable();
+            $table->string('taxable_salary',50,2)->nullable();
             $table->string('payment_of_month')->nullable();
             $table->bigInteger('created_by')->unsigned()->nullable();
             $table->bigInteger('updated_by')->unsigned()->nullable();

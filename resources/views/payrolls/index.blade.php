@@ -73,8 +73,9 @@
                                                 </th>
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                     rowspan="1" colspan="1"
-                                                    aria-label="Join Date: activate to sort column ascending">Severance Pay
+                                                    aria-label="Join Date: activate to sort column ascending">Base Salary Received
                                                 </th>
+                                                
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                     rowspan="1" colspan="1"
                                                     aria-label="Join Date: activate to sort column ascending">Seniority Pay
@@ -82,6 +83,10 @@
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                     rowspan="1" colspan="1"
                                                     aria-label="Join Date: activate to sort column ascending">Total Gross Salary
+                                                </th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                    rowspan="1" colspan="1"
+                                                    aria-label="Join Date: activate to sort column ascending">Severance Pay
                                                 </th>
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                     rowspan="1" colspan="1"
@@ -128,12 +133,13 @@
                                                         <td>{{ $item->users == null ? '' : $item->users->joinOfDate }}</td>
                                                         <td>$ <a href="#">{{ $item->basic_salary }}</a></td>
                                                         <td>$ <a href="#">{{ $item->total_child_allowance }}</a></td>
-                                                        <td>$ <a href="#">{{ $item->phone_allowance }}</a></td>
+                                                        <td>$ <a href="#">{{ $item->phone_allowance == null ? '0.00' : $item->phone_allowance}}</a></td>
                                                         <td>$ <a href="#">{{ $item->total_kny_phcumben}}</a></td>
                                                         <td>$ <a href="#">{{ $item->total_pension_fund}}</a></td>
-                                                        <td>$ <a href="#">{{ $item->total_severance_pay}}</a></td>
+                                                        <td>$ <a href="#">{{ $item->base_salary_received_usd}}</a></td>
                                                         <td>$ <a href="#">{{ $item->total_seniority_pay}}</a></td>
                                                         <td>$ <a href="#">{{ $item->total_gross_salary }}</a></td>
+                                                        <td>$ <a href="#">{{ $item->total_severance_pay}}</a></td>
                                                         <td>$ <a href="#">{{ $item->total_salary }}</a></td>
                                                         <td>{{ $item->PayrollDate }}</td>
                                                         <td>{{ $item->Created }}</td>
@@ -158,7 +164,7 @@
                                                 @endforeach
                                             @else
                                                 <tr>
-                                                    <td colspan="16" style="text-align: center">No record to display</td>
+                                                    <td colspan="20" style="text-align: center">No record to display</td>
                                                 </tr>
                                             @endif
                                         </tbody>

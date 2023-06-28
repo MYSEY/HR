@@ -16,8 +16,8 @@ return new class extends Migration
         Schema::create('gross_salary_pays', function (Blueprint $table) {
             $table->id();
             $table->integer('employee_id')->nullable();
-            $table->decimal('basic_salary')->default(0);
-            $table->decimal('total_gross_salary')->default(0);
+            $table->decimal('basic_salary',50,2)->default(0);
+            $table->decimal('total_gross_salary',50,2)->default(0);
             $table->date('payment_date')->nullable();
             $table->bigInteger('created_by')->unsigned()->nullable();
             $table->bigInteger('updated_by')->unsigned()->nullable();

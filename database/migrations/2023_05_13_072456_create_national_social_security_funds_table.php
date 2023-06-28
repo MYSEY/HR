@@ -16,14 +16,14 @@ return new class extends Migration
         Schema::create('national_social_security_funds', function (Blueprint $table) {
             $table->id();
             $table->integer('employee_id');
-            $table->string('total_pre_tax_salary_usd')->default(0);
-            $table->string('total_pre_tax_salary_riel')->default(0);
-            $table->string('total_average_wage')->default(0);
-            $table->string('total_occupational_risk')->default(0);
-            $table->string('total_health_care')->default(0);
-            $table->string('pension_contribution_usd')->default(0);
-            $table->string('pension_contribution_riel')->default(0);
-            $table->string('corporate_contribution')->default(0);
+            $table->string('total_pre_tax_salary_usd',50,2)->default(0);
+            $table->string('total_pre_tax_salary_riel',50,2)->default(0);
+            $table->string('total_average_wage',50,2)->default(0);
+            $table->string('total_occupational_risk',50,2)->default(0);
+            $table->string('total_health_care',50,2)->default(0);
+            $table->string('pension_contribution_usd',50,2)->default(0);
+            $table->string('pension_contribution_riel',50,2)->default(0);
+            $table->string('corporate_contribution',50,2)->default(0);
             $table->bigInteger('created_by')->unsigned()->nullable();
             $table->bigInteger('updated_by')->unsigned()->nullable();
             $table->dateTime('deleted_at')->nullable();

@@ -17,9 +17,9 @@ return new class extends Migration
             $table->id();
             $table->integer('employee_id');
             $table->string('number_of_working_days')->nullable();
-            $table->decimal('base_salary')->default(0);
-            $table->decimal('base_salary_received')->default(0);
-            $table->decimal('total_allowance')->default(0);
+            $table->decimal('base_salary',50,2)->default(0);
+            $table->decimal('base_salary_received',50,2)->default(0);
+            $table->decimal('total_allowance',50,2)->default(0);
             $table->string('bouns_type')->nullable();
             $table->bigInteger('created_by')->unsigned()->nullable();
             $table->bigInteger('updated_by')->unsigned()->nullable();

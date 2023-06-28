@@ -71,10 +71,8 @@ class EmployeePayrollController extends Controller
             // get exchang rate
             // $exChange= ExchangeRate::first();
             // $request->exchange_rate =  $exChange->amount_riel;
-            
             $employee = User::where('date_of_commencement','<=',$request->payment_date)->whereIn('emp_status',['Probation','1','2'])->get();
             foreach ($employee as $item) {
-                
                 //function first month join work
                 if (count(Payroll::where('employee_id',$item->id)->get()) == 0) {
                     //total day in months
@@ -113,37 +111,42 @@ class EmployeePayrollController extends Controller
                         $totalBasicSalary = $totalDays * ($item->basic_salary / 22);
                     }
                 } else {
-                    $totalBasicSalary = $item->basic_salary;
+                    $monthToPay = Carbon::parse($item->fdc_date)->format('Y-m-d');
+                    $currentMonthToPay = Carbon::createFromDate($request->payment_date)->format('Y-m-d');
+                    if($monthToPay == $currentMonthToPay){
+                        $totalBasicSalary = $item->pre_salary;
+                    }else{
+                        $totalBasicSalary = $item->basic_salary;
+                    }
                 }
-
                 //National Social Security Fund (NSSF) Formula
-                $totalExchangeRielPreTax =  $request->exchange_rate * number_format($totalBasicSalary, 2);
+                $totalExchangeRielPreTax =  $request->exchange_rate * $totalBasicSalary;
+                // dd($totalExchangeRielPreTax);
                 if ($totalExchangeRielPreTax) {
                     if ($totalExchangeRielPreTax >= 1200000) {
-                        $AverageWage    = 1200000;
+                        $averageWage    = 1200000;
                     }else if($totalExchangeRielPreTax >= 400000){
-                        $AverageWage    = $totalExchangeRielPreTax;
+                        $averageWage    = $totalExchangeRielPreTax;
                     }else{
-                        $AverageWage = 400000;
+                        $averageWage = 400000;
                     }
                 }else{
-                    $AverageWage = 0;
+                    $averageWage = 0;
                 }
-                
-                $OccupationalRisk = (0.008 * $AverageWage);
-                $HealthCare = (0.026 * $AverageWage);
-                $WorkerContribution_usd = ($AverageWage * 0.02);
-                $WorkerContribution_riel = (round($WorkerContribution_usd, -2) / $request->exchange_rate);
+                $occupationalRisk = (0.008 * $averageWage);
+                $healthCare = (0.026 * $averageWage);
+                $workerContributionUsd = ($averageWage * 0.02);
+                $workerContributionRiel = (round($workerContributionUsd, -2) / $request->exchange_rate);
                 $dataNSSF = NationalSocialSecurityFund::create([
                     'employee_id'   => $item->id,
                     'total_pre_tax_salary_usd'   => number_format($totalBasicSalary, 2),
                     'total_pre_tax_salary_riel'   => number_format($totalExchangeRielPreTax),
-                    'total_average_wage'   => number_format($AverageWage),
-                    'total_occupational_risk'   => number_format($OccupationalRisk),
-                    'total_health_care'   => number_format($HealthCare),
-                    'pension_contribution_usd'   => number_format($WorkerContribution_usd),
-                    'pension_contribution_riel'   => round($WorkerContribution_riel, 2),
-                    'corporate_contribution'   => number_format($WorkerContribution_usd),
+                    'total_average_wage'   => number_format($averageWage),
+                    'total_occupational_risk'   => round($occupationalRisk, 2),
+                    'total_health_care'   => round($healthCare, 2),
+                    'pension_contribution_usd'   => round($workerContributionUsd, 2),
+                    'pension_contribution_riel'   => round($workerContributionRiel, 2),
+                    'corporate_contribution'   => number_format($workerContributionUsd),
                     'created_by'   => Auth::user()->id,
                 ]);
 
@@ -152,9 +155,9 @@ class EmployeePayrollController extends Controller
                 $pension_contribution = $dataNSSF->pension_contribution_riel;
                 
                 //calculated khmer_new_year and pchumBen_bonus
+                $totalBunus = 0;
                 if ($item->emp_status == 1 || $item->emp_status == 2) {
                     $dataHolidayBunuse = Holiday::get();
-                    $totalBunus = 0;
                     foreach ($dataHolidayBunuse as $value) {
                         $userJoinDate = $item->date_of_commencement;
                         $startDate = Carbon::parse()->diffInDays($userJoinDate) + 1;
@@ -212,11 +215,12 @@ class EmployeePayrollController extends Controller
                 }else{
                     $totalAmountChild = 0;
                 }
-
+                
                 $grossSalary = $item->basic_salary + $totalBunus + $item->phone_allowance + $totalAmountChild;
+
                 $dataGrossSalary = GrossSalaryPay::create([
                     'employee_id'           => $item->id,
-                    'basic_salary'          => number_format($item->basic_salary, 2),
+                    'basic_salary'          => $item->basic_salary,
                     'total_gross_salary'    => $grossSalary,
                     'payment_date'          => $request->payment_date,
                     'created_by'            => Auth::user()->id
@@ -257,16 +261,22 @@ class EmployeePayrollController extends Controller
                         $totalSalaryReceive = ($totalSalary / 22) * 7.5;
                         $totalGrossExchange = 2000000 / $request->exchange_rate;
                         if ($totalSalaryReceive > $totalGrossExchange) {
+                            $taxExemptionSalary = $totalGrossExchange;
+                        } else {
+                            $taxExemptionSalary = $totalSalaryReceive;
+                        }
+
+                        if ($totalSalaryReceive > $totalGrossExchange) {
                             $totaltaxableSalary = $totalSalaryReceive - $totalGrossExchange;
                         } else {
-                            $totaltaxableSalary = $totalSalaryReceive;
+                            $totaltaxableSalary = 0;
                         }
                         $paymentOfMonth = $PaymentOfMonth;
                         $seniority = Seniority::create([
                             'employee_id'           => $item->id,
                             'total_average_salary'  => number_format($totalSalary, 2),
                             'total_salary_receive'  => round($totalSalaryReceive, 2),
-                            'tax_exemption_salary'  => round($totalSalaryReceive, 2),
+                            'tax_exemption_salary'  => round($taxExemptionSalary, 2),
                             'taxable_salary'        => number_format($totaltaxableSalary, 2),
                             'payment_of_month'      => $paymentOfMonth,
                             'created_by'            => Auth::user()->id,
@@ -638,7 +648,7 @@ class EmployeePayrollController extends Controller
 
                 $data   = $request->all();
                 $data['employee_id']                    = $item->id;
-                $data['basic_salary']                   = number_format($item->basic_salary,2);
+                $data['basic_salary']                   = $item->basic_salary;
                 $data['children']                       = $children;
                 $data['total_gross_salary']             = number_format($grossSalary,2);
                 $data['total_child_allowance']          = $totalAmountChild;
