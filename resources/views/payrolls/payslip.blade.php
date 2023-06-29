@@ -1,6 +1,27 @@
 
 
 @extends('layouts.master')
+<style>
+    .profile-info-left {
+        border-right: 0px dashed #cccccc !important;
+    }
+
+    .td-border {
+        border: none !important
+    }
+
+    .tr-bckground-ch {
+        background-color: chocolate !important
+    }
+
+    .tr-background-83 {
+        background-color: #83d85c;
+    }
+
+    .td-background-cc {
+        background-color: #cccccc !important;
+    }
+</style>
 @section('content')
     
 <div class="content container-fluid">
@@ -17,8 +38,8 @@
             </div>
             <div class="col-auto float-end ms-auto">
                 <div class="btn-group btn-group-sm">
-                    <button class="btn btn-white">CSV</button>
-                    <button class="btn btn-white">PDF</button>
+                    {{-- <button class="btn btn-white">CSV</button>
+                    <button class="btn btn-white">PDF</button> --}}
                     <button class="btn btn-white"><i class="fa fa-print fa-lg"></i> Print</button>
                 </div>
             </div>
@@ -29,101 +50,134 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="payslip-title">EMPLOYEE PAYSLIP</h4>
-                    <h5 class="payslip-title" style="color: red">Monthly Payroll : {{Carbon\Carbon::now()->format('M Y')}}</h5>
                     <div class="row">
-                        <div class="col-sm-6 m-b-20">
+                        <div class="col-sm-4 m-b-20">
                             <img src="{{ asset('/admin/img/logo/commalogo1.png') }}" class="inv-logo" alt="">
                             <ul class="list-unstyled mb-0">
                                 <li>Camma Microfinance Limited</li>
                                 <li>289 Samdech Pen Nuth (St. 289), Phnom Penh</li>
                             </ul>
                         </div>
-                        {{-- <div class="col-sm-6 m-b-20">
-                            <div class="invoice-details">
-                                <h3 class="text-uppercase">Payslip #49029</h3>
-                                <ul class="list-unstyled">
-                                    <li>Salary Month: <span>{{Carbon\Carbon::now()->format('M Y')}}</span></li>
-                                </ul>
-                            </div>
-                        </div> --}}
+                        <div class="col-md-4">
+                            <h4 class="payslip-title">EMPLOYEE PAYSLIP</h4>
+                            <h5 class="payslip-title" style="color: red">Monthly Payroll : {{Carbon\Carbon::now()->format('M Y')}}</h5>
+                        </div>
                     </div>
                     <div class="row">
-                        <div class="col-lg-12 m-b-20">
+                        <div class="col-lg-6 m-b-20">
                             <ul class="list-unstyled">
-                                <li>Employee ID : {{$payslip->users == null ? "" : $payslip->users->number_employee}}</li>
-                                <li>Employee Name  : {{$payslip->users == null ? "" : $payslip->users->employee_name_en}}</li>
-                                <li>Departement : {{$payslip->users == null ? "" : $payslip->users->EmployeeDepartment}}</li>
-                                <li>Position : {{$payslip->users == null ? "" : $payslip->users->EmployeePosition}}</li>
-                                <li>Branch : {{$payslip->users == null ? "" : $payslip->users->EmployeeBranch}}</li>
-                                <li><span>Joining Date</span> : {{$payslip->users == null ? "" : $payslip->users->joinOfDate}}</li>
-                                <li><span>Basic Rate</span> : {{$payslip->total_rate}}%</li>
+                                <li><strong>Employee ID</strong> : {{$payslip->users == null ? "" : $payslip->users->number_employee}}</li>
+                                <li><strong>Position</strong> : {{$payslip->users == null ? "" : $payslip->users->EmployeePosition}}</li>
+                                <li><strong>Joining Date</strong> : {{$payslip->users == null ? "" : $payslip->users->joinOfDate}}</li>
+                                <li><strong>Branch</strong> : {{$payslip->users == null ? "" : $payslip->users->EmployeeBranch}}</li>
+                            </ul>
+                        </div>
+                        <div class="col-lg-4 m-b-20">
+                            <ul class="list-unstyled">
+                                <li><strong>Employee Name</strong>  : {{$payslip->users == null ? "" : $payslip->users->employee_name_en}}</li>
+                                <li><strong>Departement</strong> : {{$payslip->users == null ? "" : $payslip->users->EmployeeDepartment}}</li>
+                                <li><strong>Basic Rate</strong> : {{$payslip->total_rate}}%</li>
                             </ul>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-sm-6">
-                            <div>
-                                <h4 class="m-b-10"><strong>Earnings</strong></h4>
-                                <table class="table table-bordered">
-                                    <tbody>
-                                        <tr>
-                                            <td>Gross Salary <span class="float-end">$ {{$payslip->total_gross_salary}}</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Increasment <span class="float-end">$55</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Incentive <span class="float-end">$55</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Bonus(Annual/PB/KNY) <span class="float-end">$ {{$payslip->bunus == null ? 0 : $payslip->bunus->total_allowance}}</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Seniority pay <span class="float-end">$ {{$payslip->seniority == null ? 0 : $payslip->seniority->total_salary_receive}}</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Severance Pay <span class="float-end">$ {{$payslip->severancePay == null ? 0 : $payslip->severancePay->total_contract_severance_pay}}</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Adjustment(+/-) <span class="float-end">$55</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Leaves  (+/-) <span class="float-end">$55</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Phone <span class="float-end">$ {{$payslip->phone_allowance == null ? 0 : $payslip->phone_allowance}}</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td><strong>Total Earnings</strong> <span class="float-end"><strong>$ {{$payslip->total_gross_salary}}</strong></span></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div>
-                                <h4 class="m-b-10"><strong>Deductions</strong></h4>
-                                <table class="table table-bordered">
-                                    <tbody>
-                                        <tr>
-                                            <td>Personal Tax <span class="float-end">$0</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Pension Fund <span class="float-end">$0</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Staff loan <span class="float-end">$550</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td><strong>Total Deductions</strong> <span class="float-end"><strong>$59698</strong></span></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
                         <div class="col-sm-12">
-                            <p><strong>Total Net Pay: $59698</strong></p>
+                            <div>
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr class="tr-bckground-ch">
+                                            <th>Earning </th>
+                                            <th style="text-align: center;">Amount</th>
+                                            <th>Deduction </th>
+                                            <th style="text-align: center;">Amount</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        <tr>
+                                            <td>Gross Salary</td>
+                                            <td>
+                                                <span class="float-end">$ {{$payslip->total_gross_salary}}</span>
+                                            </td>
+                                            <td>Personal Tax</td>
+                                            <td>
+                                                <span class="float-end">$ 0.00</span>
+                                            </td>
+                                        </tr>
+                                        
+                                        <tr>
+                                            <td>Increasment</td>
+                                            <td>
+                                                <span class="float-end">$ 0.00</span>
+                                            </td>
+                                            <td>Pension Fund</td>
+                                            <td>
+                                                <span class="float-end">$ 0.00</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Incentive</td>
+                                            <td>
+                                                <span class="float-end">$ 0.00</span>
+                                            </td>
+                                            <td>Staff loan</td>
+                                            <td>
+                                                <span class="float-end">$ 0.00</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Bonus(Annual/PB/KNY)</td>
+                                            <td>
+                                                <span class="float-end">$ {{$payslip->total_kny_phcumben}}</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Seniority pay</td>
+                                            <td>
+                                                <span class="float-end">$ {{$payslip->tax_free_seniority_allowance}}</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Severance Pay</td>
+                                            <td>
+                                                <span class="float-end">$ {{$payslip->total_severance_pay}}</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Adjustment(+/-)</td>
+                                            <td>
+                                                <span class="float-end">$ 0.00</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Leaves  (+/-)</td>
+                                            <td>
+                                                <span class="float-end">$ 0.00</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Phone Allowance</td>
+                                            <td>
+                                                <span class="float-end">$ {{$payslip->phone_allowance == null ? '0.00' : $payslip->phone_allowance}}</span>
+                                            </td>
+                                        </tr>
+                                        <tr style="background-color: #d2dbdb;">
+                                            <td><strong>Total Earnings</strong></td>
+                                            <td>
+                                                <span class="float-end">$ {{$payslip->total_gross_salary + $payslip->phone_allowance + $payslip->total_kny_phcumben + $payslip->total_severance_pay + $payslip->tax_free_seniority_allowance}}</span>
+                                            </td>
+                                            <td><strong>Total Deductions :</strong></td>
+                                            <td><span class="float-end">$ 59698</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td><p><strong>Total Net Pay:</strong></p></td>
+                                            <td><span class="float-end">$ 59698</span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>

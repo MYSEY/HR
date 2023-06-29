@@ -33,7 +33,7 @@ class PayrollRepository extends BaseRepository
 
     public function getAllPayroll(){
         if (Auth::user()->RolePermission == 'Administrator') {
-            return Payroll::with('users')->get();
+            return Payroll::with('users')->where('payment_date','>',Carbon::now()->month())->get();
         } else {
             return Payroll::where('employee_id',Auth::user()->id)->where('role_id',Auth::user()->role_id)->get();
         }

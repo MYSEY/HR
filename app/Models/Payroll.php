@@ -30,7 +30,7 @@ class Payroll extends Model
         'total_kny_phcumben',
         'total_pension_fund',
         'total_severance_pay',
-        'total_seniority_pay',
+        'seniority_payable_tax',
         'base_salary_received_usd',
         'base_salary_received_riel',
         'total_amount_reduced',
@@ -76,7 +76,7 @@ class Payroll extends Model
             return Carbon::parse($this->created_at)->format('d-M-Y');
         }
     }
-    public function getPayrollDateAttribute(){
+    public function getPayrollPaymentDateAttribute(){
         if ($this->payment_date) {
             return Carbon::parse($this->payment_date)->format('d-M-Y');
         }

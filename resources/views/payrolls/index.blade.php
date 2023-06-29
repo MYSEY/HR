@@ -69,20 +69,23 @@
                                                 </th>
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                     rowspan="1" colspan="1"
+                                                    aria-label="Join Date: activate to sort column ascending">Total Gross Salary
+                                                </th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                    rowspan="1" colspan="1"
+                                                    aria-label="Join Date: activate to sort column ascending">Seniority Payable Tax
+                                                </th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                    rowspan="1" colspan="1"
                                                     aria-label="Join Date: activate to sort column ascending">Pension Fund
                                                 </th>
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                     rowspan="1" colspan="1"
                                                     aria-label="Join Date: activate to sort column ascending">Base Salary Received
                                                 </th>
-                                                
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                     rowspan="1" colspan="1"
-                                                    aria-label="Join Date: activate to sort column ascending">Seniority Pay
-                                                </th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                    rowspan="1" colspan="1"
-                                                    aria-label="Join Date: activate to sort column ascending">Total Gross Salary
+                                                    aria-label="Join Date: activate to sort column ascending">Tax-free Seniority
                                                 </th>
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                     rowspan="1" colspan="1"
@@ -135,13 +138,14 @@
                                                         <td>$ <a href="#">{{ $item->total_child_allowance }}</a></td>
                                                         <td>$ <a href="#">{{ $item->phone_allowance == null ? '0.00' : $item->phone_allowance}}</a></td>
                                                         <td>$ <a href="#">{{ $item->total_kny_phcumben}}</a></td>
+                                                        <td>$ <a href="#">{{ $item->total_gross_salary }}</a></td>
+                                                        <td>$ <a href="#">{{ $item->seniority_payable_tax}}</a></td>
                                                         <td>$ <a href="#">{{ $item->total_pension_fund}}</a></td>
                                                         <td>$ <a href="#">{{ $item->base_salary_received_usd}}</a></td>
-                                                        <td>$ <a href="#">{{ $item->total_seniority_pay}}</a></td>
-                                                        <td>$ <a href="#">{{ $item->total_gross_salary }}</a></td>
+                                                        <td>$ <a href="#">{{ $item->tax_free_seniority_allowance}}</a></td>
                                                         <td>$ <a href="#">{{ $item->total_severance_pay}}</a></td>
                                                         <td>$ <a href="#">{{ $item->total_salary }}</a></td>
-                                                        <td>{{ $item->PayrollDate }}</td>
+                                                        <td>{{ $item->PayrollPaymentDate }}</td>
                                                         <td>{{ $item->Created }}</td>
                                                         <td><a class="btn btn-sm btn-primary" href="{{ url('payslip', $item->employee_id) }}">Generate Slip</a></td>
                                                         <td class="text-end">
