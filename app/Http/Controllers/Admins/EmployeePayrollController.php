@@ -62,13 +62,7 @@ class EmployeePayrollController extends Controller
      */
     public function store(Request $request)
     {
-        // $currentYear = '2024-03-25';
-        // $totalSalary = GrossSalaryPay::where('employee_id', 2)->where('payment_date','>=',$currentYear)->pluck('total_gross_salary')->avg();
-        // dd($totalSalary);
         // try{
-            // get exchang rate
-            // $exChange= ExchangeRate::first();
-            // $request->exchange_rate =  $exChange->amount_riel;
             $employee = User::where('date_of_commencement','<=',$request->payment_date)->whereIn('emp_status',['Probation','1','2'])->get();
             foreach ($employee as $item) {
                 //function first month join work
@@ -92,21 +86,18 @@ class EmployeePayrollController extends Controller
                         if ($sunday == 0) {
                             $holidays[] = $date->format("Y-m-d");
                         } else {
-                            echo'';
+                            echo '';
                         }
                     }
                     $startDate = Carbon::parse($item->date_of_commencement);
                     $endDate = Carbon::parse($currentYear.'-'.$totalDayInMonth);
                     $totalDays = $startDate->diffInDaysFiltered(function (Carbon $date) use ($holidays) {
                         return $date->isWeekday() && !in_array($date, $holidays);
-                    }, $endDate);
-                    if(count($holidays) == 4){
-                        $totalDays + 1;
-                    }
-                    if ($totalDays > 22) {
+                    }, $endDate) + 1;
+                    if ($totalDays == 22) {
                         $totalBasicSalary = $item->basic_salary;
                     }else{
-                        $totalBasicSalary = $totalDays * ($item->basic_salary / 22);
+                        $totalBasicSalary = ($item->basic_salary / 22) * $totalDays;
                     }
                 } else {
                     $monthToPay = Carbon::parse($item->fdc_date)->format('Y-m-d');
@@ -117,6 +108,7 @@ class EmployeePayrollController extends Controller
                         $totalBasicSalary = $item->basic_salary;
                     }
                 }
+                
                 //National Social Security Fund (NSSF) Formula
                 $totalExchangeRielPreTax =  $request->exchange_rate * $totalBasicSalary;
                 // dd($totalExchangeRielPreTax);
@@ -160,33 +152,24 @@ class EmployeePayrollController extends Controller
                         $userJoinDate = $item->date_of_commencement;
                         $startDate = Carbon::parse()->diffInDays($userJoinDate) + 1;
                         $dayOfYear = 365;
-                        if($value->period_month == $request->payment_date){
-                            $fromDate = Carbon::parse($item->date_of_commencement);
-                            $toDate = Carbon::parse($value->from);
-                            $totalStartDays = $fromDate->diffInDays($toDate) - 1;
-                            if ($totalStartDays > 365) {
+                        $fromDate = Carbon::parse($item->date_of_commencement);
+                        $toDate = Carbon::parse($value->from);
+                        $totalStartDays = $fromDate->diffInDays($toDate) - 1;
+                        if($request->payment_date == $value->period_month){
+                            if ($totalStartDays > $dayOfYear) {
                                 $percent = $value->amount_percent / 100;
-                                $totalAllowance = ($item->basic_salary * $percent);
+                                $totalAllowanceBunus = ($item->basic_salary * $percent);
                             } else {
                                 $percent = $value->amount_percent / 100;
                                 $totalPercent = ($item->basic_salary * $percent);
                                 $percentSalary = $totalPercent * $totalStartDays;
-                                $totalAllowance = $percentSalary / $dayOfYear;
+                                $totalAllowanceBunus = $percentSalary / $dayOfYear;
                             }
-                            $dataBonus = Bonus::create([
-                                'employee_id'   => $item->id,
-                                'number_of_working_days'    => $totalStartDays,
-                                'base_salary'   => $item->basic_salary,
-                                'base_salary_received'  => $item->basic_salary,
-                                'total_allowance'   => $totalAllowance,
-                                'bouns_type'   => $value->title,
-                                'created_by'    => Auth::user()->id,
-                            ]);
-                            $totalBunus = $dataBonus->total_allowance ?? 0;
                         }
+                        $totalBunus = $totalAllowanceBunus ?? 0;
                     }
                 }
-
+                // dd($totalBunus);
                 // sum benefit children < 18
                 $dataDateOfBirth = [];
                 $dataChildren = ChildrenInfor::where('employee_id',$item->id)->get();
@@ -214,7 +197,7 @@ class EmployeePayrollController extends Controller
                     $totalAmountChild = 0;
                 }
                 
-                $grossSalary = $item->basic_salary + $totalBunus + $item->phone_allowance + $totalAmountChild;
+                $grossSalary = $totalBasicSalary + $totalBunus + $item->phone_allowance + $totalAmountChild;
 
                 $dataGrossSalary = GrossSalaryPay::create([
                     'employee_id'           => $item->id,

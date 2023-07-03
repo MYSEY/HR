@@ -71,7 +71,6 @@
                             <div class="form-group">
                                 <label>Gender</label>
                                 <select class="form-control" id="e_gender" name="gender">
-                                    <option selected disabled value=""> --Select --</option>
                                 </select>
                             </div>
                         </div>
