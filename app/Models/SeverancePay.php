@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class SeverancePay extends Model
 {
@@ -20,5 +21,9 @@ class SeverancePay extends Model
         'created_by',
         'updated_by',
     ];
-
+    //RelationShip
+    public function users()
+    {
+        return $this->belongsTo(User::class ,'employee_id');
+    }
 }

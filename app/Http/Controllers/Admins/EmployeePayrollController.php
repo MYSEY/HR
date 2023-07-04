@@ -6,7 +6,6 @@ use DateTime;
 use DatePeriod;
 use DateInterval;
 use App\Models\User;
-use App\Models\Bonus;
 use App\Models\Holiday;
 use App\Models\Payroll;
 use App\Models\Seniority;
@@ -94,7 +93,8 @@ class EmployeePayrollController extends Controller
                     $totalDays = $startDate->diffInDaysFiltered(function (Carbon $date) use ($holidays) {
                         return $date->isWeekday() && !in_array($date, $holidays);
                     }, $endDate) + 1;
-                    if ($totalDays <= 22) {
+                    
+                    if ($totalDays == 22) {
                         $totalBasicSalary = $item->basic_salary;
                     }else{
                         $totalBasicSalary = ($item->basic_salary / 22) * $totalDays;
@@ -108,6 +108,7 @@ class EmployeePayrollController extends Controller
                         $totalBasicSalary = $item->basic_salary;
                     }
                 }
+                
                 //National Social Security Fund (NSSF) Formula
                 $totalExchangeRielPreTax =  $request->exchange_rate * $totalBasicSalary;
                 // dd($totalExchangeRielPreTax);
@@ -131,10 +132,10 @@ class EmployeePayrollController extends Controller
                     'total_pre_tax_salary_usd'   => number_format($totalBasicSalary, 2),
                     'total_pre_tax_salary_riel'   => number_format($totalExchangeRielPreTax),
                     'total_average_wage'   => number_format($averageWage),
-                    'total_occupational_risk'   => round($occupationalRisk, 2),
-                    'total_health_care'   => round($healthCare, 2),
-                    'pension_contribution_usd'   => round($workerContributionUsd, 2),
-                    'pension_contribution_riel'   => round($workerContributionRiel, 2),
+                    'total_occupational_risk'   => number_format($occupationalRisk, 2),
+                    'total_health_care'   => number_format($healthCare, 2),
+                    'pension_contribution_usd'   => number_format($workerContributionUsd, 2),
+                    'pension_contribution_riel'   => number_format($workerContributionRiel, 2),
                     'corporate_contribution'   => number_format($workerContributionUsd),
                     'created_by'   => Auth::user()->id,
                 ]);

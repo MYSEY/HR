@@ -42,6 +42,10 @@
                                                     rowspan="1" colspan="1">Employee ID</th>
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                     rowspan="1" colspan="1"
+                                                    aria-label="Email: activate to sort column ascending">Position
+                                                </th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                    rowspan="1" colspan="1"
                                                     aria-label="Email: activate to sort column ascending">Department
                                                 </th>
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
@@ -130,9 +134,10 @@
                                                             </h2>
                                                         </td>
                                                         <td> <a href="#">{{ $item->users == null ? '' : $item->users->employee_name_en }}</span></a></td>
-                                                        <td>{{ $item->users == null ? '' : $item->users->number_employee }}</td>
-                                                        <td>{{ $item->users == null ? '' : $item->users->EmployeeDepartment }}</td>
-                                                        <td>{{ $item->users == null ? '' : $item->users->EmployeeBranch }}</td>
+                                                        <td><a href="#">{{ $item->users == null ? '' : $item->users->number_employee }}</a></td>
+                                                        <td><a href="#">{{ $item->users == null ? '' : $item->users->EmployeePosition }}</a></td>
+                                                        <td><a href="#">{{ $item->users == null ? '' : $item->users->EmployeeDepartment }}</a></td>
+                                                        <td><a href="#">{{ $item->users == null ? '' : $item->users->EmployeeBranch }}</a></td>
                                                         <td>{{ $item->users == null ? '' : $item->users->joinOfDate }}</td>
                                                         <td>$ <a href="#">{{ $item->basic_salary }}</a></td>
                                                         <td>$ <a href="#">{{ $item->total_child_allowance }}</a></td>
@@ -199,17 +204,17 @@
                         <div class="row">
                             <div class="col-sm-6">
                                 <div class="form-gorup">
-                                    <label>USD</label>
+                                    <label>US Dollar</label>
                                     <div class="input-group">
                                         <span class="input-group-text">$</span>
                                         <input type="number" class="form-control" id="" name=""
-                                            placeholder="" value="1">
+                                            placeholder="" value="1.00">
                                     </div>
                                 </div>
                             </div>
                             <div class="col-sm-6">
                                 <div class="form-gorup">
-                                    <label>Riel</label>
+                                    <label>Riels</label>
                                     <div class="input-group">
                                         <span class="input-group-text">៛</span>
                                         <input type="number" class="form-control" id="exchange_rate"

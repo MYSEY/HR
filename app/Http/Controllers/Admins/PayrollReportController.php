@@ -2,17 +2,20 @@
 
 namespace App\Http\Controllers\Admins;
 
+use Carbon\Carbon;
+use App\Models\User;
+use App\Models\Branchs;
+use App\Models\Payroll;
+use App\Models\Seniority;
+use App\Models\MotorRentel;
+use App\Models\SeverancePay;
+use Illuminate\Http\Request;
 use App\Exports\ExportMotorRentel;
 use App\Http\Controllers\Controller;
-use App\Models\Branchs;
-use App\Models\MotorRentel;
-use App\Models\Payroll;
-use App\Models\User;
-use App\Repositories\Admin\MotorRentalRepository;
 use Brian2694\Toastr\Facades\Toastr;
-use Carbon\Carbon;
-use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Models\NationalSocialSecurityFund;
+use App\Repositories\Admin\MotorRentalRepository;
 
 class PayrollReportController extends Controller
 {
@@ -30,7 +33,10 @@ class PayrollReportController extends Controller
     public function index()
     {
         $payroll = Payroll::with('users')->get();
-        return view('reports.payroll_report',compact('payroll'));
+        $dataNSSF = NationalSocialSecurityFund::all();
+        $dataSeniority = Seniority::all();
+        $severancePay = SeverancePay::all();
+        return view('reports.payroll_report',compact('payroll','dataNSSF','dataSeniority','severancePay'));
     }
 
     public function motorrentel(Request $request)

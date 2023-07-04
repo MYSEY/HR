@@ -79,7 +79,7 @@
                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="DOB: activate to sort column ascending" style="width: 81.0625px;">DOB</th>
                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Martial Status: activate to sort column ascending" style="width: 100.25px;">Martial Status</th>
                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Gender: activate to sort column ascending" style="width: 52.95px;">Gender</th>
-                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Salary: activate to sort column ascending" style="width: 51.475px;">Salary</th>
+                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Salary: activate to sort column ascending" style="width: 51.475px;">Basic Salary</th>
                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Address: activate to sort column ascending" style="width: 349.275px;">Address</th>
                                         <th class="text-center sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Status: activate to sort column ascending" style="width: 55.5625px;">Status</th>
                                     </tr>
@@ -101,68 +101,68 @@
                                                         @endif
                                                     </h2>
                                                 </td>
-                                                <td><a href="#">{{$item->employee_name_en}}</a></td>
-                                                <td>{{$item->RolePermission}}</td>
-                                                <td>{{$item->EmployeeDepartment}}</td>
-                                                <td>{{$item->EmployeePosition}}</td>
-                                                <td>{{$item->EmployeeBranch}}</td>
+                                                <td><a href="{{route('employee.profile',$item->id)}}">{{$item->employee_name_en}}</a></td>
+                                                <td><a href="{{route('employee.profile',$item->id)}}">{{$item->RolePermission}}</a></td>
+                                                <td><a href="{{route('employee.profile',$item->id)}}">{{$item->EmployeeDepartment}}</a></td>
+                                                <td><a href="{{route('employee.profile',$item->id)}}">{{$item->EmployeePosition}}</a></td>
+                                                <td><a href="{{route('employee.profile',$item->id)}}">{{$item->EmployeeBranch}}</a></td>
                                                 <td>{{$item->joinOfDate ?? ''}}</td>
                                                 <td>{{$item->DOB ?? ''}}</td>
                                                 <td>{{$item->marital_status}}</td>
                                                 <td>{{ $item->EmployeeGender }}</td>
-                                                <td>$ {{$item->basic_salary}}</td>
+                                                <td>$ <a href="#">{{$item->basic_salary}}</a></td>
                                                 <td>
-                                                   {{$item->FullAddressEn}}
+                                                   {{$item->FullCurrentAddress}}
                                                 </td>
                                                 <td>
                                                     <div class="dropdown action-label">
                                                         @if ($item->emp_status=='Probation')
-                                                            <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
+                                                            <a class="btn btn-white btn-sm" href="#">
                                                                 <i class="fa fa-dot-circle-o text-success"></i>
                                                                 <span>{{ $item->emp_status }}</span>
                                                             </a>
                                                         @elseif ($item->emp_status=='1')
-                                                            <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
+                                                            <a class="btn btn-white btn-sm" href="#">
                                                                 <i class="fa fa-dot-circle-o text-info"></i>
                                                                 <span>FDC</span>
                                                             </a>
                                                         @elseif ($item->emp_status=='2')
-                                                            <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
+                                                            <a class="btn btn-white btn-sm" href="#">
                                                                 <i class="fa fa-dot-circle-o text-danger"></i>
                                                                 <span>UDC</span>
                                                             </a>
                                                         @elseif ($item->emp_status=='3')
-                                                            <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
+                                                            <a class="btn btn-white btn-sm" href="#">
                                                                 <i class="fa fa-dot-circle-o text-dark"></i>
                                                                 <span>Resignation</span>
                                                             </a>
                                                         @elseif ($item->emp_status=='4')
-                                                            <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
+                                                            <a class="btn btn-white btn-sm" href="#">
                                                                 <i class="fa fa-dot-circle-o text-dark"></i>
                                                                 <span>Termination</span>
                                                             </a>
                                                         @elseif ($item->emp_status=='5')
-                                                            <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
+                                                            <a class="btn btn-white btn-sm" href="#">
                                                                 <i class="fa fa-dot-circle-o text-dark"></i>
                                                                 <span>Death</span>
                                                             </a>
                                                         @elseif ($item->emp_status=='6')
-                                                            <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
+                                                            <a class="btn btn-white btn-sm" href="#">
                                                                 <i class="fa fa-dot-circle-o text-dark"></i>
                                                                 <span>Retired</span>
                                                             </a>
                                                         @elseif ($item->emp_status=='7')
-                                                            <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
+                                                            <a class="btn btn-white btn-sm" href="#">
                                                                 <i class="fa fa-dot-circle-o text-dark"></i>
                                                                 <span>Lay off</span>
                                                             </a>
                                                         @elseif ($item->emp_status=='8')
-                                                            <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
+                                                            <a class="btn btn-white btn-sm" href="#">
                                                                 <i class="fa fa-dot-circle-o text-dark"></i>
                                                                 <span>Suspension</span>
                                                             </a>
                                                         @elseif ($item->emp_status=='9')
-                                                            <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
+                                                            <a class="btn btn-white btn-sm" href="#">
                                                                 <i class="fa fa-dot-circle-o text-dark"></i>
                                                                 <span>Fall Probation</span>
                                                             </a>

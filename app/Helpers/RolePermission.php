@@ -53,13 +53,7 @@ function menu(){
                     'url'=>"leaves/employee",
                     'table'=>12,
                     'permission'=>1
-                ],
-                [
-                    'value'=>'Public Holiday',
-                    'url'=>"holidays",
-                    'table'=>6,
-                    'permission'=>1
-                ],
+                ]
             ]
         ],
         [
@@ -205,6 +199,13 @@ function menu(){
                     'value'=>'Exchange Rate',
                     'url'=>"exchange-rate/list",
                     'table'=>7,
+                    'permission'=>1
+                ],
+                
+                [
+                    'value'=>'Public Holiday',
+                    'url'=>"holidays",
+                    'table'=>6,
                     'permission'=>1
                 ],
             ]
