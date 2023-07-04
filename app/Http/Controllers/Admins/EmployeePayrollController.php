@@ -94,21 +94,20 @@ class EmployeePayrollController extends Controller
                     $totalDays = $startDate->diffInDaysFiltered(function (Carbon $date) use ($holidays) {
                         return $date->isWeekday() && !in_array($date, $holidays);
                     }, $endDate) + 1;
-                    if ($totalDays == 22) {
+                    if ($totalDays <= 22) {
                         $totalBasicSalary = $item->basic_salary;
                     }else{
                         $totalBasicSalary = ($item->basic_salary / 22) * $totalDays;
                     }
                 } else {
-                    $monthToPay = Carbon::parse($item->fdc_date)->format('Y-m-d');
-                    $currentMonthToPay = Carbon::createFromDate($request->payment_date)->format('Y-m-d');
+                    $monthToPay = Carbon::createFromDate($item->fdc_date)->format('Y-m');
+                    $currentMonthToPay = Carbon::createFromDate($request->payment_date)->format('Y-m');
                     if($monthToPay == $currentMonthToPay){
                         $totalBasicSalary = $item->pre_salary;
                     }else{
                         $totalBasicSalary = $item->basic_salary;
                     }
                 }
-                
                 //National Social Security Fund (NSSF) Formula
                 $totalExchangeRielPreTax =  $request->exchange_rate * $totalBasicSalary;
                 // dd($totalExchangeRielPreTax);

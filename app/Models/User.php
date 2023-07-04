@@ -232,7 +232,7 @@ class User extends Authenticatable
         $data = Option::where('type','gender')->get();
         foreach($data as $item){
             if($this->gender == $item->id){
-                $Gender = $item->name_khmer;
+                $Gender = $item->name_english;
             }
         }
         return $Gender ?? "";
@@ -241,10 +241,28 @@ class User extends Authenticatable
         $data = Option::where('type','identity_type')->get();
         foreach($data as $item){
             if($this->identity_type == $item->id){
-                $IdentityType = $item->name_khmer;
+                $IdentityType = $item->name_english;
             }
         }
         return $IdentityType ?? "";
+    }
+    public function getEmployeePositionTypeAttribute(){
+        $data = Option::where('type','position_type')->get();
+        foreach($data as $item){
+            if($this->position_type == $item->id){
+                $positionType = $item->name_english;
+            }
+        }
+        return $positionType ?? "";
+    }
+    public function getEmployeeIsLoanAttribute(){
+        $data = Option::where('type','loan')->get();
+        foreach($data as $item){
+            if($this->is_loan == $item->id){
+                $positionType = $item->name_english;
+            }
+        }
+        return $positionType ?? "";
     }
     
     public function getEmployeeBranchAttribute(){

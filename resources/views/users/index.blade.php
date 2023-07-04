@@ -103,10 +103,12 @@
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending" style="width: 218.762px;">Branch</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Mobile: activate to sort column ascending" style="width: 83.3625px;">Mobile</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Role: activate to sort column ascending" style="width: 80.8125px;">Role</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Role: activate to sort column ascending" style="width: 80.8125px;">Position Type</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Role: activate to sort column ascending" style="width: 80.8125px;">Basic Salary</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending" style="width: 218.762px;">DOB</th>
                                             <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending" style="width: 87.1125px;">Join Date</th>
                                             <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending" style="width: 87.1125px;">Past Date</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Role: activate to sort column ascending" style="width: 135.163px;">Loan</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Role: activate to sort column ascending" style="width: 135.163px;">Status</th>
                                             <th class="text-end no-sort sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Action: activate to sort column ascending" style="width: 50.825px;">Action</th>
                                         </tr>
@@ -140,10 +142,26 @@
                                                     <td>
                                                         <span class="badge bg-inverse-success">{{ $item->role == null ? "" : $item->role->name }}</span>
                                                     </td>
+                                                    <td>{{$item->EmployeePositionType}}</td>
                                                     <td>$ {{$item->basic_salary}}</td>
                                                     <td>{{$item->DOB ?? ''}}</td>
                                                     <td>{{$item->joinOfDate}}</td>
                                                     <td>{{$item->PassDate}}</td>
+                                                    <td>
+                                                        @if ($item->EmployeeIsLoan == 'Yes')
+                                                            <a class="btn btn-white btn-sm" href="#" aria-expanded="false">
+                                                                <i class="fa fa-dot-circle-o text-success"></i>
+                                                                <span>{{$item->EmployeeIsLoan}}</span>
+                                                            </a>
+                                                        @elseif($item->EmployeeIsLoan == 'No')
+                                                            <a class="btn btn-white btn-sm" href="#" aria-expanded="false">
+                                                                <i class="fa fa-dot-circle-o text-danger"></i>
+                                                                <span>{{$item->EmployeeIsLoan}}</span>
+                                                            </a>
+                                                        @else
+                                                            
+                                                        @endif
+                                                    </td>
                                                     <td>
                                                         <div class="dropdown action-label">
                                                             @if ($item->emp_status=='Probation')

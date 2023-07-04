@@ -249,7 +249,7 @@ class UserController extends Controller
                     'fdc_date' => $request->start_date,
                     'fdc_end' => $request->end_dete,
                     'basic_salary' => $request->new_salary,
-                    'pre_salary' => $totalPreSalary,
+                    'pre_salary' => number_format($totalPreSalary, 2),
                     'resign_reason' => $request->resign_reason
                 ]);
             }else if($request->emp_status == 2){

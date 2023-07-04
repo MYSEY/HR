@@ -93,6 +93,10 @@
                                 <h3 class="card-title">Personal Informations </a></h3>
                                 <ul class="personal-info">
                                     <li>
+                                        <div class="title">Position Type</div>
+                                        <label class="text">{{ $data->EmployeePositionType }}</label>
+                                    </li>
+                                    <li>
                                         <div class="title">Identity Type</div>
                                         <label class="text">{{ $data->EmployeeIdentityType }}</label>
                                     </li>
@@ -125,8 +129,8 @@
                                         <label class="text">{{ $data->marital_status }}</label>
                                     </li>
                                     <li>
-                                        <div class="title">Permanent Addtress</div>
-                                        <label style="display: block;overflow: hidden;color: #888888;">{{ $data->FullPermanentAddress ?? "" }}</label>
+                                        <div class="title">Loan</div>
+                                        <label class="text">{{ $data->EmployeeIsLoan }}</label>
                                     </li>
                                 </ul>
                             </div>
