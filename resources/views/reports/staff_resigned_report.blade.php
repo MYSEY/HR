@@ -14,10 +14,10 @@
         <div class="row align-items-center">
             <div class="row align-items-center">
                 <div class="col">
-                    <h3 class="page-title">Staff Resigned Report</h3>
+                    <h3 class="page-title">Staff Resigned Reports</h3>
                     <ul class="breadcrumb">
                         <li class="breadcrumb-item"><a href="{{ url('/dashboad/employee') }}">Dashboard</a></li>
-                        <li class="breadcrumb-item active">Staff Resigned Report</li>
+                        <li class="breadcrumb-item active">Staff Resigned Reports</li>
                     </ul>
                 </div>
                 <div class="col-auto float-end ms-auto">
@@ -58,14 +58,14 @@
             <div class="col-sm-6 col-md-3 col-lg-3 col-xl-2 col-12">
                 <div class="form-group">
                     <div class="cal-icon">
-                        <input class="form-control floating datetimepicker" type="text" id="join_date" placeholder="Join date">
+                        <input class="form-control floating datetimepicker" type="text" id="join_date" placeholder="Join Date">
                     </div>
                 </div>
             </div>
             <div class="col-sm-6 col-md-3 col-lg-3 col-xl-2 col-12">
                 <div class="form-group">
                     <div class="cal-icon">
-                        <input class="form-control floating datetimepicker" type="text" id="leave_of_absence" placeholder="Leave of absence">
+                        <input class="form-control floating datetimepicker" type="text" id="leave_of_absence" placeholder="Leave of Absence">
                     </div>
                 </div>
             </div>
@@ -120,7 +120,7 @@
                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                             rowspan="1" colspan="1"
                                             aria-label="Join Date: activate to sort column ascending"
-                                            style="width: 125.15px;">Leave of absence</th>
+                                            style="width: 125.15px;">Leave of Absence</th>
                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                             rowspan="1" colspan="1"
                                             aria-label="Remark: activate to sort column ascending"

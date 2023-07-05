@@ -123,7 +123,7 @@
                                 aria-valuemin="0" aria-valuemax="100"><span id="percantage-udc"></span></div>
                         </div>
                         <div>
-                            <p><i class="fa fa-dot-circle-o text-purple me-2"></i>Up-Caming <span
+                            <p><i class="fa fa-dot-circle-o text-purple me-2"></i>Up-Coming <span
                                     id="total-interview" class="float-end">0</span></p>
                             <p><i class="fa fa-dot-circle-o text-success me-2"></i>Probation <span
                                     id="total-probation" class="float-end">0</span></p>
@@ -138,7 +138,7 @@
             <div class="col-md-12 col-lg-12 col-xl-4 d-flex">
                 <div class="card flex-fill dash-statistics">
                     <div class="card-body">
-                        <h5 class="card-title">Star Age of Staff</h5>
+                        <h5 class="card-title">Staff Age Range</h5>
                         <p><i class="fa fa-dot-circle-o text-info"></i> <span class="me-2">Age</span></p>
                         <div class="stats-list">
                             <div class="stats-info">
@@ -415,9 +415,8 @@
             let option = {};
             if (db.name == "staff_take_leave") {
                 type = "bar";
-                data = db.name == "staff_take_leave" ? dataStaffTakeLeave :
-                    dataStaffTraining;
-                text = 'Staff Training by Branch';
+                data = db.name == "staff_take_leave" ? dataStaffTakeLeave : dataStaffTraining;
+                text = 'Staff take leave';
                 option = {
                     plugins: {
                         legend: {
@@ -686,7 +685,7 @@
                 },
                 title: {
                     display: true,
-                    text: '% ACHIEVED BY BRANCHES'
+                    text: '% Current number of Staff'
                 },
             },
             responsive: true,
@@ -780,7 +779,7 @@
                 },
                 title: {
                     display: true,
-                    text: '% Staff Resignation'
+                    text: '% Resign Staff Resume'
                 },
             },
         }

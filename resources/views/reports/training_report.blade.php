@@ -18,10 +18,10 @@
         <div class="row align-items-center">
             <div class="row align-items-center">
                 <div class="col">
-                    <h3 class="page-title">Training Report</h3>
+                    <h3 class="page-title">Training Reports</h3>
                     <ul class="breadcrumb">
                         <li class="breadcrumb-item"><a href="{{ url('/dashboad/employee') }}">Dashboard</a></li>
-                        <li class="breadcrumb-item active">Training Report</li>
+                        <li class="breadcrumb-item active">Training Reports</li>
                     </ul>
                 </div>
                 <div class="col-auto float-end ms-auto">
@@ -49,7 +49,7 @@
                 <div class="col-sm-6 col-md-3 col-lg-3 col-xl-2 col-12">
                     <div class="form-group">
                         <input class="form-control floating" type="text" id="employee_name" name="employee_name"
-                            placeholder="Employee name">
+                            placeholder="Employee Name">
                     </div>
                 </div>
                 <div class="col-sm-6 col-md-2">
@@ -66,7 +66,7 @@
                     <div class="form-group">
                         <div class="cal-icon">
                             <input class="form-control floating datetimepicker" type="text" id="start_date" name="start_date"
-                                placeholder="Start date">
+                                placeholder="Start Date">
                         </div>
                     </div>
                 </div>
@@ -74,7 +74,7 @@
                     <div class="form-group">
                         <div class="cal-icon">
                             <input class="form-control floating datetimepicker" type="text" id="end_date" name="end_date"
-                                placeholder="End date">
+                                placeholder="End Date">
                         </div>
                     </div>
                 </div>
@@ -134,7 +134,7 @@
                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                             rowspan="1" colspan="1"
                                             aria-label="Seniority: activate to sort column ascending"
-                                            style="width: 125.15px;">Seniority</th>
+                                            style="width: 125.15px;">Employee Period</th>
                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                             rowspan="1" colspan="1"
                                             aria-label="Course Name: activate to sort column ascending"
@@ -142,7 +142,7 @@
                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                             rowspan="1" colspan="1"
                                             aria-label="Branch name: activate to sort column ascending"
-                                            style="width: 125.15px;">Dept/Branch</th>
+                                            style="width: 125.15px;">Location</th>
                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                             rowspan="1" colspan="1"
                                             aria-label="Start Date: activate to sort column ascending"
@@ -154,7 +154,7 @@
                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                             rowspan="1" colspan="1"
                                             aria-label="Duration of service: activate to sort column ascending"
-                                            style="width: 125.15px;">Duration of service</th>
+                                            style="width: 125.15px;">Duration Term</th>
                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                             rowspan="1" colspan="1"
                                             aria-label="Price/Unit: activate to sort column ascending"
@@ -162,7 +162,7 @@
                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                             rowspan="1" colspan="1"
                                             aria-label="Discount Price: activate to sort column ascending"
-                                            style="width: 125.15px;">Discount Price</th>
+                                            style="width: 125.15px;">Discount Fee</th>
                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                             rowspan="1" colspan="1"
                                             aria-label="Total: activate to sort column ascending"

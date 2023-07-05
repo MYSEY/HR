@@ -14,10 +14,10 @@
         <div class="row align-items-center">
             <div class="row align-items-center">
                 <div class="col">
-                    <h3 class="page-title">Staff Transferred Report</h3>
+                    <h3 class="page-title">Staff Transferred Reports</h3>
                     <ul class="breadcrumb">
                         <li class="breadcrumb-item"><a href="{{ url('/dashboad/employee') }}">Dashboard</a></li>
-                        <li class="breadcrumb-item active">Staff Transferred Report</li>
+                        <li class="breadcrumb-item active">Staff Transferred Reports</li>
                     </ul>
                 </div>
                 <div class="col-auto float-end ms-auto">
@@ -42,14 +42,14 @@
             <div class="col-sm-6 col-md-3 col-lg-3 col-xl-2 col-12">
                 <div class="form-group">
                     <div class="cal-icon">
-                        <input class="form-control floating datetimepicker" type="text" id="from_date" placeholder="From date">
+                        <input class="form-control floating datetimepicker" type="text" id="from_date" placeholder="From Date">
                     </div>
                 </div>
             </div>
             <div class="col-sm-6 col-md-3 col-lg-3 col-xl-2 col-12">
                 <div class="form-group">
                     <div class="cal-icon">
-                        <input class="form-control floating datetimepicker" type="text" id="to_date" placeholder="To date">
+                        <input class="form-control floating datetimepicker" type="text" id="to_date" placeholder="To Date">
                     </div>
                 </div>
             </div>

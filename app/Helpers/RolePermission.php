@@ -38,12 +38,12 @@ function menu(){
         [
             'name'=>'Employee',
             'icon'=>'<i class="la la-user"></i> <span></span> <span class="menu-arrow"></span>',
-            'value'=>'Employees',
+            'value'=>'Employee',
             'table'=>2,
             'permission'=>1,
             'child'=>[
                 [
-                    'value'=>'All Employees',
+                    'value'=>'All Employee',
                     'url'=>"users",
                     'table'=>3,
                     'permission'=>1
@@ -59,7 +59,7 @@ function menu(){
         [
             'name'=>'HR',
             'icon'=>'<i class="la la-money"></i> <span></span> <span class="menu-arrow"></span>',
-            'value'=>'Payrolls',
+            'value'=>'Payroll',
             'table'=>2,
             'permission'=>1,
             'child'=>[
@@ -80,7 +80,7 @@ function menu(){
         [
             'name'=>'',
             'icon'=>'<i class="la la-briefcase"></i> <span></span> <span class="menu-arrow"></span>',
-            'value'=>'Recruitments',
+            'value'=>'Recruitment',
             'table'=>2,
             'permission'=>1,
             'child'=>[
@@ -112,7 +112,7 @@ function menu(){
                     'permission'=>1
                 ],
                 [
-                    'value'=>'Trainers',
+                    'value'=>'Trainer',
                     'url'=>"trainer/list",
                     'table'=>2,
                     'permission'=>1
@@ -134,7 +134,7 @@ function menu(){
         [
             'name'=>'',
             'icon'=>'<i class="la la-pie-chart"></i> <span></span> <span class="menu-arrow"></span>',
-            'value'=>'Reports',
+            'value'=>'Report',
             'table'=>2,
             'permission'=>1,
             'child'=>[
@@ -190,7 +190,7 @@ function menu(){
             'permission'=>1,
             'child'=>[
                 [
-                    'value'=>'Taxes',
+                    'value'=>'Taxe',
                     'url'=>"taxes",
                     'table'=>7,
                     'permission'=>1
@@ -213,12 +213,12 @@ function menu(){
         [
             'name'=>'',
             'icon'=>'<i class="la la-cog"></i> <span> </span> <span class="menu-arrow"></span>',
-            'value'=>'Settings',
+            'value'=>'Setting',
             'table'=>7,
             'permission'=>1,
             'child'=>[
                 [
-                    'value'=>'Banks',
+                    'value'=>'Bank',
                     'url'=>"bank",
                     'table'=>7,
                     'permission'=>1
@@ -252,7 +252,7 @@ function menu(){
         [
             'name'=>'',
             'icon'=>'<i class="la la-key"></i> <span></span>',
-            'value'=>'Roles Permissions',
+            'value'=>'Roles Permission',
             'table'=>6,
             'permission'=>1,
             'url'=>"role",

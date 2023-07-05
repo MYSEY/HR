@@ -14,10 +14,10 @@
         <div class="row align-items-center">
             <div class="row align-items-center">
                 <div class="col">
-                    <h3 class="page-title">Motor rental report</h3>
+                    <h3 class="page-title">Motor rental reports</h3>
                     <ul class="breadcrumb">
                         <li class="breadcrumb-item"><a href="{{ url('/dashboad/employee') }}">Dashboard</a></li>
-                        <li class="breadcrumb-item active">Motor rental report</li>
+                        <li class="breadcrumb-item active">Motor rental reports</li>
                     </ul>
                 </div>
                 <div class="col-auto float-end ms-auto">
@@ -48,7 +48,7 @@
             <div class="col-sm-6 col-md-2">
                 <div class="form-group">
                     <select class="select form-control" id="branch_id" name="branch_id" value="{{old('branch_id')}}">
-                        <option value="">Branch name</option>
+                        <option value="">Branch Name</option>
                         @foreach ($branchs as $item)
                             <option value="{{$item->id}}">{{$item->branch_name_kh}}</option>
                         @endforeach
@@ -58,14 +58,14 @@
             <div class="col-sm-6 col-md-3 col-lg-3 col-xl-2 col-12">
                 <div class="form-group">
                     <div class="cal-icon">
-                        <input class="form-control floating datetimepicker" type="text" id="from_date" placeholder="From date">
+                        <input class="form-control floating datetimepicker" type="text" id="from_date" placeholder="From Date">
                     </div>
                 </div>
             </div>
             <div class="col-sm-6 col-md-3 col-lg-3 col-xl-2 col-12">
                 <div class="form-group">
                     <div class="cal-icon">
-                        <input class="form-control floating datetimepicker" type="text" id="to_date" placeholder="To date">
+                        <input class="form-control floating datetimepicker" type="text" id="to_date" placeholder="To Date">
                     </div>
                 </div>
             </div>
@@ -98,13 +98,13 @@
                                         <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
                                             rowspan="1" colspan="1" aria-sort="ascending"
                                             aria-label="Employee name: activate to sort column descending"
-                                            style="width: 178px;">Employee name</th>
+                                            style="width: 178px;">Employee Name</th>
                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1"
                                             colspan="1" aria-label="Gender: activate to sort column ascending"
                                             style="width: 125.15px;">Gender</th>
                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1"
                                             colspan="1" aria-label="Branch name: activate to sort column ascending"
-                                            style="width: 125.15px;">Branch name</th>
+                                            style="width: 125.15px;">Branch Name</th>
                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1"
                                             colspan="1" aria-label="Position: activate to sort column ascending"
                                             style="width: 125.15px;">Position</th>
@@ -127,27 +127,27 @@
                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                             rowspan="1" colspan="1"
                                             aria-label="Year of manufature: activate to sort column ascending"
-                                            style="width: 89.6px;">Year of manufature</th>
+                                            style="width: 89.6px;">Year of Manufature</th>
                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                             rowspan="1" colspan="1"
                                             aria-label="Expiretion year: activate to sort column ascending"
-                                            style="width: 89.6px;">Expiretion year</th>
+                                            style="width: 89.6px;">Expiretion Year</th>
                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                             rowspan="1" colspan="1"
                                             aria-label="Shelt life: activate to sort column ascending"
-                                            style="width: 89.6px;">Shelt life</th>
+                                            style="width: 89.6px;">Shelt Life</th>
                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                             rowspan="1" colspan="1"
                                             aria-label="Number plate: activate to sort column ascending"
-                                            style="width: 125.15px;">Number plate</th>
+                                            style="width: 125.15px;">Number Plate</th>
                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                             rowspan="1" colspan="1"
                                             aria-label="Total gasoline: activate to sort column ascending"
-                                            style="width: 89.6px;">Total gasoline</th>
+                                            style="width: 89.6px;">Total Gasoline</th>
                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                             rowspan="1" colspan="1"
                                             aria-label="Total working days: activate to sort column ascending"
-                                            style="width: 89.6px;">Total working days</th>
+                                            style="width: 89.6px;">Total Working Days</th>
                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                             rowspan="1" colspan="1"
                                             aria-label="Total gasoline liters: activate to sort column ascending"
@@ -155,23 +155,23 @@
                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                             rowspan="1" colspan="1"
                                             aria-label="Total price gasoline: activate to sort column ascending"
-                                            style="width: 89.6px;">Total price gasoline</th>
+                                            style="width: 89.6px;">Total Price Gasoline</th>
                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                             rowspan="1" colspan="1"
                                             aria-label="Price engine oil: activate to sort column ascending"
-                                            style="width: 89.6px;">Price engine oil</th>
+                                            style="width: 89.6px;">Price Engine oil</th>
                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                             rowspan="1" colspan="1"
                                             aria-label="Price motor rentel: activate to sort column ascending"
-                                            style="width: 89.6px;">Price motor rentel</th>
+                                            style="width: 89.6px;">Price Motor Rentel</th>
                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                             rowspan="1" colspan="1"
                                             aria-label="Tax rate: activate to sort column ascending"
-                                            style="width: 89.6px;">Tax rate</th>
+                                            style="width: 89.6px;">Tax Rate</th>
                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                             rowspan="1" colspan="1"
                                             aria-label="Taxes on fees: activate to sort column ascending"
-                                            style="width: 89.6px;">Taxes on fees</th>
+                                            style="width: 89.6px;">Taxes on Fees</th>
                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                             rowspan="1" colspan="1"
                                             aria-label="Amount: activate to sort column ascending"

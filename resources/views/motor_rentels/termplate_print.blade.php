@@ -31,7 +31,7 @@
             <div style="width: 350%">
                 <span><strong>Name:</strong> {{ $data->MotorEmployee->employee_name_en }}</span><br>
                 <span><strong>Department:</strong> {{ $data->MotorEmployee->department->name_khmer }}</span><br>
-                <span><strong>Branch:</strong> {{ $data->MotorEmployee->branch->branch_name_en }}</span><br>
+                <span><strong>Location:</strong> {{ $data->MotorEmployee->branch->branch_name_en }}</span><br>
                 <span><strong>Average Unit Price (Gasoline/1L):</strong>
                     {{ number_format($data->gasoline_price_per_liter) }} ៛</span>
             </div>

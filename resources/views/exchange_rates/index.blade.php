@@ -4,10 +4,10 @@
         <div class="page-header">
             <div class="row align-items-center">
                 <div class="col">
-                    <h3 class="page-title">Exchange Rate</h3>
+                    <h3 class="page-title">Exchange Rates</h3>
                     <ul class="breadcrumb">
                         <li class="breadcrumb-item"><a href="{{url('/dashboad/employee')}}">Dashboard</a></li>
-                        <li class="breadcrumb-item active">Exchange Rate</li>
+                        <li class="breadcrumb-item active">Exchange Rates</li>
                     </ul>
                 </div>
                 {{-- <div class="col-auto float-end ms-auto">
@@ -30,7 +30,7 @@
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department Name: activate to sort column ascending" style="width: 772.237px;">USD</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department Name: activate to sort column ascending" style="width: 772.237px;">Riel</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department Name: activate to sort column ascending" style="width: 772.237px;">Description</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department Name: activate to sort column ascending" style="width: 772.237px;">Updated at</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department Name: activate to sort column ascending" style="width: 772.237px;">Updated At</th>
                                             <th class="text-end sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Action: activate to sort column ascending" style="width: 300.962px;">Action</th>
                                         </tr>
                                     </thead>

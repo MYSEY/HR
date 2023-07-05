@@ -4,10 +4,10 @@
         <div class="page-header">
             <div class="row align-items-center">
                 <div class="col">
-                    <h3 class="page-title">Recruitment Plan</h3>
+                    <h3 class="page-title">Recruitment Plans</h3>
                     <ul class="breadcrumb">
                         <li class="breadcrumb-item"><a href="{{url('/dashboad/employee')}}">Dashboard</a></li>
-                        <li class="breadcrumb-item active">Recruitment Plan</li>
+                        <li class="breadcrumb-item active">Recruitment Plans</li>
                     </ul>
                 </div>
                 <div class="col-auto float-end ms-auto">
@@ -32,7 +32,7 @@
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Year: activate to sort column ascending" style="width: 772.237px;">Plan of Year</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Created at: activate to sort column ascending" style="width: 772.237px;">Total Staff</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Description: activate to sort column ascending" style="width: 772.237px;">Remark</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Created at: activate to sort column ascending" style="width: 772.237px;">Create at</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Created at: activate to sort column ascending" style="width: 772.237px;">Create At</th>
                                             <th class="text-end sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Action: activate to sort column ascending" style="width: 300.962px;">Action</th>
                                         </tr>
                                     </thead>

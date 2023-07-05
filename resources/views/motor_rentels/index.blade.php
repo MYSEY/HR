@@ -15,10 +15,10 @@
         <div class="row align-items-center">
             <div class="row align-items-center">
                 <div class="col">
-                    <h3 class="page-title">Motor rental</h3>
+                    <h3 class="page-title">Motor rentals</h3>
                     <ul class="breadcrumb">
                         <li class="breadcrumb-item"><a href="{{ url('/dashboad/employee') }}">Dashboard</a></li>
-                        <li class="breadcrumb-item active">Motor rental</li>
+                        <li class="breadcrumb-item active">Motor rentals</li>
                     </ul>
                 </div>
 
@@ -60,7 +60,7 @@
                     <div class="cal-icon">
                         <input type="text" class="form-control floating datetimepicker" name="from_date" id="from_date" value="">
                     </div>
-                    <label class="focus-label">From</label>
+                    <label class="focus-label">From Date</label>
                 </div>
             </div>
             <div class="col-sm-6 col-md-3 col-lg-3 col-xl-2 col-12">
@@ -68,7 +68,7 @@
                     <div class="cal-icon">
                         <input type="text" class="form-control floating datetimepicker" name="to_date" id="to_date" value="">
                     </div>
-                    <label class="focus-label">To</label>
+                    <label class="focus-label">To Date</label>
                 </div>
             </div>
            
@@ -101,7 +101,7 @@
                                         <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
                                             rowspan="1" colspan="1" aria-sort="ascending"
                                             aria-label="Employee name: activate to sort column descending"
-                                            style="width: 178px;">Employee name</th>
+                                            style="width: 178px;">Employee Name</th>
                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1"
                                             colspan="1" aria-label="Gender: activate to sort column ascending"
                                             style="width: 125.15px;">Gender</th>

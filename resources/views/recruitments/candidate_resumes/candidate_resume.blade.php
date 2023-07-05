@@ -4,10 +4,10 @@
         <div class="page-header">
             <div class="row align-items-center">
                 <div class="col">
-                    <h3 class="page-title">Candidate Resume</h3>
+                    <h3 class="page-title">Candidate Resumes</h3>
                     <ul class="breadcrumb">
                         <li class="breadcrumb-item"><a href="{{url('/dashboad/employee')}}">Dashboard</a></li>
-                        <li class="breadcrumb-item active">Candidate Resume</li>
+                        <li class="breadcrumb-item active">Candidate Resumes</li>
                     </ul>
                 </div>
                 <div class="col-auto float-end ms-auto">

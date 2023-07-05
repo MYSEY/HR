@@ -14,10 +14,10 @@
         <div class="row align-items-center">
             <div class="row align-items-center">
                 <div class="col">
-                    <h3 class="page-title">New Staff Report</h3>
+                    <h3 class="page-title">New Staff Reports</h3>
                     <ul class="breadcrumb">
                         <li class="breadcrumb-item"><a href="{{ url('/dashboad/employee') }}">Dashboard</a></li>
-                        <li class="breadcrumb-item active">New Staff Report</li>
+                        <li class="breadcrumb-item active">New Staff Reports</li>
                     </ul>
                 </div>
                 <div class="col-auto float-end ms-auto">
@@ -48,7 +48,7 @@
             <div class="col-sm-6 col-md-2">
                 <div class="form-group">
                     <select class="select form-control" id="branch_id" name="branch_id" value="{{old('branch_id')}}">
-                        <option value="">Branch name</option>
+                        <option value="">Branch Name</option>
                         @foreach ($branch as $item)
                             <option value="{{$item->id}}">{{$item->branch_name_kh}}</option>
                         @endforeach
@@ -58,14 +58,14 @@
             <div class="col-sm-6 col-md-3 col-lg-3 col-xl-2 col-12">
                 <div class="form-group">
                     <div class="cal-icon">
-                        <input class="form-control floating datetimepicker" type="text" id="from_date" placeholder="From date">
+                        <input class="form-control floating datetimepicker" type="text" id="from_date" placeholder="From Date">
                     </div>
                 </div>
             </div>
             <div class="col-sm-6 col-md-3 col-lg-3 col-xl-2 col-12">
                 <div class="form-group">
                     <div class="cal-icon">
-                        <input class="form-control floating datetimepicker" type="text" id="to_date" placeholder="To date">
+                        <input class="form-control floating datetimepicker" type="text" id="to_date" placeholder="To Date">
                     </div>
                 </div>
             </div>
