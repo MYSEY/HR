@@ -26,7 +26,7 @@
                                     role="tab">Candidate Resume</a>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <a class="nav-link" data-bs-toggle="tab" id="btn_tab_short_list" href="#tab_short_list" aria-selected="false" role="tab" data-tab-id="1"
+                                <a class="nav-link" data-bs-toggle="tab" id="btn_tab_short_list" href="#tab_short_list" aria-selected="false" role="tab" data-tab-id="2"
                                     tabindex="-1">Short List</a>
                             </li>
                             <li class="nav-item" role="presentation">
@@ -93,6 +93,7 @@
     $(function(){
         $("#btn_tab_short_list, #btn_not_tab_short_list").on("click", function(){
             let tab_status = $(this).attr('data-tab-id');
+            console.log(tab_status);
             showDatas(tab_status);
         });
         $("#btn_tab_interviewed_result, #btn_tab_signed_contract").on("click", function(){
