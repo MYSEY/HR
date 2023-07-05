@@ -210,4 +210,5 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('/recruitment/candidate-resume/update', [CandidateResumeController::class,'update']);
     Route::post('/recruitment/candidate-resume/status', [CandidateResumeController::class,'processing']);
     Route::post('/recruitment/candidate-resume/delete', [CandidateResumeController::class,'destroy']);
+    Route::post('/recruitment/candidate-resume/createemp', [CandidateResumeController::class,'createemp']);
 });

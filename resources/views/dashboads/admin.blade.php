@@ -85,7 +85,7 @@
                         <span class="dash-widget-icon"><i class="la la-edit"></i></span>
                         <div class="dash-widget-info">
                             <h3 id="total-training"></h3>
-                            <a href="{{ url('/reports/transferred-staff-report') }}"><span>Training</span></a>
+                            <a href="{{ url('/training/list') }}"><span>Training</span></a>
                         </div>
                     </div>
                 </div>
@@ -1000,7 +1000,7 @@
                     align: 'center',
                     _actives: false,
                     formatter: (value, context) => {
-                        return `${value}%`;
+                        return `${parseFloat(value).toFixed(2)}%`;
                     }
                 },
                 title: {

@@ -1,4 +1,4 @@
-@extends('layouts.master')
+@extends('layouts.master_print')
 @section('content')
     <div class="content container-fluid">
         <div class="page-header">
@@ -26,12 +26,20 @@
                                     role="tab">Candidate Resume</a>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <a class="nav-link" data-bs-toggle="tab" id="btn_tab_short_list" href="#tab_short_list" aria-selected="false" role="tab" data-tab-id="2"
+                                <a class="nav-link" data-bs-toggle="tab" id="btn_tab_short_list" href="#tab_short_list" aria-selected="false" role="tab" data-tab-id="1"
                                     tabindex="-1">Short List</a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link" data-bs-toggle="tab" id="btn_not_tab_short_list" href="#tab_not_short_list" aria-selected="false" role="tab" data-tab-id="2"
+                                    tabindex="-1">Not Short List</a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" data-bs-toggle="tab" id="btn_tab_interviewed_result" href="#tab_interviewed_result" aria-selected="false" data-tab-id="3"
                                     role="tab" tabindex="-1">Interviewed Result</a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link" data-bs-toggle="tab" id="btn_tab_signed_contract" href="#tab_signed_contract" aria-selected="false" data-tab-id="4"
+                                    role="tab" tabindex="-1">Signed Contract</a>
                             </li>
                         </ul>
                     </div>
@@ -39,179 +47,7 @@
             </div>
     
             <div class="tab-content">
-                <div class="tab-pane active show" id="tab_candidate_resume" role="tabpanel">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="table-responsive">
-                                <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
-                                    <div class="row">
-                                        <div class="col-sm-12">
-                                            <table class="table table-striped custom-table mb-0 datatable dataTable no-footer"
-                                                id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
-                                                <thead>
-                                                    <tr>
-                                                        <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="#: activate to sort column descending">#</th>
-                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Name: activate to sort column ascending">Name (EN)</th>
-                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Name: activate to sort column ascending">Name (KH)</th>
-                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Gender: activate to sort column ascending">Gender</th>
-                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Current Position at: activate to sort column ascending">Current Position</th>
-                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Company Name: activate to sort column ascending" >Company Name</th>
-                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Current Address: activate to sort column ascending" >Current Address</th>
-                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Position Appied: activate to sort column ascending" >Position Appied</th>
-                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Location Appied: activate to sort column ascending" >Location Appied</th>
-                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Received Date: activate to sort column ascending" >Received Date</th>
-                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Recruitment Channel: activate to sort column ascending" >Recruitment Channel</th>
-                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Concten Number: activate to sort column ascending" >Concten Number</th>
-                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Recruitement Status: activate to sort column ascending" >Status</th>
-                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Remark: activate to sort column ascending" >Remark</th>
-                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Action: activate to sort column ascending" >Action</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    @if (count($data)>0)
-                                                        @foreach ($data as $item)
-                                                            <tr class="odd">
-                                                                <td class="ids">{{$item->id}}</td>
-                                                                <td >{{$item->name_kh }}</td>
-                                                                <td >{{$item->name_en}}</td>
-                                                                <td >{{$item->CandidateGender}}</td>
-                                                                <td >{{$item->current_position}}</td>
-                                                                <td >{{$item->companey_name}}</td>
-                                                                <td >{{$item->current_address}}</td>
-                                                                <td >{{$item->CandidatePosition}}</td>
-                                                                <td >{{$item->CandidateBranch}}</td>
-                                                                <td >{{ \Carbon\Carbon::parse($item->received_date)->format('d-M-Y') ?? ''}}</td>
-                                                                <td >{{$item->recruitment_channel}}</td>
-                                                                <td >{{$item->contact_number}}</td>
-                                                                <td >
-                                                                    <div class="dropdown action-label">
-                                                                        @if ($item->status=='1')
-                                                                            <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
-                                                                                <i class="fa fa-dot-circle-o text-purple"></i>
-                                                                                <span>Received CV</span>
-                                                                            </a>
-                                                                        @elseif ($item->status=='2')
-                                                                            <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
-                                                                                <i class="fa fa-dot-circle-o text-warning"></i>
-                                                                                <span>Shortlisted</span>
-                                                                            </a>
-                                                                        @endif
-                                                                        @if (Auth::user()->RolePermission == 'Administrator')
-                                                                            <div class="dropdown-menu dropdown-menu-right" id="btn-status">
-                                                                                <a class="dropdown-item" data-emp-id="{{$item->id}}"  data-id="1" href="#">
-                                                                                    <i class="fa fa-dot-circle-o text-purple"></i> Received CV
-                                                                                </a>
-                                                                                <a class="dropdown-item" data-emp-id="{{$item->id}}"  data-id="2" href="#">
-                                                                                    <i class="fa fa-dot-circle-o text-warning"></i> Shortlisted
-                                                                                </a>
-                                                                            </div>
-                                                                        @endif
-                                                                    </div>
-                                                                </td>
-                                                                <td>{{ $item->remark }}</td>
-                                                                <td class="text-end">
-                                                                    <div class="dropdown dropdown-action">
-                                                                        <a href="#" class="action-icon dropdown-toggle"
-                                                                            data-bs-toggle="dropdown" aria-expanded="false"><i
-                                                                                class="material-icons">more_vert</i></a>
-                                                                        @if (Auth::user()->RolePermission == 'Administrator')
-                                                                            <div class="dropdown-menu dropdown-menu-right">
-                                                                                <a class="dropdown-item update"
-                                                                                    data-id="{{ $item->id }}"><i
-                                                                                        class="fa fa-pencil m-r-5"></i> Edit</a>
-                                                                                <a class="dropdown-item delete" href="#"
-                                                                                    data-toggle="modal" data-id="{{ $item->id }}"
-                                                                                    data-target="#delete_candidate"><i
-                                                                                        class="fa fa-trash-o m-r-5"></i> Delete</a>
-                                                                            </div>
-                                                                        @endif
-                                                                    </div>
-                                                                </td>
-                                                            </tr>
-                                                        @endforeach
-                                                    @else
-                                                        <tr>
-                                                            <td colspan="14" style="text-align: center">No record to display</td>
-                                                        </tr>
-                                                    @endif
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-    
-                <div class="tab-pane show" id="tab_short_list" role="tabpanel">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="table-responsive">
-                                <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
-                                    <div class="row">
-                                        <div class="col-sm-12">
-                                            <table class="table table-striped custom-table datatable dataTable no-footer tbl-short-list"
-                                                id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
-                                                <thead>
-                                                    <tr>
-                                                        <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="#: activate to sort column descending">#</th>
-                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Name: activate to sort column ascending">Name (EN)</th>
-                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Name: activate to sort column ascending">Name (KH)</th>
-                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Gender: activate to sort column ascending">Gender</th>
-                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Position Appied: activate to sort column ascending" >Position Appied</th>
-                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Location Appied: activate to sort column ascending" >Location Appied</th>
-                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Interviewed Date: activate to sort column ascending" >Interviewed Date</th>
-                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Time: activate to sort column ascending" >Time</th>
-                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Committee Interview: activate to sort column ascending" >Committee Interview</th>
-                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Status: activate to sort column ascending" >Status</th>
-                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="CV's Candidates: activate to sort column ascending" >CV's Candidates</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-    
-                <div class="tab-pane show" id="tab_interviewed_result" role="tabpanel">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="table-responsive">
-                                <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
-                                    <div class="row">
-                                        <div class="col-sm-12">
-                                            <table class="table table-striped custom-table datatable dataTable no-footer tbl-result"
-                                                id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
-                                                <thead>
-                                                    <tr>
-                                                        <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="#: activate to sort column descending">#</th>
-                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Name: activate to sort column ascending">Name (EN)</th>
-                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Name: activate to sort column ascending">Name (KH)</th>
-                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Gender: activate to sort column ascending">Gender</th>
-                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Position Appied: activate to sort column ascending" >Position Appied</th>
-                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Location Appied: activate to sort column ascending" >Location Appied</th>
-                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Interviewed Date: activate to sort column ascending" >Interviewed Date</th>
-                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Interviewed Result: activate to sort column ascending" >Interviewed Result</th>
-                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Status: activate to sort column ascending" >Status</th>
-                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Remark: activate to sort column ascending" >Remark</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                @include('recruitments.candidate_resumes.table_by_tab')
             </div>
         </div>
 
@@ -244,30 +80,50 @@
         </div>
         @include('recruitments.candidate_resumes.modal_form_create')
         @include('recruitments.candidate_resumes.modal_form_edit')
+        @include('recruitments.candidate_resumes.modal_form_create_emp')
     </div>
 @endsection
+{{-- @include('recruitments.candidate_resumes.print_signed_contract') --}}
 
 @include('includs.script')
 <script src="{{asset('/admin/js/validation-field.js')}}"></script>
 <link rel="stylesheet" href="{{ asset('admin/css/noty.css') }}">
 <script src="{{asset('/admin/js/noty.js')}}"></script>
-<script>
+<script type="text/javascript">
     $(function(){
-        $("#btn_tab_short_list").on("click", function(){
+        $("#btn_tab_short_list, #btn_not_tab_short_list").on("click", function(){
             let tab_status = $(this).attr('data-tab-id');
             showDatas(tab_status);
         });
-        $("#btn_tab_interviewed_result").on("click", function(){
+        $("#btn_tab_interviewed_result, #btn_tab_signed_contract").on("click", function(){
             let tab_status = $(this).attr('data-tab-id');
             showDatas(tab_status);
         });
+
+        $(document).on('click','.btn_print_signed_contract', function(){
+            var _this = $(this).parents('tr');
+            $("#candidate_id").val(_this.find('.ids').text());
+            $(".employee_name_kh").val(_this.find('.name_kh').text());
+            $(".employee_name_en").val(_this.find('.name_en').text());
+            $("#position").val(_this.find('.position').text());
+            $("#position_id").val($('.position_id').attr("data-postion"));
+
+            $("#gender_name").val(_this.find('.gender_name_english').text());
+            $("#gender_id").val($('.gender_id').attr("data-gender"));
+            $(".date_of_commencement").val($('.join_date').attr("data-join-date"));
+            $("#branch_name").val(_this.find('.branch').text());
+            $("#branch_id").val($('.branch_id').attr("data-branch"));
+            $(".personal_phone_number").val($('.phone_number').attr("data-phone-number"));
+            $("#add_emp").modal("show");
+        });
+        
         $('.delete').on('click', function() {
             var _this = $(this).parents('tr');
             $('.e_id').val(_this.find('.ids').text());
         });
         $('.update').on('click', function() {
             let id = $(this).data("id");
-            $("#e_id").val(id)
+            $("#e_id").val(id);
             $.ajax({
                 type: "GET",
                 url: "{{ url('recruitment/candidate-resume/edit') }}",
@@ -317,7 +173,7 @@
                         $('#e_recruitment_channel').val(response.success.recruitment_channel);
                         $('#e_contact_number').val(response.success.contact_number);
                         $('#hidden_cv').val(response.success.cv);
-                        $('#e_remark').val(response.success.remark);
+                        // $('#e_remark').val(response.success.remark);
                         $('#status').val(response.success.status);
                     }
 
@@ -328,14 +184,15 @@
         $('body').on('click', '#btn-status a', function() {
             let id = $(this).attr('data-emp-id');
             let status = $(this).data('id');
+            var candi_status = "";
             if (status == 1) {
-                var candi_status = "Received CV";
+                candi_status = "Received CV";
             } else if(status == 2) {
-                var candi_status = "Shortlisted";
+                candi_status = "Shortlisted";
             }else if(status == 3){
-                var candi_status = "Interviewed";
+                candi_status = "Interviewed";
             }else if(status == 4){
-                var candi_status = "Signed Contract";
+                candi_status = "Signed Contract";
             }
             if (status == 1) {
                 $.confirm({
@@ -422,6 +279,10 @@
                                 '<label>Committee Interview <span class="text-danger">*</span></label>'+
                                 '<input type="text" class="form-control committee_interview">'+
                             '</div>'+
+                            '<div class="form-group">'+
+                                '<label>Remark</label>'+
+                                '<textarea type="text" rows="3" class="form-control remark"></textarea>'+
+                            '</div>'+
                         '</form>',
                     onOpen: function(){
                             this.$content.find('.showtList').change(function(){
@@ -448,6 +309,7 @@
                                 var interviewed_channel = this.$content.find('.interviewed_channel').val();
                                 var committee_interview = this.$content.find('.committee_interview').val();
                                 var id = this.$content.find('.id').val();
+                                var remark = this.$content.find('.remark').val();
                                 if (short_list == "1") {
                                     if ($(".interviewed_dates").val() ==""){
                                         $(".interviewed_dates").css("border","solid 1px red");
@@ -457,7 +319,6 @@
                                         $(".committee_interview").css("border","solid 1px red");
                                         return false;
                                     }
-                                    
                                 }
 
                                 axios.post('{{ URL('recruitment/candidate-resume/status') }}', {
@@ -467,6 +328,7 @@
                                         'interviewed_date': interviewed_date,
                                         'interviewed_channel': interviewed_channel,
                                         'committee_interview': committee_interview,
+                                        'remark': remark,
                                     }).then(function(response) {
                                     new Noty({
                                         title: "",
@@ -493,6 +355,19 @@
                     }
                 }); 
             }else if(status == 3){
+                let data_status = $(this).attr('data-status');
+                let select_joined_interview  = ""; 
+                if (data_status == 3 ) {
+                    select_joined_interview = '<select class="form-control form-select joined_interview" >'+
+                        '<option selected value="1"> Yes</option>'+
+                    '</select>';
+                }else{
+                    select_joined_interview = '<select class="form-control form-select joined_interview" >'+
+                        '<option selected value="1"> Yes</option>'+
+                        '<option value="2"> No</option>'+
+                        '<option value="3"> Delay</option>'+
+                    '</select>';
+                }
                 $.confirm({
                     title: 'Candidate Resume Status!',
                     contentClass: 'text-center',
@@ -506,10 +381,11 @@
                             '<input type="hidden" class="form-control id" id="" name="" value="'+id+'">'+
                             '<div class="form-group">'+
                                 '<label>Joined Interview</label>'+
-                                '<select class="form-control form-select joined_interview" >'+
-                                    '<option selected value="1"> Yes</option>'+
-                                    '<option value="2"> No</option>'+
-                                '</select>'+
+                                select_joined_interview+
+                            '</div>'+
+                            '<div class="form-group interviewed_date" style="display: none">'+
+                                '<label>Interviewed Date <span class="text-danger">*</span></label>'+
+                                '<input type="datetime-local" class="form-control interviewed_dates">'+
                             '</div>'+
                             '<div class="form-group interviewed_results">'+
                                 '<label>Interviewed Result</label>'+
@@ -523,14 +399,26 @@
                                     '<option value="7"> Black list</option>'+
                                 '</select>'+
                             '</div>'+
+                            '<div class="form-group">'+
+                                '<label>Remark</label>'+
+                                '<textarea type="text" rows="3" class="form-control remark"></textarea>'+
+                            '</div>'+
                         '</form>',
                     onOpen: function(){
                             this.$content.find('.joined_interview').change(function(){
                                 let value = $('.joined_interview').val();
                                 if (value == "2") {
                                     $(".interviewed_results").hide();
+                                    $(".interviewed_date").hide();
+                                    $(".interviewed_dates").val("");
+                                }else if(value == 3){
+                                    $(".interviewed_date").show();
+                                    $(".interviewed_results").hide();
                                 }else{
                                     $(".interviewed_results").show();
+                                    $(".interviewed_date").hide();
+                                    $(".interviewed_dates").val("");
+                                    $('.status').val(3)
                                 }
                             });
                         },
@@ -543,12 +431,18 @@
                                 var joined_interview = this.$content.find('.joined_interview').val();
                                 var interviewed_result = this.$content.find('.interviewed_result').val();
                                 var id = this.$content.find('.id').val();
+                                var interviewed_dates = this.$content.find('.interviewed_dates').val();
+                                var remark = this.$content.find('.remark').val();
                                 if (joined_interview == "1") {
                                     if ($(".interviewed_result").val() ==""){
                                         $(".interviewed_result").css("border","solid 1px red");
                                         return false;
                                     }
-                                    
+                                }else if (joined_interview == 3) {
+                                    if ($(".interviewed_dates").val() ==""){
+                                        $(".interviewed_dates").css("border","solid 1px red");
+                                        return false;
+                                    }
                                 }
 
                                 axios.post('{{ URL('recruitment/candidate-resume/status') }}', {
@@ -556,6 +450,8 @@
                                         'status': status,
                                         'joined_interview': joined_interview,
                                         'interviewed_result': interviewed_result,
+                                        'interviewed_date': interviewed_dates,
+                                        'remark': remark,
                                     }).then(function(response) {
                                     new Noty({
                                         title: "",
@@ -667,6 +563,9 @@
                 let datas = response.datas;
                 if (datas.length > 0) {
                     var tr_re = "";
+                    var tr = "";
+                    var tr_not_list = "";
+                    var tr_ct = "";
                     if (btn_tab == 2) {
                         datas.map((staff) => {
                             let interviewed_date = "";
@@ -693,39 +592,65 @@
                                         '<a href="{{asset("/uploads/images")}}/'+(staff.cv)+'" target="_blank" class="subdrop"><i class="la la-file-pdf"></i> <span>Preview CV</span></a>'+
                                     '</small>'
                             }
-                            tr += '<tr class="odd">'+
-                                '<td class="ids">'+(staff.id)+'</td>'+
-                                '<td >'+(staff.name_kh)+' </td>'+
-                                '<td >'+(staff.name_en)+'</td>'+
-                                '<td >'+(staff.option.name_english)+'</td>'+
-                                '<td >'+(staff.position.name_english)+'</td>'+
-                                '<td >'+(staff.branch.branch_name_en)+'</td>'+
-                                '<td >'+(interviewed_date)+'</td>'+
-                                '<td >'+(time)+'</td>'+
-                                '<td >'+(staff.committee_interview ? staff.committee_interview : "")+'</td>'+
-                                '<td >'+
-                                    '<div class="dropdown action-label">'+
-                                        '<a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">'+
-                                            (tag_i)+
-                                            '<span>'+(text_status)+'</span>'+
-                                        '</a>'+
-                                        '<div class="dropdown-menu dropdown-menu-right" id="btn-status">'+
-                                            '<a class="dropdown-item" data-emp-id="'+(staff.id)+'"  data-id="1" href="#">'+
-                                                '<i class="fa fa-dot-circle-o text-purple"></i> Received CV'+
+                            if (staff.short_list == 1) {
+                                tr += '<tr class="odd">'+
+                                    '<td class="ids">'+(staff.id)+'</td>'+
+                                    '<td >'+(staff.name_kh)+' </td>'+
+                                    '<td >'+(staff.name_en)+'</td>'+
+                                    '<td >'+(staff.option.name_english)+'</td>'+
+                                    '<td >'+(staff.position.name_english)+'</td>'+
+                                    '<td >'+(staff.branch.branch_name_en)+'</td>'+
+                                    '<td >'+(interviewed_date)+'</td>'+
+                                    '<td >'+(time)+'</td>'+
+                                    '<td >'+(staff.committee_interview ? staff.committee_interview : "")+'</td>'+
+                                    '<td >'+
+                                        '<div class="dropdown action-label">'+
+                                            '<a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">'+
+                                                (tag_i)+
+                                                '<span>'+(text_status)+'</span>'+
                                             '</a>'+
-                                            '<a class="dropdown-item" data-emp-id="'+(staff.id)+'"  data-id="2" href="#">'+
-                                                '<i class="fa fa-dot-circle-o text-warning"></i> Shortlisted'+
-                                            '</a>'+
-                                            '<a class="dropdown-item" data-emp-id="'+(staff.id)+'"  data-id="3" href="#">'+
-                                                '<i class="fa fa-dot-circle-o text-info"></i> Interviewed'+
-                                            '</a>'+
+                                            '<div class="dropdown-menu dropdown-menu-right" id="btn-status">'+
+                                                // '<a class="dropdown-item" data-emp-id="'+(staff.id)+'"  data-id="2" href="#">'+
+                                                //     '<i class="fa fa-dot-circle-o text-warning"></i> Shortlisted'+
+                                                // '</a>'+
+                                                '<a class="dropdown-item" data-emp-id="'+(staff.id)+'"  data-id="3" href="#">'+
+                                                    '<i class="fa fa-dot-circle-o text-info"></i> Interviewed'+
+                                                '</a>'+
+                                            '</div>'+
                                         '</div>'+
-                                    '</div>'+
-                                '</td>'+
-                                '<td >'+
-                                    cv+
-                                '</td>'+
-                            '</tr>';
+                                    '</td>'+
+                                    '<td >'+
+                                        cv+
+                                    '</td>'+
+                                    '<td>'+(staff.remark ? staff.remark: "")+'</td>'+
+                                '</tr>';
+                            }else if (staff.short_list == 2) {
+                                tr_not_list += '<tr class="odd">'+
+                                    '<td class="ids">'+(staff.id)+'</td>'+
+                                    '<td >'+(staff.name_kh)+' </td>'+
+                                    '<td >'+(staff.name_en)+'</td>'+
+                                    '<td >'+(staff.option.name_english)+'</td>'+
+                                    '<td >'+(staff.position.name_english)+'</td>'+
+                                    '<td >'+(staff.branch.branch_name_en)+'</td>'+
+                                    '<td >'+
+                                        '<div class="dropdown action-label">'+
+                                            '<a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">'+
+                                                (tag_i)+
+                                                '<span>'+(text_status)+'</span>'+
+                                            '</a>'+
+                                            '<div class="dropdown-menu dropdown-menu-right" id="btn-status">'+
+                                                '<a class="dropdown-item" data-emp-id="'+(staff.id)+'"  data-id="2" href="#">'+
+                                                    '<i class="fa fa-dot-circle-o text-warning"></i> Shortlisted'+
+                                                '</a>'+
+                                            '</div>'+
+                                        '</div>'+
+                                    '</td>'+
+                                    '<td >'+
+                                        cv+
+                                    '</td>'+
+                                    '<td>'+(staff.remark ? staff.remark: "")+'</td>'+
+                                '</tr>';
+                            }
                         });
                     }else if (btn_tab == 3) {
                         datas.map((staff_result) => {
@@ -734,35 +659,53 @@
                             let interview_result = "";
                             if (staff_result.interviewed_result == 1) {
                                 interview_result = "Passed";
-                            }
+                            }else
                             if (staff_result.interviewed_result == "2") {
                                 interview_result = "Failed";
-                            }
+                            }else
                             if (staff_result.interviewed_result == "3") {
                                 interview_result = "Waiting";
-                            }
+                            }else
                             if (staff_result.interviewed_result == "4") {
                                 interview_result = "Pending";
-                            }
+                            }else
                             if (staff_result.interviewed_result == "5") {
                                 interview_result = "High Exected Salary";
-                            }
+                            }else
                             if (staff_result.interviewed_result == "6") {
                                 interview_result = "Rejected Offered";
-                            }
-                            if (staff_result.interviewed_result == "6") {
+                            }else if(staff_result.interviewed_result == "7"){
                                 interview_result = "Black list";
+                            }else{
+                                interview_result = "No";
                             };
-                            if (staff_result.status =='2') {
-                                text_status = "Shortlisted";
-                                tag_i = '<i class="fa fa-dot-circle-o text-warning"></i>'
-                            }else if(staff_result.status =='3') {
+
+                            if(staff_result.status =='3') {
                                 text_status = "Interviewed";
                                 tag_i = '<i class="fa fa-dot-circle-o text-info"></i>'
                             }else if (staff_result.status =='4') {
                                 text_status = "Signed Contract";
                                 tag_i = '<i class="fa fa-dot-circle-o text-success"></i>'
                             };
+                            let status_show = "";
+                            if (staff_result.interviewed_result == 1 || staff_result.interviewed_result == 3 || staff_result.interviewed_result == 4 || staff_result.interviewed_result == 5) {
+                                status_show = '<div class="dropdown action-label">'+
+                                                '<a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">'+
+                                                    (tag_i)+
+                                                    '<span>'+(text_status)+'</span>'+
+                                                '</a>'+
+                                                '<div class="dropdown-menu dropdown-menu-right" id="btn-status">'+
+                                                    '<a class="dropdown-item" data-emp-id="'+(staff_result.id)+'"  data-id="3" data-status="'+(staff_result.status)+'" href="#">'+
+                                                        '<i class="fa fa-dot-circle-o text-info"></i> Interviewed'+
+                                                    '</a>'+
+                                                    '<a class="dropdown-item" data-emp-id="'+(staff_result.id)+'" data-id="4" href="#">'+
+                                                        '<i class="fa fa-dot-circle-o text-success"></i> Signed Contract'+
+                                                    '</a>'+
+                                                '</div>'+
+                                            '</div>';
+                            }else{
+                                status_show = '<span class="badge bg-inverse-danger">'+interview_result+'</snap>';   
+                            }
                             let interviewed_date = staff_result.interviewed_date ? moment(staff_result.interviewed_date).format('MMM-D-YYYY') : "";
                             tr_re += ' <tr class="odd">'+
                                 '<td class="ids">'+(staff_result.id)+'</td>'+
@@ -774,34 +717,56 @@
                                 '<td >'+(interviewed_date)+'</td>'+
                                 '<td >'+(interview_result)+'</td>'+
                                 '<td >'+
-                                    '<div class="dropdown action-label">'+
-                                        '<a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">'+
-                                            (tag_i)+
-                                            '<span>'+(text_status)+'</span>'+
-                                        '</a>'+
-                                        '<div class="dropdown-menu dropdown-menu-right" id="btn-status">'+
-                                            '<a class="dropdown-item" data-emp-id="'+(staff_result.id)+'"  data-id="2" href="#">'+
-                                                '<i class="fa fa-dot-circle-o text-warning"></i> Shortlisted'+
-                                            '</a>'+
-                                            '<a class="dropdown-item" data-emp-id="'+(staff_result.id)+'"  data-id="3" href="#">'+
-                                                '<i class="fa fa-dot-circle-o text-info"></i> Interviewed'+
-                                            '</a>'+
-                                            '<a class="dropdown-item" data-emp-id="'+(staff_result.id)+'" data-id="4" href="#">'+
-                                                '<i class="fa fa-dot-circle-o text-success"></i> Signed Contract'+
-                                            '</a>'+
-                                        '</div>'+
-                                    '</div>'+
+                                    (status_show)+
                                 '</td>'+
                                 '<td >'+(staff_result.remark ? staff_result.remark: "")+'</td>'+
                             '</tr>';
                         });
+                    }else if (btn_tab == 4) {
+                        datas.map((staff_result) => {
+                            let interview_result = "";
+                            if (staff_result.interviewed_result == 1) {
+                                interview_result = "Passed";
+                            }
+                            let join_date = staff_result.join_date ? moment(staff_result.join_date).format('MMM-D-YYYY') : "";
+                            let contract_date = staff_result.contract_date ? moment(staff_result.contract_date).format('MMM-D-YYYY') : "";
+                            tr_ct += ' <tr class="odd">'+
+                                '<td class="ids">'+(staff_result.id)+'</td>'+
+                                '<td class="name_kh" >'+(staff_result.name_kh )+'</td>'+
+                                '<td class="name_en">'+(staff_result.name_en)+'</td>'+
+                                '<td class="gender_name_english"><input type="text" class="gender_id" data-gender="'+(staff_result.gender)+'" hidden>'+(staff_result.option.name_english)+'</td>'+
+                                '<td class="position" ><input type="text" class="position_id" data-postion="'+(staff_result.position_applied)+'" hidden>'+(staff_result.position.name_english)+'</td>'+
+                                '<td class="branch"><input type="text" class="branch_id" data-branch="'+(staff_result.location_applied)+'" hidden>'+(staff_result.branch.branch_name_en)+'</td>'+
+                                '<td >'+(contract_date)+'</td>'+
+                                '<td ><input type="date" class="join_date" data-join-date="'+(staff_result.join_date)+'" hidden>'+(join_date)+'</td>'+
+                                '<td ><span class="badge bg-inverse-success">'+(interview_result)+'</snap></td>'+
+                                '<td >'+(staff_result.remark ? staff_result.remark: "")+'</td>'+
+                                '<td>'+
+                                    '<input type="text" class="phone_number" data-phone-number="'+(staff_result.contact_number)+'" hidden>'+
+                                    '<div class="dropdown dropdown-action">'+
+                                        '<a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">'+
+                                            '<i class="material-icons">more_vert</i>'+
+                                        '</a>'+
+                                        '<div class="dropdown-menu dropdown-menu-right">'+
+                                            '<a class="dropdown-item btn_print_signed_contract" href="#">'+
+                                                '<i class="fa fa-print fa-lg m-r-5"></i> Print'+
+                                            '</a>'+
+                                        '</div>'+
+                                    '</div>'+
+                                '</td>'+
+                            '</tr>';
+                        });
                     }
                 }else {
-                    var tr = '<tr><td colspan=11 align="center">No record to display</td></tr>';
+                    var tr = '<tr><td colspan=12 align="center">No record to display</td></tr>';
+                    var tr_not_list = '<tr><td colspan=9 align="center">No record to display</td></tr>';
                     var tr_re = '<tr><td colspan=10 align="center">No record to display</td></tr>';
+                    var tr_ct = '<tr><td colspan=10 align="center">No record to display</td></tr>';
                 }
                 $(".tbl-short-list tbody").html(tr);
+                $(".tbl-not-short-list tbody").html(tr_not_list);
                 $(".tbl-result tbody").html(tr_re);
+                $(".tbl-signed-contract tbody").html(tr_ct);
             }
         });
     }

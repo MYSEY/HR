@@ -107,15 +107,6 @@
                         </div>
                     </div>
 
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <div class="form-group">
-                                <label>Remark</label>
-                                <textarea type="text" rows="3" class="form-control" name="remark" id="remark" value="{{old('remark')}}"></textarea>
-                            </div>
-                        </div>
-                    </div>
-
                     <div class="submit-section">
                         <button type="submit" class="btn btn-primary submit-btn" data-dismiss="modal">
                             <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading </span>

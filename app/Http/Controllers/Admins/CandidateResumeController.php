@@ -8,6 +8,8 @@ use App\Models\CandidateResume;
 use App\Models\Department;
 use App\Models\Option;
 use App\Models\Position;
+use App\Models\Province;
+use App\Models\Role;
 use App\Models\User;
 use App\Traits\GeneratingCode;
 use Brian2694\Toastr\Facades\Toastr;
@@ -28,11 +30,17 @@ class CandidateResumeController extends Controller
     
     public function index()
     {
+        $role = Role::all();
+        $autoEmpId   = $this->generate_EmployeeId(Carbon::today())['number_employee'];
+        $department = Department::all();
         $position = Position::all();
         $branch = Branchs::all();
         $gender = Option::where('type','gender')->get();
+        $optionPositionType = Option::where('type','position_type')->get();
+        $optionLoan = Option::where('type','loan')->get();
         $data = CandidateResume::where("status", "1")->get();
-        return view('recruitments.candidate_resumes.candidate_resume', compact(["position", "branch", "gender", "data" ]));
+        $province = Province::all();
+        return view('recruitments.candidate_resumes.candidate_resume', compact(["position", "branch", "gender", "data", "autoEmpId", "role", "department", "optionPositionType", "optionLoan", "province" ]));
     }
 
     /**
@@ -186,6 +194,7 @@ class CandidateResumeController extends Controller
                         'interviewed_date' => $request->interviewed_date,
                         'interviewed_channel' => $request->interviewed_channel,
                         'committee_interview' => $request->committee_interview,
+                        'remark' => $request->remark,
                         'updated_by' => Auth::user()->id,
                     ];
                 }else{
@@ -195,6 +204,7 @@ class CandidateResumeController extends Controller
                         'interviewed_date' => null,
                         'interviewed_channel' => null,
                         'committee_interview' => null,
+                        'remark' => $request->remark,
                         'updated_by' => Auth::user()->id,
                     ];
                 }
@@ -205,15 +215,26 @@ class CandidateResumeController extends Controller
                         'status' => $request->status,
                         'joined_interview' => $request->joined_interview,
                         'interviewed_result' => $request->interviewed_result,
+                        'remark' =>$request->remark,
                         'updated_by' => Auth::user()->id,
                     ];
-                }else{
+                }else if($request->joined_interview == "3"){
+                    $dataUpdate = [
+                        'status' => 2,
+                        'joined_interview' => $request->joined_interview,
+                        'interviewed_result' =>null,
+                        'interviewed_date' =>$request->interviewed_date,
+                        'remark' =>$request->remark,
+                        'updated_by' => Auth::user()->id,
+                    ];
+                }else {
                     $dataUpdate = [
                         'status' => $request->status,
                         'joined_interview' => $request->joined_interview,
                         'interviewed_result' =>null,
+                        'remark' =>$request->remark,
                         'updated_by' => Auth::user()->id,
-                    ];
+                    ]; 
                 }
             } 
             if ($request->status == "4") {
@@ -225,27 +246,29 @@ class CandidateResumeController extends Controller
                 ];
             }
             CandidateResume::where('id',$request->id)->update($dataUpdate);
-            if ($request->status == "4") {
-                $dataCandidate = CandidateResume::where("id", $request->id)->first();
-                $newDateTime = Carbon::parse($dataCandidate->join_date)->addMonths(3);
-                $dataEmployee = [
-                    'number_employee' => $this->generate_EmployeeId(Carbon::today())['number_employee'],
-                    'employee_name_kh' => $dataCandidate->name_kh,
-                    'employee_name_en' => $dataCandidate->name_en,
-                    'password' => Hash::make("camma@newstaff@12"),
-                    'personal_phone_number' => $dataCandidate->contact_number,
-                    'position_id' => $dataCandidate->position_applied,
-                    'branch_id' => $dataCandidate->location_applied,
-                    'gender' => $dataCandidate->gender,
-                    'date_of_commencement' => $dataCandidate->join_date,
-                    'fdc_date' => $newDateTime,
-                    'emp_status' => "Probation",
-                    'basic_salary' => 0,
-                ];
-                User::create($dataEmployee);
-            }
             DB::commit();
             return ['message' => 'successfull'];
+        } catch (\Exception $exp) {
+            DB::rollBack();
+            return response()->json(['message' => $exp->getMessage()], 500);
+        }
+    }
+    public function createemp(Request $request)
+    {
+        try {
+            CandidateResume::where('id',$request->candidate_id)->update([
+                // "number_employee" =>$request->number_employee,
+                'status' => 5,
+            ]);
+            $data = $request->all();
+            $newDateTime = Carbon::parse($data['date_of_commencement'])->addMonths(3);
+            $data['fdc_date'] = $newDateTime;
+            $data['emp_status'] = 'Complete';
+            $data['created_by'] = Auth::user()->id;
+            $data['password']   = Hash::make("Camma@123");
+            $userData = User::create($data);
+            $emp = User::where("id", $userData->id)->with("branch")->with("position")->with("permanentprovince")->first();
+            return response()->json(['dataEmployee'=>$emp]);
         } catch (\Exception $exp) {
             DB::rollBack();
             return response()->json(['message' => $exp->getMessage()], 500);

@@ -167,6 +167,9 @@ class User extends Authenticatable
         return $this->belongsTo(Bank::class,'bank_name','id');
     }
 
+    public function permanentprovince(){
+        return $this->belongsTo(Province::class,'permanent_province','code');
+    }
 
     public function getMediumProfileAttribute()
     {
