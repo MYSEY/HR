@@ -3,10 +3,10 @@
     <div class="page-header">
         <div class="row align-items-center">
             <div class="col">
-                <h3 class="page-title">Employee Salary</h3>
+                <h3 class="page-title">Employee Salaries</h3>
                 <ul class="breadcrumb">
                     <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
-                    <li class="breadcrumb-item active">Salary</li>
+                    <li class="breadcrumb-item active">Salaries</li>
                 </ul>
             </div>
             <div class="col-auto float-end ms-auto">
@@ -73,10 +73,6 @@
                                                 </th>
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                     rowspan="1" colspan="1"
-                                                    aria-label="Join Date: activate to sort column ascending">Total Gross Salary
-                                                </th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                    rowspan="1" colspan="1"
                                                     aria-label="Join Date: activate to sort column ascending">Seniority Payable Tax
                                                 </th>
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
@@ -85,7 +81,7 @@
                                                 </th>
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                     rowspan="1" colspan="1"
-                                                    aria-label="Join Date: activate to sort column ascending">Base Salary Received
+                                                    aria-label="Join Date: activate to sort column ascending">Total Gross Salary
                                                 </th>
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                     rowspan="1" colspan="1"
@@ -143,7 +139,6 @@
                                                         <td>$ <a href="#">{{ $item->total_child_allowance }}</a></td>
                                                         <td>$ <a href="#">{{ $item->phone_allowance == null ? '0.00' : $item->phone_allowance}}</a></td>
                                                         <td>$ <a href="#">{{ $item->total_kny_phcumben}}</a></td>
-                                                        <td>$ <a href="#">{{ $item->total_gross_salary }}</a></td>
                                                         <td>$ <a href="#">{{ $item->seniority_payable_tax}}</a></td>
                                                         <td>$ <a href="#">{{ $item->total_pension_fund}}</a></td>
                                                         <td>$ <a href="#">{{ $item->base_salary_received_usd}}</a></td>

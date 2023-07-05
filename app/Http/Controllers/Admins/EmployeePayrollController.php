@@ -270,7 +270,7 @@ class EmployeePayrollController extends Controller
                 
                 //sum salary and sum other benefit
                 $baseSalaryReceivedUsd = $grossSalary + $seniorityPayableTax - $pension_contribution;
-                $totalGrossSalary = $grossSalary + $seniorityPayableTax;
+                // $totalGrossSalary = $grossSalary + $seniorityPayableTax;
                 // dd($baseSalaryReceivedUsd);
 
                 //exchange rate
@@ -635,7 +635,7 @@ class EmployeePayrollController extends Controller
                 $data['employee_id']                    = $item->id;
                 $data['basic_salary']                   = $item->basic_salary;
                 $data['children']                       = $children;
-                $data['total_gross_salary']             = $totalGrossSalary;
+                $data['total_gross_salary']             = $baseSalaryReceivedUsd;
                 $data['total_child_allowance']          = $totalAmountChild;
                 $data['phone_allowance']                = $item->phone_allowance;
                 $data['total_kny_phcumben']             = $totalBunus;
