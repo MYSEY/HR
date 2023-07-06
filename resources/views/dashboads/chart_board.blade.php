@@ -23,13 +23,13 @@
                         <div class="col-md-6 col-6 text-center">
                             <div class="stats-box mb-4">
                                 <p>Total staff working</p>
-                                <h3 id="total-staff-working">150</h3>
+                                <h3 id="total-staff-working"></h3>
                             </div>
                         </div>
                         <div class="col-md-6 col-6 text-center">
                             <div class="stats-box mb-4">
                                 <p>Total Resigned staff</p>
-                                <h3 id="total-resigned-staff">60</h3>
+                                <h3 id="total-resign-staff-resume"></h3>
                             </div>
                         </div>
                     </div>

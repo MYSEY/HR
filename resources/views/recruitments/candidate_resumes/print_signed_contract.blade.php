@@ -30,7 +30,7 @@
                 </div>
                 <table style="width:100%">
                     <tr><td class="table_tr">
-                        <span id="pr_mr_or_mrs"></span><strong id="pr_name"></strong>ភេទ <span id="pr_gender"></span>កើតនៅថ្ងៃទី​ <span id="pr_born_on"></span> ទីកន្លែងកំណើត <span id="pr_permanent_province"></span> កាន់អត្តសញ្ញាណប័ណ្ណលេខ <strong id="pr_id_card_number"></strong> សញ្ជាតិខ្មែរ។ អាស័យដ្ឋាន ……………………………………… ទូរស័ព្ទលេខ <span id="pr_personal_phone_number"></span> ដែលតទៅនេះហៅថា <span style="font-weight: bold;">«និយោជិត»។</span>
+                        <span id="pr_mr_or_mrs"></span><strong id="pr_name"></strong>ភេទ <span id="pr_gender"></span>កើតនៅថ្ងៃទី​ <strong id="pr_born_on"></strong> ទីកន្លែងកំណើត <strong id="pr_permanent_province"></strong> កាន់អត្តសញ្ញាណប័ណ្ណលេខ <strong id="pr_id_card_number"></strong> សញ្ជាតិខ្មែរ។ អាស័យដ្ឋាន ……………………………………… ទូរស័ព្ទលេខ <strong id="pr_personal_phone_number"></strong> ដែលតទៅនេះហៅថា <strong>«និយោជិត»។</strong>
                     </td></tr>
                 </table>
                 <div style="text-align: center;">

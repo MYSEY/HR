@@ -20,6 +20,251 @@
         overflow-y: scroll;
         display: flex;
     }
+
+
+    /* block style birthday */
+    .balloon {
+        /* width: 738px; */
+        margin-top: -50px;
+        /* margin: 0 auto; */
+        /* padding-top: 30px; */
+        position: relative;
+    }
+    .balloon > div {
+        width: 20px;
+        height: 30px;
+        background: rgba(182, 15, 97, 0.9);
+        border-radius: 0;
+        border-radius: 80% 80% 80% 80%;
+        margin: 0 auto;
+        position: absolute;
+        padding: 10px;
+        box-shadow: inset 17px 7px 10px rgba(182, 15, 97, 0.9);
+        -webkit-transform-origin: bottom center;
+    }
+    .balloon > div:nth-child(1) {
+        background: rgba(182, 15, 97, 0.9);
+        left: 0;
+        box-shadow: inset 10px 10px 10px rgba(135, 11, 72, 0.9);
+        -webkit-animation: balloon1 6s ease-in-out infinite;
+        -moz-animation: balloon1 6s ease-in-out infinite;
+        -o-animation: balloon1 6s ease-in-out infinite;
+        animation: balloon1 6s ease-in-out infinite;
+    }
+    .balloon > div:nth-child(1):before {
+        color: rgba(182, 15, 97, 0.9);
+    }
+    .balloon > div:nth-child(2) {
+        background: rgba(242, 112, 45, 0.9);
+        left: 22px;
+        box-shadow: inset 10px 10px 10px rgba(222, 85, 14, 0.9);
+        -webkit-animation: balloon2 6s ease-in-out infinite;
+        -moz-animation: balloon2 6s ease-in-out infinite;
+        -o-animation: balloon2 6s ease-in-out infinite;
+        animation: balloon2 6s ease-in-out infinite;
+    }
+    .balloon > div:nth-child(2):before {
+        color: rgba(242, 112, 45, 0.9);
+    }
+    .balloon > div:nth-child(3) {
+        background: rgba(45, 181, 167, 0.9);
+        left: 45px;
+        box-shadow: inset 10px 10px 10px rgba(35, 140, 129, 0.9);
+        -webkit-animation: balloon4 6s ease-in-out infinite;
+        -moz-animation: balloon4 6s ease-in-out infinite;
+        -o-animation: balloon4 6s ease-in-out infinite;
+        animation: balloon4 6s ease-in-out infinite;
+    }
+    .balloon > div:nth-child(3):before {
+        color: rgba(45, 181, 167, 0.9);
+    }
+    .balloon > div:nth-child(4) {
+        background: rgba(190, 61, 244, 0.9);
+        left: 63px;
+        box-shadow: inset 10px 10px 10px rgba(173, 14, 240, 0.9);
+        -webkit-animation: balloon1 5s ease-in-out infinite;
+        -moz-animation: balloon1 5s ease-in-out infinite;
+        -o-animation: balloon1 5s ease-in-out infinite;
+        animation: balloon1 5s ease-in-out infinite;
+    }
+    .balloon > div:nth-child(4):before {
+        color: rgba(190, 61, 244, 0.9);
+    }
+    .balloon > div:nth-child(5) {
+        background: rgba(180, 224, 67, 0.9);
+        left: 90px;
+        box-shadow: inset 10px 10px 10px rgba(158, 206, 34, 0.9);
+        -webkit-animation: balloon3 5s ease-in-out infinite;
+        -moz-animation: balloon3 5s ease-in-out infinite;
+        -o-animation: balloon3 5s ease-in-out infinite;
+        animation: balloon3 5s ease-in-out infinite;
+    }
+    .balloon > div:nth-child(5):before {
+        color: rgba(180, 224, 67, 0.9);
+    }
+    .balloon > div:nth-child(6) {
+        background: rgba(242, 194, 58, 0.9);
+        left: 105px;
+        box-shadow: inset 10px 10px 10px rgba(234, 177, 15, 0.9);
+        /* -webkit-animation: balloon2 3s ease-in-out infinite;
+        -moz-animation: balloon2 3s ease-in-out infinite;
+        -o-animation: balloon2 3s ease-in-out infinite;
+        animation: balloon2 3s ease-in-out infinite; */
+        -webkit-animation: balloon2 6s ease-in-out infinite;
+        -moz-animation: balloon2 6s ease-in-out infinite;
+        -o-animation: balloon2 6s ease-in-out infinite;
+        animation: balloon2 6s ease-in-out infinite;
+    }
+    .balloon > div:nth-child(6):before {
+        color: rgba(242, 194, 58, 0.9);
+    }
+    .balloon > div:before {
+        color: rgba(182, 15, 97, 0.9);
+        position: absolute;
+        bottom: -30px;
+        left: -1px;
+        content:"▲";
+        font-size: 1em;
+    }
+    .color-span {
+        /* font-size: 4.8em; */
+        color: white;
+        position: relative;
+        top: -5px;
+        left: -5px
+    }
+    /*BALLOON 1 4*/
+    @-webkit-keyframes balloon1 {
+        0%, 100% {
+            -webkit-transform: translateY(0) rotate(-6deg);
+        }
+        50% {
+            -webkit-transform: translateY(-20px) rotate(8deg);
+        }
+    }
+    @-moz-keyframes balloon1 {
+        0%, 100% {
+            -moz-transform: translateY(0) rotate(-6deg);
+        }
+        50% {
+            -moz-transform: translateY(-20px) rotate(8deg);
+        }
+    }
+    @-o-keyframes balloon1 {
+        0%, 100% {
+            -o-transform: translateY(0) rotate(-6deg);
+        }
+        50% {
+            -o-transform: translateY(-20px) rotate(8deg);
+        }
+    }
+    @keyframes balloon1 {
+        0%, 100% {
+            transform: translateY(0) rotate(-6deg);
+        }
+        50% {
+            transform: translateY(-20px) rotate(8deg);
+        }
+    }
+    /* BAllOON 2 5*/
+    @-webkit-keyframes balloon2 {
+        0%, 100% {
+            -webkit-transform: translateY(0) rotate(6eg);
+        }
+        50% {
+            -webkit-transform: translateY(-30px) rotate(-8deg);
+        }
+    }
+    @-moz-keyframes balloon2 {
+        0%, 100% {
+            -moz-transform: translateY(0) rotate(6deg);
+        }
+        50% {
+            -moz-transform: translateY(-30px) rotate(-8deg);
+        }
+    }
+    @-o-keyframes balloon2 {
+        0%, 100% {
+            -o-transform: translateY(0) rotate(6deg);
+        }
+        50% {
+            -o-transform: translateY(-30px) rotate(-8deg);
+        }
+    }
+    @keyframes balloon2 {
+        0%, 100% {
+            transform: translateY(0) rotate(6deg);
+        }
+        50% {
+            transform: translateY(-30px) rotate(-8deg);
+        }
+    }
+    /* BAllOON 0*/
+    @-webkit-keyframes balloon3 {
+        0%, 100% {
+            -webkit-transform: translate(0, -10px) rotate(6eg);
+        }
+        50% {
+            -webkit-transform: translate(-20px, 30px) rotate(-8deg);
+        }
+    }
+    @-moz-keyframes balloon3 {
+        0%, 100% {
+            -moz-transform: translate(0, -10px) rotate(6eg);
+        }
+        50% {
+            -moz-transform: translate(-20px, 30px) rotate(-8deg);
+        }
+    }
+    @-o-keyframes balloon3 {
+        0%, 100% {
+            -o-transform: translate(0, -10px) rotate(6eg);
+        }
+        50% {
+            -o-transform: translate(-20px, 30px) rotate(-8deg);
+        }
+    }
+    @keyframes balloon3 {
+        0%, 100% {
+            transform: translate(0, -10px) rotate(6eg);
+        }
+        50% {
+            transform: translate(-20px, 30px) rotate(-8deg);
+        }
+    }
+    /* BAllOON 3*/
+    @-webkit-keyframes balloon4 {
+        0%, 100% {
+            -webkit-transform: translate(10px, -10px) rotate(-8eg);
+        }
+        50% {
+            -webkit-transform: translate(-15px, 20px) rotate(10deg);
+        }
+    }
+    @-moz-keyframes balloon4 {
+        0%, 100% {
+            -moz-transform: translate(10px, -10px) rotate(-8eg);
+        }
+        50% {
+            -moz-transform: translate(-15px, 10px) rotate(10deg);
+        }
+    }
+    @-o-keyframes balloon4 {
+        0%, 100% {
+            -o-transform: translate(10px, -10px) rotate(-8eg);
+        }
+        50% {
+            -o-transform: translate(-15px, 10px) rotate(10deg);
+        }
+    }
+    @keyframes balloon4 {
+        0%, 100% {
+            transform: translate(10px, -10px) rotate(-8eg);
+        }
+        50% {
+            transform: translate(-15px, 10px) rotate(10deg);
+        }
+    }
 </style>
 @section('content')
     <div class="content container-fluid">
@@ -265,7 +510,17 @@
                                             '<span class="text-sm text-muted">Birthday</span>'+
                                         '</div>'+
                                         '<div class="col-6 text-end">'+
-                                            '<span class="badge bg-inverse-danger">Happy Birthday</span>'+
+                                            '<div>'+
+                                                '<div class="balloon">'+
+                                                    '<div><span class="color-span">☺</span> </div>'+
+                                                    '<div><span class="color-span">B</span> </div>'+
+                                                    '<div><span class="color-span">D</span> </div>'+
+                                                    '<div><span class="color-span">A</span> </div>'+
+                                                    '<div><span class="color-span">Y</span> </div>'+
+                                                    '<div><span class="color-span">!</span> </div>'+
+                                                '</div>'+
+                                            '</div>'+
+                                            // '<span class="badge bg-inverse-danger">Happy Birthday <i style="font-size: 25px" class="fa fa-birthday-cake" aria-hidden="true"></i></span>'+
                                         '</div>'+
                                     '</div>'+
                                 '</div>';
@@ -300,6 +555,8 @@
                 $("#total-resigned-staff").text(response.staffResignations.length);
                 $("#total-promoted-staff").text(response.staffPromotes);
                 $("#total-transferred-staff").text(response.transferred);
+                $("#total-staff-working").text(response.totalStaff.length);
+                $("#total-resign-staff-resume").text(response.staffResignations.length);
                 
                 $("#total-training").text(response.dataTrainings.length);
 
@@ -340,7 +597,8 @@
                     totalEmployee: response.data.length,
                 }
                 let typeOfStaff = {
-                    employee_position_type: response.totalStaff
+                    employee_position_type: response.totalStaff,
+                    position_type: response.position_type
                 };
 
                 let dataTraining = {
@@ -899,77 +1157,72 @@
     function dashboardTypeOfStaff(datas) {
         let dataTypeStaff = {
             datasets: [
-                {
-                    label: '% Male',
-                    data: [],
-                    backgroundColor: [
-                        "green"
-                    ],
-                    stack: 'Stack 0',
-                },
-                {
-                    label: '% Female',
-                    data: [],
-                    backgroundColor: [
-                        "LightGray"
-                    ],
-                    stack: 'Stack 1',
-                },
             ]
         };
 
-        let supporting = {
-            male:0,
-            female:0,
-            total:0
-        };
-        let fieldStaff = {
-            male:0,
-            female:0,
-            total:0
-        };
-        if (datas.employee_position_type.length > 0) {
-            datas.employee_position_type.map((emp) => {
-                if (emp.position_type == 1) {
-                    if (emp.gender) {
-                        if (emp.gender.name_english === "Male") {
-                            supporting.male ++;
+        let type_labels = [];
+        let datasets = [];
+        let data_value = [];
+        datas.position_type.map((position, index) => {
+            if (position.type ==  "position_type") {
+                let male = 0;
+                let female = 0;
+                let total = 0;
+                if (datas.employee_position_type.length > 0) {
+                    datas.employee_position_type.map((emp) => {
+                        if (position.id == emp.position_type) {
+                            if (emp.gender) {
+                                if (emp.gender.name_english === "Male") {
+                                    male ++;
+                                }
+                                if (emp.gender.name_english =="Female") {
+                                    female ++;
+                                }
+                            }
+                            total ++;
                         }
-                        if (emp.gender.name_english =="Female") {
-                            supporting.female ++;
-                        }
-                    }
-                    supporting.total ++;
+                    })
                 }
-                if (emp.position_type == 2) {
-                    if (emp.gender) {
-                        if (emp.gender.name_english === "Male") {
-                            fieldStaff.male ++;
-                        }
-                        if (emp.gender.name_english =="Female") {
-                            fieldStaff.female ++;
-                        }
-                    }
-                    fieldStaff.total ++;
-                }
-            })
-        }
-        dataTypeStaff.labels = ['Supporting Staff','Field Staff','total'];
+                
+                data_value.push({
+                    male,
+                    female,
+                    total,
+                    name_english: position.name_english
+                });
+                type_labels.push(position.name_english);
+            }
+            if (position.type ==  "gender") {
+                dataTypeStaff.datasets.push(
+                    {
+                        label: '% '+position.name_english,
+                    },
+                )
+            }  
+        });
+        dataTypeStaff.datasets[0].backgroundColor = ["green"];
+        dataTypeStaff.datasets[0].stack = 'Stack 0';
+        dataTypeStaff.datasets[0].data = [];
+        dataTypeStaff.datasets[1].backgroundColor = ["LightGray"];
+        dataTypeStaff.datasets[1].stack = 'Stack 1';
+        dataTypeStaff.datasets[1].data = [];
+    
+        type_labels.push('total')
+        dataTypeStaff.labels = type_labels;
         dataTypeStaff.datasets[0].data = [
-            (supporting.male / datas.employee_position_type.length)*100,
-            ((fieldStaff.male / datas.employee_position_type.length)*100),
-            (supporting.total / datas.employee_position_type.length)*100,
+            (data_value[0].male / datas.employee_position_type.length) * 100,
+            (data_value[1].male / datas.employee_position_type.length) * 100,
+            ((data_value[0].male + data_value[1].male) / datas.employee_position_type.length) * 100,
         ];
-        dataTypeStaff.datasets[1].data = [
-            (supporting.femal / datas.employee_position_type.length)*100,
-            ((fieldStaff.female / datas.employee_position_type.length)*100),
-            ((fieldStaff.total / datas.employee_position_type.length)*100),
+        dataTypeStaff.datasets[1].data= [
+            (data_value[0].female / datas.employee_position_type.length) * 100,
+            (data_value[1].female / datas.employee_position_type.length) * 100,
+            ((data_value[0].female + data_value[1].female) / datas.employee_position_type.length) * 100,
         ];
-
         let dataTypeStaffRed = [
-            (supporting.total / datas.employee_position_type.length)*100,
-            (fieldStaff.total / datas.employee_position_type.length)*100,
-            ((supporting.total + fieldStaff.total) / datas.employee_position_type.length)*100,
+            (data_value[0].total / datas.employee_position_type.length) * 100,
+            (data_value[1].total / datas.employee_position_type.length) * 100,
+            ((data_value[0].total + data_value[1].total) / datas.employee_position_type.length) * 100,
         ];
         dataTypeStaff.datasets.push(
             {

@@ -90,14 +90,14 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-sm-6">
+                        {{-- <div class="col-sm-6">
                             <div class="">
                                 <label class="">Place of birth</label>
                                 <div class="cal-icon">
                                     <input class="form-control place_of_birth" id="place_of_birth" type="text">
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="">Join Date</label>
@@ -107,14 +107,14 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label>ID card number <span class="text-danger">*</span></label>
                                 <input class="form-control" type="number" id="id_card_number" name="id_card_number">
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="">Personal Phone <span class="text-danger">*</span></label>

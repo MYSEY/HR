@@ -35,6 +35,7 @@ class DashboadController extends Controller
 
         $branches = Branchs::all();
         $options = Option::where("type", "emp_status")->get();
+        $position_type = Option::whereIn("type", ["position_type", "gender"])->get();
 
         $employee = User::with("gender")->with('position')->with('branch')
         ->when($from_date, function ($query, $from_date) {
@@ -44,8 +45,9 @@ class DashboadController extends Controller
             $query->where('created_at','<=', $to_date);
         })->orderBy('id', 'desc')->get();
 
-        $currentYear = Carbon::now()->format('Y');
-        $year = Carbon::createFromDate('01-01-'.$currentYear)->format('Y-m-d');
+        // $currentYear = Carbon::now()->format('Y');
+        // $year = Carbon::createFromDate('01-01-'.$currentYear)->format('Y-m-d');
+        $year = null;
         $staffResignations = User::whereNotIn('emp_status',['1','2','Probation'])
         ->when($year, function ($query, $year) {
             $query->where('resign_date', '>=', $year);
@@ -69,6 +71,7 @@ class DashboadController extends Controller
         
         return response()->json([
             'options'=>$options,
+            'position_type'=>$position_type,
             'branches'=>$branches,
             'data'=>$employee,
             'staffResignations'=>$staffResignations,
