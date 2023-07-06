@@ -28,11 +28,10 @@
                                         <thead>
                                             <tr>
                                                 <th>#</th>
-                                                <th>Title </th>
-                                                <th>Amount Percent (%)</th>
+                                                <th>Days</th>
+                                                <th>Title</th>
+                                                <th>Amount Percent</th>
                                                 <th>Period Month</th>
-                                                <th>From</th>
-                                                <th>To</th>
                                                 <th>Created At</th>
                                                 <th class="text-end">Action</th>
                                             </tr>
@@ -42,11 +41,10 @@
                                                 @foreach ($data as $item)
                                                     <tr>
                                                         <td class="ids">{{$item->id}}</td>
+                                                        <td class="title">{{$item->Day}}</td>
                                                         <td class="title">{{$item->title}}</td>
-                                                        <td class="amount_percent">{{$item->amount_percent}}</td>
+                                                        <td class="amount_percent"><a href="#">{{$item->amount_percent == null ? '0' : $item->amount_percent}}%</a></td>
                                                         <td class="period_month">{{$item->PeriodPayment}}</td>
-                                                        <td class="from">{{$item->DateFrom}}</td>
-                                                        <td class="to">{{$item->DateTo}}</td>
                                                         <td>{{$item->created_at}}</td>
                                                         <td class="text-end">
                                                             <div class="dropdown dropdown-action">

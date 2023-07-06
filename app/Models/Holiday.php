@@ -81,6 +81,11 @@ class Holiday extends Model
         $diff_in_days = $to->diffInDays($from);
         return $diff_in_days;
     }
+    public function getDayAttribute(){
+        $from = Carbon::parse($this->from)->format('d');
+        $to = Carbon::parse($this->to)->format('d-M-Y');
+        return $from.' , '.$to;
+    }
     /*
     |--------------------------------------------------------------------------
     | MUTATORS

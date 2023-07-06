@@ -25,8 +25,8 @@
                         <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                             <div class="row">
                                 <div class="col-sm-12">
-                                    <table class="table table-striped custom-table datatable dataTable no-footer"
-                                        id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
+                                    <table class="table table-striped custom-table datatable dataTable no-footer display"
+                                        id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info"  cellspacing="0">
                                         <thead>
                                             <tr>
                                                 <th class="sorting sorting_asc" tabindex="0"
@@ -81,11 +81,11 @@
                                                 </th>
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                     rowspan="1" colspan="1"
-                                                    aria-label="Join Date: activate to sort column ascending">base salary received
+                                                    aria-label="Join Date: activate to sort column ascending">Base Salary Received
                                                 </th>
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                     rowspan="1" colspan="1"
-                                                    aria-label="Join Date: activate to sort column ascending">base salary received
+                                                    aria-label="Join Date: activate to sort column ascending">Base Salary Received
                                                 </th>
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                     rowspan="1" colspan="1"
@@ -120,7 +120,7 @@
                                                     aria-label="Action: activate to sort column ascending">Action</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
+                                        <tbody >
                                             @if (count($data) > 0)
                                                 @foreach ($data as $item)
                                                     <tr class="odd">
@@ -250,3 +250,21 @@
     </div>
 @endsection
 @include('includs.script')
+<script>
+    // $(function(){
+    //     $('#DataTables_Table_0').DataTable({
+    //         "scrollY": "200px",
+    //         "scrollCollapse": true,
+    //         "paging": false
+    //     });
+    //     $(window).on('resize', function() {
+    //         resizetable();
+    //     });
+    //     function resizetable() {
+    //         $('.dataTables_scrollBody').css({
+    //             maxHeight: ($(window).height() - 78 - 65) + 'px'
+    //         });
+    //     }
+    //     resizetable();
+    // });
+</script>

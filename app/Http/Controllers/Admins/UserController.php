@@ -79,7 +79,7 @@ class UserController extends Controller
         $to_date = Carbon::now()->addDays(14)->format('d');
         $month = Carbon::now()->format('m');
 
-        $data =  User::whereIn('emp_status',['1','2','Probation'])
+        $data =  User::whereIn('emp_status',['1','2','3','4','5','6','7','8','9','Probation'])
         ->whereDay('date_of_birth', '>=', $from_date)
         ->whereDay('date_of_birth', '<=', $to_date)
         ->whereMonth('date_of_birth', $month)
