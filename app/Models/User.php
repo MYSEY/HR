@@ -297,6 +297,11 @@ class User extends Authenticatable
             return Carbon::parse($this->fdc_end)->format('d-M-Y');
         }
     }
+    public function getDayOfGetSeverancePayAttribute(){
+        if ($this->fdc_end) {
+            return Carbon::createFromDate($this->fdc_end)->format('d-M-Y');
+        }
+    }
     public function getResignDatesAttribute(){
         if ($this->resign_date) {
             return Carbon::parse($this->resign_date)->format('d-M-Y');

@@ -101,13 +101,15 @@
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending" style="width: 218.762px;">Position</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending" style="width: 218.762px;">Department</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending" style="width: 218.762px;">Branch</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Mobile: activate to sort column ascending" style="width: 83.3625px;">Mobile</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Mobile: activate to sort column ascending" style="width: 83.3625px;">Contact Number</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Role: activate to sort column ascending" style="width: 80.8125px;">Role</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Role: activate to sort column ascending" style="width: 80.8125px;">Position Type</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Role: activate to sort column ascending" style="width: 80.8125px;">Basic Salary</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending" style="width: 218.762px;">DOB</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Role: activate to sort column ascending" style="width: 80.8125px;">Phone Allowance</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending" style="width: 218.762px;">Date Of Birth</th>
                                             <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending" style="width: 87.1125px;">Join Date</th>
                                             <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending" style="width: 87.1125px;">Past Date</th>
+                                            <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending" style="width: 87.1125px;">Month Get Severance Pay</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Role: activate to sort column ascending" style="width: 135.163px;">Loan</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Role: activate to sort column ascending" style="width: 135.163px;">Status</th>
                                             <th class="text-end no-sort sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Action: activate to sort column ascending" style="width: 50.825px;">Action</th>
@@ -143,10 +145,12 @@
                                                         <span class="badge bg-inverse-success">{{ $item->role == null ? "" : $item->role->name }}</span>
                                                     </td>
                                                     <td>{{$item->EmployeePositionType}}</td>
-                                                    <td>$ {{$item->basic_salary}}</td>
+                                                    <td>$ <a href="#">{{$item->basic_salary}}</a></td>
+                                                    <td>$ <a href="#">{{$item->phone_allowance}}</a></td>
                                                     <td>{{$item->DOB ?? ''}}</td>
                                                     <td>{{$item->joinOfDate}}</td>
                                                     <td>{{$item->PassDate}}</td>
+                                                    <td>{{$item->DayOfGetSeverancePay}}</td>
                                                     <td>
                                                         @if ($item->EmployeeIsLoan == 'Yes')
                                                             <a class="btn btn-white btn-sm" href="#" aria-expanded="false">
@@ -648,9 +652,9 @@
             let id = $(this).attr('data-emp-id');
             let status = $(this).data('id');
             if (status == 1) {
-                var emp_status = "FDC";
+                var emp_status = "Fixed Duration Contract (FDC)";
             } else if(status == 2) {
-                var emp_status = "UDC";
+                var emp_status = "Undetermined Duration Contract (UDC)";
             }else if(status == 3){
                 var emp_status = "Resignation";
             }else if(status == 4){
@@ -682,17 +686,17 @@
                                     '<label><a href="#">'+emp_status+'</a></label>'+
                                 '</div>'+
                                 '<div class="form-group">'+
-                                    '<label>Start date <span class="text-danger">*</span></label>'+
+                                    '<label>Start Date <span class="text-danger">*</span></label>'+
                                     '<input type="date" class="form-control start_date" value="'+start_date+'">'+
                                     '<input type="hidden" class="form-control emp_status" value="'+status+'">'+
                                     '<input type="hidden" class="form-control id" value="'+id+'">'+
                                 '</div>'+
                                 '<div class="form-group">'+
-                                    '<label>End date</label>'+
-                                    '<input type="date" class="form-control end_dete" value="">'+
+                                    '<label>End Date <span class="text-danger">*</span></label>'+
+                                    '<input type="date" class="form-control end_dete" value="'+end_date+'">'+
                                 '</div>'+
                                 '<div class="form-group">'+
-                                    '<label>Salary</label>'+
+                                    '<label>Salary Increase</label>'+
                                     '<input type="number" class="form-control new_salary" value="'+new_salary+'">'+
                                 '</div>'+
                                 '<label>Reason</label>'+
@@ -715,6 +719,13 @@
                                     $.alert({
                                         title: '<span class="text-danger">Requiered</span>',
                                         content: 'Please input start date.',
+                                    });
+                                    return false;
+                                }
+                                if (!end_dete) {
+                                    $.alert({
+                                        title: '<span class="text-danger">Requiered</span>',
+                                        content: 'Please input end date.',
                                     });
                                     return false;
                                 }
@@ -764,7 +775,7 @@
                                 '<label><a href="#">'+emp_status+'</a></label>'+
                             '</div>'+
                             '<div class="form-group">'+
-                                '<label>End date <span class="text-danger">*</span></label>'+
+                                '<label>End Date <span class="text-danger">*</span></label>'+
                                 '<input type="hidden" class="form-control start_date" value="'+start_date+'">'+
                                 '<input type="date" class="form-control end_date" value="'+end_date+'">'+
                                 '<input type="hidden" class="form-control emp_status" id="" name="" value="'+status+'">'+
@@ -849,7 +860,7 @@
                             '</div>'+
                             '<div class="form-group">'+
                                 '<div class="form-group">'+
-                                    '<label>date <span class="text-danger">*</span></label>'+
+                                    '<label>Resignation Date <span class="text-danger">*</span></label>'+
                                     '<input type="date" class="form-control resign_date" id="" name="" value="">'+
                                     '<input type="hidden" class="form-control emp_status" id="" name="" value="'+status+'">'+
                                     '<input type="hidden" class="form-control id" id="" name="" value="'+id+'">'+
@@ -920,7 +931,7 @@
                             '</div>'+
                             '<div class="form-group">'+
                                 '<div class="form-group">'+
-                                    '<label>date <span class="text-danger">*</span></label>'+
+                                    '<label>Date <span class="text-danger">*</span></label>'+
                                     '<input type="date" class="form-control resign_date" id="" name="" value="">'+
                                     '<input type="hidden" class="form-control emp_status" id="" name="" value="'+status+'">'+
                                     '<input type="hidden" class="form-control id" id="" name="" value="'+id+'">'+
