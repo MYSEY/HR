@@ -6,6 +6,7 @@ use DateTime;
 use DatePeriod;
 use DateInterval;
 use App\Models\User;
+use App\Models\Bonus;
 use App\Models\Holiday;
 use App\Models\Payroll;
 use App\Models\Seniority;
@@ -39,7 +40,7 @@ class EmployeePayrollController extends Controller
     {
         $data = $this->payrollRepo->getAllPayroll($request);
         $user = User::all();
-        $exChangeRate= ExchangeRate::first();
+        $exChangeRate= ExchangeRate::orderBy('id', 'desc')->first();
         return view('payrolls.index',compact('data','user','exChangeRate'));
     }
 
@@ -90,10 +91,15 @@ class EmployeePayrollController extends Controller
                     }
                     $startDate = Carbon::parse($item->date_of_commencement);
                     $endDate = Carbon::parse($currentYear.'-'.$totalDayInMonth);
-                    $totalDays = $startDate->diffInDaysFiltered(function (Carbon $date) use ($holidays) {
+                    $toDays = $startDate->diffInDaysFiltered(function (Carbon $date) use ($holidays) {
                         return $date->isWeekday() && !in_array($date, $holidays);
                     }, $endDate) + 1;
                     
+                    if(count($holidays) == 4){
+                        $totalDays = $toDays - 1;
+                    }else{
+                        $totalDays = $toDays + 1;
+                    }
                     if ($totalDays == 22) {
                         $totalBasicSalary = $item->basic_salary;
                     }else{
@@ -103,7 +109,7 @@ class EmployeePayrollController extends Controller
                     $monthToPay = Carbon::createFromDate($item->fdc_date)->format('Y-m');
                     $currentMonthToPay = Carbon::createFromDate($request->payment_date)->format('Y-m');
                     if($monthToPay == $currentMonthToPay){
-                        $totalBasicSalary = $item->pre_salary;
+                        $totalBasicSalary = $item->total_current_salary;
                     }else{
                         $totalBasicSalary = $item->basic_salary;
                     }
@@ -165,8 +171,17 @@ class EmployeePayrollController extends Controller
                                 $percentSalary = $totalPercent * $totalStartDays;
                                 $totalAllowanceBunus = $percentSalary / $dayOfYear;
                             }
+                            $dataBonus = Bonus::create([
+                                'employee_id'   => $item->id,
+                                'number_of_working_days'    => $totalStartDays,
+                                'base_salary'   => $item->basic_salary,
+                                'base_salary_received'  => $item->basic_salary,
+                                'total_allowance'   => $totalAllowanceBunus,
+                                'bouns_type'   => $value->title,
+                                'created_by'    => Auth::user()->id,
+                            ]);
                         }
-                        $totalBunus = $totalAllowanceBunus ?? 0;
+                        $totalBunus = $dataBonus->total_allowance ?? 0;
                     }
                 }
                 // dd($totalBunus);

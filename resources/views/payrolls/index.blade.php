@@ -81,7 +81,15 @@
                                                 </th>
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                     rowspan="1" colspan="1"
-                                                    aria-label="Join Date: activate to sort column ascending">Total Gross Salary
+                                                    aria-label="Join Date: activate to sort column ascending">base salary received
+                                                </th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                    rowspan="1" colspan="1"
+                                                    aria-label="Join Date: activate to sort column ascending">base salary received
+                                                </th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                    rowspan="1" colspan="1"
+                                                    aria-label="Join Date: activate to sort column ascending">Tax Rate
                                                 </th>
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                     rowspan="1" colspan="1"
@@ -142,6 +150,8 @@
                                                         <td>$ <a href="#">{{ $item->seniority_payable_tax}}</a></td>
                                                         <td>$ <a href="#">{{ $item->total_pension_fund}}</a></td>
                                                         <td>$ <a href="#">{{ $item->base_salary_received_usd}}</a></td>
+                                                        <td><span>៛</span> <a href="#">{{ $item->base_salary_received_riel}}</a></td>
+                                                        <td><a href="#">{{ $item->total_rate}}%</a></td>
                                                         <td>$ <a href="#">{{ $item->tax_free_seniority_allowance}}</a></td>
                                                         <td>$ <a href="#">{{ $item->total_severance_pay}}</a></td>
                                                         <td>$ <a href="#">{{ $item->total_salary }}</a></td>
@@ -212,9 +222,8 @@
                                     <label>Riels</label>
                                     <div class="input-group">
                                         <span class="input-group-text">៛</span>
-                                        <input type="number" class="form-control" id="exchange_rate"
-                                            name="exchange_rate" placeholder=""
-                                            value="{{ $exChangeRate->amount_riel }}">
+                                        <input type="number" class="form-control" id="exchange_rate" disabled name="exchange_rate" placeholder="" value="{{ $exChangeRate->amount_riel }}">
+                                        <input type="hidden" class="form-control" id="exchange_rate" name="exchange_rate" placeholder="" value="{{ $exChangeRate->amount_riel }}">
                                     </div>
                                 </div>
                             </div>

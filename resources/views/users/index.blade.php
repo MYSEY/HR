@@ -146,7 +146,7 @@
                                                     </td>
                                                     <td>{{$item->EmployeePositionType}}</td>
                                                     <td>$ <a href="#">{{$item->basic_salary}}</a></td>
-                                                    <td>$ <a href="#">{{$item->phone_allowance}}</a></td>
+                                                    <td>$ <a href="#">{{$item->phone_allowance == null ? '0.00' : $item->phone_allowance}}</a></td>
                                                     <td>{{$item->DOB ?? ''}}</td>
                                                     <td>{{$item->joinOfDate}}</td>
                                                     <td>{{$item->PassDate}}</td>
@@ -221,7 +221,7 @@
                                                             @endif
                                                             @if (Auth::user()->RolePermission == 'Administrator')
                                                                 <div class="dropdown-menu dropdown-menu-right" id="btn-emp-status">
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-basic-salary="{{$item->basic_salary}}" data-id="1" href="#">
+                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="1" href="#">
                                                                         <i class="fa fa-dot-circle-o text-success"></i> FDC
                                                                     </a>
                                                                     <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="2" href="#">
@@ -671,7 +671,6 @@
                 var emp_status = "Fall Probation";
             }
 
-            let new_salary = $(this).attr('data-basic-salary');
             let start_date = $(this).attr('data-start-date');
             let end_date = $(this).attr('data-end-date');
             if (status == 1) {
@@ -697,7 +696,7 @@
                                 '</div>'+
                                 '<div class="form-group">'+
                                     '<label>Salary Increase</label>'+
-                                    '<input type="number" class="form-control new_salary" value="'+new_salary+'">'+
+                                    '<input type="number" class="form-control total_salary_increase" value="">'+
                                 '</div>'+
                                 '<label>Reason</label>'+
                                 '<textarea class="form-control resign_reason"></textarea>'+
@@ -712,7 +711,7 @@
                                 var id = this.$content.find('.id').val();
                                 var start_date = this.$content.find('.start_date').val();
                                 var end_dete = this.$content.find('.end_dete').val();
-                                var new_salary = this.$content.find('.new_salary').val();
+                                var total_salary_increase = this.$content.find('.total_salary_increase').val();
                                 var resign_reason = this.$content.find('.resign_reason').val();
 
                                 if (!start_date) {
@@ -735,7 +734,7 @@
                                         'id': id,
                                         'start_date': start_date,
                                         'end_dete': end_dete,
-                                        'new_salary': new_salary,
+                                        'total_salary_increase': total_salary_increase,
                                         'resign_reason': resign_reason
                                     }).then(function(response) {
                                     if (response.data.message == 'successfull') {

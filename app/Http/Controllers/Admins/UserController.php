@@ -235,20 +235,23 @@ class UserController extends Controller
                 $endDate = Carbon::parse($currentYear);
 
                 // new salary and new total days
+                $dataSalary = User::where('id',$request->id)->first();
                 $totalNewDays = $startDate->diffInDays($endDate) + 1;
-                $totalnewSalary = ($request->new_salary / $totalDayInMonth) * $totalNewDays;
+                $totalBasicSalary = $dataSalary->basic_salary + $request->total_salary_increase;
+                $totalnewSalary = ($totalBasicSalary / $totalDayInMonth) * $totalNewDays;
 
                 //old salary and total old days
-                $dataSalary = User::where('id',$request->id)->first();
                 $totalOldDay = $totalDayInMonth - $totalNewDays;
                 $totalOldSalary = ($dataSalary->basic_salary / $totalDayInMonth)  * $totalOldDay;
                 
-                $totalBisicSalary = $totalnewSalary + $totalOldSalary;
+                $totalCurrentSalary = $totalnewSalary + $totalOldSalary;
                 User::where('id',$request->id)->update([
                     'emp_status' => $request->emp_status,
                     'fdc_date' => $request->start_date,
                     'fdc_end' => $request->end_dete,
-                    'basic_salary' => number_format($totalBisicSalary, 2),
+                    'salary_increas' => $request->total_salary_increase,
+                    'basic_salary' => $totalBasicSalary,
+                    'total_current_salary' => number_format($totalCurrentSalary, 2),
                     'pre_salary' => number_format($dataSalary->basic_salary, 2),
                     'resign_reason' => $request->resign_reason
                 ]);

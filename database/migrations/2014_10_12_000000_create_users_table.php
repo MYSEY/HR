@@ -34,8 +34,10 @@ class CreateUsersTable extends Migration
             $table->date('date_of_commencement')->nullable();
             $table->decimal('pre_salary',50,2)->default(0);
             $table->decimal('basic_salary',50,2)->default(0);
+            $table->decimal('salary_increas',50,2)->default(0);
+            $table->decimal('total_current_salary',50,2)->default(0);
             $table->date('change_salary_date')->nullable();
-            $table->decimal('phone_allowance')->default(0);
+            $table->integer('phone_allowance')->nullable();
             $table->string('email_verified_at')->nullable();
             $table->string('email')->nullable();
             $table->string('password');

@@ -48,6 +48,8 @@ class User extends Authenticatable
         'email',
         'pre_salary',
         'basic_salary',
+        'salary_increas',
+        'total_current_salary',
         'phone_allowance',
         'password',
         'phone',
