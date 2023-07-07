@@ -8,8 +8,8 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form  enctype="multipart/form-data" class="needs-validation" novalidate>
-                    {{-- @csrf --}}
+                <form  enctype="multipart/form-data">
+                    @csrf
                     <input type="text" name="" id="candidate_id" hidden>
                     <div class="row">
                         <div class="col-sm-6">
@@ -51,8 +51,8 @@
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="">Position Type</label>
-                                <select class="select form-control" id="position_type" name="position_type" value="{{old('position_type')}}">
+                                <label class="">Position Type <span class="text-danger">*</span></label>
+                                <select class="select form-control" id="position_type" name="position_type" value="{{old('position_type')}}" required>
                                     <option value="">Please select position type</option>
                                     @foreach ($optionPositionType as $item)
                                         <option value="{{$item->id}}">{{$item->name_english}}</option>
@@ -71,8 +71,8 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>Department</label>
-                                <select class="select form-control" id="department_id" name="department_id" value="{{old('department_id')}}">
+                                <label>Department <span class="text-danger">*</span></label>
+                                <select class="select form-control" id="department_id" name="department_id" value="{{old('department_id')}}" required>
                                     <option value="">Please select department</option>
                                     @foreach ($department as $item)
                                         <option value="{{$item->id}}">{{$item->name_english}}</option>
@@ -84,9 +84,9 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>Date Of Birth</label>
+                                <label>Date Of Birth <span class="text-danger">*</span></label>
                                 <div class="cal-icon">
-                                    <input class="form-control datetimepicker @error('date_of_birth') is-invalid @enderror" type="text" required id="date_of_birth" name="date_of_birth" value="{{old('date_of_birth')}}">
+                                    <input class="form-control datetimepicker @error('date_of_birth') is-invalid @enderror" type="text" required id="date_of_birth" name="date_of_birth" value="{{old('date_of_birth')}}" required>
                                 </div>
                             </div>
                         </div>
@@ -112,7 +112,7 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label>ID card number <span class="text-danger">*</span></label>
-                                <input class="form-control" type="number" id="id_card_number" name="id_card_number">
+                                <input class="form-control" type="number" id="id_card_number" name="id_card_number" required>
                             </div>
                         </div>
                         <div class="col-sm-6">
@@ -168,8 +168,8 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>Province/City</label>
-                                    <select class="select form-control" id="current_province" name="current_province" value="{{old('current_province')}}">
+                                    <label>Province/City <span class="text-danger">*</span></label>
+                                    <select class="select form-control" id="current_province" name="current_province" value="{{old('current_province')}}" required>
                                         <option selected disabled> --Select --</option>
                                         @if (count($province)>0)
                                             @foreach ($province as $item)
@@ -181,23 +181,23 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>District/Khan</label>
-                                    <select class="select form-control" id="current_district" name="current_district" value="{{old('current_district')}}">
+                                    <label>District/Khan <span class="text-danger">*</span></label>
+                                    <select class="select form-control" id="current_district" name="current_district" value="{{old('current_district')}}" required>
                                     </select>
                                 </div>
                             </div>
 
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label class="no-error-label">Commune/Sangkat</label>
-                                    <select class="select form-control no-error-border" id="current_commune" name="current_commune" value="{{old('current_commune')}}">
+                                    <label class="no-error-label">Commune/Sangkat <span class="text-danger">*</span></label>
+                                    <select class="select form-control no-error-border" id="current_commune" name="current_commune" value="{{old('current_commune')}}" required>
                                     </select>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label class="no-error-label">Village</label>
-                                    <select class="select form-control no-error-border" id="current_village" name="current_village" value="{{old('current_village')}}">
+                                    <label class="no-error-label">Village <span class="text-danger">*</span></label>
+                                    <select class="select form-control no-error-border" id="current_village" name="current_village" value="{{old('current_village')}}" required>
                                     </select>
                                 </div>
                             </div>
@@ -229,8 +229,8 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>Province/City</label>
-                                    <select class="select form-control" id="permanent_province" name="permanent_province" value="{{old('permanent_province')}}">
+                                    <label>Province/City <span class="text-danger">*</span></label>
+                                    <select class="select form-control" id="permanent_province" name="permanent_province" value="{{old('permanent_province')}}" required>
                                         <option selected disabled> --Select --</option>
                                         @if (count($province)>0)
                                         @foreach ($province as $item)
@@ -287,7 +287,7 @@
                     </div>
 
                     <div class="submit-section">
-                        <button type="button" class="btn btn-primary btn_save_print" id="btn_save_print">
+                        <button type="submit" class="btn btn-primary btn_save_print" id="btn_save_print">
                             <span class="btn-text-print">Save and Print</span>
                             <span id="btn-print-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading</span>
                         </button>
@@ -380,7 +380,7 @@
                 // password_confirmation: $("#password_confirmation").val(),
                 position_type: $("#position_type").val(),
                 basic_salary: $("#basic_salary").val(),
-                salary_to_increase: $("#salary_to_increase").val(),
+                salary_increas: $("#salary_to_increase").val(),
                 current_province: $("#current_province").val(),
                 current_district: $("#current_district").val(),
                 current_commune: $("#current_commune").val(),
@@ -397,9 +397,17 @@
             }).then(function(response) {
                 var data = response.data.dataEmployee;
                 var date_of_birth = new Date(data.date_of_birth);
+                var date_of_commencement = new Date(data.date_of_commencement);
+                var fdc_date = new Date(data.fdc_date);
                 let day = formatDate( date_of_birth, 'km', format_date={day: true});
                 let month = formatDate( date_of_birth, 'km', format_date={month: true});
                 let year = formatDate( date_of_birth, 'km', format_date={year: true});
+                let join_day = formatDate( date_of_commencement, 'km', format_date={day: true});
+                let join_month = formatDate( date_of_commencement, 'km', format_date={month: true});
+                let join_year = formatDate( date_of_commencement, 'km', format_date={year: true});
+                let end_day = formatDate( fdc_date, 'km', format_date={day: true});
+                let end_month = formatDate( fdc_date, 'km', format_date={month: true});
+                let end_year = formatDate( fdc_date, 'km', format_date={year: true});
                 if (data) {
                     if ($("#gender_name").val() == "Female") {
                         $("#pr_mr_or_mrs").text("អ្នកស្រី ");
@@ -413,7 +421,34 @@
                     $("#pr_permanent_province").text(data.permanentprovince.name_km + " ");
                     $("#pr_permanent_province").text(data.permanentprovince.name_km + " ");
                     $("#pr_id_card_number").text($("#id_card_number").val()+ "");
+
+                    let number_home = "";
+                    let number_street = "";
+                    if (data.current_house_no) {
+                        number_home = "ផ្ទះលេខ "+ data.current_house_no;
+                    }
+                    if (data.current_street_no) {
+                        number_street = " ផ្លូវលេខ "+data.current_street_no;
+                    }
+                    let location = number_home + number_street + " ភូមិ "+data.currentvillage.name_km + " ឃុំ/សង្កាត់ " + data.currentcommune.name_km + " ស្រុក/ខណ្ឌ " + data.currentdistrict.name_km+ " ខេត្ត/ក្រុង "+data.currentprovince.name_km;
+
+                    $("#pr_current_location").text(location);
+
                     $("#pr_personal_phone_number").text(data.personal_phone_number);
+                    $(".pr_join_day").text(join_day);
+                    $(".pr_join_month").text(join_month);
+                    $(".pr_join_year").text(join_year);
+                    $("#pr_end_day").text(end_day);
+                    $("#pr_end_month").text(end_month);
+                    $("#pr_end_year").text(end_year);
+                    $("#pr_position").text(data.position.name_khmer);
+                    $("#pr_branch").text(data.branch.branch_name_kh);
+                    $("#pr_employee_id").text(data.number_employee);
+                    $("#pr_basic_salary").text(data.basic_salary);
+                    $("#pr_salary_increase").text($("#salary_to_increase").val());
+                    if (data.positiontype.name_english == "Field Staff") {
+                        $("#pr_supporting_or_field_staff").text("ដោយធៀបនិងភាគរយការងារសម្រេចបានសម្រាប់បុគ្គលិកឥណទាន (គិតតាម Pro-Rate) ដោយការបង់ពន្ធជូនរាជរដ្ឋាភិបាលជាបន្ទុករបស់និយោជិត");
+                    }
                     print_pdf();
                 }
                 new Noty({
@@ -422,8 +457,7 @@
                     type: "success",
                     icon: true
                 }).show();
-                $('.card-footer').remove();
-                // window.location.replace("{{ URL('recruitment/candidate-resume/list') }}");
+                showDatas(4);
             }).catch(function(error) {
                 new Noty({
                     title: "",
@@ -432,7 +466,6 @@
                     icon: true
                 }).show();
             });
-            // print_pdf();
         });
     });
     function showProvince(id, optionSelect){
@@ -520,6 +553,7 @@
         });
     }
 
+    // function format date to language KH
     Date.prototype.getAmPm = function () {
         if( this.getHours() >= 12 ) { return 1 }; // pm
         return 0; // am

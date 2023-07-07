@@ -17,6 +17,7 @@ class CandidateResume extends Model
     protected $table = 'candidate_resumes';
     protected $guarded = ['id'];
     protected $fillable = [
+        'number_employee',
         'name_kh',
         'name_en',
         'gender',

@@ -14,6 +14,9 @@ use App\Models\User;
 use App\Traits\GeneratingCode;
 use Brian2694\Toastr\Facades\Toastr;
 use Carbon\Carbon;
+use DateInterval;
+use DatePeriod;
+use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -30,6 +33,7 @@ class CandidateResumeController extends Controller
     
     public function index()
     {
+        
         $role = Role::all();
         $autoEmpId   = $this->generate_EmployeeId(Carbon::today())['number_employee'];
         $department = Department::all();
@@ -255,23 +259,32 @@ class CandidateResumeController extends Controller
     }
     public function createemp(Request $request)
     {
-        try {
+        // try {
             CandidateResume::where('id',$request->candidate_id)->update([
-                // "number_employee" =>$request->number_employee,
+                "number_employee" =>$request->number_employee,
                 'status' => 5,
             ]);
             $data = $request->all();
             $newDateTime = Carbon::parse($data['date_of_commencement'])->addMonths(3);
             $data['fdc_date'] = $newDateTime;
-            $data['emp_status'] = 'Complete';
+            $data['emp_status'] = 'Upcoming';
             $data['created_by'] = Auth::user()->id;
             $data['password']   = Hash::make("Camma@123");
             $userData = User::create($data);
-            $emp = User::where("id", $userData->id)->with("branch")->with("position")->with("permanentprovince")->first();
+            $emp = User::where("id", $userData->id)
+            ->with("branch")
+            ->with("position")
+            ->with("positiontype")
+            ->with("permanentprovince")
+            ->with("currentprovince")
+            ->with("currentdistrict")
+            ->with("currentcommune")
+            ->with("currentvillage")
+            ->first();
             return response()->json(['dataEmployee'=>$emp]);
-        } catch (\Exception $exp) {
-            DB::rollBack();
-            return response()->json(['message' => $exp->getMessage()], 500);
-        }
+        // } catch (\Exception $exp) {
+        //     DB::rollBack();
+        //     return response()->json(['message' => $exp->getMessage()], 500);
+        // }
     }
 }

@@ -133,6 +133,9 @@ class User extends Authenticatable
     public function position(){
         return $this->belongsTo(Position::class,'position_id');
     }
+    public function positiontype(){
+        return $this->belongsTo(Option::class,'position_type', 'id');
+    }
     public function role(){
         return $this->belongsTo(Role::class,'role_id');
     }
@@ -169,6 +172,21 @@ class User extends Authenticatable
         return $this->belongsTo(Bank::class,'bank_name','id');
     }
 
+    //// Current address
+    public function currentprovince(){
+        return $this->belongsTo(Province::class,'current_province','code');
+    }
+    public function currentdistrict(){
+        return $this->belongsTo(District::class,'current_district','code');
+    }
+    public function currentcommune(){
+        return $this->belongsTo(Conmmunes::class,'current_commune','code');
+    }
+    public function currentvillage(){
+        return $this->belongsTo(Villages::class,'current_village','code');
+    }
+
+    //// Permanent address
     public function permanentprovince(){
         return $this->belongsTo(Province::class,'permanent_province','code');
     }

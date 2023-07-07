@@ -83,7 +83,7 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label>Received Date <span class="text-danger">*</span></label>
-                                <input class="form-control @error('received_date') is-invalid @enderror" type="date" id="received_date" required name="received_date" value="{{old('received_date')}}">
+                                <input class="form-control datetimepicker" id="received_date" required name="received_date">
                             </div>
                         </div>
                         <div class="col-sm-6">

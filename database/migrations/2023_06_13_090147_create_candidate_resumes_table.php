@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('candidate_resumes', function (Blueprint $table) {
             $table->id();
+            $table->string('number_employee')->nullable();
             $table->string('name_kh');
             $table->string('name_en')->nullable();
             $table->string('gender')->nullable();

@@ -30,7 +30,7 @@
                 </div>
                 <table style="width:100%">
                     <tr><td class="table_tr">
-                        <span id="pr_mr_or_mrs"></span><strong id="pr_name"></strong>ភេទ <span id="pr_gender"></span>កើតនៅថ្ងៃទី​ <strong id="pr_born_on"></strong> ទីកន្លែងកំណើត <strong id="pr_permanent_province"></strong> កាន់អត្តសញ្ញាណប័ណ្ណលេខ <strong id="pr_id_card_number"></strong> សញ្ជាតិខ្មែរ។ អាស័យដ្ឋាន ……………………………………… ទូរស័ព្ទលេខ <strong id="pr_personal_phone_number"></strong> ដែលតទៅនេះហៅថា <strong>«និយោជិត»។</strong>
+                        <span id="pr_mr_or_mrs"></span><strong id="pr_name"></strong>ភេទ <strong id="pr_gender"></strong>កើតនៅថ្ងៃទី​ <strong id="pr_born_on"></strong> ទីកន្លែងកំណើត <strong id="pr_permanent_province"></strong> កាន់អត្តសញ្ញាណប័ណ្ណលេខ <strong id="pr_id_card_number"></strong> សញ្ជាតិខ្មែរ។ អាស័យដ្ឋាន <span id="pr_current_location"></span> ទូរស័ព្ទលេខ <strong id="pr_personal_phone_number"></strong> ដែលតទៅនេះហៅថា <strong>«និយោជិត»។</strong>
                     </td></tr>
                 </table>
                 <div style="text-align: center;">
@@ -48,7 +48,7 @@
                     <div>
                         <table style="width:100%">
                             <tr><td class="table_tr">
-                                <strong>និយោជក</strong> យល់ព្រមទទួល <strong>និយោជិត</strong> ឲ្យចូលបម្រើការងារក្នុងគ្រឹះស្ថាន ខេមា មីក្រូហិរញ្ញវត្ថុ លីមីតធីត ជាបុគ្គលិកសាកល្បងការងារ ចាប់ពីថ្ងៃទី……… ខែ……… ឆ្នាំ ………។
+                                <strong>និយោជក</strong> យល់ព្រមទទួល <strong>និយោជិត</strong> ឲ្យចូលបម្រើការងារក្នុងគ្រឹះស្ថាន ខេមា មីក្រូហិរញ្ញវត្ថុ លីមីតធីត ជាបុគ្គលិកសាកល្បងការងារ ចាប់ពីថ្ងៃទី <strong class="pr_join_day"></strong> ខែ <strong class="pr_join_month"></strong> ឆ្នាំ <strong class="pr_join_year"></strong> ។
                             </td></tr>
                         </table>
                     </div>
@@ -64,7 +64,7 @@
                     <div>
                         <table style="width:100%">
                             <tr><td class="table_tr">
-                                រយៈពេលនៃកិច្ចសន្យាការងារនេះមានចំនួនបី (៣) ខែ ដោយគិតចាប់ពីថ្ងៃទី………ខែ……………ឆ្នាំ ………ដល់ថ្ងៃទី……… ខែ……… ឆ្នាំ………។
+                                រយៈពេលនៃកិច្ចសន្យាការងារនេះមានចំនួនបី (៣) ខែ ដោយគិតចាប់ពីថ្ងៃទី <strong class="pr_join_day"></strong> ខែ <strong class="pr_join_month"></strong> ឆ្នាំ <strong class="pr_join_year"></strong> ដល់ថ្ងៃទី <strong id="pr_end_day"></strong> ខែ <strong id="pr_end_month"></strong> ឆ្នាំ <strong id="pr_end_year"></strong> ។
                             </td></tr>
                         </table>
                     </div>
@@ -80,7 +80,7 @@
                     <div>
                         <table style="width:100%">
                             <tr><td class="table_tr">
-                                តួនាទី និងភារកិច្ចរបស់និយោជិតគឺជា ………………………………………។
+                                តួនាទី និងភារកិច្ចរបស់និយោជិតគឺជា <strong id="pr_position"></strong> ។
                             </td></tr>
                         </table>
                     </div>
@@ -96,7 +96,7 @@
                     <div>
                         <table style="width:100%">
                             <tr><td class="table_tr">
-                                កន្លែងបម្រើការងារនៅ ប្រចាំ………………………………។
+                                កន្លែងបម្រើការងារនៅ ប្រចាំ <strong id="pr_branch"></strong> ។
                             </td></tr>
                         </table>
                     </div>
@@ -112,7 +112,7 @@
                     <div>
                         <table style="width:100%">
                             <tr><td class="table_tr">
-                                លេខអត្តសញ្ញាណប័ណ្ណការងារ ……………………។
+                                លេខអត្តសញ្ញាណប័ណ្ណការងារ <strong id="pr_employee_id"></strong>។
                             </td></tr>
                         </table>
                     </div>
@@ -128,7 +128,7 @@
                     <div>
                         <table style="width:100%">
                             <tr><td class="table_tr">
-                                ប្រាក់បៀវត្សដុលចំនួន …………… ដុល្លារអាមេរិក ក្នុងមួយខែ និងក្រោយឆ្លងផុតការងារសាកល្បង បុគ្គលិកនឹងត្រូវដំឡើងប្រាក់បៀវត្សបន្ថែមចំនួន …………… ដុល្លារអាមេរិក ដោយធៀបនិងភាគរយការងារសម្រេចបានសម្រាប់បុគ្គលិកឥណទាន (គិតតាម Pro-Rate) ដោយការបង់ពន្ធជូនរាជរដ្ឋាភិបាលជាបន្ទុករបស់និយោជិត។
+                                ប្រាក់បៀវត្សដុលចំនួន <strong id="pr_basic_salary"></strong> ដុល្លារអាមេរិក ក្នុងមួយខែ និងក្រោយឆ្លងផុតការងារសាកល្បង បុគ្គលិកនឹងត្រូវដំឡើងប្រាក់បៀវត្សបន្ថែមចំនួន <strong id="pr_salary_increase"></strong> ដុល្លារអាមេរិក <span id="pr_supporting_or_field_staff"></span>។
                             </td></tr>
                         </table>
                     </div>

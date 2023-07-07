@@ -39,7 +39,7 @@
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" data-bs-toggle="tab" id="btn_tab_signed_contract" href="#tab_signed_contract" aria-selected="false" data-tab-id="4"
-                                    role="tab" tabindex="-1">Signed Contract</a>
+                                    role="tab" tabindex="-1">Complete</a>
                             </li>
                         </ul>
                     </div>
@@ -700,7 +700,7 @@
                                                         '<i class="fa fa-dot-circle-o text-info"></i> Interviewed'+
                                                     '</a>'+
                                                     '<a class="dropdown-item" data-emp-id="'+(staff_result.id)+'" data-id="4" href="#">'+
-                                                        '<i class="fa fa-dot-circle-o text-success"></i> Signed Contract'+
+                                                        '<i class="fa fa-dot-circle-o text-success"></i> Complete'+
                                                     '</a>'+
                                                 '</div>'+
                                             '</div>';
@@ -762,7 +762,7 @@
                     var tr = '<tr><td colspan=12 align="center">No record to display</td></tr>';
                     var tr_not_list = '<tr><td colspan=9 align="center">No record to display</td></tr>';
                     var tr_re = '<tr><td colspan=10 align="center">No record to display</td></tr>';
-                    var tr_ct = '<tr><td colspan=10 align="center">No record to display</td></tr>';
+                    var tr_ct = '<tr><td colspan=11 align="center">No record to display</td></tr>';
                 }
                 $(".tbl-short-list tbody").html(tr);
                 $(".tbl-not-short-list tbody").html(tr_not_list);
