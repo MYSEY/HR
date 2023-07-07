@@ -52,6 +52,7 @@ class UserController extends Controller
         $optionGender = Option::where('type','gender')->get();
         $optionPositionType = Option::where('type','position_type')->get();
         $optionLoan = Option::where('type','loan')->get();
+        $optionSpouse = Option::where('type','is_spouse')->get();
         $branch = Branchs::all();
         $province = Province::all();
         $bank = Bank::all();
@@ -68,7 +69,8 @@ class UserController extends Controller
                                             'province',
                                             'bank',
                                             'optionPositionType',
-                                            'optionLoan'
+                                            'optionLoan',
+                                            'optionSpouse'
                                         ));
     }
 
@@ -145,6 +147,7 @@ class UserController extends Controller
         $optionIdentityType = Option::where('type','identity_type')->get();
         $optionPositionType = Option::where('type','position_type')->get();
         $optionLoan = Option::where('type','loan')->get();
+        $optionSpouse = Option::where('type','is_spouse')->get();
         $bank = Bank::all();
         $province = Province::all();
         $district = District::where('province_id',$data->current_province)->orWhere("province_id",$data->permanent_province )->get();
@@ -164,7 +167,8 @@ class UserController extends Controller
             'conmmunes'=>$conmmunes,
             'villages'=>$villages,
             'optionPositionType'=>$optionPositionType,
-            'optionLoan'=>$optionLoan
+            'optionLoan'=>$optionLoan,
+            'optionSpouse'=>$optionSpouse
         ]);
     }
 

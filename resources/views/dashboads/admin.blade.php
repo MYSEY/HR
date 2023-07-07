@@ -510,17 +510,17 @@
                                             '<span class="text-sm text-muted">Birthday</span>'+
                                         '</div>'+
                                         '<div class="col-6 text-end">'+
-                                            '<div>'+
-                                                '<div class="balloon">'+
-                                                    '<div><span class="color-span">☺</span> </div>'+
-                                                    '<div><span class="color-span">B</span> </div>'+
-                                                    '<div><span class="color-span">D</span> </div>'+
-                                                    '<div><span class="color-span">A</span> </div>'+
-                                                    '<div><span class="color-span">Y</span> </div>'+
-                                                    '<div><span class="color-span">!</span> </div>'+
-                                                '</div>'+
-                                            '</div>'+
-                                            // '<span class="badge bg-inverse-danger">Happy Birthday <i style="font-size: 25px" class="fa fa-birthday-cake" aria-hidden="true"></i></span>'+
+                                            // '<div>'+
+                                            //     '<div class="balloon">'+
+                                            //         '<div><span class="color-span">☺</span> </div>'+
+                                            //         '<div><span class="color-span">B</span> </div>'+
+                                            //         '<div><span class="color-span">D</span> </div>'+
+                                            //         '<div><span class="color-span">A</span> </div>'+
+                                            //         '<div><span class="color-span">Y</span> </div>'+
+                                            //         '<div><span class="color-span">!</span> </div>'+
+                                            //     '</div>'+
+                                            // '</div>'+
+                                            '<span class="badge bg-inverse-danger">Happy Birthday <i style="font-size: 25px" class="fa fa-birthday-cake" aria-hidden="true"></i></span>'+
                                         '</div>'+
                                     '</div>'+
                                 '</div>';

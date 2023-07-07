@@ -231,13 +231,13 @@
                                                                         <i class="fa fa-dot-circle-o text-danger"></i> Resignation
                                                                     </a>
                                                                     <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="4" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-success"></i> Termination
+                                                                        <i class="fa fa-dot-circle-o text-danger"></i> Termination
                                                                     </a>
                                                                     <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="5" href="#">
                                                                         <i class="fa fa-dot-circle-o text-danger"></i> Death
                                                                     </a>
                                                                     <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="6" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-warning"></i> Retired
+                                                                        <i class="fa fa-dot-circle-o text-danger"></i> Retired
                                                                     </a>
                                                                     <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="7" href="#">
                                                                         <i class="fa fa-dot-circle-o text-danger"></i> Lay off
@@ -432,7 +432,6 @@
                 dataType: "JSON",
                 success: function (response) {
                     if (response.success) {
-                        console.log(response.success);
                         if (response.role != '') {
                             $('#e_role_id').html('<option selected disabled> --Select --</option>');
                             $.each(response.role, function(i, item) {
@@ -476,7 +475,7 @@
                             });
                         }
                         if (response.branch != '') {
-                            $('#e_branch_id').html('<option selected disabled> --Select --</option>');
+                            $('#e_branch_id').html('<option selected disabled> -- Select --</option>');
                             $.each(response.branch, function(i, item) {
                                 $('#e_branch_id').append($('<option>', {
                                     value: item.id,
@@ -484,6 +483,11 @@
                                     selected: item.id == response.success.branch_id
                                 }));
                             });
+                        }
+                        if (response.success.spouse == 1) {
+                            $("#e_spouse").append('<option selected value="1">Yes</option> <option value="0">No</option>');
+                        } else {
+                            $("#e_spouse").append('<option selected value="0">No</option> <option value="1">Yes</option>');   
                         }
 
                         if (response.optionIdentityType != '') {
@@ -614,7 +618,6 @@
                         $('#e_unit').val(response.success.unit);
                         $('#e_basic_salary').val(response.success.basic_salary);
                         $('#e_phone_allowance').val(response.success.phone_allowance);
-                        $('#e_spouse').val(response.success.spouse);
                         $('#e_date_of_commencement').val(response.success.date_of_commencement);
                         $('#e_number_of_children').val(response.success.number_of_children);
                         $('#e_marital_status').val(response.success.marital_status);

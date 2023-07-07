@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use DateTime;
 use App\Models\User;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Model;
@@ -82,9 +83,34 @@ class Holiday extends Model
         return $diff_in_days;
     }
     public function getDayAttribute(){
-        $from = Carbon::parse($this->from)->format('d');
-        $to = Carbon::parse($this->to)->format('d-M-Y');
-        return $from.' , '.$to;
+        $startDate = Carbon::parse($this->from);
+        if($this->to == null){
+            $endDate = Carbon::parse($this->from);
+            $end_day = Carbon::createFromDate($this->from)->format('d');
+            $end_month = Carbon::createFromDate($this->from)->format('M'); 
+        }else{
+            $endDate = Carbon::parse($this->to);
+            $end_day = Carbon::createFromDate($this->to)->format('d');
+            $end_month = Carbon::createFromDate($this->to)->format('M'); 
+        }
+
+        $diffInDays = $startDate->diffInDays($endDate);
+        $day = Carbon::createFromDate($this->from)->format('d'); 
+        
+        $holidays = null;
+        $int = (int)$day;
+        if ($int > 1) {
+            for ($i=0; $i < $diffInDays; $i++) { 
+                if ($int > 9) {
+                    $holidays .= $int + $i.',';
+                }else{
+                    $holidays .= '0'.$int + $i.',';
+                }
+            }
+            return $end_month.' '.$holidays.$end_day;
+        }else{
+            return $end_month.' '.'0'.$int;
+        }
     }
     /*
     |--------------------------------------------------------------------------

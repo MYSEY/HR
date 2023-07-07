@@ -65,6 +65,7 @@ class EmployeePayrollController extends Controller
         // try{
             $employee = User::where('date_of_commencement','<=',$request->payment_date)->whereIn('emp_status',['Probation','1','2'])->get();
             foreach ($employee as $item) {
+                // dd($item->spouse);
                 //function first month join work
                 if (count(Payroll::where('employee_id',$item->id)->get()) == 0) {
                     //total day in months
@@ -295,25 +296,25 @@ class EmployeePayrollController extends Controller
                 $totalChargesReducedChild = 150000;
                 $totalChargesReducedSpouse = 150000;
                 //not have child and sposes child 1
-                if($number_of_children == null && $item->spouse == null){
+                if($number_of_children == null && $item->spouse == 0){
                     $totalChargesReduced = 0;
-                }else if($number_of_children == null && $item->spouse == null){
+                }else if($number_of_children == null && $item->spouse == 0){
                     $totalChargesReduced = $totalChargesReducedSpouse;
-                }else if($number_of_children == 1 && $item->spouse == null){
+                }else if($number_of_children == 1 && $item->spouse == 0){
                     $totalChargesReduced = $totalChargesReducedChild;
                 }else if($number_of_children == null && $item->spouse == 1){
                     $totalChargesReduced = $totalChargesReducedSpouse;
                 }else if($number_of_children == 1 && $item->spouse == 1){
                     $totalChargesReduced = ($number_of_children * $totalChargesReducedChild) + $totalChargesReducedSpouse;
-                }else if($number_of_children == 2 && $item->spouse == null){
+                }else if($number_of_children == 2 && $item->spouse == 0){
                     $totalChargesReduced = $number_of_children * $totalChargesReducedChild;
                 }else if($number_of_children == 2 && $item->spouse == 1){
                     $totalChargesReduced = ($number_of_children * $totalChargesReducedChild) + $totalChargesReducedSpouse;
-                }else if($number_of_children == 3 && $item->spouse == null){
+                }else if($number_of_children == 3 && $item->spouse == 0){
                     $totalChargesReduced = $number_of_children * $totalChargesReducedChild;
                 }else if($number_of_children == 3 && $item->spouse == 1){
                     $totalChargesReduced = ($number_of_children * $totalChargesReducedChild) + $totalChargesReducedSpouse;
-                }else if($number_of_children == 4 && $item->spouse == null){
+                }else if($number_of_children == 4 && $item->spouse == 0){
                     $totalChargesReduced = $number_of_children * $totalChargesReducedChild;
                 }else if($number_of_children == 4 && $item->spouse == 1){
                     $totalChargesReduced = ($number_of_children * $totalChargesReducedChild) + $totalChargesReducedSpouse;
@@ -322,23 +323,23 @@ class EmployeePayrollController extends Controller
                 // dd($totalChargesReduced);
 
                 //កាត់មូលដ្ឋានគិតពន្ធ
-                if ($number_of_children == null && $item->spouse == null) {
+                if ($number_of_children == null && $item->spouse == 0) {
                     $totalTtaxBbaseRiel = $totalExchangeRiel;
-                } else if($number_of_children == 1 && $item->spouse == null) {
+                } else if($number_of_children == 1 && $item->spouse == 0) {
                     $totalTtaxBbaseRiel = $totalExchangeRiel - $totalChargesReduced;
                 }else if($number_of_children == null && $item->spouse == 1) {
                     $totalTtaxBbaseRiel = $totalExchangeRiel - $totalChargesReduced;
                 }else if($number_of_children == 1 && $item->spouse == 1) {
                     $totalTtaxBbaseRiel = $totalExchangeRiel - $totalChargesReduced;
-                }else if($number_of_children == 2 &&  $item->spouse == null){
+                }else if($number_of_children == 2 &&  $item->spouse == 0){
                     $totalTtaxBbaseRiel = $totalExchangeRiel - $totalChargesReduced;
                 }else if($number_of_children == 2 &&  $item->spouse == 1){
                     $totalTtaxBbaseRiel = $totalExchangeRiel - $totalChargesReduced;
-                }else if($number_of_children == 3 &&  $item->spouse == null){
+                }else if($number_of_children == 3 &&  $item->spouse == 0){
                     $totalTtaxBbaseRiel = $totalExchangeRiel - $totalChargesReduced;
                 }else if($number_of_children == 3 &&  $item->spouse == 1){
                     $totalTtaxBbaseRiel = $totalExchangeRiel - $totalChargesReduced;
-                }else if($number_of_children == 4 &&  $item->spouse == null){
+                }else if($number_of_children == 4 &&  $item->spouse == 0){
                     $totalTtaxBbaseRiel = $totalExchangeRiel - $totalChargesReduced;
                 }else if($number_of_children == 4 &&  $item->spouse == 1){
                     $totalTtaxBbaseRiel = $totalExchangeRiel - $totalChargesReduced;
@@ -347,7 +348,7 @@ class EmployeePayrollController extends Controller
                 $children = $number_of_children;
 
                 // អត្រា ពន្ធ(%)
-                if ($number_of_children == null && $item->spouse == null) {
+                if ($number_of_children == null && $item->spouse == 0) {
                     
                     if($totalExchangeRiel >= 0 && $totalExchangeRiel <= 1500000){
                         $totalTax = 0;
@@ -379,7 +380,7 @@ class EmployeePayrollController extends Controller
 
                     //ពន្ធលើប្រាក់បៀវត្ស ដុល្លារ/USD
                     $totalSalaryAfterTax = $baseSalaryReceivedUsd - $totalSalaryTaxUsd;
-                } else if($number_of_children == 1 && $item->spouse == null) {
+                } else if($number_of_children == 1 && $item->spouse == 0) {
 
                     if($totalTtaxBbaseRiel >= 0 && $totalTtaxBbaseRiel <= 1500000){
                         $totalTax = 0;
@@ -442,7 +443,7 @@ class EmployeePayrollController extends Controller
                     $totalSalaryTaxUsd = round($totalSalaryTaxRiel / $request->exchange_rate,2);
                     //ពន្ធលើប្រាក់បៀវត្ស ដុល្លារ/USD
                     $totalSalaryAfterTax = $baseSalaryReceivedUsd - $totalSalaryTaxUsd;
-                }else if($number_of_children == 2 && $item->spouse == null){
+                }else if($number_of_children == 2 && $item->spouse == 0){
                     if($totalTtaxBbaseRiel >= 0 && $totalTtaxBbaseRiel <= 1500000){
                         $totalTax = 0;
                     }elseif($totalTtaxBbaseRiel >= 1500001 && $totalTtaxBbaseRiel <= 2000000){
@@ -502,7 +503,7 @@ class EmployeePayrollController extends Controller
                     $totalSalaryTaxUsd = round($totalSalaryTaxRiel / $request->exchange_rate,2);
                     //ពន្ធលើប្រាក់បៀវត្ស ដុល្លារ/USD
                     $totalSalaryAfterTax = $baseSalaryReceivedUsd - $totalSalaryTaxUsd;
-                }else if($number_of_children == 3 && $item->spouse == null){
+                }else if($number_of_children == 3 && $item->spouse == 0){
                     if($totalTtaxBbaseRiel >= 0 && $totalTtaxBbaseRiel <= 1500000){
                         $totalTax = 0;
                     }elseif($totalTtaxBbaseRiel >= 1500001 && $totalTtaxBbaseRiel <= 2000000){
@@ -562,7 +563,7 @@ class EmployeePayrollController extends Controller
                     $totalSalaryTaxUsd = round($totalSalaryTaxRiel / $request->exchange_rate,2);
                     //ពន្ធលើប្រាក់បៀវត្ស ដុល្លារ/USD
                     $totalSalaryAfterTax = $baseSalaryReceivedUsd - $totalSalaryTaxUsd;
-                }else if($number_of_children == 4 && $item->spouse == null){
+                }else if($number_of_children == 4 && $item->spouse == 0){
                     if($totalTtaxBbaseRiel >= 0 && $totalTtaxBbaseRiel <= 1500000){
                         $totalTax = 0;
                     }elseif($totalTtaxBbaseRiel >= 1500001 && $totalTtaxBbaseRiel <= 2000000){

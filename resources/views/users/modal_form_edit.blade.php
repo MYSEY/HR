@@ -121,7 +121,9 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="">Spouse</label>
-                                <input type="number" class="form-control" name="spouse" id="e_spouse" maxlength="2" placeholder="">
+                                <select class="form-control" id="e_spouse" name="spouse" value="{{old('spouse')}}">
+                                    
+                                </select>
                             </div>
                         </div>
                     </div>
