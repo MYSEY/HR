@@ -8,7 +8,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form  enctype="multipart/form-data">
+                <form class="was-validated">
                     @csrf
                     <input type="text" name="" id="candidate_id" hidden>
                     <div class="row">
@@ -52,7 +52,7 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="">Position Type <span class="text-danger">*</span></label>
-                                <select class="select form-control" id="position_type" name="position_type" value="{{old('position_type')}}" required>
+                                <select class="form-control emp_required" id="position_type" name="position_type" required>
                                     <option value="">Please select position type</option>
                                     @foreach ($optionPositionType as $item)
                                         <option value="{{$item->id}}">{{$item->name_english}}</option>
@@ -72,7 +72,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Department <span class="text-danger">*</span></label>
-                                <select class="select form-control" id="department_id" name="department_id" value="{{old('department_id')}}" required>
+                                <select class="form-control emp_required" id="department_id" name="department_id"  required>
                                     <option value="">Please select department</option>
                                     @foreach ($department as $item)
                                         <option value="{{$item->id}}">{{$item->name_english}}</option>
@@ -86,7 +86,7 @@
                             <div class="form-group">
                                 <label>Date Of Birth <span class="text-danger">*</span></label>
                                 <div class="cal-icon">
-                                    <input class="form-control datetimepicker @error('date_of_birth') is-invalid @enderror" type="text" required id="date_of_birth" name="date_of_birth" value="{{old('date_of_birth')}}" required>
+                                    <input class="form-control datetimepicker @error('date_of_birth') is-invalid @enderror emp_required" type="text" required id="date_of_birth" name="date_of_birth">
                                 </div>
                             </div>
                         </div>
@@ -112,7 +112,7 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label>ID card number <span class="text-danger">*</span></label>
-                                <input class="form-control" type="number" id="id_card_number" name="id_card_number" required>
+                                <input class="form-control emp_required" type="number" id="id_card_number" name="id_card_number" required>
                             </div>
                         </div>
                         <div class="col-sm-6">
@@ -144,7 +144,7 @@
                                 <label>Basic Salary <span class="text-danger">*</span></label>
                                 <div class="input-group">
                                     <span class="input-group-text">$</span>
-                                    <input type="number" class="form-control" id="basic_salary" name="basic_salary" placeholder="" value="{{old('basic_salary')}}" required>
+                                    <input type="number" class="form-control emp_required" id="basic_salary" name="basic_salary" placeholder="" required>
                                 </div>
                             </div>
                         </div>
@@ -169,8 +169,8 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Province/City <span class="text-danger">*</span></label>
-                                    <select class="select form-control" id="current_province" name="current_province" value="{{old('current_province')}}" required>
-                                        <option selected disabled> --Select --</option>
+                                    <select class="form-control @error('current_province') is-invalid @enderror emp_required" id="current_province" name="current_province" required>
+                                        <option value="" selected> --Select --</option>
                                         @if (count($province)>0)
                                             @foreach ($province as $item)
                                                 <option value="{{$item->code}}">{{$item->name_en}}</option>
@@ -182,7 +182,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>District/Khan <span class="text-danger">*</span></label>
-                                    <select class="select form-control" id="current_district" name="current_district" value="{{old('current_district')}}" required>
+                                    <select class="form-control  @error('current_district') is-invalid @enderror emp_required" id="current_district" name="current_district" required>
                                     </select>
                                 </div>
                             </div>
@@ -190,14 +190,14 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="no-error-label">Commune/Sangkat <span class="text-danger">*</span></label>
-                                    <select class="select form-control no-error-border" id="current_commune" name="current_commune" value="{{old('current_commune')}}" required>
+                                    <select class="form-control no-error-border  @error('current_commune') is-invalid @enderror emp_required" id="current_commune" name="current_commune" required>
                                     </select>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="no-error-label">Village <span class="text-danger">*</span></label>
-                                    <select class="select form-control no-error-border" id="current_village" name="current_village" value="{{old('current_village')}}" required>
+                                    <select class="form-control no-error-border @error('current_village') is-invalid @enderror emp_required" id="current_village" name="current_village" required>
                                     </select>
                                 </div>
                             </div>
@@ -230,8 +230,8 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Province/City <span class="text-danger">*</span></label>
-                                    <select class="select form-control" id="permanent_province" name="permanent_province" value="{{old('permanent_province')}}" required>
-                                        <option selected disabled> --Select --</option>
+                                    <select class="form-control @error('current_commune') is-invalid @enderror emp_required" id="permanent_province" name="permanent_province" required>
+                                        <option value="" selected> --Select --</option>
                                         @if (count($province)>0)
                                         @foreach ($province as $item)
                                         <option value="{{$item->code}}">{{$item->name_en}}</option>
@@ -287,14 +287,14 @@
                     </div>
 
                     <div class="submit-section">
-                        <button type="submit" class="btn btn-primary btn_save_print" id="btn_save_print">
+                        <button type="submit" class="btn btn-primary btn_save_print" id="btn_save_print" data-dismiss="modal">
                             <span class="btn-text-print">Save and Print</span>
                             <span id="btn-print-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading</span>
                         </button>
 
-                        {{-- <button type="submit" class="btn btn-primary submit-btn" data-dismiss="modal">
+                        {{-- <button type="submit" class="btn btn-primary submit-btn" id="btn_save_print" data-dismiss="modal">
                             <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading </span>
-                            <span class="btn-txt">{{ __('Save') }}</span>
+                            <span class="btn-txt">{{ __('Save and Print') }}</span>
                         </button> --}}
                     </div>
                 </form>
@@ -316,24 +316,24 @@
             let id = $("#current_province").val();
             let optionSelect = "currentProvince";
 
-            $('#current_district').html('<option selected disabled> --Select --</option>');
-            $('#current_commune').html('<option selected disabled> --Select --</option>');
-            $('#current_village').html('<option selected disabled> --Select --</option>');
+            $('#current_district').html('<option value=""> --Select --</option>');
+            $('#current_commune').html('<option value=""> --Select --</option>');
+            $('#current_village').html('<option value=""> --Select --</option>');
             showProvince(id, optionSelect);
         });
 
         $("#current_district").on("change", function(){
             let id = $("#current_district").val();
             let optionSelect = "currentDistrict";
-            $('#current_commune').html('<option selected disabled> --Select --</option>');
-            $('#current_village').html('<option selected disabled> --Select --</option>');
+            $('#current_commune').html('<option value=""> --Select --</option>');
+            $('#current_village').html('<option value=""> --Select --</option>');
             showProvince(id, optionSelect);
         });
 
         $("#current_commune").on("change", function(){
             let id = $("#current_commune").val();
             let optionSelect = "currentCommune";
-            $('#current_village').html('<option selected disabled> --Select --</option>');
+            $('#current_village').html('<option value=""> --Select --</option>');
             showProvince(id, optionSelect);
         });
 
@@ -359,113 +359,129 @@
             $('#permanent_village').html('<option selected disabled> --Select --</option>');
             showProvince(id, optionSelect);
         });
+        
 
-        $(".btn_save_print").on("click", function(){
+        $("#btn_save_print").on("click", function(){
+            var num_miss = 0;
             $("#btn-print-loading").css('display', 'block');
             $("#btn_save_print").prop('disabled', true);
-            $(".btn-text-print").hide();
-            axios.post('{{ URL('recruitment/candidate-resume/createemp') }}', {
-                candidate_id: $("#candidate_id").val(),
-                number_employee: $("#number_employee").val(),
-                employee_name_kh: $("#employee_name_kh").val(),
-                employee_name_en: $("#employee_name_en").val(),
-                position_id: $("#position_id").val(),
-                date_of_birth: $("#date_of_birth").val(),
-                gender: $("#gender_id").val(),
-                department_id: $("#department_id").val(),
-                branch_id: $("#branch_id").val(),
-                date_of_commencement: $("#date_of_commencement").val(),
-                personal_phone_number: $("#personal_phone_number").val(),
-                // password: $("#password").val(),
-                // password_confirmation: $("#password_confirmation").val(),
-                position_type: $("#position_type").val(),
-                basic_salary: $("#basic_salary").val(),
-                salary_increas: $("#salary_to_increase").val(),
-                current_province: $("#current_province").val(),
-                current_district: $("#current_district").val(),
-                current_commune: $("#current_commune").val(),
-                current_village: $("#current_village").val(),
-                current_house_no: $("#current_house_no").val(),
-                current_street_no: $("#current_street_no").val(),
-                permanent_province: $("#permanent_province").val(),
-                permanent_district: $("#permanent_district").val(),
-                permanent_commune: $("#permanent_commune").val(),
-                permanent_village: $("#permanent_village").val(),
-                permanent_house_no: $("#permanent_house_no").val(),
-                permanent_street_no: $("#permanent_street_no").val(),
-                remark: $("#remark").val(),
-            }).then(function(response) {
-                var data = response.data.dataEmployee;
-                var date_of_birth = new Date(data.date_of_birth);
-                var date_of_commencement = new Date(data.date_of_commencement);
-                var fdc_date = new Date(data.fdc_date);
-                let day = formatDate( date_of_birth, 'km', format_date={day: true});
-                let month = formatDate( date_of_birth, 'km', format_date={month: true});
-                let year = formatDate( date_of_birth, 'km', format_date={year: true});
-                let join_day = formatDate( date_of_commencement, 'km', format_date={day: true});
-                let join_month = formatDate( date_of_commencement, 'km', format_date={month: true});
-                let join_year = formatDate( date_of_commencement, 'km', format_date={year: true});
-                let end_day = formatDate( fdc_date, 'km', format_date={day: true});
-                let end_month = formatDate( fdc_date, 'km', format_date={month: true});
-                let end_year = formatDate( fdc_date, 'km', format_date={year: true});
-                if (data) {
-                    if ($("#gender_name").val() == "Female") {
-                        $("#pr_mr_or_mrs").text("អ្នកស្រី ");
-                        $("#pr_gender").text("ស្រី ");
-                    }else{
-                        $("#pr_mr_or_mrs").text("លោក ");
-                        $("#pr_gender").text("ប្រុស ");
-                    }
-                    $("#pr_name").text(data.employee_name_kh +" ");
-                    $("#pr_born_on").text(day+" ខែ "+month+" ឆ្នាំ "+ year);
-                    $("#pr_permanent_province").text(data.permanentprovince.name_km + " ");
-                    $("#pr_permanent_province").text(data.permanentprovince.name_km + " ");
-                    $("#pr_id_card_number").text($("#id_card_number").val()+ "");
-
-                    let number_home = "";
-                    let number_street = "";
-                    if (data.current_house_no) {
-                        number_home = "ផ្ទះលេខ "+ data.current_house_no;
-                    }
-                    if (data.current_street_no) {
-                        number_street = " ផ្លូវលេខ "+data.current_street_no;
-                    }
-                    let location = number_home + number_street + " ភូមិ "+data.currentvillage.name_km + " ឃុំ/សង្កាត់ " + data.currentcommune.name_km + " ស្រុក/ខណ្ឌ " + data.currentdistrict.name_km+ " ខេត្ត/ក្រុង "+data.currentprovince.name_km;
-
-                    $("#pr_current_location").text(location);
-
-                    $("#pr_personal_phone_number").text(data.personal_phone_number);
-                    $(".pr_join_day").text(join_day);
-                    $(".pr_join_month").text(join_month);
-                    $(".pr_join_year").text(join_year);
-                    $("#pr_end_day").text(end_day);
-                    $("#pr_end_month").text(end_month);
-                    $("#pr_end_year").text(end_year);
-                    $("#pr_position").text(data.position.name_khmer);
-                    $("#pr_branch").text(data.branch.branch_name_kh);
-                    $("#pr_employee_id").text(data.number_employee);
-                    $("#pr_basic_salary").text(data.basic_salary);
-                    $("#pr_salary_increase").text($("#salary_to_increase").val());
-                    if (data.positiontype.name_english == "Field Staff") {
-                        $("#pr_supporting_or_field_staff").text("ដោយធៀបនិងភាគរយការងារសម្រេចបានសម្រាប់បុគ្គលិកឥណទាន (គិតតាម Pro-Rate) ដោយការបង់ពន្ធជូនរាជរដ្ឋាភិបាលជាបន្ទុករបស់និយោជិត");
-                    }
-                    print_pdf();
-                }
-                new Noty({
-                    title: "",
-                    text: "The process has been successfully.",
-                    type: "success",
-                    icon: true
-                }).show();
-                showDatas(4);
-            }).catch(function(error) {
-                new Noty({
-                    title: "",
-                    text: "Something went wrong please try again later.",
-                    type: "error",
-                    icon: true
-                }).show();
+            $(".btn-text-print").css("display", "none");
+            
+            $(".emp_required").each(function(){
+                if($(this).val()==""){ num_miss++;}
             });
+            if (num_miss>0) {
+                setTimeout(function () {
+                    $("#btn_save_print").attr('disabled',false);
+                    $("#btn-print-loading").css('display', 'none');
+                    $(".btn-text-print").css("display", 'block');
+                }, 500);
+                return false;
+            }else{
+                axios.post('{{ URL('recruitment/candidate-resume/createemp') }}', {
+                    candidate_id: $("#candidate_id").val(),
+                    number_employee: $("#number_employee").val(),
+                    employee_name_kh: $("#employee_name_kh").val(),
+                    employee_name_en: $("#employee_name_en").val(),
+                    position_id: $("#position_id").val(),
+                    date_of_birth: $("#date_of_birth").val(),
+                    gender: $("#gender_id").val(),
+                    department_id: $("#department_id").val(),
+                    branch_id: $("#branch_id").val(),
+                    date_of_commencement: $("#date_of_commencement").val(),
+                    personal_phone_number: $("#personal_phone_number").val(),
+                    // password: $("#password").val(),
+                    // password_confirmation: $("#password_confirmation").val(),
+                    position_type: $("#position_type").val(),
+                    basic_salary: $("#basic_salary").val(),
+                    salary_increas: $("#salary_to_increase").val(),
+                    current_province: $("#current_province").val(),
+                    current_district: $("#current_district").val(),
+                    current_commune: $("#current_commune").val(),
+                    current_village: $("#current_village").val(),
+                    current_house_no: $("#current_house_no").val(),
+                    current_street_no: $("#current_street_no").val(),
+                    permanent_province: $("#permanent_province").val(),
+                    permanent_district: $("#permanent_district").val(),
+                    permanent_commune: $("#permanent_commune").val(),
+                    permanent_village: $("#permanent_village").val(),
+                    permanent_house_no: $("#permanent_house_no").val(),
+                    permanent_street_no: $("#permanent_street_no").val(),
+                    remark: $("#remark").val(),
+                }).then(function(response) {
+                    var data = response.data.dataEmployee;
+                    var date_of_birth = new Date(data.date_of_birth);
+                    var date_of_commencement = new Date(data.date_of_commencement);
+                    var fdc_date = new Date(data.fdc_date);
+                    let day = formatDate( date_of_birth, 'km', format_date={day: true});
+                    let month = formatDate( date_of_birth, 'km', format_date={month: true});
+                    let year = formatDate( date_of_birth, 'km', format_date={year: true});
+                    let join_day = formatDate( date_of_commencement, 'km', format_date={day: true});
+                    let join_month = formatDate( date_of_commencement, 'km', format_date={month: true});
+                    let join_year = formatDate( date_of_commencement, 'km', format_date={year: true});
+                    let end_day = formatDate( fdc_date, 'km', format_date={day: true});
+                    let end_month = formatDate( fdc_date, 'km', format_date={month: true});
+                    let end_year = formatDate( fdc_date, 'km', format_date={year: true});
+                    if (data) {
+                        if ($("#gender_name").val() == "Female") {
+                            $("#pr_mr_or_mrs").text("អ្នកស្រី ");
+                            $("#pr_gender").text("ស្រី ");
+                        }else{
+                            $("#pr_mr_or_mrs").text("លោក ");
+                            $("#pr_gender").text("ប្រុស ");
+                        }
+                        $("#pr_name").text(data.employee_name_kh +" ");
+                        $("#pr_born_on").text(day+" ខែ "+month+" ឆ្នាំ "+ year);
+                        $("#pr_permanent_province").text(data.permanentprovince.name_km + " ");
+                        $("#pr_permanent_province").text(data.permanentprovince.name_km + " ");
+                        $("#pr_id_card_number").text($("#id_card_number").val()+ "");
+
+                        let number_home = "";
+                        let number_street = "";
+                        if (data.current_house_no) {
+                            number_home = "ផ្ទះលេខ "+ data.current_house_no;
+                        }
+                        if (data.current_street_no) {
+                            number_street = " ផ្លូវលេខ "+data.current_street_no;
+                        }
+                        let location = number_home + number_street + " ភូមិ "+data.currentvillage.name_km + " ឃុំ/សង្កាត់ " + data.currentcommune.name_km + " ស្រុក/ខណ្ឌ " + data.currentdistrict.name_km+ " ខេត្ត/ក្រុង "+data.currentprovince.name_km;
+
+                        $("#pr_current_location").text(location);
+
+                        $("#pr_personal_phone_number").text(data.personal_phone_number);
+                        $(".pr_join_day").text(join_day);
+                        $(".pr_join_month").text(join_month);
+                        $(".pr_join_year").text(join_year);
+                        $("#pr_end_day").text(end_day);
+                        $("#pr_end_month").text(end_month);
+                        $("#pr_end_year").text(end_year);
+                        $("#pr_position").text(data.position.name_khmer);
+                        $("#pr_branch").text(data.branch.branch_name_kh);
+                        $("#pr_employee_id").text(data.number_employee);
+                        $("#pr_basic_salary").text(data.basic_salary);
+                        $("#pr_salary_increase").text($("#salary_to_increase").val());
+                        if (data.positiontype.name_english == "Field Staff") {
+                            $("#pr_supporting_or_field_staff").text("ដោយធៀបនិងភាគរយការងារសម្រេចបានសម្រាប់បុគ្គលិកឥណទាន (គិតតាម Pro-Rate) ដោយការបង់ពន្ធជូនរាជរដ្ឋាភិបាលជាបន្ទុករបស់និយោជិត");
+                        }
+                        print_pdf();
+                    }
+                    new Noty({
+                        title: "",
+                        text: "The process has been successfully.",
+                        type: "success",
+                        icon: true
+                    }).show();
+                    showDatas(4);
+                }).catch(function(error) {
+                    new Noty({
+                        title: "",
+                        text: "Something went wrong please try again later.",
+                        type: "error",
+                        icon: true
+                    }).show();
+                });
+            }
+            
         });
     });
     function showProvince(id, optionSelect){

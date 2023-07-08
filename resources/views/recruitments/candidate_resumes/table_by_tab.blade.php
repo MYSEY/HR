@@ -22,6 +22,7 @@
                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Recruitment Channel: activate to sort column ascending" >Recruitment Channel</th>
                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Concten Number: activate to sort column ascending" >Concten Number</th>
                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Recruitement Status: activate to sort column ascending" >Status</th>
+                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="CV: activate to sort column ascending" >CV</th>
                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Remark: activate to sort column ascending" >Remark</th>
                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Action: activate to sort column ascending" >Action</th>
                                     </tr>
@@ -56,6 +57,11 @@
                                                             </div>
                                                         @endif
                                                     </div>
+                                                </td>
+                                                <td>
+                                                    <small class="block text-ellipsis">
+                                                        <a href="{{asset("/uploads/images/".$item->cv)}}" target="_blank" class="subdrop"><i class="la la-file-pdf"></i> <span>Preview CV</span></a>
+                                                    </small>
                                                 </td>
                                                 <td>{{ $item->remark }}</td>
                                                 <td class="text-end">
