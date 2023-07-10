@@ -84,225 +84,26 @@
         @endif
        
         {!! Toastr::message() !!}
-        {{-- <div class="row">
-            <div class="col-md-12">
-                <div class="table-responsive">
-                    <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <table class="table table-striped custom-table datatable dataTable no-footer" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
-                                    <thead>
-                                        <tr>
-                                            <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Profle: activate to sort column descending" style="width: 265.913px;">#</th>
-                                            <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Profle: activate to sort column descending" style="width: 265.913px;">Profle</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Employee ID: activate to sort column ascending" style="width: 94.0625px;">Employee ID</th>
-                                            <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 265.913px;">Name(KH)</th>
-                                            <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 265.913px;">Name(EN)</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending" style="width: 218.762px;">Position</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending" style="width: 218.762px;">Department</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending" style="width: 218.762px;">Branch</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Mobile: activate to sort column ascending" style="width: 83.3625px;">Contact Number</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Role: activate to sort column ascending" style="width: 80.8125px;">Role</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Role: activate to sort column ascending" style="width: 80.8125px;">Position Type</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Role: activate to sort column ascending" style="width: 80.8125px;">Basic Salary</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Role: activate to sort column ascending" style="width: 80.8125px;">Phone Allowance</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending" style="width: 218.762px;">Date Of Birth</th>
-                                            <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending" style="width: 87.1125px;">Join Date</th>
-                                            <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending" style="width: 87.1125px;">Past Date</th>
-                                            <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending" style="width: 87.1125px;">Month Get Severance Pay</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Role: activate to sort column ascending" style="width: 135.163px;">Loan</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Role: activate to sort column ascending" style="width: 135.163px;">Status</th>
-                                            <th class="text-end no-sort sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Action: activate to sort column ascending" style="width: 50.825px;">Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @if (count($data)>0)
-                                            @foreach ($data as $item)
-                                                <tr class="odd">
-                                                    <td class="ids">{{$item->id}}</td>
-                                                    <td class="sorting_1">
-                                                        <h2 class="table-avatar">
-                                                            @if ($item->profile != null)
-                                                                <a href="{{asset('/uploads/images/'.$item->profile)}}"  class="avatar">
-                                                                    <img alt="" src="{{asset('/uploads/images/'.$item->profile)}}">
-                                                                </a>
-                                                            @else
-                                                                <a href="{{asset('admin/img/defuals/default-user-icon.png')}}">
-                                                                    <img alt="" src="{{asset('admin/img/defuals/default-user-icon.png')}}">
-                                                                </a>
-                                                            @endif
-                                                        </h2>
-                                                    </td>
-                                                    <td><a href="{{route('employee.profile',$item->id)}}">{{$item->number_employee}}</a></td>
-                                                    <td><a href="{{route('employee.profile',$item->id)}}">{{$item->employee_name_kh}}</a></td>
-                                                    <td><a href="{{route('employee.profile',$item->id)}}">{{$item->employee_name_en}}</a></td>
-                                                    
-                                                    <td>{{$item->EmployeePosition}}</td>
-                                                    <td>{{$item->EmployeeDepartment}}</td>
-                                                    <td>{{$item->EmployeeBranch}}</td>
-                                                    <td>{{$item->personal_phone_number}}</td>
-                                                    <td>
-                                                        <span class="badge bg-inverse-success">{{ $item->role == null ? "" : $item->role->name }}</span>
-                                                    </td>
-                                                    <td>{{$item->EmployeePositionType}}</td>
-                                                    <td>$ <a href="#">{{$item->basic_salary}}</a></td>
-                                                    <td>$ <a href="#">{{$item->phone_allowance == null ? '0.00' : $item->phone_allowance}}</a></td>
-                                                    <td>{{$item->DOB ?? ''}}</td>
-                                                    <td>{{$item->joinOfDate}}</td>
-                                                    <td>{{$item->PassDate}}</td>
-                                                    <td>{{$item->DayOfGetSeverancePay}}</td>
-                                                    <td>
-                                                        @if ($item->EmployeeIsLoan == 'Yes')
-                                                            <a class="btn btn-white btn-sm" href="#" aria-expanded="false">
-                                                                <i class="fa fa-dot-circle-o text-success"></i>
-                                                                <span>{{$item->EmployeeIsLoan}}</span>
-                                                            </a>
-                                                        @elseif($item->EmployeeIsLoan == 'No')
-                                                            <a class="btn btn-white btn-sm" href="#" aria-expanded="false">
-                                                                <i class="fa fa-dot-circle-o text-danger"></i>
-                                                                <span>{{$item->EmployeeIsLoan}}</span>
-                                                            </a>
-                                                        @else
-                                                            
-                                                        @endif
-                                                    </td>
-                                                    <td>
-                                                        <div class="dropdown action-label">
-                                                            @if ($item->emp_status=='Probation')
-                                                                <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
-                                                                    <i class="fa fa-dot-circle-o text-success"></i>
-                                                                    <span>{{ $item->emp_status }}</span>
-                                                                </a>
-                                                            @elseif ($item->emp_status=='1')
-                                                                <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
-                                                                    <i class="fa fa-dot-circle-o text-info"></i>
-                                                                    <span>FDC</span>
-                                                                </a>
-                                                            @elseif ($item->emp_status=='2')
-                                                                <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
-                                                                    <i class="fa fa-dot-circle-o text-danger"></i>
-                                                                    <span>UDC</span>
-                                                                </a>
-                                                            @elseif ($item->emp_status=='3')
-                                                                <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
-                                                                    <i class="fa fa-dot-circle-o text-dark"></i>
-                                                                    <span>Resignation</span>
-                                                                </a>
-                                                            @elseif ($item->emp_status=='4')
-                                                                <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
-                                                                    <i class="fa fa-dot-circle-o text-dark"></i>
-                                                                    <span>Termination</span>
-                                                                </a>
-                                                            @elseif ($item->emp_status=='5')
-                                                                <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
-                                                                    <i class="fa fa-dot-circle-o text-dark"></i>
-                                                                    <span>Death</span>
-                                                                </a>
-                                                            @elseif ($item->emp_status=='6')
-                                                                <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
-                                                                    <i class="fa fa-dot-circle-o text-dark"></i>
-                                                                    <span>Retired</span>
-                                                                </a>
-                                                            @elseif ($item->emp_status=='7')
-                                                                <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
-                                                                    <i class="fa fa-dot-circle-o text-dark"></i>
-                                                                    <span>Lay off</span>
-                                                                </a>
-                                                            @elseif ($item->emp_status=='8')
-                                                                <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
-                                                                    <i class="fa fa-dot-circle-o text-dark"></i>
-                                                                    <span>Suspension</span>
-                                                                </a>
-                                                            @elseif ($item->emp_status=='9')
-                                                                <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
-                                                                    <i class="fa fa-dot-circle-o text-dark"></i>
-                                                                    <span>Fall Probation</span>
-                                                                </a>
-                                                            @endif
-                                                            @if (Auth::user()->RolePermission == 'Administrator')
-                                                                <div class="dropdown-menu dropdown-menu-right" id="btn-emp-status">
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="1" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-success"></i> FDC
-                                                                    </a>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="2" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-warning"></i> UDC
-                                                                    </a>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="3" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-danger"></i> Resignation
-                                                                    </a>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="4" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-danger"></i> Termination
-                                                                    </a>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="5" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-danger"></i> Death
-                                                                    </a>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="6" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-danger"></i> Retired
-                                                                    </a>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="7" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-danger"></i> Lay off
-                                                                    </a>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="8" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-danger"></i> Suspension
-                                                                    </a>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="9" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-danger"></i> Fall Probation
-                                                                    </a>
-                                                                </div>
-                                                            @endif
-                                                        </div>
-                                                    </td>
-                                                    <td class="text-end">
-                                                        <div class="dropdown dropdown-action">
-                                                            <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i  class="material-icons">more_vert</i></a>
-                                                            @if (Auth::user()->RolePermission == 'Administrator')
-                                                                <div class="dropdown-menu dropdown-menu-right">
-                                                                    <a class="dropdown-item userUpdate" data-id="{{$item->id}}"><i class="fa fa-pencil m-r-5"></i> Edit</a>
-                                                                    <a class="dropdown-item userDelete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_user"><i class="fa fa-trash-o m-r-5"></i> Delete</a>
-                                                                </div>
-                                                            @endif
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            @endforeach
-                                        @else
-                                            <tr>
-                                                <td colspan="16" style="text-align: center">No record to display</td>
-                                            </tr>
-                                         @endif
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div> --}}
-        
+       
         {{-- <div class="content container-fluid">
             <div class="page-menu"> --}}
                 <div class="row">
                     <div class="col-md-12">
                         <ul class="nav nav-tabs nav-tabs-bottom" role="tablist">
                             <li class="nav-item" role="presentation">
-                                <a class="nav-link active" data-bs-toggle="tab" href="#tab_candidate_resume" aria-selected="true"
-                                    role="tab">Signed Contracts</a>
+                                <a class="nav-link active" data-bs-toggle="tab" href="#tab_candidate_resume" aria-selected="true" role="tab">Signed Contracts</a>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <a class="nav-link" data-bs-toggle="tab" id="btn_tab_short_list" href="#tab_short_list" aria-selected="false" role="tab" data-tab-id="2"
-                                    tabindex="-1">Probations</a>
+                                <a class="nav-link" data-bs-toggle="tab" id="" href="#tab_probations" aria-selected="false" role="tab" data-tab-id="2" tabindex="-1">Probations</a>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <a class="nav-link" data-bs-toggle="tab" id="btn_not_tab_short_list" href="#tab_not_short_list" aria-selected="false" role="tab" data-tab-id="2"
-                                    tabindex="-1">FDC</a>
+                                <a class="nav-link" data-bs-toggle="tab" id="" href="#tab_fdc" aria-selected="false" role="tab" data-tab-id="2" tabindex="-1">FDC</a>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <a class="nav-link" data-bs-toggle="tab" id="btn_tab_interviewed_result" href="#tab_interviewed_result" aria-selected="false" data-tab-id="3"
-                                    role="tab" tabindex="-1">UDC</a>
+                                <a class="nav-link" data-bs-toggle="tab" id="" href="#tab_udc" aria-selected="false" data-tab-id="3" role="tab" tabindex="-1">UDC</a>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <a class="nav-link" data-bs-toggle="tab" id="btn_tab_signed_contract" href="#tab_signed_contract" aria-selected="false" data-tab-id="4"
-                                    role="tab" tabindex="-1">Rejects</a>
+                                <a class="nav-link" data-bs-toggle="tab" id="" href="#tab_reject" aria-selected="false" data-tab-id="4" role="tab" tabindex="-1">Rejects</a>
                             </li>
                         </ul>
                         <div class="tab-content">
@@ -688,7 +489,9 @@
         $('body').on('click', '#btn-emp-status a', function() {
             let id = $(this).attr('data-emp-id');
             let status = $(this).data('id');
-            if (status == 1) {
+            if (status == '1') {
+                var emp_status = "Fixed Duration Contract (FDC)";
+            } else if(status == '10') {
                 var emp_status = "Fixed Duration Contract (FDC)";
             } else if(status == 2) {
                 var emp_status = "Undetermined Duration Contract (UDC)";
@@ -708,10 +511,10 @@
                 var emp_status = "Fall Probation";
             }else if (status =="Probation") {
                 emp_status = status;
+            }else{
+                var emp_status = "Cancel Signed Contract";
             }
 
-            let start_date = $(this).attr('data-start-date');
-            let end_date = $(this).attr('data-end-date');
             if (status == "Probation") {
                 $.confirm({
                     title: 'Employee Status!',
@@ -768,8 +571,9 @@
                         },
                     }
                 });
-            }
-            else if (status == 1) {
+            }else if (status == '1') {
+                let start_date = $(this).attr('data-start-date');
+                let end_date = $(this).attr('data-end-date');
                 $.confirm({
                     title: 'Employee Status!',
                     contentClass: 'text-center',
@@ -859,7 +663,93 @@
                         },
                     }
                 });
+            }else if(status == '10'){
+                let start_date = $(this).attr('data-start-date');
+                $.confirm({
+                    title: 'Employee Status!',
+                    contentClass: 'text-center',
+                    backgroundDismiss: 'cancel',
+                    content: ''+
+                        '<form method="post" class="formName">'+
+                            '<div class="form-group">'+
+                                '<div class="form-group">'+
+                                    '<label><a href="#">'+emp_status+'</a></label>'+
+                                '</div>'+
+                                '<div class="form-group">'+
+                                    '<label>Start Date <span class="text-danger">*</span></label>'+
+                                    '<input type="date" class="form-control start_date" value="'+start_date+'">'+
+                                    '<input type="hidden" class="form-control emp_status" value="'+status+'">'+
+                                    '<input type="hidden" class="form-control id" value="'+id+'">'+
+                                '</div>'+
+                                '<div class="form-group">'+
+                                    '<label>End Date <span class="text-danger">*</span></label>'+
+                                    '<input type="date" class="form-control end_dete" value="">'+
+                                '</div>'+
+                                '<label>Reason</label>'+
+                                '<textarea class="form-control resign_reason"></textarea>'+
+                            '</div>'+
+                        '</form>',
+                    buttons: {
+                        confirm: {
+                            text: 'Submit',
+                            btnClass: 'btn-blue',
+                            action: function() {
+                                var emp_status = this.$content.find('.emp_status').val();
+                                var id = this.$content.find('.id').val();
+                                var start_date = this.$content.find('.start_date').val();
+                                var end_dete = this.$content.find('.end_dete').val();
+                                var resign_reason = this.$content.find('.resign_reason').val();
+
+                                if (!start_date) {
+                                    $.alert({
+                                        title: '<span class="text-danger">Requiered</span>',
+                                        content: 'Please input start date.',
+                                    });
+                                    return false;
+                                }
+                                if (!end_dete) {
+                                    $.alert({
+                                        title: '<span class="text-danger">Requiered</span>',
+                                        content: 'Please input end date.',
+                                    });
+                                    return false;
+                                }
+                                
+                                axios.post('{{ URL('employee/status') }}', {
+                                        'emp_status': emp_status,
+                                        'id': id,
+                                        'start_date': start_date,
+                                        'end_dete': end_dete,
+                                        'resign_reason': resign_reason
+                                    }).then(function(response) {
+                                    if (response.data.message == 'successfull') {
+                                        new Noty({
+                                            title: "",
+                                            text: "The process has been successfully.",
+                                            type: "success",
+                                            timeout: 3000,
+                                            icon: true
+                                        }).show();
+                                        window.location.replace("{{ URL('users') }}"); 
+                                    }
+                                }).catch(function(error) {
+                                    new Noty({
+                                        title: "",
+                                        text: "Something went wrong please try again later.",
+                                        type: "error",
+                                        icon: true
+                                    }).show();
+                                });
+                            }
+                        },
+                        cancel: {
+                            text: 'Cancel',
+                            btnClass: 'btn-red btn-sm',
+                        },
+                    }
+                });
             }else if(status==2){
+                let start_date = $(this).attr('data-end-date');
                 $.confirm({
                     title: 'Employee Status!',
                     contentClass: 'text-center',
@@ -870,9 +760,8 @@
                                 '<label><a href="#">'+emp_status+'</a></label>'+
                             '</div>'+
                             '<div class="form-group">'+
-                                '<label>End Date <span class="text-danger">*</span></label>'+
-                                '<input type="hidden" class="form-control start_date" value="'+start_date+'">'+
-                                '<input type="date" class="form-control end_date" value="'+end_date+'">'+
+                                '<label>Start Date <span class="text-danger">*</span></label>'+
+                                '<input type="date" class="form-control start_date" value="'+start_date+'">'+
                                 '<input type="hidden" class="form-control emp_status" id="" name="" value="'+status+'">'+
                                 '<input type="hidden" class="form-control id" id="" name="" value="'+id+'">'+
                             '</div>'+
@@ -888,11 +777,10 @@
                             action: function() {
                                 var emp_status = this.$content.find('.emp_status').val();
                                 var start_date = this.$content.find('.start_date').val();
-                                var end_date = this.$content.find('.end_date').val();
                                 var id = this.$content.find('.id').val();
                                 var resign_reason = this.$content.find('.resign_reason').val();
 
-                                if (!end_date) {
+                                if (!start_date) {
                                     $.alert({
                                         title: '<span class="text-danger">Requiered</span>',
                                         content: 'Please input end date.',
@@ -903,7 +791,6 @@
                                 axios.post('{{ URL('employee/status') }}', {
                                         'id': id,
                                         'emp_status': emp_status,
-                                        'end_date': end_date,
                                         'start_date': start_date,
                                         'resign_reason': resign_reason
                                     }).then(function(response) {

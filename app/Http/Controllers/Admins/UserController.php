@@ -225,7 +225,7 @@ class UserController extends Controller
     public function processing(Request $request)
     {
         try {
-            if ($request->emp_status == 1) {
+            if ($request->emp_status == '1') {
                 //total day in months
                 $endMonth = Carbon::createFromDate($request->start_date)->format('m');
                 $totalDayInMonth = Carbon::now()->month($endMonth)->daysInMonth;
@@ -259,11 +259,17 @@ class UserController extends Controller
                     'pre_salary' => number_format($dataSalary->basic_salary, 2),
                     'resign_reason' => $request->resign_reason
                 ]);
+            }else if($request->emp_status == '10'){
+                User::where('id',$request->id)->update([
+                    'emp_status' => $request->emp_status,
+                    'fdc_date' => $request->start_date,
+                    'fdc_end' => $request->end_dete,
+                    'resign_reason' => $request->resign_reason
+                ]);
             }else if($request->emp_status == 2){
                 User::where('id',$request->id)->update([
                     'emp_status' => $request->emp_status,
                     'fdc_date' => $request->start_date,
-                    'fdc_end' => $request->end_date,
                     'resign_reason' => $request->resign_reason
                 ]);
             }else if($request->emp_status == "Probation"){
@@ -276,8 +282,7 @@ class UserController extends Controller
                     'emp_status' => $request->emp_status,
                     'resign_reason' => $request->resign_reason
                 ]);
-            }
-            else{
+            }else{
                 User::where('id',$request->id)->update([
                     'emp_status' => $request->emp_status,
                     'resign_date' => $request->resign_date,

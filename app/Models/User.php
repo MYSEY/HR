@@ -287,6 +287,15 @@ class User extends Authenticatable
         }
         return $positionType ?? "";
     }
+    public function getEmployeeResignReasonAttribute(){
+        $data = Option::where('type','emp_status')->get();
+        foreach($data as $item){
+            if($this->resign_reason == $item->id){
+                $resignReason = $item->name_english;
+            }
+        }
+        return $resignReason ?? "";
+    }
     
     public function getEmployeeBranchAttribute(){
         return optional($this->branch)->branch_name_en;

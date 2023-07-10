@@ -30,7 +30,7 @@
                                                 <th>#</th>
                                                 <th>Days</th>
                                                 <th>Title</th>
-                                                <th>Amount Percent</th>
+                                                <th>Amount Percent(%)</th>
                                                 <th>Period Month</th>
                                                 <th>Created At</th>
                                                 <th class="text-end">Action</th>
@@ -43,7 +43,7 @@
                                                         <td class="ids">{{$item->id}}</td>
                                                         <td class="title">{{$item->Day}}</td>
                                                         <td class="title">{{$item->title}}</td>
-                                                        <td class="amount_percent"><a href="#">{{$item->amount_percent == null ? '0' : $item->amount_percent}}%</a></td>
+                                                        <td style="text-align: center;" class="amount_percent"><a href="#">{{$item->amount_percent}}</a></td>
                                                         <td class="period_month">{{$item->PeriodPayment}}</td>
                                                         <td>{{$item->created_at}}</td>
                                                         <td class="text-end">

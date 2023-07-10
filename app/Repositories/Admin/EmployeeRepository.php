@@ -58,7 +58,7 @@ class EmployeeRepository extends BaseRepository
                 }
                 return $dataUser->get();
             }else{
-                return User::with('role')->with('department')->whereIn('emp_status',['1','2','3','4','5','6','7','8','9','Probation','Upcoming'])->get();
+                return User::with('role')->with('department')->whereIn('emp_status',['1','10','2','3','4','5','6','7','8','9','Probation','Upcoming'])->get();
             }
         } else {
             return User::where('role_id',Auth::user()->role_id)

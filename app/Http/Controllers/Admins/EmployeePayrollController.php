@@ -63,7 +63,7 @@ class EmployeePayrollController extends Controller
     public function store(Request $request)
     {
         // try{
-            $employee = User::where('date_of_commencement','<=',$request->payment_date)->whereIn('emp_status',['Probation','1','2'])->get();
+            $employee = User::where('date_of_commencement','<=',$request->payment_date)->whereIn('emp_status',['Probation','1','10','2'])->get();
             foreach ($employee as $item) {
                 // dd($item->spouse);
                 //function first month join work
@@ -153,7 +153,7 @@ class EmployeePayrollController extends Controller
                 
                 //calculated khmer_new_year and pchumBen_bonus
                 $totalBunus = 0;
-                if ($item->emp_status == 1 || $item->emp_status == 2) {
+                if ($item->emp_status == 1 || $item->emp_status == 10 || $item->emp_status == 2) {
                     $dataHolidayBunuse = Holiday::get();
                     foreach ($dataHolidayBunuse as $value) {
                         $userJoinDate = $item->date_of_commencement;
@@ -165,18 +165,18 @@ class EmployeePayrollController extends Controller
                         if($request->payment_date == $value->period_month){
                             if ($totalStartDays > $dayOfYear) {
                                 $percent = $value->amount_percent / 100;
-                                $totalAllowanceBunus = ($item->basic_salary * $percent);
+                                $totalAllowanceBunus = ($totalBasicSalary * $percent);
                             } else {
                                 $percent = $value->amount_percent / 100;
-                                $totalPercent = ($item->basic_salary * $percent);
+                                $totalPercent = ($totalBasicSalary * $percent);
                                 $percentSalary = $totalPercent * $totalStartDays;
                                 $totalAllowanceBunus = $percentSalary / $dayOfYear;
                             }
                             $dataBonus = Bonus::create([
                                 'employee_id'   => $item->id,
                                 'number_of_working_days'    => $totalStartDays,
-                                'base_salary'   => $item->basic_salary,
-                                'base_salary_received'  => $item->basic_salary,
+                                'base_salary'   => $totalBasicSalary,
+                                'base_salary_received'  => $totalBasicSalary,
                                 'total_allowance'   => $totalAllowanceBunus,
                                 'bouns_type'   => $value->title,
                                 'created_by'    => Auth::user()->id,
@@ -185,7 +185,6 @@ class EmployeePayrollController extends Controller
                         $totalBunus = $dataBonus->total_allowance ?? 0;
                     }
                 }
-                // dd($totalBunus);
                 // sum benefit children < 18
                 $dataDateOfBirth = [];
                 $dataChildren = ChildrenInfor::where('employee_id',$item->id)->get();
@@ -626,7 +625,8 @@ class EmployeePayrollController extends Controller
                 }
 
                 //function Severance Pay
-                if ($item->emp_status == 1) {
+                $totalSeverancePay = 0;
+                if ($item->emp_status == 1 || $item->emp_status == 10) {
                     $severancePay = GrossSalaryPay::where('employee_id',$item->id)->get();
                     if (count($severancePay) == 15) {
                         $dataSeveranc = GrossSalaryPay::where('employee_id', $item->id)->where('payment_date', '>=',$item->fdc_date)->sum('total_gross_salary');
@@ -638,11 +638,17 @@ class EmployeePayrollController extends Controller
                             'created_by'                    => Auth::user()->id,
                         ]);
                         $totalSeverancePay = $dataSeverance->total_contract_severance_pay;
-                    }else{
-                        $totalSeverancePay = 0;
+                    }else if(count($severancePay) == 27){
+                        $dataSeveranc = GrossSalaryPay::where('employee_id', $item->id)->where('payment_date', '>=',$item->fdc_date)->sum('total_gross_salary');
+                        $totalContractSeverancePay = $dataSeveranc * 0.05;
+                        $dataSeverance = SeverancePay::create([
+                            'employee_id'                   => $item->id,
+                            'total_severanec_pay'           => $dataSeveranc,
+                            'total_contract_severance_pay'  => $totalContractSeverancePay,
+                            'created_by'                    => Auth::user()->id,
+                        ]);
+                        $totalSeverancePay = $dataSeverance->total_contract_severance_pay;
                     }
-                }else{
-                    $totalSeverancePay = 0;
                 }
                 
                 $totalNetSalary = $totalSalaryAfterTax + $totalSeverancePay + $taxExemptionSalary;

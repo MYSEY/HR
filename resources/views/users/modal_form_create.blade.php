@@ -134,8 +134,8 @@
                             <div class="form-group">
                                 <label class="">Spouse</label>
                                 <select class="form-control" id="spouse" name="spouse" value="{{old('spouse')}}">
-                                    <option value="1">Yes</option>
                                     <option value="0">No</option>
+                                    <option value="1">Yes</option>
                                 </select>
                                 {{-- <input type="number" class="form-control" name="spouse" id="spouse" maxlength="2" placeholder=""> --}}
                             </div>

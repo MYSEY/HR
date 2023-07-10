@@ -178,7 +178,7 @@
                                                 @endforeach
                                             @else
                                                 <tr>
-                                                    <td colspan="22" style="text-align: center">No record to display</td>
+                                                    <td colspan="25" style="text-align: center">No record to display</td>
                                                 </tr>
                                             @endif
                                         </tbody>
