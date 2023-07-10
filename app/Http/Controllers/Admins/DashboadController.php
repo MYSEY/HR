@@ -48,7 +48,7 @@ class DashboadController extends Controller
         // $currentYear = Carbon::now()->format('Y');
         // $year = Carbon::createFromDate('01-01-'.$currentYear)->format('Y-m-d');
         $year = null;
-        $staffResignations = User::whereNotIn('emp_status',['1','2','Probation'])
+        $staffResignations = User::whereNotIn('emp_status',['1','2','Probation','Upcoming'])
         ->when($year, function ($query, $year) {
             $query->where('resign_date', '>=', $year);
         })->orderBy('id', 'desc')->get();
@@ -62,7 +62,8 @@ class DashboadController extends Controller
         $totalStaff =  User::with("gender")->whereIn('emp_status',['1','2','Probation'])->get();
         $staffPromotes = StaffPromoted::all()->count();
         $transferred = Transferred::all()->count();
-        $candidateResumes = CandidateResume::get();
+        $empUpcoming = User::where("emp_status","Upcoming")->get()->count();
+        $candidateResumes = CandidateResume::whereNot("status","5")->get()->count();
         $dataTrainings = Training::whereMonth("created_at", $Monthly)->whereYear("created_at", $yearLy)->get();
         $dataEmployeeTrainings = [];
         foreach ($dataTrainings as $key => $item) {
@@ -82,6 +83,7 @@ class DashboadController extends Controller
             'totalStaff'=> $totalStaff,
             'dataTrainings'=> $dataTrainings,
             "candidateResumes"=>$candidateResumes,
+            "empUpcoming"=>$empUpcoming,
             'dataEmployeeTrainings'=> $dataEmployeeTrainings,
         ]);
     }

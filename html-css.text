@@ -1,0 +1,156 @@
+<style>
+input[type=checkbox] {
+    cursor: pointer;
+    font-size: 20px;
+    visibility: hidden;
+    position: absolute;
+    left: 0;
+    transform: scale(1.5);
+}
+
+input[type=checkbox]:after {
+    content: " ";
+    background-color: #fff;
+    display: inline-block;
+    color: #00BFF0;
+    width: 100%;
+    height: 100%;
+    visibility: visible;
+    border: 1px solid #FFF;
+    padding: 0 3px;
+    margin: 2px 0;
+    border-radius: 12px;
+    box-shadow: 0 0 10px 0 rgba(0,0,0,0.08), 0 0 2px 0 rgba(0,0,0,0.16);
+}
+
+input[type=checkbox]:checked:after {
+    content: "\2714";
+    display: unset;
+    font-weight: bold;
+}
+
+.first{
+    position: absolute;
+    width: 3%;
+    padding: 9px;
+    margin-left: 5%;
+    margin-top: -13px;
+}
+.discount{
+
+background-color: #96918b;
+padding-top: 1px;
+padding-bottom: 1px;
+padding-left: 4px;
+padding-right: 4px;
+font-size: 10px;
+border-radius: 6px;
+color: #fff;
+}
+
+
+</style>
+<body>
+<div class="container mt-5 mb-5">	
+    <div class="card " style="height: 75%;">	
+        <div class="row g-0" style=" height: 100%;" >	
+            <div class="col-md-6 border-end">
+                <div class="row">
+                    <div class="col-md-2"> </div>
+                    <div class="col-md-10">
+                        <div class="mt-2 pr-3 content">	
+                            <h4 >Learn 24</h4>
+                            <ul style="position: relative;">
+                                <li>
+                                    <div class="me-2"><input type="checkbox" checked disabled></div>
+                                    <div class="media" style="margin-left: 40px;">
+                                        <div class="me-3">
+                                            <h4 class="font-size-15 mb-1">Order #1137</h4>
+                                            <p class="text-muted font-size-14 mb-0">Tranks your!</p>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                            <ul style="position: relative;">
+                                <li>
+                                    <div class="media" style="margin-left: 40px; margin-top: 5%; border: 0.1em solid #e9ecef; width: auto; height: 20%;">
+                                        <div style="margin-top: 15px; margin-left: 10px;">
+                                            <h5 class="font-size-15 mb-1">Your order is confirmed</h5>
+                                            <p class="text-muted font-size-14 mb-0">Contact us by email or phone to recieve an order confirmed,</p>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li >
+                                    <div class="media" style="margin-left: 40px; margin-top: 3%; border: 0.1em solid #e9ecef; width: auto; height: 20%;">
+                                        <div style="margin-top: 15px; margin-left: 10px;">
+                                            <h5 class="font-size-15 mb-1">Your order is confirmed</h5>
+                                            <p class="text-muted font-size-14 mb-0">Contact us by email or phone to recieve an order confirmed,</p>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li >
+                                    <div class="media" style="margin-left: 40px; margin-top: 3%; border: 0.1em solid #e9ecef; width: auto; height: 20%">
+                                        <div style="margin-top: 15px; margin-left: 10px;">
+                                            <h5 class="font-size-15 mb-1">Your order is confirmed</h5>
+                                            <p class="text-muted font-size-14 mb-0">Contact us by email or phone to recieve an order confirmed,</p>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>	
+            <div class="col-md-6">	
+                <div class="p-3 right-side" style="height: 100%; background: #F8F8FF">
+                    <div class="mt-2 pr-3 content" style="display: flex;">	
+                        <div class="first">
+                            <span class="discount" >1</span>
+                        </div>
+                        <div>
+                            <img src='https://images.unsplash.com/photo-1554079501-a254f876fc77?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxNDU4OXwwfDF8cmFuZG9tfHx8fHx8fHx8MTYyNDY0NTMwOQ&ixlib=rb-1.2.1&q=80&w=400' width="75" height="auto" style="border-radius: 10px;" alt=''>
+                        </div>
+                        <div style="margin-top: 15px; margin-left: 10;">
+                            <h4 class="font-size-15 mb-1">Order #1137</h4>
+                            <p class="text-muted font-size-14 mb-0">Tranks your!</p>
+                        </div>
+                        <div style="margin-top: 7%;margin-left: 40%;">
+                            <span>$1500</span>
+                        </div>
+                    </div>
+                    <div class="mt-2 pr-3 content" style="display: flex;">	
+                        <div class="first">
+                            <span class="discount" >2</span>
+                        </div>
+                        <div>
+                            <img src='https://images.unsplash.com/photo-1554079501-a254f876fc77?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxNDU4OXwwfDF8cmFuZG9tfHx8fHx8fHx8MTYyNDY0NTMwOQ&ixlib=rb-1.2.1&q=80&w=400' width="75" height="auto" style="border-radius: 10px;" alt=''>
+                        </div>
+                        <div style="margin-top: 15px; margin-left: 10;">
+                            <h4 class="font-size-15 mb-1">Order #1137</h4>
+                            <p class="text-muted font-size-14 mb-0">Tranks your!</p>
+                        </div>
+                        <div style="margin-top: 7%;margin-left: 40%;">
+                            <span>$1500</span>
+                        </div>
+                    </div>
+                    <div class="mt-2 pr-3 content" style="display: flex;">	
+                        <div class="first">
+                            <span class="discount" >3</span>
+                        </div>
+                        <div>
+                            <img src='https://images.unsplash.com/photo-1554079501-a254f876fc77?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxNDU4OXwwfDF8cmFuZG9tfHx8fHx8fHx8MTYyNDY0NTMwOQ&ixlib=rb-1.2.1&q=80&w=400' width="75" height="auto" style="border-radius: 10px;" alt=''>
+                        </div>
+                        <div style="margin-top: 15px; margin-left: 10;">
+                            <h4 class="font-size-15 mb-1">Order #1137</h4>
+                            <p class="text-muted font-size-14 mb-0">Tranks your!</p>
+                        </div>
+                        <div style="margin-top: 7%;margin-left: 40%;">
+                            <span>$1500</span>
+                        </div>
+                    </div>
+                </div>	
+            </div>	
+        </div>	
+    </div> 
+</div>
+</body>

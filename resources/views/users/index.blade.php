@@ -84,7 +84,7 @@
         @endif
        
         {!! Toastr::message() !!}
-        <div class="row">
+        {{-- <div class="row">
             <div class="col-md-12">
                 <div class="table-responsive">
                     <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
@@ -271,14 +271,48 @@
                                             </tr>
                                          @endif
                                     </tbody>
-                                    {{-- @include('components.loarding-table', ["column"=> 16, "rol"=> 7]) --}}
                                 </table>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
+        
+        {{-- <div class="content container-fluid">
+            <div class="page-menu"> --}}
+                <div class="row">
+                    <div class="col-md-12">
+                        <ul class="nav nav-tabs nav-tabs-bottom" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link active" data-bs-toggle="tab" href="#tab_candidate_resume" aria-selected="true"
+                                    role="tab">Signed Contracts</a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link" data-bs-toggle="tab" id="btn_tab_short_list" href="#tab_short_list" aria-selected="false" role="tab" data-tab-id="2"
+                                    tabindex="-1">Probations</a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link" data-bs-toggle="tab" id="btn_not_tab_short_list" href="#tab_not_short_list" aria-selected="false" role="tab" data-tab-id="2"
+                                    tabindex="-1">FDC</a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link" data-bs-toggle="tab" id="btn_tab_interviewed_result" href="#tab_interviewed_result" aria-selected="false" data-tab-id="3"
+                                    role="tab" tabindex="-1">UDC</a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link" data-bs-toggle="tab" id="btn_tab_signed_contract" href="#tab_signed_contract" aria-selected="false" data-tab-id="4"
+                                    role="tab" tabindex="-1">Rejects</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            @include('users.tab_all_table')
+                        </div>
+                    </div>
+                </div>
+            {{-- </div>
+        </div> --}}
+
         
         @include('users.modal_form_create')
         @include('users.modal_form_edit')
@@ -672,11 +706,70 @@
                 var emp_status = "Suspension";
             }else if(status == 9){
                 var emp_status = "Fall Probation";
+            }else if (status =="Probation") {
+                emp_status = status;
             }
 
             let start_date = $(this).attr('data-start-date');
             let end_date = $(this).attr('data-end-date');
-            if (status == 1) {
+            if (status == "Probation") {
+                $.confirm({
+                    title: 'Employee Status!',
+                    contentClass: 'text-center',
+                    backgroundDismiss: 'cancel',
+                    content: ''+
+                        '<form method="post">'+
+                            '<div class="form-group">'+
+                                '<label><a href="#">'+emp_status+'</a></label>'+
+                            '</div>'+
+                            '<div class="form-group">'+
+                                '<div class="form-group">'+
+                                    '<input type="hidden" class="form-control emp_status" id="" name="" value="'+status+'">'+
+                                    '<input type="hidden" class="form-control id" id="" name="" value="'+id+'">'+
+                                '</div>'+
+                                '<label>Reason</label>'+
+                                '<textarea class="form-control resign_reason"></textarea>'+
+                            '</div>'+
+                        '</form>',
+                    buttons: {
+                        confirm: {
+                            text: 'Submit',
+                            btnClass: 'btn-blue',
+                            action: function() {
+                                var emp_status = this.$content.find('.emp_status').val();
+                                var id = this.$content.find('.id').val();
+                                var resign_reason = this.$content.find('.resign_reason').val();
+                                axios.post('{{ URL('employee/status') }}', {
+                                        'id': id,
+                                        'emp_status': emp_status,
+                                        'resign_reason': resign_reason
+                                    }).then(function(response) {
+                                    new Noty({
+                                        title: "",
+                                        text: "The process has been successfully.",
+                                        type: "success",
+                                        icon: true
+                                    }).show();
+                                    $('.card-footer').remove();
+                                    window.location.replace("{{ URL('users') }}");
+                                }).catch(function(error) {
+                                    new Noty({
+                                        title: "",
+                                        text: "Something went wrong please try again later.",
+                                        type: "error",
+                                        icon: true
+                                    }).show();
+                                });
+                            }
+                        },
+                        cancel: {
+                            text: 'Cancel',
+                            btnClass: 'btn-red btn-sm',
+                        },
+                    }
+                });
+            }
+            else if (status == 1) {
                 $.confirm({
                     title: 'Employee Status!',
                     contentClass: 'text-center',

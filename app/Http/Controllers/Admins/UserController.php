@@ -266,7 +266,18 @@ class UserController extends Controller
                     'fdc_end' => $request->end_date,
                     'resign_reason' => $request->resign_reason
                 ]);
-            }else{
+            }else if($request->emp_status == "Probation"){
+                User::where('id',$request->id)->update([
+                    'emp_status' => $request->emp_status,
+                    'resign_reason' => $request->resign_reason
+                ]);
+            }else if($request->emp_status == "Cancel"){
+                User::where('id',$request->id)->update([
+                    'emp_status' => $request->emp_status,
+                    'resign_reason' => $request->resign_reason
+                ]);
+            }
+            else{
                 User::where('id',$request->id)->update([
                     'emp_status' => $request->emp_status,
                     'resign_date' => $request->resign_date,

@@ -559,17 +559,9 @@
                 $("#total-resign-staff-resume").text(response.staffResignations.length);
                 
                 $("#total-training").text(response.dataTrainings.length);
-
-                let totalCandidateSignedContract = 0;
-                if (response.candidateResumes.length > 0) {
-                    response.candidateResumes.map((candi) =>{
-                        if (candi.status == 4) {
-                            totalCandidateSignedContract ++;
-                        }
-                    });
-                }
-                $("#total-interview").text(totalCandidateSignedContract);
-                $("#percentage-interview").text(Math.round((totalCandidateSignedContract / response.candidateResumes.length) * 100, 2)+ "%");
+                
+                $("#total-interview").text(response.empUpcoming);
+                $("#percentage-interview").text(Math.round((response.empUpcoming / (response.empUpcoming + response.candidateResumes)) * 100, 2)+ "%");
 
                 let dataHRMS = {
                     branches: response.branches,
