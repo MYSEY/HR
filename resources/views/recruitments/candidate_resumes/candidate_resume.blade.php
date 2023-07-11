@@ -93,7 +93,6 @@
     $(function(){
         $("#btn_tab_short_list, #btn_not_tab_short_list").on("click", function(){
             let tab_status = $(this).attr('data-tab-id');
-            console.log(tab_status);
             showDatas(tab_status);
         });
         $("#btn_tab_interviewed_result, #btn_tab_signed_contract").on("click", function(){
@@ -133,7 +132,6 @@
                 },
                 dataType: "JSON",
                 success: function(response) {
-                    console.log(response.success);
                     if (response.success) {
                         if (response.position != '') {
                             $('#e_position_applied').html('');

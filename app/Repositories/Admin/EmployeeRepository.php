@@ -4,12 +4,10 @@ namespace App\Repositories\Admin;
 
 use Carbon\Carbon;
 use App\Models\User;
-use Dflydev\DotAccessData\Data;
 use App\Repositories\BaseRepository;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Traits\UploadFiles\UploadFIle;
-use Illuminate\Support\Facades\DB;
 
 class EmployeeRepository extends BaseRepository
 {
@@ -36,29 +34,29 @@ class EmployeeRepository extends BaseRepository
 
     public function getAllUsers($request){
         if (Auth::user()->RolePermission == 'Administrator') {
-            if($request->employee_id || $request->employee_name){
+            if($request->emp_status || $request->employee_id || $request->employee_name){
                 $dataUser = [];
-
-                if ($request->employee_id && $request->employee_name =="") {
-
-                    $dataUser = User::with('role')->with('department')->where('number_employee', 'LIKE', '%'.$request->employee_id.'%');
-                }
-
-                if ($request->employee_name && $request->empolyee_id =="") {
-                    $dataUser= User::with('role')->with('department')
-                    ->orWhere('employee_name_kh', 'LIKE', '%'.$request->employee_name.'%')
-                    ->orWhere('employee_name_en', 'LIKE', '%'.$request->employee_name.'%');
-                }
-
-                if ($request->employee_name && $request->employee_id) {
-                    $dataUser = User::with('role')->with('department')
-                    ->where('number_employee', '=', $request->employee_id)
-                    ->where('employee_name_kh', 'LIKE', '%'.$request->employee_name.'%')
-                    ->where('employee_name_en', 'LIKE', '%'.$request->employee_name.'%');
-                }
+                $dataUser = User::with('role')->with('department')->with('position')->with('branch')->with('positiontype')
+                ->when($request->emp_status, function ($query, $emp_status) {
+                    if ($emp_status == "resign_reason") {
+                        $query->with("resignStatus");
+                        $query->whereNotIn('emp_status',['1','2','10','Probation','Upcoming']); 
+                    }else if($emp_status == "FDC"){
+                        $query->whereIn('emp_status', ['1','10']);
+                    }else{
+                        $query->where('emp_status', $emp_status);
+                    }
+                })
+                ->when($request->employee_id, function ($query, $employee_id) {
+                    $query->where('number_employee', 'LIKE', '%'.$employee_id.'%');
+                })
+                ->when($request->employee_name, function ($query, $employee_name) {
+                    $query->where('employee_name_en', 'LIKE', '%'.$employee_name.'%');
+                    $query->orWhere('employee_name_kh', 'LIKE', '%'.$employee_name.'%');
+                });
                 return $dataUser->get();
             }else{
-                return User::with('role')->with('department')->whereIn('emp_status',['1','10','2','3','4','5','6','7','8','9','Probation','Upcoming'])->get();
+                return User::with('role')->with('department')->whereNot('emp_status',null)->get();
             }
         } else {
             return User::where('role_id',Auth::user()->role_id)

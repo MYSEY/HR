@@ -1,11 +1,11 @@
-<div class="tab-pane active show" id="tab_candidate_resume" role="tabpanel">
+<div class="tab-pane active show" id="tbl_candidate_resume" role="tabpanel">
     <div class="row">
         <div class="col-md-12">
             <div class="table-responsive">
                 <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                     <div class="row">
                         <div class="col-sm-12">
-                            <table class="table table-striped custom-table mb-0 datatable dataTable no-footer"
+                            <table class="table table-striped custom-table mb-0 datatable dataTable no-footer tbl_signed_contract"
                                 id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
                                 <thead>
                                     <tr>
@@ -24,6 +24,7 @@
                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Role: activate to sort column ascending" style="width: 80.8125px;">Phone Allowance</th>
                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending" style="width: 218.762px;">Date Of Birth</th>
                                         <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending" style="width: 87.1125px;">Join Date</th>
+                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Role: activate to sort column ascending" style="width: 135.163px;">Loan</th>
                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Role: activate to sort column ascending" style="width: 135.163px;">Status</th>
                                         <th class="text-end no-sort sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Action: activate to sort column ascending" style="width: 50.825px;">Action</th>
                                     </tr>
@@ -64,21 +65,24 @@
                                                     <td>{{$item->DOB ?? ''}}</td>
                                                     <td>{{$item->joinOfDate}}</td>
                                                     <td>
+                                                        @if ($item->is_loan == '1')
+                                                            <span style="font-size: 13px" class="badge bg-inverse-danger">Yes</span>
+                                                        @elseif($item->is_loan == '0')
+                                                            <span style="font-size: 13px" class="badge bg-inverse-success">No</span>
+                                                        @endif
+                                                    </td>
+                                                    <td>
                                                         <div class="dropdown action-label">
                                                             @if ($item->emp_status=='Upcoming')
-                                                            <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
-                                                                <i class="fa fa-dot-circle-o text-success"></i>
-                                                                <span>{{ $item->emp_status }}</span>
-                                                            </a>
-                                                            @elseif ($item->emp_status=='Probation')
                                                                 <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
                                                                     <i class="fa fa-dot-circle-o text-success"></i>
                                                                     <span>{{ $item->emp_status }}</span>
                                                                 </a>
                                                             @endif
                                                             @if (Auth::user()->RolePermission == 'Administrator')
-                                                                <div class="dropdown-menu dropdown-menu-right" id="btn-emp-status">
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-id="Probation" href="#">
+                                                                <div class="dropdown-menu dropdown-menu-right btn-emp-status" id="btn-emp-status">
+                                                                    <input type="text" name="" class="join_date" value="{{$item->date_of_commencement}}" hidden>
+                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-id="Probation" href="#">
                                                                         <i class="fa fa-dot-circle-o text-success"></i> Probation
                                                                     </a>
                                                                     <a class="dropdown-item" data-emp-id="{{$item->id}}" data-id="Cancel" href="#">
@@ -112,14 +116,14 @@
         </div>
     </div>
 </div>
-<div class="tab-pane show" id="tab_probations" role="tabpanel">
+<div class="tab-pane show" id="tbl_probations" role="tabpanel">
     <div class="row">
         <div class="col-md-12">
             <div class="table-responsive">
                 <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                     <div class="row">
                         <div class="col-sm-12">
-                            <table class="table table-striped custom-table datatable dataTable no-footer tbl-short-list"
+                            <table class="table table-striped custom-table datatable dataTable no-footer tbl_probation"
                                 id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
                                 <thead>
                                     <tr>
@@ -139,6 +143,7 @@
                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending" style="width: 218.762px;">Date Of Birth</th>
                                         <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending" style="width: 87.1125px;">Join Date</th>
                                         <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending" style="width: 87.1125px;">Past Date</th>
+                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Role: activate to sort column ascending" style="width: 135.163px;">Loan</th>
                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Role: activate to sort column ascending" style="width: 135.163px;">Status</th>
                                         <th class="text-end no-sort sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Action: activate to sort column ascending" style="width: 50.825px;">Action</th>
                                     </tr>
@@ -180,65 +185,24 @@
                                                     <td>{{$item->joinOfDate}}</td>
                                                     <td>{{$item->PassDate}}</td>
                                                     <td>
+                                                        @if ($item->is_loan == '1')
+                                                            <span style="font-size: 13px" class="badge bg-inverse-danger">Yes</span>
+                                                        @elseif($item->is_loan == '0')
+                                                            <span style="font-size: 13px" class="badge bg-inverse-success">No</span>
+                                                        @else
+                                                            
+                                                        @endif
+                                                    </td>
+                                                    <td>
                                                         <div class="dropdown action-label">
                                                             @if ($item->emp_status=='Probation')
                                                                 <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
                                                                     <i class="fa fa-dot-circle-o text-success"></i>
                                                                     <span>{{ $item->emp_status }}</span>
                                                                 </a>
-                                                            @elseif ($item->emp_status=='1')
-                                                                <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
-                                                                    <i class="fa fa-dot-circle-o text-info"></i>
-                                                                    <span>FDC-1</span>
-                                                                </a>
-                                                            @elseif ($item->emp_status=='10')
-                                                                <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
-                                                                    <i class="fa fa-dot-circle-o text-info"></i>
-                                                                    <span>FDC-2</span>
-                                                                </a>
-                                                            @elseif ($item->emp_status=='2')
-                                                                <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
-                                                                    <i class="fa fa-dot-circle-o text-danger"></i>
-                                                                    <span>UDC</span>
-                                                                </a>
-                                                            @elseif ($item->emp_status=='3')
-                                                                <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
-                                                                    <i class="fa fa-dot-circle-o text-dark"></i>
-                                                                    <span>Resignation</span>
-                                                                </a>
-                                                            @elseif ($item->emp_status=='4')
-                                                                <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
-                                                                    <i class="fa fa-dot-circle-o text-dark"></i>
-                                                                    <span>Termination</span>
-                                                                </a>
-                                                            @elseif ($item->emp_status=='5')
-                                                                <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
-                                                                    <i class="fa fa-dot-circle-o text-dark"></i>
-                                                                    <span>Death</span>
-                                                                </a>
-                                                            @elseif ($item->emp_status=='6')
-                                                                <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
-                                                                    <i class="fa fa-dot-circle-o text-dark"></i>
-                                                                    <span>Retired</span>
-                                                                </a>
-                                                            @elseif ($item->emp_status=='7')
-                                                                <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
-                                                                    <i class="fa fa-dot-circle-o text-dark"></i>
-                                                                    <span>Lay off</span>
-                                                                </a>
-                                                            @elseif ($item->emp_status=='8')
-                                                                <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
-                                                                    <i class="fa fa-dot-circle-o text-dark"></i>
-                                                                    <span>Suspension</span>
-                                                                </a>
-                                                            @elseif ($item->emp_status=='9')
-                                                                <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
-                                                                    <i class="fa fa-dot-circle-o text-dark"></i>
-                                                                    <span>Fall Probation</span>
-                                                                </a>
                                                             @endif
                                                             @if (Auth::user()->RolePermission == 'Administrator')
-                                                                <div class="dropdown-menu dropdown-menu-right" id="btn-emp-status">
+                                                                <div class="dropdown-menu dropdown-menu-right btn-emp-status" id="btn-emp-status">
                                                                     <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="1" href="#">
                                                                         <i class="fa fa-dot-circle-o text-success"></i> FDC-1
                                                                     </a>
@@ -297,14 +261,14 @@
         </div>
     </div>
 </div>
-<div class="tab-pane show" id="tab_fdc" role="tabpanel">
+<div class="tab-pane show" id="tbl_fdc" role="tabpanel">
     <div class="row">
         <div class="col-md-12">
             <div class="table-responsive">
                 <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                     <div class="row">
                         <div class="col-sm-12">
-                            <table class="table table-striped custom-table datatable dataTable no-footer tbl-not-short-list"
+                            <table class="table table-striped custom-table datatable dataTable no-footer tbl_fdc"
                                 id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
                                 <thead>
                                     <tr>
@@ -368,28 +332,17 @@
                                                     <td>{{$item->FDCStartDate}}</td>
                                                     <td>{{$item->FDCEndDate}}</td>
                                                     <td>
-                                                        @if ($item->EmployeeIsLoan == 'Yes')
-                                                            <a class="btn btn-white btn-sm" href="#" aria-expanded="false">
-                                                                <i class="fa fa-dot-circle-o text-success"></i>
-                                                                <span>{{$item->EmployeeIsLoan}}</span>
-                                                            </a>
-                                                        @elseif($item->EmployeeIsLoan == 'No')
-                                                            <a class="btn btn-white btn-sm" href="#" aria-expanded="false">
-                                                                <i class="fa fa-dot-circle-o text-danger"></i>
-                                                                <span>{{$item->EmployeeIsLoan}}</span>
-                                                            </a>
+                                                        @if ($item->is_loan == '1')
+                                                            <span style="font-size: 13px" class="badge bg-inverse-danger">Yes</span>
+                                                        @elseif($item->is_loan == '0')
+                                                            <span style="font-size: 13px" class="badge bg-inverse-success">No</span>
                                                         @else
                                                             
                                                         @endif
                                                     </td>
                                                     <td>
                                                         <div class="dropdown action-label">
-                                                            @if ($item->emp_status=='Probation')
-                                                                <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
-                                                                    <i class="fa fa-dot-circle-o text-success"></i>
-                                                                    <span>{{ $item->emp_status }}</span>
-                                                                </a>
-                                                            @elseif ($item->emp_status=='1')
+                                                            @if ($item->emp_status=='1')
                                                                 <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
                                                                     <i class="fa fa-dot-circle-o text-info"></i>
                                                                     <span>FDC-1</span>
@@ -399,53 +352,13 @@
                                                                     <i class="fa fa-dot-circle-o text-info"></i>
                                                                     <span>FDC-2</span>
                                                                 </a>
-                                                            @elseif ($item->emp_status=='2')
-                                                                <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
-                                                                    <i class="fa fa-dot-circle-o text-danger"></i>
-                                                                    <span>UDC</span>
-                                                                </a>
-                                                            @elseif ($item->emp_status=='3')
-                                                                <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
-                                                                    <i class="fa fa-dot-circle-o text-dark"></i>
-                                                                    <span>Resignation</span>
-                                                                </a>
-                                                            @elseif ($item->emp_status=='4')
-                                                                <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
-                                                                    <i class="fa fa-dot-circle-o text-dark"></i>
-                                                                    <span>Termination</span>
-                                                                </a>
-                                                            @elseif ($item->emp_status=='5')
-                                                                <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
-                                                                    <i class="fa fa-dot-circle-o text-dark"></i>
-                                                                    <span>Death</span>
-                                                                </a>
-                                                            @elseif ($item->emp_status=='6')
-                                                                <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
-                                                                    <i class="fa fa-dot-circle-o text-dark"></i>
-                                                                    <span>Retired</span>
-                                                                </a>
-                                                            @elseif ($item->emp_status=='7')
-                                                                <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
-                                                                    <i class="fa fa-dot-circle-o text-dark"></i>
-                                                                    <span>Lay off</span>
-                                                                </a>
-                                                            @elseif ($item->emp_status=='8')
-                                                                <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
-                                                                    <i class="fa fa-dot-circle-o text-dark"></i>
-                                                                    <span>Suspension</span>
-                                                                </a>
-                                                            @elseif ($item->emp_status=='9')
-                                                                <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
-                                                                    <i class="fa fa-dot-circle-o text-dark"></i>
-                                                                    <span>Fall Probation</span>
-                                                                </a>
                                                             @endif
                                                             @if (Auth::user()->RolePermission == 'Administrator')
-                                                                <div class="dropdown-menu dropdown-menu-right" id="btn-emp-status">
+                                                                <div class="dropdown-menu dropdown-menu-right btn-emp-status" id="btn-emp-status">
                                                                     <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="1" href="#">
                                                                         <i class="fa fa-dot-circle-o text-success"></i> FDC-1
                                                                     </a>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="12" href="#">
+                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="10" href="#">
                                                                         <i class="fa fa-dot-circle-o text-success"></i> FDC-2
                                                                     </a>
                                                                     <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="2" href="#">
@@ -500,14 +413,14 @@
         </div>
     </div>
 </div>
-<div class="tab-pane show" id="tab_udc" role="tabpanel">
+<div class="tab-pane show" id="tbl_udc" role="tabpanel">
     <div class="row">
         <div class="col-md-12">
             <div class="table-responsive">
                 <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                     <div class="row">
                         <div class="col-sm-12">
-                            <table class="table table-striped custom-table datatable dataTable no-footer tbl-result"
+                            <table class="table table-striped custom-table datatable dataTable no-footer tbl-udc "
                                 id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
                                 <thead>
                                     <tr>
@@ -567,18 +480,12 @@
                                                     <td>$ <a href="#">{{$item->phone_allowance == null ? '0.00' : $item->phone_allowance}}</a></td>
                                                     <td>{{$item->DOB ?? ''}}</td>
                                                     <td>{{$item->joinOfDate}}</td>
-                                                    <td>{{$item->FDCEndDate}}</td>
+                                                    <td>{{$item->FDCStartDate}}</td>
                                                     <td>
-                                                        @if ($item->EmployeeIsLoan == 'Yes')
-                                                            <a class="btn btn-white btn-sm" href="#" aria-expanded="false">
-                                                                <i class="fa fa-dot-circle-o text-success"></i>
-                                                                <span>{{$item->EmployeeIsLoan}}</span>
-                                                            </a>
-                                                        @elseif($item->EmployeeIsLoan == 'No')
-                                                            <a class="btn btn-white btn-sm" href="#" aria-expanded="false">
-                                                                <i class="fa fa-dot-circle-o text-danger"></i>
-                                                                <span>{{$item->EmployeeIsLoan}}</span>
-                                                            </a>
+                                                        @if ($item->is_loan == '1')
+                                                            <span style="font-size: 13px" class="badge bg-inverse-danger">Yes</span>
+                                                        @elseif($item->is_loan == '0')
+                                                            <span style="font-size: 13px" class="badge bg-inverse-success">No</span>
                                                         @else
                                                             
                                                         @endif
@@ -587,50 +494,12 @@
                                                         <div class="dropdown action-label">
                                                             @if ($item->emp_status=='2')
                                                                 <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
-                                                                    <i class="fa fa-dot-circle-o text-danger"></i>
+                                                                    <i class="fa fa-dot-circle-o text-dark"></i>
                                                                     <span>UDC</span>
-                                                                </a>
-                                                            @elseif ($item->emp_status=='3')
-                                                                <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
-                                                                    <i class="fa fa-dot-circle-o text-dark"></i>
-                                                                    <span>Resignation</span>
-                                                                </a>
-                                                            @elseif ($item->emp_status=='4')
-                                                                <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
-                                                                    <i class="fa fa-dot-circle-o text-dark"></i>
-                                                                    <span>Termination</span>
-                                                                </a>
-                                                            @elseif ($item->emp_status=='5')
-                                                                <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
-                                                                    <i class="fa fa-dot-circle-o text-dark"></i>
-                                                                    <span>Death</span>
-                                                                </a>
-                                                            @elseif ($item->emp_status=='6')
-                                                                <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
-                                                                    <i class="fa fa-dot-circle-o text-dark"></i>
-                                                                    <span>Retired</span>
-                                                                </a>
-                                                            @elseif ($item->emp_status=='7')
-                                                                <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
-                                                                    <i class="fa fa-dot-circle-o text-dark"></i>
-                                                                    <span>Lay off</span>
-                                                                </a>
-                                                            @elseif ($item->emp_status=='8')
-                                                                <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
-                                                                    <i class="fa fa-dot-circle-o text-dark"></i>
-                                                                    <span>Suspension</span>
-                                                                </a>
-                                                            @elseif ($item->emp_status=='9')
-                                                                <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
-                                                                    <i class="fa fa-dot-circle-o text-dark"></i>
-                                                                    <span>Fall Probation</span>
                                                                 </a>
                                                             @endif
                                                             @if (Auth::user()->RolePermission == 'Administrator')
                                                                 <div class="dropdown-menu dropdown-menu-right" id="btn-emp-status">
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="2" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-warning"></i> UDC
-                                                                    </a>
                                                                     <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="3" href="#">
                                                                         <i class="fa fa-dot-circle-o text-danger"></i> Resignation
                                                                     </a>
@@ -680,14 +549,14 @@
         </div>
     </div>
 </div>
-<div class="tab-pane show" id="tab_reject" role="tabpanel">
+<div class="tab-pane show" id="tbl_reject" role="tabpanel">
     <div class="row">
         <div class="col-md-12">
             <div class="table-responsive">
                 <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                     <div class="row">
                         <div class="col-sm-12">
-                            <table class="table table-striped custom-table datatable dataTable no-footer tbl-signed-contract"
+                            <table class="table table-striped custom-table datatable dataTable no-footer tbl_reason"
                                 id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
                                 <thead>
                                     <tr>
@@ -716,7 +585,7 @@
                                 <tbody>
                                     @if (count($data)>0)
                                         @foreach ($data as $item)
-                                            @if ($item->emp_status != "Upcoming" && $item->emp_status != "Probation" && $item->emp_status != "1" && $item->emp_status != "2")
+                                            @if ($item->emp_status != "Upcoming" && $item->emp_status != "Probation" && $item->emp_status != "1" && $item->emp_status != "2" && $item->emp_status != "10")
                                                 <tr class="odd">
                                                     <td class="ids">{{$item->id}}</td>
                                                     <td class="sorting_1">
@@ -751,16 +620,10 @@
                                                     <td>{{$item->ResignDates}}</td>
                                                     <td>{{$item->EmployeeResignReason == null ? $item->resign_reason : $item->EmployeeResignReason}}</td>
                                                     <td>
-                                                        @if ($item->EmployeeIsLoan == 'Yes')
-                                                            <a class="btn btn-white btn-sm" href="#" aria-expanded="false">
-                                                                <i class="fa fa-dot-circle-o text-success"></i>
-                                                                <span>{{$item->EmployeeIsLoan}}</span>
-                                                            </a>
-                                                        @elseif($item->EmployeeIsLoan == 'No')
-                                                            <a class="btn btn-white btn-sm" href="#" aria-expanded="false">
-                                                                <i class="fa fa-dot-circle-o text-danger"></i>
-                                                                <span>{{$item->EmployeeIsLoan}}</span>
-                                                            </a>
+                                                        @if ($item->is_loan == '1')
+                                                            <span style="font-size: 13px" class="badge bg-inverse-danger">Yes</span>
+                                                        @elseif($item->is_loan == '0')
+                                                            <span style="font-size: 13px" class="badge bg-inverse-success">No</span>
                                                         @else
                                                             
                                                         @endif
@@ -768,40 +631,21 @@
                                                     <td>
                                                         <div class="dropdown action-label">
                                                             @if ($item->emp_status=='3')
-                                                                <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
-                                                                    <i class="fa fa-dot-circle-o text-danger"></i>
-                                                                    <span>Resignation</span>
-                                                                </a>
+                                                                <span style="font-size: 13px" class="badge bg-inverse-danger">Resignation</span>
                                                             @elseif ($item->emp_status=='4')
-                                                                <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
-                                                                    <i class="fa fa-dot-circle-o text-danger"></i>
-                                                                    <span>Termination</span>
-                                                                </a>
+                                                                <span style="font-size: 13px" class="badge bg-inverse-danger">Termination</span>
                                                             @elseif ($item->emp_status=='5')
-                                                                <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
-                                                                    <i class="fa fa-dot-circle-o text-danger"></i>
-                                                                    <span>Death</span>
-                                                                </a>
+                                                                <span style="font-size: 13px" class="badge bg-inverse-danger">Death</span>
                                                             @elseif ($item->emp_status=='6')
-                                                                <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
-                                                                    <i class="fa fa-dot-circle-o text-danger"></i>
-                                                                    <span>Retired</span>
-                                                                </a>
+                                                                <span style="font-size: 13px" class="badge bg-inverse-danger">Retired</span>
                                                             @elseif ($item->emp_status=='7')
-                                                                <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
-                                                                    <i class="fa fa-dot-circle-o text-danger"></i>
-                                                                    <span>Lay off</span>
-                                                                </a>
+                                                                <span style="font-size: 13px" class="badge bg-inverse-danger">Lay off</span>
                                                             @elseif ($item->emp_status=='8')
-                                                                <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
-                                                                    <i class="fa fa-dot-circle-o text-danger"></i>
-                                                                    <span>Suspension</span>
-                                                                </a>
+                                                                <span style="font-size: 13px" class="badge bg-inverse-danger">Suspension</span>
                                                             @elseif ($item->emp_status=='9')
-                                                                <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
-                                                                    <i class="fa fa-dot-circle-o text-danger"></i>
-                                                                    <span>Fall Probation</span>
-                                                                </a>
+                                                                <span style="font-size: 13px" class="badge bg-inverse-danger">Fall Probation</span>
+                                                            @elseif ($item->emp_status=='Cancel')
+                                                                <span style="font-size: 13px" class="badge bg-inverse-danger">Cancel</span>
                                                             @endif
                                                         </div>
                                                     </td>
@@ -829,3 +673,275 @@
         </div>
     </div>
 </div>
+<script type="text/javascript">
+    $(function(){
+        var tab_status = 1;
+        $("#tab_candidate_resume, #tab_probation, #tab_fdc, #tab_udc, #tab_reason").on("click", function() {
+            tab_status = $(this).attr('data-tab-id');
+        });
+        $(".submit-btn").on("click", function(){
+            $(this).prop('disabled', true);
+            $(".btn-txt").hide();
+            $(".loading-icon").css('display', 'block');
+            let filter = {
+                number_employee: $("#number_employee").val(),
+                employee_name: $("#employee_name").val(),
+            };
+            showDatabytab(tab_status, filter);
+        });
+    });
+    function showDatabytab(tab, filter){
+        let data = {
+            "_token": "{{ csrf_token() }}",
+        };
+        if (tab == 1) {
+            data.emp_status = "Upcoming";
+        }else if (tab == 2) {
+            data.emp_status = "Probation";
+        }else if (tab == 3) {
+            data.emp_status = 'FDC';
+        }else if (tab == 4) {
+            data.emp_status = "2";
+        }else if (tab == 5) {
+            data.emp_status = "resign_reason";
+        };
+        data.employee_id = filter.number_employee ? filter.number_employee : null;
+        data.employee_name = filter.employee_name ? filter.employee_name: null;
+        $.ajax({
+            type: "POST",
+            url: "{{url('users')}}",
+            data,
+            dataType: "JSON",
+            success: function (response) {
+                $(".submit-btn").prop('disabled', false);
+                $(".btn-txt").show();
+                $(".loading-icon").css('display', 'none');
+                var data = response.data;
+                var tr = '';
+                if (data) {
+                    data.map((emp) => {
+                        let tag_a = '';
+                        if (emp.profile != null) {
+                            tag_a = '<a href="{{asset("/uploads/images")}}/'+(emp.profile)+'" class="avatar">'+
+                                        '<img alt="" src="{{asset("/uploads/images")}}/'+(emp.profile)+'">'+
+                                    '</a>';
+                        }else {
+                            tag_a = '<a href="{{asset("admin/img/defuals/default-user-icon.png")}}">'+
+                                    '<img alt="" src="{{asset("admin/img/defuals/default-user-icon.png")}}">'+
+                                '</a>';
+                        };
+                        let DOB = moment(emp.date_of_birth).format('D-MMM-YYYY')
+                        let joinOfDate = moment(emp.date_of_commencement).format('D-MMM-YYYY')
+                        let PassDate = moment(emp.fdc_date).format('D-MMM-YYYY')
+                        let fdc_end = moment(emp.fdc_end).format('D-MMM-YYYY')
+                        let is_loan = '';
+                        if (emp.is_loan == 1) {
+                            is_loan = '<span style="font-size: 13px" class="badge bg-inverse-danger">Yes</span>';
+                        }else{
+                            is_loan = '<span style="font-size: 13px" class="badge bg-inverse-success">No</span>';
+                        };
+                        let all_status ='';
+                        let emp_status = "";
+                        let status_color = "";
+                        let td = "";
+                        let btn_edit = '';
+                        let resign_status_td ='<td>'+(emp.resign_status ? emp.resign_status.name_english : emp.resign_reason)+'</td>';
+                        all_status = '<div class="dropdown-menu dropdown-menu-right btn-emp-status" id="btn-emp-status">'+
+                                '<a class="dropdown-item" data-emp-id="'+(emp.id)+'" data-start-date="'+(emp.fdc_date)+'" data-end-date="'+(emp.fdc_end)+'" data-id="1" href="#">'+
+                                '<i class="fa fa-dot-circle-o text-success"></i> FDC-1'+
+                                '</a>'+
+                                '<a class="dropdown-item" data-emp-id="'+(emp.id)+'" data-start-date="'+(emp.fdc_date)+'" data-end-date="'+(emp.fdc_end)+'" data-id="12" href="#">'+
+                                    '<i class="fa fa-dot-circle-o text-success"></i> FDC-2'+
+                                '</a>'+
+                                '<a class="dropdown-item" data-emp-id="'+(emp.id)+'" data-start-date="'+(emp.fdc_date)+'" data-end-date="'+(emp.fdc_end)+'" data-id="2" href="#">'+
+                                    '<i class="fa fa-dot-circle-o text-warning"></i> UDC'+
+                                '</a>'+
+                                '<a class="dropdown-item" data-emp-id="'+(emp.id)+'" data-start-date="'+(emp.fdc_date)+'" data-end-date="'+(emp.fdc_end)+'" data-id="3" href="#">'+
+                                    '<i class="fa fa-dot-circle-o text-danger"></i> Resignation'+
+                                '</a>'+
+                                '<a class="dropdown-item" data-emp-id="'+(emp.id)+'" data-start-date="'+(emp.fdc_date)+'" data-end-date="'+(emp.fdc_end)+'" data-id="4" href="#">'+
+                                    '<i class="fa fa-dot-circle-o text-danger"></i> Termination'+
+                                '</a>'+
+                                '<a class="dropdown-item" data-emp-id="'+(emp.id)+'" data-start-date="'+(emp.fdc_date)+'" data-end-date="'+(emp.fdc_end)+'" data-id="5" href="#">'+
+                                    '<i class="fa fa-dot-circle-o text-danger"></i> Death'+
+                                '</a>'+
+                                '<a class="dropdown-item" data-emp-id="'+(emp.id)+'" data-start-date="'+(emp.fdc_date)+'" data-end-date="'+(emp.fdc_end)+'" data-id="6" href="#">'+
+                                    '<i class="fa fa-dot-circle-o text-danger"></i> Retired'+
+                                '</a>'+
+                                '<a class="dropdown-item" data-emp-id="'+(emp.id)+'" data-start-date="'+(emp.fdc_date)+'" data-end-date="'+(emp.fdc_end)+'" data-id="7" href="#">'+
+                                    '<i class="fa fa-dot-circle-o text-danger"></i> Lay off'+
+                                '</a>'+
+                                '<a class="dropdown-item" data-emp-id="'+(emp.id)+'" data-start-date="'+(emp.fdc_date)+'" data-end-date="'+(emp.fdc_end)+'" data-id="8" href="#">'+
+                                    '<i class="fa fa-dot-circle-o text-danger"></i> Suspension'+
+                                '</a>'+
+                                '<a class="dropdown-item" data-emp-id="'+(emp.id)+'" data-start-date="'+(emp.fdc_date)+'" data-end-date="'+(emp.fdc_end)+'" data-id="9" href="#">'+
+                                    '<i class="fa fa-dot-circle-o text-danger"></i> Fall Probation'+
+                                '</a>'+
+                            '</div>';
+                        if (emp.emp_status =="Upcoming") {
+                            emp_status = emp.emp_status;
+                            status_color = "text-success";
+                            resign_status_td ="";
+                            is_loan = "";
+                            all_status = '<div class="dropdown-menu dropdown-menu-right btn-emp-status" id="btn-emp-status">'+
+                                '<input type="text" name="" class="join_date" value="{{$item->date_of_commencement}}" hidden>'+
+                                '<a class="dropdown-item" data-emp-id="'+(emp.id)+'" data-start-date="'+(emp.fdc_date)+'" data-id="Probation" href="#">'+
+                                    '<i class="fa fa-dot-circle-o text-success"></i> Probation'+
+                                '</a>'+
+                                '<a class="dropdown-item" data-emp-id="'+(emp.id)+'" data-id="Cancel" href="#">'+
+                                    '<i class="fa fa-dot-circle-o text-danger"></i> Cancel'+
+                                '</a>'+
+                            '</div>';
+                            btn_edit = '<a class="dropdown-item userUpdate" data-id="'+(emp.id)+'"><i class="fa fa-pencil m-r-5"></i> Edit</a>';
+                        }else if (emp.emp_status == "Probation") {
+                            emp_status = "Probation";
+                            status_color = "text-success";
+                            resign_status_td ="";
+                            btn_edit = '<a class="dropdown-item userUpdate" data-id="'+(emp.id)+'"><i class="fa fa-pencil m-r-5"></i> Edit</a>';
+                        }else if(emp.emp_status == '1'){
+                            emp_status = "FDC-1";
+                            status_color = "text-info";
+                            td = '<td>'+(fdc_end)+'</td>';
+                            resign_status_td ="";
+                            btn_edit = '<a class="dropdown-item userUpdate" data-id="'+(emp.id)+'"><i class="fa fa-pencil m-r-5"></i> Edit</a>';
+                        }else if(emp.emp_status == '10'){
+                            emp_status = "FDC-2";
+                            status_color = "text-info";
+                            td = '<td>'+(fdc_end)+'</td>';
+                            resign_status_td ="";
+                            btn_edit = '<a class="dropdown-item userUpdate" data-id="'+(emp.id)+'"><i class="fa fa-pencil m-r-5"></i> Edit</a>';
+                        }else if(emp.emp_status == '2'){
+                            emp_status = "UDC";
+                            status_color = "text-danger";
+                            resign_status_td ="";
+                            all_status = '<div class="dropdown-menu dropdown-menu-right btn-emp-status" id="btn-emp-status">'+
+                                '<a class="dropdown-item" data-emp-id="'+(emp.id)+'" data-start-date="'+(emp.fdc_date)+'" data-end-date="'+(emp.fdc_end)+'" data-id="3" href="#">'+
+                                    '<i class="fa fa-dot-circle-o text-danger"></i> Resignation'+
+                                '</a>'+
+                                '<a class="dropdown-item" data-emp-id="'+(emp.id)+'" data-start-date="'+(emp.fdc_date)+'" data-end-date="'+(emp.fdc_end)+'" data-id="4" href="#">'+
+                                    '<i class="fa fa-dot-circle-o text-danger"></i> Termination'+
+                                '</a>'+
+                                '<a class="dropdown-item" data-emp-id="'+(emp.id)+'" data-start-date="'+(emp.fdc_date)+'" data-end-date="'+(emp.fdc_end)+'" data-id="5" href="#">'+
+                                    '<i class="fa fa-dot-circle-o text-danger"></i> Death'+
+                                '</a>'+
+                                '<a class="dropdown-item" data-emp-id="'+(emp.id)+'" data-start-date="'+(emp.fdc_date)+'" data-end-date="'+(emp.fdc_end)+'" data-id="6" href="#">'+
+                                    '<i class="fa fa-dot-circle-o text-danger"></i> Retired'+
+                                '</a>'+
+                                '<a class="dropdown-item" data-emp-id="'+(emp.id)+'" data-start-date="'+(emp.fdc_date)+'" data-end-date="'+(emp.fdc_end)+'" data-id="7" href="#">'+
+                                    '<i class="fa fa-dot-circle-o text-danger"></i> Lay off'+
+                                '</a>'+
+                                '<a class="dropdown-item" data-emp-id="'+(emp.id)+'" data-start-date="'+(emp.fdc_date)+'" data-end-date="'+(emp.fdc_end)+'" data-id="8" href="#">'+
+                                    '<i class="fa fa-dot-circle-o text-danger"></i> Suspension'+
+                                '</a>'+
+                                '<a class="dropdown-item" data-emp-id="'+(emp.id)+'" data-start-date="'+(emp.fdc_date)+'" data-end-date="'+(emp.fdc_end)+'" data-id="9" href="#">'+
+                                    '<i class="fa fa-dot-circle-o text-danger"></i> Fall Probation'+
+                                '</a>'+
+                            '</div>';
+                            btn_edit = '<a class="dropdown-item userUpdate" data-id="'+(emp.id)+'"><i class="fa fa-pencil m-r-5"></i> Edit</a>';
+                        }else if(emp.emp_status == '3'){
+                            emp_status = "Resignation";
+                            status_color = "text-danger";
+                            all_status = "";
+                        }else if(emp.emp_status == '4'){
+                            emp_status = "Termination";
+                            status_color = "text-danger";
+                            all_status = "";
+                        }else if(emp.emp_status == '5'){
+                            emp_status = "Death";
+                            status_color = "text-danger";
+                            all_status = "";
+                        }else if(emp.emp_status == '6'){
+                            emp_status = "Retired";
+                            status_color = "text-danger";
+                            status_color = "text-danger";
+                            all_status = "";
+                        }else if(emp.emp_status == '7'){
+                            emp_status = "Lay off";
+                            status_color = "text-danger";
+                        }else if(emp.emp_status == '8'){
+                            emp_status = "Suspension";
+                            status_color = "text-danger";
+                            all_status = "";
+                        }else if(emp.emp_status == '9'){
+                            emp_status = "Fall Probation";
+                            status_color = "text-danger";
+                            all_status = "";
+                        }else if(emp.emp_status == 'Cancel'){
+                            emp_status = "Cancel";
+                            status_color = "text-danger";
+                            all_status = "";
+                            is_loan = "";
+                        };
+                        let empStatus = '<div class="dropdown action-label">'+
+                                        '<a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">'+
+                                            '<i class="fa fa-dot-circle-o '+(status_color)+'"></i>'+
+                                            '<span>'+(emp_status)+'</span>'+
+                                        '</a>'+
+                                        (all_status)+
+                                    '</div>';
+                        if (all_status =="" && emp.emp_status !="Upcoming") {
+                            empStatus = '<span style="font-size: 13px" class="badge bg-inverse-danger">'+(emp_status)+'</span>';
+                        }
+
+                        tr +='<tr class="odd">'+
+                                '<td class="ids">'+(emp.id)+'</td>'+
+                                '<td class="sorting_1">'+
+                                    '<h2 class="table-avatar">'+
+                                        (tag_a)+
+                                    '</h2>'+
+                                '</td>'+
+                                '<td><a href="{{url("employee/profile")}}/'+(emp.id)+'">'+(emp.number_employee)+'</a></td>'+
+                                '<td><a href="{{url("employee/profile")}}/'+(emp.id)+'">'+(emp.employee_name_kh)+'</a></td>'+
+                                '<td><a href="{{url("employee/profile")}}/'+(emp.id)+'">'+(emp.employee_name_en)+'</a></td>'+
+                                '<td>'+(emp.position ? emp.position.name_english: "")+'</td>'+
+                                '<td>'+(emp.department ? emp.department.name_english: "")+'</td>'+
+                                '<td>'+(emp.branch ? emp.branch.branch_name_en: "")+'</td>'+
+                                '<td>'+(emp.personal_phone_number)+'</td>'+
+                                '<td>'+
+                                    '<span class="badge bg-inverse-success">'+(emp.role == null ? "" : emp.role.name )+'</span>'+
+                                '</td>'+
+                                '<td>'+(emp.positiontype ? emp.positiontype.name_english : "")+'</td>'+
+                                '<td>$ <a href="#">'+(emp.basic_salary)+'</a></td>'+
+                                '<td>$ <a href="#">'+(emp.phone_allowance == null ? '0.00' : emp.phone_allowance)+'</a></td>'+
+                                '<td>'+(DOB)+'</td>'+
+                                '<td>'+(joinOfDate)+'</td>'+
+                                '<td>'+(PassDate)+'</td>'+
+                                (td)+
+                                (resign_status_td)+
+                                '<td>'+
+                                    (is_loan)+
+                                '</td>'+
+                                '<td>'+
+                                    (empStatus)+
+                                '</td>'+
+                                '<td class="text-end">'+
+                                    '<div class="dropdown dropdown-action">'+
+                                        '<a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">'+
+                                        '<i  class="material-icons">more_vert</i>'+
+                                        '</a>'+
+                                        '<div class="dropdown-menu dropdown-menu-right">'+
+                                            (btn_edit)+
+                                            '<a class="dropdown-item userDelete" href="#" data-toggle="modal" data-id="'+(emp.id)+'" data-target="#delete_user"><i class="fa fa-trash-o m-r-5"></i> Delete</a>'+
+                                        '</div>'+
+                                    '</div>'+
+                                '</td>'+
+                        '</tr>';
+                    });
+                }else{
+                    tr = '<tr><td colspan=19 align="center">ពុំមានទិន្នន័យសម្រាប់បង្ហាញ</td></tr>';
+                };
+                if (tab == 1) {
+                    $(".tbl_signed_contract tbody").html(tr);
+                }else if (tab == 2) {
+                    $(".tbl_probation tbody").html(tr);
+                }else if (tab == 3) {
+                    $(".tbl_fdc tbody").html(tr);
+                }else if (tab == 4) {
+                    $(".tbl-udc tbody").html(tr);
+                }else if (tab == 5) {
+                    $(".tbl_reason tbody").html(tr);
+                };
+            }
+        });
+    }
+</script>

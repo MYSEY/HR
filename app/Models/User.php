@@ -148,6 +148,10 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Branchs::class ,'branch_id');
     }
+    public function resignStatus(){
+        return $this->belongsTo(Option::class,'resign_reason', 'id');
+    }
+
     public function educations()
     {
         return $this->hasMany(Education::class, 'employee_id', 'id');

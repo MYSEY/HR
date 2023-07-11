@@ -450,7 +450,6 @@
                 dataType: "JSON",
                 success: function (response) {
                     if (response.success) {
-                        console.log(response.success);
                         $('#e_id').val(response.success.id);
                         $('#e_employee_id').val(response.success.employee_id);
                         $('#e_name').val(response.success.name);

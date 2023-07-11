@@ -1,9 +1,6 @@
 <?php
 
 namespace App\Http\Controllers\Admins;
-use DateTime;
-use DatePeriod;
-use DateInterval;
 use App\Models\Bank;
 use App\Models\Role;
 use App\Models\User;
@@ -74,6 +71,18 @@ class UserController extends Controller
                                         ));
     }
 
+    public function filter(Request $request){
+        try{
+            $data = $this->employeeRepo->getAllUsers($request);
+            return response()->json([
+                'data'=>$data,
+            ]);
+        }catch(\Exception $e){
+            DB::rollback();
+            Toastr::error('Update employee fail','Error');
+            return redirect()->back();
+        }
+    }
     public function showDetailBirthday (Request $request){
         $from_date = null;
         $to_date = null;
@@ -81,7 +90,7 @@ class UserController extends Controller
         $to_date = Carbon::now()->addDays(14)->format('d');
         $month = Carbon::now()->format('m');
 
-        $data =  User::whereIn('emp_status',['1','2','3','4','5','6','7','8','9','Probation'])
+        $data =  User::whereNot('emp_status', null)
         ->whereDay('date_of_birth', '>=', $from_date)
         ->whereDay('date_of_birth', '<=', $to_date)
         ->whereMonth('date_of_birth', $month)
@@ -273,11 +282,6 @@ class UserController extends Controller
                     'resign_reason' => $request->resign_reason
                 ]);
             }else if($request->emp_status == "Probation"){
-                User::where('id',$request->id)->update([
-                    'emp_status' => $request->emp_status,
-                    'resign_reason' => $request->resign_reason
-                ]);
-            }else if($request->emp_status == "Cancel"){
                 User::where('id',$request->id)->update([
                     'emp_status' => $request->emp_status,
                     'resign_reason' => $request->resign_reason

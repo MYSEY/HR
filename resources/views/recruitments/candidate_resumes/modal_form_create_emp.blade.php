@@ -472,6 +472,7 @@
                         icon: true
                     }).show();
                     showDatas(4);
+                    window.location.replace("{{ URL('recruitment/candidate-resume/list') }}");
                 }).catch(function(error) {
                     new Noty({
                         title: "",

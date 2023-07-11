@@ -32,7 +32,7 @@
             </div>
         </div>
         @if (Auth::user()->RolePermission == 'Administrator')
-            <form action="{{url('users')}}" method="POST" class="needs-validation" novalidate>
+            <form class="needs-validation" novalidate>
                 @csrf
                 <div class="row filter-row">
                     <div class="col-sm-6 col-md-3"> 
@@ -68,7 +68,7 @@
                         </div>
                     </div> --}}
                     <div class="col-sm-6 col-md-2">
-                        <button type="submit" class="btn btn-success w-100 submit-btn" data-dismiss="modal">
+                        <button type="button" class="btn btn-success w-100 submit-btn" data-dismiss="modal">
                             <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading </span>
                             <span class="btn-txt">{{ __('Search') }}</span>
                         </button>
@@ -91,19 +91,19 @@
                     <div class="col-md-12">
                         <ul class="nav nav-tabs nav-tabs-bottom" role="tablist">
                             <li class="nav-item" role="presentation">
-                                <a class="nav-link active" data-bs-toggle="tab" href="#tab_candidate_resume" aria-selected="true" role="tab">Signed Contracts</a>
+                                <a class="nav-link active" data-bs-toggle="tab" id="tab_candidate_resume" href="#tbl_candidate_resume" aria-selected="true" role="tab" data-tab-id="1">Signed Contracts</a>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <a class="nav-link" data-bs-toggle="tab" id="" href="#tab_probations" aria-selected="false" role="tab" data-tab-id="2" tabindex="-1">Probations</a>
+                                <a class="nav-link" data-bs-toggle="tab" id="tab_probation" href="#tbl_probations" aria-selected="false" role="tab" data-tab-id="2" tabindex="-1">Probations</a>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <a class="nav-link" data-bs-toggle="tab" id="" href="#tab_fdc" aria-selected="false" role="tab" data-tab-id="2" tabindex="-1">FDC</a>
+                                <a class="nav-link" data-bs-toggle="tab" id="tab_fdc" href="#tbl_fdc" aria-selected="false" role="tab" data-tab-id="3" tabindex="-1">FDC</a>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <a class="nav-link" data-bs-toggle="tab" id="" href="#tab_udc" aria-selected="false" data-tab-id="3" role="tab" tabindex="-1">UDC</a>
+                                <a class="nav-link" data-bs-toggle="tab" id="tab_udc" href="#tbl_udc" aria-selected="false" data-tab-id="4" role="tab" tabindex="-1">UDC</a>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <a class="nav-link" data-bs-toggle="tab" id="" href="#tab_reject" aria-selected="false" data-tab-id="4" role="tab" tabindex="-1">Rejects</a>
+                                <a class="nav-link" data-bs-toggle="tab" id="tab_reason" href="#tbl_reject" aria-selected="false" data-tab-id="5" role="tab" tabindex="-1">Staff Resigns</a>
                             </li>
                         </ul>
                         <div class="tab-content">
@@ -111,14 +111,12 @@
                         </div>
                     </div>
                 </div>
-            {{-- </div>
-        </div> --}}
+            </div>
+        </div>
 
-        
         @include('users.modal_form_create')
         @include('users.modal_form_edit')
        
-
         <!-- Delete User Modal -->
         <div class="modal custom-modal fade" id="delete_user" role="dialog">
             <div class="modal-dialog modal-dialog-centered">
@@ -245,7 +243,7 @@
             $("#editUserModal").modal('hide')
         });
 
-        $('.userUpdate').on('click',function(){
+        $(document).on('click','.userUpdate', function(){
             $('#e_bank_name').html('<option selected value=""> </option>');
             
             $('#e_current_province').html('<option selected value="">--Select --</option>');
@@ -515,6 +513,9 @@
                 var emp_status = "Cancel Signed Contract";
             }
 
+            let join_date = $(".join_date").val();
+            let start_date = $(this).attr('data-start-date');
+            let end_date = $(this).attr('data-end-date');
             if (status == "Probation") {
                 $.confirm({
                     title: 'Employee Status!',
@@ -527,8 +528,14 @@
                             '</div>'+
                             '<div class="form-group">'+
                                 '<div class="form-group">'+
-                                    '<input type="hidden" class="form-control emp_status" id="" name="" value="'+status+'">'+
-                                    '<input type="hidden" class="form-control id" id="" name="" value="'+id+'">'+
+                                    '<label>Join Date <span class="text-danger">*</span></label>'+
+                                    '<input type="date" class="form-control start_date" value="'+join_date+'" disabled>'+
+                                    '<input type="hidden" class="form-control emp_status" value="'+status+'">'+
+                                    '<input type="hidden" class="form-control id" value="'+id+'">'+
+                                '</div>'+
+                                '<div class="form-group">'+
+                                    '<label>Pass Date <span class="text-danger">*</span></label>'+
+                                    '<input type="date" class="form-control end_dete" value="'+start_date+'" disabled>'+
                                 '</div>'+
                                 '<label>Reason</label>'+
                                 '<textarea class="form-control resign_reason"></textarea>'+
@@ -914,7 +921,7 @@
                             '<div class="form-group">'+
                                 '<div class="form-group">'+
                                     '<label>Date <span class="text-danger">*</span></label>'+
-                                    '<input type="date" class="form-control resign_date" id="" name="" value="">'+
+                                    '<input type="date" class="form-control resign_date">'+
                                     '<input type="hidden" class="form-control emp_status" id="" name="" value="'+status+'">'+
                                     '<input type="hidden" class="form-control id" id="" name="" value="'+id+'">'+
                                 '</div>'+
