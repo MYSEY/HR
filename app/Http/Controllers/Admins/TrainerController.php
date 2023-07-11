@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Trainer;
 use App\Models\User;
 use Brian2694\Toastr\Facades\Toastr;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -22,6 +23,53 @@ class TrainerController extends Controller
         $data = Trainer::with("employee")->get();
         $employee = User::whereIn("emp_status", ['1','2'])->get();
         return view('trainers.index', compact('data', 'employee'));
+    }
+    public function filter(Request $request)
+    {
+        try {
+            $from_date = null;
+            $to_date = null;
+            if ($request->from_date) {
+                $from_date = Carbon::createFromDate($request->from_date)->format('Y-m-d');
+            }
+            if ($request->to_date) {
+                $to_date = Carbon::createFromDate($request->to_date.' '.'23:59:59')->format('Y-m-d H:i:s');
+            }
+            $data = Trainer::join('users', 'trainers.employee_id', '=', 'users.id')
+            ->select(
+                'trainers.*', 
+                'users.employee_name_kh',
+                'users.employee_name_en',
+                'users.personal_phone_number',
+                'users.email as  user_email',
+                'users.remark as user_remark',
+            )
+            ->when($from_date, function ($query, $from_date) {
+                $query->where('trainers.created_at', '>=', $from_date);
+            })
+            ->when($to_date, function ($query, $to_date) {
+                $query->where('trainers.created_at','<=', $to_date);
+            })
+            ->when($request->trainer_type, function ($query, $trainer_type) {
+                $query->where('type', $trainer_type);
+            })
+            ->when($request->company_name, function ($query, $company_name) {
+                $query->where('company_name', 'LIKE', '%'.$company_name.'%');
+            })
+            ->when($request->trainer_name, function ($query, $trainer_name) {
+                $query->where('name_en', 'LIKE', '%'.$trainer_name.'%');
+                $query->orWhere('name_kh', 'LIKE', '%'.$trainer_name.'%');
+                $query->orWhere('employee_name_en', 'LIKE', '%'.$trainer_name.'%');
+                $query->orWhere('employee_name_kh', 'LIKE', '%'.$trainer_name.'%');
+            })
+            ->get();
+            return response()->json([
+                'success'=>$data,
+            ]);
+        } catch (\Throwable $exp) {
+            DB::rollback();
+            Toastr::error('Training created fail.','Error');
+        }
     }
 
     /**

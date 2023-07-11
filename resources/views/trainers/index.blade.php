@@ -1,4 +1,14 @@
 @extends('layouts.master')
+<style>
+    .filter-row .btn {
+        min-height: 38px !important;
+        padding: 10px !important;
+    }
+    .reset-btn{
+        /* background: #ffbc34 !important; */
+        color: #fff !important
+    }
+</style>
 @section('content')
     <div class="content container-fluid">
         <div class="page-header">
@@ -15,6 +25,62 @@
                 </div>
             </div>
         </div>
+        @if (Auth::user()->RolePermission == 'Administrator')
+            <form class="needs-validation" novalidate>
+                @csrf
+                
+                <div class="row filter-row">
+                    <div class="col-sm-2 col-md-2">
+                        <div class="form-group">
+                            <input class="form-control floating" type="text" id="trainer_name" placeholder="Name">
+                        </div>
+                    </div>
+                    <div class="col-sm-2 col-md-2">
+                        <div class="form-group">
+                            <input class="form-control floating" type="text" id="company_name" placeholder="Company Name">
+                        </div>
+                    </div>
+                    <div class="col-sm-2 col-md-2">
+                        <div class="form-group">
+                            <select class="select form-control" data-select2-id="select2-data-2-c0n2" id="trainer_type">
+                                <option value="" data-select2-id="select2-data-2-c0n2">All Type</option>
+                                <option value="1">Internal</option>
+                                <option value="2">External</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="col-sm-2 col-md-2">
+                        <div class="form-group">
+                            <div class="cal-icon">
+                                <input class="form-control floating datetimepicker" type="text" id="from_date"
+                                    placeholder="From Date">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-2 col-md-2">
+                        <div class="form-group">
+                            <div class="cal-icon">
+                                <input class="form-control floating datetimepicker" type="text" id="to_date"
+                                    placeholder="To Date">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-2 col-md-2">
+                        <div style="display: flex" class="float-end">
+                            <button type="button" class="btn btn-sm btn-success submit-btn me-2" id="btn_research">
+                                <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading</span>
+                                <span class="btn-txt">{{ __('Search') }}</span>
+                            </button>
+                            <button type="button" class="btn btn-sm btn-warning reset-btn">
+                                <span class="btn-text-reset">Reset</span>
+                                <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        @endif
         {!! Toastr::message() !!}
         <div class="row">
             <div class="col-md-12">
@@ -22,7 +88,7 @@
                     <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                         <div class="row">
                             <div class="col-sm-12">
-                                <table class="table table-striped custom-table mb-0 datatable dataTable no-footer"
+                                <table class="table table-striped custom-table mb-0 datatable dataTable no-footer btn_trainer"
                                     id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
                                     <thead>
                                         <tr>
@@ -87,10 +153,6 @@
                                                     </td>
                                                 </tr>
                                             @endforeach
-                                        @else
-                                            <tr>
-                                                <td colspan="11" style="text-align: center">No record to display</td>
-                                            </tr>
                                         @endif
                                     </tbody>
                                 </table>
@@ -331,6 +393,25 @@
             $(".trainer-internal").hide();
             $(".trainer-external").show();
         }
+        $(".reset-btn").on("click", function() {
+            $(this).prop('disabled', true);
+            $(".btn-text-reset").hide();
+            $("#btn-text-loading").css('display', 'block');
+            window.location.replace("{{ URL('/trainer/list') }}"); 
+        });
+        $("#btn_research").on("click", function (){
+            $(this).prop('disabled', true);
+            $(".btn-txt").hide();
+            $(".loading-icon").css('display', 'block');
+            let params = {
+                trainer_name: $("#trainer_name").val(),
+                company_name: $("#company_name").val(),
+                trainer_type: $("#trainer_type").val(),
+                from_date: $("#from_date").val(),
+                to_date: $("#to_date").val(),
+            };
+            showdatas(params);
+        });
         $("#change-type, #e_change_type").on("change", function(){
             let id = $("#change-type").val();
             let e_id = $("#e_change_type").val();
@@ -470,4 +551,84 @@
             });
         });
     });
+    function showdatas(params) {
+        $.ajax({
+            type: "post",
+            url: "{{ url('trainer/list') }}",
+            data: {
+                "_token": "{{ csrf_token() }}",
+                trainer_name: params.trainer_name ? params.trainer_name : null,
+                company_name: params.company_name ? params.company_name : null,
+                trainer_type: params.trainer_type ? params.trainer_type : null,
+                from_date: params.from_date ? params.from_date : null,
+                to_date: params.to_date ? params.to_date : null,
+            },
+            dataType: "JSON",
+            success: function(response) {
+                let data =  response.success;
+                console.log("data: ", data);
+                $("#btn_research").prop('disabled', false);
+                $(".btn-txt").show();
+                $(".loading-icon").css('display', 'none');
+                var tr = "";
+                if (data.length > 0) {
+                    data.map((row) =>{
+                        let created_at = moment(row.created_at).format('D-MMM-YYYY');
+                        let trainer_status = "";
+                        let status_color = "";
+                        if (row.status=='1') {
+                            status_color = "success";
+                            trainer_status = "Active";
+                        }else{
+                            status_color = "danger";
+                            trainer_status = "Inactive";
+                            
+                        }
+                        tr += '<tr class="odd">'+
+                            '<td class="sorting_1 ids">'+(row.id)+'</td>'+
+                            '<td class="type">'+(row.type == 1 ? "Internal": "External")+'</td>'+
+                            '<td class="company_name">'+(row.company_name ? row.company_name : "")+'</td>'+
+                            '<td class="name_kh">'+(row.type == 1 ? row.employee_name_kh : row.name_kh)+'</td>'+
+                            '<td class="name_en">'+(row.type == 1 ? row.employee_name_en : row.name_en)+'</td>'+
+                            '<td class="number_phone">'+(row.type == 1 ? row.personal_phone_number : row.number_phone)+'</td>'+
+                            '<td class="email">'+(row.type == 1 ? row.user_email ? row.user_email: ""  : row.email ? row.email : "")+'</td>'+
+                            '<td >'+(row.type == 1 ? row.user_remark ? row.user_remark : "" : row.remark ? row.remark : "")+'</td>'+
+                            '<td>'+
+                                '<input type="hidden" class="status" value="'+(row.status)+'">'+
+                                '<div class="dropdown action-label">'+
+                                    '<a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">'+
+                                        '<i class="fa fa-dot-circle-o text-'+(status_color)+'"></i>'+
+                                        '<span>'+(trainer_status)+'</span>'+
+                                    '</a>'+
+                                    '<div class="dropdown-menu dropdown-menu-right" id="btn-status">'+
+                                        '<a class="dropdown-item" data-id="'+(row.id)+'" data-name="1" data-status-old="'+(row.status)+'" href="#">'+
+                                            '<i class="fa fa-dot-circle-o text-success"></i> Active'+
+                                        '</a>'+
+                                        '<a class="dropdown-item" data-id="'+(row.id)+'" data-name="0" data-status-old="'+(row.status)+'" href="#">'+
+                                            '<i class="fa fa-dot-circle-o text-danger"></i> Inactive'+
+                                        '</a>'+
+                                    '</div>'+
+                                '</div>'+
+                            '</td>'+
+                            '<td>'+
+                                (created_at)+
+                            '</td>'+
+                            '<td class="text-end">'+
+                                '<div class="dropdown dropdown-action">'+
+                                    '<a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>'+
+                                    '<div class="dropdown-menu dropdown-menu-right">'+
+                                        '<a class="dropdown-item update" data-toggle="modal" data-id="'+(row.id)+'" data-target="#edit_trainer"><i class="fa fa-pencil m-r-5"></i> Edit</a>'+
+                                        '<a class="dropdown-item delete" href="#" data-toggle="modal" data-id="'+(row.id)+'" data-target="#delete_trainer"><i class="fa fa-trash-o m-r-5"></i> Delete</a>'+
+                                    '</div>'+
+                                '</div>'+
+                            '</td>'+
+                        '</tr>';
+                    });
+                }else{
+                    var tr = '<tr><td colspan=11 align="center">ពុំមានទិន្នន័យសម្រាប់បង្ហាញ</td></tr>';
+                }
+                $(".btn_trainer tbody").html(tr);
+            }
+        });
+    }
 </script>
