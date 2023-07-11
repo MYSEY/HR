@@ -1,10 +1,12 @@
 @extends('layouts.master')
 <style>
     .filter-row .btn {
-        min-height: 44px !important;
-        padding: 9px !important;
+        min-height: 38px !important;
+        padding: 10px !important;
     }
-
+    .reset-btn{
+        color: #fff !important
+    }
     .ui-datepicker-calendar {
         display: none;
     }
@@ -41,21 +43,21 @@
     </div>
     @if (Auth::user()->RolePermission == 'Administrator')
         <div class="row filter-row">
-            <div class="col-sm-6 col-md-3">
+            <div class="col-sm-2 col-md-2">
                 <div class="form-group form-focus select-focus">
                     <input type="text" class="form-control" name="employee_id" id="employee_id" placeholder="Employee ID"
                         value="{{ old('employee_id') }}">
                     <label class="focus-label">Filter</label>
                 </div>
             </div>
-            <div class="col-sm-6 col-md-3">
+            <div class="col-sm-2 col-md-2">
                 <div class="form-group form-focus select-focus">
                     <input type="text" class="form-control" name="employee_name" id="employee_name"
                         placeholder="Employee Name" value="{{ old('employee_name') }}">
                     <label class="focus-label">Filter</label>
                 </div>
             </div>
-            <div class="col-sm-6 col-md-3 col-lg-3 col-xl-2 col-12">
+            <div class="col-sm-2 col-md-2 col-lg-3 col-xl-2 col-12">
                 <div class="form-group form-focus focused">
                     <div class="cal-icon">
                         <input type="text" class="form-control floating datetimepicker" name="from_date" id="from_date" value="">
@@ -63,7 +65,7 @@
                     <label class="focus-label">From Date</label>
                 </div>
             </div>
-            <div class="col-sm-6 col-md-3 col-lg-3 col-xl-2 col-12">
+            <div class="col-sm-2 col-md-2 col-lg-3 col-xl-2 col-12">
                 <div class="form-group form-focus focused">
                     <div class="cal-icon">
                         <input type="text" class="form-control floating datetimepicker" name="to_date" id="to_date" value="">
@@ -72,11 +74,17 @@
                 </div>
             </div>
            
-            <div class="col-sm-6 col-md-2">
-                <button class="btn btn-success w-100 btn-search" data-dismiss="modal" >
-                    <span class="btn-text-search">Search</span>
-                    <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading</span>
-                </button>
+            <div class="col-sm-4 col-md-4">
+                <div style="display: flex" class="float-end">
+                    <button class="btn btn-sm btn-success btn-search me-2" data-dismiss="modal" >
+                        <span class="btn-text-search">Search</span>
+                        <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading</span>
+                    </button>
+                    <button type="button" class="btn btn-sm btn-warning reset-btn">
+                        <span class="btn-text-reset">Reset</span>
+                        <span id="btn-reset-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading</span>
+                    </button>
+                </div>
             </div>
         </div>
     @endif
@@ -220,6 +228,13 @@
         var currentYear = 2010;
         var newYear = moment(new Date()).format('YYYY');
         var currentDiff = moment(new Date()).diff(new Date(`01/01/${currentYear}`), 'years');
+
+        $(".reset-btn").on("click", function() {
+            $(this).prop('disabled', true);
+            $(".btn-text-reset").hide();
+            $("#btn-reset-text-loading").css('display', 'block');
+            window.location.replace("{{ URL('motor-rentel/list') }}"); 
+        });
 
         $("#product_year, #e_product_year").on('change', function() {
             $('#e_expired_year').html('<option value=""> </option>');

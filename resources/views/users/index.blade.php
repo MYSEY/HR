@@ -1,11 +1,10 @@
 @extends('layouts.master')
 <style>
     .filter-row .btn {
-        min-height: 44px !important;
-        padding: 9px !important;
+        min-height: 38px !important;
+        padding: 10px !important;
     }
     .reset-btn{
-        background: #ffbc34 !important;
         color: #fff !important
     }
 </style>
@@ -35,16 +34,17 @@
             <form class="needs-validation" novalidate>
                 @csrf
                 <div class="row filter-row">
-                    <div class="col-sm-6 col-md-3"> 
+                    <div class="col-sm-2 col-md-2"> 
                         <div class="form-group">
                             <input type="text" class="form-control" name="employee_id" id="number_employee" placeholder="Employee ID" value="{{old('number_employee')}}">
                         </div>
                     </div>
-                    <div class="col-sm-6 col-md-3"> 
+                    <div class="col-sm-2 col-md-2"> 
                         <div class="form-group">
                             <input type="text" class="form-control" name="employee_name" id="employee_name" placeholder="Employee name" value="{{old('employee_name')}}">
                         </div>
                     </div>
+
                     {{-- <div class="col-sm-6 col-md-3"> 
                         <div class="form-group form-focus select-focus focused">
                             <select class="select form-control floating select2-hidden-accessible" data-select2-id="select2-data-1-cyfe" name="position_id" tabindex="-1" aria-hidden="true">
@@ -67,17 +67,17 @@
                             <label class="focus-label">Department</label>
                         </div>
                     </div> --}}
-                    <div class="col-sm-6 col-md-2">
-                        <button type="button" class="btn btn-success w-100 submit-btn" data-dismiss="modal">
-                            <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading </span>
-                            <span class="btn-txt">{{ __('Search') }}</span>
-                        </button>
-                    </div>
-                    <div class="col-sm-6 col-md-2">
-                        <button type="button" class="btn w-100 reset-btn">
-                            <span class="btn-text-reset">Reset</span>
-                            <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading</span>
-                        </button>
+                    <div class="col-sm-8 col-md-8">
+                        <div style="display: flex" class="float-end">
+                            <button type="button" class="btn btn-sm btn-success submit-btn me-2">
+                                <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading </span>
+                                <span class="btn-txt">{{ __('Search') }}</span>
+                            </button>
+                            <button type="button" class="btn btn-sm btn-warning reset-btn">
+                                <span class="btn-text-reset">Reset</span>
+                                <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </form>
