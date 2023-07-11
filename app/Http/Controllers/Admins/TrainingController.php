@@ -7,6 +7,7 @@ use App\Models\Trainer;
 use App\Models\Training;
 use App\Models\User;
 use Brian2694\Toastr\Facades\Toastr;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -70,6 +71,38 @@ class TrainingController extends Controller
         return view('training.training_detail', compact('training','trainer','employees'));
     }
 
+    public function filter(Request $request)
+    {
+        try {
+            $start_date = null;
+            $end_date = null;
+            if ($request->start_date) {
+                $start_date = Carbon::createFromDate($request->start_date)->format('Y-m-d H:i:s');
+            }
+            if ($request->end_date) {
+                $end_date = Carbon::createFromDate($request->end_date.' '.'23:59:59')->format('Y-m-d H:i:s');
+            }
+            $data = Training::when($request->training_type, function ($query, $training_type) {
+                $query->where('training_type', $training_type);
+            })
+            ->when($request->course_name, function ($query, $course_name) {
+                $query->where('course_name', 'LIKE', '%'.$course_name.'%');
+            })
+            ->when($start_date, function ($query, $start_date) {
+                $query->where('start_date', '>=', $start_date);
+            })
+            ->when($end_date, function ($query, $end_date) {
+                $query->where('end_date','<=', $end_date);
+            })
+            ->get();
+            return response()->json([
+                'success'=>$data,
+            ]);
+        } catch (\Throwable $exp) {
+            DB::rollback();
+            Toastr::error('Training created fail.','Error');
+        }
+    }
     /**
      * Show the form for creating a new resource.
      *
@@ -88,17 +121,17 @@ class TrainingController extends Controller
      */
     public function store(Request $request)
     {
-        // try {
+        try {
             $data = $request->all();
             $data['created_by'] = Auth::user()->id;
             Training::create($data);
             Toastr::success('Training created successfully.','Success');
             return redirect()->back();
             DB::commit();
-        // } catch (\Throwable $exp) {
-        //     DB::rollback();
-        //     Toastr::error('Training created fail.','Error');
-        // }
+        } catch (\Throwable $exp) {
+            DB::rollback();
+            Toastr::error('Training created fail.','Error');
+        }
     }
 
     /**

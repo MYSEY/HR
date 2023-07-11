@@ -180,6 +180,9 @@ class ReportsController extends Controller
         when($request->traing_type, function ($query, $traing_type) {
             $query->where('training_type', $traing_type);
         })
+        ->when($request->course_name, function ($query, $course_name) {
+            $query->where('course_name', $course_name);
+        })
         ->when($start_date, function ($query, $start_date) {
             $query->where('start_date', '>=', $start_date);
         })

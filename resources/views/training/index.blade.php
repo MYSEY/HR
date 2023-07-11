@@ -7,6 +7,14 @@
         /* visibility:hidden; */
         display: none !important
     }
+    .filter-row .btn {
+        min-height: 38px !important;
+        padding: 10px !important;
+    }
+    .reset-btn{
+        /* background: #ffbc34 !important; */
+        color: #fff !important
+    }
 </style>
 @section('content')
     <div class="content container-fluid">
@@ -25,6 +33,57 @@
                 </div>
             </div>
         </div>
+        @if (Auth::user()->RolePermission == 'Administrator')
+            <form class="needs-validation" novalidate>
+                @csrf
+                
+                <div class="row filter-row">
+                    <div class="col-sm-2 col-md-2">
+                        <div class="form-group">
+                            <input class="form-control floating" type="text" id="course_name" name="course_name" placeholder="Course Name">
+                        </div>
+                    </div>
+                    <div class="col-sm-2 col-md-2">
+                        <div class="form-group">
+                            <select class="select form-control" data-select2-id="select2-data-2-c0n2" id="training_type">
+                                <option value="" data-select2-id="select2-data-2-c0n2">All Training Type</option>
+                                <option value="1">Internal</option>
+                                <option value="2">External</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="col-sm-2 col-md-2">
+                        <div class="form-group">
+                            <div class="cal-icon">
+                                <input class="form-control floating datetimepicker" type="text" id="start_date" name="start_date"
+                                    placeholder="Start Date">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-2 col-md-2">
+                        <div class="form-group">
+                            <div class="cal-icon">
+                                <input class="form-control floating datetimepicker" type="text" id="end_date" name="end_date"
+                                    placeholder="End Date">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-4 col-md-4">
+                        <div style="display: flex" class="float-end">
+                            <button type="button" class="btn btn-sm btn-success submit-btn me-2" id="btn_research">
+                                <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading</span>
+                                <span class="btn-txt">{{ __('Search') }}</span>
+                            </button>
+                            <button type="button" class="btn btn-sm btn-warning reset-btn">
+                                <span class="btn-text-reset">Reset</span>
+                                <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        @endif
         {!! Toastr::message() !!}
         <div class="row">
             <div class="col-md-12">
@@ -32,7 +91,7 @@
                     <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                         <div class="row">
                             <div class="col-sm-12">
-                                <table class="table table-striped custom-table mb-0 datatable dataTable no-footer"
+                                <table class="table table-striped custom-table mb-0 datatable dataTable no-footer btl_training"
                                     id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
                                     <thead>
                                         <tr>
@@ -133,10 +192,6 @@
                                                     </td>
                                                 </tr>
                                             @endforeach
-                                        @else
-                                            <tr>
-                                                <td colspan="10" style="text-align: center">No record to display</td>
-                                            </tr>
                                         @endif
                                     </tbody>
                                 </table>
@@ -186,6 +241,24 @@
 <script src="{{asset('/admin/js/validation-field.js')}}"></script>
 <script>
     $(function() {
+        $(".reset-btn").on("click", function() {
+            $(this).prop('disabled', true);
+            $(".btn-text-reset").hide();
+            $("#btn-text-loading").css('display', 'block');
+            window.location.replace("{{ URL('/training/list') }}"); 
+        });
+        $("#btn_research").on("click", function (){
+            $(this).prop('disabled', true);
+            $(".btn-txt").hide();
+            $(".loading-icon").css('display', 'block');
+            let params = {
+                course_name: $("#course_name").val(),
+                training_type: $("#training_type").val(),
+                start_date: $("#start_date").val(),
+                end_date: $("#end_date").val(),
+            };
+            showdatas(params);
+        });
         $("#btn_add_training").on("click", function() {
             $('#training_type').html('');
             $('#trainer').html('');
@@ -224,7 +297,6 @@
                 $('#e_duration').attr('required', true);
             }
         });
-        
         $("#training_type, #e_training_type").on("change", function() {
             $('#trainer').html('');
             $('#e_trainer').html('');
@@ -288,7 +360,7 @@
                 }
             });
         });
-        $('.update').on('click', function() {
+        $(document).on('click','.update', function(){
             $('#trainer').html('');
             $('#e_trainer').html('');
             $('#e_status').html('<option value=""></option>');
@@ -403,4 +475,75 @@
             $('.e_id').val(_this.find('.ids').text());
         });
     });
+    function showdatas(params) {
+        $.ajax({
+            type: "post",
+            url: "{{ url('training/list') }}",
+            data: {
+                "_token": "{{ csrf_token() }}",
+                course_name: params.course_name ? params.course_name : null,
+                training_type: params.training_type ? params.training_type : null,
+                start_date: params.start_date ? params.start_date : null,
+                end_date: params.end_date ? params.end_date : null,
+            },
+            dataType: "JSON",
+            success: function(response) {
+                let data =  response.success;
+                $("#btn_research").prop('disabled', false);
+                $(".btn-txt").show();
+                $(".loading-icon").css('display', 'none');
+                var tr = "";
+                if (data.length > 0) {
+                    data.map((row) =>{
+                        let start_date = moment(row.start_date).format('D-MMM-YYYY')
+                        let end_date = moment(row.end_date).format('D-MMM-YYYY')
+                        tr += '<tr class="odd">'+
+                                '<td class="sorting_1 ids">'+(row.id)+'</td>'+
+                                '<td class="training_type_name">'+(row.training_type == 1 ? "Internal" : "External")+'</td>'+
+                                '<td class="course_name">'+(row.course_name)+'</td>'+
+                                '<td>'+
+                                    '<ul class="team-members">'+
+                                        '<li class="dropdown avatar-dropdown">'+
+                                            '<a href="#" class="all-users dropdown-toggle" aria-expanded="false">'+(row.trainer_id.length)+'</a>'+
+                                        '</li>'+
+                                    '</ul>'+
+                                '</td>'+
+                                '<td>'+
+                                    '<ul class="team-members">'+
+                                        '<li class="dropdown avatar-dropdown">'+
+                                            '<a href="#" class="all-users dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">'+(row.employee_id.length)+'</a>'+
+                                        '</li>'+
+                                    '</ul>'+
+                                '</td>'+
+                                '<td class="sorting_1">'+
+                                    (start_date)+' - '+(end_date)+
+                                '</td>'+
+                                
+                                '<td>$'+(row.cost_price ? row.cost_price : 0)+'</td>'+
+                                '<td>'+(row.status == 1 ? "Yes" : "No")+' </td>'+
+                                '<td>'+(row.remark ? row.remark: "")+'</td>'+
+                                '<td class="text-end">'+
+                                    '<div class="dropdown dropdown-action">'+
+                                        '<a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">'+
+                                            '<i class="material-icons">more_vert</i>'+
+                                        '</a>'+
+                                        '<div class="dropdown-menu dropdown-menu-right">'+
+                                            '<a class="dropdown-item detail" href="{{url("/training/detail")}}/'+(row.id)+'">'+
+                                                '<i class="fa fa-eye m-r-5"></i> View Details</a>'+
+                                            '<a class="dropdown-item update" data-toggle="modal" data-id="'+(row.id)+'" data-target="#edit_training">'+
+                                                '<i class="fa fa-pencil m-r-5"></i> Edit</a>'+
+                                            '<a class="dropdown-item delete" href="#" data-toggle="modal" data-id="'+(row.id)+'" data-target="#delete_training">'+
+                                                '<i class="fa fa-trash-o m-r-5"></i> Delete</a>'+
+                                        '</div>'+
+                                    '</div>'+
+                                '</td>'+
+                            '</tr>';
+                    });
+                }else{
+                    var tr = '<tr><td colspan=10 align="center">ពុំមានទិន្នន័យសម្រាប់បង្ហាញ</td></tr>';
+                }
+                $(".btl_training tbody").html(tr);
+            }
+        });
+    }
 </script>
