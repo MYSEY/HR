@@ -6582,7 +6582,7 @@ textarea.form-control {
   flex-direction: row;
 }
 .dash-section .dash-info-list .dash-card-container .dash-card-content p {
-  font-size: 22px;
+  font-size: 16px;
   margin-bottom: 0;
 }
 @media (max-width: 768px) {

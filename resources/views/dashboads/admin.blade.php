@@ -279,7 +279,7 @@
                 </div>
             </div>
         </div>
-         <div class="row">
+        <div class="row">
             {{-- <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
                 <div class="card dash-widget">
                     <div class="card-body">
@@ -426,20 +426,82 @@
         </div>
         @include('dashboads.chart_board')
         <?php 
-            $merchants = Session::get('mas');
+            $userUpComming = Session::get('dataUpComming');
+            $userProbation = Session::get('dataProbation');
+            $userFdc = Session::get('dataFdc');
         ?>
-        @if ($merchants)
-            <div class="modal" role="dialog" id="showNotyfication" aria-hidden="true">
+        @if ($userUpComming)
+            <div id="showNotyfication" class="modal custom-modal fade" style="display: none;" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-bs-dismiss="modal">×</button>
+                        </div>
                         <div class="modal-body">
-                            <div class="form-header">
-                                <h3>Delete</h3>
-                                <p>Are you sure want to delete?</p>
+                            <div class="row">
+                                <div class="col-md-12 col-sm-12 col-lg-12 col-xl-12">
+                                    <section class="dash-section">
+                                        <h1 class="dash-sec-title">TASK FOR TODAY</h1>
+                                        <div class="dash-sec-content">
+                                            @if ($userUpComming)
+                                                <div class="form-group">
+                                                    <label for="" class="text-danger">Pleas change status up coming to brobation</label>
+                                                    <div class="dash-info-list">
+                                                        <div class="dash-card">
+                                                            <div class="dash-card-container">
+                                                                <div class="dash-card-icon">
+                                                                    <i class="fa fa-user-plus"></i>
+                                                                </div>
+                                                                <div class="dash-card-content">
+                                                                    <p>{{$userUpComming}} People will be change to pass probation</p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endif
+                                            
+                                            @if ($userProbation)
+                                               <div class="form-group">
+                                                    <label for="" class="text-danger">Pleas change status brobation to fdc</label>
+                                                    <div class="dash-info-list">
+                                                        <div class="dash-card">
+                                                            <div class="dash-card-container">
+                                                                <div class="dash-card-icon">
+                                                                    <i class="fa fa-user-plus"></i>
+                                                                </div>
+                                                                <div class="dash-card-content">
+                                                                    <p>{{$userProbation}} People will be change to employee</p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                               </div>
+                                            @endif
+                                            @if ($userFdc)
+                                               <div class="form-group">
+                                                    <label for="" class="text-danger">Pleas change status fdc to udc</label>
+                                                    <div class="dash-info-list">
+                                                        <div class="dash-card">
+                                                            <div class="dash-card-container">
+                                                                <div class="dash-card-icon">
+                                                                    <i class="fa fa-user-plus"></i>
+                                                                </div>
+                                                                <div class="dash-card-content">
+                                                                    <p>{{$userFdc}} People will be change to employee</p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                               </div>
+                                            @endif
+                                        </div>
+                                    </section>
+                                </div>
                             </div>
-                            @foreach ($merchants as $merchant)
-                                <input type="hidden" id="hidden" value="{{$merchant->date_of_commencement}}">
-                            @endforeach 
+                            <input type="hidden" id="" class="hidden" value="{{$userUpComming}}">
+                            <input type="hidden" id="" class="hidden" value="{{$userProbation}}">
+                            <input type="hidden" id="" class="hidden" value="{{$userFdc}}">
                         </div>
                     </div>
                 </div>
@@ -450,9 +512,11 @@
 @include('includs.script')
 <script>
     $(function() {
-        if($('#hidden').val()){
-            $('#showNotyfication').modal('show');
-        }
+        $(".hidden").each(function(){
+            if($(this).val()){ 
+                $('#showNotyfication').modal('show');
+            }
+        });
         $.ajax({
             type: "GET",
             url: "{{ url('dashboad/show') }}",

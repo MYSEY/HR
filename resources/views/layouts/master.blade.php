@@ -32,6 +32,7 @@
     <link href="{{ asset('admin/css/daterangepicker.css') }}" rel="stylesheet" type="text/css">
 
     <link rel="stylesheet" href="{{ asset('admin/css/bootstrap-tagsinput.css') }}">
+    <link rel="stylesheet" href="{{ asset('admin/css/daterangepicker/daterangepicker.css') }}">
 
     {{-- <link rel="stylesheet" href="{{ asset('admin/css/summernote-bs4.css') }}"> --}}
 
