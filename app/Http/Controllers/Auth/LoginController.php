@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use App\Models\User;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
-use Illuminate\Support\Facades\Hash;
 
 class LoginController extends Controller
 {
@@ -53,6 +53,8 @@ class LoginController extends Controller
     // change password
     public function login(Request $request)
     {
+        $dataUser = User::where('date_of_commencement',Carbon::now()->format('Y-m-d'))->where('emp_status','Upcoming')->get();
+
         $change_password= "";
         $hashedPassword = User::select('employee_name_en','number_employee', 'password','email')->where('number_employee', $request->number_employee)->first();
         if($hashedPassword == null){
@@ -100,7 +102,8 @@ class LoginController extends Controller
         if (Auth::attempt(['number_employee' => $number_employee, 'password' => $password, 'status' => 'Active'])) {
             DB::table('activity_logs')->insert($activityLog);
             Toastr::success('Login successfully.', 'Success');
-            return redirect('dashboad/admin');
+            return redirect('dashboad/admin')->with(['mas'=>$dataUser]);
+            // return redirect('dashboad/admin');
         } elseif (Auth::attempt(['number_employee' => $number_employee, 'password' => $password, 'status' => null])) {
             DB::table('activity_logs')->insert($activityLog);
             Toastr::success('Login successfully.', 'Success');

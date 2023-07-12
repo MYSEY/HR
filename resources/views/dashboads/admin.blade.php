@@ -425,11 +425,34 @@
             </div>
         </div>
         @include('dashboads.chart_board')
+        <?php 
+            $merchants = Session::get('mas');
+        ?>
+        @if ($merchants)
+            <div class="modal" role="dialog" id="showNotyfication" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <div class="form-header">
+                                <h3>Delete</h3>
+                                <p>Are you sure want to delete?</p>
+                            </div>
+                            @foreach ($merchants as $merchant)
+                                <input type="hidden" id="hidden" value="{{$merchant->date_of_commencement}}">
+                            @endforeach 
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endif
     </div>
 @endsection
 @include('includs.script')
 <script>
     $(function() {
+        if($('#hidden').val()){
+            $('#showNotyfication').modal('show');
+        }
         $.ajax({
             type: "GET",
             url: "{{ url('dashboad/show') }}",

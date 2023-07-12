@@ -70,9 +70,10 @@ class ExchangeRateController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request)
     {
-        //
+        $data = ExchangeRate::where('id',$request->id)->first();
+        return response()->json(['success'=>$data]);
     }
 
     /**
@@ -88,7 +89,7 @@ class ExchangeRateController extends Controller
             ExchangeRate::where('id',$request->id)->update([
                 'amount_usd' => $request->amount_usd,
                 'amount_riel' => $request->amount_riel,
-                'description' => $request->description,
+                'change_date' => $request->change_date,
                 'updated_by' => Auth::user()->id 
             ]);
             Toastr::success('Exchange rate successfully.','Success');

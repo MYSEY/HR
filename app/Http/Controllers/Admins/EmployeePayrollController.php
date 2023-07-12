@@ -677,7 +677,6 @@ class EmployeePayrollController extends Controller
                 Payroll::create($data);
             }
             
-            //end function create Seniority
             Toastr::success('Created prayroll successfully.','Success');
             return redirect()->back();
             DB::commit();

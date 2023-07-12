@@ -172,6 +172,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('/exchange-rate/list', [ExchangeRateController::class,'index']);
     Route::post('/exchange-rate/store', [ExchangeRateController::class,'store']);
     Route::post('/exchange-rate/update', [ExchangeRateController::class,'update']);
+    Route::get('/exchange-rate/edit', [ExchangeRateController::class,'edit']);
     Route::post('/exchange-rate/delete', [ExchangeRateController::class,'destroy']);
     Route::post('/exchange-rate/status', [ExchangeRateController::class,'processing']);
 

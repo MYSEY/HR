@@ -212,8 +212,7 @@
                                     <label>US Dollar</label>
                                     <div class="input-group">
                                         <span class="input-group-text">$</span>
-                                        <input type="number" class="form-control" id="" name=""
-                                            placeholder="" value="1.00">
+                                        <input type="number" class="form-control" id="" name="" placeholder="" value="1.00">
                                     </div>
                                 </div>
                             </div>
@@ -222,8 +221,8 @@
                                     <label>Riels</label>
                                     <div class="input-group">
                                         <span class="input-group-text">៛</span>
-                                        <input type="number" class="form-control" id="exchange_rate" disabled name="exchange_rate" placeholder="" value="{{ $exChangeRate->amount_riel }}">
-                                        <input type="hidden" class="form-control" id="exchange_rate" name="exchange_rate" placeholder="" value="{{ $exChangeRate->amount_riel }}">
+                                        <input type="number" class="form-control" id="exchange_rate" disabled name="exchange_rate" placeholder="" value="{{$exChangeRate == null ? "" : $exChangeRate->amount_riel }}">
+                                        <input type="hidden" class="form-control" id="exchange_rate" name="exchange_rate" placeholder="" value="{{ $exChangeRate == null ? "" : $exChangeRate->amount_riel }}">
                                     </div>
                                 </div>
                             </div>
