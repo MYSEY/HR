@@ -140,7 +140,7 @@ function menu(){
             'child'=>[
                 [
                     'value'=>'Employee Report',
-                    'url'=>"employee/report",
+                    'url'=>"reports/employee-report",
                     'table'=>2,
                     'permission'=>1
                 ],

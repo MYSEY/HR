@@ -13,23 +13,18 @@ use App\Http\Controllers\Admins\HolidayController;
 use App\Http\Controllers\Admins\SettingController;
 use App\Http\Controllers\Admins\TrainerController;
 use App\Http\Controllers\Admins\DashboadController;
-use App\Http\Controllers\Admins\EmployeeController;
 use App\Http\Controllers\Admins\PositionController;
 use App\Http\Controllers\Admins\ProvinceController;
 use App\Http\Controllers\Admins\TrainingController;
 use App\Http\Controllers\Admins\DepartmentController;
 use App\Http\Controllers\Admins\PermissionController;
-use App\Http\Controllers\Admins\LeavesAdminController;
 use App\Http\Controllers\Admins\MotorRentelController;
 use App\Http\Controllers\Admins\ExchangeRateController;
 use App\Http\Controllers\Admins\TrainingTypeController;
 use App\Http\Controllers\Admins\PayrollReportController;
-use App\Http\Controllers\Admins\EmployeeReportController;
 use App\Http\Controllers\Admins\LeavesEmployeeController;
-use App\Http\Controllers\Admins\AttendanceAdminController;
 use App\Http\Controllers\Admins\EmployeePayrollController;
 use App\Http\Controllers\Admins\EmployeeProfileController;
-use App\Http\Controllers\Admins\AttendanceEmployeeController;
 use App\Http\Controllers\Admins\CandidateResumeController;
 use App\Http\Controllers\Admins\RecruitmentPlanController;
 use App\Http\Controllers\Admins\ReportsController;
@@ -74,8 +69,6 @@ Route::middleware(['auth:sanctum'])->group(function(){
     // Route::get('/attendance/employee', [AttendanceEmployeeController::class, 'index']);
     // Route::Resource('/leaves/admin', LeavesAdminController::class);
     Route::get('/leaves/employee', [LeavesEmployeeController::class,'index']);
-    Route::get('/employee/report',[EmployeeReportController::class,'index']);
-    Route::post('employee/report',[EmployeeReportController::class,'index']);
 
     Route::get('role', [RoleConroller::class,'index']);
     Route::post('role/store', [RoleConroller::class,'store']);
@@ -177,6 +170,8 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('/exchange-rate/status', [ExchangeRateController::class,'processing']);
 
     // route block reports
+    Route::get('/reports/employee-report',[ReportsController::class,'employee']);
+    Route::post('reports/employee-report',[ReportsController::class,'employee']);
     Route::get('/reports/payroll-report', [PayrollReportController::class,'index']);
     Route::get('/reports/motor-rentel-report', [PayrollReportController::class,'motorrentel']);
     Route::post('/reports/motor-rentel-report', [PayrollReportController::class,'motorrentel']);

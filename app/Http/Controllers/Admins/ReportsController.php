@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admins;
 
 use App\Http\Controllers\Controller;
 use App\Models\Branchs;
-use App\Models\Position;
 use App\Models\StaffPromoted;
 use App\Models\Trainer;
 use App\Models\Training;
@@ -15,14 +14,19 @@ use Illuminate\Http\Request;
 
 class ReportsController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
+    public function employee(Request $request){
+        $users = User::whereNot("emp_status", null)
+        ->when($request->emp_status, function ($query, $emp_status) {
+            $query->where('emp_status', $emp_status);
+        })
+        ->when($request->employee_id, function ($query, $employee_id) {
+            $query->where('number_employee', 'LIKE', '%'.$employee_id.'%');
+        })
+        ->when($request->employee_name, function ($query, $employee_name) {
+            $query->where('employee_name_en', 'LIKE', '%'.$employee_name.'%');
+            // $query->where('employee_name_kh', 'LIKE', '%'.$employee_name.'%');
+        })->get();
+        return view('reports.employee_report',compact('users'));
     }
     public function newStaff(Request $request){
         $from_date = null;
@@ -208,70 +212,5 @@ class ReportsController extends Controller
             $dataTrainings[] = $item;
         }
         return view('reports.training_report', compact("dataTrainings"));
-    }
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
     }
 }
