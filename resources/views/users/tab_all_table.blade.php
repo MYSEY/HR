@@ -679,10 +679,10 @@
         $("#tab_candidate_resume, #tab_probation, #tab_fdc, #tab_udc, #tab_reason").on("click", function() {
             tab_status = $(this).attr('data-tab-id');
         });
-        $(".submit-btn").on("click", function(){
+        $(".btn-search").on("click", function(){
             $(this).prop('disabled', true);
-            $(".btn-txt").hide();
-            $(".loading-icon").css('display', 'block');
+            $(".btn-search-txt").hide();
+            $(".search-loading-icon").css('display', 'block');
             let filter = {
                 number_employee: $("#number_employee").val(),
                 employee_name: $("#employee_name").val(),
@@ -713,9 +713,9 @@
             data,
             dataType: "JSON",
             success: function (response) {
-                $(".submit-btn").prop('disabled', false);
-                $(".btn-txt").show();
-                $(".loading-icon").css('display', 'none');
+                $(".btn-search").prop('disabled', false);
+                $(".btn-search-txt").show();
+                $(".search-loading-icon").css('display', 'none');
                 var data = response.data;
                 var tr = '';
                 if (data) {

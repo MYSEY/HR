@@ -69,9 +69,9 @@
                     </div> --}}
                     <div class="col-sm-8 col-md-8">
                         <div style="display: flex" class="float-end">
-                            <button type="button" class="btn btn-sm btn-success submit-btn me-2">
-                                <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading </span>
-                                <span class="btn-txt">{{ __('Search') }}</span>
+                            <button type="button" class="btn btn-sm btn-success btn-search me-2">
+                                <span class="search-loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading </span>
+                                <span class="btn-search-txt">{{ __('Search') }}</span>
                             </button>
                             <button type="button" class="btn btn-sm btn-warning reset-btn">
                                 <span class="btn-text-reset">Reset</span>
