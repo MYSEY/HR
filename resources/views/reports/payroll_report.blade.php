@@ -1,11 +1,32 @@
 @extends('layouts.master')
 <style>
     .filter-row .btn {
-        min-height: 44px !important;
-        padding: 9px !important;
+        min-height: 38px !important;
+        padding: 10px !important;
+    }
+
+    .reset-btn {
+        color: #fff !important
+    }
+    #filter_month {
+        position: relative;
+    }
+
+    input[type="month"]::-webkit-calendar-picker-indicator {
+        background-position: right;
+        background-size: auto;
+        cursor: pointer;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        top: 0;
+        height: auto;
+        width: auto;
     }
 </style>
 @section('content')
+<div class="content container-fluid">
     <div class="page-header">
         <div class="row align-items-center">
             <div class="col">
@@ -20,33 +41,37 @@
     
     <div class="content">
         @if (Auth::user()->RolePermission == 'Administrator')
-            <form action="{{url('report/search')}}" method="POST">
-                @csrf
+            <form>
+                {{-- @csrf --}}
                 <div class="row filter-row"> 
-                    <div class="col-sm-6 col-md-3">
-                        <div class="form-group form-focus select-focus">
-                            <input type="text" class="form-control" name="employee_name" id="employee_name" placeholder="Employee name" value="{{old('employee_name')}}">
-                            <label class="focus-label">Filter</label>
-                        </div>
-                    </div>
-                    <div class="col-sm-6 col-md-3 col-lg-3 col-xl-2 col-12">
-                        <div class="form-group form-focus focused">
-                            <div class="cal-icon">
-                                <input class="form-control floating datetimepicker" type="text">
-                            </div>
-                                <label class="focus-label">From</label>
-                        </div>
-                    </div>
-                    <div class="col-sm-6 col-md-3 col-lg-3 col-xl-2 col-12">
-                        <div class="form-group form-focus focused">
-                            <div class="cal-icon">
-                                <input class="form-control floating datetimepicker" type="text">
-                            </div>
-                            <label class="focus-label">To</label>
+                    <div class="col-sm-2 col-md-2"> 
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="employee_id" id="employee_id" placeholder="Employee ID" value="{{old('number_employee')}}">
                         </div>
                     </div>
                     <div class="col-sm-6 col-md-2">
-                        <button type="submit" class="btn btn-success w-100" data-dismiss="modal">Search</button>
+                        <div class="form-group ">
+                            <input type="text" class="form-control" name="employee_name" id="employee_name" placeholder="Employee Name" value="{{old('employee_name')}}">
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-2 col-lg-2 col-xl-2">
+                        <div class="form-group ">
+                            {{-- <div class="cal-icon"> --}}
+                                <input class="form-control" type="month" id="filter_month">
+                            {{-- </div> --}}
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-6">
+                        <div style="display: flex" class="float-end">
+                            <button type="button" class="btn btn-sm btn-success submit-btn me-2" data-dismiss="modal">
+                                <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading </span>
+                                <span class="btn-txt">{{ __('Search') }}</span>
+                            </button>
+                            <button type="button" class="btn btn-sm btn-warning reset-btn">
+                                <span class="btn-text-reset">Reset</span>
+                                <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </form>
@@ -56,16 +81,16 @@
                 <div class="col-sm-12">
                     <ul class="nav nav-tabs nav-tabs-bottom" role="tablist">
                         <li class="nav-item" role="presentation">
-                            <a class="nav-link active" data-bs-toggle="tab" href="#tab_basic_salary" aria-selected="true" role="tab">Basic Salary</a>
+                            <a class="nav-link active" data-bs-toggle="tab" id="tab_btl_basic_salary" href="#tab_basic_salary" aria-selected="true" role="tab" data-tab-id="1">Basic Salary</a>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <a class="nav-link" data-bs-toggle="tab" href="#tab_NSSF" aria-selected="false" role="tab" tabindex="-1">NSSF</a>
+                            <a class="nav-link" data-bs-toggle="tab" id="tab_btn_NSSF" href="#tab_NSSF" aria-selected="false" role="tab" tabindex="-1" data-tab-id="2">NSSF</a>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <a class="nav-link" data-bs-toggle="tab" href="#tab_Seniority" aria-selected="false" role="tab" tabindex="-1">Seniority Pay</a>
+                            <a class="nav-link" data-bs-toggle="tab" id="tab_btn_seniority" href="#tab_Seniority" aria-selected="false" role="tab" tabindex="-1" data-tab-id="3">Seniority Pay</a>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <a class="nav-link" data-bs-toggle="tab" href="#tab_Severance_pay" aria-selected="false" role="tab" tabindex="-1">Severance Pay</a>
+                            <a class="nav-link" data-bs-toggle="tab" id="tab_btn_severance_pay" href="#tab_Severance_pay" aria-selected="false" role="tab" tabindex="-1" data-tab-id="4">Severance Pay</a>
                         </li>
                     </ul>
                 </div>
@@ -80,7 +105,7 @@
                             <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                                 <div class="row">
                                     <div class="col-sm-12">
-                                        <table class="table table-striped custom-table datatable dataTable no-footer"
+                                        <table class="table table-striped custom-table datatable dataTable no-footer tbl_payment_salary"
                                             id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
                                             <thead>
                                                 <tr>
@@ -173,7 +198,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="table-responsive">
-                            <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+                            <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer tbl_nssf">
                                 <div class="row">
                                     <div class="col-sm-12">
                                         <table class="table table-striped custom-table datatable dataTable no-footer" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
@@ -246,10 +271,6 @@
                                                             <td>{{ Carbon\Carbon::parse($item->created_at)->format('d-M-Y') }}</td>
                                                         </tr>
                                                     @endforeach
-                                                @else
-                                                    <tr>
-                                                        <td colspan="18" style="text-align: center">No record to display</td>
-                                                    </tr>
                                                 @endif
                                             </tbody>
                                         </table>
@@ -268,7 +289,7 @@
                             <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                                 <div class="row">
                                     <div class="col-sm-12">
-                                        <table class="table table-striped custom-table datatable dataTable no-footer"
+                                        <table class="table table-striped custom-table datatable dataTable no-footer tbl_seniority_pay"
                                             id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
                                             <thead>
                                                 <tr>
@@ -300,10 +321,6 @@
                                                             <td>{{ Carbon\Carbon::parse($item->created_at)->format('d-M-Y') }}</td>
                                                         </tr>
                                                     @endforeach
-                                                @else
-                                                    <tr>
-                                                        <td colspan="16" style="text-align: center">No record to display</td>
-                                                    </tr>
                                                 @endif
                                             </tbody>
                                         </table>
@@ -321,7 +338,7 @@
                             <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                                 <div class="row">
                                     <div class="col-sm-12">
-                                        <table class="table table-striped custom-table datatable dataTable no-footer"
+                                        <table class="table table-striped custom-table datatable dataTable no-footer tbl_severance_pay"
                                             id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
                                             <thead>
                                                 <tr>
@@ -347,10 +364,6 @@
                                                             <td>{{ Carbon\Carbon::parse($item->created_at)->format('d-M-Y') }}</td>
                                                         </tr>
                                                     @endforeach
-                                                @else
-                                                    <tr>
-                                                        <td colspan="16" style="text-align: center">No record to display</td>
-                                                    </tr>
                                                 @endif
                                             </tbody>
                                         </table>
@@ -363,4 +376,149 @@
             </div>
         </div>
     </div>
+</div>
+  
 @endsection
+@include('includs.script')
+<script src="{{ asset('/admin/js/validation-field.js') }}"></script>
+<script src="{{ asset('/admin/js/date-range-bicker.js') }}"></script>
+<script>
+    $(function() {
+        var tab_status = 1;
+        $("#tab_btl_basic_salary, #tab_btn_NSSF, #tab_btn_seniority, #tab_btn_severance_pay").on("click", function() {
+            tab_status = $(this).attr('data-tab-id');
+        });
+        $(".reset-btn").on("click", function() {
+            $(this).prop('disabled', true);
+            $(".btn-text-reset").hide();
+            $("#btn-text-loading").css('display', 'block');
+            window.location.replace("{{ URL('reports/payroll-report') }}");
+        });
+        $(".submit-btn").on("click", function(){
+            let params = {
+                employee_id: $("#employee_id").val(),
+                employee_name: $("#employee_name").val(),
+                filter_month: $("#filter_month").val(),
+            };
+            showdatas(tab_status, params);
+        });
+    });
+    function showdatas(tab_status, params) {
+        $.ajax({
+            type: "post",
+            url: "{{ url('reports/payroll-report') }}",
+            data: {
+                "_token": "{{ csrf_token() }}",
+                tab_status,
+                employee_id: params.employee_id ? params.employee_id : null,
+                employee_name: params.employee_name ? params.employee_name : null,
+                filter_month: params.filter_month ? params.filter_month : null,
+            },
+            dataType: "JSON",
+            success: function(response) {
+                let data =  response.success;
+                $(".submit-btn").prop('disabled', false);
+                $(".btn-txt").show();
+                $(".loading-icon").css('display', 'none')
+                var tr = "";
+                if (tab_status == 1 ) {
+                    if (data.length > 0) {
+                        data.map((row) => {
+                            let join_date = moment(row.users.date_of_commencement).format('D-MMM-YYYY')
+                            let payment_date = moment(row.payment_date).format('D-MMM-YYYY')
+                            tr +='<tr class="odd">'+
+                                '<td><a href="#">'+(row.users == null ? '' : row.users.number_employee )+'</a></td>'+
+                                '<td><a href="#">'+(row.users == null ? '' : row.users.employee_name_en )+'</a></td>'+
+                                '<td><a href="#">'+(row.users == null ? '' : row.users.department.name_english)+'</a></td>'+
+                                '<td><a href="#">'+(row.users == null ? '' : row.users.position.name_english)+'</a></td>'+
+                                '<td><a href="#">'+(row.users == null ? '' : row.users.branch.branch_name_en)+'</a></td>'+
+                                '<td>'+(join_date)+'</td>'+
+                                '<td>$ <a href="#">'+(row.basic_salary )+'</a></td>'+
+                                '<td>$ <a href="#">'+(row.total_child_allowance )+'</a></td>'+
+                                '<td>$ <a href="#">'+(row.phone_allowance == null ? '0.00' : row.phone_allowance)+'</a></td>'+
+                                '<td>$ <a href="#">'+(row.total_kny_phcumben)+'</a></td>'+
+                                '<td>$ <a href="#">'+(row.total_gross_salary )+'</a></td>'+
+                                '<td>$ <a href="#">'+(row.seniority_payable_tax)+'</a></td>'+
+                                '<td>$ <a href="#">'+(row.total_pension_fund)+'</a></td>'+
+                                '<td>$ <a href="#">'+(row.base_salary_received_usd)+'</a></td>'+
+                                '<td>$ <a href="#">'+(row.tax_free_seniority_allowance)+'</a></td>'+
+                                '<td>$ <a href="#">'+(row.total_severance_pay)+'</a></td>'+
+                                '<td>$ <a href="#">'+(row.total_salary )+'</a></td>'+
+                                '<td>'+(payment_date)+'</td>'+
+                            '</tr>';
+                        });
+                    }else{
+                        var tr = '<tr><td colspan=18 align="center">ពុំមានទិន្នន័យសម្រាប់បង្ហាញ</td></tr>';
+                    }
+                    $(".tbl_payment_salary tbody").html(tr);
+                }else if (tab_status == 2) {
+                    if (data.length > 0) {
+                        data.map((row) => {
+                            let join_date = moment(row.users.date_of_commencement).format('D-MMM-YYYY')
+                            let created_at = moment(row.created_at).format('D-MMM-YYYY')
+                            tr +='<tr class="odd">'+
+                                    '<td><a href="#">'+(row.users == null ? '' : row.users.number_employee )+'</a></td>'+
+                                    '<td><a href="#">'+(row.users == null ? '' : row.users.employee_name_en )+'</a></td></td></td>'+
+                                    '<td>'+(join_date)+'</td>'+
+                                    '<td>$ '+(row.total_pre_tax_salary_usd )+'</td>'+
+                                    '<td><span>៛</span> '+(row.total_pre_tax_salary_riel )+'</td>'+
+                                    '<td>'+(row.total_average_wage )+'</td>'+
+                                    '<td>'+(row.total_occupational_risk )+'</td>'+
+                                    '<td>'+(row.total_health_care )+'</td>'+
+                                    '<td>$ '+(row.pension_contribution_usd )+'</td>'+
+                                    '<td><span></span> '+(row.pension_contribution_riel )+'</td>'+
+                                    '<td>'+(row.corporate_contribution )+'</td>'+
+                                    '<td>'+(created_at)+'</td>'+
+                            '</tr>';
+                        });
+                    }else {
+                        var tr = '<tr><td colspan=13 align="center">ពុំមានទិន្នន័យសម្រាប់បង្ហាញ</td></tr>';
+                    }
+                    $(".tbl_nssf tbody").html(tr);
+                }else if(tab_status == 3){
+                    if (data.length > 0) {
+                        data.map((row) => {
+                            let join_date = moment(row.users.date_of_commencement).format('D-MMM-YYYY')
+                            let created_at = moment(row.created_at).format('D-MMM-YYYY')
+                            tr +='<tr class="odd">'+
+                                '<td><a href="#">'+(row.users == null ? '' : row.users.number_employee )+'</a></td>'+
+                                '<td><a href="#">'+(row.users == null ? '' : row.users.employee_name_en )+'</a></td>'+
+                                '<td>'+(row.users == null ? '' : row.users.position.name_english )+'</td>'+
+                                '<td>'+(join_date)+'</td>'+
+                                '<td>'+(row.payment_of_month )+'</td>'+
+                                '<td>'+(row.total_average_salary )+'</td>'+
+                                '<td>'+(row.total_salary_receive )+'</td>'+
+                                '<td>'+(row.tax_exemption_salary )+'</td>'+
+                                '<td>'+(row.taxable_salary )+'</td>'+
+                                '<td>'+(created_at)+'</td>'+
+                            '</tr>';
+                        });
+                    }else {
+                        var tr = '<tr><td colspan=10 align="center">ពុំមានទិន្នន័យសម្រាប់បង្ហាញ</td></tr>';
+                    }
+                    $(".tbl_seniority_pay tbody").html(tr);
+                }else{
+                    if (data.length > 0) {
+                        data.map((row) => {
+                            let join_date = moment(row.users.date_of_commencement).format('D-MMM-YYYY')
+                            let created_at = moment(row.created_at).format('D-MMM-YYYY')
+                            tr +='<tr class="odd">'+
+                                '<td><a href="#">'+(row.users == null ? '' : row.users.number_employee )+'</a></td>'+
+                                '<td><a href="#">'+(row.users == null ? '' : row.users.employee_name_en )+'</a></td>'+
+                                '<td>'+(row.users == null ? '' : row.users.position.name_english )+'</td>'+
+                                '<td>'+(join_date)+'</td>'+
+                                '<td>'+(row.total_severanec_pay )+'</td>'+
+                                '<td>'+(row.total_contract_severance_pay )+'</td>'+
+                                '<td>'+(created_at)+'</td>'+
+                            '</tr>';
+                        });
+                    }else {
+                        var tr = '<tr><td colspan=7 align="center">ពុំមានទិន្នន័យសម្រាប់បង្ហាញ</td></tr>';
+                    }
+                    $(".tbl_severance_pay tbody").html(tr);
+                }
+                    
+            }
+        });
+    }
+</script>

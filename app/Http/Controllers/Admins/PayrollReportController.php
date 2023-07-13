@@ -3,16 +3,13 @@
 namespace App\Http\Controllers\Admins;
 
 use Carbon\Carbon;
-use App\Models\User;
 use App\Models\Branchs;
 use App\Models\Payroll;
 use App\Models\Seniority;
-use App\Models\MotorRentel;
 use App\Models\SeverancePay;
 use Illuminate\Http\Request;
 use App\Exports\ExportMotorRentel;
 use App\Http\Controllers\Controller;
-use Brian2694\Toastr\Facades\Toastr;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Models\NationalSocialSecurityFund;
 use App\Repositories\Admin\MotorRentalRepository;
@@ -37,6 +34,110 @@ class PayrollReportController extends Controller
         $dataSeniority = Seniority::all();
         $severancePay = SeverancePay::all();
         return view('reports.payroll_report',compact('payroll','dataNSSF','dataSeniority','severancePay'));
+    }
+
+    public function filter(Request $request)
+    {
+        $Monthly = null;
+        $yearLy = null;
+        if ($request->filter_month) {
+            $Monthly = Carbon::createFromDate($request->filter_month)->format('m');
+            $yearLy = Carbon::createFromDate($request->filter_month)->format('Y');
+        }
+        $payroll=[];
+        if ($request->tab_status == 1) {
+            $payroll = Payroll::with("users")
+            ->join('users', 'payrolls.employee_id', '=', 'users.id')
+            ->select(
+                'payrolls.*',
+                'users.number_employee',
+                'users.employee_name_en',
+                'users.employee_name_kh',
+            )
+            ->when($request->employee_id, function ($query, $employee_id) {
+                $query->where('users.number_employee', 'LIKE', '%'.$employee_id.'%');
+            })
+            ->when($request->employee_name, function ($query, $employee_name) {
+                $query->where('users.employee_name_en', 'LIKE', '%'.$employee_name.'%');
+            })
+            ->when($Monthly, function ($query, $Monthly) {
+                $query->whereMonth('payment_date', $Monthly);
+            })
+            ->when($yearLy, function ($query, $yearLy) {
+                $query->whereYear('payment_date', $yearLy);
+            })->get();
+        }else if ($request->tab_status == 2) {
+            $payroll = NationalSocialSecurityFund::with("users")
+            ->join('users', 'national_social_security_funds.employee_id', '=', 'users.id')
+            ->select(
+                'national_social_security_funds.*',
+                'users.number_employee',
+                'users.employee_name_en',
+                'users.employee_name_kh',
+            )
+            ->when($request->employee_id, function ($query, $employee_id) {
+                $query->where('users.number_employee', 'LIKE', '%'.$employee_id.'%');
+            })
+            ->when($request->employee_name, function ($query, $employee_name) {
+                $query->where('users.employee_name_en', 'LIKE', '%'.$employee_name.'%');
+            })
+            ->when($Monthly, function ($query, $Monthly) {
+                $query->whereMonth('national_social_security_funds.created_at', $Monthly);
+            })
+            ->when($yearLy, function ($query, $yearLy) {
+                $query->whereYear('national_social_security_funds.created_at', $yearLy);
+            })
+            ->get();
+        }else if ($request->tab_status == 3) {
+            $payroll = Seniority::with("users")
+            ->join('users', 'seniorities.employee_id', '=', 'users.id')
+            ->select(
+                'seniorities.*',
+                'users.number_employee',
+                'users.employee_name_en',
+                'users.employee_name_kh',
+            )
+            ->when($request->employee_id, function ($query, $employee_id) {
+                $query->where('users.number_employee', 'LIKE', '%'.$employee_id.'%');
+            })
+            ->when($request->employee_name, function ($query, $employee_name) {
+                $query->where('users.employee_name_en', 'LIKE', '%'.$employee_name.'%');
+            })
+            ->when($Monthly, function ($query, $Monthly) {
+                $query->whereMonth('seniorities.created_at', $Monthly);
+            })
+            ->when($yearLy, function ($query, $yearLy) {
+                $query->whereYear('seniorities.created_at', $yearLy);
+            })
+            ->get();
+        }else {
+            $payroll = SeverancePay::with("users")
+            ->join('users', 'severance_pays.employee_id', '=', 'users.id')
+            ->select(
+                'severance_pays.*',
+                'users.number_employee',
+                'users.employee_name_en',
+                'users.employee_name_kh',
+            )
+            ->when($request->employee_id, function ($query, $employee_id) {
+                $query->where('users.number_employee', 'LIKE', '%'.$employee_id.'%');
+            })
+            ->when($request->employee_name, function ($query, $employee_name) {
+                $query->where('users.employee_name_en', 'LIKE', '%'.$employee_name.'%');
+            })
+            ->when($Monthly, function ($query, $Monthly) {
+                $query->whereMonth('severance_pays.created_at', $Monthly);
+            })
+            ->when($yearLy, function ($query, $yearLy) {
+                $query->whereYear('severance_pays.created_at', $yearLy);
+            })
+            ->get();
+        }
+        
+        
+        return response()->json([
+            'success'=>$payroll,
+        ]);
     }
 
     public function motorrentel(Request $request)
