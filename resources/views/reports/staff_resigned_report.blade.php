@@ -1,8 +1,11 @@
 @extends('layouts.master')
 <style>
     .filter-row .btn {
-        min-height: 44px !important;
-        padding: 9px !important;
+        min-height: 38px !important;
+        padding: 10px !important;
+    }
+    .reset-btn {
+        color: #fff !important
     }
 
     .ui-datepicker-calendar {
@@ -70,10 +73,16 @@
                 </div>
             </div>
             <div class="col-sm-6 col-md-2">
-                <button type="submit" class="btn btn-success w-100 btn-search" data-dismiss="modal">
-                    <span class="btn-text-search">Search</span>
-                    <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading</span>
-                </button>
+                <div style="display: flex" class="float-end">
+                    <button type="button" class="btn btn-sm btn-success btn-search me-2" data-dismiss="modal">
+                        <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> </span>
+                        <span class="btn-text-search">{{ __('Search') }}</span>
+                    </button>
+                    <button type="button" class="btn btn-sm btn-warning reset-btn">
+                        <span class="btn-text-reset">Reset</span>
+                        <span id="btn-reset-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> </span>
+                    </button>
+                </div>
             </div>
         </div>
     @endif
@@ -178,6 +187,12 @@
 
 <script>
     $(function() {
+        $(".reset-btn").on("click", function() {
+            $(this).prop('disabled', true);
+            $(".btn-text-reset").hide();
+            $("#btn-reset-text-loading").css('display', 'block');
+            window.location.replace("{{ URL('reports/staff-resigned-report') }}");
+        });
         // $(".btn-export").on("click", function(){
         //     var query = {
         //         'employee_id': $("#employee_id").val(),
@@ -222,7 +237,7 @@
                     });
                 } else {
                     var tr =
-                        '<tr><td colspan=9 align="center">ពុំមានទិន្នន័យសម្រាប់បង្ហាញ</td></tr>';
+                        '<tr><td colspan=10 align="center">ពុំមានទិន្នន័យសម្រាប់បង្ហាញ</td></tr>';
                 }
                 $(".tbl-new-staff-report tbody").html(tr);
                 $("#btn-text-loading").hide();

@@ -1,10 +1,12 @@
 @extends('layouts.master')
 <style>
-    .filter-row .btn {
-        min-height: 44px !important;
-        padding: 9px !important;
+   .filter-row .btn {
+        min-height: 38px !important;
+        padding: 10px !important;
     }
-
+    .reset-btn {
+        color: #fff !important
+    }
     .ui-datepicker-calendar {
         display: none;
     }
@@ -55,25 +57,31 @@
                     </select>
                 </div>
             </div>
-            <div class="col-sm-6 col-md-3 col-lg-3 col-xl-2 col-12">
+            <div class="col-sm-6 col-md-2 col-lg-2 col-xl-2 col-12">
                 <div class="form-group">
                     <div class="cal-icon">
                         <input class="form-control floating datetimepicker" type="text" id="from_date" placeholder="From Date">
                     </div>
                 </div>
             </div>
-            <div class="col-sm-6 col-md-3 col-lg-3 col-xl-2 col-12">
+            <div class="col-sm-6 col-md-2 col-lg-2 col-xl-2 col-12">
                 <div class="form-group">
                     <div class="cal-icon">
                         <input class="form-control floating datetimepicker" type="text" id="to_date" placeholder="To Date">
                     </div>
                 </div>
             </div>
-            <div class="col-sm-6 col-md-2">
-                <button type="submit" class="btn btn-success w-100 btn-search" data-dismiss="modal">
-                    <span class="btn-text-search">Search</span>
-                    <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading</span>
-                </button>
+            <div class="col-sm-6 col-md-4">
+                <div style="display: flex" class="float-end">
+                    <button type="button" class="btn btn-sm btn-success btn-search me-2" data-dismiss="modal">
+                        <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> </span>
+                        <span class="btn-text-search">{{ __('Search') }}</span>
+                    </button>
+                    <button type="button" class="btn btn-sm btn-warning reset-btn">
+                        <span class="btn-text-reset">Reset</span>
+                        <span id="btn-reset-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> </span>
+                    </button>
+                </div>
             </div>
         </div>
     @endif
@@ -138,6 +146,12 @@
 
 <script>
     $(function() {
+        $(".reset-btn").on("click", function() {
+            $(this).prop('disabled', true);
+            $(".btn-text-reset").hide();
+            $("#btn-reset-text-loading").css('display', 'block');
+            window.location.replace("{{ URL('reports/promoted-staff-report') }}");
+        });
         $(".btn-search").on("click", function() {
             $(this).prop('disabled', true);
             $(".btn-text-search").hide();
