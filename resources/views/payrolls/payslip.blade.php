@@ -30,7 +30,7 @@
                     <h3 class="page-title">Payslip</h3>
                     <ul class="breadcrumb">
                         <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
-                        <li class="breadcrumb-item active">Payslip</li>
+                        <li class="breadcrumb-item active">Payslip / <a href="{{url('payroll')}}">back to list</a></li>
                     </ul>
                 </div>
                 <div class="col-auto float-end ms-auto">
@@ -68,7 +68,7 @@
                                     <li><strong>Employee ID :</strong> {{$payslip->users == null ? "" : $payslip->users->number_employee}}</li>
                                     <li><strong>Position :</strong> {{$payslip->users == null ? "" : $payslip->users->EmployeePosition}}</li>
                                     <li><strong>Joining Date :</strong> {{$payslip->users == null ? "" : $payslip->users->joinOfDate}}</li>
-                                    <li><strong>Branch :</strong> {{$payslip->users == null ? "" : $payslip->users->EmployeeBranch}}</li>
+                                    <li><strong>Location :</strong> {{$payslip->users == null ? "" : $payslip->users->EmployeeBranch}}</li>
                                 </ul>
                             </div>
                             <div class="col-lg-4 m-b-20">

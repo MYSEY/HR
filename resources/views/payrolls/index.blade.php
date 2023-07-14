@@ -50,7 +50,7 @@
                                                 </th>
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                     rowspan="1" colspan="1"
-                                                    aria-label="Email: activate to sort column ascending">Branch</th>
+                                                    aria-label="Email: activate to sort column ascending">Location</th>
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                     rowspan="1" colspan="1"
                                                     aria-label="Join Date: activate to sort column ascending">Join Date

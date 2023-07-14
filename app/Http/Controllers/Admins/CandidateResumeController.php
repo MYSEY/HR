@@ -70,9 +70,9 @@ class CandidateResumeController extends Controller
             $data['created_by'] = Auth::user()->id;
             $data['status'] = "1";
             CandidateResume::create($data);
+            DB::commit();
             Toastr::success('Candidate resume created successfully.','Success');
             return redirect()->back();
-            DB::commit();
         } catch (\Throwable $exp) {
             DB::rollback();
             Toastr::error('Candidate resume created fail.','Error');

@@ -81,7 +81,7 @@
                                                             @endif
                                                             @if (Auth::user()->RolePermission == 'Administrator')
                                                                 <div class="dropdown-menu dropdown-menu-right btn-emp-status" id="btn-emp-status">
-                                                                    <input type="text" name="" class="join_date" value="{{$item->date_of_commencement}}" hidden>
+                                                                    <input type="text" name="" class="join_date" value="{{$item == null ? "" : $item->date_of_commencement}}" hidden>
                                                                     <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-id="Probation" href="#">
                                                                         <i class="fa fa-dot-circle-o text-success"></i> Probation
                                                                     </a>
@@ -189,8 +189,6 @@
                                                             <span style="font-size: 13px" class="badge bg-inverse-danger">Yes</span>
                                                         @elseif($item->is_loan == '0')
                                                             <span style="font-size: 13px" class="badge bg-inverse-success">No</span>
-                                                        @else
-                                                            
                                                         @endif
                                                     </td>
                                                     <td>
@@ -203,7 +201,7 @@
                                                             @endif
                                                             @if (Auth::user()->RolePermission == 'Administrator')
                                                                 <div class="dropdown-menu dropdown-menu-right btn-emp-status" id="btn-emp-status">
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="1" href="#">
+                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-Salary-Increase="{{$item->salary_increas == null ? "" : $item->salary_increas}}" data-id="1" href="#">
                                                                         <i class="fa fa-dot-circle-o text-success"></i> FDC-1
                                                                     </a>
                                                                     <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="10" href="#">
@@ -784,7 +782,7 @@
                             resign_status_td ="";
                             is_loan = "";
                             all_status = '<div class="dropdown-menu dropdown-menu-right btn-emp-status" id="btn-emp-status">'+
-                                '<input type="text" name="" class="join_date" value="{{$item->date_of_commencement}}" hidden>'+
+                                '<input type="text" name="" class="join_date" value="" hidden>'+
                                 '<a class="dropdown-item" data-emp-id="'+(emp.id)+'" data-start-date="'+(emp.fdc_date)+'" data-id="Probation" href="#">'+
                                     '<i class="fa fa-dot-circle-o text-success"></i> Probation'+
                                 '</a>'+

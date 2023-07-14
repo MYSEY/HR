@@ -581,6 +581,7 @@
             }else if (status == '1') {
                 let start_date = $(this).attr('data-start-date');
                 let end_date = $(this).attr('data-end-date');
+                let salaryIncrease = $(this).attr('data-Salary-Increase');
                 $.confirm({
                     title: 'Employee Status!',
                     contentClass: 'text-center',
@@ -603,7 +604,7 @@
                                 '</div>'+
                                 '<div class="form-group">'+
                                     '<label>Salary Increase</label>'+
-                                    '<input type="number" class="form-control total_salary_increase" value="">'+
+                                    '<input type="number" class="form-control total_salary_increase" value="'+salaryIncrease+'">'+
                                 '</div>'+
                                 '<label>Reason</label>'+
                                 '<textarea class="form-control resign_reason"></textarea>'+

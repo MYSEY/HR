@@ -98,9 +98,12 @@ class EmployeePayrollController extends Controller
                     
                     if(count($holidays) == 4){
                         $totalDays = $toDays - 1;
+                    }else if(count($holidays) == 3){
+                        $totalDays = $toDays + 1;
                     }else{
                         $totalDays = $toDays + 1;
                     }
+                    
                     if ($totalDays == 22) {
                         $totalBasicSalary = $item->basic_salary;
                     }else{
@@ -146,7 +149,7 @@ class EmployeePayrollController extends Controller
                     'corporate_contribution'   => number_format($workerContributionUsd),
                     'created_by'   => Auth::user()->id,
                 ]);
-
+                // dd($dataNSSF);
                 //total NSSF
                 // $pension_contribution = '5.9';
                 $pension_contribution = $dataNSSF->pension_contribution_riel;
@@ -167,8 +170,7 @@ class EmployeePayrollController extends Controller
                                 $percent = $value->amount_percent / 100;
                                 $totalAllowanceBunus = ($totalBasicSalary * $percent);
                             } else {
-                                $percent = $value->amount_percent / 100;
-                                $totalPercent = ($totalBasicSalary * $percent);
+                                $totalPercent = ($totalBasicSalary * $value->amount_percent) / 100;
                                 $percentSalary = $totalPercent * $totalStartDays;
                                 $totalAllowanceBunus = $percentSalary / $dayOfYear;
                             }
