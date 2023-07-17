@@ -20,7 +20,9 @@ class RecruitmentPlanController extends Controller
      */
     public function index()
     {
-        $data = RecruitmentPlan::with('position')->with('branch')->orderBy('id', 'desc')->get();
+        $data = RecruitmentPlan::with('position')->with('branch')
+        ->orderBy('id', 'desc')
+        ->get();
         $positions = Position::all();
         $branchs = Branchs::all();
         return view('recruitments.plans.recruitment_plan', compact('data', 'positions', 'branchs'));
@@ -63,9 +65,27 @@ class RecruitmentPlanController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request)
     {
-        //
+        // $branchs = Branchs::
+        // when($request->branch_id, function ($query, $branch_id) {
+        //     $query->where('id', $branch_id);
+        // })
+        // ->get();
+        $data = RecruitmentPlan::with('position')->with('branch')
+        -> when($request->branch_id, function ($query, $branch_id) {
+            $query->where('branch_id', $branch_id);
+        })
+        ->when($request->position_id, function ($query, $position_id) {
+            $query->where('position_id', $position_id);
+        })
+        ->orderBy('plan_date', 'desc')
+        // ->orderBy('id', 'desc')
+        ->get();
+        return response()->json([
+            'success'=>$data,
+            // 'branchs'=>$branchs,
+        ]);
     }
 
     /**
