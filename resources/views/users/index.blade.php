@@ -326,7 +326,7 @@
                         if (response.optionIdentityType != '') {
                             $.each(response.optionIdentityType, function(i, item) {
                                 $('#e_identity_type').append($('<option>', {
-                                    value: item.name_english,
+                                    value: item.id,
                                     text: item.name_english,
                                     selected: item.id == response.success.identity_type
                                 }));
@@ -448,7 +448,7 @@
                         $('#e_employee_name_en').val(response.success.employee_name_en);
                         $('#e_date_of_birth').val(response.success.date_of_birth);
                         $('#e_unit').val(response.success.unit);
-                        $('#e_unit').val(response.success.unit);
+                        $('#e_level').val(response.success.level);
                         $('#e_basic_salary').val(response.success.basic_salary);
                         $('#e_phone_allowance').val(response.success.phone_allowance);
                         $('#e_date_of_commencement').val(response.success.date_of_commencement);

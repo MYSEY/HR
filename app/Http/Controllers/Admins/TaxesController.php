@@ -70,10 +70,10 @@ class TaxesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request)
     {
-        $data = Taxes::find($id);
-        return view('Taxes.edit',compact('data'));
+        $data = Taxes::where('id',$request->id)->first();
+        return response()->json(['success'=>$data]);
     }
 
     /**
@@ -87,9 +87,10 @@ class TaxesController extends Controller
     {
         try{
             Taxes::where('id',$request->id)->update([
-                'name' => $request->name,
-                'percentage' => $request->percentage,
-                'status' => $request->status,
+                'tax_rate' => $request->tax_rate,
+                'from' => $request->name,
+                'to' => $request->to,
+                'tax_deduction_amount' => $request->tax_deduction_amount,
                 'updated_by' => Auth::user()->id 
             ]);
             Toastr::success('Taxes Updated successfully.','Success');

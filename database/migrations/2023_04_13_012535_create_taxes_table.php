@@ -15,9 +15,10 @@ return new class extends Migration
     {
         Schema::create('taxes', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->unique();
-            $table->integer('percentage')->nullable();
-            $table->string('status')->nullable();
+            $table->integer('tax_rate')->nullable();
+            $table->string('from')->nullable();
+            $table->string('to')->nullable();
+            $table->string('tax_deduction_amount')->nullable();
             $table->bigInteger('created_by')->unsigned()->nullable();
             $table->bigInteger('updated_by')->unsigned()->nullable();
             $table->dateTime('deleted_at')->nullable();

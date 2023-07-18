@@ -203,7 +203,7 @@
                 </div>
 
                 <div class="modal-body">
-                    <form action="{{ url('payroll/store') }}" method="POST">
+                    <form action="{{ url('payroll/store') }}" method="POST" class="needs-validation" novalidate>
                         @csrf
                         <h5>Exchange Rate</h5>
                         <div class="row">
@@ -231,7 +231,7 @@
                         <div class="row">
                             <div class="col-sm-6">
                                 <div class="form-group">
-                                    <label>Payment Date</label>
+                                    <label>Payment Date <span class="text-danger">*</span></label>
                                     <div class="cal-icon">
                                         <input class="form-control datetimepicker" type="text" id="payment_date" name="payment_date" required>
                                     </div>
@@ -249,6 +249,7 @@
     </div>
 @endsection
 @include('includs.script')
+<script src="{{asset('/admin/js/validation-field.js')}}"></script>
 <script>
     // $(function(){
     //     $('#DataTables_Table_0').DataTable({

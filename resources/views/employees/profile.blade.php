@@ -1,7 +1,7 @@
 @extends('layouts.master')
 @section('content')
-    <div class="content container-fluid">
 
+    <div class="content container-fluid">
         <div class="page-header">
             <div class="row">
                 <div class="col-sm-12">
@@ -13,6 +13,145 @@
                 </div>
             </div>
         </div>
+
+        {{-- <div class="row">
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <ul class="nav nav-tabs nav-tabs-solid nav-justified flex-column" role="tablist">
+                            <li class="nav-item" role="presentation"><a class="nav-link active" data-bs-toggle="tab" href="#Personal" aria-selected="true" role="tab">Personal Informations</a></li>
+                            <li class="nav-item" role="presentation"><a class="nav-link" data-bs-toggle="tab" href="#education" aria-selected="false" role="tab" tabindex="-1">Education Informations</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-9">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="tab-content">
+                            <div id="Personal" class="tab-pane active show" role="tabpanel">
+                                <div class="row form-group">
+                                    <div class="col-md-4">
+                                        <div class="title"><strong>Employee ID</strong></div>
+                                        <label class="text">{{ $data->number_employee }}</label>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="title"><strong>Name Khmer</strong></div>
+                                        <label class="text">{{ $data->employee_name_kh }}</label>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="title"><strong>Name English</strong></div>
+                                        <label class="text">{{ $data->employee_name_en }}</label>
+                                    </div>
+                                </div>
+                                <div class="row form-group">
+                                    <div class="col-md-4">
+                                        <div class="title"><strong>Gender</strong></div>
+                                        <label class="text">{{ $data->gender == 1 ? 'Male' : 'Female' }}</label>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="title"><strong>Phone</strong></div>
+                                        <label class="text">{{ $data->personal_phone_number }}</label>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="title"><strong>Date of Birth</strong></div>
+                                        <label class="text">{{ \Carbon\Carbon::parse($data->date_of_birth)->format('d-M-Y') ?? '' }}</label>
+                                    </div>
+                                </div>
+                                <div class="row form-group">
+                                    <div class="col-md-4">
+                                        <div class="title"><strong>Email</strong></div>
+                                        <label class="text">{{ $data->email }}</label>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="title"><strong>Position</strong></div>
+                                        <label class="text">{{ $data->EmployeePosition }}</label>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="title"><strong>Departement</strong></div>
+                                        <label class="text">{{ $data->EmployeeDepartment }}</label>
+                                    </div>
+                                </div>
+                                <div class="row form-group">
+                                    <div class="col-md-4">
+                                        <div><strong>Join Date</strong></div>
+                                        <label class="text">{{ $data->joinOfDate }}</label>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="title"><strong>Unit</strong></div>
+                                        <label class="text">{{$data->unit}}</label>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="title"><strong>Level</strong></div>
+                                        <label class="text">{{ $data->level }}</label>
+                                    </div>
+                                </div>
+
+                                <div class="row form-group">
+                                    <div class="col-md-4">
+                                        <div><strong>Nationality</strong></div>
+                                        <label class="text">{{ $data->nationality }}</label>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="title"><strong>Position Type</strong></div>
+                                        <label class="text">{{ $data->EmployeePositionType }}</label>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="title"><strong>Identity Type</strong></div>
+                                        <label class="text">{{ $data->EmployeeIdentityType }}</label>
+                                    </div>
+                                </div>
+
+                                <div class="row form-group">
+                                    <div class="col-md-4">
+                                        <div><strong>Identity Number</strong></div>
+                                        <label class="text">{{ $data->identity_number }}</label>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="title"><strong>Issue Date</strong></div>
+                                        <label class="text">{{ \Carbon\Carbon::parse($data->issue_date)->format('d-M-Y') ?? '' }}</label>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="title"><strong>Issue Expired Date</strong></div>
+                                        <label class="text">{{ \Carbon\Carbon::parse($data->issue_expired_date)->format('d-M-Y') ?? '' }}</label>
+                                    </div>
+                                </div>
+                                <div class="row form-group">
+                                    <div class="col-md-4">
+                                        <div class="title"><strong>Loan</strong></div>
+                                        <label class="text">{{ $data->EmployeeIsLoan}}</label>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div><strong>Marital Status</strong></div>
+                                        <label class="text">{{ $data->marital_status }}</label>
+                                    </div>
+                                </div>
+                            </div>
+        
+                            <div id="education" class="tab-pane fade" role="tabpanel">
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>title</th>
+                                                <th></th>
+                                                <th>Sex</th>
+                                                <th>Age</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> --}}
+
+        
 
         <div class="card mb-0">
             <div class="card-body">
@@ -70,6 +209,7 @@
                 </div>
             </div>
         </div>
+        
         <div class="card tab-box">
             <div class="row user-tabs">
                 <div class="col-lg-12 col-md-12 col-sm-12 line-tabs">

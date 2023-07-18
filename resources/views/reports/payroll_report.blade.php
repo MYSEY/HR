@@ -238,11 +238,11 @@
                                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                         rowspan="1" colspan="1"
                                                         aria-label="Payslip: activate to sort column ascending">Pension
-                                                        contribution dollars</th>
+                                                        contribution Riel</th>
                                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                         rowspan="1" colspan="1"
                                                         aria-label="Payslip: activate to sort column ascending">Pension
-                                                        contribution Riel</th>
+                                                        contribution dollar</th>
                                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                         rowspan="1" colspan="1"
                                                         aria-label="Payslip: activate to sort column ascending">Enterprise
@@ -265,8 +265,8 @@
                                                             <td>{{ $item->total_average_wage }}</td>
                                                             <td>{{ $item->total_occupational_risk }}</td>
                                                             <td>{{ $item->total_health_care }}</td>
-                                                            <td>$ {{ $item->pension_contribution_usd }}</td>
-                                                            <td><span></span> {{ $item->pension_contribution_riel }}</td>
+                                                            <td><span>៛</span> {{ $item->pension_contribution_usd }}</td>
+                                                            <td>$  {{ $item->pension_contribution_riel }}</td>
                                                             <td>{{ $item->corporate_contribution }}</td>
                                                             <td>{{ Carbon\Carbon::parse($item->created_at)->format('d-M-Y') }}</td>
                                                         </tr>

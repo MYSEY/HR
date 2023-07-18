@@ -132,7 +132,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('/taxes/store', [TaxesController::class,'store']);
     Route::post('/taxes/update', [TaxesController::class,'update']);
     Route::post('/taxes/delete', [TaxesController::class,'destroy']);
-    Route::post('/taxes/status', [TaxesController::class,'processing']);
+    Route::get('/taxes/edit', [TaxesController::class,'edit']);
 
     // route trainings
     Route::get('/training/list', [TrainingController::class,'index']);
