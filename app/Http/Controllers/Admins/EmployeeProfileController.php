@@ -30,6 +30,7 @@ class EmployeeProfileController extends Controller
         $optionOfStudy = Option::where('type','field_of_study')->get();
         $optionDegree = Option::where('type','degree')->get();
         $relationship = Option::where('type','relationship')->get();
+        $optionGender = Option::where('type','gender')->get();
         $department = Department::all();
         $position = Position::all();
         $branch = Branchs::all();
@@ -40,7 +41,7 @@ class EmployeeProfileController extends Controller
         $contact = Contact::where('employee_id',$request->id)->get();
         $childrenInfor = ChildrenInfor::where('employee_id',$request->id)->get();
         $empPromoted = StaffPromoted::where('employee_id',$request->id)->orderBy('id', 'DESC')->get();
-        return view('employees.profile',compact('data','optionOfStudy','optionDegree','department','position','empPromoted','branch','transferred','training','relationship','contact','educations','experiences','childrenInfor'));
+        return view('employees.profile',compact('data','optionOfStudy','optionDegree','department','position','empPromoted','branch','transferred','training','relationship','contact','educations','experiences','childrenInfor','optionGender'));
     }
     public function employeeEducation(Request $request){
         try{

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use App\Models\Option;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -33,5 +34,15 @@ class ChildrenInfor extends Model
         if ($this->date_of_birth) {
             return $years.' '.'Year';
         }
+    }
+
+    public function getChildrenGenderAttribute(){
+        $data = Option::where('type','gender')->get();
+        foreach($data as $item){
+            if($this->sex == $item->id){
+                $Gender = $item->name_english;
+            }
+        }
+        return $Gender ?? "";
     }
 }

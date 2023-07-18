@@ -31,8 +31,14 @@
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label>Sex</label>
-                                                <input class="form-control" type="text" name="sex[]" id="sex[]">
+                                                <label>Gender</label>
+                                                <select class="form-control" id="sex[]" name="sex[]" value="">
+                                                    <option selected disabled value=""> --Select --</option>
+                                                    @foreach ($optionGender as $item)
+                                                        <option value="{{$item->id}}">{{$item->name_khmer}}</option>
+                                                    @endforeach
+                                                </select>
+                                                {{-- <input class="form-control" type="text" name="sex[]" id="sex[]"> --}}
                                             </div>
                                         </div>
                                     </div>

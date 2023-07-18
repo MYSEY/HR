@@ -198,7 +198,7 @@ class EmployeePayrollController extends Controller
                
                 $number_of_children = count($dataDateOfBirth);
                 if ($number_of_children) {
-                    if ($number_of_children == null) {
+                    if ($number_of_children == 0) {
                         $totalAmountChild = 0;
                     } else if($number_of_children == 1) {
                         $totalAmountChild = 10;

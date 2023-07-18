@@ -304,7 +304,7 @@
                     </div>
                 </div>
                 <div id="emergency_contact_modal" class="modal custom-modal fade" style="display: none;" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+                    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h5 class="modal-title">Emergency Contact</h5>
@@ -316,19 +316,17 @@
                                 <form action="{{url('employee/contact')}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
                                     @csrf
                                     <div class="row">
-                                        <div class="col-md-12">
+                                        <div class="col-md-6">
                                             <div class="form-group">
                                                 <label>Name <span class="text-danger">*</span></label>
                                                 <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" value="{{old('name')}}" required>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-12">
+                                        <div class="col-md-6">
                                             <div class="form-group">
                                                 <label>Relationship <span class="text-danger">*</span></label>
                                                 <select class="form-control @error('relationship') is-invalid @enderror" id="relationship" name="relationship" value="{{old('relationship')}}" required>
-                                                    <option selected disabled value=""> --Select relationship --</option>
+                                                    <option selected disabled value=""> -- Select relationship --</option>
                                                     @foreach ($relationship as $item)
                                                         <option value="{{ $item->id }}">{{ $item->name_khmer }}</option>
                                                     @endforeach
@@ -337,18 +335,16 @@
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-md-12">
+                                        <div class="col-md-6">
                                             <div class="form-group">
                                                 <label>Phone <span class="text-danger">*</span></label>
-                                                <input class="form-control @error('phone') is-invalid @enderror" type="text" id="phone" name="phone" value="{{old('phone')}}" required>
+                                                <input class="form-control @error('phone') is-invalid @enderror" type="number" id="phone" name="phone" value="{{old('phone')}}" required>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-12">
+                                        <div class="col-md-6">
                                             <div class="form-group">
                                                 <label>Phone 2</label>
-                                                <input class="form-control" type="text" id="phone_2" name="phone_2">
+                                                <input class="form-control" type="number" id="phone_2" name="phone_2">
                                             </div>
                                         </div>
                                     </div>
@@ -396,7 +392,7 @@
                                             <tr>
                                                 <th>Name</th>
                                                 <th>Date of Birth</th>
-                                                <th>Sex</th>
+                                                <th>Gender</th>
                                                 <th>Age</th>
                                                 <th>Action</th>
                                             </tr>
@@ -407,7 +403,7 @@
                                                 <tr>
                                                     <td>{{$item->name}}</td>
                                                     <td>{{$item->DateofBirthChildren}}</td>
-                                                    <td>{{$item->sex}}</td>
+                                                    <td>{{$item->ChildrenGender}}</td>
                                                     <td>{{$item->YearsOfChildren}}</td>
                                                     <td class="text-end">
                                                         <div class="dropdown dropdown-action">

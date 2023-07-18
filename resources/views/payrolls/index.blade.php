@@ -115,9 +115,6 @@
                                                     rowspan="1" colspan="1"
                                                     aria-label="Payslip: activate to sort column ascending">Payslip
                                                 </th>
-                                                <th class="text-end sorting" tabindex="0"
-                                                    aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
-                                                    aria-label="Action: activate to sort column ascending">Action</th>
                                             </tr>
                                         </thead>
                                         <tbody >
@@ -158,22 +155,6 @@
                                                         <td>{{ $item->PayrollPaymentDate }}</td>
                                                         <td>{{ $item->Created }}</td>
                                                         <td><a class="btn btn-sm btn-primary" href="{{ url('payslip', $item->employee_id) }}">Generate Slip</a></td>
-                                                        <td class="text-end">
-                                                            <div class="dropdown dropdown-action">
-                                                                <a href="#" class="action-icon dropdown-toggle"
-                                                                    data-bs-toggle="dropdown" aria-expanded="false"><i
-                                                                        class="material-icons">more_vert</i></a>
-                                                                <div class="dropdown-menu dropdown-menu-right">
-                                                                    @if (Auth::user()->RolePermission == 'Administrator')
-                                                                        <a class="dropdown-item" href="#"
-                                                                            data-bs-toggle="modal"
-                                                                            data-bs-target="#edit_salary"><i
-                                                                                class="fa fa-pencil m-r-5"></i>
-                                                                            Edit</a>
-                                                                    @endif
-                                                                </div>
-                                                            </div>
-                                                        </td>
                                                     </tr>
                                                 @endforeach
                                             @else

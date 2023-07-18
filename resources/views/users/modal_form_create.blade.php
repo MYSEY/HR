@@ -74,6 +74,7 @@
                             <div class="form-group">
                                 <label>Gender</label>
                                 <select class="form-control" id="gender" name="gender" value="{{old('gender')}}">
+                                    <option selected disabled value=""> --Select --</option>
                                     @foreach ($optionGender as $item)
                                         <option value="{{$item->id}}">{{$item->name_khmer}}</option>
                                     @endforeach

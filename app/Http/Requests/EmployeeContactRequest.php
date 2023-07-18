@@ -25,8 +25,8 @@ class EmployeeContactRequest extends FormRequest
     {
         return [
             'employee_id' => 'required|integer',
-            'name' => 'required|max:255',
-            'phone' => 'required|integer',
+            'name' => 'required',
+            'phone' => 'required',
         ];
     }
 }
