@@ -8,8 +8,8 @@ use App\Http\Controllers\Admins\BankController;
 use App\Http\Controllers\Admins\UserController;
 use App\Http\Controllers\Admins\TaxesController;
 use App\Http\Controllers\Admins\BranchController;
-use App\Http\Controllers\Admins\AddressController;
 use App\Http\Controllers\Admins\HolidayController;
+use App\Http\Controllers\Admins\ReportsController;
 use App\Http\Controllers\Admins\SettingController;
 use App\Http\Controllers\Admins\TrainerController;
 use App\Http\Controllers\Admins\DashboadController;
@@ -23,11 +23,11 @@ use App\Http\Controllers\Admins\ExchangeRateController;
 use App\Http\Controllers\Admins\TrainingTypeController;
 use App\Http\Controllers\Admins\PayrollReportController;
 use App\Http\Controllers\Admins\LeavesEmployeeController;
+use App\Http\Controllers\Admins\CandidateResumeController;
 use App\Http\Controllers\Admins\EmployeePayrollController;
 use App\Http\Controllers\Admins\EmployeeProfileController;
-use App\Http\Controllers\Admins\CandidateResumeController;
 use App\Http\Controllers\Admins\RecruitmentPlanController;
-use App\Http\Controllers\Admins\ReportsController;
+use App\Http\Controllers\Admins\ChildrenAllowanceController;
 
 /*
 |--------------------------------------------------------------------------
@@ -212,4 +212,9 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('/recruitment/candidate-resume/status', [CandidateResumeController::class,'processing']);
     Route::post('/recruitment/candidate-resume/delete', [CandidateResumeController::class,'destroy']);
     Route::post('/recruitment/candidate-resume/createemp', [CandidateResumeController::class,'createemp']);
+
+    Route::get('children/allowance',[ChildrenAllowanceController::class,'index']);
+    Route::get('children/edit',[ChildrenAllowanceController::class,'edit']);
+    Route::post('children/update',[ChildrenAllowanceController::class,'update']);
+    Route::post('children/delete',[ChildrenAllowanceController::class,'destroy']);
 });

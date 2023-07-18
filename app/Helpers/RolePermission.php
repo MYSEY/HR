@@ -208,6 +208,12 @@ function menu(){
                     'table'=>6,
                     'permission'=>1
                 ],
+                [
+                    'value'=>'Children Allowance',
+                    'url'=>"children/allowance",
+                    'table'=>6,
+                    'permission'=>1
+                ],
             ]
         ],
         [

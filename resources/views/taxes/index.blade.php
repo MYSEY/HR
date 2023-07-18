@@ -26,7 +26,7 @@
                                 <th>From</th>
                                 <th>To</th>
                                 <th>Tax deduction</th>
-                                <th>Action</th>
+                                <th style="text-align: center;">Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -38,7 +38,7 @@
                                         <td><div class="input-group"><span class="input-group-text">៛</span><input type="number" class="form-control" value="{{$item->from}}"></div></td>
                                         <td><div class="input-group"><span class="input-group-text">៛</span><input type="number" class="form-control" width="100px" value="{{$item->to}}"></div></td>
                                         <td><div class="input-group"><span class="input-group-text">៛</span><input type="number" class="form-control" value="{{$item->tax_deduction_amount}}"></div></td>
-                                        <td>
+                                        <td style="text-align: center;">
                                             <a class="btn btn-success update" data-toggle="modal" data-id="{{$item->id}}" data-target="#edit_taxes"><i class="fa fa-pencil m-r-5"></i></a>
                                             <a class="btn btn-danger delete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_taxes"><i class="fa fa-trash-o m-r-5"></i></a>
                                         </td>
@@ -52,7 +52,7 @@
         </div>
 
         <div id="add_taxes" class="modal custom-modal fade" role="dialog">
-            <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">Add New Tax</h5>
@@ -63,22 +63,35 @@
                     <div class="modal-body">
                         <form action="{{ url('taxes/store') }}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
                             @csrf
-                            <div class="form-group">
-                                <label>Tax Rate <span class="text-danger">*</span></label>
-                                <input class="form-control @error('tax_rate') is-invalid @enderror" type="text" id="" name="tax_rate">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Tax Rate <span class="text-danger">*</span></label>
+                                        <input class="form-control @error('tax_rate') is-invalid @enderror" type="text" id="" name="tax_rate" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Tax Deduction</label>
+                                        <input class="form-control @error('tax_deduction_amount') is-invalid @enderror" type="number" id="" name="tax_deduction_amount">
+                                    </div>
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label>From</label>
-                                <input class="form-control @error('from') is-invalid @enderror" type="number" id="" name="from">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>From</label>
+                                        <input class="form-control @error('from') is-invalid @enderror" type="number" id="" name="from">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>To</label>
+                                        <input class="form-control @error('to') is-invalid @enderror" type="number" id="" name="to">
+                                    </div>
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label>To</label>
-                                <input class="form-control @error('to') is-invalid @enderror" type="number" id="" name="to">
-                            </div>
-                            <div class="form-group">
-                                <label>Tax Deduction</label>
-                                <input class="form-control @error('tax_deduction_amount') is-invalid @enderror" type="number" id="" name="tax_deduction_amount">
-                            </div>
+                            
                             <div class="submit-section">
                                 <button type="submit" class="btn btn-primary submit-btn">
                                     <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i>
@@ -93,7 +106,7 @@
         </div>
 
         <div id="edit_taxes" class="modal custom-modal fade" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">Edit Tax</h5>
@@ -104,22 +117,35 @@
                     <div class="modal-body">
                         <form action="{{ url('taxes/update') }}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
                             @csrf
-                            <div class="form-group">
-                                <label>Tax Rate <span class="text-danger">*</span></label>
-                                <input class="form-control @error('tax_rate') is-invalid @enderror" type="text" id="e_tax_rate" name="tax_rate">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Tax Rate <span class="text-danger">*</span></label>
+                                        <input class="form-control @error('tax_rate') is-invalid @enderror" type="text" id="e_tax_rate" name="tax_rate" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Tax Deduction</label>
+                                        <input class="form-control @error('tax_deduction_amount') is-invalid @enderror" type="number" id="e_tax_deduction_amount" name="tax_deduction_amount">
+                                    </div>
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label>From</label>
-                                <input class="form-control @error('from') is-invalid @enderror" type="number" id="e_from" name="from">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>From</label>
+                                        <input class="form-control @error('from') is-invalid @enderror" type="number" id="e_from" name="from">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>To</label>
+                                        <input class="form-control @error('to') is-invalid @enderror" type="number" id="e_to" name="to">
+                                    </div>
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label>To</label>
-                                <input class="form-control @error('to') is-invalid @enderror" type="number" id="e_to" name="to">
-                            </div>
-                            <div class="form-group">
-                                <label>Tax Deduction</label>
-                                <input class="form-control @error('tax_deduction_amount') is-invalid @enderror" type="number" id="e_tax_deduction_amount" name="tax_deduction_amount">
-                            </div>
+                            
                             <div class="submit-section">
                                 <input type="hidden" class="ids" name="id" id="e_id">
                                 <button type="submit" class="btn btn-primary submit-btn">
