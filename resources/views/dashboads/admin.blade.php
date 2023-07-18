@@ -340,7 +340,7 @@
             <div class="col-md-12 col-lg-6 col-xl-4 d-flex">
                 <div class="card flex-fill">
                     <div class="card-body">
-                        <h4 class="card-title">Employees</h4>
+                        <h4 class="card-title">Employee</h4>
                         <div class="statistics">
                             <div class="row">
                                 <div class="col-md-6 col-6 text-center">
@@ -383,7 +383,7 @@
             <div class="col-md-12 col-lg-12 col-xl-4 d-flex">
                 <div class="card flex-fill dash-statistics">
                     <div class="card-body">
-                        <h5 class="card-title">Staff Age Range</h5>
+                        <h5 class="card-title">Age of Employee</h5>
                         <p><i class="fa fa-dot-circle-o text-info"></i> <span class="me-2">Age</span></p>
                         <div class="stats-list">
                             <div class="stats-info">
@@ -753,7 +753,7 @@
             if (db.name == "staff_take_leave") {
                 type = "bar";
                 data = db.name == "staff_take_leave" ? dataStaffTakeLeave : dataStaffTraining;
-                text = 'Staff take leave';
+                text = 'Staff Taking Leave';
                 option = {
                     plugins: {
                         legend: {
@@ -880,7 +880,7 @@
                 },
                 title: {
                     display: true,
-                    text: "HRMS Dashboards"
+                    text: "Total Number of Staff"
                 },
 
             },
@@ -1022,7 +1022,7 @@
                 },
                 title: {
                     display: true,
-                    text: '% Current number of Staff'
+                    text: '% Credit Staff Ratio'
                 },
             },
             responsive: true,
@@ -1116,7 +1116,7 @@
                 },
                 title: {
                     display: true,
-                    text: '% Resign Staff Resume'
+                    text: '% Resigned Staff'
                 },
             },
         }
@@ -1193,11 +1193,11 @@
             });
             staffResignationData.push(dataSumTermination, dataSumDeath, dataSumLayoff, dataSumSuspension, dataSumFallProbation);
         }
-        labelStaffResignation.push("Termination","Death","Lay off", "Suspension", "Fall Probation");
+        labelStaffResignation.push("Termination","Death","Lay Off", "No need to input", "Failed Probation");
         dataReasonStaffResignation.labels = labelStaffResignation;
         dataReasonStaffResignation.datasets[0].data = staffResignationData;
         let data = dataReasonStaffResignation;
-        let text = '% Reasons of Staff Resignation';
+        let text = "% Reasons of Staff's Exit";
         let option = {
             responsive: true,
             plugins: {
@@ -1336,7 +1336,7 @@
                 },
                 title: {
                     display: true,
-                    text: '% Type of Staff'
+                    text: '% Staff Retio'
                 },
             },
             responsive: true,

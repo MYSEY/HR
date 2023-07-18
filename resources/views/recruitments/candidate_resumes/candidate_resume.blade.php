@@ -4,10 +4,10 @@
         <div class="page-header">
             <div class="row align-items-center">
                 <div class="col">
-                    <h3 class="page-title">Candidate Resumes</h3>
+                    <h3 class="page-title">Candidate CVs</h3>
                     <ul class="breadcrumb">
                         <li class="breadcrumb-item"><a href="{{url('/dashboad/employee')}}">Dashboard</a></li>
-                        <li class="breadcrumb-item active">Candidate Resumes</li>
+                        <li class="breadcrumb-item active">Candidate CVs</li>
                     </ul>
                 </div>
                 <div class="col-auto float-end ms-auto">
@@ -23,23 +23,23 @@
                         <ul class="nav nav-tabs nav-tabs-bottom" role="tablist">
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link active" data-bs-toggle="tab" href="#tab_candidate_resume" aria-selected="true"
-                                    role="tab">Candidate Resume</a>
+                                    role="tab">CVs</a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" data-bs-toggle="tab" id="btn_tab_short_list" href="#tab_short_list" aria-selected="false" role="tab" data-tab-id="2"
-                                    tabindex="-1">Short List</a>
+                                    tabindex="-1">Shortlisted</a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" data-bs-toggle="tab" id="btn_not_tab_short_list" href="#tab_not_short_list" aria-selected="false" role="tab" data-tab-id="2"
-                                    tabindex="-1">Not Short List</a>
+                                    tabindex="-1">Non-Shortlisted</a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" data-bs-toggle="tab" id="btn_tab_interviewed_result" href="#tab_interviewed_result" aria-selected="false" data-tab-id="3"
-                                    role="tab" tabindex="-1">Interviewed Result</a>
+                                    role="tab" tabindex="-1">Inter-Result</a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" data-bs-toggle="tab" id="btn_tab_signed_contract" href="#tab_signed_contract" aria-selected="false" data-tab-id="4"
-                                    role="tab" tabindex="-1">Complete</a>
+                                    role="tab" tabindex="-1">Proccessing Contract</a>
                             </li>
                         </ul>
                     </div>
