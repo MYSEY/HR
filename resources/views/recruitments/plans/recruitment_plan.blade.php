@@ -33,7 +33,7 @@
     thead tr>th:first-child {
         z-index: 3;
     }
-    #plan_date {
+    .plan_date {
         position: relative;
     }
 
@@ -132,7 +132,7 @@
                             class="needs-validation" novalidate>
                             @csrf
                             <div class="row">
-                                <div class="col-sm-6">
+                                <div class="col-sm-6 col-md-6">
                                     <div class="form-group">
                                         <label>Position<span class="text-danger">*</span></label>
                                         <select class="form-select " name="position_id" required>
@@ -143,7 +143,7 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-sm-6">
+                                <div class="col-sm-6 col-md-6">
                                     <div class="form-group">
                                         <label>Branch <span class="text-danger">*</span></label>
                                         <select class="form-select" name="branch_id" required>
@@ -154,25 +154,40 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-sm-6">
+                            </div>
+                            <div class="row new_element_inp">
+                                <div class="col-sm-6 col-md-6 element-plan-month-year">
                                     <div class="form-group">
                                         <label>Plan of Year <span class="text-danger">*</span></label>
-                                        <input class="form-control" type="month" name="plan_date" id="plan_date" required>
+                                        <input class="form-control plan_date" type="month" name="plan_date[]" required>
                                     </div>
                                 </div>
-                                <div class="col-sm-6">
+                                <div class="col-sm-6 col-md-6 element-plan-total-staff">
                                     <div class="form-group">
                                         <label>Total Staff <span class="text-danger">*</span></label>
-                                        <input class="form-control @error('total_staff') is-invalid @enderror"
-                                            type="number" name="total_staff" required>
+                                        <div style="display: flex">
+                                            <input class="form-control me-3 @error('total_staff') is-invalid @enderror" type="number" name="total_staff[]" required>
+                                            <div>
+                                                <a href="javascript:void(0);" class="delete-icon education-delete-element"><i class="fa fa-trash-o" style="margin-top: 12px;"></i></a>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-
-                                <div class="col-sm-12">
+                            </div>
+                            <div id="multi_add_plan"></div>
+                            <div class="row">
+                                <div class="col-ms-12 col-md-12">
+                                    <div class="add-more">
+                                        <a class="float-end" id="btnAddEducation"><i class="fa fa-plus-circle"></i> Add More</a>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-sm-12 col-md-12">
                                     <div class="form-group">
                                         <label class="">Remark</label>
-                                        <textarea type="text" rows="3" class="form-control" name="remark" id="remark"
-                                            value="{{ old('remark') }}"></textarea>
+                                        <textarea type="text" rows="3" class="form-control" name="remark" id="remark" value="{{ old('remark') }}"></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -216,6 +231,19 @@
                 filter_year: $("#filter_year").val(),
             };
             showDatas(filter);
+        });
+
+        $('#btnAddEducation').on('click', function() {
+            $('.new_element_inp:first').clone().appendTo('#multi_add_plan');
+            var lastElementMonthYear = $('.new_element_inp:last');
+            var inputMonthYear = lastElementMonthYear.find('input');
+            inputMonthYear.val('');
+        });
+
+        $('body').on('click', '.education-delete-element', function() {
+            if ($('.new_element_inp').length > 1) {
+                $(this).closest('.new_element_inp').remove();
+            }
         });
     });
 

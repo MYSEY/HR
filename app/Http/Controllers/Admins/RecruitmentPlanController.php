@@ -49,10 +49,17 @@ class RecruitmentPlanController extends Controller
     {
         try {
             $currentday = Carbon::createFromDate()->format('d');
-            $data = $request->all();
-            $data["plan_date"] = $request->plan_date.'-'.$currentday;
-            $data['created_by'] = Auth::user()->id;
-            RecruitmentPlan::create($data);
+            foreach ($request->plan_date as $key => $plan_date) {
+                $data = [
+                    "position_id" => $request->position_id,
+                    "branch_id" => $request->branch_id,
+                    "plan_date" => $plan_date.'-'.$currentday,
+                    "total_staff" => $request->total_staff[$key],
+                    "remark" =>  $request->remark,
+                    "created_by" => Auth::user()->id,
+                ];
+                RecruitmentPlan::create($data);
+            }
             Toastr::success('Recruitment plan created successfully.','Success');
             return redirect()->back();
             DB::commit();
