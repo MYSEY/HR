@@ -197,7 +197,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
 
     // route block recruitment
     Route::get('/recruitment/plan-list', [RecruitmentPlanController::class,'index']);
-    Route::get('/recruitment/detail', [RecruitmentPlanController::class,'detail']);
+    Route::get('/recruitment/detail/{branch_id}/{position_id}/{year}', [RecruitmentPlanController::class,'detail']);
     Route::post('/recruitment/show', [RecruitmentPlanController::class,'show']);
     Route::post('/recruitment/plan-store', [RecruitmentPlanController::class,'store']);
     Route::post('/recruitment/plan-update', [RecruitmentPlanController::class,'update']);

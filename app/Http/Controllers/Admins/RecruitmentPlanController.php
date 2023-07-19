@@ -47,7 +47,7 @@ class RecruitmentPlanController extends Controller
      */
     public function store(Request $request)
     {
-        // try {
+        try {
             $currentday = Carbon::createFromDate()->format('d');
             $data = $request->all();
             $data["plan_date"] = $request->plan_date.'-'.$currentday;
@@ -56,10 +56,10 @@ class RecruitmentPlanController extends Controller
             Toastr::success('Recruitment plan created successfully.','Success');
             return redirect()->back();
             DB::commit();
-        // } catch (\Throwable $exp) {
-        //     DB::rollback();
-        //     Toastr::error('Recruitment plan created fail.','Error');
-        // }
+        } catch (\Throwable $exp) {
+            DB::rollback();
+            Toastr::error('Recruitment plan created fail.','Error');
+        }
     }
 
     /**
@@ -70,22 +70,32 @@ class RecruitmentPlanController extends Controller
      */
     public function show(Request $request)
     {
-        $data = RecruitmentPlan::with('position')->with('branch')
-        ->when($request->branch_id, function ($query, $branch_id) {
-            $query->where('branch_id', $branch_id);
-        })
-        ->when($request->position_id, function ($query, $position_id) {
-            $query->where('position_id', $position_id);
-        })
-        ->when($request->filter_year, function ($query, $filter_year) {
-            $query->whereYear('plan_date', $filter_year);
-        })
-        ->orderBy('plan_date', 'desc')
-        // ->orderBy('id', 'desc')
-        ->get();
-        return response()->json([
-            'success'=>$data,
-        ]);
+        try {
+            $by_year = null;
+            if ($request->filter_year) {
+            $by_year = $request->filter_year;
+            }else {
+                $by_year = Carbon::createFromDate()->format('Y');
+            }
+            $data = RecruitmentPlan::with('position')->with('branch')
+            ->when($request->branch_id, function ($query, $branch_id) {
+                $query->where('branch_id', $branch_id);
+            })
+            ->when($request->position_id, function ($query, $position_id) {
+                $query->where('position_id', $position_id);
+            })
+            ->when($by_year, function ($query, $filter_year) {
+                $query->whereYear('plan_date', $filter_year);
+            })
+            ->orderBy('plan_date', 'desc')
+            ->get();
+            return response()->json([
+                'success'=>$data,
+            ]);
+        } catch (\Throwable $exp) {
+            DB::rollback();
+            Toastr::error('Recruitment plan fail.','Error');
+        }
     }
 
     public function detail()
