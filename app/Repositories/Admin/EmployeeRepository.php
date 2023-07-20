@@ -4,6 +4,7 @@ namespace App\Repositories\Admin;
 
 use Carbon\Carbon;
 use App\Models\User;
+use App\Models\GenerateIdEmployee;
 use App\Repositories\BaseRepository;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -67,13 +68,19 @@ class EmployeeRepository extends BaseRepository
         }
     }
     public function createUsers($request){
-        $data = $request->all();
+        $data = $request->all(); 
         $newDateTime = Carbon::parse($data['date_of_commencement'])->addMonths(3);
         $data['fdc_date'] = $newDateTime;
         $data['emp_status'] = 'Probation';
         $data['created_by'] = Auth::user()->id;
         $data['password']   = Hash::make($request->password);
-        return User::create($data);
+        $user = User::create($data);
+        GenerateIdEmployee::create([
+            'employee_id'   => $user->id,
+            'number_employee'   => $user->number_employee,
+            'created_by' => Auth::user()->id,
+        ]);
+        return $user;
     }
     public function updatedUsers($request){
         if($request->hasFile('profile')) {

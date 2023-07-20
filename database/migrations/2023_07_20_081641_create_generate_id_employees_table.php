@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('generate_id_employees', function (Blueprint $table) {
             $table->id();
-            $table->integer('number_employee')->unique();
+            $table->string('number_employee')->unique();
             $table->integer('employee_id')->nullable();
             $table->integer('candidate_resumes_id')->nullable();
             $table->bigInteger('created_by')->unsigned()->nullable();
