@@ -373,7 +373,8 @@ class EmployeePayrollController extends Controller
                 $children = $number_of_children;
                 // អត្រា ពន្ធ(%)
                 if ($number_of_children == 0 && $item->spouse == 0) {
-                    $taxRate = Taxes::where('from', '<=' ,(string)$totalExchangeRiel)->where('to','>=',(string)$totalExchangeRiel)->first();
+                    $taxRate = Taxes::where('from', '<=' ,(string)round($totalExchangeRiel))->where('to','>=',(string)round($totalExchangeRiel))->first();
+                    dd($taxRate);
                     $totalTax = $taxRate->tax_rate;
                     if($totalExchangeRiel <= $taxRate->to){
                         $totalSalaryTaxRiel = 0;
