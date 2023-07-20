@@ -71,7 +71,7 @@
                                     <li><strong>Location :</strong> {{$payslip->users == null ? "" : $payslip->users->EmployeeBranch}}</li>
                                 </ul>
                             </div>
-                            <div class="col-lg-4 m-b-20">
+                            <div class="col-lg-6 m-b-20">
                                 <ul class="list-unstyled">
                                     <li><strong>Employee Name :</strong> {{$payslip->users == null ? "" : $payslip->users->employee_name_en}}</li>
                                     <li><strong>Departement :</strong> {{$payslip->users == null ? "" : $payslip->users->EmployeeDepartment}}</li>

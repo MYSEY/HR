@@ -16,12 +16,11 @@
                 <span>{{$payslip->users == null ? "" : $payslip->users->BranchAddress}}</span>
             </div>
             <div style="display:flex; margin-top: 5%;">
-                
                 <div style="width: 350%">
                     <strong>Employee ID :</strong> <span>{{$payslip->users == null ? "" : $payslip->users->number_employee}}</span><br>
                     <strong>Position :</strong> <span>{{$payslip->users == null ? "" : $payslip->users->EmployeePosition}}</span><br>
                     <strong>Joining Date :</strong> <span>{{$payslip->users == null ? "" : $payslip->users->joinOfDate}}</span><br>
-                    <strong>Branch :</strong> <span>{{$payslip->users == null ? "" : $payslip->users->EmployeeBranch}}</span><br>
+                    <strong>Location :</strong> <span>{{$payslip->users == null ? "" : $payslip->users->EmployeeBranch}}</span><br>
                 </div>
                 <div style="width: 350%">
                     <strong>Employee Name :</strong> <span>{{$payslip->users == null ? "" : $payslip->users->employee_name_en}}</span><br>
