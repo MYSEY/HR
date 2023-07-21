@@ -87,6 +87,9 @@
                             <a class="nav-link" data-bs-toggle="tab" id="tab_btn_NSSF" href="#tab_NSSF" aria-selected="false" role="tab" tabindex="-1" data-tab-id="2">NSSF</a>
                         </li>
                         <li class="nav-item" role="presentation">
+                            <a class="nav-link" data-bs-toggle="tab" id="tab_btn_Benefit" href="#tab_Benefit" aria-selected="false" role="tab" tabindex="-1" data-tab-id="2">Khmer New Year / Pchum Ben Benefit</a>
+                        </li>
+                        <li class="nav-item" role="presentation">
                             <a class="nav-link" data-bs-toggle="tab" id="tab_btn_seniority" href="#tab_Seniority" aria-selected="false" role="tab" tabindex="-1" data-tab-id="3">Seniority Pay</a>
                         </li>
                         <li class="nav-item" role="presentation">
@@ -268,6 +271,73 @@
                                                             <td><span>៛</span> {{ $item->pension_contribution_usd }}</td>
                                                             <td>$  {{ $item->pension_contribution_riel }}</td>
                                                             <td>{{ $item->corporate_contribution }}</td>
+                                                            <td>{{ Carbon\Carbon::parse($item->created_at)->format('d-M-Y') }}</td>
+                                                        </tr>
+                                                    @endforeach
+                                                @endif
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane show" id="tab_Benefit" role="tabpanel">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="table-responsive">
+                            <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer tbl_nssf">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <table class="table table-striped custom-table datatable dataTable no-footer" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
+                                            <thead>
+                                                <tr>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                        rowspan="1" colspan="1">Employee ID</th>
+                                                    <th class="sorting sorting_asc" tabindex="0"
+                                                        aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
+                                                        aria-sort="ascending"
+                                                        aria-label="Employee: activate to sort column descending">Full Name
+                                                    </th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                        rowspan="1" colspan="1"
+                                                        aria-label="Join Date: activate to sort column ascending">Join Date
+                                                    </th>
+
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                        rowspan="1" colspan="1"
+                                                        aria-label="Salary: activate to sort column ascending">Number Of Working Days</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                        rowspan="1" colspan="1"
+                                                        aria-label="Salary: activate to sort column ascending">Basic Salary</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                        rowspan="1" colspan="1"
+                                                        aria-label="Salary: activate to sort column ascending">Basic Salary Received
+                                                    </th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                        rowspan="1" colspan="1"
+                                                        aria-label="Payslip: activate to sort column ascending">
+                                                        Total Allowance</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                        rowspan="1" colspan="1"
+                                                        aria-label="Salary: activate to sort column ascending">Created At
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @if (count($benefit) > 0)
+                                                    @foreach ($benefit as $item)
+                                                        <tr class="odd">
+                                                            <td><a href="#">{{ $item->users == null ? '' : $item->users->number_employee }}</a></td>
+                                                            <td><a href="#">{{ $item->users == null ? '' : $item->users->employee_name_en }}</a></td></td></td>
+                                                            <td>{{ $item->users == null ? '' : $item->users->joinOfDate }}</td>
+
+                                                            <td>{{ $item->number_of_working_days }} Days</td>
+                                                            <td>$ {{ $item->base_salary }}</td>
+                                                            <td>{{ $item->base_salary_received }}</td>
+                                                            <td>{{ $item->total_allowance }}</td>
                                                             <td>{{ Carbon\Carbon::parse($item->created_at)->format('d-M-Y') }}</td>
                                                         </tr>
                                                     @endforeach

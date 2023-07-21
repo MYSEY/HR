@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admins;
 
 use Carbon\Carbon;
+use App\Models\Bonus;
 use App\Models\Branchs;
 use App\Models\Payroll;
 use App\Models\Seniority;
@@ -33,7 +34,8 @@ class PayrollReportController extends Controller
         $dataNSSF = NationalSocialSecurityFund::all();
         $dataSeniority = Seniority::all();
         $severancePay = SeverancePay::all();
-        return view('reports.payroll_report',compact('payroll','dataNSSF','dataSeniority','severancePay'));
+        $benefit = Bonus::all();
+        return view('reports.payroll_report',compact('payroll','dataNSSF','dataSeniority','severancePay','benefit'));
     }
 
     public function filter(Request $request)

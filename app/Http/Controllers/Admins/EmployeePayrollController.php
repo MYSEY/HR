@@ -120,9 +120,11 @@ class EmployeePayrollController extends Controller
                         $totalBasicSalary = $item->basic_salary;
                     }
                 }
-                
+               
+                // dd($request->exchange_rate * $item->basic_salary);
                 //National Social Security Fund (NSSF) Formula
-                $totalExchangeRielPreTax =  $request->exchange_rate * $totalBasicSalary;
+                $totalExchangeRielPreTax =  $request->exchange_rate * round($totalBasicSalary, 2);
+                
                 if ($totalExchangeRielPreTax) {
                     if ($totalExchangeRielPreTax >= 1200000) {
                         $averageWage    = 1200000;
@@ -216,12 +218,10 @@ class EmployeePayrollController extends Controller
                     $totalAmountChild = 0;
                 }
 
-
+                //calcute salary get end severance pay
                 if ($item->emp_status == 1 || $item->emp_status == 10) {
-                    $fromDate = Carbon::parse($item->fdc_date);
-                    $toDate = Carbon::parse($item->fdc_end);
-                    $totalStartDays = $fromDate->diffInDays($toDate);
-                    if($totalStartDays == 365){
+                    $severancePay = GrossSalaryPay::where('employee_id',$item->id)->get();
+                    if (count($severancePay) == 14) {
                         $endMonth = Carbon::createFromDate($item->fdc_end)->format('m');
                         $totalDayInMonth = Carbon::now()->month($endMonth)->daysInMonth;
                         
@@ -232,16 +232,39 @@ class EmployeePayrollController extends Controller
                         $startDate = Carbon::parse($item->fdc_end);
                         $endDate = Carbon::parse($currentYear);
                         $totalNewDays = $startDate->diffInDays($endDate) + 1;
-                        $totalBasicSalary = $item->basic_salary + $item->total_salary_increase;
-                        $totalnewSalary = ($totalBasicSalary / $totalDayInMonth) * $totalNewDays;
-
+                        $totalBasicSeverSalary = $item->basic_salary + $item->salary_increas;
+                        $totalnewSalary = ($totalBasicSeverSalary / $totalDayInMonth) * $totalNewDays;
+                        
                         //old salary and total old days
                         $totalOldDay = $totalDayInMonth - $totalNewDays;
                         $totalOldSalary = ($item->basic_salary / $totalDayInMonth)  * $totalOldDay;
                         $totalBasicSalary = $totalnewSalary + $totalOldSalary;
+
+                    }else if(count($severancePay) == 26){
+                        if($totalStartDays == 365){
+                            $endMonth = Carbon::createFromDate($item->fdc_end)->format('m');
+                            $totalDayInMonth = Carbon::now()->month($endMonth)->daysInMonth;
+                            
+                            $date_of_month = Carbon::createFromDate($item->fdc_end)->format('Y-m');
+                            $currentYear = $date_of_month.'-'.$totalDayInMonth;
+                            
+                            // new salary and new total days
+                            $startDate = Carbon::parse($item->fdc_end);
+                            $endDate = Carbon::parse($currentYear);
+                            $totalNewDays = $startDate->diffInDays($endDate) + 1;
+                            $totalBasicSeverSalary = $item->basic_salary + $item->salary_increas;
+                            $totalnewSalary = ($totalBasicSeverSalary / $totalDayInMonth) * $totalNewDays;
+
+                            //old salary and total old days
+                            $totalOldDay = $totalDayInMonth - $totalNewDays;
+                            $totalOldSalary = ($item->basic_salary / $totalDayInMonth)  * $totalOldDay;
+                            $totalBasicSalary = $totalnewSalary + $totalOldSalary;
+                        }
                     }
                 }
+                
                 $grossSalary = $totalBasicSalary + $totalBunus + $item->phone_allowance + $totalAmountChild;
+
                 $dataGrossSalary = GrossSalaryPay::create([
                     'employee_id'           => $item->id,
                     'basic_salary'          => $item->basic_salary,
@@ -313,12 +336,13 @@ class EmployeePayrollController extends Controller
 
                 
                 //sum salary and sum other benefit
-                $baseSalaryReceivedUsd = $grossSalary + $seniorityPayableTax - $pension_contribution;
+                $baseSalaryReceivedUsd = round($grossSalary, 2) + $seniorityPayableTax - $pension_contribution;
                 // $totalGrossSalary = $grossSalary + $seniorityPayableTax;
 
                 //exchange rate
                 $totalExchangeRiel =  $request->exchange_rate * $baseSalaryReceivedUsd;
-                
+           
+                // dd($totalExchangeRiel);
                 //total that បូកបន្ថែមលើបន្ទុកកូននិងប្រពន្ធ
                 $totalChargesReducedChild = $childrenAllowance->reduced_burden_children;
                 $totalChargesReducedSpouse = $childrenAllowance->spouse_allowance;
@@ -369,12 +393,12 @@ class EmployeePayrollController extends Controller
                 }else if($number_of_children == 4 &&  $item->spouse == 1){
                     $totalTtaxBbaseRiel = $totalExchangeRiel - $totalChargesReduced;
                 }
-         
+               
                 $children = $number_of_children;
                 // អត្រា ពន្ធ(%)
                 if ($number_of_children == 0 && $item->spouse == 0) {
-                    $taxRate = Taxes::where('from', '<=' ,(string)round($totalExchangeRiel))->where('to','>=',(string)round($totalExchangeRiel))->first();
-                    dd($taxRate);
+                    $taxRate = Taxes::where('from', '<=' ,(int)$totalTtaxBbaseRiel)->where('to','>=',(int)$totalTtaxBbaseRiel)->first();
+                    
                     $totalTax = $taxRate->tax_rate;
                     if($totalExchangeRiel <= $taxRate->to){
                         $totalSalaryTaxRiel = 0;
