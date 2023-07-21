@@ -91,7 +91,7 @@ function menu(){
                     'permission'=>1
                 ],
                 [
-                    'value'=>'Candidate Resume',
+                    'value'=>'Candidate CV',
                     'url'=>"recruitment/candidate-resume/list",
                     'table'=>2,
                     'permission'=>1

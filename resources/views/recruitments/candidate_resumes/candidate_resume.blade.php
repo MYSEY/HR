@@ -39,7 +39,11 @@
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" data-bs-toggle="tab" id="btn_tab_signed_contract" href="#tab_signed_contract" aria-selected="false" data-tab-id="4"
-                                    role="tab" tabindex="-1">Proccessing Contract</a>
+                                    role="tab" tabindex="-1">Processing Contract</a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link" data-bs-toggle="tab" id="btn_tab_signed_contract_cancel" href="#tab_signed_contract_cancel" aria-selected="false" data-tab-id="5"
+                                    role="tab" tabindex="-1">Canceled Contract</a>
                             </li>
                         </ul>
                     </div>
@@ -83,45 +87,133 @@
         @include('recruitments.candidate_resumes.modal_form_create_emp')
     </div>
 @endsection
-{{-- @include('recruitments.candidate_resumes.print_signed_contract') --}}
 
 @include('includs.script')
 <script src="{{asset('/admin/js/validation-field.js')}}"></script>
-<link rel="stylesheet" href="{{ asset('admin/css/noty.css') }}">
-<script src="{{asset('/admin/js/noty.js')}}"></script>
 <script type="text/javascript">
     $(function(){
         $("#btn_tab_short_list, #btn_not_tab_short_list").on("click", function(){
             let tab_status = $(this).attr('data-tab-id');
             showDatas(tab_status);
         });
-        $("#btn_tab_interviewed_result, #btn_tab_signed_contract").on("click", function(){
+        $("#btn_tab_interviewed_result, #btn_tab_signed_contract, #btn_tab_signed_contract_cancel").on("click", function(){
             let tab_status = $(this).attr('data-tab-id');
+            if (tab_status ==  5) {
+                tab_status ="Cancel"
+            }
             showDatas(tab_status);
         });
-
-        $(document).on('click','.btn_print_signed_contract', function(){
-            var _this = $(this).parents('tr');
-            $("#candidate_id").val(_this.find('.ids').text());
-            $(".employee_name_kh").val(_this.find('.name_kh').text());
-            $(".employee_name_en").val(_this.find('.name_en').text());
-            $("#position").val(_this.find('.position').text());
-            $("#position_id").val($('.position_id').attr("data-postion"));
-
-            $("#gender_name").val(_this.find('.gender_name_english').text());
-            $("#gender_id").val($('.gender_id').attr("data-gender"));
-            $(".date_of_commencement").val($('.join_date').attr("data-join-date"));
-            $("#branch_name").val(_this.find('.branch').text());
-            $("#branch_id").val($('.branch_id').attr("data-branch"));
-            $(".personal_phone_number").val($('.phone_number').attr("data-phone-number"));
-            $("#add_emp").modal("show");
+        $(document).on('click','.btn_approve', function(){
+            let id = $(this).data("id");
+            $.confirm({
+                title: 'Approve!',
+                content: '' +
+                '<form action="" class="formName">' +
+                    '<div class="form-group">' +
+                        '<label>Are you sure want to Approve?</label>' +
+                        '<input type="hidden" class="form-control id" id="" name="" value="'+id+'">'+
+                    '</div>' +
+                '</form>',
+                buttons: {
+                    formSubmit: {
+                        text: 'OK',
+                        btnClass: 'btn-blue',
+                        action: function () {
+                            var id = this.$content.find('.id').val();
+                            axios.post('{{ URL('recruitment/candidate-resume/createemp') }}', {
+                                'id': id,
+                                'status': "Upcoming",
+                            }).then(function(response) {
+                                new Noty({
+                                    title: "",
+                                    text: "The process has been successfully.",
+                                    type: "success",
+                                    timeout: 3000,
+                                    icon: true
+                                }).show();
+                                showDatas("4");
+                            }).catch(function(error) {
+                                new Noty({
+                                    title: "",
+                                    text: "Something went wrong please try again later.",
+                                    type: "error",
+                                    icon: true
+                                }).show();
+                            });
+                        }
+                    },
+                    cancel: {
+                        text: 'Cancel',
+                        btnClass: 'btn-red btn-sm',
+                    },
+                },
+                onContentReady: function () {
+                    var jc = this;
+                    this.$content.find('form').on('submit', function (e) {
+                        e.preventDefault();
+                        jc.$$formSubmit.trigger('click');
+                    });
+                }
+            });
         });
-        
+        $(document).on('click','.btn_cancel', function(){
+            let id = $(this).data("id");
+            $.confirm({
+                title: 'Cancel!',
+                content: '' +
+                '<form action="" class="formName">' +
+                    '<div class="form-group">' +
+                        '<label>Are you sure want to Cancel?</label>' +
+                        '<input type="hidden" class="form-control id" id="" name="" value="'+id+'">'+
+                    '</div>' +
+                '</form>',
+                buttons: {
+                    formSubmit: {
+                        text: 'OK',
+                        btnClass: 'btn-blue',
+                        action: function () {
+                            var id = this.$content.find('.id').val();
+                            axios.post('{{ URL('recruitment/candidate-resume/status') }}', {
+                                'id': id,
+                                'status': "Cancel",
+                            }).then(function(response) {
+                                new Noty({
+                                    title: "",
+                                    text: "The process has been successfully.",
+                                    type: "success",
+                                    timeout: 3000,
+                                    icon: true
+                                }).show();
+                                showDatas("4");
+                            }).catch(function(error) {
+                                new Noty({
+                                    title: "",
+                                    text: "Something went wrong please try again later.",
+                                    type: "error",
+                                    icon: true
+                                }).show();
+                            });
+                        }
+                    },
+                    cancel: {
+                        text: 'Cancel',
+                        btnClass: 'btn-red btn-sm',
+                    },
+                },
+                onContentReady: function () {
+                    var jc = this;
+                    this.$content.find('form').on('submit', function (e) {
+                        e.preventDefault();
+                        jc.$$formSubmit.trigger('click');
+                    });
+                }
+            });
+        });
         $('.delete').on('click', function() {
             var _this = $(this).parents('tr');
             $('.e_id').val(_this.find('.ids').text());
         });
-        $('.update').on('click', function() {
+        $(document).on('click','.update', function(){
             let id = $(this).data("id");
             $("#e_id").val(id);
             $.ajax({
@@ -175,7 +267,6 @@
                         // $('#e_remark').val(response.success.remark);
                         $('#status').val(response.success.status);
                     }
-
                     $('#edit_staff').modal('show');
                 }
             });
@@ -197,7 +288,7 @@
                 $.confirm({
                     title: 'Candidate Resume Status!',
                     contentClass: 'text-center',
-                    backgroundDismiss: 'cancel',
+                    // backgroundDismiss: 'cancel',
                     content: ''+
                         '<form method="post" class="formName">'+
                             '<div class="form-group">'+
@@ -226,6 +317,7 @@
                                             title: "",
                                             text: "The process has been successfully.",
                                             type: "success",
+                                            timeout: 3000,
                                             icon: true
                                         }).show();
                                         $('.card-footer').remove();
@@ -251,7 +343,7 @@
                 $.confirm({
                     title: 'Candidate Resume Status!',
                     contentClass: 'text-center',
-                    backgroundDismiss: 'cancel',
+                    // backgroundDismiss: 'cancel',
                     content: ''+
                         '<form class="needs-validation" novalidate>'+
                             '<div class="form-group">'+
@@ -333,6 +425,7 @@
                                         title: "",
                                         text: "The process has been successfully.",
                                         type: "success",
+                                        timeout: 3000,
                                         icon: true
                                     }).show();
                                     $('.card-footer').remove();
@@ -353,6 +446,7 @@
                         },
                     }
                 }); 
+                
             }else if(status == 3){
                 let data_status = $(this).attr('data-status');
                 let select_joined_interview  = ""; 
@@ -370,7 +464,7 @@
                 $.confirm({
                     title: 'Candidate Resume Status!',
                     contentClass: 'text-center',
-                    backgroundDismiss: 'cancel',
+                    // backgroundDismiss: 'cancel',
                     content: ''+
                         '<form class="needs-validation" novalidate>'+
                             '<div class="form-group">'+
@@ -456,6 +550,7 @@
                                         title: "",
                                         text: "The process has been successfully.",
                                         type: "success",
+                                        timeout: 3000,
                                         icon: true
                                     }).show();
                                     $('.card-footer').remove();
@@ -480,7 +575,7 @@
                 $.confirm({
                     title: 'Candidate Resume Status!',
                     contentClass: 'text-center',
-                    backgroundDismiss: 'cancel',
+                    // backgroundDismiss: 'cancel',
                     content: ''+
                         '<form class="needs-validation" novalidate>'+
                             '<div class="form-group">'+
@@ -527,6 +622,7 @@
                                         title: "",
                                         text: "The process has been successfully.",
                                         type: "success",
+                                        timeout: 3000,
                                         icon: true
                                     }).show();
                                     $('.card-footer').remove();
@@ -539,12 +635,19 @@
                                         icon: true
                                     }).show();
                                 });
-                            }
+                            },
                         },
                         cancel: {
                             text: 'Cancel',
                             btnClass: 'btn-red btn-sm',
                         },
+                    },
+                    onContentReady: function () {
+                        var jc = this;
+                        this.$content.find('form').on('submit', function (e) {
+                            e.preventDefault();
+                            jc.$$formSubmit.trigger('click');
+                        });
                     }
                 }); 
             }
@@ -565,6 +668,7 @@
                     var tr = "";
                     var tr_not_list = "";
                     var tr_ct = "";
+                    var tr_ct_cancel = "";
                     if (btn_tab == 2) {
                         datas.map((staff) => {
                             let interviewed_date = "";
@@ -688,6 +792,12 @@
                             };
                             let status_show = "";
                             if (staff_result.interviewed_result == 1 || staff_result.interviewed_result == 3 || staff_result.interviewed_result == 4 || staff_result.interviewed_result == 5) {
+                                let complete = '';
+                                if (staff_result.interviewed_result == 1) {
+                                    complete = '<a class="dropdown-item" data-emp-id="'+(staff_result.id)+'" data-id="4" href="#">'+
+                                                '<i class="fa fa-dot-circle-o text-success"></i> Complete'+
+                                            '</a>';
+                                }
                                 status_show = '<div class="dropdown action-label">'+
                                                 '<a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">'+
                                                     (tag_i)+
@@ -697,9 +807,7 @@
                                                     '<a class="dropdown-item" data-emp-id="'+(staff_result.id)+'"  data-id="3" data-status="'+(staff_result.status)+'" href="#">'+
                                                         '<i class="fa fa-dot-circle-o text-info"></i> Interviewed'+
                                                     '</a>'+
-                                                    '<a class="dropdown-item" data-emp-id="'+(staff_result.id)+'" data-id="4" href="#">'+
-                                                        '<i class="fa fa-dot-circle-o text-success"></i> Complete'+
-                                                    '</a>'+
+                                                   (complete)+
                                                 '</div>'+
                                             '</div>';
                             }else{
@@ -721,7 +829,7 @@
                                 '<td >'+(staff_result.remark ? staff_result.remark: "")+'</td>'+
                             '</tr>';
                         });
-                    }else if (btn_tab == 4) {
+                    }else if (btn_tab == 4 || btn_tab == "Cancel") {
                         datas.map((staff_result) => {
                             let interview_result = "";
                             if (staff_result.interviewed_result == 1) {
@@ -729,31 +837,57 @@
                             }
                             let join_date = staff_result.join_date ? moment(staff_result.join_date).format('MMM-D-YYYY') : "";
                             let contract_date = staff_result.contract_date ? moment(staff_result.contract_date).format('MMM-D-YYYY') : "";
-                            tr_ct += ' <tr class="odd">'+
-                                '<td class="ids">'+(staff_result.id)+'</td>'+
-                                '<td class="name_kh" >'+(staff_result.name_kh )+'</td>'+
-                                '<td class="name_en">'+(staff_result.name_en)+'</td>'+
-                                '<td class="gender_name_english"><input type="text" class="gender_id" data-gender="'+(staff_result.gender)+'" hidden>'+(staff_result.option.name_english)+'</td>'+
-                                '<td class="position" ><input type="text" class="position_id" data-postion="'+(staff_result.position_applied)+'" hidden>'+(staff_result.position.name_english)+'</td>'+
-                                '<td class="branch"><input type="text" class="branch_id" data-branch="'+(staff_result.location_applied)+'" hidden>'+(staff_result.branch.branch_name_en)+'</td>'+
-                                '<td >'+(contract_date)+'</td>'+
-                                '<td ><input type="date" class="join_date" data-join-date="'+(staff_result.join_date)+'" hidden>'+(join_date)+'</td>'+
-                                '<td ><span class="badge bg-inverse-success">'+(interview_result)+'</snap></td>'+
-                                '<td >'+(staff_result.remark ? staff_result.remark: "")+'</td>'+
-                                '<td>'+
-                                    '<input type="text" class="phone_number" data-phone-number="'+(staff_result.contact_number)+'" hidden>'+
-                                    '<div class="dropdown dropdown-action">'+
-                                        '<a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">'+
-                                            '<i class="material-icons">more_vert</i>'+
-                                        '</a>'+
-                                        '<div class="dropdown-menu dropdown-menu-right">'+
-                                            '<a class="dropdown-item btn_print_signed_contract" href="#">'+
-                                                '<i class="fa fa-print fa-lg m-r-5"></i> Print'+
+                            let updated_at =  moment(staff_result.updated_at).format('MMM-D-YYYY');
+                            if (staff_result.status == "Cancel") {
+                                action = "";
+                                tr_ct_cancel += ' <tr class="odd">'+
+                                    '<td class="ids">'+(staff_result.id)+'</td>'+
+                                    '<td class="name_kh" >'+(staff_result.name_kh )+'</td>'+
+                                    '<td class="name_en">'+(staff_result.name_en)+'</td>'+
+                                    '<td class="gender_name_english"><input type="text" class="gender_id" data-gender="'+(staff_result.gender)+'" hidden>'+(staff_result.option.name_english)+'</td>'+
+                                    '<td class="position" ><input type="text" class="position_id" data-postion="'+(staff_result.position_applied)+'" hidden>'+(staff_result.position.name_english)+'</td>'+
+                                    '<td class="branch"><input type="text" class="branch_id" data-branch="'+(staff_result.location_applied)+'" hidden>'+(staff_result.branch.branch_name_en)+'</td>'+
+                                    '<td >'+(contract_date)+'</td>'+
+                                    '<td ><input type="date" class="join_date" data-join-date="'+(staff_result.join_date)+'" hidden>'+(join_date)+'</td>'+
+                                    '<td ><span class="badge bg-inverse-success">'+(interview_result)+'</snap></td>'+
+                                    '<td >'+(staff_result.remark ? staff_result.remark: "")+'</td>'+
+                                    '<td ><span class="badge bg-inverse-danger">'+(staff_result.status)+'</snap></td>'+
+                                    '<td >'+(updated_at)+'</td>'+
+                                '</tr>';
+                            }else{
+                                tr_ct += ' <tr class="odd">'+
+                                    '<td class="ids">'+(staff_result.id)+'</td>'+
+                                    '<td class="name_kh" >'+(staff_result.name_kh )+'</td>'+
+                                    '<td class="name_en">'+(staff_result.name_en)+'</td>'+
+                                    '<td class="gender_name_english"><input type="text" class="gender_id" data-gender="'+(staff_result.gender)+'" hidden>'+(staff_result.option.name_english)+'</td>'+
+                                    '<td class="position" ><input type="text" class="position_id" data-postion="'+(staff_result.position_applied)+'" hidden>'+(staff_result.position.name_english)+'</td>'+
+                                    '<td class="branch"><input type="text" class="branch_id" data-branch="'+(staff_result.location_applied)+'" hidden>'+(staff_result.branch.branch_name_en)+'</td>'+
+                                    '<td >'+(contract_date)+'</td>'+
+                                    '<td ><input type="date" class="join_date" data-join-date="'+(staff_result.join_date)+'" hidden>'+(join_date)+'</td>'+
+                                    '<td ><span class="badge bg-inverse-success">'+(interview_result)+'</snap></td>'+
+                                    '<td >'+(staff_result.remark ? staff_result.remark: "")+'</td>'+
+                                    '<td>'+
+                                        '<input type="text" class="phone_number" data-phone-number="'+(staff_result.contact_number)+'" hidden>'+
+                                        '<div class="dropdown dropdown-action">'+
+                                            '<a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">'+
+                                                '<i class="material-icons">more_vert</i>'+
                                             '</a>'+
+                                            '<div class="dropdown-menu dropdown-menu-right">'+
+                                                '<a class="dropdown-item btn_print_signed_contract" href="#" data-print-status="4" data-id="'+(staff_result.id)+'">'+
+                                                    '<i class="fa fa-print fa-lg m-r-5"></i> Print'+
+                                                '</a>'+
+                                                '<a class="btn btn-sm dropdown-item btn_approve" href="#" data-id="'+(staff_result.id)+'">'+
+                                                    '<i class="fa fa-dot-circle-o text-success"></i>'+
+                                                    '<span> Approve</span>'+
+                                                '</a>'+
+                                                '<a class="dropdown-item btn_cancel text-danger" href="#" data-id="'+(staff_result.id)+'">'+
+                                                    '  <span aria-hidden="true">&times;</span> Cancel'+
+                                                '</a>'+
+                                            '</div>'+
                                         '</div>'+
-                                    '</div>'+
-                                '</td>'+
-                            '</tr>';
+                                    '</td>'+
+                                '</tr>';
+                            }
                         });
                     }
                 }else {
@@ -766,6 +900,7 @@
                 $(".tbl-not-short-list tbody").html(tr_not_list);
                 $(".tbl-result tbody").html(tr_re);
                 $(".tbl-signed-contract tbody").html(tr_ct);
+                $(".tbl-signed-contract_cancel tbody").html(tr_ct_cancel);
             }
         });
     }

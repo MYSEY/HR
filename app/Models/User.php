@@ -63,6 +63,7 @@ class User extends Authenticatable
         'level',
         'gender',
         'date_of_birth',
+        'id_card_number',
         'nationality',
         'date_of_commencement',
         'guarantee_letter',

@@ -40,6 +40,25 @@ class CandidateResume extends Model
         'joined_interview',
         'contract_date',
         'interviewed_channel',
+        'fdc_date',
+        'id_card_number',
+        'basic_salary',
+        'salary_increas',
+        'position_type',
+        'department_id',
+        'date_of_birth',
+        'current_province',
+        'current_district',
+        'current_commune',
+        'current_village',
+        'current_house_no',
+        'current_street_no',
+        'permanent_province',
+        'permanent_district',
+        'permanent_commune',
+        'permanent_village',
+        'permanent_house_no',
+        'permanent_street_no',
         'created_by',
         'updated_by',
     ];
@@ -49,10 +68,33 @@ class CandidateResume extends Model
     public function position(){
         return $this->belongsTo(Position::class,'position_applied');
     }
+    public function positiontype(){
+        return $this->belongsTo(Option::class,'position_type', 'id');
+    }
     public function branch()
     {
         return $this->belongsTo(Branchs::class ,'location_applied');
     }
+
+    //// Current address
+    public function currentprovince(){
+        return $this->belongsTo(Province::class,'current_province','code');
+    }
+    public function currentdistrict(){
+        return $this->belongsTo(District::class,'current_district','code');
+    }
+    public function currentcommune(){
+        return $this->belongsTo(Conmmunes::class,'current_commune','code');
+    }
+    public function currentvillage(){
+        return $this->belongsTo(Villages::class,'current_village','code');
+    }
+
+    //// Permanent address
+    public function permanentprovince(){
+        return $this->belongsTo(Province::class,'permanent_province','code');
+    }
+
     public function createdBy()
     {
         return $this->belongsTo(User::class, 'created_by');

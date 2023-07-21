@@ -1197,7 +1197,7 @@
         dataReasonStaffResignation.labels = labelStaffResignation;
         dataReasonStaffResignation.datasets[0].data = staffResignationData;
         let data = dataReasonStaffResignation;
-        let text = "% Reasons of Staff's Exit";
+        let text = "% Reasons of Staff’s Exit";
         let option = {
             responsive: true,
             plugins: {
@@ -1336,7 +1336,7 @@
                 },
                 title: {
                     display: true,
-                    text: '% Staff Retio'
+                    text: '% Staff Ratio'
                 },
             },
             responsive: true,

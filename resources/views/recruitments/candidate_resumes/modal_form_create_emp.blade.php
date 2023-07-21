@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Add New Employee</h5>
+                <h5 class="modal-title">Edit Candidate CV</h5>
                 <button type="button" class="close btn-close" data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -15,48 +15,43 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="">Employee ID</label>
-                                <input type="text" class="form-control number_employee" value="{{$autoEmpId}}" disabled>
-                                <input type="text" class="form-control number_employee" id="number_employee" name="number_employee" value="{{$autoEmpId}}" hidden>
+                                <input type="text" class="form-control number_employee clear_data" disabled>
+                                <input type="text" class="form-control number_employee clear_data" id="number_employee" name="number_employee" hidden>
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="">
-                                <label class="">Name (KH)</label>
-                                <input class="form-control employee_name_kh" type="text" disabled>
-                                <input class="form-control employee_name_kh" type="text" id="employee_name_kh" name="employee_name_kh" hidden>
+                                <label class="">Name (KH) <span class="text-danger">*</span></label>
+                                <input class="form-control employee_name_kh emp_required" type="text" id="employee_name_kh" name="employee_name_kh" required>
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="">Name (EN)</label>
-                                <input class="form-control employee_name_en" type="text" disabled>
-                                <input class="form-control employee_name_en" type="text" id="employee_name_en" name="employee_name_en" hidden>
+                                <label class="">Name (EN) <span class="text-danger">*</span></label>
+                                <input class="form-control employee_name_en emp_required clear_data" type="text" id="employee_name_en" name="employee_name_en" required>
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label>Gender</label>
-                                <input class="form-control" type="text" id="gender_name" disabled>
-                                <input class="form-control" type="text" id="gender_id" name="gender" hidden>
+                                <label>Gender <span class="text-danger">*</span></label>
+                                <select class="form-control form-select emp_required clear_data" name="gender" id="emp_gender">
+                                </select>
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label>Position</label>
-                                <input class="form-control" type="text" id="position"disabled>
-                                <input class="form-control" type="text" id="position_id" name="position_id" hidden>
+                                <label>Position <span class="text-danger">*</span></label>
+                                <select class="form-control form-select emp_required clear_data" name="position_id" id="emp_position" required>
+                                </select>
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="">Position Type <span class="text-danger">*</span></label>
-                                <select class="form-control emp_required" id="position_type" name="position_type" required>
+                                <select class="form-control emp_required clear_data" id="position_type" name="position_type" required>
                                     <option value="">Please select position type</option>
-                                    @foreach ($optionPositionType as $item)
-                                        <option value="{{$item->id}}">{{$item->name_english}}</option>
-                                    @endforeach
                                 </select>
                             </div>
                         </div>
@@ -64,19 +59,16 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>Branch</label>
-                                <input class="form-control" type="text" id="branch_name" disabled>
-                                <input class="form-control" type="text" id="branch_id" name="branch_id" hidden>
+                                <label>Branch <span class="text-danger">*</span></label>
+                                <select class="form-control form-select clear_data" name="branch_id" id="emp_branch" required>
+                                </select>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Department <span class="text-danger">*</span></label>
-                                <select class="form-control emp_required" id="department_id" name="department_id"  required>
+                                <select class="form-control emp_required clear_data" id="department_id" name="department_id"  required>
                                     <option value="">Please select department</option>
-                                    @foreach ($department as $item)
-                                        <option value="{{$item->id}}">{{$item->name_english}}</option>
-                                    @endforeach
                                 </select>
                             </div>
                         </div>
@@ -86,24 +78,15 @@
                             <div class="form-group">
                                 <label>Date Of Birth <span class="text-danger">*</span></label>
                                 <div class="cal-icon">
-                                    <input class="form-control datetimepicker @error('date_of_birth') is-invalid @enderror emp_required" type="text" required id="date_of_birth" name="date_of_birth">
+                                    <input class="form-control clear_data datetimepicker @error('date_of_birth') is-invalid @enderror emp_required" type="text" required id="date_of_birth" name="date_of_birth" required>
                                 </div>
                             </div>
                         </div>
-                        {{-- <div class="col-sm-6">
-                            <div class="">
-                                <label class="">Place of birth</label>
-                                <div class="cal-icon">
-                                    <input class="form-control place_of_birth" id="place_of_birth" type="text">
-                                </div>
-                            </div>
-                        </div> --}}
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="">Join Date</label>
+                                <label class="">Join Date <span class="text-danger">*</span></label>
                                 <div class="cal-icon">
-                                    <input class="form-control datetimepicker date_of_commencement" type="text" disabled>
-                                    <input class="form-control datetimepicker date_of_commencement" type="text" id="date_of_commencement" name="date_of_commencement" hidden>
+                                    <input class="form-control clear_data datetimepicker date_of_commencement emp_required" type="text" id="date_of_commencement" name="date_of_commencement" required>
                                 </div>
                             </div>
                         </div>
@@ -112,29 +95,16 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label>ID card number <span class="text-danger">*</span></label>
-                                <input class="form-control emp_required" type="number" id="id_card_number" name="id_card_number" required>
+                                <input class="form-control emp_required clear_data" type="text" id="id_card_number" name="id_card_number" required>
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="">Personal Phone <span class="text-danger">*</span></label>
-                                <input class="form-control personal_phone_number" type="number" disabled>
-                                <input class="form-control personal_phone_number" type="number" id="personal_phone_number" name="personal_phone_number" hidden>
+                                <input class="form-control personal_phone_number emp_required clear_data" type="number" id="personal_phone_number" name="personal_phone_number" required>
                             </div>
                         </div>
                     </div>
-                    {{-- <div class="row">
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label>Password <span class="text-danger">*</span></label>
-                                <input type="password" class="form-control @error('password') is-invalid @enderror" required name="password" id="password" placeholder="">
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <label>Confirm Password</label>
-                            <input type="password" class="form-control" required name="password_confirmation" placeholder="">
-                        </div>
-                    </div> --}}
                     <div class="form-group col-md-12 col-12" element="div" bp-field-wrapper="true" bp-field-name="Identity" bp-field-type="custom_html">
                         <label class="navbar-brand custom-navbar-brand mb-0" style="width: 100%; background: #dfe6e9; padding: 6px;font-size: 15px;font-weight: normal !important;">Basic Salary</label>
                     </div>
@@ -144,7 +114,7 @@
                                 <label>Basic Salary <span class="text-danger">*</span></label>
                                 <div class="input-group">
                                     <span class="input-group-text">$</span>
-                                    <input type="number" class="form-control emp_required" id="basic_salary" name="basic_salary" placeholder="" required>
+                                    <input type="number" class="form-control emp_required clear_data" id="basic_salary" name="basic_salary" placeholder="" required>
                                 </div>
                             </div>
                         </div>
@@ -153,7 +123,7 @@
                                 <label>Salary to increase</label>
                                 <div class="input-group">
                                     <span class="input-group-text">$</span>
-                                    <input class="form-control" type="number" id="salary_to_increase">
+                                    <input class="form-control clear_data" type="number" id="salary_to_increase">
                                 </div>
                             </div>
                         </div>
@@ -169,20 +139,15 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Province/City <span class="text-danger">*</span></label>
-                                    <select class="form-control @error('current_province') is-invalid @enderror emp_required" id="current_province" name="current_province" required>
+                                    <select class="form-control clear_data @error('current_province') is-invalid @enderror emp_required" id="current_province" name="current_province" required>
                                         <option value="" selected> --Select --</option>
-                                        @if (count($province)>0)
-                                            @foreach ($province as $item)
-                                                <option value="{{$item->code}}">{{$item->name_en}}</option>
-                                            @endforeach
-                                        @endif
                                     </select>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>District/Khan <span class="text-danger">*</span></label>
-                                    <select class="form-control  @error('current_district') is-invalid @enderror emp_required" id="current_district" name="current_district" required>
+                                    <select class="form-control clear_data  @error('current_district') is-invalid @enderror emp_required" id="current_district" name="current_district" required>
                                     </select>
                                 </div>
                             </div>
@@ -190,14 +155,14 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="no-error-label">Commune/Sangkat <span class="text-danger">*</span></label>
-                                    <select class="form-control no-error-border  @error('current_commune') is-invalid @enderror emp_required" id="current_commune" name="current_commune" required>
+                                    <select class="form-control no-error-border clear_data @error('current_commune') is-invalid @enderror emp_required" id="current_commune" name="current_commune" required>
                                     </select>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="no-error-label">Village <span class="text-danger">*</span></label>
-                                    <select class="form-control no-error-border @error('current_village') is-invalid @enderror emp_required" id="current_village" name="current_village" required>
+                                    <select class="form-control no-error-border clear_data @error('current_village') is-invalid @enderror emp_required" id="current_village" name="current_village" required>
                                     </select>
                                 </div>
                             </div>
@@ -208,13 +173,13 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>House No</label>
-                                <input class="form-control" type="text" id="current_house_no" name="current_house_no">
+                                <input class="form-control clear_data" type="text" id="current_house_no" name="current_house_no">
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Street No</label>
-                                <input class="form-control" type="text" id="current_street_no" name="current_street_no">
+                                <input class="form-control clear_data" type="text" id="current_street_no" name="current_street_no">
                             </div>
                         </div>
                     </div>
@@ -230,20 +195,15 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Province/City <span class="text-danger">*</span></label>
-                                    <select class="form-control @error('current_commune') is-invalid @enderror emp_required" id="permanent_province" name="permanent_province" required>
+                                    <select class="form-control clear_data @error('current_commune') is-invalid @enderror emp_required" id="permanent_province" name="permanent_province" required>
                                         <option value="" selected> --Select --</option>
-                                        @if (count($province)>0)
-                                        @foreach ($province as $item)
-                                        <option value="{{$item->code}}">{{$item->name_en}}</option>
-                                        @endforeach
-                                        @endif
                                     </select>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>District/Khan</label>
-                                    <select class="select form-control" id="permanent_district" name="permanent_district" value="{{old('permanent_district')}}">
+                                    <select class="select form-control clear_data" id="permanent_district" name="permanent_district" value="{{old('permanent_district')}}">
                                     </select>
                                 </div>
                             </div>
@@ -251,14 +211,14 @@
                             <div class="col-md-6">
                                 <div class="form-group ">
                                     <label class="no-error-label">Commune/Sangkat</label>
-                                    <select class="select form-control no-error-border" id="permanent_commune" name="permanent_commune" value="{{old('permanent_commune')}}">
+                                    <select class="select form-control no-error-border clear_data" id="permanent_commune" name="permanent_commune" value="{{old('permanent_commune')}}">
                                     </select>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="no-error-label">Village</label>
-                                    <select class="select form-control no-error-border" id="permanent_village" name="permanent_village" value="{{old('permanent_village')}}">
+                                    <select class="select form-control no-error-border clear_data" id="permanent_village" name="permanent_village" value="{{old('permanent_village')}}">
                                     </select>
                                 </div>
                             </div>
@@ -269,13 +229,13 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>House No</label>
-                                <input class="form-control" type="text" id="permanent_house_no" name="permanent_house_no">
+                                <input class="form-control clear_data" type="text" id="permanent_house_no" name="permanent_house_no">
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Street No</label>
-                                <input class="form-control" type="text" id="permanent_street_no" name="permanent_street_no">
+                                <input class="form-control clear_data" type="text" id="permanent_street_no" name="permanent_street_no">
                             </div>
                         </div>
                     </div>
@@ -287,15 +247,16 @@
                     </div>
 
                     <div class="submit-section">
-                        <button type="submit" class="btn btn-primary btn_save_print" id="btn_save_print" data-dismiss="modal">
-                            <span class="btn-text-print">Save and Print</span>
+                        <button type="button" class="btn btn-primary btn_save_print" id="btn_save_print" data-dismiss="modal" data-btn="1">
+                            <span class="btn-text-print">Print</span>
                             <span id="btn-print-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading</span>
                         </button>
 
-                        {{-- <button type="submit" class="btn btn-primary submit-btn" id="btn_save_print" data-dismiss="modal">
-                            <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading </span>
-                            <span class="btn-txt">{{ __('Save and Print') }}</span>
-                        </button> --}}
+                        <button type="button" class="btn btn-primary btn_save" id="btn_save" data-dismiss="modal" data-btn="2">
+                            <span class="btn-text-save">{{ __('Edit') }}</span>
+                            <span id="btn-save-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading </span>
+                           
+                        </button>
                     </div>
                 </form>
             </div>
@@ -304,11 +265,10 @@
 </div>
 @include('recruitments.candidate_resumes.print_signed_contract')
 
+
 <script src="{{asset('/admin/js/validation-field.js')}}"></script>
 <script type="text/javascript" src="{{ asset('/admin/js/printThis.js') }}"></script>
-<link rel="stylesheet" href="{{ asset('admin/css/noty.css') }}">
-<script src="{{asset('/admin/js/noty.js')}}"></script>
-
+<script src="{{asset('/admin/js/format-date-kh.js')}}"></script>
 <script type="text/javascript">
     $(function(){
          // block Current Address
@@ -359,23 +319,205 @@
             $('#permanent_village').html('<option selected disabled> --Select --</option>');
             showProvince(id, optionSelect);
         });
-        
 
-        $("#btn_save_print").on("click", function(){
+        $(document).on('click','.btn_print_signed_contract', function(){
+
+            $('#current_province').html('<option selected value="">--Select --</option>');
+            $('#current_district').html('<option selected value=""> </option>');
+            $('#current_commune').html('<option selected value=""> </option>');
+            $('#current_village').html('<option selected value=""> </option>');
+
+            $('#permanent_province').html('<option selected value="">--Select --</option>');
+            $('#permanent_district').html('<option selected value=""> </option>');
+            $('#permanent_commune').html('<option selected value=""> </option>');
+            $('#permanent_village').html('<option selected value=""> </option>');
+
+            $("#position_type").html('<option selected value="">--Select --</option>');
+            $("#department_id").html('<option selected value="">--Select --</option>');
+            $(".clear_data").val("");
+            $("#remark").text("");
+            let id = $(this).data("id");
+            $.ajax({
+                type: "GET",
+                url: "{{ url('recruitment/candidate-resume/edit') }}",
+                data: {
+                    id: id,
+                    status: '4',
+                },
+                dataType: "JSON",
+                success: function(response) {
+                    if (response.success) {
+                        if (response.position != '') {
+                            $('#emp_position').html('');
+                            $.each(response.position, function(i, item) {
+                                $("#emp_position").append($('<option>', {
+                                    value: item.id,
+                                    text: item.name_english,
+                                    selected: item.id == response.success.position_applied
+                                }));
+                            });
+                        }
+                        if (response.branch != '') {
+                            $('#emp_branch').html('');
+                            $.each(response.branch, function(i, item) {
+                                $("#emp_branch").append($('<option>', {
+                                    value: item.id,
+                                    text: item.branch_name_en,
+                                    selected: item.id == response.success.location_applied
+                                }));
+                            });
+                        }
+                        if (response.gender != '') {
+                            $('#emp_gender').html('');
+                            $.each(response.gender, function(i, item) {
+                                $("#emp_gender").append($('<option>', {
+                                    value: item.id,
+                                    text: item.name_english,
+                                    selected: item.id == response.success.gender
+                                }));
+                            });
+                        }
+                        if (response.optionPositionType !='') {
+                            // $("#position_type").html('');
+                            $.each(response.optionPositionType, function(i, item) {
+                                $("#position_type").append($('<option>', {
+                                    value: item.id,
+                                    text: item.name_english,
+                                    selected: item.id == response.success.position_type
+                                }));
+                            });
+                        }
+                        if (response.department !='') {
+                            // $("#department_id").html('');
+                            $.each(response.department, function(i, item) {
+                                $("#department_id").append($('<option>', {
+                                    value: item.id,
+                                    text: item.name_english,
+                                    selected: item.id == response.success.department_id
+                                }));
+                            });
+                        }
+                        if (response.province !='') {
+                            $.each(response.province, function(i, item) {
+                                $("#current_province").append($('<option>', {
+                                    value: item.code,
+                                    text: item.name_en,
+                                    selected: item.code == response.success.current_province
+                                }));
+                                $("#permanent_province").append($('<option>', {
+                                    value: item.code,
+                                    text: item.name_en,
+                                    selected: item.code == response.success.permanent_province
+                                }));
+                            });
+                        }
+                        if (response.district !='') {
+                            $.each(response.district, function(i, item) {
+                                if (item.province_id == response.success.current_province) {
+                                    $("#current_district").append($('<option>', {
+                                        value: item.code,
+                                        text: item.name_en,
+                                        selected: item.code == response.success.current_district
+                                    }));
+                                }
+                                if (item.province_id == response.success.permanent_province) {
+                                    $("#permanent_district").append($('<option>', {
+                                        value: item.code,
+                                        text: item.name_en,
+                                        selected: item.code == response.success.permanent_district
+                                    }));
+                                }
+                            });
+                        }
+                        if (response.conmmunes !='') {
+                            $.each(response.conmmunes, function(i, item) {
+                                if (item.district_id == response.success.current_district) {
+                                    $("#current_commune").append($('<option>', {
+                                        value: item.code,
+                                        text: item.name_en,
+                                        selected: item.code == response.success.current_commune
+                                    }));
+                                }
+                            if (item.district_id == response.success.permanent_district) {
+                                    $("#permanent_commune").append($('<option>', {
+                                        value: item.code,
+                                        text: item.name_en,
+                                        selected: item.code == response.success.permanent_commune
+                                    }));
+                            }
+                            });
+                        }
+                        if (response.villages !='') {
+                            $.each(response.villages, function(i, item) {
+                                if (item.commune_id == response.success.current_commune) {
+                                    $("#current_village").append($('<option>', {
+                                        value: item.code,
+                                        text: item.name_en,
+                                        selected: item.code == response.success.current_village
+                                    }));
+                                }
+                                if (item.commune_id == response.success.permanent_commune) {
+                                    $("#permanent_village").append($('<option>', {
+                                        value: item.code,
+                                        text: item.name_en,
+                                        selected: item.code == response.success.permanent_village
+                                    }));
+                                }
+                            });
+                        }
+                        $("#candidate_id").val(id);
+                        $(".number_employee").val(response.success.number_employee ? response.success.number_employee : response.autoEmpId);
+                        $(".employee_name_kh").val(response.success.name_kh);
+                        $(".employee_name_en").val(response.success.name_en);
+                        $("#date_of_birth").val(response.success.date_of_birth);
+                        $(".date_of_commencement").val(response.success.join_date);
+                        $("#id_card_number").val(response.success.id_card_number);
+                        $(".personal_phone_number").val(response.success.contact_number);
+                        $("#basic_salary").val(response.success.basic_salary);
+                        $("#salary_to_increase").val(response.success.salary_increas);
+                        $("#current_house_no").val(response.success.current_house_no);
+                        $("#current_street_no").val(response.success.current_street_no);
+                        $("#permanent_house_no").val(response.success.permanent_house_no);
+                        $("#permanent_street_no").val(response.success.permanent_street_no);
+                        $('#remark').val(response.success.remark);
+                    }
+                    $("#add_emp").modal("show");
+                }
+            });
+        });
+
+        $("#btn_save_print, #btn_save").on("click", function(){
+            let btn_action = $(this).attr('data-btn');
             var num_miss = 0;
-            $("#btn-print-loading").css('display', 'block');
-            $("#btn_save_print").prop('disabled', true);
-            $(".btn-text-print").css("display", "none");
+            if (btn_action == 1) {
+                $("#btn-print-loading").css('display', 'block');
+                $("#btn_save_print").prop('disabled', true);
+                $(".btn-text-print").css("display", "none");
+            }else{
+                $("#btn-save-loading").css('display', 'block');
+                $("#btn_save").prop('disabled', true);
+                $(".btn-text-save").css("display", "none");
+            }
+           
             
             $(".emp_required").each(function(){
                 if($(this).val()==""){ num_miss++;}
             });
             if (num_miss>0) {
-                setTimeout(function () {
-                    $("#btn_save_print").attr('disabled',false);
-                    $("#btn-print-loading").css('display', 'none');
-                    $(".btn-text-print").css("display", 'block');
-                }, 500);
+                if (btn_action == 1) {
+                    setTimeout(function () {
+                        $("#btn_save_print").attr('disabled',false);
+                        $("#btn-print-loading").css('display', 'none');
+                        $(".btn-text-print").css("display", 'block');
+                    }, 500);
+                }else{
+                    setTimeout(function () {
+                        $("#btn_save").attr('disabled',false);
+                        $("#btn-save-loading").css('display', 'none');
+                        $(".btn-text-save").css("display", 'block');
+                    }, 500);
+                }
+               
                 return false;
             }else{
                 axios.post('{{ URL('recruitment/candidate-resume/createemp') }}', {
@@ -383,15 +525,14 @@
                     number_employee: $("#number_employee").val(),
                     employee_name_kh: $("#employee_name_kh").val(),
                     employee_name_en: $("#employee_name_en").val(),
-                    position_id: $("#position_id").val(),
+                    position_id: $("#emp_position").val(),
                     date_of_birth: $("#date_of_birth").val(),
-                    gender: $("#gender_id").val(),
+                    gender: $("#emp_gender").val(),
                     department_id: $("#department_id").val(),
-                    branch_id: $("#branch_id").val(),
+                    branch_id: $("#emp_branch").val(),
                     date_of_commencement: $("#date_of_commencement").val(),
+                    id_card_number: $("#id_card_number").val(),
                     personal_phone_number: $("#personal_phone_number").val(),
-                    // password: $("#password").val(),
-                    // password_confirmation: $("#password_confirmation").val(),
                     position_type: $("#position_type").val(),
                     basic_salary: $("#basic_salary").val(),
                     salary_increas: $("#salary_to_increase").val(),
@@ -411,7 +552,7 @@
                 }).then(function(response) {
                     var data = response.data.dataEmployee;
                     var date_of_birth = new Date(data.date_of_birth);
-                    var date_of_commencement = new Date(data.date_of_commencement);
+                    var date_of_commencement = new Date(data.join_date);
                     var fdc_date = new Date(data.fdc_date);
                     let day = formatDate( date_of_birth, 'km', format_date={day: true});
                     let month = formatDate( date_of_birth, 'km', format_date={month: true});
@@ -423,14 +564,14 @@
                     let end_month = formatDate( fdc_date, 'km', format_date={month: true});
                     let end_year = formatDate( fdc_date, 'km', format_date={year: true});
                     if (data) {
-                        if ($("#gender_name").val() == "Female") {
+                        if (data.option.name_english == "Female") {
                             $("#pr_mr_or_mrs").text("អ្នកស្រី ");
                             $("#pr_gender").text("ស្រី ");
                         }else{
                             $("#pr_mr_or_mrs").text("លោក ");
                             $("#pr_gender").text("ប្រុស ");
                         }
-                        $("#pr_name").text(data.employee_name_kh +" ");
+                        $("#pr_name").text(data.name_kh +" ");
                         $("#pr_born_on").text(day+" ខែ "+month+" ឆ្នាំ "+ year);
                         $("#pr_permanent_province").text(data.permanentprovince.name_km + " ");
                         $("#pr_permanent_province").text(data.permanentprovince.name_km + " ");
@@ -448,7 +589,7 @@
 
                         $("#pr_current_location").text(location);
 
-                        $("#pr_personal_phone_number").text(data.personal_phone_number);
+                        $("#pr_personal_phone_number").text(data.contact_number);
                         $(".pr_join_day").text(join_day);
                         $(".pr_join_month").text(join_month);
                         $(".pr_join_year").text(join_year);
@@ -463,21 +604,31 @@
                         if (data.positiontype.name_english == "Field Staff") {
                             $("#pr_supporting_or_field_staff").text("ដោយធៀបនិងភាគរយការងារសម្រេចបានសម្រាប់បុគ្គលិកឥណទាន (គិតតាម Pro-Rate) ដោយការបង់ពន្ធជូនរាជរដ្ឋាភិបាលជាបន្ទុករបស់និយោជិត");
                         }
-                        print_pdf();
+                        if (btn_action == 1) {
+                            print_pdf();
+                        }
                     }
                     new Noty({
                         title: "",
                         text: "The process has been successfully.",
                         type: "success",
+                        timeout: 3000,
                         icon: true
                     }).show();
                     showDatas(4);
+                    $("#btn_save").attr('disabled',false);
+                    $("#btn-save-loading").css('display', 'none');
+                    $(".btn-text-save").css("display", 'block');
+                    if (btn_action == 2) {
+                        $("#add_emp").modal("hide");
+                    }
                     // window.location.replace("{{ URL('recruitment/candidate-resume/list') }}");
                 }).catch(function(error) {
                     new Noty({
                         title: "",
                         text: "Something went wrong please try again later.",
                         type: "error",
+                        timeout: 3000,
                         icon: true
                     }).show();
                 });
@@ -569,91 +720,4 @@
             doctypeString: "",
         });
     }
-
-    // function format date to language KH
-    Date.prototype.getAmPm = function () {
-        if( this.getHours() >= 12 ) { return 1 }; // pm
-        return 0; // am
-    }
-    var locale = {
-        en: {
-            month: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September ', 'October', 'November', 'December'],
-            ampm: [ 'am', 'pm' ]
-        },
-        km: {
-            month: ['មករា', 'កុម្ភៈ', 'មីនា', 'មេសា', 'ឧសភា', 
-                    'មិថុនា', 'កក្កដា', 'សីហា', 'កញ្ញា', 'តុលា', 'វិច្ឆិកា', 'ធ្នូ'
-                ],
-            ampm: [ 'ព្រឹក', 'ល្ងាច' ]
-        }
-    };
-
-    var toLocaleNumber = function( num, lang, zeroPadding ) {
-        if( typeof num !== 'number' ) return null;
-
-        var numInteger = parseInt( num );
-        var numString = numInteger.toString();
-        
-        if( zeroPadding > 0 && numString.length < zeroPadding ) {
-            numString = '0' + numString;
-        }
-
-        // support only khmer
-        if( lang !== 'km' ) { return numString };
-
-        var khmerNumber = '';
-        var numbersKhmer = ['០', '១', '២', '៣', '៤', '៥', '៦', '៧', '៨', '៩'];
-
-        for( var i=0; i < numString.length; i++ ) {
-            khmerNumber += numbersKhmer[parseInt(numString[i])];
-        }
-
-        return khmerNumber;
-    };
-
-    var formatDate = function( date, lang, format_date ) {
-        var formattedDate = null;
-        var hours = date.getHours();
-        if( hours > 12 ) { hours -= 12; }; 
-
-         if (format_date) { 
-            if(format_date.day && !format_date.month && !format_date.year) {
-                formattedDate = toLocaleNumber( date.getDate(), lang, 2 )
-            }else if (format_date.month && !format_date.day && !format_date.year) {
-                formattedDate = locale[lang]['month'][date.getMonth()]
-            }else if (format_date.year && !format_date.day && !format_date.month) {
-                formattedDate = toLocaleNumber( date.getFullYear(), lang )
-            }else if (format_date.time) {
-                formattedDate = toLocaleNumber( hours, lang, 2 )
-                                + ':' + toLocaleNumber( date.getMinutes(), lang, 2 )
-                                +' ' + locale[lang]['ampm'][date.getAmPm()];
-            }
-            if (format_date.day && format_date.month) {
-                formattedDate = toLocaleNumber( date.getDate(), lang, 2 )
-                                + '-' + locale[lang]['month'][date.getMonth()]
-            }
-            if (format_date.month && format_date.year) {
-                formattedDate = locale[lang]['month'][date.getMonth()]
-                                + '-' + toLocaleNumber( date.getFullYear(), lang )
-            }
-
-        }else{
-            formattedDate = toLocaleNumber( date.getDate(), lang, 2 )
-            + '-'
-            + locale[lang]['month'][date.getMonth()]
-            + '-'
-            + toLocaleNumber( date.getFullYear(), lang )
-            + ' '
-            + toLocaleNumber( hours, lang, 2 )
-            + ':'
-            + toLocaleNumber( date.getMinutes(), lang, 2 );
-            + ' '
-            + locale[lang]['ampm'][date.getAmPm()];
-        }
-        
-          
-            
-           
-        return formattedDate;
-    };
 </script>

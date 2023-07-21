@@ -44,29 +44,6 @@
                             <input type="text" class="form-control" name="employee_name" id="employee_name" placeholder="Employee name" value="{{old('employee_name')}}">
                         </div>
                     </div>
-
-                    {{-- <div class="col-sm-6 col-md-3"> 
-                        <div class="form-group form-focus select-focus focused">
-                            <select class="select form-control floating select2-hidden-accessible" data-select2-id="select2-data-1-cyfe" name="position_id" tabindex="-1" aria-hidden="true">
-                                <option value="" data-select2-id="select2-data-3-c0n2">Select Position</option>
-                                @foreach ($position as $positions )
-                                    <option value="{{ $positions->id }}">{{ $positions->name_khmer }}</option>
-                                @endforeach
-                            </select>
-                            <label class="focus-label">Position</label>
-                        </div>
-                    </div>
-                    <div class="col-sm-6 col-md-3">
-                        <div class="form-group form-focus select-focus">
-                            <select class="select form-control" id="department_id" data-select2-id="select2-data-2-c0n2" name="department_id">
-                                <option value="" data-select2-id="select2-data-2-c0n2">Selected department</option>
-                                @foreach ($department as $item)
-                                    <option value="{{$item->id}}">{{$item->name_khmer}}</option>
-                                @endforeach
-                            </select>
-                            <label class="focus-label">Department</label>
-                        </div>
-                    </div> --}}
                     <div class="col-sm-8 col-md-8">
                         <div style="display: flex" class="float-end">
                             <button type="button" class="btn btn-sm btn-success btn-search me-2">
@@ -91,7 +68,7 @@
                     <div class="col-md-12">
                         <ul class="nav nav-tabs nav-tabs-bottom" role="tablist">
                             <li class="nav-item" role="presentation">
-                                <a class="nav-link active" data-bs-toggle="tab" id="tab_candidate_resume" href="#tbl_candidate_resume" aria-selected="true" role="tab" data-tab-id="1">Signed Contracts</a>
+                                <a class="nav-link active" data-bs-toggle="tab" id="tab_candidate_resume" href="#tbl_candidate_resume" aria-selected="true" role="tab" data-tab-id="1">Upcoming Staff</a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" data-bs-toggle="tab" id="tab_probation" href="#tbl_probations" aria-selected="false" role="tab" data-tab-id="2" tabindex="-1">Probations</a>
@@ -101,6 +78,9 @@
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" data-bs-toggle="tab" id="tab_udc" href="#tbl_udc" aria-selected="false" data-tab-id="4" role="tab" tabindex="-1">UDC</a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link" data-bs-toggle="tab" id="tab_cancel" href="#tbl_cancel" aria-selected="false" data-tab-id="6" role="tab" tabindex="-1">Canceled Contract</a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" data-bs-toggle="tab" id="tab_reason" href="#tbl_reject" aria-selected="false" data-tab-id="5" role="tab" tabindex="-1">Staff Resigns</a>

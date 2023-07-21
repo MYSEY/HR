@@ -24,6 +24,7 @@ class CreateUsersTable extends Migration
             $table->integer('gender')->nullable();
             $table->date('date_of_birth')->nullable();
             $table->integer('spouse')->nullable();
+            $table->string('id_card_number')->nullable();
             $table->string('department_id')->nullable();
             $table->string('position_id')->nullable();
             $table->integer('branch_id')->nullable();
