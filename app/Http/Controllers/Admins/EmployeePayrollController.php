@@ -218,7 +218,7 @@ class EmployeePayrollController extends Controller
                     $totalAmountChild = 0;
                 }
 
-                //calcute salary get end severance pay
+                //calcute salary get end severance pay12
                 if ($item->emp_status == 1 || $item->emp_status == 10) {
                     $severancePay = GrossSalaryPay::where('employee_id',$item->id)->get();
                     if (count($severancePay) == 14) {
@@ -241,25 +241,23 @@ class EmployeePayrollController extends Controller
                         $totalBasicSalary = $totalnewSalary + $totalOldSalary;
 
                     }else if(count($severancePay) == 26){
-                        if($totalStartDays == 365){
-                            $endMonth = Carbon::createFromDate($item->fdc_end)->format('m');
-                            $totalDayInMonth = Carbon::now()->month($endMonth)->daysInMonth;
-                            
-                            $date_of_month = Carbon::createFromDate($item->fdc_end)->format('Y-m');
-                            $currentYear = $date_of_month.'-'.$totalDayInMonth;
-                            
-                            // new salary and new total days
-                            $startDate = Carbon::parse($item->fdc_end);
-                            $endDate = Carbon::parse($currentYear);
-                            $totalNewDays = $startDate->diffInDays($endDate) + 1;
-                            $totalBasicSeverSalary = $item->basic_salary + $item->salary_increas;
-                            $totalnewSalary = ($totalBasicSeverSalary / $totalDayInMonth) * $totalNewDays;
+                        $endMonth = Carbon::createFromDate($item->fdc_end)->format('m');
+                        $totalDayInMonth = Carbon::now()->month($endMonth)->daysInMonth;
+                        
+                        $date_of_month = Carbon::createFromDate($item->fdc_end)->format('Y-m');
+                        $currentYear = $date_of_month.'-'.$totalDayInMonth;
+                        
+                        // new salary and new total days
+                        $startDate = Carbon::parse($item->fdc_end);
+                        $endDate = Carbon::parse($currentYear);
+                        $totalNewDays = $startDate->diffInDays($endDate) + 1;
+                        $totalBasicSeverSalary = $item->basic_salary + $item->salary_increas;
+                        $totalnewSalary = ($totalBasicSeverSalary / $totalDayInMonth) * $totalNewDays;
 
-                            //old salary and total old days
-                            $totalOldDay = $totalDayInMonth - $totalNewDays;
-                            $totalOldSalary = ($item->basic_salary / $totalDayInMonth)  * $totalOldDay;
-                            $totalBasicSalary = $totalnewSalary + $totalOldSalary;
-                        }
+                        //old salary and total old days
+                        $totalOldDay = $totalDayInMonth - $totalNewDays;
+                        $totalOldSalary = ($item->basic_salary / $totalDayInMonth)  * $totalOldDay;
+                        $totalBasicSalary = $totalnewSalary + $totalOldSalary;
                     }
                 }
                 

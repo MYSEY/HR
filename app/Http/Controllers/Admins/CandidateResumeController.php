@@ -5,19 +5,18 @@ namespace App\Http\Controllers\Admins;
 use App\Http\Controllers\Controller;
 use App\Models\Branchs;
 use App\Models\CandidateResume;
-use App\Models\Conmmunes;
 use App\Models\Department;
-use App\Models\District;
-use App\Models\GenerateIdEmployee;
 use App\Models\Option;
 use App\Models\Position;
 use App\Models\Province;
 use App\Models\Role;
 use App\Models\User;
-use App\Models\Villages;
 use App\Traits\GeneratingCode;
 use Brian2694\Toastr\Facades\Toastr;
 use Carbon\Carbon;
+use DateInterval;
+use DatePeriod;
+use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -102,47 +101,14 @@ class CandidateResumeController extends Controller
     {
         $position = Position::all();
         $branch = Branchs::all();
+        $data = CandidateResume::where("id", $request->id)->first();
         $gender = Option::where('type','gender')->get();
-        if ($request->status =='4') {
-            $autoEmpId   = $this->generate_EmployeeId(Carbon::today())['number_employee'];
-            $optionPositionType = Option::where('type','position_type')->get();
-            $department = Department::all();
-            $data = CandidateResume::where("id", $request->id)
-            ->with("branch")->with("position")->with("option")
-            ->with("positiontype")
-            ->with("permanentprovince")
-            ->with("currentprovince")
-            ->with("currentdistrict")
-            ->with("currentcommune")
-            ->with("currentvillage")
-            ->first();
-            $province = Province::all();
-            $district = District::whereIn('province_id',[$data->current_province, $data->permanent_province])->get();
-            $conmmunes = Conmmunes::whereIn('district_id',[$data->current_district,$data->permanent_district])->get();
-            $villages = Villages::whereIn('commune_id',[$data->current_commune,$data->permanent_commune])->get();
-            return response()->json([
-                'autoEmpId'=>$autoEmpId,
-                'success'=>$data,
-                'gender'=>$gender,
-                'position'=>$position,
-                'branch'=>$branch,
-                'optionPositionType' => $optionPositionType,
-                'department' => $department,
-                'province' => $province,
-                'district' => $district,
-                'conmmunes' => $conmmunes,
-                'villages' => $villages,
-            ]);
-        }else{
-            $data = CandidateResume::where("id", $request->id)
-            ->with("branch")->with("position")->with("option")->first();
-            return response()->json([
-                'success'=>$data,
-                'gender'=>$gender,
-                'position'=>$position,
-                'branch'=>$branch,
-            ]);
-        }
+        return response()->json([
+            'success'=>$data,
+            'gender'=>$gender,
+            'position'=>$position,
+            'branch'=>$branch,
+        ]);
     }
 
     /**
@@ -283,12 +249,6 @@ class CandidateResumeController extends Controller
                     'updated_by' => Auth::user()->id,
                 ];
             }
-            if ($request->status == "Cancel") {
-                $dataUpdate = [
-                    'status' => $request->status,
-                    'updated_by' => Auth::user()->id,
-                ];
-            }
             CandidateResume::where('id',$request->id)->update($dataUpdate);
             DB::commit();
             return ['message' => 'successfull'];
@@ -299,101 +259,32 @@ class CandidateResumeController extends Controller
     }
     public function createemp(Request $request)
     {
-        try {
-            if ($request->status == "Upcoming") {
-                $candidate = CandidateResume::where("id", $request->id) ->first();
-                $emp_data = [
-                    'number_employee' => $candidate->number_employee,
-                    'employee_name_kh' => $candidate->name_kh,
-                    'employee_name_en' => $candidate->name_en,
-                    'gender' => $candidate->gender,
-                    'position_id' => $candidate->position_applied,
-                    'branch_id' => $candidate->location_applied,
-                    'personal_phone_number' => $candidate->contact_number,
-                    'id_card_number' => $candidate->id_card_number,
-                    'basic_salary' => $candidate->basic_salary,
-                    'salary_increas' => $candidate->salary_increas,
-                    'position_type' => $candidate->position_type,
-                    'department_id' => $candidate->department_id,
-                    'date_of_commencement' => $candidate->join_date,
-                    'fdc_date' => $candidate->fdc_date,
-                    'date_of_birth' => $candidate->date_of_birth,
-                    'current_province' => $candidate->current_province,
-                    'current_district' => $candidate->current_district,
-                    'current_commune' => $candidate->current_commune,
-                    'current_village' => $candidate->current_village,
-                    'current_house_no' => $candidate->current_house_no,
-                    'current_street_no' => $candidate->current_street_no,
-                    'permanent_province' => $candidate->permanent_province,
-                    'permanent_district' => $candidate->permanent_district,
-                    'permanent_commune' => $candidate->permanent_commune,
-                    'permanent_village' => $candidate->permanent_village,
-                    'permanent_house_no' => $candidate->permanent_house_no,
-                    'permanent_street_no' => $candidate->permanent_street_no,
-                    'emp_status' => $request->status,
-                    'remark' => $request->remark,
-                    'spouse' => 0,
-                    'password' => Hash::make("Camma@123"),
-                    'created_by' => Auth::user()->id,
-                ];
-                $userData = User::create($emp_data);
-                CandidateResume::where('id',$candidate->id)->update([ 'status' => 5]);
-                DB::commit();
-                return ['message' => 'successfull'];
-            }else{
-                $generateID = GenerateIdEmployee::where("number_employee",$request->number_employee )->first();
-                if (!$generateID) {
-                    GenerateIdEmployee::create([
-                        'candidate_resumes_id'   => $request->candidate_id,
-                        'number_employee'   => $request->number_employee,
-                        'created_by' => Auth::user()->id,
-                    ]);
-                };
-                $newDateTime = Carbon::parse($request->date_of_commencement)->addMonths(3);
-                CandidateResume::where('id',$request->candidate_id)->update([
-                    "number_employee" =>$request->number_employee,
-                    'name_kh' => $request->employee_name_kh,
-                    'name_en' => $request->employee_name_en,
-                    'gender' => $request->gender,
-                    'position_applied' => $request->position_id,
-                    'location_applied' => $request->branch_id,
-                    'contact_number' => $request->personal_phone_number,
-                    'id_card_number' =>$request->id_card_number,
-                    'basic_salary' => $request->basic_salary,
-                    'salary_increas' => $request->salary_increas,
-                    'position_type' => $request->position_type,
-                    'department_id' =>$request->department_id,
-                    'join_date' => $request->date_of_commencement,
-                    'fdc_date' => $newDateTime,
-                    'date_of_birth' => $request->date_of_birth,
-                    'current_province' =>$request->current_province,
-                    'current_district' => $request->current_district,
-                    'current_commune' => $request->current_commune,
-                    'current_village' => $request->current_village,
-                    'current_house_no' => $request->current_house_no,
-                    'current_street_no' => $request->current_street_no,
-                    'permanent_province' => $request->permanent_province,
-                    'permanent_district' => $request->permanent_district,
-                    'permanent_commune' => $request->permanent_commune,
-                    'permanent_village' => $request->permanent_village,
-                    'permanent_house_no' => $request->permanent_house_no,
-                    'permanent_street_no' => $request->permanent_street_no,
-                    'status' => 4,
-                ]);
-                $datas = CandidateResume::where("id", $request->candidate_id)
-                    ->with("branch")->with("position")->with("option")
-                    ->with("positiontype")
-                    ->with("permanentprovince")
-                    ->with("currentprovince")
-                    ->with("currentdistrict")
-                    ->with("currentcommune")
-                    ->with("currentvillage")
-                    ->first();
-                return response()->json(['dataEmployee'=>$datas]);
-            }
-        } catch (\Exception $exp) {
-            DB::rollBack();
-            return response()->json(['message' => $exp->getMessage()], 500);
-        }
+        // try {
+            CandidateResume::where('id',$request->candidate_id)->update([
+                "number_employee" =>$request->number_employee,
+                'status' => 5,
+            ]);
+            $data = $request->all();
+            $newDateTime = Carbon::parse($data['date_of_commencement'])->addMonths(3);
+            $data['fdc_date'] = $newDateTime;
+            $data['emp_status'] = 'Upcoming';
+            $data['created_by'] = Auth::user()->id;
+            $data['password']   = Hash::make("Camma@123");
+            $userData = User::create($data);
+            $emp = User::where("id", $userData->id)
+            ->with("branch")
+            ->with("position")
+            ->with("positiontype")
+            ->with("permanentprovince")
+            ->with("currentprovince")
+            ->with("currentdistrict")
+            ->with("currentcommune")
+            ->with("currentvillage")
+            ->first();
+            return response()->json(['dataEmployee'=>$emp]);
+        // } catch (\Exception $exp) {
+        //     DB::rollBack();
+        //     return response()->json(['message' => $exp->getMessage()], 500);
+        // }
     }
 }

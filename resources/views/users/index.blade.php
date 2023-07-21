@@ -500,7 +500,7 @@
                 $.confirm({
                     title: 'Employee Status!',
                     contentClass: 'text-center',
-                    backgroundDismiss: 'cancel',
+                    // backgroundDismiss: 'cancel',
                     content: ''+
                         '<form method="post">'+
                             '<div class="form-group">'+
@@ -565,7 +565,7 @@
                 $.confirm({
                     title: 'Employee Status!',
                     contentClass: 'text-center',
-                    backgroundDismiss: 'cancel',
+                    // backgroundDismiss: 'cancel',
                     content: ''+
                         '<form method="post" class="formName">'+
                             '<div class="form-group">'+
@@ -656,7 +656,7 @@
                 $.confirm({
                     title: 'Employee Status!',
                     contentClass: 'text-center',
-                    backgroundDismiss: 'cancel',
+                    // backgroundDismiss: 'cancel',
                     content: ''+
                         '<form method="post" class="formName">'+
                             '<div class="form-group">'+
@@ -741,7 +741,7 @@
                 $.confirm({
                     title: 'Employee Status!',
                     contentClass: 'text-center',
-                    backgroundDismiss: 'cancel',
+                    // backgroundDismiss: 'cancel',
                     content: ''+
                         '<form>'+
                             '<div class="form-group">'+
@@ -822,7 +822,7 @@
                 $.confirm({
                     title: 'Employee Status!',
                     contentClass: 'text-center',
-                    backgroundDismiss: 'cancel',
+                    // backgroundDismiss: 'cancel',
                     content: ''+
                         '<form method="post">'+
                             '<div class="form-group">'+
@@ -893,7 +893,7 @@
                 $.confirm({
                     title: 'Employee Status!',
                     contentClass: 'text-center',
-                    backgroundDismiss: 'cancel',
+                    // backgroundDismiss: 'cancel',
                     content: ''+
                         '<form method="post">'+
                             '<div class="form-group">'+

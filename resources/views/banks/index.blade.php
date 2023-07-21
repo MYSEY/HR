@@ -65,7 +65,7 @@
         </div>
 
 
-        <div id="add_bank" class="modal custom-modal fade" role="dialog">
+        <div id="add_bank" class="modal custom-modal fade" role="dialog" data-bs-backdrop="static">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -93,7 +93,7 @@
             </div>
         </div>
 
-        <div id="edit_bank" class="modal custom-modal fade" aria-hidden="true">
+        <div id="edit_bank" class="modal custom-modal fade" aria-hidden="true" data-bs-backdrop="static">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
