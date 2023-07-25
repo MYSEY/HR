@@ -255,7 +255,7 @@
     <script src="{{asset('/admin/js/greedynav.js.download')}}"></script>
 
     <script src="{{asset('/admin/js/bootstrap.min.js')}}"></script>
-    <script src="{{asset('/admin/js/app.js.download')}}"></script>
+    <script src="{{asset('/admin/js/app.js')}}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
 
     {{-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> --}}

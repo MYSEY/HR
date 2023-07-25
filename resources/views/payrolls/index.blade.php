@@ -157,10 +157,6 @@
                                                         <td><a class="btn btn-sm btn-primary" href="{{ url('payslip', $item->employee_id) }}">Generate Slip</a></td>
                                                     </tr>
                                                 @endforeach
-                                            @else
-                                                <tr>
-                                                    <td colspan="25" style="text-align: center">No record to display</td>
-                                                </tr>
                                             @endif
                                         </tbody>
                                     </table>
