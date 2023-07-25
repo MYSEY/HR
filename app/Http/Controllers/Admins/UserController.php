@@ -181,6 +181,24 @@ class UserController extends Controller
         ]);
     }
 
+    public function print(Request $request)
+    {
+        $data = User::where("id", $request->id)
+        ->with("branch")
+        ->with("position")
+        ->with("gender")
+        ->with("positiontype")
+        ->with("permanentprovince")
+        ->with("currentprovince")
+        ->with("currentdistrict")
+        ->with("currentcommune")
+        ->with("currentvillage")
+        ->first();
+        return response()->json([
+            'success'=>$data,
+        ]);
+    }
+
     /**
      * Update the specified resource in storage.
      *

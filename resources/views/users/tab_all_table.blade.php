@@ -98,6 +98,7 @@
                                                             @if (Auth::user()->RolePermission == 'Administrator')
                                                                 <div class="dropdown-menu dropdown-menu-right">
                                                                     <a class="dropdown-item userUpdate" data-id="{{$item->id}}"><i class="fa fa-pencil m-r-5"></i> Edit</a>
+                                                                    <a class="dropdown-item btn_print" data-id="{{$item->id}}"><i class="fa fa-print fa-lg m-r-5"></i> Print</a>
                                                                     <a class="dropdown-item userDelete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_user"><i class="fa fa-trash-o m-r-5"></i> Delete</a>
                                                                 </div>
                                                             @endif
@@ -795,6 +796,9 @@
         </div>
     </div>
 </div>
+@include('recruitments.candidate_resumes.print_signed_contract')
+<script type="text/javascript" src="{{ asset('/admin/js/printThis.js') }}"></script>
+<script src="{{asset('/admin/js/format-date-kh.js')}}"></script>
 <script type="text/javascript">
     $(function(){
         var tab_status = 1;
@@ -810,6 +814,76 @@
                 employee_name: $("#employee_name").val(),
             };
             showDatabytab(tab_status, filter);
+        });
+        $(".btn_print").on("click", function (){
+            let id = $(this).data("id");
+            $.ajax({
+                type: "GET",
+                url: "{{url('users/print')}}",
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    id : id
+                },
+                dataType: "JSON",
+                success: function (response) {
+                    var data = response.success;
+                    var date_of_birth = new Date(data.date_of_birth);
+                    var date_of_commencement = new Date(data.date_of_commencement);
+                    var fdc_date = new Date(data.fdc_date);
+                    let day = formatDate( date_of_birth, 'km', format_date={day: true});
+                    let month = formatDate( date_of_birth, 'km', format_date={month: true});
+                    let year = formatDate( date_of_birth, 'km', format_date={year: true});
+                    let join_day = formatDate( date_of_commencement, 'km', format_date={day: true});
+                    let join_month = formatDate( date_of_commencement, 'km', format_date={month: true});
+                    let join_year = formatDate( date_of_commencement, 'km', format_date={year: true});
+                    let end_day = formatDate( fdc_date, 'km', format_date={day: true});
+                    let end_month = formatDate( fdc_date, 'km', format_date={month: true});
+                    let end_year = formatDate( fdc_date, 'km', format_date={year: true});
+                    if (data) {
+                        if (data.gender.name_english == "Female") {
+                            $("#pr_mr_or_mrs").text("អ្នកស្រី ");
+                            $("#pr_gender").text("ស្រី ");
+                        }else{
+                            $("#pr_mr_or_mrs").text("លោក ");
+                            $("#pr_gender").text("ប្រុស ");
+                        }
+                        $("#pr_name").text(data.employee_name_kh +" ");
+                        $("#pr_born_on").text(day+" ខែ "+month+" ឆ្នាំ "+ year);
+                        $("#pr_permanent_province").text(data.permanentprovince.name_km + " ");
+                        $("#pr_permanent_province").text(data.permanentprovince.name_km + " ");
+                        $("#pr_id_card_number").text(data.id_card_number+ "");
+
+                        let number_home = "";
+                        let number_street = "";
+                        if (data.current_house_no) {
+                            number_home = "ផ្ទះលេខ "+ data.current_house_no;
+                        }
+                        if (data.current_street_no) {
+                            number_street = " ផ្លូវលេខ "+data.current_street_no;
+                        }
+                        let location = number_home + number_street + " ភូមិ "+data.currentvillage.name_km + " ឃុំ/សង្កាត់ " + data.currentcommune.name_km + " ស្រុក/ខណ្ឌ " + data.currentdistrict.name_km+ " ខេត្ត/ក្រុង "+data.currentprovince.name_km;
+
+                        $("#pr_current_location").text(location);
+
+                        $("#pr_personal_phone_number").text(data.contact_number);
+                        $(".pr_join_day").text(join_day);
+                        $(".pr_join_month").text(join_month);
+                        $(".pr_join_year").text(join_year);
+                        $("#pr_end_day").text(end_day);
+                        $("#pr_end_month").text(end_month);
+                        $("#pr_end_year").text(end_year);
+                        $("#pr_position").text(data.position.name_khmer);
+                        $("#pr_branch").text(data.branch.branch_name_kh);
+                        $("#pr_employee_id").text(data.number_employee);
+                        $("#pr_basic_salary").text(data.basic_salary);
+                        $("#pr_salary_increase").text($("#salary_to_increase").val());
+                        if (data.positiontype.name_english == "Field Staff") {
+                            $("#pr_supporting_or_field_staff").text("ដោយធៀបនិងភាគរយការងារសម្រេចបានសម្រាប់បុគ្គលិកឥណទាន (គិតតាម Pro-Rate) ដោយការបង់ពន្ធជូនរាជរដ្ឋាភិបាលជាបន្ទុករបស់និយោជិត");
+                        }
+                        print_pdf();
+                    }
+                }
+            });
         });
     });
     function showDatabytab(tab, filter){
@@ -1068,6 +1142,19 @@
                     $(".tbl-cancel tbody").html(tr);
                 };
             }
+        });
+    }
+    function print_pdf(type) {
+        $("#print_purchase").show();
+        $("#print_purchase").printThis({
+            importCSS: false,
+            importStyle: true,
+            loadCSS: "/admin/css/style_table.css",
+            header: "",
+            printDelay: 1000,
+            formValues: false,
+            canvas: false,
+            doctypeString: "",
         });
     }
 </script>

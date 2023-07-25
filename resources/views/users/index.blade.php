@@ -1,4 +1,4 @@
-@extends('layouts.master')
+@extends('layouts.master_print')
 <style>
     .filter-row .btn {
         min-height: 38px !important;
