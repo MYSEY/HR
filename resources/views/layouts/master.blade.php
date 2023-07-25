@@ -167,10 +167,30 @@
                             @foreach (menu() as $key=>$menu)
                                 @if (isset($menu['child']))
                                     @if (RolePermission($menu['table'],$menu['permission']))
+
                                         <li class="menu-title">
+                                            <span>Employees</span>
+                                        </li>
+                                        <li class="submenu">
+                                            <a href="" class="noti-dot"><i class="la la-user"></i> <span> {{$menu['name']}}</span> <span class="menu-arrow"></span></a>
+                                            <ul style="display: none;">
+                                                @foreach ($menu['child'] as $sub_menu)
+                                                    @if (RolePermission($sub_menu['table'],$sub_menu['permission']))
+                                                        <li class="sidebar-menu-item">
+                                                            <a class="sidebar-menu-button" href="{{url($sub_menu['url'])}}">
+                                                                <span class="sidebar-menu-text">{{$sub_menu['value']}}</span>
+                                                            </a>
+                                                        </li>
+                                                    @endif
+                                                @endforeach
+                                            </ul>
+                                        </li>
+                                        
+                                        
+                                        {{-- <li class="menu-title">
                                             <span>{{$menu['name']}}</span>
                                         </li>
-                                        <li class="sidebar-menu-item">
+                                        <li class="sidebar-menu-item submenu">
                                             <a class="sidebar-menu-button" data-toggle="collapse" href="#dropdown-{{$key}}">
                                                 {!! $menu['icon'] !!}
                                                 <span class="sidebar-menu-text">{{$menu['value']}}</span>
@@ -187,7 +207,7 @@
                                                     @endif
                                                 @endforeach
                                             </ul>
-                                        </li>
+                                        </li> --}}
                                     @endif
                                 @else
                                     @if (RolePermission($menu['table'],$menu['permission']))
