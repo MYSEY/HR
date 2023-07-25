@@ -1,4 +1,10 @@
 @extends('layouts.master_print')
+<style>
+.jconfirm-buttons-center{
+    float: none !important;
+    text-align: center !important;
+}
+</style>
 @section('content')
     <div class="content container-fluid">
         <div class="page-header">
@@ -57,7 +63,7 @@
 
         <!-- Delete training type Modal -->
         <div class="modal custom-modal fade" id="delete_candidate" role="dialog">
-            <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-dialog modal-sm modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-body">
                         <div class="form-header">
@@ -69,11 +75,9 @@
                                 @csrf
                                 <input type="hidden" name="id" class="e_id" value="">
                                 <div class="row">
-                                    <div class="col-6">
-                                        <button type="submit" class="btn btn-primary continue-btn submit-btn">Delete</button>
-                                    </div>
-                                    <div class="col-6">
-                                        <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-primary cancel-btn">Cancel</a>
+                                    <div class="submit-section" style="text-align: center">
+                                        <button type="submit" class="btn btn-primary submit-btn me-2">Delete</button>
+                                        <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-danger">Cancel</a>
                                     </div>
                                 </div>
                             </form>
@@ -106,14 +110,20 @@
         $(document).on('click','.btn_approve', function(){
             let id = $(this).data("id");
             $.confirm({
-                title: 'Approve!',
+                icon: 'fa fa-warning',
+                title: 'Approve',
+                titleClass: 'text-center',
+                type: 'blue',
                 content: '' +
                 '<form action="" class="formName">' +
-                    '<div class="form-group">' +
+                    '<div class="form-group" style="text-align: center">' +
                         '<label>Are you sure want to Approve?</label>' +
                         '<input type="hidden" class="form-control id" id="" name="" value="'+id+'">'+
                     '</div>' +
                 '</form>',
+                onOpenBefore: function () {
+                    $(".jconfirm-buttons").addClass("jconfirm-buttons-center");
+                },
                 buttons: {
                     formSubmit: {
                         text: 'OK',
@@ -159,14 +169,21 @@
         $(document).on('click','.btn_cancel', function(){
             let id = $(this).data("id");
             $.confirm({
-                title: 'Cancel!',
+                title: 'Cancel',
+                icon: 'fa fa-warning',
+                titleClass: 'text-center',
+                type: 'red',
+                typeAnimated: true,
                 content: '' +
                 '<form action="" class="formName">' +
-                    '<div class="form-group">' +
+                    '<div class="form-group" style="text-align: center">' +
                         '<label>Are you sure want to Cancel?</label>' +
                         '<input type="hidden" class="form-control id" id="" name="" value="'+id+'">'+
                     '</div>' +
                 '</form>',
+                onOpenBefore: function () {
+                    $(".jconfirm-buttons").addClass("jconfirm-buttons-center");
+                },
                 buttons: {
                     formSubmit: {
                         text: 'OK',
@@ -196,7 +213,7 @@
                         }
                     },
                     cancel: {
-                        text: 'Cancel',
+                        text: 'Close',
                         btnClass: 'btn-red btn-sm',
                     },
                 },

@@ -124,7 +124,7 @@
 
         <!-- Delete Bank Modal -->
         <div class="modal custom-modal fade" id="delete_bank" role="dialog">
-            <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-dialog modal-sm modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-body">
                         <div class="form-header">
@@ -136,11 +136,9 @@
                                 @csrf
                                 <input type="hidden" name="id" class="e_id" value="">
                                 <div class="row">
-                                    <div class="col-6">
-                                        <button type="submit" class="btn btn-primary continue-btn submit-btn">Delete</button>
-                                    </div>
-                                    <div class="col-6">
-                                        <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-primary cancel-btn">Cancel</a>
+                                    <div class="submit-section" style="text-align: center">
+                                        <button type="submit" class="btn btn-primary submit-btn me-2">Delete</button>
+                                        <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-danger">Cancel</a>
                                     </div>
                                 </div>
                             </form>

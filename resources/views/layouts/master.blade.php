@@ -168,7 +168,7 @@
                                 @if (isset($menu['child']))
                                     @if (RolePermission($menu['table'],$menu['permission']))
 
-                                        <li class="menu-title">
+                                        {{-- <li class="menu-title">
                                             <span>Employees</span>
                                         </li>
                                         <li class="submenu">
@@ -184,10 +184,10 @@
                                                     @endif
                                                 @endforeach
                                             </ul>
-                                        </li>
+                                        </li> --}}
                                         
                                         
-                                        {{-- <li class="menu-title">
+                                        <li class="menu-title">
                                             <span>{{$menu['name']}}</span>
                                         </li>
                                         <li class="sidebar-menu-item submenu">
@@ -207,7 +207,7 @@
                                                     @endif
                                                 @endforeach
                                             </ul>
-                                        </li> --}}
+                                        </li>
                                     @endif
                                 @else
                                     @if (RolePermission($menu['table'],$menu['permission']))

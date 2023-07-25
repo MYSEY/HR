@@ -797,6 +797,7 @@
     </div>
 </div>
 @include('recruitments.candidate_resumes.print_signed_contract')
+@include('components.loading-modal')
 <script type="text/javascript" src="{{ asset('/admin/js/printThis.js') }}"></script>
 <script src="{{asset('/admin/js/format-date-kh.js')}}"></script>
 <script type="text/javascript">
@@ -816,6 +817,7 @@
             showDatabytab(tab_status, filter);
         });
         $(".btn_print").on("click", function (){
+            $('#modal-loading').modal('show');
             let id = $(this).data("id");
             $.ajax({
                 type: "GET",
@@ -865,7 +867,7 @@
 
                         $("#pr_current_location").text(location);
 
-                        $("#pr_personal_phone_number").text(data.contact_number);
+                        $("#pr_personal_phone_number").text(data.personal_phone_number);
                         $(".pr_join_day").text(join_day);
                         $(".pr_join_month").text(join_month);
                         $(".pr_join_year").text(join_year);
@@ -876,7 +878,7 @@
                         $("#pr_branch").text(data.branch.branch_name_kh);
                         $("#pr_employee_id").text(data.number_employee);
                         $("#pr_basic_salary").text(data.basic_salary);
-                        $("#pr_salary_increase").text($("#salary_to_increase").val());
+                        $("#pr_salary_increase").text(data.salary_increas);
                         if (data.positiontype.name_english == "Field Staff") {
                             $("#pr_supporting_or_field_staff").text("ដោយធៀបនិងភាគរយការងារសម្រេចបានសម្រាប់បុគ្គលិកឥណទាន (គិតតាម Pro-Rate) ដោយការបង់ពន្ធជូនរាជរដ្ឋាភិបាលជាបន្ទុករបស់និយោជិត");
                         }
@@ -1146,6 +1148,9 @@
     }
     function print_pdf(type) {
         $("#print_purchase").show();
+        window.setTimeout(function() {
+            $('#modal-loading').modal('hide');
+        }, 2000);
         $("#print_purchase").printThis({
             importCSS: false,
             importStyle: true,
