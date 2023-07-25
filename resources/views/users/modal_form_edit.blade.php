@@ -48,14 +48,14 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-sm-6"> 
+                        <div class="col-sm-6">
                             <div class="form-group">
-                                <label>Position <span class="text-danger">*</span></label>
-                                <select class="form-control @error('position_id') is-invalid @enderror" name="position_id" id="e_position" required>
-                                    <option selected disabled value=""> --Select --</option>
+                                <label>Gender</label>
+                                <select class="form-control" id="e_gender" name="gender">
                                 </select>
                             </div>
                         </div>
+                        
                     </div>
                     <div class="row">
                         <div class="col-md-6">
@@ -66,25 +66,16 @@
                                 </div>
                             </div>
                         </div>
-                        
                         <div class="col-sm-6">
-                            <div class="form-group">
-                                <label>Gender</label>
-                                <select class="form-control" id="e_gender" name="gender">
-                                </select>
+                            <div class="">
+                                <label class="">Join Date <span class="text-danger">*</span></label>
+                                <div class="cal-icon">
+                                    <input class="form-control datetimepicker  @error('date_of_commencement') is-invalid @enderror" id="e_date_of_commencement" required name="date_of_commencement" type="text" value="{{old('date_of_commencement')}}">
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Department</label>
-                                <select class="form-control" name="department_id" id="e_department">
-                                    <option selected disabled> --Select --</option>
-                                </select>
-                            </div>
-                        </div>
-                        
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Branch <span class="text-danger">*</span></label>
@@ -93,7 +84,34 @@
                                 </select>
                             </div>
                         </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Department</label>
+                                <select class="form-control" name="department_id" id="e_department">
+                                    <option selected disabled> --Select --</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
+                    <div class="row">
+                        <div class="col-sm-6"> 
+                            <div class="form-group">
+                                <label>Position <span class="text-danger">*</span></label>
+                                <select class="form-control @error('position_id') is-invalid @enderror" name="position_id" id="e_position" required>
+                                    <option selected disabled value=""> --Select --</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="">Position Type</label>
+                                <select class="form-control" id="e_position_type" name="position_type" value="{{old('position_type')}}">
+                                    <option selected disabled> --Select --</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
@@ -105,25 +123,6 @@
                             <div class="">
                                 <label>level</label>
                                 <input type="text" class="form-control" id="e_level" name="level" value="{{old('level')}}">
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <div class="">
-                                <label class="">Join Date <span class="text-danger">*</span></label>
-                                <div class="cal-icon">
-                                    <input class="form-control datetimepicker  @error('date_of_commencement') is-invalid @enderror" id="e_date_of_commencement" required name="date_of_commencement" type="text" value="{{old('date_of_commencement')}}">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label class="">Spouse</label>
-                                <select class="form-control" id="e_spouse" name="spouse" value="{{old('spouse')}}">
-                                    
-                                </select>
                             </div>
                         </div>
                     </div>
@@ -205,11 +204,12 @@
                     </div>
                     --}}
                     <div class="row">
+                        
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="">Position Type</label>
-                                <select class="form-control" id="e_position_type" name="position_type" value="{{old('position_type')}}">
-                                    <option selected disabled> --Select --</option>
+                                <label class="">Spouse</label>
+                                <select class="form-control" id="e_spouse" name="spouse" value="{{old('spouse')}}">
+                                    
                                 </select>
                             </div>
                         </div>
@@ -422,6 +422,7 @@
                             <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading </span>
                             <span class="btn-txt">{{ __('Submit') }}</span>
                         </button>
+                        <button type="button" id="btn-cancel" class="btn btn-secondary btn-cancel">Cancel</button>
                     </div>
                 </form>
             </div>

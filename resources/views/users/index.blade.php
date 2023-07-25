@@ -222,6 +222,10 @@
             $("#add_user").modal('hide')
             $("#editUserModal").modal('hide')
         });
+        $(".btn-cancel").on("click", function(){
+            $("#add_user").modal('hide');
+            $("#editUserModal").modal('hide');
+        });
 
         $(document).on('click','.userUpdate', function(){
             $('#e_bank_name').html('<option selected value=""> </option>');

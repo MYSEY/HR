@@ -50,11 +50,11 @@
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label>Position <span class="text-danger">*</span></label>
-                                <select class="form-control @error('position_id') is-invalid @enderror" name="position_id" id="position_id" required>
+                                <label>Gender</label>
+                                <select class="form-control" id="gender" name="gender" value="{{old('gender')}}">
                                     <option selected disabled value=""> --Select --</option>
-                                    @foreach ($position as $positions )
-                                        <option value="{{ $positions->id }}">{{ $positions->name_english }}</option>
+                                    @foreach ($optionGender as $item)
+                                        <option value="{{$item->id}}">{{$item->name_khmer}}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -69,20 +69,27 @@
                                 </div>
                             </div>
                         </div>
-                        
                         <div class="col-sm-6">
-                            <div class="form-group">
-                                <label>Gender</label>
-                                <select class="form-control" id="gender" name="gender" value="{{old('gender')}}">
-                                    <option selected disabled value=""> --Select --</option>
-                                    @foreach ($optionGender as $item)
-                                        <option value="{{$item->id}}">{{$item->name_khmer}}</option>
-                                    @endforeach
-                                </select>
+                            <div class="">
+                                <label class="">Join Date <span class="text-danger">*</span></label>
+                                <div class="cal-icon">
+                                    <input class="form-control datetimepicker @error('date_of_commencement') is-invalid @enderror" id="date_of_commencement" required name="date_of_commencement" type="text" value="{{old('date_of_commencement')}}">
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Branch <span class="text-danger">*</span></label>
+                                <select class="form-control" id="branch_id" name="branch_id" value="{{old('branch_id')}}" required>
+                                    <option selected disabled value=""> --Select --</option>
+                                    @foreach ($branch as $item)
+                                        <option value="{{$item->id}}">{{$item->branch_name_en}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Department</label>
@@ -94,14 +101,25 @@
                                 </select>
                             </div>
                         </div>
-
-                        <div class="col-md-6">
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
                             <div class="form-group">
-                                <label>Branch <span class="text-danger">*</span></label>
-                                <select class="form-control" id="branch_id" name="branch_id" value="{{old('branch_id')}}" required>
+                                <label>Position <span class="text-danger">*</span></label>
+                                <select class="form-control @error('position_id') is-invalid @enderror" name="position_id" id="position_id" required>
                                     <option selected disabled value=""> --Select --</option>
-                                    @foreach ($branch as $item)
-                                        <option value="{{$item->id}}">{{$item->branch_name_en}}</option>
+                                    @foreach ($position as $positions )
+                                        <option value="{{ $positions->id }}">{{ $positions->name_english }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="">Position Type</label>
+                                <select class="form-control" id="position_type" name="position_type" value="{{old('position_type')}}">
+                                    @foreach ($optionPositionType as $item)
+                                        <option value="{{$item->id}}">{{$item->name_english}}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -118,27 +136,6 @@
                             <div class="">
                                 <label>level</label>
                                 <input type="text" class="form-control" id="level" name="level" value="{{old('level')}}">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <div class="">
-                                <label class="">Join Date <span class="text-danger">*</span></label>
-                                <div class="cal-icon">
-                                    <input class="form-control datetimepicker @error('date_of_commencement') is-invalid @enderror" id="date_of_commencement" required name="date_of_commencement" type="text" value="{{old('date_of_commencement')}}">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label class="">Spouse</label>
-                                <select class="form-control" id="spouse" name="spouse" value="{{old('spouse')}}">
-                                    <option value="0">No</option>
-                                    <option value="1">Yes</option>
-                                </select>
-                                {{-- <input type="number" class="form-control" name="spouse" id="spouse" maxlength="2" placeholder=""> --}}
                             </div>
                         </div>
                     </div>
@@ -217,13 +214,13 @@
                         </div>
                     </div>
                     <div class="row">
+                        
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="">Position Type</label>
-                                <select class="form-control" id="position_type" name="position_type" value="{{old('position_type')}}">
-                                    @foreach ($optionPositionType as $item)
-                                        <option value="{{$item->id}}">{{$item->name_english}}</option>
-                                    @endforeach
+                                <label class="">Spouse</label>
+                                <select class="form-control" id="spouse" name="spouse" value="{{old('spouse')}}">
+                                    <option value="0">No</option>
+                                    <option value="1">Yes</option>
                                 </select>
                             </div>
                         </div>
@@ -467,6 +464,7 @@
                             <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading </span>
                             <span class="btn-txt">{{ __('Submit') }}</span>
                         </button>
+                        <button type="button" id="btn-cancel" class="btn btn-secondary btn-cancel">Cancel</button>
                     </div>
                 </form>
             </div>
