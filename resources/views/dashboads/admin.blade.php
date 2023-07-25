@@ -280,17 +280,6 @@
             </div>
         </div>
         <div class="row">
-            {{-- <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
-                <div class="card dash-widget">
-                    <div class="card-body">
-                        <span class="dash-widget-icon"><i class="fa fa-user"></i></span>
-                        <div class="dash-widget-info">
-                            <h3 id="total-new-staff"></h3>
-                            <span>New Employees</span><a href="{{ url('/reports/new_staff-report') }}">View Detail</a>
-                        </div>
-                    </div>
-                </div>
-            </div> --}}
             <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
                 <div class="card dash-widget">
                     <div class="card-body">
@@ -546,7 +535,7 @@
                         if (emp.emp_status == "Probation") {
                             total_probatio ++;
                         } 
-                        if (emp.emp_status == "1") {
+                        if (emp.emp_status == "1" || emp.emp_status == "10") {
                             total_fdc++;
                         } 
                         if (emp.emp_status == "2") {

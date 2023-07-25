@@ -48,18 +48,18 @@ class DashboadController extends Controller
         // $currentYear = Carbon::now()->format('Y');
         // $year = Carbon::createFromDate('01-01-'.$currentYear)->format('Y-m-d');
         $year = null;
-        $staffResignations = User::whereNotIn('emp_status',['1','2','Probation','Upcoming'])
+        $staffResignations = User::whereNotIn('emp_status',['1','2','10','Probation','Upcoming'])
         ->when($year, function ($query, $year) {
             $query->where('resign_date', '>=', $year);
         })->orderBy('id', 'desc')->get();
 
         $recruitmentPlans = RecruitmentPlan::with('branch')->whereMonth("plan_date", 12)->whereYear("plan_date",$yearLy)->get();
-        $achieveBranchs = User::with('branch')->whereIn('emp_status',['1','2','Probation'])
+        $achieveBranchs = User::with('branch')->whereIn('emp_status',['1','2','10','Probation'])
         ->when($year, function ($query, $year) {
             $query->where('date_of_commencement', '>=', $year);
         })->get();
         
-        $totalStaff =  User::with("gender")->whereIn('emp_status',['1','2','Probation'])->get();
+        $totalStaff =  User::with("gender")->whereIn('emp_status',['1','2','10','Probation'])->get();
         $staffPromotes = StaffPromoted::all()->count();
         $transferred = Transferred::all()->count();
         $empUpcoming = User::where("emp_status","Upcoming")->get()->count();

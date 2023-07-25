@@ -224,13 +224,13 @@
                                                                         <i class="fa fa-dot-circle-o text-danger"></i> Retired
                                                                     </a>
                                                                     <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="7" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-danger"></i> Lay off
+                                                                        <i class="fa fa-dot-circle-o text-danger"></i> Lay Off
                                                                     </a>
                                                                     <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="8" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-danger"></i> Suspension
+                                                                        <i class="fa fa-dot-circle-o text-danger"></i> No need to input
                                                                     </a>
                                                                     <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="9" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-danger"></i> Fall Probation
+                                                                        <i class="fa fa-dot-circle-o text-danger"></i> Failed Probation
                                                                     </a>
                                                                 </div>
                                                             @endif
@@ -376,13 +376,13 @@
                                                                         <i class="fa fa-dot-circle-o text-danger"></i> Retired
                                                                     </a>
                                                                     <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="7" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-danger"></i> Lay off
+                                                                        <i class="fa fa-dot-circle-o text-danger"></i> Lay Off
                                                                     </a>
                                                                     <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="8" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-danger"></i> Suspension
+                                                                        <i class="fa fa-dot-circle-o text-danger"></i> No need to input
                                                                     </a>
                                                                     <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="9" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-danger"></i> Fall Probation
+                                                                        <i class="fa fa-dot-circle-o text-danger"></i> Failed Probation
                                                                     </a>
                                                                 </div>
                                                             @endif
@@ -512,13 +512,13 @@
                                                                         <i class="fa fa-dot-circle-o text-danger"></i> Retired
                                                                     </a>
                                                                     <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="7" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-danger"></i> Lay off
+                                                                        <i class="fa fa-dot-circle-o text-danger"></i> Lay Off
                                                                     </a>
                                                                     <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="8" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-danger"></i> Suspension
+                                                                        <i class="fa fa-dot-circle-o text-danger"></i> No need to input
                                                                     </a>
                                                                     <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="9" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-danger"></i> Fall Probation
+                                                                        <i class="fa fa-dot-circle-o text-danger"></i> Failed Probation
                                                                     </a>
                                                                 </div>
                                                             @endif
@@ -638,11 +638,11 @@
                                                         @elseif ($item->emp_status=='6')
                                                             <span style="font-size: 13px" class="badge bg-inverse-danger">Retired</span>
                                                         @elseif ($item->emp_status=='7')
-                                                            <span style="font-size: 13px" class="badge bg-inverse-danger">Lay off</span>
+                                                            <span style="font-size: 13px" class="badge bg-inverse-danger">Lay Off</span>
                                                         @elseif ($item->emp_status=='8')
-                                                            <span style="font-size: 13px" class="badge bg-inverse-danger">Suspension</span>
+                                                            <span style="font-size: 13px" class="badge bg-inverse-danger">No need to input</span>
                                                         @elseif ($item->emp_status=='9')
-                                                            <span style="font-size: 13px" class="badge bg-inverse-danger">Fall Probation</span>
+                                                            <span style="font-size: 13px" class="badge bg-inverse-danger">Failed Probation</span>
                                                         @elseif ($item->emp_status=='Cancel')
                                                             <span style="font-size: 13px" class="badge bg-inverse-danger">Cancel</span>
                                                         @endif
@@ -762,11 +762,11 @@
                                                             @elseif ($item->emp_status=='6')
                                                                 <span style="font-size: 13px" class="badge bg-inverse-danger">Retired</span>
                                                             @elseif ($item->emp_status=='7')
-                                                                <span style="font-size: 13px" class="badge bg-inverse-danger">Lay off</span>
+                                                                <span style="font-size: 13px" class="badge bg-inverse-danger">Lay Off</span>
                                                             @elseif ($item->emp_status=='8')
-                                                                <span style="font-size: 13px" class="badge bg-inverse-danger">Suspension</span>
+                                                                <span style="font-size: 13px" class="badge bg-inverse-danger">No need to input</span>
                                                             @elseif ($item->emp_status=='9')
-                                                                <span style="font-size: 13px" class="badge bg-inverse-danger">Fall Probation</span>
+                                                                <span style="font-size: 13px" class="badge bg-inverse-danger">Failed Probation</span>
                                                             @elseif ($item->emp_status=='Cancel')
                                                                 <span style="font-size: 13px" class="badge bg-inverse-danger">Cancel</span>
                                                             @endif

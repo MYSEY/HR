@@ -274,25 +274,25 @@ class OptionSeeder extends Seeder
             // 'Others',
         Option::firstOrCreate([
             'name_khmer' => 'មានការងារធ្វើថ្មី',
-            'name_english'=> 'Get new job',
+            'name_english'=> 'Get New Job',
             'type' => 'emp_status',
             'created_by'    => Auth::id(),
         ]);
         Option::firstOrCreate([
             'name_khmer' => 'ធ្វើអាជីវកម្មផ្ទាល់ខ្លួន',
-            'name_english'=> 'Owner Business',
+            'name_english'=> 'Own Business',
             'type' => 'emp_status',
             'created_by'    => Auth::id(),
         ]);
         Option::firstOrCreate([
             'name_khmer' => 'ផ្លាស់ប្តូរទីតាំងរស់នៅ​',
-            'name_english'=> 'Relocate Resident',
+            'name_english'=> 'Relocate Residence',
             'type' => 'emp_status',
             'created_by'    => Auth::id(),
         ]);
         Option::firstOrCreate([
             'name_khmer' => 'បន្តការសិក្សា',
-            'name_english'=> 'Contiue stadies',
+            'name_english'=> 'Pursuit Study',
             'type' => 'emp_status',
             'created_by'    => Auth::id(),
         ]);
@@ -304,7 +304,7 @@ class OptionSeeder extends Seeder
         ]);
         Option::firstOrCreate([
             'name_khmer' => 'គ្រួសារ',
-            'name_english'=> 'Fimaly',
+            'name_english'=> 'Personal Issue',
             'type' => 'emp_status',
             'created_by'    => Auth::id(),
         ]);
