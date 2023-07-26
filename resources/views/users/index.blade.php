@@ -68,22 +68,22 @@
                     <div class="col-md-12">
                         <ul class="nav nav-tabs nav-tabs-bottom" role="tablist">
                             <li class="nav-item" role="presentation">
-                                <a class="nav-link active" data-bs-toggle="tab" id="tab_candidate_resume" href="#tbl_candidate_resume" aria-selected="true" role="tab" data-tab-id="1">Upcoming Staff</a>
+                                <a class="nav-link active" data-bs-toggle="tab" id="tab_candidate_resume" href="#tbl_candidate_resume" aria-selected="true" role="tab" data-tab-id="1">Upcoming Staff({{count($data)}})</a>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <a class="nav-link" data-bs-toggle="tab" id="tab_probation" href="#tbl_probations" aria-selected="false" role="tab" data-tab-id="2" tabindex="-1">Probations</a>
+                                <a class="nav-link" data-bs-toggle="tab" id="tab_probation" href="#tbl_probations" aria-selected="false" role="tab" data-tab-id="2" tabindex="-1">Probation({{count($dataProbation)}})</a>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <a class="nav-link" data-bs-toggle="tab" id="tab_fdc" href="#tbl_fdc" aria-selected="false" role="tab" data-tab-id="3" tabindex="-1">FDC</a>
+                                <a class="nav-link" data-bs-toggle="tab" id="tab_fdc" href="#tbl_fdc" aria-selected="false" role="tab" data-tab-id="3" tabindex="-1">FDC({{count($dataFDC)}})</a>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <a class="nav-link" data-bs-toggle="tab" id="tab_udc" href="#tbl_udc" aria-selected="false" data-tab-id="4" role="tab" tabindex="-1">UDC</a>
+                                <a class="nav-link" data-bs-toggle="tab" id="tab_udc" href="#tbl_udc" aria-selected="false" data-tab-id="4" role="tab" tabindex="-1">UDC({{count($dataUDC)}})</a>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <a class="nav-link" data-bs-toggle="tab" id="tab_cancel" href="#tbl_cancel" aria-selected="false" data-tab-id="6" role="tab" tabindex="-1">Canceled Contract</a>
+                                <a class="nav-link" data-bs-toggle="tab" id="tab_cancel" href="#tbl_cancel" aria-selected="false" data-tab-id="6" role="tab" tabindex="-1">Canceled Contract({{count($dataCanContract)}})</a>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <a class="nav-link" data-bs-toggle="tab" id="tab_reason" href="#tbl_reject" aria-selected="false" data-tab-id="5" role="tab" tabindex="-1">Staff Resigns</a>
+                                <a class="nav-link" data-bs-toggle="tab" id="tab_reason" href="#tbl_reject" aria-selected="false" data-tab-id="5" role="tab" tabindex="-1">Staff Resigns({{count($dataResign)}})</a>
                             </li>
                         </ul>
                         <div class="tab-content">

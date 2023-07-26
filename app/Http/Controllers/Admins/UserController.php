@@ -53,6 +53,11 @@ class UserController extends Controller
         $branch = Branchs::all();
         $province = Province::all();
         $bank = Bank::all();
+        $dataProbation = User::with('role')->with('department')->where('emp_status','Probation')->get();
+        $dataFDC = User::with('role')->with('department')->where('emp_status','1')->where('emp_status','10')->get();
+        $dataUDC = User::with('role')->with('department')->where('emp_status','2')->get();
+        $dataCanContract = User::with('role')->with('department')->where('emp_status','Cancel')->get();
+        $dataResign = User::with('role')->with('department')->whereIn('emp_status', ['3','4','5','6','7','8','9'])->get();
         $optionIdentityType = Option::where('type','identity_type')->get();
         return view('users.index',compact('data',
                                             'role',
@@ -67,7 +72,12 @@ class UserController extends Controller
                                             'bank',
                                             'optionPositionType',
                                             'optionLoan',
-                                            'optionSpouse'
+                                            'optionSpouse',
+                                            'dataProbation',
+                                            'dataFDC',
+                                            'dataUDC',
+                                            'dataCanContract',
+                                            'dataResign'
                                         ));
     }
 

@@ -57,7 +57,7 @@ class EmployeeRepository extends BaseRepository
                 });
                 return $dataUser->get();
             }else{
-                return User::with('role')->with('department')->whereNot('emp_status',null)->get();
+                return User::with('role')->with('department')->where('emp_status','Upcoming')->get();
             }
         } else {
             return User::where('role_id',Auth::user()->role_id)

@@ -46,7 +46,7 @@ class CandidateResumeController extends Controller
         $data = CandidateResume::where("status", "1")->get();
         $dataShortList = CandidateResume::where("short_list", "1")->where('status','2')->count();
         $dataNon = CandidateResume::where("short_list", "2")->count();
-        $dataResult = CandidateResume::whereNot("interviewed_result",null)->count();
+        $dataResult = CandidateResume::where("status",'3')->count();
         $dataProcessing = CandidateResume::where("status",'4')->count();
         $dataCancel = CandidateResume::where("status",'Cancel')->count();
         $province = Province::all();

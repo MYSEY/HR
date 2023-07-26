@@ -32,80 +32,78 @@
                                 <tbody>
                                     @if (count($data)>0)
                                         @foreach ($data as $item)
-                                            @if ($item->emp_status == "Upcoming")
-                                                <tr class="odd">
-                                                    <td class="ids">{{$item->id}}</td>
-                                                    <td class="sorting_1">
-                                                        <h2 class="table-avatar">
-                                                            @if ($item->profile != null)
-                                                                <a href="{{asset('/uploads/images/'.$item->profile)}}"  class="avatar">
-                                                                    <img alt="" src="{{asset('/uploads/images/'.$item->profile)}}">
-                                                                </a>
-                                                            @else
-                                                                <a href="{{asset('admin/img/defuals/default-user-icon.png')}}">
-                                                                    <img alt="" src="{{asset('admin/img/defuals/default-user-icon.png')}}">
-                                                                </a>
-                                                            @endif
-                                                        </h2>
-                                                    </td>
-                                                    <td><a href="{{route('employee.profile',$item->id)}}">{{$item->number_employee}}</a></td>
-                                                    <td><a href="{{route('employee.profile',$item->id)}}">{{$item->employee_name_kh}}</a></td>
-                                                    <td><a href="{{route('employee.profile',$item->id)}}">{{$item->employee_name_en}}</a></td>
-                                                    
-                                                    <td>{{$item->EmployeePosition}}</td>
-                                                    <td>{{$item->EmployeeDepartment}}</td>
-                                                    <td>{{$item->EmployeeBranch}}</td>
-                                                    <td>{{$item->personal_phone_number}}</td>
-                                                    <td>
-                                                        <span class="badge bg-inverse-success">{{ $item->role == null ? "" : $item->role->name }}</span>
-                                                    </td>
-                                                    <td>{{$item->EmployeePositionType}}</td>
-                                                    <td>$ <a href="#">{{$item->basic_salary}}</a></td>
-                                                    <td>$ <a href="#">{{$item->phone_allowance == null ? '0.00' : $item->phone_allowance}}</a></td>
-                                                    <td>{{$item->DOB ?? ''}}</td>
-                                                    <td>{{$item->joinOfDate}}</td>
-                                                    <td>
-                                                        @if ($item->is_loan == '1')
-                                                            <span style="font-size: 13px" class="badge bg-inverse-danger">Yes</span>
-                                                        @elseif($item->is_loan == '0')
-                                                            <span style="font-size: 13px" class="badge bg-inverse-success">No</span>
+                                            <tr class="odd">
+                                                <td class="ids">{{$item->id}}</td>
+                                                <td class="sorting_1">
+                                                    <h2 class="table-avatar">
+                                                        @if ($item->profile != null)
+                                                            <a href="{{asset('/uploads/images/'.$item->profile)}}"  class="avatar">
+                                                                <img alt="" src="{{asset('/uploads/images/'.$item->profile)}}">
+                                                            </a>
+                                                        @else
+                                                            <a href="{{asset('admin/img/defuals/default-user-icon.png')}}">
+                                                                <img alt="" src="{{asset('admin/img/defuals/default-user-icon.png')}}">
+                                                            </a>
                                                         @endif
-                                                    </td>
-                                                    <td>
-                                                        <div class="dropdown action-label">
-                                                            @if ($item->emp_status=='Upcoming')
-                                                                <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
-                                                                    <i class="fa fa-dot-circle-o text-success"></i>
-                                                                    <span>{{ $item->emp_status }}</span>
+                                                    </h2>
+                                                </td>
+                                                <td><a href="{{route('employee.profile',$item->id)}}">{{$item->number_employee}}</a></td>
+                                                <td><a href="{{route('employee.profile',$item->id)}}">{{$item->employee_name_kh}}</a></td>
+                                                <td><a href="{{route('employee.profile',$item->id)}}">{{$item->employee_name_en}}</a></td>
+                                                
+                                                <td>{{$item->EmployeePosition}}</td>
+                                                <td>{{$item->EmployeeDepartment}}</td>
+                                                <td>{{$item->EmployeeBranch}}</td>
+                                                <td>{{$item->personal_phone_number}}</td>
+                                                <td>
+                                                    <span class="badge bg-inverse-success">{{ $item->role == null ? "" : $item->role->name }}</span>
+                                                </td>
+                                                <td>{{$item->EmployeePositionType}}</td>
+                                                <td>$ <a href="#">{{$item->basic_salary}}</a></td>
+                                                <td>$ <a href="#">{{$item->phone_allowance == null ? '0.00' : $item->phone_allowance}}</a></td>
+                                                <td>{{$item->DOB ?? ''}}</td>
+                                                <td>{{$item->joinOfDate}}</td>
+                                                <td>
+                                                    @if ($item->is_loan == '1')
+                                                        <span style="font-size: 13px" class="badge bg-inverse-danger">Yes</span>
+                                                    @elseif($item->is_loan == '0')
+                                                        <span style="font-size: 13px" class="badge bg-inverse-success">No</span>
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    <div class="dropdown action-label">
+                                                        @if ($item->emp_status=='Upcoming')
+                                                            <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
+                                                                <i class="fa fa-dot-circle-o text-success"></i>
+                                                                <span>{{ $item->emp_status }}</span>
+                                                            </a>
+                                                        @endif
+                                                        @if (Auth::user()->RolePermission == 'Administrator')
+                                                            <div class="dropdown-menu dropdown-menu-right btn-emp-status" id="btn-emp-status">
+                                                                <input type="text" name="" class="join_date" value="{{$item == null ? "" : $item->date_of_commencement}}" hidden>
+                                                                <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-id="Probation" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-success"></i> Probation
                                                                 </a>
-                                                            @endif
-                                                            @if (Auth::user()->RolePermission == 'Administrator')
-                                                                <div class="dropdown-menu dropdown-menu-right btn-emp-status" id="btn-emp-status">
-                                                                    <input type="text" name="" class="join_date" value="{{$item == null ? "" : $item->date_of_commencement}}" hidden>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-id="Probation" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-success"></i> Probation
-                                                                    </a>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-id="Cancel" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-danger"></i> Cancel
-                                                                    </a>
-                                                                </div>
-                                                            @endif
-                                                        </div>
-                                                    </td>
-                                                    <td class="text-end">
-                                                        <div class="dropdown dropdown-action">
-                                                            <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i  class="material-icons">more_vert</i></a>
-                                                            @if (Auth::user()->RolePermission == 'Administrator')
-                                                                <div class="dropdown-menu dropdown-menu-right">
-                                                                    <a class="dropdown-item userUpdate" data-id="{{$item->id}}"><i class="fa fa-pencil m-r-5"></i> Edit</a>
-                                                                    <a class="dropdown-item btn_print" data-id="{{$item->id}}"><i class="fa fa-print fa-lg m-r-5"></i> Print</a>
-                                                                    <a class="dropdown-item userDelete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_user"><i class="fa fa-trash-o m-r-5"></i> Delete</a>
-                                                                </div>
-                                                            @endif
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            @endif
+                                                                <a class="dropdown-item" data-emp-id="{{$item->id}}" data-id="Cancel" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-danger"></i> Cancel
+                                                                </a>
+                                                            </div>
+                                                        @endif
+                                                    </div>
+                                                </td>
+                                                <td class="text-end">
+                                                    <div class="dropdown dropdown-action">
+                                                        <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i  class="material-icons">more_vert</i></a>
+                                                        @if (Auth::user()->RolePermission == 'Administrator')
+                                                            <div class="dropdown-menu dropdown-menu-right">
+                                                                <a class="dropdown-item userUpdate" data-id="{{$item->id}}"><i class="fa fa-pencil m-r-5"></i> Edit</a>
+                                                                <a class="dropdown-item btn_print" data-id="{{$item->id}}"><i class="fa fa-print fa-lg m-r-5"></i> Print</a>
+                                                                <a class="dropdown-item userDelete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_user"><i class="fa fa-trash-o m-r-5"></i> Delete</a>
+                                                            </div>
+                                                        @endif
+                                                    </div>
+                                                </td>
+                                            </tr>
                                         @endforeach
                                     @endif
                                 </tbody>
@@ -150,105 +148,103 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @if (count($data)>0)
-                                        @foreach ($data as $item)
-                                            @if ($item->emp_status == "Probation")
-                                                <tr class="odd">
-                                                    <td class="ids">{{$item->id}}</td>
-                                                    <td class="sorting_1">
-                                                        <h2 class="table-avatar">
-                                                            @if ($item->profile != null)
-                                                                <a href="{{asset('/uploads/images/'.$item->profile)}}"  class="avatar">
-                                                                    <img alt="" src="{{asset('/uploads/images/'.$item->profile)}}">
-                                                                </a>
-                                                            @else
-                                                                <a href="{{asset('admin/img/defuals/default-user-icon.png')}}">
-                                                                    <img alt="" src="{{asset('admin/img/defuals/default-user-icon.png')}}">
-                                                                </a>
-                                                            @endif
-                                                        </h2>
-                                                    </td>
-                                                    <td><a href="{{route('employee.profile',$item->id)}}">{{$item->number_employee}}</a></td>
-                                                    <td><a href="{{route('employee.profile',$item->id)}}">{{$item->employee_name_kh}}</a></td>
-                                                    <td><a href="{{route('employee.profile',$item->id)}}">{{$item->employee_name_en}}</a></td>
-                                                    
-                                                    <td>{{$item->EmployeePosition}}</td>
-                                                    <td>{{$item->EmployeeDepartment}}</td>
-                                                    <td>{{$item->EmployeeBranch}}</td>
-                                                    <td>{{$item->personal_phone_number}}</td>
-                                                    <td>
-                                                        <span class="badge bg-inverse-success">{{ $item->role == null ? "" : $item->role->name }}</span>
-                                                    </td>
-                                                    <td>{{$item->EmployeePositionType}}</td>
-                                                    <td>$ <a href="#">{{$item->basic_salary}}</a></td>
-                                                    <td>$ <a href="#">{{$item->phone_allowance == null ? '0.00' : $item->phone_allowance}}</a></td>
-                                                    <td>{{$item->DOB ?? ''}}</td>
-                                                    <td>{{$item->joinOfDate}}</td>
-                                                    <td>{{$item->PassDate}}</td>
-                                                    <td>
-                                                        @if ($item->is_loan == '1')
-                                                            <span style="font-size: 13px" class="badge bg-inverse-danger">Yes</span>
-                                                        @elseif($item->is_loan == '0')
-                                                            <span style="font-size: 13px" class="badge bg-inverse-success">No</span>
+                                    @if (count($dataProbation)>0)
+                                        @foreach ($dataProbation as $item)
+                                            <tr class="odd">
+                                                <td class="ids">{{$item->id}}</td>
+                                                <td class="sorting_1">
+                                                    <h2 class="table-avatar">
+                                                        @if ($item->profile != null)
+                                                            <a href="{{asset('/uploads/images/'.$item->profile)}}"  class="avatar">
+                                                                <img alt="" src="{{asset('/uploads/images/'.$item->profile)}}">
+                                                            </a>
+                                                        @else
+                                                            <a href="{{asset('admin/img/defuals/default-user-icon.png')}}">
+                                                                <img alt="" src="{{asset('admin/img/defuals/default-user-icon.png')}}">
+                                                            </a>
                                                         @endif
-                                                    </td>
-                                                    <td>
-                                                        <div class="dropdown action-label">
-                                                            @if ($item->emp_status=='Probation')
-                                                                <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
-                                                                    <i class="fa fa-dot-circle-o text-success"></i>
-                                                                    <span>{{ $item->emp_status }}</span>
+                                                    </h2>
+                                                </td>
+                                                <td><a href="{{route('employee.profile',$item->id)}}">{{$item->number_employee}}</a></td>
+                                                <td><a href="{{route('employee.profile',$item->id)}}">{{$item->employee_name_kh}}</a></td>
+                                                <td><a href="{{route('employee.profile',$item->id)}}">{{$item->employee_name_en}}</a></td>
+                                                
+                                                <td>{{$item->EmployeePosition}}</td>
+                                                <td>{{$item->EmployeeDepartment}}</td>
+                                                <td>{{$item->EmployeeBranch}}</td>
+                                                <td>{{$item->personal_phone_number}}</td>
+                                                <td>
+                                                    <span class="badge bg-inverse-success">{{ $item->role == null ? "" : $item->role->name }}</span>
+                                                </td>
+                                                <td>{{$item->EmployeePositionType}}</td>
+                                                <td>$ <a href="#">{{$item->basic_salary}}</a></td>
+                                                <td>$ <a href="#">{{$item->phone_allowance == null ? '0.00' : $item->phone_allowance}}</a></td>
+                                                <td>{{$item->DOB ?? ''}}</td>
+                                                <td>{{$item->joinOfDate}}</td>
+                                                <td>{{$item->PassDate}}</td>
+                                                <td>
+                                                    @if ($item->is_loan == '1')
+                                                        <span style="font-size: 13px" class="badge bg-inverse-danger">Yes</span>
+                                                    @elseif($item->is_loan == '0')
+                                                        <span style="font-size: 13px" class="badge bg-inverse-success">No</span>
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    <div class="dropdown action-label">
+                                                        @if ($item->emp_status=='Probation')
+                                                            <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
+                                                                <i class="fa fa-dot-circle-o text-success"></i>
+                                                                <span>{{ $item->emp_status }}</span>
+                                                            </a>
+                                                        @endif
+                                                        @if (Auth::user()->RolePermission == 'Administrator')
+                                                            <div class="dropdown-menu dropdown-menu-right btn-emp-status" id="btn-emp-status">
+                                                                <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-Salary-Increase="{{$item->salary_increas == null ? "" : $item->salary_increas}}" data-id="1" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-success"></i> FDC-1
                                                                 </a>
-                                                            @endif
-                                                            @if (Auth::user()->RolePermission == 'Administrator')
-                                                                <div class="dropdown-menu dropdown-menu-right btn-emp-status" id="btn-emp-status">
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-Salary-Increase="{{$item->salary_increas == null ? "" : $item->salary_increas}}" data-id="1" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-success"></i> FDC-1
-                                                                    </a>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="10" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-success"></i> FDC-2
-                                                                    </a>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="2" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-warning"></i> UDC
-                                                                    </a>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="3" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-danger"></i> Resignation
-                                                                    </a>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="4" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-danger"></i> Termination
-                                                                    </a>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="5" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-danger"></i> Death
-                                                                    </a>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="6" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-danger"></i> Retired
-                                                                    </a>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="7" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-danger"></i> Lay Off
-                                                                    </a>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="8" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-danger"></i> No need to input
-                                                                    </a>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="9" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-danger"></i> Failed Probation
-                                                                    </a>
-                                                                </div>
-                                                            @endif
-                                                        </div>
-                                                    </td>
-                                                    <td class="text-end">
-                                                        <div class="dropdown dropdown-action">
-                                                            <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i  class="material-icons">more_vert</i></a>
-                                                            @if (Auth::user()->RolePermission == 'Administrator')
-                                                                <div class="dropdown-menu dropdown-menu-right">
-                                                                    <a class="dropdown-item userUpdate" data-id="{{$item->id}}"><i class="fa fa-pencil m-r-5"></i> Edit</a>
-                                                                    <a class="dropdown-item userDelete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_user"><i class="fa fa-trash-o m-r-5"></i> Delete</a>
-                                                                </div>
-                                                            @endif
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            @endif
+                                                                <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="10" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-success"></i> FDC-2
+                                                                </a>
+                                                                <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="2" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-warning"></i> UDC
+                                                                </a>
+                                                                <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="3" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-danger"></i> Resignation
+                                                                </a>
+                                                                <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="4" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-danger"></i> Termination
+                                                                </a>
+                                                                <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="5" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-danger"></i> Death
+                                                                </a>
+                                                                <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="6" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-danger"></i> Retired
+                                                                </a>
+                                                                <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="7" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-danger"></i> Lay Off
+                                                                </a>
+                                                                <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="8" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-danger"></i> No need to input
+                                                                </a>
+                                                                <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="9" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-danger"></i> Failed Probation
+                                                                </a>
+                                                            </div>
+                                                        @endif
+                                                    </div>
+                                                </td>
+                                                <td class="text-end">
+                                                    <div class="dropdown dropdown-action">
+                                                        <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i  class="material-icons">more_vert</i></a>
+                                                        @if (Auth::user()->RolePermission == 'Administrator')
+                                                            <div class="dropdown-menu dropdown-menu-right">
+                                                                <a class="dropdown-item userUpdate" data-id="{{$item->id}}"><i class="fa fa-pencil m-r-5"></i> Edit</a>
+                                                                <a class="dropdown-item userDelete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_user"><i class="fa fa-trash-o m-r-5"></i> Delete</a>
+                                                            </div>
+                                                        @endif
+                                                    </div>
+                                                </td>
+                                            </tr>
                                         @endforeach
                                     @endif
                                 </tbody>
@@ -294,113 +290,111 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @if (count($data)>0)
-                                        @foreach ($data as $item)
-                                            @if ($item->emp_status == 1 || $item->emp_status == 10)
-                                                <tr class="odd">
-                                                    <td class="ids">{{$item->id}}</td>
-                                                    <td class="sorting_1">
-                                                        <h2 class="table-avatar">
-                                                            @if ($item->profile != null)
-                                                                <a href="{{asset('/uploads/images/'.$item->profile)}}"  class="avatar">
-                                                                    <img alt="" src="{{asset('/uploads/images/'.$item->profile)}}">
-                                                                </a>
-                                                            @else
-                                                                <a href="{{asset('admin/img/defuals/default-user-icon.png')}}">
-                                                                    <img alt="" src="{{asset('admin/img/defuals/default-user-icon.png')}}">
-                                                                </a>
-                                                            @endif
-                                                        </h2>
-                                                    </td>
-                                                    <td><a href="{{route('employee.profile',$item->id)}}">{{$item->number_employee}}</a></td>
-                                                    <td><a href="{{route('employee.profile',$item->id)}}">{{$item->employee_name_kh}}</a></td>
-                                                    <td><a href="{{route('employee.profile',$item->id)}}">{{$item->employee_name_en}}</a></td>
-                                                    
-                                                    <td>{{$item->EmployeePosition}}</td>
-                                                    <td>{{$item->EmployeeDepartment}}</td>
-                                                    <td>{{$item->EmployeeBranch}}</td>
-                                                    <td>{{$item->personal_phone_number}}</td>
-                                                    <td>
-                                                        <span class="badge bg-inverse-success">{{ $item->role == null ? "" : $item->role->name }}</span>
-                                                    </td>
-                                                    <td>{{$item->EmployeePositionType}}</td>
-                                                    <td>$ <a href="#">{{$item->basic_salary}}</a></td>
-                                                    <td>$ <a href="#">{{$item->phone_allowance == null ? '0.00' : $item->phone_allowance}}</a></td>
-                                                    <td>{{$item->DOB ?? ''}}</td>
-                                                    <td>{{$item->joinOfDate}}</td>
-                                                    <td>{{$item->FDCStartDate}}</td>
-                                                    <td>{{$item->FDCEndDate}}</td>
-                                                    <td>
-                                                        @if ($item->is_loan == '1')
-                                                            <span style="font-size: 13px" class="badge bg-inverse-danger">Yes</span>
-                                                        @elseif($item->is_loan == '0')
-                                                            <span style="font-size: 13px" class="badge bg-inverse-success">No</span>
+                                    @if (count($dataFDC)>0)
+                                        @foreach ($dataFDC as $item)
+                                            <tr class="odd">
+                                                <td class="ids">{{$item->id}}</td>
+                                                <td class="sorting_1">
+                                                    <h2 class="table-avatar">
+                                                        @if ($item->profile != null)
+                                                            <a href="{{asset('/uploads/images/'.$item->profile)}}"  class="avatar">
+                                                                <img alt="" src="{{asset('/uploads/images/'.$item->profile)}}">
+                                                            </a>
                                                         @else
-                                                            
+                                                            <a href="{{asset('admin/img/defuals/default-user-icon.png')}}">
+                                                                <img alt="" src="{{asset('admin/img/defuals/default-user-icon.png')}}">
+                                                            </a>
                                                         @endif
-                                                    </td>
-                                                    <td>
-                                                        <div class="dropdown action-label">
-                                                            @if ($item->emp_status=='1')
-                                                                <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
-                                                                    <i class="fa fa-dot-circle-o text-info"></i>
-                                                                    <span>FDC-1</span>
+                                                    </h2>
+                                                </td>
+                                                <td><a href="{{route('employee.profile',$item->id)}}">{{$item->number_employee}}</a></td>
+                                                <td><a href="{{route('employee.profile',$item->id)}}">{{$item->employee_name_kh}}</a></td>
+                                                <td><a href="{{route('employee.profile',$item->id)}}">{{$item->employee_name_en}}</a></td>
+                                                
+                                                <td>{{$item->EmployeePosition}}</td>
+                                                <td>{{$item->EmployeeDepartment}}</td>
+                                                <td>{{$item->EmployeeBranch}}</td>
+                                                <td>{{$item->personal_phone_number}}</td>
+                                                <td>
+                                                    <span class="badge bg-inverse-success">{{ $item->role == null ? "" : $item->role->name }}</span>
+                                                </td>
+                                                <td>{{$item->EmployeePositionType}}</td>
+                                                <td>$ <a href="#">{{$item->basic_salary}}</a></td>
+                                                <td>$ <a href="#">{{$item->phone_allowance == null ? '0.00' : $item->phone_allowance}}</a></td>
+                                                <td>{{$item->DOB ?? ''}}</td>
+                                                <td>{{$item->joinOfDate}}</td>
+                                                <td>{{$item->FDCStartDate}}</td>
+                                                <td>{{$item->FDCEndDate}}</td>
+                                                <td>
+                                                    @if ($item->is_loan == '1')
+                                                        <span style="font-size: 13px" class="badge bg-inverse-danger">Yes</span>
+                                                    @elseif($item->is_loan == '0')
+                                                        <span style="font-size: 13px" class="badge bg-inverse-success">No</span>
+                                                    @else
+                                                        
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    <div class="dropdown action-label">
+                                                        @if ($item->emp_status=='1')
+                                                            <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
+                                                                <i class="fa fa-dot-circle-o text-info"></i>
+                                                                <span>FDC-1</span>
+                                                            </a>
+                                                        @elseif ($item->emp_status=='10')
+                                                            <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
+                                                                <i class="fa fa-dot-circle-o text-info"></i>
+                                                                <span>FDC-2</span>
+                                                            </a>
+                                                        @endif
+                                                        @if (Auth::user()->RolePermission == 'Administrator')
+                                                            <div class="dropdown-menu dropdown-menu-right btn-emp-status" id="btn-emp-status">
+                                                                <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="1" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-success"></i> FDC-1
                                                                 </a>
-                                                            @elseif ($item->emp_status=='10')
-                                                                <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
-                                                                    <i class="fa fa-dot-circle-o text-info"></i>
-                                                                    <span>FDC-2</span>
+                                                                <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="10" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-success"></i> FDC-2
                                                                 </a>
-                                                            @endif
-                                                            @if (Auth::user()->RolePermission == 'Administrator')
-                                                                <div class="dropdown-menu dropdown-menu-right btn-emp-status" id="btn-emp-status">
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="1" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-success"></i> FDC-1
-                                                                    </a>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="10" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-success"></i> FDC-2
-                                                                    </a>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="2" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-warning"></i> UDC
-                                                                    </a>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="3" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-danger"></i> Resignation
-                                                                    </a>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="4" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-danger"></i> Termination
-                                                                    </a>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="5" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-danger"></i> Death
-                                                                    </a>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="6" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-danger"></i> Retired
-                                                                    </a>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="7" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-danger"></i> Lay Off
-                                                                    </a>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="8" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-danger"></i> No need to input
-                                                                    </a>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="9" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-danger"></i> Failed Probation
-                                                                    </a>
-                                                                </div>
-                                                            @endif
-                                                        </div>
-                                                    </td>
-                                                    <td class="text-end">
-                                                        <div class="dropdown dropdown-action">
-                                                            <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i  class="material-icons">more_vert</i></a>
-                                                            @if (Auth::user()->RolePermission == 'Administrator')
-                                                                <div class="dropdown-menu dropdown-menu-right">
-                                                                    <a class="dropdown-item userUpdate" data-id="{{$item->id}}"><i class="fa fa-pencil m-r-5"></i> Edit</a>
-                                                                    <a class="dropdown-item userDelete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_user"><i class="fa fa-trash-o m-r-5"></i> Delete</a>
-                                                                </div>
-                                                            @endif
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            @endif
+                                                                <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="2" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-warning"></i> UDC
+                                                                </a>
+                                                                <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="3" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-danger"></i> Resignation
+                                                                </a>
+                                                                <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="4" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-danger"></i> Termination
+                                                                </a>
+                                                                <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="5" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-danger"></i> Death
+                                                                </a>
+                                                                <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="6" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-danger"></i> Retired
+                                                                </a>
+                                                                <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="7" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-danger"></i> Lay Off
+                                                                </a>
+                                                                <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="8" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-danger"></i> No need to input
+                                                                </a>
+                                                                <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="9" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-danger"></i> Failed Probation
+                                                                </a>
+                                                            </div>
+                                                        @endif
+                                                    </div>
+                                                </td>
+                                                <td class="text-end">
+                                                    <div class="dropdown dropdown-action">
+                                                        <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i  class="material-icons">more_vert</i></a>
+                                                        @if (Auth::user()->RolePermission == 'Administrator')
+                                                            <div class="dropdown-menu dropdown-menu-right">
+                                                                <a class="dropdown-item userUpdate" data-id="{{$item->id}}"><i class="fa fa-pencil m-r-5"></i> Edit</a>
+                                                                <a class="dropdown-item userDelete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_user"><i class="fa fa-trash-o m-r-5"></i> Delete</a>
+                                                            </div>
+                                                        @endif
+                                                    </div>
+                                                </td>
+                                            </tr>
                                         @endforeach
                                     @endif
                                 </tbody>
@@ -445,98 +439,96 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @if (count($data)>0)
-                                        @foreach ($data as $item)
-                                            @if ($item->emp_status == "2")
-                                                <tr class="odd">
-                                                    <td class="ids">{{$item->id}}</td>
-                                                    <td class="sorting_1">
-                                                        <h2 class="table-avatar">
-                                                            @if ($item->profile != null)
-                                                                <a href="{{asset('/uploads/images/'.$item->profile)}}"  class="avatar">
-                                                                    <img alt="" src="{{asset('/uploads/images/'.$item->profile)}}">
-                                                                </a>
-                                                            @else
-                                                                <a href="{{asset('admin/img/defuals/default-user-icon.png')}}">
-                                                                    <img alt="" src="{{asset('admin/img/defuals/default-user-icon.png')}}">
-                                                                </a>
-                                                            @endif
-                                                        </h2>
-                                                    </td>
-                                                    <td><a href="{{route('employee.profile',$item->id)}}">{{$item->number_employee}}</a></td>
-                                                    <td><a href="{{route('employee.profile',$item->id)}}">{{$item->employee_name_kh}}</a></td>
-                                                    <td><a href="{{route('employee.profile',$item->id)}}">{{$item->employee_name_en}}</a></td>
-                                                    
-                                                    <td>{{$item->EmployeePosition}}</td>
-                                                    <td>{{$item->EmployeeDepartment}}</td>
-                                                    <td>{{$item->EmployeeBranch}}</td>
-                                                    <td>{{$item->personal_phone_number}}</td>
-                                                    <td>
-                                                        <span class="badge bg-inverse-success">{{ $item->role == null ? "" : $item->role->name }}</span>
-                                                    </td>
-                                                    <td>{{$item->EmployeePositionType}}</td>
-                                                    <td>$ <a href="#">{{$item->basic_salary}}</a></td>
-                                                    <td>$ <a href="#">{{$item->phone_allowance == null ? '0.00' : $item->phone_allowance}}</a></td>
-                                                    <td>{{$item->DOB ?? ''}}</td>
-                                                    <td>{{$item->joinOfDate}}</td>
-                                                    <td>{{$item->FDCStartDate}}</td>
-                                                    <td>
-                                                        @if ($item->is_loan == '1')
-                                                            <span style="font-size: 13px" class="badge bg-inverse-danger">Yes</span>
-                                                        @elseif($item->is_loan == '0')
-                                                            <span style="font-size: 13px" class="badge bg-inverse-success">No</span>
+                                    @if (count($dataUDC)>0)
+                                        @foreach ($dataUDC as $item)
+                                            <tr class="odd">
+                                                <td class="ids">{{$item->id}}</td>
+                                                <td class="sorting_1">
+                                                    <h2 class="table-avatar">
+                                                        @if ($item->profile != null)
+                                                            <a href="{{asset('/uploads/images/'.$item->profile)}}"  class="avatar">
+                                                                <img alt="" src="{{asset('/uploads/images/'.$item->profile)}}">
+                                                            </a>
                                                         @else
-                                                            
+                                                            <a href="{{asset('admin/img/defuals/default-user-icon.png')}}">
+                                                                <img alt="" src="{{asset('admin/img/defuals/default-user-icon.png')}}">
+                                                            </a>
                                                         @endif
-                                                    </td>
-                                                    <td>
-                                                        <div class="dropdown action-label">
-                                                            @if ($item->emp_status=='2')
-                                                                <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
-                                                                    <i class="fa fa-dot-circle-o text-dark"></i>
-                                                                    <span>UDC</span>
+                                                    </h2>
+                                                </td>
+                                                <td><a href="{{route('employee.profile',$item->id)}}">{{$item->number_employee}}</a></td>
+                                                <td><a href="{{route('employee.profile',$item->id)}}">{{$item->employee_name_kh}}</a></td>
+                                                <td><a href="{{route('employee.profile',$item->id)}}">{{$item->employee_name_en}}</a></td>
+                                                
+                                                <td>{{$item->EmployeePosition}}</td>
+                                                <td>{{$item->EmployeeDepartment}}</td>
+                                                <td>{{$item->EmployeeBranch}}</td>
+                                                <td>{{$item->personal_phone_number}}</td>
+                                                <td>
+                                                    <span class="badge bg-inverse-success">{{ $item->role == null ? "" : $item->role->name }}</span>
+                                                </td>
+                                                <td>{{$item->EmployeePositionType}}</td>
+                                                <td>$ <a href="#">{{$item->basic_salary}}</a></td>
+                                                <td>$ <a href="#">{{$item->phone_allowance == null ? '0.00' : $item->phone_allowance}}</a></td>
+                                                <td>{{$item->DOB ?? ''}}</td>
+                                                <td>{{$item->joinOfDate}}</td>
+                                                <td>{{$item->FDCStartDate}}</td>
+                                                <td>
+                                                    @if ($item->is_loan == '1')
+                                                        <span style="font-size: 13px" class="badge bg-inverse-danger">Yes</span>
+                                                    @elseif($item->is_loan == '0')
+                                                        <span style="font-size: 13px" class="badge bg-inverse-success">No</span>
+                                                    @else
+                                                        
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    <div class="dropdown action-label">
+                                                        @if ($item->emp_status=='2')
+                                                            <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
+                                                                <i class="fa fa-dot-circle-o text-dark"></i>
+                                                                <span>UDC</span>
+                                                            </a>
+                                                        @endif
+                                                        @if (Auth::user()->RolePermission == 'Administrator')
+                                                            <div class="dropdown-menu dropdown-menu-right" id="btn-emp-status">
+                                                                <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="3" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-danger"></i> Resignation
                                                                 </a>
-                                                            @endif
-                                                            @if (Auth::user()->RolePermission == 'Administrator')
-                                                                <div class="dropdown-menu dropdown-menu-right" id="btn-emp-status">
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="3" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-danger"></i> Resignation
-                                                                    </a>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="4" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-danger"></i> Termination
-                                                                    </a>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="5" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-danger"></i> Death
-                                                                    </a>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="6" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-danger"></i> Retired
-                                                                    </a>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="7" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-danger"></i> Lay Off
-                                                                    </a>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="8" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-danger"></i> No need to input
-                                                                    </a>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="9" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-danger"></i> Failed Probation
-                                                                    </a>
-                                                                </div>
-                                                            @endif
-                                                        </div>
-                                                    </td>
-                                                    <td class="text-end">
-                                                        <div class="dropdown dropdown-action">
-                                                            <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i  class="material-icons">more_vert</i></a>
-                                                            @if (Auth::user()->RolePermission == 'Administrator')
-                                                                <div class="dropdown-menu dropdown-menu-right">
-                                                                    <a class="dropdown-item userUpdate" data-id="{{$item->id}}"><i class="fa fa-pencil m-r-5"></i> Edit</a>
-                                                                    <a class="dropdown-item userDelete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_user"><i class="fa fa-trash-o m-r-5"></i> Delete</a>
-                                                                </div>
-                                                            @endif
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            @endif
+                                                                <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="4" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-danger"></i> Termination
+                                                                </a>
+                                                                <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="5" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-danger"></i> Death
+                                                                </a>
+                                                                <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="6" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-danger"></i> Retired
+                                                                </a>
+                                                                <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="7" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-danger"></i> Lay Off
+                                                                </a>
+                                                                <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="8" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-danger"></i> No need to input
+                                                                </a>
+                                                                <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="9" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-danger"></i> Failed Probation
+                                                                </a>
+                                                            </div>
+                                                        @endif
+                                                    </div>
+                                                </td>
+                                                <td class="text-end">
+                                                    <div class="dropdown dropdown-action">
+                                                        <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i  class="material-icons">more_vert</i></a>
+                                                        @if (Auth::user()->RolePermission == 'Administrator')
+                                                            <div class="dropdown-menu dropdown-menu-right">
+                                                                <a class="dropdown-item userUpdate" data-id="{{$item->id}}"><i class="fa fa-pencil m-r-5"></i> Edit</a>
+                                                                <a class="dropdown-item userDelete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_user"><i class="fa fa-trash-o m-r-5"></i> Delete</a>
+                                                            </div>
+                                                        @endif
+                                                    </div>
+                                                </td>
+                                            </tr>
                                         @endforeach
                                     @endif
                                 </tbody>
@@ -582,9 +574,8 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @if (count($data)>0)
-                                    @foreach ($data as $item)
-                                        @if ($item->emp_status == "Cancel")
+                                    @if (count($dataCanContract)>0)
+                                        @foreach ($dataCanContract as $item)
                                             <tr class="odd">
                                                 <td class="ids">{{$item->id}}</td>
                                                 <td class="sorting_1">
@@ -660,9 +651,8 @@
                                                     </div>
                                                 </td>
                                             </tr>
-                                        @endif
-                                    @endforeach
-                                @endif
+                                        @endforeach
+                                    @endif
                                 </tbody>
                             </table>
                         </div>
@@ -706,85 +696,83 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @if (count($data)>0)
-                                        @foreach ($data as $item)
-                                            @if ($item->emp_status != "Upcoming" && $item->emp_status !="Cancel" && $item->emp_status != "Probation" && $item->emp_status != "1" && $item->emp_status != "2" && $item->emp_status != "10")
-                                                <tr class="odd">
-                                                    <td class="ids">{{$item->id}}</td>
-                                                    <td class="sorting_1">
-                                                        <h2 class="table-avatar">
-                                                            @if ($item->profile != null)
-                                                                <a href="{{asset('/uploads/images/'.$item->profile)}}"  class="avatar">
-                                                                    <img alt="" src="{{asset('/uploads/images/'.$item->profile)}}">
-                                                                </a>
-                                                            @else
-                                                                <a href="{{asset('admin/img/defuals/default-user-icon.png')}}">
-                                                                    <img alt="" src="{{asset('admin/img/defuals/default-user-icon.png')}}">
-                                                                </a>
-                                                            @endif
-                                                        </h2>
-                                                    </td>
-                                                    <td><a href="{{route('employee.profile',$item->id)}}">{{$item->number_employee}}</a></td>
-                                                    <td><a href="{{route('employee.profile',$item->id)}}">{{$item->employee_name_kh}}</a></td>
-                                                    <td><a href="{{route('employee.profile',$item->id)}}">{{$item->employee_name_en}}</a></td>
-                                                    
-                                                    <td>{{$item->EmployeePosition}}</td>
-                                                    <td>{{$item->EmployeeDepartment}}</td>
-                                                    <td>{{$item->EmployeeBranch}}</td>
-                                                    <td>{{$item->personal_phone_number}}</td>
-                                                    <td>
-                                                        <span class="badge bg-inverse-success">{{ $item->role == null ? "" : $item->role->name }}</span>
-                                                    </td>
-                                                    <td>{{$item->EmployeePositionType}}</td>
-                                                    <td>$ <a href="#">{{$item->basic_salary}}</a></td>
-                                                    <td>$ <a href="#">{{$item->phone_allowance == null ? '0.00' : $item->phone_allowance}}</a></td>
-                                                    <td>{{$item->DOB ?? ''}}</td>
-                                                    <td>{{$item->joinOfDate}}</td>
-                                                    <td>{{$item->ResignDates}}</td>
-                                                    <td>{{$item->EmployeeResignReason == null ? $item->resign_reason : $item->EmployeeResignReason}}</td>
-                                                    <td>
-                                                        @if ($item->is_loan == '1')
-                                                            <span style="font-size: 13px" class="badge bg-inverse-danger">Yes</span>
-                                                        @elseif($item->is_loan == '0')
-                                                            <span style="font-size: 13px" class="badge bg-inverse-success">No</span>
+                                    @if (count($dataResign)>0)
+                                        @foreach ($dataResign as $item)
+                                            <tr class="odd">
+                                                <td class="ids">{{$item->id}}</td>
+                                                <td class="sorting_1">
+                                                    <h2 class="table-avatar">
+                                                        @if ($item->profile != null)
+                                                            <a href="{{asset('/uploads/images/'.$item->profile)}}"  class="avatar">
+                                                                <img alt="" src="{{asset('/uploads/images/'.$item->profile)}}">
+                                                            </a>
                                                         @else
-                                                            
+                                                            <a href="{{asset('admin/img/defuals/default-user-icon.png')}}">
+                                                                <img alt="" src="{{asset('admin/img/defuals/default-user-icon.png')}}">
+                                                            </a>
                                                         @endif
-                                                    </td>
-                                                    <td>
-                                                        <div class="dropdown action-label">
-                                                            @if ($item->emp_status=='3')
-                                                                <span style="font-size: 13px" class="badge bg-inverse-danger">Resignation</span>
-                                                            @elseif ($item->emp_status=='4')
-                                                                <span style="font-size: 13px" class="badge bg-inverse-danger">Termination</span>
-                                                            @elseif ($item->emp_status=='5')
-                                                                <span style="font-size: 13px" class="badge bg-inverse-danger">Death</span>
-                                                            @elseif ($item->emp_status=='6')
-                                                                <span style="font-size: 13px" class="badge bg-inverse-danger">Retired</span>
-                                                            @elseif ($item->emp_status=='7')
-                                                                <span style="font-size: 13px" class="badge bg-inverse-danger">Lay Off</span>
-                                                            @elseif ($item->emp_status=='8')
-                                                                <span style="font-size: 13px" class="badge bg-inverse-danger">No need to input</span>
-                                                            @elseif ($item->emp_status=='9')
-                                                                <span style="font-size: 13px" class="badge bg-inverse-danger">Failed Probation</span>
-                                                            @elseif ($item->emp_status=='Cancel')
-                                                                <span style="font-size: 13px" class="badge bg-inverse-danger">Cancel</span>
-                                                            @endif
-                                                        </div>
-                                                    </td>
-                                                    <td class="text-end">
-                                                        <div class="dropdown dropdown-action">
-                                                            <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i  class="material-icons">more_vert</i></a>
-                                                            @if (Auth::user()->RolePermission == 'Administrator')
-                                                                <div class="dropdown-menu dropdown-menu-right">
-                                                                    {{-- <a class="dropdown-item userUpdate" data-id="{{$item->id}}"><i class="fa fa-pencil m-r-5"></i> Edit</a> --}}
-                                                                    <a class="dropdown-item userDelete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_user"><i class="fa fa-trash-o m-r-5"></i> Delete</a>
-                                                                </div>
-                                                            @endif
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            @endif
+                                                    </h2>
+                                                </td>
+                                                <td><a href="{{route('employee.profile',$item->id)}}">{{$item->number_employee}}</a></td>
+                                                <td><a href="{{route('employee.profile',$item->id)}}">{{$item->employee_name_kh}}</a></td>
+                                                <td><a href="{{route('employee.profile',$item->id)}}">{{$item->employee_name_en}}</a></td>
+                                                
+                                                <td>{{$item->EmployeePosition}}</td>
+                                                <td>{{$item->EmployeeDepartment}}</td>
+                                                <td>{{$item->EmployeeBranch}}</td>
+                                                <td>{{$item->personal_phone_number}}</td>
+                                                <td>
+                                                    <span class="badge bg-inverse-success">{{ $item->role == null ? "" : $item->role->name }}</span>
+                                                </td>
+                                                <td>{{$item->EmployeePositionType}}</td>
+                                                <td>$ <a href="#">{{$item->basic_salary}}</a></td>
+                                                <td>$ <a href="#">{{$item->phone_allowance == null ? '0.00' : $item->phone_allowance}}</a></td>
+                                                <td>{{$item->DOB ?? ''}}</td>
+                                                <td>{{$item->joinOfDate}}</td>
+                                                <td>{{$item->ResignDates}}</td>
+                                                <td>{{$item->EmployeeResignReason == null ? $item->resign_reason : $item->EmployeeResignReason}}</td>
+                                                <td>
+                                                    @if ($item->is_loan == '1')
+                                                        <span style="font-size: 13px" class="badge bg-inverse-danger">Yes</span>
+                                                    @elseif($item->is_loan == '0')
+                                                        <span style="font-size: 13px" class="badge bg-inverse-success">No</span>
+                                                    @else
+                                                        
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    <div class="dropdown action-label">
+                                                        @if ($item->emp_status=='3')
+                                                            <span style="font-size: 13px" class="badge bg-inverse-danger">Resignation</span>
+                                                        @elseif ($item->emp_status=='4')
+                                                            <span style="font-size: 13px" class="badge bg-inverse-danger">Termination</span>
+                                                        @elseif ($item->emp_status=='5')
+                                                            <span style="font-size: 13px" class="badge bg-inverse-danger">Death</span>
+                                                        @elseif ($item->emp_status=='6')
+                                                            <span style="font-size: 13px" class="badge bg-inverse-danger">Retired</span>
+                                                        @elseif ($item->emp_status=='7')
+                                                            <span style="font-size: 13px" class="badge bg-inverse-danger">Lay Off</span>
+                                                        @elseif ($item->emp_status=='8')
+                                                            <span style="font-size: 13px" class="badge bg-inverse-danger">No need to input</span>
+                                                        @elseif ($item->emp_status=='9')
+                                                            <span style="font-size: 13px" class="badge bg-inverse-danger">Failed Probation</span>
+                                                        @elseif ($item->emp_status=='Cancel')
+                                                            <span style="font-size: 13px" class="badge bg-inverse-danger">Cancel</span>
+                                                        @endif
+                                                    </div>
+                                                </td>
+                                                <td class="text-end">
+                                                    <div class="dropdown dropdown-action">
+                                                        <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i  class="material-icons">more_vert</i></a>
+                                                        @if (Auth::user()->RolePermission == 'Administrator')
+                                                            <div class="dropdown-menu dropdown-menu-right">
+                                                                {{-- <a class="dropdown-item userUpdate" data-id="{{$item->id}}"><i class="fa fa-pencil m-r-5"></i> Edit</a> --}}
+                                                                <a class="dropdown-item userDelete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_user"><i class="fa fa-trash-o m-r-5"></i> Delete</a>
+                                                            </div>
+                                                        @endif
+                                                    </div>
+                                                </td>
+                                            </tr>
                                         @endforeach
                                     @endif
                                 </tbody>
