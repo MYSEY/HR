@@ -44,8 +44,30 @@ class CandidateResumeController extends Controller
         $optionPositionType = Option::where('type','position_type')->get();
         $optionLoan = Option::where('type','loan')->get();
         $data = CandidateResume::where("status", "1")->get();
+        $dataShortList = CandidateResume::where("short_list", "1")->where('status','2')->count();
+        $dataNon = CandidateResume::where("short_list", "2")->count();
+        $dataResult = CandidateResume::whereNot("interviewed_result",null)->count();
+        $dataProcessing = CandidateResume::where("status",'4')->count();
+        $dataCancel = CandidateResume::where("status",'Cancel')->count();
         $province = Province::all();
-        return view('recruitments.candidate_resumes.candidate_resume', compact(["position", "branch", "gender", "data", "autoEmpId", "role", "department", "optionPositionType", "optionLoan", "province" ]));
+        return view('recruitments.candidate_resumes.candidate_resume', 
+            compact([
+                "position", 
+                "branch", 
+                "gender", 
+                "data", 
+                "autoEmpId", 
+                "role", 
+                "department", 
+                "optionPositionType", 
+                "optionLoan", 
+                "province",
+                "dataShortList",
+                "dataNon",
+                "dataResult",
+                'dataProcessing',
+                'dataCancel'
+            ]));
     }
 
     /**

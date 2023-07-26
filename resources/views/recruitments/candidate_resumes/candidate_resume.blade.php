@@ -29,27 +29,27 @@
                         <ul class="nav nav-tabs nav-tabs-bottom" role="tablist">
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link active" data-bs-toggle="tab" href="#tab_candidate_resume" aria-selected="true"
-                                    role="tab">CVs</a>
+                                    role="tab">CVs({{count($data)}})</a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" data-bs-toggle="tab" id="btn_tab_short_list" href="#tab_short_list" aria-selected="false" role="tab" data-tab-id="2"
-                                    tabindex="-1">Shortlisted</a>
+                                    tabindex="-1">Shortlisted({{$dataShortList}})</a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" data-bs-toggle="tab" id="btn_not_tab_short_list" href="#tab_not_short_list" aria-selected="false" role="tab" data-tab-id="2"
-                                    tabindex="-1">Non-Shortlisted</a>
+                                    tabindex="-1">Non-Shortlisted({{$dataNon}})</a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" data-bs-toggle="tab" id="btn_tab_interviewed_result" href="#tab_interviewed_result" aria-selected="false" data-tab-id="3"
-                                    role="tab" tabindex="-1">Inter-Result</a>
+                                    role="tab" tabindex="-1">Inter-Result({{$dataResult}})</a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" data-bs-toggle="tab" id="btn_tab_signed_contract" href="#tab_signed_contract" aria-selected="false" data-tab-id="4"
-                                    role="tab" tabindex="-1">Processing Contract</a>
+                                    role="tab" tabindex="-1">Processing Contract({{$dataProcessing}})</a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" data-bs-toggle="tab" id="btn_tab_signed_contract_cancel" href="#tab_signed_contract_cancel" aria-selected="false" data-tab-id="5"
-                                    role="tab" tabindex="-1">Canceled Contract</a>
+                                    role="tab" tabindex="-1">Canceled Contract({{$dataCancel}})</a>
                             </li>
                         </ul>
                     </div>
