@@ -1,8 +1,8 @@
-@extends('layouts.master')
+@extends('layouts.master_print')
 <style>
     .filter-row .btn {
         min-height: 38px !important;
-        padding: 10px !important;
+        padding: 8px !important;
     }
     .reset-btn{
         color: #fff !important
@@ -14,23 +14,23 @@
         position: relative;
         padding-left: 0 !important;
     }
-    thead,
+    .custom-table
     tr>th {
         position: sticky;
         background: #fff !important;
     }
 
-    thead {
+    .custom-table thead {
         top: 0;
         z-index: 2;
     }
 
-    tr>th {
+    .custom-table tr>th {
         left: 0;
         z-index: 1;
     }
 
-    thead tr>th:first-child {
+    .custom-table thead tr>th:first-child {
         z-index: 3;
     }
     .plan_date {
@@ -106,9 +106,14 @@
                                 <span class="search-loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading </span>
                                 <span class="btn-search-txt">{{ __('Search') }}</span>
                             </button>
-                            <button type="button" class="btn btn-sm btn-warning reset-btn">
+                            <button type="button" class="btn btn-sm btn-warning reset-btn me-2">
                                 <span class="btn-text-reset">Reset</span>
                                 <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading</span>
+                            </button>
+
+                            <button type="button" class="btn btn-outline-secondary btn-sm btn_print">
+                                <span class="btn-text-print"><i class="fa fa-print fa-lg"></i> Print</span>
+                                <span id="btn-text-loading-print" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading</span>
                             </button>
                         </div>
                     </div>
@@ -204,9 +209,11 @@
             </div>
         </div>
     </div>
+    @include('recruitments.plans.recruitment_plan_print');
 @endsection
 
 @include('includs.script')
+<script type="text/javascript" src="{{ asset('/admin/js/printThis.js') }}"></script>
 <script src="{{ asset('/admin/js/validation-field.js') }}"></script>
 <script>
     $(function() {
@@ -231,6 +238,13 @@
                 filter_year: $("#filter_year").val(),
             };
             showDatas(filter);
+        });
+
+        $(".btn_print").on("click", function (){
+            $("#btn-text-loading-print").css('display', 'block');
+            $(".btn_print").prop('disabled', true);
+            $(".btn-text-print").css("display", "none");
+            print_pdf();
         });
 
         $('#btnAddEducation').on('click', function() {
@@ -306,9 +320,12 @@
                 }, {}));
 
                 var div = "";
+                var tatle_print ="";
                 if (branchs.length) { 
                     branchs.map((br) => {
                         let tbd = "";
+                        let tdb_print = "";
+                        let tfoot_print = "";
                         let tfoot = "";
                         let br_year = moment(br.year).format('y');
                         positions.map((pos) => {
@@ -361,11 +378,25 @@
                                             '<td></td>'+
                                     ' </tr>'+
                                 '</tfoot>';
+
+                                 // tbody print
+                                 tdb_print += '<tbody>'+
+                                        '<tr>'+
+                                            '<td>'+(pos.position)+'</td>'+
+                                            (td)+
+                                        '</tr>'+
+                                '</tbody>';
+                                tfoot_print = '<tfoot>'+
+                                        '<tr>'+
+                                            '<td style="text-align: center">Total</td>'+
+                                            (tf)+
+                                    ' </tr>'+
+                                '</tfoot>';
                             }
                         });
-                        
                         if (tbd) {
                             let plan_year = moment(br.year).format('y');
+                            $("#print_year").text(plan_year);
                             div +='<div class="card">'+
                                 '<div class="card-header">'+
                                     '<h4><strong>Location:</strong> '+(br.branch_name_en)+'</h4>'+
@@ -394,9 +425,31 @@
                                         '</thead>'+
                                                 (tbd)+
                                                 (tfoot)+
-                                ' </table>'+
+                                    '</table>'+
                                 '</div>'+
                             '</div>';
+                            tatle_print += '<h4><strong>Location:</strong> '+(br.branch_name_en)+'</h4>'+
+                                    '<table class="table-print">'+
+                                        '<thead>'+
+                                            '<tr>'+
+                                                '<th >Position</th>'+
+                                                '<th >January</th>'+
+                                                '<th >February</th>'+
+                                                '<th >March</th>'+
+                                                '<th >April</th>'+
+                                                '<th >May</th>'+
+                                                '<th >June</th>'+
+                                                '<th >July</th>'+
+                                                '<th >August</th>'+
+                                                '<th >September</th>'+
+                                                '<th >October</th>'+
+                                                '<th >November</th>'+
+                                                '<th >December</th>'+
+                                            '</tr>'+
+                                        '</thead>'+
+                                                (tdb_print)+
+                                                (tfoot_print)+
+                                    '</table>';
                         }
                     });   
                 }else{
@@ -409,7 +462,27 @@
                     '</div>';
                 }
                 $("#card_by_branch").html(div);
+                $("#form_print").html(tatle_print);
             }
+        });
+    }
+    function print_pdf(type) {
+        $("#print_purchase").show();
+        window.setTimeout(function() {
+            $("#print_purchase").hide();
+            $(".btn_print").prop('disabled', false);
+            $(".btn-text-print").show();
+            $("#btn-text-loading-print").css('display', 'none');
+        }, 2000);
+        $("#print_purchase").printThis({
+            importCSS: false,
+            importStyle: true,
+            loadCSS: "/admin/css/style-templete-recruitment-plan.css",
+            header: "",
+            printDelay: 1000,
+            formValues: false,
+            canvas: false,
+            doctypeString: "",
         });
     }
 </script>

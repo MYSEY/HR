@@ -1,0 +1,60 @@
+@import url('https://fonts.googleapis.com/css?family=Nunito:200,600');
+@import url('https://fonts.googleapis.com/css?family=Nokora');
+  
+.set-font,p{
+    font-family:'Khmer OS Battambang', serif;
+    margin-top: -15px;
+    font-size: 12px;
+}
+.font-title, .title{
+    font-family: 'Khmer OS Muol Light', serif;
+    font-size: 18px;
+}
+.font-title, p {
+    font-family: 'Khmer OS Bokor', serif;
+    font-size: 12px;
+    margin-top: -2px;
+}
+.font-sub-title{
+    text-align: center; 
+    margin-top: -12px;
+}
+.label-sub{
+    font-family: "Khmer OS Muol Light", serif;
+    font-size: 14px;
+}
+.label-subs{
+    font-family: 'Khmer OS Siemreap', serif;
+    font-size: 14px;
+}
+.label-sub_l{
+    font-weight: bold;
+    font-family: 'Khmer OS Bokor', serif;
+    font-size: 14px;
+}
+.label-sub_ll{
+    font-weight: bold;
+    font-family: 'Khmer OS Bokor', serif;
+    font-size: 14px;
+}
+.label-sub_lll {
+    font-family: "Khmer OS Muol Light", serif;
+    font-size: 14px;
+}
+
+.table-print {
+    font-family: Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 14px;
+}
+.table-print, th {
+    border: 1px solid #ddd !important;
+    padding: 8px !important;
+    text-align:left;
+}
+
+.table-print, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
