@@ -163,25 +163,25 @@
             <div class="slimScrollDiv" style="position: relative; overflow:hidden; width: 100%; height: 346px;">
                 <div class="sidebar-inner slimscroll" style="overflow: auto; width: 100%; height: 346px;">
                     <div id="sidebar-menu" class="sidebar-menu">
-                        <ul class="sidebar-vertical" >
-                            @foreach (menu() as $key=>$menu)
+                        <ul class="sidebar-vertical">
+                            @foreach (menu() as $menu)
                                 @if (isset($menu['child']))
                                     @if (RolePermission($menu['table'],$menu['permission']))
                                         <li class="menu-title">
                                             <span>{{$menu['name']}}</span>
                                         </li>
-                                        <li class="sidebar-menu-item">
-                                            <a class="sidebar-menu-button" data-toggle="collapse" href="#dropdown-{{$key}}">
+                                        <li class="submenu">
+                                            <a class="" href="#">
                                                 {!! $menu['icon'] !!}
-                                                <span class="sidebar-menu-text">{{$menu['value']}}</span>
-                                                <span class="ml-auto sidebar-menu-toggle-icon"></span>
+                                                <span>{{$menu['value']}}</span>
+                                                <span class="menu-arrow"></span>
                                             </a>
                                             <ul style="display: none;">
                                                 @foreach ($menu['child'] as $sub_menu)
                                                     @if (RolePermission($sub_menu['table'],$sub_menu['permission']))
-                                                        <li class="sidebar-menu-item">
-                                                            <a class="sidebar-menu-button" href="{{url($sub_menu['url'])}}">
-                                                                <span class="sidebar-menu-text">{{$sub_menu['value']}}</span>
+                                                        <li>
+                                                            <a class="" href="{{url($sub_menu['url'])}}">
+                                                                {{$sub_menu['value']}}
                                                             </a>
                                                         </li>
                                                     @endif
@@ -194,10 +194,10 @@
                                         <li class="menu-title">
                                             <span>{{$menu['name']}}</span>
                                         </li>
-                                        <li class="sidebar-menu-item">
-                                            <a class="sidebar-menu-button" href="{{url($menu['url'])}}">
+                                        <li>
+                                            <a class="" href="{{url($menu['url'])}}">
                                                 {!! $menu['icon'] !!}
-                                                <span class="sidebar-menu-text">{{$menu['value']}}</span>
+                                                <span>{{$menu['value']}}</span>
                                             </a>
                                         </li>
                                     @endif

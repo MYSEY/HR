@@ -3,10 +3,10 @@
     <div class="page-header">
         <div class="row align-items-center">
             <div class="col">
-                <h3 class="page-title">Employee Salaries</h3>
+                <h3 class="page-title">Employee Salary</h3>
                 <ul class="breadcrumb">
                     <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
-                    <li class="breadcrumb-item active">Salaries</li>
+                    <li class="breadcrumb-item active">Salary</li>
                 </ul>
             </div>
             <div class="col-auto float-end ms-auto">
@@ -147,7 +147,7 @@
                                                         <td>$ <a href="#">{{ $item->seniority_payable_tax}}</a></td>
                                                         <td>$ <a href="#">{{ $item->total_pension_fund}}</a></td>
                                                         <td>$ <a href="#">{{ $item->base_salary_received_usd}}</a></td>
-                                                        <td><span>៛</span> <a href="#">{{ $item->base_salary_received_riel}}</a></td>
+                                                        <td><span>៛</span> <a href="#">{{ $item->total_tax_base_riel}}</a></td>
                                                         <td><a href="#">{{ $item->total_rate}}%</a></td>
                                                         <td>$ <a href="#">{{ $item->tax_free_seniority_allowance}}</a></td>
                                                         <td>$ <a href="#">{{ $item->total_severance_pay}}</a></td>
@@ -169,7 +169,7 @@
         </div>
     </div>
 
-    <div id="add_salary" class="modal custom-modal fade" style="display: none;" aria-hidden="true">
+    <div id="add_salary" class="modal custom-modal fade" style="display: none;" aria-hidden="true" data-bs-backdrop="static">
         <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">

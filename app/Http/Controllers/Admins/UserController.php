@@ -54,7 +54,7 @@ class UserController extends Controller
         $province = Province::all();
         $bank = Bank::all();
         $dataProbation = User::with('role')->with('department')->where('emp_status','Probation')->get();
-        $dataFDC = User::with('role')->with('department')->where('emp_status','1')->where('emp_status','10')->get();
+        $dataFDC = User::with('role')->with('department')->whereIn('emp_status',['1','10'])->get();
         $dataUDC = User::with('role')->with('department')->where('emp_status','2')->get();
         $dataCanContract = User::with('role')->with('department')->where('emp_status','Cancel')->get();
         $dataResign = User::with('role')->with('department')->whereIn('emp_status', ['3','4','5','6','7','8','9'])->get();

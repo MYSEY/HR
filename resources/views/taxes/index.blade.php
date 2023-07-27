@@ -40,7 +40,7 @@
                                         <td><div class="input-group"><span class="input-group-text">៛</span><input type="number" class="form-control" value="{{$item->tax_deduction_amount}}"></div></td>
                                         <td style="text-align: center;">
                                             <a class="btn btn-success update" data-toggle="modal" data-id="{{$item->id}}" data-target="#edit_taxes"><i class="fa fa-pencil m-r-5"></i></a>
-                                            <a class="btn btn-danger delete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_taxes"><i class="fa fa-trash-o m-r-5"></i></a>
+                                            {{-- <a class="btn btn-danger delete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_taxes"><i class="fa fa-trash-o m-r-5"></i></a> --}}
                                         </td>
                                     </tr>
                                 @endforeach

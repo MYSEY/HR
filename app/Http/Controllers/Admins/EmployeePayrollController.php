@@ -64,10 +64,10 @@ class EmployeePayrollController extends Controller
      */
     public function store(Request $request)
     {
-        try{
+        // try{
             $employee = User::where('date_of_commencement','<=',$request->payment_date)->whereIn('emp_status',['Probation','1','10','2'])->get();
             foreach ($employee as $item) {
-
+                dd($item->fdc_date <= $request->payment_date);
                 //function first month join work
                 if (count(Payroll::where('employee_id',$item->id)->get()) == 0) {
                     //total day in months
@@ -105,8 +105,8 @@ class EmployeePayrollController extends Controller
                     }else{
                         $totalDays = $toDays + 1;
                     }
-                    
-                    if ($totalDays == 22) {
+               
+                    if ($totalDays >= 22) {
                         $totalBasicSalary = $item->basic_salary;
                     }else{
                         $totalBasicSalary = ($item->basic_salary / 22) * $totalDays;
@@ -120,8 +120,7 @@ class EmployeePayrollController extends Controller
                         $totalBasicSalary = $item->basic_salary;
                     }
                 }
-               
-                // dd($request->exchange_rate * $item->basic_salary);
+                
                 //National Social Security Fund (NSSF) Formula
                 $totalExchangeRielPreTax =  $request->exchange_rate * round($totalBasicSalary, 2);
                 
@@ -262,7 +261,6 @@ class EmployeePayrollController extends Controller
                 }
                 
                 $grossSalary = $totalBasicSalary + $totalBunus + $item->phone_allowance + $totalAmountChild;
-
                 $dataGrossSalary = GrossSalaryPay::create([
                     'employee_id'           => $item->id,
                     'basic_salary'          => $item->basic_salary,
@@ -335,12 +333,9 @@ class EmployeePayrollController extends Controller
                 
                 //sum salary and sum other benefit
                 $baseSalaryReceivedUsd = round($grossSalary, 2) + $seniorityPayableTax - $pension_contribution;
-                // $totalGrossSalary = $grossSalary + $seniorityPayableTax;
-
                 //exchange rate
                 $totalExchangeRiel =  $request->exchange_rate * $baseSalaryReceivedUsd;
-           
-                // dd($totalExchangeRiel);
+        
                 //total that បូកបន្ថែមលើបន្ទុកកូននិងប្រពន្ធ
                 $totalChargesReducedChild = $childrenAllowance->reduced_burden_children;
                 $totalChargesReducedSpouse = $childrenAllowance->spouse_allowance;
@@ -391,14 +386,13 @@ class EmployeePayrollController extends Controller
                 }else if($number_of_children == 4 &&  $item->spouse == 1){
                     $totalTtaxBbaseRiel = $totalExchangeRiel - $totalChargesReduced;
                 }
-               
+              
                 $children = $number_of_children;
                 // អត្រា ពន្ធ(%)
                 if ($number_of_children == 0 && $item->spouse == 0) {
-                    $taxRate = Taxes::where('from', '<=' ,(int)$totalTtaxBbaseRiel)->where('to','>=',(int)$totalTtaxBbaseRiel)->first();
-                    
+                    $taxRate = Taxes::where('from', '<=' ,$totalExchangeRiel)->where('to','>=',$totalExchangeRiel)->first();
                     $totalTax = $taxRate->tax_rate;
-                    if($totalExchangeRiel <= $taxRate->to){
+                    if($totalExchangeRiel >= $taxRate->to){
                         $totalSalaryTaxRiel = 0;
                     }elseif($totalExchangeRiel > $taxRate->from && $totalExchangeRiel <= $taxRate->to){
                         $totalSalaryTaxRiel = ($totalExchangeRiel * $totalTax) / 100 - $taxRate->tax_deduction_amount;
@@ -409,9 +403,9 @@ class EmployeePayrollController extends Controller
                     }else{
                         $totalSalaryTaxRiel = ($totalExchangeRiel * $totalTax) / 100 - $taxRate->tax_deduction_amount;
                     }
+
                     //ពន្ធលើប្រាក់បៀវត្ស រៀល/Riel
                     $totalSalaryTaxUsd = $totalSalaryTaxRiel / $request->exchange_rate;
-
                     //ពន្ធលើប្រាក់បៀវត្ស ដុល្លារ/USD
                     $totalSalaryAfterTax = $baseSalaryReceivedUsd - $totalSalaryTaxUsd;
                 } else if($number_of_children == 1 && $item->spouse == 0) {
@@ -430,7 +424,27 @@ class EmployeePayrollController extends Controller
                     }
                     
                     //ពន្ធលើប្រាក់បៀវត្ស រៀល/Riel
-                    $totalSalaryTaxUsd = round($totalSalaryTaxRiel / $request->exchange_rate, 2);
+                    $totalSalaryTaxUsd = $totalSalaryTaxRiel / $request->exchange_rate;
+
+                    //ពន្ធលើប្រាក់បៀវត្ស ដុល្លារ/USD
+                    $totalSalaryAfterTax = $baseSalaryReceivedUsd - $totalSalaryTaxUsd;
+                }else if($number_of_children == 0 && $item->spouse == 1) {
+                    $taxRate = Taxes::where('from', '<=' ,(string)$totalTtaxBbaseRiel)->where('to','>=',(string)$totalTtaxBbaseRiel)->first();
+                    $totalTax = $taxRate->tax_rate;
+                    if($totalTtaxBbaseRiel >= $taxRate->to){
+                        $totalSalaryTaxRiel = 0;
+                    }elseif($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to){
+                        $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - $taxRate->tax_deduction_amount;
+                    }elseif($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to){
+                        $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - $taxRate->tax_deduction_amount;
+                    }elseif($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to){
+                        $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - $taxRate->tax_deduction_amount;
+                    }else{
+                        $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - $taxRate->tax_deduction_amount;
+                    }
+                    
+                    //ពន្ធលើប្រាក់បៀវត្ស រៀល/Riel
+                    $totalSalaryTaxUsd = $totalSalaryTaxRiel / $request->exchange_rate;
 
                     //ពន្ធលើប្រាក់បៀវត្ស ដុល្លារ/USD
                     $totalSalaryAfterTax = $baseSalaryReceivedUsd - $totalSalaryTaxUsd;
@@ -455,7 +469,6 @@ class EmployeePayrollController extends Controller
                     //ពន្ធលើប្រាក់បៀវត្ស ដុល្លារ/USD
                     $totalSalaryAfterTax = $baseSalaryReceivedUsd - $totalSalaryTaxUsd;
                 }else if($number_of_children == 2 && $item->spouse == 0){
-                    
                     //​cululate salaray Taxable
                     $taxRate = Taxes::where('from', '<=' ,(string)$totalTtaxBbaseRiel)->where('to','>=',(string)$totalTtaxBbaseRiel)->first();
                     $totalTax = $taxRate->tax_rate;
@@ -475,7 +488,6 @@ class EmployeePayrollController extends Controller
                     //ពន្ធលើប្រាក់បៀវត្ស ដុល្លារ/USD
                     $totalSalaryAfterTax = $baseSalaryReceivedUsd - $totalSalaryTaxUsd;
                 }else if($number_of_children == 2 && $item->spouse == 1){
-                    
                     //​cululate salaray Taxable
                     $taxRate = Taxes::where('from', '<=' ,(string)$totalTtaxBbaseRiel)->where('to','>=',(string)$totalTtaxBbaseRiel)->first();
                     $totalTax = $taxRate->tax_rate;
@@ -495,7 +507,6 @@ class EmployeePayrollController extends Controller
                     //ពន្ធលើប្រាក់បៀវត្ស ដុល្លារ/USD
                     $totalSalaryAfterTax = $baseSalaryReceivedUsd - $totalSalaryTaxUsd;
                 }else if($number_of_children == 3 && $item->spouse == 0){
-                    
                     //​cululate salaray Taxable
                     $taxRate = Taxes::where('from', '<=' ,(string)$totalTtaxBbaseRiel)->where('to','>=',(string)$totalTtaxBbaseRiel)->first();
                     $totalTax = $taxRate->tax_rate;
@@ -515,7 +526,6 @@ class EmployeePayrollController extends Controller
                     //ពន្ធលើប្រាក់បៀវត្ស ដុល្លារ/USD
                     $totalSalaryAfterTax = $baseSalaryReceivedUsd - $totalSalaryTaxUsd;
                 }else if($number_of_children == 3 && $item->spouse == 1){
-                    
                     //​cululate salaray Taxable
                     $taxRate = Taxes::where('from', '<=' ,(string)$totalTtaxBbaseRiel)->where('to','>=',(string)$totalTtaxBbaseRiel)->first();
                     $totalTax = $taxRate->tax_rate;
@@ -535,7 +545,6 @@ class EmployeePayrollController extends Controller
                     //ពន្ធលើប្រាក់បៀវត្ស ដុល្លារ/USD
                     $totalSalaryAfterTax = $baseSalaryReceivedUsd - $totalSalaryTaxUsd;
                 }else if($number_of_children == 4 && $item->spouse == 0){
-                   
                     //​cululate salaray Taxable
                     $taxRate = Taxes::where('from', '<=' ,(string)$totalTtaxBbaseRiel)->where('to','>=',(string)$totalTtaxBbaseRiel)->first();
                     $totalTax = $taxRate->tax_rate;
@@ -555,7 +564,6 @@ class EmployeePayrollController extends Controller
                     //ពន្ធលើប្រាក់បៀវត្ស ដុល្លារ/USD
                     $totalSalaryAfterTax = $baseSalaryReceivedUsd - $totalSalaryTaxUsd;
                 }else if($number_of_children == 4 && $item->spouse == 1){
-                    
                     //​cululate salaray Taxable
                     $taxRate = Taxes::where('from', '<=' ,(string)$totalTtaxBbaseRiel)->where('to','>=',(string)$totalTtaxBbaseRiel)->first();
                     $totalTax = $taxRate->tax_rate;
@@ -632,12 +640,12 @@ class EmployeePayrollController extends Controller
             
             Toastr::success('Created prayroll successfully.','Success');
             return redirect()->back();
-            DB::commit();
-        }catch(\Exception $e){
-            DB::rollback();
-            Toastr::error('Prayroll created fail','Error');
-            return redirect()->back();
-        }
+        //     DB::commit();
+        // }catch(\Exception $e){
+        //     DB::rollback();
+        //     Toastr::error('Prayroll created fail','Error');
+        //     return redirect()->back();
+        // }
     }
 
     /**

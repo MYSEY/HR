@@ -42,7 +42,7 @@
                     </div>
                     <div class="col-sm-2 col-md-2">
                         <div class="form-group">
-                            <select class="select form-control" data-select2-id="select2-data-2-c0n2" id="trainer_type">
+                            <select class="select form-control" data-select2-id="select2-data-2-c0n2" id="">
                                 <option value="" data-select2-id="select2-data-2-c0n2">All Type</option>
                                 <option value="1">Internal</option>
                                 <option value="2">External</option>

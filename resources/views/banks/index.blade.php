@@ -50,10 +50,6 @@
                                                     </td>
                                                 </tr>
                                             @endforeach
-                                        @else
-                                            <tr>
-                                                <td colspan="6" style="text-align: center">No record to display</td>
-                                            </tr>
                                         @endif
                                     </tbody>
                                 </table>
