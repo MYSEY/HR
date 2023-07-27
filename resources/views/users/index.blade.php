@@ -83,7 +83,7 @@
                                 <a class="nav-link" data-bs-toggle="tab" id="tab_cancel" href="#tbl_cancel" aria-selected="false" data-tab-id="6" role="tab" tabindex="-1">Canceled Contract({{count($dataCanContract)}})</a>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <a class="nav-link" data-bs-toggle="tab" id="tab_reason" href="#tbl_reject" aria-selected="false" data-tab-id="5" role="tab" tabindex="-1">Staff Resigns({{count($dataResign)}})</a>
+                                <a class="nav-link" data-bs-toggle="tab" id="tab_reason" href="#tbl_reject" aria-selected="false" data-tab-id="5" role="tab" tabindex="-1">Resigned Staff({{count($dataResign)}})</a>
                             </li>
                         </ul>
                         <div class="tab-content">

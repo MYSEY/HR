@@ -1,7 +1,7 @@
 <div id="print_purchase" hidden>
     <div class="card-header">
         {{-- logo company --}}
-        <div style="width: 700px;">
+        <div>
             <div style="text-align: center" class="font-title">
                 <label class="title">ព្រះរាជាណាចក្រកម្ពុជា</label><br>
                 <label style="font-size: 16px">ជាតិ សាសនា ព្រះមហាក្សត្រ</label><br>
@@ -19,7 +19,7 @@
         </div><br>
         
         <div style="display:flex;" class="set-font">
-            <div style="width: 487%">
+            <div style="width: 487%;">
                 <table style="width:100%">
                     <tr><td class="table_tr">
                         <strong>គ្រឹះស្ថាន ខេមា មីក្រូហិរញ្ញវត្ថុ លីមីតធីត</strong> អាស័យដ្ឋានផ្ទះលេខ ១០១A ផ្លូវ ២៨៩ សង្កាត់បឹងកក់ទី១ ខណ្ឌទួលគោក រាជធានីភ្នំពេញ និងអាជ្ញាប័ណ្ណលេខ ២៤ ម.ហ (M.F 24) ចុះថ្ងៃទី ២៦ ខែវិច្ឆិកា ឆ្នាំ២០១២  តំណាងដោយ លោក <span style="font-weight: bold; font-family:  Khmer OS Muol Light, serif;"> លី ឈាង </span> តួនាទីអគ្គនាយកប្រតិបតិ្តស្តីទី ដែលតទៅនេះហៅថា <strong>«និយោជក»</strong>។
@@ -558,7 +558,7 @@
                     <div>
                         <table style="width:100%">
                             <tr><td class="table_tr">
-                                ប្រសិនបើភាគីនិយោជិត  បញ្ចប់កិច្ចសន្យាមុនរយៈពេលកំណត់ គិតចាប់ពីថ្ងៃដែលចូលបម្រើការងារនៅគ្រឹះស្ថាន និយោជិតត្រូវសងថ្លៃចំណាយលើការបណ្តុះបណ្តាលជាក់ស្តែងមកនិយោជកដោយគិត ជាសមាមាត្រទៅតាមរយៈពេលធ្វើការ និងតួនាទី ឬមានតម្លៃស្មើនឹងប្រាក់បៀវត្ស ឬប្រាក់ឧបត្ថម្ភមួយខែ។
+                                ប្រសិនបើភាគីនិយោជិត បញ្ចប់កិច្ចសន្យាមុនរយៈពេលកំណត់ គិតចាប់ពីថ្ងៃដែលចូលបម្រើការងារនៅគ្រឹះស្ថាន និយោជិតត្រូវសងថ្លៃចំណាយលើការបណ្តុះបណ្តាលជាក់ស្តែងមកនិយោជកដោយគិត ជាសមាមាត្រទៅតាមរយៈពេលធ្វើការ និងតួនាទី ឬមានតម្លៃស្មើនឹងប្រាក់បៀវត្ស ឬប្រាក់ឧបត្ថម្ភមួយខែ។
                             </td></tr>
                         </table>
                     </div>
@@ -585,7 +585,7 @@
                     <label style="font-size: 16px;">ភ្នំពេញ, ថ្ងៃទី......... ខែ........ ឆ្នាំ២០.......</label>
                 </div>
             </div>
-        </div>
+        </div><br>
         <div style="display: flex">
             <div class="payslip-title-center" style="margin-left: 5%">
                 <label class="label-subs" style="margin-left: 25"><strong>និយោជិត</strong></label><br><br><br><br><br>

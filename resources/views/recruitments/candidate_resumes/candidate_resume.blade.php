@@ -109,23 +109,10 @@
         });
         $(document).on('click','.btn_approve', function(){
             let id = $(this).data("id");
-            $.confirm({
-                icon: 'fa fa-warning',
-                title: 'Approve',
-                titleClass: 'text-center',
-                type: 'blue',
-                content: '' +
-                '<form action="" class="formName">' +
-                    '<div class="form-group" style="text-align: center">' +
-                        '<label>Are you sure want to Approve?</label>' +
-                        '<input type="hidden" class="form-control id" id="" name="" value="'+id+'">'+
-                    '</div>' +
-                '</form>',
-                onOpenBefore: function () {
-                    $(".jconfirm-buttons").addClass("jconfirm-buttons-center");
-                },
-                buttons: {
-                    formSubmit: {
+            let id_card = $(this).attr("data-id-card");
+            let description = "Are you sure want to Approve?";
+            let text_label = "";
+            let button_ok = {
                         text: 'OK',
                         btnClass: 'btn-blue',
                         action: function () {
@@ -151,7 +138,30 @@
                                 }).show();
                             });
                         }
-                    },
+                    };
+            if (id_card == "null") {
+                text_label = '<label>You can not Aprove.</label>';
+                description = "Please enter all information for Aprove.";
+                button_ok = "";
+            }
+            $.confirm({
+                icon: 'fa fa-warning',
+                title: 'Approve',
+                titleClass: 'text-center',
+                type: 'blue',
+                content: '' +
+                '<form action="" class="formName">' +
+                    '<div class="form-group" style="text-align: center">' +
+                        (text_label)+
+                        '<label>'+(description)+'</label>' +
+                        '<input type="hidden" class="form-control id" id="" name="" value="'+id+'">'+
+                    '</div>' +
+                '</form>',
+                onOpenBefore: function () {
+                    $(".jconfirm-buttons").addClass("jconfirm-buttons-center");
+                },
+                buttons: {
+                    button_ok,
                     cancel: {
                         text: 'Cancel',
                         btnClass: 'btn-red btn-sm',
@@ -381,10 +391,14 @@
                             '</div>'+
                             '<div class="form-group interview_channel">'+
                                 '<label>Interviewed Channel</label>'+
-                                '<input type="text" class="form-control interviewed_channel">'+
+                                '<select class="form-control form-select interviewed_channel">'+
+                                    '<option selected value="Online"> Online</option>'+
+                                    '<option value="Face to face"> Face to face</option>'+
+                                '</select>'+
+                                // '<input type="text" class="form-control interviewed_channel">'+
                             '</div>'+
                             '<div class="form-group committee_interviewed">'+
-                                '<label>Committee Interview <span class="text-danger">*</span></label>'+
+                                '<label>Interview Committee <span class="text-danger">*</span></label>'+
                                 '<input type="text" class="form-control committee_interview">'+
                             '</div>'+
                             '<div class="form-group">'+
@@ -601,7 +615,7 @@
                             '<input type="hidden" class="form-control status" id="" name="" value="'+status+'">'+
                             '<input type="hidden" class="form-control id" id="" name="" value="'+id+'">'+
                             '<div class="form-group">'+
-                                '<label>Contract Date <span class="text-danger">*</span></label>'+
+                                '<label>Signed Contract Date <span class="text-danger">*</span></label>'+
                                 '<input type="date" class="form-control contract_date" value="">'+
                             '</div>'+
                             '<div class="form-group">'+
@@ -753,6 +767,9 @@
                                     '<td >'+(staff.position.name_english)+'</td>'+
                                     '<td >'+(staff.branch.branch_name_en)+'</td>'+
                                     '<td >'+
+                                        cv+
+                                    '</td>'+
+                                    '<td >'+
                                         '<div class="dropdown action-label">'+
                                             '<a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">'+
                                                 (tag_i)+
@@ -764,9 +781,6 @@
                                                 '</a>'+
                                             '</div>'+
                                         '</div>'+
-                                    '</td>'+
-                                    '<td >'+
-                                        cv+
                                     '</td>'+
                                     '<td>'+(staff.remark ? staff.remark: "")+'</td>'+
                                 '</tr>';
@@ -855,6 +869,10 @@
                             let join_date = staff_result.join_date ? moment(staff_result.join_date).format('MMM-D-YYYY') : "";
                             let contract_date = staff_result.contract_date ? moment(staff_result.contract_date).format('MMM-D-YYYY') : "";
                             let updated_at =  moment(staff_result.updated_at).format('MMM-D-YYYY');
+                            // let disabled = "";
+                            // if (!staff_result.id_card_number) {
+                            //     disabled = "disabled";
+                            // }
                             if (staff_result.status == "Cancel") {
                                 action = "";
                                 tr_ct_cancel += ' <tr class="odd">'+
@@ -893,7 +911,7 @@
                                                 '<a class="dropdown-item btn_print_signed_contract" href="#" data-print-status="4" data-id="'+(staff_result.id)+'">'+
                                                     '<i class="fa fa-print fa-lg m-r-5"></i> Print'+
                                                 '</a>'+
-                                                '<a class="btn btn-sm dropdown-item btn_approve" href="#" data-id="'+(staff_result.id)+'">'+
+                                                '<a class="btn btn-sm dropdown-item btn_approve" href="#" data-id-card="'+(staff_result.id_card_number)+'" data-id="'+(staff_result.id)+'">'+
                                                     '<i class="fa fa-dot-circle-o text-success"></i>'+
                                                     '<span> Approve</span>'+
                                                 '</a>'+

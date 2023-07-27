@@ -22,13 +22,13 @@ function menu(){
             'permission'=>1,
             'child'=>[
                 [
-                    'value'=>'Dashboard Admin',
+                    'value'=>'Admin Dashboard',
                     'url'=>"dashboad/admin",
                     'table'=>1,
                     'permission'=>1
                 ],
                 [
-                    'value'=>'Dashboard Employee',
+                    'value'=>'Employee Dashboard',
                     'url'=>"dashboad/employee",
                     'table'=>2,
                     'permission'=>1
