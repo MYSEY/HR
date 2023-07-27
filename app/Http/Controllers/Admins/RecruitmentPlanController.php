@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admins;
 
+use App\Exports\ExportRecruitmentPlan;
 use App\Http\Controllers\Controller;
 use App\Models\Branchs;
 use App\Models\Position;
@@ -11,6 +12,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class RecruitmentPlanController extends Controller
 {
@@ -154,6 +156,51 @@ class RecruitmentPlanController extends Controller
             Toastr::error('Recruitment plan updated fail.','Error');
             return redirect()->back();
         }
+    }
+
+    public function export(Request $request)
+    {
+        $by_year = null;
+        if ($request->filter_year) {
+        $by_year = $request->filter_year;
+        }else {
+            $by_year = Carbon::createFromDate()->format('Y');
+        }
+        $dataRecruitmentPlans = RecruitmentPlan::with('position')->with('branch')
+        ->when($request->branch_id, function ($query, $branch_id) {
+            $query->where('branch_id', $branch_id);
+        })
+        ->when($request->position_id, function ($query, $position_id) {
+            $query->where('position_id', $position_id);
+        })
+        ->when($by_year, function ($query, $filter_year) {
+            $query->whereYear('plan_date', $filter_year);
+        })
+        ->orderBy('plan_date', 'desc')
+        ->get()->groupBy(function($data) {
+            return $data->branch_id;
+        });
+        // $dataexcel = json_decode($dataRecruitmentPlans);
+        // foreach($dataRecruitmentPlans as $branch_id => $plan) {
+        //         foreach($plan as $pl) {
+
+        //         }
+        // }
+        // $dataExport = [];
+        // foreach ($dataRecruitmentPlans as $item) {
+        //     $dataExport[] = [
+        //         $item
+        //     ];
+        // }
+        // return response()->json([
+        //     'success'=>$dataExport,
+        // ]);
+        // return response()->json([
+        //     'success'=>$dataRecruitmentPlans,
+        // ]);
+
+        $export = new ExportRecruitmentPlan($dataRecruitmentPlans);
+        return Excel::download($export, 'RecruitmentPlan.xlsx');
     }
 
     /**

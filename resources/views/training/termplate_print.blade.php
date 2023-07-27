@@ -72,7 +72,7 @@
                     <th>Gender</th>
                     <th>Position</th>
                     <th>Dept/ Branch</th>
-                    <th>Join Date</th>
+                    <th>Date of Employment</th>
                 </tr>
             </thead>
             <tbody>

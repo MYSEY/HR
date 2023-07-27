@@ -45,7 +45,7 @@
                     </div>
                     <div class="col-sm-2 col-md-2">
                         <div class="form-group">
-                            <select class="select form-control" data-select2-id="select2-data-2-c0n2" id="training_type">
+                            <select class="select form-control" data-select2-id="select2-data-2-c0n2" id="filter_training_type">
                                 <option value="" data-select2-id="select2-data-2-c0n2">All Training Type</option>
                                 <option value="1">Internal</option>
                                 <option value="2">External</option>
@@ -249,7 +249,7 @@
             $(".loading-icon").css('display', 'block');
             let params = {
                 course_name: $("#course_name").val(),
-                training_type: $("#training_type").val(),
+                training_type: $("#filter_training_type").val(),
                 start_date: $("#start_date").val(),
                 end_date: $("#end_date").val(),
             };

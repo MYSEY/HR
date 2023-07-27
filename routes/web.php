@@ -204,6 +204,8 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('/recruitment/plan-update', [RecruitmentPlanController::class,'update']);
     Route::post('/recruitment/plan-delete', [RecruitmentPlanController::class,'destroy']);
     Route::get('/recruitment/plan-edit', [RecruitmentPlanController::class,'edit']);
+    Route::get('/recruitment/plan/export', [RecruitmentPlanController::class,'export']);
+
     // route block recruitment candidate resume
     Route::get('/recruitment/candidate-resume/list', [CandidateResumeController::class,'index']);
     Route::get('/recruitment/candidate-resume/show', [CandidateResumeController::class,'show']);

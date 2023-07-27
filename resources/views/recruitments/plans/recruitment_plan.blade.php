@@ -110,10 +110,13 @@
                                 <span class="btn-text-reset">Reset</span>
                                 <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading</span>
                             </button>
-
-                            <button type="button" class="btn btn-outline-secondary btn-sm btn_print">
+                            <button type="button" class="btn btn-outline-secondary btn-sm btn_print me-2">
                                 <span class="btn-text-print"><i class="fa fa-print fa-lg"></i> Print</span>
                                 <span id="btn-text-loading-print" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading</span>
+                            </button>
+                            <button type="button" class="btn btn-outline-secondary btn-sm btn_excel">
+                                <span class="btn-text-excel"><i class="fa fa-file-excel-o" aria-hidden="true"></i> Excel</span>
+                                <span id="btn-text-loading-excel" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading</span>
                             </button>
                         </div>
                     </div>
@@ -245,6 +248,29 @@
             $(".btn_print").prop('disabled', true);
             $(".btn-text-print").css("display", "none");
             print_pdf();
+        });
+
+        $(".btn_excel").on("click", function () {
+            $("#btn-text-loading-excel").css('display', 'block');
+            $(".btn_excel").prop('disabled', true);
+            $(".btn-text-excel").css("display", "none");
+            $.ajax({
+                type: "GET",
+                url: "{{ url('recruitment/plan/export') }}",
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    position_id: $("#position_id").val() ? $("#position_id").val() : null,
+                    branch_id: $("#branch_id").val() ? $("#branch_id").val() : null,
+                    filter_year: $("#filter_year").val() ? $("#filter_year").val() : null,
+                },
+                dataType: "JSON",
+                success: function(response) {
+                    $(".btn_excel").prop('disabled', false);
+                    $(".btn-text-excel").show();
+                    $("#btn-text-loading-excel").css('display', 'none');
+                    console.log("response: ", response);
+                }
+            });
         });
 
         $('#btnAddEducation').on('click', function() {

@@ -105,7 +105,7 @@
                                         <th>Gender</th>
                                         <th>Position</th>
                                         <th>Dept/ Branch</th>
-                                        <th>Join Date</th>
+                                        <th>Date of Employment</th>
                                         <th>Rmark</th>
                                     </tr>
                                 </thead>
