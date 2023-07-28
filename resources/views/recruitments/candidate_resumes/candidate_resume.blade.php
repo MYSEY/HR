@@ -1,4 +1,4 @@
-@extends('layouts.master_print')
+@extends('layouts.master')
 <style>
 .jconfirm-buttons-center{
     float: none !important;

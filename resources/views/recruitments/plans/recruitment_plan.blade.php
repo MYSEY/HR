@@ -1,4 +1,4 @@
-@extends('layouts.master_print')
+@extends('layouts.master')
 <style>
     .filter-row .btn {
         min-height: 38px !important;
@@ -216,7 +216,6 @@
 @endsection
 
 @include('includs.script')
-<script type="text/javascript" src="{{ asset('/admin/js/printThis.js') }}"></script>
 <script src="{{ asset('/admin/js/validation-field.js') }}"></script>
 <script>
     $(function() {

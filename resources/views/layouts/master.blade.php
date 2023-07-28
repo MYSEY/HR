@@ -223,6 +223,8 @@
 
     <script src="{{asset('/admin/js/jquery.min.js.download')}}"></script>
 
+    <script type="text/javascript" src="{{ asset('/admin/js/printThis.js') }}"></script>
+
     <script src="{{asset('/admin/js/bootstrap.bundle.min.js.download')}}"></script>
 
     <script src="{{asset('/admin/js/jquery.slimscroll.min.js.download')}}"></script>

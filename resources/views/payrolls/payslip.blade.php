@@ -1,6 +1,6 @@
 
 
-@extends('layouts.master_print')
+@extends('layouts.master')
 <style>
     .profile-info-left {
         border-right: 0px dashed #cccccc !important;
@@ -188,8 +188,7 @@
 @endsection
 
 @include('includs.script')
-<script type="text/javascript" src="{{ asset('/admin/js/printThis.js') }}"></script>
-<script type="text/javascript">
+{{-- <script type="text/javascript">
 
     $(function() {
         $("#btn_print_payroll").on("click", function() {
@@ -222,4 +221,4 @@
             doctypeString: "",
         });
     }
-</script>
+</script> --}}

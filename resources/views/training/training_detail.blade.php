@@ -1,4 +1,4 @@
-@extends('layouts.master_print')
+@extends('layouts.master')
 <style>
     .profile-info-left {
         border-right: 0px dashed #cccccc !important;
@@ -137,7 +137,6 @@
 @endsection
 @include('training.termplate_print')
 @include('includs.script')
-<script type="text/javascript" src="{{ asset('/admin/js/printThis.js') }}"></script>
 <script type="text/javascript">
     $(function() {
         $("#btn_print").on("click", function() {

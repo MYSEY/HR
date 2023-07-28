@@ -115,7 +115,7 @@ class EmployeePayrollController extends Controller
                     $monthToPay = Carbon::createFromDate($item->fdc_date)->format('Y-m');
                     $currentMonthToPay = Carbon::createFromDate($request->payment_date)->format('Y-m');
                     if($monthToPay == $currentMonthToPay){
-                        $totalBasicSalary = $item->total_current_salary;
+                        $totalBasicSalary = $item->total_current_salary == null ? $item->basic_salary : $item->total_current_salary;
                     }else{
                         $totalBasicSalary = $item->basic_salary;
                     }
