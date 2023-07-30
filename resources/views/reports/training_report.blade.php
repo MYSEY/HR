@@ -253,7 +253,7 @@
             </div>
         </div>
     </div>
-    @include('training.templete_print')
+    @include('training.templete_print_report')
 @endsection
 
 @include('includs.script')
@@ -261,92 +261,20 @@
 <script src="{{asset('/admin/js/validation-field.js')}}"></script>
 <script>
     $(function() {
-        var dataPrint = [];
-        $(document).ready(function() {
-            $.ajax({
-                url: "{{ url('reports/training-report') }}",
-                type: 'POST',
-                data:{
-                    "_token": "{{ csrf_token() }}",
-                },
-                dataType: 'JSON',
-                success: function(data){
-                    dataPrint = data;
-                }
-            });
-        });
         $("#btn-research").on("click", function () {
-            $.ajax({
-                url: "{{ url('reports/training-report') }}",
-                type: 'POST',
-                data:{
-                    "_token": "{{ csrf_token() }}",
-                    employee_id: $("#employee_id").val(),
-                    employee_name: $("#employee_name").val(),
-                    course_name: $("#course_name").val(),
-                    start_date: $("#start_date").val(),
-                    end_date: $("#end_date").val(),
-                    traing_type: $("#training_type").val(),
-                },
-                dataType: 'JSON',
-                success: function(data){
-                    dataPrint = data;
-                    console.log("data:", data);
-                    var tr = "";
-                    if (data.length > 0) {
-                        data.map((item) =>{
-                            let start_date = moment(item.start_date).format('DD-MMM-YYYY');
-                            let end_date = moment(item.end_date).format('DD-MMM-YYYY');
-                            let month = item.duration_month ? moment(item.end_date).add(item.duration_month, 'M').format('DD-MMM-YYYY') : 0;
-                            let duration_month = '<span style="font-size: 13px" class="badge bg-inverse-danger">'+(month)+'</span>';
-                            let price = 0;
-                            let discount = 0;
-                            let total = 0;
-                            if (item.employees.length > 0) {
-                                price =  item.cost_price / item.employees.length;
-                                discount = (price * item.discount) / 100;
-                                total = price - discount;
-                            }
-                            let trainer = '';
-                            if (item.trainers.length == 1) {
-                                trainer = item.trainers[0].type == 2 ? item.trainers[0].name_en : item.trainers[0].employee.employee_name_en;
-                            }else{
-                                item.trainers.map((trai) => {
-                                    trainer += trai.type == 2 ? trai.name_en : trai.employee.employee_name_en +', ';
-                                });
-                            }
-                            item.employees.map((emp) => {
-                                let date_ofcommencement = moment(emp.date_of_commencement).format('DD-MMM-YYYY');
-                                let currentDate = new Date();
-                                let join_date = new Date(emp.date_of_commencement);
-                                let empl_period = diff_year_month_day(join_date, currentDate);
-                                tr +='<tr class="odd">'+
-                                    '<td class="ids">'+(item.id )+'</td>'+
-                                    '<td>'+(emp.number_employee )+'</td>'+
-                                    '<td>'+(emp.employee_name_kh )+'</td>'+
-                                    '<td>'+(emp.employee_name_en)+'</td>'+
-                                    '<td>'+(emp.gender.name_english)+'</td>'+
-                                    '<td>'+(emp.position.name_english)+'</td>'+
-                                    '<td>'+(date_ofcommencement)+'</td>'+
-                                    '<td>'+(empl_period)+'</td>'+
-                                    '<td>'+(item.course_name)+'</td>'+
-                                    '<td>'+(emp.branch.branch_name_en)+'</td>'+
-                                    '<td>'+(start_date)+'</td>'+
-                                    '<td>'+(end_date)+'</td>'+
-                                    '<td>'+(duration_month)+'</td>'+
-                                    '<td>$ '+(parseFloat(price).toFixed(2))+'</td>'+
-                                    '<td>$ '+(parseFloat(discount).toFixed(2))+'</td>'+
-                                    '<td>$ '+(parseFloat(total).toFixed(2))+'</td>'+
-                                    '<td>'+(trainer)+'</td>'+
-                                    '<td>'+(item.training_type == 1 ? "Internal" : "External")+'</td>'+
-                                    '<td>'+(item.remark ? item.remark : "")+'</td>'+
-                                '</tr>';
-                            });
-                        });
-                    }
-                    $(".tbl-traingin-report tbody").html(tr);
-                }
-            });
+            $(this).prop('disabled', true);
+            $(".btn-txt").hide();
+            $(".loading-icon").css('display', 'block');
+            let param = {
+                "_token": "{{ csrf_token() }}",
+                employee_id: $("#employee_id").val(),
+                employee_name: $("#employee_name").val(),
+                course_name: $("#course_name").val(),
+                start_date: $("#start_date").val(),
+                end_date: $("#end_date").val(),
+                traing_type: $("#training_type").val(),
+            };
+            showdatas(param);
         });
         $(".reset-btn").on("click", function() {
             $(this).prop('disabled', true);
@@ -358,22 +286,102 @@
             $("#btn-text-loading-print").css('display', 'block');
             $(".btn_print").prop('disabled', true);
             $(".btn-text-print").css("display", "none");
-            if (dataPrint.length > 0) {
-                console.log(dataPrint);
-            }
+            let param = {
+                "_token": "{{ csrf_token() }}",
+                employee_id: $("#employee_id").val(),
+                employee_name: $("#employee_name").val(),
+                course_name: $("#course_name").val(),
+                start_date: $("#start_date").val(),
+                end_date: $("#end_date").val(),
+                traing_type: $("#training_type").val(),
+                btn_print: true
+            };
+            showdatas(param)
             print_pdf();
         });
     });
+    function showdatas(param) {  
+        $.ajax({
+            url: "{{ url('reports/training-report') }}",
+            type: 'POST',
+            data:param,
+            dataType: 'JSON',
+            success: function(data){
+                dataPrint = data;
+                var tr = "";
+                var tr_print = "";
+                if (data.length > 0) {
+                    data.map((item) =>{
+                        let start_date = moment(item.start_date).format('DD-MMM-YYYY');
+                        let end_date = moment(item.end_date).format('DD-MMM-YYYY');
+                        let month = item.duration_month ? moment(item.end_date).add(item.duration_month, 'M').format('DD-MMM-YYYY') : 0;
+                        let duration_month = '<span style="font-size: 13px" class="badge bg-inverse-danger">'+(month)+'</span>';
+                        let price = 0;
+                        let discount = 0;
+                        let total = 0;
+                        if (item.employees.length > 0) {
+                            price =  item.cost_price / item.employees.length;
+                            discount = (price * item.discount) / 100;
+                            total = price - discount;
+                        }
+                        let trainer = '';
+                        if (item.trainers.length == 1) {
+                            trainer = item.trainers[0].type == 2 ? item.trainers[0].name_en : item.trainers[0].employee.employee_name_en;
+                        }else{
+                            item.trainers.map((trai) => {
+                                trainer += trai.type == 2 ? trai.name_en : trai.employee.employee_name_en +', ';
+                            });
+                        }
+                        item.employees.map((emp) => {
+                            let date_ofcommencement = moment(emp.date_of_commencement).format('DD-MMM-YYYY');
+                            let currentDate = new Date();
+                            let join_date = new Date(emp.date_of_commencement);
+                            let empl_period = diff_year_month_day(join_date, currentDate);
+                            tr +='<tr class="odd">'+
+                                '<td class="ids">'+(item.id )+'</td>'+
+                                '<td>'+(emp.number_employee )+'</td>'+
+                                '<td>'+(emp.employee_name_kh )+'</td>'+
+                                '<td>'+(emp.employee_name_en)+'</td>'+
+                                '<td>'+(emp.gender.name_english)+'</td>'+
+                                '<td>'+(emp.position.name_english)+'</td>'+
+                                '<td>'+(date_ofcommencement)+'</td>'+
+                                '<td>'+(empl_period)+'</td>'+
+                                '<td>'+(item.course_name)+'</td>'+
+                                '<td>'+(emp.branch.branch_name_en)+'</td>'+
+                                '<td>'+(start_date)+'</td>'+
+                                '<td>'+(end_date)+'</td>'+
+                                '<td>'+(duration_month)+'</td>'+
+                                '<td>$ '+(parseFloat(price).toFixed(2))+'</td>'+
+                                '<td>$ '+(parseFloat(discount).toFixed(2))+'</td>'+
+                                '<td>$ '+(parseFloat(total).toFixed(2))+'</td>'+
+                                '<td>'+(trainer)+'</td>'+
+                                '<td>'+(item.training_type == 1 ? "Internal" : "External")+'</td>'+
+                                '<td>'+(item.remark ? item.remark : "")+'</td>'+
+                            '</tr>';
+                        });
+                    });
+                }
+                if (param.btn_print) {
+                    $("#form_print tbody").html(tr);
+                }else{
+                    $(".tbl-traingin-report tbody").html(tr);
+                    $("#btn-research").prop('disabled', false);
+                    $(".btn-txt").show();
+                    $(".loading-icon").css('display', 'none');
+                }
+            }
+        });
+    }
     function diff_year_month_day(dt1, dt2){
-
       var time =(dt2.getTime() - dt1.getTime()) / 1000;
       var year  = Math.abs(Math.round((time/(60 * 60 * 24))/365.25));
     //   var month = Math.abs(Math.round(time/(60 * 60 * 24 * 7 * 4)));
       let current_year = moment(dt2).format('YYYY');
-      let current_month = moment(dt2).format('MM');
-      var month = Math.abs(parseInt(moment(current_year+'-01-01').diff(dt2, 'months', true)));
+      let current_year2 = moment(dt2).format('YYYY-MM-D');
+      let current_month = moment(dt1).format('MM-D');
+      var month = Math.abs(parseInt(moment(current_year+'-'+current_month).diff(dt2, 'months', true)));
     //   var days = Math.abs(Math.round(time/(3600 * 24)));
-    var days = Math.abs(parseInt(moment(current_year+'-'+current_month+'-01').diff(dt2, 'days')));
+    var days = Math.abs(parseInt(moment(current_year+'-'+current_month).diff(current_year2, 'days')));
       return year +" years, " + month + " months, " + days + " days";
 
     }
@@ -388,7 +396,7 @@
         $("#print_purchase").printThis({
             importCSS: false,
             importStyle: true,
-            loadCSS: "/admin/css/style-templete-recruitment-plan.css",
+            loadCSS: "/admin/css/style-templete-report-training.css",
             header: "",
             printDelay: 1000,
             formValues: false,
