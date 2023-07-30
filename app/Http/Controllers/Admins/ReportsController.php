@@ -211,6 +211,9 @@ class ReportsController extends Controller
             $item["employees"] = $em;
             $dataTrainings[] = $item;
         }
-        return view('reports.training_report', compact("dataTrainings"));
+        if ($request->ajax()) {
+            return response()->json($dataTrainings);
+        }
+        return view('reports.training_report', compact("dataTrainings"), );
     }
 }

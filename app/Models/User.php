@@ -385,7 +385,13 @@ class User extends Authenticatable
     }
 
     public function getSeniorityYearsOfEmployeeAttribute(){
-        $seniority = Carbon::createFromDate($this->date_of_commencement)->diff(Carbon::now())->format('%y years, %m months, %d days');
+        $date_of_commencement = Carbon::createFromDate($this->date_of_commencement);
+        $current_date = Carbon::createFromDate();
+        $result = $date_of_commencement->gte($current_date);
+        $seniority = "0 years, 0 months, 0 days";
+        if (!$result) {
+            $seniority = Carbon::createFromDate($this->date_of_commencement)->diff(Carbon::now())->format('%y years, %m months, %d days');
+        }
         if ($this->date_of_commencement) {
             return $seniority;
         }

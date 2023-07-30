@@ -1,8 +1,8 @@
-@extends('layouts.master')
+@extends('layouts.master_print')
 <style>
     .filter-row .btn {
         min-height: 38px !important;
-        padding: 10px !important;
+        padding: 8px !important;
     }
 
     .ui-datepicker-calendar {
@@ -36,13 +36,14 @@
         </div>
     </div>
     @if (Auth::user()->RolePermission == 'Administrator')
-        <form action="{{url('/reports/training-report')}}" method="POST" class="needs-validation" novalidate>
-            @csrf
+        {{-- <form action="{{url('/reports/training-report')}}" method="POST" class="needs-validation" novalidate> --}}
+        <form  class="needs-validation" novalidate>
+            {{-- @csrf --}}
             
             <div class="row">
                 <div class="col-sm-2 col-md-2">
                     <div class="form-group">
-                        <input type="text" class="form-control" name="employee_id" placeholder="Employee ID"
+                        <input type="text" class="form-control" name="employee_id" placeholder="Employee ID" id="employee_id"
                             value="{{ old('employee_id') }}">
                     </div>
                 </div>
@@ -59,7 +60,7 @@
                 </div>
                 <div class="col-sm-2 col-md-2">
                     <div class="form-group">
-                        <select class="select form-control" data-select2-id="select2-data-2-c0n2" name="traing_type">
+                        <select class="select form-control" data-select2-id="select2-data-2-c0n2" name="traing_type" id="training_type">
                             <option value="" data-select2-id="select2-data-2-c0n2">All Training Type</option>
                             <option value="1">Internal</option>
                             <option value="2">External</option>
@@ -87,13 +88,21 @@
             <div class="row filter-row">
                 <div class="col-sm-2 col-md-12">
                     <div style="display: flex" class="float-end">
-                        <button type="submit" class="btn btn-sm btn-success submit-btn me-2" data-dismiss="modal">
+                        <button type="button" class="btn btn-sm btn-success submit-btn me-2" id="btn-research" data-dismiss="modal">
                             <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> </span>
                             <span class="btn-txt">{{ __('Search') }}</span>
                         </button>
-                        <button type="button" class="btn btn-sm btn-warning reset-btn">
+                        <button type="button" class="btn btn-sm btn-warning reset-btn me-2">
                             <span class="btn-text-reset">Reset</span>
                             <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
+                        </button>
+                        <button type="button" class="btn btn-sm btn-outline-secondary btn_print me-2">
+                            <span class="btn-text-print"><i class="fa fa-print fa-lg"></i> Print</span>
+                            <span id="btn-text-loading-print" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading</span>
+                        </button>
+                        <button type="button" class="btn btn-sm btn-outline-secondary btn_excel">
+                            <span class="btn-text-excel"><i class="fa fa-file-excel-o" aria-hidden="true"></i> Excel</span>
+                            <span id="btn-text-loading-excel" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading</span>
                         </button>
                     </div>
                 </div>
@@ -244,17 +253,147 @@
             </div>
         </div>
     </div>
+    @include('training.templete_print')
 @endsection
 
 @include('includs.script')
+<script type="text/javascript" src="{{ asset('/admin/js/printThis.js') }}"></script>
 <script src="{{asset('/admin/js/validation-field.js')}}"></script>
 <script>
     $(function() {
+        var dataPrint = [];
+        $(document).ready(function() {
+            $.ajax({
+                url: "{{ url('reports/training-report') }}",
+                type: 'POST',
+                data:{
+                    "_token": "{{ csrf_token() }}",
+                },
+                dataType: 'JSON',
+                success: function(data){
+                    dataPrint = data;
+                }
+            });
+        });
+        $("#btn-research").on("click", function () {
+            $.ajax({
+                url: "{{ url('reports/training-report') }}",
+                type: 'POST',
+                data:{
+                    "_token": "{{ csrf_token() }}",
+                    employee_id: $("#employee_id").val(),
+                    employee_name: $("#employee_name").val(),
+                    course_name: $("#course_name").val(),
+                    start_date: $("#start_date").val(),
+                    end_date: $("#end_date").val(),
+                    traing_type: $("#training_type").val(),
+                },
+                dataType: 'JSON',
+                success: function(data){
+                    dataPrint = data;
+                    console.log("data:", data);
+                    var tr = "";
+                    if (data.length > 0) {
+                        data.map((item) =>{
+                            let start_date = moment(item.start_date).format('DD-MMM-YYYY');
+                            let end_date = moment(item.end_date).format('DD-MMM-YYYY');
+                            let month = item.duration_month ? moment(item.end_date).add(item.duration_month, 'M').format('DD-MMM-YYYY') : 0;
+                            let duration_month = '<span style="font-size: 13px" class="badge bg-inverse-danger">'+(month)+'</span>';
+                            let price = 0;
+                            let discount = 0;
+                            let total = 0;
+                            if (item.employees.length > 0) {
+                                price =  item.cost_price / item.employees.length;
+                                discount = (price * item.discount) / 100;
+                                total = price - discount;
+                            }
+                            let trainer = '';
+                            if (item.trainers.length == 1) {
+                                trainer = item.trainers[0].type == 2 ? item.trainers[0].name_en : item.trainers[0].employee.employee_name_en;
+                            }else{
+                                item.trainers.map((trai) => {
+                                    trainer += trai.type == 2 ? trai.name_en : trai.employee.employee_name_en +', ';
+                                });
+                            }
+                            item.employees.map((emp) => {
+                                let date_ofcommencement = moment(emp.date_of_commencement).format('DD-MMM-YYYY');
+                                let currentDate = new Date();
+                                let join_date = new Date(emp.date_of_commencement);
+                                let empl_period = diff_year_month_day(join_date, currentDate);
+                                tr +='<tr class="odd">'+
+                                    '<td class="ids">'+(item.id )+'</td>'+
+                                    '<td>'+(emp.number_employee )+'</td>'+
+                                    '<td>'+(emp.employee_name_kh )+'</td>'+
+                                    '<td>'+(emp.employee_name_en)+'</td>'+
+                                    '<td>'+(emp.gender.name_english)+'</td>'+
+                                    '<td>'+(emp.position.name_english)+'</td>'+
+                                    '<td>'+(date_ofcommencement)+'</td>'+
+                                    '<td>'+(empl_period)+'</td>'+
+                                    '<td>'+(item.course_name)+'</td>'+
+                                    '<td>'+(emp.branch.branch_name_en)+'</td>'+
+                                    '<td>'+(start_date)+'</td>'+
+                                    '<td>'+(end_date)+'</td>'+
+                                    '<td>'+(duration_month)+'</td>'+
+                                    '<td>$ '+(parseFloat(price).toFixed(2))+'</td>'+
+                                    '<td>$ '+(parseFloat(discount).toFixed(2))+'</td>'+
+                                    '<td>$ '+(parseFloat(total).toFixed(2))+'</td>'+
+                                    '<td>'+(trainer)+'</td>'+
+                                    '<td>'+(item.training_type == 1 ? "Internal" : "External")+'</td>'+
+                                    '<td>'+(item.remark ? item.remark : "")+'</td>'+
+                                '</tr>';
+                            });
+                        });
+                    }
+                    $(".tbl-traingin-report tbody").html(tr);
+                }
+            });
+        });
         $(".reset-btn").on("click", function() {
             $(this).prop('disabled', true);
             $(".btn-text-reset").hide();
             $("#btn-text-loading").css('display', 'block');
             window.location.replace("{{ URL('/reports/training-report') }}"); 
         });
+        $(".btn_print").on("click", function() {
+            $("#btn-text-loading-print").css('display', 'block');
+            $(".btn_print").prop('disabled', true);
+            $(".btn-text-print").css("display", "none");
+            if (dataPrint.length > 0) {
+                console.log(dataPrint);
+            }
+            print_pdf();
+        });
     });
+    function diff_year_month_day(dt1, dt2){
+
+      var time =(dt2.getTime() - dt1.getTime()) / 1000;
+      var year  = Math.abs(Math.round((time/(60 * 60 * 24))/365.25));
+    //   var month = Math.abs(Math.round(time/(60 * 60 * 24 * 7 * 4)));
+      let current_year = moment(dt2).format('YYYY');
+      let current_month = moment(dt2).format('MM');
+      var month = Math.abs(parseInt(moment(current_year+'-01-01').diff(dt2, 'months', true)));
+    //   var days = Math.abs(Math.round(time/(3600 * 24)));
+    var days = Math.abs(parseInt(moment(current_year+'-'+current_month+'-01').diff(dt2, 'days')));
+      return year +" years, " + month + " months, " + days + " days";
+
+    }
+    function print_pdf(type) {
+        $("#print_purchase").show();
+        window.setTimeout(function() {
+            $("#print_purchase").hide();
+            $(".btn_print").prop('disabled', false);
+            $(".btn-text-print").show();
+            $("#btn-text-loading-print").css('display', 'none');
+        }, 2000);
+        $("#print_purchase").printThis({
+            importCSS: false,
+            importStyle: true,
+            loadCSS: "/admin/css/style-templete-recruitment-plan.css",
+            header: "",
+            printDelay: 1000,
+            formValues: false,
+            canvas: false,
+            doctypeString: "",
+        });
+    }
 </script>
