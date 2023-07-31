@@ -299,6 +299,18 @@
             showdatas(param)
             print_pdf();
         });
+        $(".btn_excel").on("click", function () {
+            var query = {
+                employee_id: $("#employee_id").val(),
+                employee_name: $("#employee_name").val(),
+                course_name: $("#course_name").val(),
+                start_date: $("#start_date").val(),
+                end_date: $("#end_date").val(),
+                traing_type: $("#training_type").val(),
+            }
+            var url = "{{URL::to('reports/training-export')}}?" + $.param(query)
+            window.location = url;
+        });
     });
     function showdatas(param) {  
         $.ajax({
@@ -373,16 +385,16 @@
         });
     }
     function diff_year_month_day(dt1, dt2){
-      var time =(dt2.getTime() - dt1.getTime()) / 1000;
-      var year  = Math.abs(Math.round((time/(60 * 60 * 24))/365.25));
-    //   var month = Math.abs(Math.round(time/(60 * 60 * 24 * 7 * 4)));
-      let current_year = moment(dt2).format('YYYY');
-      let current_year2 = moment(dt2).format('YYYY-MM-D');
-      let current_month = moment(dt1).format('MM-D');
-      var month = Math.abs(parseInt(moment(current_year+'-'+current_month).diff(dt2, 'months', true)));
-    //   var days = Math.abs(Math.round(time/(3600 * 24)));
-    var days = Math.abs(parseInt(moment(current_year+'-'+current_month).diff(current_year2, 'days')));
-      return year +" years, " + month + " months, " + days + " days";
+        var time =(dt2.getTime() - dt1.getTime()) / 1000;
+        var year  = Math.abs(Math.round((time/(60 * 60 * 24))/365.25));
+        //   var month = Math.abs(Math.round(time/(60 * 60 * 24 * 7 * 4)));
+        let current_year = moment(dt2).format('YYYY');
+        let current_year2 = moment(dt2).format('YYYY-MM-D');
+        let current_month = moment(dt1).format('MM-D');
+        var month = Math.abs(parseInt(moment(current_year+'-'+current_month).diff(dt2, 'months', true)));
+        //   var days = Math.abs(Math.round(time/(3600 * 24)));
+        var days = Math.abs(parseInt(moment(current_year+'-'+current_month).diff(current_year2, 'days')));
+        return year +" years, " + month + " months, " + days + " days";
 
     }
     function print_pdf(type) {

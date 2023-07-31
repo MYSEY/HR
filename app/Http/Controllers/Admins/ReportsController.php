@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admins;
 
+use App\Exports\ExportTraining;
 use App\Http\Controllers\Controller;
 use App\Models\Branchs;
 use App\Models\StaffPromoted;
@@ -11,6 +12,7 @@ use App\Models\Transferred;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ReportsController extends Controller
 {
@@ -215,5 +217,49 @@ class ReportsController extends Controller
             return response()->json($dataTrainings);
         }
         return view('reports.training_report', compact("dataTrainings"), );
+    }
+
+    public function trainingExport(Request $request){
+        $start_date = null;
+        $end_date = null;
+        if ($request->start_date) {
+            $start_date = Carbon::createFromDate($request->start_date)->format('Y-m-d H:i:s');
+        }
+        if ($request->end_date) {
+            $end_date = Carbon::createFromDate($request->end_date)->format('Y-m-d H:i:s');
+        }
+        $data = Training::
+        when($request->traing_type, function ($query, $traing_type) {
+            $query->where('training_type', $traing_type);
+        })
+        ->when($request->course_name, function ($query, $course_name) {
+            $query->where('course_name', $course_name);
+        })
+        ->when($start_date, function ($query, $start_date) {
+            $query->where('start_date', '>=', $start_date);
+        })
+        ->when($end_date, function ($query, $end_date) {
+            $query->where('end_date','<=', $end_date);
+        })
+        ->get();
+        $dataTrainings = [];
+        foreach ($data as $key => $item) {
+            $dataTrainer = Trainer::whereIn('id', $item->trainer_id)->with("employee")->get();
+            $em =  User::whereIn('id', $item->employee_id)
+            ->with("gender")->with("position")->with("branch")
+            ->when($request->employee_id, function ($query, $employee_id) {
+                $query->where('number_employee', 'LIKE', '%'.$employee_id.'%');
+            })
+            ->when($request->employee_name, function ($query, $employee_name) {
+                $query->where('employee_name_en', 'LIKE', '%'.$employee_name.'%');
+                $query->orWhere('employee_name_kh', 'LIKE', '%'.$employee_name.'%');
+            })
+            ->get();
+            $item["trainers"] = $dataTrainer;
+            $item["employees"] = $em;
+            $dataTrainings[] = $item;
+        }
+        $export = new ExportTraining($dataTrainings);
+        return Excel::download($export, 'ReportTraining.xlsx');
     }
 }
