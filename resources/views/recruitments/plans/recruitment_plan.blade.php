@@ -253,23 +253,18 @@
             $("#btn-text-loading-excel").css('display', 'block');
             $(".btn_excel").prop('disabled', true);
             $(".btn-text-excel").css("display", "none");
-            $.ajax({
-                type: "GET",
-                url: "{{ url('recruitment/plan/export') }}",
-                data: {
-                    "_token": "{{ csrf_token() }}",
-                    position_id: $("#position_id").val() ? $("#position_id").val() : null,
-                    branch_id: $("#branch_id").val() ? $("#branch_id").val() : null,
-                    filter_year: $("#filter_year").val() ? $("#filter_year").val() : null,
-                },
-                dataType: "JSON",
-                success: function(response) {
-                    $(".btn_excel").prop('disabled', false);
-                    $(".btn-text-excel").show();
-                    $("#btn-text-loading-excel").css('display', 'none');
-                    console.log("response: ", response);
-                }
-            });
+            var query = {
+                position_id: $("#position_id").val() ? $("#position_id").val() : null,
+                branch_id: $("#branch_id").val() ? $("#branch_id").val() : null,
+                filter_year: $("#filter_year").val() ? $("#filter_year").val() : null,
+            }
+            var url = "{{URL::to('recruitment/plan/export')}}?" + $.param(query)
+            window.location = url;
+            window.setTimeout(function() {
+                $(".btn_excel").prop('disabled', false);
+                $(".btn-text-excel").show();
+                $("#btn-text-loading-excel").css('display', 'none');
+            }, 2000);
         });
 
         $('#btnAddEducation').on('click', function() {
@@ -366,7 +361,7 @@
                                     let total_staff = 0;
                                     let year_month = moment(date.plan_date).format('y-M');
                                     if (date.branch_id == pos.branch_id && date.position_id == pos.position_id && year_month == x_month) {
-                                        number_staff = date.total_staff;
+                                        number_staff += date.total_staff;
                                     };
                                     if (date.branch_id == pos.branch_id  && year_month == x_month) {
                                         total_staff = date.total_staff;
