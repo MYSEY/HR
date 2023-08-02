@@ -77,7 +77,7 @@ class ReportsController extends Controller
         }
 
         $employees = User::with("gender")->with('position')->with('branch')
-            ->whereNotIn('emp_status',['1','2','Probation'])
+            ->whereNotIn('emp_status',['Upcoming', 'Cancel', '1','2','10','Probation'])
             ->when($join_date, function ($query, $join_date) {
                 $query->where('date_of_commencement', '>=', $join_date);
             })

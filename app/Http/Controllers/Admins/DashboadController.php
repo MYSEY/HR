@@ -48,7 +48,7 @@ class DashboadController extends Controller
         // $currentYear = Carbon::now()->format('Y');
         // $year = Carbon::createFromDate('01-01-'.$currentYear)->format('Y-m-d');
         $year = null;
-        $staffResignations = User::whereNotIn('emp_status',['1','2','10','Probation','Upcoming'])
+        $staffResignations = User::whereNotIn('emp_status',['1','2','10','Probation','Upcoming', 'Cancel'])
         ->when($year, function ($query, $year) {
             $query->where('resign_date', '>=', $year);
         })->orderBy('id', 'desc')->get();
@@ -64,7 +64,9 @@ class DashboadController extends Controller
         $transferred = Transferred::all()->count();
         $empUpcoming = User::where("emp_status","Upcoming")->get()->count();
         $candidateResumes = CandidateResume::whereNot("status","5")->get()->count();
-        $dataTrainings = Training::whereMonth("created_at", $Monthly)->whereYear("created_at", $yearLy)->get();
+        // $dataTrainings = Training::whereMonth("created_at", $Monthly)->whereYear("created_at", $yearLy)->get();
+        $dataTrainings = Training::get();
+        // dd($dataTrainings);
         $dataEmployeeTrainings = [];
         foreach ($dataTrainings as $key => $item) {
             $dataEmployeeTrainings[] = User::whereIn('id', $item->employee_id)->select("employee_name_kh", "employee_name_en", "branch_id", "profile")->with('branch')->get();
