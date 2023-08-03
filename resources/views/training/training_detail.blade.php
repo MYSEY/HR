@@ -160,7 +160,7 @@
         $("#print_purchase").printThis({
             importCSS: false,
             importStyle: true,
-            loadCSS: "/admin/css/style_table.css",
+            loadCSS: "{{asset('/admin/css/style_table.css')}}",
             header: "",
             printDelay: 1000,
             formValues: false,

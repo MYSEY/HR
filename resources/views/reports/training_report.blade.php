@@ -408,7 +408,7 @@
         $("#print_purchase").printThis({
             importCSS: false,
             importStyle: true,
-            loadCSS: "/admin/css/style-templete-report-training.css",
+            loadCSS: "{{asset('/admin/css/style-templete-report-training.css')}}",
             header: "",
             printDelay: 1000,
             formValues: false,

@@ -18,6 +18,8 @@ return new class extends Migration
             $table->integer('employee_id')->nullable();
             $table->decimal('basic_salary',50,2)->default(0);
             $table->decimal('total_gross_salary',50,2)->default(0);
+            $table->decimal('total_gross_salary_one',50,2)->default(0);
+            $table->decimal('total_gross_salary_two',50,2)->default(0);
             $table->date('payment_date')->nullable();
             $table->bigInteger('created_by')->unsigned()->nullable();
             $table->bigInteger('updated_by')->unsigned()->nullable();

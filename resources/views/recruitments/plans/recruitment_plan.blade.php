@@ -497,7 +497,7 @@
         $("#print_purchase").printThis({
             importCSS: false,
             importStyle: true,
-            loadCSS: "/admin/css/style-templete-recruitment-plan.css",
+            loadCSS: "{{asset('/admin/css/style-templete-recruitment-plan.css')}}",
             header: "",
             printDelay: 1000,
             formValues: false,

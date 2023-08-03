@@ -25,6 +25,7 @@ return new class extends Migration
             $table->string('current_address')->nullable();
             $table->string('location_applied')->nullable();
             $table->date('received_date')->nullable();
+            $table->date('fdc_date')->nullable();
             $table->string('recruitment_channel')->nullable();
             $table->string('contact_number')->nullable();
             $table->string('status')->nullable();

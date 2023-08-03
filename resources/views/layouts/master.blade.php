@@ -122,7 +122,7 @@
                 </li>
 
                 <li class="nav-item dropdown has-arrow main-drop">
-                    <a href="" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">
+                    <a href="javascript:void(0);" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">
                         <span class="avatar">
                             @if (Auth::user()->profile==null)
                                 <img alt="avatar" src="{{asset('admin/img/defuals/default-user-icon.png')}}">
@@ -171,11 +171,7 @@
                                             <span>{{$menu['name']}}</span>
                                         </li>
                                         <li class="submenu">
-                                            <a class="" href="#">
-                                                {!! $menu['icon'] !!}
-                                                <span>{{$menu['value']}}</span>
-                                                <span class="menu-arrow"></span>
-                                            </a>
+                                            <a class="" href="javascript:void(0);">{!! $menu['icon'] !!}<span>{{$menu['value']}}</span><span class="menu-arrow"></span></a>
                                             <ul style="display: none;">
                                                 @foreach ($menu['child'] as $sub_menu)
                                                     @if (RolePermission($sub_menu['table'],$sub_menu['permission']))

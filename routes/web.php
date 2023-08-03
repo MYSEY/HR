@@ -19,6 +19,7 @@ use App\Http\Controllers\Admins\TrainingController;
 use App\Http\Controllers\Admins\DepartmentController;
 use App\Http\Controllers\Admins\PermissionController;
 use App\Http\Controllers\Admins\MotorRentelController;
+use App\Http\Controllers\Admins\PayrollItemController;
 use App\Http\Controllers\Admins\ExchangeRateController;
 use App\Http\Controllers\Admins\TrainingTypeController;
 use App\Http\Controllers\Admins\PayrollReportController;
@@ -116,6 +117,8 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('payroll/store',[EmployeePayrollController::class,'store']);
     Route::get('payslip/{employee_id}',[EmployeePayrollController::class,'paySlip']);
 
+    //Payroll Item
+    Route::get('payroll/item',[PayrollItemController::class,'index']);
     // route province
     Route::get('province', [ProvinceController::class,'index']);
     Route::post('district', [ProvinceController::class,'showDistrict']);
