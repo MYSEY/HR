@@ -75,14 +75,14 @@
                                 <span class="float-end">$ {{$payslip->total_severance_pay}}</span>
                             </td>
                         </tr>
-                        <tr>
+                        {{-- <tr>
                             <td class="border-0 text-nowrap">Adjustment(+/-)</td>
                             <td class="border-0 fw-bolder"><span class="float-end">$ 0.00</span></td>
                         </tr>
                         <tr>
                             <td class="border-0 text-nowrap">Leaves  (+/-)</td>
                             <td class="border-0 fw-bolder"><span class="float-end">$ 0.00</span></td>
-                        </tr>
+                        </tr> --}}
                         <tr>
                             <td class="border-0 text-nowrap">Phone Allowance</td>
                             <td class="border-0 fw-bolder"><span class="float-end">$ {{$payslip->phone_allowance}}</span></td>

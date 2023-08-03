@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use App\Models\CandidateResume;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Brian2694\Toastr\Facades\Toastr;
@@ -53,10 +54,16 @@ class LoginController extends Controller
     // change password
     public function login(Request $request)
     {
+        $dataShortList = DB::table('candidate_resumes')->select('candidate_resumes.*')
+        ->where(DB::raw("(DATE_FORMAT(candidate_resumes.interviewed_date,'%Y-%m-%d'))"), Carbon::now()->format('Y-m-d'))
+        ->where('candidate_resumes.status','2')
+        ->get()->count();
+        $dataContract = CandidateResume::where('contract_date',Carbon::now()->format('Y-m-d'))->where('status','4')->get()->count();
+
         $dataUserUpComming = User::where('date_of_commencement',Carbon::now()->format('Y-m-d'))->where('emp_status','Upcoming')->get()->count();
         $dataUserProbation = User::where('fdc_date',Carbon::now()->format('Y-m-d'))->where('emp_status','Probation')->get()->count();
-        $dataUserFdc = User::where('fdc_end',Carbon::now()->format('Y-m-d'))->where('emp_status','1')->get()->count();
-
+        $dataUserFdc = User::where('fdc_end',Carbon::now()->format('Y-m-d'))->whereIn('emp_status',['1','10'])->get()->count();
+        
         $change_password= "";
         $hashedPassword = User::select('employee_name_en','number_employee', 'password','email')->where('number_employee', $request->number_employee)->first();
         if($hashedPassword == null){
@@ -104,7 +111,13 @@ class LoginController extends Controller
         if (Auth::attempt(['number_employee' => $number_employee, 'password' => $password, 'status' => 'Active'])) {
             DB::table('activity_logs')->insert($activityLog);
             Toastr::success('Login successfully.', 'Success');
-            return redirect('dashboad/admin')->with(['dataUpComming'=>$dataUserUpComming,'dataProbation'=>$dataUserProbation,'dataFdc'=>$dataUserFdc]);
+            return redirect('dashboad/admin')->with([
+                'dataUpComming'=>$dataUserUpComming,
+                'dataProbation'=>$dataUserProbation,
+                'dataFdc'=>$dataUserFdc,
+                'dataShortList' => $dataShortList,
+                'dataContract'  => $dataContract
+            ]);
             // return redirect('dashboad/admin');
         } elseif (Auth::attempt(['number_employee' => $number_employee, 'password' => $password, 'status' => null])) {
             DB::table('activity_logs')->insert($activityLog);

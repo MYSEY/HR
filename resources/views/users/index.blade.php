@@ -654,7 +654,7 @@
                     }
                 });
             }else if(status == '10'){
-                let start_date = $(this).attr('data-start-date');
+                let start_date = $(this).attr('data-end-date');
                 $.confirm({
                     title: 'Employee Status!',
                     contentClass: 'text-center',

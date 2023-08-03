@@ -142,7 +142,7 @@
                                                     <span class="float-end">$ {{$payslip->total_severance_pay}}</span>
                                                 </td>
                                             </tr>
-                                            <tr>
+                                            {{-- <tr>
                                                 <td>Adjustment(+/-)</td>
                                                 <td>
                                                     <span class="float-end">$ 0.00</span>
@@ -153,7 +153,7 @@
                                                 <td>
                                                     <span class="float-end">$ 0.00</span>
                                                 </td>
-                                            </tr>
+                                            </tr> --}}
                                             <tr>
                                                 <td>Phone Allowance</td>
                                                 <td>
@@ -188,7 +188,7 @@
 @endsection
 
 @include('includs.script')
-{{-- <script type="text/javascript">
+<script type="text/javascript">
 
     $(function() {
         $("#btn_print_payroll").on("click", function() {
@@ -213,7 +213,7 @@
         $("#print_payroll").printThis({
             importCSS: false,
             importStyle: true,
-            loadCSS: "/admin/css/style_table.css",
+            loadCSS: "{{asset('/admin/css/style_table.css')}}",
             header: "",
             printDelay: 1000,
             formValues: false,
@@ -221,4 +221,4 @@
             doctypeString: "",
         });
     }
-</script> --}}
+</script>

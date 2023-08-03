@@ -418,9 +418,11 @@
             $userUpComming = Session::get('dataUpComming');
             $userProbation = Session::get('dataProbation');
             $userFdc = Session::get('dataFdc');
+            $ShortList = Session::get('dataShortList');
+            $SignContract = Session::get('dataContract');
         ?>
-        @if ($userUpComming)
-            <div id="showNotyfication" class="modal custom-modal fade" style="display: none;" aria-hidden="true">
+        @if ($userUpComming || $userProbation || $userFdc || $ShortList || $SignContract)
+            <div id="showNotyfication" class="modal custom-modal fade" style="display: none;" aria-hidden="true" data-bs-backdrop="static">
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -432,9 +434,9 @@
                                     <section class="dash-section">
                                         <h1 class="dash-sec-title">TASK FOR TODAY</h1>
                                         <div class="dash-sec-content">
-                                            @if ($userUpComming)
+                                            @if ($ShortList)
                                                 <div class="form-group">
-                                                    <label for="" class="text-danger">Pleas change status up coming to brobation</label>
+                                                    <label for="" class="text-danger">Candidate CVs</label>
                                                     <div class="dash-info-list">
                                                         <div class="dash-card">
                                                             <div class="dash-card-container">
@@ -442,17 +444,16 @@
                                                                     <i class="fa fa-user-plus"></i>
                                                                 </div>
                                                                 <div class="dash-card-content">
-                                                                    <p>{{$userUpComming}} People will be change to pass probation</p>
+                                                                    <p>{{$ShortList}} People will be check short list <a href="{{url('/recruitment/candidate-resume/list')}}" target="_blank">link>></a></p>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             @endif
-                                            
-                                            @if ($userProbation)
-                                               <div class="form-group">
-                                                    <label for="" class="text-danger">Pleas change status brobation to fdc</label>
+                                            @if ($SignContract)
+                                                <div class="form-group">
+                                                    <label for="" class="text-danger">Signature Contract</label>
                                                     <div class="dash-info-list">
                                                         <div class="dash-card">
                                                             <div class="dash-card-container">
@@ -460,7 +461,42 @@
                                                                     <i class="fa fa-user-plus"></i>
                                                                 </div>
                                                                 <div class="dash-card-content">
-                                                                    <p>{{$userProbation}} People will be change to employee</p>
+                                                                    <p>{{$SignContract}} People will be signature contract today <a href="{{url('/recruitment/candidate-resume/list')}}" target="_blank">link>></a></p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endif
+
+                                            @if ($userUpComming)
+                                                <div class="form-group">
+                                                    <label for="" class="text-danger">Pleas change status upComing to probation</label>
+                                                    <div class="dash-info-list">
+                                                        <div class="dash-card">
+                                                            <div class="dash-card-container">
+                                                                <div class="dash-card-icon">
+                                                                    <i class="fa fa-user-plus"></i>
+                                                                </div>
+                                                                <div class="dash-card-content">
+                                                                    <p>{{$userUpComming}} People will be change to pass probation <a href="{{url('users')}}" target="_blank">link>></a></p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endif
+                                            @if ($userProbation)
+                                               <div class="form-group">
+                                                    <label for="" class="text-danger">Pleas change status probation to fdc</label>
+                                                    <div class="dash-info-list">
+                                                        <div class="dash-card">
+                                                            <div class="dash-card-container">
+                                                                <div class="dash-card-icon">
+                                                                    <i class="fa fa-user-plus"></i>
+                                                                </div>
+                                                                <div class="dash-card-content">
+                                                                    <p>{{$userProbation}} People will be change to employee <a href="{{url('users')}}" target="_blank">link>></a></p>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -477,7 +513,7 @@
                                                                     <i class="fa fa-user-plus"></i>
                                                                 </div>
                                                                 <div class="dash-card-content">
-                                                                    <p>{{$userFdc}} People will be change to employee</p>
+                                                                    <p>{{$userFdc}} People will be change to employee <a href="{{url('users')}}" target="_blank">link>></a></p>
                                                                 </div>
                                                             </div>
                                                         </div>
