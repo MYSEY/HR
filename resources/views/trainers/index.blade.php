@@ -42,7 +42,7 @@
                     </div>
                     <div class="col-sm-2 col-md-2">
                         <div class="form-group">
-                            <select class="select form-control" data-select2-id="select2-data-2-c0n2" id="">
+                            <select class="select form-control" data-select2-id="select2-data-2-c0n2" id="filter_trainer_type">
                                 <option value="" data-select2-id="select2-data-2-c0n2">All Type</option>
                                 <option value="1">Internal</option>
                                 <option value="2">External</option>
@@ -68,9 +68,9 @@
                     </div>
                     <div class="col-sm-2 col-md-2">
                         <div style="display: flex" class="float-end">
-                            <button type="button" class="btn btn-sm btn-success submit-btn me-2" id="btn_research">
-                                <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading</span>
-                                <span class="btn-txt">{{ __('Search') }}</span>
+                            <button type="button" class="btn btn-sm btn-success me-2" id="btn_research">
+                                <span class="loading-icon-research" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading</span>
+                                <span class="btn-txt-research">{{ __('Search') }}</span>
                             </button>
                             <button type="button" class="btn btn-sm btn-warning reset-btn">
                                 <span class="btn-text-reset">Reset</span>
@@ -188,7 +188,7 @@
                                 <div class="col-sm-6 trainer-internal">
                                     <div class="form-group">
                                         <label class="">Trainer <span class="text-danger">*</span></label>
-                                        <select class="select form-control" name="employee_id">
+                                        <select class="select form-control" name="employee_id" id="employee_id">
                                             @foreach ($employee as $item)
                                                 <option value="{{$item->id}}">{{$item->employee_name_en}}</option>
                                             @endforeach
@@ -198,26 +198,26 @@
                                 <div class="col-sm-6">
                                     <div class="form-group trainer-external">
                                         <label>Company Name<span class="text-danger">*</span></label>
-                                        <input class="form-control @error('name_en') is-invalid @enderror" type="text" name="company_name">
+                                        <input class="form-control trainer_required @error('name_en') is-invalid @enderror" type="text" name="company_name">
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
                                     <div class="form-group trainer-external">
                                         <label>Name (KH)<span class="text-danger">*</span></label>
-                                        <input class="form-control @error('name_kh') is-invalid @enderror" type="text" name="name_kh">
+                                        <input class="form-control trainer_required @error('name_kh') is-invalid @enderror" type="text" name="name_kh">
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
                                     <div class="form-group trainer-external">
                                         <label>Name (EN)<span class="text-danger">*</span></label>
-                                        <input class="form-control @error('name_en') is-invalid @enderror" type="text" name="name_en">
+                                        <input class="form-control trainer_required @error('name_en') is-invalid @enderror" type="text" name="name_en">
                                     </div>
                                 </div>
 
                                 <div class="col-sm-6">
                                     <div class="form-group trainer-external">
                                         <label>Phone </label>
-                                        <input class="form-control @error('number_phone') is-invalid @enderror" type="number" name="number_phone">
+                                        <input class="form-control trainer_required @error('number_phone') is-invalid @enderror" type="number" name="number_phone">
                                     </div>
                                 </div>
                             
@@ -283,7 +283,7 @@
                                 <div class="col-sm-6 e-trainer-internal">
                                     <div class="form-group">
                                         <label class="">Trainer <span class="text-danger">*</span></label>
-                                        <select class="select form-control data-clear" id="e_employee_id" name="employee_id">
+                                        <select class="select form-control" id="e_employee_id" name="employee_id">
                                             @foreach ($employee as $item)
                                                 <option value="{{$item->id}}">{{$item->employee_name_en}}</option>
                                             @endforeach
@@ -293,25 +293,25 @@
                                 <div class="col-sm-6">
                                     <div class="form-group e-trainer-external">
                                         <label>Company Name<span class="text-danger">*</span></label>
-                                        <input class="form-control data-clear @error('name_en') is-invalid @enderror" type="text" id="e_company_name" name="company_name">
+                                        <input class="form-control data-clear e_trainer_required @error('name_en') is-invalid @enderror" type="text" id="e_company_name" name="company_name">
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
                                     <div class="form-group e-trainer-external">
                                         <label>Name (KH)<span class="text-danger">*</span></label>
-                                        <input class="form-control data-clear @error('name_kh') is-invalid @enderror" type="text" id="e_name_kh" name="name_kh">
+                                        <input class="form-control data-clear e_trainer_required @error('name_kh') is-invalid @enderror" type="text" id="e_name_kh" name="name_kh">
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
                                     <div class="form-group e-trainer-external">
                                         <label>Name (EN)<span class="text-danger">*</span></label>
-                                        <input class="form-control data-clear @error('name_en') is-invalid @enderror" type="text" id="e_name_en" name="name_en">
+                                        <input class="form-control data-clear e_trainer_required @error('name_en') is-invalid @enderror" type="text" id="e_name_en" name="name_en">
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
                                     <div class="form-group e-trainer-external">
                                         <label>Phone </label>
-                                        <input class="form-control data-clear @error('number_phone') is-invalid @enderror" type="number" id="e_number_phone" name="number_phone">
+                                        <input class="form-control data-clear e_trainer_required @error('number_phone') is-invalid @enderror" type="number" id="e_number_phone" name="number_phone">
                                     </div>
                                 </div>
                             
@@ -399,12 +399,12 @@
         });
         $("#btn_research").on("click", function (){
             $(this).prop('disabled', true);
-            $(".btn-txt").hide();
-            $(".loading-icon").css('display', 'block');
+            $(".btn-txt-research").hide();
+            $(".loading-icon-research").css('display', 'block');
             let params = {
                 trainer_name: $("#trainer_name").val(),
                 company_name: $("#company_name").val(),
-                trainer_type: $("#trainer_type").val(),
+                trainer_type: $("#filter_trainer_type").val(),
                 from_date: $("#from_date").val(),
                 to_date: $("#to_date").val(),
             };
@@ -416,18 +416,22 @@
             if (id == 1) {
                 $(".trainer-external").hide();
                 $(".trainer-internal").show();
+                $('.trainer_required').removeAttr('required');
             }else{
                 $(".trainer-internal").hide();
                 $(".trainer-external").show();
+                $(".trainer_required").attr("required", "true");
             }
             if (e_id == 1) {
                 $(".e-trainer-external").hide();
                 $(".e-trainer-internal").show();
                 $(".data-clear").val("");
+                $('.e_trainer_required').removeAttr('required');
             }else{
                 $(".data-clear").val("");
                 $(".e-trainer-internal").hide();
                 $(".e-trainer-external").show();
+                $(".e_trainer_required").attr("required", "true");
             }
         });
 
@@ -565,8 +569,8 @@
             success: function(response) {
                 let data =  response.success;
                 $("#btn_research").prop('disabled', false);
-                $(".btn-txt").show();
-                $(".loading-icon").css('display', 'none');
+                $(".btn-txt-research").show();
+                $(".loading-icon-research").css('display', 'none');
                 var tr = "";
                 if (data.length > 0) {
                     data.map((row) =>{
