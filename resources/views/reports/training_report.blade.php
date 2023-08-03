@@ -150,7 +150,7 @@
                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                             rowspan="1" colspan="1"
                                             aria-label="Seniority: activate to sort column ascending"
-                                            style="width: 125.15px;">Employee Period</th>
+                                            style="width: 125.15px;">Length of Employment</th>
                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                             rowspan="1" colspan="1"
                                             aria-label="Course Name: activate to sort column ascending"
@@ -158,7 +158,7 @@
                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                             rowspan="1" colspan="1"
                                             aria-label="Branch name: activate to sort column ascending"
-                                            style="width: 125.15px;">Location</th>
+                                            style="width: 125.15px;">Dept/Branch</th>
                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                             rowspan="1" colspan="1"
                                             aria-label="Start Date: activate to sort column ascending"

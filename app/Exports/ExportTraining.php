@@ -78,7 +78,7 @@ class ExportTraining implements FromCollection, WithColumnWidths, WithHeadings, 
     }
     public function startCell(): string
     {
-        return 'A5';
+        return 'A4';
     }
     public function registerEvents(): array {
         return [
@@ -88,7 +88,7 @@ class ExportTraining implements FromCollection, WithColumnWidths, WithHeadings, 
 
                 // block merge cells 
                 $sheet->mergeCells('A2:S2');
-                $sheet->setCellValue('A2', "ព្រះរាជាណាចក្រកម្ពុជា");
+                $sheet->setCellValue('A2', "CAMMA Microfinance Limited");
                 $sheet->getDelegate()->getStyle('A2:S2')->getFont()->setName('Khmer OS Muol Light')
                 ->setSize(12)->setUnderline('A2:S2');
                 $event->sheet->getDelegate()->getStyle('A2:S2')
@@ -98,19 +98,19 @@ class ExportTraining implements FromCollection, WithColumnWidths, WithHeadings, 
                 // $month = Carbon::now()->format('M');
                 // $year = Carbon::now()->format('Y');
 
-                $sheet->mergeCells('A3:S3');
-                $sheet->setCellValue('A3', "ជាតិ សាសនា ព្រះមហាក្សត្រ");
-                $sheet->getDelegate()->getStyle('A3:S3')->getFont()->setName('Khmer OS Freehand')
-                ->setSize(10);
-                $event->sheet->getDelegate()->getStyle('A3:S3')
-                                ->getAlignment()
-                                ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+                // $sheet->mergeCells('A3:S3');
+                // $sheet->setCellValue('A3', "ជាតិ សាសនា ព្រះមហាក្សត្រ");
+                // $sheet->getDelegate()->getStyle('A3:S3')->getFont()->setName('Khmer OS Freehand')
+                // ->setSize(10);
+                // $event->sheet->getDelegate()->getStyle('A3:S3')
+                //                 ->getAlignment()
+                //                 ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
-                $sheet->mergeCells('A4:S4');
-                $sheet->setCellValue('A4', "Training Reports");
+                $sheet->mergeCells('A3:S3');
+                $sheet->setCellValue('A3', "Training Reports");
                 $sheet->getDelegate()->getStyle('A3:S3')->getFont()->setName('Arial')
                 ->setSize(10);
-                $event->sheet->getDelegate()->getStyle('A4:S4')
+                $event->sheet->getDelegate()->getStyle('A3:S3')
                                 ->getAlignment()
                                 ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
@@ -152,9 +152,9 @@ class ExportTraining implements FromCollection, WithColumnWidths, WithHeadings, 
                 "Gender",
                 "Position",
                 "Date of Employment",
-                "Employee Period",
+                "Length of Employment",
                 "Course Name",
-                "Location",
+                "Dept/Branch",
                 "Start Date",
                 "End Date",
                 "Duration Term",

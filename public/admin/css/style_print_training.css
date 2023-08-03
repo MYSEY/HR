@@ -1,0 +1,18 @@
+@import url('https://fonts.googleapis.com/css?family=Nunito:200,600');
+@import url('https://fonts.googleapis.com/css?family=Nokora');
+.table-print {
+    font-family: Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 12px;
+}
+.table-print, th {
+    border: 1px solid #ddd !important;
+    padding: 8px !important;
+    text-align:left;
+}
+
+.table-print, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+}

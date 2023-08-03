@@ -89,13 +89,17 @@
         @include('recruitments.candidate_resumes.modal_form_create')
         @include('recruitments.candidate_resumes.modal_form_edit')
         @include('recruitments.candidate_resumes.modal_form_create_emp')
+        {{-- <input id="example" type="text"> --}}
+
     </div>
 @endsection
 
 @include('includs.script')
 <script src="{{asset('/admin/js/validation-field.js')}}"></script>
+
 <script type="text/javascript">
     $(function(){
+       
         $("#btn_tab_short_list, #btn_not_tab_short_list").on("click", function(){
             let tab_status = $(this).attr('data-tab-id');
             showDatas(tab_status);
@@ -298,6 +302,7 @@
                 }
             });
         });
+        
         $('body').on('click', '#btn-status a', function() {
             let id = $(this).attr('data-emp-id');
             let status = $(this).data('id');
@@ -399,7 +404,7 @@
                             '</div>'+
                             '<div class="form-group committee_interviewed">'+
                                 '<label>Interview Committee <span class="text-danger">*</span></label>'+
-                                '<input type="text" class="form-control committee_interview">'+
+                                '<input type="text" id="committeeinterview" class="form-control committee_interview">'+
                             '</div>'+
                             '<div class="form-group">'+
                                 '<label>Remark</label>'+
@@ -683,6 +688,23 @@
                 }); 
             }
         });
+        // $(document).on('click','.committee_interview', function(){
+        //     var list = [
+        //         {"label": "Apple", "value": "0"},
+        //         {"label": "Orange", "value": "1"},
+        //         {"label": "Banana", "value": "2"}
+        //     ];
+        //     $("#committeeinterview").mSelectDBox({
+        //         "list":list,
+        //         "multiple": true,
+        //         "autoComplete": true,
+        //         "name": "a"
+        //     });
+        // });
+        // $( document ).ready(function() {
+            
+           
+        // });
     });
     function showDatas(btn_tab){
         $.ajax({

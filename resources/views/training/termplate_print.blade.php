@@ -6,63 +6,72 @@
                 src="http://127.0.0.1:8000/admin/img/logo/cammalogo.png">&nbsp;&nbsp;
         </div>
 
-        <div style="margin-top:-75px; margin-left:243px">
-            <h3 class="payslip-title-center">TRAINING DETAIL</h3>
-            <p class="payslip-title-center">For monthly &nbsp;
+        <div style="margin-top:-75px; text-align: center">
+            <h3 class="payslip-title-center">{{$training->training_type == 1 ? "Internal" : "External" }} Training</h3>
+            <p class="payslip-title-center">For  &nbsp;
                 <strong>
-                    {{ \Carbon\Carbon::parse()->format('M-Y') ?? '' }}
+                    {{ \Carbon\Carbon::parse()->format('M-d-Y') ?? '' }}
                 </strong>
             </p>
         </div>
-        <div style="width: 35%">
-            <label>Camma Microfinance Limited</label>
-            <span>#101A, St. 289, Sangkat Boeung Kak 1, Khan Toul Kork, Phnom Penh, Cambodia</span>
-        </div><br>
+        @if ($training->training_type == 1 )
+            <div style="width: 35%">
+                <label>Camma Microfinance Limited</label>
+                <span>#101A, St. 289, Sangkat Boeung Kak 1, Khan Toul Kork, Phnom Penh, Cambodia</span>
+            </div><br>
+        @endif
         <div style="display:flex;">
             <div style="width: 350%">
-                <span><strong>Training Type:</strong> {{$training->training_type == 1 ? "Internal" : "External" }}</span><br>
-                <span><strong>Course name:</strong> {{$training->course_name}}</span><br>
-                <span><strong>Time Duration:</strong>
+                <span><strong>Course Name:</strong> {{$training->course_name}}</span><br>
+                <span><strong>StartDate:</strong>
                     {{ \Carbon\Carbon::parse($training->start_date)->format('d-M-Y') ?? '' }}
-                    -
+                </span><br>
+                <span><strong>EndDate:</strong>
                     {{ \Carbon\Carbon::parse($training->end_date)->format('d-M-Y') ?? '' }}
                 </span>
             </div>
         </div>
-        <br>
         <span>
-            <h3>Trainer</h3>
-            <table class="print_table_training">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Type</th>
-                        <th>Name kh</th>
-                        <th>Name EN</th>
-                        <th>Contact Number</th>
-                        <th>Email</th>
-                        <th>Created At</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @if (count($trainer) > 0)
-                        @foreach ($trainer as $item)
-                            <tr>
-                                <td style="width: 5%">{{$item->id}}</td>
-                                <td >{{$item->type == 1 ? "Internal" : "External"}}</td>
-                                <td >{{$item->type == 1 ? $item->EmployeeIn->employee_name_kh : $item->name_kh}}</td>
-                                <td >{{$item->type == 1 ? $item->EmployeeIn->employee_name_en : $item->name_en}}</td>
-                                <td >{{$item->type == 1 ? $item->EmployeeIn->personal_phone_number : $item->number_phone}}</td>
-                                <td >{{$item->type == 1 ? $item->EmployeeIn->email : $item->email}}</td>
-                                <td >{{ \Carbon\Carbon::parse($item->created_at)->format('d-M-Y') ?? '' }}</td>
-                            </tr>
-                        @endforeach
-                    @endif
-                </tbody>
-            </table>
-        </span><br>
-        <h3> Employees</h3>
-        <table class="print_table_training">
+            @if ($training->training_type == 1 )
+                <h4>Trainer Information</h4>
+                <table class="table-print">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Type</th>
+                            <th>Name kh</th>
+                            <th>Name EN</th>
+                            <th>Contact Number</th>
+                            <th>Email</th>
+                            <th>Created At</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (count($trainer) > 0)
+                            @foreach ($trainer as $item)
+                                <tr>
+                                    <td style="width: 5%">{{$item->id}}</td>
+                                    <td >{{$item->type == 1 ? "Internal" : "External"}}</td>
+                                    <td >{{$item->type == 1 ? $item->EmployeeIn->employee_name_kh : $item->name_kh}}</td>
+                                    <td >{{$item->type == 1 ? $item->EmployeeIn->employee_name_en : $item->name_en}}</td>
+                                    <td >{{$item->type == 1 ? $item->EmployeeIn->personal_phone_number : $item->number_phone}}</td>
+                                    <td >{{$item->type == 1 ? $item->EmployeeIn->email : $item->email}}</td>
+                                    <td >{{ \Carbon\Carbon::parse($item->created_at)->format('d-M-Y') ?? '' }}</td>
+                                </tr>
+                            @endforeach
+                        @endif
+                    </tbody>
+                </table>
+            @else
+                <br>
+                <span><strong>TrainerName:</strong> {{count($trainer) > 0 ? $trainer[0]->name_en : ""}}</span><br>
+                <span><strong>Company Name:</strong> {{count($trainer) > 0 ? $trainer[0]->company_name : ""}} </span><br>
+                <span><strong>Contact Number:</strong> {{count($trainer) > 0 ? $trainer[0]->number_phone : ""}} </span><br>
+                <span><strong>Email:</strong> {{count($trainer) > 0 ? $trainer[0]->email : ""}}</span>
+            @endif
+        </span>
+        <h4> Employees Information</h4>
+        <table class="table-print">
             <thead>
                 <tr>
                     <th>#</th>
