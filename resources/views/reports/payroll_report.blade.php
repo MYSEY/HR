@@ -2,7 +2,7 @@
 <style>
     .filter-row .btn {
         min-height: 38px !important;
-        padding: 10px !important;
+        padding: 8px !important;
     }
 
     .reset-btn {
@@ -67,10 +67,19 @@
                                 <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading </span>
                                 <span class="btn-txt">{{ __('Search') }}</span>
                             </button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary btn_print me-2">
+                                <span class="btn-text-print"><i class="fa fa-print fa-lg"></i> Print</span>
+                                <span id="btn-text-loading-print" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading</span>
+                            </button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary btn_excel me-2">
+                                <span class="btn-text-excel"><i class="fa fa-file-excel-o" aria-hidden="true"></i> Excel</span>
+                                <span id="btn-text-loading-excel" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading</span>
+                            </button>
                             <button type="button" class="btn btn-sm btn-warning reset-btn">
                                 <span class="btn-text-reset">Reset</span>
                                 <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
                             </button>
+                            
                         </div>
                     </div>
                 </div>
@@ -87,13 +96,13 @@
                             <a class="nav-link" data-bs-toggle="tab" id="tab_btn_NSSF" href="#tab_NSSF" aria-selected="false" role="tab" tabindex="-1" data-tab-id="2">NSSF</a>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <a class="nav-link" data-bs-toggle="tab" id="tab_btn_Benefit" href="#tab_Benefit" aria-selected="false" role="tab" tabindex="-1" data-tab-id="2">Khmer New Year / Pchum Ben Benefit</a>
+                            <a class="nav-link" data-bs-toggle="tab" id="tab_btn_Benefit" href="#tab_Benefit" aria-selected="false" role="tab" tabindex="-1" data-tab-id="3">Khmer New Year / Pchum Ben Benefit</a>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <a class="nav-link" data-bs-toggle="tab" id="tab_btn_seniority" href="#tab_Seniority" aria-selected="false" role="tab" tabindex="-1" data-tab-id="3">Seniority Pay</a>
+                            <a class="nav-link" data-bs-toggle="tab" id="tab_btn_seniority" href="#tab_Seniority" aria-selected="false" role="tab" tabindex="-1" data-tab-id="4">Seniority Pay</a>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <a class="nav-link" data-bs-toggle="tab" id="tab_btn_severance_pay" href="#tab_Severance_pay" aria-selected="false" role="tab" tabindex="-1" data-tab-id="4">Severance Pay</a>
+                            <a class="nav-link" data-bs-toggle="tab" id="tab_btn_severance_pay" href="#tab_Severance_pay" aria-selected="false" role="tab" tabindex="-1" data-tab-id="5">Severance Pay</a>
                         </li>
                     </ul>
                 </div>
@@ -291,7 +300,7 @@
                             <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer tbl_nssf">
                                 <div class="row">
                                     <div class="col-sm-12">
-                                        <table class="table table-striped custom-table datatable dataTable no-footer" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
+                                        <table class="table table-striped custom-table datatable dataTable no-footer tbl_banefit" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
                                             <thead>
                                                 <tr>
                                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
@@ -450,13 +459,51 @@
   
 @endsection
 @include('includs.script')
+@include('payrolls.print_payroll_report')
 <script src="{{ asset('/admin/js/validation-field.js') }}"></script>
 <script src="{{ asset('/admin/js/date-range-bicker.js') }}"></script>
 <script>
     $(function() {
         var tab_status = 1;
-        $("#tab_btl_basic_salary, #tab_btn_NSSF, #tab_btn_seniority, #tab_btn_severance_pay").on("click", function() {
+        $("#tab_btl_basic_salary, #tab_btn_NSSF, #tab_btn_Benefit, #tab_btn_seniority, #tab_btn_severance_pay").on("click", function() {
             tab_status = $(this).attr('data-tab-id');
+            // if check for function print report
+            if (tab_status == 1) {
+                $("#title_print").text("staff salary");
+                $("#table_print_basic_salary").show();
+                $("#table_print_nssf").hide();
+                $("#table_print_benefit").hide();
+                $("#table_print_seniority_pay").hide();
+                $("#table_print_severance_pay").hide();
+            }else if (tab_status == 2) {
+                $("#title_print").text("NSSF");
+                $("#table_print_basic_salary").hide();
+                $("#table_print_nssf").show();
+                $("#table_print_benefit").hide();
+                $("#table_print_seniority_pay").hide();
+                $("#table_print_severance_pay").hide();
+            }else if (tab_status == 3) {
+                $("#title_print").text("Khmer New Year / Pchum Ben Benefit");
+                $("#table_print_basic_salary").hide();
+                $("#table_print_nssf").hide();
+                $("#table_print_benefit").show();
+                $("#table_print_seniority_pay").hide();
+                $("#table_print_severance_pay").hide();
+            }else if (tab_status == 4) {
+                $("#title_print").text("Seniority Pay");
+                $("#table_print_basic_salary").hide();
+                $("#table_print_nssf").hide();
+                $("#table_print_benefit").hide();
+                $("#table_print_seniority_pay").show();
+                $("#table_print_severance_pay").hide();
+            }else if (tab_status == 5) {
+                $("#title_print").text("Severance Pay");
+                $("#table_print_basic_salary").hide();
+                $("#table_print_nssf").hide();
+                $("#table_print_benefit").hide();
+                $("#table_print_seniority_pay").hide();
+                $("#table_print_severance_pay").show();
+            }
         });
         $(".reset-btn").on("click", function() {
             $(this).prop('disabled', true);
@@ -471,6 +518,19 @@
                 filter_month: $("#filter_month").val(),
             };
             showdatas(tab_status, params);
+        });
+        $(".btn_print").on("click", function() {
+            $("#btn-text-loading-print").css('display', 'block');
+            $(".btn_print").prop('disabled', true);
+            $(".btn-text-print").css("display", "none");
+            let params = {
+                employee_id: $("#employee_id").val(),
+                employee_name: $("#employee_name").val(),
+                filter_month: $("#filter_month").val(),
+                btn_print: true
+            };
+            showdatas(tab_status, params)
+            print_pdf();
         });
     });
     function showdatas(tab_status, params) {
@@ -493,6 +553,10 @@
                 var tr = "";
                 if (tab_status == 1 ) {
                     if (data.length > 0) {
+                        let dollar = "$";
+                        if (params.btn_print) {
+                            dollar ="";
+                        }
                         data.map((row) => {
                             let join_date = moment(row.users.date_of_commencement).format('D-MMM-YYYY')
                             let payment_date = moment(row.payment_date).format('D-MMM-YYYY')
@@ -503,17 +567,17 @@
                                 '<td><a href="#">'+(row.users == null ? '' : row.users.position.name_english)+'</a></td>'+
                                 '<td><a href="#">'+(row.users == null ? '' : row.users.branch.branch_name_en)+'</a></td>'+
                                 '<td>'+(join_date)+'</td>'+
-                                '<td>$ <a href="#">'+(row.basic_salary )+'</a></td>'+
-                                '<td>$ <a href="#">'+(row.total_child_allowance )+'</a></td>'+
-                                '<td>$ <a href="#">'+(row.phone_allowance == null ? '0.00' : row.phone_allowance)+'</a></td>'+
-                                '<td>$ <a href="#">'+(row.total_kny_phcumben)+'</a></td>'+
-                                '<td>$ <a href="#">'+(row.total_gross_salary )+'</a></td>'+
-                                '<td>$ <a href="#">'+(row.seniority_payable_tax)+'</a></td>'+
-                                '<td>$ <a href="#">'+(row.total_pension_fund)+'</a></td>'+
-                                '<td>$ <a href="#">'+(row.base_salary_received_usd)+'</a></td>'+
-                                '<td>$ <a href="#">'+(row.tax_free_seniority_allowance)+'</a></td>'+
-                                '<td>$ <a href="#">'+(row.total_severance_pay)+'</a></td>'+
-                                '<td>$ <a href="#">'+(row.total_salary )+'</a></td>'+
+                                '<td>'+(dollar)+' <a href="#">'+(row.basic_salary )+'</a></td>'+
+                                '<td>'+(dollar)+' <a href="#">'+(row.total_child_allowance )+'</a></td>'+
+                                '<td>'+(dollar)+' <a href="#">'+(row.phone_allowance == null ? '0.00' : row.phone_allowance)+'</a></td>'+
+                                '<td>'+(dollar)+' <a href="#">'+(row.total_kny_phcumben)+'</a></td>'+
+                                '<td>'+(dollar)+' <a href="#">'+(row.total_gross_salary )+'</a></td>'+
+                                '<td>'+(dollar)+' <a href="#">'+(row.seniority_payable_tax)+'</a></td>'+
+                                '<td>'+(dollar)+' <a href="#">'+(row.total_pension_fund)+'</a></td>'+
+                                '<td>'+(dollar)+' <a href="#">'+(row.base_salary_received_usd)+'</a></td>'+
+                                '<td>'+(dollar)+' <a href="#">'+(row.tax_free_seniority_allowance)+'</a></td>'+
+                                '<td>'+(dollar)+' <a href="#">'+(row.total_severance_pay)+'</a></td>'+
+                                '<td>'+(dollar)+' <a href="#">'+(row.total_salary )+'</a></td>'+
                                 '<td>'+(payment_date)+'</td>'+
                             '</tr>';
                         });
@@ -521,6 +585,7 @@
                         var tr = '<tr><td colspan=18 align="center">ពុំមានទិន្នន័យសម្រាប់បង្ហាញ</td></tr>';
                     }
                     $(".tbl_payment_salary tbody").html(tr);
+                    $("#table_print_filter_basic_salary tbody").html(tr);
                 }else if (tab_status == 2) {
                     if (data.length > 0) {
                         data.map((row) => {
@@ -545,7 +610,29 @@
                         var tr = '<tr><td colspan=13 align="center">ពុំមានទិន្នន័យសម្រាប់បង្ហាញ</td></tr>';
                     }
                     $(".tbl_nssf tbody").html(tr);
-                }else if(tab_status == 3){
+                    $("#table_print_filter_nssf tbody").html(tr);
+                }else if (tab_status == 3) {
+                    if (data.length > 0) {
+                        data.map((row) => {
+                            let join_date = moment(row.users.date_of_commencement).format('D-MMM-YYYY')
+                            let created_at = moment(row.created_at).format('D-MMM-YYYY')
+                            tr +='<tr class="odd">'+
+                                '<td><a href="#">'+(row.users == null ? '' : row.users.number_employee)+'</a></td>'+
+                                '<td><a href="#">'+(row.users == null ? '' : row.users.employee_name_en)+'</a></td>'+
+                                '<td>'+(row.users == null ? '' : join_date)+'</td>'+
+                                '<td>'+(row.number_of_working_days)+' Days</td>'+
+                                '<td>$ '+(row.base_salary)+'</td>'+
+                                '<td>'+(row.base_salary_received)+'</td>'+
+                                '<td>'+(row.total_allowance)+'</td>'+
+                                '<td>'+(created_at)+'</td>'+
+                            '</tr>';
+                        });
+                    }else {
+                        var tr = '<tr><td colspan=8 align="center">ពុំមានទិន្នន័យសម្រាប់បង្ហាញ</td></tr>';
+                    }
+                    $(".tbl_banefit tbody").html(tr);
+                    $("#table_print_filter_benefit tbody").html(tr);
+                }else if(tab_status == 4){
                     if (data.length > 0) {
                         data.map((row) => {
                             let join_date = moment(row.users.date_of_commencement).format('D-MMM-YYYY')
@@ -567,6 +654,7 @@
                         var tr = '<tr><td colspan=10 align="center">ពុំមានទិន្នន័យសម្រាប់បង្ហាញ</td></tr>';
                     }
                     $(".tbl_seniority_pay tbody").html(tr);
+                    $("#table_print_filter_seniority_pay tbody").html(tr);
                 }else{
                     if (data.length > 0) {
                         data.map((row) => {
@@ -586,9 +674,29 @@
                         var tr = '<tr><td colspan=7 align="center">ពុំមានទិន្នន័យសម្រាប់បង្ហាញ</td></tr>';
                     }
                     $(".tbl_severance_pay tbody").html(tr);
+                    $("#table_print_filter_severance_pay tbody").html(tr);
                 }
                     
             }
+        });
+    }
+    function print_pdf(type) {
+        $("#print_purchase").show();
+        window.setTimeout(function() {
+            $("#print_purchase").hide();
+            $(".btn_print").prop('disabled', false);
+            $(".btn-text-print").show();
+            $("#btn-text-loading-print").css('display', 'none');
+        }, 2000);
+        $("#print_purchase").printThis({
+            importCSS: false,
+            importStyle: true,
+            loadCSS: "{{asset('/admin/css/style_print_report_payroll.css')}}",
+            header: "",
+            printDelay: 1000,
+            formValues: false,
+            canvas: false,
+            doctypeString: "",
         });
     }
 </script>

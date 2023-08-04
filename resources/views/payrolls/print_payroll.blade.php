@@ -6,7 +6,7 @@
                 <img style="width:auto;height: 80px;"alt='White' id="image_logo_print" src="http://127.0.0.1:8000/admin/img/logo/cammalogo.png">&nbsp;&nbsp;
             </div>
     
-            <div style="margin-top:-75px; margin-left:243px">
+            <div style="margin-top:-75px; text-align: center">
                 <h3 class="payslip-title-center">EMPLOYEE PAYSLIP</h3>
                 <p class="payslip-title-center">Monthly Payroll : {{Carbon\Carbon::createFromDate($payslip->payment_date)->format('M Y')}}</strong>
                 </p>
