@@ -131,7 +131,7 @@
                                     type: "success",
                                     timeout: 3000,
                                     icon: true
-                                }).show();
+                                }).show(); 
                                 showDatas("4");
                             }).catch(function(error) {
                                 new Noty({
@@ -758,12 +758,12 @@
                                     '<td >'+(staff.branch.branch_name_en)+'</td>'+
                                     '<td >'+(interviewed_date)+'</td>'+
                                     '<td >'+(time)+'</td>'+
+                                    '<td ><span class="badge bg-inverse-success">'+(staff.interviewed_channel)+'</snap></td>'+
                                     '<td >'+(staff.committee_interview ? staff.committee_interview : "")+'</td>'+
                                     '<td >'+
                                         '<div class="dropdown action-label">'+
                                             '<a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">'+
-                                                (tag_i)+
-                                                '<span>'+(text_status)+'</span>'+
+                                                (tag_i)+ '<span>'+(text_status)+'</span>'+
                                             '</a>'+
                                             '<div class="dropdown-menu dropdown-menu-right" id="btn-status">'+
                                                 // '<a class="dropdown-item" data-emp-id="'+(staff.id)+'"  data-id="2" href="#">'+
@@ -794,8 +794,7 @@
                                     '<td >'+
                                         '<div class="dropdown action-label">'+
                                             '<a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">'+
-                                                (tag_i)+
-                                                '<span>'+(text_status)+'</span>'+
+                                                (tag_i)+ '<span>'+(text_status)+'</span>'+
                                             '</a>'+
                                             '<div class="dropdown-menu dropdown-menu-right" id="btn-status">'+
                                                 '<a class="dropdown-item" data-emp-id="'+(staff.id)+'"  data-id="2" href="#">'+
@@ -837,7 +836,7 @@
                             };
 
                             if(staff_result.status =='3') {
-                                text_status = "Interviewed";
+                                text_status = " Interviewed";
                                 tag_i = '<i class="fa fa-dot-circle-o text-info"></i>'
                             }else if (staff_result.status =='4') {
                                 text_status = "Signed Contract";
@@ -853,8 +852,7 @@
                                 }
                                 status_show = '<div class="dropdown action-label">'+
                                                 '<a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">'+
-                                                    (tag_i)+
-                                                    '<span>'+(text_status)+'</span>'+
+                                                    (tag_i)+ '<span>'+ (text_status)+'</span>'+
                                                 '</a>'+
                                                 '<div class="dropdown-menu dropdown-menu-right" id="btn-status">'+
                                                     '<a class="dropdown-item" data-emp-id="'+(staff_result.id)+'"  data-id="3" data-status="'+(staff_result.status)+'" href="#">'+
@@ -864,7 +862,7 @@
                                                 '</div>'+
                                             '</div>';
                             }else{
-                                status_show = '<span class="badge bg-inverse-danger">'+interview_result+'</snap>';   
+                                status_show = '<span class="badge bg-inverse-danger">'+ interview_result+'</snap>';   
                             }
                             let interviewed_date = staff_result.interviewed_date ? moment(staff_result.interviewed_date).format('MMM-D-YYYY') : "";
                             tr_re += ' <tr class="odd">'+
@@ -875,10 +873,8 @@
                                 '<td >'+(staff_result.position.name_english)+'</td>'+
                                 '<td >'+(staff_result.branch.branch_name_en)+'</td>'+
                                 '<td >'+(interviewed_date)+'</td>'+
-                                '<td >'+(interview_result)+'</td>'+
-                                '<td >'+
-                                    (status_show)+
-                                '</td>'+
+                                '<td ><span class="badge bg-inverse-success">'+(interview_result)+'</snap></td>'+
+                                '<td >'+(status_show)+'</td>'+
                                 '<td >'+(staff_result.remark ? staff_result.remark: "")+'</td>'+
                             '</tr>';
                         });

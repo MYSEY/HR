@@ -328,32 +328,5 @@ class OptionSeeder extends Seeder
             'type' => 'position_type',
             'created_by'    => Auth::id(),
         ]);
-        // loan
-        Option::firstOrCreate([
-            'name_khmer' => 'Yes',
-            'name_english'=> 'Yes',
-            'type' => 'loan',
-            'created_by'    => Auth::id(),
-        ]);
-        Option::firstOrCreate([
-            'name_khmer' => 'No',
-            'name_english'=> 'No',
-            'type' => 'loan',
-            'created_by'    => Auth::id(),
-        ]);
-        //spouse
-        Option::firstOrCreate([
-            'name_khmer' => 'Yes',
-            'name_english'=> 'Yes',
-            'type' => 'is_spouse',
-            'created_by'    => Auth::id(),
-        ]);
-        Option::firstOrCreate([
-            'name_khmer' => 'No',
-            'name_english'=> 'No',
-            'type' => 'is_spouse',
-            'created_by'    => Auth::id(),
-        ]);
-
     }
 }

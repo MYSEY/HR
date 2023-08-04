@@ -355,6 +355,7 @@ class CandidateResumeController extends Controller
                     'emp_status' => $request->status,
                     'remark' => $request->remark,
                     'spouse' => 0,
+                    'is_loan' => 0,
                     'password' => Hash::make("Camma@123"),
                     'created_by' => Auth::user()->id,
                 ];

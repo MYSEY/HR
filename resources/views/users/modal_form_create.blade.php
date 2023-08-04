@@ -227,9 +227,8 @@
                         <div class="col-sm-6">
                             <label>Loan</label>
                             <select class="form-control" id="is_loan" name="is_loan" value="{{old('is_loan')}}">
-                                @foreach ($optionLoan as $item)
-                                    <option value="{{$item->id}}">{{$item->name_english}}</option>
-                                @endforeach
+                                <option value="1">Yes</option>
+                                <option value="0" selected>No</option>
                             </select>
                         </div>
                     </div>

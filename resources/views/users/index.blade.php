@@ -304,6 +304,11 @@
                         } else {
                             $("#e_spouse").append('<option selected value="0">No</option> <option value="1">Yes</option>');   
                         }
+                        if (response.success.is_loan == 1) {
+                            $("#e_is_loan").append('<option selected value="1">Yes</option> <option value="0">No</option>');
+                        } else {
+                            $("#e_is_loan").append('<option selected value="0">No</option> <option value="1">Yes</option>');   
+                        }
 
                         if (response.optionIdentityType != '') {
                             $.each(response.optionIdentityType, function(i, item) {

@@ -43,7 +43,7 @@ return new class extends Migration
             $table->string('position_type')->nullable();
             $table->date('date_of_birth')->nullable();
             $table->decimal('basic_salary',50,2)->default(0);
-            $table->decimal('salary_increas')->nullable();
+            $table->decimal('salary_increas')->default(0);
             $table->string('id_card_number')->nullable();
             $table->string('current_province')->nullable();
             $table->string('current_district')->nullable();

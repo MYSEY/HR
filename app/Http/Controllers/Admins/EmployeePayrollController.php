@@ -218,30 +218,13 @@ class EmployeePayrollController extends Controller
                     $totalAmountChild = 0;
                 }
 
-                //calcute salary get end severance pay 12
+                //calcute severance pay last end 12
                 $totalGrossOne = 0;
                 $totalGrossTwo = 0;
                 if ($item->emp_status == 1 || $item->emp_status == 10) {
-                    $severancePay = GrossSalaryPay::where('employee_id',$item->id)->get();
-                    if (count($severancePay) == 14) {
-                        $endMonth = Carbon::createFromDate($item->fdc_end)->format('m');
-                        $totalDayInMonth = Carbon::now()->month($endMonth)->daysInMonth;
-                        
-                        $date_of_month = Carbon::createFromDate($item->fdc_end)->format('Y-m');
-                        $currentYear = $date_of_month.'-'.$totalDayInMonth;
-                        
-                        // new salary and new total days
-                        $startDate = Carbon::parse($item->fdc_end);
-                        $endDate = Carbon::parse($currentYear);
-                        $totalNewDays = $startDate->diffInDays($endDate) + 1;
-                        $totalGrossOne = ($item->basic_salary / $totalDayInMonth) * $totalNewDays;
-                        
-                        //old salary and total old days
-                        $totalOldDay = $totalDayInMonth - $totalNewDays;
-                        $totalGrossTwo = ($item->basic_salary / $totalDayInMonth) * $totalOldDay;
-                        $totalBasicSalary = $totalGrossOne + $totalGrossTwo;
-
-                    }else if(count($severancePay) == 26){
+                    // $severancePay = GrossSalaryPay::where('employee_id',$item->id)->get();
+                    $dataGrossSalaryPay = GrossSalaryPay::where('employee_id',$item->id)->whereDate('payment_date','>',$item->fdc_date)->whereDate('payment_date','<',$item->fdc_end)->get();
+                    if (count($dataGrossSalaryPay) == 12 || count($dataGrossSalaryPay) == 24) {
                         $endMonth = Carbon::createFromDate($item->fdc_end)->format('m');
                         $totalDayInMonth = Carbon::now()->month($endMonth)->daysInMonth;
                         
@@ -266,8 +249,6 @@ class EmployeePayrollController extends Controller
                     'employee_id'               => $item->id,
                     'basic_salary'              => $item->basic_salary,
                     'total_gross_salary'        => $totalGrossOne == null ? $GrossSalary : $totalGrossOne,
-                    'total_gross_salary_one'    => $totalGrossOne == null ? $GrossSalary : $totalGrossOne,
-                    'total_gross_salary_two'    => $totalGrossTwo,
                     'payment_date'              => $request->payment_date,
                     'created_by'                => Auth::user()->id
                 ]);
@@ -588,22 +569,13 @@ class EmployeePayrollController extends Controller
                     $totalSalaryAfterTax = $baseSalaryReceivedUsd - $totalSalaryTaxUsd;
                 }
 
-                //function Severance Pay
+                //function Severance Pay ti 1
                 $totalSeverancePay = 0;
                 if ($item->emp_status == 1 || $item->emp_status == 10) {
-                    $severancePay = GrossSalaryPay::where('employee_id',$item->id)->get();
-                    if (count($severancePay) == 15) {
-                        $dataSeveranc = GrossSalaryPay::where('employee_id', $item->id)->where('payment_date', '>=',$item->fdc_date)->sum('total_gross_salary_one');
-                        $totalContractSeverancePay = $dataSeveranc * 0.05;
-                        $dataSeverance = SeverancePay::create([
-                            'employee_id'                   => $item->id,
-                            'total_severanec_pay'           => $dataSeveranc,
-                            'total_contract_severance_pay'  => $totalContractSeverancePay,
-                            'created_by'                    => Auth::user()->id,
-                        ]);
-                        $totalSeverancePay = $dataSeverance->total_contract_severance_pay;
-                    }else if(count($severancePay) == 27){
-                        $dataSeveranc = GrossSalaryPay::where('employee_id', $item->id)->where('payment_date', '>=',$item->fdc_date)->sum('total_gross_salary_two');
+                    // $severancePay = GrossSalaryPay::where('employee_id',$item->id)->get();
+                    $severancePay = GrossSalaryPay::where('employee_id',$item->id)->whereDate('payment_date','>',$item->fdc_date)->whereDate('payment_date','<',$item->fdc_end)->get();
+                    if (count($severancePay) == 12 || count($severancePay) == 24) {
+                        $dataSeveranc = GrossSalaryPay::where('employee_id', $item->id)->where('payment_date', '>=',$item->fdc_date)->sum('total_gross_salary');
                         $totalContractSeverancePay = $dataSeveranc * 0.05;
                         $dataSeverance = SeverancePay::create([
                             'employee_id'                   => $item->id,

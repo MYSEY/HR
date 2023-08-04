@@ -120,10 +120,10 @@
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label>Salary to increase</label>
+                                <label>Salary Increase</label>
                                 <div class="input-group">
                                     <span class="input-group-text">$</span>
-                                    <input class="form-control clear_data" type="number" id="salary_to_increase">
+                                    <input class="form-control clear_data" type="number" id="salary_to_increase" name="salary_to_increase">
                                 </div>
                             </div>
                         </div>
