@@ -119,7 +119,6 @@
                         <th >Employee ID</th>
                         <th >Full Name</th>
                         <th >Join Date</th>
-
                         <th >Number Of Working Days</th>
                         <th >Basic Salary</th>
                         <th >Basic Salary Received </th>

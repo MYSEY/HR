@@ -10,6 +10,7 @@ use App\Models\Seniority;
 use App\Models\SeverancePay;
 use Illuminate\Http\Request;
 use App\Exports\ExportMotorRentel;
+use App\Exports\ExportPayroll;
 use App\Http\Controllers\Controller;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Models\NationalSocialSecurityFund;
@@ -34,7 +35,7 @@ class PayrollReportController extends Controller
         $dataNSSF = NationalSocialSecurityFund::all();
         $dataSeniority = Seniority::all();
         $severancePay = SeverancePay::all();
-        $benefit = Bonus::all();
+        $benefit = Bonus::with("users")->get();
         return view('reports.payroll_report',compact('payroll','dataNSSF','dataSeniority','severancePay','benefit'));
     }
 
@@ -92,7 +93,7 @@ class PayrollReportController extends Controller
             ->get();
         }else if($request->tab_status == 3){
             
-            $payroll = Bonus::all();
+            $payroll = Bonus::with("users")->get();
 
         }else if ($request->tab_status == 4) {
             $payroll = Seniority::with("users")
@@ -140,10 +141,14 @@ class PayrollReportController extends Controller
             ->get();
         }
         
-        
         return response()->json([
             'success'=>$payroll,
         ]);
+    }
+
+    // export payroll
+    public function payrollExport(Request $request){
+        return Excel::download(new ExportPayroll($request), 'ReportPayroll.xlsx');
     }
 
     public function motorrentel(Request $request)

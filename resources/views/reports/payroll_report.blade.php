@@ -297,10 +297,10 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="table-responsive">
-                            <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer tbl_nssf">
+                            <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                                 <div class="row">
                                     <div class="col-sm-12">
-                                        <table class="table table-striped custom-table datatable dataTable no-footer tbl_banefit" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
+                                        <table class="table table-striped custom-table datatable dataTable no-footer table_banefit" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
                                             <thead>
                                                 <tr>
                                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
@@ -342,7 +342,6 @@
                                                             <td><a href="#">{{ $item->users == null ? '' : $item->users->number_employee }}</a></td>
                                                             <td><a href="#">{{ $item->users == null ? '' : $item->users->employee_name_en }}</a></td></td></td>
                                                             <td>{{ $item->users == null ? '' : $item->users->joinOfDate }}</td>
-
                                                             <td>{{ $item->number_of_working_days }} Days</td>
                                                             <td>$ {{ $item->base_salary }}</td>
                                                             <td>{{ $item->base_salary_received }}</td>
@@ -469,7 +468,7 @@
             tab_status = $(this).attr('data-tab-id');
             // if check for function print report
             if (tab_status == 1) {
-                $("#title_print").text("staff salary");
+                $("#title_print").text("Basic Salary");
                 $("#table_print_basic_salary").show();
                 $("#table_print_nssf").hide();
                 $("#table_print_benefit").hide();
@@ -518,6 +517,19 @@
                 filter_month: $("#filter_month").val(),
             };
             showdatas(tab_status, params);
+        });
+        $(".btn_excel").on("click", function() {
+            // $("#btn-text-loading-excel").css('display', 'block');
+            // $(".btn_excel").prop('disabled', true);
+            // $(".btn-text-excel").css("display", "none");
+            let query = {
+                employee_id: $("#employee_id").val(),
+                employee_name: $("#employee_name").val(),
+                filter_month: $("#filter_month").val(),
+                tab_status: tab_status
+            };
+            var url = "{{URL::to('reports/payroll-export')}}?" + $.param(query)
+            window.location = url;
         });
         $(".btn_print").on("click", function() {
             $("#btn-text-loading-print").css('display', 'block');
@@ -630,7 +642,7 @@
                     }else {
                         var tr = '<tr><td colspan=8 align="center">ពុំមានទិន្នន័យសម្រាប់បង្ហាញ</td></tr>';
                     }
-                    $(".tbl_banefit tbody").html(tr);
+                    $(".table_banefit tbody").html(tr);
                     $("#table_print_filter_benefit tbody").html(tr);
                 }else if(tab_status == 4){
                     if (data.length > 0) {
