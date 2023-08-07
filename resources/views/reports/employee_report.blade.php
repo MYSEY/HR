@@ -2,7 +2,7 @@
 <style>
     .filter-row .btn {
         min-height: 38px !important;
-        padding: 10px !important;
+        padding: 8px !important;
     }
 
     .reset-btn {
@@ -24,7 +24,7 @@
         </div>
     </div>
     @if (Auth::user()->RolePermission == 'Administrator')
-        <form action="{{url('reports/employee-report')}}" method="POST" class="needs-validation" novalidate>
+        <form class="needs-validation" novalidate>
             @csrf
             <div class="row filter-row"> 
                 <div class="col-sm-2 col-md-2"> 
@@ -60,9 +60,13 @@
                 {{-- <div class="col-md-6 col-sm-6"></div> --}}
                 <div class="col-sm-6 col-md-6">
                     <div style="display: flex" class="float-end">
-                        <button type="submit" class="btn btn-sm btn-success submit-btn me-2" data-dismiss="modal">
-                            <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading </span>
-                            <span class="btn-txt">{{ __('Search') }}</span>
+                        <button type="button" class="btn btn-sm btn-success me-2 btn-search" data-dismiss="modal">
+                            <span class="loading-icon-search" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading </span>
+                            <span class="btn-txt-search">{{ __('Search') }}</span>
+                        </button>
+                        <button type="button" class="btn btn-sm btn-outline-secondary btn_excel me-2">
+                            <span class="btn-text-excel"><i class="fa fa-file-excel-o" aria-hidden="true"></i> Excel</span>
+                            <span id="btn-text-loading-excel" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading</span>
                         </button>
                         <button type="button" class="btn btn-sm btn-warning reset-btn">
                             <span class="btn-text-reset">Reset</span>
@@ -80,7 +84,7 @@
                 <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                     <div class="row">
                         <div class="col-sm-12 col-md-12">
-                            <table class="table table-striped custom-table mb-0 datatable dataTable no-footer" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
+                            <table class="table table-striped custom-table mb-0 datatable dataTable no-footer tbl_employee" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
                                 <thead>
                                     <tr>
                                         <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
@@ -221,5 +225,108 @@
             $("#btn-text-loading").css('display', 'block');
             window.location.replace("{{ URL('reports/employee-report') }}");
         });
+        $(".btn-search").on("click", function() {
+            $(this).prop('disabled', true);
+            $(".btn-txt-search").hide();
+            $(".loading-icon-search").css('display', 'block');
+            var params = {
+                number_employee: $("#number_employee").val(),
+                employee_name: $("#employee_name").val(),
+                emp_status: $("#emp_status").val(),
+            }
+            showDatas(params);
+        });
+        $(".btn_excel").on("click", function () {
+            var query = {
+                number_employee: $("#number_employee").val(),
+                employee_name: $("#employee_name").val(),
+                emp_status: $("#emp_status").val(),
+            }
+            var url = "{{URL::to('reports/employee-export')}}?" + $.param(query)
+            window.location = url;
+        });
     });
+
+    function showDatas(params) {
+        $.ajax({
+            type: "post",
+            url: "{{ url('reports/employee-search') }}",
+            data: {
+                "_token": "{{ csrf_token() }}",
+                employee_id: params.number_employee ? params.number_employee : null,
+                employee_name: params.employee_name ? params.employee_name : null,
+                emp_status: params.emp_status ? params.emp_status : null,
+            },
+            dataType: "JSON",
+            success: function(response) {
+                let data =  response.success;
+                $(".btn-search").prop('disabled', false);
+                $(".btn-txt-search").show();
+                $(".loading-icon-search").css('display', 'none');
+                var tr = "";
+                if (data.length > 0) {
+                    data.map((row) => {
+                        let join_date = moment(row.date_of_commencement).format('DD-MMM-YYYY')
+                        let date_of_birth = moment(row.date_of_birth).format('DD-MMM-YYYY')
+                        let emp_status = "";
+                        if (row.emp_status== "Upcoming"){
+                            emp_status = '<span style="font-size: 13px" class="badge bg-inverse-success">Upcoming</span>';
+                        }else if (row.emp_status == "Probation"){
+                            emp_status = '<span style="font-size: 13px" class="badge bg-inverse-success">Probation</span>';
+                        }else if (row.emp_status == "1"){
+                            emp_status = '<span style="font-size: 13px" class="badge bg-inverse-success">FDC-1</span>';
+                        }else if (row.emp_status == "10"){
+                            emp_status = '<span style="font-size: 13px" class="badge bg-inverse-success">FDC-2</span>';
+                        }else if (row.emp_status == "2"){
+                            emp_status = '<span style="font-size: 13px" class="badge bg-inverse-success">UDC</span>';
+                        }else if (row.emp_status=='3'){
+                            emp_status = '<span style="font-size: 13px" class="badge bg-inverse-danger">Resignation</span>';
+                        }else if (row.emp_status=='4'){
+                            emp_status = '<span style="font-size: 13px" class="badge bg-inverse-danger">Termination</span>';
+                        }else if (row.emp_status=='5'){
+                            emp_status = '<span style="font-size: 13px" class="badge bg-inverse-danger">Death</span>';
+                        }else if (row.emp_status=='6'){
+                            emp_status = '<span style="font-size: 13px" class="badge bg-inverse-danger">Retired</span>';
+                        }else if (row.emp_status=='7'){
+                            emp_status = '<span style="font-size: 13px" class="badge bg-inverse-danger">Lay off</span>';
+                        }else if (row.emp_status=='8'){
+                            emp_status = '<span style="font-size: 13px" class="badge bg-inverse-danger">Suspension</span>';
+                        }else if (row.emp_status=='9'){
+                            emp_status = '<span style="font-size: 13px" class="badge bg-inverse-danger">Fall Probation</span>';
+                        }else if (row.emp_status=='Cancel'){
+                            emp_status = '<span style="font-size: 13px" class="badge bg-inverse-danger">Cancel</span>';
+                        };
+                        let profile = '<a href="{{asset("admin/img/defuals/default-user-icon.png")}}">'+
+                                        '<img alt="" src="{{asset("admin/img/defuals/default-user-icon.png")}}">'+
+                                    '</a>';
+                        if (row.profile != null) {
+                            profile ='<a href="{{asset("/uploads/images")}}/'+(row.profile)+'" class="avatar">'+
+                                        '<img alt="" src="{{asset("/uploads/images")}}/'+(row.profile)+'">'+
+                                    '</a>';
+                        };
+                        tr +='<tr class="odd">'+
+                            '<td><h2>'+(profile)+'</h2></td>'+
+                            '<td><a href="{{url("employee/profile")}}/'+(row.id)+'">'+(row.number_employee)+'</td>'+
+                            '<td><a href="{{url("employee/profile")}}/'+(row.id)+'">'+(row.employee_name_en)+'</a></td>'+
+                            '<td><a href="{{url("employee/profile")}}/'+(row.id)+'">'+(row.role ? row.role.name : "")+'</a></td>'+
+                            '<td><a href="{{url("employee/profile")}}/'+(row.id)+'">'+(row.department.name_english)+'</a></td>'+
+                            '<td><a href="{{url("employee/profile")}}/'+(row.id)+'">'+(row.position.name_english	)+'</a></td>'+
+                            '<td><a href="{{url("employee/profile")}}/'+(row.id)+'">'+(row.branch.branch_name_en)+'</a></td>'+
+                            '<td>'+(join_date)+'</td>'+
+                            '<td>'+(date_of_birth)+'</td>'+
+                            '<td>'+(row.marital_status ? row.marital_status : "" )+'</td>'+
+                            '<td>'+(row.gender.name_english	 )+'</td>'+
+                            '<td>$ <a href="#">'+(row.basic_salary )+'</a></td>'+
+                            '<td>'+
+                                (emp_status)+
+                            '</td>'+
+                        '</tr>';
+                    });
+                }else{
+                    var tr = '<tr><td colspan=13 align="center">ពុំមានទិន្នន័យសម្រាប់បង្ហាញ</td></tr>';
+                }
+                $(".tbl_employee tbody").html(tr);   
+            }
+        });
+    }
 </script>

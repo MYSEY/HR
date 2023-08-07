@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admins;
 
+use App\Exports\ExportEmployeeReport;
 use App\Exports\ExportTraining;
 use App\Http\Controllers\Controller;
 use App\Models\Branchs;
@@ -16,8 +17,12 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class ReportsController extends Controller
 {
-    public function employee(Request $request){
-        $users = User::whereNot("emp_status", null)
+    public function employee(){
+        $users = User::whereNot("emp_status", null)->get();
+        return view('reports.employee_report',compact('users'));
+    }
+    public function employeeSearch(Request $request) {
+        $users = User::whereNot("emp_status", null)->with("department")->with("position")->with("role")->with("branch")->with("gender")
         ->when($request->emp_status, function ($query, $emp_status) {
             $query->where('emp_status', $emp_status);
         })
@@ -26,9 +31,13 @@ class ReportsController extends Controller
         })
         ->when($request->employee_name, function ($query, $employee_name) {
             $query->where('employee_name_en', 'LIKE', '%'.$employee_name.'%');
-            // $query->where('employee_name_kh', 'LIKE', '%'.$employee_name.'%');
         })->get();
-        return view('reports.employee_report',compact('users'));
+        return response()->json([
+            'success'=>$users,
+        ]);
+    }
+    public function export(Request $request) {
+        return Excel::download(new ExportEmployeeReport($request), 'EmployeeReport.xlsx');
     }
     public function newStaff(Request $request){
         $from_date = null;
