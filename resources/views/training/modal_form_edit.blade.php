@@ -62,7 +62,7 @@
 
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label>Cost Price</label>
+                                <label>Course Price</label>
                                 <input class="form-control @error('cost_price') is-invalid @enderror" type="number" id="e_cost_price" name="cost_price">
                             </div>
                         </div>

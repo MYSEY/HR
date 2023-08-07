@@ -120,8 +120,8 @@
                                                 style="width: 170.062px;" aria-sort="ascending">Time Duration</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                 rowspan="1" colspan="1"
-                                                aria-label="Cost : activate to sort column ascending"
-                                                style="width: 34.575px;">Cost Price </th>
+                                                aria-label="Course : activate to sort column ascending"
+                                                style="width: 34.575px;">Course Price </th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                 rowspan="1" colspan="1"
                                                 aria-label="Contract : activate to sort column ascending"

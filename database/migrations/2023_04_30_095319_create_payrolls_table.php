@@ -38,6 +38,7 @@ return new class extends Migration
             $table->decimal('pension_contribution',50,2)->default(0);
             $table->decimal('tax_free_seniority_allowance',50,2)->default(0);
             $table->decimal('total_salary')->default(0);
+            $table->string('exchange_rate')->nullable();
             $table->bigInteger('created_by')->unsigned()->nullable();
             $table->bigInteger('updated_by')->unsigned()->nullable();
             $table->dateTime('deleted_at')->nullable();

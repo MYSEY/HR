@@ -475,7 +475,6 @@
                 }else{
                     var div ='<div class="card text-center">'+
                         '<div class="card-body">'+
-                            '<h5 class="card-title">Recruitment Plans</h5>'+
                             '<p class="card-text">No data available for display.</p>'+
                             // '<a href="#"  data-bs-target="#add_plan" class="btn btn-primary">Add New</a>'+
                         '</div>'+

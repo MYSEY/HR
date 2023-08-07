@@ -238,7 +238,7 @@
                 </div>
 
                 <div class="modal-body">
-                    <form action="{{ url('payroll/store') }}" method="POST" class="needs-validation" novalidate>
+                    <form action="{{ url('payroll/create') }}" method="POST" class="needs-validation" novalidate>
                         @csrf
                         <h5>Exchange Rate</h5>
                         <div class="row">
