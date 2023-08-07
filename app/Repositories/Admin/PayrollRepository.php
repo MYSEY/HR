@@ -38,7 +38,7 @@ class PayrollRepository extends BaseRepository
             return Payroll::with('users')->get();
             // return Payroll::with('users')->whereMonth('payment_date','<=',$currentMonth)->whereYear('payment_date','>=',$currentYear)->get();
         } else {
-            return Payroll::where('employee_id',Auth::user()->id)->where('role_id',Auth::user()->role_id)->get();
+            return Payroll::with("users")->where('employee_id',Auth::user()->id)->where('role_id',Auth::user()->role_id)->get();
         }
     }
 }

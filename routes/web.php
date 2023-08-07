@@ -106,6 +106,8 @@ Route::middleware(['auth:sanctum'])->group(function(){
 
     //Employee Payroll
     Route::get('payroll',[EmployeePayrollController::class,'index']);
+    Route::post('payroll-search',[EmployeePayrollController::class,'search']);
+    Route::get('payroll-export',[EmployeePayrollController::class,'export']);
     Route::get('motor-rentel/list',[MotorRentelController::class,'index']);
     Route::get('motor-rentel/edit',[MotorRentelController::class,'edit']);
     Route::get('motor-rentel/detail/{id}',[MotorRentelController::class,'detail']);

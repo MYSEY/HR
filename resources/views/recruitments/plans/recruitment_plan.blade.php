@@ -106,17 +106,17 @@
                                 <span class="search-loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading </span>
                                 <span class="btn-search-txt">{{ __('Search') }}</span>
                             </button>
-                            <button type="button" class="btn btn-sm btn-warning reset-btn me-2">
-                                <span class="btn-text-reset">Reset</span>
-                                <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading</span>
-                            </button>
                             <button type="button" class="btn btn-outline-secondary btn-sm btn_print me-2">
                                 <span class="btn-text-print"><i class="fa fa-print fa-lg"></i> Print</span>
                                 <span id="btn-text-loading-print" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading</span>
                             </button>
-                            <button type="button" class="btn btn-outline-secondary btn-sm btn_excel">
+                            <button type="button" class="btn btn-outline-secondary btn-sm me-2 btn_excel">
                                 <span class="btn-text-excel"><i class="fa fa-file-excel-o" aria-hidden="true"></i> Excel</span>
                                 <span id="btn-text-loading-excel" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading</span>
+                            </button>
+                            <button type="button" class="btn btn-sm btn-warning reset-btn">
+                                <span class="btn-text-reset">Reset</span>
+                                <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading</span>
                             </button>
                         </div>
                     </div>

@@ -1,4 +1,13 @@
 @extends('layouts.master')
+<style>
+    .filter-row .btn {
+        min-height: 38px !important;
+        padding: 8px !important;
+    }
+    .reset-btn{
+        color: #fff !important
+    }
+</style>
 @section('content')
     <div class="page-header">
         <div class="row align-items-center">
@@ -16,6 +25,55 @@
             </div>
         </div>
     </div>
+    @if (Auth::user()->RolePermission == 'Administrator')
+        <form>
+            {{-- @csrf --}}
+            <div class="row filter-row"> 
+                <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2"> 
+                    <div class="form-group">
+                        <input type="text" class="form-control" name="employee_id" id="employee_id" placeholder="Employee ID" value="{{old('number_employee')}}">
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-2 col-lg-2 col-xl-2">
+                    <div class="form-group ">
+                        <input type="text" class="form-control" name="employee_name" id="employee_name" placeholder="Employee Name" value="{{old('employee_name')}}">
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-2 col-lg-2 col-xl-2">
+                    <div class="form-group">
+                        <select class="select form-control" id="branch_id" data-select2-id="select2-data-2-c0n2" name="branch_id">
+                            <option value="" data-select2-id="select2-data-2-c0n2">All Location</option>
+                            @foreach ($branch as $item)
+                                <option value="{{$item->id}}">{{$item->branch_name_en}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-2 col-lg-2 col-xl-2">
+                    <div class="form-group ">
+                        <input class="form-control" type="month" id="filter_month">
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-4 ">
+                    <div style="display: flex" class="float-end">
+                        <button type="button" class="btn btn-sm btn-success btn-search me-2" data-dismiss="modal">
+                            <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading </span>
+                            <span class="btn-txt">{{ __('Search') }}</span>
+                        </button>
+                        <button type="button" class="btn btn-sm btn-outline-secondary btn_excel me-2">
+                            <span class="btn-text-excel"><i class="fa fa-file-excel-o" aria-hidden="true"></i> Excel</span>
+                            <span id="btn-text-loading-excel" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading</span>
+                        </button>
+                        <button type="button" class="btn btn-sm btn-warning reset-btn">
+                            <span class="btn-text-reset">Reset</span>
+                            <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
+                        </button>
+                        
+                    </div>
+                </div>
+            </div>
+        </form>
+    @endif
     {!! Toastr::message() !!}
     <div class="content container-fluid">
         <div class="page-menu">
@@ -25,7 +83,7 @@
                         <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                             <div class="row">
                                 <div class="col-sm-12">
-                                    <table class="table table-striped custom-table datatable dataTable no-footer display"
+                                    <table class="table table-striped custom-table datatable dataTable no-footer display tbl_payment_salary"
                                         id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info"  cellspacing="0">
                                         <thead>
                                             <tr>
@@ -34,12 +92,12 @@
                                                     aria-sort="ascending"
                                                     aria-label="Employee: activate to sort column descending">Profile
                                                 </th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                    rowspan="1" colspan="1">Employee ID</th>
                                                 <th class="sorting sorting_asc" tabindex="0"
                                                     aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
                                                     aria-sort="ascending"
                                                     aria-label="Employee: activate to sort column descending">Name</th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                    rowspan="1" colspan="1">Employee ID</th>
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                     rowspan="1" colspan="1"
                                                     aria-label="Email: activate to sort column ascending">Position
@@ -81,11 +139,11 @@
                                                 </th>
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                     rowspan="1" colspan="1"
-                                                    aria-label="Join Date: activate to sort column ascending">Base Salary Received
+                                                    aria-label="Join Date: activate to sort column ascending">Base Salary Received USD
                                                 </th>
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                     rowspan="1" colspan="1"
-                                                    aria-label="Join Date: activate to sort column ascending">Base Salary Received
+                                                    aria-label="Join Date: activate to sort column ascending">Base Salary Received Riel
                                                 </th>
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                     rowspan="1" colspan="1"
@@ -123,9 +181,9 @@
                                                     <tr class="odd">
                                                         <td class="sorting_1">
                                                             <h2 class="table-avatar">
-                                                                @if ($item->profile != null)
-                                                                    <a href="{{ asset('/uploads/images/' . $item->users->profile) }}" class="avatar">
-                                                                        <img src="{{ asset('/uploads/images/' . $item->users->profile) }}" alt="">
+                                                                @if ($item->users->profile !=null)
+                                                                    <a href="{{asset('/uploads/images/'.$item->users->profile)}}"  class="avatar">
+                                                                        <img alt="" src="{{asset('/uploads/images/'.$item->users->profile)}}">
                                                                     </a>
                                                                 @else
                                                                     <a href="{{asset('admin/img/defuals/default-user-icon.png')}}">
@@ -134,8 +192,8 @@
                                                                 @endif
                                                             </h2>
                                                         </td>
-                                                        <td> <a href="#">{{ $item->users == null ? '' : $item->users->employee_name_en }}</span></a></td>
                                                         <td><a href="#">{{ $item->users == null ? '' : $item->users->number_employee }}</a></td>
+                                                        <td> <a href="#">{{ $item->users == null ? '' : $item->users->employee_name_en }}</span></a></td>
                                                         <td><a href="#">{{ $item->users == null ? '' : $item->users->EmployeePosition }}</a></td>
                                                         <td><a href="#">{{ $item->users == null ? '' : $item->users->EmployeeDepartment }}</a></td>
                                                         <td><a href="#">{{ $item->users == null ? '' : $item->users->EmployeeBranch }}</a></td>
@@ -228,20 +286,98 @@
 @include('includs.script')
 <script src="{{asset('/admin/js/validation-field.js')}}"></script>
 <script>
-    // $(function(){
-    //     $('#DataTables_Table_0').DataTable({
-    //         "scrollY": "200px",
-    //         "scrollCollapse": true,
-    //         "paging": false
-    //     });
-    //     $(window).on('resize', function() {
-    //         resizetable();
-    //     });
-    //     function resizetable() {
-    //         $('.dataTables_scrollBody').css({
-    //             maxHeight: ($(window).height() - 78 - 65) + 'px'
-    //         });
-    //     }
-    //     resizetable();
-    // });
+    $(function(){
+        $(".reset-btn").on("click", function() {
+            $(this).prop('disabled', true);
+            $(".btn-text-reset").hide();
+            $("#btn-text-loading").css('display', 'block');
+            window.location.replace("{{ URL('payroll') }}");
+        });
+        $(".btn-search").on("click", function(){
+            let params = {
+                branch_id: $("#branch_id").val(),
+                employee_id: $("#employee_id").val(),
+                employee_name: $("#employee_name").val(),
+                filter_month: $("#filter_month").val(),
+            };
+            showdatas(params);
+        });
+        $(".btn_excel").on("click", function() {
+            let query = {
+                branch_id: $("#branch_id").val(),
+                employee_id: $("#employee_id").val(),
+                employee_name: $("#employee_name").val(),
+                filter_month: $("#filter_month").val(),
+            };
+            var url = "{{URL::to('payroll-export')}}?" + $.param(query)
+            window.location = url;
+        });
+    });
+    function showdatas(params) {
+        $.ajax({
+            type: "post",
+            url: "{{ url('payroll-search') }}",
+            data: {
+                "_token": "{{ csrf_token() }}",
+                branch_id: params.branch_id ? params.branch_id : null,
+                employee_id: params.employee_id ? params.employee_id : null,
+                employee_name: params.employee_name ? params.employee_name : null,
+                filter_month: params.filter_month ? params.filter_month : null,
+            },
+            dataType: "JSON",
+            success: function(response) {
+                let data =  response.success;
+                $(".submit-btn").prop('disabled', false);
+                $(".btn-txt").show();
+                $(".loading-icon").css('display', 'none')
+                var tr = "";
+                if (data.length > 0) {
+                    data.map((row) => {
+                        let join_date = moment(row.users.date_of_commencement).format('D-MMM-YYYY');
+                        let payment_date = moment(row.payment_date).format('D-MMM-YYYY');
+                        let created_at = moment(row.created_at).format('D-MMM-YYYY');
+                        let profile = '<a href="{{asset("admin/img/defuals/default-user-icon.png")}}">'+
+                                        '<img alt="" src="{{asset("admin/img/defuals/default-user-icon.png")}}">'+
+                                    '</a>';
+                        if (row.users.profile != null) {
+                            profile ='<a href="{{asset("/uploads/images")}}/'+(row.users.profile)+'" class="avatar">'+
+                                        '<img alt="" src="{{asset("/uploads/images")}}/'+(row.users.profile)+'">'+
+                                    '</a>';
+                        }
+                        tr +='<tr class="odd">'+
+                            '<td class="sorting_1">'+
+                                '<h2 class="table-avatar">'+
+                                    (profile)+
+                                '</h2>'+
+                            '</td>'+
+                            '<td><a href="#">'+(row.users == null ? '' : row.users.number_employee )+'</a></td>'+
+                            '<td> <a href="#">'+(row.users == null ? '' : row.users.employee_name_en )+'</span></a></td>'+
+                            '<td><a href="#">'+(row.users == null ? '' : row.users.position.name_english )+'</a></td>'+
+                            '<td><a href="#">'+(row.users == null ? '' : row.users.department.name_english )+'</a></td>'+
+                            '<td><a href="#">'+(row.users == null ? '' : row.users.branch.branch_name_en )+'</a></td>'+
+                            '<td>'+(join_date)+'</td>'+
+                            '<td>$ <a href="#">'+(row.basic_salary )+'</a></td>'+
+                            '<td>$ <a href="#">'+(row.total_child_allowance )+'</a></td>'+
+                            '<td>$ <a href="#">'+(row.phone_allowance == null ? '0.00' : row.phone_allowance)+'</a></td>'+
+                            '<td>$ <a href="#">'+(row.total_kny_phcumben)+'</a></td>'+
+                            '<td>$ <a href="#">'+(row.seniority_payable_tax)+'</a></td>'+
+                            '<td>$ <a href="#">'+(row.total_pension_fund)+'</a></td>'+
+                            '<td>$ <a href="#">'+(row.base_salary_received_usd)+'</a></td>'+
+                            '<td><span>៛</span> <a href="#">'+(row.total_tax_base_riel)+'</a></td>'+
+                            '<td><a href="#">'+(row.total_rate)+'%</a></td>'+
+                            '<td>$ <a href="#">'+(row.tax_free_seniority_allowance)+'</a></td>'+
+                            '<td>$ <a href="#">'+(row.total_severance_pay)+'</a></td>'+
+                            '<td>$ <a href="#">'+(row.total_salary )+'</a></td>'+
+                            '<td>'+(payment_date)+'</td>'+
+                            '<td>'+(created_at)+'</td>'+
+                            '<td><a class="btn btn-sm btn-primary" href="{{url("payslip")}}/'+(row.employee_id)+'">Generate Slip</a></td>'+
+                        '</tr>';
+                    });
+                }else{
+                    var tr = '<tr><td colspan=22 align="center">ពុំមានទិន្នន័យសម្រាប់បង្ហាញ</td></tr>';
+                }
+                $(".tbl_payment_salary tbody").html(tr);
+            }
+        });
+    }
 </script>

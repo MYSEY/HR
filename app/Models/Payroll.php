@@ -52,6 +52,7 @@ class Payroll extends Model
         return $this->belongsTo(User::class ,'employee_id')
         ->select([
             'id', 
+            'profile',
             'employee_name_en',
             'employee_name_kh',
             'number_employee',

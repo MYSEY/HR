@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admins;
 
+use App\Exports\ExportEmployeeSalary;
 use DateTime;
 use DatePeriod;
 use DateInterval;
@@ -20,10 +21,12 @@ use Illuminate\Support\Carbon;
 use App\Models\ChildrenAllowance;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Models\Branchs;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Auth;
 use App\Models\NationalSocialSecurityFund;
 use App\Repositories\Admin\PayrollRepository;
+use Maatwebsite\Excel\Facades\Excel;
 
 class EmployeePayrollController extends Controller
 {
@@ -42,8 +45,49 @@ class EmployeePayrollController extends Controller
     {
         $data = $this->payrollRepo->getAllPayroll($request);
         $user = User::all();
+        $branch = Branchs::all();
         $exChangeRate= ExchangeRate::orderBy('id', 'desc')->first();
-        return view('payrolls.index',compact('data','user','exChangeRate'));
+        return view('payrolls.index',compact('data','user','branch','exChangeRate'));
+    }
+
+    public function search(Request $request) {
+        $Monthly = null;
+        $yearLy = null;
+        if ($request->filter_month) {
+            $Monthly = Carbon::createFromDate($request->filter_month)->format('m');
+            $yearLy = Carbon::createFromDate($request->filter_month)->format('Y');
+        }
+        $payroll = Payroll::with("users")
+        ->join('users', 'payrolls.employee_id', '=', 'users.id')
+        ->select(
+            'payrolls.*',
+            'users.number_employee',
+            'users.employee_name_en',
+            'users.employee_name_kh',
+            'users.branch_id',
+        )
+        ->when($request->employee_id, function ($query, $employee_id) {
+            $query->where('users.number_employee', 'LIKE', '%'.$employee_id.'%');
+        })
+        ->when($request->employee_name, function ($query, $employee_name) {
+            $query->where('users.employee_name_en', 'LIKE', '%'.$employee_name.'%');
+        })
+        ->when($request->branch_id, function ($query, $branch_id) {
+            $query->where('users.branch_id', $branch_id);
+        })
+        ->when($Monthly, function ($query, $Monthly) {
+            $query->whereMonth('payment_date', $Monthly);
+        })
+        ->when($yearLy, function ($query, $yearLy) {
+            $query->whereYear('payment_date', $yearLy);
+        })->get();
+        return response()->json([
+            'success'=>$payroll,
+        ]);
+    }
+
+    public function export(Request $request) {
+        return Excel::download(new ExportEmployeeSalary($request), 'EmployeeSalary.xlsx');
     }
 
     /**
