@@ -267,7 +267,6 @@ class EmployeePayrollController extends Controller
                     $totalGrossOne = 0;
                     $totalGrossTwo = 0;
                     if ($item->emp_status == 1 || $item->emp_status == 10) {
-                        // $severancePay = GrossSalaryPay::where('employee_id',$item->id)->get();
                         $dataGrossSalaryPay = GrossSalaryPay::where('employee_id',$item->id)->whereDate('payment_date','>',$item->fdc_date)->whereDate('payment_date','<',$item->fdc_end)->get();
                         if (count($dataGrossSalaryPay) == 12 || count($dataGrossSalaryPay) == 24) {
                             $endMonth = Carbon::createFromDate($item->fdc_end)->format('m');

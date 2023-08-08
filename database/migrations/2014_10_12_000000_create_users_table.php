@@ -87,7 +87,7 @@ class CreateUsersTable extends Migration
 
         DB::table('users')->insert(
             [
-                'number_employee'=>'230-0001',
+                'number_employee'=>'230-0000',
                 'employee_name_kh'=>'Administrator',
                 'employee_name_en'=>'Administrator',
                 'email'=>'administrator@gmail.com',
