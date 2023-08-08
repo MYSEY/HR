@@ -1998,7 +1998,7 @@ input[type=file].form-control {
     line-height: 60px;
     width: 60px;
     z-index: 10;
-    padding: 0 20px;
+    padding: 18 20px;
     position: absolute;
     top: 0;
     left: 0;
@@ -2190,7 +2190,7 @@ input[type=file].form-control {
   text-align: right;
   width: 60px;
   z-index: 10;
-  padding: 0 20px;
+  padding: 18 20px;
   position: absolute;
   top: 0;
   right: 0;

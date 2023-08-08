@@ -122,7 +122,7 @@ class LoginController extends Controller
         } elseif (Auth::attempt(['number_employee' => $number_employee, 'password' => $password, 'status' => null])) {
             DB::table('activity_logs')->insert($activityLog);
             Toastr::success('Login successfully.', 'Success');
-            return redirect('dashboad/employee');
+            // return redirect('dashboad/employee');
         } else {
             Toastr::error('Wrong employee ID Or password', 'Error');
             return redirect('login');

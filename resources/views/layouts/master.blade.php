@@ -209,7 +209,7 @@
             </div>
         </div>
         <div class="page-wrapper" style="min-height: 406px;">
-            <div class="content container-fluid">
+            <div class="">
                 <div class="content-wrapper">
                     @yield('content')
                 </div>
