@@ -1,6 +1,6 @@
 @extends('layouts.master')
 <style>
-    .filter-row .btn {
+    .filter-btn .btn {
         min-height: 38px !important;
         padding: 10px !important;
     }
@@ -33,7 +33,7 @@
         @if (Auth::user()->RolePermission == 'Administrator')
             <form class="needs-validation" novalidate>
                 @csrf
-                <div class="row filter-row">
+                <div class="row filter-btn">
                     <div class="col-sm-2 col-md-2"> 
                         <div class="form-group">
                             <input type="text" class="form-control" name="employee_id" id="number_employee" placeholder="Employee ID" value="{{old('number_employee')}}">

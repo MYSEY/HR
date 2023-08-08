@@ -7,9 +7,9 @@
         /* visibility:hidden; */
         display: none !important
     }
-    .filter-row .btn {
+    .filter-btn .btn {
         min-height: 38px !important;
-        padding: 10px !important;
+        padding: 9px !important;
     }
     .reset-btn{
         /* background: #ffbc34 !important; */
@@ -37,7 +37,7 @@
             <form class="needs-validation" novalidate>
                 @csrf
                 
-                <div class="row filter-row">
+                <div class="row filter-btn">
                     <div class="col-sm-2 col-md-2">
                         <div class="form-group">
                             <input class="form-control floating" type="text" id="course_name" name="course_name" placeholder="Course Name">
@@ -71,7 +71,7 @@
                     </div>
                     <div class="col-sm-4 col-md-4">
                         <div style="display: flex" class="float-end">
-                            <button type="button" class="btn btn-sm btn-success submit-btn me-2" id="btn_research">
+                            <button type="button" class="btn btn-sm btn-success me-2" id="btn_research">
                                 <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading</span>
                                 <span class="btn-txt">{{ __('Search') }}</span>
                             </button>

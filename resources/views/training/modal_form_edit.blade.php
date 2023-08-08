@@ -22,7 +22,7 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label>Course Name <span class="text-danger">*</span></label>
-                                <input class="form-control @error('course_name') is-invalid @enderror" type="text" name="course_name" id="e_course_name">
+                                <input class="form-control @error('course_name') is-invalid @enderror" type="text" name="course_name" id="e_course_name" required>
                             </div>
                         </div>
                         <div class="col-sm-6">

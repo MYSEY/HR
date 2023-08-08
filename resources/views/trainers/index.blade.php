@@ -1,8 +1,8 @@
 @extends('layouts.master')
 <style>
-    .filter-row .btn {
+    .filter-btn .btn {
         min-height: 38px !important;
-        padding: 10px !important;
+        padding: 9px !important;
     }
     .reset-btn{
         /* background: #ffbc34 !important; */
@@ -29,7 +29,7 @@
             <form class="needs-validation" novalidate>
                 @csrf
                 
-                <div class="row filter-row">
+                <div class="row filter-btn">
                     <div class="col-sm-2 col-md-2">
                         <div class="form-group">
                             <input class="form-control floating" type="text" id="trainer_name" placeholder="Name">
@@ -74,7 +74,7 @@
                             </button>
                             <button type="button" class="btn btn-sm btn-warning reset-btn">
                                 <span class="btn-text-reset">Reset</span>
-                                <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
+                                <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading</span>
                             </button>
                         </div>
                     </div>
@@ -188,7 +188,7 @@
                                 <div class="col-sm-6 trainer-internal">
                                     <div class="form-group">
                                         <label class="">Trainer <span class="text-danger">*</span></label>
-                                        <select class="select form-control" name="employee_id" id="employee_id">
+                                        <select class="select form-control" name="employee_id" id="employee_id" required>
                                             @foreach ($employee as $item)
                                                 <option value="{{$item->id}}">{{$item->employee_name_en}}</option>
                                             @endforeach

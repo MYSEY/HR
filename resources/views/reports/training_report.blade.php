@@ -1,8 +1,8 @@
 @extends('layouts.master_print')
 <style>
-    .filter-row .btn {
+    .filter-btn .btn {
         min-height: 38px !important;
-        padding: 8px !important;
+        padding: 9px !important;
     }
 
     .ui-datepicker-calendar {
@@ -85,11 +85,11 @@
                     </div>
                 </div>
             </div>
-            <div class="row filter-row">
+            <div class="row filter-btn">
                 <div class="col-sm-2 col-md-12">
                     <div style="display: flex" class="float-end">
                         <button type="button" class="btn btn-sm btn-success submit-btn me-2" id="btn-research" data-dismiss="modal">
-                            <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> </span>
+                            <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading</span>
                             <span class="btn-txt">{{ __('Search') }}</span>
                         </button>
                         <button type="button" class="btn btn-sm btn-outline-secondary btn_print me-2">
@@ -102,7 +102,7 @@
                         </button>
                         <button type="button" class="btn btn-sm btn-warning reset-btn">
                             <span class="btn-text-reset">Reset</span>
-                            <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
+                            <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading</span>
                         </button>
                     </div>
                 </div>

@@ -1,8 +1,8 @@
 @extends('layouts.master')
 <style>
-    .filter-row-btn .btn {
+    .filter-btn .btn {
         min-height: 38px !important;
-        padding: 8px !important;
+        padding: 9px !important;
     }
 
     .reset-btn {
@@ -35,7 +35,7 @@
         </div>
     </div>
     @if (Auth::user()->RolePermission == 'Administrator')
-        <div class="row filter-row">
+        <div class="row">
             <div class="col-sm-6 col-md-2">
                 <div class="form-group">
                     <input type="text" class="form-control" name="employee_id" id="employee_id"
@@ -83,21 +83,21 @@
                 </div>
             </div>
         </div>
-        <div class="row filter-row-btn">
+        <div class="row filter-btn">
             <div class="col-md-6"></div>
             <div class="col-sm-6 col-md-6">
                 <div style="display: flex" class="float-end">
-                    <button type="button" class="btn btn-success btn-search me-2" data-dismiss="modal">
-                        <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> </span>
+                    <button type="button" class="btn btn-sm btn-success btn-search me-2" data-dismiss="modal">
+                        <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading</span>
                         <span class="btn-text-search">{{ __('Search') }}</span>
                     </button>
-                    <button type="button" class="btn btn-outline-secondary btn-export me-2">
+                    <button type="button" class="btn btn-sm btn-outline-secondary btn-export me-2">
                         <span class="btn-text-excel"><i class="fa fa-file-excel-o" aria-hidden="true"></i> Excel</span>
                         <span id="btn-text-loading-excel" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading</span>
                     </button>
-                    <button type="button" class="btn btn-warning reset-btn">
+                    <button type="button" class="btn btn-sm btn-warning reset-btn">
                         <span class="btn-text-reset">Reset</span>
-                        <span id="btn-reset-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> </span>
+                        <span id="btn-reset-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading</span>
                     </button>
                 </div>
             </div>
