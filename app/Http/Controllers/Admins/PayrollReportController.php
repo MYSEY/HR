@@ -10,7 +10,6 @@ use App\Models\Seniority;
 use App\Models\SeverancePay;
 use Illuminate\Http\Request;
 use App\Exports\ExportMotorRentel;
-use App\Exports\ExportMotorRentelReport;
 use App\Exports\ExportPayroll;
 use App\Http\Controllers\Controller;
 use App\Models\Department;
@@ -170,12 +169,6 @@ class PayrollReportController extends Controller
     {
         $data = $this->dataMotor->getDatas($request);
         return Excel::download(new ExportMotorRentel($data), 'MotorRentel.xlsx');
-    }
-    // Export report motor rentel
-    public function exportMotorRentelReport(Request $request)
-    {
-        $datas = $this->dataMotor->getDatas($request);
-        return Excel::download(new ExportMotorRentelReport($datas), 'MotorRentelReport.xlsx');
     }
 
     /**

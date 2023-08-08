@@ -1,6 +1,6 @@
 @extends('layouts.master')
 <style>
-    .filter-row .btn {
+    .filter-row-btn .btn {
         min-height: 38px !important;
         padding: 10px !important;
     }
@@ -42,7 +42,7 @@
         </div>
     </div>
     @if (Auth::user()->RolePermission == 'Administrator')
-        <div class="row filter-row">
+        <div class="row filter-row-btn">
             <div class="col-sm-2 col-md-2">
                 <div class="form-group form-focus select-focus">
                     <input type="text" class="form-control" name="employee_id" id="employee_id" placeholder="Employee ID"
@@ -336,14 +336,15 @@
                         if (newYearExpireted <= Number(newYear)) {
                             newYearExpireted = newYear;
                         }
-                        calculatorYearExpire(response.success.product_year,
-                            newYearExpireted);
+                        calculatorYearExpire(response.success.product_year, newYearExpireted);
                         $('#e_shelt_life').val(response.success.shelt_life);
                         $('#e_number_plate').val(response.success.number_plate);
                         $('#e_total_gasoline').val(response.success.total_gasoline);
                         $('#e_total_work_day').val(response.success.total_work_day);
                         $('#e_price_engine_oil').val(response.success.price_engine_oil);
                         $('#e_price_motor_rentel').val(response.success.price_motor_rentel);
+                        $('#e_taplab_rentel').val(response.success.taplab_rentel);
+                        $('#e_price_taplab_rentel').val(response.success.price_taplab_rentel);
                         $('#e_tax_rate').val(response.success.tax_rate);
 
                         $('#edit_motor_rentel').modal('show');

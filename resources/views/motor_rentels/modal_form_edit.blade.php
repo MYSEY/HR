@@ -10,6 +10,9 @@
             <div class="modal-body">
                 <form action="{{url('motor-rentel/update')}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
                     @csrf
+                    <div class="form-group col-md-12 col-12" element="div" bp-field-wrapper="true" bp-field-name="Identity" bp-field-type="custom_html">
+                        <label class="navbar-brand custom-navbar-brand mb-0" style="width: 100%; background: #dfe6e9; padding: 6px;font-size: 15px;font-weight: normal !important;">Moto Rentals</label>
+                    </div>
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
@@ -93,6 +96,36 @@
                             <div class="form-group">
                                 <label class="">Price motor rentel ($)<span class="text-danger">*</span></label>
                                 <input class="form-control @error('price_motor_rentel') is-invalid @enderror" type="number" id="e_price_motor_rentel" required name="price_motor_rentel" value="{{old('price_motor_rentel')}}">
+                            </div>
+                        </div>
+
+                        {{-- <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="">Tax rate (%)<span class="text-danger">*</span></label>
+                                <input class="form-control @error('tax_rate') is-invalid @enderror" type="number" id="e_tax_rate" required name="tax_rate" value="{{old('tax_rate')}}">
+                            </div>
+                        </div> --}}
+                    </div>
+
+                    <div class="form-group col-md-12 col-12" element="div" bp-field-wrapper="true" bp-field-name="Identity" bp-field-type="custom_html">
+                        <label class="navbar-brand custom-navbar-brand mb-0" style="width: 100%; background: #dfe6e9; padding: 6px;font-size: 15px;font-weight: normal !important;">Taplabs</label>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>Taplab</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="e_taplab_rentel" name="taplab_rentel" placeholder="" value="{{old('taplab_rentel')}}">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>Taplab Price</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">$</span>
+                                    <input class="form-control" type="number" name="price_taplab_rentel" id="e_price_taplab_rentel" value="{{old('price_taplab_rentel')}}">
+                                </div>
                             </div>
                         </div>
 

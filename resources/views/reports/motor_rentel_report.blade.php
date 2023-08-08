@@ -1,6 +1,6 @@
 @extends('layouts.master')
 <style>
-    .filter-row .btn {
+    .filter-row-btn .btn {
         min-height: 38px !important;
         padding: 8px !important;
     }
@@ -24,10 +24,10 @@
                     </ul>
                 </div>
                 <div class="col-auto float-end ms-auto">
-                    @if (Auth::user()->RolePermission == 'Administrator')
+                    {{-- @if (Auth::user()->RolePermission == 'Administrator')
                         <a href="#" class="btn add-btn btn-export"><i class="fa fa-plus"></i>
                             Export Data</a>
-                    @endif
+                    @endif --}}
                 </div>
                 <div class="col-auto float-end ms-auto">
                 </div>
@@ -83,7 +83,7 @@
                 </div>
             </div>
         </div>
-        <div class="row filter-row">
+        <div class="row filter-row-btn">
             <div class="col-md-6"></div>
             <div class="col-sm-6 col-md-6">
                 <div style="display: flex" class="float-end">
@@ -192,12 +192,21 @@
                                             style="width: 89.6px;">Price Motor Rentel</th>
                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                             rowspan="1" colspan="1"
+                                            aria-label="Taplab: activate to sort column ascending"
+                                            style="width: 89.6px;">Taplab</th>
+                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                            rowspan="1" colspan="1"
+                                            aria-label="Taplab Price: activate to sort column ascending"
+                                            style="width: 89.6px;">Taplab Price</th>
+                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                            rowspan="1" colspan="1"
                                             aria-label="Tax rate: activate to sort column ascending"
                                             style="width: 89.6px;">Tax Rate</th>
                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                             rowspan="1" colspan="1"
                                             aria-label="Taxes on fees: activate to sort column ascending"
                                             style="width: 89.6px;">Taxes on Fees</th>
+
                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                             rowspan="1" colspan="1"
                                             aria-label="Amount: activate to sort column ascending"
@@ -236,11 +245,13 @@
                                                 </td>
                                                 <td class="price_engine_oil">$ {{ $item->price_engine_oil }}</td>
                                                 <td class="price_motor_rentel">$ {{ $item->price_motor_rentel }}</td>
+                                                <td >{{ $item->taplab_rentel }}</td>
+                                                <td >$ {{ $item->price_taplab_rentel }}</td>
                                                 <td class="tax_rate">{{ $item->tax_rate }}%</td>
                                                 <td>$ {{ ($item->price_motor_rentel * $item->tax_rate) / 100 }}</td>
 
                                                 <td>$
-                                                    {{ $item->price_motor_rentel - ($item->price_motor_rentel * $item->tax_rate) / 100 }}
+                                                    {{ ($item->price_motor_rentel - ($item->price_motor_rentel * $item->tax_rate) / 100) + ($item->price_taplab_rentel - ($item->price_taplab_rentel * $item->tax_rate) / 100 )  }}
                                                 </td>
                                                 <td>
                                                     <div class="dropdown dropdown-action">
@@ -333,12 +344,14 @@
 
                                     '<td>'+( row.total_gasoline * row.total_work_day )+'</td>'+
                                     '<td>'+( (row.total_gasoline * row.total_work_day * row.gasoline_price_per_liter).toFixed(2))+'៛</td>'+
-                                    '<td class="price_engine_oil">$'+ ( row.price_engine_oil )+'</td>'+
-                                    '<td class="price_motor_rentel">$'+ ( row.price_motor_rentel )+'</td>'+
-                                    '<td class="tax_rate">'+( row.tax_rate )+'%</td>'+
-                                    '<td>$'+ ( (row.price_motor_rentel * row.tax_rate) / 100 )+'</td>'+
+                                    '<td class="price_engine_oil">$ '+ ( row.price_engine_oil )+'</td>'+
+                                    '<td class="price_motor_rentel">$ '+ ( row.price_motor_rentel )+'</td>'+
+                                    '<td >'+ ( row.taplab_rentel )+'</td>'+
+                                    '<td >$ '+ ( row.price_taplab_rentel )+'</td>'+
 
-                                    '<td>$ '+( row.price_motor_rentel - (row.price_motor_rentel * row.tax_rate) / 100 )+'</td>'+
+                                    '<td class="tax_rate">'+( row.tax_rate )+'%</td>'+
+                                    '<td>$ '+ ( (row.price_motor_rentel * row.tax_rate) / 100 )+'</td>'+
+                                    '<td>$ '+( (row.price_motor_rentel - (row.price_motor_rentel * row.tax_rate) / 100 ) + (row.price_taplab_rentel - (row.price_taplab_rentel * row.tax_rate) / 100 ))+'</td>'+
                                     '<td>'+
                                         '<div class="dropdown dropdown-action">' +
                                         '<a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">' +

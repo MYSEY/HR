@@ -208,6 +208,8 @@ class MotorRentelController extends Controller
                 'total_work_day' => $request->total_work_day,
                 'price_engine_oil' => $request->price_engine_oil,
                 'price_motor_rentel' => $request->price_motor_rentel,
+                'taplab_rentel' => $request->taplab_rentel,
+                'price_taplab_rentel' => $request->price_taplab_rentel,
                 'tax_rate' => $request->tax_rate,
                 'updated_by' => Auth::user()->id
             ];
