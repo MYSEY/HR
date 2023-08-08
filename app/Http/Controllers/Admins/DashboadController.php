@@ -38,6 +38,7 @@ class DashboadController extends Controller
         $position_type = Option::whereIn("type", ["position_type", "gender"])->get();
 
         $employee = User::with("gender")->with('position')->with('branch')
+        ->whereNot("emp_status", null)
         ->when($from_date, function ($query, $from_date) {
             $query->where('created_at', '>=', $from_date);
         })
