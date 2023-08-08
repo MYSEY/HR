@@ -87,32 +87,6 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {{-- @if (count($data) > 0)
-                                            @foreach ($data as $item)
-                                                <tr class="odd">
-                                                    <td class="ids">{{$item->id}}</td>
-                                                    <td >{{$item->position ? $item->position->name_english: "" }}</td>
-                                                    <td >{{$item->branch ? $item->branch->branch_name_en: ""}}</td>
-                                                    <td >{{ \Carbon\Carbon::parse($item->plan_date)->format('M-Y') ?? '' }}</td>
-                                                    <td >{{$item->total_staff}}</td>
-                                                    <td >{{$item->remark}}</td>
-                                                    <td>{{ \Carbon\Carbon::parse($item->start_date)->format('d-M-Y') ?? '' }}</td>
-                                                    <td class="text-end">
-                                                        <div class="dropdown dropdown-action">
-                                                            <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
-                                                            <div class="dropdown-menu dropdown-menu-right">
-                                                                <a class="dropdown-item update" data-toggle="modal" data-id="{{$item->id}}" data-target="#edit_plan"><i class="fa fa-pencil m-r-5"></i> Edit</a>
-                                                                <a class="dropdown-item delete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_plan"><i class="fa fa-trash-o m-r-5"></i> Delete</a>
-                                                            </div>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            @endforeach
-                                        @else
-                                            <tr>
-                                                <td colspan="9" style="text-align: center">No record to display</td>
-                                            </tr>
-                                        @endif --}}
                                     </tbody>
                                 </table>
                             </div>
@@ -264,7 +238,7 @@
                                 }));
                             });
                         }
-                        let plan_date = moment(response.success.plan_date).format('yyyy-M');
+                        let plan_date = moment(response.success.plan_date).format('yyyy-MM');
                         $('#e_plan_date').val(plan_date);
                         $('#e_total_staff').val(response.success.total_staff);
                         $('#e_remark').val(response.success.remark);

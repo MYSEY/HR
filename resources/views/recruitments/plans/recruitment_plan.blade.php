@@ -1,8 +1,8 @@
 @extends('layouts.master')
 <style>
-    .filter-row .btn {
+    .filter-btn .btn {
         min-height: 38px !important;
-        padding: 8px !important;
+        padding: 9px !important;
     }
     .reset-btn{
         color: #fff !important
@@ -70,7 +70,7 @@
         @if (Auth::user()->RolePermission == 'Administrator')
             <form class="needs-validation" novalidate>
                 @csrf
-                <div class="row filter-row">
+                <div class="row filter-btn">
                      <div class="col-sm-6 col-md-2"> 
                         <div class="form-group">
                             <select class="select form-control floating select2-hidden-accessible" data-select2-id="select2-data-1-cyfe" id="position_id" name="position_id" tabindex="-1" aria-hidden="true">

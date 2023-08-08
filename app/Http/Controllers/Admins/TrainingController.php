@@ -25,7 +25,7 @@ class TrainingController extends Controller
         $trainer = Trainer::all();
        
         // $trainingType = TrainingType::all();
-        $employee = User::all();
+        $employee = User::whereNot("emp_status", null)->get();
         // $dataTrainings = [];
         // foreach ($data as $key => $item) {
         //     $trainers = [];

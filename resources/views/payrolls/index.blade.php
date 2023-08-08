@@ -1,8 +1,8 @@
 @extends('layouts.master')
 <style>
-    .filter-row .btn {
+    .filter-btn .btn {
         min-height: 38px !important;
-        padding: 8px !important;
+        padding: 9px !important;
     }
     .reset-btn{
         color: #fff !important
@@ -28,7 +28,7 @@
     @if (Auth::user()->RolePermission == 'Administrator')
         <form>
             {{-- @csrf --}}
-            <div class="row filter-row"> 
+            <div class="row filter-btn"> 
                 <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2"> 
                     <div class="form-group">
                         <input type="text" class="form-control" name="employee_id" id="employee_id" placeholder="Employee ID" value="{{old('number_employee')}}">
@@ -66,7 +66,7 @@
                         </button>
                         <button type="button" class="btn btn-sm btn-warning reset-btn">
                             <span class="btn-text-reset">Reset</span>
-                            <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
+                            <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading</span>
                         </button>
                         
                     </div>
@@ -294,6 +294,9 @@
             window.location.replace("{{ URL('payroll') }}");
         });
         $(".btn-search").on("click", function(){
+            $(".btn-search").prop('disabled', true);
+                $(".btn-txt").hide();
+                $(".loading-icon").css('display', 'block')
             let params = {
                 branch_id: $("#branch_id").val(),
                 employee_id: $("#employee_id").val(),
@@ -327,7 +330,7 @@
             dataType: "JSON",
             success: function(response) {
                 let data =  response.success;
-                $(".submit-btn").prop('disabled', false);
+                $(".btn-search").prop('disabled', false);
                 $(".btn-txt").show();
                 $(".loading-icon").css('display', 'none')
                 var tr = "";
