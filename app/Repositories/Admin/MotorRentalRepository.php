@@ -44,6 +44,7 @@ class MotorRentalRepository extends BaseRepository
                 'users.employee_name_kh',
                 'users.number_employee',
                 'users.branch_id',
+                'users.department_id',
             )
             ->when($request->employee_id, function ($query, $employee_id) {
                 $query->where('users.number_employee', 'LIKE', '%'.$employee_id.'%');
@@ -54,6 +55,9 @@ class MotorRentalRepository extends BaseRepository
             })
             ->when($request->branch_id, function ($query, $branch) {
                 $query->where('users.branch_id', $branch);
+            })
+            ->when($request->department_id, function ($query, $department_id) {
+                $query->where('users.department_id', $department_id);
             })
             ->when($from_date, function ($query, $from_date) {
                 $query->where('motor_rentels.created_at', '>=', $from_date);

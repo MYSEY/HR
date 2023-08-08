@@ -10,8 +10,10 @@ use App\Models\Seniority;
 use App\Models\SeverancePay;
 use Illuminate\Http\Request;
 use App\Exports\ExportMotorRentel;
+use App\Exports\ExportMotorRentelReport;
 use App\Exports\ExportPayroll;
 use App\Http\Controllers\Controller;
+use App\Models\Department;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Models\NationalSocialSecurityFund;
 use App\Repositories\Admin\MotorRentalRepository;
@@ -146,7 +148,7 @@ class PayrollReportController extends Controller
         ]);
     }
 
-    // export payroll
+    // Export payroll
     public function payrollExport(Request $request){
         return Excel::download(new ExportPayroll($request), 'ReportPayroll.xlsx');
     }
@@ -155,17 +157,25 @@ class PayrollReportController extends Controller
     {
         $data = $this->dataMotor->getDatas($request);
         $branchs = Branchs::get();
+        $departments = Department::get();
         if ($request->research) {
             return response()->json(['data'=>$data]);
         }else {
-            return view('reports.motor_rentel_report', compact('data', 'branchs'));
+            return view('reports.motor_rentel_report', compact('data', 'branchs', 'departments'));
         }
     }
 
+    // Export List motor rentel in payroll
     public function export(Request $request)
     {
         $data = $this->dataMotor->getDatas($request);
         return Excel::download(new ExportMotorRentel($data), 'MotorRentel.xlsx');
+    }
+    // Export report motor rentel
+    public function exportMotorRentelReport(Request $request)
+    {
+        $datas = $this->dataMotor->getDatas($request);
+        return Excel::download(new ExportMotorRentelReport($datas), 'MotorRentelReport.xlsx');
     }
 
     /**

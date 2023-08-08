@@ -179,19 +179,27 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('/reports/employee-report',[ReportsController::class,'employee']);
     Route::post('reports/employee-search',[ReportsController::class,'employeeSearch']);
     Route::get('reports/employee-export',[ReportsController::class,'export']);
+
     Route::get('/reports/payroll-report', [PayrollReportController::class,'index']);
     Route::post('/reports/payroll-report', [PayrollReportController::class,'filter']);
     Route::get('/reports/payroll-export', [PayrollReportController::class,'payrollExport']);
+
     Route::get('/reports/motor-rentel-report', [PayrollReportController::class,'motorrentel']);
     Route::post('/reports/motor-rentel-report', [PayrollReportController::class,'motorrentel']);
+    Route::get('/reports/export-motor-rentel-report', [PayrollReportController::class,'exportMotorRentelReport']);
+    
     Route::get('/reports/new_staff-report', [ReportsController::class,'newStaff']);
     Route::post('/reports/new_staff-report', [ReportsController::class,'newStaff']);
+
     Route::get('/reports/staff-resigned-report', [ReportsController::class,'staffResigned']);
     Route::post('/reports/staff-resigned-report', [ReportsController::class,'staffResigned']);
+
     Route::get('/reports/promoted-staff-report', [ReportsController::class,'staffPromoted']);
     Route::post('/reports/promoted-staff-report', [ReportsController::class,'staffPromoted']);
+
     Route::get('/reports/transferred-staff-report', [ReportsController::class,'staffTransferred']);
     Route::post('/reports/transferred-staff-report', [ReportsController::class,'staffTransferred']);
+
     Route::get('/reports/training-report', [ReportsController::class,'trainingReport']);
     Route::post('/reports/training-report', [ReportsController::class,'trainingReport']);
     Route::get('/reports/training-export', [ReportsController::class,'trainingExport']);

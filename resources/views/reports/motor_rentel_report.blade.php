@@ -2,7 +2,7 @@
 <style>
     .filter-row .btn {
         min-height: 38px !important;
-        padding: 10px !important;
+        padding: 8px !important;
     }
 
     .reset-btn {
@@ -58,27 +58,44 @@
                     </select>
                 </div>
             </div>
-            <div class="col-sm-6 col-md-3 col-lg-3 col-xl-2 col-12">
+            <div class="col-sm-6 col-md-2">
+                <div class="form-group">
+                    <select class="select form-control" id="department_id" name="department_id" value="{{old('department_id')}}">
+                        <option value="">Department</option>
+                        @foreach ($departments as $item)
+                            <option value="{{$item->id}}">{{$item->name_english}}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-2 col-lg-2 col-xl-2 col-12">
                 <div class="form-group">
                     <div class="cal-icon">
                         <input class="form-control floating datetimepicker" type="text" id="from_date" placeholder="From Date">
                     </div>
                 </div>
             </div>
-            <div class="col-sm-6 col-md-3 col-lg-3 col-xl-2 col-12">
+            <div class="col-sm-6 col-md-2 col-lg-2 col-xl-2 col-12">
                 <div class="form-group">
                     <div class="cal-icon">
                         <input class="form-control floating datetimepicker" type="text" id="to_date" placeholder="To Date">
                     </div>
                 </div>
             </div>
-            <div class="col-sm-6 col-md-2">
+        </div>
+        <div class="row filter-row">
+            <div class="col-md-6"></div>
+            <div class="col-sm-6 col-md-6">
                 <div style="display: flex" class="float-end">
-                    <button type="button" class="btn btn-sm btn-success btn-search me-2" data-dismiss="modal">
+                    <button type="button" class="btn btn-success btn-search me-2" data-dismiss="modal">
                         <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> </span>
                         <span class="btn-text-search">{{ __('Search') }}</span>
                     </button>
-                    <button type="button" class="btn btn-sm btn-warning reset-btn">
+                    <button type="button" class="btn btn-outline-secondary btn-export me-2">
+                        <span class="btn-text-excel"><i class="fa fa-file-excel-o" aria-hidden="true"></i> Excel</span>
+                        <span id="btn-text-loading-excel" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading</span>
+                    </button>
+                    <button type="button" class="btn btn-warning reset-btn">
                         <span class="btn-text-reset">Reset</span>
                         <span id="btn-reset-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> </span>
                     </button>
@@ -269,10 +286,11 @@
                 'employee_id': $("#employee_id").val(),
                 'employee_name': $("#employee_name").val(),
                 'branch_id': $("#branch_id").val(),
+                'department_id': $("#department_id").val(),
                 'from_date': $("#from_date").val(),
                 'to_date': $("#to_date").val(),
             }
-            var url = "{{URL::to('motor-rentel/export')}}?" + $.param(query)
+            var url = "{{URL::to('reports/export-motor-rentel-report')}}?" + $.param(query)
             window.location = url;
         });
         $(".btn-search").on("click", function() {
@@ -284,6 +302,7 @@
                 'employee_id': $("#employee_id").val(),
                 'employee_name': $("#employee_name").val(),
                 'branch_id': $("#branch_id").val(),
+                'department_id': $("#department_id").val(),
                 'from_date': $("#from_date").val(),
                 'to_date': $("#to_date").val(),
             }).then(function(response) {
