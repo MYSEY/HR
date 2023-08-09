@@ -90,7 +90,7 @@
                 <div class="col-sm-12">
                     <ul class="nav nav-tabs nav-tabs-bottom" role="tablist">
                         <li class="nav-item" role="presentation">
-                            <a class="nav-link active" data-bs-toggle="tab" id="tab_btl_basic_salary" href="#tab_basic_salary" aria-selected="true" role="tab" data-tab-id="1">Basic Salary</a>
+                            <a class="nav-link active" data-bs-toggle="tab" id="tab_btl_basic_salary" href="#tab_payroll" aria-selected="true" role="tab" data-tab-id="1">Payroll</a>
                         </li>
                         <li class="nav-item" role="presentation">
                             <a class="nav-link" data-bs-toggle="tab" id="tab_btn_NSSF" href="#tab_NSSF" aria-selected="false" role="tab" tabindex="-1" data-tab-id="2">NSSF</a>
@@ -110,7 +110,7 @@
         </div>
 
         <div class="tab-content">
-            <div class="tab-pane active show" id="tab_basic_salary" role="tabpanel">
+            <div class="tab-pane active show" id="tab_payroll" role="tabpanel">
                 <div class="row">
                     <div class="col-md-12">
                         <div class="table-responsive">
@@ -157,7 +157,15 @@
                                                     </th>
                                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                         rowspan="1" colspan="1"
-                                                        aria-label="Join Date: activate to sort column ascending">Base Salary Received
+                                                        aria-label="Join Date: activate to sort column ascending">Gross Salary(USD)
+                                                    </th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                        rowspan="1" colspan="1"
+                                                        aria-label="Join Date: activate to sort column ascending">Gross Salary(Riel)
+                                                    </th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                        rowspan="1" colspan="1"
+                                                        aria-label="Join Date: activate to sort column ascending">Tax Rate
                                                     </th>
                                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                         rowspan="1" colspan="1"
@@ -189,6 +197,8 @@
                                                             <td>$ <a href="#">{{ $item->seniority_payable_tax}}</a></td>
                                                             <td>$ <a href="#">{{ $item->total_pension_fund}}</a></td>
                                                             <td>$ <a href="#">{{ $item->base_salary_received_usd}}</a></td>
+                                                            <td>$ <a href="#">{{ $item->base_salary_received_riel}}</a></td>
+                                                            <td><a href="#">{{ $item->total_rate}}%</a></td>
                                                             <td>$ <a href="#">{{ $item->tax_free_seniority_allowance}}</a></td>
                                                             <td>$ <a href="#">{{ $item->total_severance_pay}}</a></td>
                                                             <td>$ <a href="#">{{ $item->total_salary }}</a></td>

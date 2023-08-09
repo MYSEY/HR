@@ -112,6 +112,24 @@ class EmployeePayrollController extends Controller
             $employee = User::where('date_of_commencement','<=',$request->payment_date)->whereIn('emp_status',['Probation','1','10','2'])->get();
             if (!$employee->isEmpty()) {
                 foreach ($employee as $item) {
+                    // $hildayMonth = Carbon::createFromDate('2022-09-25')->format('Y-m');
+                    // $hildayDays = Carbon::createFromDate('2022-09-25')->format('d');
+                    // $payMonth = Carbon::createFromDate($request->payment_date)->format('Y-m');
+                    // $payDays = Carbon::createFromDate($request->payment_date)->format('d');
+                    // if ($hildayMonth == $payMonth && $hildayDays >= $payDays) {
+                    //     $dataBonus = Bonus::create([
+                    //         'employee_id'               => $item->id,
+                    //         'number_of_working_days'    => 90,
+                    //         'base_salary'               => 300,
+                    //         'base_salary_received'      => 100,
+                    //         'total_allowance'           => 50,
+                    //         'bouns_type'                => 'pch',
+                    //         'created_by'                => Auth::user()->id,
+                    //     ]);
+                    // }else{
+                    //     dd('false');
+                    // }
+                    // return;
                     //function first month join work
                     if (count(Payroll::where('employee_id',$item->id)->get()) == 0) {
                         //total day in months
@@ -140,16 +158,14 @@ class EmployeePayrollController extends Controller
                         $endDate = Carbon::parse($currentYear.'-'.$totalDayInMonth);
                         $toDays = $startDate->diffInDaysFiltered(function (Carbon $date) use ($holidays) {
                             return $date->isWeekday() && !in_array($date, $holidays);
-                        }, $endDate) + 1;
-                        
+                        }, $endDate);
                         if(count($holidays) == 4){
-                            $totalDays = $toDays;
+                            $totalDays = $toDays + 1;
                         }else if(count($holidays) == 3){
                             $totalDays = $toDays + 1;
                         }else{
                             $totalDays = $toDays + 1;
                         }
-                   
                         if ($totalDays >= 22) {
                             $totalBasicSalary = $item->basic_salary;
                         }else{
@@ -166,7 +182,7 @@ class EmployeePayrollController extends Controller
                     }
                     // dd($totalBasicSalary);
                     //National Social Security Fund (NSSF) Formula
-                    $totalExchangeRielPreTax =  $request->exchange_rate * round($totalBasicSalary, 2);
+                    $totalExchangeRielPreTax =  $request->exchange_rate * $totalBasicSalary;
                     
                     if ($totalExchangeRielPreTax) {
                         if ($totalExchangeRielPreTax >= 1200000) {
@@ -185,16 +201,16 @@ class EmployeePayrollController extends Controller
                     $workerContributionUsd = ($averageWage * 0.02);
                     $workerContributionRiel = (round($workerContributionUsd, -2) / $request->exchange_rate);
                     $dataNSSF = NationalSocialSecurityFund::create([
-                        'employee_id'   => $item->id,
-                        'total_pre_tax_salary_usd'   => number_format($totalBasicSalary, 2),
-                        'total_pre_tax_salary_riel'   => number_format($totalExchangeRielPreTax),
-                        'total_average_wage'   => number_format($averageWage),
-                        'total_occupational_risk'   => number_format($occupationalRisk),
-                        'total_health_care'   => number_format($healthCare),
-                        'pension_contribution_usd'   => number_format($workerContributionUsd),
-                        'pension_contribution_riel'   => number_format($workerContributionRiel, 2),
-                        'corporate_contribution'   => number_format($workerContributionUsd),
-                        'created_by'   => Auth::user()->id,
+                        'employee_id'                   => $item->id,
+                        'total_pre_tax_salary_usd'      => number_format($totalBasicSalary, 2),
+                        'total_pre_tax_salary_riel'     => number_format($totalExchangeRielPreTax),
+                        'total_average_wage'            => number_format($averageWage),
+                        'total_occupational_risk'       => number_format($occupationalRisk),
+                        'total_health_care'             => number_format($healthCare),
+                        'pension_contribution_usd'      => number_format($workerContributionUsd),
+                        'pension_contribution_riel'     => number_format($workerContributionRiel, 2),
+                        'corporate_contribution'        => number_format($workerContributionUsd),
+                        'created_by'                    => Auth::user()->id,
                     ]);
                     
                     // $pension_contribution = '5.9';
@@ -211,7 +227,13 @@ class EmployeePayrollController extends Controller
                             $fromDate = Carbon::parse($item->date_of_commencement);
                             $toDate = Carbon::parse($value->from);
                             $totalStartDays = $fromDate->diffInDays($toDate) - 1;
-                            if($request->payment_date == $value->period_month){
+
+                            $hildayMonth = Carbon::createFromDate($value->period_month)->format('Y-m');
+                            $hildayDays = Carbon::createFromDate($value->period_month)->format('d');
+                            $payMonth = Carbon::createFromDate($request->payment_date)->format('Y-m');
+                            $payDays = Carbon::createFromDate($request->payment_date)->format('d');
+                            
+                            if($hildayMonth == $payMonth && $hildayDays >= $payDays){
                                 if ($totalStartDays > $dayOfYear) {
                                     $percent = $value->amount_percent / 100;
                                     $totalAllowanceBunus = ($totalBasicSalary * $percent);
@@ -221,13 +243,13 @@ class EmployeePayrollController extends Controller
                                     $totalAllowanceBunus = $percentSalary / $dayOfYear;
                                 }
                                 $dataBonus = Bonus::create([
-                                    'employee_id'   => $item->id,
+                                    'employee_id'               => $item->id,
                                     'number_of_working_days'    => $totalStartDays,
-                                    'base_salary'   => $totalBasicSalary,
-                                    'base_salary_received'  => $totalBasicSalary,
-                                    'total_allowance'   => $totalAllowanceBunus,
-                                    'bouns_type'   => $value->title,
-                                    'created_by'    => Auth::user()->id,
+                                    'base_salary'               => $totalBasicSalary,
+                                    'base_salary_received'      => $totalBasicSalary,
+                                    'total_allowance'           => $totalAllowanceBunus,
+                                    'bouns_type'                => $value->title,
+                                    'created_by'                => Auth::user()->id,
                                 ]);
                             }
                             $totalBunus = $dataBonus->total_allowance ?? 0;
@@ -287,12 +309,13 @@ class EmployeePayrollController extends Controller
                             $totalBasicSalary = $totalGrossOne + $totalGrossTwo;
                         }
                     }
-    
-                    $GrossSalary = $totalBasicSalary + $totalBunus + $item->phone_allowance + $totalAmountChild;
+                    
+                    //sum salary and sum other benefit befor tax free
+                    $totalGrossSalaryTaxFree = $totalBasicSalary + $totalBunus + $item->phone_allowance + $totalAmountChild;
                     $dataGrossSalary = GrossSalaryPay::create([
                         'employee_id'               => $item->id,
                         'basic_salary'              => $item->basic_salary,
-                        'total_gross_salary'        => $totalGrossOne == null ? $GrossSalary : $totalGrossOne,
+                        'total_gross_salary'        => $totalGrossSalaryTaxFree,
                         'payment_date'              => $request->payment_date,
                         'created_by'                => Auth::user()->id
                     ]);
@@ -359,10 +382,10 @@ class EmployeePayrollController extends Controller
                         }
                     }
     
-                    
-                    //sum salary and sum other benefit
+                    //function ដក​ pensin fund
                     $baseSalaryReceivedUsd = round($totalGrossSalary, 2) + $seniorityPayableTax - $pension_contribution;
-                    //exchange rate
+
+                    // functin exchange riel rate gross salary after tax
                     $totalExchangeRiel =  $request->exchange_rate * $baseSalaryReceivedUsd;
             
                     //total that បូកបន្ថែមលើបន្ទុកកូននិងប្រពន្ធ
@@ -638,7 +661,7 @@ class EmployeePayrollController extends Controller
                     $data['basic_salary']                   = $item->basic_salary;
                     $data['spouse']                         = $item->spouse;
                     $data['children']                       = $children;
-                    $data['total_gross_salary']             = $baseSalaryReceivedUsd;
+                    $data['total_gross_salary']             = $totalGrossSalary;
                     $data['total_child_allowance']          = $totalAmountChild;
                     $data['phone_allowance']                = $item->phone_allowance;
                     $data['total_kny_phcumben']             = $totalBunus;
@@ -651,7 +674,7 @@ class EmployeePayrollController extends Controller
                     $data['total_charges_reduced']          = $totalChargesReduced;
                     $data['total_rate']                     = $totalTax;
                     $data['tax_free_seniority_allowance']   = $taxExemptionSalary;
-                    $data['total_salary_tax_riel']          = number_format($totalSalaryTaxRiel, 2);
+                    $data['total_salary_tax_riel']          = $totalSalaryTaxRiel;
                     $data['total_salary_tax_usd']           = $totalSalaryTaxUsd;
                     $data['total_salary']                   = round($totalNetSalary, 2);
                     $data['exchange_rate']                  = $request->exchange_rate;

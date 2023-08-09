@@ -139,11 +139,11 @@
                                                 </th>
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                     rowspan="1" colspan="1"
-                                                    aria-label="Join Date: activate to sort column ascending">Base Salary Received USD
+                                                    aria-label="Join Date: activate to sort column ascending">Gross Salary(USD)
                                                 </th>
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                     rowspan="1" colspan="1"
-                                                    aria-label="Join Date: activate to sort column ascending">Base Salary Received Riel
+                                                    aria-label="Join Date: activate to sort column ascending">Gross Salary(Riel)
                                                 </th>
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                     rowspan="1" colspan="1"

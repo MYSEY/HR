@@ -740,7 +740,7 @@
             ],
             datasets: [{
                 label: 'Total Staff',
-                data: [31, 17, 17, 15, 15, 10, 10, 80],
+                data: [0, 0, 0, 0, 0, 0, 0, 0],
                 backgroundColor: [
                     "red"
                 ],
