@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\Bonus;
 use App\Models\Seniority;
 use App\Models\SeverancePay;
+use App\Models\ChildrenInfor;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\NationalSocialSecurityFund;
@@ -65,6 +66,9 @@ class Payroll extends Model
     }
     public function NSSF(){
         return $this->belongsTo(NationalSocialSecurityFund::class ,'employee_id');
+    }
+    public function chiledren(){
+        return $this->belongsTo(ChildrenInfor::class ,'employee_id');
     }
     public function seniority(){
         return $this->belongsTo(Seniority::class ,'employee_id');

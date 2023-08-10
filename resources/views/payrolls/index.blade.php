@@ -147,6 +147,18 @@
                                                 </th>
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                     rowspan="1" colspan="1"
+                                                    aria-label="Join Date: activate to sort column ascending">Spouse
+                                                </th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                    rowspan="1" colspan="1"
+                                                    aria-label="Join Date: activate to sort column ascending">Salary Charges Reduced
+                                                </th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                    rowspan="1" colspan="1"
+                                                    aria-label="Join Date: activate to sort column ascending">Total Tax Base(Riel)
+                                                </th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                    rowspan="1" colspan="1"
                                                     aria-label="Join Date: activate to sort column ascending">Tax Rate
                                                 </th>
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
@@ -198,18 +210,21 @@
                                                         <td><a href="#">{{ $item->users == null ? '' : $item->users->EmployeeDepartment }}</a></td>
                                                         <td><a href="#">{{ $item->users == null ? '' : $item->users->EmployeeBranch }}</a></td>
                                                         <td>{{ $item->users == null ? '' : $item->users->joinOfDate }}</td>
-                                                        <td>$ <a href="#">{{ $item->basic_salary }}</a></td>
-                                                        <td>$ <a href="#">{{ $item->total_child_allowance }}</a></td>
-                                                        <td>$ <a href="#">{{ $item->phone_allowance == null ? '0.00' : $item->phone_allowance}}</a></td>
-                                                        <td>$ <a href="#">{{ $item->total_kny_phcumben}}</a></td>
-                                                        <td>$ <a href="#">{{ $item->seniority_payable_tax}}</a></td>
-                                                        <td>$ <a href="#">{{ $item->total_pension_fund}}</a></td>
-                                                        <td>$ <a href="#">{{ $item->base_salary_received_usd}}</a></td>
-                                                        <td><span>៛</span> <a href="#">{{ $item->total_tax_base_riel}}</a></td>
+                                                        <td>$<a href="#">{{ $item->basic_salary }}</a></td>
+                                                        <td>$<a href="#">{{ $item->total_child_allowance }}</a></td>
+                                                        <td>$<a href="#">{{ $item->phone_allowance == null ? '0.00' : $item->phone_allowance}}</a></td>
+                                                        <td>$<a href="#">{{ $item->total_kny_phcumben}}</a></td>
+                                                        <td>$<a href="#">{{ $item->seniority_payable_tax}}</a></td>
+                                                        <td>$<a href="#">{{ $item->total_pension_fund}}</a></td>
+                                                        <td>$<a href="#">{{ $item->base_salary_received_usd}}</a></td>
+                                                        <td><span>៛</span><a href="#">{{ $item->base_salary_received_riel}}</a></td>
+                                                        <td>{{ $item->spouse}}</td>
+                                                        <td><span>៛</span><a href="#">{{ number_format($item->total_charges_reduced)}}</a></td>
+                                                        <td><span>៛</span><a href="#">{{ $item->total_tax_base_riel}}</a></td>
                                                         <td><a href="#">{{ $item->total_rate}}%</a></td>
-                                                        <td>$ <a href="#">{{ $item->tax_free_seniority_allowance}}</a></td>
-                                                        <td>$ <a href="#">{{ $item->total_severance_pay}}</a></td>
-                                                        <td>$ <a href="#">{{ $item->total_salary }}</a></td>
+                                                        <td>$<a href="#">{{ $item->tax_free_seniority_allowance}}</a></td>
+                                                        <td>$<a href="#">{{ $item->total_severance_pay}}</a></td>
+                                                        <td>$<a href="#">{{ $item->total_salary }}</a></td>
                                                         <td>{{ $item->PayrollPaymentDate }}</td>
                                                         <td>{{ $item->Created }}</td>
                                                         <td><a class="btn btn-sm btn-primary" href="{{ url('payslip', $item->employee_id) }}">Generate Slip</a></td>
@@ -354,30 +369,33 @@
                                 '</h2>'+
                             '</td>'+
                             '<td><a href="#">'+(row.users == null ? '' : row.users.number_employee )+'</a></td>'+
-                            '<td> <a href="#">'+(row.users == null ? '' : row.users.employee_name_en )+'</span></a></td>'+
+                            '<td><a href="#">'+(row.users == null ? '' : row.users.employee_name_en )+'</span></a></td>'+
                             '<td><a href="#">'+(row.users == null ? '' : row.users.position.name_english )+'</a></td>'+
                             '<td><a href="#">'+(row.users == null ? '' : row.users.department.name_english )+'</a></td>'+
                             '<td><a href="#">'+(row.users == null ? '' : row.users.branch.branch_name_en )+'</a></td>'+
                             '<td>'+(join_date)+'</td>'+
-                            '<td>$ <a href="#">'+(row.basic_salary )+'</a></td>'+
-                            '<td>$ <a href="#">'+(row.total_child_allowance )+'</a></td>'+
-                            '<td>$ <a href="#">'+(row.phone_allowance == null ? '0.00' : row.phone_allowance)+'</a></td>'+
-                            '<td>$ <a href="#">'+(row.total_kny_phcumben)+'</a></td>'+
-                            '<td>$ <a href="#">'+(row.seniority_payable_tax)+'</a></td>'+
-                            '<td>$ <a href="#">'+(row.total_pension_fund)+'</a></td>'+
-                            '<td>$ <a href="#">'+(row.base_salary_received_usd)+'</a></td>'+
+                            '<td>$<a href="#">'+(row.basic_salary )+'</a></td>'+
+                            '<td>$<a href="#">'+(row.total_child_allowance )+'</a></td>'+
+                            '<td>$<a href="#">'+(row.phone_allowance == null ? '0.00' : row.phone_allowance)+'</a></td>'+
+                            '<td>$<a href="#">'+(row.total_kny_phcumben)+'</a></td>'+
+                            '<td>$<a href="#">'+(row.seniority_payable_tax)+'</a></td>'+
+                            '<td>$<a href="#">'+(row.total_pension_fund)+'</a></td>'+
+                            '<td>$<a href="#">'+(row.base_salary_received_usd)+'</a></td>'+
+                            '<td>$<a href="#">'+(row.spouse)+'</a></td>'+
+                            '<td>$<a href="#">'+(row.total_charges_reduced)+'</a></td>'+
+                            '<td>$<a href="#">'+(row.base_salary_received_riel)+'</a></td>'+
                             '<td><span>៛</span> <a href="#">'+(row.total_tax_base_riel)+'</a></td>'+
                             '<td><a href="#">'+(row.total_rate)+'%</a></td>'+
-                            '<td>$ <a href="#">'+(row.tax_free_seniority_allowance)+'</a></td>'+
-                            '<td>$ <a href="#">'+(row.total_severance_pay)+'</a></td>'+
-                            '<td>$ <a href="#">'+(row.total_salary )+'</a></td>'+
+                            '<td>$<a href="#">'+(row.tax_free_seniority_allowance)+'</a></td>'+
+                            '<td>$<a href="#">'+(row.total_severance_pay)+'</a></td>'+
+                            '<td>$<a href="#">'+(row.total_salary )+'</a></td>'+
                             '<td>'+(payment_date)+'</td>'+
                             '<td>'+(created_at)+'</td>'+
                             '<td><a class="btn btn-sm btn-primary" href="{{url("payslip")}}/'+(row.employee_id)+'">Generate Slip</a></td>'+
                         '</tr>';
                     });
                 }else{
-                    var tr = '<tr><td colspan=22 align="center">ពុំមានទិន្នន័យសម្រាប់បង្ហាញ</td></tr>';
+                    var tr = '<tr><td colspan=30 align="center">ពុំមានទិន្នន័យសម្រាប់បង្ហាញ</td></tr>';
                 }
                 $(".tbl_payment_salary tbody").html(tr);
             }
