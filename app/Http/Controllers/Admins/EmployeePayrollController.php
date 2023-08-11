@@ -108,29 +108,13 @@ class EmployeePayrollController extends Controller
      */
     public function store(Request $request)
     {
-        try{
+        
+        // try{
             $employee = User::where('date_of_commencement','<=',$request->payment_date)->whereIn('emp_status',['Probation','1','10','2'])->get();
             if (!$employee->isEmpty()) {
                 foreach ($employee as $item) {
-                    // $hildayMonth = Carbon::createFromDate('2022-09-25')->format('Y-m');
-                    // $hildayDays = Carbon::createFromDate('2022-09-25')->format('d');
-                    // $payMonth = Carbon::createFromDate($request->payment_date)->format('Y-m');
-                    // $payDays = Carbon::createFromDate($request->payment_date)->format('d');
-                    // if ($hildayMonth == $payMonth && $hildayDays >= $payDays) {
-                    //     $dataBonus = Bonus::create([
-                    //         'employee_id'               => $item->id,
-                    //         'number_of_working_days'    => 90,
-                    //         'base_salary'               => 300,
-                    //         'base_salary_received'      => 100,
-                    //         'total_allowance'           => 50,
-                    //         'bouns_type'                => 'pch',
-                    //         'created_by'                => Auth::user()->id,
-                    //     ]);
-                    // }else{
-                    //     dd('false');
-                    // }
-                    // return;
                     //function first month join work
+                    $totalSeverancPay = 0;
                     if (count(Payroll::where('employee_id',$item->id)->get()) == 0) {
                         //total day in months
                         $currentYear = Carbon::createFromDate($item->date_of_commencement)->format('Y-m');
@@ -140,11 +124,9 @@ class EmployeePayrollController extends Controller
                         $endMonth = Carbon::createFromDate($item->date_of_commencement)->format('m');
                         $totalDayInMonth = Carbon::now()->month($endMonth)->daysInMonth;
                         $end = new DateTime($currentYear.'-'.$totalDayInMonth);
-    
-                        $end = $end->modify('+1 day');
+                        $end = $end->modify('+1');
                         $interval = new DateInterval('P1D');
                         $daterange = new DatePeriod($begin, $interval, $end);
-    
                         $holidays = [];
                         foreach ($daterange ?? [] as $date) {
                             $sunday = date('w', strtotime($date->format("Y-m-d")));
@@ -154,33 +136,41 @@ class EmployeePayrollController extends Controller
                                 echo '';
                             }
                         }
+                        // dd($holidays);
                         $startDate = Carbon::parse($item->date_of_commencement);
                         $endDate = Carbon::parse($currentYear.'-'.$totalDayInMonth);
                         $toDays = $startDate->diffInDaysFiltered(function (Carbon $date) use ($holidays) {
                             return $date->isWeekday() && !in_array($date, $holidays);
-                        }, $endDate);
-                        if(count($holidays) == 4){
-                            $totalDays = $toDays + 1;
-                        }else if(count($holidays) == 3){
-                            $totalDays = $toDays + 1;
-                        }else{
-                            $totalDays = $toDays + 1;
-                        }
-                        if ($totalDays >= 22) {
+                        }, $endDate) + 1;
+                        
+                        if ($toDays >= 22) {
                             $totalBasicSalary = $item->basic_salary;
                         }else{
-                            $totalBasicSalary = ($item->basic_salary / 22) * $totalDays;
+                            $totalBasicSalary = ($item->basic_salary / 22) * $toDays;
                         }
                     } else {
                         $monthToPay = Carbon::createFromDate($item->fdc_date)->format('Y-m');
                         $currentMonthToPay = Carbon::createFromDate($request->payment_date)->format('Y-m');
                         if($monthToPay == $currentMonthToPay){
                             $totalBasicSalary = $item->total_current_salary == null ? $item->basic_salary : $item->total_current_salary;
+
+                            //function get severance pay
+                            $endMonth = Carbon::createFromDate($request->fdc_date)->format('m');
+                            $totalDayInMonth = Carbon::now()->month($endMonth)->daysInMonth;
+                            //find start date employee join date
+                            $date_of_month = Carbon::createFromDate($request->fdc_date)->format('Y-m');
+                            $currentYear = $date_of_month.'-'.$totalDayInMonth;
+                            //find total working day in month
+                            $startDate = Carbon::parse($request->fdc_date);
+                            $endDate = Carbon::parse($currentYear);
+                            // new salary and new total days
+                            $totalNewDays = $startDate->diffInDays($endDate);
+                            $totalSeverancPay = ($item->basic_salary / $totalDayInMonth) * $totalNewDays;
                         }else{
                             $totalBasicSalary = $item->basic_salary;
                         }
                     }
-                    // dd($totalBasicSalary);
+                    // dd($totalSeverancPay);
                     //National Social Security Fund (NSSF) Formula
                     $totalExchangeRielPreTax =  $request->exchange_rate * $totalBasicSalary;
                     
@@ -287,7 +277,7 @@ class EmployeePayrollController extends Controller
     
                     //calcute severance pay last end 12
                     $totalGrossOne = 0;
-                    $totalGrossTwo = 0;
+                    $totalSeverancPay = 0;
                     if ($item->emp_status == 1 || $item->emp_status == 10) {
                         $dataGrossSalaryPay = GrossSalaryPay::where('employee_id',$item->id)->whereDate('payment_date','>',$item->fdc_date)->whereDate('payment_date','<',$item->fdc_end)->get();
                         if (count($dataGrossSalaryPay) == 12 || count($dataGrossSalaryPay) == 24) {
@@ -305,17 +295,19 @@ class EmployeePayrollController extends Controller
                             
                             //old salary and total old days
                             $totalOldDay = $totalDayInMonth - $totalNewDays;
-                            $totalGrossTwo = ($item->basic_salary / $totalDayInMonth) * $totalOldDay;
-                            $totalBasicSalary = $totalGrossOne + $totalGrossTwo;
+                            $totalSeverancPay = ($item->basic_salary / $totalDayInMonth) * $totalOldDay;
+                            $totalBasicSalary = $totalGrossOne + $totalSeverancPay;
                         }
                     }
                     
                     //sum salary and sum other benefit befor tax free
                     $totalGrossSalaryTaxFree = $totalBasicSalary + $totalBunus + $item->phone_allowance + $totalAmountChild;
+                    $totalGrossSeverancePay = $totalSeverancPay == null ? $totalGrossSalaryTaxFree : $totalSeverancPay + $totalBunus + $item->phone_allowance + $totalAmountChild;
                     $dataGrossSalary = GrossSalaryPay::create([
                         'employee_id'               => $item->id,
                         'basic_salary'              => $item->basic_salary,
                         'total_gross_salary'        => $totalGrossSalaryTaxFree,
+                        'total_salary_severance'    => $totalGrossSeverancePay,
                         'payment_date'              => $request->payment_date,
                         'created_by'                => Auth::user()->id
                     ]);
@@ -353,7 +345,7 @@ class EmployeePayrollController extends Controller
                                 $query->where('payment_date', '>=',$fdc_end);
                             })->when($currentMonth, function($query, $currentMonth){
                                 $query->where('payment_date', '>=',$currentMonth);
-                            })->pluck('total_gross_salary')->avg();
+                            })->pluck('total_salary_severance')->avg();
                             $totalSalaryReceive = ($totalSalary / 22) * 7.5;
                             $totalGrossExchange = 2000000 / $request->exchange_rate;
                             if ($totalSalaryReceive > $totalGrossExchange) {
@@ -642,7 +634,7 @@ class EmployeePayrollController extends Controller
                         // $severancePay = GrossSalaryPay::where('employee_id',$item->id)->get();
                         $severancePay = GrossSalaryPay::where('employee_id',$item->id)->whereDate('payment_date','>',$item->fdc_date)->whereDate('payment_date','<',$item->fdc_end)->get();
                         if (count($severancePay) == 12 || count($severancePay) == 24) {
-                            $dataSeveranc = GrossSalaryPay::where('employee_id', $item->id)->where('payment_date', '>=',$item->fdc_date)->sum('total_gross_salary');
+                            $dataSeveranc = GrossSalaryPay::where('employee_id', $item->id)->where('payment_date', '>=',$item->fdc_date)->sum('total_salary_severance');
                             $totalContractSeverancePay = $dataSeveranc * 0.05;
                             $dataSeverance = SeverancePay::create([
                                 'employee_id'                   => $item->id,
@@ -689,11 +681,11 @@ class EmployeePayrollController extends Controller
                 Toastr::error('Prayroll created fail','Error');
                 return redirect()->back();
             }
-        }catch(\Exception $e){
-            DB::rollback();
-            Toastr::error('Prayroll created fail','Error');
-            return redirect()->back();
-        }
+        // }catch(\Exception $e){
+        //     DB::rollback();
+        //     Toastr::error('Prayroll created fail','Error');
+        //     return redirect()->back();
+        // }
     }
 
     /**
