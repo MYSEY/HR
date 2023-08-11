@@ -23,8 +23,10 @@
                             </div>
                         </div>
                         <div class="col-sm-6">
-                            <label class="">Gasoline price per liter (kh)<span class="text-danger">*</span></label>
-                            <input class="form-control @error('gasoline_price_per_liter') is-invalid @enderror" type="number" step="0.00" value="" id="e_gasoline_price_per_liter" required name="gasoline_price_per_liter">
+                            <div class="form-group">
+                                <label class="">Number Plate <span class="text-danger">*</span></label>
+                                <input class="form-control @error('number_plate') is-invalid @enderror" type="text" id="e_number_plate" required name="number_plate" value="{{old('number_plate')}}">
+                            </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="">
@@ -68,12 +70,7 @@
                                 <input class="form-control @error('shelt_life') is-invalid @enderror" type="Number" id="e_shelt_life" required name="shelt_life" value="{{old('shelt_life')}}">
                             </div>
                         </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label class="">Number Plate <span class="text-danger">*</span></label>
-                                <input class="form-control @error('number_plate') is-invalid @enderror" type="text" id="e_number_plate" required name="number_plate" value="{{old('number_plate')}}">
-                            </div>
-                        </div>
+                       
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="">Total Gasoline <span class="text-danger">*</span></label>
@@ -98,13 +95,6 @@
                                 <input class="form-control @error('price_motor_rentel') is-invalid @enderror" type="number" id="e_price_motor_rentel" required name="price_motor_rentel" value="{{old('price_motor_rentel')}}">
                             </div>
                         </div>
-
-                        {{-- <div class="col-sm-6">
-                            <div class="form-group">
-                                <label class="">Tax rate (%)<span class="text-danger">*</span></label>
-                                <input class="form-control @error('tax_rate') is-invalid @enderror" type="number" id="e_tax_rate" required name="tax_rate" value="{{old('tax_rate')}}">
-                            </div>
-                        </div> --}}
                     </div>
 
                     <div class="form-group col-md-12 col-12" element="div" bp-field-wrapper="true" bp-field-name="Identity" bp-field-type="custom_html">
@@ -129,12 +119,12 @@
                             </div>
                         </div>
 
-                        <div class="col-sm-6">
+                        {{-- <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="">Tax rate (%)<span class="text-danger">*</span></label>
                                 <input class="form-control @error('tax_rate') is-invalid @enderror" type="number" id="e_tax_rate" required name="tax_rate" value="{{old('tax_rate')}}">
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
                     <input type="hidden" name="id" id="e_id">
                     <div class="submit-section">

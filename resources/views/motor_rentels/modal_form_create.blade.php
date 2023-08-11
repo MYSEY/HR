@@ -26,10 +26,9 @@
                             </div>
                         </div>
                         <div class="col-sm-6">
-                            <label class="">Gasoline price per liter<span class="text-danger">*</span></label>
-                            <div class="input-group">
-                                <span class="input-group-text">៛</span>
-                                <input class="form-control @error('gasoline_price_per_liter') is-invalid @enderror" type="number" step="0.00" value="" id="gasoline_price_per_liter" required name="gasoline_price_per_liter">
+                            <div class="form-group">
+                                <label class="">Number Plate <span class="text-danger">*</span></label>
+                                <input class="form-control @error('number_plate') is-invalid @enderror" type="text" id="number_plate" required name="number_plate" value="{{old('number_plate')}}">
                             </div>
                         </div>
                         <div class="col-sm-6">
@@ -74,12 +73,7 @@
                                 <input class="form-control @error('shelt_life') is-invalid @enderror" type="Number" id="shelt_life" required name="shelt_life" value="{{old('shelt_life')}}">
                             </div>
                         </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label class="">Number Plate <span class="text-danger">*</span></label>
-                                <input class="form-control @error('number_plate') is-invalid @enderror" type="text" id="number_plate" required name="number_plate" value="{{old('number_plate')}}">
-                            </div>
-                        </div>
+                       
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="">Total Gasoline <span class="text-danger">*</span></label>
@@ -130,13 +124,6 @@
                                     <span class="input-group-text">$</span>
                                     <input class="form-control" type="number" name="price_taplab_rentel" id="price_taplab_rentel" value="{{old('price_taplab_rentel')}}">
                                 </div>
-                            </div>
-                        </div>
-
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label class="">Tax rate (%)<span class="text-danger">*</span></label>
-                                <input class="form-control @error('tax_rate') is-invalid @enderror" type="number" id="tax_rate" required name="tax_rate" value="{{old('tax_rate')}}">
                             </div>
                         </div>
                     </div>

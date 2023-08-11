@@ -26,7 +26,7 @@
     }
 </style>
 @section('content')
-<div class="content container-fluid">
+<div class="">
     <div class="page-header">
         <div class="row align-items-center">
             <div class="col">
@@ -39,7 +39,7 @@
         </div>
     </div>
     
-    <div class="content">
+    <div class="">
         @if (Auth::user()->RolePermission == 'Administrator')
             <form>
                 {{-- @csrf --}}
@@ -76,7 +76,7 @@
                                 <span id="btn-text-loading-excel" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading</span>
                             </button>
                             <button type="button" class="btn btn-sm btn-warning reset-btn">
-                                <span class="btn-text-reset">Reset</span>
+                                <span class="btn-text-reset">Reload</span>
                                 <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading</span>
                             </button>
                             

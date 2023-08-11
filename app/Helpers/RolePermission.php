@@ -69,9 +69,24 @@ function menu(){
                     'table'=>2,
                     'permission'=>1
                 ],
+            ]
+        ],
+        [
+            'name'=>'',
+            'icon'=>'<i class="la la-motorcycle"></i> <span></span> <span class="menu-arrow"></span>',
+            'value'=>'Motor Rental',
+            'table'=>2,
+            'permission'=>1,
+            'child'=>[
                 [
-                    'value'=>'Motor Rental',
+                    'value'=>'Motor Rental List',
                     'url'=>"motor-rentel/list",
+                    'table'=>2,
+                    'permission'=>1
+                ],
+                [
+                    'value'=>'Pay Motor Rental',
+                    'url'=>"motor-rentel/pay",
                     'table'=>2,
                     'permission'=>1
                 ],

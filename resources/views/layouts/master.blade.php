@@ -229,7 +229,7 @@
     <script src="{{asset('/admin/js/moment.min.js.download')}}"></script>
     <script src="{{asset('/admin/js/jquery-ui.min.js.download')}}"></script>
 
-    <script src="{{asset('/admin/js/select2.min.js.download')}}"></script>
+    <script src="{{asset('/admin/js/select2.min.js')}}"></script>
 
     <script src="{{asset('/admin/js/jquery.dataTables.min.js.download')}}"></script>
     <script src="{{asset('/admin/js/dataTables.bootstrap4.min.js.download')}}"></script>

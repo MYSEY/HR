@@ -79,7 +79,7 @@
                         <span class="btn-text-search">{{ __('Search') }}</span>
                     </button>
                     <button type="button" class="btn btn-sm btn-warning reset-btn">
-                        <span class="btn-text-reset">Reset</span>
+                        <span class="btn-text-reset">Reload</span>
                         <span id="btn-reset-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading</span>
                     </button>
                 </div>

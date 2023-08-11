@@ -54,7 +54,14 @@ class DashboadController extends Controller
             $query->where('resign_date', '>=', $year);
         })->orderBy('id', 'desc')->get();
 
-        $recruitmentPlans = RecruitmentPlan::with('branch')->whereMonth("plan_date", 12)->whereYear("plan_date",$yearLy)->get();
+        $recruitmentPlans = RecruitmentPlan::with("branch")->whereMonth("plan_date", 12)->whereYear("plan_date",$yearLy)
+            ->join('positions', 'recruitment_plans.position_id', '=', 'positions.id')
+            ->select(
+                'recruitment_plans.*',
+                'positions.type',
+            )
+            ->where("positions.type", "Credit_Officer")
+            ->get();
         $achieveBranchs = User::with('branch')->whereIn('emp_status',['1','2','10','Probation'])
         ->when($year, function ($query, $year) {
             $query->where('date_of_commencement', '>=', $year);
@@ -67,7 +74,6 @@ class DashboadController extends Controller
         $candidateResumes = CandidateResume::whereNot("status","5")->get()->count();
         // $dataTrainings = Training::whereMonth("created_at", $Monthly)->whereYear("created_at", $yearLy)->get();
         $dataTrainings = Training::get();
-        // dd($dataTrainings);
         $dataEmployeeTrainings = [];
         foreach ($dataTrainings as $key => $item) {
             $dataEmployeeTrainings[] = User::whereIn('id', $item->employee_id)->select("employee_name_kh", "employee_name_en", "branch_id", "profile")->with('branch')->get();

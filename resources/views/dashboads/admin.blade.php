@@ -267,7 +267,7 @@
     }
 </style>
 @section('content')
-    <div class="content container-fluid">
+    <div class="">
 
         <div class="page-header">
             <div class="row">
@@ -1397,6 +1397,15 @@
             }, ]
         };
         if (datas.branches.length > 0) {
+            
+            // const groupedTraining = datas.employeeTrainings.reduce((train, training) => {
+            // const group = train[training.training_type] || [];
+            //     group.push(training);
+            //     train[training.training_type] = group;
+            //     return train;
+            // }, {});
+            // console.log("groupedTraining: ", groupedTraining);
+
             datas.branches.map((br) => {
                 let totalValue = 0;
                 if (datas.employeeTrainings.length > 0) {
@@ -1414,7 +1423,7 @@
         dataStaffTraining.datasets[0].data.push(datas.employeeTrainings.length);
         let type = "bar";
         let data = dataStaffTraining;
-        let text = 'Staff Training by Branch';
+        let text = 'Staff Training by Branch External';
         let option = {
             plugins: {
                 legend: {
@@ -1453,7 +1462,8 @@
             options: option,
             plugins: [ChartDataLabels]
         }
-        new Chart('staff_Training_by_branch', dataChart);
+        new Chart('staff_Training_by_branch_external', dataChart);
+        new Chart('staff_Training_by_branch_internal', dataChart);
     }
 
     function monthDiff(dateFrom, dateTo) {

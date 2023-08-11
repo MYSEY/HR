@@ -144,15 +144,15 @@ class PositionSeeder extends Seeder
         Position::firstOrCreate(['name_khmer' => 'នាយក​ សាខា','name_english' => 'Branch Manager']);
         Position::firstOrCreate(['name_khmer' => 'នាយករង ការិយាល័យប្រតិបត្តិការ','name_english' => 'Deputy Operation Manager']);
         Position::firstOrCreate(['name_khmer' => 'នាយក​រង សាខា','name_english' => 'Deputy Branch Manager']);
-        Position::firstOrCreate(['name_khmer' => 'ប្រធានភ្នាក់ងារឥណទាន','name_english' => 'Chief Credit Officer']);
+        Position::firstOrCreate(['name_khmer' => 'ប្រធានភ្នាក់ងារឥណទាន','name_english' => 'Chief Credit Officer','type'=>'Credit_Officer']);
         Position::firstOrCreate(['name_khmer' => 'ប្រធានគណនេយ្យករប្រតិបត្តិការ','name_english' => 'Chief Operation Accountant']);
         Position::firstOrCreate(['name_khmer' => 'ប្រធានគណនេយ្យករសាខា','name_english' => 'Chief Branch Accountant']);
         Position::firstOrCreate(['name_khmer' => 'ប្រធានបេឡាករ','name_english' => 'Chief Teller']);
         Position::firstOrCreate(['name_khmer' => 'ប្រធានក្រុមបេឡករ','name_english' => 'Teller Team Leader']);
-        Position::firstOrCreate(['name_khmer' => 'ភ្នាក់ងារឥណទានជាន់ខ្ពស់','name_english' => 'Senior Credit Officer']);
+        Position::firstOrCreate(['name_khmer' => 'ភ្នាក់ងារឥណទានជាន់ខ្ពស់','name_english' => 'Senior Credit Officer','type'=>'Credit_Officer']);
         Position::firstOrCreate(['name_khmer' => 'គណនេយ្យករប្រតិបត្តិការជាន់ខ្ពស់','name_english' => 'Senior Operation Accountant']);
         Position::firstOrCreate(['name_khmer' => 'គណនេយ្យករសាខាជាន់ខ្ពស់','name_english' => 'Senior Branch Accountant']);
-        Position::firstOrCreate(['name_khmer' => 'ភ្នាក់ងារឥណទាន','name_english' => 'Credit Officer']);
+        Position::firstOrCreate(['name_khmer' => 'ភ្នាក់ងារឥណទាន','name_english' => 'Credit Officer','type'=>'Credit_Officer']);
         Position::firstOrCreate(['name_khmer' => 'បុគ្គលិករដ្ឋបាលឥណទាន','name_english' => 'Credit Admin Officer']);
         Position::firstOrCreate(['name_khmer' => 'គណនេយ្យករប្រតិបត្តិការ','name_english' => 'Operation Accountant']);
         Position::firstOrCreate(['name_khmer' => 'គណនេយ្យករសាខា','name_english' => 'Branch Accountant']);
