@@ -76,137 +76,138 @@
                 </div>
             </form>
         @endif
-    
-        <div class="row">
-            <div class="col-md-12">
-                <div class="table-responsive">
-                    <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
-                        <div class="row">
-                            <div class="col-sm-12 col-md-12">
-                                <table class="table table-striped custom-table mb-0 datatable dataTable no-footer tbl_employee" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
-                                    <thead>
-                                        <tr>
-                                            <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
-                                                rowspan="1" colspan="1" aria-sort="ascending"
-                                                aria-label="Profile: activate to sort column descending"
-                                                style="width: 178px;">Profile</th>
-                                            <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
-                                                rowspan="1" colspan="1" aria-sort="ascending"
-                                                aria-label="Employee ID: activate to sort column descending"
-                                                style="width: 178px;">Employee ID</th>
-                                            <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
-                                                rowspan="1" colspan="1" aria-sort="ascending"
-                                                aria-label="Employee Name: activate to sort column descending"
-                                                style="width: 178px;">Name</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1"
-                                                colspan="1" aria-label="Employee Type: activate to sort column ascending"
-                                                style="width: 108.188px;">Role</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1"
-                                                colspan="1" aria-label="Department: activate to sort column ascending"
-                                                style="width: 125.15px;">Department</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1"
-                                                colspan="1" aria-label="Department: activate to sort column ascending"
-                                                style="width: 125.15px;">Position</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1"
-                                                colspan="1" aria-label="Department: activate to sort column ascending"
-                                                style="width: 125.15px;">Branch</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1"
-                                                colspan="1" aria-label="DOB: activate to sort column ascending"
-                                                style="width: 81.0625px;">Join Date</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                rowspan="1" colspan="1"
-                                                aria-label="DOB: activate to sort column ascending" style="width: 81.0625px;">
-                                                DOB</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                rowspan="1" colspan="1"
-                                                aria-label="Martial Status: activate to sort column ascending"
-                                                style="width: 100.25px;">Martial Status</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                rowspan="1" colspan="1"
-                                                aria-label="Gender: activate to sort column ascending"
-                                                style="width: 52.95px;">Gender</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                rowspan="1" colspan="1"
-                                                aria-label="Salary: activate to sort column ascending"
-                                                style="width: 51.475px;">Basic Salary</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                rowspan="1" colspan="1"
-                                                aria-label="Status: activate to sort column ascending"
-                                                style="width: 51.475px;">Status</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @if (count($users) > 0)
-                                            @foreach ($users as $item)
-                                                <tr class="odd">
-                                                    <td>
-                                                        <h2>
-                                                            @if ($item->profile != null)
-                                                                <a href="#" class="avatar">
-                                                                    <img src="{{ asset('/uploads/images/' . $item->profile) }}" alt="">
-                                                                </a>
-                                                            @else
-                                                                <a href="{{ asset('admin/img/defuals/default-user-icon.png') }}">
-                                                                    <img alt="" src="{{ asset('admin/img/defuals/default-user-icon.png') }}">
-                                                                </a>
+        <div class="content">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="table-responsive">
+                        <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+                            <div class="row">
+                                <div class="col-sm-12 col-md-12">
+                                    <table class="table table-striped custom-table mb-0 datatable dataTable no-footer tbl_employee" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
+                                        <thead>
+                                            <tr>
+                                                <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
+                                                    rowspan="1" colspan="1" aria-sort="ascending"
+                                                    aria-label="Profile: activate to sort column descending"
+                                                    style="width: 178px;">Profile</th>
+                                                <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
+                                                    rowspan="1" colspan="1" aria-sort="ascending"
+                                                    aria-label="Employee ID: activate to sort column descending"
+                                                    style="width: 178px;">Employee ID</th>
+                                                <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
+                                                    rowspan="1" colspan="1" aria-sort="ascending"
+                                                    aria-label="Employee Name: activate to sort column descending"
+                                                    style="width: 178px;">Name</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1"
+                                                    colspan="1" aria-label="Employee Type: activate to sort column ascending"
+                                                    style="width: 108.188px;">Role</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1"
+                                                    colspan="1" aria-label="Department: activate to sort column ascending"
+                                                    style="width: 125.15px;">Department</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1"
+                                                    colspan="1" aria-label="Department: activate to sort column ascending"
+                                                    style="width: 125.15px;">Position</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1"
+                                                    colspan="1" aria-label="Department: activate to sort column ascending"
+                                                    style="width: 125.15px;">Branch</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1"
+                                                    colspan="1" aria-label="DOB: activate to sort column ascending"
+                                                    style="width: 81.0625px;">Join Date</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                    rowspan="1" colspan="1"
+                                                    aria-label="DOB: activate to sort column ascending" style="width: 81.0625px;">
+                                                    DOB</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                    rowspan="1" colspan="1"
+                                                    aria-label="Martial Status: activate to sort column ascending"
+                                                    style="width: 100.25px;">Martial Status</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                    rowspan="1" colspan="1"
+                                                    aria-label="Gender: activate to sort column ascending"
+                                                    style="width: 52.95px;">Gender</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                    rowspan="1" colspan="1"
+                                                    aria-label="Salary: activate to sort column ascending"
+                                                    style="width: 51.475px;">Basic Salary</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                    rowspan="1" colspan="1"
+                                                    aria-label="Status: activate to sort column ascending"
+                                                    style="width: 51.475px;">Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @if (count($users) > 0)
+                                                @foreach ($users as $item)
+                                                    <tr class="odd">
+                                                        <td>
+                                                            <h2>
+                                                                @if ($item->profile != null)
+                                                                    <a href="#" class="avatar">
+                                                                        <img src="{{ asset('/uploads/images/' . $item->profile) }}" alt="">
+                                                                    </a>
+                                                                @else
+                                                                    <a href="{{ asset('admin/img/defuals/default-user-icon.png') }}">
+                                                                        <img alt="" src="{{ asset('admin/img/defuals/default-user-icon.png') }}">
+                                                                    </a>
+                                                                @endif
+                                                            </h2>
+                                                        </td>
+                                                        <td><a href="{{ route('employee.profile', $item->id) }}">{{$item->number_employee}}</td>
+                                                        <td>
+                                                            <a href="{{ route('employee.profile', $item->id) }}">{{ $item->employee_name_en }}</a>
+                                                        </td>
+                                                        <td>
+                                                            <a href="{{ route('employee.profile', $item->id) }}">{{ $item->RolePermission }}</a>
+                                                        </td>
+                                                        <td>
+                                                            <a href="{{ route('employee.profile', $item->id) }}">{{ $item->EmployeeDepartment }}</a>
+                                                        </td>
+                                                        <td>
+                                                            <a href="{{ route('employee.profile', $item->id) }}">{{ $item->EmployeePosition }}</a>
+                                                        </td>
+                                                        <td>
+                                                            <a href="{{ route('employee.profile', $item->id) }}">{{ $item->EmployeeBranch }}</a>
+                                                        </td>
+                                                        <td>{{ $item->joinOfDate ?? '' }}</td>
+                                                        <td>{{ $item->DOB ?? '' }}</td>
+                                                        <td>{{ $item->marital_status }}</td>
+                                                        <td>{{ $item->EmployeeGender }}</td>
+                                                        <td>$ <a href="#">{{ $item->basic_salary }}</a></td>
+                                                        <td>
+                                                            @if ($item->emp_status== "Upcoming")
+                                                                <span style="font-size: 13px" class="badge bg-inverse-success">Upcoming</span>
+                                                            @elseif ($item->emp_status == "Probation")
+                                                                <span style="font-size: 13px" class="badge bg-inverse-success">Probation</span>
+                                                            @elseif ($item->emp_status == "1")
+                                                                <span style="font-size: 13px" class="badge bg-inverse-success">FDC-1</span>
+                                                            @elseif ($item->emp_status == "10")
+                                                                <span style="font-size: 13px" class="badge bg-inverse-success">FDC-2</span>
+                                                            @elseif ($item->emp_status == "2")
+                                                                <span style="font-size: 13px" class="badge bg-inverse-success">UDC</span>
+                                                            @elseif ($item->emp_status=='3')
+                                                                <span style="font-size: 13px" class="badge bg-inverse-danger">Resignation</span>
+                                                            @elseif ($item->emp_status=='4')
+                                                                <span style="font-size: 13px" class="badge bg-inverse-danger">Termination</span>
+                                                            @elseif ($item->emp_status=='5')
+                                                                <span style="font-size: 13px" class="badge bg-inverse-danger">Death</span>
+                                                            @elseif ($item->emp_status=='6')
+                                                                <span style="font-size: 13px" class="badge bg-inverse-danger">Retired</span>
+                                                            @elseif ($item->emp_status=='7')
+                                                                <span style="font-size: 13px" class="badge bg-inverse-danger">Lay off</span>
+                                                            @elseif ($item->emp_status=='8')
+                                                                <span style="font-size: 13px" class="badge bg-inverse-danger">Suspension</span>
+                                                            @elseif ($item->emp_status=='9')
+                                                                <span style="font-size: 13px" class="badge bg-inverse-danger">Fall Probation</span>
+                                                            @elseif ($item->emp_status=='Cancel')
+                                                                <span style="font-size: 13px" class="badge bg-inverse-danger">Cancel</span>
                                                             @endif
-                                                        </h2>
-                                                    </td>
-                                                    <td><a href="{{ route('employee.profile', $item->id) }}">{{$item->number_employee}}</td>
-                                                    <td>
-                                                        <a href="{{ route('employee.profile', $item->id) }}">{{ $item->employee_name_en }}</a>
-                                                    </td>
-                                                    <td>
-                                                        <a href="{{ route('employee.profile', $item->id) }}">{{ $item->RolePermission }}</a>
-                                                    </td>
-                                                    <td>
-                                                        <a href="{{ route('employee.profile', $item->id) }}">{{ $item->EmployeeDepartment }}</a>
-                                                    </td>
-                                                    <td>
-                                                        <a href="{{ route('employee.profile', $item->id) }}">{{ $item->EmployeePosition }}</a>
-                                                    </td>
-                                                    <td>
-                                                        <a href="{{ route('employee.profile', $item->id) }}">{{ $item->EmployeeBranch }}</a>
-                                                    </td>
-                                                    <td>{{ $item->joinOfDate ?? '' }}</td>
-                                                    <td>{{ $item->DOB ?? '' }}</td>
-                                                    <td>{{ $item->marital_status }}</td>
-                                                    <td>{{ $item->EmployeeGender }}</td>
-                                                    <td>$ <a href="#">{{ $item->basic_salary }}</a></td>
-                                                    <td>
-                                                        @if ($item->emp_status== "Upcoming")
-                                                            <span style="font-size: 13px" class="badge bg-inverse-success">Upcoming</span>
-                                                        @elseif ($item->emp_status == "Probation")
-                                                            <span style="font-size: 13px" class="badge bg-inverse-success">Probation</span>
-                                                        @elseif ($item->emp_status == "1")
-                                                            <span style="font-size: 13px" class="badge bg-inverse-success">FDC-1</span>
-                                                        @elseif ($item->emp_status == "10")
-                                                            <span style="font-size: 13px" class="badge bg-inverse-success">FDC-2</span>
-                                                        @elseif ($item->emp_status == "2")
-                                                            <span style="font-size: 13px" class="badge bg-inverse-success">UDC</span>
-                                                        @elseif ($item->emp_status=='3')
-                                                            <span style="font-size: 13px" class="badge bg-inverse-danger">Resignation</span>
-                                                        @elseif ($item->emp_status=='4')
-                                                            <span style="font-size: 13px" class="badge bg-inverse-danger">Termination</span>
-                                                        @elseif ($item->emp_status=='5')
-                                                            <span style="font-size: 13px" class="badge bg-inverse-danger">Death</span>
-                                                        @elseif ($item->emp_status=='6')
-                                                            <span style="font-size: 13px" class="badge bg-inverse-danger">Retired</span>
-                                                        @elseif ($item->emp_status=='7')
-                                                            <span style="font-size: 13px" class="badge bg-inverse-danger">Lay off</span>
-                                                        @elseif ($item->emp_status=='8')
-                                                            <span style="font-size: 13px" class="badge bg-inverse-danger">Suspension</span>
-                                                        @elseif ($item->emp_status=='9')
-                                                            <span style="font-size: 13px" class="badge bg-inverse-danger">Fall Probation</span>
-                                                        @elseif ($item->emp_status=='Cancel')
-                                                            <span style="font-size: 13px" class="badge bg-inverse-danger">Cancel</span>
-                                                        @endif
-                                                    </td>
-                                                </tr>
-                                            @endforeach
-                                        @endif
-                                    </tbody>
-                                </table>
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                            @endif
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>

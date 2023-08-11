@@ -44,7 +44,7 @@
                             <input type="text" class="form-control" name="employee_name" id="employee_name" placeholder="Employee name" value="{{old('employee_name')}}">
                         </div>
                     </div>
-                    <div class="col-sm-8 col-md-8">
+                    <div class="col-md-8 col-sm-8">
                         <div style="display: flex" class="float-end">
                             <button type="button" class="btn btn-sm btn-success btn-search me-2">
                                 <span class="search-loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading </span>
@@ -62,10 +62,10 @@
        
         {!! Toastr::message() !!}
        
-        {{-- <div class="content container-fluid">
-            <div class="page-menu"> --}}
+        <div class="content">
+            <div class="page-menu">
                 <div class="row">
-                    <div class="col-md-12">
+                    <div class="col-md-12 col-ms-12">
                         <ul class="nav nav-tabs nav-tabs-bottom" role="tablist">
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link active" data-bs-toggle="tab" id="tab_candidate_resume" href="#tbl_candidate_resume" aria-selected="true" role="tab" data-tab-id="1">Upcoming Staff({{count($data)}})</a>

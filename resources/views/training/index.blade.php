@@ -85,123 +85,124 @@
             </form>
         @endif
         {!! Toastr::message() !!}
-        <div class="row">
-            <div class="col-md-12">
-                <div class="table-responsive">
-                    <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <table class="table table-striped custom-table mb-0 datatable dataTable no-footer btl_training"
-                                    id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
-                                    <thead>
-                                        <tr>
-                                            <th style="width: 30px;" class="sorting" tabindex="0"
-                                                aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
-                                                aria-label="#: activate to sort column ascending">#</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                rowspan="1" colspan="1"
-                                                aria-label="Training Type: activate to sort column ascending"
-                                                style="width: 110.95px;">Training Type</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                rowspan="1" colspan="1"
-                                                aria-label="Course Name: activate to sort column ascending"
-                                                style="width: 141.175px;">Course Name</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                rowspan="1" colspan="1"
-                                                aria-label="Trainer: activate to sort column ascending"
-                                                style="width: 141.175px;">Total trainer</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                rowspan="1" colspan="1"
-                                                aria-label="Employee: activate to sort column ascending"
-                                                style="width: 89.45px;">Total Employee</th>
-                                            <th class="sorting sorting_asc" tabindex="0"
-                                                aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
-                                                aria-label="Time Duration: activate to sort column descending"
-                                                style="width: 170.062px;" aria-sort="ascending">Time Duration</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                rowspan="1" colspan="1"
-                                                aria-label="Course : activate to sort column ascending"
-                                                style="width: 34.575px;">Course Fee </th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                rowspan="1" colspan="1"
-                                                aria-label="Contract : activate to sort column ascending"
-                                                style="width: 97.15px;">Contract </th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                rowspan="1" colspan="1"
-                                                aria-label="Description : activate to sort column ascending"
-                                                style="width: 129.65px;">Remark </th>
-                                            <th class="text-end sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                rowspan="1" colspan="1"
-                                                aria-label="Action: activate to sort column ascending"
-                                                style="width: 48.1875px;">Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @if (count($dataTrainings) > 0)
-                                            @foreach ($dataTrainings as $item)
-                                                <tr class="odd">
-                                                    <td class="sorting_1 ids">{{ $item->id }}</td>
-                                                    <td class="training_type_name">{{ $item->training_type == 1 ? "Internal" : "External" }}</td>
-                                                    <td class="course_name">{{ $item->course_name }}</td>
-                                                    <td>
-                                                        <ul class="team-members">
-                                                            <li class="dropdown avatar-dropdown">
-                                                                <a href="#" class="all-users dropdown-toggle"
-                                                                    data-bs-toggle="dropdown"
-                                                                    aria-expanded="false">{{count($item->trainer_id)}}</a>
-                                                            </li>
-                                                        </ul>
-                                                    </td>
-                                                    <td>
-                                                        <ul class="team-members">
-                                                            <li class="dropdown avatar-dropdown">
-                                                                <a href="#" class="all-users dropdown-toggle"
-                                                                    data-bs-toggle="dropdown"
-                                                                    aria-expanded="false">{{ count($item->employee_id) }}</a>
-                                                            </li>
-                                                        </ul>
-                                                    </td>
-                                                    <td class="sorting_1">
-                                                        {{ \Carbon\Carbon::parse($item->start_date)->format('d-M-Y') ?? '' }}
-                                                        -
-                                                        {{ \Carbon\Carbon::parse($item->end_date)->format('d-M-Y') ?? '' }}
-                                                    </td>
-                                                   
-                                                    <td>${{ $item->cost_price ? $item->cost_price : 0 }}</td>
-                                                    <td>{{ $item->status == 1 ? "Yes" : "No" }} </td>
-                                                    <td>{{ $item->remark }}</td>
-                                                    <td class="text-end">
-                                                        <div class="dropdown dropdown-action">
-                                                            <a href="#" class="action-icon dropdown-toggle"
-                                                                data-bs-toggle="dropdown" aria-expanded="false"><i
-                                                                    class="material-icons">more_vert</i></a>
-                                                            <div class="dropdown-menu dropdown-menu-right">
-                                                                <a class="dropdown-item detail"
-                                                                    href="{{ url('/training/detail', $item->id) }}"><i
-                                                                        class="fa fa-eye m-r-5"></i> View Details</a>
-                                                                <a class="dropdown-item update" data-toggle="modal"
-                                                                    data-id="{{ $item->id }}"
-                                                                    data-target="#edit_training"><i
-                                                                        class="fa fa-pencil m-r-5"></i> Edit</a>
-                                                                <a class="dropdown-item delete" href="#"
-                                                                    data-toggle="modal" data-id="{{ $item->id }}"
-                                                                    data-target="#delete_training"><i
-                                                                        class="fa fa-trash-o m-r-5"></i> Delete</a>
+        <div class="content">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="table-responsive">
+                        <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <table class="table table-striped custom-table mb-0 datatable dataTable no-footer btl_training"
+                                        id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
+                                        <thead>
+                                            <tr>
+                                                <th style="width: 30px;" class="sorting" tabindex="0"
+                                                    aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
+                                                    aria-label="#: activate to sort column ascending">#</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                    rowspan="1" colspan="1"
+                                                    aria-label="Training Type: activate to sort column ascending"
+                                                    style="width: 110.95px;">Training Type</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                    rowspan="1" colspan="1"
+                                                    aria-label="Course Name: activate to sort column ascending"
+                                                    style="width: 141.175px;">Course Name</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                    rowspan="1" colspan="1"
+                                                    aria-label="Trainer: activate to sort column ascending"
+                                                    style="width: 141.175px;">Total trainer</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                    rowspan="1" colspan="1"
+                                                    aria-label="Employee: activate to sort column ascending"
+                                                    style="width: 89.45px;">Total Employee</th>
+                                                <th class="sorting sorting_asc" tabindex="0"
+                                                    aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
+                                                    aria-label="Time Duration: activate to sort column descending"
+                                                    style="width: 170.062px;" aria-sort="ascending">Time Duration</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                    rowspan="1" colspan="1"
+                                                    aria-label="Course : activate to sort column ascending"
+                                                    style="width: 34.575px;">Course Fee </th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                    rowspan="1" colspan="1"
+                                                    aria-label="Contract : activate to sort column ascending"
+                                                    style="width: 97.15px;">Contract </th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                    rowspan="1" colspan="1"
+                                                    aria-label="Description : activate to sort column ascending"
+                                                    style="width: 129.65px;">Remark </th>
+                                                <th class="text-end sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                    rowspan="1" colspan="1"
+                                                    aria-label="Action: activate to sort column ascending"
+                                                    style="width: 48.1875px;">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @if (count($dataTrainings) > 0)
+                                                @foreach ($dataTrainings as $item)
+                                                    <tr class="odd">
+                                                        <td class="sorting_1 ids">{{ $item->id }}</td>
+                                                        <td class="training_type_name">{{ $item->training_type == 1 ? "Internal" : "External" }}</td>
+                                                        <td class="course_name">{{ $item->course_name }}</td>
+                                                        <td>
+                                                            <ul class="team-members">
+                                                                <li class="dropdown avatar-dropdown">
+                                                                    <a href="#" class="all-users dropdown-toggle"
+                                                                        data-bs-toggle="dropdown"
+                                                                        aria-expanded="false">{{count($item->trainer_id)}}</a>
+                                                                </li>
+                                                            </ul>
+                                                        </td>
+                                                        <td>
+                                                            <ul class="team-members">
+                                                                <li class="dropdown avatar-dropdown">
+                                                                    <a href="#" class="all-users dropdown-toggle"
+                                                                        data-bs-toggle="dropdown"
+                                                                        aria-expanded="false">{{ count($item->employee_id) }}</a>
+                                                                </li>
+                                                            </ul>
+                                                        </td>
+                                                        <td class="sorting_1">
+                                                            {{ \Carbon\Carbon::parse($item->start_date)->format('d-M-Y') ?? '' }}
+                                                            -
+                                                            {{ \Carbon\Carbon::parse($item->end_date)->format('d-M-Y') ?? '' }}
+                                                        </td>
+                                                       
+                                                        <td>${{ $item->cost_price ? $item->cost_price : 0 }}</td>
+                                                        <td>{{ $item->status == 1 ? "Yes" : "No" }} </td>
+                                                        <td>{{ $item->remark }}</td>
+                                                        <td class="text-end">
+                                                            <div class="dropdown dropdown-action">
+                                                                <a href="#" class="action-icon dropdown-toggle"
+                                                                    data-bs-toggle="dropdown" aria-expanded="false"><i
+                                                                        class="material-icons">more_vert</i></a>
+                                                                <div class="dropdown-menu dropdown-menu-right">
+                                                                    <a class="dropdown-item detail"
+                                                                        href="{{ url('/training/detail', $item->id) }}"><i
+                                                                            class="fa fa-eye m-r-5"></i> View Details</a>
+                                                                    <a class="dropdown-item update" data-toggle="modal"
+                                                                        data-id="{{ $item->id }}"
+                                                                        data-target="#edit_training"><i
+                                                                            class="fa fa-pencil m-r-5"></i> Edit</a>
+                                                                    <a class="dropdown-item delete" href="#"
+                                                                        data-toggle="modal" data-id="{{ $item->id }}"
+                                                                        data-target="#delete_training"><i
+                                                                            class="fa fa-trash-o m-r-5"></i> Delete</a>
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            @endforeach
-                                        @endif
-                                    </tbody>
-                                </table>
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                            @endif
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
         @include('training.modal_form_create')
         @include('training.modal_form_edit')
 

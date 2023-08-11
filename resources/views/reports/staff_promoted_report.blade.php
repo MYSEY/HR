@@ -85,55 +85,56 @@
             </div>
         </div>
     @endif
-
-    <div class="row">
-        <div class="col-md-12">
-            <div class="table-responsive">
-                <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <table class="table table-striped custom-table mb-0 datatable dataTable no-footer staff-promoted-report"
-                                id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
-                                <thead>
-                                    <tr>
-                                        <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
-                                            rowspan="1" colspan="1" aria-sort="ascending"
-                                            aria-label="Profle: activate to sort column descending"
-                                            style="width: 94.0625px;">#</th>
-                                        <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
-                                            rowspan="1" colspan="1" aria-sort="ascending"
-                                            aria-label="Employee name: activate to sort column descending"
-                                            style="width: 178px;">Name</th>
-                                        <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
-                                            rowspan="1" colspan="1" aria-sort="ascending"
-                                            aria-label="Location: activate to sort column descending"
-                                            style="width: 178px;">Location</th>
-                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1"
-                                            colspan="1" aria-label="Prev.Position: activate to sort column ascending"
-                                            style="width: 125.15px;">Prev.Position</th>
-                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1"
-                                            colspan="1" aria-label="Curr.Position: activate to sort column ascending"
-                                            style="width: 125.15px;">Curr.Position</th>
-                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1"
-                                            colspan="1" aria-label="Effective Date: activate to sort column ascending"
-                                            style="width: 125.15px;">Effective Date</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @if (count($staffPromotes) > 0)
-                                        @foreach ($staffPromotes as $item)
-                                            <tr class="odd">
-                                                <td class="ids">{{ $item->id }}</td>
-                                                <td>{{ $item->employee->employee_name_en }}</td>
-                                                <td>{{ $item->employee->EmployeeBranchAbbreviations }}</td>
-                                                <td>{{ $item->posit_id }}</td>
-                                                <td>{{ $item->position_promoted_to}}</td>
-                                                <td>{{ \Carbon\Carbon::parse($item->date)->format('d-M-Y') ?? '' }}</td>
-                                            </tr>
-                                        @endforeach
-                                    @endif
-                                </tbody>
-                            </table>
+    <div class="content">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="table-responsive">
+                    <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <table class="table table-striped custom-table mb-0 datatable dataTable no-footer staff-promoted-report"
+                                    id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
+                                    <thead>
+                                        <tr>
+                                            <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
+                                                rowspan="1" colspan="1" aria-sort="ascending"
+                                                aria-label="Profle: activate to sort column descending"
+                                                style="width: 94.0625px;">#</th>
+                                            <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
+                                                rowspan="1" colspan="1" aria-sort="ascending"
+                                                aria-label="Employee name: activate to sort column descending"
+                                                style="width: 178px;">Name</th>
+                                            <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
+                                                rowspan="1" colspan="1" aria-sort="ascending"
+                                                aria-label="Location: activate to sort column descending"
+                                                style="width: 178px;">Location</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1"
+                                                colspan="1" aria-label="Prev.Position: activate to sort column ascending"
+                                                style="width: 125.15px;">Prev.Position</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1"
+                                                colspan="1" aria-label="Curr.Position: activate to sort column ascending"
+                                                style="width: 125.15px;">Curr.Position</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1"
+                                                colspan="1" aria-label="Effective Date: activate to sort column ascending"
+                                                style="width: 125.15px;">Effective Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if (count($staffPromotes) > 0)
+                                            @foreach ($staffPromotes as $item)
+                                                <tr class="odd">
+                                                    <td class="ids">{{ $item->id }}</td>
+                                                    <td>{{ $item->employee->employee_name_en }}</td>
+                                                    <td>{{ $item->employee->EmployeeBranchAbbreviations }}</td>
+                                                    <td>{{ $item->posit_id }}</td>
+                                                    <td>{{ $item->position_promoted_to}}</td>
+                                                    <td>{{ \Carbon\Carbon::parse($item->date)->format('d-M-Y') ?? '' }}</td>
+                                                </tr>
+                                            @endforeach
+                                        @endif
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
