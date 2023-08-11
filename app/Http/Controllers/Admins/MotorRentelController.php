@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Admins;
 
 use App\Exports\ExportMotorRentel;
 use App\Http\Controllers\Controller;
+use App\Models\MotorRentalDetail;
 use App\Models\MotorRentel;
 use App\Models\User;
+use App\Repositories\Admin\MotorRentalRepository;
 use Brian2694\Toastr\Facades\Toastr;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -18,6 +20,11 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
 
 class MotorRentelController extends Controller
 {
+    private $dataMotorPays;
+    public function __construct(MotorRentalRepository $dataMotorPay)
+    {
+        $this->dataMotorPays = $dataMotorPay;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -59,29 +66,36 @@ class MotorRentelController extends Controller
             ->orderBy('id', 'desc')
             ->get();
        
-        $employees = User::all();
+        $employees = User::whereIn("emp_status", ["Probation", "1", "2", "10"])->get();
         if ($request->research) {
             return response()->json(['data'=>$data]);
         }else {
             return view('motor_rentels.index', compact('data', 'employees'));
         }
-        // return view('motor_rentels.index', compact('data', 'employees'));
+    }
+
+    public function indexPay(Request $request)
+    {
+        $monthly = Carbon::now()->format('m');
+        $currentYear = Carbon::now()->format('Y');
+        $data = MotorRentalDetail::with('user')
+            ->whereMonth('created_at', $monthly)
+            ->whereYear('created_at', $currentYear)
+            ->orderBy('id', 'desc')
+            ->get();
+        return view('motor_rentels.pay_motor_rental',  compact('data'));
+    }
+    public function indexPaySearch(Request $request)
+    {
+        $request["monthly"] = true;
+        $data = $this->dataMotorPays->getDatas($request);
+        return response()->json(['data'=>$data]);
     }
 
     public function detail(Request $request)
     {
-        $data = MotorRentel::where("id", $request->id)->first();
+        $data = MotorRentalDetail::where("id", $request->id)->first();
         return view('motor_rentels.detail', compact('data'));
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -92,8 +106,6 @@ class MotorRentelController extends Controller
      */
     public function store(Request $request)
     {
-        // $product_year = Carbon::createFromDate($request->product_year)->format('Y');
-        // $expried_year = Carbon::createFromDate($request->expired_year)->format('Y');
         try {
             $data = $request->all();
             $data['created_by'] = Auth::user()->id;
@@ -107,15 +119,38 @@ class MotorRentelController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
+    public function storePay(Request $request)
     {
-        //
+        try {
+            $motorRentals = MotorRentel::get();
+            foreach ($motorRentals as $key => $motor) {
+                $data = [
+                    'employee_id' => $motor->employee_id,
+                    'number_plate' => $motor->number_plate,
+                    'gasoline_price_per_liter' => $request->gasoline_price_per_liter,
+                    'start_date' => $motor->start_date,
+                    'end_date' => $motor->end_date,
+                    'product_year' => $motor->product_year,
+                    'expired_year' => $motor->expired_year,
+                    'shelt_life' => $motor->shelt_life,
+                    'total_gasoline' => $motor->total_gasoline,
+                    'total_work_day' => $motor->total_work_day,
+                    'price_engine_oil' => $motor->price_engine_oil,
+                    'price_motor_rentel' => $motor->price_motor_rentel,
+                    'taplab_rentel' => $motor->taplab_rentel,
+                    'price_taplab_rentel' => $motor->price_taplab_rentel,
+                    'tax_rate' => $request->tax_rate,
+                    'created_by' => Auth::user()->id
+                ];
+                MotorRentalDetail::create($data);
+            }
+            Toastr::success('Created successfully.', 'Success');
+            return redirect()->back();
+            DB::commit();
+        } catch (\Throwable $exp) {
+            DB::rollback();
+            Toastr::error('Created fail.', 'Error');
+        }
     }
 
     /**
@@ -198,7 +233,7 @@ class MotorRentelController extends Controller
         try {
             $dataUpdate = [
                 'employee_id' => $request->employee_id,
-                'gasoline_price_per_liter' => $request->gasoline_price_per_liter,
+                // 'gasoline_price_per_liter' => $request->gasoline_price_per_liter,
                 'start_date' => $request->start_date,
                 'end_date' => $request->end_date,
                 'product_year' => $request->product_year,
@@ -210,12 +245,13 @@ class MotorRentelController extends Controller
                 'price_motor_rentel' => $request->price_motor_rentel,
                 'taplab_rentel' => $request->taplab_rentel,
                 'price_taplab_rentel' => $request->price_taplab_rentel,
-                'tax_rate' => $request->tax_rate,
+                // 'tax_rate' => $request->tax_rate,
                 'updated_by' => Auth::user()->id
             ];
             MotorRentel::where('id', $request->id)->update($dataUpdate);
             Toastr::success('Updated successfully.', 'Success');
             return redirect()->back();
+            DB::commit();
         } catch (\Exception $e) {
             DB::rollback();
             Toastr::error('Updated fail.', 'Error');

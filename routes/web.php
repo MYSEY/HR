@@ -108,15 +108,19 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('payroll',[EmployeePayrollController::class,'index']);
     Route::post('payroll-search',[EmployeePayrollController::class,'search']);
     Route::get('payroll-export',[EmployeePayrollController::class,'export']);
-    Route::get('motor-rentel/list',[MotorRentelController::class,'index']);
     
-    // Motor Rental Payroll
+    // Motor Rental
+    Route::get('motor-rentel/list',[MotorRentelController::class,'index']);
     Route::get('motor-rentel/edit',[MotorRentelController::class,'edit']);
     Route::get('motor-rentel/detail/{id}',[MotorRentelController::class,'detail']);
     Route::post('motor-rentel/store',[MotorRentelController::class,'store']);
     Route::post('motor-rentel/update',[MotorRentelController::class,'update']);
     Route::post('motor-rentel/delete',[MotorRentelController::class,'destroy']);
     Route::post('motor-rentel/list',[MotorRentelController::class,'index']);
+    Route::get('motor-rentel/pay',[MotorRentelController::class,'indexPay']);
+    Route::post('motor-rentel/search',[MotorRentelController::class,'indexPaySearch']);
+    Route::post('motor-rentel/create-pay',[MotorRentelController::class,'storePay']);
+
 
     Route::post('payroll/create',[EmployeePayrollController::class,'store']);
     Route::get('payslip/{employee_id}',[EmployeePayrollController::class,'paySlip']);

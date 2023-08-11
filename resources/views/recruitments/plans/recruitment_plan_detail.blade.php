@@ -51,7 +51,7 @@
     }
 </style>
 @section('content')
-    <div class="content container-fluid">
+    <div class="">
         <div class="page-header">
             <div class="row align-items-center">
                 <div class="col">

@@ -96,7 +96,7 @@
                         <span id="btn-text-loading-excel" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading</span>
                     </button>
                     <button type="button" class="btn btn-sm btn-warning reset-btn">
-                        <span class="btn-text-reset">Reset</span>
+                        <span class="btn-text-reset">Reload</span>
                         <span id="btn-reset-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading</span>
                     </button>
                 </div>
@@ -138,10 +138,6 @@
                                             rowspan="1" colspan="1"
                                             aria-label="Department: activate to sort column ascending"
                                             style="width: 125.15px;">Department</th>
-                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                            rowspan="1" colspan="1"
-                                            aria-label="Start Date: activate to sort column ascending"
-                                            style="width: 89.6px;">Created At</th>
                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                             rowspan="1" colspan="1"
                                             aria-label="Start Date: activate to sort column ascending"
@@ -206,11 +202,14 @@
                                             rowspan="1" colspan="1"
                                             aria-label="Taxes on fees: activate to sort column ascending"
                                             style="width: 89.6px;">Taxes on Fees</th>
-
                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                             rowspan="1" colspan="1"
                                             aria-label="Amount: activate to sort column ascending"
                                             style="width: 51.475px;">Amount</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                            rowspan="1" colspan="1"
+                                            aria-label="Payment Date: activate to sort column ascending"
+                                            style="width: 89.6px;">Payment Date</th>
                                         <th class="text-center sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                             rowspan="1" colspan="1"
                                             aria-label="Status: activate to sort column ascending"
@@ -230,7 +229,6 @@
                                                 <td>{{ $item->MotorEmployee->EmployeeBranch }}</td>
                                                 <td>{{ $item->MotorEmployee->EmployeePosition }}</td>
                                                 <td>{{ $item->MotorEmployee->EmployeeDepartment }}</td>
-                                                <td>{{ \Carbon\Carbon::parse($item->created_at)->format('d-M-Y') ?? '' }}</td>
                                                 <td class="start_date">{{ \Carbon\Carbon::parse($item->start_date)->format('d-M-Y') ?? '' }}</td>
                                                 <td class="end_date">{{  \Carbon\Carbon::parse($item->end_date)->format('d-M-Y') ?? '' }}</td>
                                                 <td class="product_year">{{ $item->product_year }}</td>
@@ -249,10 +247,10 @@
                                                 <td >$ {{ $item->price_taplab_rentel }}</td>
                                                 <td class="tax_rate">{{ $item->tax_rate }}%</td>
                                                 <td>$ {{ ($item->price_motor_rentel * $item->tax_rate) / 100 }}</td>
-
                                                 <td>$
                                                     {{ ($item->price_motor_rentel - ($item->price_motor_rentel * $item->tax_rate) / 100) + ($item->price_taplab_rentel - ($item->price_taplab_rentel * $item->tax_rate) / 100 )  }}
                                                 </td>
+                                                <td>{{ \Carbon\Carbon::parse($item->created_at)->format('d-M-Y') ?? '' }}</td>
                                                 <td>
                                                     <div class="dropdown dropdown-action">
                                                         <a href="#" class="action-icon dropdown-toggle"
@@ -332,7 +330,6 @@
                                     '<td>'+( row.user.branch.branch_name_en )+'</td>'+
                                     '<td>'+( row.user.position ? row.user.position.name_khmer : "" )+'</td>'+
                                     '<td>'+( row.user.department.name_khmer )+'</td>'+
-                                    '<td>'+( created_at )+'</td>'+
                                     '<td class="start_date">'+( start_date )+'</td>'+
                                     '<td class="end_date">'+( end_date )+'</td>'+
                                     '<td class="product_year">'+( row.product_year )+'</td>'+
@@ -352,6 +349,7 @@
                                     '<td class="tax_rate">'+( row.tax_rate )+'%</td>'+
                                     '<td>$ '+ ( (row.price_motor_rentel * row.tax_rate) / 100 )+'</td>'+
                                     '<td>$ '+( (row.price_motor_rentel - (row.price_motor_rentel * row.tax_rate) / 100 ) + (row.price_taplab_rentel - (row.price_taplab_rentel * row.tax_rate) / 100 ))+'</td>'+
+                                    '<td>'+( created_at )+'</td>'+
                                     '<td>'+
                                         '<div class="dropdown dropdown-action">' +
                                         '<a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">' +

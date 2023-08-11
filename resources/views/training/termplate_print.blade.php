@@ -5,9 +5,9 @@
             <img style="width:auto;height: 80px;"alt='White' id="image_logo_print"
                 src="http://127.0.0.1:8000/admin/img/logo/cammalogo.png">&nbsp;&nbsp;
         </div>
-
-        <div style="margin-top:-75px; text-align: center">
-            <h3 class="payslip-title-center">{{$training->training_type == 1 ? "Internal" : "External" }} Training</h3>
+        <div style="margin-top:-90px; text-align: center">
+            <h3>CAMMA Microfinance Limited</h3>
+            <h3 class="payslip-title-center">{{$training->training_type == 1 ? "Internal" : "External" }} Training Report</h3>
             <p class="payslip-title-center">For  &nbsp;
                 <strong>
                     {{ \Carbon\Carbon::parse()->format('M-d-Y') ?? '' }}

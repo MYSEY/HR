@@ -17,7 +17,7 @@
     }
 </style>
 @section('content')
-    <div class="content container-fluid">
+    <div class="">
         <div class="page-header">
             <div class="row align-items-center">
                 <div class="col">
@@ -76,7 +76,7 @@
                                 <span class="btn-txt">{{ __('Search') }}</span>
                             </button>
                             <button type="button" class="btn btn-sm btn-warning reset-btn">
-                                <span class="btn-text-reset">Reset</span>
+                                <span class="btn-text-reset">Reload</span>
                                 <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading</span>
                             </button>
                         </div>
@@ -121,7 +121,7 @@
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                 rowspan="1" colspan="1"
                                                 aria-label="Course : activate to sort column ascending"
-                                                style="width: 34.575px;">Course Price </th>
+                                                style="width: 34.575px;">Course Fee </th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                 rowspan="1" colspan="1"
                                                 aria-label="Contract : activate to sort column ascending"

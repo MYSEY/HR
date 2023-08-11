@@ -1,7 +1,7 @@
 @extends('layouts.master')
 @section('content')
 
-    <div class="content container-fluid">
+    <div class="">
         <div class="page-header">
             <div class="row">
                 <div class="col-sm-12">

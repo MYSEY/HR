@@ -1,6 +1,6 @@
 @extends('layouts.master')
 @section('content')
-    <div class="content container-fluid">
+    <div class="">
         <div class="row">
             <div class="col-md-12">
                 <div class="welcome-box">
