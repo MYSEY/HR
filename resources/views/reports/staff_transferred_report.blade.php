@@ -69,64 +69,65 @@
             </div>
         </div>
     @endif
-
-    <div class="row">
-        <div class="col-md-12">
-            <div class="table-responsive">
-                <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <table class="table table-striped custom-table mb-0 datatable dataTable no-footer staff-transfer-report"
-                                id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
-                                <thead>
-                                    <tr>
-                                        <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
-                                            rowspan="2" aria-sort="ascending"
-                                            aria-label="Name: activate to sort column descending"
-                                            style="width: 94.0625px;">Name</th>
-                                        <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
-                                            colspan="2"
-                                            aria-label="Location: activate to sort column descending"
-                                            style="width: 94.0625px; text-align: center">Location</th>
-                                        <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
-                                            colspan="2"  aria-sort="ascending"
-                                            aria-label="Position: activate to sort column descending"
-                                            style="width: 94.0625px; text-align: center">Position</th>
-                                        <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
-                                            rowspan="2" aria-sort="ascending"
-                                            aria-label="Profle: activate to sort column descending"
-                                            style="width: 94.0625px;">Effective Date</th>
-                                      </tr>
-                                      <tr>
-                                        <th>Previous</th>
-                                        <th>Current</th>
-                                        <th>Previous</th>
-                                        <th>Current</th>
-                                      </tr>
-                                </thead>
-                                <tbody>
-                                    @if (count($transferred) > 0)
-                                        @php
-                                            $branch_name = "";
-                                            $position_name = "";
-                                        @endphp
-                                        @foreach ($transferred as $key=>$item)
-                                            <tr>
-                                                <td>{{ $item->TransferEmp->employee_name_en }}</td>
-                                                <td>{{ $key == 0 ? $item->TransferEmp->branch->abbreviations: $branch_name }}</td>
-                                                <td>{{ $item->TransferredBranch->abbreviations }}</td>
-                                                <td>{{ $key == 0 ? $item->TransferEmp->position->name_english : $position_name}}</td>
-                                                <td>{{ $item->TransferredPosition->name_english}}</td>
-                                                <td>{{ \Carbon\Carbon::parse($item->date)->format('d-M-Y') ?? '' }}</td>
-                                            </tr>
+    <div class="content">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="table-responsive">
+                    <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <table class="table table-striped custom-table mb-0 datatable dataTable no-footer staff-transfer-report"
+                                    id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
+                                    <thead>
+                                        <tr>
+                                            <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
+                                                rowspan="2" aria-sort="ascending"
+                                                aria-label="Name: activate to sort column descending"
+                                                style="width: 94.0625px;">Name</th>
+                                            <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
+                                                colspan="2"
+                                                aria-label="Location: activate to sort column descending"
+                                                style="width: 94.0625px; text-align: center">Location</th>
+                                            <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
+                                                colspan="2"  aria-sort="ascending"
+                                                aria-label="Position: activate to sort column descending"
+                                                style="width: 94.0625px; text-align: center">Position</th>
+                                            <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
+                                                rowspan="2" aria-sort="ascending"
+                                                aria-label="Profle: activate to sort column descending"
+                                                style="width: 94.0625px;">Effective Date</th>
+                                        </tr>
+                                        <tr>
+                                            <th>Previous</th>
+                                            <th>Current</th>
+                                            <th>Previous</th>
+                                            <th>Current</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if (count($transferred) > 0)
                                             @php
-                                                $branch_name = $item->TransferredBranch->abbreviations;
-                                                $position_name = $item->TransferredPosition->name_english;
+                                                $branch_name = "";
+                                                $position_name = "";
                                             @endphp
-                                        @endforeach
-                                    @endif
-                                </tbody>
-                            </table>
+                                            @foreach ($transferred as $key=>$item)
+                                                <tr>
+                                                    <td>{{ $item->TransferEmp->employee_name_en }}</td>
+                                                    <td>{{ $key == 0 ? $item->TransferEmp->branch->abbreviations: $branch_name }}</td>
+                                                    <td>{{ $item->TransferredBranch->abbreviations }}</td>
+                                                    <td>{{ $key == 0 ? $item->TransferEmp->position->name_english : $position_name}}</td>
+                                                    <td>{{ $item->TransferredPosition->name_english}}</td>
+                                                    <td>{{ \Carbon\Carbon::parse($item->date)->format('d-M-Y') ?? '' }}</td>
+                                                </tr>
+                                                @php
+                                                    $branch_name = $item->TransferredBranch->abbreviations;
+                                                    $position_name = $item->TransferredPosition->name_english;
+                                                @endphp
+                                            @endforeach
+                                        @endif
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>

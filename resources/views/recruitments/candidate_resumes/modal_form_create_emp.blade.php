@@ -20,7 +20,7 @@
                             </div>
                         </div>
                         <div class="col-sm-6">
-                            <div class="">
+                            <div class="form-group">
                                 <label class="">Name (KH) <span class="text-danger">*</span></label>
                                 <input class="form-control employee_name_kh emp_required" type="text" id="employee_name_kh" name="employee_name_kh" required>
                             </div>

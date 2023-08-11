@@ -87,148 +87,149 @@
                 </div>
             </div>
         @endif
-    
-        <div class="row">
-            <div class="col-md-12">
-                <div class="table-responsive">
-                    <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <table class="table table-striped custom-table mb-0 datatable dataTable no-footer tbl-motor"
-                                    id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
-                                    <thead>
-                                        <tr>
-                                            <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
-                                                rowspan="1" colspan="1" aria-sort="ascending"
-                                                aria-label="Profle: activate to sort column descending"
-                                                style="width: 94.0625px;">#</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1"
-                                                colspan="1" aria-label="Employee ID: activate to sort column ascending"
-                                                style="width: 94.0625px;">Employee ID</th>
-                                            <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
-                                                rowspan="1" colspan="1" aria-sort="ascending"
-                                                aria-label="Employee name: activate to sort column descending"
-                                                style="width: 178px;">Employee Name</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1"
-                                                colspan="1" aria-label="Gender: activate to sort column ascending"
-                                                style="width: 125.15px;">Gender</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                rowspan="1" colspan="1"
-                                                aria-label="Position: activate to sort column ascending"
-                                                style="width: 125.15px;">Position</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                rowspan="1" colspan="1"
-                                                aria-label="Department: activate to sort column ascending"
-                                                style="width: 125.15px;">Department</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                rowspan="1" colspan="1"
-                                                aria-label="Total Gasoline: activate to sort column ascending"
-                                                style="width: 125.15px;">Total Gasoline </th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                rowspan="1" colspan="1"
-                                                aria-label="Total working days: activate to sort column ascending"
-                                                style="width: 125.15px;">Total working days</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                rowspan="1" colspan="1"
-                                                aria-label="Price engine oil: activate to sort column ascending"
-                                                style="width: 125.15px;">Price engine oil</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                rowspan="1" colspan="1"
-                                                aria-label="Price motor rentel: activate to sort column ascending"
-                                                style="width: 51.475px;">Price motor rentel</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                rowspan="1" colspan="1"
-                                                aria-label="Taplab Price: activate to sort column ascending"
-                                                style="width: 51.475px;">Taplab Price</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                rowspan="1" colspan="1"
-                                                aria-label="Create at: activate to sort column ascending"
-                                                style="width: 51.475px;">Created At</th>
-                                            <th class="text-center sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                rowspan="1" colspan="1"
-                                                aria-label="Status: activate to sort column ascending"
-                                                style="width: 55.5625px;">Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @if (count($data) > 0)
-                                            @foreach ($data as $item)
-                                                <tr class="odd">
-                                                    <td class="ids">{{ $item->id }}</td>
-                                                    <td class="number_employee_id"><a
-                                                            href="{{ url('/motor-rentel/detail', $item->id) }}">{{ $item->MotorEmployee->number_employee }}</a>
-                                                    </td>
-                                                    <td>{{ $item->MotorEmployee->employee_name_en }}</td>
-                                                    <td>{{ $item->MotorEmployee->EmployeeGender }}</td>
-                                                    <td>{{ $item->MotorEmployee->EmployeePosition }}</td>
-                                                    <td>{{ $item->MotorEmployee->EmployeeDepartment }}</td>
-                                                    <td>{{ $item->total_gasoline }}</td>
-                                                    <td>{{ $item->total_work_day }}</td>
-                                                    <td>$ {{ $item->price_engine_oil }}</td>
-                                                    <td>$ {{ $item->price_motor_rentel}}</td>
-                                                    <td>$ {{ $item->price_taplab_rentel ? $item->price_taplab_rentel : "0.00"}}</td>
-                                                    {{-- <td>{{ ($item->price_motor_rentel - ($item->price_motor_rentel * $item->tax_rate) / 100) + ($item->price_taplab_rentel - ($item->price_taplab_rentel * $item->tax_rate) / 100 ) }}</td> --}}
-                                                    <td>{{ \Carbon\Carbon::parse($item->created_at)->format('d-M-Y') ?? '' }}</td>
-                                                    <td class="text-end">
-                                                        <div class="dropdown dropdown-action">
-                                                            <a href="#" class="action-icon dropdown-toggle"
-                                                                data-bs-toggle="dropdown" aria-expanded="false"><i
-                                                                    class="material-icons">more_vert</i></a>
-                                                            @if (Auth::user()->RolePermission == 'Administrator')
-                                                                <div class="dropdown-menu dropdown-menu-right">
-                                                                    {{-- <a class="dropdown-item motor_detail"
-                                                                        data-id="{{ $item->id }}"
-                                                                        href="{{ url('/motor-rentel/detail', $item->id) }}"><i
-                                                                            class="fa fa-eye m-r-5"></i> View</a> --}}
-                                                                    <a class="dropdown-item update"
-                                                                        data-id="{{ $item->id }}"><i
-                                                                            class="fa fa-pencil m-r-5"></i> Edit</a>
-                                                                    <a class="dropdown-item delete" href="#"
-                                                                        data-toggle="modal" data-id="{{ $item->id }}"
-                                                                        data-target="#delete_motor_rentel"><i
-                                                                            class="fa fa-trash-o m-r-5"></i> Delete</a>
-                                                                </div>
-                                                            @endif
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            @endforeach
-                                        @else
-                                           
-                                        @endif
-                                    </tbody>
-                                    {{-- @include('components.loarding-table', ["column"=> 9, "rol"=> 7]) --}}
-                                </table>
+        <div class="content">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="table-responsive">
+                        <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <table class="table table-striped custom-table mb-0 datatable dataTable no-footer tbl-motor"
+                                        id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
+                                        <thead>
+                                            <tr>
+                                                <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
+                                                    rowspan="1" colspan="1" aria-sort="ascending"
+                                                    aria-label="Profle: activate to sort column descending"
+                                                    style="width: 94.0625px;">#</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1"
+                                                    colspan="1" aria-label="Employee ID: activate to sort column ascending"
+                                                    style="width: 94.0625px;">Employee ID</th>
+                                                <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
+                                                    rowspan="1" colspan="1" aria-sort="ascending"
+                                                    aria-label="Employee name: activate to sort column descending"
+                                                    style="width: 178px;">Employee Name</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1"
+                                                    colspan="1" aria-label="Gender: activate to sort column ascending"
+                                                    style="width: 125.15px;">Gender</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                    rowspan="1" colspan="1"
+                                                    aria-label="Position: activate to sort column ascending"
+                                                    style="width: 125.15px;">Position</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                    rowspan="1" colspan="1"
+                                                    aria-label="Department: activate to sort column ascending"
+                                                    style="width: 125.15px;">Department</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                    rowspan="1" colspan="1"
+                                                    aria-label="Total Gasoline: activate to sort column ascending"
+                                                    style="width: 125.15px;">Total Gasoline </th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                    rowspan="1" colspan="1"
+                                                    aria-label="Total working days: activate to sort column ascending"
+                                                    style="width: 125.15px;">Total working days</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                    rowspan="1" colspan="1"
+                                                    aria-label="Price engine oil: activate to sort column ascending"
+                                                    style="width: 125.15px;">Price engine oil</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                    rowspan="1" colspan="1"
+                                                    aria-label="Price motor rentel: activate to sort column ascending"
+                                                    style="width: 51.475px;">Price motor rentel</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                    rowspan="1" colspan="1"
+                                                    aria-label="Taplab Price: activate to sort column ascending"
+                                                    style="width: 51.475px;">Taplab Price</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                    rowspan="1" colspan="1"
+                                                    aria-label="Create at: activate to sort column ascending"
+                                                    style="width: 51.475px;">Created At</th>
+                                                <th class="text-center sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                    rowspan="1" colspan="1"
+                                                    aria-label="Status: activate to sort column ascending"
+                                                    style="width: 55.5625px;">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @if (count($data) > 0)
+                                                @foreach ($data as $item)
+                                                    <tr class="odd">
+                                                        <td class="ids">{{ $item->id }}</td>
+                                                        <td class="number_employee_id"><a
+                                                                href="{{ url('/motor-rentel/detail', $item->id) }}">{{ $item->MotorEmployee->number_employee }}</a>
+                                                        </td>
+                                                        <td>{{ $item->MotorEmployee->employee_name_en }}</td>
+                                                        <td>{{ $item->MotorEmployee->EmployeeGender }}</td>
+                                                        <td>{{ $item->MotorEmployee->EmployeePosition }}</td>
+                                                        <td>{{ $item->MotorEmployee->EmployeeDepartment }}</td>
+                                                        <td>{{ $item->total_gasoline }}</td>
+                                                        <td>{{ $item->total_work_day }}</td>
+                                                        <td>$ {{ $item->price_engine_oil }}</td>
+                                                        <td>$ {{ $item->price_motor_rentel}}</td>
+                                                        <td>$ {{ $item->price_taplab_rentel ? $item->price_taplab_rentel : "0.00"}}</td>
+                                                        {{-- <td>{{ ($item->price_motor_rentel - ($item->price_motor_rentel * $item->tax_rate) / 100) + ($item->price_taplab_rentel - ($item->price_taplab_rentel * $item->tax_rate) / 100 ) }}</td> --}}
+                                                        <td>{{ \Carbon\Carbon::parse($item->created_at)->format('d-M-Y') ?? '' }}</td>
+                                                        <td class="text-end">
+                                                            <div class="dropdown dropdown-action">
+                                                                <a href="#" class="action-icon dropdown-toggle"
+                                                                    data-bs-toggle="dropdown" aria-expanded="false"><i
+                                                                        class="material-icons">more_vert</i></a>
+                                                                @if (Auth::user()->RolePermission == 'Administrator')
+                                                                    <div class="dropdown-menu dropdown-menu-right">
+                                                                        {{-- <a class="dropdown-item motor_detail"
+                                                                            data-id="{{ $item->id }}"
+                                                                            href="{{ url('/motor-rentel/detail', $item->id) }}"><i
+                                                                                class="fa fa-eye m-r-5"></i> View</a> --}}
+                                                                        <a class="dropdown-item update"
+                                                                            data-id="{{ $item->id }}"><i
+                                                                                class="fa fa-pencil m-r-5"></i> Edit</a>
+                                                                        <a class="dropdown-item delete" href="#"
+                                                                            data-toggle="modal" data-id="{{ $item->id }}"
+                                                                            data-target="#delete_motor_rentel"><i
+                                                                                class="fa fa-trash-o m-r-5"></i> Delete</a>
+                                                                    </div>
+                                                                @endif
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                            @else
+                                            
+                                            @endif
+                                        </tbody>
+                                        {{-- @include('components.loarding-table', ["column"=> 9, "rol"=> 7]) --}}
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-    
-            @include('motor_rentels.modal_form_create')
-            @include('motor_rentels.modal_form_edit')
-            @include('motor_rentels.import')
-            {{-- @include('components.loarding-table', ["column"=> 9, "rol"=> 7]) --}}
-            <!-- Delete Training Modal -->
-            <div class="modal custom-modal fade" id="delete_motor_rentel" role="dialog">
-                <div class="modal-dialog modal-sm modal-dialog-centered">
-                    <div class="modal-content">
-                        <div class="modal-body">
-                            <div class="form-header">
-                                <h3>Delete</h3>
-                                <p>Are you sure want to delete?</p>
-                            </div>
-                            <div class="modal-btn delete-action">
-                                <form action="{{ url('motor-rentel/delete') }}" method="POST">
-                                    @csrf
-                                    <input type="hidden" name="id" class="e_id" value="">
-                                    <div class="row">
-                                        <div class="submit-section" style="text-align: center">
-                                            <button type="submit" class="btn btn-primary submit-btn me-2">Delete</button>
-                                            <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-danger">Cancel</a>
+        
+                @include('motor_rentels.modal_form_create')
+                @include('motor_rentels.modal_form_edit')
+                @include('motor_rentels.import')
+                {{-- @include('components.loarding-table', ["column"=> 9, "rol"=> 7]) --}}
+                <!-- Delete Training Modal -->
+                <div class="modal custom-modal fade" id="delete_motor_rentel" role="dialog">
+                    <div class="modal-dialog modal-sm modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-body">
+                                <div class="form-header">
+                                    <h3>Delete</h3>
+                                    <p>Are you sure want to delete?</p>
+                                </div>
+                                <div class="modal-btn delete-action">
+                                    <form action="{{ url('motor-rentel/delete') }}" method="POST">
+                                        @csrf
+                                        <input type="hidden" name="id" class="e_id" value="">
+                                        <div class="row">
+                                            <div class="submit-section" style="text-align: center">
+                                                <button type="submit" class="btn btn-primary submit-btn me-2">Delete</button>
+                                                <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-danger">Cancel</a>
+                                            </div>
                                         </div>
-                                    </div>
-                                </form>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     </div>

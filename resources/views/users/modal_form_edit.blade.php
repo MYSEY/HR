@@ -19,7 +19,7 @@
                             </div>
                         </div>
                         <div class="col-sm-6">
-                            <div class="">
+                            <div class="form-group">
                                 <label class="">Name (KH) <span class="text-danger">*</span></label>
                                 <input class="form-control @error('employee_name_kh') is-invalid @enderror" type="text" id="e_employee_name_kh" required name="employee_name_kh" value="{{old('employee_name_kh')}}">
                             </div>
@@ -67,7 +67,7 @@
                             </div>
                         </div>
                         <div class="col-sm-6">
-                            <div class="">
+                            <div class="form-group">
                                 <label class="">Join Date <span class="text-danger">*</span></label>
                                 <div class="cal-icon">
                                     <input class="form-control datetimepicker  @error('date_of_commencement') is-invalid @enderror" id="e_date_of_commencement" required name="date_of_commencement" type="text" value="{{old('date_of_commencement')}}">
@@ -120,7 +120,7 @@
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <div class="">
+                            <div class="form-group">
                                 <label>level</label>
                                 <input type="text" class="form-control" id="e_level" name="level" value="{{old('level')}}">
                             </div>
@@ -150,7 +150,7 @@
                     
                     <div class="row">
                         <div class="col-sm-6">
-                            <div class="">
+                            <div class="form-group">
                                 <label class="">Guarantee Letter(PDF) <span class="text-danger">*</span></label>
                                 <input class="form-control @error('guarantee_letter') is-invalid @enderror" type="file" id="guarantee_letter" name="guarantee_letter" value="{{old('guarantee_letter')}}">
                                 <input type="hidden" name="hidden_file_guarantee" id="e_guarantee_letter" value="">
@@ -186,8 +186,10 @@
                             </div>
                         </div>
                         <div class="col-sm-6"> 
-                            <label>Email</label>
-                            <input class="form-control @error('email') is-invalid @enderror" type="email" id="e_email" name="email"  placeholder="" {{old('email')}}>
+                            <div class="form-group">
+                                <label>Email</label>
+                                <input class="form-control @error('email') is-invalid @enderror" type="email" id="e_email" name="email"  placeholder="" {{old('email')}}>
+                            </div>
                         </div>
                     </div>
                     {{-- <div class="row"> 
@@ -204,7 +206,6 @@
                     </div>
                     --}}
                     <div class="row">
-                        
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="">Spouse</label>
@@ -214,10 +215,12 @@
                             </div>
                         </div>
                         <div class="col-sm-6">
-                            <label>Loan</label>
-                            <select class="form-control" id="e_is_loan" name="is_loan" value="{{old('is_loan')}}">
-                                <option selected disabled> --Select --</option>
-                            </select>
+                            <div class="form-group">
+                                <label>Loan</label>
+                                <select class="form-control" id="e_is_loan" name="is_loan" value="{{old('is_loan')}}">
+                                    <option selected disabled> --Select --</option>
+                                </select>
+                            </div>    
                         </div>
                     </div>
                     <div class="col-sm-12">

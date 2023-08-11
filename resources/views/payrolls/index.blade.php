@@ -76,7 +76,7 @@
             </form>
         @endif
         {!! Toastr::message() !!}
-        <div class="">
+        <div class="content">
             <div class="page-menu">
                 <div class="row">
                     <div class="col-md-12">
@@ -244,7 +244,7 @@
                             <h5>Exchange Rate</h5>
                             <div class="row">
                                 <div class="col-sm-6">
-                                    <div class="form-gorup">
+                                    <div class="form-group">
                                         <label>US Dollar</label>
                                         <div class="input-group">
                                             <span class="input-group-text">$</span>
@@ -253,7 +253,7 @@
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
-                                    <div class="form-gorup">
+                                    <div class="form-group">
                                         <label>Riels</label>
                                         <div class="input-group">
                                             <span class="input-group-text">៛</span>
@@ -263,7 +263,6 @@
                                     </div>
                                 </div>
                             </div>
-                            <br>
                             <div class="row">
                                 <div class="col-sm-6">
                                     <div class="form-group">

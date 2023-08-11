@@ -86,90 +86,91 @@
             </div>
         </div>
     @endif
-
-    <div class="row">
-        <div class="col-md-12">
-            <div class="table-responsive">
-                <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <table class="table table-striped custom-table mb-0 datatable dataTable no-footer tbl-new-staff-report"
-                                id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
-                                <thead>
-                                    <tr>
-                                        <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
-                                            rowspan="1" colspan="1" aria-sort="ascending"
-                                            aria-label="Profle: activate to sort column descending"
-                                            style="width: 94.0625px;">#</th>
-                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1"
-                                            colspan="1" aria-label="Employee ID: activate to sort column ascending"
-                                            style="width: 94.0625px;">ID Card</th>
-                                        <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
-                                            rowspan="1" colspan="1" aria-sort="ascending"
-                                            aria-label="Employee name: activate to sort column descending"
-                                            style="width: 178px;">Name Kh</th>
-                                        <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
-                                            rowspan="1" colspan="1" aria-sort="ascending"
-                                            aria-label="Employee name: activate to sort column descending"
-                                            style="width: 178px;">Name En</th>
-                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1"
-                                            colspan="1" aria-label="Gender: activate to sort column ascending"
-                                            style="width: 125.15px;">Gender</th>
-                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1"
-                                            colspan="1" aria-label="Position: activate to sort column ascending"
-                                            style="width: 125.15px;">Position</th>
-                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1"
-                                            colspan="1" aria-label="Branch name: activate to sort column ascending"
-                                            style="width: 125.15px;">Dept/Branch</th>
-                                        
-                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                            rowspan="1" colspan="1"
-                                            aria-label="Join Date: activate to sort column ascending"
-                                            style="width: 125.15px;">Join Date</th>
-                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                            rowspan="1" colspan="1"
-                                            aria-label="Remark: activate to sort column ascending"
-                                            style="width: 125.15px;">Remark</th>
-                                        {{-- <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                            rowspan="1" colspan="1"
-                                            aria-label="Action: activate to sort column ascending"
-                                            style="width: 125.15px;">Action</th> --}}
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @if (count($employees) > 0)
-                                        @foreach ($employees as $item)
-                                            <tr class="odd">
-                                                <td class="ids">{{ $item->id }}</td>
-                                                <td>{{ $item->number_employee }}</td>
-                                                <td>{{ $item->employee_name_kh }}</td>
-                                                <td>{{ $item->employee_name_en }}</td>
-                                                <td>{{ $item->EmployeeGender }}</td>
-                                                <td>{{ $item->position ? $item->position->name_khmer : "" }}</td>
-                                                <td>{{ $item->branch ? $item->branch->branch_name_en: "" }}</td>
-                                                <td>{{ \Carbon\Carbon::parse($item->date_of_commencement)->format('d-M-Y') ?? '' }}</td>
-                                                <td>{{ $item->remark }}</td>
-                                                {{-- <td>
-                                                    <div class="dropdown dropdown-action">
-                                                        <a href="#" class="action-icon dropdown-toggle"
-                                                            data-bs-toggle="dropdown" aria-expanded="false"><i
-                                                                class="material-icons">more_vert</i></a>
-                                                        @if (Auth::user()->RolePermission == 'Administrator')
-                                                            <div class="dropdown-menu dropdown-menu-right">
-                                                                <a class="dropdown-item motor_detail"
-                                                                    data-id="{{ $item->id }}"
-                                                                    href="{{ url('/motor-rentel/detail', $item->id) }}"><i
-                                                                        class="fa fa-eye m-r-5"></i> View
-                                                                </a>
-                                                            </div>
-                                                        @endif
-                                                    </div>
-                                                </td> --}}
-                                            </tr>
-                                        @endforeach
-                                    @endif
-                                </tbody>
-                            </table>
+    <div class="content">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="table-responsive">
+                    <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <table class="table table-striped custom-table mb-0 datatable dataTable no-footer tbl-new-staff-report"
+                                    id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
+                                    <thead>
+                                        <tr>
+                                            <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
+                                                rowspan="1" colspan="1" aria-sort="ascending"
+                                                aria-label="Profle: activate to sort column descending"
+                                                style="width: 94.0625px;">#</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1"
+                                                colspan="1" aria-label="Employee ID: activate to sort column ascending"
+                                                style="width: 94.0625px;">ID Card</th>
+                                            <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
+                                                rowspan="1" colspan="1" aria-sort="ascending"
+                                                aria-label="Employee name: activate to sort column descending"
+                                                style="width: 178px;">Name Kh</th>
+                                            <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
+                                                rowspan="1" colspan="1" aria-sort="ascending"
+                                                aria-label="Employee name: activate to sort column descending"
+                                                style="width: 178px;">Name En</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1"
+                                                colspan="1" aria-label="Gender: activate to sort column ascending"
+                                                style="width: 125.15px;">Gender</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1"
+                                                colspan="1" aria-label="Position: activate to sort column ascending"
+                                                style="width: 125.15px;">Position</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1"
+                                                colspan="1" aria-label="Branch name: activate to sort column ascending"
+                                                style="width: 125.15px;">Dept/Branch</th>
+                                            
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                rowspan="1" colspan="1"
+                                                aria-label="Join Date: activate to sort column ascending"
+                                                style="width: 125.15px;">Join Date</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                rowspan="1" colspan="1"
+                                                aria-label="Remark: activate to sort column ascending"
+                                                style="width: 125.15px;">Remark</th>
+                                            {{-- <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                rowspan="1" colspan="1"
+                                                aria-label="Action: activate to sort column ascending"
+                                                style="width: 125.15px;">Action</th> --}}
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if (count($employees) > 0)
+                                            @foreach ($employees as $item)
+                                                <tr class="odd">
+                                                    <td class="ids">{{ $item->id }}</td>
+                                                    <td>{{ $item->number_employee }}</td>
+                                                    <td>{{ $item->employee_name_kh }}</td>
+                                                    <td>{{ $item->employee_name_en }}</td>
+                                                    <td>{{ $item->EmployeeGender }}</td>
+                                                    <td>{{ $item->position ? $item->position->name_khmer : "" }}</td>
+                                                    <td>{{ $item->branch ? $item->branch->branch_name_en: "" }}</td>
+                                                    <td>{{ \Carbon\Carbon::parse($item->date_of_commencement)->format('d-M-Y') ?? '' }}</td>
+                                                    <td>{{ $item->remark }}</td>
+                                                    {{-- <td>
+                                                        <div class="dropdown dropdown-action">
+                                                            <a href="#" class="action-icon dropdown-toggle"
+                                                                data-bs-toggle="dropdown" aria-expanded="false"><i
+                                                                    class="material-icons">more_vert</i></a>
+                                                            @if (Auth::user()->RolePermission == 'Administrator')
+                                                                <div class="dropdown-menu dropdown-menu-right">
+                                                                    <a class="dropdown-item motor_detail"
+                                                                        data-id="{{ $item->id }}"
+                                                                        href="{{ url('/motor-rentel/detail', $item->id) }}"><i
+                                                                            class="fa fa-eye m-r-5"></i> View
+                                                                    </a>
+                                                                </div>
+                                                            @endif
+                                                        </div>
+                                                    </td> --}}
+                                                </tr>
+                                            @endforeach
+                                        @endif
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
