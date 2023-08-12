@@ -124,7 +124,7 @@
             </form>
         @endif
         {!! Toastr::message() !!}
-        <div class="content">
+        <div class="">
             <div id="card_by_branch"></div>
         </div>
         <div id="add_plan" class="modal custom-modal fade" role="dialog">
@@ -213,7 +213,7 @@
             </div>
         </div>
     </div>
-    @include('recruitments.plans.recruitment_plan_print');
+    @include('recruitments.plans.recruitment_plan_print')
 @endsection
 
 @include('includs.script')

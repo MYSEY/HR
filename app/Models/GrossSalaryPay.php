@@ -15,6 +15,7 @@ class GrossSalaryPay extends Model
         'employee_id',
         'basic_salary',
         'total_gross_salary',
+        'total_salary_severance',
         'payment_date',
         'created_by',
         'updated_by',
