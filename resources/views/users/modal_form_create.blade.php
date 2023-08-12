@@ -11,25 +11,25 @@
                 <form action="{{url('users/store')}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
                     @csrf
                     <div class="row">
-                        <div class="col-sm-6">
+                        <div class="col-md-6">
                             <div class="form-group">
                                 <label class="">Employee ID</label>
                                 <input type="text" class="form-control" id="number_employee" name="number_employee" value="{{$autoEmpId}}">
                             </div>
                         </div>
-                        <div class="col-sm-6">
-                            <div class="">
+                        <div class="col-md-6">
+                            <div class="form-group">
                                 <label class="">Name (KH) <span class="text-danger">*</span></label>
                                 <input class="form-control @error('employee_name_kh') is-invalid @enderror" type="text" id="employee_name_kh" required name="employee_name_kh" value="{{old('employee_name_kh')}}">
                             </div>
                         </div>
-                        <div class="col-sm-6">
+                        <div class="col-md-6">
                             <div class="form-group">
                                 <label class="">Name (EN) <span class="text-danger">*</span></label>
                                 <input class="form-control @error('employee_name_en') is-invalid @enderror" type="text" id="employee_name_en" required name="employee_name_en" value="{{old('employee_name_en')}}">
                             </div>
                         </div>
-                        <div class="col-sm-6">
+                        <div class="col-md-6">
                             <div class="form-group">
                                 <label class="">Profile</label>
                                 <input class="form-control" type="file" id="profile" name="profile" value="{{old('profile')}}">
@@ -37,7 +37,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-sm-6">
+                        <div class="col-md-6">
                             <div class="form-group">
                                 <label>Role Name <span class="text-danger">*</span></label>
                                 <select class="form-control @error('role_id') is-invalid @enderror" name="role_id" id="role_id" required>
@@ -70,7 +70,7 @@
                             </div>
                         </div>
                         <div class="col-sm-6">
-                            <div class="">
+                            <div class="form-group">
                                 <label class="">Join Date <span class="text-danger">*</span></label>
                                 <div class="cal-icon">
                                     <input class="form-control datetimepicker @error('date_of_commencement') is-invalid @enderror" id="date_of_commencement" required name="date_of_commencement" type="text" value="{{old('date_of_commencement')}}">
@@ -103,7 +103,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-sm-6">
+                        <div class="col-md-6">
                             <div class="form-group">
                                 <label>Position <span class="text-danger">*</span></label>
                                 <select class="form-control @error('position_id') is-invalid @enderror" name="position_id" id="position_id" required>
@@ -133,7 +133,7 @@
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <div class="">
+                            <div class="form-group">
                                 <label>level</label>
                                 <input type="text" class="form-control" id="level" name="level" value="{{old('level')}}">
                             </div>
@@ -163,7 +163,7 @@
 
                     <div class="row">
                         <div class="col-sm-6">
-                            <div class="">
+                            <div class="form-group">
                                 <label class="">Guarantee Letter(PDF) <span class="text-danger">*</span></label>
                                 <input class="form-control @error('guarantee_letter') is-invalid @enderror" type="file" id="guarantee_letter" required name="guarantee_letter" value="{{old('guarantee_letter')}}">
                             </div>
@@ -197,8 +197,10 @@
                             </div>
                         </div>
                         <div class="col-sm-6">
-                            <label>Email</label>
-                            <input class="form-control @error('email') is-invalid @enderror" type="email" id="" name="email" placeholder="" {{old('email')}}>
+                            <div class="form-group">
+                                <label>Email</label>
+                                <input class="form-control @error('email') is-invalid @enderror" type="email" id="" name="email" placeholder="" {{old('email')}}>
+                            </div>
                         </div>
                     </div>
                     <div class="row">
@@ -209,12 +211,13 @@
                             </div>
                         </div>
                         <div class="col-sm-6">
-                            <label>Confirm Password</label>
-                            <input type="password" class="form-control" required name="password_confirmation" placeholder="">
+                            <div class="form-group">
+                                <label>Confirm Password</label>
+                                <input type="password" class="form-control" required name="password_confirmation" placeholder="">
+                            </div>
                         </div>
                     </div>
                     <div class="row">
-                        
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="">Spouse</label>
@@ -225,11 +228,13 @@
                             </div>
                         </div>
                         <div class="col-sm-6">
-                            <label>Loan</label>
-                            <select class="form-control" id="is_loan" name="is_loan" value="{{old('is_loan')}}">
-                                <option value="1">Yes</option>
-                                <option value="0" selected>No</option>
-                            </select>
+                            <div class="form-group">
+                                <label>Loan</label>
+                                <select class="form-control" id="is_loan" name="is_loan" value="{{old('is_loan')}}">
+                                    <option value="1">Yes</option>
+                                    <option value="0" selected>No</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
                     <div class="col-sm-12">

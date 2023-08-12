@@ -108,144 +108,145 @@
                 </div>
             </form>
         @endif
-    
-        <div class="row">
-            <div class="col-md-12">
-                <div class="table-responsive">
-                    <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <table
-                                    class="table table-striped custom-table mb-0 datatable dataTable no-footer tbl-traingin-report"
-                                    id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
-                                    <thead>
-                                        <tr>
-                                            <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
-                                                rowspan="1" colspan="1" aria-sort="ascending"
-                                                aria-label="Profle: activate to sort column descending"
-                                                style="width: 94.0625px;">#</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1"
-                                                colspan="1" aria-label="Employee ID: activate to sort column ascending"
-                                                style="width: 94.0625px;">ID Card</th>
-                                            <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
-                                                rowspan="1" colspan="1" aria-sort="ascending"
-                                                aria-label="Employee name: activate to sort column descending"
-                                                style="width: 178px;">Name Kh</th>
-                                            <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
-                                                rowspan="1" colspan="1" aria-sort="ascending"
-                                                aria-label="Employee name: activate to sort column descending"
-                                                style="width: 178px;">Name En</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1"
-                                                colspan="1" aria-label="Gender: activate to sort column ascending"
-                                                style="width: 125.15px;">Gender</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                rowspan="1" colspan="1"
-                                                aria-label="Position: activate to sort column ascending"
-                                                style="width: 125.15px;">Position</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                rowspan="1" colspan="1"
-                                                aria-label="Date of Employment: activate to sort column ascending"
-                                                style="width: 125.15px;">Date of Employment</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                rowspan="1" colspan="1"
-                                                aria-label="Seniority: activate to sort column ascending"
-                                                style="width: 125.15px;">Length of Employment</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                rowspan="1" colspan="1"
-                                                aria-label="Course Name: activate to sort column ascending"
-                                                style="width: 125.15px;">Course Name</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                rowspan="1" colspan="1"
-                                                aria-label="Branch name: activate to sort column ascending"
-                                                style="width: 125.15px;">Dept/Branch</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                rowspan="1" colspan="1"
-                                                aria-label="Start Date: activate to sort column ascending"
-                                                style="width: 125.15px;">Start Date</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                rowspan="1" colspan="1"
-                                                aria-label="End Date: activate to sort column ascending"
-                                                style="width: 125.15px;">End Date</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                rowspan="1" colspan="1"
-                                                aria-label="Duration of service: activate to sort column ascending"
-                                                style="width: 125.15px;">Duration Term</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                rowspan="1" colspan="1"
-                                                aria-label="Price/Unit: activate to sort column ascending"
-                                                style="width: 125.15px;">Price/Unit</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                rowspan="1" colspan="1"
-                                                aria-label="Discount Price: activate to sort column ascending"
-                                                style="width: 125.15px;">Discount Fee</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                rowspan="1" colspan="1"
-                                                aria-label="Total: activate to sort column ascending"
-                                                style="width: 125.15px;">Total</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                rowspan="1" colspan="1"
-                                                aria-label="Trainer: activate to sort column ascending"
-                                                style="width: 125.15px;">Trainer</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                rowspan="1" colspan="1"
-                                                aria-label="Type of Training: activate to sort column ascending"
-                                                style="width: 125.15px;">Type of Training</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                rowspan="1" colspan="1"
-                                                aria-label="Remarks: activate to sort column ascending"
-                                                style="width: 125.15px;">Remarks</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @if (count($dataTrainings) > 0)
-                                            @foreach ($dataTrainings as $item)
-                                                @php
-                                                    $price = 0;
-                                                    $discount = 0;
-                                                    $total = 0;
-                                                    if (count($item->employee_id) > 0) {
-                                                        $price =  $item->cost_price / count($item->employee_id);
-                                                        $discount = ($price * $item->discount) / 100;
-                                                        $total = $price - $discount;
-                                                    }
-                                                    $trainer = null;
-                                                    if (count($item->trainers) == 1) {
-                                                        $trainer = $item->trainers[0]->type == 2 ? $item->trainers[0]->name_en : $item->trainers[0]->employee->employee_name_en;
-                                                    }else{
-                                                        foreach ($item->trainers as $key => $trai) {
-                                                            $trainer .= $trai->type == 2 ? $trai->name_en : $trai->employee->employee_name_en.', ';
+        <div class="content">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="table-responsive">
+                        <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <table
+                                        class="table table-striped custom-table mb-0 datatable dataTable no-footer tbl-traingin-report"
+                                        id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
+                                        <thead>
+                                            <tr>
+                                                <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
+                                                    rowspan="1" colspan="1" aria-sort="ascending"
+                                                    aria-label="Profle: activate to sort column descending"
+                                                    style="width: 94.0625px;">#</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1"
+                                                    colspan="1" aria-label="Employee ID: activate to sort column ascending"
+                                                    style="width: 94.0625px;">ID Card</th>
+                                                <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
+                                                    rowspan="1" colspan="1" aria-sort="ascending"
+                                                    aria-label="Employee name: activate to sort column descending"
+                                                    style="width: 178px;">Name Kh</th>
+                                                <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
+                                                    rowspan="1" colspan="1" aria-sort="ascending"
+                                                    aria-label="Employee name: activate to sort column descending"
+                                                    style="width: 178px;">Name En</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1"
+                                                    colspan="1" aria-label="Gender: activate to sort column ascending"
+                                                    style="width: 125.15px;">Gender</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                    rowspan="1" colspan="1"
+                                                    aria-label="Position: activate to sort column ascending"
+                                                    style="width: 125.15px;">Position</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                    rowspan="1" colspan="1"
+                                                    aria-label="Date of Employment: activate to sort column ascending"
+                                                    style="width: 125.15px;">Date of Employment</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                    rowspan="1" colspan="1"
+                                                    aria-label="Seniority: activate to sort column ascending"
+                                                    style="width: 125.15px;">Length of Employment</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                    rowspan="1" colspan="1"
+                                                    aria-label="Course Name: activate to sort column ascending"
+                                                    style="width: 125.15px;">Course Name</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                    rowspan="1" colspan="1"
+                                                    aria-label="Branch name: activate to sort column ascending"
+                                                    style="width: 125.15px;">Dept/Branch</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                    rowspan="1" colspan="1"
+                                                    aria-label="Start Date: activate to sort column ascending"
+                                                    style="width: 125.15px;">Start Date</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                    rowspan="1" colspan="1"
+                                                    aria-label="End Date: activate to sort column ascending"
+                                                    style="width: 125.15px;">End Date</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                    rowspan="1" colspan="1"
+                                                    aria-label="Duration of service: activate to sort column ascending"
+                                                    style="width: 125.15px;">Duration Term</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                    rowspan="1" colspan="1"
+                                                    aria-label="Price/Unit: activate to sort column ascending"
+                                                    style="width: 125.15px;">Price/Unit</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                    rowspan="1" colspan="1"
+                                                    aria-label="Discount Price: activate to sort column ascending"
+                                                    style="width: 125.15px;">Discount Fee</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                    rowspan="1" colspan="1"
+                                                    aria-label="Total: activate to sort column ascending"
+                                                    style="width: 125.15px;">Total</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                    rowspan="1" colspan="1"
+                                                    aria-label="Trainer: activate to sort column ascending"
+                                                    style="width: 125.15px;">Trainer</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                    rowspan="1" colspan="1"
+                                                    aria-label="Type of Training: activate to sort column ascending"
+                                                    style="width: 125.15px;">Type of Training</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                    rowspan="1" colspan="1"
+                                                    aria-label="Remarks: activate to sort column ascending"
+                                                    style="width: 125.15px;">Remarks</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @if (count($dataTrainings) > 0)
+                                                @foreach ($dataTrainings as $item)
+                                                    @php
+                                                        $price = 0;
+                                                        $discount = 0;
+                                                        $total = 0;
+                                                        if (count($item->employee_id) > 0) {
+                                                            $price =  $item->cost_price / count($item->employee_id);
+                                                            $discount = ($price * $item->discount) / 100;
+                                                            $total = $price - $discount;
                                                         }
-                                                    }
-                                                @endphp
-                                                @foreach ($item->employees as $key=>$emp)
-                                                    <tr class="odd">
-                                                        <td class="ids">{{ $item->id }}</td>
-                                                        <td>{{ $emp->number_employee }}</td>
-                                                        <td>{{ $emp->employee_name_kh }}</td>
-                                                        <td>{{$emp->employee_name_en}}</td>
-                                                        <td>{{$emp->EmployeeGender}}</td>
-                                                        <td>{{$emp->EmployeePosition}}</td>
-                                                        <td>{{ \Carbon\Carbon::parse($emp->date_of_commencement)->format('d-M-Y') ?? '' }}</td>
-                                                        <td>{{$emp->SeniorityYearsOfEmployee}}</td>
-                                                        <td>{{$item->course_name}}</td>
-                                                        <td>{{$emp->EmployeeBranch}}</td>
-                                                        <td>{{ \Carbon\Carbon::parse($item->start_date)->format('d-M-Y') ?? '' }}</td>
-                                                        <td>{{ \Carbon\Carbon::parse($item->end_date)->format('d-M-Y') ?? '' }}</td>
-                                                        <td>
-                                                            <span style="font-size: 13px" class="badge bg-inverse-danger">{{ $item->duration_month ? \Carbon\Carbon::parse($item->end_date)->addMonth($item->duration_month)->format('d-M-Y'): 0}}</span>
-                                                        </td>
-                                                        <td>$ {{round($price, 2)}}</td>
-                                                        <td>$ {{round($discount, 2)}}</td>
-                                                        <td>$ {{round($total, 2)}}</td>
-                                                        <td> {{$trainer}}</td>
-                                                        <td>{{ $item->training_type == 1 ? "Internal" : "External"}}</td>
-                                                        <td>{{$item->remark ? $item->remark : ""}}</td>
-                                                    </tr>
+                                                        $trainer = null;
+                                                        if (count($item->trainers) == 1) {
+                                                            $trainer = $item->trainers[0]->type == 2 ? $item->trainers[0]->name_en : $item->trainers[0]->employee->employee_name_en;
+                                                        }else{
+                                                            foreach ($item->trainers as $key => $trai) {
+                                                                $trainer .= $trai->type == 2 ? $trai->name_en : $trai->employee->employee_name_en.', ';
+                                                            }
+                                                        }
+                                                    @endphp
+                                                    @foreach ($item->employees as $key=>$emp)
+                                                        <tr class="odd">
+                                                            <td class="ids">{{ $item->id }}</td>
+                                                            <td>{{ $emp->number_employee }}</td>
+                                                            <td>{{ $emp->employee_name_kh }}</td>
+                                                            <td>{{$emp->employee_name_en}}</td>
+                                                            <td>{{$emp->EmployeeGender}}</td>
+                                                            <td>{{$emp->EmployeePosition}}</td>
+                                                            <td>{{ \Carbon\Carbon::parse($emp->date_of_commencement)->format('d-M-Y') ?? '' }}</td>
+                                                            <td>{{$emp->SeniorityYearsOfEmployee}}</td>
+                                                            <td>{{$item->course_name}}</td>
+                                                            <td>{{$emp->EmployeeBranch}}</td>
+                                                            <td>{{ \Carbon\Carbon::parse($item->start_date)->format('d-M-Y') ?? '' }}</td>
+                                                            <td>{{ \Carbon\Carbon::parse($item->end_date)->format('d-M-Y') ?? '' }}</td>
+                                                            <td>
+                                                                <span style="font-size: 13px" class="badge bg-inverse-danger">{{ $item->duration_month ? \Carbon\Carbon::parse($item->end_date)->addMonth($item->duration_month)->format('d-M-Y'): 0}}</span>
+                                                            </td>
+                                                            <td>$ {{round($price, 2)}}</td>
+                                                            <td>$ {{round($discount, 2)}}</td>
+                                                            <td>$ {{round($total, 2)}}</td>
+                                                            <td> {{$trainer}}</td>
+                                                            <td>{{ $item->training_type == 1 ? "Internal" : "External"}}</td>
+                                                            <td>{{$item->remark ? $item->remark : ""}}</td>
+                                                        </tr>
+                                                    @endforeach
                                                 @endforeach
-                                            @endforeach
-                                        @endif
-                                    </tbody>
-                                </table>
+                                            @endif
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>

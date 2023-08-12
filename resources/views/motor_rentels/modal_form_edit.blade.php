@@ -29,7 +29,7 @@
                             </div>
                         </div>
                         <div class="col-sm-6">
-                            <div class="">
+                            <div class="form-group">
                                 <label class="">Start Date <span class="text-danger">*</span></label>
                                 <div class="cal-icon">
                                     <input class="form-control datetimepicker @error('start_date') is-invalid @enderror" type="text" id="e_start_date" required name="start_date" value="{{old('employee_name_kh')}}">

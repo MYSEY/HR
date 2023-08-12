@@ -12,13 +12,14 @@
                     @csrf
                     <div class="row">
                         <div class="col-md-6">
-                            <label class="">Gasoline price per liter<span class="text-danger">*</span></label>
-                            <div class="input-group">
-                                <span class="input-group-text">៛</span>
-                                <input class="form-control @error('gasoline_price_per_liter') is-invalid @enderror" type="number" step="0.00" value="" id="gasoline_price_per_liter" required name="gasoline_price_per_liter">
+                            <div class="form-group">
+                                <label class="">Gasoline price per liter<span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <span class="input-group-text">៛</span>
+                                    <input class="form-control @error('gasoline_price_per_liter') is-invalid @enderror" type="number" step="0.00" value="" id="gasoline_price_per_liter" required name="gasoline_price_per_liter">
+                                </div>
                             </div>
                         </div>
-
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="">Tax rate (%)<span class="text-danger">*</span></label>

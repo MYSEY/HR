@@ -124,8 +124,9 @@
             </form>
         @endif
         {!! Toastr::message() !!}
-        <div id="card_by_branch"></div>
-
+        <div class="content">
+            <div id="card_by_branch"></div>
+        </div>
         <div id="add_plan" class="modal custom-modal fade" role="dialog">
             <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                 <div class="modal-content">
