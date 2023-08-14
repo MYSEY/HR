@@ -268,7 +268,6 @@
 </style>
 @section('content')
     <div class="">
-
         <div class="page-header">
             <div class="row">
                 <div class="col-sm-12">
@@ -705,8 +704,20 @@
                     position_type: response.position_type
                 };
 
-                let dataTraining = {
-                    employeeTrainings: response.dataEmployeeTrainings.flat(1),
+                const groupedTraining = response.dataEmployeeTrainings.reduce((train, training) => {
+                const group = train[training.training_type] || [];
+                    group.push(training);
+                    train[training.training_type] = group;
+                    return train;
+                }, {});
+                console.log("groupedTraining: ", groupedTraining);
+                let dataTrainingInternal = {
+                    employeeTrainings: groupedTraining[1] ? groupedTraining[1] : [],
+                    branches: response.branches,
+                }
+                let dataTrainingExternal = {
+                    // employeeTrainings: response.dataEmployeeTrainings.flat(1),
+                    employeeTrainings: groupedTraining[2] ? groupedTraining[2] : [],
                     branches: response.branches,
                 }
                 showDashboard(datas);
@@ -715,7 +726,8 @@
                 dashboardStaffResign(dataStaffResign);
                 dascboardReasonOffStaff(dataReasonStaff);
                 dashboardTypeOfStaff(typeOfStaff);
-                dashboardTraining(dataTraining);
+                dashboardTrainingInternal(dataTrainingInternal);
+                dashboardTraining(dataTrainingExternal);
             }
         });
     });
@@ -1384,7 +1396,7 @@
         new Chart('type_of_staff', dataChart);
     }
 
-    function dashboardTraining(datas){
+    function dashboardTrainingInternal(datas){
         let dataStaffTraining = {
             labels: [],
             datasets: [{
@@ -1397,34 +1409,28 @@
             }, ]
         };
         if (datas.branches.length > 0) {
-            
-            // const groupedTraining = datas.employeeTrainings.reduce((train, training) => {
-            // const group = train[training.training_type] || [];
-            //     group.push(training);
-            //     train[training.training_type] = group;
-            //     return train;
-            // }, {});
-            // console.log("groupedTraining: ", groupedTraining);
-
+            let trainingInternal = [];
+            if (datas.employeeTrainings.length > 0) {
+                trainingInternal = mergeEmployeeArrays(datas.employeeTrainings);
+            }
             datas.branches.map((br) => {
-                let totalValue = 0;
+                let  totalValueInternal = 0;
                 if (datas.employeeTrainings.length > 0) {
-                    datas.employeeTrainings.map((emp) => {
+                    trainingInternal.map((emp) => {
                         if (emp.branch_id == br.id) {
-                            totalValue++;
+                            totalValueInternal++;
                         }
-                    })
+                    });
+
                 }
                 dataStaffTraining.labels.push(br.abbreviations);
-                dataStaffTraining.datasets[0].data.push(totalValue);
+                dataStaffTraining.datasets[0].data.push(totalValueInternal);
             });
+            dataStaffTraining.labels.push("Total");
+            dataStaffTraining.datasets[0].data.push(trainingInternal.length);
         } 
-        dataStaffTraining.labels.push("Total");
-        dataStaffTraining.datasets[0].data.push(datas.employeeTrainings.length);
-        let type = "bar";
-        let data = dataStaffTraining;
-        let text = 'Staff Training by Branch External';
-        let option = {
+       
+        let optionInternal = {
             plugins: {
                 legend: {
                     display: false,
@@ -1440,7 +1446,7 @@
                 },
                 title: {
                     display: true,
-                    text
+                    text: "Staff Training by Branch Internal"
                 },
             },
             responsive: true,
@@ -1456,16 +1462,100 @@
                 }
             }
         }
-        let dataChart = {
-            type,
-            data,
-            options: option,
+        let dataChartInternal = {
+            type: "bar",
+            data: dataStaffTraining,
+            options: optionInternal,
             plugins: [ChartDataLabels]
         }
-        new Chart('staff_Training_by_branch_external', dataChart);
-        new Chart('staff_Training_by_branch_internal', dataChart);
+        new Chart('staff_Training_by_branch_internal', dataChartInternal);
     }
 
+    function dashboardTraining(datas){
+        let dataStaffTraining = {
+            labels: [],
+            datasets: [{
+                label: 'Total Staff',
+                data: [],
+                backgroundColor: [
+                    "green"
+                ],
+                stack: 'Stack 0',
+            }, ]
+        };
+        if (datas.branches.length > 0) {
+            let dataTypeExternal = [];
+            if (datas.employeeTrainings.length > 0) {
+                dataTypeExternal = mergeEmployeeArrays(datas.employeeTrainings);
+            }
+            datas.branches.map((br) => {
+                let totalValueExternal = 0;
+                let  totalValueInternal = 0;
+                if (datas.employeeTrainings.length > 0) {
+                    dataTypeExternal.map((emp) => {
+                        if (emp.branch_id == br.id) {
+                            totalValueExternal++;
+                        }
+                    });
+                }
+                dataStaffTraining.labels.push(br.abbreviations);
+                dataStaffTraining.datasets[0].data.push(totalValueExternal);
+            });
+            dataStaffTraining.labels.push("Total");
+            dataStaffTraining.datasets[0].data.push(dataTypeExternal.length);
+        } 
+        let optionExternal = {
+            plugins: {
+                legend: {
+                    display: false,
+                },
+                datalabels: {
+                    anchor: 'end',
+                    align: 'top',
+                    font: {
+                        weight: 'bold',
+                        size: 10
+                    },
+                    align: 'center',
+                },
+                title: {
+                    display: true,
+                    text: "Staff Training by Branch External"
+                },
+            },
+            responsive: true,
+            interaction: {
+                intersect: false,
+            },
+            scales: {
+                x: {
+                    stacked: true,
+                },
+                y: {
+                    stacked: true
+                }
+            }
+        }
+        
+        let dataChartExternal = {
+            type: "bar",
+            data: dataStaffTraining,
+            options: optionExternal,
+            plugins: [ChartDataLabels]
+        }
+        new Chart('staff_Training_by_branch_external', dataChartExternal);
+    }
+    function mergeEmployeeArrays(data) {
+        let mergedEmployeeArray = [];
+        for (const dictionary of data) {
+            mergedEmployeeArray = mergedEmployeeArray.concat(dictionary.employee);
+        }
+        let training = mergedEmployeeArray.filter(
+                (value, index, self) =>
+                    index === self.findIndex((t) => t.number_employee === value.number_employee && t.branch_id === value.branch_id)
+            );
+        return training;
+    }
     function monthDiff(dateFrom, dateTo) {
         return dateTo.getMonth() - dateFrom.getMonth() + (12 * (dateTo.getFullYear() - dateFrom.getFullYear()))
     }

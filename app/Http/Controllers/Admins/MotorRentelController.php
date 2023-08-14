@@ -190,25 +190,23 @@ class MotorRentelController extends Controller
             foreach ($allDataInSheet as $csv) {
                 $i++;
                 if ($i != 1) {
-                    $start_date = Carbon::createFromDate($csv[2])->format('Y-m-d'); // 2023-04-19
-                    $end_date = Carbon::createFromDate($csv[3])->format('Y-m-d'); // 2023-04-19
+                    $start_date = Carbon::createFromDate($csv[1])->format('Y-m-d'); // 2023-04-19
+                    $end_date = Carbon::createFromDate($csv[2])->format('Y-m-d'); // 2023-04-19
                     $employee = User::where("number_employee", $csv[0])->first();
                     $arr = [
                         'employee_id'     => $employee->id,
-                        'gasoline_price_per_liter'  => $csv[1],
                         'start_date'  => $start_date,
                         'end_date'  => $end_date,
-                        'product_year'  => $csv[4],
-                        'expired_year'  => $csv[5],
-                        'shelt_life'  => $csv[6],
-                        'number_plate'  => $csv[7],
-                        'total_gasoline'  => $csv[8],
-                        'total_work_day'  => $csv[9],
-                        'price_engine_oil'  => $csv[10],
-                        'price_motor_rentel'  => $csv[11],
-                        'taplab_rentel'  => $csv[12],
-                        'price_taplab_rentel'  => $csv[13],
-                        'tax_rate'  => $csv[14],
+                        'product_year'  => $csv[3],
+                        'expired_year'  => $csv[4],
+                        'shelt_life'  => $csv[5],
+                        'number_plate'  => $csv[6],
+                        'total_gasoline'  => $csv[7],
+                        'total_work_day'  => $csv[8],
+                        'price_engine_oil'  => $csv[9],
+                        'price_motor_rentel'  => $csv[10],
+                        'taplab_rentel'  => $csv[11],
+                        'price_taplab_rentel'  => $csv[12],
                         'created_by'        => $userID,
                         'created_at'       => Carbon::now(),
                     ];

@@ -72,11 +72,15 @@ class DashboadController extends Controller
         $transferred = Transferred::all()->count();
         $empUpcoming = User::where("emp_status","Upcoming")->get()->count();
         $candidateResumes = CandidateResume::whereNot("status","5")->get()->count();
-        // $dataTrainings = Training::whereMonth("created_at", $Monthly)->whereYear("created_at", $yearLy)->get();
-        $dataTrainings = Training::get();
+        $dataTrainings = Training::whereMonth("created_at", $Monthly)->whereYear("created_at", $yearLy)->get();
+        // $dataTrainings = Training::get();
         $dataEmployeeTrainings = [];
         foreach ($dataTrainings as $key => $item) {
-            $dataEmployeeTrainings[] = User::whereIn('id', $item->employee_id)->select("employee_name_kh", "employee_name_en", "branch_id", "profile")->with('branch')->get();
+            $users = User::whereIn('id', $item->employee_id)->select("number_employee","employee_name_kh", "employee_name_en", "branch_id")->with('branch')->get();
+            $dataEmployeeTrainings[] = [
+                "training_type"=> $item->training_type,
+                "employee"=> $users,
+            ];
         }
         
         return response()->json([
