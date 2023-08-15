@@ -26,6 +26,7 @@ use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Auth;
 use App\Models\NationalSocialSecurityFund;
 use App\Repositories\Admin\PayrollRepository;
+use Illuminate\Support\Facades\Date;
 use Maatwebsite\Excel\Facades\Excel;
 
 class EmployeePayrollController extends Controller
@@ -108,8 +109,8 @@ class EmployeePayrollController extends Controller
      */
     public function store(Request $request)
     {
-        // $start = Carbon::now()->setDate(2023, 03, 06);
-        // $end = Carbon::now()->setDate(2023, 03, 31);
+        // $start = Carbon::now()->setDate(2023, 02, 07);
+        // $end = Carbon::now()->setDate(2023, 02, 28);
 
         // $holidays = [
         //     Carbon::create(2023, 5, 11),
@@ -131,15 +132,17 @@ class EmployeePayrollController extends Controller
                     if (count(Payroll::where('employee_id',$item->id)->get()) == 0) {
                         //total day in months
                         $currentYear = Carbon::createFromDate($item->date_of_commencement)->format('Y-m');
-                        $begin = new DateTime($currentYear.'-'.'01');
+                        $begin = new DateTime($item->date_of_commencement);
                         
                         //total day in months
                         $endMonth = Carbon::createFromDate($item->date_of_commencement)->format('m');
                         $totalDayInMonth = Carbon::now()->month($endMonth)->daysInMonth;
                         $end = new DateTime($currentYear.'-'.$totalDayInMonth);
-                        $end = $end->modify('+1');
+
+                        $end = $end->modify('+1 day');
                         $interval = new DateInterval('P1D');
                         $daterange = new DatePeriod($begin, $interval, $end);
+
                         $holidays = [];
                         foreach ($daterange ?? [] as $date) {
                             $sunday = date('w', strtotime($date->format("Y-m-d")));
@@ -149,13 +152,27 @@ class EmployeePayrollController extends Controller
                                 echo '';
                             }
                         }
+
                         // dd($holidays);
-                        $startDate = Carbon::parse($item->date_of_commencement);
-                        $endDate = Carbon::parse($currentYear.'-'.$totalDayInMonth);
-                        $toDays = $startDate->diffInDaysFiltered(function (Carbon $date) use ($holidays) {
-                            return $date->isWeekday() && !in_array($date, $holidays);
-                        }, $endDate) + 1;
-                        
+                        $start_date = Carbon::createFromDate($item->date_of_commencement);
+                        $end_date = Date::createFromDate($currentYear.'-'.$totalDayInMonth);
+
+                        $workdays = 0;
+                        for ($day = $start_date->day; $day <= $end_date->day; $day++) {
+                            if ($start_date->dayOfWeek != 0 && $start_date->dayOfWeek != 6 && $day !== $holidays) {
+                                $workdays++;
+                            }
+                        }
+                        // dd($workdays);
+                        $toDays = $workdays - (count($holidays)*2);
+                        dd($toDays);
+                       
+                        // $startDate = Carbon::parse($item->date_of_commencement);
+                        // $endDate = Carbon::parse($currentYear.'-'.$totalDayInMonth);
+                        // $toDays = $startDate->diffInDaysFiltered(function (Carbon $date) use ($holidays) {
+                        //     return $date->isWeekday() && !in_array($date, $holidays);
+                        // }, $endDate);
+                        // dd($toDays);
                         if ($toDays >= 22) {
                             $totalBasicSalary = $item->basic_salary;
                         }else{

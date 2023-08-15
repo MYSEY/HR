@@ -710,7 +710,6 @@
                     train[training.training_type] = group;
                     return train;
                 }, {});
-                console.log("groupedTraining: ", groupedTraining);
                 let dataTrainingInternal = {
                     employeeTrainings: groupedTraining[1] ? groupedTraining[1] : [],
                     branches: response.branches,
@@ -727,7 +726,7 @@
                 dascboardReasonOffStaff(dataReasonStaff);
                 dashboardTypeOfStaff(typeOfStaff);
                 dashboardTrainingInternal(dataTrainingInternal);
-                dashboardTraining(dataTrainingExternal);
+                dashboardTrainingExternal(dataTrainingExternal);
             }
         });
     });
@@ -1471,7 +1470,7 @@
         new Chart('staff_Training_by_branch_internal', dataChartInternal);
     }
 
-    function dashboardTraining(datas){
+    function dashboardTrainingExternal(datas){
         let dataStaffTraining = {
             labels: [],
             datasets: [{
