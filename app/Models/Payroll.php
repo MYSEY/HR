@@ -44,6 +44,10 @@ class Payroll extends Model
         'tax_free_seniority_allowance',
         'total_salary',
         'exchange_rate',
+        'amount_loan',
+        'incentive',
+        'adjustment',
+        'leaves',
         'created_by',
         'updated_by',
     ];

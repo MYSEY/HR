@@ -109,20 +109,6 @@ class EmployeePayrollController extends Controller
      */
     public function store(Request $request)
     {
-        // $start = Carbon::now()->setDate(2023, 02, 07);
-        // $end = Carbon::now()->setDate(2023, 02, 28);
-
-        // $holidays = [
-        //     Carbon::create(2023, 5, 11),
-        //     Carbon::create(2023, 12, 18),
-        //     Carbon::create(2023, 19, 25),
-        //     Carbon::create(2023, 7, 3),
-        // ];
-
-        // $days = $start->diffInDaysFiltered(function (Carbon $date) use ($holidays) {
-        //     return $date->isWeekday() && !in_array($date, $holidays);
-        // }, $end);
-        // dd($days);
         // try{
             $employee = User::where('date_of_commencement','<=',$request->payment_date)->whereIn('emp_status',['Probation','1','10','2'])->get();
             if (!$employee->isEmpty()) {
@@ -152,27 +138,21 @@ class EmployeePayrollController extends Controller
                                 echo '';
                             }
                         }
-
-                        // dd($holidays);
                         $start_date = Carbon::createFromDate($item->date_of_commencement);
                         $end_date = Date::createFromDate($currentYear.'-'.$totalDayInMonth);
-
+                        $saturday = Date::createFromDate($currentYear.'-'.$totalDayInMonth)->format('D');
                         $workdays = 0;
                         for ($day = $start_date->day; $day <= $end_date->day; $day++) {
                             if ($start_date->dayOfWeek != 0 && $start_date->dayOfWeek != 6 && $day !== $holidays) {
                                 $workdays++;
                             }
                         }
-                        // dd($workdays);
-                        $toDays = $workdays - (count($holidays)*2);
-                        dd($toDays);
-                       
-                        // $startDate = Carbon::parse($item->date_of_commencement);
-                        // $endDate = Carbon::parse($currentYear.'-'.$totalDayInMonth);
-                        // $toDays = $startDate->diffInDaysFiltered(function (Carbon $date) use ($holidays) {
-                        //     return $date->isWeekday() && !in_array($date, $holidays);
-                        // }, $endDate);
-                        // dd($toDays);
+                        $days = $workdays - (count($holidays)*2);
+                        if($saturday === 'Sat'){
+                            $toDays = $days  - 1;
+                        }else{
+                            $toDays = $days;
+                        }
                         if ($toDays >= 22) {
                             $totalBasicSalary = $item->basic_salary;
                         }else{
@@ -690,8 +670,8 @@ class EmployeePayrollController extends Controller
                     $data['seniority_payable_tax']          = $seniorityPayableTax;
                     $data['total_pension_fund']             = $pension_contribution;
                     $data['base_salary_received_usd']       = $baseSalaryReceivedUsd;
-                    $data['base_salary_received_riel']      = number_format($totalExchangeRiel, 2);
-                    $data['total_tax_base_riel']            = number_format($totalTtaxBbaseRiel, 2);
+                    $data['base_salary_received_riel']      = $totalExchangeRiel;
+                    $data['total_tax_base_riel']            = $totalTtaxBbaseRiel;
                     $data['total_charges_reduced']          = $totalChargesReduced;
                     $data['total_rate']                     = $totalTax;
                     $data['tax_free_seniority_allowance']   = $taxExemptionSalary;

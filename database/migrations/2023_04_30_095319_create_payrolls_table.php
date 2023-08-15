@@ -39,6 +39,10 @@ return new class extends Migration
             $table->decimal('tax_free_seniority_allowance',50,2)->default(0);
             $table->decimal('total_salary')->default(0);
             $table->string('exchange_rate')->nullable();
+            $table->string('amount_loan')->nullable();
+            $table->string('incentive')->nullable();
+            $table->string('adjustment')->nullable();
+            $table->string('leaves')->nullable();
             $table->bigInteger('created_by')->unsigned()->nullable();
             $table->bigInteger('updated_by')->unsigned()->nullable();
             $table->dateTime('deleted_at')->nullable();

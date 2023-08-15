@@ -150,7 +150,7 @@
                                                         </th>
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                             rowspan="1" colspan="1"
-                                                            aria-label="Join Date: activate to sort column ascending">Seniority Payable Tax
+                                                            aria-label="Join Date: activate to sort column ascending">Seniority Pay (Excluded Tax)
                                                         </th>
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                             rowspan="1" colspan="1"
@@ -164,13 +164,30 @@
                                                             rowspan="1" colspan="1"
                                                             aria-label="Join Date: activate to sort column ascending">Gross Salary(Riel)
                                                         </th>
+                                                        
+                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                            rowspan="1" colspan="1"
+                                                            aria-label="Join Date: activate to sort column ascending">Salary Charges Reduced
+                                                        </th>
+                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                            rowspan="1" colspan="1"
+                                                            aria-label="Join Date: activate to sort column ascending">Tax base(Riel)
+                                                        </th>
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                             rowspan="1" colspan="1"
                                                             aria-label="Join Date: activate to sort column ascending">Tax Rate
                                                         </th>
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                             rowspan="1" colspan="1"
-                                                            aria-label="Join Date: activate to sort column ascending">Tax-free Seniority
+                                                            aria-label="Join Date: activate to sort column ascending">Personal Tax(USD)
+                                                        </th>
+                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                            rowspan="1" colspan="1"
+                                                            aria-label="Join Date: activate to sort column ascending">Personal Tax(Riel)
+                                                        </th>
+                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                            rowspan="1" colspan="1"
+                                                            aria-label="Join Date: activate to sort column ascending">Seniority Pay (Excluded Tax)
                                                         </th>
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                             rowspan="1" colspan="1"
@@ -190,19 +207,23 @@
                                                                 <td><a href="#">{{ $item->users == null ? '' : $item->users->EmployeePosition}}</a></td>
                                                                 <td><a href="#">{{ $item->users == null ? '' : $item->users->EmployeeBranch}}</a></td>
                                                                 <td>{{ $item->users == null ? '' : $item->users->joinOfDate}}</td>
-                                                                <td>$ <a href="#">{{ $item->basic_salary }}</a></td>
-                                                                <td>$ <a href="#">{{ $item->total_child_allowance }}</a></td>
-                                                                <td>$ <a href="#">{{ $item->phone_allowance == null ? '0.00' : $item->phone_allowance}}</a></td>
-                                                                <td>$ <a href="#">{{ $item->total_kny_phcumben}}</a></td>
-                                                                <td>$ <a href="#">{{ $item->total_gross_salary }}</a></td>
-                                                                <td>$ <a href="#">{{ $item->seniority_payable_tax}}</a></td>
-                                                                <td>$ <a href="#">{{ $item->total_pension_fund}}</a></td>
-                                                                <td>$ <a href="#">{{ $item->base_salary_received_usd}}</a></td>
-                                                                <td>$ <a href="#">{{ $item->base_salary_received_riel}}</a></td>
+                                                                <td>$<a href="#">{{ $item->basic_salary }}</a></td>
+                                                                <td>$<a href="#">{{ $item->total_child_allowance }}</a></td>
+                                                                <td>$<a href="#">{{ $item->phone_allowance == null ? '0.00' : $item->phone_allowance}}</a></td>
+                                                                <td>$<a href="#">{{ $item->total_kny_phcumben}}</a></td>
+                                                                <td>$<a href="#">{{ $item->total_gross_salary }}</a></td>
+                                                                <td>$<a href="#">{{ $item->seniority_payable_tax}}</a></td>
+                                                                <td>$<a href="#">{{ $item->total_pension_fund}}</a></td>
+                                                                <td>$<a href="#">{{ $item->base_salary_received_usd}}</a></td>
+                                                                <td>$<a href="#">{{ number_format((int)$item->base_salary_received_riel)}}</a></td>
+                                                                <td><span>៛</span><a href="#">{{ number_format((int)$item->total_charges_reduced) }}</a></td>
+                                                                <td><span>៛</span><a href="#">{{ number_format((int)$item->total_tax_base_riel) }}</a></td>
                                                                 <td><a href="#">{{ $item->total_rate}}%</a></td>
-                                                                <td>$ <a href="#">{{ $item->tax_free_seniority_allowance}}</a></td>
-                                                                <td>$ <a href="#">{{ $item->total_severance_pay}}</a></td>
-                                                                <td>$ <a href="#">{{ $item->total_salary }}</a></td>
+                                                                <td>$<a href="#">{{ $item->total_salary_tax_usd}}</a></td>
+                                                                <td><span>៛</span><a href="#">{{ number_format((int)$item->total_salary_tax_riel)}}</a></td>
+                                                                <td>$<a href="#">{{ $item->tax_free_seniority_allowance}}</a></td>
+                                                                <td>$<a href="#">{{ $item->total_severance_pay}}</a></td>
+                                                                <td>$<a href="#">{{ $item->total_salary }}</a></td>
                                                                 <td>{{ $item->payment_date}}</td>
                                                             </tr>
                                                         @endforeach
@@ -594,24 +615,23 @@
                                 '<td><a href="#">'+(row.users == null ? '' : row.users.position.name_english)+'</a></td>'+
                                 '<td><a href="#">'+(row.users == null ? '' : row.users.branch.branch_name_en)+'</a></td>'+
                                 '<td>'+(join_date)+'</td>'+
-                                '<td>'+(dollar)+' <a href="#">'+(row.basic_salary )+'</a></td>'+
-                                '<td>'+(dollar)+' <a href="#">'+(row.total_child_allowance )+'</a></td>'+
-                                '<td>'+(dollar)+' <a href="#">'+(row.phone_allowance == null ? '0.00' : row.phone_allowance)+'</a></td>'+
-                                '<td>'+(dollar)+' <a href="#">'+(row.total_kny_phcumben)+'</a></td>'+
-                                '<td>'+(dollar)+' <a href="#">'+(row.total_gross_salary )+'</a></td>'+
-                                '<td>'+(dollar)+' <a href="#">'+(row.seniority_payable_tax)+'</a></td>'+
-                                '<td>'+(dollar)+' <a href="#">'+(row.total_pension_fund)+'</a></td>'+
-                                '<td>'+(dollar)+' <a href="#">'+(row.base_salary_received_usd)+'</a></td>'+
-                                '<td>'+(dollar)+' <a href="#">'+(row.base_salary_received_riel)+'</a></td>'+
-                                '<td><a href="#">'+(row.spouse)+'</a></td>'+
-                                '<td><span>៛</span><a href="#">'+(row.total_charges_reduced)+'</a></td>'+
-                                '<td><span>៛</span> <a href="#">'+(row.total_tax_base_riel)+'</a></td>'+
+                                '<td>'+(dollar)+'<a href="#">'+(row.basic_salary )+'</a></td>'+
+                                '<td>'+(dollar)+'<a href="#">'+(row.total_child_allowance )+'</a></td>'+
+                                '<td>'+(dollar)+'<a href="#">'+(row.phone_allowance == null ? '0.00' : row.phone_allowance)+'</a></td>'+
+                                '<td>'+(dollar)+'<a href="#">'+(row.total_kny_phcumben)+'</a></td>'+
+                                '<td>'+(dollar)+'<a href="#">'+(row.total_gross_salary )+'</a></td>'+
+                                '<td>'+(dollar)+'<a href="#">'+(row.seniority_payable_tax)+'</a></td>'+
+                                '<td>'+(dollar)+'<a href="#">'+(row.total_pension_fund)+'</a></td>'+
+                                '<td>'+(dollar)+'<a href="#">'+(row.base_salary_received_usd)+'</a></td>'+
+                                '<td>'+(dollar)+'<a href="#">'+(formatCurrencyKH(row.base_salary_received_riel))+'</a></td>'+
+                                '<td><span>៛</span><a href="#">'+(formatCurrencyKH(row.total_charges_reduced))+'</a></td>'+
+                                '<td><span>៛</span><a href="#">'+(formatCurrencyKH(row.total_tax_base_riel))+'</a></td>'+
                                 '<td><a href="#">'+(row.total_rate)+'%</a></td>'+
-                                '<td>'+(dollar)+' <a href="#">'+(row.total_salary_tax_usd)+'</a></td>'+
-                                '<td><span>៛</span> <a href="#">'+(row.total_salary_tax_riel)+'</a></td>'+
-                                '<td>'+(dollar)+' <a href="#">'+(row.tax_free_seniority_allowance)+'</a></td>'+
-                                '<td>'+(dollar)+' <a href="#">'+(row.total_severance_pay)+'</a></td>'+
-                                '<td>'+(dollar)+' <a href="#">'+(row.total_salary )+'</a></td>'+
+                                '<td>'+(dollar)+'<a href="#">'+(row.total_salary_tax_usd)+'</a></td>'+
+                                '<td><span>៛</span><a href="#">'+(formatCurrencyKH(row.total_salary_tax_riel))+'</a></td>'+
+                                '<td>'+(dollar)+'<a href="#">'+(row.tax_free_seniority_allowance)+'</a></td>'+
+                                '<td>'+(dollar)+'<a href="#">'+(row.total_severance_pay)+'</a></td>'+
+                                '<td>'+(dollar)+'<a href="#">'+(row.total_salary )+'</a></td>'+
                                 '<td>'+(payment_date)+'</td>'+
                             '</tr>';
                         });
@@ -713,6 +733,9 @@
                     
             }
         });
+    }
+    function formatCurrencyKH(currency) {
+        return parseInt(currency).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
     function print_pdf(type) {
         $("#print_purchase").show();

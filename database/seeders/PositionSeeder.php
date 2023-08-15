@@ -108,7 +108,7 @@ class PositionSeeder extends Seeder
         Position::firstOrCreate(['name_khmer' => 'បុគ្គលិកផ្នែកវាយតម្លៃឥណទានឌីជីថលជាន់ខ្ពស់','name_english' => 'Senior Digital Loan Assessment Officer']);
         Position::firstOrCreate(['name_khmer' => 'បុគ្គលិកលក់សាជីវកម្មជាន់ខ្ពស់','name_english' => 'Senior Corporate Sales Officer']);
         Position::firstOrCreate(['name_khmer' => 'បុគ្គលិកឥណទានយានយន្តជាន់ខ្ពស់','name_english' => 'Senior Auto Loan Officer']);
-        Position::firstOrCreate(['name_khmer' => 'បុគ្គលិកផ្នែកវាយតម្លៃឥណទានឌីជីថលជាន់ខ្ពស់','name_english' => 'Senior Assessment Officer']);
+        Position::firstOrCreate(['name_khmer' => 'មន្ត្រីការវាយតម្លៃជាន់ខ្ពស់','name_english' => 'Senior Assessment Officer']);
         Position::firstOrCreate(['name_khmer' => 'បុគ្គលិកផលប័ត្រឥណទានជាន់ខ្ពស់','name_english' => 'Senior Credit Portfolio Officer']);
         Position::firstOrCreate(['name_khmer' => 'បុគ្គលិកត្រួតពិនិត្យឥណទានជាន់ខ្ពស់','name_english' => 'Senior Credit Control Officer']);
         Position::firstOrCreate(['name_khmer' => 'បុគ្គលិកវិភាគឥណទានជាន់ខ្ពស់','name_english' => 'Senior Credit Underwriting Officer']);
