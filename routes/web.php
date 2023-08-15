@@ -103,6 +103,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('users/reasonoption', [UserController::class, 'reasonOption']);
     Route::get('users/birthday', [UserController::class, 'showDetailBirthday']);
     Route::get('users/print', [UserController::class, 'print']);
+    Route::post('import/employee',[UserController::class,'employImport']);
 
     //Employee Payroll
     Route::get('payroll',[EmployeePayrollController::class,'index']);

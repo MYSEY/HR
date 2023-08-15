@@ -20,7 +20,10 @@ use App\Http\Requests\UserUpdated;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Brian2694\Toastr\Facades\Toastr;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use App\Traits\UploadFiles\UploadFIle;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 use App\Repositories\Admin\EmployeeRepository;
 
 class UserController extends Controller
@@ -207,6 +210,66 @@ class UserController extends Controller
         return response()->json([
             'success'=>$data,
         ]);
+    }
+
+    public function employImport(Request $request){
+        $file = $request->file;
+        $filesize = filesize($file);
+        $extension = $request->file->extension();
+        $spreadsheet = IOFactory::load($file);
+        $allDataInSheet = $spreadsheet->getActiveSheet()->toArray();
+        if ($extension == "xlsx" || $extension == "xls" || $extension == "csv") {
+            $created = Auth::user()->id;
+            $i = 0;
+            foreach ($allDataInSheet as $item) {
+                $i++;
+                if ($i != 1) {
+                    $date_of_birth = Carbon::createFromDate($item[4])->format('Y-m-d');
+                    $date_of_commencement = Carbon::createFromDate($item[5])->format('Y-m-d');
+                    $fdc_date = Carbon::createFromDate($item[6])->format('Y-m-d');
+                    $issue_date = Carbon::createFromDate($item[27])->format('Y-m-d');
+                    $issue_expired_date = Carbon::createFromDate($item[28])->format('Y-m-d');
+                    User::create([
+                        'number_employee'   => $item[0],
+                        'employee_name_kh'   => $item[1],
+                        'employee_name_en'   => $item[2],
+                        'gender'   => $item[3],
+                        'date_of_birth'   => $date_of_birth,
+                        'date_of_commencement'   => $date_of_commencement,
+                        'fdc_date'   => $fdc_date,
+                        'branch_id'   => $item[7],
+                        'department_id'   => $item[8],
+                        'position_id'   => $item[9],
+                        'position_type'   => $item[10],
+                        'unit'   => $item[11],
+                        'level'   => $item[12],
+                        'nationality'   => $item[13],
+                        'marital_status'   => $item[14],
+                        'basic_salary'   => $item[15],
+                        'phone_allowance'   => $item[16],
+                        'guarantee_letter'   => 'INVITATION_Ingenico & Hengbao_11 Aug 2023_v3.pdf',
+                        'employment_book'   => $item[18],
+                        'personal_phone_number'   => $item[19],
+                        'company_phone_number'   => $item[20],
+                        'agency_phone_number'   => $item[21],
+                        'email'   => $item[22],
+                        'spouse'   => $item[23],
+                        'is_loan'   => $item[24],
+                        'identity_type'   => $item[25],
+                        'identity_number'   => $item[26],
+                        'issue_date'   => $issue_date,
+                        'issue_expired_date'   => $issue_expired_date,
+                        'password'  => Hash::make($item[29]),
+                        'role_id'  => $item[30],
+                        'emp_status'  => $item[31],
+                        'created_by'  => $created,
+                    ]);
+                }
+            }
+            return 1;
+        } else {
+            return 0;
+        }
     }
 
     /**

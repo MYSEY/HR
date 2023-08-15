@@ -152,13 +152,13 @@ class OptionSeeder extends Seeder
 
         //Gender
         Option::firstOrCreate([
-            'name_khmer' => 'Male',
+            'name_khmer' => 'ភេទប្រុស',
             'name_english'=>'Male',
             'type' => 'gender',
             'created_by'    => Auth::id(),
         ]);
         Option::firstOrCreate([
-            'name_khmer' => 'Female',
+            'name_khmer' => 'ភេទស្រី',
             'name_english'=>'Female',
             'type' => 'gender',
             'created_by'    => Auth::id(),
@@ -186,12 +186,6 @@ class OptionSeeder extends Seeder
         Option::firstOrCreate([
             'name_khmer' => 'Residential',
             'name_english'=>'Residential',
-            'type' => 'identity_type',
-            'created_by'    => Auth::id(),
-        ]);
-        Option::firstOrCreate([
-            'name_khmer' => 'Other',
-            'name_english'=>'Other',
             'type' => 'identity_type',
             'created_by'    => Auth::id(),
         ]);

@@ -28,6 +28,13 @@
                         <a href="#" class="btn add-btn" data-toggle="modal" id="add_new"><i class="fa fa-plus"></i> Add New</a>
                     @endif
                 </div>
+                <div class="col-auto float-end ms-auto">
+                    @if (Auth::user()->RolePermission == 'Administrator')
+                        <a href="#" class="btn add-btn" data-toggle="modal" id="import_employee"><i
+                                class="fa fa-plus"></i>
+                            Import Data</a>
+                    @endif
+                </div>
             </div>
         </div>
         @if (Auth::user()->RolePermission == 'Administrator')
@@ -96,6 +103,7 @@
 
         @include('users.modal_form_create')
         @include('users.modal_form_edit')
+        @include('users.import')
        
         <!-- Delete User Modal -->
         <div class="modal custom-modal fade" id="delete_user" role="dialog">
@@ -134,6 +142,11 @@
 
 <script>
     $(function(){
+        $("#import_employee").on("click", function() {
+            $(".thanLess").hide();
+            $("#thanLess").text("");
+            $('#importEmployeeModal').modal('show');
+        });
         $(".reset-btn").on("click", function() {
             $(this).prop('disabled', true);
             $(".btn-text-reset").hide();
