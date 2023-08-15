@@ -270,7 +270,11 @@
                                     </li>
                                     <li>
                                         <div class="title">Loan</div>
-                                        <label class="text">{{ $data->EmployeeIsLoan }}</label>
+                                        @if ($data->is_loan == '1')
+                                            <span style="font-size: 13px" class="badge bg-inverse-danger">Yes</span>
+                                        @elseif($data->is_loan == '0')
+                                            <span style="font-size: 13px" class="badge bg-inverse-success">No</span>
+                                        @endif
                                     </li>
                                 </ul>
                             </div>

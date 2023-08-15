@@ -283,15 +283,6 @@ class User extends Authenticatable
         }
         return $positionType ?? "";
     }
-    public function getEmployeeIsLoanAttribute(){
-        $data = Option::where('type','loan')->get();
-        foreach($data as $item){
-            if($this->is_loan == $item->id){
-                $positionType = $item->name_english;
-            }
-        }
-        return $positionType ?? "";
-    }
     public function getEmployeeResignReasonAttribute(){
         $data = Option::where('type','emp_status')->get();
         foreach($data as $item){

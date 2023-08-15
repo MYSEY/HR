@@ -36,7 +36,7 @@
                                                 <select class="form-control" id="e_sex" name="sex" value="">
                                                     <option selected disabled value=""> --Select --</option>
                                                     @foreach ($optionGender as $item)
-                                                        <option value="{{$item->id}}">{{$item->name_khmer}}</option>
+                                                        <option value="{{$item->id}}">{{$item->name_english}}</option>
                                                     @endforeach
                                                 </select>
                                             </div>
