@@ -33,7 +33,7 @@
                 </div> --}}
                 <div class="col-auto float-end ms-auto">
                     <div class="btn-group">
-                        @if (Auth::user()->RolePermission == 'Administrator')
+                        @if (Auth::user()->RolePermission == 'Admin')
                         <div class="btn-group btn-group-sm">
                             <button class="btn btn-white" id="btn_print">
                                 <span class="btn-text-print"><i class="fa fa-print fa-lg"></i> Print</span>

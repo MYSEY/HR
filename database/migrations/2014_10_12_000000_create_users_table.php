@@ -88,8 +88,8 @@ class CreateUsersTable extends Migration
         DB::table('users')->insert(
             [
                 'number_employee'=>'230-0000',
-                'employee_name_kh'=>'Administrator',
-                'employee_name_en'=>'Administrator',
+                'employee_name_kh'=>'Developer',
+                'employee_name_en'=>'Developer',
                 'email'=>'administrator@gmail.com',
                 'password'=>Hash::make('ASDasd12345$$'),
                 'role_id'=>'1',

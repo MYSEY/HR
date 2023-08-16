@@ -67,7 +67,7 @@
                 </div>
             </div>
         </div>
-        @if (Auth::user()->RolePermission == 'Administrator')
+        @if (Auth::user()->RolePermission == 'Admin')
             <form class="needs-validation" novalidate>
                 @csrf
                 <div class="row filter-btn">

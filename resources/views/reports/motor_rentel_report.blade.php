@@ -24,7 +24,7 @@
                     </ul>
                 </div>
                 <div class="col-auto float-end ms-auto">
-                    {{-- @if (Auth::user()->RolePermission == 'Administrator')
+                    {{-- @if (Auth::user()->RolePermission == 'Admin')
                         <a href="#" class="btn add-btn btn-export"><i class="fa fa-plus"></i>
                             Export Data</a>
                     @endif --}}
@@ -34,7 +34,7 @@
             </div>
         </div>
     </div>
-    @if (Auth::user()->RolePermission == 'Administrator')
+    @if (Auth::user()->RolePermission == 'Admin')
         <div class="row">
             <div class="col-sm-6 col-md-2">
                 <div class="form-group">
@@ -256,7 +256,7 @@
                                                             <a href="#" class="action-icon dropdown-toggle"
                                                                 data-bs-toggle="dropdown" aria-expanded="false"><i
                                                                     class="material-icons">more_vert</i></a>
-                                                            @if (Auth::user()->RolePermission == 'Administrator')
+                                                            @if (Auth::user()->RolePermission == 'Admin')
                                                                 <div class="dropdown-menu dropdown-menu-right">
                                                                     <a class="dropdown-item motor_detail"
                                                                         data-id="{{ $item->id }}"

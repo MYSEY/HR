@@ -25,14 +25,14 @@
                 </div>
 
                 <div class="col-auto float-end ms-auto">
-                    @if (Auth::user()->RolePermission == 'Administrator')
+                    @if (Auth::user()->RolePermission == 'Admin')
                         <a href="#" class="btn add-btn" data-toggle="modal" data-toggle="modal" id="add_new"><i
                                 class="fa fa-plus"></i>
                             Add New</a>
                     @endif
                 </div>
                 <div class="col-auto float-end ms-auto">
-                    @if (Auth::user()->RolePermission == 'Administrator')
+                    @if (Auth::user()->RolePermission == 'Admin')
                         <a href="#" class="btn add-btn" data-toggle="modal" id="import_new_motor_rentel"><i
                                 class="fa fa-plus"></i>
                             Import Data</a>
@@ -40,7 +40,7 @@
                 </div>
             </div>
         </div>
-        @if (Auth::user()->RolePermission == 'Administrator')
+        @if (Auth::user()->RolePermission == 'Admin')
             <div class="row filter-row-btn">
                 <div class="col-sm-2 col-md-2">
                     <div class="form-group form-focus select-focus">
@@ -174,7 +174,7 @@
                                                                 <a href="#" class="action-icon dropdown-toggle"
                                                                     data-bs-toggle="dropdown" aria-expanded="false"><i
                                                                         class="material-icons">more_vert</i></a>
-                                                                @if (Auth::user()->RolePermission == 'Administrator')
+                                                                @if (Auth::user()->RolePermission == 'Admin')
                                                                     <div class="dropdown-menu dropdown-menu-right">
                                                                         {{-- <a class="dropdown-item motor_detail"
                                                                             data-id="{{ $item->id }}"

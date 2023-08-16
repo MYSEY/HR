@@ -34,7 +34,7 @@ class EmployeeRepository extends BaseRepository
     }
 
     public function getAllUsers($request){
-        if (Auth::user()->RolePermission == 'Administrator') {
+        if (Auth::user()->RolePermission == 'Admin') {
             if($request->emp_status || $request->employee_id || $request->employee_name){
                 $dataUser = [];
                 $dataUser = User::with('role')->with('department')->with('position')->with('branch')->with('positiontype')

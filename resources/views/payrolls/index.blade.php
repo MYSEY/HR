@@ -20,13 +20,13 @@
                     </ul>
                 </div>
                 <div class="col-auto float-end ms-auto">
-                    @if (Auth::user()->RolePermission == 'Administrator')
+                    @if (Auth::user()->RolePermission == 'Admin')
                         <a href="#" class="btn add-btn" data-bs-toggle="modal" data-bs-target="#add_salary"><i class="fa fa-plus"></i> Add New</a>
                     @endif
                 </div>
             </div>
         </div>
-        @if (Auth::user()->RolePermission == 'Administrator')
+        @if (Auth::user()->RolePermission == 'Admin')
             <form>
                 {{-- @csrf --}}
                 <div class="row filter-btn"> 

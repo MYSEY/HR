@@ -220,7 +220,7 @@ class User extends Authenticatable
     }
 
     public function getRolePermissionAttribute(){
-        return optional($this->role)->name;
+        return optional($this->role)->role_type;
     }
 
     public function setGuaranteeLetterAttribute($value)

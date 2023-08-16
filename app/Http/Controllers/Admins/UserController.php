@@ -217,11 +217,11 @@ class UserController extends Controller
         $filesize = filesize($file);
         $extension = $request->file->extension();
         $spreadsheet = IOFactory::load($file);
-        $allDataInSheet = $spreadsheet->getActiveSheet()->toArray();
+        $AllEmployee = $spreadsheet->getActiveSheet()->toArray();
         if ($extension == "xlsx" || $extension == "xls" || $extension == "csv") {
             $created = Auth::user()->id;
             $i = 0;
-            foreach ($allDataInSheet as $item) {
+            foreach ($AllEmployee as $item) {
                 $i++;
                 if ($i != 1) {
                     $date_of_birth = Carbon::createFromDate($item[4])->format('Y-m-d');

@@ -49,7 +49,7 @@
                                                             <i class="fa fa-dot-circle-o text-purple"></i>
                                                             <span>Received CV</span>
                                                         </a>
-                                                        @if (Auth::user()->RolePermission == 'Administrator')
+                                                        @if (Auth::user()->RolePermission == 'Admin')
                                                             <div class="dropdown-menu dropdown-menu-right" id="btn-status">
                                                                 <a class="dropdown-item" data-emp-id="{{$item->id}}"  data-id="2" href="#">
                                                                     <i class="fa fa-dot-circle-o text-warning"></i> Shortlisted
@@ -69,7 +69,7 @@
                                                         <a href="#" class="action-icon dropdown-toggle"
                                                             data-bs-toggle="dropdown" aria-expanded="false"><i
                                                                 class="material-icons">more_vert</i></a>
-                                                        @if (Auth::user()->RolePermission == 'Administrator')
+                                                        @if (Auth::user()->RolePermission == 'Admin')
                                                             <div class="dropdown-menu dropdown-menu-right">
                                                                 <a class="dropdown-item update"
                                                                     data-id="{{ $item->id }}"><i

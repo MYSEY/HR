@@ -24,14 +24,21 @@ return new class extends Migration
             $table->dateTime('deleted_at')->nullable();
             $table->timestamps();
         });
-        DB::table('roles')->insert(
+        DB::table('roles')->insert([
             [
-                'role_name'=>'Administrator',
+                'role_name'=>'Developer',
                 'role_type'=>'Admin',
                 'status'=>1,
                 'created_at'=>now(),
                 'updated_at'=>now()
-            ]
+            ],
+            [
+                'role_name'=>'HR',
+                'role_type'=>'Admin',
+                'status'=>1,
+                'created_at'=>now(),
+                'updated_at'=>now()
+            ]]
         );
     }
 
