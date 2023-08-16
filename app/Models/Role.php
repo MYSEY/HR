@@ -10,7 +10,9 @@ class Role extends Model
     use HasFactory;
     protected $fillable = [
         'id',
-        'name',
+        'role_name',
+        'role_type',
+        'updated_by',
     ];
 
 

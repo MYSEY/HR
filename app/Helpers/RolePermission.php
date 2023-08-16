@@ -79,7 +79,7 @@ function menu(){
             'permission'=>1,
             'child'=>[
                 [
-                    'value'=>'Motor Rental List',
+                    'value'=>'Motor Rental',
                     'url'=>"motor-rentel/list",
                     'table'=>2,
                     'permission'=>1
@@ -137,13 +137,7 @@ function menu(){
                     'url'=>"reports/training-report",
                     'table'=>2,
                     'permission'=>1
-                ],
-                // [
-                //     'value'=>'Training Type',
-                //     'url'=>"training-type/list",
-                //     'table'=>2,
-                //     'permission'=>1
-                // ],
+                ]
             ]
         ],
         [

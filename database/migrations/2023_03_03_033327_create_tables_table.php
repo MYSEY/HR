@@ -23,13 +23,13 @@ return new class extends Migration
         DB::table('tables')->insert(
             [
                 [
-                    'name'=>'Dashboard Admin',
+                    'name'=>'Admin Dashboard',
                     'status'=>1,
                     'created_at'=>now(),
                     'updated_at'=>now()
                 ],
                 [
-                    'name'=>'Dashboard Employee',
+                    'name'=>'Employee Dashboard',
                     'status'=>1,
                     'created_at'=>now(),
                     'updated_at'=>now()
@@ -53,19 +53,49 @@ return new class extends Migration
                     'updated_at'=>now()
                 ],
                 [
-                    'name'=>'Roles & Permissions',
+                    'name'=>'Pay Motor Rental',
                     'status'=>1,
                     'created_at'=>now(),
                     'updated_at'=>now()
                 ],
                 [
-                    'name'=>'Holidays',
+                    'name'=>'Recruitment Plan',
                     'status'=>1,
                     'created_at'=>now(),
                     'updated_at'=>now()
                 ],
                 [
-                    'name'=>'Leaves',
+                    'name'=>'Candidate CV',
+                    'status'=>1,
+                    'created_at'=>now(),
+                    'updated_at'=>now()
+                ],
+                [
+                    'name'=>'Training',
+                    'status'=>1,
+                    'created_at'=>now(),
+                    'updated_at'=>now()
+                ],
+                [
+                    'name'=>'Trainer',
+                    'status'=>1,
+                    'created_at'=>now(),
+                    'updated_at'=>now()
+                ],
+                [
+                    'name'=>'Training Report',
+                    'status'=>1,
+                    'created_at'=>now(),
+                    'updated_at'=>now()
+                ],
+                [
+                    'name'=>'Public Holiday',
+                    'status'=>1,
+                    'created_at'=>now(),
+                    'updated_at'=>now()
+                ],
+                [
+                    'name'=>'Bank',
                     'status'=>1,
                     'created_at'=>now(),
                     'updated_at'=>now()
@@ -89,13 +119,73 @@ return new class extends Migration
                     'updated_at'=>now()
                 ],
                 [
-                    'name'=>'Leaves Employee',
+                    'name'=>'Employee Report',
                     'status'=>1,
                     'created_at'=>now(),
                     'updated_at'=>now()
                 ],
                 [
-                    'name'=>'Recruitment',
+                    'name'=>'Payroll Report',
+                    'status'=>1,
+                    'created_at'=>now(),
+                    'updated_at'=>now()
+                ],
+                [
+                    'name'=>'Motor Rental Report',
+                    'status'=>1,
+                    'created_at'=>now(),
+                    'updated_at'=>now()
+                ],
+                [
+                    'name'=>'New Staff Report',
+                    'status'=>1,
+                    'created_at'=>now(),
+                    'updated_at'=>now()
+                ],
+                [
+                    'name'=>'Staff Resigned Report',
+                    'status'=>1,
+                    'created_at'=>now(),
+                    'updated_at'=>now()
+                ],
+                [
+                    'name'=>'Promoted Staff Report',
+                    'status'=>1,
+                    'created_at'=>now(),
+                    'updated_at'=>now()
+                ],
+                [
+                    'name'=>'Transferred Staff Report',
+                    'status'=>1,
+                    'created_at'=>now(),
+                    'updated_at'=>now()
+                ],
+                [
+                    'name'=>'Taxe',
+                    'status'=>1,
+                    'created_at'=>now(),
+                    'updated_at'=>now()
+                ],
+                [
+                    'name'=>'Exchange Rate',
+                    'status'=>1,
+                    'created_at'=>now(),
+                    'updated_at'=>now()
+                ],
+                [
+                    'name'=>'Children Allowance',
+                    'status'=>1,
+                    'created_at'=>now(),
+                    'updated_at'=>now()
+                ],
+                [
+                    'name'=>'Change Password',
+                    'status'=>1,
+                    'created_at'=>now(),
+                    'updated_at'=>now()
+                ],
+                [
+                    'name'=>'Roles & Permissions',
                     'status'=>1,
                     'created_at'=>now(),
                     'updated_at'=>now()

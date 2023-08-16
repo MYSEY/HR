@@ -19,8 +19,9 @@
                            @foreach ($role as $item)
                                 <li class="{{ $loop->first ? 'active' : '' }}" at="{{$item->id ?? 0}}" value="{{$item->id ?? 0}}">
                                     <span hidden class="id">{{ $item->id }}</span>
+                                    <span hidden class="roleType">{{ $item->role_type }}</span>
                                     <a href="javascript:void(0);" at="{{$item->id ?? 0}}" value="{{$item->id ?? 0}}">
-                                        <span class="roleNmae">{{$item->name ?? ''}}</span>
+                                        <span class="roleName">{{$item->role_name ?? ''}}</span>
                                         <span class="role-action">
                                             <span class="action-circle large rolesUpdate" data-toggle="modal" data-id="{{$item->id}}" data-target="#edit_role">
                                                 <i class="material-icons">edit</i>
@@ -63,7 +64,7 @@
         </div>
     </div>
 
-    <div id="add_role" class="modal custom-modal fade" role="dialog">
+    <div id="add_role" class="modal custom-modal fade" role="dialog" data-bs-backdrop="static">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -72,11 +73,19 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form action="{{url('role/store')}}" method="POST" enctype="multipart/form-data">
+                    <form action="{{url('role/store')}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
                         @csrf
                         <div class="form-group">
                             <label>Role Name <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control @error('roleName') is-invalid @enderror" id="roleName" name="roleName" value="{{ old('roleName') }}" placeholder="Enter role name">
+                            <input type="text" class="form-control @error('role_name') is-invalid @enderror" id="role_name" name="role_name" value="{{ old('role_name') }}" placeholder="Enter role name" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Role Type <span class="text-danger">*</span></label>
+                            <select class="form-control" id="role_type" name="role_type" value="{{old('role_type')}}" required>
+                                <option selected disabled value=""> --Select --</option>
+                                <option value="Admin">Admin</option>
+                                <option value="Employee">Employee</option>
+                            </select>
                         </div>
                         <div class="submit-section">
                             <button class="btn btn-primary submit-btn">Submit</button>
@@ -88,7 +97,7 @@
     </div>
 
     <!-- Edit Role Modal -->
-    <div id="edit_role" class="modal custom-modal fade" role="dialog">
+    <div id="edit_role" class="modal custom-modal fade" role="dialog" data-bs-backdrop="static">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content modal-md">
                 <div class="modal-header">
@@ -97,14 +106,22 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form action="{{ url('role/update') }}" method="POST" enctype="multipart/form-data"> 
+                    <form action="{{ url('role/update') }}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate> 
                         @csrf
                         <div class="form-group">
-                            <input type="hidden" name="id" id="e_id" value="">
                             <label>Role Name <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="e_roleNmae" name="roleNmae" value="">
+                            <input type="text" class="form-control" id="e_role_name" name="role_name" value="">
+                        </div>
+                        <div class="form-group">
+                            <label>Role Type <span class="text-danger">*</span></label>
+                            <select class="form-control" id="e_role_type" name="role_type" value="{{old('role_type')}}" required>
+                                <option selected disabled value=""> --Select --</option>
+                                <option value="Admin">Admin</option>
+                                <option value="Employee">Employee</option>
+                            </select>
                         </div>
                         <div class="submit-section">
+                            <input type="hidden" name="id" id="e_id" value="">
                             <button type="submit" class="btn btn-primary submit-btn">Save</button>
                         </div>
                     </form>
@@ -142,7 +159,7 @@
     </div>
 @endsection
 @include('includs.script')
-
+<script src="{{asset('/admin/js/validation-field.js')}}"></script>
 <script>
     $(function(){
         role_click_change(role_active_id());
@@ -155,7 +172,8 @@
         $('.rolesUpdate').on('click',function(){
             var _this = $(this).closest("li");
             $('#e_id').val(_this.find('.id').text());
-            $('#e_roleNmae').val(_this.find('.roleNmae').text());
+            $('#e_role_name').val(_this.find('.roleName').text());
+            $('#e_role_type').val(_this.find('.roleType').text());
         });
         $('.rolesDelete').on('click',function(){
             var _this = $(this).closest("li");

@@ -46,19 +46,21 @@ class RoleConroller extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'roleName' => 'required|string|max:255',
+            'role_name' => 'required|string|max:255',
+            'role_type' => 'required|string|max:255',
         ]);
         try{
             Role::create([
-                'name'      => $request->roleName,
+                'role_name' => $request->role_name,
+                'role_type' => $request->role_type,
                 'status'    => 1,
                 'created_by'    => Auth::user()->id
             ]);
-            Toastr::success('Create new role successfully :)','Success');
+            Toastr::success('Create new role successfully','Success');
             return redirect()->back();
         }catch(\Exception $e){
             DB::rollback();
-            Toastr::error('Add new role fail :)','Error');
+            Toastr::error('Add new role fail','Error');
             return redirect()->back();
         }
     }
@@ -96,15 +98,16 @@ class RoleConroller extends Controller
     {
         try{
             Role::where('id',$request->id)->update([
-                'name'  => $request->roleNmae,
+                'role_name'  => $request->role_name,
+                'role_type'  => $request->role_type,
                 'status'    => 1,
                 'updated_by'    => Auth::user()->id
             ]);
-            Toastr::success('Updated role successfully :)','Success');
+            Toastr::success('Updated role successfully','Success');
             return redirect()->back();
         }catch(\Exception $e){
             DB::rollback();
-            Toastr::error('Add new employee fail :)','Error');
+            Toastr::error('Add new employee fail','Error');
             return redirect()->back();
         }
     }
@@ -119,11 +122,11 @@ class RoleConroller extends Controller
     {
         try{
             Role::destroy($request->id);
-            Toastr::success('Role Name deleted successfully :)','Success');
+            Toastr::success('Role Name deleted successfully','Success');
             return redirect()->back();
         }catch(\Exception $e){
             DB::rollback();
-            Toastr::error('Role Name delete fail :)','Error');
+            Toastr::error('Role Name delete fail','Error');
             return redirect()->back();
         }
     }
