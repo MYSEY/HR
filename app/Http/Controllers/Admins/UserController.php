@@ -219,50 +219,48 @@ class UserController extends Controller
         $spreadsheet = IOFactory::load($file);
         $AllEmployee = $spreadsheet->getActiveSheet()->toArray();
         if ($extension == "xlsx" || $extension == "xls" || $extension == "csv") {
-            $created = Auth::user()->id;
             $i = 0;
             foreach ($AllEmployee as $item) {
                 $i++;
                 if ($i != 1) {
-                    $date_of_birth = Carbon::createFromDate($item[4])->format('Y-m-d');
-                    $date_of_commencement = Carbon::createFromDate($item[5])->format('Y-m-d');
-                    $fdc_date = Carbon::createFromDate($item[6])->format('Y-m-d');
-                    $issue_date = Carbon::createFromDate($item[27])->format('Y-m-d');
-                    $issue_expired_date = Carbon::createFromDate($item[28])->format('Y-m-d');
                     User::create([
-                        'number_employee'   => $item[0],
-                        'employee_name_kh'   => $item[1],
-                        'employee_name_en'   => $item[2],
-                        'gender'   => $item[3],
-                        'date_of_birth'   => $date_of_birth,
-                        'date_of_commencement'   => $date_of_commencement,
-                        'fdc_date'   => $fdc_date,
-                        'branch_id'   => $item[7],
-                        'department_id'   => $item[8],
-                        'position_id'   => $item[9],
-                        'position_type'   => $item[10],
-                        'unit'   => $item[11],
-                        'level'   => $item[12],
-                        'nationality'   => $item[13],
-                        'marital_status'   => $item[14],
-                        'basic_salary'   => $item[15],
-                        'phone_allowance'   => $item[16],
-                        'guarantee_letter'   => 'INVITATION_Ingenico & Hengbao_11 Aug 2023_v3.pdf',
-                        'employment_book'   => $item[18],
-                        'personal_phone_number'   => $item[19],
-                        'company_phone_number'   => $item[20],
-                        'agency_phone_number'   => $item[21],
-                        'email'   => $item[22],
-                        'spouse'   => $item[23],
-                        'is_loan'   => $item[24],
-                        'identity_type'   => $item[25],
-                        'identity_number'   => $item[26],
-                        'issue_date'   => $issue_date,
-                        'issue_expired_date'   => $issue_expired_date,
-                        'password'  => Hash::make($item[29]),
-                        'role_id'  => $item[30],
-                        'emp_status'  => $item[31],
-                        'created_by'  => $created,
+                        'number_employee'       => $item[0],
+                        'employee_name_kh'      => $item[1],
+                        'employee_name_en'      => $item[2],
+                        'gender'                => $item[3],
+                        'date_of_birth'         => $item[4] == null ? null : Carbon::createFromDate($item[4])->format('Y-m-d'),
+                        'emp_status'            => $item[5],
+                        'role_id'               => $item[6],
+                        'date_of_commencement'  => $item[7] == null ? null : Carbon::createFromDate($item[7])->format('Y-m-d'),
+                        'fdc_date'              => $item[8] == null ? null :  Carbon::createFromDate($item[8])->format('Y-m-d'),
+                        'fdc_end'               => $item[9] == null ? null : Carbon::createFromDate($item[9])->format('Y-m-d'),
+                        'fdc_end'               => $item[10] == null ? null : Carbon::createFromDate($item[10])->format('Y-m-d'),
+                        'resign_date'           => $item[11] == null ? null : Carbon::createFromDate($item[11])->format('Y-m-d'),
+                        'resign_reason'         => $item[12],
+                        'branch_id'             => $item[13],
+                        'department_id'         => $item[14],
+                        'position_id'           => $item[15],
+                        'position_type'         => $item[16],
+                        'unit'                  => $item[17],
+                        'level'                 => $item[18],
+                        'nationality'           => $item[19],
+                        'marital_status'        => $item[20],
+                        'basic_salary'          => $item[21],
+                        'phone_allowance'       => $item[22],
+                        'guarantee_letter'      => 'INVITATION_Ingenico & Hengbao_11 Aug 2023_v3.pdf',
+                        'employment_book'       => $item[24],
+                        'personal_phone_number' => $item[25],
+                        'company_phone_number'  => $item[26],
+                        'agency_phone_number'   => $item[27],
+                        'email'                 => $item[28],
+                        'spouse'                => $item[29],
+                        'is_loan'               => $item[30],
+                        'identity_type'         => $item[31],
+                        'identity_number'       => $item[32],
+                        'issue_date'            => $item[33] == null ? null : Carbon::createFromDate($item[33])->format('Y-m-d'),
+                        'issue_expired_date'    => $item[34] == null ? null : Carbon::createFromDate($item[34])->format('Y-m-d'),
+                        'password'              => Hash::make($item[35]),
+                        'created_by'            => Auth::user()->id,
                     ]);
                 }
             }

@@ -56,7 +56,7 @@
                                                 <td>{{$item->EmployeeBranch}}</td>
                                                 <td>{{$item->personal_phone_number}}</td>
                                                 <td>
-                                                    <span class="badge bg-inverse-success">{{ $item->role == null ? "" : $item->role->name }}</span>
+                                                    <span class="badge bg-inverse-success">{{ $item->role == null ? "" : $item->role->role_name }}</span>
                                                 </td>
                                                 <td>{{$item->EmployeePositionType}}</td>
                                                 <td>$ <a href="#">{{$item->basic_salary}}</a></td>
@@ -174,7 +174,7 @@
                                                 <td>{{$item->EmployeeBranch}}</td>
                                                 <td>{{$item->personal_phone_number}}</td>
                                                 <td>
-                                                    <span class="badge bg-inverse-success">{{ $item->role == null ? "" : $item->role->name }}</span>
+                                                    <span class="badge bg-inverse-success">{{ $item->role == null ? "" : $item->role->role_name }}</span>
                                                 </td>
                                                 <td>{{$item->EmployeePositionType}}</td>
                                                 <td>$ <a href="#">{{$item->basic_salary}}</a></td>
@@ -316,7 +316,7 @@
                                                 <td>{{$item->EmployeeBranch}}</td>
                                                 <td>{{$item->personal_phone_number}}</td>
                                                 <td>
-                                                    <span class="badge bg-inverse-success">{{ $item->role == null ? "" : $item->role->name }}</span>
+                                                    <span class="badge bg-inverse-success">{{ $item->role == null ? "" : $item->role->role_name }}</span>
                                                 </td>
                                                 <td>{{$item->EmployeePositionType}}</td>
                                                 <td>$ <a href="#">{{$item->basic_salary}}</a></td>
@@ -465,7 +465,7 @@
                                                 <td>{{$item->EmployeeBranch}}</td>
                                                 <td>{{$item->personal_phone_number}}</td>
                                                 <td>
-                                                    <span class="badge bg-inverse-success">{{ $item->role == null ? "" : $item->role->name }}</span>
+                                                    <span class="badge bg-inverse-success">{{ $item->role == null ? "" : $item->role->role_name }}</span>
                                                 </td>
                                                 <td>{{$item->EmployeePositionType}}</td>
                                                 <td>$ <a href="#">{{$item->basic_salary}}</a></td>
@@ -600,7 +600,7 @@
                                                 <td>{{$item->EmployeeBranch}}</td>
                                                 <td>{{$item->personal_phone_number}}</td>
                                                 <td>
-                                                    <span class="badge bg-inverse-success">{{ $item->role == null ? "" : $item->role->name }}</span>
+                                                    <span class="badge bg-inverse-success">{{ $item->role == null ? "" : $item->role->role_name }}</span>
                                                 </td>
                                                 <td>{{$item->EmployeePositionType}}</td>
                                                 <td>$ <a href="#">{{$item->basic_salary}}</a></td>
@@ -722,7 +722,7 @@
                                                 <td>{{$item->EmployeeBranch}}</td>
                                                 <td>{{$item->personal_phone_number}}</td>
                                                 <td>
-                                                    <span class="badge bg-inverse-success">{{ $item->role == null ? "" : $item->role->name }}</span>
+                                                    <span class="badge bg-inverse-success">{{ $item->role == null ? "" : $item->role->role_name }}</span>
                                                 </td>
                                                 <td>{{$item->EmployeePositionType}}</td>
                                                 <td>$ <a href="#">{{$item->basic_salary}}</a></td>

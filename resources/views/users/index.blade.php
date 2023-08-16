@@ -265,7 +265,7 @@
                             $.each(response.role, function(i, item) {
                                 $('#e_role_id').append($('<option>', {
                                     value: item.id,
-                                    text: item.name,
+                                    text: item.role_name,
                                     selected: item.id == response.success.role_id
                                 }));
                             });
