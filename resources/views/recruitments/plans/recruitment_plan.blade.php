@@ -127,7 +127,7 @@
         <div class="">
             <div id="card_by_branch"></div>
         </div>
-        <div id="add_plan" class="modal custom-modal fade" role="dialog">
+        <div id="add_plan" class="modal custom-modal fade hr-modal-select2" role="dialog">
             <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -142,10 +142,10 @@
                             @csrf
                             <div class="row">
                                 <div class="col-sm-6 col-md-6">
-                                    <div class="form-group">
+                                    <div class="form-group hr-form-group-select2">
                                         <label>Position<span class="text-danger">*</span></label>
-                                        <select class="form-select " name="position_id" required>
-                                            <option selected disabled value="">Choose...</option>
+                                        <select class="form-select hr-select2-option" name="position_id" id="select-position-opsition" required>
+                                            <option selected disabled value="">Choose Position</option>
                                             @foreach ($positions as $item)
                                                 <option value="{{ $item->id }}">{{ $item->name_english }}</option>
                                             @endforeach
@@ -153,10 +153,10 @@
                                     </div>
                                 </div>
                                 <div class="col-sm-6 col-md-6">
-                                    <div class="form-group">
+                                    <div class="form-group hr-form-group-select2">
                                         <label>Branch <span class="text-danger">*</span></label>
-                                        <select class="form-select" name="branch_id" required>
-                                            <option selected disabled value="">Choose...</option>
+                                        <select class="form-select hr-select2-option" name="branch_id" required>
+                                            <option selected disabled value="">Choose Branch</option>
                                             @foreach ($branchs as $item)
                                                 <option value="{{ $item->id }}">{{ $item->branch_name_en }}</option>
                                             @endforeach

@@ -140,16 +140,20 @@ class RecruitmentPlanController extends Controller
     {
         try{
             $currentday = Carbon::createFromDate()->format('d');
-            RecruitmentPlan::where('id',$request->id)->update([
-                'position_id' => $request->position_id,
-                'branch_id' => $request->branch_id,
-                'plan_date' => $request->plan_date.'-'.$currentday,
-                'total_staff' => $request->total_staff,
-                'remark' => $request->remark,
-                'updated_by' => Auth::user()->id 
-            ]);
+            $plan_date = $request->plan_date.'-'.$currentday;
+            $dataPlan = RecruitmentPlan::where("id", $request->id)->first();
+            $dataPlan->position_id = $request->position_id;
+            $dataPlan->branch_id = $request->branch_id;
+            $dataPlan->plan_date = $plan_date;
+            $dataPlan->total_staff = $request->total_staff;
+            $dataPlan->remark = $request->remark;
+            $dataPlan->updated_by = Auth::user()->id;
+            $dataPlan->save();
             Toastr::success('Recruitment plan updated successfully.','Success');
-            return redirect()->back();
+            return response()->json([
+                'success'=>$dataPlan,
+            ]);
+            // return redirect()->back();
         }catch(\Exception $e){
             DB::rollback();
             Toastr::error('Recruitment plan updated fail.','Error');

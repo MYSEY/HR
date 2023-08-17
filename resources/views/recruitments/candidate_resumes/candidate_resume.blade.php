@@ -688,23 +688,6 @@
                 }); 
             }
         });
-        // $(document).on('click','.committee_interview', function(){
-        //     var list = [
-        //         {"label": "Apple", "value": "0"},
-        //         {"label": "Orange", "value": "1"},
-        //         {"label": "Banana", "value": "2"}
-        //     ];
-        //     $("#committeeinterview").mSelectDBox({
-        //         "list":list,
-        //         "multiple": true,
-        //         "autoComplete": true,
-        //         "name": "a"
-        //     });
-        // });
-        // $( document ).ready(function() {
-            
-           
-        // });
     });
     function showDatas(btn_tab){
         $.ajax({

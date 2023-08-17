@@ -96,7 +96,7 @@
             </div>
         </div>
 
-        <div id="edit_plan" class="modal custom-modal fade" aria-hidden="true">
+        <div id="edit_plan" class="modal custom-modal fade hr-modal-select2" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -106,23 +106,22 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form action="{{ url('recruitment/plan-update') }}" method="POST" enctype="multipart/form-data"
-                            class="needs-validation" novalidate>
+                        <form class="needs-validation" novalidate>
                             @csrf
                             <input type="hidden" name="id" class="e_id">
                             <div class="row">
                                 <div class="col-sm-6">
-                                    <div class="form-group">
+                                    <div class="form-group hr-form-group-select2">
                                         <label>Position<span class="text-danger">*</span></label>
-                                        <select class="form-select" id="e_position" name="position_id" required>
+                                        <select class="form-select hr-select2-option" id="e_position" name="position_id" required>
                                             {{-- <option value="">Select type</option> --}}
                                         </select>
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
-                                    <div class="form-group">
+                                    <div class="form-group hr-form-group-select2">
                                         <label>Branch<span class="text-danger">*</span></label>
-                                        <select class="form-select" id="e_branch" name="branch_id" required>
+                                        <select class="form-select hr-select2-option" id="e_branch" name="branch_id" required>
                                             {{-- <option value="">Select type</option> --}}
                                         </select>
                                     </div>
@@ -132,13 +131,6 @@
                                         <label>Plan of Year <span class="text-danger">*</span></label>
                                         <input class="form-control" type="month" name="plan_date" id="e_plan_date" required>
                                     </div>
-                                    {{-- <div class="form-group">
-                                        <label>Plan of Year <span class="text-danger">*</span></label>
-                                        <div class="cal-icon">
-                                            <input class="form-control datetimepicker" type="text" id="e_plan_date"
-                                                name="plan_date" required>
-                                            </div>
-                                    </div> --}}
                                 </div>
                                 <div class="col-sm-6">
                                     <div class="form-group">
@@ -157,7 +149,7 @@
                                 </div>
                             </div>
                             <div class="submit-section">
-                                <button type="submit" class="btn btn-primary submit-btn">
+                                <button type="button" class="btn btn-primary submit-btn btn-edit-plan">
                                     <span class="loading-icon" style="display: none"><i
                                             class="fa fa-spinner fa-spin"></i> Loading </span>
                                     <span class="btn-txt">{{ __('Submit') }}</span>
@@ -248,60 +240,81 @@
 
         });
 
-        // $('.delete').on('click', function() {
         $(document).on('click','.delete', function(){
             var _this = $(this).parents('tr');
             $('.e_id').val(_this.find('.ids').text());
+        });
+        $(document).on("click",".btn-edit-plan", function(){
+            $.ajax({
+                type: "POST",
+                url: "{{ url('/recruitment/plan-update') }}",
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    "id": $(".e_id").val(),
+                    "plan_date": $("#e_plan_date").val(),
+                    "position_id": $("#e_position").val(),
+                    "branch_id": $("#e_branch").val(),
+                    "total_staff": $("#e_total_staff").val(),
+                    "remark": $("#e_remark").text(),
+                },
+                dataType: "JSON",
+                success: function(response) {
+                    var currentUrl = window.location.origin;
+                    if (response.success) {
+                        window.location.href = currentUrl+ "/recruitment/detail/"+response.success.branch_id+"/"+response.success.position_id+"/"+url[2];
+                    }
+                }
+            });
         });
     });
 
 
     function showDatas(params){
-        let position_id = params[1] ? parseInt(params[1]) : null;
         let branch_id = params[0] ? parseInt(params[0]) : null;
-        let filter_year = params[2] ? params[2] : null;
+        let position_id = params[1] ? parseInt(params[1]) : null;
+        let filter_year = params[2] ? parseInt(params[2]) : null;
         $.ajax({
-                type: "POST",
-                url: "{{ url('recruitment/show') }}",
-                data: {
-                    "_token": "{{ csrf_token() }}",
-                    position_id,
-                    branch_id,
-                    filter_year,
-                },
-                dataType: "JSON",
-                success: function(response) {
-                    let data_postion = response.success;
-                    var tr =  "";
-                    if (data_postion.length) { 
-                        data_postion.map((plan) => {
-                            let plan_date = moment(plan.plan_date).format('MMM-yyyy');
-                            let created_at = moment(plan.created_at).format('d-MMM-yyyy');
-                            tr +='<tr>'+
-                                    '<td class="ids">'+(plan.id)+'</td>'+
-                                    '<td>'+(plan.position.name_english)+'</td>'+
-                                    '<td>'+(plan.branch.branch_name_en)+'</td>'+
-                                    '<td>'+(plan_date)+'</td>'+
-                                    '<td>'+(plan.total_staff)+'</td>'+
-                                    '<td>'+(plan.remark ? plan.remark : "")+'</td>'+
-                                    '<td>'+(created_at)+'</td>'+
-                                    '<td class="text-end">'+
-                                        '<div class="dropdown dropdown-action">'+
-                                            '<a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>'+
-                                            '<div class="dropdown-menu dropdown-menu-right">'+
-                                                '<a class="dropdown-item update" data-toggle="modal" data-id="'+(plan.id)+'" data-target="#edit_plan"><i class="fa fa-pencil m-r-5"></i> Edit</a>'+
-                                                '<a class="dropdown-item delete" href="#" data-toggle="modal" data-id="'+(plan.id)+'" data-target="#delete_plan"><i class="fa fa-trash-o m-r-5"></i> Delete</a>'+
-                                            '</div>'+
+            type: "POST",
+            url: "{{ url('recruitment/show') }}",
+            data: {
+                "_token": "{{ csrf_token() }}",
+                position_id,
+                branch_id,
+                filter_year,
+            },
+            dataType: "JSON",
+            success: function(response) {
+                let data_postion = response.success;
+                var tr =  "";
+                if (data_postion.length) { 
+                    data_postion.map((plan) => {
+                        let plan_date = moment(plan.plan_date).format('MMM-yyyy');
+                        let created_at = moment(plan.created_at).format('d-MMM-yyyy');
+                        tr +='<tr>'+
+                                '<td class="ids">'+(plan.id)+'</td>'+
+                                '<td>'+(plan.position.name_english)+'</td>'+
+                                '<td>'+(plan.branch.branch_name_en)+'</td>'+
+                                '<td>'+(plan_date)+'</td>'+
+                                '<td>'+(plan.total_staff)+'</td>'+
+                                '<td>'+(plan.remark ? plan.remark : "")+'</td>'+
+                                '<td>'+(created_at)+'</td>'+
+                                '<td class="text-end">'+
+                                    '<div class="dropdown dropdown-action">'+
+                                        '<a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>'+
+                                        '<div class="dropdown-menu dropdown-menu-right">'+
+                                            '<a class="dropdown-item update" data-toggle="modal" data-id="'+(plan.id)+'" data-target="#edit_plan"><i class="fa fa-pencil m-r-5"></i> Edit</a>'+
+                                            '<a class="dropdown-item delete" href="#" data-toggle="modal" data-id="'+(plan.id)+'" data-target="#delete_plan"><i class="fa fa-trash-o m-r-5"></i> Delete</a>'+
                                         '</div>'+
-                                    '</td>'+
-                                '</tr>';
-                        });   
-                    }else{
-                        var tr = '<td colspan="7">No data available for display.</td>';
-                    }
-                    $(".tbl_plan tbody").html(tr);
+                                    '</div>'+
+                                '</td>'+
+                            '</tr>';
+                    });   
+                }else{
+                    var tr = '<td colspan="8" style="text-align: center">No data available for display.</td>';
                 }
-            });
+                $(".tbl_plan tbody").html(tr);
+            }
+        });
     }
 
 </script>
