@@ -1,4 +1,4 @@
-<div id="add_motor_rentel" class="modal custom-modal fade" role="dialog">
+<div id="add_motor_rentel" class="modal custom-modal fade hr-modal-select2" role="dialog">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -15,9 +15,9 @@
                     </div>
                     <div class="row">
                         <div class="col-sm-6">
-                            <div class="form-group">
+                            <div class="form-group hr-form-group-select2">
                                 <label>Employee</label>
-                                <select class="form-control" id="employee_id" name="employee_id" value="{{old('employee_id')}}" required>
+                                <select class="form-control hr-select2-option requered" id="employee_id" name="employee_id" value="{{old('employee_id')}}" required>
                                     <option selected disabled value="">Select employee...</option>
                                     @foreach ($employees as $item)
                                         <option value="{{$item->id}}">{{$item->employee_name_en}}</option>

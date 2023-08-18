@@ -164,7 +164,7 @@
                 </div>
             </div>
         </div>
-        <div id="add_trainer" class="modal custom-modal fade" role="dialog">
+        <div id="add_trainer" class="modal custom-modal fade hr-modal-select2" role="dialog">
             <div class="modal-dialog modal-dialog-centered  modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -187,9 +187,9 @@
                                     </div>
                                 </div>
                                 <div class="col-sm-6 trainer-internal">
-                                    <div class="form-group">
+                                    <div class="form-group hr-form-group-select2">
                                         <label class="">Trainer <span class="text-danger">*</span></label>
-                                        <select class="select form-control" name="employee_id" id="employee_id" required>
+                                        <select class="select form-control hr-select2-option" name="employee_id" id="employee_id" required>
                                             @foreach ($employee as $item)
                                                 <option value="{{$item->id}}">{{$item->employee_name_en}}</option>
                                             @endforeach
@@ -258,7 +258,7 @@
             </div>
         </div>
 
-        <div id="edit_trainer" class="modal custom-modal fade" aria-hidden="true">
+        <div id="edit_trainer" class="modal custom-modal fade hr-modal-select2" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -282,9 +282,9 @@
                                     </div>
                                 </div>
                                 <div class="col-sm-6 e-trainer-internal">
-                                    <div class="form-group">
+                                    <div class="form-group hr-form-group-select2">
                                         <label class="">Trainer <span class="text-danger">*</span></label>
-                                        <select class="select form-control" id="e_employee_id" name="employee_id">
+                                        <select class="select form-control hr-select2-option" id="e_employee_id" name="employee_id">
                                             @foreach ($employee as $item)
                                                 <option value="{{$item->id}}">{{$item->employee_name_en}}</option>
                                             @endforeach

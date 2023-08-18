@@ -162,7 +162,7 @@ class MotorRentelController extends Controller
     public function edit(Request $request)
     {
         $data = MotorRentel::where("id", $request->id)->first();
-        $employee = User::all();
+        $employee = User::whereIn("emp_status", ["Probation", "1", "2", "10"])->get();
         return response()->json([
             'success' => $data,
             'employee' => $employee,

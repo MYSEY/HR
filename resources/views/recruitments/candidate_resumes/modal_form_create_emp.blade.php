@@ -1,4 +1,4 @@
-<div id="add_emp" class="modal custom-modal fade" role="dialog">
+<div id="add_emp" class="modal custom-modal fade hr-modal-select2" role="dialog">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -8,7 +8,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form class="was-validated">
+                <form class="was-validated" >
                     @csrf
                     <input type="text" name="" id="candidate_id" hidden>
                     <div class="row">
@@ -41,9 +41,9 @@
                     </div>
                     <div class="row">
                         <div class="col-sm-6">
-                            <div class="form-group">
+                            <div class="form-group hr-form-group-select2">
                                 <label>Position <span class="text-danger">*</span></label>
-                                <select class="form-control form-select emp_required clear_data" name="position_id" id="emp_position" required>
+                                <select class="hr-select2-option emp_required clear_data" name="position_id" id="emp_position" required>
                                 </select>
                             </div>
                         </div>
@@ -58,17 +58,17 @@
                     </div>
                     <div class="row">
                         <div class="col-md-6">
-                            <div class="form-group">
+                            <div class="form-group hr-form-group-select2">
                                 <label>Branch <span class="text-danger">*</span></label>
-                                <select class="form-control form-select clear_data" name="branch_id" id="emp_branch" required>
+                                <select class="hr-select2-option clear_data" name="branch_id" id="emp_branch" required>
                                 </select>
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <div class="form-group">
+                            <div class="form-group hr-form-group-select2">
                                 <label>Department <span class="text-danger">*</span></label>
-                                <select class="form-control emp_required clear_data" id="department_id" name="department_id"  required>
-                                    <option value="">Please select department</option>
+                                <select class="hr-select2-option emp_required clear_data" id="department_id" name="department_id"  required>
+                                    {{-- <option selected disabled value="">Please select department</option> --}}
                                 </select>
                             </div>
                         </div>
@@ -137,32 +137,32 @@
                     <div id="CurrentAddress">
                         <div class="row">
                             <div class="col-md-6">
-                                <div class="form-group">
+                                <div class="form-group hr-form-group-select2">
                                     <label>Province/City <span class="text-danger">*</span></label>
-                                    <select class="form-control clear_data @error('current_province') is-invalid @enderror emp_required" id="current_province" name="current_province" required>
+                                    <select class="form-control hr-select2-option clear_data @error('current_province') is-invalid @enderror emp_required" id="current_province" name="current_province" required>
                                         <option value="" selected> --Select --</option>
                                     </select>
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <div class="form-group">
+                                <div class="form-group hr-form-group-select2">
                                     <label>District/Khan <span class="text-danger">*</span></label>
-                                    <select class="form-control clear_data  @error('current_district') is-invalid @enderror emp_required" id="current_district" name="current_district" required>
+                                    <select class="form-control hr-select2-option clear_data  @error('current_district') is-invalid @enderror emp_required" id="current_district" name="current_district" required>
                                     </select>
                                 </div>
                             </div>
 
                             <div class="col-md-6">
-                                <div class="form-group">
+                                <div class="form-group hr-form-group-select2">
                                     <label class="no-error-label">Commune/Sangkat <span class="text-danger">*</span></label>
-                                    <select class="form-control no-error-border clear_data @error('current_commune') is-invalid @enderror emp_required" id="current_commune" name="current_commune" required>
+                                    <select class="form-control hr-select2-option no-error-border clear_data @error('current_commune') is-invalid @enderror emp_required" id="current_commune" name="current_commune" required>
                                     </select>
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <div class="form-group">
+                                <div class="form-group hr-form-group-select2">
                                     <label class="no-error-label">Village <span class="text-danger">*</span></label>
-                                    <select class="form-control no-error-border clear_data @error('current_village') is-invalid @enderror emp_required" id="current_village" name="current_village" required>
+                                    <select class="form-control hr-select2-option no-error-border clear_data @error('current_village') is-invalid @enderror emp_required" id="current_village" name="current_village" required>
                                     </select>
                                 </div>
                             </div>
@@ -193,32 +193,32 @@
                     <div id="PermanentAddress">
                         <div class="row">
                             <div class="col-md-6">
-                                <div class="form-group">
+                                <div class="form-group hr-form-group-select2">
                                     <label>Province/City <span class="text-danger">*</span></label>
-                                    <select class="form-control clear_data @error('current_commune') is-invalid @enderror emp_required" id="permanent_province" name="permanent_province" required>
+                                    <select class="form-control hr-select2-option clear_data @error('current_commune') is-invalid @enderror emp_required" id="permanent_province" name="permanent_province" required>
                                         <option value="" selected> --Select --</option>
                                     </select>
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <div class="form-group">
+                                <div class="form-group hr-form-group-select2">
                                     <label>District/Khan</label>
-                                    <select class="select form-control clear_data" id="permanent_district" name="permanent_district" value="{{old('permanent_district')}}">
+                                    <select class="select form-control hr-select2-option clear_data" id="permanent_district" name="permanent_district" value="{{old('permanent_district')}}">
                                     </select>
                                 </div>
                             </div>
 
                             <div class="col-md-6">
-                                <div class="form-group ">
+                                <div class="form-group hr-form-group-select2 ">
                                     <label class="no-error-label">Commune/Sangkat</label>
-                                    <select class="select form-control no-error-border clear_data" id="permanent_commune" name="permanent_commune" value="{{old('permanent_commune')}}">
+                                    <select class="select form-control hr-select2-option no-error-border clear_data" id="permanent_commune" name="permanent_commune" value="{{old('permanent_commune')}}">
                                     </select>
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <div class="form-group">
+                                <div class="form-group hr-form-group-select2">
                                     <label class="no-error-label">Village</label>
-                                    <select class="select form-control no-error-border clear_data" id="permanent_village" name="permanent_village" value="{{old('permanent_village')}}">
+                                    <select class="select form-control hr-select2-option no-error-border clear_data" id="permanent_village" name="permanent_village" value="{{old('permanent_village')}}">
                                     </select>
                                 </div>
                             </div>
@@ -247,7 +247,7 @@
                     </div>
 
                     <div class="submit-section">
-                        <button type="button" class="btn btn-primary btn_save_print" id="btn_save_print" data-dismiss="modal" data-btn="1">
+                        <button type="button" class="btn btn-primary  btn_save_print" id="btn_save_print" data-dismiss="modal" data-btn="1">
                             <span class="btn-text-print">Print</span>
                             <span id="btn-print-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading</span>
                         </button>
@@ -333,7 +333,7 @@
             $('#permanent_village').html('<option selected value=""> </option>');
 
             $("#position_type").html('<option selected value="">--Select --</option>');
-            $("#department_id").html('<option selected value="">--Select --</option>');
+            $("#department_id").html('<option selected disabled value="">--Select --</option>');
             $(".clear_data").val("");
             $("#remark").text("");
             let id = $(this).data("id");
@@ -388,7 +388,7 @@
                             });
                         }
                         if (response.department !='') {
-                            // $("#department_id").html('');
+                            $("#department_id").html('');
                             $.each(response.department, function(i, item) {
                                 $("#department_id").append($('<option>', {
                                     value: item.id,
@@ -489,6 +489,17 @@
         $("#btn_save_print, #btn_save").on("click", function(){
             let btn_action = $(this).attr('data-btn');
             var num_miss = 0;
+            $(".hr-form-group-select2").each(function(){
+                let formGroup = $(this);
+                let value = formGroup.attr("data-select2-id");
+                let requeredField = formGroup.find(".hr-select2-option").val();
+                let requered = formGroup.find(".emp_required").val();
+                if(!value && requered == ""){ 
+                    formGroup.find(".select2-selection--single").css("border-color","#dc3545");
+                }else if (!requeredField && requered == "") {
+                    formGroup.find(".select2-selection--single").css("border-color","#dc3545");
+                }
+            });
             if (btn_action == 1) {
                 $("#btn-print-loading").css('display', 'block');
                 $("#btn_save_print").prop('disabled', true);

@@ -1,4 +1,4 @@
-<div id="add_user" class="modal custom-modal fade" role="dialog" data-bs-backdrop="static">
+<div id="add_user" class="modal custom-modal fade hr-modal-select2" role="dialog" data-bs-backdrop="static">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -58,9 +58,9 @@
 
                     <div class="row">
                         <div class="col-sm-6">
-                            <div class="form-group">
+                            <div class="form-group hr-form-group-select2">
                                 <label>Position Applied <span class="text-danger">*</span></label>
-                                <select class="form-control form-select" required name="position_applied" id="position_applied">
+                                <select class="hr-select2-option requered" required name="position_applied" id="position_applied">
                                     <option selected disabled value=""> --Select --</option>
                                     @foreach ($position as $positions )
                                     <option value="{{ $positions->id }}">{{ $positions->name_english }}</option>
@@ -69,9 +69,9 @@
                             </div>
                         </div>
                         <div class="col-sm-6">
-                            <div class="form-group">
+                            <div class="form-group hr-form-group-select2">
                                 <label>Location Applied <span class="text-danger">*</span></label>
-                                <select class="form-control form-select" required name="location_applied" id="location_applied">
+                                <select class="hr-select2-option requered" required name="location_applied" id="location_applied">
                                     <option selected disabled value=""> --Select --</option>
                                     @foreach ($branch as $bran )
                                         <option value="{{ $bran->id }}">{{ $bran->branch_name_en }}</option>

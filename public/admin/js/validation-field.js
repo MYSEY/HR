@@ -4,10 +4,13 @@ $(function(){
     var forms = document.querySelectorAll('.needs-validation')
     // select option and search value
     $(document).ready(function(){
-        $( '.hr-select2-option' ).select2( {
-            dropdownParent: '.hr-modal-select2',
-            width: '100%',
-        } );
+        $('.hr-select2-option').each(function() {
+            $(this).select2({
+                width: '100%',
+              dropdownParent: $(this).parent(),
+            })
+          })
+
         $('.hr-select2-option').on('change', function(event) {
             $(".hr-form-group-select2").each(function(){
                 let value = $(this).attr("data-select2-id");
@@ -26,9 +29,10 @@ $(function(){
                 let formGroup = $(this);
                 let value = formGroup.attr("data-select2-id");
                 let requeredField = formGroup.find(".hr-select2-option").val();
-                if(!value){ 
+                let requered = formGroup.find(".requered").prop('required');
+                if(!value && requered){ 
                     formGroup.find(".select2-selection--single").css("border-color","#dc3545");
-                }else if (!requeredField) {
+                }else if (!requeredField && requered) {
                     formGroup.find(".select2-selection--single").css("border-color","#dc3545");
                 }
             });

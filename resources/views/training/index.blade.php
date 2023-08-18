@@ -72,8 +72,8 @@
                     <div class="col-sm-4 col-md-4">
                         <div style="display: flex" class="float-end">
                             <button type="button" class="btn btn-sm btn-success me-2" id="btn_research">
-                                <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading</span>
-                                <span class="btn-txt">{{ __('Search') }}</span>
+                                <span class="loading-icon-search" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading</span>
+                                <span class="btn-txt-search">{{ __('Search') }}</span>
                             </button>
                             <button type="button" class="btn btn-sm btn-warning reset-btn">
                                 <span class="btn-text-reset">Reload</span>
@@ -246,8 +246,8 @@
         });
         $("#btn_research").on("click", function (){
             $(this).prop('disabled', true);
-            $(".btn-txt").hide();
-            $(".loading-icon").css('display', 'block');
+            $(".btn-txt-search").hide();
+            $(".loading-icon-search").css('display', 'block');
             let params = {
                 course_name: $("#course_name").val(),
                 training_type: $("#filter_training_type").val(),
@@ -487,8 +487,8 @@
             success: function(response) {
                 let data =  response.success;
                 $("#btn_research").prop('disabled', false);
-                $(".btn-txt").show();
-                $(".loading-icon").css('display', 'none');
+                $(".btn-txt-search").show();
+                $(".loading-icon-search").css('display', 'none');
                 var tr = "";
                 if (data.length > 0) {
                     data.map((row) =>{
