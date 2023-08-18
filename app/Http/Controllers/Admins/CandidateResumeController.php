@@ -114,6 +114,11 @@ class CandidateResumeController extends Controller
         return response()->json(['datas'=>$datas]);
     }
 
+    public function showemp(){
+        $dataEmp =  User::whereIn('emp_status',['1','2','10'])->get();
+        return response()->json(['employees'=>$dataEmp]);
+    }
+    
     /**
      * Show the form for editing the specified resource.
      *

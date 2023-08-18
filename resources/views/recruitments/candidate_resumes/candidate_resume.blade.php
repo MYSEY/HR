@@ -99,7 +99,6 @@
 
 <script type="text/javascript">
     $(function(){
-       
         $("#btn_tab_short_list, #btn_not_tab_short_list").on("click", function(){
             let tab_status = $(this).attr('data-tab-id');
             showDatas(tab_status);
@@ -306,16 +305,6 @@
         $('body').on('click', '#btn-status a', function() {
             let id = $(this).attr('data-emp-id');
             let status = $(this).data('id');
-            var candi_status = "";
-            if (status == 1) {
-                candi_status = "Received CV";
-            } else if(status == 2) {
-                candi_status = "Shortlisted";
-            }else if(status == 3){
-                candi_status = "Interviewed";
-            }else if(status == 4){
-                candi_status = "Signed Contract";
-            }
             if (status == 1) {
                 $.confirm({
                     title: 'Candidate Resume Status!',
@@ -325,7 +314,7 @@
                         '<form method="post" class="formName">'+
                             '<div class="form-group">'+
                                 '<div class="form-group">'+
-                                    '<label><a href="#">'+candi_status+'</a></label>'+
+                                    '<label><a href="#">Received CV</a></label>'+
                                 '</div>'+
                                 '<div class="form-group">'+
                                     '<p>Do you really want to change Status?</p>'+
@@ -379,7 +368,7 @@
                     content: ''+
                         '<form class="needs-validation" novalidate>'+
                             '<div class="form-group">'+
-                                '<label><a href="#">'+candi_status+'</a></label>'+
+                                '<label><a href="#">Shortlisted</a></label>'+
                             '</div>'+
                             '<input type="hidden" class="form-control status" id="" name="" value="'+status+'">'+
                             '<input type="hidden" class="form-control id" id="" name="" value="'+id+'">'+
@@ -400,11 +389,13 @@
                                     '<option selected value="Online"> Online</option>'+
                                     '<option value="Face to face"> Face to face</option>'+
                                 '</select>'+
-                                // '<input type="text" class="form-control interviewed_channel">'+
                             '</div>'+
                             '<div class="form-group committee_interviewed">'+
                                 '<label>Interview Committee <span class="text-danger">*</span></label>'+
-                                '<input type="text" id="committeeinterview" class="form-control committee_interview">'+
+                                '<select class="form-control hr-select2-option-emp form-select committee_interview" id="committeeinterview" name="states[]" multiple >'+
+                                   
+                                '</select>'+
+                                // '<input type="text" id="committeeinterview" class="form-control committee_interview">'+
                             '</div>'+
                             '<div class="form-group">'+
                                 '<label>Remark</label>'+
@@ -442,8 +433,17 @@
                                         $(".interviewed_dates").css("border","solid 1px red");
                                         return false;
                                     }
-                                    if ($(".committee_interview").val() ==""){
-                                        $(".committee_interview").css("border","solid 1px red");
+                                    if (!committee_interview.length){
+                                        $(".committee_interviewed").each(function(){
+                                            let formGroup = $(this);
+                                            let value = formGroup.attr("data-select2-id");
+                                            let requeredField = formGroup.find(".hr-select2-option").val();
+                                            if(!value){ 
+                                                formGroup.find(".select2-selection").css("border-color","#dc3545");
+                                            }else if (!requeredField) {
+                                                formGroup.find(".select2-selection").css("border-color","#dc3545");
+                                            }
+                                        });
                                         return false;
                                     }
                                 }
@@ -454,7 +454,7 @@
                                         'short_list': short_list,
                                         'interviewed_date': interviewed_date,
                                         'interviewed_channel': interviewed_channel,
-                                        'committee_interview': committee_interview,
+                                        'committee_interview': committee_interview.toString(),
                                         'remark': remark,
                                     }).then(function(response) {
                                     new Noty({
@@ -482,7 +482,27 @@
                         },
                     }
                 }); 
-                
+                $(document).ready(function(){
+                    $('.hr-select2-option-emp').each(function() {
+                        $(this).select2({
+                            width: '100%',
+                            dropdownParent: $(this).parent(),
+                        })
+                    });
+                    axios.get('{{ URL('recruitment/candidate-resume/employee') }}', {
+                    }).then(function(response) {
+                        if (response.data.employees != '') {
+                            $('#committeeinterview').html('');
+                            $.each(response.data.employees, function(i, item) {
+                                $('#committeeinterview').append($('<option>', {
+                                    value: item.employee_name_en,
+                                    text: item.employee_name_en,
+                                    // selected: item.id == response.success.location_applied
+                                }));
+                            });
+                        }
+                    })
+                });
             }else if(status == 3){
                 let data_status = $(this).attr('data-status');
                 let select_joined_interview  = ""; 
@@ -504,7 +524,7 @@
                     content: ''+
                         '<form class="needs-validation" novalidate>'+
                             '<div class="form-group">'+
-                                '<label><a href="#">'+candi_status+'</a></label>'+
+                                '<label><a href="#">Interviewed</a></label>'+
                             '</div>'+
                             '<input type="hidden" class="form-control status" id="" name="" value="'+status+'">'+
                             '<input type="hidden" class="form-control id" id="" name="" value="'+id+'">'+
@@ -615,7 +635,7 @@
                     content: ''+
                         '<form class="needs-validation" novalidate>'+
                             '<div class="form-group">'+
-                                '<label><a href="#">'+candi_status+'</a></label>'+
+                                '<label><a href="#">Signed Contract</a></label>'+
                             '</div>'+
                             '<input type="hidden" class="form-control status" id="" name="" value="'+status+'">'+
                             '<input type="hidden" class="form-control id" id="" name="" value="'+id+'">'+
