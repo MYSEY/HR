@@ -79,7 +79,7 @@
         <div class="content">
             <div class="page-menu">
                 <div class="row">
-                    <div class="col-md-12">
+                    <div class="col-md-12 p-0">
                         <div class="table-responsive">
                             <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                                 <div class="row">

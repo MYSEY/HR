@@ -72,7 +72,7 @@
         <div class="content">
             <div class="page-menu">
                 <div class="row">
-                    <div class="col-md-12 col-ms-12">
+                    <div class="col-md-12 col-ms-12 p-0">
                         <ul class="nav nav-tabs nav-tabs-bottom" role="tablist">
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link active" data-bs-toggle="tab" id="tab_candidate_resume" href="#tbl_candidate_resume" aria-selected="true" role="tab" data-tab-id="1">Upcoming Staff({{count($data)}})</a>

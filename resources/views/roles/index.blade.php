@@ -1,5 +1,25 @@
 @extends('layouts.master')
+<style>
+    .custom-table
+    tr>th {
+        position: sticky;
+        background: #fff !important;
+    }
 
+    .custom-table thead {
+        top: 0;
+        z-index: 2;
+    }
+
+    .custom-table tr>th {
+        left: 0;
+        z-index: 1;
+    }
+
+    .custom-table thead tr>th:first-child {
+        z-index: 3;
+    }
+</style>
 @section('content')
     <div class="">
         <div class="page-header">
@@ -229,7 +249,7 @@
                         export_check="checked";
                     }
                     var tr='<tr>'+
-                            '<td>'+value.name+'</td>'+
+                            '<th>'+value.name+'</th>'+
                             '<td><input type="checkbox" name="view" id="" onclick="PermissionAndRole(this,'+value.id+',1);" '+view_check+'></td>'+
                             '<td><input type="checkbox" name="view" id="" onclick="PermissionAndRole(this,'+value.id+',2);" '+add_check+'></td>'+
                             '<td><input type="checkbox" name="view" id="" onclick="PermissionAndRole(this,'+value.id+',3);" '+update_check+'></td>'+

@@ -84,7 +84,7 @@
         @endif
         <div class="content">
             <div class="row">
-                <div class="col-md-12">
+                <div class="col-md-12 p-0">
                     <div class="table-responsive">
                         <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                             <div class="row">
@@ -150,8 +150,9 @@
                                                 @foreach ($data as $item)
                                                     <tr class="odd">
                                                         <td class="ids">{{ $item->id }}</td>
-                                                        <td class="number_employee_id"><a
-                                                                href="{{ url('/motor-rentel/detail', $item->id) }}">{{ $item->MotorEmployee->number_employee }}</a>
+                                                        <td class="number_employee_id">
+                                                            {{ $item->MotorEmployee->number_employee }}
+                                                            {{-- <a href="{{ url('/motor-rentel/detail', $item->id) }}">{{ $item->MotorEmployee->number_employee }}</a> --}}
                                                         </td>
                                                         <td>{{ $item->MotorEmployee->employee_name_en }}</td>
                                                         <td>{{ $item->MotorEmployee->EmployeeGender }}</td>

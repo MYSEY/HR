@@ -88,7 +88,7 @@
         <div class="content">
             <div class="page-menu">
                 <div class="row">
-                    <div class="col-sm-12">
+                    <div class="col-sm-12 p-0">
                         <ul class="nav nav-tabs nav-tabs-bottom" role="tablist">
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link active" data-bs-toggle="tab" id="tab_btl_basic_salary" href="#tab_payroll" aria-selected="true" role="tab" data-tab-id="1">Payroll</a>
@@ -113,7 +113,7 @@
             <div class="tab-content">
                 <div class="tab-pane active show" id="tab_payroll" role="tabpanel">
                     <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-12 p-0">
                             <div class="table-responsive">
                                 <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                                     <div class="row">
