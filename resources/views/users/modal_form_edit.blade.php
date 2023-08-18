@@ -1,4 +1,4 @@
-<div id="editUserModal" class="modal custom-modal fade" role="dialog" data-bs-backdrop="static">
+<div id="editUserModal" class="modal custom-modal fade hr-modal-select2" role="dialog" data-bs-backdrop="static">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -77,17 +77,17 @@
                     </div>
                     <div class="row">
                         <div class="col-md-6">
-                            <div class="form-group">
+                            <div class="form-group hr-form-group-select2">
                                 <label>Branch <span class="text-danger">*</span></label>
-                                <select class="form-control" id="e_branch_id" name="branch_id" value="{{old('branch_id')}}">
+                                <select class="form-control hr-select2-option" id="e_branch_id" name="branch_id" value="{{old('branch_id')}}">
                                     <option selected disabled value=""> --Select --</option>
                                 </select>
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <div class="form-group">
+                            <div class="form-group hr-form-group-select2">
                                 <label>Department</label>
-                                <select class="form-control" name="department_id" id="e_department">
+                                <select class="form-control hr-select2-option" name="department_id" id="e_department">
                                     <option selected disabled> --Select --</option>
                                 </select>
                             </div>
@@ -95,9 +95,9 @@
                     </div>
                     <div class="row">
                         <div class="col-sm-6"> 
-                            <div class="form-group">
+                            <div class="form-group hr-form-group-select2">
                                 <label>Position <span class="text-danger">*</span></label>
-                                <select class="form-control @error('position_id') is-invalid @enderror" name="position_id" id="e_position" required>
+                                <select class="form-control hr-select2-option @error('position_id') is-invalid @enderror" name="position_id" id="e_position" required>
                                     <option selected disabled value=""> --Select --</option>
                                 </select>
                             </div>
@@ -326,31 +326,31 @@
 
                     <div class="row" id="duptateCurrentAddress">
                         <div class="col-md-6">
-                            <div class="form-group">
+                            <div class="form-group hr-form-group-select2">
                                 <label>Province/City</label>
-                                <select class="form-control" id="e_current_province" name="current_province" value="{{old('current_province')}}">
+                                <select class="form-control hr-select2-option" id="e_current_province" name="current_province" value="{{old('current_province')}}">
                                 </select>
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <div class="form-group">
+                            <div class="form-group hr-form-group-select2">
                                 <label>District/Khan</label>
-                                <select class="form-control" id="e_current_district" name="current_district" value="{{old('current_district')}}">
+                                <select class="form-control hr-select2-option" id="e_current_district" name="current_district" value="{{old('current_district')}}">
                                 </select>
                             </div>
                         </div>
                         
                         <div class="col-md-6">
-                            <div class="form-group">
+                            <div class="form-group hr-form-group-select2">
                                 <label class="no-error-label">Commune/Sangkat</label>
-                                <select class="form-control no-error-border" id="e_current_commune" name="current_commune" value="{{old('current_commune')}}">
+                                <select class="form-control hr-select2-option no-error-border" id="e_current_commune" name="current_commune" value="{{old('current_commune')}}">
                                 </select>
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <div class="form-group">
+                            <div class="form-group hr-form-group-select2">
                                 <label class="no-error-label">Village</label>
-                                <select class="form-control no-error-border" id="e_current_village" name="current_village" value="{{old('current_village')}}">
+                                <select class="form-control hr-select2-option no-error-border" id="e_current_village" name="current_village" value="{{old('current_village')}}">
                                 </select>
                             </div>
                         </div>
@@ -379,28 +379,28 @@
                     <div id="updatedPermanentAddress">
                         <div class="row">
                             <div class="col-md-6">
-                                <div class="form-group">
+                                <div class="form-group hr-form-group-select2">
                                     <label>Province/City</label>
-                                    <select class="form-control" name="permanent_province" id="e_permanent_province" value="{{old('city')}}"></select>
+                                    <select class="form-control hr-select2-option" name="permanent_province" id="e_permanent_province" value="{{old('city')}}"></select>
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <div class="form-group">
+                                <div class="form-group hr-form-group-select2">
                                     <label>District/Khan</label>
-                                    <select class="form-control" id="e_permanent_district" name="permanent_district" value="{{old('distric')}}"></select>
+                                    <select class="form-control hr-select2-option" id="e_permanent_district" name="permanent_district" value="{{old('distric')}}"></select>
                                 </div>
                             </div>
                             
                             <div class="col-md-6">
-                                <div class="form-group ">
+                                <div class="form-group hr-form-group-select2 ">
                                     <label class="no-error-label">Commune/Sangkat</label>
-                                    <select class="form-control no-error-border" id="e_permanent_commune" name="permanent_commune" value="{{old('commune')}}"></select>
+                                    <select class="form-control hr-select2-option no-error-border" id="e_permanent_commune" name="permanent_commune" value="{{old('commune')}}"></select>
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <div class="form-group">
+                                <div class="form-group hr-form-group-select2">
                                     <label class="no-error-label">Village</label>
-                                    <select class="form-control no-error-border" id="e_permanent_village" name="permanent_village" value="{{old('village')}}"></select>
+                                    <select class="form-control hr-select2-option no-error-border" id="e_permanent_village" name="permanent_village" value="{{old('village')}}"></select>
                                 </div>
                             </div>
                         </div>

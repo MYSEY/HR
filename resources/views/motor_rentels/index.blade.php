@@ -26,12 +26,11 @@
 
                 <div class="col-auto float-end ms-auto">
                     @if (Auth::user()->RolePermission == 'Admin')
-                        <a href="#" class="btn add-btn" data-toggle="modal" data-toggle="modal" id="add_new"><i
-                                class="fa fa-plus"></i>
-                            Add New</a>
-                            <a href="#" class="btn add-btn me-2" data-toggle="modal" id="import_new_motor_rentel"><i
-                                class="fa fa-plus"></i>
-                            Import Data</a>
+                        <a href="#" class="btn add-btn" data-toggle="modal" id="import_new_motor_rentel"><i
+                            class="fa fa-plus"></i>Import Data</a>
+                        <a href="#" class="btn add-btn me-2" data-toggle="modal" data-toggle="modal" id="add_new"><i
+                                class="fa fa-plus"></i>Add New</a>
+                           
                     @endif
                 </div>
             </div>
