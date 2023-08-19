@@ -18,7 +18,10 @@ return new class extends Migration
             $table->integer('employee_id')->nullable();
             $table->decimal('basic_salary',50,2)->default(0);
             $table->decimal('total_gross_salary',50,2)->default(0);
-            $table->decimal('total_salary_severance',50,2)->default(0);
+            $table->decimal('total_fdc1',50,2)->default(0);
+            $table->string('type_fdc1')->nullable();
+            $table->decimal('total_fdc2',50,2)->default(0);
+            $table->string('type_fdc2')->nullable();
             $table->date('payment_date')->nullable();
             $table->bigInteger('created_by')->unsigned()->nullable();
             $table->bigInteger('updated_by')->unsigned()->nullable();
