@@ -47,9 +47,6 @@ class MotorRentelController extends Controller
                 'users.number_employee',
                 'users.branch_id',
             )
-            ->when(Auth::user()->RolePermission != "Admin", function ($query, $rolePermission) {
-                $query->where('motor_rentels.employee_id', Auth::user()->id);
-            })
             ->when($request->employee_id, function ($query, $employee_id) {
                 $query->where('users.number_employee', 'LIKE', '%'.$employee_id.'%');
             })
