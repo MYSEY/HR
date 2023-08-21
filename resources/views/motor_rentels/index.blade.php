@@ -23,9 +23,8 @@
                         <li class="breadcrumb-item active">Motor rentals</li>
                     </ul>
                 </div>
-
                 <div class="col-auto float-end ms-auto">
-                    @if (Auth::user()->RolePermission == 'Admin')
+                    @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer')
                         <a href="#" class="btn add-btn" data-toggle="modal" id="import_new_motor_rentel"><i
                             class="fa fa-plus"></i>Import Data</a>
                         <a href="#" class="btn add-btn me-2" data-toggle="modal" data-toggle="modal" id="add_new"><i
@@ -35,7 +34,7 @@
                 </div>
             </div>
         </div>
-        @if (Auth::user()->RolePermission == 'Admin')
+        @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer')
             <div class="row filter-row-btn">
                 <div class="col-sm-2 col-md-2">
                     <div class="form-group form-focus select-focus">
@@ -152,7 +151,6 @@
                                                         <td class="ids">{{ $item->id }}</td>
                                                         <td class="number_employee_id">
                                                             {{ $item->MotorEmployee->number_employee }}
-                                                            {{-- <a href="{{ url('/motor-rentel/detail', $item->id) }}">{{ $item->MotorEmployee->number_employee }}</a> --}}
                                                         </td>
                                                         <td>{{ $item->MotorEmployee->employee_name_en }}</td>
                                                         <td>{{ $item->MotorEmployee->EmployeeGender }}</td>
@@ -163,19 +161,14 @@
                                                         <td>$ {{ $item->price_engine_oil }}</td>
                                                         <td>$ {{ $item->price_motor_rentel}}</td>
                                                         <td>$ {{ $item->price_taplab_rentel ? $item->price_taplab_rentel : "0.00"}}</td>
-                                                        {{-- <td>{{ ($item->price_motor_rentel - ($item->price_motor_rentel * $item->tax_rate) / 100) + ($item->price_taplab_rentel - ($item->price_taplab_rentel * $item->tax_rate) / 100 ) }}</td> --}}
                                                         <td>{{ \Carbon\Carbon::parse($item->created_at)->format('d-M-Y') ?? '' }}</td>
                                                         <td class="text-end">
                                                             <div class="dropdown dropdown-action">
                                                                 <a href="#" class="action-icon dropdown-toggle"
                                                                     data-bs-toggle="dropdown" aria-expanded="false"><i
                                                                         class="material-icons">more_vert</i></a>
-                                                                @if (Auth::user()->RolePermission == 'Admin')
+                                                                @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer')
                                                                     <div class="dropdown-menu dropdown-menu-right">
-                                                                        {{-- <a class="dropdown-item motor_detail"
-                                                                            data-id="{{ $item->id }}"
-                                                                            href="{{ url('/motor-rentel/detail', $item->id) }}"><i
-                                                                                class="fa fa-eye m-r-5"></i> View</a> --}}
                                                                         <a class="dropdown-item update"
                                                                             data-id="{{ $item->id }}"><i
                                                                                 class="fa fa-pencil m-r-5"></i> Edit</a>
@@ -193,7 +186,6 @@
                                             
                                             @endif
                                         </tbody>
-                                        {{-- @include('components.loarding-table', ["column"=> 9, "rol"=> 7]) --}}
                                     </table>
                                 </div>
                             </div>

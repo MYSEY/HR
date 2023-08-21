@@ -25,17 +25,12 @@
                     </ul>
                 </div>
                 <div class="col-auto float-end ms-auto">
-                    {{-- @if (Auth::user()->RolePermission == 'Admin')
-                        <a href="#" class="btn add-btn btn-export"><i class="fa fa-plus"></i>
-                            Export Data</a>
-                    @endif --}}
                 </div>
                 <div class="col-auto float-end ms-auto">
                 </div>
             </div>
         </div>
-        @if (Auth::user()->RolePermission == 'Admin')
-            {{-- <form action="{{url('/reports/training-report')}}" method="POST" class="needs-validation" novalidate> --}}
+        @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer')
             <form  class="needs-validation" novalidate>
                 {{-- @csrf --}}
                 

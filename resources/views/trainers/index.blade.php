@@ -25,7 +25,7 @@
                 </div>
             </div>
         </div>
-        @if (Auth::user()->RolePermission == 'Admin')
+        @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer')
             <form class="needs-validation" novalidate>
                 @csrf
                 

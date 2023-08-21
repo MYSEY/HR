@@ -103,8 +103,9 @@
                             <label>Role Type <span class="text-danger">*</span></label>
                             <select class="form-control" id="role_type" name="role_type" value="{{old('role_type')}}" required>
                                 <option selected disabled value=""> --Select --</option>
-                                <option value="Admin">Admin</option>
-                                <option value="Employee">Employee</option>
+                                <option value="admin">Admin</option>
+                                <option value="developer">Developer</option>
+                                <option value="employee">Employee</option>
                             </select>
                         </div>
                         <div class="submit-section">
@@ -136,8 +137,9 @@
                             <label>Role Type <span class="text-danger">*</span></label>
                             <select class="form-control" id="e_role_type" name="role_type" value="{{old('role_type')}}" required>
                                 <option selected disabled value=""> --Select --</option>
-                                <option value="Admin">Admin</option>
-                                <option value="Employee">Employee</option>
+                                <option value="admin">Admin</option>
+                                <option value="developer">Developer</option>
+                                <option value="employee">Employee</option>
                             </select>
                         </div>
                         <div class="submit-section">

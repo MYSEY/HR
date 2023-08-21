@@ -23,24 +23,14 @@
                     </ul>
                 </div>
                 <div class="col-auto float-end ms-auto">
-                    {{-- @if (Auth::user()->RolePermission == 'Admin')
-                        <a href="#" class="btn add-btn btn-export"><i class="fa fa-plus"></i>
-                            Export Data</a>
-                    @endif --}}
                 </div>
                 <div class="col-auto float-end ms-auto">
                 </div>
             </div>
         </div>
     </div>
-    @if (Auth::user()->RolePermission == 'Admin')
+    @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer')
         <div class="row filter-btn">
-            {{-- <div class="col-sm-6 col-md-2">
-                <div class="form-group">
-                    <input type="text" class="form-control" name="employee_id" id="employee_id"
-                        placeholder="Employee ID" value="{{ old('employee_id') }}">
-                </div>
-            </div> --}}
             <div class="col-sm-6 col-md-2">
                 <div class="form-group">
                     <input type="text" class="form-control" name="employee_name" id="employee_name"

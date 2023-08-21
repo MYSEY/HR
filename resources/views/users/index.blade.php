@@ -24,20 +24,15 @@
 
                 </div>
                 <div class="col-auto float-end ms-auto">
-                    @if (Auth::user()->RolePermission == 'Admin')
+                    @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer')
                     <a href="#" class="btn add-btn" data-toggle="modal" id="import_employee"><i
                         class="fa fa-plus"></i> Import Data</a>
                         <a href="#" class="btn add-btn me-2" data-toggle="modal" id="add_new"><i class="fa fa-plus"></i> Add New</a>
                     @endif
                 </div>
-                {{-- <div class="col-auto float-end ms-auto">
-                    @if (Auth::user()->RolePermission == 'Admin')
-                        
-                    @endif
-                </div> --}}
             </div>
         </div>
-        @if (Auth::user()->RolePermission == 'Admin')
+        @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer')
             <form class="needs-validation" novalidate>
                 @csrf
                 <div class="row filter-btn">

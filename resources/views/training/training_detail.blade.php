@@ -28,12 +28,9 @@
                         </label></li>
                     </ul>
                 </div>
-                {{-- <div class="col-auto float-end ms-auto">
-                    <h4 class=""><a href="{{url('/training/list')}}">Back to list</a></h4>
-                </div> --}}
                 <div class="col-auto float-end ms-auto">
                     <div class="btn-group">
-                        @if (Auth::user()->RolePermission == 'Admin')
+                        @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer')
                         <div class="btn-group btn-group-sm">
                             <button class="btn btn-white" id="btn_print">
                                 <span class="btn-text-print"><i class="fa fa-print fa-lg"></i> Print</span>

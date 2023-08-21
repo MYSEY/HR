@@ -40,7 +40,7 @@
     </div>
     
     <div class="">
-        @if (Auth::user()->RolePermission == 'Admin')
+        @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer')
             <form>
                 {{-- @csrf --}}
                 <div class="row filter-btn"> 

@@ -24,17 +24,13 @@
                     </ul>
                 </div>
                 <div class="col-auto float-end ms-auto">
-                    {{-- @if (Auth::user()->RolePermission == 'Admin')
-                        <a href="#" class="btn add-btn btn-export"><i class="fa fa-plus"></i>
-                            Export Data</a>
-                    @endif --}}
                 </div>
                 <div class="col-auto float-end ms-auto">
                 </div>
             </div>
         </div>
     </div>
-    @if (Auth::user()->RolePermission == 'Admin')
+    @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer')
         <div class="row filter-btn">
             <div class="col-sm-6 col-md-2">
                 <div class="form-group">
@@ -154,22 +150,6 @@
                                                     <td>{{ \Carbon\Carbon::parse($item->date_of_commencement)->format('d-M-Y') ?? '' }}</td>
                                                     <td>{{ \Carbon\Carbon::parse($item->resign_date)->format('d-M-Y') ?? '' }}</td>
                                                     <td>{{ $item->remark }}</td>
-                                                    {{-- <td>
-                                                        <div class="dropdown dropdown-action">
-                                                            <a href="#" class="action-icon dropdown-toggle"
-                                                                data-bs-toggle="dropdown" aria-expanded="false"><i
-                                                                    class="material-icons">more_vert</i></a>
-                                                            @if (Auth::user()->RolePermission == 'Admin')
-                                                                <div class="dropdown-menu dropdown-menu-right">
-                                                                    <a class="dropdown-item motor_detail"
-                                                                        data-id="{{ $item->id }}"
-                                                                        href="{{ url('/motor-rentel/detail', $item->id) }}"><i
-                                                                            class="fa fa-eye m-r-5"></i> View
-                                                                    </a>
-                                                                </div>
-                                                            @endif
-                                                        </div>
-                                                    </td> --}}
                                                 </tr>
                                             @endforeach
                                         @endif

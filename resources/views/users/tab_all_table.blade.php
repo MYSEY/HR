@@ -78,7 +78,7 @@
                                                                 <span>{{ $item->emp_status }}</span>
                                                             </a>
                                                         @endif
-                                                        @if (Auth::user()->RolePermission == 'Admin')
+                                                        @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer')
                                                             <div class="dropdown-menu dropdown-menu-right btn-emp-status" id="btn-emp-status">
                                                                 <input type="text" name="" class="join_date" value="{{$item == null ? "" : $item->date_of_commencement}}" hidden>
                                                                 <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-id="Probation" href="#">
@@ -94,7 +94,7 @@
                                                 <td class="text-end">
                                                     <div class="dropdown dropdown-action">
                                                         <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i  class="material-icons">more_vert</i></a>
-                                                        @if (Auth::user()->RolePermission == 'Admin')
+                                                        @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer')
                                                             <div class="dropdown-menu dropdown-menu-right">
                                                                 <a class="dropdown-item userUpdate" data-id="{{$item->id}}"><i class="fa fa-pencil m-r-5"></i> Edit</a>
                                                                 <a class="dropdown-item btn_print" data-id="{{$item->id}}"><i class="fa fa-print fa-lg m-r-5"></i> Print</a>
@@ -197,7 +197,7 @@
                                                                 <span>{{ $item->emp_status }}</span>
                                                             </a>
                                                         @endif
-                                                        @if (Auth::user()->RolePermission == 'Admin')
+                                                        @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer')
                                                             <div class="dropdown-menu dropdown-menu-right btn-emp-status" id="btn-emp-status">
                                                                 <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-Salary-Increase="{{$item->salary_increas == null ? "" : $item->salary_increas}}" data-id="1" href="#">
                                                                     <i class="fa fa-dot-circle-o text-success"></i> FDC-1
@@ -236,7 +236,7 @@
                                                 <td class="text-end">
                                                     <div class="dropdown dropdown-action">
                                                         <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i  class="material-icons">more_vert</i></a>
-                                                        @if (Auth::user()->RolePermission == 'Admin')
+                                                        @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer')
                                                             <div class="dropdown-menu dropdown-menu-right">
                                                                 <a class="dropdown-item userUpdate" data-id="{{$item->id}}"><i class="fa fa-pencil m-r-5"></i> Edit</a>
                                                                 <a class="dropdown-item userDelete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_user"><i class="fa fa-trash-o m-r-5"></i> Delete</a>
@@ -347,7 +347,7 @@
                                                                 <span>FDC-2</span>
                                                             </a>
                                                         @endif
-                                                        @if (Auth::user()->RolePermission == 'Admin')
+                                                        @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer')
                                                             <div class="dropdown-menu dropdown-menu-right btn-emp-status" id="btn-emp-status">
                                                                 <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="1" href="#">
                                                                     <i class="fa fa-dot-circle-o text-success"></i> FDC-1
@@ -386,7 +386,7 @@
                                                 <td class="text-end">
                                                     <div class="dropdown dropdown-action">
                                                         <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i  class="material-icons">more_vert</i></a>
-                                                        @if (Auth::user()->RolePermission == 'Admin')
+                                                        @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer')
                                                             <div class="dropdown-menu dropdown-menu-right">
                                                                 <a class="dropdown-item userUpdate" data-id="{{$item->id}}"><i class="fa fa-pencil m-r-5"></i> Edit</a>
                                                                 <a class="dropdown-item userDelete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_user"><i class="fa fa-trash-o m-r-5"></i> Delete</a>
@@ -490,7 +490,7 @@
                                                                 <span>UDC</span>
                                                             </a>
                                                         @endif
-                                                        @if (Auth::user()->RolePermission == 'Admin')
+                                                        @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer')
                                                             <div class="dropdown-menu dropdown-menu-right" id="btn-emp-status">
                                                                 <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="3" href="#">
                                                                     <i class="fa fa-dot-circle-o text-danger"></i> Resignation
@@ -520,7 +520,7 @@
                                                 <td class="text-end">
                                                     <div class="dropdown dropdown-action">
                                                         <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i  class="material-icons">more_vert</i></a>
-                                                        @if (Auth::user()->RolePermission == 'Admin')
+                                                        @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer')
                                                             <div class="dropdown-menu dropdown-menu-right">
                                                                 <a class="dropdown-item userUpdate" data-id="{{$item->id}}"><i class="fa fa-pencil m-r-5"></i> Edit</a>
                                                                 <a class="dropdown-item userDelete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_user"><i class="fa fa-trash-o m-r-5"></i> Delete</a>
@@ -642,7 +642,7 @@
                                                 <td class="text-end">
                                                     <div class="dropdown dropdown-action">
                                                         <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i  class="material-icons">more_vert</i></a>
-                                                        @if (Auth::user()->RolePermission == 'Admin')
+                                                        @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer')
                                                             <div class="dropdown-menu dropdown-menu-right">
                                                                 {{-- <a class="dropdown-item userUpdate" data-id="{{$item->id}}"><i class="fa fa-pencil m-r-5"></i> Edit</a> --}}
                                                                 <a class="dropdown-item userDelete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_user"><i class="fa fa-trash-o m-r-5"></i> Delete</a>
@@ -764,7 +764,7 @@
                                                 <td class="text-end">
                                                     <div class="dropdown dropdown-action">
                                                         <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i  class="material-icons">more_vert</i></a>
-                                                        @if (Auth::user()->RolePermission == 'Admin')
+                                                        @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer')
                                                             <div class="dropdown-menu dropdown-menu-right">
                                                                 {{-- <a class="dropdown-item userUpdate" data-id="{{$item->id}}"><i class="fa fa-pencil m-r-5"></i> Edit</a> --}}
                                                                 <a class="dropdown-item userDelete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_user"><i class="fa fa-trash-o m-r-5"></i> Delete</a>

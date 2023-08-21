@@ -27,14 +27,21 @@ return new class extends Migration
         DB::table('roles')->insert([
             [
                 'role_name'=>'Developer',
-                'role_type'=>'Admin',
+                'role_type'=>'developer',
                 'status'=>1,
                 'created_at'=>now(),
                 'updated_at'=>now()
             ],
             [
-                'role_name'=>'HR',
-                'role_type'=>'Admin',
+                'role_name'=>'Admin',
+                'role_type'=>'admin',
+                'status'=>1,
+                'created_at'=>now(),
+                'updated_at'=>now()
+            ],
+            [
+                'role_name'=>'Employee',
+                'role_type'=>'employee',
                 'status'=>1,
                 'created_at'=>now(),
                 'updated_at'=>now()
