@@ -109,9 +109,7 @@ class EmployeePayrollController extends Controller
      */
     public function store(Request $request)
     {
-        // $dataGrossSalaryPay = GrossSalaryPay::where('employee_id',2)->whereDate('payment_date','>','2023-04-25')->whereDate('payment_date','<','2024-04-25')->get();
-        // dd(count($dataGrossSalaryPay));
-        // try{
+        try{
             $employee = User::where('date_of_commencement','<=',$request->payment_date)->whereIn('emp_status',['Probation','1','10','2'])->get();
             if (!$employee->isEmpty()) {
                 foreach ($employee as $item) {
@@ -350,6 +348,7 @@ class EmployeePayrollController extends Controller
                         $totalSeverancePay1 =  $totalGrossSalaryTaxFree != null ? $totalGrossSalaryTaxFree : $totalGrossSalaryTaxFree;
                     }
                     if($item->emp_status == 2){
+                        $type_fdc2 = 'seniority';
                         $totalGrossSalaryTaxFree = $totalBasicSalary;
                         $totalSeverancePay1 =  $totalGrossSalaryTaxFree != null ? $totalGrossSalaryTaxFree : $totalGrossSalaryTaxFree;
                     }
@@ -418,7 +417,7 @@ class EmployeePayrollController extends Controller
                                 $query->where('payment_date', '>=',$fdc_end);
                             })->when($currentMonth, function($query, $currentMonth){
                                 $query->where('payment_date', '>=',$currentMonth);
-                            })->pluck('total_salary_severance')->avg();
+                            })->pluck('total_fdc1')->avg();
                             $totalSalaryReceive = ($totalSalary / 22) * 7.5;
                             $totalGrossExchange = 2000000 / $request->exchange_rate;
                             if ($totalSalaryReceive > $totalGrossExchange) {
@@ -766,11 +765,11 @@ class EmployeePayrollController extends Controller
                 Toastr::error('Prayroll created fail','Error');
                 return redirect()->back();
             }
-        // }catch(\Exception $e){
-        //     DB::rollback();
-        //     Toastr::error('Prayroll created fail','Error');
-        //     return redirect()->back();
-        // }
+        }catch(\Exception $e){
+            DB::rollback();
+            Toastr::error('Prayroll created fail','Error');
+            return redirect()->back();
+        }
     }
 
     /**
