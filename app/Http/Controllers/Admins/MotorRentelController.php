@@ -190,24 +190,26 @@ class MotorRentelController extends Controller
                     $start_date = Carbon::createFromDate($csv[1])->format('Y-m-d'); // 2023-04-19
                     $end_date = Carbon::createFromDate($csv[2])->format('Y-m-d'); // 2023-04-19
                     $employee = User::where("number_employee", $csv[0])->first();
-                    $arr = [
-                        'employee_id'     => $employee->id,
-                        'start_date'  => $start_date,
-                        'end_date'  => $end_date,
-                        'product_year'  => $csv[3],
-                        'expired_year'  => $csv[4],
-                        'shelt_life'  => $csv[5],
-                        'number_plate'  => $csv[6],
-                        'total_gasoline'  => $csv[7],
-                        'total_work_day'  => $csv[8],
-                        'price_engine_oil'  => $csv[9],
-                        'price_motor_rentel'  => $csv[10],
-                        'taplab_rentel'  => $csv[11],
-                        'price_taplab_rentel'  => $csv[12],
-                        'created_by'        => $userID,
-                        'created_at'       => Carbon::now(),
-                    ];
-                    DB::table('motor_rentels')->insert($arr);
+                    if ($employee) {
+                        $arr = [
+                            'employee_id'     => $employee->id,
+                            'start_date'  => $start_date,
+                            'end_date'  => $end_date,
+                            'product_year'  => $csv[3],
+                            'expired_year'  => $csv[4],
+                            'shelt_life'  => $csv[5],
+                            'number_plate'  => $csv[6],
+                            'total_gasoline'  => $csv[7],
+                            'total_work_day'  => $csv[8],
+                            'price_engine_oil'  => $csv[9],
+                            'price_motor_rentel'  => $csv[10],
+                            'taplab_rentel'  => $csv[11],
+                            'price_taplab_rentel'  => $csv[12],
+                            'created_by'        => $userID,
+                            'created_at'       => Carbon::now(),
+                        ];
+                        DB::table('motor_rentels')->insert($arr);
+                    }
                 }
             }
             return 1;

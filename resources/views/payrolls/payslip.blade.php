@@ -161,9 +161,15 @@
                                                 </td>
                                             </tr> --}}
                                             <tr>
-                                                <td>Phone Allowance</td>
+                                                <td>Phone</td>
                                                 <td>
-                                                    <span class="float-end">${{$payslip->phone_allowance}}</span>
+                                                    <span class="float-end">${{$payslip->phone_allowance ?? '0.00'}}</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Child Allowence</td>
+                                                <td>
+                                                    <span class="float-end">${{$payslip->total_child_allowance}}</span>
                                                 </td>
                                             </tr>
                                             @php
@@ -172,19 +178,22 @@
                                             @php
                                                 $TotalDeductions = $payslip->total_salary_tax_usd + $payslip->total_pension_fund;
                                             @endphp
+                                            @php
+                                                $totalNetPay = $TotalEarnings - $TotalDeductions;
+                                            @endphp
                                             <tr style="background-color: #d2dbdb;">
                                                 <td><strong>Total Earnings</strong></td>
                                                 <td>
-                                                    <span class="float-end"><strong>${{$TotalEarnings}}</strong></span>
+                                                    <span class="float-end"><strong>${{number_format($TotalEarnings, 2)}}</strong></span>
                                                 </td>
                                                 <td><strong>Total Deductions :</strong></td>
-                                                <td><span class="float-end"><strong>${{$TotalDeductions}}</strong></span></td>
+                                                <td><span class="float-end"><strong>${{number_format($TotalDeductions, 2)}}</strong></span></td>
                                             </tr>
                                             <tr>
                                                 <td></td>
                                                 <td></td>
                                                 <td><p><strong>Total Net Pay:</strong></p></td>
-                                                <td><span class="float-end"><strong>${{$payslip->total_salary}}</strong></span></td>
+                                                <td><span class="float-end"><strong>${{number_format($totalNetPay, 2)}}</strong></span></td>
                                             </tr>
                                         </tbody>
                                     </table>

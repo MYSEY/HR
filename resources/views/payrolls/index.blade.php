@@ -192,7 +192,7 @@
                                                     </th>
                                                 </tr>
                                             </thead>
-                                            <tbody >
+                                            <tbody>
                                                 @if (count($data) > 0)
                                                     @foreach ($data as $item)
                                                         <tr class="odd">
@@ -233,7 +233,7 @@
                                                             <td>$<a href="#">{{ $item->total_salary }}</a></td>
                                                             <td>{{ $item->PayrollPaymentDate }}</td>
                                                             <td>{{ $item->Created }}</td>
-                                                            <td><a class="btn btn-sm btn-primary" href="{{ url('payslip', $item->employee_id) }}">Generate Slip</a></td>
+                                                            <td><a class="btn btn-sm btn-primary" target="_blank" href="{{ url('payslip', $item->employee_id) }}">Generate Slip</a></td>
                                                         </tr>
                                                     @endforeach
                                                 @endif
