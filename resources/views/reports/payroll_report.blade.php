@@ -212,7 +212,7 @@
                                                                 <td>$<a href="#">{{ $item->phone_allowance == null ? '0.00' : $item->phone_allowance}}</a></td>
                                                                 <td>$<a href="#">{{ $item->total_kny_phcumben}}</a></td>
                                                                 <td>$<a href="#">{{ $item->total_gross_salary }}</a></td>
-                                                                <td>$<a href="#">{{ $item->seniority_payable_tax}}</a></td>
+                                                                <td>$<a href="#">{{ $item->seniority_pay_excluded_tax}}</a></td>
                                                                 <td>$<a href="#">{{ $item->total_pension_fund}}</a></td>
                                                                 <td>$<a href="#">{{ $item->base_salary_received_usd}}</a></td>
                                                                 <td>$<a href="#">{{ number_format((int)$item->base_salary_received_riel)}}</a></td>
@@ -221,7 +221,7 @@
                                                                 <td><a href="#">{{ $item->total_rate}}%</a></td>
                                                                 <td>$<a href="#">{{ $item->total_salary_tax_usd}}</a></td>
                                                                 <td><span>៛</span><a href="#">{{ number_format((int)$item->total_salary_tax_riel)}}</a></td>
-                                                                <td>$<a href="#">{{ $item->tax_free_seniority_allowance}}</a></td>
+                                                                <td>$<a href="#">{{ $item->seniority_pay_excluded_tax}}</a></td>
                                                                 <td>$<a href="#">{{ $item->total_severance_pay}}</a></td>
                                                                 <td>$<a href="#">{{ $item->total_salary }}</a></td>
                                                                 <td>{{ $item->payment_date}}</td>
@@ -620,7 +620,7 @@
                                 '<td>'+(dollar)+'<a href="#">'+(row.phone_allowance == null ? '0.00' : row.phone_allowance)+'</a></td>'+
                                 '<td>'+(dollar)+'<a href="#">'+(row.total_kny_phcumben)+'</a></td>'+
                                 '<td>'+(dollar)+'<a href="#">'+(row.total_gross_salary )+'</a></td>'+
-                                '<td>'+(dollar)+'<a href="#">'+(row.seniority_payable_tax)+'</a></td>'+
+                                '<td>'+(dollar)+'<a href="#">'+(row.seniority_pay_excluded_tax)+'</a></td>'+
                                 '<td>'+(dollar)+'<a href="#">'+(row.total_pension_fund)+'</a></td>'+
                                 '<td>'+(dollar)+'<a href="#">'+(row.base_salary_received_usd)+'</a></td>'+
                                 '<td>'+(dollar)+'<a href="#">'+(formatCurrencyKH(row.base_salary_received_riel))+'</a></td>'+
@@ -629,7 +629,7 @@
                                 '<td><a href="#">'+(row.total_rate)+'%</a></td>'+
                                 '<td>'+(dollar)+'<a href="#">'+(row.total_salary_tax_usd)+'</a></td>'+
                                 '<td><span>៛</span><a href="#">'+(formatCurrencyKH(row.total_salary_tax_riel))+'</a></td>'+
-                                '<td>'+(dollar)+'<a href="#">'+(row.tax_free_seniority_allowance)+'</a></td>'+
+                                '<td>'+(dollar)+'<a href="#">'+(row.seniority_pay_excluded_tax)+'</a></td>'+
                                 '<td>'+(dollar)+'<a href="#">'+(row.total_severance_pay)+'</a></td>'+
                                 '<td>'+(dollar)+'<a href="#">'+(row.total_salary )+'</a></td>'+
                                 '<td>'+(payment_date)+'</td>'+

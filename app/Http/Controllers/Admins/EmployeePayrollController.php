@@ -742,14 +742,14 @@ class EmployeePayrollController extends Controller
                     $data['phone_allowance']                = $item->phone_allowance;
                     $data['total_kny_phcumben']             = $totalBunus;
                     $data['total_severance_pay']            = $totalSeverancePay;
-                    $data['seniority_payable_tax']          = $seniorityPayableTax;
+                    $data['seniority_pay_included_tax']     = $seniorityPayableTax;
                     $data['total_pension_fund']             = $pension_contribution;
                     $data['base_salary_received_usd']       = $baseSalaryReceivedUsd;
                     $data['base_salary_received_riel']      = $totalExchangeRiel;
                     $data['total_tax_base_riel']            = $totalTtaxBbaseRiel;
                     $data['total_charges_reduced']          = $totalChargesReduced;
                     $data['total_rate']                     = $totalTax;
-                    $data['tax_free_seniority_allowance']   = $taxExemptionSalary;
+                    $data['seniority_pay_excluded_tax']     = $taxExemptionSalary;
                     $data['total_salary_tax_riel']          = $totalSalaryTaxRiel;
                     $data['total_salary_tax_usd']           = $totalSalaryTaxUsd;
                     $data['total_salary']                   = round($totalNetSalary, 2);

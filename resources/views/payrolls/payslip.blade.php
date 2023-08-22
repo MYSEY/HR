@@ -96,50 +96,56 @@
                                             <tr>
                                                 <td>Gross Salary</td>
                                                 <td>
-                                                    <span class="float-end">$ {{$payslip->total_gross_salary}}</span>
+                                                    <span class="float-end">${{$payslip->total_gross_salary}}</span>
                                                 </td>
                                                 <td>Personal Tax</td>
                                                 <td>
-                                                    <span class="float-end">$ {{$payslip->total_salary_tax_usd}}</span>
+                                                    <span class="float-end">${{$payslip->total_salary_tax_usd}}</span>
                                                 </td>
                                             </tr>
                                             
                                             <tr>
                                                 <td>Increasment</td>
                                                 <td>
-                                                    <span class="float-end">$ 0.00</span>
+                                                    <span class="float-end">${{$payslip->users->salary_increas == null ? "0.00" : $payslip->users->salary_increas}}</span>
                                                 </td>
                                                 <td>Pension Fund</td>
                                                 <td>
-                                                    <span class="float-end">$ {{$payslip->total_pension_fund}}</span>
+                                                    <span class="float-end">${{$payslip->total_pension_fund}}</span>
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td>Incentive</td>
                                                 <td>
-                                                    <span class="float-end">$ 0.00</span>
+                                                    <span class="float-end">$0.00</span>
                                                 </td>
                                                 <td>Staff loan</td>
                                                 <td>
-                                                    <span class="float-end">$ 0.00</span>
+                                                    <span class="float-end">$0.00</span>
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td>Bonus(Annual/PB/KNY)</td>
                                                 <td>
-                                                    <span class="float-end">$ {{$payslip->total_kny_phcumben}}</span>
+                                                    <span class="float-end">${{$payslip->total_kny_phcumben}}</span>
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td>Seniority pay</td>
+                                                <td>Seniority Pay (included Tax)</td>
                                                 <td>
-                                                    <span class="float-end">$ {{$payslip->tax_free_seniority_allowance}}</span>
+                                                    <span class="float-end">${{$payslip->seniority_pay_included_tax}}</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Seniority Pay (Excluded Tax)</td>
+                                                <td>
+                                                    <span class="float-end">${{$payslip->seniority_pay_excluded_tax}}</span>
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td>Severance Pay</td>
                                                 <td>
-                                                    <span class="float-end">$ {{$payslip->total_severance_pay}}</span>
+                                                    <span class="float-end">${{$payslip->total_severance_pay}}</span>
                                                 </td>
                                             </tr>
                                             {{-- <tr>
@@ -157,22 +163,28 @@
                                             <tr>
                                                 <td>Phone Allowance</td>
                                                 <td>
-                                                    <span class="float-end">$ {{$payslip->phone_allowance}}</span>
+                                                    <span class="float-end">${{$payslip->phone_allowance}}</span>
                                                 </td>
                                             </tr>
+                                            @php
+                                                $TotalEarnings = $payslip->total_gross_salary + $payslip->phone_allowance + $payslip->total_severance_pay + $payslip->seniority_pay_excluded_tax + $payslip->seniority_pay_included_tax + $payslip->total_kny_phcumben
+                                            @endphp
+                                            @php
+                                                $TotalDeductions = $payslip->total_salary_tax_usd + $payslip->total_pension_fund;
+                                            @endphp
                                             <tr style="background-color: #d2dbdb;">
                                                 <td><strong>Total Earnings</strong></td>
                                                 <td>
-                                                    <span class="float-end"><strong>$ {{$payslip->total_gross_salary + $payslip->phone_allowance + $payslip->total_severance_pay + $payslip->tax_free_seniority_allowance + $payslip->total_kny_phcumben}}</strong></span>
+                                                    <span class="float-end"><strong>${{$TotalEarnings}}</strong></span>
                                                 </td>
                                                 <td><strong>Total Deductions :</strong></td>
-                                                <td><span class="float-end"><strong>$ {{$payslip->total_salary_tax_usd +$payslip->total_pension_fund}}</strong></span></td>
+                                                <td><span class="float-end"><strong>${{$TotalDeductions}}</strong></span></td>
                                             </tr>
                                             <tr>
                                                 <td></td>
                                                 <td></td>
                                                 <td><p><strong>Total Net Pay:</strong></p></td>
-                                                <td><span class="float-end"><strong>$ 598</strong></span></td>
+                                                <td><span class="float-end"><strong>${{$payslip->total_salary}}</strong></span></td>
                                             </tr>
                                         </tbody>
                                     </table>

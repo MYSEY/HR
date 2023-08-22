@@ -51,10 +51,10 @@
                                 <td>{{ $item->phone_allowance == null ? '0.00' : $item->phone_allowance}}</td>
                                 <td>{{ $item->total_kny_phcumben}}</td>
                                 <td>{{ $item->total_gross_salary }}</td>
-                                <td>{{ $item->seniority_payable_tax}}</td>
+                                <td>{{ $item->seniority_pay_excluded_tax}}</td>
                                 <td>{{ $item->total_pension_fund}}</td>
                                 <td>{{ $item->base_salary_received_usd}}</td>
-                                <td>{{ $item->tax_free_seniority_allowance}}</td>
+                                <td>{{ $item->seniority_pay_excluded_tax}}</td>
                                 <td>{{ $item->total_severance_pay}}</td>
                                 <td>{{ $item->total_salary }}</td>
                                 <td>{{ $item->payment_date}}</td>

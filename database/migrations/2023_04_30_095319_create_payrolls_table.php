@@ -24,7 +24,7 @@ return new class extends Migration
             $table->decimal('total_kny_phcumben',50,2)->default(0);
             $table->decimal('total_pension_fund',50,2)->default(0);
             $table->decimal('total_severance_pay',50,2)->default(0);
-            $table->decimal('seniority_payable_tax',50,2)->default(0);
+            $table->decimal('seniority_pay_included_tax',50,2)->default(0);
             $table->decimal('base_salary_received_usd',50,2)->default(0);
             $table->string('base_salary_received_riel',50,2)->default(0);
             $table->integer('spouse')->default(0);
@@ -36,10 +36,10 @@ return new class extends Migration
             $table->string('total_salary_tax_riel',50,2)->default(0);
             $table->decimal('total_amount_reduced',50,2)->default(0);
             $table->decimal('pension_contribution',50,2)->default(0);
-            $table->decimal('tax_free_seniority_allowance',50,2)->default(0);
+            $table->decimal('seniority_pay_excluded_tax',50,2)->default(0);
             $table->decimal('total_salary')->default(0);
             $table->string('exchange_rate')->nullable();
-            $table->string('amount_loan')->nullable();
+            $table->string('loan_amount')->nullable();
             $table->string('incentive')->nullable();
             $table->string('adjustment')->nullable();
             $table->string('leaves')->nullable();
