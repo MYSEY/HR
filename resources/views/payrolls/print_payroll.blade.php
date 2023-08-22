@@ -67,7 +67,7 @@
                         </tr>
                         <tr>
                             <td class="border-0 text-nowrap">Seniority pay</td>
-                            <td class="border-0 fw-bolder"><span class="float-end">$ {{$payslip->tax_free_seniority_allowance}}</span></td>
+                            <td class="border-0 fw-bolder"><span class="float-end">$ {{$payslip->seniority_pay_excluded_tax}}</span></td>
                         </tr>
                         <tr>
                             <td class="border-0 text-nowrap">Severance Pay</td>
@@ -90,7 +90,7 @@
                         <tr style="background-color: #d2dbdb;">
                             <td><strong>Total Earnings</strong></td>
                             <td>
-                                <span class="float-end"><strong>$ {{$payslip->total_gross_salary + $payslip->phone_allowance + $payslip->total_severance_pay + $payslip->tax_free_seniority_allowance + $payslip->total_kny_phcumben}}</strong></span>
+                                <span class="float-end"><strong>$ {{$payslip->total_gross_salary + $payslip->phone_allowance + $payslip->total_severance_pay + $payslip->seniority_pay_excluded_tax + $payslip->total_kny_phcumben}}</strong></span>
                             </td>
                             <td><strong>Total Deductions :</strong></td>
                             <td><span class="float-end"><strong>$ {{$payslip->total_salary_tax_usd +$payslip->total_pension_fund}}</strong></span></td>

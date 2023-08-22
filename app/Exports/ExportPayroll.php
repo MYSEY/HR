@@ -95,7 +95,7 @@ class ExportPayroll implements FromCollection, WithColumnWidths, WithHeadings, W
                     '$ '.$pay->seniority_payable_tax,
                     '$ '.$pay->total_pension_fund,
                     '$ '.$pay->base_salary_received_usd,
-                    '$ '.$pay->tax_free_seniority_allowance,
+                    '$ '.$pay->seniority_pay_excluded_tax,
                     '$ '.$pay->total_severance_pay,
                     '$ '.$pay->total_salary,
                     $payment_date,
