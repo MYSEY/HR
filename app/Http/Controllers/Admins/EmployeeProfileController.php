@@ -22,6 +22,7 @@ use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\ChildrenRequest;
 use App\Http\Requests\EmployeeContactRequest;
+use Illuminate\Support\Facades\Hash;
 
 class EmployeeProfileController extends Controller
 {
@@ -69,6 +70,38 @@ class EmployeeProfileController extends Controller
             DB::rollback();
             Toastr::error('Update education fail','Error');
             return redirect()->back();
+        }
+    }
+    public function changePassword(Request $request) {
+        $request->validate([
+            'current_password' => 'required|string',
+            'new_password' => [
+                'required',
+                'string',
+                'min:8',
+            ],
+            'comfirm_password' => 'required|string',
+        ]);
+        
+        $hashedPassword = User::select('employee_name_en','number_employee', 'password','email')->where('number_employee', $request->number_employee)->first();
+        if($hashedPassword == null){
+            Toastr::error('Wrong current password or new password', 'Error');
+            return redirect()->back();
+        }
+        if ($request->new_password == $request->comfirm_password) {
+            if (Hash::check($request->current_password, $hashedPassword->password)) {
+                User::where('number_employee', $request->number_employee)->update([
+                    'password'  =>  Hash::make($request->new_password)
+                ]);
+                DB::commit();
+                return response()->json(['message' => "password updated successfully!"], 200);
+            }else{
+                DB::rollBack();
+                return response()->json(['message' => "Current password Invalid!"], 404);
+            }
+        }else{
+            DB::rollBack();
+            return response()->json(['message' => "New password or comfirm password Invalid!"], 404);
         }
     }
 

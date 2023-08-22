@@ -1,6 +1,5 @@
 @extends('layouts.master')
 @section('content')
-
     <div class="">
         <div class="page-header">
             <div class="row">
@@ -176,6 +175,7 @@
                                             <small class="text-muted">{{ $data->EmployeePosition }}</small>
                                             <div class="staff-id">Employee ID : {{ $data->number_employee }}</div>
                                             <div class="small doj text-muted">Date of Join : {{ $data->joinOfDate }}</div>
+                                            <div class="small doj text-muted">Change Password <a href="#" id="btn-change-password">click here</a></div>
                                         </div>
                                     </div>
                                     <div class="col-md-7">
@@ -515,12 +515,20 @@
             {{-- End Training --}}
         </div>
     </div>
+    @include('employees.change_password')
 @endsection
 
 @include('includs.script')
 <script src="{{asset('/admin/js/validation-field.js')}}"></script>
+<link rel="stylesheet" href="{{ asset('admin/css/noty.css') }}">
+<script src="{{asset('/admin/js/noty.js')}}"></script>
 <script>
+  
     $(function() {
+
+        $("#btn-change-password").on("click", function(){
+            $("#modal_change_password").modal("show");
+        });
         $('#btnAddEducation').on('click', function() {
             $('.education-repeatable-element:first').clone().appendTo('#education-container-repeatable-elements');
             var lastRepeatableElement = $('.education-repeatable-element:last');
@@ -577,6 +585,52 @@
             if ($('.children-repeatable-element').length > 1) {
                 $(this).closest('.children-repeatable-element').remove();
             }
+        });
+
+        $("#btn-change-passwork").on("click", function() {
+            const currentUrl = window.location.pathname.split('/');
+            let num_miss = 0;
+            $(".emp_required").each(function(){
+                if($(this).val()==""){ 
+                    num_miss++;
+                    $(this).css("border-color", "#dc3545");
+                }else{
+                    $(this).css("border-color", "#e3e3e3");
+                }
+            });
+            if (num_miss > 0) {
+                return false;
+            }
+            $.ajax({
+                type: "post",
+                url: "{{url('employee/change-password')}}",
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    number_employee : $("#number_employee_id").val(),
+                    current_password : $("#current_password").val(),
+                    new_password : $("#new_password").val(),
+                    comfirm_password : $("#comfirm_password").val(),
+                },
+                dataType: "JSON",
+                success: function (response) {
+                    new Noty({
+                        text: response.message,
+                        type: "success",
+                        timeout: 3000,
+                        icon: true
+                    }).show();
+                    window.location.replace("{{ URL('employee/profile') }}/"+currentUrl[3]);
+                },
+                error: function(error) {
+                    console.log(error.responseJSON);
+                    new Noty({
+                        text: error.responseJSON.message,
+                        type: "error",
+                        timeout: 3000,
+                        icon: true
+                    }).show();
+                }
+            });
         });
 
         $('.childrenUpdate').on('click',function(){

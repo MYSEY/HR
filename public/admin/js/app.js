@@ -44,15 +44,33 @@ $(document).ready(function() {
 	// Password toggle
 
 	
-	if($('.toggle-password').length > 0) {
-		$(document).on('click', '.toggle-password', function() {
-			$(this).toggleClass("fa-eye fa-eye-slash");
-			var input = $(".pass-input");
-			if (input.attr("type") == "password") {
-				input.attr("type", "text");
-			} else {
-				input.attr("type", "password");
-			}
+	// if($('.toggle-password').length > 0) {
+	// 	$(document).on('click', '.toggle-password', function() {
+	// 		$(this).toggleClass("fa-eye fa-eye-slash");
+	// 		var input = $(".pass-input");
+	// 		if (input.attr("type") == "password") {
+	// 			input.attr("type", "text");
+	// 		} else {
+	// 			input.attr("type", "password");
+	// 		}
+	// 	});
+	// }
+	if($('.toggle-password').length > 0) 
+	{
+		const passwordInputs = document.querySelectorAll('.toggle-password');
+		passwordInputs.forEach((input, index) => {
+			input.addEventListener('click', function(){
+				$(this).toggleClass("fa-eye fa-eye-slash");
+				$(".pass-input").each(function(indent){
+					if (index == indent) {
+						if ($(this).attr("type") == "password") {
+							$(this).attr("type", "text");
+						} else {
+							$(this).attr("type", "password");
+						}
+					}
+				});
+			});
 		});
 	}
 	// $("#toggle-password").click(function () {

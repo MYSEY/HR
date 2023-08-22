@@ -121,14 +121,14 @@ function menu(){
             'permission'=>1,
             'child'=>[
                 [
-                    'value'=>'Training List',
-                    'url'=>"training/list",
+                    'value'=>'Trainer',
+                    'url'=>"trainer/list",
                     'table'=>2,
                     'permission'=>1
                 ],
                 [
-                    'value'=>'Trainer',
-                    'url'=>"trainer/list",
+                    'value'=>'Training List',
+                    'url'=>"training/list",
                     'table'=>2,
                     'permission'=>1
                 ],
