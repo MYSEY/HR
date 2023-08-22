@@ -257,7 +257,7 @@ function menu(){
                     'permission'=>1
                 ],
                 [
-                    'value'=>'Change Password',
+                    'value'=>'Forgot Password',
                     'url'=>"change/password",
                     'table'=>6,
                     'permission'=>1
