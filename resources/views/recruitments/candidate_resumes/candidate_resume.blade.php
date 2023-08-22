@@ -142,7 +142,7 @@
                             });
                         }
                     };
-            if (id_card == "null") {
+            if (id_card == "false") {
                 text_label = '<label>You can not Aprove.</label>';
                 description = "Please enter all information for Aprove.";
                 button_ok = "";
@@ -890,10 +890,6 @@
                             let join_date = staff_result.join_date ? moment(staff_result.join_date).format('MMM-D-YYYY') : "";
                             let contract_date = staff_result.contract_date ? moment(staff_result.contract_date).format('MMM-D-YYYY') : "";
                             let updated_at =  moment(staff_result.updated_at).format('MMM-D-YYYY');
-                            // let disabled = "";
-                            // if (!staff_result.id_card_number) {
-                            //     disabled = "disabled";
-                            // }
                             if (staff_result.status == "Cancel") {
                                 action = "";
                                 tr_ct_cancel += ' <tr class="odd">'+
@@ -911,6 +907,10 @@
                                     '<td >'+(updated_at)+'</td>'+
                                 '</tr>';
                             }else{
+                                let dataAprove = false;
+                                if (staff_result.id_card_number && staff_result.position_type && staff_result.department_id) {
+                                    dataAprove = true;
+                                }
                                 tr_ct += ' <tr class="odd">'+
                                     '<td class="ids">'+(staff_result.id)+'</td>'+
                                     '<td class="name_kh" >'+(staff_result.name_kh )+'</td>'+
@@ -932,7 +932,7 @@
                                                 '<a class="dropdown-item btn_print_signed_contract" href="#" data-print-status="4" data-id="'+(staff_result.id)+'">'+
                                                     '<i class="fa fa-print fa-lg m-r-5"></i> Print'+
                                                 '</a>'+
-                                                '<a class="btn btn-sm dropdown-item btn_approve" href="#" data-id-card="'+(staff_result.id_card_number)+'" data-id="'+(staff_result.id)+'">'+
+                                                '<a class="btn btn-sm dropdown-item btn_approve" href="#" data-id-card="'+(dataAprove)+'" data-id="'+(staff_result.id)+'">'+
                                                     '<i class="fa fa-dot-circle-o text-success"></i>'+
                                                     '<span> Approve</span>'+
                                                 '</a>'+
@@ -947,7 +947,7 @@
                         });
                     }
                 }else {
-                    var tr = '<tr><td colspan=12 align="center">No record to display</td></tr>';
+                    var tr = '<tr><td colspan=13 align="center">No record to display</td></tr>';
                     var tr_not_list = '<tr><td colspan=9 align="center">No record to display</td></tr>';
                     var tr_re = '<tr><td colspan=10 align="center">No record to display</td></tr>';
                     var tr_ct = '<tr><td colspan=11 align="center">No record to display</td></tr>';

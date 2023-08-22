@@ -1,6 +1,11 @@
 @extends('layouts.master')
+<style>
+    .page-wrapper{
+        min-height: 0px !important
+    }
+</style>
 @section('content')
-    <div class="">
+    {{-- <div class=""> --}}
         <div class="page-header">
             <div class="row align-items-center">
                 <div class="col">
@@ -52,10 +57,6 @@
                                                     </td>
                                                 </tr>
                                             @endforeach
-                                        @else
-                                            <tr>
-                                                <td colspan="6" style="text-align: center">No record to display</td>
-                                            </tr>
                                         @endif
                                     </tbody>
                                 </table>
@@ -104,7 +105,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">Edit Postion</h5>
-                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">×</span>
                         </button>
                     </div>
@@ -158,7 +159,7 @@
             </div>
         </div>
         <!-- /Delete Department Modal -->
-    </div>
+    {{-- </div> --}}
 @endsection
 
 @include('includs.script')

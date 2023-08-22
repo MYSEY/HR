@@ -83,6 +83,7 @@ class EmployeeRepository extends BaseRepository
         return $user;
     }
     public function updatedUsers($request){
+        $fdc_date = Carbon::parse($request['date_of_commencement'])->addMonths(3);
         if($request->hasFile('profile')) {
             $image = $request->file('profile');
             $filename = time().'.'.$image->getClientOriginalName();
@@ -122,6 +123,7 @@ class EmployeeRepository extends BaseRepository
             'unit'  => $request->unit,
             'level'  => $request->level,
             'date_of_commencement'  => $request->date_of_commencement,
+            'fdc_date'  => $fdc_date,
             'marital_status'  => $request->marital_status,
             'nationality'  => $request->nationality,
             'personal_phone_number'  => $request->personal_phone_number,

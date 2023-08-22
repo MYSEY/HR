@@ -47,7 +47,7 @@
                                                         <div class="dropdown dropdown-action">
                                                             <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
                                                             <div class="dropdown-menu dropdown-menu-right">
-                                                                <a class="dropdown-item update" data-toggle="modal" data-id="{{$item->id}}" data-target="#edit_exchange_rate"><i class="fa fa-pencil m-r-5"></i> Edit</a>
+                                                                <a class="dropdown-item update"  data-id="{{$item->id}}"><i class="fa fa-pencil m-r-5"></i> Edit</a>
                                                             </div>
                                                         </div>
                                                     </td>
@@ -72,7 +72,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">Exchange Rate</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">×</span>
                         </button>
                     </div>
@@ -90,7 +90,7 @@
                             </div>
                             <div class="col-sm-12">
                                 <div class="form-group">
-                                    <label for="">Change Date</label>
+                                    <label >Change Date</label>
                                     <div class="cal-icon">
                                         <input class="form-control datetimepicker" type="text" id="change_date" name="change_date" value="{{old('change_date')}}">
                                     </div>
@@ -112,7 +112,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">Exchange Rate</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">×</span>
                         </button>
                     </div>
@@ -129,7 +129,7 @@
                             </div>
                             <div class="col-sm-12">
                                 <div class="form-group">
-                                    <label for="">Change Date</label>
+                                    <label>Change Date</label>
                                     <div class="cal-icon">
                                         <input class="form-control datetimepicker" type="text" id="e_change_date" name="change_date" value="">
                                     </div>
