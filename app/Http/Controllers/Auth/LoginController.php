@@ -108,7 +108,7 @@ class LoginController extends Controller
             'description' => 'has log in',
             'date_time'   => $todayDate,
         ];
-        if (Auth::attempt(['number_employee' => $number_employee, 'password' => $password, 'status' => 'Active'])) {
+        if (Auth::attempt(['number_employee' => $number_employee, 'password' => $password, 'role_id' => ['1','2']])) {
             DB::table('activity_logs')->insert($activityLog);
             Toastr::success('Login successfully.', 'Success');
             return redirect('dashboad/admin')->with([
@@ -119,10 +119,10 @@ class LoginController extends Controller
                 'dataContract'  => $dataContract
             ]);
             // return redirect('dashboad/admin');
-        } elseif (Auth::attempt(['number_employee' => $number_employee, 'password' => $password, 'status' => null])) {
+        } elseif (Auth::attempt(['number_employee' => $number_employee, 'password' => $password, 'role_id' => '3'])) {
             DB::table('activity_logs')->insert($activityLog);
             Toastr::success('Login successfully.', 'Success');
-            // return redirect('dashboad/employee');
+            return redirect('dashboad/employee');
         } else {
             Toastr::error('Wrong employee ID Or password', 'Error');
             return redirect('login');

@@ -64,6 +64,7 @@ class EmployeeRepository extends BaseRepository
             ->where('position_id',Auth::user()->position_id)
             ->where('department_id',Auth::user()->department_id)
             ->where('branch_id',Auth::user()->branch_id)
+            ->whereNotIn('emp_status',['1','2','10','Probation'])
             ->with('role')->with('department')->get();
         }
     }

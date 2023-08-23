@@ -53,15 +53,24 @@ class UserController extends Controller
         $optionPositionType = Option::where('type','position_type')->get();
         $optionLoan = Option::where('type','loan')->get();
         $optionSpouse = Option::where('type','is_spouse')->get();
+        $optionIdentityType = Option::where('type','identity_type')->get();
         $branch = Branchs::all();
         $province = Province::all();
         $bank = Bank::all();
-        $dataProbation = User::with('role')->with('department')->where('emp_status','Probation')->get();
-        $dataFDC = User::with('role')->with('department')->whereIn('emp_status',['1','10'])->get();
-        $dataUDC = User::with('role')->with('department')->where('emp_status','2')->get();
-        $dataCanContract = User::with('role')->with('department')->where('emp_status','Cancel')->get();
-        $dataResign = User::with('role')->with('department')->whereIn('emp_status', ['3','4','5','6','7','8','9'])->get();
-        $optionIdentityType = Option::where('type','identity_type')->get();
+        if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer') {
+            $dataProbation = User::with('role')->with('department')->where('emp_status','Probation')->get();
+            $dataFDC = User::with('role')->with('department')->whereIn('emp_status',['1','10'])->get();
+            $dataUDC = User::with('role')->with('department')->where('emp_status','2')->get();
+            $dataCanContract = User::with('role')->with('department')->where('emp_status','Cancel')->get();
+            $dataResign = User::with('role')->with('department')->whereIn('emp_status', ['3','4','5','6','7','8','9'])->get();
+        }else{
+            $dataProbation = User::where('role_id',Auth::user()->role_id)->with('department')->where('emp_status','Probation')->get();
+            $dataFDC = User::where('role_id',Auth::user()->role_id)->whereIn('emp_status',['1','10'])->with('department')->get();
+            $dataUDC = User::where('role_id',Auth::user()->role_id)->where('role_type','employee')->with('department')->where('emp_status','2')->get();
+            $dataCanContract = User::where('role_id',Auth::user()->role_id)->where('emp_status','Cancel')->with('department')->get();
+            $dataResign = User::where('role_id',Auth::user()->role_id)->whereIn('emp_status', ['3','4','5','6','7','8','9'])->with('department')->get();
+        }
+       
         return view('users.index',compact('data',
                                             'role',
                                             'position',

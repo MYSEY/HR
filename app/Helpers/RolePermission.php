@@ -39,7 +39,7 @@ function menu(){
             'name'=>'Employee',
             'icon'=>'<i class="la la-user"></i> <span></span> <span class="menu-arrow"></span>',
             'value'=>'Employee',
-            'table'=>2,
+            'table'=>3,
             'permission'=>1,
             'child'=>[
                 [
@@ -60,13 +60,13 @@ function menu(){
             'name'=>'HR',
             'icon'=>'<i class="la la-money"></i> <span></span> <span class="menu-arrow"></span>',
             'value'=>'Payroll',
-            'table'=>2,
+            'table'=>4,
             'permission'=>1,
             'child'=>[
                 [
                     'value'=>'Employee Salary',
                     'url'=>"payroll",
-                    'table'=>2,
+                    'table'=>4,
                     'permission'=>1
                 ],
             ]
@@ -75,19 +75,19 @@ function menu(){
             'name'=>'',
             'icon'=>'<i class="la la-motorcycle"></i> <span></span> <span class="menu-arrow"></span>',
             'value'=>'Motor Rental',
-            'table'=>2,
+            'table'=>5,
             'permission'=>1,
             'child'=>[
                 [
                     'value'=>'Motor Rental',
                     'url'=>"motor-rentel/list",
-                    'table'=>2,
+                    'table'=>5,
                     'permission'=>1
                 ],
                 [
                     'value'=>'Pay Motor Rental',
                     'url'=>"motor-rentel/pay",
-                    'table'=>2,
+                    'table'=>6,
                     'permission'=>1
                 ],
             ]
@@ -96,19 +96,19 @@ function menu(){
             'name'=>'',
             'icon'=>'<i class="la la-briefcase"></i> <span></span> <span class="menu-arrow"></span>',
             'value'=>'Recruitment',
-            'table'=>2,
+            'table'=>7,
             'permission'=>1,
             'child'=>[
                 [
                     'value'=>'Recruitment Plan',
                     'url'=>"recruitment/plan-list",
-                    'table'=>2,
+                    'table'=>7,
                     'permission'=>1
                 ],
                 [
                     'value'=>'Candidate CV',
                     'url'=>"recruitment/candidate-resume/list",
-                    'table'=>2,
+                    'table'=>8,
                     'permission'=>1
                 ],
             ]
@@ -117,25 +117,25 @@ function menu(){
             'name'=>'',
             'icon'=>'<i class="la la-edit"></i> <span></span> <span class="menu-arrow"></span>',
             'value'=>'Training',
-            'table'=>2,
+            'table'=>9,
             'permission'=>1,
             'child'=>[
                 [
                     'value'=>'Trainer',
                     'url'=>"trainer/list",
-                    'table'=>2,
+                    'table'=>9,
                     'permission'=>1
                 ],
                 [
                     'value'=>'Training List',
                     'url'=>"training/list",
-                    'table'=>2,
+                    'table'=>10,
                     'permission'=>1
                 ],
                 [
                     'value'=>'Training Report',
                     'url'=>"reports/training-report",
-                    'table'=>2,
+                    'table'=>11,
                     'permission'=>1
                 ]
             ]
@@ -144,49 +144,49 @@ function menu(){
             'name'=>'',
             'icon'=>'<i class="la la-pie-chart"></i> <span></span> <span class="menu-arrow"></span>',
             'value'=>'Report',
-            'table'=>2,
+            'table'=>17,
             'permission'=>1,
             'child'=>[
                 [
                     'value'=>'Employee Report',
                     'url'=>"reports/employee-report",
-                    'table'=>2,
+                    'table'=>17,
                     'permission'=>1
                 ],
                 [
                     'value'=>'Payroll Report',
                     'url'=>"reports/payroll-report",
-                    'table'=>2,
+                    'table'=>18,
                     'permission'=>1
                 ],
                 [
                     'value'=>'Motor Rental Report',
                     'url'=>"reports/motor-rentel-report",
-                    'table'=>2,
+                    'table'=>19,
                     'permission'=>1
                 ],
                 [
                     'value'=>'New Staff Report',
                     'url'=>"reports/new_staff-report",
-                    'table'=>2,
+                    'table'=>20,
                     'permission'=>1
                 ],
                 [
                     'value'=>'Staff Resigned Report',
                     'url'=>"reports/staff-resigned-report",
-                    'table'=>2,
+                    'table'=>21,
                     'permission'=>1
                 ],
                 [
                     'value'=>'Promoted Staff Report',
                     'url'=>"reports/promoted-staff-report",
-                    'table'=>2,
+                    'table'=>22,
                     'permission'=>1
                 ],
                 [
                     'value'=>'Transferred Staff Report',
                     'url'=>"reports/transferred-staff-report",
-                    'table'=>2,
+                    'table'=>23,
                     'permission'=>1
                 ],
             ]
@@ -195,32 +195,32 @@ function menu(){
             'name'=>'',
             'icon'=>'<i class="la la-key"></i> <span> </span> <span class="menu-arrow"></span>',
             'value'=>'Configuration',
-            'table'=>7,
+            'table'=>24,
             'permission'=>1,
             'child'=>[
                 [
                     'value'=>'Taxe',
                     'url'=>"taxes",
-                    'table'=>7,
+                    'table'=>24,
                     'permission'=>1
                 ],
                 [
                     'value'=>'Exchange Rate',
                     'url'=>"exchange-rate/list",
-                    'table'=>7,
+                    'table'=>25,
                     'permission'=>1
                 ],
                 
                 [
                     'value'=>'Public Holiday',
                     'url'=>"holidays",
-                    'table'=>6,
+                    'table'=>12,
                     'permission'=>1
                 ],
                 [
                     'value'=>'Children Allowance',
                     'url'=>"children/allowance",
-                    'table'=>6,
+                    'table'=>26,
                     'permission'=>1
                 ],
             ]
@@ -229,37 +229,37 @@ function menu(){
             'name'=>'',
             'icon'=>'<i class="la la-cog"></i> <span> </span> <span class="menu-arrow"></span>',
             'value'=>'Setting',
-            'table'=>7,
+            'table'=>13,
             'permission'=>1,
             'child'=>[
                 [
                     'value'=>'Bank',
                     'url'=>"bank",
-                    'table'=>7,
+                    'table'=>13,
                     'permission'=>1
                 ],
                 [
                     'value'=>'Position',
                     'url'=>"position",
-                    'table'=>7,
+                    'table'=>15,
                     'permission'=>1
                 ],
                 [
                     'value'=>'Branch',
                     'url'=>"branch",
-                    'table'=>8,
+                    'table'=>16,
                     'permission'=>1
                 ],
                 [
                     'value'=>'Department',
                     'url'=>"department",
-                    'table'=>6,
+                    'table'=>14,
                     'permission'=>1
                 ],
                 [
                     'value'=>'Forgot Password',
                     'url'=>"change/password",
-                    'table'=>6,
+                    'table'=>27,
                     'permission'=>1
                 ],
             ]
