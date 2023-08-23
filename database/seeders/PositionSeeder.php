@@ -158,6 +158,6 @@ class PositionSeeder extends Seeder
         Position::firstOrCreate(['name_khmer' => 'គណនេយ្យករសាខា','name_english' => 'Branch Accountant']);
         Position::firstOrCreate(['name_khmer' => 'បេឡាករជាន់ខ្ពស់','name_english' => 'Senior Teller']);
         Position::firstOrCreate(['name_khmer' => 'បេឡាករ​','name_english' => 'Teller']);
-        Position::firstOrCreate(['name_khmer' => 'Junior Credit Officer','name_english' => 'ភ្នាក់ងារឥណទានថ្មី']);
+        Position::firstOrCreate(['name_khmer' => 'ភ្នាក់ងារឥណទានថ្មី','name_english' => 'Junior Credit Officer']);
     }
 }
