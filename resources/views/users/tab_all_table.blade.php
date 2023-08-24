@@ -62,7 +62,7 @@
                                                     </td>
                                                     <td>{{$item->EmployeePositionType}}</td>
                                                     <td>$ <a href="#">{{$item->basic_salary}}</a></td>
-                                                    <td>$ <a href="#">{{$item->phone_allowance == null ? '0.00' : $item->phone_allowance}}</a></td>
+                                                    <td>$ <a href="#">{{$item->phone_allowance == null ? '00' : $item->phone_allowance}}</a></td>
                                                     <td>{{$item->DOB ?? ''}}</td>
                                                     <td>{{$item->joinOfDate}}</td>
                                                     <td>
@@ -180,7 +180,7 @@
                                                     </td>
                                                     <td>{{$item->EmployeePositionType}}</td>
                                                     <td>$ <a href="#">{{$item->basic_salary}}</a></td>
-                                                    <td>$ <a href="#">{{$item->phone_allowance == null ? '0.00' : $item->phone_allowance}}</a></td>
+                                                    <td>$ <a href="#">{{$item->phone_allowance == null ? '00' : $item->phone_allowance}}</a></td>
                                                     <td>{{$item->DOB ?? ''}}</td>
                                                     <td>{{$item->joinOfDate}}</td>
                                                     <td>{{$item->PassDate}}</td>
@@ -322,7 +322,7 @@
                                                     </td>
                                                     <td>{{$item->EmployeePositionType}}</td>
                                                     <td>$ <a href="#">{{$item->basic_salary}}</a></td>
-                                                    <td>$ <a href="#">{{$item->phone_allowance == null ? '0.00' : $item->phone_allowance}}</a></td>
+                                                    <td>$ <a href="#">{{$item->phone_allowance == null ? '00' : $item->phone_allowance}}</a></td>
                                                     <td>{{$item->DOB ?? ''}}</td>
                                                     <td>{{$item->joinOfDate}}</td>
                                                     <td>{{$item->FDCStartDate}}</td>
@@ -471,7 +471,7 @@
                                                     </td>
                                                     <td>{{$item->EmployeePositionType}}</td>
                                                     <td>$ <a href="#">{{$item->basic_salary}}</a></td>
-                                                    <td>$ <a href="#">{{$item->phone_allowance == null ? '0.00' : $item->phone_allowance}}</a></td>
+                                                    <td>$ <a href="#">{{$item->phone_allowance == null ? '00' : $item->phone_allowance}}</a></td>
                                                     <td>{{$item->DOB ?? ''}}</td>
                                                     <td>{{$item->joinOfDate}}</td>
                                                     <td>{{$item->FDCStartDate}}</td>
@@ -606,7 +606,7 @@
                                                     </td>
                                                     <td>{{$item->EmployeePositionType}}</td>
                                                     <td>$ <a href="#">{{$item->basic_salary}}</a></td>
-                                                    <td>$ <a href="#">{{$item->phone_allowance == null ? '0.00' : $item->phone_allowance}}</a></td>
+                                                    <td>$ <a href="#">{{$item->phone_allowance == null ? '00' : $item->phone_allowance}}</a></td>
                                                     <td>{{$item->DOB ?? ''}}</td>
                                                     <td>{{$item->joinOfDate}}</td>
                                                     <td>{{$item->ResignDates}}</td>
@@ -728,7 +728,7 @@
                                                     </td>
                                                     <td>{{$item->EmployeePositionType}}</td>
                                                     <td>$ <a href="#">{{$item->basic_salary}}</a></td>
-                                                    <td>$ <a href="#">{{$item->phone_allowance == null ? '0.00' : $item->phone_allowance}}</a></td>
+                                                    <td>$ <a href="#">{{$item->phone_allowance == null ? '00' : $item->phone_allowance}}</a></td>
                                                     <td>{{$item->DOB ?? ''}}</td>
                                                     <td>{{$item->joinOfDate}}</td>
                                                     <td>{{$item->ResignDates}}</td>
@@ -850,7 +850,7 @@
                                                     </td>
                                                     <td>{{$item->EmployeePositionType}}</td>
                                                     <td>$ <a href="#">{{$item->basic_salary}}</a></td>
-                                                    <td>$ <a href="#">{{$item->phone_allowance == null ? '0.00' : $item->phone_allowance}}</a></td>
+                                                    <td>$ <a href="#">{{$item->phone_allowance == null ? '00' : $item->phone_allowance}}</a></td>
                                                     <td>{{$item->DOB ?? ''}}</td>
                                                     <td>{{$item->joinOfDate}}</td>
                                                     <td>{{$item->PassDate}}</td>
@@ -992,7 +992,7 @@
                                                     </td>
                                                     <td>{{$item->EmployeePositionType}}</td>
                                                     <td>$ <a href="#">{{$item->basic_salary}}</a></td>
-                                                    <td>$ <a href="#">{{$item->phone_allowance == null ? '0.00' : $item->phone_allowance}}</a></td>
+                                                    <td>$ <a href="#">{{$item->phone_allowance == null ? '00' : $item->phone_allowance}}</a></td>
                                                     <td>{{$item->DOB ?? ''}}</td>
                                                     <td>{{$item->joinOfDate}}</td>
                                                     <td>{{$item->FDCStartDate}}</td>
@@ -1141,7 +1141,7 @@
                                                     </td>
                                                     <td>{{$item->EmployeePositionType}}</td>
                                                     <td>$ <a href="#">{{$item->basic_salary}}</a></td>
-                                                    <td>$ <a href="#">{{$item->phone_allowance == null ? '0.00' : $item->phone_allowance}}</a></td>
+                                                    <td>$ <a href="#">{{$item->phone_allowance == null ? '00' : $item->phone_allowance}}</a></td>
                                                     <td>{{$item->DOB ?? ''}}</td>
                                                     <td>{{$item->joinOfDate}}</td>
                                                     <td>{{$item->FDCStartDate}}</td>

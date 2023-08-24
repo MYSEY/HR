@@ -101,6 +101,7 @@ class User extends Authenticatable
         'status',
         'emp_status',
         'is_loan',
+        'type',
         'created_by',
         'updated_by',
     ];

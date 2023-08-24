@@ -268,6 +268,7 @@ class UserController extends Controller
                         'issue_date'            => $item[32] == null ? null : Carbon::createFromDate($item[32])->format('Y-m-d'),
                         'issue_expired_date'    => $item[33] == null ? null : Carbon::createFromDate($item[33])->format('Y-m-d'),
                         'password'              => Hash::make($item[34]),
+                        'type'                  => 'uploade',
                         'created_by'            => Auth::user()->id,
                     ]);
                 }
