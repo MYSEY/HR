@@ -63,7 +63,7 @@ class ExportEmployeeSalary implements FromCollection, WithColumnWidths, WithHead
                 "child_allowance" => "$ ".$value->total_child_allowance,
                 "phone_allowance" => "$ ".$phone_allowance,
                 "KNY_/_pchum_ben" => "$ ".$value->total_kny_phcumben,
-                "seniority_pay_excluded_tax" => "$ ".$value->seniority_payable_tax,
+                "seniority_pay_excluded_tax" => "$ ".$value->seniority_pay_included_tax,
                 "pension_fund" => "$ ".$value->total_pension_fund,
                 "base_salary_received_usd" => "$ ".$value->base_salary_received_usd,
                 "base_salary_received_reil" => "៛ ".$value->total_tax_base_riel,

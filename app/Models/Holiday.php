@@ -22,9 +22,17 @@ class Holiday extends Model
     // protected $primaryKey = 'id';
     // public $timestamps = false;
     protected $guarded = ['id'];
-    // protected $fillable = [];
-    // protected $hidden = [];
-    // protected $dates = [];
+
+    protected $fillable = [
+        'title',
+        'amount_percent',
+        'period_month',
+        'from',
+        'to',
+        'type',
+        'created_by',
+        'updated_by',
+    ];
 
     /*
     |--------------------------------------------------------------------------

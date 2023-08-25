@@ -19,7 +19,8 @@ class HolidayController extends Controller
     public function store(Request $request){
         try{
             $data = $request->all();
-            $data['created_by']         = Auth::user()->id;
+            $data['created_by'] = Auth::user()->id;
+            $data['type']       = 'bonus';
             Holiday::create($data);
             DB::commit();
             Toastr::success('created holiday successfully','Success');
@@ -46,6 +47,7 @@ class HolidayController extends Controller
                 'period_month'      => $request->period_month,
                 'from'              => $request->from,
                 'to'                => $request->to,
+                'type'              => 'bonus',
                 'updated_by'        => Auth::user()->id
             ]);
             DB::commit();

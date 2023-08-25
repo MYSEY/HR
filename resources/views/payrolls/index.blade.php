@@ -219,7 +219,7 @@
                                                             <td>$<a href="#">{{ $item->total_child_allowance }}</a></td>
                                                             <td>$<a href="#">{{ $item->phone_allowance == null ? '0.00' : $item->phone_allowance}}</a></td>
                                                             <td>$<a href="#">{{ $item->total_kny_phcumben}}</a></td>
-                                                            <td>$<a href="#">{{ $item->seniority_payable_tax}}</a></td>
+                                                            <td>$<a href="#">{{ $item->seniority_pay_included_tax}}</a></td>
                                                             <td>$<a href="#">{{ $item->total_pension_fund}}</a></td>
                                                             <td>$<a href="#">{{ $item->base_salary_received_usd}}</a></td>
                                                             <td><span>៛</span><a href="#">{{ number_format((int)$item->base_salary_received_riel) }}</a></td>

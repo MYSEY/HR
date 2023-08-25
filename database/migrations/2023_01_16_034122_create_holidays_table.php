@@ -20,6 +20,7 @@ class CreateHolidaysTable extends Migration
             $table->date('period_month')->nullable();
             $table->date('from');
             $table->date('to')->nullable();
+            $table->string('type')->nullable();
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();
             $table->dateTime('deleted_at')->nullable();

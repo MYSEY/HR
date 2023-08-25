@@ -19,6 +19,6 @@ class TaxesSeeder extends Seeder
         Taxes::firstOrCreate(['tax_rate' => '5','from' => '1500001','to'=>'2000000','tax_deduction_amount'=>'75000']);
         Taxes::firstOrCreate(['tax_rate' => '10','from' => '2000001','to'=>'8500000','tax_deduction_amount'=>'175000']);
         Taxes::firstOrCreate(['tax_rate' => '15','from' => '8500001','to'=>'12500000','tax_deduction_amount'=>'600000']);
-        Taxes::firstOrCreate(['tax_rate' => '20','from' => '','to'=>'','tax_deduction_amount'=>'1225000']);
+        Taxes::firstOrCreate(['tax_rate' => '20','from' => '','to'=>'12500001','tax_deduction_amount'=>'1225000']);
     }
 }

@@ -64,9 +64,24 @@ class UserController extends Controller
             $dataCanContract = User::with('role')->with('department')->where('emp_status','Cancel')->get();
             $dataResign = User::with('role')->with('department')->whereIn('emp_status', ['3','4','5','6','7','8','9'])->get();
         }else{
-            $dataProbation = User::where('role_id',Auth::user()->role_id)->with('department')->where('emp_status','Probation')->get();
-            $dataFDC = User::where('role_id',Auth::user()->role_id)->whereIn('emp_status',['1','10'])->with('department')->get();
-            $dataUDC = User::where('role_id',Auth::user()->role_id)->where('role_type','employee')->with('department')->where('emp_status','2')->get();
+            $dataProbation = User::where('role_id',Auth::user()->role_id)
+            ->where('branch_id',Auth::user()->branch_id)
+            ->where('position_id',Auth::user()->position_id)
+            ->where('department_id',Auth::user()->department_id)
+            ->where('branch_id',Auth::user()->branch_id)
+            ->where('emp_status','Probation')->get();
+            $dataFDC = User::where('role_id',Auth::user()->role_id)
+            ->where('branch_id',Auth::user()->branch_id)
+            ->where('position_id',Auth::user()->position_id)
+            ->where('department_id',Auth::user()->department_id)
+            ->where('branch_id',Auth::user()->branch_id)
+            ->whereIn('emp_status',['1','10'])->get();
+            $dataUDC = User::where('role_id',Auth::user()->role_id)
+            ->where('branch_id',Auth::user()->branch_id)
+            ->where('position_id',Auth::user()->position_id)
+            ->where('department_id',Auth::user()->department_id)
+            ->where('branch_id',Auth::user()->branch_id)
+            ->where('emp_status','2')->get();
             $dataCanContract = User::where('role_id',Auth::user()->role_id)->where('emp_status','Cancel')->with('department')->get();
             $dataResign = User::where('role_id',Auth::user()->role_id)->whereIn('emp_status', ['3','4','5','6','7','8','9'])->with('department')->get();
         }
