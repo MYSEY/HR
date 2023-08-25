@@ -1521,7 +1521,7 @@
                                 '<td><a href="{{url("employee/profile")}}/'+(emp.id)+'">'+(emp.number_employee)+'</a></td>'+
                                 '<td><a href="{{url("employee/profile")}}/'+(emp.id)+'">'+(emp.employee_name_kh)+'</a></td>'+
                                 '<td><a href="{{url("employee/profile")}}/'+(emp.id)+'">'+(emp.employee_name_en)+'</a></td>'+
-                                '<td>'+(emp.EmployeeGender)+'</td>'+
+                                '<td>'+(emp.EmployeeGender == 23 ? 'Male' : 'Female')+'</td>'+
                                 '<td>'+(DOB)+'</td>'+
                                 '<td>'+(emp.branch ? emp.branch.branch_name_en: "")+'</td>'+
                                 '<td>'+(emp.department ? emp.department.name_english: "")+'</td>'+
@@ -1529,7 +1529,7 @@
                                 '<td>'+(emp.positiontype ? emp.positiontype.name_english : "")+'</td>'+
                                 '<td>'+(emp.personal_phone_number)+'</td>'+
                                 '<td>'+
-                                    '<span class="badge bg-inverse-success">'+(emp.role == null ? "" : emp.role.name )+'</span>'+
+                                    '<span class="badge bg-inverse-success">'+(emp.role == null ? "" : emp.role.role_name )+'</span>'+
                                 '</td>'+
                                 '<td>$ <a href="#">'+(emp.basic_salary)+'</a></td>'+
                                 '<td>$ <a href="#">'+(emp.phone_allowance == null ? '0.00' : emp.phone_allowance)+'</a></td>'+
