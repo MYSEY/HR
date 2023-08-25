@@ -143,8 +143,8 @@
                         }
                     };
             if (id_card == "false") {
-                text_label = '<label>You can not Aprove.</label>';
-                description = "Please enter all information for Aprove.";
+                text_label = '<label>You cannot Aprove.</label>';
+                description = "Please enter all requried information.";
                 button_ok = "";
             }
             $.confirm({
@@ -373,7 +373,7 @@
                             '<input type="hidden" class="form-control status" id="" name="" value="'+status+'">'+
                             '<input type="hidden" class="form-control id" id="" name="" value="'+id+'">'+
                             '<div class="form-group">'+
-                                '<label>Short List</label>'+
+                                '<label>Shortlist</label>'+
                                 '<select class="form-control form-select showtList" name="short_list">'+
                                     '<option selected value="1"> Yes</option>'+
                                     '<option value="2"> No</option>'+
