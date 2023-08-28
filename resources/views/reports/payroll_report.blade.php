@@ -215,7 +215,7 @@
                                                                 <td>$<a href="#">{{ $item->seniority_pay_excluded_tax}}</a></td>
                                                                 <td>$<a href="#">{{ $item->total_pension_fund}}</a></td>
                                                                 <td>$<a href="#">{{ $item->base_salary_received_usd}}</a></td>
-                                                                <td>$<a href="#">{{ number_format((int)$item->base_salary_received_riel)}}</a></td>
+                                                                <td><span>៛</span><a href="#">{{ number_format((int)$item->base_salary_received_riel)}}</a></td>
                                                                 <td><span>៛</span><a href="#">{{ number_format((int)$item->total_charges_reduced) }}</a></td>
                                                                 <td><span>៛</span><a href="#">{{ number_format((int)$item->total_tax_base_riel) }}</a></td>
                                                                 <td><a href="#">{{ $item->total_rate}}%</a></td>
@@ -304,14 +304,14 @@
                                                                 <td><a href="#">{{ $item->users == null ? '' : $item->users->number_employee }}</a></td>
                                                                 <td><a href="#">{{ $item->users == null ? '' : $item->users->employee_name_en }}</a></td></td></td>
                                                                 <td>{{ $item->users == null ? '' : $item->users->joinOfDate }}</td>
-                                                                <td>$ {{ $item->total_pre_tax_salary_usd }}</td>
+                                                                <td>${{ $item->total_pre_tax_salary_usd }}</td>
                                                                 <td><span>៛</span> {{ $item->total_pre_tax_salary_riel }}</td>
                                                                 <td>{{ $item->total_average_wage }}</td>
                                                                 <td>{{ $item->total_occupational_risk }}</td>
                                                                 <td>{{ $item->total_health_care }}</td>
-                                                                <td><span>៛</span> {{ $item->pension_contribution_usd }}</td>
-                                                                <td>$  {{ $item->pension_contribution_riel }}</td>
-                                                                <td>{{ $item->corporate_contribution }}</td>
+                                                                <td><span>៛</span>{{ $item->pension_contribution_usd }}</td>
+                                                                <td>${{ $item->pension_contribution_riel }}</td>
+                                                                <td><span>៛</span>{{ $item->corporate_contribution }}</td>
                                                                 <td>{{ Carbon\Carbon::parse($item->created_at)->format('d-M-Y') }}</td>
                                                             </tr>
                                                         @endforeach
@@ -375,9 +375,9 @@
                                                                 <td><a href="#">{{ $item->users == null ? '' : $item->users->employee_name_en }}</a></td></td></td>
                                                                 <td>{{ $item->users == null ? '' : $item->users->joinOfDate }}</td>
                                                                 <td>{{ $item->number_of_working_days }} Days</td>
-                                                                <td>$ {{ $item->base_salary }}</td>
-                                                                <td>{{ $item->base_salary_received }}</td>
-                                                                <td>{{ $item->total_allowance }}</td>
+                                                                <td>${{ $item->base_salary }}</td>
+                                                                <td>${{ $item->base_salary_received }}</td>
+                                                                <td>${{ $item->total_allowance }}</td>
                                                                 <td>{{ Carbon\Carbon::parse($item->created_at)->format('d-M-Y') }}</td>
                                                             </tr>
                                                         @endforeach
@@ -424,10 +424,10 @@
                                                                 <td>{{ $item->users == null ? '' : $item->users->EmployeePosition }}</td>
                                                                 <td>{{ $item->users == null ? '' : $item->users->joinOfDate }}</td>
                                                                 <td>{{ $item->payment_of_month }}</td>
-                                                                <td>{{ $item->total_average_salary }}</td>
-                                                                <td>{{ $item->total_salary_receive }}</td>
-                                                                <td>{{ $item->tax_exemption_salary }}</td>
-                                                                <td>{{ $item->taxable_salary }}</td>
+                                                                <td>${{ $item->total_average_salary }}</td>
+                                                                <td>${{ $item->total_salary_receive }}</td>
+                                                                <td>${{ $item->tax_exemption_salary }}</td>
+                                                                <td>${{ $item->taxable_salary }}</td>
                                                                 <td>{{ Carbon\Carbon::parse($item->created_at)->format('d-M-Y') }}</td>
                                                             </tr>
                                                         @endforeach
@@ -469,8 +469,8 @@
                                                                 <td><a href="#">{{ $item->users == null ? '' : $item->users->employee_name_en }}</a></td>
                                                                 <td>{{ $item->users == null ? '' : $item->users->EmployeePosition }}</td>
                                                                 <td>{{ $item->users == null ? '' : $item->users->joinOfDate }}</td>
-                                                                <td>{{ $item->total_severanec_pay }}</td>
-                                                                <td>{{ $item->total_contract_severance_pay }}</td>
+                                                                <td>${{ $item->total_severanec_pay }}</td>
+                                                                <td>${{ $item->total_contract_severance_pay }}</td>
                                                                 <td>{{ Carbon\Carbon::parse($item->created_at)->format('d-M-Y') }}</td>
                                                             </tr>
                                                         @endforeach
@@ -623,7 +623,7 @@
                                 '<td>'+(dollar)+'<a href="#">'+(row.seniority_pay_excluded_tax)+'</a></td>'+
                                 '<td>'+(dollar)+'<a href="#">'+(row.total_pension_fund)+'</a></td>'+
                                 '<td>'+(dollar)+'<a href="#">'+(row.base_salary_received_usd)+'</a></td>'+
-                                '<td>'+(dollar)+'<a href="#">'+(formatCurrencyKH(row.base_salary_received_riel))+'</a></td>'+
+                                '<td><span>៛</span><a href="#">'+(formatCurrencyKH(row.base_salary_received_riel))+'</a></td>'+
                                 '<td><span>៛</span><a href="#">'+(formatCurrencyKH(row.total_charges_reduced))+'</a></td>'+
                                 '<td><span>៛</span><a href="#">'+(formatCurrencyKH(row.total_tax_base_riel))+'</a></td>'+
                                 '<td><a href="#">'+(row.total_rate)+'%</a></td>'+
@@ -649,14 +649,14 @@
                                     '<td><a href="#">'+(row.users == null ? '' : row.users.number_employee )+'</a></td>'+
                                     '<td><a href="#">'+(row.users == null ? '' : row.users.employee_name_en )+'</a></td></td></td>'+
                                     '<td>'+(join_date)+'</td>'+
-                                    '<td>$ '+(row.total_pre_tax_salary_usd )+'</td>'+
+                                    '<td>$'+(row.total_pre_tax_salary_usd )+'</td>'+
                                     '<td><span>៛</span> '+(row.total_pre_tax_salary_riel )+'</td>'+
                                     '<td>'+(row.total_average_wage )+'</td>'+
                                     '<td>'+(row.total_occupational_risk )+'</td>'+
                                     '<td>'+(row.total_health_care )+'</td>'+
-                                    '<td>$ '+(row.pension_contribution_usd )+'</td>'+
-                                    '<td><span></span> '+(row.pension_contribution_riel )+'</td>'+
-                                    '<td>'+(row.corporate_contribution )+'</td>'+
+                                    '<td><span>៛</span>'+(row.pension_contribution_usd )+'</td>'+
+                                    '<td>$'+(row.pension_contribution_riel )+'</td>'+
+                                    '<td><span>៛</span>'+(row.corporate_contribution )+'</td>'+
                                     '<td>'+(created_at)+'</td>'+
                             '</tr>';
                         });
@@ -675,9 +675,9 @@
                                 '<td><a href="#">'+(row.users == null ? '' : row.users.employee_name_en)+'</a></td>'+
                                 '<td>'+(row.users == null ? '' : join_date)+'</td>'+
                                 '<td>'+(row.number_of_working_days)+' Days</td>'+
-                                '<td>$ '+(row.base_salary)+'</td>'+
-                                '<td>'+(row.base_salary_received)+'</td>'+
-                                '<td>'+(row.total_allowance)+'</td>'+
+                                '<td>$'+(row.base_salary)+'</td>'+
+                                '<td>$'+(row.base_salary_received)+'</td>'+
+                                '<td>$'+(row.total_allowance)+'</td>'+
                                 '<td>'+(created_at)+'</td>'+
                             '</tr>';
                         });
@@ -697,10 +697,10 @@
                                 '<td>'+(row.users == null ? '' : row.users.position.name_english )+'</td>'+
                                 '<td>'+(join_date)+'</td>'+
                                 '<td>'+(row.payment_of_month )+'</td>'+
-                                '<td>'+(row.total_average_salary )+'</td>'+
-                                '<td>'+(row.total_salary_receive )+'</td>'+
-                                '<td>'+(row.tax_exemption_salary )+'</td>'+
-                                '<td>'+(row.taxable_salary )+'</td>'+
+                                '<td>$'+(row.total_average_salary )+'</td>'+
+                                '<td>$'+(row.total_salary_receive )+'</td>'+
+                                '<td>$'+(row.tax_exemption_salary )+'</td>'+
+                                '<td>$'+(row.taxable_salary )+'</td>'+
                                 '<td>'+(created_at)+'</td>'+
                             '</tr>';
                         });
@@ -719,8 +719,8 @@
                                 '<td><a href="#">'+(row.users == null ? '' : row.users.employee_name_en )+'</a></td>'+
                                 '<td>'+(row.users == null ? '' : row.users.position.name_english )+'</td>'+
                                 '<td>'+(join_date)+'</td>'+
-                                '<td>'+(row.total_severanec_pay )+'</td>'+
-                                '<td>'+(row.total_contract_severance_pay )+'</td>'+
+                                '<td>$'+(row.total_severanec_pay )+'</td>'+
+                                '<td>$'+(row.total_contract_severance_pay )+'</td>'+
                                 '<td>'+(created_at)+'</td>'+
                             '</tr>';
                         });
