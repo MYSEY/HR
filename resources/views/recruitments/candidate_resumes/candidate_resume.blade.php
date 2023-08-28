@@ -143,7 +143,7 @@
                         }
                     };
             if (id_card == "false") {
-                text_label = '<label>You cannot Aprove.</label>';
+                text_label = '<label>You Cannot Aprove.</label>';
                 description = "Please enter all requried information.";
                 button_ok = "";
             }

@@ -505,47 +505,22 @@ class EmployeePayrollController extends Controller
                     }else if($number_of_children == 4 &&  $item->spouse == 1){
                         $totalTtaxBbaseRiel = $totalExchangeRiel - $totalChargesReduced;
                     }
+                    
                     $children = $number_of_children;
                     // អត្រា ពន្ធ(%)
                     if ($number_of_children == 0 && $item->spouse == 0) {
-                        // $taxRate = Taxes::where('from', '<=' ,$totalExchangeRiel)->where('to','>=',$totalExchangeRiel)->first();
-                        // $totalTax = $taxRate->tax_rate;
-                        // if($totalExchangeRiel >= $taxRate->to){
-                        //     $totalSalaryTaxRiel = 0;
-                        // }elseif($totalTtaxBbaseRiel <= $taxRate->to){
-                        //     $totalSalaryTaxRiel = 0;
-                        // }elseif($totalExchangeRiel > $taxRate->from && $totalExchangeRiel <= $taxRate->to){
-                        //     $totalSalaryTaxRiel = ($totalExchangeRiel * $totalTax) / 100 - $taxRate->tax_deduction_amount;
-                        // }elseif($totalExchangeRiel > $taxRate->from && $totalExchangeRiel <= $taxRate->to){
-                        //     $totalSalaryTaxRiel = ($totalExchangeRiel * $totalTax) / 100 - $taxRate->tax_deduction_amount;
-                        // }elseif($totalExchangeRiel > $taxRate->from && $totalExchangeRiel <= $taxRate->to){
-                        //     $totalSalaryTaxRiel = ($totalExchangeRiel * $totalTax) / 100 - $taxRate->tax_deduction_amount;
-                        // }else{
-                        //     $totalSalaryTaxRiel = ($totalExchangeRiel * $totalTax) / 100 - $taxRate->tax_deduction_amount;
-                        // }
-
-                        if($totalExchangeRiel >= 0 && $totalExchangeRiel <= 1500000){
-                            $totalTax = 0;
-                        }elseif($totalExchangeRiel >= 1500001 && $totalExchangeRiel <= 2000000){
-                            $totalTax = 5;
-                        }elseif($totalExchangeRiel >= 2000001 && $totalExchangeRiel <= 8500000){
-                            $totalTax = 10;
-                        }elseif($totalExchangeRiel >= 8500001 && $totalExchangeRiel <= 12500000){
-                            $totalTax = 15;
-                        }else{
-                            $totalTax = 20;
-                        }
-                        //​cululate salaray Taxable
-                        if($totalExchangeRiel <= 1500000){
+                        $taxRate = Taxes::where('from', '<=' ,$totalExchangeRiel)->where('to','>=',$totalExchangeRiel)->first();
+                        $totalTax = $taxRate->tax_rate;
+                        if($totalExchangeRiel >= $taxRate->to){
                             $totalSalaryTaxRiel = 0;
-                        }elseif($totalExchangeRiel > 1500001 && $totalExchangeRiel <= 2000000){
-                            $totalSalaryTaxRiel = ($totalExchangeRiel * $totalTax) / 100 - 75000;
-                        }elseif($totalExchangeRiel > 2000001 && $totalExchangeRiel <= 8500000){
-                            $totalSalaryTaxRiel = ($totalExchangeRiel * $totalTax) / 100 - 175000;
-                        }elseif($totalExchangeRiel > 8500001 && $totalExchangeRiel <= 12500000){
-                            $totalSalaryTaxRiel = ($totalExchangeRiel * $totalTax) / 100 - 600000;
+                        }elseif($totalExchangeRiel > $taxRate->from && $totalExchangeRiel <= $taxRate->to){
+                            $totalSalaryTaxRiel = ($totalExchangeRiel * $totalTax) / 100 - $taxRate->tax_deduction_amount;
+                        }elseif($totalExchangeRiel > $taxRate->from && $totalExchangeRiel <= $taxRate->to){
+                            $totalSalaryTaxRiel = ($totalExchangeRiel * $totalTax) / 100 - $taxRate->tax_deduction_amount;
+                        }elseif($totalExchangeRiel > $taxRate->from && $totalExchangeRiel <= $taxRate->to){
+                            $totalSalaryTaxRiel = ($totalExchangeRiel * $totalTax) / 100 - $taxRate->tax_deduction_amount;
                         }else{
-                            $totalSalaryTaxRiel = ($totalExchangeRiel * $totalTax) / 100 - 1225000;
+                            $totalSalaryTaxRiel = ($totalExchangeRiel * $totalTax) / 100 - $taxRate->tax_deduction_amount;
                         }
     
                         //ពន្ធលើប្រាក់បៀវត្ស រៀល/Riel
@@ -553,93 +528,41 @@ class EmployeePayrollController extends Controller
                         //ពន្ធលើប្រាក់បៀវត្ស ដុល្លារ/USD
                         $totalSalaryAfterTax = $baseSalaryReceivedUsd - $totalSalaryTaxUsd;
                     } else if($number_of_children == 1 && $item->spouse == 0) {
-                        // $taxRate = Taxes::where('from', '<=' ,(string)$totalTtaxBbaseRiel)->where('to','>=',(string)$totalTtaxBbaseRiel)->first();
-                        // $totalTax = $taxRate->tax_rate;
-                        // if($totalTtaxBbaseRiel >= $taxRate->to){
-                        //     $totalSalaryTaxRiel = 0;
-                        // }elseif($totalTtaxBbaseRiel <= $taxRate->to){
-                        //     $totalSalaryTaxRiel = 0;
-                        // }elseif($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to){
-                        //     $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - $taxRate->tax_deduction_amount;
-                        // }elseif($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to){
-                        //     $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - $taxRate->tax_deduction_amount;
-                        // }elseif($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to){
-                        //     $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - $taxRate->tax_deduction_amount;
-                        // }else{
-                        //     $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - $taxRate->tax_deduction_amount;
-                        // }
+                        $taxRate = Taxes::where('from', '<=' ,$totalTtaxBbaseRiel)->where('to','>=',$totalTtaxBbaseRiel)->first();
+                        $totalTax = $taxRate->tax_rate;
+                        if($totalTtaxBbaseRiel >= $taxRate->to){
+                            $totalSalaryTaxRiel = 0;
+                        }elseif($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to){
+                            $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - $taxRate->tax_deduction_amount;
+                        }elseif($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to){
+                            $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - $taxRate->tax_deduction_amount;
+                        }elseif($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to){
+                            $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - $taxRate->tax_deduction_amount;
+                        }else{
+                            $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - $taxRate->tax_deduction_amount;
+                        }
 
-                        if($totalTtaxBbaseRiel >= 0 && $totalTtaxBbaseRiel <= 1500000){
-							$totalTax = 0;
-						}elseif($totalTtaxBbaseRiel >= 1500001 && $totalTtaxBbaseRiel <= 2000000){
-							$totalTax = 5;
-						}elseif($totalTtaxBbaseRiel >= 2000001 && $totalTtaxBbaseRiel <= 8500000){
-							$totalTax = 10;
-						}elseif($totalTtaxBbaseRiel >= 8500001 && $totalTtaxBbaseRiel <= 12500000){
-							$totalTax = 15;
-						}else{
-							$totalTax = 20;
-						}
-						//​cululate salaray Taxable
-						if($totalTtaxBbaseRiel <= 1500000){
-							$totalSalaryTaxRiel = 0;
-						}elseif($totalTtaxBbaseRiel > 1500001 && $totalTtaxBbaseRiel <= 2000000){
-							$totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 75000;
-						}elseif($totalTtaxBbaseRiel > 2000001 && $totalTtaxBbaseRiel <= 8500000){
-							$totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 175000;
-						}elseif($totalTtaxBbaseRiel > 8500001 && $totalTtaxBbaseRiel <= 12500000){
-							$totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 600000;
-						}else{
-							$totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 1225000;
-						}
-
-                        
                         //ពន្ធលើប្រាក់បៀវត្ស រៀល/Riel
                         $totalSalaryTaxUsd = $totalSalaryTaxRiel / $request->exchange_rate;
     
                         //ពន្ធលើប្រាក់បៀវត្ស ដុល្លារ/USD
                         $totalSalaryAfterTax = $baseSalaryReceivedUsd - $totalSalaryTaxUsd;
                     }else if($number_of_children == 0 && $item->spouse == 1) {
-                        // $taxRate = Taxes::where('from', '<=' ,(string)$totalTtaxBbaseRiel)->where('to','>=',(string)$totalTtaxBbaseRiel)->first();
-                        // $totalTax = $taxRate->tax_rate;
-                        // if($totalTtaxBbaseRiel >= $taxRate->to){
-                        //     $totalSalaryTaxRiel = 0;
-                        // }elseif($totalTtaxBbaseRiel <= $taxRate->to){
-                        //     $totalSalaryTaxRiel = 0;
-                        // }elseif($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to){
-                        //     $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - $taxRate->tax_deduction_amount;
-                        // }elseif($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to){
-                        //     $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - $taxRate->tax_deduction_amount;
-                        // }elseif($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to){
-                        //     $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - $taxRate->tax_deduction_amount;
-                        // }else{
-                        //     $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - $taxRate->tax_deduction_amount;
-                        // }
-
-                        if($totalTtaxBbaseRiel >= 0 && $totalTtaxBbaseRiel <= 1500000){
-							$totalTax = 0;
-						}elseif($totalTtaxBbaseRiel >= 1500001 && $totalTtaxBbaseRiel <= 2000000){
-							$totalTax = 5;
-						}elseif($totalTtaxBbaseRiel >= 2000001 && $totalTtaxBbaseRiel <= 8500000){
-							$totalTax = 10;
-						}elseif($totalTtaxBbaseRiel >= 8500001 && $totalTtaxBbaseRiel <= 12500000){
-							$totalTax = 15;
-						}else{
-							$totalTax = 20;
-						}
-						//​cululate salaray Taxable
-						if($totalTtaxBbaseRiel <= 1500000){
-							$totalSalaryTaxRiel = 0;
-						}elseif($totalTtaxBbaseRiel > 1500001 && $totalTtaxBbaseRiel <= 2000000){
-							$totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 75000;
-						}elseif($totalTtaxBbaseRiel > 2000001 && $totalTtaxBbaseRiel <= 8500000){
-							$totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 175000;
-						}elseif($totalTtaxBbaseRiel > 8500001 && $totalTtaxBbaseRiel <= 12500000){
-							$totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 600000;
-						}else{
-							$totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 1225000;
-						}
-
+                        // dd($totalTtaxBbaseRiel);
+                        $taxRate = Taxes::where('from', '<=' ,$totalTtaxBbaseRiel)->where('to','>=',$totalTtaxBbaseRiel)->first();
+                        $totalTax = $taxRate->tax_rate;
+                        if($totalTtaxBbaseRiel >= $taxRate->to){
+                            $totalSalaryTaxRiel = 0;
+                        }elseif($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to){
+                            $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - $taxRate->tax_deduction_amount;
+                        }elseif($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to){
+                            $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - $taxRate->tax_deduction_amount;
+                        }elseif($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to){
+                            $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - $taxRate->tax_deduction_amount;
+                        }else{
+                            $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - $taxRate->tax_deduction_amount;
+                        }
+                        
                         //ពន្ធលើប្រាក់បៀវត្ស រៀល/Riel
                         $totalSalaryTaxUsd = $totalSalaryTaxRiel / $request->exchange_rate;
     
@@ -647,45 +570,19 @@ class EmployeePayrollController extends Controller
                         $totalSalaryAfterTax = $baseSalaryReceivedUsd - $totalSalaryTaxUsd;
                     }else if($number_of_children == 1 && $item->spouse == 1) {
                         //​cululate salaray Taxable
-                        // $taxRate = Taxes::where('from', '<=' ,(string)$totalTtaxBbaseRiel)->where('to','>=',(string)$totalTtaxBbaseRiel)->first();
-                        // $totalTax = $taxRate->tax_rate;
-                        // if($totalTtaxBbaseRiel >= $taxRate->to){
-                        //     $totalSalaryTaxRiel = 0;
-                        // }elseif($totalTtaxBbaseRiel <= $taxRate->to){
-                        //     $totalSalaryTaxRiel = 0;
-                        // }elseif($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to){
-                        //     $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - $taxRate->tax_deduction_amount;
-                        // }elseif($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to){
-                        //     $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - $taxRate->tax_deduction_amount;
-                        // }elseif($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to){
-                        //     $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - $taxRate->tax_deduction_amount;
-                        // }else{
-                        //     $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - $taxRate->tax_deduction_amount;
-                        // }
-
-                        if($totalTtaxBbaseRiel >= 0 && $totalTtaxBbaseRiel <= 1500000){
-							$totalTax = 0;
-						}elseif($totalTtaxBbaseRiel >= 1500001 && $totalTtaxBbaseRiel <= 2000000){
-							$totalTax = 5;
-						}elseif($totalTtaxBbaseRiel >= 2000001 && $totalTtaxBbaseRiel <= 8500000){
-							$totalTax = 10;
-						}elseif($totalTtaxBbaseRiel >= 8500001 && $totalTtaxBbaseRiel <= 12500000){
-							$totalTax = 15;
-						}else{
-							$totalTax = 20;
-						}
-						//​cululate salaray Taxable
-						if($totalTtaxBbaseRiel <= 1500000){
-							$totalSalaryTaxRiel = 0;
-						}elseif($totalTtaxBbaseRiel > 1500001 && $totalTtaxBbaseRiel <= 2000000){
-							$totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 75000;
-						}elseif($totalTtaxBbaseRiel > 2000001 && $totalTtaxBbaseRiel <= 8500000){
-							$totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 175000;
-						}elseif($totalTtaxBbaseRiel > 8500001 && $totalTtaxBbaseRiel <= 12500000){
-							$totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 600000;
-						}else{
-							$totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 1225000;
-						}
+                        $taxRate = Taxes::where('from', '<=' ,$totalTtaxBbaseRiel)->where('to','>=',$totalTtaxBbaseRiel)->first();
+                        $totalTax = $taxRate->tax_rate;
+                        if($totalTtaxBbaseRiel >= $taxRate->to){
+                            $totalSalaryTaxRiel = 0;
+                        }elseif($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to){
+                            $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - $taxRate->tax_deduction_amount;
+                        }elseif($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to){
+                            $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - $taxRate->tax_deduction_amount;
+                        }elseif($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to){
+                            $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - $taxRate->tax_deduction_amount;
+                        }else{
+                            $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - $taxRate->tax_deduction_amount;
+                        }
 
                         //ពន្ធលើប្រាក់បៀវត្ស រៀល/Riel
                         $totalSalaryTaxUsd = $totalSalaryTaxRiel / $request->exchange_rate;
@@ -693,45 +590,19 @@ class EmployeePayrollController extends Controller
                         $totalSalaryAfterTax = $baseSalaryReceivedUsd - $totalSalaryTaxUsd;
                     }else if($number_of_children == 2 && $item->spouse == 0){
                         //​cululate salaray Taxable
-                        // $taxRate = Taxes::where('from', '<=' ,(string)$totalTtaxBbaseRiel)->where('to','>=',(string)$totalTtaxBbaseRiel)->first();
-                        // $totalTax = $taxRate->tax_rate;
-                        // if($totalTtaxBbaseRiel >= $taxRate->to){
-                        //     $totalSalaryTaxRiel = 0;
-                        // }elseif($totalTtaxBbaseRiel <= $taxRate->to){
-                        //     $totalSalaryTaxRiel = 0;
-                        // }elseif($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to){
-                        //     $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - $taxRate->tax_deduction_amount;
-                        // }elseif($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to){
-                        //     $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - $taxRate->tax_deduction_amount;
-                        // }elseif($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to){
-                        //     $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - $taxRate->tax_deduction_amount;
-                        // }else{
-                        //     $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - $taxRate->tax_deduction_amount;
-                        // }
-
-                        if($totalTtaxBbaseRiel >= 0 && $totalTtaxBbaseRiel <= 1500000){
-							$totalTax = 0;
-						}elseif($totalTtaxBbaseRiel >= 1500001 && $totalTtaxBbaseRiel <= 2000000){
-							$totalTax = 5;
-						}elseif($totalTtaxBbaseRiel >= 2000001 && $totalTtaxBbaseRiel <= 8500000){
-							$totalTax = 10;
-						}elseif($totalTtaxBbaseRiel >= 8500001 && $totalTtaxBbaseRiel <= 12500000){
-							$totalTax = 15;
-						}else{
-							$totalTax = 20;
-						}
-						//​cululate salaray Taxable
-						if($totalTtaxBbaseRiel <= 1500000){
-							$totalSalaryTaxRiel = 0;
-						}elseif($totalTtaxBbaseRiel > 1500001 && $totalTtaxBbaseRiel <= 2000000){
-							$totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 75000;
-						}elseif($totalTtaxBbaseRiel > 2000001 && $totalTtaxBbaseRiel <= 8500000){
-							$totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 175000;
-						}elseif($totalTtaxBbaseRiel > 8500001 && $totalTtaxBbaseRiel <= 12500000){
-							$totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 600000;
-						}else{
-							$totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 1225000;
-						}
+                        $taxRate = Taxes::where('from', '<=' ,$totalTtaxBbaseRiel)->where('to','>=',$totalTtaxBbaseRiel)->first();
+                        $totalTax = $taxRate->tax_rate;
+                        if($totalTtaxBbaseRiel >= $taxRate->to){
+                            $totalSalaryTaxRiel = 0;
+                        }elseif($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to){
+                            $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - $taxRate->tax_deduction_amount;
+                        }elseif($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to){
+                            $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - $taxRate->tax_deduction_amount;
+                        }elseif($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to){
+                            $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - $taxRate->tax_deduction_amount;
+                        }else{
+                            $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - $taxRate->tax_deduction_amount;
+                        }
 
                         //ពន្ធលើប្រាក់បៀវត្ស រៀល/Riel
                         $totalSalaryTaxUsd = $totalSalaryTaxRiel / $request->exchange_rate;
@@ -739,45 +610,19 @@ class EmployeePayrollController extends Controller
                         $totalSalaryAfterTax = $baseSalaryReceivedUsd - $totalSalaryTaxUsd;
                     }else if($number_of_children == 2 && $item->spouse == 1){
                         //​cululate salaray Taxable
-                        // $taxRate = Taxes::where('from', '<=' ,(string)$totalTtaxBbaseRiel)->where('to','>=',(string)$totalTtaxBbaseRiel)->first();
-                        // $totalTax = $taxRate->tax_rate;
-                        // if($totalTtaxBbaseRiel >= $taxRate->to){
-                        //     $totalSalaryTaxRiel = 0;
-                        // }elseif($totalTtaxBbaseRiel <= $taxRate->to){
-                        //     $totalSalaryTaxRiel = 0;
-                        // }elseif($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to){
-                        //     $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - $taxRate->tax_deduction_amount;
-                        // }elseif($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to){
-                        //     $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - $taxRate->tax_deduction_amount;
-                        // }elseif($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to){
-                        //     $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - $taxRate->tax_deduction_amount;
-                        // }else{
-                        //     $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - $taxRate->tax_deduction_amount;
-                        // }
-
-                        if($totalTtaxBbaseRiel >= 0 && $totalTtaxBbaseRiel <= 1500000){
-							$totalTax = 0;
-						}elseif($totalTtaxBbaseRiel >= 1500001 && $totalTtaxBbaseRiel <= 2000000){
-							$totalTax = 5;
-						}elseif($totalTtaxBbaseRiel >= 2000001 && $totalTtaxBbaseRiel <= 8500000){
-							$totalTax = 10;
-						}elseif($totalTtaxBbaseRiel >= 8500001 && $totalTtaxBbaseRiel <= 12500000){
-							$totalTax = 15;
-						}else{
-							$totalTax = 20;
-						}
-						//​cululate salaray Taxable
-						if($totalTtaxBbaseRiel <= 1500000){
-							$totalSalaryTaxRiel = 0;
-						}elseif($totalTtaxBbaseRiel > 1500001 && $totalTtaxBbaseRiel <= 2000000){
-							$totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 75000;
-						}elseif($totalTtaxBbaseRiel > 2000001 && $totalTtaxBbaseRiel <= 8500000){
-							$totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 175000;
-						}elseif($totalTtaxBbaseRiel > 8500001 && $totalTtaxBbaseRiel <= 12500000){
-							$totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 600000;
-						}else{
-							$totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 1225000;
-						}
+                        $taxRate = Taxes::where('from', '<=' ,$totalTtaxBbaseRiel)->where('to','>=',$totalTtaxBbaseRiel)->first();
+                        $totalTax = $taxRate->tax_rate;
+                        if($totalTtaxBbaseRiel >= $taxRate->to){
+                            $totalSalaryTaxRiel = 0;
+                        }elseif($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to){
+                            $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - $taxRate->tax_deduction_amount;
+                        }elseif($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to){
+                            $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - $taxRate->tax_deduction_amount;
+                        }elseif($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to){
+                            $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - $taxRate->tax_deduction_amount;
+                        }else{
+                            $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - $taxRate->tax_deduction_amount;
+                        }
 
                         //ពន្ធលើប្រាក់បៀវត្ស រៀល/Riel
                         $totalSalaryTaxUsd = $totalSalaryTaxRiel / $request->exchange_rate;
@@ -785,46 +630,19 @@ class EmployeePayrollController extends Controller
                         $totalSalaryAfterTax = $baseSalaryReceivedUsd - $totalSalaryTaxUsd;
                     }else if($number_of_children == 3 && $item->spouse == 0){
                         //​cululate salaray Taxable
-                        // $taxRate = Taxes::where('from', '<=' ,(string)$totalTtaxBbaseRiel)->where('to','>=',(string)$totalTtaxBbaseRiel)->first();
-                        // $totalTax = $taxRate->tax_rate;
-                        // if($totalTtaxBbaseRiel >= $taxRate->to){
-                        //     $totalSalaryTaxRiel = 0;
-                        // }elseif($totalTtaxBbaseRiel <= $taxRate->to){
-                        //     $totalSalaryTaxRiel = 0;
-                        // }elseif($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to){
-                        //     $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - $taxRate->tax_deduction_amount;
-                        // }elseif($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to){
-                        //     $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - $taxRate->tax_deduction_amount;
-                        // }elseif($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to){
-                        //     $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - $taxRate->tax_deduction_amount;
-                        // }else{
-                        //     $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - $taxRate->tax_deduction_amount;
-                        // }
-
-
-                        if($totalTtaxBbaseRiel >= 0 && $totalTtaxBbaseRiel <= 1500000){
-							$totalTax = 0;
-						}elseif($totalTtaxBbaseRiel >= 1500001 && $totalTtaxBbaseRiel <= 2000000){
-							$totalTax = 5;
-						}elseif($totalTtaxBbaseRiel >= 2000001 && $totalTtaxBbaseRiel <= 8500000){
-							$totalTax = 10;
-						}elseif($totalTtaxBbaseRiel >= 8500001 && $totalTtaxBbaseRiel <= 12500000){
-							$totalTax = 15;
-						}else{
-							$totalTax = 20;
-						}
-						//​cululate salaray Taxable
-						if($totalTtaxBbaseRiel <= 1500000){
-							$totalSalaryTaxRiel = 0;
-						}elseif($totalTtaxBbaseRiel > 1500001 && $totalTtaxBbaseRiel <= 2000000){
-							$totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 75000;
-						}elseif($totalTtaxBbaseRiel > 2000001 && $totalTtaxBbaseRiel <= 8500000){
-							$totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 175000;
-						}elseif($totalTtaxBbaseRiel > 8500001 && $totalTtaxBbaseRiel <= 12500000){
-							$totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 600000;
-						}else{
-							$totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 1225000;
-						}
+                        $taxRate = Taxes::where('from', '<=' ,$totalTtaxBbaseRiel)->where('to','>=',$totalTtaxBbaseRiel)->first();
+                        $totalTax = $taxRate->tax_rate;
+                        if($totalTtaxBbaseRiel >= $taxRate->to){
+                            $totalSalaryTaxRiel = 0;
+                        }elseif($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to){
+                            $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - $taxRate->tax_deduction_amount;
+                        }elseif($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to){
+                            $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - $taxRate->tax_deduction_amount;
+                        }elseif($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to){
+                            $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - $taxRate->tax_deduction_amount;
+                        }else{
+                            $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - $taxRate->tax_deduction_amount;
+                        }
 
                         //ពន្ធលើប្រាក់បៀវត្ស រៀល/Riel
                         $totalSalaryTaxUsd = $totalSalaryTaxRiel / $request->exchange_rate;
@@ -832,45 +650,19 @@ class EmployeePayrollController extends Controller
                         $totalSalaryAfterTax = $baseSalaryReceivedUsd - $totalSalaryTaxUsd;
                     }else if($number_of_children == 3 && $item->spouse == 1){
                         //​cululate salaray Taxable
-                        // $taxRate = Taxes::where('from', '<=' ,(string)$totalTtaxBbaseRiel)->where('to','>=',(string)$totalTtaxBbaseRiel)->first();
-                        // $totalTax = $taxRate->tax_rate;
-                        // if($totalTtaxBbaseRiel >= $taxRate->to){
-                        //     $totalSalaryTaxRiel = 0;
-                        // }elseif($totalTtaxBbaseRiel <= $taxRate->to){
-                        //     $totalSalaryTaxRiel = 0;
-                        // }elseif($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to){
-                        //     $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - $taxRate->tax_deduction_amount;
-                        // }elseif($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to){
-                        //     $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - $taxRate->tax_deduction_amount;
-                        // }elseif($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to){
-                        //     $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - $taxRate->tax_deduction_amount;
-                        // }else{
-                        //     $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - $taxRate->tax_deduction_amount;
-                        // }
-
-                        if($totalTtaxBbaseRiel >= 0 && $totalTtaxBbaseRiel <= 1500000){
-							$totalTax = 0;
-						}elseif($totalTtaxBbaseRiel >= 1500001 && $totalTtaxBbaseRiel <= 2000000){
-							$totalTax = 5;
-						}elseif($totalTtaxBbaseRiel >= 2000001 && $totalTtaxBbaseRiel <= 8500000){
-							$totalTax = 10;
-						}elseif($totalTtaxBbaseRiel >= 8500001 && $totalTtaxBbaseRiel <= 12500000){
-							$totalTax = 15;
-						}else{
-							$totalTax = 20;
-						}
-						//​cululate salaray Taxable
-						if($totalTtaxBbaseRiel <= 1500000){
-							$totalSalaryTaxRiel = 0;
-						}elseif($totalTtaxBbaseRiel > 1500001 && $totalTtaxBbaseRiel <= 2000000){
-							$totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 75000;
-						}elseif($totalTtaxBbaseRiel > 2000001 && $totalTtaxBbaseRiel <= 8500000){
-							$totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 175000;
-						}elseif($totalTtaxBbaseRiel > 8500001 && $totalTtaxBbaseRiel <= 12500000){
-							$totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 600000;
-						}else{
-							$totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 1225000;
-						}
+                        $taxRate = Taxes::where('from', '<=' ,$totalTtaxBbaseRiel)->where('to','>=',$totalTtaxBbaseRiel)->first();
+                        $totalTax = $taxRate->tax_rate;
+                        if($totalTtaxBbaseRiel >= $taxRate->to){
+                            $totalSalaryTaxRiel = 0;
+                        }elseif($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to){
+                            $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - $taxRate->tax_deduction_amount;
+                        }elseif($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to){
+                            $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - $taxRate->tax_deduction_amount;
+                        }elseif($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to){
+                            $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - $taxRate->tax_deduction_amount;
+                        }else{
+                            $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - $taxRate->tax_deduction_amount;
+                        }
 
                         //ពន្ធលើប្រាក់បៀវត្ស រៀល/Riel
                         $totalSalaryTaxUsd = $totalSalaryTaxRiel / $request->exchange_rate;
@@ -878,45 +670,19 @@ class EmployeePayrollController extends Controller
                         $totalSalaryAfterTax = $baseSalaryReceivedUsd - $totalSalaryTaxUsd;
                     }else if($number_of_children == 4 && $item->spouse == 0){
                         //​cululate salaray Taxable
-                        // $taxRate = Taxes::where('from', '<=' ,(string)$totalTtaxBbaseRiel)->where('to','>=',(string)$totalTtaxBbaseRiel)->first();
-                        // $totalTax = $taxRate->tax_rate;
-                        // if($totalTtaxBbaseRiel >= $taxRate->to){
-                        //     $totalSalaryTaxRiel = 0;
-                        // }elseif($totalTtaxBbaseRiel <= $taxRate->to){
-                        //     $totalSalaryTaxRiel = 0;
-                        // }elseif($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to){
-                        //     $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - $taxRate->tax_deduction_amount;
-                        // }elseif($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to){
-                        //     $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - $taxRate->tax_deduction_amount;
-                        // }elseif($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to){
-                        //     $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - $taxRate->tax_deduction_amount;
-                        // }else{
-                        //     $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - $taxRate->tax_deduction_amount;
-                        // }
-
-                        if($totalTtaxBbaseRiel >= 0 && $totalTtaxBbaseRiel <= 1500000){
-							$totalTax = 0;
-						}elseif($totalTtaxBbaseRiel >= 1500001 && $totalTtaxBbaseRiel <= 2000000){
-							$totalTax = 5;
-						}elseif($totalTtaxBbaseRiel >= 2000001 && $totalTtaxBbaseRiel <= 8500000){
-							$totalTax = 10;
-						}elseif($totalTtaxBbaseRiel >= 8500001 && $totalTtaxBbaseRiel <= 12500000){
-							$totalTax = 15;
-						}else{
-							$totalTax = 20;
-						}
-						//​cululate salaray Taxable
-						if($totalTtaxBbaseRiel <= 1500000){
-							$totalSalaryTaxRiel = 0;
-						}elseif($totalTtaxBbaseRiel > 1500001 && $totalTtaxBbaseRiel <= 2000000){
-							$totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 75000;
-						}elseif($totalTtaxBbaseRiel > 2000001 && $totalTtaxBbaseRiel <= 8500000){
-							$totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 175000;
-						}elseif($totalTtaxBbaseRiel > 8500001 && $totalTtaxBbaseRiel <= 12500000){
-							$totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 600000;
-						}else{
-							$totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 1225000;
-						}
+                        $taxRate = Taxes::where('from', '<=' ,$totalTtaxBbaseRiel)->where('to','>=',$totalTtaxBbaseRiel)->first();
+                        $totalTax = $taxRate->tax_rate;
+                        if($totalTtaxBbaseRiel >= $taxRate->to){
+                            $totalSalaryTaxRiel = 0;
+                        }elseif($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to){
+                            $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - $taxRate->tax_deduction_amount;
+                        }elseif($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to){
+                            $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - $taxRate->tax_deduction_amount;
+                        }elseif($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to){
+                            $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - $taxRate->tax_deduction_amount;
+                        }else{
+                            $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - $taxRate->tax_deduction_amount;
+                        }
 
                         //ពន្ធលើប្រាក់បៀវត្ស រៀល/Riel
                         $totalSalaryTaxUsd = $totalSalaryTaxRiel / $request->exchange_rate;
@@ -924,46 +690,19 @@ class EmployeePayrollController extends Controller
                         $totalSalaryAfterTax = $baseSalaryReceivedUsd - $totalSalaryTaxUsd;
                     }else if($number_of_children == 4 && $item->spouse == 1){
                         //​cululate salaray Taxable
-                        // $taxRate = Taxes::where('from', '<=' ,(string)$totalTtaxBbaseRiel)->where('to','>=',(string)$totalTtaxBbaseRiel)->first();
-                        // $totalTax = $taxRate->tax_rate;
-                        // if($totalTtaxBbaseRiel >= $taxRate->to){
-                        //     $totalSalaryTaxRiel = 0;
-                        // }elseif($totalTtaxBbaseRiel <= $taxRate->to){
-                        //     $totalSalaryTaxRiel = 0;
-                        // }elseif($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to){
-                        //     $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - $taxRate->tax_deduction_amount;
-                        // }elseif($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to){
-                        //     $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - $taxRate->tax_deduction_amount;
-                        // }elseif($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to){
-                        //     $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - $taxRate->tax_deduction_amount;
-                        // }else{
-                        //     $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - $taxRate->tax_deduction_amount;
-                        // }
-
-
-                        if($totalTtaxBbaseRiel >= 0 && $totalTtaxBbaseRiel <= 1500000){
-							$totalTax = 0;
-						}elseif($totalTtaxBbaseRiel >= 1500001 && $totalTtaxBbaseRiel <= 2000000){
-							$totalTax = 5;
-						}elseif($totalTtaxBbaseRiel >= 2000001 && $totalTtaxBbaseRiel <= 8500000){
-							$totalTax = 10;
-						}elseif($totalTtaxBbaseRiel >= 8500001 && $totalTtaxBbaseRiel <= 12500000){
-							$totalTax = 15;
-						}else{
-							$totalTax = 20;
-						}
-						//​cululate salaray Taxable
-						if($totalTtaxBbaseRiel <= 1500000){
-							$totalSalaryTaxRiel = 0;
-						}elseif($totalTtaxBbaseRiel > 1500001 && $totalTtaxBbaseRiel <= 2000000){
-							$totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 75000;
-						}elseif($totalTtaxBbaseRiel > 2000001 && $totalTtaxBbaseRiel <= 8500000){
-							$totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 175000;
-						}elseif($totalTtaxBbaseRiel > 8500001 && $totalTtaxBbaseRiel <= 12500000){
-							$totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 600000;
-						}else{
-							$totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 1225000;
-						}
+                        $taxRate = Taxes::where('from', '<=' ,$totalTtaxBbaseRiel)->where('to','>=',$totalTtaxBbaseRiel)->first();
+                        $totalTax = $taxRate->tax_rate;
+                        if($totalTtaxBbaseRiel >= $taxRate->to){
+                            $totalSalaryTaxRiel = 0;
+                        }elseif($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to){
+                            $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - $taxRate->tax_deduction_amount;
+                        }elseif($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to){
+                            $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - $taxRate->tax_deduction_amount;
+                        }elseif($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to){
+                            $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - $taxRate->tax_deduction_amount;
+                        }else{
+                            $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - $taxRate->tax_deduction_amount;
+                        }
 
                         //ពន្ធលើប្រាក់បៀវត្ស រៀល/Riel
                         $totalSalaryTaxUsd = $totalSalaryTaxRiel / $request->exchange_rate;

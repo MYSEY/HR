@@ -16,9 +16,9 @@ return new class extends Migration
         Schema::create('taxes', function (Blueprint $table) {
             $table->id();
             $table->integer('tax_rate')->nullable();
-            $table->string('from')->nullable();
-            $table->string('to')->nullable();
-            $table->string('tax_deduction_amount')->nullable();
+            $table->integer('from')->nullable();
+            $table->integer('to')->nullable();
+            $table->integer('tax_deduction_amount')->nullable();
             $table->bigInteger('created_by')->unsigned()->nullable();
             $table->bigInteger('updated_by')->unsigned()->nullable();
             $table->dateTime('deleted_at')->nullable();
