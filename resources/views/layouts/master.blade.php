@@ -169,18 +169,14 @@
                             @foreach (menu() as $menu)
                                 @if (isset($menu['child']))
                                     @if (RolePermission($menu['table'],$menu['permission']))
-                                        <li class="menu-title">
-                                            <span>{{$menu['name']}}</span>
-                                        </li>
+                                        <li class="menu-title"><span>{{$menu['name']}}</span></li>
                                         <li class="submenu">
-                                            <a class="" href="javascript:void(0);">{!! $menu['icon'] !!}<span>{{$menu['value']}}</span><span class="menu-arrow"></span></a>
+                                            <a href="javascript:void(0);">{!! $menu['icon'] !!}<span>{{$menu['value']}}</span><span class="menu-arrow"></span></a>
                                             <ul style="display: none;">
                                                 @foreach ($menu['child'] as $sub_menu)
                                                     @if (RolePermission($sub_menu['table'],$sub_menu['permission']))
                                                         <li>
-                                                            <a class="" href="{{url($sub_menu['url'])}}">
-                                                                {{$sub_menu['value']}}
-                                                            </a>
+                                                            <a class="" href="{{url($sub_menu['url'])}}">{{$sub_menu['value']}}</a>
                                                         </li>
                                                     @endif
                                                 @endforeach
@@ -189,14 +185,8 @@
                                     @endif
                                 @else
                                     @if (RolePermission($menu['table'],$menu['permission']))
-                                        <li class="menu-title">
-                                            <span>{{$menu['name']}}</span>
-                                        </li>
-                                        <li>
-                                            <a class="" href="{{url($menu['url'])}}">
-                                                {!! $menu['icon'] !!}
-                                                <span>{{$menu['value']}}</span>
-                                            </a>
+                                        <li class="">
+                                            <a href="{{url($menu['url'])}}">{!! $menu['icon'] !!}<span>{{$menu['value']}}</span></a>
                                         </li>
                                     @endif
                                 @endif

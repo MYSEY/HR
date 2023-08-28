@@ -261,11 +261,11 @@
                                                         </th>
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                             rowspan="1" colspan="1"
-                                                            aria-label="Salary: activate to sort column ascending">Total salary
-                                                            before tax dollars</th>
+                                                            aria-label="Salary: activate to sort column ascending">Total Salary
+                                                            before tax Dollars</th>
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                             rowspan="1" colspan="1"
-                                                            aria-label="Salary: activate to sort column ascending">Total salary
+                                                            aria-label="Salary: activate to sort column ascending">Total Salary
                                                             before tax Riel</th>
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                             rowspan="1" colspan="1"
@@ -274,7 +274,7 @@
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                             rowspan="1" colspan="1"
                                                             aria-label="Payslip: activate to sort column ascending">
-                                                            Occupational risk</th>
+                                                            Occupational Risk</th>
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                             rowspan="1" colspan="1"
                                                             aria-label="Payslip: activate to sort column ascending">Health Care
@@ -286,11 +286,11 @@
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                             rowspan="1" colspan="1"
                                                             aria-label="Payslip: activate to sort column ascending">Pension
-                                                            contribution dollar</th>
+                                                            contribution Dollar</th>
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                             rowspan="1" colspan="1"
                                                             aria-label="Payslip: activate to sort column ascending">Enterprise
-                                                            pension contribution</th>
+                                                            pension Contribution</th>
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                             rowspan="1" colspan="1"
                                                             aria-label="Salary: activate to sort column ascending">Created At
@@ -305,7 +305,7 @@
                                                                 <td><a href="#">{{ $item->users == null ? '' : $item->users->employee_name_en }}</a></td></td></td>
                                                                 <td>{{ $item->users == null ? '' : $item->users->joinOfDate }}</td>
                                                                 <td>${{ $item->total_pre_tax_salary_usd }}</td>
-                                                                <td><span>៛</span> {{ $item->total_pre_tax_salary_riel }}</td>
+                                                                <td><span>៛</span>{{ $item->total_pre_tax_salary_riel }}</td>
                                                                 <td>{{ $item->total_average_wage }}</td>
                                                                 <td>{{ $item->total_occupational_risk }}</td>
                                                                 <td>{{ $item->total_health_care }}</td>
@@ -650,7 +650,7 @@
                                     '<td><a href="#">'+(row.users == null ? '' : row.users.employee_name_en )+'</a></td></td></td>'+
                                     '<td>'+(join_date)+'</td>'+
                                     '<td>$'+(row.total_pre_tax_salary_usd )+'</td>'+
-                                    '<td><span>៛</span> '+(row.total_pre_tax_salary_riel )+'</td>'+
+                                    '<td><span>៛</span>'+(row.total_pre_tax_salary_riel )+'</td>'+
                                     '<td>'+(row.total_average_wage )+'</td>'+
                                     '<td>'+(row.total_occupational_risk )+'</td>'+
                                     '<td>'+(row.total_health_care )+'</td>'+

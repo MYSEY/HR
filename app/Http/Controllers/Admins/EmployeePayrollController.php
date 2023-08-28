@@ -111,85 +111,80 @@ class EmployeePayrollController extends Controller
     {
         // try{
             $employee = User::where('date_of_commencement','<=',$request->payment_date)->whereIn('emp_status',['Probation','1','10','2'])->get();
-            // dd(count($employee));
             if (!$employee->isEmpty()) {
                 foreach ($employee as $item) {
                     //function first month join work
                     $totalFirstSeverancPay = 0;
-                    if($item->type == 'uploade'){
-                        $totalBasicSalary = $item->basic_salary;
-                    }else{
-                        if (count(Payroll::where('employee_id',$item->id)->get()) == 0) {
-                            //total day in months
-                            $currentYear = Carbon::createFromDate($item->date_of_commencement)->format('Y-m');
-                            $begin = new DateTime($item->date_of_commencement);
-    
-                            //total day in months
-                            $endMonth = Carbon::createFromDate($item->date_of_commencement)->format('m');
-                            $totalDayInMonth = Carbon::now()->month($endMonth)->daysInMonth;
-                            $end = new DateTime($currentYear.'-'.$totalDayInMonth);
-    
-                            $end = $end->modify('+1 day');
-                            $interval = new DateInterval('P1D');
-                            $daterange = new DatePeriod($begin, $interval, $end);
-    
-                            $holidays = [];
-                            foreach ($daterange ?? [] as $date) {
-                                $sunday = date('w', strtotime($date->format("Y-m-d")));
-                                if ($sunday == 0) {
-                                    $holidays[] = $date->format("Y-m-d");
-                                } else {
-                                    echo '';
-                                }
-                            }
-                            $start_date = Carbon::createFromDate($item->date_of_commencement);
-                            $end_date = Date::createFromDate($currentYear.'-'.$totalDayInMonth);
-                            $saturday = Date::createFromDate($currentYear.'-'.$totalDayInMonth)->format('D');
-                            $workdays = 0;
-                           
-                            for ($day = $start_date->day; $day <= $end_date->day; $day++) {
-                                if ($start_date->dayOfWeek != 0 && $start_date->dayOfWeek != 6 && $day !== $holidays) {
-                                    $workdays++;
-                                }
-                            }
-                            $days = 0;
-                            if($workdays!=0){
-                                $days = $workdays - (count($holidays)*2);
-                            }
-                            if($saturday === 'Sat'){
-                                $toDays = $days  - 1;
-                            }else{
-                                $toDays = $days;
-                            }
-                            if ($toDays==0) {
-                                $totalBasicSalary = $item->basic_salary;
+                    if (count(Payroll::where('employee_id',$item->id)->get()) == 0) {
+                        //total day in months
+                        $currentYear = Carbon::createFromDate($item->date_of_commencement)->format('Y-m');
+                        $begin = new DateTime($item->date_of_commencement);
+
+                        //total day in months
+                        $endMonth = Carbon::createFromDate($item->date_of_commencement)->format('m');
+                        $totalDayInMonth = Carbon::now()->month($endMonth)->daysInMonth;
+                        $end = new DateTime($currentYear.'-'.$totalDayInMonth);
+
+                        $end = $end->modify('+1 day');
+                        $interval = new DateInterval('P1D');
+                        $daterange = new DatePeriod($begin, $interval, $end);
+
+                        $holidays = [];
+                        foreach ($daterange ?? [] as $date) {
+                            $sunday = date('w', strtotime($date->format("Y-m-d")));
+                            if ($sunday == 0) {
+                                $holidays[] = $date->format("Y-m-d");
                             } else {
-                                if ($toDays >= 22) {
-                                    $totalBasicSalary = $item->basic_salary;
-                                }else{
-                                    $totalBasicSalary = ($item->basic_salary / 22) * $toDays;
-                                }
+                                echo '';
                             }
+                        }
+                        $start_date = Carbon::createFromDate($item->date_of_commencement);
+                        $end_date = Date::createFromDate($currentYear.'-'.$totalDayInMonth);
+                        $saturday = Date::createFromDate($currentYear.'-'.$totalDayInMonth)->format('D');
+                        $workdays = 0;
+                       
+                        for ($day = $start_date->day; $day <= $end_date->day; $day++) {
+                            if ($start_date->dayOfWeek != 0 && $start_date->dayOfWeek != 6 && $day !== $holidays) {
+                                $workdays++;
+                            }
+                        }
+                        $days = 0;
+                        if($workdays!=0){
+                            $days = $workdays - (count($holidays)*2);
+                        }
+                        if($saturday === 'Sat'){
+                            $toDays = $days  - 1;
+                        }else{
+                            $toDays = $days;
+                        }
+                        if ($toDays==0) {
+                            $totalBasicSalary = $item->basic_salary;
                         } else {
-                            $monthToPay = Carbon::createFromDate($item->fdc_date)->format('Y-m');
-                            $currentMonthToPay = Carbon::createFromDate($request->payment_date)->format('Y-m');
-                            if($monthToPay == $currentMonthToPay){
-                                $totalBasicSalary = $item->total_current_salary == null ? $item->basic_salary : $item->total_current_salary;
-                                //function get first severance pay
-                                $endMonth = Carbon::createFromDate($item->fdc_date)->format('m');
-                                $totalDayInMonth = Carbon::now()->month($endMonth)->daysInMonth;
-                                //find start date employee join date
-                                $date_of_month = Carbon::createFromDate($item->fdc_date)->format('Y-m');
-                                $currentYear = $date_of_month.'-'.$totalDayInMonth;
-                                //find total working day in month
-                                $startDate = Carbon::parse($item->fdc_date);
-                                $endDate = Carbon::parse($currentYear);
-                                // new salary and new total days
-                                $totalNewDays = $startDate->diffInDays($endDate);
-                                $totalFirstSeverancPay = ($totalBasicSalary / $totalDayInMonth) * $totalNewDays;
-                            }else{
+                            if ($toDays >= 22) {
                                 $totalBasicSalary = $item->basic_salary;
+                            }else{
+                                $totalBasicSalary = ($item->basic_salary / 22) * $toDays;
                             }
+                        }
+                    } else {
+                        $monthToPay = Carbon::createFromDate($item->fdc_date)->format('Y-m');
+                        $currentMonthToPay = Carbon::createFromDate($request->payment_date)->format('Y-m');
+                        if($monthToPay == $currentMonthToPay){
+                            $totalBasicSalary = $item->total_current_salary == null ? $item->basic_salary : $item->total_current_salary;
+                            //function get first severance pay
+                            $endMonth = Carbon::createFromDate($item->fdc_date)->format('m');
+                            $totalDayInMonth = Carbon::now()->month($endMonth)->daysInMonth;
+                            //find start date employee join date
+                            $date_of_month = Carbon::createFromDate($item->fdc_date)->format('Y-m');
+                            $currentYear = $date_of_month.'-'.$totalDayInMonth;
+                            //find total working day in month
+                            $startDate = Carbon::parse($item->fdc_date);
+                            $endDate = Carbon::parse($currentYear);
+                            // new salary and new total days
+                            $totalNewDays = $startDate->diffInDays($endDate);
+                            $totalFirstSeverancPay = ($totalBasicSalary / $totalDayInMonth) * $totalNewDays;
+                        }else{
+                            $totalBasicSalary = $item->basic_salary;
                         }
                     }
                    
@@ -453,7 +448,7 @@ class EmployeePayrollController extends Controller
                     //function ដក​ pensin fund
                     $baseSalaryReceivedUsd = $totalGrossSalary + $seniorityPayableTax - $pension_contribution;
                     // functin exchange riel rate gross salary after tax
-                    $totalExchangeRiel = round($baseSalaryReceivedUsd) * $request->exchange_rate;
+                    $totalExchangeRiel = $baseSalaryReceivedUsd * $request->exchange_rate;
                     
                     //total that បូកបន្ថែមលើបន្ទុកកូននិងប្រពន្ធ
                     $totalChargesReducedChild = $childrenAllowance->reduced_burden_children;
@@ -772,7 +767,7 @@ class EmployeePayrollController extends Controller
                 DB::commit();
             } else {
                 DB::rollback();
-                Toastr::error('Prayroll user fail','Error');
+                Toastr::error('Can not employee prayroll','Error');
                 return redirect()->back();
             }
         // }catch(\Exception $e){

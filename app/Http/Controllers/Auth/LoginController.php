@@ -62,7 +62,7 @@ class LoginController extends Controller
 
         $dataUserUpComming = User::where('date_of_commencement',Carbon::now()->format('Y-m-d'))->where('emp_status','Upcoming')->get()->count();
         $dataUserProbation = User::where('fdc_date',Carbon::now()->format('Y-m-d'))->where('emp_status','Probation')->get()->count();
-        $dataUserFdc = User::where('fdc_end',Carbon::now()->format('Y-m-d'))->whereIn('emp_status',['1','10'])->get()->count();
+        // $dataUserFdc = User::where('fdc_end',Carbon::now()->format('Y-m-d'))->whereIn('emp_status',['1','10'])->get()->count();
         
         $change_password= "";
         $hashedPassword = User::select('employee_name_en','number_employee', 'password','email')->where('number_employee', $request->number_employee)->first();
@@ -114,7 +114,6 @@ class LoginController extends Controller
             return redirect('dashboad/admin')->with([
                 'dataUpComming'=>$dataUserUpComming,
                 'dataProbation'=>$dataUserProbation,
-                'dataFdc'=>$dataUserFdc,
                 'dataShortList' => $dataShortList,
                 'dataContract'  => $dataContract
             ]);

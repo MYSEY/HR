@@ -416,11 +416,10 @@
         <?php 
             $userUpComming = Session::get('dataUpComming');
             $userProbation = Session::get('dataProbation');
-            $userFdc = Session::get('dataFdc');
             $ShortList = Session::get('dataShortList');
             $SignContract = Session::get('dataContract');
         ?>
-        @if ($userUpComming || $userProbation || $userFdc || $ShortList || $SignContract)
+        @if ($userUpComming || $userProbation || $ShortList || $SignContract)
             <div id="showNotyfication" class="modal custom-modal fade" style="display: none;" aria-hidden="true" data-bs-backdrop="static">
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
@@ -502,30 +501,12 @@
                                                     </div>
                                                </div>
                                             @endif
-                                            @if ($userFdc)
-                                               <div class="form-group">
-                                                    <label for="" class="text-danger">Pleas change status fdc to udc</label>
-                                                    <div class="dash-info-list">
-                                                        <div class="dash-card">
-                                                            <div class="dash-card-container">
-                                                                <div class="dash-card-icon">
-                                                                    <i class="fa fa-user-plus"></i>
-                                                                </div>
-                                                                <div class="dash-card-content">
-                                                                    <p>{{$userFdc}} People will be change to employee <a href="{{url('users')}}" target="_blank">link>></a></p>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                               </div>
-                                            @endif
                                         </div>
                                     </section>
                                 </div>
                             </div>
                             <input type="hidden" id="" class="hidden" value="{{$userUpComming}}">
                             <input type="hidden" id="" class="hidden" value="{{$userProbation}}">
-                            <input type="hidden" id="" class="hidden" value="{{$userFdc}}">
                         </div>
                     </div>
                 </div>
