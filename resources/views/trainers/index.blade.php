@@ -14,14 +14,14 @@
         <div class="page-header">
             <div class="row align-items-center">
                 <div class="col">
-                    <h3 class="page-title">Trainers</h3>
+                    <h3 class="page-title">@lang('lang.trainers')</h3>
                     <ul class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="{{url('/dashboad/employee')}}">Dashboard</a></li>
-                        <li class="breadcrumb-item active">Trainers</li>
+                        <li class="breadcrumb-item"><a href="{{url('/dashboad/employee')}}">@lang('lang.dashboard')</a></li>
+                        <li class="breadcrumb-item active">@lang('lang.trainers')</li>
                     </ul>
                 </div>
                 <div class="col-auto float-end ms-auto">
-                    <a href="#" class="btn add-btn" data-bs-toggle="modal" data-bs-target="#add_trainer"><i class="fa fa-plus"></i> Add New</a>
+                    <a href="#" class="btn add-btn" data-bs-toggle="modal" data-bs-target="#add_trainer"><i class="fa fa-plus"></i> @lang('lang.add_new')</a>
                 </div>
             </div>
         </div>
@@ -32,20 +32,20 @@
                 <div class="row filter-btn">
                     <div class="col-sm-2 col-md-2">
                         <div class="form-group">
-                            <input class="form-control floating" type="text" id="trainer_name" placeholder="Name">
+                            <input class="form-control floating" type="text" id="trainer_name" placeholder="@lang('lang.name')">
                         </div>
                     </div>
                     <div class="col-sm-2 col-md-2">
                         <div class="form-group">
-                            <input class="form-control floating" type="text" id="company_name" placeholder="Company Name">
+                            <input class="form-control floating" type="text" id="company_name" placeholder="@lang('lang.company_name')">
                         </div>
                     </div>
                     <div class="col-sm-2 col-md-2">
                         <div class="form-group">
                             <select class="select form-control" data-select2-id="select2-data-2-c0n2" id="filter_trainer_type">
-                                <option value="" data-select2-id="select2-data-2-c0n2">All Type</option>
-                                <option value="1">Internal</option>
-                                <option value="2">External</option>
+                                <option value="" data-select2-id="select2-data-2-c0n2">@lang('lang.all_type')</option>
+                                <option value="1">@lang('lang.internal')</option>
+                                <option value="2">@lang('lang.external')</option>
                             </select>
                         </div>
                     </div>
@@ -54,7 +54,7 @@
                         <div class="form-group">
                             <div class="cal-icon">
                                 <input class="form-control floating datetimepicker" type="text" id="from_date"
-                                    placeholder="From Date">
+                                    placeholder="@lang('lang.from_date')">
                             </div>
                         </div>
                     </div>
@@ -62,19 +62,19 @@
                         <div class="form-group">
                             <div class="cal-icon">
                                 <input class="form-control floating datetimepicker" type="text" id="to_date"
-                                    placeholder="To Date">
+                                    placeholder="@lang('lang.to_date')">
                             </div>
                         </div>
                     </div>
                     <div class="col-sm-2 col-md-2">
                         <div style="display: flex" class="float-end">
                             <button type="button" class="btn btn-sm btn-success me-2" id="btn_research">
-                                <span class="loading-icon-research" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading</span>
-                                <span class="btn-txt-research">{{ __('Search') }}</span>
+                                <span class="loading-icon-research" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>
+                                <span class="btn-txt-research">@lang('lang.search')</span>
                             </button>
                             <button type="button" class="btn btn-sm btn-warning reset-btn">
-                                <span class="btn-text-reset">Reload</span>
-                                <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading</span>
+                                <span class="btn-text-reset">@lang('lang.reload')</span>
+                                <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>
                             </button>
                         </div>
                     </div>
@@ -94,16 +94,16 @@
                                         <thead>
                                             <tr>
                                                 <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="#: activate to sort column descending" style="width: 30px;">#</th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Type: activate to sort column ascending" style="width: 772.237px;">Type</th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Company Name: activate to sort column ascending" style="width: 772.237px;">Company Name</th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Name (KH): activate to sort column ascending" style="width: 772.237px;">Name (KH)</th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Name (EN): activate to sort column ascending" style="width: 772.237px;">Name (EN)</th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Phone Numer: activate to sort column ascending" style="width: 772.237px;">Phone Numer</th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending" style="width: 772.237px;">Email</th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Remark: activate to sort column ascending" style="width: 772.237px;">Remark</th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Status: activate to sort column ascending" style="width: 772.237px;">Status</th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Create at: activate to sort column ascending" style="width: 772.237px;">Create at</th>
-                                                <th class="text-end sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Action: activate to sort column ascending" style="width: 300.962px;">Action</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Type: activate to sort column ascending" style="width: 772.237px;">@lang('lang.type')</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Company Name: activate to sort column ascending" style="width: 772.237px;">@lang('lang.company_name')</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Name (KH): activate to sort column ascending" style="width: 772.237px;">@lang('lang.name') (@lang('lang.kh'))</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Name (EN): activate to sort column ascending" style="width: 772.237px;">@lang('lang.name') (@lang('lang.en'))</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Phone Numer: activate to sort column ascending" style="width: 772.237px;">@lang('lang.phone_numer')</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending" style="width: 772.237px;">@lang('lang.email')</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Remark: activate to sort column ascending" style="width: 772.237px;">@lang('lang.remark')</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Status: activate to sort column ascending" style="width: 772.237px;">@lang('lang.status')</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Create at: activate to sort column ascending" style="width: 772.237px;">@lang('lang.create')</th>
+                                                <th class="text-end sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Action: activate to sort column ascending" style="width: 300.962px;">@lang('lang.action')</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -124,20 +124,20 @@
                                                                 @if ($item->status=='1')
                                                                     <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
                                                                         <i class="fa fa-dot-circle-o text-success"></i>
-                                                                        <span>Active</span>
+                                                                        <span>@lang('lang.active')</span>
                                                                     </a>
                                                                 @elseif ($item->status=='0')
                                                                     <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
                                                                         <i class="fa fa-dot-circle-o text-danger"></i>
-                                                                        <span>Inactive</span>
+                                                                        <span>@lang('lang.inactive')</span>
                                                                     </a>
                                                                 @endif
                                                                     <div class="dropdown-menu dropdown-menu-right" id="btn-status">
                                                                         <a class="dropdown-item" data-id="{{$item->id}}" data-name="1" data-status-old="{{$item->status}}" href="#">
-                                                                            <i class="fa fa-dot-circle-o text-success"></i> Active
+                                                                            <i class="fa fa-dot-circle-o text-success"></i> @lang('lang.active')
                                                                         </a>
                                                                         <a class="dropdown-item" data-id="{{$item->id}}" data-name="0" data-status-old="{{$item->status}}" href="#">
-                                                                            <i class="fa fa-dot-circle-o text-danger"></i> Inactive
+                                                                            <i class="fa fa-dot-circle-o text-danger"></i> @lang('lang.inactive')
                                                                         </a>
                                                                     </div>
                                                             </div>
@@ -147,8 +147,8 @@
                                                             <div class="dropdown dropdown-action">
                                                                 <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
                                                                 <div class="dropdown-menu dropdown-menu-right">
-                                                                    <a class="dropdown-item update" data-toggle="modal" data-id="{{$item->id}}" data-target="#edit_trainer"><i class="fa fa-pencil m-r-5"></i> Edit</a>
-                                                                    <a class="dropdown-item delete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_trainer"><i class="fa fa-trash-o m-r-5"></i> Delete</a>
+                                                                    <a class="dropdown-item update" data-toggle="modal" data-id="{{$item->id}}" data-target="#edit_trainer"><i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')</a>
+                                                                    <a class="dropdown-item delete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_trainer"><i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
                                                                 </div>
                                                             </div>
                                                         </td>
@@ -168,7 +168,7 @@
             <div class="modal-dialog modal-dialog-centered  modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Add New Trainer</h5>
+                        <h5 class="modal-title">@lang('lang.add_new_trainer')</h5>
                         <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">×</span>
                         </button>
@@ -179,16 +179,16 @@
                             <div class="row">
                                 <div class="col-sm-6">
                                     <div class="form-group">
-                                        <label>Type <span class="text-danger">*</span></label>
+                                        <label>@lang('lang.type') <span class="text-danger">*</span></label>
                                         <select class="select form-control" id="change-type" name="type" required>
-                                            <option value="1">Internal</option>
-                                            <option value="2">External</option>
+                                            <option value="1">@lang('lang.internal')</option>
+                                            <option value="2">@lang('lang.external')</option>
                                         </select>
                                     </div>
                                 </div>
                                 <div class="col-sm-6 trainer-internal">
                                     <div class="form-group hr-form-group-select2">
-                                        <label class="">Trainer <span class="text-danger">*</span></label>
+                                        <label class="">@lang('lang.trainer') <span class="text-danger">*</span></label>
                                         <select class="select form-control hr-select2-option" name="employee_id" id="employee_id" required>
                                             @foreach ($employee as $item)
                                                 <option value="{{$item->id}}">{{$item->employee_name_en}}</option>
@@ -198,58 +198,58 @@
                                 </div>
                                 <div class="col-sm-6">
                                     <div class="form-group trainer-external">
-                                        <label>Company Name<span class="text-danger">*</span></label>
+                                        <label>@lang('lang.company_name')<span class="text-danger">*</span></label>
                                         <input class="form-control trainer_required @error('name_en') is-invalid @enderror" type="text" name="company_name">
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
                                     <div class="form-group trainer-external">
-                                        <label>Name (KH)<span class="text-danger">*</span></label>
+                                        <label>@lang('lang.name') (@lang('lang.kh'))<span class="text-danger">*</span></label>
                                         <input class="form-control trainer_required @error('name_kh') is-invalid @enderror" type="text" name="name_kh">
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
                                     <div class="form-group trainer-external">
-                                        <label>Name (EN)<span class="text-danger">*</span></label>
+                                        <label>@lang('lang.name') (@lang('lang.en'))<span class="text-danger">*</span></label>
                                         <input class="form-control trainer_required @error('name_en') is-invalid @enderror" type="text" name="name_en">
                                     </div>
                                 </div>
 
                                 <div class="col-sm-6">
                                     <div class="form-group trainer-external">
-                                        <label>Phone </label>
+                                        <label>@lang('lang.phone') </label>
                                         <input class="form-control trainer_required @error('number_phone') is-invalid @enderror" type="number" name="number_phone">
                                     </div>
                                 </div>
                             
                                 <div class="col-sm-6">
                                     <div class="form-group trainer-external">
-                                        <label>Email</label>
+                                        <label>@lang('lang.email')</label>
                                         <input class="form-control @error('email') is-invalid @enderror" type="email" name="email">
                                     </div>
                                 </div>
         
                                 <div class="col-sm-12">
                                     <div class="form-group">
-                                        <label>Status</label>
+                                        <label>@lang('lang.status')</label>
                                         <select class="select form-control" id="trainer_status" name="status" value="{{old('status')}}">
-                                            <option value="1">Active</option>
-                                            <option value="0">Inactive</option>
+                                            <option value="1">@lang('lang.active')</option>
+                                            <option value="0">@lang('lang.inactive')</option>
                                         </select>
                                     </div>
                                 </div>
         
                                 <div class="col-sm-12">
                                     <div class="form-group">
-                                        <label class="">Remark</label>
+                                        <label class="">@lang('lang.remark')</label>
                                         <textarea type="text" rows="3" class="form-control" name="remark" id="remark" value="{{old('remark')}}"></textarea>
                                     </div>
                                 </div>
                             </div>
                             <div class="submit-section">
                                 <button type="submit" class="btn btn-primary submit-btn">
-                                    <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading </span>
-                                    <span class="btn-txt">{{ __('Submit') }}</span>
+                                    <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading') </span>
+                                    <span class="btn-txt">@lang('lang.submit')</span>
                                 </button>
                             </div>
                         </form>
@@ -262,7 +262,7 @@
             <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Edit Trainer</h5>
+                        <h5 class="modal-title">@lang('lang.edit_trainer')</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">×</span>
                         </button>
@@ -274,7 +274,7 @@
                             <div class="row">
                                 <div class="col-sm-6">
                                     <div class="form-group">
-                                        <label>Type <span class="text-danger">*</span></label>
+                                        <label>@lang('lang.type') <span class="text-danger">*</span></label>
                                         <select class="select form-control" id="e_change_type" name="type" required>
                                             {{-- <option value="1">Internal</option>
                                             <option value="2">External</option> --}}
@@ -283,7 +283,7 @@
                                 </div>
                                 <div class="col-sm-6 e-trainer-internal">
                                     <div class="form-group hr-form-group-select2">
-                                        <label class="">Trainer <span class="text-danger">*</span></label>
+                                        <label class="">@lang('lang.trainer') <span class="text-danger">*</span></label>
                                         <select class="select form-control hr-select2-option" id="e_employee_id" name="employee_id">
                                             @foreach ($employee as $item)
                                                 <option value="{{$item->id}}">{{$item->employee_name_en}}</option>
@@ -293,57 +293,57 @@
                                 </div>
                                 <div class="col-sm-6">
                                     <div class="form-group e-trainer-external">
-                                        <label>Company Name<span class="text-danger">*</span></label>
+                                        <label>@lang('lang.company_name')<span class="text-danger">*</span></label>
                                         <input class="form-control data-clear e_trainer_required @error('name_en') is-invalid @enderror" type="text" id="e_company_name" name="company_name">
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
                                     <div class="form-group e-trainer-external">
-                                        <label>Name (KH)<span class="text-danger">*</span></label>
+                                        <label>@lang('lang.name') (@lang('lang.kh'))<span class="text-danger">*</span></label>
                                         <input class="form-control data-clear e_trainer_required @error('name_kh') is-invalid @enderror" type="text" id="e_name_kh" name="name_kh">
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
                                     <div class="form-group e-trainer-external">
-                                        <label>Name (EN)<span class="text-danger">*</span></label>
+                                        <label>@lang('lang.name') (@lang('lang.en'))<span class="text-danger">*</span></label>
                                         <input class="form-control data-clear e_trainer_required @error('name_en') is-invalid @enderror" type="text" id="e_name_en" name="name_en">
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
                                     <div class="form-group e-trainer-external">
-                                        <label>Phone </label>
+                                        <label>@lang('lang.phone') </label>
                                         <input class="form-control data-clear e_trainer_required @error('number_phone') is-invalid @enderror" type="number" id="e_number_phone" name="number_phone">
                                     </div>
                                 </div>
                             
                                 <div class="col-sm-6">
                                     <div class="form-group e-trainer-external">
-                                        <label>Email</label>
+                                        <label>@lang('lang.email')</label>
                                         <input class="form-control data-clear @error('email') is-invalid @enderror" type="email" id="e_email" name="email">
                                     </div>
                                 </div>
         
                                 <div class="col-sm-12">
                                     <div class="form-group">
-                                        <label>Status</label>
+                                        <label>@lang('lang.status')</label>
                                         <select class="select form-control" id="e_status" name="status" value="{{old('status')}}">
-                                            <option value="1">Active</option>
-                                            <option value="0">Inactive</option>
+                                            <option value="1">@lang('lang.active')</option>
+                                            <option value="0">@lang('lang.inactive')</option>
                                         </select>
                                     </div>
                                 </div>
         
                                 <div class="col-sm-12">
                                     <div class="form-group">
-                                        <label class="">Remark</label>
+                                        <label class="">@lang('lang.remark')</label>
                                         <textarea type="text" rows="3" class="form-control" name="remark" id="e_remark" value="{{old('remark')}}"></textarea>
                                     </div>
                                 </div>
                             </div>
                             <div class="submit-section">
                                 <button type="submit" class="btn btn-primary submit-btn">
-                                    <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading </span>
-                                    <span class="btn-txt">{{ __('Submit') }}</span>
+                                    <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading') </span>
+                                    <span class="btn-txt">@lang('lang.submit')</span>
                                 </button>
                             </div>
                         </form>
@@ -358,8 +358,8 @@
                 <div class="modal-content">
                     <div class="modal-body">
                         <div class="form-header">
-                            <h3>Delete</h3>
-                            <p>Are you sure want to delete?</p>
+                            <h3>@lang('lang.delete')</h3>
+                            <p>@lang('lang.are_you_sure_want_to_delete')?</p>
                         </div>
                         <div class="modal-btn delete-action">
                             <form action="{{url('trainer/delete')}}" method="POST">
@@ -367,8 +367,8 @@
                                 <input type="hidden" name="id" class="e_id" value="">
                                 <div class="row">
                                     <div class="submit-section" style="text-align: center">
-                                        <button type="submit" class="btn btn-primary submit-btn me-2">Delete</button>
-                                        <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-danger">Cancel</a>
+                                        <button type="submit" class="btn btn-primary submit-btn me-2">@lang('lang.delete')</button>
+                                        <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-danger">@lang('lang.cancel')</a>
                                     </div>
                                 </div>
                             </form>
@@ -451,14 +451,14 @@
             let status = _this.find('.status').val();
             let type = _this.find('.type').text();
             if (status == "1") {
-                $('#e_status').append('<option selected value="1">Active</option> <option value="0">Inactive</option>');
+                $('#e_status').append('<option selected value="1">@lang("lang.active")</option> <option value="0">@lang("lang.inactive")</option>');
             }else if(status == "0"){
-                $('#e_status').append('<option selected value="0">Inactive</option> <option value="1">Active</option>');
+                $('#e_status').append('<option selected value="0">@lang("lang.inactive")</option> <option value="1">@lang("lang.active")</option>');
             }
             if (type == "Internal") {
                 $(".e-trainer-external").hide();
                 $(".e-trainer-internal").show();
-                $('#e_change_type').append('<option selected value="1">Internal</option> <option value="2">External</option>');
+                $('#e_change_type').append('<option selected value="1">@lang("lang.internal")</option> <option value="2">@lang("lang.external")</option>');
                 let _id = _this.find('.ids').text();
                 $.ajax({
                         type: "GET",
@@ -469,7 +469,7 @@
                     dataType: "JSON",
                     success: function (response) {
                         if (response.employee != '') {
-                            $('#e_employee_id').html('<option selected disabled> --Select --</option>');
+                            $('#e_employee_id').html('<option selected disabled> -- @lang("lang.select") --</option>');
                             $.each(response.employee, function(i, item) {
                                 $('#e_employee_id').append($('<option>', {
                                     value: item.id,
@@ -483,7 +483,7 @@
             }else if(type == "External"){
                 $(".e-trainer-internal").hide();
                 $(".e-trainer-external").show();
-                $('#e_change_type').append('<option selected value="2">External</option> <option value="1">Internal</option>');
+                $('#e_change_type').append('<option selected value="2">@lang("lang.external")</option> <option value="1">@lang("lang.internal")</option>');
             }
         });
 
@@ -499,26 +499,26 @@
             let text_status = "";
             let text_old_status = "";
             if (old_status == "0") {
-                text_old_status = "Inactive"
+                text_old_status = "@lang('lang.inactive')"
             }else if(old_status == "1"){
-                text_old_status = "Active"
+                text_old_status = "@lang('lang.active')"
             }
             if (status == "0") {
-                text_status = "Inactive"
+                text_status = "@lang('lang.inactive')"
             }else if(status == "1"){
-                text_status = "Active"
+                text_status = "@lang('lang.active')"
             }
             $.confirm({
-                title: 'Change Status!',
+                title: '@lang("lang.change_status")!',
                 contentClass: 'text-center',
                 backgroundDismiss: 'cancel',
                 content: ''+
-                        '<label>Are you sure want change status '+'<label style="color:red">'+text_old_status+'</label>'+' to '+'<label style="color:red">'+text_status+'</label>'+'?</label>'+
+                        '<label>@lang("lang.are_you_sure_want_change_status") '+'<label style="color:red">'+text_old_status+'</label>'+' @lang("lang.to_") '+'<label style="color:red">'+text_status+'</label>'+'?</label>'+
                         '<input type="hidden" class="form-control trainer_status" id="" name="" value="'+status+'">'+
                         '<input type="hidden" class="form-control id" id="" name="" value="'+id+'">',
                 buttons: {
                     confirm: {
-                        text: 'Submit',
+                        text: '@lang("lang.submit")',
                         btnClass: 'btn-blue',
                         action: function() {
                             var trainer_status = this.$content.find('.trainer_status').val();
@@ -530,7 +530,7 @@
                                 }).then(function(response) {
                                 new Noty({
                                     title: "",
-                                    text: "The process has been successfully.",
+                                    text: "@lang('lang.the_process_has_been_successfully').",
                                     type: "success",
                                     icon: true
                                 }).show();
@@ -539,7 +539,7 @@
                             }).catch(function(error) {
                                 new Noty({
                                     title: "",
-                                    text: "Something went wrong please try again later.",
+                                    text: "@lang('lang.something_went_wrong_please_try_again_later').",
                                     type: "error",
                                     icon: true
                                 }).show();
@@ -547,7 +547,7 @@
                         }
                     },
                     cancel: {
-                        text: 'Cancel',
+                        text: '@lang("lang.cancel")',
                         btnClass: 'btn-red btn-sm',
                     },
                 }
@@ -580,15 +580,15 @@
                         let status_color = "";
                         if (row.status=='1') {
                             status_color = "success";
-                            trainer_status = "Active";
+                            trainer_status = "@lang('lang.active')";
                         }else{
                             status_color = "danger";
-                            trainer_status = "Inactive";
+                            trainer_status = "@lang('lang.inactive')";
                             
                         }
                         tr += '<tr class="odd">'+
                             '<td class="sorting_1 ids">'+(row.id)+'</td>'+
-                            '<td class="type">'+(row.type == 1 ? "Internal": "External")+'</td>'+
+                            '<td class="type">'+(row.type == 1 ? "@lang('lang.internal')": "@lang('lang.external')")+'</td>'+
                             '<td class="company_name">'+(row.company_name ? row.company_name : "")+'</td>'+
                             '<td class="name_kh">'+(row.type == 1 ? row.employee_name_kh : row.name_kh)+'</td>'+
                             '<td class="name_en">'+(row.type == 1 ? row.employee_name_en : row.name_en)+'</td>'+
@@ -604,10 +604,10 @@
                                     '</a>'+
                                     '<div class="dropdown-menu dropdown-menu-right" id="btn-status">'+
                                         '<a class="dropdown-item" data-id="'+(row.id)+'" data-name="1" data-status-old="'+(row.status)+'" href="#">'+
-                                            '<i class="fa fa-dot-circle-o text-success"></i> Active'+
+                                            '<i class="fa fa-dot-circle-o text-success"></i> @lang("lang.active")'+
                                         '</a>'+
                                         '<a class="dropdown-item" data-id="'+(row.id)+'" data-name="0" data-status-old="'+(row.status)+'" href="#">'+
-                                            '<i class="fa fa-dot-circle-o text-danger"></i> Inactive'+
+                                            '<i class="fa fa-dot-circle-o text-danger"></i> @lang("lang.inactive")'+
                                         '</a>'+
                                     '</div>'+
                                 '</div>'+
@@ -619,8 +619,8 @@
                                 '<div class="dropdown dropdown-action">'+
                                     '<a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>'+
                                     '<div class="dropdown-menu dropdown-menu-right">'+
-                                        '<a class="dropdown-item update" data-toggle="modal" data-id="'+(row.id)+'" data-target="#edit_trainer"><i class="fa fa-pencil m-r-5"></i> Edit</a>'+
-                                        '<a class="dropdown-item delete" href="#" data-toggle="modal" data-id="'+(row.id)+'" data-target="#delete_trainer"><i class="fa fa-trash-o m-r-5"></i> Delete</a>'+
+                                        '<a class="dropdown-item update" data-toggle="modal" data-id="'+(row.id)+'" data-target="#edit_trainer"><i class="fa fa-pencil m-r-5"></i> @lang("lang.edit")</a>'+
+                                        '<a class="dropdown-item delete" href="#" data-toggle="modal" data-id="'+(row.id)+'" data-target="#delete_trainer"><i class="fa fa-trash-o m-r-5"></i> @lang("lang.delete")</a>'+
                                     '</div>'+
                                 '</div>'+
                             '</td>'+
