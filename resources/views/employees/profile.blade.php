@@ -4,10 +4,10 @@
         <div class="page-header">
             <div class="row">
                 <div class="col-sm-12">
-                    <h3 class="page-title">Profile</h3>
+                    <h3 class="page-title">@lang('lang.profile')</h3>
                     <ul class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="{{ url('/dashboad/employee') }}">Dashboard</a></li>
-                        <li class="breadcrumb-item active"><a href="{{ url('users') }}">Profile</a></li>
+                        <li class="breadcrumb-item"><a href="{{ url('/dashboad/employee') }}">@lang('lang.dashboard')</a></li>
+                        <li class="breadcrumb-item active"><a href="{{ url('users') }}">@lang('lang.profile')</a></li>
                     </ul>
                 </div>
             </div>
@@ -173,31 +173,31 @@
                                             <h3 class="user-name m-t-0 mb-0">{{ $data->employee_name_en }}</h3>
                                             <h6 class="text-muted">{{ $data->EmployeeDepartment }}</h6>
                                             <small class="text-muted">{{ $data->EmployeePosition }}</small>
-                                            <div class="staff-id">Employee ID : {{ $data->number_employee }}</div>
-                                            <div class="small doj text-muted">Date of Join : {{ $data->joinOfDate }}</div>
-                                            <div class="small doj text-muted">Change Password <a href="#" id="btn-change-password">click here</a></div>
+                                            <div class="staff-id">@lang('lang.employee_id') : {{ $data->number_employee }}</div>
+                                            <div class="small doj text-muted">@lang('lang.join_date') : {{ $data->joinOfDate }}</div>
+                                            <div class="small doj text-muted">@lang('lang.change_password') <a href="#" id="btn-change-password">@lang('lang.click_here')</a></div>
                                         </div>
                                     </div>
                                     <div class="col-md-7">
                                         <ul class="personal-info">
                                             <li>
-                                                <div class="title">Phone:</div>
+                                                <div class="title">@lang('lang.personal_phone'):</div>
                                                 <label class="text">{{ $data->personal_phone_number }}</label>
                                             </li>
                                             <li>
-                                                <div class="title">Email:</div>
+                                                <div class="title">@lang('lang.email'):</div>
                                                 <label class="text">{{ $data->email }}</label>
                                             </li>
                                             <li>
-                                                <div class="title">Birthday:</div>
+                                                <div class="title">@lang('lang.birthday'):</div>
                                                 <label class="text">{{ \Carbon\Carbon::parse($data->date_of_birth)->format('d-M-Y') ?? '' }}</label>
                                             </li>
                                             <li>
-                                                <div class="title">Gender:</div>
+                                                <div class="title">@lang('lang.gender'):</div>
                                                 <label class="text">{{ $data->gender == 1 ? 'Male' : 'Female' }}</label>
                                             </li>
                                             <li>
-                                                <div class="title">Address:</div>
+                                                <div class="title">@lang('lang.address'):</div>
                                                 <label style="display: block;overflow: hidden;color: #888888;">{{ $data->FullCurrentAddress ?? '' }}</label>
                                             </li>
                                         </ul>
@@ -214,11 +214,11 @@
             <div class="row user-tabs">
                 <div class="col-lg-12 col-md-12 col-sm-12 line-tabs">
                     <ul class="nav nav-tabs nav-tabs-bottom" role="tablist">
-                        <li class="nav-item" role="presentation"><a href="#emp_profile" data-bs-toggle="tab" class="nav-link active" aria-selected="true" role="tab">Profile</a></li>
-                        <li class="nav-item" role="presentation"><a href="#document" data-bs-toggle="tab" class="nav-link" aria-selected="false" tabindex="-1" role="tab">Document</a></li>
-                        <li class="nav-item" role="presentation"><a href="#promote" data-bs-toggle="tab" class="nav-link" aria-selected="false" tabindex="-1" role="tab">Promoted</a></li>
-                        <li class="nav-item" role="presentation"><a href="#transferred" data-bs-toggle="tab" class="nav-link" aria-selected="false" tabindex="-1" role="tab">Transferred</a></li>
-                        <li class="nav-item" role="presentation"><a href="#training" data-bs-toggle="tab" class="nav-link" aria-selected="false" tabindex="-1" role="tab">Training</a></li>
+                        <li class="nav-item" role="presentation"><a href="#emp_profile" data-bs-toggle="tab" class="nav-link active" aria-selected="true" role="tab">@lang('lang.profile')</a></li>
+                        <li class="nav-item" role="presentation"><a href="#document" data-bs-toggle="tab" class="nav-link" aria-selected="false" tabindex="-1" role="tab">@lang('lang.document')</a></li>
+                        <li class="nav-item" role="presentation"><a href="#promote" data-bs-toggle="tab" class="nav-link" aria-selected="false" tabindex="-1" role="tab">@lang('lang.promoted')</a></li>
+                        <li class="nav-item" role="presentation"><a href="#transferred" data-bs-toggle="tab" class="nav-link" aria-selected="false" tabindex="-1" role="tab">@lang('lang.transferred')</a></li>
+                        <li class="nav-item" role="presentation"><a href="#training" data-bs-toggle="tab" class="nav-link" aria-selected="false" tabindex="-1" role="tab">@lang('lang.training')</a></li>
                     </ul>
                 </div>
             </div>
@@ -230,46 +230,46 @@
                     <div class="col-md-6 d-flex">
                         <div class="card profile-box flex-fill">
                             <div class="card-body">
-                                <h3 class="card-title">Personal Informations </a></h3>
+                                <h3 class="card-title">@lang('lang.personal_informations') </a></h3>
                                 <ul class="personal-info">
                                     <li>
-                                        <div class="title">Position Type</div>
+                                        <div class="title">@lang('lang.position_type')</div>
                                         <label class="text">{{ $data->EmployeePositionType }}</label>
                                     </li>
                                     <li>
-                                        <div class="title">Identity Type</div>
+                                        <div class="title">@lang('lang.identity_type')</div>
                                         <label class="text">{{ $data->EmployeeIdentityType }}</label>
                                     </li>
                                     <li>
-                                        <div class="title">Identity Number</div>
+                                        <div class="title">@lang('lang.identity_number')</div>
                                         <label class="text">{{ $data->identity_number }}</label>
                                     </li>
                                     <li>
-                                        <div class="title">Issue Date</div>
+                                        <div class="title">@lang('lang.issue_date')</div>
                                         <label class="text">{{ \Carbon\Carbon::parse($data->issue_date)->format('d-M-Y') ?? '' }}</label>
                                     </li>
                                     <li>
-                                        <div class="title">Issue Expired Date</div>
+                                        <div class="title">@lang('lang.issue_expired_date')</div>
                                         <div class="text">{{ \Carbon\Carbon::parse($data->issue_expired_date)->format('d-M-Y') ?? '' }}</div>
                                     </li>
                                     <li>
-                                        <div class="title">Unit</div>
+                                        <div class="title">@lang('lang.unit')</div>
                                         <label class="text">{{$data->unit}}</label>
                                     </li>
                                     <li>
-                                        <div class="title">Level</div>
+                                        <div class="title">@lang('lang.level')</div>
                                         <label class="text">{{ $data->level }}</label>
                                     </li>
                                     <li>
-                                        <div class="title">Nationality</div>
+                                        <div class="title">@lang('lang.nationality')</div>
                                         <label class="text">{{ $data->nationality }}</label>
                                     </li>
                                     <li>
-                                        <div class="title">Marital status</div>
+                                        <div class="title">@lang('lang.marital_status')</div>
                                         <label class="text">{{ $data->marital_status }}</label>
                                     </li>
                                     <li>
-                                        <div class="title">Loan</div>
+                                        <div class="title">@lang('lang.loan')</div>
                                         @if ($data->is_loan == '1')
                                             <span style="font-size: 13px" class="badge bg-inverse-danger">Yes</span>
                                         @elseif($data->is_loan == '0')
@@ -283,7 +283,7 @@
                     <div class="col-md-6 d-flex">
                         <div class="card profile-box flex-fill">
                             <div class="card-body">
-                                <h3 class="card-title">Emergency Contact <a href="" class="edit-icon" data-bs-toggle="modal" data-bs-target="#emergency_contact_modal"><i class="fa fa-pencil"></i></a></h3>
+                                <h3 class="card-title">@lang('lang.emergency_contact') <a href="" class="edit-icon" data-bs-toggle="modal" data-bs-target="#emergency_contact_modal"><i class="fa fa-pencil"></i></a></h3>
                                 @if (count($contact)>0)
                                     @foreach ($contact as $item)
                                         <ul class="personal-info">
@@ -311,7 +311,7 @@
                     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title">Emergency Contact</h5>
+                                <h5 class="modal-title">@lang('lang.emergency_contact')</h5>
                                 <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">×</span>
                                 </button>
@@ -322,15 +322,15 @@
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label>Name <span class="text-danger">*</span></label>
+                                                <label>@lang('lang.name') <span class="text-danger">*</span></label>
                                                 <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" value="{{old('name')}}" required>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label>Relationship <span class="text-danger">*</span></label>
+                                                <label>@lang('lang.relationship') <span class="text-danger">*</span></label>
                                                 <select class="form-control @error('relationship') is-invalid @enderror" id="relationship" name="relationship" value="{{old('relationship')}}" required>
-                                                    <option selected disabled value=""> -- Select relationship --</option>
+                                                    <option selected disabled value=""> -- @lang('lang.select') --</option>
                                                     @foreach ($relationship as $item)
                                                         <option value="{{ $item->id }}">{{ $item->name_khmer }}</option>
                                                     @endforeach
@@ -341,13 +341,13 @@
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label>Phone <span class="text-danger">*</span></label>
+                                                <label>@lang('lang.phone') <span class="text-danger">*</span></label>
                                                 <input class="form-control @error('phone') is-invalid @enderror" type="number" id="phone" name="phone" value="{{old('phone')}}" required>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label>Phone 2</label>
+                                                <label>@lang('lang.phone') 2</label>
                                                 <input class="form-control" type="number" id="phone_2" name="phone_2">
                                             </div>
                                         </div>
@@ -355,8 +355,8 @@
                                     <div class="submit-section">
                                         <input type="hidden" name="employee_id" id="employee_id" value="{{ $data->id }}">
                                         <button class="btn btn-primary submit-btn">
-                                            <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading </span>
-                                            <span class="btn-txt">{{ __('Submit') }}</span>
+                                            <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading') </span>
+                                            <span class="btn-txt">@lang('lang.submit')</span>
                                         </button>
                                     </div>
                                 </form>
@@ -368,18 +368,18 @@
                     <div class="col-md-6 d-flex">
                         <div class="card profile-box flex-fill">
                             <div class="card-body">
-                                <h3 class="card-title">Bank information</h3>
+                                <h3 class="card-title">@lang('lang.bank_information')</h3>
                                 <ul class="personal-info">
                                     <li>
-                                        <div class="title">Bank Name</div>
+                                        <div class="title">@lang('lang.bank_name')</div>
                                         <div class="text">{{ $data->banks == null ? "" : $data->banks->name }}</div>
                                     </li>
                                     <li>
-                                        <div class="title">Bank Account No.</div>
+                                        <div class="title">@lang('lang.bank_account_no').</div>
                                         <div class="text">{{ $data->account_number }}</div>
                                     </li>
                                     <li>
-                                        <div class="title">Account Name</div>
+                                        <div class="title">@lang('lang.account_name')</div>
                                         <label class="text">{{ $data->account_name }}</label>
                                     </li>
                                 </ul>
@@ -389,16 +389,16 @@
                     <div class="col-md-6 d-flex">
                         <div class="card profile-box flex-fill">
                             <div class="card-body">
-                                <h3 class="card-title">Children Informations <a href="#" class="edit-icon" data-bs-toggle="modal" data-bs-target="#family_info_modal"><i class="fa fa-pencil"></i></a></h3>
+                                <h3 class="card-title">@lang('lang.children_informations') <a href="#" class="edit-icon" data-bs-toggle="modal" data-bs-target="#family_info_modal"><i class="fa fa-pencil"></i></a></h3>
                                 <div class="table-responsive">
                                     <table class="table table-nowrap">
                                         <thead>
                                             <tr>
-                                                <th>Name</th>
-                                                <th>Date of Birth</th>
-                                                <th>Gender</th>
-                                                <th>Age</th>
-                                                <th>Action</th>
+                                                <th>@lang('lang.name')</th>
+                                                <th>@lang('lang.date_of_birth')</th>
+                                                <th>@lang('lang.gender')</th>
+                                                <th>@lang('lang.age')</th>
+                                                <th>@lang('lang.action')</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -434,7 +434,7 @@
                     <div class="col-md-6 d-flex">
                         <div class="card profile-box flex-fill">
                             <div class="card-body">
-                                <h3 class="card-title">Education Informations <a href="#" class="edit-icon" data-bs-toggle="modal" data-bs-target="#education_info"><i class="fa fa-pencil"></i></a></h3>
+                                <h3 class="card-title">@lang('lang.education_informations') <a href="#" class="edit-icon" data-bs-toggle="modal" data-bs-target="#education_info"><i class="fa fa-pencil"></i></a></h3>
                                 <div class="experience-box">
                                     <ul class="experience-list">
                                         @if (count($educations) > 0)
@@ -462,7 +462,7 @@
                     <div class="col-md-6 d-flex">
                         <div class="card profile-box flex-fill">
                             <div class="card-body">
-                                <h3 class="card-title">Experience Informations <a href="#" class="edit-icon" data-bs-toggle="modal" data-bs-target="#experience_info"><i class="fa fa-pencil"></i></a></h3>
+                                <h3 class="card-title">@lang('lang.experience_informations') <a href="#" class="edit-icon" data-bs-toggle="modal" data-bs-target="#experience_info"><i class="fa fa-pencil"></i></a></h3>
                                 <div class="experience-box">
                                     @if (count($experiences)>0)
                                         @foreach ($experiences as $item)

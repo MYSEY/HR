@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Import New Rental</h5>
+                <h5 class="modal-title">@lang('lang.import_new_rental')</h5>
                 <button type="button" class="close btn-close" data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -10,7 +10,7 @@
             <div class="modal-body">
                 <div class="card">
                     <div class="card-header">
-                        <h4 class="card-title mb-0">Import Excel / XLS, XLSX or CSV</h4>
+                        <h4 class="card-title mb-0">@lang('lang.import_excel_/_XLS_XLSX_or_CSV')</h4>
                     </div>
                     <div class="card-body">
                         <div class="form-group">
@@ -21,13 +21,11 @@
                                 <input type="file" id="result_file">
                             </div>
                         </div><br>
-                        <div class="btn-group " style="padding-left: 2%;">
-                            <div>
-                                <a href="javascript:" class="btn btn-primary submit-btn upload_file_data">
-                                    <span class="btn-text-submit">submit</span>
-                                    <span id="btn-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading</span>
-                                </a>
-                            </div>
+                        <div class="text-end ">
+                            <a href="javascript:" class="btn btn-primary submit-btn upload_file_data">
+                                <span class="btn-text-submit">@lang('lang.submit')</span>
+                                <span id="btn-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -48,7 +46,7 @@
 
         $(".upload_file_data").on("click", function() {
             if ($('#result_file').val() == "") {
-                $("#thanLess").text("Please select a xls, xlsx and csv file and size less then 1 MB").css(
+                $("#thanLess").text("@lang('lang.please_select_a_xls,_xlsx_and_csv_file_and_size_less_then_1_MB')").css(
                     "color", "red");
                 $(".thanLess").show();
                 return false;
@@ -88,7 +86,7 @@
                             $("#import_motor_rentel").modal("show");
                             data == 0;
                             $("#thanLess").text(
-                                "Please select a xlsx, xls or csv file and size liss then 1 MB"
+                                "@lang('lang.please_select_a_xls,_xlsx_and_csv_file_and_size_less_then_1_MB')"
                                 ).css("color", "red");
                             $(".thanLess").show();
                         }
@@ -98,7 +96,7 @@
                     }
                 });
             }else{
-                $("#thanLess").text("Please select a xls, xlsx and csv file and size less then 1 MB").css(
+                $("#thanLess").text("@lang('lang.please_select_a_xls,_xlsx_and_csv_file_and_size_less_then_1_MB')").css(
                     "color", "red");
                 $(".thanLess").show();
             }

@@ -55,10 +55,10 @@
         <div class="page-header">
             <div class="row align-items-center">
                 <div class="col">
-                    <h3 class="page-title">Recruitment Plan Deatail</h3>
+                    <h3 class="page-title">@lang('lang.recruitment_plan_detail')</h3>
                     <ul class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="{{ url('/dashboad/employee') }}">Dashboard</a></li>
-                        <li class="breadcrumb-item active">Recruitment Plan Detail</li>
+                        <li class="breadcrumb-item"><a href="{{ url('/dashboad/employee') }}">@lang('lang.dashboard')</a></li>
+                        <li class="breadcrumb-item active">@lang('lang.recruitment_plan_detail')</li>
                     </ul>
                 </div>
             </div>
@@ -77,13 +77,13 @@
                                     <thead>
                                         <tr>
                                             <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="#: activate to sort column descending" style="width: 30px;">#</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Position Name: activate to sort column ascending" style="width: 772.237px;">Position Name</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Branch Name: activate to sort column ascending" style="width: 772.237px;">Branch Name</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Year: activate to sort column ascending" style="width: 772.237px;">Plan of Year</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Created at: activate to sort column ascending" style="width: 772.237px;">Total Staff</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Description: activate to sort column ascending" style="width: 772.237px;">Remark</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Created at: activate to sort column ascending" style="width: 772.237px;">Create At</th>
-                                            <th class="text-end sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Action: activate to sort column ascending" style="width: 300.962px;">Action</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Position Name: activate to sort column ascending" style="width: 772.237px;">@lang('lang.position')</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Branch Name: activate to sort column ascending" style="width: 772.237px;">@lang('lang.location')</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Year: activate to sort column ascending" style="width: 772.237px;">@lang('lang.plan_of_year')</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Created at: activate to sort column ascending" style="width: 772.237px;">@lang('lang.total_staff')</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Description: activate to sort column ascending" style="width: 772.237px;">@lang('lang.remark')</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Created at: activate to sort column ascending" style="width: 772.237px;">@lang('lang.create')</th>
+                                            <th class="text-end sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Action: activate to sort column ascending" style="width: 300.962px;">@lang('lang.action')</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -100,7 +100,7 @@
             <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Edit Plan</h5>
+                        <h5 class="modal-title">@lang('lang.edit_plan')</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">×</span>
                         </button>
@@ -112,7 +112,7 @@
                             <div class="row">
                                 <div class="col-sm-6">
                                     <div class="form-group hr-form-group-select2">
-                                        <label>Position<span class="text-danger">*</span></label>
+                                        <label>@lang('lang.position')<span class="text-danger">*</span></label>
                                         <select class="form-select hr-select2-option" id="e_position" name="position_id" required>
                                             {{-- <option value="">Select type</option> --}}
                                         </select>
@@ -120,7 +120,7 @@
                                 </div>
                                 <div class="col-sm-6">
                                     <div class="form-group hr-form-group-select2">
-                                        <label>Branch<span class="text-danger">*</span></label>
+                                        <label>@lang('lang.location')<span class="text-danger">*</span></label>
                                         <select class="form-select hr-select2-option" id="e_branch" name="branch_id" required>
                                             {{-- <option value="">Select type</option> --}}
                                         </select>
@@ -128,13 +128,13 @@
                                 </div>
                                 <div class="col-sm-6">
                                     <div class="form-group">
-                                        <label>Plan of Year <span class="text-danger">*</span></label>
+                                        <label>@lang('lang.plan_of_year') <span class="text-danger">*</span></label>
                                         <input class="form-control" type="month" name="plan_date" id="e_plan_date" required>
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
                                     <div class="form-group">
-                                        <label>Total Staff <span class="text-danger">*</span></label>
+                                        <label>@lang('lang.total_staff') <span class="text-danger">*</span></label>
                                         <input class="form-control @error('total_staff') is-invalid @enderror"
                                             type="number" id="e_total_staff" name="total_staff" required>
                                     </div>
@@ -142,7 +142,7 @@
 
                                 <div class="col-sm-12">
                                     <div class="form-group">
-                                        <label class="">Remark</label>
+                                        <label class="">@lang('lang.remark')</label>
                                         <textarea type="text" rows="3" class="form-control" name="remark" id="e_remark"
                                             value="{{ old('remark') }}"></textarea>
                                     </div>
@@ -151,8 +151,8 @@
                             <div class="submit-section">
                                 <button type="button" class="btn btn-primary submit-btn btn-edit-plan">
                                     <span class="loading-icon" style="display: none"><i
-                                            class="fa fa-spinner fa-spin"></i> Loading </span>
-                                    <span class="btn-txt">{{ __('Submit') }}</span>
+                                            class="fa fa-spinner fa-spin"></i> @lang('lang.loading') </span>
+                                    <span class="btn-txt">@lang('lang.submit')</span>
                                 </button>
                             </div>
                         </form>
@@ -167,8 +167,8 @@
                 <div class="modal-content">
                     <div class="modal-body">
                         <div class="form-header">
-                            <h3>Delete</h3>
-                            <p>Are you sure want to delete?</p>
+                            <h3>@lang('lang.delete')</h3>
+                            <p>@lang('lang.are_you_sure_want_to_delete')?</p>
                         </div>
                         <div class="modal-btn delete-action">
                             <form action="{{ url('recruitment/plan-delete') }}" method="POST">
@@ -176,8 +176,8 @@
                                 <input type="hidden" name="id" class="e_id" value="">
                                 <div class="row">
                                     <div class="submit-section" style="text-align: center">
-                                        <button type="submit" class="btn btn-primary submit-btn me-2">Delete</button>
-                                        <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-danger">Cancel</a>
+                                        <button type="submit" class="btn btn-primary submit-btn me-2">@lang('lang.delete')</button>
+                                        <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-danger">@lang('lang.cancel')</a>
                                     </div>
                                 </div>
                             </form>
@@ -197,6 +197,7 @@
         let url = pathArray.slice(3);
         showDatas(url);
         $(document).on('click','.update', function(){
+            var localeLanguage = '{{ config('app.locale') }}';
             let id = $(this).data("id");
             $(".e_id").val(id)
             $.ajax({
@@ -213,7 +214,7 @@
                             $.each(response.positions, function(i, item) {
                                 $('#e_position').append($('<option>', {
                                     value: item.id,
-                                    text: item.name_english,
+                                    text: localeLanguage == 'en' ? item.name_english : item.name_khmer,
                                     selected: item.id == response
                                         .success.position_id
                                 }));
@@ -224,7 +225,7 @@
                             $.each(response.branchs, function(i, item) {
                                 $('#e_branch').append($('<option>', {
                                     value: item.id,
-                                    text: item.branch_name_en,
+                                    text: localeLanguage == 'en' ? item.branch_name_en : item.branch_name_kh,
                                     selected: item.id == response
                                         .success.branch_id
                                 }));
@@ -302,15 +303,15 @@
                                     '<div class="dropdown dropdown-action">'+
                                         '<a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>'+
                                         '<div class="dropdown-menu dropdown-menu-right">'+
-                                            '<a class="dropdown-item update" data-toggle="modal" data-id="'+(plan.id)+'" data-target="#edit_plan"><i class="fa fa-pencil m-r-5"></i> Edit</a>'+
-                                            '<a class="dropdown-item delete" href="#" data-toggle="modal" data-id="'+(plan.id)+'" data-target="#delete_plan"><i class="fa fa-trash-o m-r-5"></i> Delete</a>'+
+                                            '<a class="dropdown-item update" data-toggle="modal" data-id="'+(plan.id)+'" data-target="#edit_plan"><i class="fa fa-pencil m-r-5"></i> @lang("lang.edit")</a>'+
+                                            '<a class="dropdown-item delete" href="#" data-toggle="modal" data-id="'+(plan.id)+'" data-target="#delete_plan"><i class="fa fa-trash-o m-r-5"></i> @lang("lang.delete")</a>'+
                                         '</div>'+
                                     '</div>'+
                                 '</td>'+
                             '</tr>';
                     });   
                 }else{
-                    var tr = '<td colspan="8" style="text-align: center">No data available for display.</td>';
+                    var tr = '<td colspan="8" style="text-align: center">@lang("lang.no_data_available_for_display").</td>';
                 }
                 $(".tbl_plan tbody").html(tr);
             }

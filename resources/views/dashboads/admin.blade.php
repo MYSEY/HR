@@ -271,9 +271,9 @@
         <div class="page-header">
             <div class="row">
                 <div class="col-sm-12">
-                    <h3 class="page-title">Welcome {{ Auth::user()->employee_name_en }}!</h3>
+                    <h3 class="page-title">@lang("lang.welcome") {{ Auth::user()->employee_name_en }}!</h3>
                     <ul class="breadcrumb">
-                        <li class="breadcrumb-item active">Dashboard</li>
+                        <li class="breadcrumb-item active">@lang('lang.dashboard')</li>
                     </ul>
                 </div>
             </div>
@@ -285,7 +285,7 @@
                         <span class="dash-widget-icon"><i class="fa fa-user"></i></span>
                         <div class="dash-widget-info">
                             <h3 id="total-resigned-staff"></h3>
-                           <a href="{{ url('/reports/staff-resigned-report') }}"> <span>Resigned Staff</span></a>
+                           <a href="{{ url('/reports/staff-resigned-report') }}"> <span>@lang('lang.resigned_staff')</span></a>
                         </div>
                     </div>
                 </div>
@@ -296,7 +296,7 @@
                         <span class="dash-widget-icon"><i class="fa fa-user"></i></span>
                         <div class="dash-widget-info">
                             <h3 id="total-promoted-staff"></h3>
-                            <a href="{{ url('/reports/promoted-staff-report') }}"><span>Promoted Staff</span></a>
+                            <a href="{{ url('/reports/promoted-staff-report') }}"><span>@lang('lang.promoted_staff')</span></a>
                         </div>
                     </div>
                 </div>
@@ -307,7 +307,7 @@
                         <span class="dash-widget-icon"><i class="fa fa-user"></i></span>
                         <div class="dash-widget-info">
                             <h3 id="total-transferred-staff"></h3>
-                            <a href="{{ url('/reports/transferred-staff-report') }}"> <span>Transferred Staff</span></a>
+                            <a href="{{ url('/reports/transferred-staff-report') }}"> <span>@lang('lang.transferred_staff')</span></a>
                         </div>
                     </div>
                 </div>
@@ -318,7 +318,7 @@
                         <span class="dash-widget-icon"><i class="la la-edit"></i></span>
                         <div class="dash-widget-info">
                             <h3 id="total-training"></h3>
-                            <a href="{{ url('/training/list') }}"><span>Training</span></a>
+                            <a href="{{ url('/training/list') }}"><span>@lang('lang.training')</span></a>
                         </div>
                     </div>
                 </div>
@@ -328,18 +328,18 @@
             <div class="col-md-12 col-lg-6 col-xl-4 d-flex">
                 <div class="card flex-fill">
                     <div class="card-body">
-                        <h4 class="card-title">Employee</h4>
+                        <h4 class="card-title">@lang('lang.employee')</h4>
                         <div class="statistics">
                             <div class="row">
                                 <div class="col-md-6 col-6 text-center">
                                     <div class="stats-box mb-4">
-                                        <p>Total Employee</p>
+                                        <p>@lang('lang.total_employee')</p>
                                         <h3 id="total-staff"></h3>
                                     </div>
                                 </div>
                                 <div class="col-md-6 col-6 text-center">
                                     <div class="stats-box mb-4">
-                                        <p>Total Female</p>
+                                        <p>@lang('lang.total_female')</p>
                                         <h3 id="total-female"></h3>
                                     </div>
                                 </div>
@@ -356,13 +356,13 @@
                                 aria-valuemin="0" aria-valuemax="100"><span id="percantage-udc"></span></div>
                         </div>
                         <div>
-                            <p><i class="fa fa-dot-circle-o text-purple me-2"></i>Up-Coming <span
+                            <p><i class="fa fa-dot-circle-o text-purple me-2"></i>@lang('lang.up-coming')<span
                                     id="total-interview" class="float-end">0</span></p>
-                            <p><i class="fa fa-dot-circle-o text-success me-2"></i>Probation <span
+                            <p><i class="fa fa-dot-circle-o text-success me-2"></i>@lang('lang.probation')<span
                                     id="total-probation" class="float-end">0</span></p>
-                            <p><i class="fa fa-dot-circle-o text-info me-2"></i>FDC <span
+                            <p><i class="fa fa-dot-circle-o text-info me-2"></i>@lang('lang.fdc')<span
                                     id="total-fdc" class="float-end">0</span></p>
-                            <p><i class="fa fa-dot-circle-o text-danger me-2"></i>UDC <span
+                            <p><i class="fa fa-dot-circle-o text-danger me-2"></i>@lang('lang.udc') <span
                                     id="total-udc" class="float-end">0</span></p>
                         </div>
                     </div>
@@ -371,8 +371,8 @@
             <div class="col-md-12 col-lg-12 col-xl-4 d-flex">
                 <div class="card flex-fill dash-statistics">
                     <div class="card-body">
-                        <h5 class="card-title">Age of Employee</h5>
-                        <p><i class="fa fa-dot-circle-o text-info"></i> <span class="me-2">Age</span></p>
+                        <h5 class="card-title">@lang('lang.age_of_employee')</h5>
+                        <p><i class="fa fa-dot-circle-o text-info"></i> <span class="me-2">@lang('lang.age')</span></p>
                         <div class="stats-list">
                             <div class="stats-info">
                                 <p>18 - 24 <strong><small id="total-age-18"></small></strong></p>
@@ -401,12 +401,12 @@
             <div class="col-md-12 col-lg-6 col-xl-4 d-flex">
                 <div class="card flex-fill">
                     <div class="card-body">
-                        <h4 class="card-title">Birthday Reminder <span class="badge bg-inverse-danger ms-2" id="total-date-birthday">0</span></h4>
+                        <h4 class="card-title">@lang('lang.birthday_reminder') <span class="badge bg-inverse-danger ms-2" id="total-date-birthday">0</span></h4>
                         <div class="card-detail">
                             <div id="birthday-staff" style="width: -webkit-fill-available"></div>
                         </div>
                         <div class="load-more text-center" id="btn-more">
-                            <a class="text-dark" href="{{ url('/users/birthday') }}">More</a>
+                            <a class="text-dark" href="{{ url('/users/birthday') }}">@lang('lang.more')</a>
                         </div>
                     </div>
                 </div>
@@ -599,7 +599,7 @@
                                     '<div class="row align-items-center mt-3">'+
                                         '<div class="col-6">'+
                                             '<h6 class="mb-0">'+(date_of_birth)+'</h6>'+
-                                            '<span class="text-sm text-muted">Birthday</span>'+
+                                            '<span class="text-sm text-muted">@lang("lang.birthday")</span>'+
                                         '</div>'+
                                         '<div class="col-6 text-end">'+
                                             '<div>'+
@@ -763,14 +763,13 @@
         };
 
         $.each(deshboard, function(i, db) {
-            let text = "";
+            let text = "@lang('lang.staff_taking_leave')";
             let data = {};
             let type = "";
             let option = {};
             if (db.name == "staff_take_leave") {
                 type = "bar";
                 data = db.name == "staff_take_leave" ? dataStaffTakeLeave : dataStaffTraining;
-                text = 'Staff Taking Leave';
                 option = {
                     plugins: {
                         legend: {
@@ -819,7 +818,7 @@
         const dataHRMSdashboards = {
             // labels: [],
             datasets: [{
-                    label: 'Total',
+                    label: '@lang("lang.total")',
                     data: [],
                     backgroundColor: [
                         "red"
@@ -827,7 +826,7 @@
                     stack: 'Stack 0',
                 },
                 {
-                    label: 'Female',
+                    label: '@lang("lang.female")',
                     data: [],
                     backgroundColor: [
                         "green"
@@ -897,7 +896,7 @@
                 },
                 title: {
                     display: true,
-                    text: "Total Number of Staff"
+                    text: "@lang('lang.total_number_of_staff')"
                 },
 
             },
@@ -924,7 +923,7 @@
     function dashboadAchieveBranch(datas) {
         let dataAchive = {
             datasets: [{
-                    label: 'Total Staff',
+                    label: '@lang("lang.total_staff")',
                     data: [],
                     backgroundColor: [
                         "green"
@@ -932,7 +931,7 @@
                     stack: 'Stack 0',
                 },
                 {
-                    label: 'Current & Recruited 2023',
+                    label: '@lang("lang.current") @lang("lang.&") @lang("lang.recruited") 2023',
                     data: [],
                     backgroundColor: [
                         "yellow"
@@ -1008,7 +1007,7 @@
         });
 
         dataAchive.datasets.push({
-            label: '% Achivement',
+            label: '% @lang("lang.achivement")',
             data: dataAchRed,
             backgroundColor: [
                 "red"
@@ -1039,7 +1038,7 @@
                 },
                 title: {
                     display: true,
-                    text: '% Credit Staff Ratio'
+                    text: '% @lang("lang.total_inactive_staff")'
                 },
             },
             responsive: true,
@@ -1133,7 +1132,7 @@
                 },
                 title: {
                     display: true,
-                    text: '% Resigned Staff'
+                    text: '% @lang("lang.resigned_staff")'
                 },
             },
         }
@@ -1214,7 +1213,7 @@
         dataReasonStaffResignation.labels = labelStaffResignation;
         dataReasonStaffResignation.datasets[0].data = staffResignationData;
         let data = dataReasonStaffResignation;
-        let text = "% Reasons of Staff’s Exit";
+        let text = "% @lang('lang.reasons_of_staff’s_exit')";
         let option = {
             responsive: true,
             plugins: {
@@ -1322,7 +1321,7 @@
         ];
         dataTypeStaff.datasets.push(
             {
-                label: 'Total',
+                label: '@lang("lang.total")',
                 data: dataTypeStaffRed,
                 backgroundColor: [
                     "red"
@@ -1353,7 +1352,7 @@
                 },
                 title: {
                     display: true,
-                    text: '% Staff Ratio'
+                    text: '% @lang("lang.staff_ratio")'
                 },
             },
             responsive: true,
@@ -1380,7 +1379,7 @@
         let dataStaffTraining = {
             labels: [],
             datasets: [{
-                label: 'Total Staff',
+                label: '@lang("lang.total_staff")',
                 data: [],
                 backgroundColor: [
                     "green"
@@ -1426,7 +1425,7 @@
                 },
                 title: {
                     display: true,
-                    text: "Staff Training by Branch Internal"
+                    text: "@lang('lang.staff_training_by_branch_internal')"
                 },
             },
             responsive: true,
@@ -1455,7 +1454,7 @@
         let dataStaffTraining = {
             labels: [],
             datasets: [{
-                label: 'Total Staff',
+                label: '@lang("lang.total_staff")',
                 data: [],
                 backgroundColor: [
                     "green"
@@ -1500,7 +1499,7 @@
                 },
                 title: {
                     display: true,
-                    text: "Staff Training by Branch External"
+                    text: "@lang('lang.staff_training_by_branch_external')"
                 },
             },
             responsive: true,

@@ -10,14 +10,14 @@
         <div class="page-header">
             <div class="row align-items-center">
                 <div class="col">
-                    <h3 class="page-title">Candidate CVs</h3>
+                    <h3 class="page-title">@lang('lang.candidate_CVs')</h3>
                     <ul class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="{{url('/dashboad/employee')}}">Dashboard</a></li>
-                        <li class="breadcrumb-item active">Candidate CVs</li>
+                        <li class="breadcrumb-item"><a href="{{url('/dashboad/employee')}}">@lang('lang.dashboard')</a></li>
+                        <li class="breadcrumb-item active">@lang('lang.candidate_CVs')</li>
                     </ul>
                 </div>
                 <div class="col-auto float-end ms-auto">
-                    <a href="#" class="btn add-btn" id="add_new" data-bs-toggle="modal" data-bs-target="#add_user"><i class="fa fa-plus"></i> Add New</a>
+                    <a href="#" class="btn add-btn" id="add_new" data-bs-toggle="modal" data-bs-target="#add_user"><i class="fa fa-plus"></i> @lang('lang.add_new')</a>
                 </div>
             </div>
         </div>
@@ -29,27 +29,27 @@
                         <ul class="nav nav-tabs nav-tabs-bottom" role="tablist">
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link active" data-bs-toggle="tab" href="#tab_candidate_resume" aria-selected="true"
-                                    role="tab">CVs({{count($data)}})</a>
+                                    role="tab">@lang('lang.cvs')({{count($data)}})</a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" data-bs-toggle="tab" id="btn_tab_short_list" href="#tab_short_list" aria-selected="false" role="tab" data-tab-id="2"
-                                    tabindex="-1">Shortlisted({{$dataShortList}})</a>
+                                    tabindex="-1">@lang('lang.shortlisted')({{$dataShortList}})</a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" data-bs-toggle="tab" id="btn_not_tab_short_list" href="#tab_not_short_list" aria-selected="false" role="tab" data-tab-id="2"
-                                    tabindex="-1">Non-Shortlisted({{$dataNon}})</a>
+                                    tabindex="-1">@lang('lang.non-shortlisted')({{$dataNon}})</a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" data-bs-toggle="tab" id="btn_tab_interviewed_result" href="#tab_interviewed_result" aria-selected="false" data-tab-id="3"
-                                    role="tab" tabindex="-1">Inter-Result({{$dataResult}})</a>
+                                    role="tab" tabindex="-1">@lang('lang.inter-result')({{$dataResult}})</a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" data-bs-toggle="tab" id="btn_tab_signed_contract" href="#tab_signed_contract" aria-selected="false" data-tab-id="4"
-                                    role="tab" tabindex="-1">Processing Contract({{$dataProcessing}})</a>
+                                    role="tab" tabindex="-1">@lang('lang.processing_contract')({{$dataProcessing}})</a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" data-bs-toggle="tab" id="btn_tab_signed_contract_cancel" href="#tab_signed_contract_cancel" aria-selected="false" data-tab-id="5"
-                                    role="tab" tabindex="-1">Canceled Contract({{$dataCancel}})</a>
+                                    role="tab" tabindex="-1">@lang('lang.canceled_contract')({{$dataCancel}})</a>
                             </li>
                         </ul>
                     </div>
@@ -67,8 +67,8 @@
                 <div class="modal-content">
                     <div class="modal-body">
                         <div class="form-header">
-                            <h3>Delete</h3>
-                            <p>Are you sure want to delete?</p>
+                            <h3>@lang('lang.delete')</h3>
+                            <p>@lang('lang.are_you_sure_want_to_delete')?</p>
                         </div>
                         <div class="modal-btn delete-action">
                             <form action="{{url('recruitment/candidate-resume/delete')}}" method="POST">
@@ -76,8 +76,8 @@
                                 <input type="hidden" name="id" class="e_id" value="">
                                 <div class="row">
                                     <div class="submit-section" style="text-align: center">
-                                        <button type="submit" class="btn btn-primary submit-btn me-2">Delete</button>
-                                        <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-danger">Cancel</a>
+                                        <button type="submit" class="btn btn-primary submit-btn me-2">@lang('lang.delete')</button>
+                                        <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-danger">@lang('lang.cancel')</a>
                                     </div>
                                 </div>
                             </form>
@@ -113,10 +113,10 @@
         $(document).on('click','.btn_approve', function(){
             let id = $(this).data("id");
             let id_card = $(this).attr("data-id-card");
-            let description = "Are you sure want to Approve?";
+            let description = "@lang('lang.are_you_sure_want_to_approve')?";
             let text_label = "";
             let button_ok = {
-                        text: 'OK',
+                        text: '@lang("lang.ok")',
                         btnClass: 'btn-blue',
                         action: function () {
                             var id = this.$content.find('.id').val();
@@ -126,7 +126,7 @@
                             }).then(function(response) {
                                 new Noty({
                                     title: "",
-                                    text: "The process has been successfully.",
+                                    text: "@lang('lang.the_process_has_been_successfully').",
                                     type: "success",
                                     timeout: 3000,
                                     icon: true
@@ -135,7 +135,7 @@
                             }).catch(function(error) {
                                 new Noty({
                                     title: "",
-                                    text: "Something went wrong please try again later.",
+                                    text: "@lang('lang.something_went_wrong_please_try_again_later').",
                                     type: "error",
                                     icon: true
                                 }).show();
@@ -143,13 +143,13 @@
                         }
                     };
             if (id_card == "false") {
-                text_label = '<label>You Cannot Aprove.</label>';
-                description = "Please enter all requried information.";
+                text_label = '<label>@lang("lang.you_cannot_aprove").</label>';
+                description = "@lang('lang.please_enter_all_requried_information').";
                 button_ok = "";
             }
             $.confirm({
                 icon: 'fa fa-warning',
-                title: 'Approve',
+                title: '@lang("lang.approve")',
                 titleClass: 'text-center',
                 type: 'blue',
                 content: '' +
@@ -166,7 +166,7 @@
                 buttons: {
                     button_ok,
                     cancel: {
-                        text: 'Cancel',
+                        text: '@lang("lang.cancel")',
                         btnClass: 'btn-red btn-sm',
                     },
                 },
@@ -182,7 +182,7 @@
         $(document).on('click','.btn_cancel', function(){
             let id = $(this).data("id");
             $.confirm({
-                title: 'Cancel',
+                title: '@lang("lang.cancel")',
                 icon: 'fa fa-warning',
                 titleClass: 'text-center',
                 type: 'red',
@@ -190,7 +190,7 @@
                 content: '' +
                 '<form action="" class="formName">' +
                     '<div class="form-group" style="text-align: center">' +
-                        '<label>Are you sure want to Cancel?</label>' +
+                        '<label>@lang("lang.are_you_sure_want_to_cancel")?</label>' +
                         '<input type="hidden" class="form-control id" id="" name="" value="'+id+'">'+
                     '</div>' +
                 '</form>',
@@ -199,7 +199,7 @@
                 },
                 buttons: {
                     formSubmit: {
-                        text: 'OK',
+                        text: '@lang("lang.ok")',
                         btnClass: 'btn-blue',
                         action: function () {
                             var id = this.$content.find('.id').val();
@@ -209,7 +209,7 @@
                             }).then(function(response) {
                                 new Noty({
                                     title: "",
-                                    text: "The process has been successfully.",
+                                    text: "@lang('lang.the_process_has_been_successfully').",
                                     type: "success",
                                     timeout: 3000,
                                     icon: true
@@ -218,7 +218,7 @@
                             }).catch(function(error) {
                                 new Noty({
                                     title: "",
-                                    text: "Something went wrong please try again later.",
+                                    text: "Som@lang('lang.something_went_wrong_please_try_again_later').",
                                     type: "error",
                                     icon: true
                                 }).show();
@@ -226,7 +226,7 @@
                         }
                     },
                     cancel: {
-                        text: 'Close',
+                        text: '@lang("lang.cancel")',
                         btnClass: 'btn-red btn-sm',
                     },
                 },
@@ -307,24 +307,24 @@
             let status = $(this).data('id');
             if (status == 1) {
                 $.confirm({
-                    title: 'Candidate Resume Status!',
+                    title: '@lang("lang.candidate_resume_status")!',
                     contentClass: 'text-center',
                     // backgroundDismiss: 'cancel',
                     content: ''+
                         '<form method="post" class="formName">'+
                             '<div class="form-group">'+
                                 '<div class="form-group">'+
-                                    '<label><a href="#">Received CV</a></label>'+
+                                    '<label><a href="#">@lang("lang.received_cv")</a></label>'+
                                 '</div>'+
                                 '<div class="form-group">'+
-                                    '<p>Do you really want to change Status?</p>'+
+                                    '<p>@lang("lang.do_you_really_want_to_change_status")?</p>'+
                                     '<input type="hidden" class="form-control status" id="" name="" value="'+status+'">'+
                                     '<input type="hidden" class="form-control id" id="" name="" value="'+id+'">'+
                                 '</div>'+
                         '</form>',
                     buttons: {
                         confirm: {
-                            text: 'Ok',
+                            text: '@lang("lang.ok")',
                             btnClass: 'btn-blue',
                             action: function() {
                                 var status = this.$content.find('.status').val();
@@ -336,7 +336,7 @@
                                     if (response.data.message == 'successfull') {
                                         new Noty({
                                             title: "",
-                                            text: "The process has been successfully.",
+                                            text: "@lang('lang.the_process_has_been_successfully').",
                                             type: "success",
                                             timeout: 3000,
                                             icon: true
@@ -347,7 +347,7 @@
                                 }).catch(function(error) {
                                     new Noty({
                                         title: "",
-                                        text: "Something went wrong please try again later.",
+                                        text: "@lang('lang.something_went_wrong_please_try_again_later').",
                                         type: "error",
                                         icon: true
                                     }).show();
@@ -355,50 +355,50 @@
                             }
                         },
                         cancel: {
-                            text: 'Cancel',
+                            text: '@lang("lang.cancel")',
                             btnClass: 'btn-red btn-sm',
                         },
                     }
                 });
             }else if(status==2){
                 $.confirm({
-                    title: 'Candidate Resume Status!',
+                    title: '@lang("lang.candidate_resume_status")!',
                     contentClass: 'text-center',
                     // backgroundDismiss: 'cancel',
                     content: ''+
                         '<form class="needs-validation" novalidate>'+
                             '<div class="form-group">'+
-                                '<label><a href="#">Shortlisted</a></label>'+
+                                '<label><a href="#">@lang("lang.shortlisted")</a></label>'+
                             '</div>'+
                             '<input type="hidden" class="form-control status" id="" name="" value="'+status+'">'+
                             '<input type="hidden" class="form-control id" id="" name="" value="'+id+'">'+
                             '<div class="form-group">'+
-                                '<label>Shortlist</label>'+
+                                '<label>@lang("lang.shortlist")</label>'+
                                 '<select class="form-control form-select showtList" name="short_list">'+
-                                    '<option selected value="1"> Yes</option>'+
-                                    '<option value="2"> No</option>'+
+                                    '<option selected value="1"> @lang("lang.yes")</option>'+
+                                    '<option value="2"> @lang("lang.no")</option>'+
                                 '</select>'+
                             '</div>'+
                             '<div class="form-group interviewed_date">'+
-                                '<label>Interviewed Date <span class="text-danger">*</span></label>'+
+                                '<label>@lang("lang.interviewed_date") <span class="text-danger">*</span></label>'+
                                 '<input type="datetime-local" class="form-control interviewed_dates">'+
                             '</div>'+
                             '<div class="form-group interview_channel">'+
-                                '<label>Interviewed Channel</label>'+
+                                '<label>@lang("lang.interviewed_channel")</label>'+
                                 '<select class="form-control form-select interviewed_channel">'+
                                     '<option selected value="Online"> Online</option>'+
-                                    '<option value="Face to face"> Face to face</option>'+
+                                    '<option value="Face to face"> @lang("lang.face_to_face")</option>'+
                                 '</select>'+
                             '</div>'+
                             '<div class="form-group committee_interviewed">'+
-                                '<label>Interview Committee <span class="text-danger">*</span></label>'+
+                                '<label>@lang("lang.interview_committee") <span class="text-danger">*</span></label>'+
                                 '<select class="form-control hr-select2-option-emp form-select committee_interview" id="committeeinterview" name="states[]" multiple >'+
                                    
                                 '</select>'+
                                 // '<input type="text" id="committeeinterview" class="form-control committee_interview">'+
                             '</div>'+
                             '<div class="form-group">'+
-                                '<label>Remark</label>'+
+                                '<label>@lang("lang.remark")</label>'+
                                 '<textarea type="text" rows="3" class="form-control remark"></textarea>'+
                             '</div>'+
                         '</form>',
@@ -418,7 +418,7 @@
                         },
                     buttons: {
                         confirm: {
-                            text: 'Submit',
+                            text: '@lang("lang.submit")',
                             btnClass: 'btn-blue',
                             action: function() {
                                 var c_status = this.$content.find('.status').val();
@@ -459,7 +459,7 @@
                                     }).then(function(response) {
                                     new Noty({
                                         title: "",
-                                        text: "The process has been successfully.",
+                                        text: "@lang('lang.the_process_has_been_successfully').",
                                         type: "success",
                                         timeout: 3000,
                                         icon: true
@@ -469,7 +469,7 @@
                                 }).catch(function(error) {
                                     new Noty({
                                         title: "",
-                                        text: "Something went wrong please try again later.",
+                                        text: "@lang('lang.something_went_wrong_please_try_again_later').",
                                         type: "error",
                                         icon: true
                                     }).show();
@@ -477,7 +477,7 @@
                             }
                         },
                         cancel: {
-                            text: 'Cancel',
+                            text: '@lang("lang.cancel")',
                             btnClass: 'btn-red btn-sm',
                         },
                     }
@@ -508,48 +508,48 @@
                 let select_joined_interview  = ""; 
                 if (data_status == 3 ) {
                     select_joined_interview = '<select class="form-control form-select joined_interview" >'+
-                        '<option selected value="1"> Yes</option>'+
+                        '<option selected value="1"> @lang("lang.yes")</option>'+
                     '</select>';
                 }else{
                     select_joined_interview = '<select class="form-control form-select joined_interview" >'+
-                        '<option selected value="1"> Yes</option>'+
-                        '<option value="2"> No</option>'+
-                        '<option value="3"> Delay</option>'+
+                        '<option selected value="1"> @lang("lang.yes")</option>'+
+                        '<option value="2"> @lang("lang.no")</option>'+
+                        '<option value="3"> @lang("lang.delay")</option>'+
                     '</select>';
                 }
                 $.confirm({
-                    title: 'Candidate Resume Status!',
+                    title: '@lang("lang.candidate_resume_status")!',
                     contentClass: 'text-center',
                     // backgroundDismiss: 'cancel',
                     content: ''+
                         '<form class="needs-validation" novalidate>'+
                             '<div class="form-group">'+
-                                '<label><a href="#">Interviewed</a></label>'+
+                                '<label><a href="#">@lang("lang.interviewed")</a></label>'+
                             '</div>'+
                             '<input type="hidden" class="form-control status" id="" name="" value="'+status+'">'+
                             '<input type="hidden" class="form-control id" id="" name="" value="'+id+'">'+
                             '<div class="form-group">'+
-                                '<label>Joined Interview</label>'+
+                                '<label>@lang("lang.joined_interview")</label>'+
                                 select_joined_interview+
                             '</div>'+
                             '<div class="form-group interviewed_date" style="display: none">'+
-                                '<label>Interviewed Date <span class="text-danger">*</span></label>'+
+                                '<label>@lang("lang.interviewed_date") <span class="text-danger">*</span></label>'+
                                 '<input type="datetime-local" class="form-control interviewed_dates">'+
                             '</div>'+
                             '<div class="form-group interviewed_results">'+
-                                '<label>Interviewed Result</label>'+
+                                '<label>@lang("lang.interviewed_result")</label>'+
                                 '<select class="form-control form-select interviewed_result" >'+
-                                    '<option selected value="1"> Passed</option>'+
-                                    '<option value="2"> Failed</option>'+
-                                    '<option value="3"> Waiting</option>'+
-                                    '<option value="4"> Pending</option>'+
-                                    '<option value="5"> High Exected Salary</option>'+
-                                    '<option value="6"> Rejected Offered</option>'+
-                                    '<option value="7"> Black list</option>'+
+                                    '<option selected value="1"> @lang("lang.passed")</option>'+
+                                    '<option value="2">@lang("lang.failed")</option>'+
+                                    '<option value="3">@lang("lang.waiting")</option>'+
+                                    '<option value="4">@lang("lang.pending")</option>'+
+                                    '<option value="5">@lang("lang.high_exected_salary")</option>'+
+                                    '<option value="6">@lang("lang.rejected_offered")</option>'+
+                                    '<option value="7">@lang("lang.black_list")</option>'+
                                 '</select>'+
                             '</div>'+
                             '<div class="form-group">'+
-                                '<label>Remark</label>'+
+                                '<label>@lang("lang.remark")</label>'+
                                 '<textarea type="text" rows="3" class="form-control remark"></textarea>'+
                             '</div>'+
                         '</form>',
@@ -573,7 +573,7 @@
                         },
                     buttons: {
                         confirm: {
-                            text: 'Submit',
+                            text: '@lang("lang.submit")',
                             btnClass: 'btn-blue',
                             action: function() {
                                 var status = this.$content.find('.status').val();
@@ -604,7 +604,7 @@
                                     }).then(function(response) {
                                     new Noty({
                                         title: "",
-                                        text: "The process has been successfully.",
+                                        text: "@lang('lang.the_process_has_been_successfully').",
                                         type: "success",
                                         timeout: 3000,
                                         icon: true
@@ -614,7 +614,7 @@
                                 }).catch(function(error) {
                                     new Noty({
                                         title: "",
-                                        text: "Something went wrong please try again later.",
+                                        text: "@lang('lang.something_went_wrong_please_try_again_later').",
                                         type: "error",
                                         icon: true
                                     }).show();
@@ -622,35 +622,35 @@
                             }
                         },
                         cancel: {
-                            text: 'Cancel',
+                            text: '@lang("lang.cancel")',
                             btnClass: 'btn-red btn-sm',
                         },
                     }
                 }); 
             }else if(status == 4) {
                 $.confirm({
-                    title: 'Candidate Resume Status!',
+                    title: '@lang("lang.candidate_resume_status")!',
                     contentClass: 'text-center',
                     // backgroundDismiss: 'cancel',
                     content: ''+
                         '<form class="needs-validation" novalidate>'+
                             '<div class="form-group">'+
-                                '<label><a href="#">Signed Contract</a></label>'+
+                                '<label><a href="#">@lang("lang.signed_contract")</a></label>'+
                             '</div>'+
                             '<input type="hidden" class="form-control status" id="" name="" value="'+status+'">'+
                             '<input type="hidden" class="form-control id" id="" name="" value="'+id+'">'+
                             '<div class="form-group">'+
-                                '<label>Signed Contract Date <span class="text-danger">*</span></label>'+
+                                '<label>@lang("lang.signed_contract_date") <span class="text-danger">*</span></label>'+
                                 '<input type="date" class="form-control contract_date" value="">'+
                             '</div>'+
                             '<div class="form-group">'+
-                                '<label>Join Date <span class="text-danger">*</span></label>'+
+                                '<label>@lang("join_date") <span class="text-danger">*</span></label>'+
                                 '<input type="date" class="form-control join_date" value="">'+
                             '</div>'+
                         '</form>',
                     buttons: {
                         confirm: {
-                            text: 'Submit',
+                            text: '@lang("lang.submit")',
                             btnClass: 'btn-blue',
                             action: function() {
                                 var status = this.$content.find('.status').val();
@@ -676,7 +676,7 @@
                                     }).then(function(response) {
                                     new Noty({
                                         title: "",
-                                        text: "The process has been successfully.",
+                                        text: "@lang('lang.the_process_has_been_successfully').",
                                         type: "success",
                                         timeout: 3000,
                                         icon: true
@@ -686,7 +686,7 @@
                                 }).catch(function(error) {
                                     new Noty({
                                         title: "",
-                                        text: "Something went wrong please try again later.",
+                                        text: "@lang('lang.something_went_wrong_please_try_again_later').",
                                         type: "error",
                                         icon: true
                                     }).show();
@@ -694,7 +694,7 @@
                             },
                         },
                         cancel: {
-                            text: 'Cancel',
+                            text: '@lang("lang.cancel")',
                             btnClass: 'btn-red btn-sm',
                         },
                     },
@@ -736,19 +736,19 @@
                             let text_status = "";
                             let tag_i = "";
                             if (staff.status =='1') {
-                                text_status = "Received CV";
+                                text_status = "@lang('lang.received_cv')";
                                 tag_i = '<i class="fa fa-dot-circle-o text-purple"></i>'
                             }else if (staff.status =='2') {
-                                text_status = "Shortlisted";
+                                text_status = "@lang('lang.shortlisted')";
                                 tag_i = '<i class="fa fa-dot-circle-o text-warning"></i>'
                             }else if(staff.status =='3') {
-                                text_status = "Interviewed";
+                                text_status = "@lang('lang.interviewed')";
                                 tag_i = '<i class="fa fa-dot-circle-o text-info"></i>'
                             };
                             let cv =  "";
                             if (staff.cv) {
                                 cv = '<small class="block text-ellipsis">'+
-                                        '<a href="{{asset("/uploads/images")}}/'+(staff.cv)+'" target="_blank" class="subdrop"><i class="la la-file-pdf"></i> <span>Preview CV</span></a>'+
+                                        '<a href="{{asset("/uploads/images")}}/'+(staff.cv)+'" target="_blank" class="subdrop"><i class="la la-file-pdf"></i> <span>@lang("lang.preview_cv")</span></a>'+
                                     '</small>'
                             }
                             if (staff.short_list == 1) {
@@ -773,7 +773,7 @@
                                                 //     '<i class="fa fa-dot-circle-o text-warning"></i> Shortlisted'+
                                                 // '</a>'+
                                                 '<a class="dropdown-item" data-emp-id="'+(staff.id)+'"  data-id="3" href="#">'+
-                                                    '<i class="fa fa-dot-circle-o text-info"></i> Interviewed'+
+                                                    '<i class="fa fa-dot-circle-o text-info"></i> @lang("lang.interviewed")'+
                                                 '</a>'+
                                             '</div>'+
                                         '</div>'+
@@ -801,7 +801,7 @@
                                             '</a>'+
                                             '<div class="dropdown-menu dropdown-menu-right" id="btn-status">'+
                                                 '<a class="dropdown-item" data-emp-id="'+(staff.id)+'"  data-id="2" href="#">'+
-                                                    '<i class="fa fa-dot-circle-o text-warning"></i> Shortlisted'+
+                                                    '<i class="fa fa-dot-circle-o text-warning"></i> @lang("lang.shortlisted")'+
                                                 '</a>'+
                                             '</div>'+
                                         '</div>'+
@@ -816,33 +816,33 @@
                             let tag_i = "";
                             let interview_result = "";
                             if (staff_result.interviewed_result == 1) {
-                                interview_result = "Passed";
+                                interview_result = "@lang('lang.passed')";
                             }else
                             if (staff_result.interviewed_result == "2") {
-                                interview_result = "Failed";
+                                interview_result = "@lang('lang.failed')";
                             }else
                             if (staff_result.interviewed_result == "3") {
-                                interview_result = "Waiting";
+                                interview_result = "@lang('lang.waiting')";
                             }else
                             if (staff_result.interviewed_result == "4") {
-                                interview_result = "Pending";
+                                interview_result = "@lang('lang.pending')";
                             }else
                             if (staff_result.interviewed_result == "5") {
-                                interview_result = "High Exected Salary";
+                                interview_result = "@lang('lang.high_exected_salary')";
                             }else
                             if (staff_result.interviewed_result == "6") {
-                                interview_result = "Rejected Offered";
+                                interview_result = "@lang('lang.rejected_offered')";
                             }else if(staff_result.interviewed_result == "7"){
-                                interview_result = "Black list";
+                                interview_result = "@lang('lang.black_list')";
                             }else{
                                 interview_result = "No";
                             };
 
                             if(staff_result.status =='3') {
-                                text_status = " Interviewed";
+                                text_status = " @lang('lang.interviewed')";
                                 tag_i = '<i class="fa fa-dot-circle-o text-info"></i>'
                             }else if (staff_result.status =='4') {
-                                text_status = "Signed Contract";
+                                text_status = "@lang('lang.signed_contract')";
                                 tag_i = '<i class="fa fa-dot-circle-o text-success"></i>'
                             };
                             let status_show = "";
@@ -850,7 +850,7 @@
                                 let complete = '';
                                 if (staff_result.interviewed_result == 1) {
                                     complete = '<a class="dropdown-item" data-emp-id="'+(staff_result.id)+'" data-id="4" href="#">'+
-                                                '<i class="fa fa-dot-circle-o text-success"></i> Complete'+
+                                                '<i class="fa fa-dot-circle-o text-success"></i> @lang("lang.complete")'+
                                             '</a>';
                                 }
                                 status_show = '<div class="dropdown action-label">'+
@@ -859,7 +859,7 @@
                                                 '</a>'+
                                                 '<div class="dropdown-menu dropdown-menu-right" id="btn-status">'+
                                                     '<a class="dropdown-item" data-emp-id="'+(staff_result.id)+'"  data-id="3" data-status="'+(staff_result.status)+'" href="#">'+
-                                                        '<i class="fa fa-dot-circle-o text-info"></i> Interviewed'+
+                                                        '<i class="fa fa-dot-circle-o text-info"></i> @lang("lang.interviewed")'+
                                                     '</a>'+
                                                    (complete)+
                                                 '</div>'+
@@ -885,7 +885,7 @@
                         datas.map((staff_result) => {
                             let interview_result = "";
                             if (staff_result.interviewed_result == 1) {
-                                interview_result = "Passed";
+                                interview_result = "@lang('lang.passed')";
                             }
                             let join_date = staff_result.join_date ? moment(staff_result.join_date).format('MMM-D-YYYY') : "";
                             let contract_date = staff_result.contract_date ? moment(staff_result.contract_date).format('MMM-D-YYYY') : "";
@@ -930,14 +930,14 @@
                                             '</a>'+
                                             '<div class="dropdown-menu dropdown-menu-right">'+
                                                 '<a class="dropdown-item btn_print_signed_contract" href="#" data-print-status="4" data-id="'+(staff_result.id)+'">'+
-                                                    '<i class="fa fa-print fa-lg m-r-5"></i> Print'+
+                                                    '<i class="fa fa-print fa-lg m-r-5"></i> @lang("lang.print")'+
                                                 '</a>'+
                                                 '<a class="btn btn-sm dropdown-item btn_approve" href="#" data-id-card="'+(dataAprove)+'" data-id="'+(staff_result.id)+'">'+
                                                     '<i class="fa fa-dot-circle-o text-success"></i>'+
-                                                    '<span> Approve</span>'+
+                                                    '<span> @lang("lang.approve")</span>'+
                                                 '</a>'+
                                                 '<a class="dropdown-item btn_cancel text-danger" href="#" data-id="'+(staff_result.id)+'">'+
-                                                    '  <span aria-hidden="true">&times;</span> Cancel'+
+                                                    '  <span aria-hidden="true">&times;</span> @lang("lang.cancel")'+
                                                 '</a>'+
                                             '</div>'+
                                         '</div>'+
@@ -947,10 +947,10 @@
                         });
                     }
                 }else {
-                    var tr = '<tr><td colspan=13 align="center">No record to display</td></tr>';
-                    var tr_not_list = '<tr><td colspan=9 align="center">No record to display</td></tr>';
-                    var tr_re = '<tr><td colspan=10 align="center">No record to display</td></tr>';
-                    var tr_ct = '<tr><td colspan=11 align="center">No record to display</td></tr>';
+                    var tr = '<tr><td colspan=13 align="center">@lang("lang.no_record_to_display")</td></tr>';
+                    var tr_not_list = '<tr><td colspan=9 align="center">@lang("lang.no_record_to_display")</td></tr>';
+                    var tr_re = '<tr><td colspan=10 align="center">@lang("lang.no_record_to_display")</td></tr>';
+                    var tr_ct = '<tr><td colspan=11 align="center">@lang("lang.no_record_to_display")</td></tr>';
                 }
                 $(".tbl-short-list tbody").html(tr);
                 $(".tbl-not-short-list tbody").html(tr_not_list);

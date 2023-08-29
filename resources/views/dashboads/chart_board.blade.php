@@ -22,13 +22,13 @@
                     <div class="row">
                         <div class="col-md-6 col-6 text-center">
                             <div class="stats-box mb-4">
-                                <p>Total Current Active Staff</p>
+                                <p>@lang("lang.total_current_active_staff")</p>
                                 <h3 id="total-staff-working"></h3>
                             </div>
                         </div>
                         <div class="col-md-6 col-6 text-center">
                             <div class="stats-box mb-4">
-                                <p>Total Inactive Staff</p>
+                                <p>@lang("lang.total_inactive_staff")</p>
                                 <h3 id="total-resign-staff-resume"></h3>
                             </div>
                         </div>

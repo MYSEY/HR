@@ -9,10 +9,10 @@
         <div class="page-header">
             <div class="row align-items-center">
                 <div class="col">
-                    <h3 class="page-title">User Birthday</h3>
+                    <h3 class="page-title">@lang('lang.employee_birthday')</h3>
                     <ul class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="{{ url('/dashboad/employee') }}">Dashboard</a></li>
-                        <li class="breadcrumb-item active">User Birthday</li>
+                        <li class="breadcrumb-item"><a href="{{ url('/dashboad/employee') }}">@lang('lang.dashboard')</a></li>
+                        <li class="breadcrumb-item active">@lang('lang.employee_birthday')</li>
                     </ul>
                 </div>
             </div>
@@ -29,14 +29,14 @@
                                     <thead>
                                         <tr>
                                             <th  tabindex="0" aria-controls="DataTables_Table_0" aria-sort="ascending" aria-label="#: activate to sort column ascending" style="width: 265.913px;">#</th>
-                                            <th  tabindex="0" aria-controls="DataTables_Table_0" aria-sort="ascending" aria-label="Profle: activate to sort column ascending" style="width: 265.913px;">Profle</th>
-                                            <th  tabindex="0" aria-controls="DataTables_Table_0" aria-sort="ascending"aria-label="Employee ID: activate to sort column ascending" style="width: 94.0625px;">Employee ID</th>
-                                            <th  tabindex="0" aria-controls="DataTables_Table_0" aria-sort="ascending" aria-label="Name: activate to sort column ascending" style="width: 265.913px;">Name(KH)</th>
-                                            <th  tabindex="0" aria-controls="DataTables_Table_0" aria-sort="ascending" aria-label="Name: activate to sort column ascending" style="width: 265.913px;">Name(EN)</th>
-                                            <th  tabindex="0" aria-controls="DataTables_Table_0" aria-sort="ascending" aria-label="Position: activate to sort column ascending" style="width: 218.762px;">Position</th>
-                                            <th  tabindex="0" aria-controls="DataTables_Table_0" aria-sort="ascending" aria-label="Department: activate to sort column ascending" style="width: 218.762px;">Department</th>
-                                            <th  tabindex="0" aria-controls="DataTables_Table_0" aria-sort="ascending" aria-label="Branch: activate to sort column ascending" style="width: 218.762px;">Branch</th>
-                                            <th  tabindex="0" aria-controls="DataTables_Table_0" aria-sort="ascending" aria-label="DOB: activate to sort column ascending" style="width: 218.762px;">DOB</th>
+                                            <th  tabindex="0" aria-controls="DataTables_Table_0" aria-sort="ascending" aria-label="Profle: activate to sort column ascending" style="width: 265.913px;">@lang('lang.profile')</th>
+                                            <th  tabindex="0" aria-controls="DataTables_Table_0" aria-sort="ascending"aria-label="Employee ID: activate to sort column ascending" style="width: 94.0625px;">@lang('lang.employee_id')</th>
+                                            <th  tabindex="0" aria-controls="DataTables_Table_0" aria-sort="ascending" aria-label="Name: activate to sort column ascending" style="width: 265.913px;">@lang('lang.name')(@lang('lang.kh'))</th>
+                                            <th  tabindex="0" aria-controls="DataTables_Table_0" aria-sort="ascending" aria-label="Name: activate to sort column ascending" style="width: 265.913px;">@lang('lang.name')(@lang('lang.en'))</th>
+                                            <th  tabindex="0" aria-controls="DataTables_Table_0" aria-sort="ascending" aria-label="Position: activate to sort column ascending" style="width: 218.762px;">@lang('lang.position')</th>
+                                            <th  tabindex="0" aria-controls="DataTables_Table_0" aria-sort="ascending" aria-label="Department: activate to sort column ascending" style="width: 218.762px;">@lang('lang.department')</th>
+                                            <th  tabindex="0" aria-controls="DataTables_Table_0" aria-sort="ascending" aria-label="Branch: activate to sort column ascending" style="width: 218.762px;">@lang('lang.branch')</th>
+                                            <th  tabindex="0" aria-controls="DataTables_Table_0" aria-sort="ascending" aria-label="DOB: activate to sort column ascending" style="width: 218.762px;">@lang('lang.date_of_birth')</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -66,10 +66,6 @@
                                                     <td>{{$item->DOB ?? ''}}</td>
                                                 </tr>
                                             @endforeach
-                                        @else
-                                            <tr>
-                                                <td colspan="9" style="text-align: center">No record to display</td>
-                                            </tr>
                                         @endif
                                     </tbody>
                                 </table>

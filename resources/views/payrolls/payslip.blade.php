@@ -27,10 +27,10 @@
         <div class="page-header">
             <div class="row align-items-center">
                 <div class="col">
-                    <h3 class="page-title">Payslip</h3>
+                    <h3 class="page-title">@lang('lang.payslip')</h3>
                     <ul class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
-                        <li class="breadcrumb-item active">Payslip / <a href="{{url('payroll')}}">back to list</a></li>
+                        <li class="breadcrumb-item"><a href="#">@lang('lang.dashboard')</a></li>
+                        <li class="breadcrumb-item active">@lang('lang.payslip') / <a href="{{url('payroll')}}">@lang('lang.back_to_list')</a></li>
                     </ul>
                 </div>
                 <div class="col-auto float-end ms-auto">
@@ -39,7 +39,7 @@
                     <div class="btn-group btn-group-sm">
                         {{-- <button class="btn btn-white">CSV</button>
                         <button class="btn btn-white">PDF</button> --}}
-                        <button class="btn btn-white" target="_blank" id="btn_print_payroll"><i class="fa fa-print fa-lg"></i> Print</button>
+                        <button class="btn btn-white" target="_blank" id="btn_print_payroll"><i class="fa fa-print fa-lg"></i> @lang('lang.print')</button>
                     </div>
                 </div>
             </div>
@@ -53,29 +53,29 @@
                             <div class="col-sm-4 m-b-20">
                                 <img src="{{ asset('/admin/img/logo/commalogo1.png') }}" class="inv-logo" alt="">
                                 <ul class="list-unstyled mb-0">
-                                    <li>Camma Microfinance Limited</li>
+                                    <li>@lang('lang.camma_microfinance_limited')</li>
                                     <li>{{$payslip->users == null ? "" : $payslip->users->BranchAddress}}</li>
                                 </ul>
                             </div>
                             <div class="col-md-4">
-                                <h4 class="payslip-title">EMPLOYEE PAYSLIP</h4>
-                                <h5 class="payslip-title" style="color: red">Monthly Payroll : {{Carbon\Carbon::createFromDate($payslip->payment_date)->format('M Y')}}</h5>
+                                <h4 class="payslip-title">@lang('lang.employee_payslip')</h4>
+                                <h5 class="payslip-title" style="color: red">@lang('lang.monthly_payroll') : {{Carbon\Carbon::createFromDate($payslip->payment_date)->format('M Y')}}</h5>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-lg-6 m-b-20">
                                 <ul class="list-unstyled">
-                                    <li><strong>Employee ID :</strong> {{$payslip->users == null ? "" : $payslip->users->number_employee}}</li>
-                                    <li><strong>Position :</strong> {{$payslip->users == null ? "" : $payslip->users->EmployeePosition}}</li>
-                                    <li><strong>Joining Date :</strong> {{$payslip->users == null ? "" : $payslip->users->joinOfDate}}</li>
-                                    <li><strong>Location :</strong> {{$payslip->users == null ? "" : $payslip->users->EmployeeBranch}}</li>
+                                    <li><strong>@lang('lang.employee_id') :</strong> {{$payslip->users == null ? "" : $payslip->users->number_employee}}</li>
+                                    <li><strong>@lang('lang.position') :</strong> {{$payslip->users == null ? "" : $payslip->users->EmployeePosition}}</li>
+                                    <li><strong>@lang('lang.joining_date') :</strong> {{$payslip->users == null ? "" : $payslip->users->joinOfDate}}</li>
+                                    <li><strong>@lang('lang.location') :</strong> {{$payslip->users == null ? "" : $payslip->users->EmployeeBranch}}</li>
                                 </ul>
                             </div>
                             <div class="col-lg-6 m-b-20">
                                 <ul class="list-unstyled">
-                                    <li><strong>Employee Name :</strong> {{$payslip->users == null ? "" : $payslip->users->employee_name_en}}</li>
-                                    <li><strong>Departement :</strong> {{$payslip->users == null ? "" : $payslip->users->EmployeeDepartment}}</li>
-                                    <li><strong>Basic Rate :</strong> {{$payslip->total_rate}}%</li>
+                                    <li><strong>@lang('lang.employee_name') :</strong> {{$payslip->users == null ? "" : $payslip->users->employee_name_en}}</li>
+                                    <li><strong>@lang('lang.department') :</strong> {{$payslip->users == null ? "" : $payslip->users->EmployeeDepartment}}</li>
+                                    <li><strong>@lang('lang.basic_rate') :</strong> {{$payslip->total_rate}}%</li>
                                 </ul>
                             </div>
                         </div>
@@ -85,65 +85,65 @@
                                     <table class="table table-bordered">
                                         <thead>
                                             <tr class="tr-bckground-ch">
-                                                <th>Earning </th>
-                                                <th style="text-align: center;">Amount</th>
-                                                <th>Deduction </th>
-                                                <th style="text-align: center;">Amount</th>
+                                                <th>@lang('lang.earning') </th>
+                                                <th style="text-align: center;">@lang('lang.amount')</th>
+                                                <th>@lang('lang.deduction') </th>
+                                                <th style="text-align: center;">@lang('lang.amount')</th>
                                             </tr>
                                         </thead>
 
                                         <tbody>
                                             <tr>
-                                                <td>Gross Salary</td>
+                                                <td>@lang('lang.gross_salary')</td>
                                                 <td>
                                                     <span class="float-end">${{$payslip->total_gross_salary}}</span>
                                                 </td>
-                                                <td>Personal Tax</td>
+                                                <td>@lang('lang.personal_tax')</td>
                                                 <td>
                                                     <span class="float-end">${{$payslip->total_salary_tax_usd}}</span>
                                                 </td>
                                             </tr>
                                             
                                             <tr>
-                                                <td>Increasment</td>
+                                                <td>@lang('lang.increasment')</td>
                                                 <td>
                                                     <span class="float-end">${{$payslip->users->salary_increas == null ? "0.00" : $payslip->users->salary_increas}}</span>
                                                 </td>
-                                                <td>Pension Fund</td>
+                                                <td>@lang('lang.pension_fund')</td>
                                                 <td>
                                                     <span class="float-end">${{$payslip->total_pension_fund}}</span>
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td>Incentive</td>
+                                                <td>@lang('lang.incentive')</td>
                                                 <td>
                                                     <span class="float-end">$0.00</span>
                                                 </td>
-                                                <td>Staff loan</td>
+                                                <td>@lang('lang.staff_loan')</td>
                                                 <td>
                                                     <span class="float-end">$0.00</span>
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td>Bonus(Annual/PB/KNY)</td>
+                                                <td>@lang('lang.bonus')(@lang('lang.annual/PB/KNY'))</td>
                                                 <td>
                                                     <span class="float-end">${{$payslip->total_kny_phcumben}}</span>
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td>Seniority Pay (included Tax)</td>
+                                                <td>@lang('lang.seniority_pay') (@lang('lang.included_tax'))</td>
                                                 <td>
                                                     <span class="float-end">${{$payslip->seniority_pay_included_tax}}</span>
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td>Seniority Pay (Excluded Tax)</td>
+                                                <td>@lang('lang.seniority_pay') (@lang('lang.excluded_tax'))</td>
                                                 <td>
                                                     <span class="float-end">${{$payslip->seniority_pay_excluded_tax}}</span>
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td>Severance Pay</td>
+                                                <td>@lang('lang.severance_pay')</td>
                                                 <td>
                                                     <span class="float-end">${{$payslip->total_severance_pay}}</span>
                                                 </td>
@@ -161,13 +161,13 @@
                                                 </td>
                                             </tr> --}}
                                             <tr>
-                                                <td>Phone</td>
+                                                <td>@lang('lang.phone')</td>
                                                 <td>
                                                     <span class="float-end">${{$payslip->phone_allowance ?? '0.00'}}</span>
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td>Child Allowence</td>
+                                                <td>@lang('lang.child_allowance')</td>
                                                 <td>
                                                     <span class="float-end">${{$payslip->total_child_allowance}}</span>
                                                 </td>
@@ -182,17 +182,17 @@
                                                 $totalNetPay = $TotalEarnings - $TotalDeductions;
                                             @endphp
                                             <tr style="background-color: #d2dbdb;">
-                                                <td><strong>Total Earnings</strong></td>
+                                                <td><strong>@lang('lang.total_earnings')</strong></td>
                                                 <td>
                                                     <span class="float-end"><strong>${{number_format($TotalEarnings, 2)}}</strong></span>
                                                 </td>
-                                                <td><strong>Total Deductions :</strong></td>
+                                                <td><strong>@lang('lang.total_deductions') :</strong></td>
                                                 <td><span class="float-end"><strong>${{number_format($TotalDeductions, 2)}}</strong></span></td>
                                             </tr>
                                             <tr>
                                                 <td></td>
                                                 <td></td>
-                                                <td><p><strong>Total Net Pay:</strong></p></td>
+                                                <td><p><strong>@lang('lang.total_net_pay'):</strong></p></td>
                                                 <td><span class="float-end"><strong>${{number_format($totalNetPay, 2)}}</strong></span></td>
                                             </tr>
                                         </tbody>

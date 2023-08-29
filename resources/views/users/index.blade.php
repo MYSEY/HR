@@ -14,10 +14,10 @@
         <div class="page-header">
             <div class="row align-items-center">
                 <div class="col">
-                    <h3 class="page-title">Employee</h3>
+                    <h3 class="page-title">@lang("lang.employee")</h3>
                     <ul class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="{{ url('/dashboad/employee') }}">Dashboard</a></li>
-                        <li class="breadcrumb-item active">Employee</li>
+                        <li class="breadcrumb-item"><a href="{{ url('/dashboad/employee') }}">@lang('lang.dashboard')</a></li>
+                        <li class="breadcrumb-item active">@lang("lang.employee")</li>
                     </ul>
                 </div>
                 <div class="col-auto float-end ms-auto">
@@ -26,8 +26,8 @@
                 <div class="col-auto float-end ms-auto">
                     @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer')
                     <a href="#" class="btn add-btn" data-toggle="modal" id="import_employee"><i
-                        class="fa fa-plus"></i> Import Data</a>
-                        <a href="#" class="btn add-btn me-2" data-toggle="modal" id="add_new"><i class="fa fa-plus"></i> Add New</a>
+                        class="fa fa-plus"></i>@lang('lang.import')</a>
+                        <a href="#" class="btn add-btn me-2" data-toggle="modal" id="add_new"><i class="fa fa-plus"></i>@lang('lang.add_new')</a>
                     @endif
                 </div>
             </div>
@@ -38,23 +38,23 @@
                 <div class="row filter-btn">
                     <div class="col-sm-2 col-md-2"> 
                         <div class="form-group">
-                            <input type="text" class="form-control" name="employee_id" id="number_employee" placeholder="Employee ID" value="{{old('number_employee')}}">
+                            <input type="text" class="form-control" name="employee_id" id="number_employee" placeholder="@lang('lang.employee_id')" value="{{old('number_employee')}}">
                         </div>
                     </div>
                     <div class="col-sm-2 col-md-2"> 
                         <div class="form-group">
-                            <input type="text" class="form-control" name="employee_name" id="employee_name" placeholder="Employee name" value="{{old('employee_name')}}">
+                            <input type="text" class="form-control" name="employee_name" id="employee_name" placeholder="@lang('lang.employee_name')" value="{{old('employee_name')}}">
                         </div>
                     </div>
                     <div class="col-md-8 col-sm-8">
                         <div style="display: flex" class="float-end">
                             <button type="button" class="btn btn-sm btn-success btn-search me-2">
-                                <span class="search-loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading </span>
-                                <span class="btn-search-txt">{{ __('Search') }}</span>
+                                <span class="search-loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i>@lang('lang.loading')</span>
+                                <span class="btn-search-txt">@lang('lang.search')</span>
                             </button>
                             <button type="button" class="btn btn-sm btn-warning reset-btn">
-                                <span class="btn-text-reset">Reload</span>
-                                <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading</span>
+                                <span class="btn-text-reset">@lang('lang.reload')</span>
+                                <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i>@lang('lang.loading')</span>
                             </button>
                         </div>
                     </div>
@@ -70,22 +70,22 @@
                     <div class="col-md-12 col-ms-12 p-0">
                         <ul class="nav nav-tabs nav-tabs-bottom" role="tablist">
                             <li class="nav-item" role="presentation">
-                                <a class="nav-link active" data-bs-toggle="tab" id="tab_candidate_resume" href="#tbl_candidate_resume" aria-selected="true" role="tab" data-tab-id="1">Upcoming Staff({{count($data)}})</a>
+                                <a class="nav-link active" data-bs-toggle="tab" id="tab_candidate_resume" href="#tbl_candidate_resume" aria-selected="true" role="tab" data-tab-id="1">@lang('lang.upcoming_staff')({{count($data)}})</a>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <a class="nav-link" data-bs-toggle="tab" id="tab_probation" href="#tbl_probations" aria-selected="false" role="tab" data-tab-id="2" tabindex="-1">Probation({{count($dataProbation)}})</a>
+                                <a class="nav-link" data-bs-toggle="tab" id="tab_probation" href="#tbl_probations" aria-selected="false" role="tab" data-tab-id="2" tabindex="-1">@lang('lang.probation')({{count($dataProbation)}})</a>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <a class="nav-link" data-bs-toggle="tab" id="tab_fdc" href="#tbl_fdc" aria-selected="false" role="tab" data-tab-id="3" tabindex="-1">FDC({{count($dataFDC)}})</a>
+                                <a class="nav-link" data-bs-toggle="tab" id="tab_fdc" href="#tbl_fdc" aria-selected="false" role="tab" data-tab-id="3" tabindex="-1">@lang('lang.fdc')({{count($dataFDC)}})</a>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <a class="nav-link" data-bs-toggle="tab" id="tab_udc" href="#tbl_udc" aria-selected="false" data-tab-id="4" role="tab" tabindex="-1">UDC({{count($dataUDC)}})</a>
+                                <a class="nav-link" data-bs-toggle="tab" id="tab_udc" href="#tbl_udc" aria-selected="false" data-tab-id="4" role="tab" tabindex="-1">@lang('lang.udc')({{count($dataUDC)}})</a>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <a class="nav-link" data-bs-toggle="tab" id="tab_cancel" href="#tbl_cancel" aria-selected="false" data-tab-id="6" role="tab" tabindex="-1">Canceled Contract({{count($dataCanContract)}})</a>
+                                <a class="nav-link" data-bs-toggle="tab" id="tab_cancel" href="#tbl_cancel" aria-selected="false" data-tab-id="6" role="tab" tabindex="-1">@lang('lang.canceled_contract')({{count($dataCanContract)}})</a>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <a class="nav-link" data-bs-toggle="tab" id="tab_reason" href="#tbl_reject" aria-selected="false" data-tab-id="5" role="tab" tabindex="-1">Resigned Staff({{count($dataResign)}})</a>
+                                <a class="nav-link" data-bs-toggle="tab" id="tab_reason" href="#tbl_reject" aria-selected="false" data-tab-id="5" role="tab" tabindex="-1">@lang('lang.resigned_staff')({{count($dataResign)}})</a>
                             </li>
                         </ul>
                         <div class="tab-content">
@@ -106,8 +106,8 @@
                 <div class="modal-content">
                     <div class="modal-body">
                         <div class="form-header">
-                            <h3>Deleted!</h3>
-                            <p>Are you sure want to delete?</p>
+                            <h3>@lang('lang.deleted')!</h3>
+                            <p>@lang('lang.are_you_sure_want_to_delete')?</p>
                         </div>
                         <div class="modal-btn delete-action">
                             <form action="{{url('users/delete')}}" method="POST">
@@ -117,8 +117,8 @@
 
                                 <div class="row">
                                     <div class="submit-section" style="text-align: center">
-                                        <button type="submit" class="btn btn-primary submit-btn me-2">Delete</button>
-                                        <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-danger">Cancel</a>
+                                        <button type="submit" class="btn btn-primary submit-btn me-2">@lang('lang.delete')</button>
+                                        <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-danger">@lang('lang.cancel')</a>
                                     </div>
                                 </div>
                             </form>
@@ -153,13 +153,13 @@
             let id = $("#current_province").val() ?? $("#current_province").val() ?? $("#e_current_province").val() ?? $("#e_current_province").val();
             let optionSelect = "currentProvince";
 
-            $('#current_district').html('<option selected disabled> --Select --</option>');
-            $('#current_commune').html('<option selected disabled> --Select --</option>');
-            $('#current_village').html('<option selected disabled> --Select --</option>');
+            $('#current_district').html('<option selected disabled> -- @lang("lang.select") --</option>');
+            $('#current_commune').html('<option selected disabled> --@lang("lang.select") --</option>');
+            $('#current_village').html('<option selected disabled> --@lang("lang.select") --</option>');
 
-            $('#e_current_district').html('<option selected disabled> --Select --</option>');
-            $('#e_current_commune').html('<option selected disabled> --Select --</option>');
-            $('#e_current_village').html('<option selected disabled> --Select --</option>');
+            $('#e_current_district').html('<option selected disabled> --@lang("lang.select") --</option>');
+            $('#e_current_commune').html('<option selected disabled> --@lang("lang.select") --</option>');
+            $('#e_current_village').html('<option selected disabled> --@lang("lang.select") --</option>');
 
             showProvince(id, optionSelect);
         });
@@ -167,19 +167,19 @@
         $("#current_district, #e_current_district").on("change", function(){
             let id = $("#current_district").val() ?? $("#current_district").val() ?? $("#e_current_district").val() ?? $("#e_current_district").val();
             let optionSelect = "currentDistrict";
-            $('#current_commune').html('<option selected disabled> --Select --</option>');
-            $('#current_village').html('<option selected disabled> --Select --</option>');
+            $('#current_commune').html('<option selected disabled> --@lang("lang.select") --</option>');
+            $('#current_village').html('<option selected disabled> --@lang("lang.select") --</option>');
 
-            $('#e_current_commune').html('<option selected disabled> --Select --</option>');
-            $('#e_current_village').html('<option selected disabled> --Select --</option>');
+            $('#e_current_commune').html('<option selected disabled> --@lang("lang.select") --</option>');
+            $('#e_current_village').html('<option selected disabled> --@lang("lang.select") --</option>');
             showProvince(id, optionSelect);
         });
 
         $("#current_commune, #e_current_commune").on("change", function(){
             let id = $("#current_commune").val() ?? $("#current_commune").val() ?? $("#e_current_commune").val() ?? $("#e_current_commune").val();
             let optionSelect = "currentCommune";
-            $('#current_village').html('<option selected disabled> --Select --</option>');
-            $('#e_current_village').html('<option selected disabled> --Select --</option>');
+            $('#current_village').html('<option selected disabled> --@lang("lang.select") --</option>');
+            $('#e_current_village').html('<option selected disabled> --@lang("lang.select") --</option>');
             showProvince(id, optionSelect);
         });
 
@@ -187,30 +187,30 @@
         $("#permanent_province, #e_permanent_province").on("change", function(){
             let id = $("#permanent_province").val() ?? $("#permanent_province").val() ?? $("#e_permanent_province").val() ?? $("#e_permanent_province").val();
             let optionSelect = "permanentProvince";
-            $('#permanent_district').html('<option selected disabled> --Select --</option>');
-            $('#permanent_commune').html('<option selected disabled> --Select --</option>');
-            $('#permanent_village').html('<option selected disabled> --Select --</option>');
+            $('#permanent_district').html('<option selected disabled> --@lang("lang.select") --</option>');
+            $('#permanent_commune').html('<option selected disabled> --@lang("lang.select") --</option>');
+            $('#permanent_village').html('<option selected disabled> --@lang("lang.select") --</option>');
 
-            $('#e_permanent_district').html('<option selected disabled> --Select --</option>');
-            $('#e_permanent_commune').html('<option selected disabled> --Select --</option>');
-            $('#e_permanent_village').html('<option selected disabled> --Select --</option>');
+            $('#e_permanent_district').html('<option selected disabled> --@lang("lang.select") --</option>');
+            $('#e_permanent_commune').html('<option selected disabled> --@lang("lang.select") --</option>');
+            $('#e_permanent_village').html('<option selected disabled> --@lang("lang.select") --</option>');
             showProvince(id, optionSelect);
         });
         $("#permanent_district, #e_permanent_district").on("change", function(){
             let id = $("#permanent_district").val() ?? $("#permanent_district").val() ?? $("#e_permanent_district").val() ?? $("#e_permanent_district").val();
             let optionSelect = "permanentDistrict";
-            $('#permanent_commune').html('<option selected disabled> --Select --</option>');
-            $('#permanent_village').html('<option selected disabled> --Select --</option>');
+            $('#permanent_commune').html('<option selected disabled> --@lang("lang.select") --</option>');
+            $('#permanent_village').html('<option selected disabled> --@lang("lang.select") --</option>');
 
-            $('#e_permanent_commune').html('<option selected disabled> --Select --</option>');
-            $('#e_permanent_village').html('<option selected disabled> --Select --</option>');
+            $('#e_permanent_commune').html('<option selected disabled> --@lang("lang.select") --</option>');
+            $('#e_permanent_village').html('<option selected disabled> --@lang("lang.select") --</option>');
             showProvince(id, optionSelect);
         });
         $("#permanent_commune, #e_permanent_commune").on("change", function(){
             let id = $("#permanent_commune").val() ?? $("#permanent_commune").val() ?? $("#e_permanent_commune").val() ?? $("#e_permanent_commune").val();
             let optionSelect = "permanentCommune";
-            $('#permanent_village').html('<option selected disabled> --Select --</option>');
-            $('#e_permanent_village').html('<option selected disabled> --Select --</option>');
+            $('#permanent_village').html('<option selected disabled> --@lang("lang.select") --</option>');
+            $('#e_permanent_village').html('<option selected disabled> --@lang("lang.select") --</option>');
             showProvince(id, optionSelect);
         });
 
@@ -234,14 +234,15 @@
         });
 
         $(document).on('click','.userUpdate', function(){
+            var localeLanguage = '{{ config('app.locale') }}';
             $('#e_bank_name').html('<option selected value=""> </option>');
             
-            $('#e_current_province').html('<option selected value="">--Select --</option>');
+            $('#e_current_province').html('<option selected value="">--@lang("lang.select") --</option>');
             $('#e_current_district').html('<option selected value=""> </option>');
             $('#e_current_commune').html('<option selected value=""> </option>');
             $('#e_current_village').html('<option selected value=""> </option>');
 
-            $('#e_permanent_province').html('<option selected value="">--Select --</option>');
+            $('#e_permanent_province').html('<option selected value="">--@lang("lang.select") --</option>');
             $('#e_permanent_district').html('<option selected value=""> </option>');
             $('#e_permanent_commune').html('<option selected value=""> </option>');
             $('#e_permanent_village').html('<option selected value=""> </option>');
@@ -256,7 +257,7 @@
                 success: function (response) {
                     if (response.success) {
                         if (response.role != '') {
-                            $('#e_role_id').html('<option selected disabled> --Select --</option>');
+                            $('#e_role_id').html('<option selected disabled> --@lang("lang.select") --</option>');
                             $.each(response.role, function(i, item) {
                                 $('#e_role_id').append($('<option>', {
                                     value: item.id,
@@ -267,42 +268,42 @@
                         }
 
                         if (response.position != '') {
-                            $('#e_position').html('<option selected disabled> --Select --</option>');
+                            $('#e_position').html('<option selected disabled> --@lang("lang.select") --</option>');
                             $.each(response.position, function(i, item) {
                                 $('#e_position').append($('<option>', {
                                     value: item.id,
-                                    text: item.name_english,
+                                    text: localeLanguage == 'en' ? item.name_english : item.name_khmer,
                                     selected: item.id == response.success.position_id
                                 }));
                             });
                         }
                         
                         if (response.department != '') {
-                            $('#e_department').html('<option selected disabled> --Select --</option>');
+                            $('#e_department').html('<option selected disabled> --@lang("lang.select") --</option>');
                             $.each(response.department, function(i, item) {
                                 $('#e_department').append($('<option>', {
                                     value: item.id,
-                                    text: item.name_english,
+                                    text: localeLanguage == 'en' ? item.name_english : item.name_khmer,
                                     selected: item.id == response.success.department_id
                                 }));
                             });
                         }
                         if (response.optionGender != '') {
-                            $('#e_gender').html('<option selected disabled> --Select --</option>');
+                            $('#e_gender').html('<option selected disabled> --@lang("lang.select") --</option>');
                             $.each(response.optionGender, function(i, item) {
                                 $('#e_gender').append($('<option>', {
                                     value: item.id,
-                                    text: item.name_english,
+                                    text: localeLanguage == 'en' ? item.name_english : item.name_khmer,
                                     selected: item.id == response.success.gender
                                 }));
                             });
                         }
                         if (response.branch != '') {
-                            $('#e_branch_id').html('<option selected disabled> -- Select --</option>');
+                            $('#e_branch_id').html('<option selected disabled> -- @lang("lang.select") --</option>');
                             $.each(response.branch, function(i, item) {
                                 $('#e_branch_id').append($('<option>', {
                                     value: item.id,
-                                    text: item.branch_name_en,
+                                    text: localeLanguage == 'en' ? item.branch_name_en : item.branch_name_kh,
                                     selected: item.id == response.success.branch_id
                                 }));
                             });
@@ -322,7 +323,7 @@
                             $.each(response.optionIdentityType, function(i, item) {
                                 $('#e_identity_type').append($('<option>', {
                                     value: item.id,
-                                    text: item.name_english,
+                                    text: localeLanguage == 'en' ? item.name_english : item.name_khmer,
                                     selected: item.id == response.success.identity_type
                                 }));
                             });
@@ -332,7 +333,7 @@
                             $.each(response.optionPositionType, function(i, item) {
                                 $('#e_position_type').append($('<option>', {
                                     value: item.id,
-                                    text: item.name_english,
+                                    text: localeLanguage == 'en' ? item.name_english : item.name_khmer,
                                     selected: item.id == response.success.position_type
                                 }));
                             });
@@ -361,7 +362,7 @@
                             $.each(response.province, function(i,item) {
                                 let option = {
                                     value: item.code,
-                                    text: item.name_en,
+                                    text: localeLanguage == 'en' ? item.name_en : item.name_km,
                                 }
                                 $('#e_current_province').append($('<option>', {...option, selected: item.code == response.success.current_province})); 
                                 $('#e_permanent_province').append($('<option>', {...option, selected: item.code == response.success.permanent_province})); 
@@ -374,7 +375,7 @@
                                     let cur_option = {}
                                     cur_option= {
                                         value:item.code,
-                                        text: item.name_en,
+                                        text: localeLanguage == 'en' ? item.name_en : item.name_km,
                                         selected: item.code == response.success.current_district
                                     };
                                     $('#e_current_district').append($('<option>', cur_option));
@@ -383,7 +384,7 @@
                                     let per_option = {}
                                     per_option= {
                                         value:item.code,
-                                        text: item.name_en,
+                                        text: localeLanguage == 'en' ? item.name_en : item.name_km,
                                         selected: item.code == response.success.permanent_district
                                     };
                                     $('#e_permanent_district').append($('<option>', per_option));
@@ -397,7 +398,7 @@
                                     let cur_option = {}
                                     cur_option= {
                                         value:item.code,
-                                        text: item.name_en,
+                                        text: localeLanguage == 'en' ? item.name_en : item.name_km,
                                         selected: item.code == response.success.current_commune
                                     };
                                     $('#e_current_commune').append($('<option>', cur_option));
@@ -406,7 +407,7 @@
                                     let per_option = {}
                                     per_option= {
                                         value:item.code,
-                                        text: item.name_en,
+                                        text: localeLanguage == 'en' ? item.name_en : item.name_km,
                                         selected: item.code == response.success.permanent_commune
                                     };
                                     $('#e_permanent_commune').append($('<option>', per_option));
@@ -420,7 +421,7 @@
                                     let cur_option = {}
                                     cur_option= {
                                         value:item.code,
-                                        text: item.name_en,
+                                        text: localeLanguage == 'en' ? item.name_en : item.name_km,
                                         selected: item.code == response.success.current_village
                                     };
                                     $('#e_current_village').append($('<option>', cur_option));
@@ -429,7 +430,7 @@
                                     let per_option = {}
                                     per_option= {
                                         value:item.code,
-                                        text: item.name_en,
+                                        text: localeLanguage == 'en' ? item.name_en : item.name_km,
                                         selected: item.code == response.success.permanent_village
                                     };
                                     $('#e_permanent_village').append($('<option>', per_option));
@@ -987,6 +988,7 @@
     });
 
     function showProvince(id, optionSelect){
+        var localeLanguage = '{{ config('app.locale') }}';
         let url = "";
         let data = {
             "_token": "{{ csrf_token() }}",
@@ -1028,7 +1030,7 @@
                     $.each(data, function(i, item) {
                         option = {
                             value: item.code,
-                            text: item.name_en,
+                            text: localeLanguage == 'en' ? item.name_en : item.name_km,
                         }
                         if (optionSelect == "currentProvince") {
                             $('#current_district').append($('<option>', option));

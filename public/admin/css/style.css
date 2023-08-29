@@ -8777,7 +8777,7 @@ button.close {
   float: left;
   font-weight: 500;
   margin-right: 30px;
-  width: 25%;
+  width: 30%;
 }
 @media (max-width: 575px) {
   .personal-info li .title {

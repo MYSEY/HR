@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Change Password</h5>
+                <h5 class="modal-title">@lang('lang.change_password')</h5>
                 <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
@@ -16,7 +16,7 @@
                             <div class="form-group Password-icon">
                                 <div class="row">
                                     <div class="col">
-                                        <label>Current Password <span class="text-danger">*</span></label>
+                                        <label>@lang('lang.current_password') <span class="text-danger">*</span></label>
                                     </div>
                                 </div>
                                 <div class="position-relative">
@@ -29,7 +29,7 @@
                             <div class="form-group Password-icon">
                                 <div class="row">
                                     <div class="col">
-                                        <label>New Password <span class="text-danger">*</span></label>
+                                        <label>@lang('lang.new_password') <span class="text-danger">*</span></label>
                                     </div>
                                 </div>
                                 <div class="position-relative">
@@ -42,7 +42,7 @@
                             <div class="form-group Password-icon">
                                 <div class="row">
                                     <div class="col">
-                                        <label>Confirm New Password <span class="text-danger">*</span></label>
+                                        <label>@lang('lang.confirm_new_password') <span class="text-danger">*</span></label>
                                     </div>
                                 </div>
                                 <div class="position-relative">
@@ -52,7 +52,7 @@
                                 </div>
                             </div>
                             <div class="submit-section text-end">
-                                <button type="button" class="btn btn-primary" id="btn-change-passwork">Submit</button>
+                                <button type="button" class="btn btn-primary" id="btn-change-passwork">@lang('lang.submit')</button>
                             </div>
                         </form>
                 

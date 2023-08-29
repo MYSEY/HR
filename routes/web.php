@@ -29,6 +29,8 @@ use App\Http\Controllers\Admins\EmployeePayrollController;
 use App\Http\Controllers\Admins\EmployeeProfileController;
 use App\Http\Controllers\Admins\RecruitmentPlanController;
 use App\Http\Controllers\Admins\ChildrenAllowanceController;
+use App\Http\Controllers\LanguageController;
+use Illuminate\Support\Facades\Lang;
 
 /*
 |--------------------------------------------------------------------------
@@ -247,3 +249,4 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('children/update',[ChildrenAllowanceController::class,'update']);
     Route::post('children/delete',[ChildrenAllowanceController::class,'destroy']);
 });
+Route::get('/{locale}', [LanguageController::class, "lang"]);

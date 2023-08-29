@@ -17,18 +17,18 @@
         <div class="page-header">
             <div class="row align-items-center">
                 <div class="col">
-                    <h3 class="page-title">Motor rentals</h3>
+                    <h3 class="page-title">@lang('lang.motor_rentals')</h3>
                     <ul class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="{{ url('/dashboad/employee') }}">Dashboard</a></li>
-                        <li class="breadcrumb-item active">Motor rentals</li>
+                        <li class="breadcrumb-item"><a href="{{ url('/dashboad/employee') }}">@lang('lang.dashboard')</a></li>
+                        <li class="breadcrumb-item active">@lang('lang.motor_rentals')</li>
                     </ul>
                 </div>
                 <div class="col-auto float-end ms-auto">
                     @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer')
                         <a href="#" class="btn add-btn" data-toggle="modal" id="import_new_motor_rentel"><i
-                            class="fa fa-plus"></i>Import Data</a>
+                            class="fa fa-plus"></i>@lang('lang.import')</a>
                         <a href="#" class="btn add-btn me-2" data-toggle="modal" data-toggle="modal" id="add_new"><i
-                                class="fa fa-plus"></i>Add New</a>
+                                class="fa fa-plus"></i>@lang('lang.add_new')</a>
                            
                     @endif
                 </div>
@@ -38,16 +38,16 @@
             <div class="row filter-row-btn">
                 <div class="col-sm-2 col-md-2">
                     <div class="form-group form-focus select-focus">
-                        <input type="text" class="form-control" name="employee_id" id="employee_id" placeholder="Employee ID"
+                        <input type="text" class="form-control" name="employee_id" id="employee_id" placeholder="@lang('lang.employee_id')"
                             value="{{ old('employee_id') }}">
-                        <label class="focus-label">Filter</label>
+                        {{-- <label class="focus-label">@lang('lang.filter')</label> --}}
                     </div>
                 </div>
                 <div class="col-sm-2 col-md-2">
                     <div class="form-group form-focus select-focus">
                         <input type="text" class="form-control" name="employee_name" id="employee_name"
-                            placeholder="Employee Name" value="{{ old('employee_name') }}">
-                        <label class="focus-label">Filter</label>
+                            placeholder="@lang('lang.employee_name')" value="{{ old('employee_name') }}">
+                        {{-- <label class="focus-label">@lang('lang.filter')</label> --}}
                     </div>
                 </div>
                 <div class="col-sm-2 col-md-2 col-lg-3 col-xl-2 col-12">
@@ -55,7 +55,7 @@
                         <div class="cal-icon">
                             <input type="text" class="form-control floating datetimepicker" name="from_date" id="from_date" value="">
                         </div>
-                        <label class="focus-label">From Date</label>
+                        <label class="focus-label">@lang('lang.from_date')</label>
                     </div>
                 </div>
                 <div class="col-sm-2 col-md-2 col-lg-3 col-xl-2 col-12">
@@ -63,19 +63,19 @@
                         <div class="cal-icon">
                             <input type="text" class="form-control floating datetimepicker" name="to_date" id="to_date" value="">
                         </div>
-                        <label class="focus-label">To Date</label>
+                        <label class="focus-label">@lang('lang.to_date')</label>
                     </div>
                 </div>
                
                 <div class="col-sm-4 col-md-4">
                     <div style="display: flex" class="float-end">
                         <button class="btn btn-sm btn-success btn-search me-2" data-dismiss="modal" >
-                            <span class="btn-text-search">Search</span>
-                            <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading</span>
+                            <span class="btn-text-search">@lang('lang.search')</span>
+                            <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>
                         </button>
                         <button type="button" class="btn btn-sm btn-warning reset-btn">
-                            <span class="btn-text-reset">Reload</span>
-                            <span id="btn-reset-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading</span>
+                            <span class="btn-text-reset">@lang('lang.reload')</span>
+                            <span id="btn-reset-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>
                         </button>
                     </div>
                 </div>
@@ -98,50 +98,50 @@
                                                     style="width: 94.0625px;">#</th>
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1"
                                                     colspan="1" aria-label="Employee ID: activate to sort column ascending"
-                                                    style="width: 94.0625px;">Employee ID</th>
+                                                    style="width: 94.0625px;">@lang('lang.employee_id')</th>
                                                 <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
                                                     rowspan="1" colspan="1" aria-sort="ascending"
                                                     aria-label="Employee name: activate to sort column descending"
-                                                    style="width: 178px;">Employee Name</th>
+                                                    style="width: 178px;">@lang('lang.employee_name')</th>
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1"
                                                     colspan="1" aria-label="Gender: activate to sort column ascending"
-                                                    style="width: 125.15px;">Gender</th>
+                                                    style="width: 125.15px;">@lang('lang.gender')</th>
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                     rowspan="1" colspan="1"
                                                     aria-label="Position: activate to sort column ascending"
-                                                    style="width: 125.15px;">Position</th>
+                                                    style="width: 125.15px;">@lang('lang.position')</th>
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                     rowspan="1" colspan="1"
                                                     aria-label="Department: activate to sort column ascending"
-                                                    style="width: 125.15px;">Department</th>
+                                                    style="width: 125.15px;">@lang('lang.department')</th>
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                     rowspan="1" colspan="1"
                                                     aria-label="Total Gasoline: activate to sort column ascending"
-                                                    style="width: 125.15px;">Total Gasoline </th>
+                                                    style="width: 125.15px;">@lang('lang.total_gasoline') </th>
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                     rowspan="1" colspan="1"
                                                     aria-label="Total working days: activate to sort column ascending"
-                                                    style="width: 125.15px;">Total working days</th>
+                                                    style="width: 125.15px;">@lang('lang.total_working_days')</th>
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                     rowspan="1" colspan="1"
                                                     aria-label="Price engine oil: activate to sort column ascending"
-                                                    style="width: 125.15px;">Price engine oil</th>
+                                                    style="width: 125.15px;">@lang('lang.price_engine_oil')</th>
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                     rowspan="1" colspan="1"
                                                     aria-label="Price motor rentel: activate to sort column ascending"
-                                                    style="width: 51.475px;">Price motor rentel</th>
+                                                    style="width: 51.475px;">@lang('lang.price_motor_rentel')</th>
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                     rowspan="1" colspan="1"
                                                     aria-label="Taplab Price: activate to sort column ascending"
-                                                    style="width: 51.475px;">Taplab Price</th>
+                                                    style="width: 51.475px;">@lang('lang.taplab_price')</th>
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                     rowspan="1" colspan="1"
                                                     aria-label="Create at: activate to sort column ascending"
-                                                    style="width: 51.475px;">Created At</th>
+                                                    style="width: 51.475px;">@lang('lang.created_at')</th>
                                                 <th class="text-center sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                     rowspan="1" colspan="1"
                                                     aria-label="Status: activate to sort column ascending"
-                                                    style="width: 55.5625px;">Action</th>
+                                                    style="width: 55.5625px;">@lang('lang.action')</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -171,11 +171,11 @@
                                                                     <div class="dropdown-menu dropdown-menu-right">
                                                                         <a class="dropdown-item update"
                                                                             data-id="{{ $item->id }}"><i
-                                                                                class="fa fa-pencil m-r-5"></i> Edit</a>
+                                                                                class="fa fa-pencil m-r-5"></i> @lang('lang.edit')</a>
                                                                         <a class="dropdown-item delete" href="#"
                                                                             data-toggle="modal" data-id="{{ $item->id }}"
                                                                             data-target="#delete_motor_rentel"><i
-                                                                                class="fa fa-trash-o m-r-5"></i> Delete</a>
+                                                                                class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
                                                                     </div>
                                                                 @endif
                                                             </div>
@@ -203,8 +203,8 @@
                         <div class="modal-content">
                             <div class="modal-body">
                                 <div class="form-header">
-                                    <h3>Delete</h3>
-                                    <p>Are you sure want to delete?</p>
+                                    <h3>@lang('lang.delete')</h3>
+                                    <p>@lang('lang.are_you_sure_want_to_delete')?</p>
                                 </div>
                                 <div class="modal-btn delete-action">
                                     <form action="{{ url('motor-rentel/delete') }}" method="POST">
@@ -212,8 +212,8 @@
                                         <input type="hidden" name="id" class="e_id" value="">
                                         <div class="row">
                                             <div class="submit-section" style="text-align: center">
-                                                <button type="submit" class="btn btn-primary submit-btn me-2">Delete</button>
-                                                <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-danger">Cancel</a>
+                                                <button type="submit" class="btn btn-primary submit-btn me-2">@lang('lang.delete')</button>
+                                                <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-danger">@lang('lang.cancel')</a>
                                             </div>
                                         </div>
                                     </form>
@@ -313,7 +313,7 @@
                 success: function(response) {
                     if (response.success) {
                         if (response.employee != '') {
-                            $('#e_employee_id').html('<option selected disabled value="">Select employee...</option>');
+                            $('#e_employee_id').html('<option selected disabled value="">@lang("lang.select")</option>');
                             $.each(response.employee, function(i, item) {
                                 $('#e_employee_id').append($('<option>', {
                                     value: item.id,
@@ -406,10 +406,10 @@
                             // '<i class="fa fa-eye m-r-5"></i> View' +
                             // '</a>' +
                             ' <a class="dropdown-item update" data-id="{{'(row.id)'}}">' +
-                            '<i class="fa fa-pencil m-r-5"></i> Edit' +
+                            '<i class="fa fa-pencil m-r-5"></i> @lang("lang.edit")' +
                             '</a>' +
                             '<a class="dropdown-item delete" href="#" data-toggle="modal" data-id="{{'(row.id)'}}" data-target="#delete_motor_rentel">' +
-                            '<i class="fa fa-trash-o m-r-5"></i> Delete' +
+                            '<i class="fa fa-trash-o m-r-5"></i> @lang("lang.delete")' +
                             '</a>' +
                             '</div>' +
                             '</div>' +
