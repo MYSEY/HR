@@ -188,7 +188,7 @@
                 </div>
             </div>
         </div>
-
+       
         <div class="sidebar" id="sidebar">
             <div class="slimScrollDiv" style="position: relative; overflow:hidden; width: 100%; height: 346px;">
                 <div class="sidebar-inner slimscroll" style="overflow: auto; width: 100%; height: 346px;">
@@ -230,6 +230,7 @@
                 </div>
             </div>
         </div>
+
         <div class="page-wrapper" style="min-height: 406px;">
             <div class="content">
                 <div class="content-wrapper">

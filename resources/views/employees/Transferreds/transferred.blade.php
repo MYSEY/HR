@@ -9,6 +9,7 @@
                             <tr>
                                 <th>#</th>
                                 <th>@lang('lang.branch')</th>
+                                <th>@lang('lang.position')</th>
                                 <th>@lang('lang.date')</th>
                                 <th>@lang('lang.remark')</th>
                             </tr>
@@ -18,7 +19,8 @@
                                 @foreach ($transferred as $item)
                                     <tr>
                                         <td>{{$item->id}}</td>
-                                        <td>{{$item->BranchName}}</td>
+                                        <td>{{$item->TransferredBranch}}</td>
+                                        <td>{{$item->TransferredPosition}}</td>
                                         <td>{{$item->TransterDate}}</td>
                                         <td>{{$item->descrition}}</td>
                                     </tr>

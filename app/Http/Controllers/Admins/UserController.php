@@ -291,10 +291,13 @@ class UserController extends Controller
                             'type'                  => 'uploade',
                             'created_by'            => Auth::user()->id,
                         ]);
-                        GenerateIdEmployee::create([
-                            'employee_id'   => $emp->id,
-                            'number_employee'   => $emp->number_employee
-                        ]);
+                        if($emp){
+                            GenerateIdEmployee::create([
+                                'employee_id'       => $emp->id,
+                                'number_employee'   => $emp->number_employee,
+                                'created_by'        => Auth::user()->id,
+                            ]);
+                        }
                     }
                 }
             }

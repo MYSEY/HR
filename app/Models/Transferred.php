@@ -37,10 +37,10 @@ class Transferred extends Model
     }
 
     public function getTransferredBranchAttribute(){
-        return optional($this->branch);
+        return optional($this->branch)->branch_name_en;
     }
     public function getTransferredPositionAttribute(){
-        return optional($this->position);
+        return optional($this->position)->name_english;
     }
 
     public function getTransferEmpAttribute(){

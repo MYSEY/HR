@@ -252,10 +252,10 @@ class User extends Authenticatable
     }
 
     public function getEmployeePositionAttribute(){
-        return optional($this->position)->name_english;
+        return (Helper::getLang() == 'en') ? optional($this->position)->name_english : optional($this->position)->name_khmer;
     }
     public function getEmployeeDepartmentAttribute(){
-        return optional($this->department)->name_khmer;
+        return (Helper::getLang() == 'en') ? optional($this->department)->name_english : optional($this->department)->name_khmer;
     }
     public function getEmployeeGenderAttribute(){
         $data = Option::where('type','gender')->get();

@@ -170,8 +170,8 @@
                                 <div class="row">
                                     <div class="col-md-5">
                                         <div class="profile-info-left">
-                                            <h3 class="user-name m-t-0 mb-0">{{ $data->employee_name_en }}</h3>
-                                            <h6 class="text-muted">{{ $data->EmployeeDepartment }}</h6>
+                                            <h3 class="user-name m-t-0 mb-0"> {{session()->get('locale') == 'en' ? $data->employee_name_en : $data->employee_name_kh}}</h3>
+                                            <h5 class="text-muted"> {{ $data->EmployeeDepartment }}</h6>
                                             <small class="text-muted">{{ $data->EmployeePosition }}</small>
                                             <div class="staff-id">@lang('lang.employee_id') : {{ $data->number_employee }}</div>
                                             <div class="small doj text-muted">@lang('lang.join_date') : {{ $data->joinOfDate }}</div>

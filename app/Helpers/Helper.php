@@ -102,4 +102,10 @@ class Helper
     {
         return ((($year % 4) == 0) && ((($year % 100) != 0) || (($year % 400) == 0)));
     }
+
+    // GET DYNAMIC LANGUAGE
+    static function getLang()
+    {
+        return app()->getLocale();
+    }
 }
