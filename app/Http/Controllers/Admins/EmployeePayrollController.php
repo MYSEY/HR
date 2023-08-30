@@ -343,7 +343,7 @@ class EmployeePayrollController extends Controller
                         }
                     }
                     if($item->emp_status == 'Probation'){
-                        $totalGrossSalaryTaxFree = $totalBasicSalary;
+                        $totalGrossSalaryTaxFree = $totalBasicSalary + $item->phone_allowance;
                         $totalSeverancePay1 =  $totalGrossSalaryTaxFree != null ? $totalGrossSalaryTaxFree : $totalGrossSalaryTaxFree;
                     }
                     if($item->emp_status == 2){

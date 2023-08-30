@@ -170,7 +170,7 @@
                                 <div class="row">
                                     <div class="col-md-5">
                                         <div class="profile-info-left">
-                                            <h3 class="user-name m-t-0 mb-0"> {{session()->get('locale') == 'en' ? $data->employee_name_en : $data->employee_name_kh}}</h3>
+                                            <h3 class="user-name m-t-0 mb-0"> {{ Helper::getLang() == 'en' ? $data->employee_name_en : $data->employee_name_kh}}</h3>
                                             <h5 class="text-muted"> {{ $data->EmployeeDepartment }}</h6>
                                             <small class="text-muted">{{ $data->EmployeePosition }}</small>
                                             <div class="staff-id">@lang('lang.employee_id') : {{ $data->number_employee }}</div>
@@ -398,23 +398,25 @@
                                                 <th>@lang('lang.date_of_birth')</th>
                                                 <th>@lang('lang.gender')</th>
                                                 <th>@lang('lang.age')</th>
-                                                <th>@lang('lang.action')</th>
+                                                <th style="text-align: center">@lang('lang.action')</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             @if (count($childrenInfor))
                                                @foreach ($childrenInfor as $item)
                                                 <tr>
+                                                    <td hidden class="ids">{{$item->id}}</td>
                                                     <td>{{$item->name}}</td>
                                                     <td>{{$item->DateofBirthChildren}}</td>
                                                     <td>{{$item->ChildrenGender}}</td>
                                                     <td>{{$item->YearsOfChildren}}</td>
-                                                    <td class="text-end">
+                                                    <td style="text-align: center">
                                                         <div class="dropdown dropdown-action">
                                                             <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i  class="material-icons">more_vert</i></a>
                                                             @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer')
                                                                 <div class="dropdown-menu dropdown-menu-right">
                                                                     <a class="dropdown-item childrenUpdate" data-id="{{$item->id}}" data-bs-target="#family_edit_info_modal"><i class="fa fa-pencil m-r-5"></i> Edit</a>
+                                                                    <a class="dropdown-item childrenDelete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_children"><i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
                                                                 </div>
                                                             @endif
                                                         </div>
@@ -473,7 +475,7 @@
                                                     </div>
                                                     <div class="experience-content">
                                                         <div class="timeline-content">
-                                                            <a href="#/" class="name">{{$item->position}} at {{$item->company_name}}</a>
+                                                            <a href="#" class="name">{{$item->position}} at {{$item->company_name}}</a>
                                                             <span class="time">{{$item->ExperienceStartDateEdnDate}}</span>
                                                         </div>
                                                     </div>
@@ -516,6 +518,33 @@
         </div>
     </div>
     @include('employees.change_password')
+
+    <!-- Delete Transferrend Modal -->
+<div class="modal custom-modal fade" id="delete_children" role="dialog">
+    <div class="modal-dialog modal-sm modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="form-header">
+                    <h3>Delete</h3>
+                    <p>Are you sure want to delete?</p>
+                </div>
+                <div class="modal-btn delete-action">
+                    <form action="{{url('employee/children/delete')}}" method="POST">
+                        @csrf
+                        <input type="hidden" name="id" class="e_child_id" value="">
+                        <div class="row">
+                            <div class="submit-section" style="text-align: center">
+                                <button type="submit" class="btn btn-primary submit-btn me-2">Delete</button>
+                                <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-danger">Cancel</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /Delete Transferrend Modal -->
 @endsection
 
 @include('includs.script')
@@ -586,6 +615,10 @@
                 $(this).closest('.children-repeatable-element').remove();
             }
         });
+        $('.childrenDelete').on('click',function(){
+            var _this = $(this).parents('tr');
+            $('.e_child_id').val(_this.find('.ids').text());
+        });
 
         $("#btn-change-passwork").on("click", function() {
             const currentUrl = window.location.pathname.split('/');
@@ -644,7 +677,7 @@
                 dataType: "JSON",
                 success: function (response) {
                     if (response.success) {
-                        $('#e_id').val(response.success.id);
+                        $('#e_child_id').val(response.success.id);
                         $('#e_employee_id').val(response.success.employee_id);
                         $('#e_name').val(response.success.name);
                         $('#e_sex').val(response.success.sex);

@@ -1,4 +1,4 @@
-<div id="family_edit_info_modal" class="modal custom-modal fade" aria-hidden="true" style="display: none;">
+<div id="family_edit_info_modal" class="modal custom-modal fade" aria-hidden="true" data-bs-backdrop="static">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -11,7 +11,7 @@
                     @csrf
                     <div class="form-scroll" id="">
                         <div class="row" id="children-container-repeatable-elements">
-                            <div class="card children-repeatable-element">
+                            <div class="card">
                                 <div class="card-body">
                                     <h3 class="card-title">@lang('lang.edit_children_informations') <a href="javascript:void(0);" class="delete-icon children-delete-element"><i class="fa fa-trash-o"></i></a></h3>
                                     <div class="row">
@@ -48,7 +48,7 @@
                         </div>
                     </div>
                     <div class="submit-section">
-                        <input type="hidden" name="id" id="e_id" value="">
+                        <input type="hidden" name="id" id="e_child_id" value="">
                         <input type="hidden" name="employee_id" id="e_employee_id" value="">
                         <button type="submit" class="btn btn-primary submit-btn" id="bntChildren">
                             <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading') </span>

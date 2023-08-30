@@ -1,4 +1,4 @@
-<div id="family_info_modal" class="modal custom-modal fade" aria-hidden="true" style="display: none;">
+<div id="family_info_modal" class="modal custom-modal fade" aria-hidden="true" data-bs-backdrop="static">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -9,7 +9,7 @@
             <div class="modal-body">
                 <form action="{{url('employee/children')}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
                     @csrf
-                    <div class="form-scroll" id="">
+                    <div class="form-scroll">
                         <div class="row" id="children-container-repeatable-elements">
                             <div class="card children-repeatable-element">
                                 <div class="card-body">
@@ -38,7 +38,6 @@
                                                         <option value="{{$item->id}}">{{session()->get('locale') == 'en' ? $item->name_english : $item->name_khmer}}</option>
                                                     @endforeach
                                                 </select>
-                                                {{-- <input class="form-control" type="text" name="sex[]" id="sex[]"> --}}
                                             </div>
                                         </div>
                                     </div>

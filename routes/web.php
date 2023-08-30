@@ -58,13 +58,22 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('employee/education', [EmployeeProfileController::class, 'employeeEducation'])->name('employee.education');
     Route::post('employee/experience', [EmployeeProfileController::class, 'updateOrCreateExperience'])->name('employee.experience');
     Route::post('employee/promote', [EmployeeProfileController::class, 'updateOrCreatePromote'])->name('employee.promote');
-    Route::post('employee/transferred', [EmployeeProfileController::class, 'updatedTransferred'])->name('employee.transferred');
     Route::post('employee/training', [EmployeeProfileController::class, 'updatedTraining'])->name('employee.training');
     Route::post('employee/contact', [EmployeeProfileController::class, 'employeeContact'])->name('employee.contact');
+
+    //Children
     Route::post('employee/children', [EmployeeProfileController::class, 'employeeChildren'])->name('employee.children');
     Route::get('employee/children/edit', [EmployeeProfileController::class, 'editChildrenInformation']);
     Route::post('employee/children/update', [EmployeeProfileController::class, 'childrenUpdate']);
+    Route::post('employee/children/delete', [EmployeeProfileController::class, 'childrenDelate']);
     Route::post('employee/change-password', [EmployeeProfileController::class, 'changePassword']);
+
+    //Transferrend
+    Route::post('transferred/create', [EmployeeProfileController::class, 'createTransferred']);
+    Route::get('transferred/edit',[EmployeeProfileController::class,'editTransferend']);
+    Route::post('transferred/update',[EmployeeProfileController::class,'updateTransferend']);
+    Route::post('transferrend/delete',[EmployeeProfileController::class,'deleteTransferend']);
+
 
     Route::get('/holidays', [HolidayController::class, 'index']);
     Route::post('/holidays/create', [HolidayController::class, 'store']);

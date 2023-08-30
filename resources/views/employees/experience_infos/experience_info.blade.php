@@ -1,4 +1,4 @@
-<div id="experience_info" class="modal custom-modal fade" aria-hidden="true" style="display: none;">
+<div id="experience_info" class="modal custom-modal fade" aria-hidden="true" data-bs-backdrop="static">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -9,7 +9,7 @@
             <div class="modal-body">
                 <form action="{{url('/employee/experience')}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
                     @csrf
-                    <div class="form-scroll" id="experienceModal">
+                    <div class="form-scroll">
                         <div class="row" id="experience-container-repeatable-elements">
                             <div class="card experience-repeatable-element">
                                 <div class="card-body">

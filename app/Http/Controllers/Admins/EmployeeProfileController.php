@@ -42,7 +42,25 @@ class EmployeeProfileController extends Controller
         $contact = Contact::where('employee_id',$request->id)->get();
         $childrenInfor = ChildrenInfor::where('employee_id',$request->id)->get();
         $empPromoted = StaffPromoted::where('employee_id',$request->id)->orderBy('id', 'DESC')->get();
-        return view('employees.profile',compact('data','optionOfStudy','optionDegree','department','position','empPromoted','branch','transferred','training','relationship','contact','educations','experiences','childrenInfor','optionGender'));
+        $empTranferend = Transferred::where('employee_id',$request->id)->orderBy('id', 'DESC')->get();
+        return view('employees.profile',
+            compact('data',
+            'optionOfStudy',
+            'optionDegree',
+            'department',
+            'position',
+            'empPromoted',
+            'branch',
+            'transferred',
+            'training',
+            'relationship',
+            'contact',
+            'educations',
+            'experiences',
+            'childrenInfor',
+            'optionGender',
+            'empTranferend'
+        ));
     }
     public function employeeEducation(Request $request){
         try{
@@ -155,17 +173,45 @@ class EmployeeProfileController extends Controller
         }
     }
 
-    public function updatedTransferred(Request $request){
+    public function createTransferred(Request $request){
         try{
             Transferred::create([
-                'employee_id'   => $request->employee_id,
-                'branch_id'      => $request->branch_id,
-                'position_id'      => $request->position_id,
-                'date'          => $request->date,
-                'descrition'    => $request->descrition,
-                'updated_by'    => Auth::id(),
+                'employee_id'               => $request->employee_id,
+                'branch_id'                 => $request->branch_id,
+                'tranferend_branch_name'    => $request->tranferend_branch_name,
+                'position_id'               => $request->position_id,
+                'tranferend_position_name'  => $request->tranferend_position_name,
+                'date'                      => $request->date,
+                'descrition'                => $request->descrition,
+                'created_by'                => Auth::id(),
             ]);
 
+            DB::commit();
+            Toastr::success('Create transferred successfully.','Success');
+            return redirect()->back();
+        }catch(\Exception $e){
+            DB::rollback();
+            Toastr::error('transferred fail','Error');
+            return redirect()->back();
+        }
+    }
+    public function editTransferend(Request $request){
+        $branch = Branchs::all();
+        $position = Position::all();
+        $data = Transferred::where('id',$request->id)->first();
+        return response()->json(['success'=>$data,'branch'=>$branch,'position'=>$position]);
+    }
+    public function updateTransferend(Request $request){
+        try{
+            Transferred::where('id',$request->id)->where('employee_id',$request->employee_id)->update([
+                'branch_id'   => $request->branch_id,
+                'tranferend_branch_name'     => $request->tranferend_branch_name,
+                'position_id'   => $request->position_id,
+                'tranferend_position_name'   => $request->tranferend_position_name,
+                'date'   => $request->date,
+                'descrition'   => $request->descrition,
+                'updated_by'   => Auth::id(),
+            ]);
             DB::commit();
             Toastr::success('Update transferred successfully.','Success');
             return redirect()->back();
@@ -175,6 +221,19 @@ class EmployeeProfileController extends Controller
             return redirect()->back();
         }
     }
+    public function deleteTransferend(Request $request)
+    {
+        try{
+            Transferred::destroy($request->id);
+            Toastr::success('Transferred deleted successfully.','Success');
+            return redirect()->back();
+        }catch(\Exception $e){
+            DB::rollback();
+            Toastr::error('Transferred delete fail.','Error');
+            return redirect()->back();
+        }
+    }
+    
 
     public function updatedTraining(Request $request){
         try{
@@ -261,6 +320,17 @@ class EmployeeProfileController extends Controller
         }catch(\Exception $e){
             DB::rollback();
             Toastr::error('Updated Children fail','Error');
+            return redirect()->back();
+        }
+    }
+    public function childrenDelate(Request $request){
+        try{
+            ChildrenInfor::destroy($request->id);
+            Toastr::success('Children deleted successfully.','Success');
+            return redirect()->back();
+        }catch(\Exception $e){
+            DB::rollback();
+            Toastr::error('Children delete fail.','Error');
             return redirect()->back();
         }
     }

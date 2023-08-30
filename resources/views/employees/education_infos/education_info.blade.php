@@ -1,4 +1,4 @@
-<div id="education_info" class="modal custom-modal fade" style="display: none;" aria-hidden="true">
+<div id="education_info" class="modal custom-modal fade" aria-hidden="true" data-bs-backdrop="static">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -9,7 +9,7 @@
             <div class="modal-body">
                 <form action="{{url('/employee/education')}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
                     @csrf
-                    <div class="form-scroll" id="educationModal">
+                    <div class="form-scroll">
                         <div class="row" id="education-container-repeatable-elements">
                             <div class="education-repeatable-element repeatable-element">
                                 <div class="card">
@@ -35,7 +35,7 @@
                                             <div class="col-md-6">
                                                 <div class="form-group form-focus focused">
                                                     <div class="cal-icon">
-                                                        <input type="text" value="" name="start_date[]" class="form-control floating datetimepicker" required>
+                                                        <input type="date" value="" name="start_date[]" class="form-control floating datetimepicker" required>
                                                     </div>
                                                     <label class="focus-label">@lang('lang.starting_date') <span class="text-danger">*</span></label>
                                                 </div>
@@ -43,7 +43,7 @@
                                             <div class="col-md-6">
                                                 <div class="form-group form-focus focused">
                                                     <div class="cal-icon">
-                                                        <input type="text" value="" name="end_date[]" class="form-control floating datetimepicker" required>
+                                                        <input type="date" value="" name="end_date[]" class="form-control floating datetimepicker" required>
                                                     </div>
                                                     <label class="focus-label">@lang('lang.complete_date') <span class="text-danger">*</span></label>
                                                 </div>

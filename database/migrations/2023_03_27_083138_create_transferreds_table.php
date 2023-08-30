@@ -17,7 +17,9 @@ return new class extends Migration
             $table->id();
             $table->integer('employee_id')->nullable();
             $table->string('branch_id')->nullable();
+            $table->string('tranferend_branch_name')->nullable();
             $table->string('position_id')->nullable();
+            $table->string('tranferend_position_name')->nullable();
             $table->date('date')->nullable();
             $table->string('descrition')->nullable();
             $table->bigInteger('created_by')->unsigned()->nullable();

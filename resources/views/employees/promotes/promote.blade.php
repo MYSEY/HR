@@ -60,7 +60,6 @@
                             @else
                                 <input class="form-control" type="text" id="posit_id" name="posit_id" value="{{$data->EmployeePosition}}" readonly="">
                             @endif
-
                         </div>
                         <div class="form-group hr-form-group-select2">
                             <label>@lang('lang.promoted_to') <span class="text-danger">*</span></label>

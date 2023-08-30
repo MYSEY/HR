@@ -8,6 +8,7 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
+     * php artisan migrate:refresh --path=database/migrations/2023_05_17_044126_create_bonuses_table.php
      *
      * @return void
      */

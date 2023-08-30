@@ -8,6 +8,7 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
+     * php artisan migrate:refresh --path=database/migrations/2023_05_13_072456_create_national_social_security_funds_table.php
      *
      * @return void
      */
