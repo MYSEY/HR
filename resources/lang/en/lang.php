@@ -232,6 +232,7 @@ return[
     "internal"=>"Internal",
     "issue_date"=>"Issue Date",
     "inter-result"=>"Inter-Result",
+    "inter-failed"=>"Inter-Failed",
     "interviewed"=>"Interviewed",
     "interviewed_result"=>"Interviewed Result",
     "interviewed_date"=>"Interviewed Date",

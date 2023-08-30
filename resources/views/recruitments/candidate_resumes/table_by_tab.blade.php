@@ -29,9 +29,12 @@
                                 </thead>
                                 <tbody>
                                     @if (count($data) > 0)
+                                        @php
+                                            $num = 1;
+                                        @endphp
                                         @foreach ($data as $item)
                                             <tr class="odd">
-                                                <td class="ids">{{$item->id}}</td>
+                                                <td class="ids">{{$num}}</td>
                                                 <td >{{$item->name_kh }}</td>
                                                 <td >{{$item->name_en}}</td>
                                                 <td >{{$item->CandidateGender}}</td>
@@ -72,17 +75,18 @@
                                                         @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer')
                                                             <div class="dropdown-menu dropdown-menu-right">
                                                                 <a class="dropdown-item update"
-                                                                    data-id="{{ $item->id }}"><i
-                                                                        class="fa fa-pencil m-r-5"></i> @lang('lang.edit')</a>
+                                                                    data-id="{{ $item->id }}"><i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')</a>
                                                                 <a class="dropdown-item delete" href="#"
                                                                     data-toggle="modal" data-id="{{ $item->id }}"
-                                                                    data-target="#delete_candidate"><i
-                                                                        class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
+                                                                    data-target="#delete_candidate"><i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
                                                             </div>
                                                         @endif
                                                     </div>
                                                 </td>
                                             </tr>
+                                            @php
+                                                $num ++;
+                                            @endphp
                                         @endforeach
                                     @endif
                                 </tbody>
@@ -151,6 +155,39 @@
                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Time: activate to sort column ascending" >Time</th>
                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Committee Interview: activate to sort column ascending" >Committee Interview</th> --}}
                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="CV: activate to sort column ascending" >@lang('lang.cv')</th>
+                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Status: activate to sort column ascending" >@lang('lang.status')</th>
+                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Remark: activate to sort column ascending" >@lang('lang.remark')</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="tab-pane show" id="tab_interviewed_failed" role="tabpanel">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="table-responsive">
+                <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <table class="table table-striped custom-table datatable dataTable no-footer tbl-failed"
+                                id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
+                                <thead>
+                                    <tr>
+                                        <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="#: activate to sort column descending">#</th>
+                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Name: activate to sort column ascending">@lang('lang.name') (@lang('lang.en'))</th>
+                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Name: activate to sort column ascending">@lang('lang.name') (@lang('lang.kh'))</th>
+                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Gender: activate to sort column ascending">@lang('lang.gender')</th>
+                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Position Applied: activate to sort column ascending" >@lang('lang.position_applied')</th>
+                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Location Applied: activate to sort column ascending" >@lang('lang.location_applied')</th>
+                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Interviewed Date: activate to sort column ascending" >@lang('lang.interviewed_date')</th>
+                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Interviewed Result: activate to sort column ascending" >@lang('lang.interviewed_result')</th>
                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Status: activate to sort column ascending" >@lang('lang.status')</th>
                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Remark: activate to sort column ascending" >@lang('lang.remark')</th>
                                     </tr>

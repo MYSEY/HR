@@ -1,4 +1,4 @@
-<div id="add_emp" class="modal custom-modal fade hr-modal-select2" role="dialog">
+<div id="add_emp" class="modal custom-modal fade hr-modal-select2" role="dialog" data-bs-backdrop="static">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -255,7 +255,9 @@
                         <button type="button" class="btn btn-primary btn_save" id="btn_save" data-dismiss="modal" data-btn="2">
                             <span class="btn-text-save">@lang('lang.edit')</span>
                             <span id="btn-save-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading') </span>
-                           
+                        </button>
+                        <button type="button" class="btn btn-secondary btn-cancel" id="btn-cancel">
+                            <span class="btn-text-save">@lang('lang.cancel')</span>
                         </button>
                     </div>
                 </form>
@@ -318,6 +320,9 @@
             let optionSelect = "permanentCommune";
             $('#permanent_village').html('<option selected disabled> --@lang("lang.select") --</option>');
             showProvince(id, optionSelect);
+        });
+        $("#btn-cancel").on("click", function() {
+            $('#add_emp').modal('hide');
         });
 
         $(document).on('click','.btn_print_signed_contract', function(){
@@ -634,7 +639,6 @@
                     if (btn_action == 2) {
                         $("#add_emp").modal("hide");
                     }
-                    // window.location.replace("{{ URL('recruitment/candidate-resume/list') }}");
                 }).catch(function(error) {
                     new Noty({
                         title: "",

@@ -29,27 +29,31 @@
                         <ul class="nav nav-tabs nav-tabs-bottom" role="tablist">
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link active" data-bs-toggle="tab" href="#tab_candidate_resume" aria-selected="true"
-                                    role="tab">@lang('lang.cvs')({{count($data)}})</a>
+                                    role="tab">@lang('lang.cvs')(<span id="data_cv">{{count($data)}}</span>)</a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" data-bs-toggle="tab" id="btn_tab_short_list" href="#tab_short_list" aria-selected="false" role="tab" data-tab-id="2"
-                                    tabindex="-1">@lang('lang.shortlisted')({{$dataShortList}})</a>
+                                    tabindex="-1">@lang('lang.shortlisted')(<span id="dataShortList">{{$dataShortList}})</span></a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" data-bs-toggle="tab" id="btn_not_tab_short_list" href="#tab_not_short_list" aria-selected="false" role="tab" data-tab-id="2"
-                                    tabindex="-1">@lang('lang.non-shortlisted')({{$dataNon}})</a>
+                                    tabindex="-1">@lang('lang.non-shortlisted')(<span id="dataNon">{{$dataNon}}</span>)</a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link" data-bs-toggle="tab" id="btn_tab_interviewed_failed" href="#tab_interviewed_failed" aria-selected="false" data-tab-id="6"
+                                    role="tab" tabindex="-1">@lang('lang.inter-failed')(<span id="dataFailed">{{$dataFailed}}</span>)</a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" data-bs-toggle="tab" id="btn_tab_interviewed_result" href="#tab_interviewed_result" aria-selected="false" data-tab-id="3"
-                                    role="tab" tabindex="-1">@lang('lang.inter-result')({{$dataResult}})</a>
+                                    role="tab" tabindex="-1">@lang('lang.inter-result')(<span id="dataResult">{{$dataResult}}</span>)</a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" data-bs-toggle="tab" id="btn_tab_signed_contract" href="#tab_signed_contract" aria-selected="false" data-tab-id="4"
-                                    role="tab" tabindex="-1">@lang('lang.processing_contract')({{$dataProcessing}})</a>
+                                    role="tab" tabindex="-1">@lang('lang.processing_contract')(<span id="dataProcessing">{{$dataProcessing}}</span>)</a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" data-bs-toggle="tab" id="btn_tab_signed_contract_cancel" href="#tab_signed_contract_cancel" aria-selected="false" data-tab-id="5"
-                                    role="tab" tabindex="-1">@lang('lang.canceled_contract')({{$dataCancel}})</a>
+                                    role="tab" tabindex="-1">@lang('lang.canceled_contract')(<span id="dataCancel">{{$dataCancel}}</span>)</a>
                             </li>
                         </ul>
                     </div>
@@ -103,7 +107,7 @@
             let tab_status = $(this).attr('data-tab-id');
             showDatas(tab_status);
         });
-        $("#btn_tab_interviewed_result, #btn_tab_signed_contract, #btn_tab_signed_contract_cancel").on("click", function(){
+        $("#btn_tab_interviewed_failed, #btn_tab_interviewed_result, #btn_tab_signed_contract, #btn_tab_signed_contract_cancel").on("click", function(){
             let tab_status = $(this).attr('data-tab-id');
             if (tab_status ==  5) {
                 tab_status ="Cancel"
@@ -132,6 +136,7 @@
                                     icon: true
                                 }).show(); 
                                 showDatas("4");
+                                $("#dataProcessing").text(response.data.dataProcessing);
                             }).catch(function(error) {
                                 new Noty({
                                     title: "",
@@ -215,6 +220,8 @@
                                     icon: true
                                 }).show();
                                 showDatas("4");
+                                $("#dataProcessing").text(response.data.dataProcessing);
+                                $("#dataCancel").text(response.data.dataCancel);
                             }).catch(function(error) {
                                 new Noty({
                                     title: "",
@@ -305,62 +312,8 @@
         $('body').on('click', '#btn-status a', function() {
             let id = $(this).attr('data-emp-id');
             let status = $(this).data('id');
-            if (status == 1) {
-                $.confirm({
-                    title: '@lang("lang.candidate_resume_status")!',
-                    contentClass: 'text-center',
-                    // backgroundDismiss: 'cancel',
-                    content: ''+
-                        '<form method="post" class="formName">'+
-                            '<div class="form-group">'+
-                                '<div class="form-group">'+
-                                    '<label><a href="#">@lang("lang.received_cv")</a></label>'+
-                                '</div>'+
-                                '<div class="form-group">'+
-                                    '<p>@lang("lang.do_you_really_want_to_change_status")?</p>'+
-                                    '<input type="hidden" class="form-control status" id="" name="" value="'+status+'">'+
-                                    '<input type="hidden" class="form-control id" id="" name="" value="'+id+'">'+
-                                '</div>'+
-                        '</form>',
-                    buttons: {
-                        confirm: {
-                            text: '@lang("lang.ok")',
-                            btnClass: 'btn-blue',
-                            action: function() {
-                                var status = this.$content.find('.status').val();
-                                var id = this.$content.find('.id').val();
-                                axios.post('{{ URL('recruitment/candidate-resume/status') }}', {
-                                        'id': id,
-                                        'status': status,
-                                    }).then(function(response) {
-                                    if (response.data.message == 'successfull') {
-                                        new Noty({
-                                            title: "",
-                                            text: "@lang('lang.the_process_has_been_successfully').",
-                                            type: "success",
-                                            timeout: 3000,
-                                            icon: true
-                                        }).show();
-                                        $('.card-footer').remove();
-                                        window.location.replace("{{ URL('recruitment/candidate-resume/list') }}"); 
-                                    }
-                                }).catch(function(error) {
-                                    new Noty({
-                                        title: "",
-                                        text: "@lang('lang.something_went_wrong_please_try_again_later').",
-                                        type: "error",
-                                        icon: true
-                                    }).show();
-                                });
-                            }
-                        },
-                        cancel: {
-                            text: '@lang("lang.cancel")',
-                            btnClass: 'btn-red btn-sm',
-                        },
-                    }
-                });
-            }else if(status==2){
+            let nonShort = $(this).data('id-short');
+            if(status==2){
                 $.confirm({
                     title: '@lang("lang.candidate_resume_status")!',
                     contentClass: 'text-center',
@@ -457,15 +410,21 @@
                                         'committee_interview': committee_interview.toString(),
                                         'remark': remark,
                                     }).then(function(response) {
-                                    new Noty({
-                                        title: "",
-                                        text: "@lang('lang.the_process_has_been_successfully').",
-                                        type: "success",
-                                        timeout: 3000,
-                                        icon: true
-                                    }).show();
-                                    $('.card-footer').remove();
-                                    window.location.replace("{{ URL('recruitment/candidate-resume/list') }}");
+                                        new Noty({
+                                            title: "",
+                                            text: "@lang('lang.the_process_has_been_successfully').",
+                                            type: "success",
+                                            timeout: 3000,
+                                            icon: true
+                                        }).show();
+                                        if (nonShort == "non-shortlist") {
+                                            showDatas("2");
+                                            $("#data_cv").text(response.data.data);
+                                            $("#dataNon").text(response.data.dataNon);
+                                            $("#dataShortList").text(response.data.dataShortList);
+                                        }else{
+                                            window.location.replace("{{ URL('recruitment/candidate-resume/list') }}");
+                                        }
                                 }).catch(function(error) {
                                     new Noty({
                                         title: "",
@@ -503,7 +462,7 @@
                         }
                     })
                 });
-            }else if(status == 3){
+            }else if(status == 3 || status == 6){
                 let data_status = $(this).attr('data-status');
                 let select_joined_interview  = ""; 
                 if (data_status == 3 ) {
@@ -602,15 +561,25 @@
                                         'interviewed_date': interviewed_dates,
                                         'remark': remark,
                                     }).then(function(response) {
-                                    new Noty({
-                                        title: "",
-                                        text: "@lang('lang.the_process_has_been_successfully').",
-                                        type: "success",
-                                        timeout: 3000,
-                                        icon: true
-                                    }).show();
-                                    $('.card-footer').remove();
-                                    window.location.replace("{{ URL('recruitment/candidate-resume/list') }}");
+                                        if (status == 6) {
+                                            showDatas("6");
+                                        };
+                                        if(status == 3) {
+                                            showDatas("3");
+                                        } ;
+                                        if(nonShort == "shortlist") {
+                                            showDatas("2");
+                                        };
+                                        $("#dataFailed").text(response.data.dataFailed);
+                                        $("#dataResult").text(response.data.dataResult);
+                                        $("#dataShortList").text(response.data.dataShortList);
+                                        new Noty({
+                                            title: "",
+                                            text: "@lang('lang.the_process_has_been_successfully').",
+                                            type: "success",
+                                            timeout: 3000,
+                                            icon: true
+                                        }).show();
                                 }).catch(function(error) {
                                     new Noty({
                                         title: "",
@@ -644,7 +613,7 @@
                                 '<input type="date" class="form-control contract_date" value="">'+
                             '</div>'+
                             '<div class="form-group">'+
-                                '<label>@lang("join_date") <span class="text-danger">*</span></label>'+
+                                '<label>@lang("lang.join_date") <span class="text-danger">*</span></label>'+
                                 '<input type="date" class="form-control join_date" value="">'+
                             '</div>'+
                         '</form>',
@@ -674,15 +643,17 @@
                                         'contract_date': contract_date,
                                         'join_date': join_date,
                                     }).then(function(response) {
-                                    new Noty({
-                                        title: "",
-                                        text: "@lang('lang.the_process_has_been_successfully').",
-                                        type: "success",
-                                        timeout: 3000,
-                                        icon: true
-                                    }).show();
-                                    $('.card-footer').remove();
-                                    window.location.replace("{{ URL('recruitment/candidate-resume/list') }}");
+                                        showDatas("3");
+                                        $("#dataFailed").text(response.data.dataFailed);
+                                        $("#dataProcessing").text(response.data.dataProcessing);
+                                        $("#dataResult").text(response.data.dataResult);
+                                        new Noty({
+                                            title: "",
+                                            text: "@lang('lang.the_process_has_been_successfully').",
+                                            type: "success",
+                                            timeout: 3000,
+                                            icon: true
+                                        }).show();
                                 }).catch(function(error) {
                                     new Noty({
                                         title: "",
@@ -710,6 +681,7 @@
         });
     });
     function showDatas(btn_tab){
+        var status_tab = btn_tab;
         $.ajax({
             type: "GET",
             url: "{{ url('/recruitment/candidate-resume/show') }}",
@@ -721,11 +693,13 @@
                 let datas = response.datas;
                 if (datas.length > 0) {
                     var tr_re = "";
+                    var tr_failed = "";
                     var tr = "";
                     var tr_not_list = "";
                     var tr_ct = "";
                     var tr_ct_cancel = "";
                     if (btn_tab == 2) {
+                        let num = 1;
                         datas.map((staff) => {
                             let interviewed_date = "";
                             let time = "";
@@ -753,7 +727,7 @@
                             }
                             if (staff.short_list == 1) {
                                 tr += '<tr class="odd">'+
-                                    '<td class="ids">'+(staff.id)+'</td>'+
+                                    '<td class="ids">'+(num)+'</td>'+
                                     '<td >'+(staff.name_kh)+' </td>'+
                                     '<td >'+(staff.name_en)+'</td>'+
                                     '<td >'+(staff.option.name_english)+'</td>'+
@@ -772,7 +746,7 @@
                                                 // '<a class="dropdown-item" data-emp-id="'+(staff.id)+'"  data-id="2" href="#">'+
                                                 //     '<i class="fa fa-dot-circle-o text-warning"></i> Shortlisted'+
                                                 // '</a>'+
-                                                '<a class="dropdown-item" data-emp-id="'+(staff.id)+'"  data-id="3" href="#">'+
+                                                '<a class="dropdown-item" data-emp-id="'+(staff.id)+'"  data-id="3" data-id-short="shortlist"  href="#">'+
                                                     '<i class="fa fa-dot-circle-o text-info"></i> @lang("lang.interviewed")'+
                                                 '</a>'+
                                             '</div>'+
@@ -783,9 +757,10 @@
                                     '</td>'+
                                     '<td>'+(staff.remark ? staff.remark: "")+'</td>'+
                                 '</tr>';
+                                num ++;
                             }else if (staff.short_list == 2) {
                                 tr_not_list += '<tr class="odd">'+
-                                    '<td class="ids">'+(staff.id)+'</td>'+
+                                    '<td class="ids">'+(num)+'</td>'+
                                     '<td >'+(staff.name_kh)+' </td>'+
                                     '<td >'+(staff.name_en)+'</td>'+
                                     '<td >'+(staff.option.name_english)+'</td>'+
@@ -800,7 +775,7 @@
                                                 (tag_i)+ '<span>'+(text_status)+'</span>'+
                                             '</a>'+
                                             '<div class="dropdown-menu dropdown-menu-right" id="btn-status">'+
-                                                '<a class="dropdown-item" data-emp-id="'+(staff.id)+'"  data-id="2" href="#">'+
+                                                '<a class="dropdown-item" data-emp-id="'+(staff.id)+'"  data-id="2" data-id-short="non-shortlist" href="#">'+
                                                     '<i class="fa fa-dot-circle-o text-warning"></i> @lang("lang.shortlisted")'+
                                                 '</a>'+
                                             '</div>'+
@@ -808,35 +783,70 @@
                                     '</td>'+
                                     '<td>'+(staff.remark ? staff.remark: "")+'</td>'+
                                 '</tr>';
+                                num ++;
                             }
                         });
-                    }else if (btn_tab == 3) {
+                    }
+                    if (status_tab == 6) {
+                        let num =1;
+                        datas.map((staff_result) => {
+                            let interview_result = "";
+                            if (staff_result.interviewed_result == "2") {
+                                interview_result = "@lang('lang.failed')";
+                            }else if (staff_result.interviewed_result == "5") {
+                                interview_result = "@lang('lang.high_exected_salary')";
+                            }else
+                            if (staff_result.interviewed_result == "6") {
+                                interview_result = "@lang('lang.rejected_offered')";
+                            }else if(staff_result.interviewed_result == "7"){
+                                interview_result = '<span class="badge bg-inverse-danger">@lang("lang.black_list")</snap>'
+                            }else{
+                                interview_result = "No";
+                            };
+                            let status_show_failed = "";
+                            let interviewed_date = staff_result.interviewed_date ? moment(staff_result.interviewed_date).format('MMM-D-YYYY') : "";
+                            if (staff_result.interviewed_result == "5") {
+                                status_show_failed = '<div class="dropdown action-label">'+
+                                            '<a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">'+
+                                                '<i class="fa fa-dot-circle-o text-info"></i><span>@lang("lang.interviewed")</span>'+
+                                            '</a>'+
+                                            '<div class="dropdown-menu dropdown-menu-right" id="btn-status">'+
+                                                '<a class="dropdown-item" data-emp-id="'+(staff_result.id)+'"  data-id="6" data-status="'+(staff_result.status)+'" href="#">'+
+                                                    '<i class="fa fa-dot-circle-o text-info"></i> @lang("lang.interviewed")'+
+                                                '</a>'+
+                                            '</div>'+
+                                        '</div>';
+                            }else {
+                                status_show_failed = interview_result;
+                            }
+                            tr_failed += '<tr class="odd">'+
+                                '<td class="ids">'+(num)+'</td>'+
+                                '<td >'+(staff_result.name_kh )+'</td>'+
+                                '<td >'+(staff_result.name_en)+'</td>'+
+                                '<td >'+(staff_result.option.name_english)+'</td>'+
+                                '<td >'+(staff_result.position.name_english)+'</td>'+
+                                '<td >'+(staff_result.branch.branch_name_en)+'</td>'+
+                                '<td >'+(interviewed_date)+'</td>'+
+                                '<td >'+(interview_result)+'</td>'+
+                                '<td >'+(status_show_failed)+'</td>'+
+                                '<td >'+(staff_result.remark ? staff_result.remark: "")+'</td>'+
+                            '</tr>';
+                            num ++;
+                        })
+                    }
+                    if (btn_tab == 3) {
+                        let num = 1;
                         datas.map((staff_result) => {
                             let text_status = "";
                             let tag_i = "";
                             let interview_result = "";
                             if (staff_result.interviewed_result == 1) {
                                 interview_result = "@lang('lang.passed')";
-                            }else
-                            if (staff_result.interviewed_result == "2") {
-                                interview_result = "@lang('lang.failed')";
-                            }else
-                            if (staff_result.interviewed_result == "3") {
+                            }else if (staff_result.interviewed_result == "3") {
                                 interview_result = "@lang('lang.waiting')";
-                            }else
-                            if (staff_result.interviewed_result == "4") {
+                            }else if (staff_result.interviewed_result == "4") {
                                 interview_result = "@lang('lang.pending')";
-                            }else
-                            if (staff_result.interviewed_result == "5") {
-                                interview_result = "@lang('lang.high_exected_salary')";
-                            }else
-                            if (staff_result.interviewed_result == "6") {
-                                interview_result = "@lang('lang.rejected_offered')";
-                            }else if(staff_result.interviewed_result == "7"){
-                                interview_result = "@lang('lang.black_list')";
-                            }else{
-                                interview_result = "No";
-                            };
+                            }
 
                             if(staff_result.status =='3') {
                                 text_status = " @lang('lang.interviewed')";
@@ -846,30 +856,26 @@
                                 tag_i = '<i class="fa fa-dot-circle-o text-success"></i>'
                             };
                             let status_show = "";
-                            if (staff_result.interviewed_result == 1 || staff_result.interviewed_result == 3 || staff_result.interviewed_result == 4 || staff_result.interviewed_result == 5) {
-                                let complete = '';
-                                if (staff_result.interviewed_result == 1) {
-                                    complete = '<a class="dropdown-item" data-emp-id="'+(staff_result.id)+'" data-id="4" href="#">'+
-                                                '<i class="fa fa-dot-circle-o text-success"></i> @lang("lang.complete")'+
-                                            '</a>';
-                                }
-                                status_show = '<div class="dropdown action-label">'+
-                                                '<a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">'+
-                                                    (tag_i)+ '<span>'+ (text_status)+'</span>'+
-                                                '</a>'+
-                                                '<div class="dropdown-menu dropdown-menu-right" id="btn-status">'+
-                                                    '<a class="dropdown-item" data-emp-id="'+(staff_result.id)+'"  data-id="3" data-status="'+(staff_result.status)+'" href="#">'+
-                                                        '<i class="fa fa-dot-circle-o text-info"></i> @lang("lang.interviewed")'+
-                                                    '</a>'+
-                                                   (complete)+
-                                                '</div>'+
-                                            '</div>';
-                            }else{
-                                status_show = '<span class="badge bg-inverse-danger">'+ interview_result+'</snap>';   
-                            }
+                            let complete = '';
                             let interviewed_date = staff_result.interviewed_date ? moment(staff_result.interviewed_date).format('MMM-D-YYYY') : "";
+                            if (staff_result.interviewed_result == 1) {
+                                complete = '<a class="dropdown-item" data-emp-id="'+(staff_result.id)+'" data-id="4" href="#">'+
+                                            '<i class="fa fa-dot-circle-o text-success"></i> @lang("lang.complete")'+
+                                        '</a>';
+                            }
+                            status_show = '<div class="dropdown action-label">'+
+                                            '<a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">'+
+                                                (tag_i)+ '<span>'+ (text_status)+'</span>'+
+                                            '</a>'+
+                                            '<div class="dropdown-menu dropdown-menu-right" id="btn-status">'+
+                                                '<a class="dropdown-item" data-emp-id="'+(staff_result.id)+'"  data-id="3" data-status="'+(staff_result.status)+'" href="#">'+
+                                                    '<i class="fa fa-dot-circle-o text-info"></i> @lang("lang.interviewed")'+
+                                                '</a>'+
+                                                (complete)+
+                                            '</div>'+
+                                        '</div>';
                             tr_re += ' <tr class="odd">'+
-                                '<td class="ids">'+(staff_result.id)+'</td>'+
+                                '<td class="ids">'+(num)+'</td>'+
                                 '<td >'+(staff_result.name_kh )+'</td>'+
                                 '<td >'+(staff_result.name_en)+'</td>'+
                                 '<td >'+(staff_result.option.name_english)+'</td>'+
@@ -880,8 +886,11 @@
                                 '<td >'+(status_show)+'</td>'+
                                 '<td >'+(staff_result.remark ? staff_result.remark: "")+'</td>'+
                             '</tr>';
-                        });
-                    }else if (btn_tab == 4 || btn_tab == "Cancel") {
+                            num ++;
+                        })
+                    };
+                    if (btn_tab == 4 || btn_tab == "Cancel") {
+                        let num  =1;
                         datas.map((staff_result) => {
                             let interview_result = "";
                             if (staff_result.interviewed_result == 1) {
@@ -893,7 +902,7 @@
                             if (staff_result.status == "Cancel") {
                                 action = "";
                                 tr_ct_cancel += ' <tr class="odd">'+
-                                    '<td class="ids">'+(staff_result.id)+'</td>'+
+                                    '<td class="ids">'+(num)+'</td>'+
                                     '<td class="name_kh" >'+(staff_result.name_kh )+'</td>'+
                                     '<td class="name_en">'+(staff_result.name_en)+'</td>'+
                                     '<td class="gender_name_english"><input type="text" class="gender_id" data-gender="'+(staff_result.gender)+'" hidden>'+(staff_result.option.name_english)+'</td>'+
@@ -906,13 +915,14 @@
                                     '<td ><span class="badge bg-inverse-danger">'+(staff_result.status)+'</snap></td>'+
                                     '<td >'+(updated_at)+'</td>'+
                                 '</tr>';
+                                num ++;
                             }else{
                                 let dataAprove = false;
                                 if (staff_result.id_card_number && staff_result.position_type && staff_result.department_id) {
                                     dataAprove = true;
                                 }
                                 tr_ct += ' <tr class="odd">'+
-                                    '<td class="ids">'+(staff_result.id)+'</td>'+
+                                    '<td class="ids">'+(num)+'</td>'+
                                     '<td class="name_kh" >'+(staff_result.name_kh )+'</td>'+
                                     '<td class="name_en">'+(staff_result.name_en)+'</td>'+
                                     '<td class="gender_name_english"><input type="text" class="gender_id" data-gender="'+(staff_result.gender)+'" hidden>'+(staff_result.option.name_english)+'</td>'+
@@ -943,17 +953,20 @@
                                         '</div>'+
                                     '</td>'+
                                 '</tr>';
+                                num ++;
                             }
                         });
                     }
                 }else {
                     var tr = '<tr><td colspan=13 align="center">@lang("lang.no_record_to_display")</td></tr>';
                     var tr_not_list = '<tr><td colspan=9 align="center">@lang("lang.no_record_to_display")</td></tr>';
+                    var tr_failed = '<tr><td colspan=10 align="center">@lang("lang.no_record_to_display")</td></tr>';
                     var tr_re = '<tr><td colspan=10 align="center">@lang("lang.no_record_to_display")</td></tr>';
                     var tr_ct = '<tr><td colspan=11 align="center">@lang("lang.no_record_to_display")</td></tr>';
                 }
                 $(".tbl-short-list tbody").html(tr);
                 $(".tbl-not-short-list tbody").html(tr_not_list);
+                $(".tbl-failed tbody").html(tr_failed);
                 $(".tbl-result tbody").html(tr_re);
                 $(".tbl-signed-contract tbody").html(tr_ct);
                 $(".tbl-signed-contract_cancel tbody").html(tr_ct_cancel);

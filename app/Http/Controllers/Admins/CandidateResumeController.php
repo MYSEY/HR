@@ -46,7 +46,8 @@ class CandidateResumeController extends Controller
         $data = CandidateResume::where("status", "1")->get();
         $dataShortList = CandidateResume::where("short_list", "1")->where('status','2')->count();
         $dataNon = CandidateResume::where("short_list", "2")->count();
-        $dataResult = CandidateResume::where("status",'3')->count();
+        $dataResult = CandidateResume::where("status",'3')->whereIn("interviewed_result", [1,3,4])->count();
+        $dataFailed = CandidateResume::where("status",'3')->whereNotIn("interviewed_result", [1,3,4])->orWhere('interviewed_result', '=', null)->where('status', 3)->count();
         $dataProcessing = CandidateResume::where("status",'4')->count();
         $dataCancel = CandidateResume::where("status",'Cancel')->count();
         $province = Province::all();
@@ -64,6 +65,7 @@ class CandidateResumeController extends Controller
                 "province",
                 "dataShortList",
                 "dataNon",
+                "dataFailed",
                 "dataResult",
                 'dataProcessing',
                 'dataCancel'
@@ -110,7 +112,23 @@ class CandidateResumeController extends Controller
      */
     public function show(Request $request)
     {
-        $datas = CandidateResume::where("status", $request->status)->with("branch")->with("position")->with("option")->get();
+        if ($request->status == 3 || $request->status == 6) {
+            $datas = CandidateResume::with("branch")->with("position")->with("option")
+            ->when($request->status, function ($query, $status) {
+                if ($status == 6) {
+                    $query->whereNotIn('interviewed_result', [1,3,4]);
+                    $query->orWhere('interviewed_result', '=', null); 
+                    $query->where('status', 3);
+                }else{
+                    $query->where('status', $status);
+                    $query->whereIn('interviewed_result', [1,3,4]);
+                }
+            })
+           ->get();
+        }else{
+            $datas = CandidateResume::where("status", $request->status)->with("branch")->with("position")->with("option")->get();
+        }
+        
         return response()->json(['datas'=>$datas]);
     }
 
@@ -274,10 +292,10 @@ class CandidateResumeController extends Controller
                     ];
                 }
             }
-            if ($request->status == "3") {
+            if ($request->status == "3" || $request->status == "6") {
                 if ($request->joined_interview == "1") {
                     $dataUpdate = [
-                        'status' => $request->status,
+                        'status' => 3,
                         'joined_interview' => $request->joined_interview,
                         'interviewed_result' => $request->interviewed_result,
                         'remark' =>$request->remark,
@@ -294,7 +312,7 @@ class CandidateResumeController extends Controller
                     ];
                 }else {
                     $dataUpdate = [
-                        'status' => $request->status,
+                        'status' => 3,
                         'joined_interview' => $request->joined_interview,
                         'interviewed_result' =>null,
                         'remark' =>$request->remark,
@@ -318,7 +336,23 @@ class CandidateResumeController extends Controller
             }
             CandidateResume::where('id',$request->id)->update($dataUpdate);
             DB::commit();
-            return ['message' => 'successfull'];
+            $data = CandidateResume::where("status", "1")->count();
+            $dataShortList = CandidateResume::where("short_list", "1")->where('status','2')->count();
+            $dataNon = CandidateResume::where("short_list", "2")->count();
+            $dataResult = CandidateResume::where("status",'3')->whereIn("interviewed_result", [1,3,4])->count();
+            $dataFailed = CandidateResume::where("status",'3')->whereNotIn("interviewed_result", [1,3,4])->orWhere('interviewed_result', '=', null)->where('status', 3)->count();
+            $dataProcessing = CandidateResume::where("status",'4')->count();
+            $dataCancel = CandidateResume::where("status",'Cancel')->count();
+            return response()->json([
+                'message' => 'successfull',
+                "data" => $data,
+                "dataShortList" => $dataShortList,
+                "dataNon" => $dataNon,
+                "dataFailed" => $dataFailed,
+                "dataResult" => $dataResult,
+                'dataProcessing' => $dataProcessing,
+                'dataCancel' => $dataCancel,
+            ]);
         } catch (\Exception $exp) {
             DB::rollBack();
             return response()->json(['message' => $exp->getMessage()], 500);
@@ -367,7 +401,8 @@ class CandidateResumeController extends Controller
                 $userData = User::create($emp_data);
                 CandidateResume::where('id',$candidate->id)->update([ 'status' => 5]);
                 DB::commit();
-                return ['message' => 'successfull'];
+                $dataProcessing = CandidateResume::where("status",'4')->count();
+                return response()->json(['message' => 'successfull', "dataProcessing"=>$dataProcessing]);
             }else{
                 $generateID = GenerateIdEmployee::where("number_employee",$request->number_employee )->first();
                 if (!$generateID) {
