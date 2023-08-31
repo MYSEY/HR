@@ -784,9 +784,22 @@ class EmployeePayrollController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+        try{
+            Payroll::destroy($request->id);
+            $this->NSSF()->delete();
+            $this->seniority()->delete();
+            $this->severancePay()->delete();
+            $this->GrossSalaryPay()->delete();
+            $this->Bonus()->delete();
+            Toastr::success('Payroll deleted successfully.','Success');
+            return redirect()->back();
+        }catch(\Exception $e){
+            DB::rollback();
+            Toastr::error('Payroll delete fail','Error');
+            return redirect()->back();
+        }
     }
 
     public function paySlip(Request $request){

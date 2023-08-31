@@ -42,7 +42,7 @@
                                     </tr>
                                 @endforeach
                             @else
-                                <td colspan="6" style="text-align: center">@lang('lang.no_record_to_display')</td>
+                                <td colspan="10" style="text-align: center">@lang('lang.no_record_to_display')</td>
                             @endif
                         </tbody>
                     </table>

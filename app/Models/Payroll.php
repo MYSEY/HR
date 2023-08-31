@@ -7,14 +7,18 @@ use App\Models\Bonus;
 use App\Models\Seniority;
 use App\Models\SeverancePay;
 use App\Models\ChildrenInfor;
+use App\Models\GrossSalaryPay;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\NationalSocialSecurityFund;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Payroll extends Model
 {
     use HasFactory;
+    use SoftDeletes;
+
     protected $table = 'payrolls';
     protected $guarded = ['id'];
 
@@ -69,16 +73,22 @@ class Payroll extends Model
         ->with('department')->with('position')->with('branch');
     }
     public function NSSF(){
-        return $this->belongsTo(NationalSocialSecurityFund::class ,'employee_id');
+        return $this->belongsTo(NationalSocialSecurityFund::class ,'employee_id','id');
+    }
+    public function GrossSalaryPay(){
+        return $this->belongsTo(GrossSalaryPay::class ,'employee_id','id');
     }
     public function chiledren(){
-        return $this->belongsTo(ChildrenInfor::class ,'employee_id');
+        return $this->belongsTo(ChildrenInfor::class ,'employee_id','id');
     }
     public function seniority(){
-        return $this->belongsTo(Seniority::class ,'employee_id');
+        return $this->belongsTo(Seniority::class ,'employee_id','id');
     }
     public function severancePay(){
-        return $this->belongsTo(SeverancePay::class ,'employee_id');
+        return $this->belongsTo(SeverancePay::class ,'employee_id','id');
+    }
+    public function Bonus(){
+        return $this->belongsTo(Bonus::class ,'employee_id','id');
     }
 
     public function getCreatedAttribute(){

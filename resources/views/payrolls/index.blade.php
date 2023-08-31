@@ -190,12 +190,14 @@
                                                         rowspan="1" colspan="1"
                                                         aria-label="Payslip: activate to sort column ascending">@lang('lang.payslip')
                                                     </th>
+                                                    {{-- <th class="text-end no-sort sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Action: activate to sort column ascending" style="width: 50.825px;">@lang('lang.action')</th> --}}
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 @if (count($data) > 0)
                                                     @foreach ($data as $item)
                                                         <tr class="odd">
+                                                            <td class="ids" hidden>{{$item->id}}</td>
                                                             <td class="sorting_1">
                                                                 <h2 class="table-avatar">
                                                                     @if ($item->users->profile !=null)
@@ -234,6 +236,16 @@
                                                             <td>{{ $item->PayrollPaymentDate }}</td>
                                                             <td>{{ $item->Created }}</td>
                                                             <td><a class="btn btn-sm btn-primary" href="{{ url('payslip', $item->employee_id) }}">@lang('lang.generate_payslip')</a></td>
+                                                            {{-- <td class="text-end">
+                                                                <div class="dropdown dropdown-action">
+                                                                    <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i  class="material-icons">more_vert</i></a>
+                                                                    @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer')
+                                                                        <div class="dropdown-menu dropdown-menu-right">
+                                                                            <a class="dropdown-item payrollDelete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_payroll"><i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
+                                                                        </div>
+                                                                    @endif
+                                                                </div>
+                                                            </td> --}}
                                                         </tr>
                                                     @endforeach
                                                 @endif
@@ -302,12 +314,43 @@
                 </div>
             </div>
         </div>
+
+        <!-- Delete Payroll Modal -->
+        <div class="modal custom-modal fade" id="delete_payroll" role="dialog">
+            <div class="modal-dialog modal-sm modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <div class="form-header">
+                            <h3>@lang('lang.deleted')!</h3>
+                            <p>@lang('lang.are_you_sure_want_to_delete')?</p>
+                        </div>
+                        <div class="modal-btn delete-action">
+                            <form action="{{url('payroll/delete')}}" method="POST">
+                                @csrf
+                                <input type="hidden" name="id" class="e_id" value="">
+                                <div class="row">
+                                    <div class="submit-section" style="text-align: center">
+                                        <button type="submit" class="btn btn-primary submit-btn me-2">@lang('lang.delete')</button>
+                                        <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-danger">@lang('lang.cancel')</a>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /Delete Payroll Modal -->
     </div>
 @endsection
 @include('includs.script')
 <script src="{{asset('/admin/js/validation-field.js')}}"></script>
 <script>
     $(function(){
+        $('.payrollDelete').on('click',function(){
+            var _this = $(this).parents('tr');
+            $('.e_id').val(_this.find('.ids').text());
+        });
         $(".reset-btn").on("click", function() {
             $(this).prop('disabled', true);
             $(".btn-text-reset").hide();

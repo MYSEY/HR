@@ -261,7 +261,7 @@ class User extends Authenticatable
         $data = Option::where('type','gender')->get();
         foreach($data as $item){
             if($this->gender == $item->id){
-                $Gender = $item->name_english;
+                $Gender = Helper::getLang() == 'en' ? $item->name_english : $item->name_khmer;
             }
         }
         return $Gender ?? "";
@@ -270,7 +270,7 @@ class User extends Authenticatable
         $data = Option::where('type','identity_type')->get();
         foreach($data as $item){
             if($this->identity_type == $item->id){
-                $IdentityType = $item->name_english;
+                $IdentityType = Helper::getLang() == 'en' ? $item->name_english : $item->name_khmer;
             }
         }
         return $IdentityType ?? "";
@@ -279,7 +279,7 @@ class User extends Authenticatable
         $data = Option::where('type','position_type')->get();
         foreach($data as $item){
             if($this->position_type == $item->id){
-                $positionType = $item->name_english;
+                $positionType = Helper::getLang() == 'en' ? $item->name_english : $item->name_khmer;
             }
         }
         return $positionType ?? "";
@@ -295,7 +295,7 @@ class User extends Authenticatable
     }
     
     public function getEmployeeBranchAttribute(){
-        return optional($this->branch)->branch_name_en;
+        return (Helper::getLang() == 'en') ? optional($this->branch)->branch_name_en : optional($this->branch)->branch_name_kh;
     }
     public function getEmployeeBranchAbbreviationsAttribute(){
         return optional($this->branch)->abbreviations;
@@ -339,7 +339,7 @@ class User extends Authenticatable
         }
     }
 
-    //// GET Current address
+    //// GET Current address EN
     public function getFullCurrentAddressAttribute()
     {
         $houseNo = $streetNo = $provice_name = $district_name = $conmmunes_name = $villages_name = '';
@@ -352,25 +352,25 @@ class User extends Authenticatable
         $province = Province::all();
         foreach($province as $item){
             if($this->current_province == $item->code){
-                $provice_name = $item->address_en;
+                $provice_name = Helper::getLang() == 'en' ? $item->address_en : $item->address_km;
             }
         }
         $district = District::where('province_id',$this->current_province)->get();
         foreach($district as $item){
             if($this->current_district == $item->code){
-                $district_name = $item->full_name_en;
+                $district_name = Helper::getLang() == 'en' ? $item->full_name_en : $item->full_name_km;
             }
         }
         $Conmmunes = Conmmunes::where('district_id',$this->current_district)->get();
         foreach($Conmmunes as $item){
             if($this->current_commune == $item->code){
-                $conmmunes_name = $item->full_name_en;
+                $conmmunes_name = Helper::getLang() == 'en' ? $item->full_name_en : $item->full_name_km;
             }
         }
         $villages = Villages::all();
         foreach($villages as $item){
             if($this->current_village == $item->code){
-                $villages_name = $item->full_name_en;
+                $villages_name = Helper::getLang() == 'en' ? $item->full_name_en : $item->full_name_km;
             }
         }
         return $houseNo . $streetNo .$villages_name.', '.$conmmunes_name.', '.$district_name.', '.$provice_name;

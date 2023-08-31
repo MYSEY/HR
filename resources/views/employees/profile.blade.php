@@ -171,11 +171,12 @@
                                     <div class="col-md-5">
                                         <div class="profile-info-left">
                                             <h3 class="user-name m-t-0 mb-0"> {{ Helper::getLang() == 'en' ? $data->employee_name_en : $data->employee_name_kh}}</h3>
-                                            <h5 class="text-muted"> {{ $data->EmployeeDepartment }}</h6>
-                                            <small class="text-muted">{{ $data->EmployeePosition }}</small>
                                             <div class="staff-id">@lang('lang.employee_id') : {{ $data->number_employee }}</div>
-                                            <div class="small doj text-muted">@lang('lang.join_date') : {{ $data->joinOfDate }}</div>
-                                            <div class="small doj text-muted">@lang('lang.change_password') <a href="#" id="btn-change-password">@lang('lang.click_here')</a></div>
+                                            <div class="staff-id">@lang('lang.department') : {{ $data->EmployeeDepartment }}</div>
+                                            <div class="staff-id">@lang('lang.position') : {{ $data->EmployeePosition }}</div>
+                                            <div class="staff-id">@lang('lang.branch') : {{ $data->EmployeeBranch }}</div>
+                                            <div class="staff-id">@lang('lang.employee_id') : {{ $data->joinOfDate }}</div>
+                                            <div class="staff-id">@lang('lang.change_password') <a href="#" id="btn-change-password">@lang('lang.click_here')</a></div>
                                         </div>
                                     </div>
                                     <div class="col-md-7">
@@ -194,7 +195,7 @@
                                             </li>
                                             <li>
                                                 <div class="title">@lang('lang.gender'):</div>
-                                                <label class="text">{{ $data->gender == 1 ? 'Male' : 'Female' }}</label>
+                                                <label class="text">{{ $data->EmployeeGender }}</label>
                                             </li>
                                             <li>
                                                 <div class="title">@lang('lang.address'):</div>
@@ -288,15 +289,15 @@
                                     @foreach ($contact as $item)
                                         <ul class="personal-info">
                                             <li>
-                                                <div class="title">Name</div>
+                                                <div class="title">@lang('lang.name')</div>
                                                 <div class="text">{{$item->name}}</div>
                                             </li>
                                             <li>
-                                                <div class="title">Relationship</div>
+                                                <div class="title">@lang('lang.relationship')</div>
                                                 <div class="text">{{$item->EmergencyContact}}</div>
                                             </li>
                                             <li>
-                                                <div class="title">Phone </div>
+                                                <div class="title">@lang('lang.contact_number')</div>
                                                 <div class="text">{{$item->phone}},{{$item->phone_2}}</div>
                                             </li>
                                         </ul>

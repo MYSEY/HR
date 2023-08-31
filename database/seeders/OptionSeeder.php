@@ -18,133 +18,133 @@ class OptionSeeder extends Seeder
     {
         //education
         Option::firstOrCreate([
-            'name_khmer' => 'HR Management',
+            'name_khmer' => 'ផ្នែកគ្រប់គ្រងធនធានមនុស្ស',
             'name_english'=>'HR Management',
             'type' => 'field_of_study',
             'created_by'    => Auth::id(),
         ]);
         Option::firstOrCreate([
-            'name_khmer' => 'Maketing',
+            'name_khmer' => 'ទីផ្សារ',
             'name_english'=>'Maketing',
             'type' => 'field_of_study',
             'created_by'    => Auth::id(),
         ]);
         Option::firstOrCreate([
-            'name_khmer' => 'Banking And Financail',
+            'name_khmer' => 'ធនាគារ និងហិរញ្ញវត្ថុ',
             'name_english'=>'Banking And Financail',
             'type' => 'field_of_study',
             'created_by'    => Auth::id(),
         ]);
         Option::firstOrCreate([
-            'name_khmer' => 'Managerment',
+            'name_khmer' => 'ផ្នែកគ្រប់គ្រង',
             'name_english'=>'Managerment',
             'type' => 'field_of_study',
             'created_by'    => Auth::id(),
         ]);
         Option::firstOrCreate([
-            'name_khmer' => 'Finance and Accounting',
+            'name_khmer' => 'ហិរញ្ញវត្ថុ និងគណនេយ្យ',
             'name_english'=>'Finance and Accounting',
             'type' => 'field_of_study',
             'created_by'    => Auth::id(),
         ]);
         Option::firstOrCreate([
-            'name_khmer' => 'Public Law',
+            'name_khmer' => 'ច្បាប់សាធារណៈ',
             'name_english'=>'Public Law',
             'type' => 'field_of_study',
             'created_by'    => Auth::id(),
         ]);
         Option::firstOrCreate([
-            'name_khmer' => 'Public Administration',
+            'name_khmer' => 'រដ្ឋបាល​សាធារណៈ',
             'name_english'=>'Public Administration',
             'type' => 'field_of_study',
             'created_by'    => Auth::id(),
         ]);
         Option::firstOrCreate([
-            'name_khmer' => 'Information Technology',
+            'name_khmer' => 'ព​ត៌​មាន​វិទ្យា',
             'name_english'=>'Information Technology',
             'type' => 'field_of_study',
             'created_by'    => Auth::id(),
         ]);
         Option::firstOrCreate([
-            'name_khmer' => 'Computer Science',
+            'name_khmer' => 'វិទ្យាសាស្ត្រ​កុំព្យូទ័រ',
             'name_english'=>'Computer Science',
             'type' => 'field_of_study',
             'created_by'    => Auth::id(),
         ]);
         Option::firstOrCreate([
-            'name_khmer' => 'Computer Engineering',
+            'name_khmer' => 'វិស្វករ​កុំព្យូទ័រ',
             'name_english'=>'Computer Engineering',
             'type' => 'field_of_study',
             'created_by'    => Auth::id(),
         ]);
         Option::firstOrCreate([
-            'name_khmer' => 'Internatoinal Business',
+            'name_khmer' => 'ជំនួញ​អន្តរជាតិ',
             'name_english'=>'Internatoinal Business',
             'type' => 'field_of_study',
             'created_by'    => Auth::id(),
         ]);
         Option::firstOrCreate([
-            'name_khmer' => 'Business Economic',
+            'name_khmer' => 'សេដ្ឋកិច្ចពាណិជ្ជកម្ម',
             'name_english'=>'Business Economic',
             'type' => 'field_of_study',
             'created_by'    => Auth::id(),
         ]);
         Option::firstOrCreate([
-            'name_khmer' => 'English Language and Literature',
+            'name_khmer' => 'ភាសាអង់គ្លេស និងអក្សរសាស្ត្រ',
             'name_english'=>'English Language and Literature',
             'type' => 'field_of_study',
             'created_by'    => Auth::id(),
         ]);
         Option::firstOrCreate([
-            'name_khmer' => 'Hotel &Tourism Managerment',
+            'name_khmer' => 'ការគ្រប់គ្រងសណ្ឋាគារ និងទេសចរណ៍',
             'name_english'=>'Hotel &Tourism Managerment',
             'type' => 'field_of_study',
             'created_by'    => Auth::id(),
         ]);
         Option::firstOrCreate([
-            'name_khmer' => 'Internatoinal Relation',
+            'name_khmer' => 'ទំនាក់ទំនងអន្តរជាតិ',
             'name_english'=>'Internatoinal Relation',
             'type' => 'field_of_study',
             'created_by'    => Auth::id(),
         ]);
         Option::firstOrCreate([
-            'name_khmer' => 'International Business',
+            'name_khmer' => 'ជំនួញ​អន្តរជាតិ',
             'name_english'=>'International Business',
             'type' => 'field_of_study',
             'created_by'    => Auth::id(),
         ]);
         Option::firstOrCreate([
-            'name_khmer' => 'Secondary School',
+            'name_khmer' => 'អនុវិទ្យាល័យ',
             'name_english'=>'Secondary School',
             'type' => 'degree',
             'created_by'    => Auth::id(),
         ]);
         Option::firstOrCreate([
-            'name_khmer' => 'High School',
+            'name_khmer' => 'វិទ្យាល័យ',
             'name_english'=>'High School',
             'type' => 'degree',
             'created_by'    => Auth::id(),
         ]);
         Option::firstOrCreate([
-            'name_khmer' => 'Associate degree',
+            'name_khmer' => 'បរិញ្ញាបត្ររង',
             'name_english'=>'Associate degree',
             'type' => 'degree',
             'created_by'    => Auth::id(),
         ]);
         Option::firstOrCreate([
-            'name_khmer' => "Bachelor's degree",
+            'name_khmer' => "បរិញ្ញាបត្រ",
             'name_english'=>"Bachelor's degree",
             'type' => 'degree',
             'created_by'    => Auth::id(),
         ]);
         Option::firstOrCreate([
-            'name_khmer' => "Master's degree",
+            'name_khmer' => "ថ្នាក់អនុបណ្ឌិត",
             'name_english'=>"Master's degree",
             'type' => 'degree',
             'created_by'    => Auth::id(),
         ]);
         Option::firstOrCreate([
-            'name_khmer' => "PHD/Doctoral degree",
+            'name_khmer' => "បណ្ឌិត/សញ្ញាបត្របណ្ឌិត",
             'name_english'=>"PHD/Doctoral degree",
             'type' => 'degree',
             'created_by'    => Auth::id(),
@@ -152,13 +152,13 @@ class OptionSeeder extends Seeder
 
         //Gender
         Option::firstOrCreate([
-            'name_khmer' => 'ភេទប្រុស',
+            'name_khmer' => 'ប្រុស',
             'name_english'=>'Male',
             'type' => 'gender',
             'created_by'    => Auth::id(),
         ]);
         Option::firstOrCreate([
-            'name_khmer' => 'ភេទស្រី',
+            'name_khmer' => 'ស្រី',
             'name_english'=>'Female',
             'type' => 'gender',
             'created_by'    => Auth::id(),
@@ -166,25 +166,25 @@ class OptionSeeder extends Seeder
 
         // identity type
         Option::firstOrCreate([
-            'name_khmer' => 'ID Card',
+            'name_khmer' => 'អត្តសញ្ញាណប័ណ្ណ',
             'name_english'=>'ID Card',
             'type' => 'identity_type',
             'created_by'    => Auth::id(),
         ]);
         Option::firstOrCreate([
-            'name_khmer' => 'Passport',
+            'name_khmer' => 'លិខិតឆ្លងដែន',
             'name_english'=>'Passport',
             'type' => 'identity_type',
             'created_by'    => Auth::id(),
         ]);
         Option::firstOrCreate([
-            'name_khmer' => 'Family Book',
+            'name_khmer' => 'សៀវភៅគ្រួសារ',
             'name_english'=>'Family Book',
             'type' => 'identity_type',
             'created_by'    => Auth::id(),
         ]);
         Option::firstOrCreate([
-            'name_khmer' => 'Residential',
+            'name_khmer' => 'លំនៅដ្ឋាន',
             'name_english'=>'Residential',
             'type' => 'identity_type',
             'created_by'    => Auth::id(),
@@ -192,13 +192,13 @@ class OptionSeeder extends Seeder
 
         // experience
         Option::firstOrCreate([
-            'name_khmer' => 'Full-Time',
+            'name_khmer' => 'ពេញ​មោ៉​ង',
             'name_english'=>'Full-Time',
             'type' => 'experience',
             'created_by'    => Auth::id(),
         ]);
         Option::firstOrCreate([
-            'name_khmer' => 'Path-Time',
+            'name_khmer' => 'បុគ្គលិកក្រៅម៉ោង',
             'name_english'=>'Path-Time',
             'type' => 'experience',
             'created_by'    => Auth::id(),
@@ -224,37 +224,37 @@ class OptionSeeder extends Seeder
         ]);
         // Emergency Contact
         Option::firstOrCreate([
-            'name_khmer' => 'Father',
+            'name_khmer' => 'ឪពុក',
             'name_english'=>'Father',
             'type' => 'relationship',
             'created_by'    => Auth::id(),
         ]);
         Option::firstOrCreate([
-            'name_khmer' => 'Mother',
+            'name_khmer' => 'ម្តាយ',
             'name_english'=>'Mother',
             'type' => 'relationship',
             'created_by'    => Auth::id(),
         ]);
         Option::firstOrCreate([
-            'name_khmer' => 'Husband',
+            'name_khmer' => 'ប្តី',
             'name_english'=>'Husband',
             'type' => 'relationship',
             'created_by'    => Auth::id(),
         ]);
         Option::firstOrCreate([
-            'name_khmer' => 'Wife',
+            'name_khmer' => 'ប្រពន្ធ',
             'name_english'=>'Wife',
             'type' => 'relationship',
             'created_by'    => Auth::id(),
         ]);
         Option::firstOrCreate([
-            'name_khmer' => 'Sister',
+            'name_khmer' => 'បងស្រី',
             'name_english'=>'Sister',
             'type' => 'relationship',
             'created_by'    => Auth::id(),
         ]);
         Option::firstOrCreate([
-            'name_khmer' => 'Brother',
+            'name_khmer' => 'បងប្រុស',
             'name_english'=>'Brother',
             'type' => 'relationship',
             'created_by'    => Auth::id(),
@@ -311,13 +311,13 @@ class OptionSeeder extends Seeder
         
         //position type
         Option::firstOrCreate([
-            'name_khmer' => 'Supporting Staff',
+            'name_khmer' => 'បុគ្គលិកគាំទ្រ',
             'name_english'=> 'Supporting Staff',
             'type' => 'position_type',
             'created_by'    => Auth::id(),
         ]);
         Option::firstOrCreate([
-            'name_khmer' => 'Field Staff',
+            'name_khmer' => 'បុគ្គលិកចុះតាមតំបន់',
             'name_english'=> 'Field Staff',
             'type' => 'position_type',
             'created_by'    => Auth::id(),

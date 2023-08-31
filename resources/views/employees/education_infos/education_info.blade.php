@@ -24,7 +24,7 @@
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="form-group">
-                                                    <label for="">Field of study</label>
+                                                    <label for="">@lang('lang.field_of_study')</label>
                                                     <select class="form-control" id="field_of_study[]" name="field_of_study[]" value="">
                                                         <option value="">@lang('lang.select_field_of_study')</option>
                                                         @foreach ($optionOfStudy as $item)
@@ -51,7 +51,7 @@
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="form-group">
-                                                    <label for="">Degree</label>
+                                                    <label for="">@lang('lang.degree')</label>
                                                     <select class="form-control" id="degree[]"
                                                         name="degree[]" value="">
                                                         <option value="">@lang('lang.select_degree')</option>

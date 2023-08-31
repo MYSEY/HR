@@ -137,6 +137,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
 
 
     Route::post('payroll/create',[EmployeePayrollController::class,'store']);
+    Route::post('payroll/delete',[EmployeePayrollController::class,'destroy']);
     Route::get('payslip/{employee_id}',[EmployeePayrollController::class,'paySlip']);
 
     //Payroll Item
