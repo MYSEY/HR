@@ -29,7 +29,7 @@
                                 <label class="">@lang('lang.gender')</label>
                                 <select class="form-control form-select" name="gender" id="gender">
                                     @foreach ($gender as $gen )
-                                    <option value="{{ $gen->id }}">{{ session()->get('locale') == 'en' ? $gen->name_english : $gen->name_khmer }}</option>
+                                    <option value="{{ $gen->id }}">{{ Helper::getLang() == 'en' ? $gen->name_english : $gen->name_khmer }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -63,7 +63,7 @@
                                 <select class="hr-select2-option requered" required name="position_applied" id="position_applied">
                                     <option selected disabled value=""> -- @lang('lang.select') --</option>
                                     @foreach ($position as $positions )
-                                    <option value="{{ $positions->id }}">{{ session()->get('locale') == 'en' ? $positions->name_english : $positions->name_khmer }}</option>
+                                    <option value="{{ $positions->id }}">{{ Helper::getLang() == 'en' ? $positions->name_english : $positions->name_khmer }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -74,7 +74,7 @@
                                 <select class="hr-select2-option requered" required name="location_applied" id="location_applied">
                                     <option selected disabled value=""> -- @lang('lang.select') --</option>
                                     @foreach ($branch as $bran )
-                                        <option value="{{ $bran->id }}">{{ session()->get('locale') == 'en' ? $bran->branch_name_en : $bran->branch_name_kh }}</option>
+                                        <option value="{{ $bran->id }}">{{ Helper::getLang() == 'en' ? $bran->branch_name_en : $bran->branch_name_kh }}</option>
                                     @endforeach
                                 </select>
                             </div>

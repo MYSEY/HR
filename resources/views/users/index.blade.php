@@ -257,7 +257,7 @@
                 success: function (response) {
                     if (response.success) {
                         if (response.role != '') {
-                            $('#e_role_id').html('<option selected disabled> --@lang("lang.select") --</option>');
+                            $('#e_role_id').html('<option selected disabled value=""> --@lang("lang.select") --</option>');
                             $.each(response.role, function(i, item) {
                                 $('#e_role_id').append($('<option>', {
                                     value: item.id,

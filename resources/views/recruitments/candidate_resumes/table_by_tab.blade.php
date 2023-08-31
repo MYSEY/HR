@@ -35,8 +35,8 @@
                                         @foreach ($data as $item)
                                             <tr class="odd">
                                                 <td class="ids">{{$num}}</td>
-                                                <td >{{$item->name_kh }}</td>
-                                                <td >{{$item->name_en}}</td>
+                                                <td >{{$item->name_en }}</td>
+                                                <td >{{$item->name_kh}}</td>
                                                 <td >{{$item->CandidateGender}}</td>
                                                 <td >{{$item->current_position}}</td>
                                                 <td >{{$item->companey_name}}</td>
