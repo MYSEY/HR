@@ -17,13 +17,14 @@
                                         <h3 class="card-title">@lang('lang.education_informations') <a href="javascript:void(0);" class="delete-icon education-delete-element"><i class="fa fa-trash-o"></i></a></h3>
                                         <div class="row">
                                             <div class="col-md-6">
-                                                <div class="form-group form-focus focused">
-                                                    <input type="text" value="" id="school[]" name="school[]" class="form-control floating" required>
+                                                <div class="form-group">
                                                     <label class="focus-label">@lang('lang.institution') <span class="text-danger">*</span></label>
+                                                    <input type="text" value="" id="school[]" name="school[]" class="form-control floating" required>
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
-                                                <div class="form-group form-focus focused">
+                                                <div class="form-group">
+                                                    <label for="">Field of study</label>
                                                     <select class="form-control" id="field_of_study[]" name="field_of_study[]" value="">
                                                         <option value="">@lang('lang.select_field_of_study')</option>
                                                         @foreach ($optionOfStudy as $item)
@@ -33,23 +34,24 @@
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
-                                                <div class="form-group form-focus focused">
+                                                <div class="form-group">
+                                                    <label class="focus-label">@lang('lang.starting_date') <span class="text-danger">*</span></label>
                                                     <div class="cal-icon">
                                                         <input type="date" value="" name="start_date[]" class="form-control floating datetimepicker" required>
                                                     </div>
-                                                    <label class="focus-label">@lang('lang.starting_date') <span class="text-danger">*</span></label>
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
-                                                <div class="form-group form-focus focused">
+                                                <div class="form-group">
+                                                    <label class="focus-label">@lang('lang.complete_date') <span class="text-danger">*</span></label>
                                                     <div class="cal-icon">
                                                         <input type="date" value="" name="end_date[]" class="form-control floating datetimepicker" required>
                                                     </div>
-                                                    <label class="focus-label">@lang('lang.complete_date') <span class="text-danger">*</span></label>
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
-                                                <div class="form-group form-focus focused">
+                                                <div class="form-group">
+                                                    <label for="">Degree</label>
                                                     <select class="form-control" id="degree[]"
                                                         name="degree[]" value="">
                                                         <option value="">@lang('lang.select_degree')</option>
@@ -60,10 +62,9 @@
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
-                                                <div class="form-group form-focus focused">
-                                                    <input type="text" value="" id="grade[]"
-                                                        name="grade[]" class="form-control floating">
+                                                <div class="form-group">
                                                     <label class="focus-label">@lang('lang.grade')</label>
+                                                    <input type="text" value="" id="grade[]" name="grade[]" class="form-control floating">
                                                 </div>
                                             </div>
                                         </div>

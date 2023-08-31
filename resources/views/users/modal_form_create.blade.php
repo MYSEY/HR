@@ -54,7 +54,7 @@
                                 <select class="form-control" id="gender" name="gender" value="{{old('gender')}}">
                                     <option selected disabled value=""> --@lang('lang.select')--</option>
                                     @foreach ($optionGender as $item)
-                                        <option value="{{$item->id}}"> {{ session()->get('locale') == 'en' ? $item->name_english : $item->name_khmer }}</option>
+                                        <option value="{{$item->id}}"> {{ Helper::getLang() == 'en' ? $item->name_english : $item->name_khmer }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -85,7 +85,7 @@
                                 <select class="form-control hr-select2-option requered" id="branch_id" name="branch_id" value="{{old('branch_id')}}" required>
                                     <option selected disabled value=""> --@lang('lang.select')--</option>
                                     @foreach ($branch as $item)
-                                        <option value="{{$item->id}}">{{ session()->get('locale') == 'en' ? $item->branch_name_en : $item->branch_name_kh}}</option>
+                                        <option value="{{$item->id}}">{{ Helper::getLang() == 'en' ? $item->branch_name_en : $item->branch_name_kh}}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -96,7 +96,7 @@
                                 <select class="form-control hr-select2-option" id="department_id" name="department_id" value="{{old('department_id')}}">
                                     <option selected disabled value=""> --@lang('lang.select')--</option>
                                     @foreach ($department as $item)
-                                        <option value="{{$item->id}}">{{ session()->get('locale') == 'en' ? $item->name_english : $item->name_khmer}}</option>
+                                        <option value="{{$item->id}}">{{ Helper::getLang() == 'en' ? $item->name_english : $item->name_khmer}}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -109,7 +109,7 @@
                                 <select class="form-control hr-select2-option requered @error('position_id') is-invalid @enderror" name="position_id" id="position_id" required>
                                     <option selected disabled value=""> -- @lang('lang.select')--</option>
                                     @foreach ($position as $positions )
-                                        <option value="{{ $positions->id }}">{{session()->get('locale') == 'en' ? $positions->name_english : $positions->name_khmer}}</option>
+                                        <option value="{{ $positions->id }}">{{Helper::getLang() == 'en' ? $positions->name_english : $positions->name_khmer}}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -119,7 +119,7 @@
                                 <label class="">@lang('lang.position_type')</label>
                                 <select class="form-control" id="position_type" name="position_type" value="{{old('position_type')}}">
                                     @foreach ($optionPositionType as $item)
-                                        <option value="{{$item->id}}">{{session()->get('locale') == 'en' ? $item->name_english : $item->name_khmer}}</option>
+                                        <option value="{{$item->id}}">{{Helper::getLang() == 'en' ? $item->name_english : $item->name_khmer}}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -309,7 +309,7 @@
                                 <select class="form-control" id="identity_type" name="identity_type" value="{{old('identity_type')}}">
                                     <option selected disabled> --@lang('lang.select')--</option>
                                     @foreach ($optionIdentityType as $item)
-                                        <option value="{{$item->id}}">{{session()->get('locale') == 'en' ? $item->name_english : $item->name_khmer}}</option>
+                                        <option value="{{$item->id}}">{{Helper::getLang() == 'en' ? $item->name_english : $item->name_khmer}}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -355,7 +355,7 @@
                                         <option selected disabled> --@lang('lang.select')--</option>
                                         @if (count($province)>0)
                                             @foreach ($province as $item)
-                                                <option value="{{$item->code}}">{{ session()->get('locale') == 'en' ? $item->name_en : $item->name_km}}</option>
+                                                <option value="{{$item->code}}">{{ Helper::getLang() == 'en' ? $item->name_en : $item->name_km}}</option>
                                             @endforeach
                                         @endif
                                     </select>
@@ -417,7 +417,7 @@
                                         <option selected disabled> --@lang('lang.select')--</option>
                                         @if (count($province)>0)
                                             @foreach ($province as $item)
-                                                <option value="{{$item->code}}">{{session()->get('locale') == 'en' ? $item->name_en : $item->name_km}}</option>
+                                                <option value="{{$item->code}}">{{Helper::getLang() == 'en' ? $item->name_en : $item->name_km}}</option>
                                             @endforeach
                                         @endif
                                     </select>

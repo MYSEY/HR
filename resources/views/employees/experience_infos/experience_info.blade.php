@@ -16,14 +16,14 @@
                                     <h3 class="card-title">@lang('lang.experience_informations') <a href="javascript:void(0);" class="delete-icon experience-delete-element"><i class="fa fa-trash-o"></i></a></h3>
                                     <div class="row">
                                         <div class="col-md-6">
-                                            <div class="form-group form-focus focused">
+                                            <div class="form-group">
+                                                <label for="">@lang('lang.company_name') <span class="text-danger">*</span></label>
                                                 <input type="text" class="form-control floating" id="company_name[]" name="company_name[]" value="" required>
-                                                <label class="focus-label">@lang('lang.company_name') <span class="text-danger">*</span></label>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
-                                            <div class="form-group form-focus focused">
-                                                <label class="focus-label">@lang('lang.employment_type')</label>
+                                            <div class="form-group">
+                                                <label for="">@lang('lang.employment_type')</label>
                                                 <select class="form-control form-select" id="employment_type[]" name="employment_type[]">
                                                     <option value="1">Full-Time</option>
                                                     <option value="2">Path-Time</option>
@@ -32,31 +32,31 @@
                                         </div>
                                         
                                         <div class="col-md-6">
-                                            <div class="form-group form-focus focused">
+                                            <div class="form-group">
+                                                <label for="">@lang('lang.job_position') <span class="text-danger">*</span></label>
                                                 <input type="text" class="form-control floating" id="position[]" name="position[]" value="" required>
-                                                <label class="focus-label">@lang('lang.job_position') <span class="text-danger">*</span></label>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
-                                            <div class="form-group form-focus focused">
+                                            <div class="form-group">
+                                                <label for="">@lang('lang.period_from') <span class="text-danger">*</span></label>
                                                 <div class="">
-                                                    <input type="text" class="form-control floating datetimepicker" id="start_date_experience[]" name="start_date_experience[]" value="" required>
+                                                    <input type="date" class="form-control floating datetimepicker" id="start_date_experience[]" name="start_date_experience[]" value="" required>
                                                 </div>
-                                                <label class="focus-label">@lang('lang.period_from') <span class="text-danger">*</span></label>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
-                                            <div class="form-group form-focus focused">
+                                            <div class="form-group">
+                                                <label for="">@lang('lang.period_to') <span class="text-danger">*</span></label>
                                                 <div class="">
-                                                    <input type="text" class="form-control floating datetimepicker" id="end_date_experience[]" name="end_date_experience[]" value="" required>
+                                                    <input type="date" class="form-control floating datetimepicker" id="end_date_experience[]" name="end_date_experience[]" value="" required>
                                                 </div>
-                                                <label class="focus-label">@lang('lang.period_to') <span class="text-danger">*</span></label>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
-                                            <div class="form-group form-focus focused">
+                                            <div class="form-group">
+                                                <label for="">@lang('lang.location')</label>
                                                 <input type="text" class="form-control floating" id="location[]" name="location[]" value="">
-                                                <label class="focus-label">@lang('lang.location')</label>
                                             </div>
                                         </div>
                                     </div>

@@ -8,6 +8,7 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
+     * php artisan migrate:refresh --path=database/migrations/2023_04_24_083925_create_exchange_rates_table.php
      *
      * @return void
      */
