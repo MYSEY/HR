@@ -1,4 +1,5 @@
 @extends('layouts.master')
+@inject('numbersToWords', 'App\Traits\Convertors\ConvertNumbersToWordsClassForBlade')
 <style>
     .filter-row-btn .btn {
         min-height: 38px !important;
@@ -225,10 +226,14 @@
             </div>
         </div>
     </div>
+    {{-- @dd($numbersToWords->convertNumbers2Words(900000, 1)) --}}
+    @include('motor_rentels.print_signed_contract')
 @endsection
 
 @include('includs.script')
 <script src="{{asset('/admin/js/validation-field.js')}}"></script>
+<script src="{{asset('/admin/js/format-date-kh.js')}}"></script>
+<script src="{{asset('/admin/js/convertNumberToWords.js')}}"></script>
 <script>
     $(function() {
         var currentYear = 2010;
@@ -251,27 +256,28 @@
             $('#e_shelt_life').val(ageMotorrentel);
 
             // block Price motor rentel
+            let newYearExpireted = 0;
             if (ageMotorrentel >= 0 && ageMotorrentel <= 5) {
                 $("#price_motor_rentel").val(30);
                 $('#e_price_motor_rentel').val(30);
+                newYearExpireted = 5
             } else if (ageMotorrentel > 5 && ageMotorrentel <= 7) {
                 $("#price_motor_rentel").val(25);
                 $('#e_price_motor_rentel').val(25);
+                newYearExpireted = 7
             } else if (ageMotorrentel > 7 && ageMotorrentel <= 10) {
                 $("#price_motor_rentel").val(20);
                 $('#e_price_motor_rentel').val(20);
+                newYearExpireted = 10;
             } else {
                 $("#price_motor_rentel").val(0);
                 $('#e_price_motor_rentel').val(0);
             }
-
-            $('#expired_year').html('<option value=""> </option>');
-            let currentY = $(this).val();
-            let newYearExpireted = Number(currentY) + 11;
-            if (newYearExpireted <= Number(newYear)) {
-                newYearExpireted = newYear;
-            }
-            calculatorYearExpire(currentY, newYearExpireted);
+            const aYearFromNow = new Date(dateYear);
+            aYearFromNow.setFullYear(aYearFromNow.getFullYear() + newYearExpireted);
+            let YearExpireted = moment(aYearFromNow).format('YYYY');
+            $('#expired_year').val(YearExpireted);
+            $('#e_expired_year').val(YearExpireted);
         });
 
         $("#import_new_motor_rentel").on("click", function() {
@@ -281,10 +287,8 @@
         });
 
         $("#add_new").on("click", function() {
-            $('#expired_year').html('<option value=""> </option>');
             $("#shelt_life").val('');
             $("#price_motor_rentel").val('');
-            calculatorYearExpire(newYear, Number(newYear) + 11);
             [...Array(currentDiff >= 0 ? currentDiff + 1 : 0).keys()].map((num) => {
                 let year = currentYear + num;
                 let option = {
@@ -300,8 +304,108 @@
             $('#add_motor_rentel').modal('show');
         });
 
+        $(document).on('click','#save-print', function(){
+            let btn_action = $(this).attr('data-btn');
+            var num_miss = 0;
+            $(".hr-form-group-select2").each(function(){
+                let formGroup = $(this);
+                let value = formGroup.attr("data-select2-id");
+                let requeredField = formGroup.find(".hr-select2-option").val();
+                let requered = formGroup.find(".emp_required").val();
+                if(!value && requered == "" || !requered){ 
+                    formGroup.find(".select2-selection--single").css("border-color","#dc3545");
+                }else if (!requeredField && requered == "") {
+                    formGroup.find(".select2-selection--single").css("border-color","#dc3545");
+                }
+            });
+            $("#btn-print-loading").css('display', 'block');
+            $("#save-print").prop('disabled', true);
+            $(".btn-text-print").css("display", "none");
+            
+            $(".emp_required").each(function(){
+                if($(this).val()==""){ 
+                    num_miss++;
+                    $(this).css("border-color","#dc3545")
+                }else{
+                    $(this).css("border-color","#198754")
+                }
+            });
+            if (num_miss>0) {
+                setTimeout(function () {
+                    $("#save-print").attr('disabled',false);
+                    $("#btn-print-loading").css('display', 'none');
+                    $(".btn-text-print").css("display", 'block');
+                }, 500);
+                return false;
+            }else{
+                axios.post('{{ URL('motor-rentel/store') }}', {
+                    employee_id: $("#c_employee_id").val(),
+                    number_plate: $("#number_plate").val(),
+                    start_date: $("#start_date").val(),
+                    end_date: $("#end_date").val(),
+                    product_year: $("#product_year").val(),
+                    expired_year: $("#expired_year").val(),
+                    shelt_life: $("#shelt_life").val(),
+                    total_gasoline: $("#total_gasoline").val(),
+                    total_work_day: $("#total_work_day").val(),
+                    price_engine_oil: $("#price_engine_oil").val(),
+                    price_motor_rentel: $("#price_motor_rentel").val(),
+                    taplab_rentel: $("#taplab_rentel").val(),
+                    price_taplab_rentel: $("#price_taplab_rentel").val(),
+                }).then(function(response) {
+                    let data = response.data.success;
+                    let date_of_birth = data.user.date_of_birth ? moment(data.user.date_of_birth).format('d,MMM,YYYY') : "";
+                    $("#p_full_name").text(data.user.employee_name_kh);
+                    $("#p_gender").text(data.user.gender.name_khmer);
+                    $("#p_date_of_birth").text(date_of_birth);
+                    $("#p_id_card_number").text(data.user.id_card_number);
+                    $("#p_house_no").text(data.current_house_no);
+                    $("#p_house").text(data.user.currentvillage ? data.user.currentvillage.name_km : "");
+                    $("#p_commune").text(data.user.currentcommune ? data.user.currentcommune.name_km : "");
+                    $("#p_district").text(data.user.currentdistrict ? data.user.currentdistrict.name_km : "");
+                    $("#p_province").text(data.user.currentprovince ? data.user.currentprovince.name_km : "");
+                    $("#p_year_of_manufature").text(data.product_year);
+                    $("#p_number_plate").text(data.number_plate);
+                    let start_date = data.start_date.split('-');
+                    let end_date = data.end_date.split('-');
+                    // start_date
+                    $("#p_s_day").text(start_date[2]);
+                    $("#p_s_month").text(start_date[1]);
+                    $("#p_s_year").text(start_date[0]);
+                    // end_date
+                    $("#p_e_day").text(end_date[2]);
+                    $("#p_e_month").text(end_date[1]);
+                    $("#p_e_year").text(end_date[0]);
+                    // approve date
+                    $("#p_a_day").text(start_date[2]);
+                    $("#p_a_month").text(start_date[1]);
+                    $("#p_a_year").text(start_date[0]);
+                    $("#p_price_motor_rentel").text(data.price_motor_rentel);
+                    let price_to_word = convertNumberToWords(data.price_motor_rentel)
+                    $("#p_price_to_word").text(price_to_word);
+                    print_pdf();
+                    new Noty({
+                        title: "",
+                        text: "@lang('lang.the_process_has_been_successfully').",
+                        type: "success",
+                        timeout: 3000,
+                        icon: true
+                    }).show();
+                }).catch(function(error) {
+                    console.log(error);
+                    new Noty({
+                        title: "",
+                        text: "@lang('lang.something_went_wrong_please_try_again_later').",
+                        type: "error",
+                        timeout: 3000,
+                        icon: true
+                    }).show();
+                });
+            }
+            
+        });
+
         $('.update').on('click', function() {
-            $('#e_expired_year').html('<option value=""> </option>');
             let id = $(this).data("id");
             $.ajax({
                 type: "GET",
@@ -341,11 +445,6 @@
                             }
                             $('#e_product_year').append($('<option>', option));
                         });
-                        let newYearExpireted = Number(response.success.product_year) + 11;
-                        if (newYearExpireted <= Number(newYear)) {
-                            newYearExpireted = newYear;
-                        }
-                        calculatorYearExpire(response.success.product_year, newYearExpireted);
                         $('#e_shelt_life').val(response.success.shelt_life);
                         $('#e_number_plate').val(response.success.number_plate);
                         $('#e_total_gasoline').val(response.success.total_gasoline);
@@ -355,6 +454,7 @@
                         $('#e_taplab_rentel').val(response.success.taplab_rentel);
                         $('#e_price_taplab_rentel').val(response.success.price_taplab_rentel);
                         // $('#e_tax_rate').val(response.success.tax_rate);
+                        $('#e_expired_year').val(response.success.expired_year);
 
                         $('#edit_motor_rentel').modal('show');
                     }
@@ -427,6 +527,27 @@
             })
         });
     });
+
+    function print_pdf(type) {
+        $("#print_purchase").show();
+        window.setTimeout(function() {
+            $("#print_purchase").hide();
+            $("#save-print").prop('disabled', false);
+            $(".btn-text-print").show();
+            $("#btn-print-loading").css('display', 'none');
+            $("#add_motor_rentel").modal("hide")
+        }, 2000);
+        $("#print_purchase").printThis({
+            importCSS: false,
+            importStyle: true,
+            loadCSS: "{{asset('/admin/css/style_table.css')}}",
+            header: "",
+            printDelay: 1000,
+            formValues: false,
+            canvas: false,
+            doctypeString: "",
+        });
+    }
 
     function calculatorYearExpire(currentYear, expiretedYear) {
         const expiredDiff = moment(new Date(`01/01/${expiretedYear}`)).diff(new Date(`01/01/${currentYear}`), 'years');

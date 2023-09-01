@@ -56,8 +56,24 @@ class MotorRentel extends Model
             'department_id',
             'position_id',
             'branch_id',
-            'gender'])
-        ->with('department')->with('position')->with('gender')->with('branch');
+            'gender',
+            'date_of_birth',
+            'id_card_number',
+            'current_province',
+            'current_district',
+            'current_commune',
+            'current_village',
+            'current_house_no',
+            'current_street_no',
+        ])
+        ->with('department')
+        ->with('position')
+        ->with('gender')
+        ->with('branch')
+        ->with('currentprovince')
+        ->with('currentdistrict')
+        ->with('currentcommune')
+        ->with('currentvillage');
     }
 
     public function getMotorEmployeeAttribute(){

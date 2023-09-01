@@ -58,8 +58,9 @@
                             <div class="form-group">
                                 <label class="">@lang('lang.expiretion_year') <span class="text-danger">*</span></label>
                                 <div class="cal-icon">
-                                    <select id="e_expired_year" name="expired_year"  class="form-control floating select select2-hidden-accessible" >
-                                    </select>
+                                    {{-- <select id="e_expired_year" name="expired_year"  class="form-control floating select select2-hidden-accessible" >
+                                    </select> --}}
+                                    <input type="text"  class="form-control" name="expired_year" id="e_expired_year">
                                 </div>
                             </div>
                         </div>

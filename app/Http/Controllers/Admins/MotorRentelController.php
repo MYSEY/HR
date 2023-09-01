@@ -106,9 +106,13 @@ class MotorRentelController extends Controller
         try {
             $data = $request->all();
             $data['created_by'] = Auth::user()->id;
-            MotorRentel::create($data);
+            $motor = MotorRentel::create($data);
             Toastr::success('Created successfully.', 'Success');
-            return redirect()->back();
+            $getData = MotorRentel::with('user')->where("id", $motor->id)->first();
+            return response()->json([
+                'success' => $getData,
+            ]);
+            // return redirect()->back();
             DB::commit();
         } catch (\Throwable $exp) {
             DB::rollback();

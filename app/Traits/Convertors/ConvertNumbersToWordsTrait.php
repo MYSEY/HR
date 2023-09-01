@@ -174,6 +174,14 @@ trait ConvertNumbersToWordsTrait
 					$string .= $conjunction . $this->convertNumbers2Words($remainder, $kh);
 				}
 				break;
+			case $number >= 10000 && $number <= 999999:
+				$hundreds  = $number / 10000;
+				$remainder = $number % 10000;
+				$string = $dictionary[$hundreds] . ' ' . $dictionary[10000];
+				if ($remainder) {
+					$string .= $conjunction . $this->convertNumbers2Words($remainder,$kh);
+				}
+				break;
 			default:
 				$baseUnit = pow(1000, floor(log($number, 1000)));
 				$numBaseUnits = (int) ($number / $baseUnit);

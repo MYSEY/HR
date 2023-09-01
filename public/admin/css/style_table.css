@@ -96,6 +96,10 @@ ol.s {list-style-type: inherit;}
     font-family: 'Khmer OS Siemreap', serif;
     font-size: 14px;
 }
+.label-subss{
+    font-family: 'Khmer OS Siemreap', serif;
+    font-size: 16px;
+}
 .label-sub_l{
     font-weight: bold;
     font-family: 'Khmer OS Bokor', serif;
@@ -122,45 +126,3 @@ ol.s {list-style-type: inherit;}
     text-align: justify; 
     text-justify: inter-word;
 }
-/* .tbody_print tr,th, .float-end{
-    float: right!important;
-} */
-/* .table_c{
-    margin-left:auto;
-    margin-top:0.8%;
-    color: #4747d1;
-    font-family: 'Nunito','Nokora', sans-serif, serif;
-    border-collapse: collapse;
-    width: 33%;
-    
-} */
-/* .table-d {
-    color: #4747d1;
-    margin-top:30px;
-    font-family: 'Nunito','Nokora', sans-serif, serif;
-    border-collapse: collapse;
-    width: 100%;
-    
-} */
-/* .table_dd {
-    font-family: 'Nunito','Nokora', sans-serif, serif;
-    width: 100%;
-    color: #4747d1;
-    border-collapse: collapse;
-} */
-/* .border_print{
-    padding:7px; 
-    border-bottom: 0px solid #ffffff !important;
-    border-left: 0px solid #ffffff !important
-}
-.remove_border_botton_print{
-    font-size: 14px;
-    border-bottom: 0px solid #ffffff !important;
-}
-.remove_border_top_print{
-    border-top: 0px solid #ffffff !important;
-}
-.one-font{
-    font-family: 'Nunito','Nokora', sans-serif, serif;
-} */
-
