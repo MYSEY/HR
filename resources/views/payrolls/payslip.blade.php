@@ -1,6 +1,8 @@
 
 
 @extends('layouts.master')
+@inject('numbersToWords', 'App\Traits\Convertors\ConvertNumbersToWordsClassForBlade')
+@inject('number_trait', 'App\Traits\Convertors\NumberBlade')
 <style>
     .profile-info-left {
         border-right: 0px dashed #cccccc !important;
@@ -91,7 +93,7 @@
                                                 <th style="text-align: center;">@lang('lang.amount')</th>
                                             </tr>
                                         </thead>
-
+                                        
                                         <tbody>
                                             <tr>
                                                 <td>@lang('lang.gross_salary')</td>
@@ -181,6 +183,7 @@
                                             @php
                                                 $totalNetPay = $TotalEarnings - $TotalDeductions;
                                             @endphp
+                                            {{-- @dd($numbersToWords->convertNumbers2Words($TotalDeductions, 1)) --}}
                                             <tr style="background-color: #d2dbdb;">
                                                 <td><strong>@lang('lang.total_earnings')</strong></td>
                                                 <td>
@@ -189,6 +192,7 @@
                                                 <td><strong>@lang('lang.total_deductions') :</strong></td>
                                                 <td><span class="float-end"><strong>${{number_format($TotalDeductions, 2)}}</strong></span></td>
                                             </tr>
+
                                             <tr>
                                                 <td></td>
                                                 <td></td>

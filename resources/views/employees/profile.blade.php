@@ -175,7 +175,7 @@
                                             <div class="staff-id">@lang('lang.department') : {{ $data->EmployeeDepartment }}</div>
                                             <div class="staff-id">@lang('lang.position') : {{ $data->EmployeePosition }}</div>
                                             <div class="staff-id">@lang('lang.branch') : {{ $data->EmployeeBranch }}</div>
-                                            <div class="staff-id">@lang('lang.employee_id') : {{ $data->joinOfDate }}</div>
+                                            <div class="staff-id">@lang('lang.join_date') : {{ $data->joinOfDate }}</div>
                                             <div class="staff-id">@lang('lang.change_password') <a href="#" id="btn-change-password">@lang('lang.click_here')</a></div>
                                         </div>
                                     </div>

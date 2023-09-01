@@ -787,12 +787,7 @@ class EmployeePayrollController extends Controller
     public function destroy(Request $request)
     {
         try{
-            Payroll::destroy($request->id);
-            $this->NSSF()->delete();
-            $this->seniority()->delete();
-            $this->severancePay()->delete();
-            $this->GrossSalaryPay()->delete();
-            $this->Bonus()->delete();
+            Payroll::find($request->id);
             Toastr::success('Payroll deleted successfully.','Success');
             return redirect()->back();
         }catch(\Exception $e){
