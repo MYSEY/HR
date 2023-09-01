@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Option;
+use App\Helpers\Helper;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -27,7 +28,7 @@ class Contact extends Model
         $data = Option::where('type','relationship')->get();
         foreach($data as $item){
             if($this->relationship == $item->id){
-                $Contact = $item->name_khmer;
+                $Contact = (Helper::getLang() == 'en' ? $item->name_english : $item->name_khmer);
             }
         }
         return $Contact ?? "";

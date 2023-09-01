@@ -30,6 +30,7 @@ use App\Http\Controllers\Admins\EmployeeProfileController;
 use App\Http\Controllers\Admins\RecruitmentPlanController;
 use App\Http\Controllers\Admins\ChildrenAllowanceController;
 use App\Http\Controllers\LanguageController;
+use App\Models\StaffPromoted;
 use Illuminate\Support\Facades\Lang;
 
 /*
@@ -57,9 +58,21 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('/employee/profile/{id}', [EmployeeProfileController::class, 'employeeProfile'])->name('employee.profile');
     Route::post('employee/education', [EmployeeProfileController::class, 'employeeEducation'])->name('employee.education');
     Route::post('employee/experience', [EmployeeProfileController::class, 'updateOrCreateExperience'])->name('employee.experience');
-    Route::post('employee/promote', [EmployeeProfileController::class, 'updateOrCreatePromote'])->name('employee.promote');
-    Route::post('employee/training', [EmployeeProfileController::class, 'updatedTraining'])->name('employee.training');
     Route::post('employee/contact', [EmployeeProfileController::class, 'employeeContact'])->name('employee.contact');
+    Route::get('employee/contact/edit', [EmployeeProfileController::class, 'editContact']);
+    Route::post('employee/contact/update', [EmployeeProfileController::class, 'updateContact']);
+    Route::post('employee/contact/delete', [EmployeeProfileController::class, 'deleteContact']);
+
+    //Training
+    Route::post('employee/training/create', [EmployeeProfileController::class, 'updatedTraining']);
+    Route::get('employee/training/edit', [EmployeeProfileController::class, 'editTraining']);
+    Route::post('employee/training/update', [EmployeeProfileController::class, 'updateTraining']);
+    Route::post('employee/training/delete', [EmployeeProfileController::class, 'deleteTraining']);
+    // StaffPromoted
+    Route::post('promote/create', [EmployeeProfileController::class, 'createPromote']);
+    Route::get('promote/edit', [EmployeeProfileController::class, 'editPromote']);
+    Route::post('promote/update', [EmployeeProfileController::class, 'updatePromote']);
+    Route::post('promote/delete', [EmployeeProfileController::class, 'deletePromote']);
 
     //Children
     Route::post('employee/children', [EmployeeProfileController::class, 'employeeChildren'])->name('employee.children');

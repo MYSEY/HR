@@ -27,7 +27,7 @@ use Illuminate\Support\Facades\Hash;
 class EmployeeProfileController extends Controller
 {
     public function employeeProfile(Request $request){
-        $data = User::with(['educations','experiences','banks'])->where('id',$request->id)->first();
+        $data = User::with(['educations','experiences','banks','staffPromoted'])->where('id',$request->id)->first();
         $optionOfStudy = Option::where('type','field_of_study')->get();
         $optionDegree = Option::where('type','degree')->get();
         $relationship = Option::where('type','relationship')->get();
@@ -151,7 +151,7 @@ class EmployeeProfileController extends Controller
             return redirect()->back();
         }
     }
-    public function updateOrCreatePromote(Request $request){
+    public function createPromote(Request $request){
         try{
             StaffPromoted::create([
                 'employee_id'   => $request->employee_id,
@@ -160,7 +160,40 @@ class EmployeeProfileController extends Controller
                 'depart_id'     => $request->depart_id,
                 'department_promoted_to'     => $request->department_promoted_to,
                 'date'          => $request->promote_date,
-                'updated_by'    => Auth::id(),
+                'created_by'    => Auth::id(),
+            ]);
+
+            DB::commit();
+            Toastr::success('Create promoted successfully.','Success');
+            return redirect()->back();
+        }catch(\Exception $e){
+            DB::rollback();
+            Toastr::error('Create promoted fail','Error');
+            return redirect()->back();
+        }
+    }
+    public function editPromote(Request $request){
+        try{
+            $department = Department::all();
+            $position = Position::all();
+            $data = StaffPromoted::where('id',$request->id)->first();
+            return response()->json(['success'=>$data,'department'=>$department,'position'=>$position]);
+        }catch(\Exception $e){
+            DB::rollback();
+            Toastr::error('Edit promoted fail','Error');
+            return redirect()->back();
+        }
+    }
+    public function updatePromote(Request $request){
+        try{
+            StaffPromoted::where('id',$request->id)->update([
+                'employee_id'               => $request->employee_id,
+                'posit_id'                  => $request->posit_id,
+                'position_promoted_to'      => $request->position_promoted_to,
+                'depart_id'                 => $request->depart_id,
+                'department_promoted_to'    => $request->department_promoted_to,
+                'date'                      => $request->promote_date,
+                'created_by'                => Auth::id(),
             ]);
 
             DB::commit();
@@ -169,6 +202,17 @@ class EmployeeProfileController extends Controller
         }catch(\Exception $e){
             DB::rollback();
             Toastr::error('Update promoted fail','Error');
+            return redirect()->back();
+        }
+    }
+    public function deletePromote(Request $request){
+        try{
+            StaffPromoted::destroy($request->id);
+            Toastr::success('Promote deleted successfully.','Success');
+            return redirect()->back();
+        }catch(\Exception $e){
+            DB::rollback();
+            Toastr::error('Promote delete fail.','Error');
             return redirect()->back();
         }
     }
@@ -204,13 +248,13 @@ class EmployeeProfileController extends Controller
     public function updateTransferend(Request $request){
         try{
             Transferred::where('id',$request->id)->where('employee_id',$request->employee_id)->update([
-                'branch_id'   => $request->branch_id,
-                'tranferend_branch_name'     => $request->tranferend_branch_name,
-                'position_id'   => $request->position_id,
-                'tranferend_position_name'   => $request->tranferend_position_name,
-                'date'   => $request->date,
-                'descrition'   => $request->descrition,
-                'updated_by'   => Auth::id(),
+                'branch_id'                 => $request->branch_id,
+                'tranferend_branch_name'    => $request->tranferend_branch_name,
+                'position_id'               => $request->position_id,
+                'tranferend_position_name'  => $request->tranferend_position_name,
+                'date'                      => $request->date,
+                'descrition'                => $request->descrition,
+                'updated_by'                => Auth::id(),
             ]);
             DB::commit();
             Toastr::success('Update transferred successfully.','Success');
@@ -235,9 +279,33 @@ class EmployeeProfileController extends Controller
     }
     
 
-    public function updatedTraining(Request $request){
+    public function createTraining(Request $request){
         try{
             StaffTraining::create([
+                'employee_id'   => $request->employee_id,
+                'title'         => $request->title,
+                'start_date'    => $request->start_date,
+                'end_date'      => $request->end_date,
+                'descrition'    => $request->descrition,
+                'created_at'    => Auth::id(),
+            ]);
+
+            DB::commit();
+            Toastr::success('Created training successfully.','Success');
+            return redirect()->back();
+        }catch(\Exception $e){
+            DB::rollback();
+            Toastr::error('Created training fail','Error');
+            return redirect()->back();
+        }
+    }
+    public function editTraining(Request $request){
+        $data = StaffTraining::where('id',$request->id)->first();
+        return response()->json(['success'=>$data]);
+    }
+    public function updateTraining(Request $request){
+        try{
+            StaffTraining::where('id',$request->id)->update([
                 'employee_id'   => $request->employee_id,
                 'title'         => $request->title,
                 'start_date'    => $request->start_date,
@@ -255,6 +323,17 @@ class EmployeeProfileController extends Controller
             return redirect()->back();
         }
     }
+    public function deleteTraining(Request $request){
+        try{
+            StaffTraining::destroy($request->id);
+            Toastr::success('Training deleted successfully.','Success');
+            return redirect()->back();
+        }catch(\Exception $e){
+            DB::rollback();
+            Toastr::error('Training delete fail.','Error');
+            return redirect()->back();
+        }
+    }
     public function employeeContact(EmployeeContactRequest $request){
         try{
             Contact::create([
@@ -263,18 +342,52 @@ class EmployeeProfileController extends Controller
                 'relationship'  => $request->relationship,
                 'phone'         => $request->phone,
                 'phone_2'       => $request->phone_2,
-                'updated_by'    => Auth::id(),
+                'created_by'    => Auth::id(),
             ]);
             DB::commit();
-            Toastr::success('Create emergency contact successfully.','Success');
+            Toastr::success('Create contact successfully.','Success');
             return redirect()->back();
         }catch(\Exception $e){
             DB::rollback();
-            Toastr::error('emergency contact fail','Error');
+            Toastr::error('Create contact fail','Error');
             return redirect()->back();
         }
     }
-
+    public function editContact(Request $request){
+        $relationship = Option::where('type','relationship')->get();
+        $data = Contact::where('id',$request->id)->first();
+        return response()->json(['success'=>$data,'relationship'=>$relationship]);
+    }
+    public function updateContact(Request $request){
+        try{
+            Contact::where('id',$request->id)->update([
+                'employee_id'   => $request->employee_id,
+                'name'          => $request->name,
+                'relationship'  => $request->relationship,
+                'phone'         => $request->phone,
+                'phone_2'       => $request->phone_2,
+                'updated_by'    => Auth::id(),
+            ]);
+            DB::commit();
+            Toastr::success('Update contact successfully.','Success');
+            return redirect()->back();
+        }catch(\Exception $e){
+            DB::rollback();
+            Toastr::error('Update contact fail','Error');
+            return redirect()->back();
+        }
+    }
+    public function deleteContact(Request $request){
+        try{
+            Contact::destroy($request->id);
+            Toastr::success('Contact deleted successfully.','Success');
+            return redirect()->back();
+        }catch(\Exception $e){
+            DB::rollback();
+            Toastr::error('Contact delete fail.','Error');
+            return redirect()->back();
+        }
+    }
     public function employeeChildren(ChildrenRequest $request){
         try{
             if (is_array($request->name) && count($request->name)) {

@@ -13,13 +13,14 @@
                                 <th>@lang('lang.position_from')</th>
                                 <th>@lang('lang.position_to')</th>
                                 <th>@lang('lang.promoted_date')</th>
+                                <th style="text-align: center">@lang('lang.action')</th>
                             </tr>
                         </thead>
                         <tbody>
                             @if (count($empPromoted)>0)
                                 @foreach ($empPromoted as $item)   
                                     <tr>
-                                        <td>{{$item->id}}</td>
+                                        <td class="ids">{{$item->id}}</td>
                                         <td>{{$item->depart_id}}</td>
                                         <td style="color:#26AF49">
                                             {{$item->department_promoted_to}}
@@ -27,6 +28,17 @@
                                         <td>{{$item->posit_id}}</td>
                                         <td style="color:#26AF49">{{$item->position_promoted_to}}</td>
                                         <td>{{$item->PormotDate}}</td>
+                                        <td style="text-align: center">
+                                            <div class="dropdown dropdown-action">
+                                                <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i  class="material-icons">more_vert</i></a>
+                                                @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer')
+                                                    <div class="dropdown-menu dropdown-menu-right">
+                                                        <a class="dropdown-item promoteUpdate" data-id="{{$item->id}}" data-bs-target="#promote_edit"><i class="fa fa-pencil m-r-5"></i> Edit</a>
+                                                        <a class="dropdown-item promoteDelete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_promote"><i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
+                                                    </div>
+                                                @endif
+                                            </div>
+                                        </td>
                                     </tr>
                                 @endforeach
                             @else
@@ -38,71 +50,25 @@
             </div>
         </div>
     </div>
-    <div id="PromotionModal" class="modal custom-modal fade hr-modal-select2" aria-hidden="true" style="display: none;">
-        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
+</div>
+<!-- Delete Promote Modal -->
+<div class="modal custom-modal fade" id="delete_promote" role="dialog">
+    <div class="modal-dialog modal-sm modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="form-header">
+                    <h3>Delete</h3>
+                    <p>Are you sure want to delete?</p>
                 </div>
-                <div class="modal-body">
-                    <form action="{{url('/employee/promote')}}" method="POST" data-select2-id="select2-data-9-apez" class="needs-validation" novalidate>
+                <div class="modal-btn delete-action">
+                    <form action="{{url('promote/delete')}}" method="POST">
                         @csrf
-                        <div class="form-group col-md-12 col-12" element="div" bp-field-wrapper="true" bp-field-name="Identity" bp-field-type="custom_html">
-                            <label class="navbar-brand custom-navbar-brand mb-0" style="width: 100%; background: #dfe6e9; padding: 6px;font-size: 15px;font-weight: normal !important;">@lang('lang.position')</label>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label>@lang('lang.promoted_from')</label>
-                            @if (count($empPromoted) > 0)
-                                <input class="form-control" type="text" id="posit_id" name="posit_id" value="{{$empPromoted[0]->department_promoted_to}}" readonly="">
-                            @else
-                                <input class="form-control" type="text" id="posit_id" name="posit_id" value="{{$data->EmployeePosition}}" readonly="">
-                            @endif
-                        </div>
-                        <div class="form-group hr-form-group-select2">
-                            <label>@lang('lang.promoted_to') <span class="text-danger">*</span></label>
-                            <select class="form-control form-select hr-select2-option requered" id="position_promoted_to" name="position_promoted_to" required>
-                                <option value="">-- @lang('lang.select') --</option>
-                                @if (count($position)>0)
-                                    @foreach ($position as $item)
-                                        <option value="{{session()->get('locale') == 'en' ? $item->name_english :  $item->name_khmer}}">{{session()->get('locale') == 'en' ? $item->name_english : $item->name_khmer}}</option>
-                                    @endforeach
-                                @endif
-                            </select>
-                        </div>
-
-                        <div class="form-group col-md-12 col-12" element="div" bp-field-wrapper="true" bp-field-name="Identity" bp-field-type="custom_html">
-                            <label class="navbar-brand custom-navbar-brand mb-0" style="width: 100%; background: #dfe6e9; padding: 6px;font-size: 15px;font-weight: normal !important;">@lang('lang.department')</label>
-                        </div>
-                        <div class="form-group">
-                            <label>@lang('lang.promoted_from')</label>
-                            <input class="form-control" type="text" id="depart_id" name="depart_id" value="{{$data->EmployeeDepartment}}" readonly="">
-                        </div>
-                        <div class="form-group hr-form-group-select2">
-                            <label>@lang('lang.promoted_to') <span class="text-danger">*</span></label>
-                            <select class="form-control form-select hr-select2-option requered" id="department_promoted_to" name="department_promoted_to" required>
-                                <option value="">-- @lang('lang.select')  --</option>
-                                @if (count($department)>0)
-                                    @foreach ($department as $item)
-                                        <option value="{{session()->get('locale') == 'en' ? $item->name_english: $item->name_khmer}}">{{session()->get('locale') == 'en' ? $item->name_english : $item->name_khmer}}</option>
-                                    @endforeach
-                                @endif
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>@lang('lang.promoted_date') <span class="text-danger">*</span></label>
-                            <div class="cal-icon">
-                                <input type="text" id="promote_date" name="promote_date" class="form-control datetimepicker" required>
+                        <input type="hidden" name="id" class="e_pro_id" value="">
+                        <div class="row">
+                            <div class="submit-section" style="text-align: center">
+                                <button type="submit" class="btn btn-primary submit-btn me-2">Delete</button>
+                                <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-danger">Cancel</a>
                             </div>
-                        </div>
-                        <div class="submit-section">
-                            <input type="hidden" name="employee_id" id="employee_id" value="{{ $data->id }}">
-                            <button type="submit" class="btn btn-primary submit-btn" id="bntEmpPromote">
-                                <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading') </span>
-                                <span class="btn-txt">@lang('lang.submit')</span>
-                            </button>
                         </div>
                     </form>
                 </div>
@@ -110,4 +76,59 @@
         </div>
     </div>
 </div>
+<!-- /Delete Promote Modal -->
+@include('employees.promotes.create')
+@include('employees.promotes.edit')
 <script src="{{asset('/admin/js/validation-field.js')}}"></script>
+
+<script>
+    $(function(){
+        $('.promoteDelete').on('click',function(){
+            var _this = $(this).parents('tr');
+            $('.e_pro_id').val(_this.find('.ids').text());
+        });
+        $('.promoteUpdate').on('click',function(){
+            var localeLanguage = '{{ config('app.locale') }}';
+
+            let id = $(this).data("id");
+            $.ajax({
+                type: "GET",
+                url: "{{url('/promote/edit')}}",
+                data: {
+                    id : id
+                },
+                dataType: "JSON",
+                success: function (response) {
+                    if (response.success) {
+                        if (response.position != '') {
+                            $('#e_position_promoted_to').html('<option selected disabled> -- @lang("lang.select") --</option>');
+                            $.each(response.position, function(i, item) {
+                                $('#e_position_promoted_to').append($('<option>', {
+                                    value: item.name_english,
+                                    text: localeLanguage == 'en' ? item.name_english : item.name_khmer,
+                                    selected: item.name_english == response.success.position_promoted_to
+                                }));
+                            });
+                        }
+                        if (response.department != '') {
+                            $('#e_department_promoted_to').html('<option selected disabled> -- @lang("lang.select") --</option>');
+                            $.each(response.department, function(i, item) {
+                                $('#e_department_promoted_to').append($('<option>', {
+                                    value: item.name_english,
+                                    text: localeLanguage == 'en' ? item.name_english : item.name_khmer,
+                                    selected: item.name_english == response.success.department_promoted_to
+                                }));
+                            });
+                        }
+
+                        $('#e_promote_id').val(response.success.id);
+                        $('#e_posit_id').val(response.success.posit_id);
+                        $('#e_depart_id').val(response.success.depart_id);
+                        $('#e_promote_date').val(response.success.date);
+                        $('#promotionModalEdit').modal('show');
+                    }
+                }
+            });
+        });
+    });
+</script>

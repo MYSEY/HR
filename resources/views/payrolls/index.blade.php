@@ -197,7 +197,7 @@
                                                 @if (count($data) > 0)
                                                     @foreach ($data as $item)
                                                         <tr class="odd">
-                                                            <td class="ids" hidden>{{$item->id}}</td>
+                                                            {{-- <td class="ids" hidden>{{$item->id}}</td> --}}
                                                             <td class="sorting_1">
                                                                 <h2 class="table-avatar">
                                                                     @if ($item->users->profile !=null)

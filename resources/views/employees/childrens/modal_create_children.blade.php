@@ -35,7 +35,7 @@
                                                 <select class="form-control" id="sex[]" name="sex[]" value="">
                                                     <option selected disabled value=""> -- @lang('lang.select') --</option>
                                                     @foreach ($optionGender as $item)
-                                                        <option value="{{$item->id}}">{{session()->get('locale') == 'en' ? $item->name_english : $item->name_khmer}}</option>
+                                                        <option value="{{$item->id}}">{{Helper::getLang() == 'en' ? $item->name_english : $item->name_khmer}}</option>
                                                     @endforeach
                                                 </select>
                                             </div>

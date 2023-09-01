@@ -132,8 +132,8 @@
                             <div class="form-group">
                                 <label class="">@lang('lang.marital_status')</label>
                                 <select class="form-control" id="e_marital_status" name="marital_status" value="{{old('marital_status')}}">
-                                    <option value="Married">@lang('lang.married')</option>
-                                    <option value="Single">@lang('lang.single')</option>
+                                    <option value="@lang('lang.married')">@lang('lang.married')</option>
+                                    <option value="@lang('lang.single')">@lang('lang.single')</option>
                                 </select>
                             </div>
                         </div>
@@ -141,8 +141,8 @@
                             <div class="form-group">
                                 <label>@lang('lang.nationality')</label>
                                 <select class="form-control" id="e_nationality" name="nationality" value="{{old('nationality')}}">
-                                    <option value="Khmer">@lang('lang.khmer')</option>
-                                    <option value="Chinese">@lang('lang.chinese')</option>
+                                    <option value="@lang('lang.khmer')">@lang('lang.khmer')</option>
+                                    <option value="@lang('lang.chinese')">@lang('lang.chinese')</option>
                                 </select>
                             </div>
                         </div>

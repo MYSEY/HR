@@ -12,7 +12,7 @@
                                 <th>@lang('lang.branch_to')</th>
                                 <th>@lang('lang.position_from')</th>
                                 <th>@lang('lang.position_to')</th>
-                                <th>@lang('lang.date')</th>
+                                <th>@lang('lang.trainsferend_date')</th>
                                 <th>@lang('lang.remark')</th>
                                 <th style="text-align: center">@lang('lang.action')</th>
                             </tr>
@@ -106,17 +106,6 @@
                         }
                         if (response.position != '') {
                             $('#e_tranferend_position_name').html('<option selected disabled> -- @lang("lang.select") --</option>');
-                            $.each(response.position, function(i, item) {
-                                $('#e_tranferend_position_name').append($('<option>', {
-                                    value: item.branch_name_en,
-                                    text: localeLanguage == 'en' ? item.branch_name_en : item.branch_name_kh,
-                                    selected: item.branch_name_en == response.success.tranferend_branch_name
-                                }));
-                            });
-                        }
-
-                        if (response.position != '') {
-                            $('#e_tranferend_position_name').html('<option selected disabled> --@lang("lang.select") --</option>');
                             $.each(response.position, function(i, item) {
                                 $('#e_tranferend_position_name').append($('<option>', {
                                     value: item.name_english,
