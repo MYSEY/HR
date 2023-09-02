@@ -18,10 +18,10 @@
         <div class="page-header">
             <div class="row align-items-center">
                 <div class="col">
-                    <h3 class="page-title">Training Reports</h3>
+                    <h3 class="page-title">@lang('lang.training_reports')</h3>
                     <ul class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="{{ url('/dashboad/employee') }}">Dashboard</a></li>
-                        <li class="breadcrumb-item active">Training Reports</li>
+                        <li class="breadcrumb-item"><a href="{{ url('/dashboad/employee') }}">@lang('lang.dashboard')</a></li>
+                        <li class="breadcrumb-item active">@lang('lang.training_reports')</li>
                     </ul>
                 </div>
                 <div class="col-auto float-end ms-auto">
@@ -37,27 +37,27 @@
                 <div class="row">
                     <div class="col-sm-2 col-md-2">
                         <div class="form-group">
-                            <input type="text" class="form-control" name="employee_id" placeholder="Employee ID" id="employee_id"
+                            <input type="text" class="form-control" name="employee_id" placeholder="@lang('lang.employee_id')" id="employee_id"
                                 value="{{ old('employee_id') }}">
                         </div>
                     </div>
                     <div class="col-sm-2 col-md-2">
                         <div class="form-group">
                             <input class="form-control floating" type="text" id="employee_name" name="employee_name"
-                                placeholder="Employee Name">
+                                placeholder="@lang('lang.employee_name')">
                         </div>
                     </div>
                     <div class="col-sm-2 col-md-2">
                         <div class="form-group">
-                            <input class="form-control floating" type="text" id="course_name" name="course_name" placeholder="Course Name">
+                            <input class="form-control floating" type="text" id="course_name" name="course_name" placeholder="@lang('lang.course_name')">
                         </div>
                     </div>
                     <div class="col-sm-2 col-md-2">
                         <div class="form-group">
                             <select class="select form-control" data-select2-id="select2-data-2-c0n2" name="traing_type" id="training_type">
-                                <option value="" data-select2-id="select2-data-2-c0n2">All Training Type</option>
-                                <option value="1">Internal</option>
-                                <option value="2">External</option>
+                                <option value="" data-select2-id="select2-data-2-c0n2">@lang('lang.all_training_type')</option>
+                                <option value="1">@lang('lang.internal')</option>
+                                <option value="2">@lang('lang.external')</option>
                             </select>
                         </div>
                     </div>
@@ -66,7 +66,7 @@
                         <div class="form-group">
                             <div class="cal-icon">
                                 <input class="form-control floating datetimepicker" type="text" id="start_date" name="start_date"
-                                    placeholder="Start Date">
+                                    placeholder="@lang('lang.start_date')">
                             </div>
                         </div>
                     </div>
@@ -74,7 +74,7 @@
                         <div class="form-group">
                             <div class="cal-icon">
                                 <input class="form-control floating datetimepicker" type="text" id="end_date" name="end_date"
-                                    placeholder="End Date">
+                                    placeholder="@lang('lang.end_date')">
                             </div>
                         </div>
                     </div>
@@ -83,20 +83,20 @@
                     <div class="col-sm-2 col-md-12">
                         <div style="display: flex" class="float-end">
                             <button type="button" class="btn btn-sm btn-success submit-btn me-2" id="btn-research" data-dismiss="modal">
-                                <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading</span>
-                                <span class="btn-txt">{{ __('Search') }}</span>
+                                <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>
+                                <span class="btn-txt">@lang('lang.search')</span>
                             </button>
                             <button type="button" class="btn btn-sm btn-outline-secondary btn_print me-2">
-                                <span class="btn-text-print"><i class="fa fa-print fa-lg"></i> Print</span>
-                                <span id="btn-text-loading-print" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading</span>
+                                <span class="btn-text-print"><i class="fa fa-print fa-lg"></i> @lang('lang.print')</span>
+                                <span id="btn-text-loading-print" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>
                             </button>
                             <button type="button" class="btn btn-sm btn-outline-secondary btn_excel me-2">
-                                <span class="btn-text-excel"><i class="fa fa-file-excel-o" aria-hidden="true"></i> Excel</span>
-                                <span id="btn-text-loading-excel" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading</span>
+                                <span class="btn-text-excel"><i class="fa fa-file-excel-o" aria-hidden="true"></i> @lang('lang.excel')</span>
+                                <span id="btn-text-loading-excel" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>
                             </button>
                             <button type="button" class="btn btn-sm btn-warning reset-btn">
-                                <span class="btn-text-reset">Reload</span>
-                                <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading</span>
+                                <span class="btn-text-reset">@lang('lang.reload')</span>
+                                <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>
                             </button>
                         </div>
                     </div>
@@ -121,74 +121,74 @@
                                                     style="width: 94.0625px;">#</th>
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1"
                                                     colspan="1" aria-label="Employee ID: activate to sort column ascending"
-                                                    style="width: 94.0625px;">ID Card</th>
+                                                    style="width: 94.0625px;">@lang('lang.id_card')</th>
                                                 <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
                                                     rowspan="1" colspan="1" aria-sort="ascending"
                                                     aria-label="Employee name: activate to sort column descending"
-                                                    style="width: 178px;">Name Kh</th>
+                                                    style="width: 178px;">@lang('lang.name_kh')</th>
                                                 <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
                                                     rowspan="1" colspan="1" aria-sort="ascending"
                                                     aria-label="Employee name: activate to sort column descending"
-                                                    style="width: 178px;">Name En</th>
+                                                    style="width: 178px;">@lang('lang.name_en')</th>
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1"
                                                     colspan="1" aria-label="Gender: activate to sort column ascending"
-                                                    style="width: 125.15px;">Gender</th>
+                                                    style="width: 125.15px;">@lang('lang.gender')</th>
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                     rowspan="1" colspan="1"
                                                     aria-label="Position: activate to sort column ascending"
-                                                    style="width: 125.15px;">Position</th>
+                                                    style="width: 125.15px;">@lang('lang.position')</th>
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                     rowspan="1" colspan="1"
                                                     aria-label="Date of Employment: activate to sort column ascending"
-                                                    style="width: 125.15px;">Date of Employment</th>
+                                                    style="width: 125.15px;">@lang('lang.date_of_employment')</th>
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                     rowspan="1" colspan="1"
                                                     aria-label="Seniority: activate to sort column ascending"
-                                                    style="width: 125.15px;">Length of Employment</th>
+                                                    style="width: 125.15px;">@lang('lang.length_of_employment')</th>
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                     rowspan="1" colspan="1"
                                                     aria-label="Course Name: activate to sort column ascending"
-                                                    style="width: 125.15px;">Course Name</th>
+                                                    style="width: 125.15px;">@lang('lang.course_name')</th>
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                     rowspan="1" colspan="1"
                                                     aria-label="Branch name: activate to sort column ascending"
-                                                    style="width: 125.15px;">Dept/Branch</th>
+                                                    style="width: 125.15px;">@lang('lang.location')</th>
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                     rowspan="1" colspan="1"
                                                     aria-label="Start Date: activate to sort column ascending"
-                                                    style="width: 125.15px;">Start Date</th>
+                                                    style="width: 125.15px;">@lang('lang.start_date')</th>
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                     rowspan="1" colspan="1"
                                                     aria-label="End Date: activate to sort column ascending"
-                                                    style="width: 125.15px;">End Date</th>
+                                                    style="width: 125.15px;">@lang('lang.end_date')</th>
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                     rowspan="1" colspan="1"
                                                     aria-label="Duration of service: activate to sort column ascending"
-                                                    style="width: 125.15px;">Duration Term</th>
+                                                    style="width: 125.15px;">@lang('lang.duration_term')</th>
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                     rowspan="1" colspan="1"
                                                     aria-label="Price/Unit: activate to sort column ascending"
-                                                    style="width: 125.15px;">Price/Unit</th>
+                                                    style="width: 125.15px;">@lang('lang.price/unit')</th>
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                     rowspan="1" colspan="1"
                                                     aria-label="Discount Price: activate to sort column ascending"
-                                                    style="width: 125.15px;">Discount Fee</th>
+                                                    style="width: 125.15px;">@lang('lang.discount_fee')</th>
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                     rowspan="1" colspan="1"
                                                     aria-label="Total: activate to sort column ascending"
-                                                    style="width: 125.15px;">Total</th>
+                                                    style="width: 125.15px;">@lang('lang.total')</th>
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                     rowspan="1" colspan="1"
                                                     aria-label="Trainer: activate to sort column ascending"
-                                                    style="width: 125.15px;">Trainer</th>
+                                                    style="width: 125.15px;">@lang('lang.trainer')</th>
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                     rowspan="1" colspan="1"
                                                     aria-label="Type of Training: activate to sort column ascending"
-                                                    style="width: 125.15px;">Type of Training</th>
+                                                    style="width: 125.15px;">@lang('lang.type_of_training')</th>
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                     rowspan="1" colspan="1"
                                                     aria-label="Remarks: activate to sort column ascending"
-                                                    style="width: 125.15px;">Remarks</th>
+                                                    style="width: 125.15px;">@lang('lang.remark')</th>
                                             </tr>
                                         </thead>
                                         <tbody>

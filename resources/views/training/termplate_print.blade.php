@@ -6,9 +6,9 @@
                 src="http://127.0.0.1:8000/admin/img/logo/cammalogo.png">&nbsp;&nbsp;
         </div>
         <div style="margin-top:-90px; text-align: center">
-            <h3>CAMMA Microfinance Limited</h3>
-            <h3 class="payslip-title-center">{{$training->training_type == 1 ? "Internal" : "External" }} Training Report</h3>
-            <p class="payslip-title-center">For  &nbsp;
+            <h3>@lang('lang.camma_microfinance_limited')</h3>
+            <h3 class="payslip-title-center">{{$training->training_type == 1 ? "Internal" : "External" }} @lang('lang.training_report')</h3>
+            <p class="payslip-title-center">@lang('lang.for')  &nbsp;
                 <strong>
                     {{ \Carbon\Carbon::parse()->format('M-d-Y') ?? '' }}
                 </strong>
@@ -16,34 +16,34 @@
         </div>
         @if ($training->training_type == 1 )
             <div style="width: 35%">
-                <label>Camma Microfinance Limited</label>
+                <label>@lang('lang.camma_microfinance_limited')</label>
                 <span>#101A, St. 289, Sangkat Boeung Kak 1, Khan Toul Kork, Phnom Penh, Cambodia</span>
             </div><br>
         @endif
         <div style="display:flex;">
             <div style="width: 350%">
-                <span><strong>Course Name:</strong> {{$training->course_name}}</span><br>
-                <span><strong>StartDate:</strong>
+                <span><strong>@lang('lang.course_name'):</strong> {{$training->course_name}}</span><br>
+                <span><strong>@lang('lang.start_date'):</strong>
                     {{ \Carbon\Carbon::parse($training->start_date)->format('d-M-Y') ?? '' }}
                 </span><br>
-                <span><strong>EndDate:</strong>
+                <span><strong>@lang('lang.end_date'):</strong>
                     {{ \Carbon\Carbon::parse($training->end_date)->format('d-M-Y') ?? '' }}
                 </span>
             </div>
         </div>
         <span>
             @if ($training->training_type == 1 )
-                <h4>Trainer Information</h4>
+                <h4>@lang('lang.trainer_information')</h4>
                 <table class="table-print">
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>Type</th>
-                            <th>Name kh</th>
-                            <th>Name EN</th>
-                            <th>Contact Number</th>
-                            <th>Email</th>
-                            <th>Created At</th>
+                            <th>@lang('lang.type')</th>
+                            <th>@lang('lang.name_kh')</th>
+                            <th>@lang('lang.name_en')</th>
+                            <th>@lang('lang.contact_number')</th>
+                            <th>@lang('lang.email')</th>
+                            <th>@lang('lang.created_at')</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -64,24 +64,24 @@
                 </table>
             @else
                 <br>
-                <span><strong>TrainerName:</strong> {{count($trainer) > 0 ? $trainer[0]->name_en : ""}}</span><br>
-                <span><strong>Company Name:</strong> {{count($trainer) > 0 ? $trainer[0]->company_name : ""}} </span><br>
-                <span><strong>Contact Number:</strong> {{count($trainer) > 0 ? $trainer[0]->number_phone : ""}} </span><br>
-                <span><strong>Email:</strong> {{count($trainer) > 0 ? $trainer[0]->email : ""}}</span>
+                <span><strong>@lang('lang.trainer_name'):</strong> {{count($trainer) > 0 ? $trainer[0]->name_en : ""}}</span><br>
+                <span><strong>@lang('lang.company_name'):</strong> {{count($trainer) > 0 ? $trainer[0]->company_name : ""}} </span><br>
+                <span><strong>@lang('lang.contact_number'):</strong> {{count($trainer) > 0 ? $trainer[0]->number_phone : ""}} </span><br>
+                <span><strong>@lang('lang.email'):</strong> {{count($trainer) > 0 ? $trainer[0]->email : ""}}</span>
             @endif
         </span>
-        <h4> Employees Information</h4>
+        <h4> @lang('lang.employees_information')</h4>
         <table class="table-print">
             <thead>
                 <tr>
                     <th>#</th>
-                    <th>ID Card</th>
-                    <th>Name kh</th>
-                    <th>Name EN</th>
-                    <th>Gender</th>
-                    <th>Position</th>
-                    <th>Dept/ Branch</th>
-                    <th>Date of Employment</th>
+                    <th>@lang('lang.id_card')</th>
+                    <th>@lang('lang.name_kh')</th>
+                    <th>@lang('lang.name_en')</th>
+                    <th>@lang('lang.gender')</th>
+                    <th>@lang('lang.position')</th>
+                    <th>@lang('lang.location')</th>
+                    <th>@lang('lang.date_of_employment')</th>
                 </tr>
             </thead>
             <tbody>

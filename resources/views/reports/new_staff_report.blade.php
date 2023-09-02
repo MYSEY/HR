@@ -17,10 +17,10 @@
         <div class="row align-items-center">
             <div class="row align-items-center">
                 <div class="col">
-                    <h3 class="page-title">New Staff Reports</h3>
+                    <h3 class="page-title">@lang('lang.new_staff_reports')</h3>
                     <ul class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="{{ url('/dashboad/employee') }}">Dashboard</a></li>
-                        <li class="breadcrumb-item active">New Staff Reports</li>
+                        <li class="breadcrumb-item"><a href="{{ url('/dashboad/employee') }}">@lang('lang.dashboard')</a></li>
+                        <li class="breadcrumb-item active">@lang('lang.new_staff_reports')</li>
                     </ul>
                 </div>
                 <div class="col-auto float-end ms-auto">
@@ -35,19 +35,19 @@
             <div class="col-sm-6 col-md-2">
                 <div class="form-group">
                     <input type="text" class="form-control" name="employee_id" id="employee_id"
-                        placeholder="Employee ID" value="{{ old('employee_id') }}">
+                        placeholder="@lang('lang.employee_id')" value="{{ old('employee_id') }}">
                 </div>
             </div>
             <div class="col-sm-6 col-md-2">
                 <div class="form-group">
                     <input type="text" class="form-control" name="employee_name" id="employee_name"
-                        placeholder="Employee Name" value="{{ old('employee_name') }}">
+                        placeholder="@lang('lang.employee_name')" value="{{ old('employee_name') }}">
                 </div>
             </div>
             <div class="col-sm-6 col-md-2">
                 <div class="form-group">
                     <select class="select form-control" id="branch_id" name="branch_id" value="{{old('branch_id')}}">
-                        <option value="">Branch Name</option>
+                        <option value="">@lang('lang.location')</option>
                         @foreach ($branch as $item)
                             <option value="{{$item->id}}">{{$item->branch_name_kh}}</option>
                         @endforeach
@@ -57,26 +57,26 @@
             <div class="col-sm-6 col-md-3 col-lg-3 col-xl-2 col-12">
                 <div class="form-group">
                     <div class="cal-icon">
-                        <input class="form-control floating datetimepicker" type="text" id="from_date" placeholder="From Date">
+                        <input class="form-control floating datetimepicker" type="text" id="from_date" placeholder="@lang('lang.from_date')">
                     </div>
                 </div>
             </div>
             <div class="col-sm-6 col-md-3 col-lg-3 col-xl-2 col-12">
                 <div class="form-group">
                     <div class="cal-icon">
-                        <input class="form-control floating datetimepicker" type="text" id="to_date" placeholder="To Date">
+                        <input class="form-control floating datetimepicker" type="text" id="to_date" placeholder="@lang('lang.to_date')">
                     </div>
                 </div>
             </div>
             <div class="col-sm-6 col-md-2">
                 <div style="display: flex" class="float-end">
                     <button type="button" class="btn btn-sm btn-success btn-search me-2" data-dismiss="modal">
-                        <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading</span>
-                        <span class="btn-text-search">{{ __('Search') }}</span>
+                        <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>
+                        <span class="btn-text-search">@lang('lang.search')</span>
                     </button>
                     <button type="button" class="btn btn-sm btn-warning reset-btn">
-                        <span class="btn-text-reset">Reload</span>
-                        <span id="btn-reset-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading</span>
+                        <span class="btn-text-reset">@lang('lang.reload')</span>
+                        <span id="btn-reset-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>
                     </button>
                 </div>
             </div>
@@ -99,33 +99,33 @@
                                                 style="width: 94.0625px;">#</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1"
                                                 colspan="1" aria-label="Employee ID: activate to sort column ascending"
-                                                style="width: 94.0625px;">ID Card</th>
+                                                style="width: 94.0625px;">@lang('lang.id_card')</th>
                                             <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
                                                 rowspan="1" colspan="1" aria-sort="ascending"
                                                 aria-label="Employee name: activate to sort column descending"
-                                                style="width: 178px;">Name Kh</th>
+                                                style="width: 178px;">@lang('lang.name_kh')</th>
                                             <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
                                                 rowspan="1" colspan="1" aria-sort="ascending"
                                                 aria-label="Employee name: activate to sort column descending"
-                                                style="width: 178px;">Name En</th>
+                                                style="width: 178px;">@lang('lang.name_en')</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1"
                                                 colspan="1" aria-label="Gender: activate to sort column ascending"
-                                                style="width: 125.15px;">Gender</th>
+                                                style="width: 125.15px;">@lang('lang.gender')</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1"
                                                 colspan="1" aria-label="Position: activate to sort column ascending"
-                                                style="width: 125.15px;">Position</th>
+                                                style="width: 125.15px;">@lang('lang.position')</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1"
                                                 colspan="1" aria-label="Branch name: activate to sort column ascending"
-                                                style="width: 125.15px;">Dept/Branch</th>
+                                                style="width: 125.15px;">@lang('lang.location')</th>
                                             
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                 rowspan="1" colspan="1"
                                                 aria-label="Join Date: activate to sort column ascending"
-                                                style="width: 125.15px;">Join Date</th>
+                                                style="width: 125.15px;">@lang('lang.join_date')</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                 rowspan="1" colspan="1"
                                                 aria-label="Remark: activate to sort column ascending"
-                                                style="width: 125.15px;">Remark</th>
+                                                style="width: 125.15px;">@lang('lang.remark')</th>
                                             {{-- <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                 rowspan="1" colspan="1"
                                                 aria-label="Action: activate to sort column ascending"

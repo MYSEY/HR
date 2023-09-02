@@ -17,34 +17,34 @@
         </div>
 
         <div style="margin-top:-75px; text-align: center">
-            <h2>CAMMA Microfinance Limited</h2>
+            <h2>@lang('lang.camma_microfinance_limited')</h2>
         </div>
         
         <div class="font-sub-title">
-            <label class="title">Training Reports</label><br>
+            <label class="title">@lang('lang.training_reports')</label><br>
         </div><br>
         <table class="table-print" id="form_print">
             <thead>
                 <tr>
                     <th >#</th>
-                    <th >ID Card</th>
-                    <th >Name Kh</th>
-                    <th >Name En</th>
-                    <th >Gender</th>
-                    <th >Position</th>
-                    <th >Date of Employment</th>
-                    <th >Length of Employment</th>
-                    <th >Course Name</th>
-                    <th >Dept/Branch</th>
-                    <th >Start Date</th>
-                    <th >End Date</th>
-                    <th >Duration Term</th>
-                    <th >Price/Unit</th>
-                    <th >Discount Fee</th>
-                    <th >Total</th>
-                    <th >Trainer</th>
-                    <th >Type of Training</th>
-                    <th >Remarks</th>
+                    <th >@lang('lang.id_card')</th>
+                    <th >@lang('lang.name_kh')</th>
+                    <th >@lang('lang.name_en')</th>
+                    <th >@lang('lang.gender')</th>
+                    <th >@lang('lang.position')</th>
+                    <th >@lang('lang.date_of_employment')</th>
+                    <th >@lang('lang.length_of_employment')</th>
+                    <th >@lang('lang.course_name')</th>
+                    <th >@lang('lang.location')</th>
+                    <th >@lang('lang.start_date')</th>
+                    <th >@lang('lang.end_date')</th>
+                    <th >@lang('lang.duration_term')</th>
+                    <th >@lang('lang.price/unit')</th>
+                    <th >@lang('lang.discount_fee')</th>
+                    <th >@lang('lang.total')</th>
+                    <th >@lang('lang.trainer')</th>
+                    <th >@lang('lang.type_of_training')</th>
+                    <th >@lang('lang.remark')</th>
                 </tr>
             </thead>
             <tbody>
