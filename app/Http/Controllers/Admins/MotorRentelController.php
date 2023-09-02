@@ -109,10 +109,13 @@ class MotorRentelController extends Controller
             $motor = MotorRentel::create($data);
             Toastr::success('Created successfully.', 'Success');
             $getData = MotorRentel::with('user')->where("id", $motor->id)->first();
-            return response()->json([
-                'success' => $getData,
-            ]);
-            // return redirect()->back();
+            if ($request->status_print) {
+                return response()->json([
+                    'success' => $getData,
+                ]);
+            }else{
+                return redirect()->back();
+            }
             DB::commit();
         } catch (\Throwable $exp) {
             DB::rollback();

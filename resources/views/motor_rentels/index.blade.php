@@ -339,6 +339,7 @@
                 return false;
             }else{
                 axios.post('{{ URL('motor-rentel/store') }}', {
+                    status_print: true,
                     employee_id: $("#c_employee_id").val(),
                     number_plate: $("#number_plate").val(),
                     start_date: $("#start_date").val(),
@@ -384,6 +385,7 @@
                     let price_to_word = convertNumberToWords(data.price_motor_rentel)
                     $("#p_price_to_word").text(price_to_word);
                     print_pdf();
+                    showDatas();
                     new Noty({
                         title: "",
                         text: "@lang('lang.the_process_has_been_successfully').",
@@ -470,64 +472,67 @@
             $(this).prop('disabled', true);
             $(".btn-text-search").hide();
             $("#btn-text-loading").css('display', 'block');
-            axios.post('{{ URL('motor-rentel/list') }}', {
-                'research':true,
-                'employee_id': $("#employee_id").val(),
-                'employee_name': $("#employee_name").val(),
-                'from_date': $("#from_date").val(),
-                'to_date': $("#to_date").val(),
-            }).then(function(response) {
-                var rows = response.data.data;
-                if (rows.length > 0) {
-                    var tr = "";
-                    $(rows).each(function(e, row) {
-                        let createdAt = moment(row.created_at).format('D-MMM-YYYY')
-                        tr += '<tr class="odd">' +
-                            '<td class="ids">' + (row.id) + '</td>' +
-                            '<td class="number_employee_id"><a href="{{url("motor-rentel/detail")}}/'+row.id+'">' + (row.number_employee) + '</a></td>' +
-                            '<td>' + (row.employee_name_en) + '</td>' +
-                            '<td>' + (row.user.gender == null ? "" : row.user.gender.name_english) + '</td>' +
-                            '<td>' + (row.user.position ? row.user.position.name_english : "") + '</td>' +
-                            '<td>' + (row.user.department.name_english) + '</td>' +
-                            '<td>' + (row.total_gasoline) + '</td>' +
-                            '<td>' + (row.total_work_day) + '</td>' +
-                            '<td>$ ' + (row.price_engine_oil) + '</td>' +
-                            '<td>$ ' + (row.price_motor_rentel) + '</td>' +
-                            '<td>$ ' + (row.price_taplab_rentel ? row.price_taplab_rentel : "0.00") + '</td>' +
-                            '<td>' + (createdAt) + '</td>' +
-                            // '<td>' + (row.price_motor_rentel - (row.price_motor_rentel * row.tax_rate) / 100) + '</td>' +
-                            '<td class="text-end">' +
-                            '<div class="dropdown dropdown-action">' +
-                            '<a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">' +
-                            '<i class="material-icons">more_vert</i>' +
-                            '</a>' +
-                            '<div class="dropdown-menu dropdown-menu-right">' +
-                            // '<a class="dropdown-item motor_detail" data-id="{{'(row.id)'}}" href="{{url("motor-rentel/detail")}}/'+row.id+'">' +
-                            // '<i class="fa fa-eye m-r-5"></i> View' +
-                            // '</a>' +
-                            ' <a class="dropdown-item update" data-id="{{'(row.id)'}}">' +
-                            '<i class="fa fa-pencil m-r-5"></i> @lang("lang.edit")' +
-                            '</a>' +
-                            '<a class="dropdown-item delete" href="#" data-toggle="modal" data-id="{{'(row.id)'}}" data-target="#delete_motor_rentel">' +
-                            '<i class="fa fa-trash-o m-r-5"></i> @lang("lang.delete")' +
-                            '</a>' +
-                            '</div>' +
-                            '</div>' +
-                            '</td>' +
-                            ' </tr>';
-                    });
-                } else {
-                    var tr =
-                        '<tr><td colspan=13 align="center">ពុំមានទិន្នន័យសម្រាប់បង្ហាញ</td></tr>';
-                }
-                $(".tbl-motor tbody").html(tr);
-                $("#btn-text-loading").hide();
-                $(".btn-text-search").show();
-                $(".btn-search").prop("disabled",false);
-            })
+            showDatas();
         });
     });
 
+    function showDatas(){
+        axios.post('{{ URL('motor-rentel/list') }}', {
+            'research':true,
+            'employee_id': $("#employee_id").val(),
+            'employee_name': $("#employee_name").val(),
+            'from_date': $("#from_date").val(),
+            'to_date': $("#to_date").val(),
+        }).then(function(response) {
+            var rows = response.data.data;
+            if (rows.length > 0) {
+                var tr = "";
+                $(rows).each(function(e, row) {
+                    let createdAt = moment(row.created_at).format('D-MMM-YYYY')
+                    tr += '<tr class="odd">' +
+                        '<td class="ids">' + (row.id) + '</td>' +
+                        '<td class="number_employee_id"><a href="{{url("motor-rentel/detail")}}/'+row.id+'">' + (row.number_employee) + '</a></td>' +
+                        '<td>' + (row.employee_name_en) + '</td>' +
+                        '<td>' + (row.user.gender == null ? "" : row.user.gender.name_english) + '</td>' +
+                        '<td>' + (row.user.position ? row.user.position.name_english : "") + '</td>' +
+                        '<td>' + (row.user.department.name_english) + '</td>' +
+                        '<td>' + (row.total_gasoline) + '</td>' +
+                        '<td>' + (row.total_work_day) + '</td>' +
+                        '<td>$ ' + (row.price_engine_oil) + '</td>' +
+                        '<td>$ ' + (row.price_motor_rentel) + '</td>' +
+                        '<td>$ ' + (row.price_taplab_rentel ? row.price_taplab_rentel : "0.00") + '</td>' +
+                        '<td>' + (createdAt) + '</td>' +
+                        // '<td>' + (row.price_motor_rentel - (row.price_motor_rentel * row.tax_rate) / 100) + '</td>' +
+                        '<td class="text-end">' +
+                        '<div class="dropdown dropdown-action">' +
+                        '<a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">' +
+                        '<i class="material-icons">more_vert</i>' +
+                        '</a>' +
+                        '<div class="dropdown-menu dropdown-menu-right">' +
+                        // '<a class="dropdown-item motor_detail" data-id="{{'(row.id)'}}" href="{{url("motor-rentel/detail")}}/'+row.id+'">' +
+                        // '<i class="fa fa-eye m-r-5"></i> View' +
+                        // '</a>' +
+                        ' <a class="dropdown-item update" data-id="{{'(row.id)'}}">' +
+                        '<i class="fa fa-pencil m-r-5"></i> @lang("lang.edit")' +
+                        '</a>' +
+                        '<a class="dropdown-item delete" href="#" data-toggle="modal" data-id="{{'(row.id)'}}" data-target="#delete_motor_rentel">' +
+                        '<i class="fa fa-trash-o m-r-5"></i> @lang("lang.delete")' +
+                        '</a>' +
+                        '</div>' +
+                        '</div>' +
+                        '</td>' +
+                        ' </tr>';
+                });
+            } else {
+                var tr =
+                    '<tr><td colspan=13 align="center">ពុំមានទិន្នន័យសម្រាប់បង្ហាញ</td></tr>';
+            }
+            $(".tbl-motor tbody").html(tr);
+            $("#btn-text-loading").hide();
+            $(".btn-text-search").show();
+            $(".btn-search").prop("disabled",false);
+        })
+    }
     function print_pdf(type) {
         $("#print_purchase").show();
         window.setTimeout(function() {
@@ -542,7 +547,7 @@
             importStyle: true,
             loadCSS: "{{asset('/admin/css/style_table.css')}}",
             header: "",
-            printDelay: 1000,
+            printDelay: 1500,
             formValues: false,
             canvas: false,
             doctypeString: "",
