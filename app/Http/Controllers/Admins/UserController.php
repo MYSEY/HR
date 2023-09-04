@@ -367,7 +367,7 @@ class UserController extends Controller
                 //total day in months
                 $endMonth = Carbon::createFromDate($request->start_date)->format('m');
                 $totalDayInMonth = Carbon::now()->month($endMonth)->daysInMonth;
-            
+                
                 //find start date employee join date
                 $date_of_month = Carbon::createFromDate($request->start_date)->format('Y-m');
                 $currentYear = $date_of_month.'-'.$totalDayInMonth;
@@ -381,10 +381,13 @@ class UserController extends Controller
                 $totalNewDays = $startDate->diffInDays($endDate) + 1;
                 $totalBasicSalary = $dataSalary->basic_salary + $request->total_salary_increase;
                 $totalnewSalary = ($totalBasicSalary / $totalDayInMonth) * $totalNewDays;
-
+                
                 //old salary and total old days
                 $totalOldDay = $totalDayInMonth - $totalNewDays;
-                $totalOldSalary = ($dataSalary->basic_salary / $totalDayInMonth)  * $totalOldDay;
+                $totalOldSalary = 0;
+                if ($totalOldDay) {
+                    $totalOldSalary = ($dataSalary->basic_salary / $totalDayInMonth)  * $totalOldDay;
+                }
                 
                 $totalCurrentSalary = $totalnewSalary + $totalOldSalary;
                 User::where('id',$request->id)->update([
@@ -393,8 +396,8 @@ class UserController extends Controller
                     'fdc_end' => $request->end_dete,
                     'salary_increas' => $request->total_salary_increase,
                     'basic_salary' => $totalBasicSalary,
-                    'total_current_salary' => number_format($totalCurrentSalary, 2),
-                    'pre_salary' => number_format($dataSalary->basic_salary, 2),
+                    'total_current_salary' => $totalCurrentSalary,
+                    'pre_salary' => $dataSalary->basic_salary,
                     'resign_reason' => $request->resign_reason
                 ]);
             }else if($request->emp_status == '10'){
