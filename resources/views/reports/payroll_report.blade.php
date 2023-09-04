@@ -30,10 +30,10 @@
     <div class="page-header">
         <div class="row align-items-center">
             <div class="col">
-                <h3 class="page-title">Payroll Report</h3>
+                <h3 class="page-title">@lang('lang.payroll_report')</h3>
                 <ul class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="">Dashboard</a></li>
-                    <li class="breadcrumb-item active">Payroll Report</li>
+                    <li class="breadcrumb-item"><a href="">@lang('lang.dashboard')</a></li>
+                    <li class="breadcrumb-item active">@lang('lang.payroll_report')</li>
                 </ul>
             </div>
         </div>
@@ -46,12 +46,12 @@
                 <div class="row filter-btn"> 
                     <div class="col-sm-2 col-md-2"> 
                         <div class="form-group">
-                            <input type="text" class="form-control" name="employee_id" id="employee_id" placeholder="Employee ID" value="{{old('number_employee')}}">
+                            <input type="text" class="form-control" name="employee_id" id="employee_id" placeholder="@lang('lang.employee_id')" value="{{old('number_employee')}}">
                         </div>
                     </div>
                     <div class="col-sm-6 col-md-2">
                         <div class="form-group ">
-                            <input type="text" class="form-control" name="employee_name" id="employee_name" placeholder="Employee Name" value="{{old('employee_name')}}">
+                            <input type="text" class="form-control" name="employee_name" id="employee_name" placeholder="@lang('lang.employee_name')" value="{{old('employee_name')}}">
                         </div>
                     </div>
                     <div class="col-sm-6 col-md-2 col-lg-2 col-xl-2">
@@ -64,20 +64,20 @@
                     <div class="col-sm-6 col-md-6">
                         <div style="display: flex" class="float-end">
                             <button type="button" class="btn btn-sm btn-success submit-btn me-2" data-dismiss="modal">
-                                <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading </span>
-                                <span class="btn-txt">{{ __('Search') }}</span>
+                                <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading') </span>
+                                <span class="btn-txt">@lang('lang.search')</span>
                             </button>
                             <button type="button" class="btn btn-sm btn-outline-secondary btn_print me-2">
-                                <span class="btn-text-print"><i class="fa fa-print fa-lg"></i> Print</span>
-                                <span id="btn-text-loading-print" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading</span>
+                                <span class="btn-text-print"><i class="fa fa-print fa-lg"></i> @lang('lang.print')</span>
+                                <span id="btn-text-loading-print" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>
                             </button>
                             <button type="button" class="btn btn-sm btn-outline-secondary btn_excel me-2">
-                                <span class="btn-text-excel"><i class="fa fa-file-excel-o" aria-hidden="true"></i> Excel</span>
-                                <span id="btn-text-loading-excel" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading</span>
+                                <span class="btn-text-excel"><i class="fa fa-file-excel-o" aria-hidden="true"></i> <label >@lang('lang.excel')</label></span>
+                                <span id="btn-text-loading-excel" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>
                             </button>
                             <button type="button" class="btn btn-sm btn-warning reset-btn">
-                                <span class="btn-text-reset">Reload</span>
-                                <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading</span>
+                                <span class="btn-text-reset">@lang('lang.reload')</span>
+                                <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>
                             </button>
                             
                         </div>
@@ -91,19 +91,19 @@
                     <div class="col-sm-12 p-0">
                         <ul class="nav nav-tabs nav-tabs-bottom" role="tablist">
                             <li class="nav-item" role="presentation">
-                                <a class="nav-link active" data-bs-toggle="tab" id="tab_btl_basic_salary" href="#tab_payroll" aria-selected="true" role="tab" data-tab-id="1">Payroll</a>
+                                <a class="nav-link active" data-bs-toggle="tab" id="tab_btl_basic_salary" href="#tab_payroll" aria-selected="true" role="tab" data-tab-id="1">@lang('lang.payroll')</a>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <a class="nav-link" data-bs-toggle="tab" id="tab_btn_NSSF" href="#tab_NSSF" aria-selected="false" role="tab" tabindex="-1" data-tab-id="2">NSSF</a>
+                                <a class="nav-link" data-bs-toggle="tab" id="tab_btn_NSSF" href="#tab_NSSF" aria-selected="false" role="tab" tabindex="-1" data-tab-id="2">@lang('lang.nssf')</a>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <a class="nav-link" data-bs-toggle="tab" id="tab_btn_Benefit" href="#tab_Benefit" aria-selected="false" role="tab" tabindex="-1" data-tab-id="3">Khmer New Year / Pchum Ben Benefit</a>
+                                <a class="nav-link" data-bs-toggle="tab" id="tab_btn_Benefit" href="#tab_Benefit" aria-selected="false" role="tab" tabindex="-1" data-tab-id="3">@lang('lang.KNY_/_pchum_ben')</a>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <a class="nav-link" data-bs-toggle="tab" id="tab_btn_seniority" href="#tab_Seniority" aria-selected="false" role="tab" tabindex="-1" data-tab-id="4">Seniority Pay</a>
+                                <a class="nav-link" data-bs-toggle="tab" id="tab_btn_seniority" href="#tab_Seniority" aria-selected="false" role="tab" tabindex="-1" data-tab-id="4">@lang('lang.seniority_pay')</a>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <a class="nav-link" data-bs-toggle="tab" id="tab_btn_severance_pay" href="#tab_Severance_pay" aria-selected="false" role="tab" tabindex="-1" data-tab-id="5">Severance Pay</a>
+                                <a class="nav-link" data-bs-toggle="tab" id="tab_btn_severance_pay" href="#tab_Severance_pay" aria-selected="false" role="tab" tabindex="-1" data-tab-id="5">@lang('lang.severance_pay')</a>
                             </li>
                         </ul>
                     </div>
@@ -122,79 +122,79 @@
                                                 id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
                                                 <thead>
                                                     <tr>
-                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Employee ID: activate to sort column ascending" style="width: 94.0625px;">Employee ID</th>
-                                                        <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Employee Name: activate to sort column descending" style="width: 178px;">Employee Name</th>
-                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department: activate to sort column ascending" style="width: 125.15px;">Department</th>
-                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department: activate to sort column ascending" style="width: 125.15px;">Position</th>
-                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department: activate to sort column ascending" style="width: 125.15px;">Branch</th>
-                                                        <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending" style="width: 87.1125px;">Join Date</th>
+                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Employee ID: activate to sort column ascending" style="width: 94.0625px;">@lang('lang.employee_id')</th>
+                                                        <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Employee Name: activate to sort column descending" style="width: 178px;">@lang('lang.employee_name')</th>
+                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department: activate to sort column ascending" style="width: 125.15px;">@lang('lang.department')</th>
+                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department: activate to sort column ascending" style="width: 125.15px;">@lang('lang.position')</th>
+                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department: activate to sort column ascending" style="width: 125.15px;">@lang('lang.location')</th>
+                                                        <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending" style="width: 87.1125px;">@lang('lang.join_date')</th>
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                             rowspan="1" colspan="1"
-                                                            aria-label="Join Date: activate to sort column ascending">Basic Salary
+                                                            aria-label="Join Date: activate to sort column ascending">@lang('lang.basic_salary')
                                                         </th>
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                             rowspan="1" colspan="1"
-                                                            aria-label="Join Date: activate to sort column ascending">Child Allowance
+                                                            aria-label="Join Date: activate to sort column ascending">@lang('lang.child_allowance')
                                                         </th>
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                             rowspan="1" colspan="1"
-                                                            aria-label="Join Date: activate to sort column ascending">Phone Allowance
+                                                            aria-label="Join Date: activate to sort column ascending">@lang('lang.phone_allowance')
                                                         </th>
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                             rowspan="1" colspan="1"
-                                                            aria-label="Join Date: activate to sort column ascending">KNY / Pchum Ben
+                                                            aria-label="Join Date: activate to sort column ascending">@lang('lang.KNY_/_pchum_ben')
                                                         </th>
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                             rowspan="1" colspan="1"
-                                                            aria-label="Join Date: activate to sort column ascending">Total Gross Salary
+                                                            aria-label="Join Date: activate to sort column ascending">@lang('lang.total_gross_salary')
                                                         </th>
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                             rowspan="1" colspan="1"
-                                                            aria-label="Join Date: activate to sort column ascending">Seniority Pay (Excluded Tax)
+                                                            aria-label="Join Date: activate to sort column ascending">@lang('lang.seniority_pay') (@lang('lang.excluded_tax'))
                                                         </th>
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                             rowspan="1" colspan="1"
-                                                            aria-label="Join Date: activate to sort column ascending">Pension Fund
+                                                            aria-label="Join Date: activate to sort column ascending">@lang('lang.pension_fund')
                                                         </th>
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                             rowspan="1" colspan="1"
-                                                            aria-label="Join Date: activate to sort column ascending">Gross Salary(USD)
+                                                            aria-label="Join Date: activate to sort column ascending">@lang('lang.gross_salary')(@lang('lang.usd'))
                                                         </th>
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                             rowspan="1" colspan="1"
-                                                            aria-label="Join Date: activate to sort column ascending">Gross Salary(Riel)
+                                                            aria-label="Join Date: activate to sort column ascending">@lang('lang.gross_salary')(@lang('lang.riel'))
                                                         </th>
                                                         
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                             rowspan="1" colspan="1"
-                                                            aria-label="Join Date: activate to sort column ascending">Salary Charges Reduced
+                                                            aria-label="Join Date: activate to sort column ascending">@lang('lang.salary_charges_reduced')
                                                         </th>
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                             rowspan="1" colspan="1"
-                                                            aria-label="Join Date: activate to sort column ascending">Tax base(Riel)
+                                                            aria-label="Join Date: activate to sort column ascending">@lang('lang.tax_base')(@lang('lang.riel'))
                                                         </th>
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                             rowspan="1" colspan="1"
-                                                            aria-label="Join Date: activate to sort column ascending">Tax Rate
+                                                            aria-label="Join Date: activate to sort column ascending">@lang('lang.tax_rate')
                                                         </th>
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                             rowspan="1" colspan="1"
-                                                            aria-label="Join Date: activate to sort column ascending">Personal Tax(USD)
+                                                            aria-label="Join Date: activate to sort column ascending">@lang('lang.personal_tax')(@lang('lang.usd'))
                                                         </th>
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                             rowspan="1" colspan="1"
-                                                            aria-label="Join Date: activate to sort column ascending">Personal Tax(Riel)
+                                                            aria-label="Join Date: activate to sort column ascending">@lang('lang.personal_tax')(@lang('lang.riel'))
                                                         </th>
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                             rowspan="1" colspan="1"
-                                                            aria-label="Join Date: activate to sort column ascending">Seniority Pay (Excluded Tax)
+                                                            aria-label="Join Date: activate to sort column ascending">@lang('lang.seniority_pay') (@lang('lang.excluded_tax'))
                                                         </th>
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                             rowspan="1" colspan="1"
-                                                            aria-label="Join Date: activate to sort column ascending">Severance Pay
+                                                            aria-label="Join Date: activate to sort column ascending">@lang('lang.severance_pay')
                                                         </th>
-                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Salary: activate to sort column ascending" style="width: 51.475px;">Net Salary</th>
-                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Joining Date: activate to sort column ascending" style="width: 89.6px;">Payment Date</th>
+                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Salary: activate to sort column ascending" style="width: 51.475px;">@lang('lang.net_salary')</th>
+                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Joining Date: activate to sort column ascending" style="width: 89.6px;">@lang('lang.payment_date')</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -249,51 +249,45 @@
                                                 <thead>
                                                     <tr>
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                            rowspan="1" colspan="1">Employee ID</th>
+                                                            rowspan="1" colspan="1">@lang('lang.employee_id')</th>
                                                         <th class="sorting sorting_asc" tabindex="0"
                                                             aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
                                                             aria-sort="ascending"
-                                                            aria-label="Employee: activate to sort column descending">Full Name
+                                                            aria-label="Employee: activate to sort column descending">@lang('lang.name')
                                                         </th>
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                             rowspan="1" colspan="1"
-                                                            aria-label="Join Date: activate to sort column ascending">Join Date
+                                                            aria-label="Join Date: activate to sort column ascending">@lang('lang.join_date')
                                                         </th>
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                             rowspan="1" colspan="1"
-                                                            aria-label="Salary: activate to sort column ascending">Total Salary
-                                                            before tax Dollars</th>
+                                                            aria-label="Salary: activate to sort column ascending">@lang('lang.total_salary_before_tax_dollars')@lang('lang.usd')</th>
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                             rowspan="1" colspan="1"
-                                                            aria-label="Salary: activate to sort column ascending">Total Salary
-                                                            before tax Riel</th>
+                                                            aria-label="Salary: activate to sort column ascending">@lang('lang.total_salary_before_tax_riel')@lang('lang.riel')</th>
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                             rowspan="1" colspan="1"
-                                                            aria-label="Salary: activate to sort column ascending">Average wage
+                                                            aria-label="Salary: activate to sort column ascending">@lang('lang.average_wage')
                                                         </th>
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                             rowspan="1" colspan="1"
-                                                            aria-label="Payslip: activate to sort column ascending">
-                                                            Occupational Risk</th>
+                                                            aria-label="Payslip: activate to sort column ascending"> @lang('lang.occupational_risk')</th>
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                             rowspan="1" colspan="1"
-                                                            aria-label="Payslip: activate to sort column ascending">Health Care
+                                                            aria-label="Payslip: activate to sort column ascending">@lang('lang.health_care')
                                                         </th>
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                             rowspan="1" colspan="1"
-                                                            aria-label="Payslip: activate to sort column ascending">Pension
-                                                            contribution Riel</th>
+                                                            aria-label="Payslip: activate to sort column ascending">@lang('lang.pension_contribution_riel')</th>
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                             rowspan="1" colspan="1"
-                                                            aria-label="Payslip: activate to sort column ascending">Pension
-                                                            contribution Dollar</th>
+                                                            aria-label="Payslip: activate to sort column ascending">@lang('lang.pension_contribution_dollar')</th>
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                             rowspan="1" colspan="1"
-                                                            aria-label="Payslip: activate to sort column ascending">Enterprise
-                                                            pension Contribution</th>
+                                                            aria-label="Payslip: activate to sort column ascending">@lang('lang.enterprise_pension_contribution')</th>
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                             rowspan="1" colspan="1"
-                                                            aria-label="Salary: activate to sort column ascending">Created At
+                                                            aria-label="Salary: activate to sort column ascending">@lang('lang.created_at')
                                                         </th>
                                                     </tr>
                                                 </thead>
@@ -336,34 +330,34 @@
                                                 <thead>
                                                     <tr>
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                            rowspan="1" colspan="1">Employee ID</th>
+                                                            rowspan="1" colspan="1">@lang('lang.employee_id')</th>
                                                         <th class="sorting sorting_asc" tabindex="0"
                                                             aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
                                                             aria-sort="ascending"
-                                                            aria-label="Employee: activate to sort column descending">Full Name
+                                                            aria-label="Employee: activate to sort column descending">@lang('lang.name')
                                                         </th>
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                             rowspan="1" colspan="1"
-                                                            aria-label="Join Date: activate to sort column ascending">Join Date
+                                                            aria-label="Join Date: activate to sort column ascending">@lang('lang.join_date')
                                                         </th>
 
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                             rowspan="1" colspan="1"
-                                                            aria-label="Salary: activate to sort column ascending">Number Of Working Days</th>
+                                                            aria-label="Salary: activate to sort column ascending">@lang('lang.number_of_working_days')</th>
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                             rowspan="1" colspan="1"
-                                                            aria-label="Salary: activate to sort column ascending">Basic Salary</th>
+                                                            aria-label="Salary: activate to sort column ascending">@lang('lang.basic_salary')</th>
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                             rowspan="1" colspan="1"
-                                                            aria-label="Salary: activate to sort column ascending">Basic Salary Received
+                                                            aria-label="Salary: activate to sort column ascending">@lang('lang.basic_salary_received')
                                                         </th>
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                             rowspan="1" colspan="1"
                                                             aria-label="Payslip: activate to sort column ascending">
-                                                            Total Allowance</th>
+                                                            @lang('lang.total_allowance')</th>
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                             rowspan="1" colspan="1"
-                                                            aria-label="Salary: activate to sort column ascending">Created At
+                                                            aria-label="Salary: activate to sort column ascending">@lang('lang.created_at')
                                                         </th>
                                                     </tr>
                                                 </thead>
@@ -403,16 +397,16 @@
                                                 id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
                                                 <thead>
                                                     <tr>
-                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1">Employee ID</th>
-                                                        <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Employee: activate to sort column descending">Full Name</th>
-                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending">Position</th>
-                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">Join Date</th>
-                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">Months</th>
-                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Payslip: activate to sort column ascending">Total Average Salary</th>
-                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Payslip: activate to sort column ascending">Total Salary Receive</th>
-                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Payslip: activate to sort column ascending">Tax Exemption Salary</th>
-                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Payslip: activate to sort column ascending">Taxable Salary</th>
-                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Salary: activate to sort column ascending">Created At</th>
+                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1">@lang('lang.employee_id')</th>
+                                                        <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Employee: activate to sort column descending">@lang('lang.name')</th>
+                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending">@lang('lang.position')</th>
+                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">@lang('lang.join_date')</th>
+                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">@lang('lang.month')</th>
+                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Payslip: activate to sort column ascending">@lang('lang.total_average_salary')</th>
+                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Payslip: activate to sort column ascending">@lang('lang.total_salary_receive')</th>
+                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Payslip: activate to sort column ascending">@lang('lang.tax_exemption_salary')</th>
+                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Payslip: activate to sort column ascending">@lang('lang.taxable_salary')</th>
+                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Salary: activate to sort column ascending">@lang('lang.created_at')</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -452,13 +446,13 @@
                                                 id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
                                                 <thead>
                                                     <tr>
-                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1">Employee ID</th>
-                                                        <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Employee: activate to sort column descending">Full Name</th>
-                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending">Position</th>
-                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">Join Date</th>
-                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Payslip: activate to sort column ascending">Total Severanec Pay</th>
-                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Payslip: activate to sort column ascending">Total Contract Severance Pay</th>
-                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Salary: activate to sort column ascending">Created At</th>
+                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1">@lang('lang.employee_id')</th>
+                                                        <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Employee: activate to sort column descending">@lang('lang.full_name')</th>
+                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending">@lang('lang.position')</th>
+                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">@lang('lang.join_date')</th>
+                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Payslip: activate to sort column ascending">@lang('lang.total_severanec_pay')</th>
+                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Payslip: activate to sort column ascending">@lang('lang.total_contract_severance_pay')</th>
+                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Salary: activate to sort column ascending">@lang('lang.created_at')</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
