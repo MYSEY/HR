@@ -25,14 +25,14 @@
         <div class="page-header">
             <div class="row">
                 <div class="col-sm-12">
-                    <h3 class="page-title">Roles &amp; Permissions</h3>
+                    <h3 class="page-title">@lang('lang.roles') &amp; @lang('lang.permissions')</h3>
                 </div>
             </div>
         </div>
         {!! Toastr::message() !!}
         <div class="row">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xl-3">
-                <a href="#" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#add_role"><i class="fa fa-plus"></i> Add Roles</a>
+                <a href="#" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#add_role"><i class="fa fa-plus"></i> @lang('lang.add_roles')</a>
                 <div class="roles-menu">
                     <ul>
                         @if (count($role)>0)
@@ -64,13 +64,13 @@
                             <table class="table table-striped custom-table">
                                 <thead>
                                     <tr>
-                                        <th>Permission</th>
-                                        <th>Read</th>
-                                        <th>Write</th>
-                                        <th>Create</th>
-                                        <th>Delete</th>
-                                        <th>Import</th>
-                                        <th>Export</th>
+                                        <th>@lang('lang.permission')</th>
+                                        <th>@lang('lang.read')</th>
+                                        <th>@lang('lang.write')</th>
+                                        <th>@lang('lang.create')</th>
+                                        <th>@lang('lang.delete')</th>
+                                        <th>@lang('lang.import')</th>
+                                        <th>@lang('lang.export')</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -96,20 +96,20 @@
                     <form action="{{url('role/store')}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
                         @csrf
                         <div class="form-group">
-                            <label>Role Name <span class="text-danger">*</span></label>
+                            <label>@lang('lang.role_name') <span class="text-danger">*</span></label>
                             <input type="text" class="form-control @error('role_name') is-invalid @enderror" id="role_name" name="role_name" value="{{ old('role_name') }}" placeholder="Enter role name" required>
                         </div>
                         <div class="form-group">
-                            <label>Role Type <span class="text-danger">*</span></label>
+                            <label>@lang('lang.role_type') <span class="text-danger">*</span></label>
                             <select class="form-control" id="role_type" name="role_type" value="{{old('role_type')}}" required>
-                                <option selected disabled value=""> --Select --</option>
-                                <option value="admin">Admin</option>
-                                <option value="developer">Developer</option>
-                                <option value="employee">Employee</option>
+                                <option selected disabled value=""> -- @lang('lang.select') --</option>
+                                <option value="admin">@lang('lang.admin')</option>
+                                <option value="developer">@lang('lang.developer')</option>
+                                <option value="employee">@lang('lang.employee')</option>
                             </select>
                         </div>
                         <div class="submit-section">
-                            <button class="btn btn-primary submit-btn">Submit</button>
+                            <button class="btn btn-primary submit-btn">@lang('lang.submit')</button>
                         </div>
                     </form>
                 </div>
@@ -130,21 +130,21 @@
                     <form action="{{ url('role/update') }}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate> 
                         @csrf
                         <div class="form-group">
-                            <label>Role Name <span class="text-danger">*</span></label>
+                            <label>@lang('lang.role_name') <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" id="e_role_name" name="role_name" value="">
                         </div>
                         <div class="form-group">
-                            <label>Role Type <span class="text-danger">*</span></label>
+                            <label>@lang('lang.role_type') <span class="text-danger">*</span></label>
                             <select class="form-control" id="e_role_type" name="role_type" value="{{old('role_type')}}" required>
-                                <option selected disabled value=""> --Select --</option>
-                                <option value="admin">Admin</option>
-                                <option value="developer">Developer</option>
-                                <option value="employee">Employee</option>
+                                <option selected disabled value=""> -- @lang('lang.select') --</option>
+                                <option value="admin">@lang('lang.admin')</option>
+                                <option value="developer">@lang('lang.developer')</option>
+                                <option value="employee">@lang('lang.employee')</option>
                             </select>
                         </div>
                         <div class="submit-section">
                             <input type="hidden" name="id" id="e_id" value="">
-                            <button type="submit" class="btn btn-primary submit-btn">Save</button>
+                            <button type="submit" class="btn btn-primary submit-btn">@lang('lang.save')</button>
                         </div>
                     </form>
                 </div>
@@ -154,23 +154,21 @@
     <!-- /Edit Role Modal -->
 
     <div class="modal custom-modal fade" id="delete_role" role="dialog">
-        <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-dialog modal-sm  modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-body">
                     <div class="form-header">
-                        <h3>Delete Role</h3>
-                        <p>Are you sure want to delete?</p>
+                        <h3>@lang('lang.delete')</h3>
+                        <p>@lang('lang.are_you_sure_want_to_delete')?</p>
                     </div>
                     <div class="modal-btn delete-action">
                         <form action="{{ url('role/delete') }}" method="POST">
                             @csrf
                             <input type="hidden" name="id" class="e_id" value="">
                             <div class="row">
-                                <div class="col-6">
-                                    <button type="submit" class="btn btn-primary continue-btn submit-btn">Delete</button>
-                                </div>
-                                <div class="col-6">
-                                    <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-primary cancel-btn">Cancel</a>
+                                <div class="submit-section" style="text-align: center">
+                                    <button type="submit" class="btn btn-primary submit-btn me-2">@lang('lang.delete')</button>
+                                    <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-danger">@lang('lang.cancel')</a>
                                 </div>
                             </div>
                         </form>

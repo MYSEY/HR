@@ -3,6 +3,12 @@
 <html lang="en" data-layout="vertical" data-topbar="light" data-sidebar="dark" data-sidebar-size="lg" data-sidebar-image="none">
 
     <head>
+        <style>
+            body,option,label,.chartjs-size-monitor-shrink,#k_chart_cashin_cahout,.chartjs-render-monitor,canvas,#k_chart_receive_pay,.chartjs-size-monitor,.fontKH,.f,.form-control,.modal-title,.menu-item,.menu-title,.k-portlet__head-title,tr,li,a,label,.ui-helper-hidden-accessible,div,button,h1,h2,b,h3,title,.swal2-title,.content-header-title,.btn,.swal2-title{
+                font-family:  'Nunito', "Khmer OS Battambang", sans-serif, serif;
+                /* font-family: 'Jaldi', sans-serif; */
+            }
+        </style>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
@@ -35,14 +41,14 @@
                                 <div class="text-center">
                                     <img src="{{asset('/admin/img/logo/aa15d5f1-6051-4731-85c3-9f8e7dbc4b88.jfif')}}" style="width: 30%" alt="Dreamguy&#39;s Technologies">
                                 </div>
-                                <h3 class="account-title">Forgot Password?</h3>
-                                <p class="account-subtitle" style="font-size: 17px !important">Enter your employee ID to get a password reset link</p>
+                                <h3 class="account-title">@lang('lang.forgot_password?')</h3>
+                                <p class="account-subtitle" style="font-size: 17px !important">@lang('lang.enter_your_employee_id_to_get_a_password_reset_link')</p>
                                 {!! Toastr::message() !!}
 
                                 <form method="POST" action="{{ url('update/password') }}">
                                     @csrf
                                     <div class="form-group">
-                                        <label>Employee ID <span class="text-danger">*</span></label>
+                                        <label>@lang('lang.employee_id') <span class="text-danger">*</span></label>
                                         <input type="text" class="form-control requered @error('number_employee') is-invalid @enderror" name="number_employee" value="{{ old('number_employee') }}" required>
                                         @error('number_employee')
                                             <span class="invalid-feedback" role="alert">
@@ -51,7 +57,7 @@
                                         @enderror
                                     </div>
                                     <div class="form-group Password-icon">
-                                        <label >New Password <span class="text-danger">*</span></label>
+                                        <label >@lang('lang.new_password') <span class="text-danger">*</span></label>
                                         <div class="position-relative">
                                             <input type="password" class="form-control requered pass-input " name="password" required>
                                             <span class="fa fa-eye-slash toggle-password"></span>
@@ -64,17 +70,17 @@
                                     </div>
 
                                     <div class="form-group Password-icon">
-                                        <label >Confirm Password <span class="text-danger">*</span></label>
+                                        <label >@lang('lang.confirm_password') <span class="text-danger">*</span></label>
                                         <div class="position-relative">
                                             <input type="password" class="form-control requered pass-input" name="password_confirmation" required>
                                             <span class="fa fa-eye-slash toggle-password"></span>
                                         </div>
                                     </div>
                                     <div class="form-group text-center">
-                                        <button class="btn btn-primary account-btn submit-btn" type="submit">Reset Password</button>
+                                        <button class="btn btn-primary account-btn submit-btn" type="submit">@lang('lang.reset_password')</button>
                                     </div>
                                     <div class="account-footer">
-                                        <p>Remember your password? <a href="{{url('/')}}">Login</a></p>
+                                        <p>@lang('lang.remember_your_password')? <a href="{{url('/')}}">@lang('lang.login')</a></p>
                                     </div>
                                 </form>
                             </div>
