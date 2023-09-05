@@ -36,7 +36,7 @@ class ExportPayroll implements FromCollection, WithColumnWidths, WithHeadings, W
         if ($request->tab_status == 1) {
             $this->register_events_title = "R2";
             $this->register_events_title_sub_title = "R3";
-            $this->text_title = "Basic Salary";
+            $this->text_title = "តារាងលំអិតអំពីប្រាក់បៀវត្សរបស់បុគ្គលិក";
             $datas = Payroll::with("users")
             ->join('users', 'payrolls.employee_id', '=', 'users.id')
             ->select(
@@ -87,17 +87,18 @@ class ExportPayroll implements FromCollection, WithColumnWidths, WithHeadings, W
                     $pay->users == null ? '' : $pay->users->EmployeePosition,
                     $pay->users == null ? '' : $pay->users->EmployeeBranch,
                     $pay->users == null ? '' : $pay->users->joinOfDate,
-                    '$ '.$pay->basic_salary,
-                    '$ '.$pay->total_child_allowance,
-                    '$ '.$phone_allowance,
-                    '$ '.$pay->total_kny_phcumben,
-                    '$ '.$pay->total_gross_salary,
-                    '$ '.$pay->seniority_payable_tax,
-                    '$ '.$pay->total_pension_fund,
-                    '$ '.$pay->base_salary_received_usd,
-                    '$ '.$pay->seniority_pay_excluded_tax,
-                    '$ '.$pay->total_severance_pay,
-                    '$ '.$pay->total_salary,
+
+                    $pay->basic_salary,
+                    $pay->total_child_allowance,
+                    $phone_allowance,
+                    $pay->total_kny_phcumben,
+                    $pay->total_gross_salary,
+                    $pay->seniority_payable_tax,
+                    $pay->total_pension_fund,
+                    $pay->base_salary_received_usd,
+                    $pay->seniority_pay_excluded_tax,
+                    $pay->total_severance_pay,
+                    $pay->total_salary,
                     $payment_date,
                 ];
             }
@@ -309,20 +310,20 @@ class ExportPayroll implements FromCollection, WithColumnWidths, WithHeadings, W
 
                 // block merge cells 
                 $sheet->mergeCells('A2:'.$this->register_events_title);
-                $sheet->setCellValue('A2', "CAMMA Microfinance Limited");
-                $sheet->getDelegate()->getStyle('A2:'.$this->register_events_title)->getFont()->setName('Khmer OS Muol Light')
-                ->setSize(12)->setUnderline('A2:'.$this->register_events_title);
+                $sheet->setCellValue('A2', "ខេមា​ មីក្រូហិរញ្ញវត្ថុ លីមីតធីត");
+                $sheet->getDelegate()->getStyle('A2:'.$this->register_events_title)->getFont()->setName('Khmer OS Muol Pali')
+                ->setSize(18)->setUnderline('A2:'.$this->register_events_title);
                 $event->sheet->getDelegate()->getStyle('A2:'.$this->register_events_title)
                 ->getAlignment()
                 ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
                 $sheet->mergeCells('A3:'.$this->register_events_title_sub_title);
-                $sheet->setCellValue('A3', "Report ".$this->text_title);
-                $sheet->getDelegate()->getStyle('A3:'.$this->register_events_title_sub_title)->getFont()->setName('Arial')
-                ->setSize(10);
+                $sheet->setCellValue('A3',$this->text_title);
+                $sheet->getDelegate()->getStyle('A3:'.$this->register_events_title_sub_title)->getFont()->setName('Khmer OS Muol Light')
+                ->setSize(12);
                 $event->sheet->getDelegate()->getStyle('A3:'.$this->register_events_title_sub_title)
-                                ->getAlignment()
-                                ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+                ->getAlignment()
+                ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
             },
         ];
@@ -331,24 +332,24 @@ class ExportPayroll implements FromCollection, WithColumnWidths, WithHeadings, W
     public function columnWidths(): array
     {
         return [
-            'A' => 10,
-            'B' => 10,      
-            'C' => 10,      
-            'D' => 10,      
-            'E' => 10,      
-            'F' => 10,      
-            'G' => 10,      
-            'H' => 10,      
-            'I' => 10,      
-            'J' => 10,      
-            'K' => 10,      
-            'L' => 10,      
-            'M' => 10,      
-            'N' => 10,      
-            'O' => 10,      
-            'P' => 10,      
-            'Q' => 10,      
-            'R' => 10,
+            'A' => 14,
+            'B' => 20,      
+            'C' => 20,      
+            'D' => 20,      
+            'E' => 20,      
+            'F' => 20,      
+            'G' => 15,      
+            'H' => 15,      
+            'I' => 15,      
+            'J' => 15,      
+            'K' => 15,      
+            'L' => 15,      
+            'M' => 15,      
+            'N' => 15,      
+            'O' => 15,      
+            'P' => 15,      
+            'Q' => 15,      
+            'R' => 15,
         ];
     }
     public function headings(): array
