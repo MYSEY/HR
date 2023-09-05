@@ -251,7 +251,6 @@
             $('#e_expired_year').html('<option value=""> </option>');
             let dateYear = moment(new Date(`01/01/${$(this).val()}`)).format('YYYY-MM-DD');
             let ageMotorrentel = calculateAge(dateYear);
-
             $("#shelt_life").val(ageMotorrentel);
             $('#e_shelt_life').val(ageMotorrentel);
 
@@ -278,6 +277,18 @@
             let YearExpireted = moment(aYearFromNow).format('YYYY');
             $('#expired_year').val(YearExpireted);
             $('#e_expired_year').val(YearExpireted);
+
+            if ($("#start_date").val() || $("#e_start_date").val()) {
+                let startMonth = null;
+                if ($("#e_start_date").val()) {
+                    startMonth = moment($("#e_start_date").val()).format('MM');
+                }else{
+                    startMonth = moment($("#start_date").val()).format('MM');
+                }
+                let lastDay = new Date(YearExpireted, startMonth, 0).getDate();
+                $("#end_date").val(YearExpireted+'-'+startMonth+'-'+lastDay);
+                $("#e_end_date").val(YearExpireted+'-'+startMonth+'-'+lastDay);
+            }
         });
 
         $("#import_new_motor_rentel").on("click", function() {
@@ -355,7 +366,7 @@
                     price_taplab_rentel: $("#price_taplab_rentel").val(),
                 }).then(function(response) {
                     let data = response.data.success;
-                    let date_of_birth = data.user.date_of_birth ? moment(data.user.date_of_birth).format('d,MMM,YYYY') : "";
+                    let date_of_birth = data.user.date_of_birth ? moment(data.user.date_of_birth).format('d,MM,YYYY') : "";
                     $("#p_full_name").text(data.user.employee_name_kh);
                     $("#p_gender").text(data.user.gender.name_khmer);
                     $("#p_date_of_birth").text(date_of_birth);
@@ -407,7 +418,97 @@
             
         });
 
-        $('.update').on('click', function() {
+        $("#btn-e-save-print").on("click", function() {
+            var num_miss = 0;
+            $("#btn-e-print-loading").css('display', 'block');
+            $("#btn-e-save-print").prop('disabled', true);
+            $(".btn-e-text-print").css("display", "none");
+            
+            $(".e_emp_required").each(function(){
+                if($(this).val()==""){ 
+                    num_miss++;
+                    $(this).css("border-color","#dc3545")
+                }else{
+                    $(this).css("border-color","#198754")
+                }
+            });
+            if (num_miss>0) {
+                setTimeout(function () {
+                    $("#btn-e-save-print").attr('disabled',false);
+                    $("#btn-e-print-loading").css('display', 'none');
+                    $(".btn-e-text-print").css("display", 'block');
+                }, 500);
+                return false;
+            }else{
+                axios.post('{{ URL('motor-rentel/update') }}', {
+                    id:$("#e_id").val(),
+                    status_print: true,
+                    employee_id: $("#e_employee_id").val(),
+                    number_plate: $("#e_number_plate").val(),
+                    start_date: $("#e_start_date").val(),
+                    end_date: $("#e_end_date").val(),
+                    product_year: $("#e_product_year").val(),
+                    expired_year: $("#e_expired_year").val(),
+                    shelt_life: $("#e_shelt_life").val(),
+                    total_gasoline: $("#e_total_gasoline").val(),
+                    total_work_day: $("#e_total_work_day").val(),
+                    price_engine_oil: $("#e_price_engine_oil").val(),
+                    price_motor_rentel: $("#e_price_motor_rentel").val(),
+                    taplab_rentel: $("#e_taplab_rentel").val(),
+                    price_taplab_rentel: $("#e_price_taplab_rentel").val(),
+                }).then(function(response) {
+                    let data = response.data.success;
+                    let date_of_birth = data.user.date_of_birth ? moment(data.user.date_of_birth).format('d,MM,YYYY') : "";
+                    $("#p_full_name").text(data.user.employee_name_kh);
+                    $("#p_gender").text(data.user.gender.name_khmer);
+                    $("#p_date_of_birth").text(date_of_birth);
+                    $("#p_id_card_number").text(data.user.id_card_number);
+                    $("#p_house_no").text(data.current_house_no);
+                    $("#p_house").text(data.user.currentvillage ? data.user.currentvillage.name_km : "");
+                    $("#p_commune").text(data.user.currentcommune ? data.user.currentcommune.name_km : "");
+                    $("#p_district").text(data.user.currentdistrict ? data.user.currentdistrict.name_km : "");
+                    $("#p_province").text(data.user.currentprovince ? data.user.currentprovince.name_km : "");
+                    $("#p_year_of_manufature").text(data.product_year);
+                    $("#p_number_plate").text(data.number_plate);
+                    let start_date = data.start_date.split('-');
+                    let end_date = data.end_date.split('-');
+                    // start_date
+                    $("#p_s_day").text(start_date[2]);
+                    $("#p_s_month").text(start_date[1]);
+                    $("#p_s_year").text(start_date[0]);
+                    // end_date
+                    $("#p_e_day").text(end_date[2]);
+                    $("#p_e_month").text(end_date[1]);
+                    $("#p_e_year").text(end_date[0]);
+                    // approve date
+                    $("#p_a_day").text(start_date[2]);
+                    $("#p_a_month").text(start_date[1]);
+                    $("#p_a_year").text(start_date[0]);
+                    $("#p_price_motor_rentel").text(data.price_motor_rentel);
+                    let price_to_word = convertNumberToWords(data.price_motor_rentel)
+                    $("#p_price_to_word").text(price_to_word);
+                    print_pdf();
+                    showDatas();
+                    new Noty({
+                        title: "",
+                        text: "@lang('lang.the_process_has_been_successfully').",
+                        type: "success",
+                        timeout: 3000,
+                        icon: true
+                    }).show();
+                }).catch(function(error) {
+                    console.log(error);
+                    new Noty({
+                        title: "",
+                        text: "@lang('lang.something_went_wrong_please_try_again_later').",
+                        type: "error",
+                        timeout: 3000,
+                        icon: true
+                    }).show();
+                });
+            }
+        });
+        $(document).on('click','.update', function(){
             let id = $(this).data("id");
             $.ajax({
                 type: "GET",
@@ -417,6 +518,7 @@
                 },
                 dataType: "JSON",
                 success: function(response) {
+                    console.log("response: ", response);
                     if (response.success) {
                         if (response.employee != '') {
                             $('#e_employee_id').html('<option selected disabled value="">@lang("lang.select")</option>');
@@ -424,14 +526,12 @@
                                 $('#e_employee_id').append($('<option>', {
                                     value: item.id,
                                     text: item.employee_name_en,
-                                    selected: item.id == response
-                                        .success.employee_id
+                                    selected: item.id == response.success.employee_id
                                 }));
                             });
                         }
 
                         $('#e_id').val(response.success.id);
-                        // $('#e_gasoline_price_per_liter').val(response.success.gasoline_price_per_liter);
                         $('#e_start_date').val(response.success.start_date);
                         $('#e_end_date').val(response.success.end_date);
                         [...Array(currentDiff >= 0 ? currentDiff + 1 : 0).keys()].map((
@@ -455,9 +555,7 @@
                         $('#e_price_motor_rentel').val(response.success.price_motor_rentel);
                         $('#e_taplab_rentel').val(response.success.taplab_rentel);
                         $('#e_price_taplab_rentel').val(response.success.price_taplab_rentel);
-                        // $('#e_tax_rate').val(response.success.tax_rate);
                         $('#e_expired_year').val(response.success.expired_year);
-
                         $('#edit_motor_rentel').modal('show');
                     }
                 }
@@ -509,13 +607,10 @@
                         '<i class="material-icons">more_vert</i>' +
                         '</a>' +
                         '<div class="dropdown-menu dropdown-menu-right">' +
-                        // '<a class="dropdown-item motor_detail" data-id="{{'(row.id)'}}" href="{{url("motor-rentel/detail")}}/'+row.id+'">' +
-                        // '<i class="fa fa-eye m-r-5"></i> View' +
-                        // '</a>' +
-                        ' <a class="dropdown-item update" data-id="{{'(row.id)'}}">' +
+                        ' <a class="dropdown-item update" data-id="'+(row.id)+'">' +
                         '<i class="fa fa-pencil m-r-5"></i> @lang("lang.edit")' +
                         '</a>' +
-                        '<a class="dropdown-item delete" href="#" data-toggle="modal" data-id="{{'(row.id)'}}" data-target="#delete_motor_rentel">' +
+                        '<a class="dropdown-item delete" href="#" data-toggle="modal" data-id="'+(row.id)+'" data-target="#delete_motor_rentel">' +
                         '<i class="fa fa-trash-o m-r-5"></i> @lang("lang.delete")' +
                         '</a>' +
                         '</div>' +
@@ -541,6 +636,11 @@
             $(".btn-text-print").show();
             $("#btn-print-loading").css('display', 'none');
             $("#add_motor_rentel").modal("hide")
+
+            $("#btn-e-save-print").prop('disabled', false);
+            $(".btn-e-text-print").show();
+            $("#btn-e-print-loading").css('display', 'none');
+            $("#edit_motor_rentel").modal("hide")
         }, 2000);
         $("#print_purchase").printThis({
             importCSS: false,

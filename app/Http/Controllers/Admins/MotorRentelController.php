@@ -254,7 +254,14 @@ class MotorRentelController extends Controller
             ];
             MotorRentel::where('id', $request->id)->update($dataUpdate);
             Toastr::success('Updated successfully.', 'Success');
-            return redirect()->back();
+            $getData = MotorRentel::with('user')->where("id", $request->id)->first();
+            if ($request->status_print) {
+                return response()->json([
+                    'success' => $getData,
+                ]);
+            }else{
+                return redirect()->back();
+            }
             DB::commit();
         } catch (\Exception $e) {
             DB::rollback();

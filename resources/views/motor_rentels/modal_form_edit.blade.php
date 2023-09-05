@@ -17,7 +17,7 @@
                         <div class="col-sm-6">
                             <div class="form-group hr-form-group-select2">
                                 <label>@lang('lang.employee')</label>
-                                <select class="form-control hr-select2-option requered" id="e_employee_id" name="employee_id" value="{{old('employee_id')}}" required>
+                                <select class="form-control hr-select2-option requered e_emp_required" id="e_employee_id" name="employee_id" value="{{old('employee_id')}}" required>
                                     {{-- <option value="">select employee</option> --}}
                                 </select>
                             </div>
@@ -25,14 +25,23 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="">@lang('lang.number_plate') <span class="text-danger">*</span></label>
-                                <input class="form-control @error('number_plate') is-invalid @enderror" type="text" id="e_number_plate" required name="number_plate" value="{{old('number_plate')}}">
+                                <input class="form-control e_emp_required @error('number_plate') is-invalid @enderror" type="text" id="e_number_plate" required name="number_plate" value="{{old('number_plate')}}">
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="">@lang('lang.start_date') <span class="text-danger">*</span></label>
                                 <div class="cal-icon">
-                                    <input class="form-control datetimepicker @error('start_date') is-invalid @enderror" type="text" id="e_start_date" required name="start_date" value="{{old('employee_name_kh')}}">
+                                    <input class="form-control datetimepicker e_emp_required @error('start_date') is-invalid @enderror" type="text" id="e_start_date" required name="start_date" value="{{old('employee_name_kh')}}">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group ">
+                                <label class="">@lang('lang.year_of_manufature') <span class="text-danger">*</span></label>
+                                <div class="cal-icon">
+                                    <select id="e_product_year" name="product_year"  class="form-control floating select select2-hidden-accessible e_emp_required" data-select2-id="select2-data-4-f353" tabindex="-1" aria-hidden="true">
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -40,27 +49,18 @@
                             <div class="form-group">
                                 <label class="">@lang('lang.end_date') <span class="text-danger">*</span></label>
                                 <div class="cal-icon">
-                                    <input class="form-control datetimepicker @error('end_date') is-invalid @enderror" type="text" id="e_end_date" required name="end_date" value="{{old('end_date')}}">
+                                    <input class="form-control datetimepicker e_emp_required @error('end_date') is-invalid @enderror" type="text" id="e_end_date" required name="end_date" value="{{old('end_date')}}">
                                 </div>
                             </div>
                         </div>
 
-                        <div class="col-sm-6">
-                            <div class="form-group ">
-                                <label class="">@lang('lang.year_of_manufature') <span class="text-danger">*</span></label>
-                                <div class="cal-icon">
-                                    <select id="e_product_year" name="product_year"  class="form-control floating select select2-hidden-accessible" data-select2-id="select2-data-4-f353" tabindex="-1" aria-hidden="true">
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="">@lang('lang.expiretion_year') <span class="text-danger">*</span></label>
                                 <div class="cal-icon">
                                     {{-- <select id="e_expired_year" name="expired_year"  class="form-control floating select select2-hidden-accessible" >
                                     </select> --}}
-                                    <input type="text"  class="form-control" name="expired_year" id="e_expired_year">
+                                    <input type="text"  class="form-control e_emp_required" name="expired_year" id="e_expired_year">
                                 </div>
                             </div>
                         </div>
@@ -68,32 +68,32 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="">@lang('lang.shelt_life') <span class="text-danger">*</span></label>
-                                <input class="form-control @error('shelt_life') is-invalid @enderror" type="Number" id="e_shelt_life" required name="shelt_life" value="{{old('shelt_life')}}">
+                                <input class="form-control e_emp_required @error('shelt_life') is-invalid @enderror" type="Number" id="e_shelt_life" required name="shelt_life" value="{{old('shelt_life')}}">
                             </div>
                         </div>
                        
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="">@lang('lang.total_gasoline') <span class="text-danger">*</span></label>
-                                <input class="form-control @error('total_gasoline') is-invalid @enderror" type="number" id="e_total_gasoline" required name="total_gasoline" value="{{old('total_gasoline')}}">
+                                <input class="form-control e_emp_required @error('total_gasoline') is-invalid @enderror" type="number" id="e_total_gasoline" required name="total_gasoline" value="{{old('total_gasoline')}}">
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="">@lang('lang.total_working_days') <span class="text-danger">*</span></label>
-                                <input class="form-control @error('total_work_day') is-invalid @enderror" type="number" id="e_total_work_day" required name="total_work_day" value="{{old('total_work_day')}}">
+                                <input class="form-control e_emp_required @error('total_work_day') is-invalid @enderror" type="number" id="e_total_work_day" required name="total_work_day" value="{{old('total_work_day')}}">
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="">@lang('lang.price_engine_oil') ($)<span class="text-danger">*</span></label>
-                                <input class="form-control @error('price_engine_oil') is-invalid @enderror" type="number" id="e_price_engine_oil" required name="price_engine_oil" value="{{old('price_engine_oil')}}">
+                                <input class="form-control e_emp_required @error('price_engine_oil') is-invalid @enderror" type="number" id="e_price_engine_oil" required name="price_engine_oil" value="{{old('price_engine_oil')}}">
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="">@lang('lang.price_motor_rentel') ($)<span class="text-danger">*</span></label>
-                                <input class="form-control @error('price_motor_rentel') is-invalid @enderror" type="number" id="e_price_motor_rentel" required name="price_motor_rentel" value="{{old('price_motor_rentel')}}">
+                                <input class="form-control e_emp_required @error('price_motor_rentel') is-invalid @enderror" type="number" id="e_price_motor_rentel" required name="price_motor_rentel" value="{{old('price_motor_rentel')}}">
                             </div>
                         </div>
                     </div>
@@ -133,6 +133,10 @@
                             {{-- Submit --}}
                             <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading') </span>
                             <span class="btn-txt">@lang('lang.submit')</span>
+                        </button>
+                        <button type="button" class="btn btn-primary" data-btn="1" id="btn-e-save-print">
+                            <span class="btn-e-text-print">@lang('lang.print')</span>
+                            <span id="btn-e-print-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>
                         </button>
                     </div>
                 </form>

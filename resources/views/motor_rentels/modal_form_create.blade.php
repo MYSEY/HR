@@ -40,15 +40,6 @@
                             </div>
                         </div>
                         <div class="col-sm-6">
-                            <div class="form-group">
-                                <label class="">@lang('lang.end_date') <span class="text-danger">*</span></label>
-                                <div class="cal-icon">
-                                    <input class="form-control datetimepicker emp_required" type="text" id="end_date" name="end_date" value="{{old('end_date')}}" required>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-sm-6">
                             <div class="form-group ">
                                 <label class="">@lang('lang.year_of_manufature') <span class="text-danger">*</span></label>
                                 <div class="cal-icon">
@@ -57,6 +48,15 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="">@lang('lang.end_date') <span class="text-danger">*</span></label>
+                                <div class="cal-icon">
+                                    <input class="form-control datetimepicker emp_required" type="text" id="end_date" name="end_date" value="{{old('end_date')}}" required>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="">@lang('lang.expiretion_year') <span class="text-danger">*</span></label>
