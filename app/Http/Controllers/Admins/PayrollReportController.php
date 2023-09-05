@@ -32,11 +32,11 @@ class PayrollReportController extends Controller
     }
     public function index()
     {
-        $payroll = Payroll::with('users')->get();
-        $dataNSSF = NationalSocialSecurityFund::all();
-        $dataSeniority = Seniority::all();
-        $severancePay = SeverancePay::all();
-        $benefit = Bonus::with("users")->get();
+        $payroll = Payroll::with('users')->orderBy('employee_id')->get();
+        $dataNSSF = NationalSocialSecurityFund::orderBy('employee_id')->get();
+        $dataSeniority = Seniority::orderBy('employee_id')->get();
+        $severancePay = SeverancePay::orderBy('employee_id')->get();
+        $benefit = Bonus::with("users")->orderBy('employee_id')->get();
         return view('reports.payroll_report',compact('payroll','dataNSSF','dataSeniority','severancePay','benefit'));
     }
 

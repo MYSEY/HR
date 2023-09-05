@@ -484,29 +484,29 @@
             let id = $(this).attr('data-emp-id');
             let status = $(this).data('id');
             if (status == '1') {
-                var emp_status = "Fixed Duration Contract (FDC)";
+                var emp_status = '@lang("lang.fixed_duration_contract")';
             } else if(status == '10') {
-                var emp_status = "Fixed Duration Contract (FDC)";
+                var emp_status = '@lang("lang.fixed_duration_contract")';
             } else if(status == 2) {
-                var emp_status = "Undetermined Duration Contract (UDC)";
+                var emp_status = '@lang("lang.undetermined_duration_contract")';
             }else if(status == 3){
-                var emp_status = "Resignation";
+                var emp_status = '@lang("lang.resignation")';
             }else if(status == 4){
-                var emp_status = "Termination";
+                var emp_status = '@lang("lang.termination")';
             }else if(status == 5){
-                var emp_status = "Death";
+                var emp_status = '@lang("lang.death")';
             }else if(status == 6){
-                var emp_status = "Retired";
+                var emp_status = '@lang("lang.retired")';
             }else if(status == 7){
-                var emp_status = "Lay off";
+                var emp_status = '@lang("lang.lay_off")';
             }else if(status == 8){
-                var emp_status = "Suspension";
+                var emp_status = '@lang("lang.suspension")';
             }else if(status == 9){
-                var emp_status = "Fall Probation";
+                var emp_status = '@lang("lang.field_probation")';
             }else if (status =="Probation") {
                 emp_status = status;
             }else{
-                var emp_status = "Cancel Signed Contract";
+                var emp_status = '@lang("lang.cancel_signed_contract")';
             }
 
             let join_date = $(".join_date").val();
@@ -514,7 +514,7 @@
             let end_date = $(this).attr('data-end-date');
             if (status == "Probation") {
                 $.confirm({
-                    title: 'Employee Status!',
+                    title: '@lang("lang.employee_status")',
                     contentClass: 'text-center',
                     // backgroundDismiss: 'cancel',
                     content: ''+
@@ -524,16 +524,16 @@
                             '</div>'+
                             '<div class="form-group">'+
                                 '<div class="form-group">'+
-                                    '<label>Join Date <span class="text-danger">*</span></label>'+
+                                    '<label>@lang("lang.join_dat") <span class="text-danger">*</span></label>'+
                                     '<input type="date" class="form-control start_date" value="'+join_date+'" disabled>'+
                                     '<input type="hidden" class="form-control emp_status" value="'+status+'">'+
                                     '<input type="hidden" class="form-control id" value="'+id+'">'+
                                 '</div>'+
                                 '<div class="form-group">'+
-                                    '<label>Pass Date <span class="text-danger">*</span></label>'+
+                                    '<label>@lang("lang.pass_date") <span class="text-danger">*</span></label>'+
                                     '<input type="date" class="form-control end_dete" value="'+start_date+'" disabled>'+
                                 '</div>'+
-                                '<label>Reason</label>'+
+                                '<label>@lang("lang.reason")</label>'+
                                 '<textarea class="form-control resign_reason"></textarea>'+
                             '</div>'+
                         '</form>',
@@ -552,7 +552,7 @@
                                     }).then(function(response) {
                                     new Noty({
                                         title: "",
-                                        text: "The process has been successfully.",
+                                        text: '@lang("lang.the_process_has_been_successfully")',
                                         type: "success",
                                         icon: true
                                     }).show();
@@ -561,7 +561,7 @@
                                 }).catch(function(error) {
                                     new Noty({
                                         title: "",
-                                        text: "Something went wrong please try again later.",
+                                        text: '@lang("lang.something_went_wrong_please_try_again_later")',
                                         type: "error",
                                         icon: true
                                     }).show();
@@ -579,7 +579,7 @@
                 let end_date = $(this).attr('data-end-date');
                 let salaryIncrease = $(this).attr('data-Salary-Increase');
                 $.confirm({
-                    title: 'Employee Status!',
+                    title: '@lang("lang.employee_status")',
                     contentClass: 'text-center',
                     // backgroundDismiss: 'cancel',
                     content: ''+
@@ -589,20 +589,20 @@
                                     '<label><a href="#">'+emp_status+'</a></label>'+
                                 '</div>'+
                                 '<div class="form-group">'+
-                                    '<label>Start Date <span class="text-danger">*</span></label>'+
+                                    '<label>@lang("lang.start_date") <span class="text-danger">*</span></label>'+
                                     '<input type="date" class="form-control start_date" value="'+start_date+'">'+
                                     '<input type="hidden" class="form-control emp_status" value="'+status+'">'+
                                     '<input type="hidden" class="form-control id" value="'+id+'">'+
                                 '</div>'+
                                 '<div class="form-group">'+
-                                    '<label>End Date <span class="text-danger">*</span></label>'+
+                                    '<label>@lang("lang.end_date") <span class="text-danger">*</span></label>'+
                                     '<input type="date" class="form-control end_dete" value="'+end_date+'">'+
                                 '</div>'+
                                 '<div class="form-group">'+
-                                    '<label>Salary Increase</label>'+
+                                    '<label>@lang("lang.salary_increase")</label>'+
                                     '<input type="number" class="form-control total_salary_increase" value="'+salaryIncrease+'">'+
                                 '</div>'+
-                                '<label>Reason</label>'+
+                                '<label>@lang("lang.reason")</label>'+
                                 '<textarea class="form-control resign_reason"></textarea>'+
                             '</div>'+
                         '</form>',
@@ -620,15 +620,15 @@
 
                                 if (!start_date) {
                                     $.alert({
-                                        title: '<span class="text-danger">Requiered</span>',
+                                        title: '<span class="text-danger">@lang("lang.requiered")</span>',
                                         content: 'Please input start date.',
                                     });
                                     return false;
                                 }
                                 if (!end_dete) {
                                     $.alert({
-                                        title: '<span class="text-danger">Requiered</span>',
-                                        content: 'Please input end date.',
+                                        title: '<span class="text-danger">@lang("lang.requiered")</span>',
+                                        content: '@lang("lang.please_input_end_date")',
                                     });
                                     return false;
                                 }
@@ -644,7 +644,7 @@
                                     if (response.data.message == 'successfull') {
                                         new Noty({
                                             title: "",
-                                            text: "The process has been successfully.",
+                                            text: '@lang("lang.the_process_has_been_successfully")',
                                             type: "success",
                                             timeout: 3000,
                                             icon: true
@@ -654,7 +654,7 @@
                                 }).catch(function(error) {
                                     new Noty({
                                         title: "",
-                                        text: "Something went wrong please try again later.",
+                                        text: '@lang("lang.something_went_wrong_please_try again_later")',
                                         type: "error",
                                         icon: true
                                     }).show();
@@ -670,7 +670,7 @@
             }else if(status == '10'){
                 let start_date = $(this).attr('data-end-date');
                 $.confirm({
-                    title: 'Employee Status!',
+                    title: '@lang("lang.employee_status")',
                     contentClass: 'text-center',
                     // backgroundDismiss: 'cancel',
                     content: ''+
@@ -680,16 +680,16 @@
                                     '<label><a href="#">'+emp_status+'</a></label>'+
                                 '</div>'+
                                 '<div class="form-group">'+
-                                    '<label>Start Date <span class="text-danger">*</span></label>'+
+                                    '<label>@lang("lang.start_date") <span class="text-danger">*</span></label>'+
                                     '<input type="date" class="form-control start_date" value="'+start_date+'">'+
                                     '<input type="hidden" class="form-control emp_status" value="'+status+'">'+
                                     '<input type="hidden" class="form-control id" value="'+id+'">'+
                                 '</div>'+
                                 '<div class="form-group">'+
-                                    '<label>End Date <span class="text-danger">*</span></label>'+
+                                    '<label>@lang("lang.end_date") <span class="text-danger">*</span></label>'+
                                     '<input type="date" class="form-control end_dete" value="">'+
                                 '</div>'+
-                                '<label>Reason</label>'+
+                                '<label>@lang("lang.reason")</label>'+
                                 '<textarea class="form-control resign_reason"></textarea>'+
                             '</div>'+
                         '</form>',
@@ -706,15 +706,15 @@
 
                                 if (!start_date) {
                                     $.alert({
-                                        title: '<span class="text-danger">Requiered</span>',
-                                        content: 'Please input start date.',
+                                        title: '<span class="text-danger">@lang("lang.requiered")</span>',
+                                        content: '@lang("lang.please_input_start_date")',
                                     });
                                     return false;
                                 }
                                 if (!end_dete) {
                                     $.alert({
-                                        title: '<span class="text-danger">Requiered</span>',
-                                        content: 'Please input end date.',
+                                        title: '<span class="text-danger">@lang("lang.requiered")</span>',
+                                        content: '@lang("lang.please_input_start_date")',
                                     });
                                     return false;
                                 }
@@ -729,7 +729,7 @@
                                     if (response.data.message == 'successfull') {
                                         new Noty({
                                             title: "",
-                                            text: "The process has been successfully.",
+                                            text: '@lang("lang.the_process_has_been_successfully")',
                                             type: "success",
                                             timeout: 3000,
                                             icon: true
@@ -739,7 +739,7 @@
                                 }).catch(function(error) {
                                     new Noty({
                                         title: "",
-                                        text: "Something went wrong please try again later.",
+                                        text: '@lang("lang.something_went_wrong_please_try again_later")',
                                         type: "error",
                                         icon: true
                                     }).show();
@@ -755,7 +755,7 @@
             }else if(status==2){
                 let start_date = $(this).attr('data-end-date');
                 $.confirm({
-                    title: 'Employee Status!',
+                    title: '@lang("lang.employee_status")',
                     contentClass: 'text-center',
                     // backgroundDismiss: 'cancel',
                     content: ''+
@@ -764,13 +764,13 @@
                                 '<label><a href="#">'+emp_status+'</a></label>'+
                             '</div>'+
                             '<div class="form-group">'+
-                                '<label>Start Date <span class="text-danger">*</span></label>'+
+                                '<label>@lang("lang.start_date") <span class="text-danger">*</span></label>'+
                                 '<input type="date" class="form-control start_date" value="'+start_date+'">'+
                                 '<input type="hidden" class="form-control emp_status" id="" name="" value="'+status+'">'+
                                 '<input type="hidden" class="form-control id" id="" name="" value="'+id+'">'+
                             '</div>'+
                             '<div class="form-group">'+
-                                '<label>Reason</label>'+
+                                '<label>@lang("lang.reason")</label>'+
                                 '<textarea class="form-control resign_reason"></textarea>'+
                             '</div>'+
                         '</form>',
@@ -786,8 +786,8 @@
 
                                 if (!start_date) {
                                     $.alert({
-                                        title: '<span class="text-danger">Requiered</span>',
-                                        content: 'Please input end date.',
+                                        title: '<span class="text-danger">@lang("lang.requiered")</span>',
+                                        content: '@lang("lang.please_input_start_date")',
                                     });
                                     return false;
                                 }
@@ -800,7 +800,7 @@
                                     }).then(function(response) {
                                     new Noty({
                                         title: "",
-                                        text: "The process has been successfully.",
+                                        text: '@lang("lang.the_process_has_been_successfully")',
                                         type: "success",
                                         icon: true
                                     }).show();
@@ -809,7 +809,7 @@
                                 }).catch(function(error) {
                                     new Noty({
                                         title: "",
-                                        text: "Something went wrong please try again later.",
+                                        text: '@lang("lang.something_went_wrong_please_try again_later")',
                                         type: "error",
                                         icon: true
                                     }).show();
@@ -836,7 +836,7 @@
                     });
                 });
                 $.confirm({
-                    title: 'Employee Status!',
+                    title: '@lang("lang.employee_status")',
                     contentClass: 'text-center',
                     // backgroundDismiss: 'cancel',
                     content: ''+
@@ -846,13 +846,13 @@
                             '</div>'+
                             '<div class="form-group">'+
                                 '<div class="form-group">'+
-                                    '<label>Resignation Date <span class="text-danger">*</span></label>'+
+                                    '<label>@lang("lang.resign_date") <span class="text-danger">*</span></label>'+
                                     '<input type="date" class="form-control resign_date" id="" name="" value="">'+
                                     '<input type="hidden" class="form-control emp_status" id="" name="" value="'+status+'">'+
                                     '<input type="hidden" class="form-control id" id="" name="" value="'+id+'">'+
                                 '</div>'+
                                 '<div class="form-group">'+
-                                    '<label>Reason</label>'+
+                                    '<label>@lang("lang.reason")</label>'+
                                     selectOption+
                                 '</div>'+
                             '</div>'+
@@ -869,8 +869,8 @@
 
                                 if (!resign_date) {
                                     $.alert({
-                                        title: '<span class="text-danger">Requiered</span>',
-                                        content: 'Please input date.',
+                                        title: '@lang("lang.requiered")',
+                                        content: '@lang("lang.please_input_start_date")',
                                     });
                                     return false;
                                 }
@@ -883,7 +883,7 @@
                                     }).then(function(response) {
                                     new Noty({
                                         title: "",
-                                        text: "The process has been successfully.",
+                                        text: '@lang("lang.the_process_has_been_successfully")',
                                         type: "success",
                                         icon: true
                                     }).show();
@@ -892,7 +892,7 @@
                                 }).catch(function(error) {
                                     new Noty({
                                         title: "",
-                                        text: "Something went wrong please try again later.",
+                                        text: '@lang("lang.something_went_wrong_please_try again_later")',
                                         type: "error",
                                         icon: true
                                     }).show();
@@ -907,7 +907,7 @@
                 });
             }else {
                 $.confirm({
-                    title: 'Employee Status!',
+                    title: '@lang("lang.employee_status")',
                     contentClass: 'text-center',
                     // backgroundDismiss: 'cancel',
                     content: ''+
@@ -917,12 +917,12 @@
                             '</div>'+
                             '<div class="form-group">'+
                                 '<div class="form-group">'+
-                                    '<label>Date <span class="text-danger">*</span></label>'+
+                                    '<label>@lang("lang.date") <span class="text-danger">*</span></label>'+
                                     '<input type="date" class="form-control resign_date">'+
                                     '<input type="hidden" class="form-control emp_status" id="" name="" value="'+status+'">'+
                                     '<input type="hidden" class="form-control id" id="" name="" value="'+id+'">'+
                                 '</div>'+
-                                '<label>Reason</label>'+
+                                '<label>@lang("lang.reason")</label>'+
                                 '<textarea class="form-control resign_reason"></textarea>'+
                             '</div>'+
                         '</form>',
@@ -938,7 +938,7 @@
 
                                 if (!resign_date) {
                                     $.alert({
-                                        title: '<span class="text-danger">Requiered</span>',
+                                        title: '<span class="text-danger">@lang("lang.requiered")</span>',
                                         content: 'Please input date.',
                                     });
                                     return false;
@@ -952,7 +952,7 @@
                                     }).then(function(response) {
                                     new Noty({
                                         title: "",
-                                        text: "The process has been successfully.",
+                                        text: '@lang("lang.the_process_has_been_successfully")',
                                         type: "success",
                                         icon: true
                                     }).show();
@@ -961,7 +961,7 @@
                                 }).catch(function(error) {
                                     new Noty({
                                         title: "",
-                                        text: "Something went wrong please try again later.",
+                                        text: '@lang("lang.something_went_wrong_please_try again_later")',
                                         type: "error",
                                         icon: true
                                     }).show();

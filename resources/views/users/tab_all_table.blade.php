@@ -33,9 +33,9 @@
                                     </thead>
                                     <tbody>
                                         @if (count($data)>0)
-                                            @foreach ($data as $item)
+                                            @foreach ($data as $key=>$item)
                                                 <tr class="odd">
-                                                    <td class="ids">{{$item->id}}</td>
+                                                    <td class="ids">{{++$key ?? ''}}</td>
                                                     <td class="sorting_1">
                                                         <h2 class="table-avatar">
                                                             @if ($item->profile != null)
@@ -84,10 +84,10 @@
                                                                 <div class="dropdown-menu dropdown-menu-right btn-emp-status" id="btn-emp-status">
                                                                     <input type="text" name="" class="join_date" value="{{$item == null ? "" : $item->date_of_commencement}}" hidden>
                                                                     <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-id="Probation" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-success"></i> Probation
+                                                                        <i class="fa fa-dot-circle-o text-success"></i>@lang('lang.probation')
                                                                     </a>
                                                                     <a class="dropdown-item" data-emp-id="{{$item->id}}" data-id="Cancel" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-danger"></i> Cancel
+                                                                        <i class="fa fa-dot-circle-o text-danger"></i>@lang('lang.cancel')
                                                                     </a>
                                                                 </div>
                                                             @endif
@@ -152,9 +152,9 @@
                                     </thead>
                                     <tbody>
                                         @if (count($dataProbation)>0)
-                                            @foreach ($dataProbation as $item)
+                                            @foreach ($dataProbation as $key=>$item)
                                                 <tr class="odd">
-                                                    <td class="ids">{{$item->id}}</td>
+                                                    <td class="ids">{{++$key ?? ''}}</td>
                                                     <td class="sorting_1">
                                                         <h2 class="table-avatar">
                                                             @if ($item->profile != null)
@@ -295,9 +295,9 @@
                                     </thead>
                                     <tbody>
                                         @if (count($dataFDC)>0)
-                                            @foreach ($dataFDC as $item)
+                                            @foreach ($dataFDC as $key=>$item)
                                                 <tr class="odd">
-                                                    <td class="ids">{{$item->id}}</td>
+                                                    <td class="ids">{{++$key ?? ""}}</td>
                                                     <td class="sorting_1">
                                                         <h2 class="table-avatar">
                                                             @if ($item->profile != null)
@@ -445,9 +445,9 @@
                                     </thead>
                                     <tbody>
                                         @if (count($dataUDC)>0)
-                                            @foreach ($dataUDC as $item)
+                                            @foreach ($dataUDC as $key=>$item)
                                                 <tr class="odd">
-                                                    <td class="ids">{{$item->id}}</td>
+                                                    <td class="ids">{{++$key ?? ""}}</td>
                                                     <td class="sorting_1">
                                                         <h2 class="table-avatar">
                                                             @if ($item->profile != null)
@@ -581,9 +581,9 @@
                                     </thead>
                                     <tbody>
                                         @if (count($dataCanContract)>0)
-                                            @foreach ($dataCanContract as $item)
+                                            @foreach ($dataCanContract as $key=>$item)
                                                 <tr class="odd">
-                                                    <td class="ids">{{$item->id}}</td>
+                                                    <td class="ids">{{++$key ?? "" }}</td>
                                                     <td class="sorting_1">
                                                         <h2 class="table-avatar">
                                                             @if ($item->profile != null)
@@ -704,9 +704,9 @@
                                     </thead>
                                     <tbody>
                                         @if (count($dataResign)>0)
-                                            @foreach ($dataResign as $item)
+                                            @foreach ($dataResign as $key=>$item)
                                                 <tr class="odd">
-                                                    <td class="ids">{{$item->id}}</td>
+                                                    <td class="ids">{{++$key ?? ""}}</td>
                                                     <td class="sorting_1">
                                                         <h2 class="table-avatar">
                                                             @if ($item->profile != null)
@@ -827,9 +827,9 @@
                                     </thead>
                                     <tbody>
                                         @if (count($dataProbation)>0)
-                                            @foreach ($dataProbation as $item)
+                                            @foreach ($dataProbation as $key=>$item)
                                                 <tr class="odd">
-                                                    <td class="ids">{{$item->id}}</td>
+                                                    <td class="ids">{{++$key ?? ""}}</td>
                                                     <td class="sorting_1">
                                                         <h2 class="table-avatar">
                                                             @if ($item->profile != null)
@@ -970,9 +970,9 @@
                                     </thead>
                                     <tbody>
                                         @if (count($dataFDC)>0)
-                                            @foreach ($dataFDC as $item)
+                                            @foreach ($dataFDC as $key=>$item)
                                                 <tr class="odd">
-                                                    <td class="ids">{{$item->id}}</td>
+                                                    <td class="ids">{{++$key ?? ""}}</td>
                                                     <td class="sorting_1">
                                                         <h2 class="table-avatar">
                                                             @if ($item->profile != null)
@@ -1120,9 +1120,9 @@
                                     </thead>
                                     <tbody>
                                         @if (count($dataUDC)>0)
-                                            @foreach ($dataUDC as $item)
+                                            @foreach ($dataUDC as $key=>$item)
                                                 <tr class="odd">
-                                                    <td class="ids">{{$item->id}}</td>
+                                                    <td class="ids">{{++$key ?? ""}}</td>
                                                     <td class="sorting_1">
                                                         <h2 class="table-avatar">
                                                             @if ($item->profile != null)
