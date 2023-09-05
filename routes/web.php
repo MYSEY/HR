@@ -272,4 +272,4 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('children/update',[ChildrenAllowanceController::class,'update']);
     Route::post('children/delete',[ChildrenAllowanceController::class,'destroy']);
 });
-Route::get('/{locale}', [LanguageController::class, "lang"]);
+Route::get('lang/{locale}', [LanguageController::class, "lang"]);
