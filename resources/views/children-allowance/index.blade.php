@@ -4,10 +4,10 @@
         <div class="page-header">
             <div class="row align-items-center">
                 <div class="col">
-                    <h3 class="page-title">Children Allowance</h3>
+                    <h3 class="page-title">@lang('lang.children_allowance')</h3>
                     <ul class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="{{ url('/dashboad/employee') }}">Dashboard</a></li>
-                        <li class="breadcrumb-item active">Children Allowance</li>
+                        <li class="breadcrumb-item"><a href="{{ url('/dashboad/employee') }}">@lang('lang.dashboard')</a></li>
+                        <li class="breadcrumb-item active">@lang('lang.children_allowance')</li>
                     </ul>
                 </div>
             </div>
@@ -19,10 +19,10 @@
                     <table class="table table-bordered review-table mb-0">
                         <thead>
                             <tr>
-                                <th>Children Allowance</th>
-                                <th>Reduced Burden Children</th>
-                                <th>Reduced Burden Spouse</th>
-                                <th style="text-align: center;">Action</th>
+                                <th>@lang('lang.children_allowance')</th>
+                                <th>@lang('lang.reduced_burden_children')</th>
+                                <th>@lang('lang.reduced_burden_spouse')</th>
+                                <th style="text-align: center;">@lang('lang.action')</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -50,7 +50,7 @@
             <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Edit Children Allowance</h5>
+                        <h5 class="modal-title">@lang('lang.edit_children_allowance')</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">×</span>
                         </button>
@@ -61,13 +61,13 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label>Children Allowance <span class="text-danger">*</span></label>
+                                        <label>@lang('lang.children_allowance') <span class="text-danger">*</span></label>
                                         <input class="form-control @error('total_children_allowance') is-invalid @enderror" type="text" id="e_children_allowance" name="total_children_allowance">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label>Reduced Burden Children</label>
+                                        <label>@lang('lang.reduced_burden_children')</label>
                                         <input class="form-control" type="text" id="e_reduced_burden_children" name="reduced_burden_children">
                                     </div>
                                 </div>
@@ -75,7 +75,7 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label>Reduced Burden Spouse</label>
+                                        <label>@lang('lang.reduced_burden_spouse')</label>
                                         <input class="form-control" type="text" id="e_spouse_allowance" name="spouse_allowance">
                                     </div>
                                 </div>
@@ -83,8 +83,8 @@
                             <div class="submit-section">
                                 <input type="hidden" class="ids" name="id" id="e_id">
                                 <button type="submit" class="btn btn-primary submit-btn">
-                                    <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading </span>
-                                    <span class="btn-txt">{{ __('Submit') }}</span>
+                                    <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading') </span>
+                                    <span class="btn-txt">@lang('lang.submit')</span>
                                 </button>
                             </div>
                         </form>
@@ -99,8 +99,8 @@
                 <div class="modal-content">
                     <div class="modal-body">
                         <div class="form-header">
-                            <h3>Delete</h3>
-                            <p>Are you sure want to delete?</p>
+                            <h3>@lang('lang.delete')</h3>
+                            <p>@lang('lang.are_you_sure_want_to_delete')?</p>
                         </div>
                         <div class="modal-btn delete-action">
                             <form action="{{ url('children/delete') }}" method="POST">
@@ -108,10 +108,10 @@
                                 <input type="hidden" name="id" class="e_id" value="">
                                 <div class="row">
                                     <div class="col-6">
-                                        <button type="submit" class="btn btn-primary continue-btn submit-btn">Delete</button>
+                                        <button type="submit" class="btn btn-primary continue-btn submit-btn">@lang('lang.delete')</button>
                                     </div>
                                     <div class="col-6">
-                                        <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-primary cancel-btn">Cancel</a>
+                                        <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-primary cancel-btn">@lang('lang.cancel')</a>
                                     </div>
                                 </div>
                             </form>

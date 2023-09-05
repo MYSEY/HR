@@ -4,14 +4,14 @@
         <div class="page-header">
             <div class="row align-items-center">
                 <div class="col">
-                    <h3 class="page-title">Public Holidays</h3>
+                    <h3 class="page-title">@lang('lang.public_holidays')</h3>
                     <ul class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="{{ url('/dashboad/employee') }}">Dashboard</a></li>
-                        <li class="breadcrumb-item active">Holidays</li>
+                        <li class="breadcrumb-item"><a href="{{ url('/dashboad/employee') }}">@lang('lang.dashboard')</a></li>
+                        <li class="breadcrumb-item active">@lang('lang.holidays')</li>
                     </ul>
                 </div>
                 <div class="col-auto float-end ms-auto">
-                    <a href="#" class="btn add-btn" data-bs-toggle="modal" data-bs-target="#add_holiday"><i class="fa fa-plus"></i> Add New</a>
+                    <a href="#" class="btn add-btn" data-bs-toggle="modal" data-bs-target="#add_holiday"><i class="fa fa-plus"></i> @lang('lang.add_new')</a>
                 </div>
             </div>
         </div>
@@ -28,12 +28,12 @@
                                         <thead>
                                             <tr>
                                                 <th>#</th>
-                                                <th>Days</th>
-                                                <th>Title</th>
-                                                <th>Amount Percent(%)</th>
-                                                <th>Period Month</th>
-                                                <th>Created At</th>
-                                                <th class="text-end">Action</th>
+                                                <th>@lang('lang.days')</th>
+                                                <th>@lang('lang.title')</th>
+                                                <th>@lang('lang.amount_percent')(%)</th>
+                                                <th>@lang('lang.period_month')</th>
+                                                <th>@lang('lang.created_at')</th>
+                                                <th class="text-end">@lang('lang.action')</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -50,7 +50,7 @@
                                                             <div class="dropdown dropdown-action">
                                                                 <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
                                                                 <div class="dropdown-menu dropdown-menu-right">
-                                                                    <a class="dropdown-item update" data-toggle="modal" data-id="{{$item->id}}" data-target="#edit_holiday"><i class="fa fa-pencil m-r-5"></i> Edit</a>
+                                                                    <a class="dropdown-item update" data-toggle="modal" data-id="{{$item->id}}" data-target="#edit_holiday"><i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')</a>
                                                                 </div>
                                                             </div>
                                                         </td>
@@ -58,7 +58,7 @@
                                                 @endforeach
                                             @else
                                                 <tr>
-                                                    <td colspan="8" style="text-align: center">No record to display</td>
+                                                    <td colspan="8" style="text-align: center">@lang('lang.no_record_to_display')</td>
                                                 </tr>
                                             @endif
                                         </tbody>
@@ -75,7 +75,7 @@
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Add Holiday</h5>
+                        <h5 class="modal-title">@lang('lang.add_holiday')</h5>
                         <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">×</span>
                         </button>
@@ -84,35 +84,35 @@
                         <form action="{{url('holidays/create')}}" method="POST" class="needs-validation" novalidate>
                             @csrf
                             <div class="form-group">
-                                <label>Title <span class="text-danger">*</span></label>
+                                <label>@lang('lang.title') <span class="text-danger">*</span></label>
                                 <input class="form-control" type="text" id="title" name="title" required>
                             </div>
                             <div class="form-group">
-                                <label>Amount Percent (%)</label>
+                                <label>@lang('lang.amount_percent') (%)</label>
                                 <input class="form-control" type="number" id="amount_percent" name="amount_percent">
                             </div>
                             <div class="form-group">
-                                <label>Period Month</label>
+                                <label>@lang('lang.period_month')</label>
                                 <div class="cal-icon">
                                     <input class="form-control datetimepicker" type="text" id="period_month" name="period_month">
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label>From <span class="text-danger">*</span></label>
+                                <label>@lang('lang.from') <span class="text-danger">*</span></label>
                                 <div class="cal-icon">
                                     <input class="form-control datetimepicker" type="text" id="from" name="from" required>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label>To</label>
+                                <label>@lang('lang.to')</label>
                                 <div class="cal-icon">
                                     <input class="form-control datetimepicker" type="text" id="to" name="to">
                                 </div>
                             </div>
                             <div class="submit-section">
                                 <button class="btn btn-primary submit-btn">
-                                    <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading </span>
-                                    <span class="btn-txt">{{ __('Submit') }}</span>
+                                    <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading') </span>
+                                    <span class="btn-txt">@lang('lang.submit')</span>
                                 </button>
                             </div>
                         </form>
@@ -125,7 +125,7 @@
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Edit Holiday</h5>
+                        <h5 class="modal-title">@lang('lang.edit_holiday')</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">×</span>
                         </button>
@@ -134,27 +134,27 @@
                         <form action="{{url('holidays/update')}}" method="POST">
                             @csrf
                             <div class="form-group">
-                                <label>Title <span class="text-danger">*</span></label>
+                                <label>@lang('lang.title') <span class="text-danger">*</span></label>
                                 <input class="form-control" type="text" id="e_title" name="title" required>
                             </div>
                             <div class="form-group">
-                                <label>Amount Percent (%)</label>
+                                <label>@lang('lang.amount_percent') (%)</label>
                                 <input class="form-control" type="number" id="e_amount_percent" name="amount_percent">
                             </div>
                             <div class="form-group">
-                                <label>Period Month</label>
+                                <label>@lang('lang.period_month')</label>
                                 <div class="cal-icon">
                                     <input class="form-control datetimepicker" type="text" id="e_period_month" name="period_month">
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label>From <span class="text-danger">*</span></label>
+                                <label>@lang('lang.from') <span class="text-danger">*</span></label>
                                 <div class="cal-icon">
                                     <input class="form-control datetimepicker" type="text" id="e_from" name="from" required>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label>To</label>
+                                <label>@lang('lang.to')</label>
                                 <div class="cal-icon">
                                     <input class="form-control datetimepicker" type="text" id="e_to" name="to">
                                 </div>
@@ -162,8 +162,8 @@
                             <div class="submit-section">
                                 <input type="hidden" name="id" id="e_id" class="e_id" value="">
                                 <button class="btn btn-primary submit-btn">
-                                    <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading </span>
-                                    <span class="btn-txt">{{ __('Submit') }}</span>
+                                    <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading') </span>
+                                    <span class="btn-txt">@lang('lang.submit')</span>
                                 </button>
                             </div>
                         </form>

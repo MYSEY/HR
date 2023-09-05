@@ -4,14 +4,14 @@
         <div class="page-header">
             <div class="row align-items-center">
                 <div class="col">
-                    <h3 class="page-title">Exchange Rates</h3>
+                    <h3 class="page-title">@lang('lang.exchange_rates')</h3>
                     <ul class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="{{url('/dashboad/employee')}}">Dashboard</a></li>
-                        <li class="breadcrumb-item active">Exchange Rates</li>
+                        <li class="breadcrumb-item"><a href="{{url('/dashboad/employee')}}">@lang('lang.dashboard')</a></li>
+                        <li class="breadcrumb-item active">@lang('lang.exchange_rates')</li>
                     </ul>
                 </div>
                 <div class="col-auto float-end ms-auto">
-                    <a href="#" class="btn add-btn" data-bs-toggle="modal" data-bs-target="#add_exchange_rate"><i class="fa fa-plus"></i> Add New</a>
+                    <a href="#" class="btn add-btn" data-bs-toggle="modal" data-bs-target="#add_exchange_rate"><i class="fa fa-plus"></i> @lang('lang.add_new')</a>
                 </div>
             </div>
         </div>
@@ -27,11 +27,11 @@
                                     <thead>
                                         <tr>
                                             <th style="width: 30px;" class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="#: activate to sort column descending">#</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department Name: activate to sort column ascending" style="width: 772.237px;">US Dollar</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department Name: activate to sort column ascending" style="width: 772.237px;">Riel</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department Name: activate to sort column ascending" style="width: 772.237px;">Change Date</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department Name: activate to sort column ascending" style="width: 772.237px;">Updated At</th>
-                                            <th class="text-end sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Action: activate to sort column ascending" style="width: 300.962px;">Action</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department Name: activate to sort column ascending" style="width: 772.237px;">@lang('lang.usd')</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department Name: activate to sort column ascending" style="width: 772.237px;">@lang('lang.riel')</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department Name: activate to sort column ascending" style="width: 772.237px;">@lang('lang.change_date')</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department Name: activate to sort column ascending" style="width: 772.237px;">@lang('lang.updated_at')</th>
+                                            <th class="text-end sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Action: activate to sort column ascending" style="width: 300.962px;">@lang('lang.action')</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -47,8 +47,8 @@
                                                         <div class="dropdown dropdown-action">
                                                             <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
                                                             <div class="dropdown-menu dropdown-menu-right">
-                                                                <a class="dropdown-item update"  data-id="{{$item->id}}"><i class="fa fa-pencil m-r-5"></i> Edit</a>
-                                                                <a class="dropdown-item delete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_echange_rate"><i class="fa fa-trash-o m-r-5"></i> Delete</a>
+                                                                <a class="dropdown-item update"  data-id="{{$item->id}}"><i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')</a>
+                                                                <a class="dropdown-item delete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_echange_rate"><i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
                                                             </div>
                                                         </div>
                                                     </td>
@@ -56,7 +56,7 @@
                                             @endforeach
                                         @else
                                             <tr>
-                                                <td colspan="6" style="text-align: center">No record to display</td>
+                                                <td colspan="6" style="text-align: center">@lang('lang.no_record_to_display')</td>
                                             </tr>
                                         @endif
                                     </tbody>
@@ -72,7 +72,7 @@
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Exchange Rate</h5>
+                        <h5 class="modal-title">@lang('lang.exchange_rate')</h5>
                         <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">×</span>
                         </button>
@@ -82,16 +82,16 @@
                             @csrf
                             <input type="hidden" name="id" class="e_id">
                             <div class="form-group">
-                                <label>US Dollar <span class="text-danger">*</span></label>
+                                <label>@lang('lang.usd') <span class="text-danger">*</span></label>
                                 <input class="form-control @error('amount') is-invalid @enderror" type="number" id="" name="amount_usd" placeholder="1.00" required>
                             </div>
                             <div class="form-group">
-                                <label>Riel <span class="text-danger">*</span></label>
+                                <label>@lang('lang.riel') <span class="text-danger">*</span></label>
                                 <input class="form-control @error('amount') is-invalid @enderror" type="number" id="" name="amount_riel" required>
                             </div>
                             <div class="col-sm-12">
                                 <div class="form-group">
-                                    <label >Change Date</label>
+                                    <label >@lang('lang.change_date')</label>
                                     <div class="cal-icon">
                                         <input class="form-control datetimepicker" type="text" id="change_date" name="change_date" value="{{old('change_date')}}">
                                     </div>
@@ -99,8 +99,8 @@
                             </div>
                             <div class="submit-section">
                                 <button type="submit" class="btn btn-primary submit-btn">
-                                    <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading </span>
-                                    <span class="btn-txt">{{ __('Submit') }}</span>
+                                    <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.Loading') </span>
+                                    <span class="btn-txt">@lang('lang.submit')</span>
                                 </button>
                             </div>
                         </form>
@@ -112,7 +112,7 @@
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Exchange Rate</h5>
+                        <h5 class="modal-title">@lang('lang.exchange_rate')</h5>
                         <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">×</span>
                         </button>
@@ -121,16 +121,16 @@
                         <form action="{{url('exchange-rate/update')}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
                             @csrf
                             <div class="form-group">
-                                <label>US Dollar <span class="text-danger">*</span></label>
+                                <label>@lang('lang.usd') <span class="text-danger">*</span></label>
                                 <input class="form-control @error('amount') is-invalid @enderror" type="number" id="e_amount_usd" name="amount_usd" required>
                             </div>
                             <div class="form-group">
-                                <label>Riel <span class="text-danger">*</span></label>
+                                <label>@lang('lang.riel') <span class="text-danger">*</span></label>
                                 <input class="form-control @error('amount') is-invalid @enderror" type="number" id="e_amount_riel" name="amount_riel" required>
                             </div>
                             <div class="col-sm-12">
                                 <div class="form-group">
-                                    <label>Change Date</label>
+                                    <label>@lang('lang.change_date')</label>
                                     <div class="cal-icon">
                                         <input class="form-control datetimepicker" type="text" id="e_change_date" name="change_date" value="">
                                     </div>
@@ -139,8 +139,8 @@
                             <div class="submit-section">
                                 <input type="hidden" name="id" id="e_id">
                                 <button type="submit" class="btn btn-primary submit-btn">
-                                    <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading </span>
-                                    <span class="btn-txt">{{ __('Submit') }}</span>
+                                    <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading') </span>
+                                    <span class="btn-txt">@lang('lang.submit')</span>
                                 </button>
                             </div>
                         </form>
