@@ -87,7 +87,7 @@
             <a id="mobile_btn" class="mobile_btn" href=""><i class="fa fa-bars"></i></a>
 
             <ul class="nav user-menu">
-                @php
+                {{-- @php
                     $language = session()->get('locale');
                     $icon = $language == 'en' ? 'ខ្មែរ' : 'English';
                     $languagee = session()->get('locale');
@@ -98,21 +98,32 @@
                         aria-expanded="false">
                         {{ $icon }}
                     </a>
-                </li>
-                {{-- <li class="nav-item dropdown has-arrow flag-nav">
+                </li> --}}
+                
+                <li class="nav-item dropdown has-arrow flag-nav">
                     <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="" role="button">
-                        <img src="{{asset('/admin/img/us.png')}}" alt="" height="20">
-                        <span>English</span>
+                        @switch(App::getLocale())
+                            @case('en')
+                                <img src="{{asset('/admin/img/us.png')}}" alt="" height="20"><span>English</span>
+                            @break
+                            @case('kh')
+                                <img src="{{asset('/admin/img/flag-of-cambodia-logo.png')}}" alt="" height="20"><span>English</span>
+                            @break
+                            @default
+                            <img src="{{asset('/admin/img/us.png')}}" alt="" height="20"><span>English</span>
+                        @endswitch
                     </a>
+                    
+                    
                     <div class="dropdown-menu dropdown-menu-right">
-                        <a href="javascript:void(0);" class="dropdown-item">
-                            <img src="{{asset('/admin/img/us.png')}}" alt="" height="16"> English
+                        <a href="{{ url('lang/en') }}" class="dropdown-item">
+                            <img src="{{asset('/admin/img/us.png')}}" alt="" height="20"> English
                         </a>
-                        <a href="javascript:void(0);" class="dropdown-item">
-                            <img src="{{asset('/admin/img/flag-of-cambodia-logo.png')}}" alt="" height="16"> Khmer
+                        <a href="{{ url('lang/kh') }}" class="dropdown-item">
+                            <img src="{{asset('/admin/img/flag-of-cambodia-logo.png')}}" alt="" height="20"> Khmer
                         </a>
                     </div>
-                </li> --}}
+                </li>
 
                 {{-- <li class="nav-item dropdown">
                     <a href="" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">
