@@ -163,7 +163,7 @@ class ExportEmployeeSalary implements FromCollection, WithColumnWidths, WithHead
                 ]);
 
                 //SetColumn Center
-                $sheet->getDelegate()->getStyle('A5:AF5')->getFont()->setName('Khmer OS Battambang')->setSize(8)->setUnderline('A3:AF3');
+                // $sheet->getDelegate()->getStyle('A5:AF5')->getFont()->setName('Khmer OS Battambang')->setSize(8)->setUnderline('A5:AF3');
                 // $event->sheet->getDelegate()->getStyle('B5')->getAlignment()
                 // ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
