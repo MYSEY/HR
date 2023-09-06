@@ -18,7 +18,7 @@ class ExchangeRateController extends Controller
      */
     public function index()
     {
-        $data = ExchangeRate::all();
+        $data = ExchangeRate::orderBy('id')->get();
         return view('exchange_rates.index',  compact('data'));
     }
 
@@ -90,6 +90,7 @@ class ExchangeRateController extends Controller
                 'amount_usd' => $request->amount_usd,
                 'amount_riel' => $request->amount_riel,
                 'change_date' => $request->change_date,
+                'type'        => $request->type,
                 'updated_by' => Auth::user()->id 
             ]);
             Toastr::success('Exchange rate successfully.','Success');

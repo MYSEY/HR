@@ -47,7 +47,7 @@ class EmployeePayrollController extends Controller
         $data = $this->payrollRepo->getAllPayroll($request);
         $user = User::all();
         $branch = Branchs::all();
-        $exChangeRate= ExchangeRate::orderBy('id', 'desc')->first();
+        $exChangeRate= ExchangeRate::where('type','Salary')->orderBy('id','desc')->first();
         return view('payrolls.index',compact('data','user','branch','exChangeRate'));
     }
 
@@ -158,35 +158,38 @@ class EmployeePayrollController extends Controller
                    
                     // dd($totalBasicSalary);
                     //National Social Security Fund (NSSF) Formula
-                    $totalExchangeRielPreTax =  $request->exchange_rate * $totalBasicSalary;
-                    if ($totalExchangeRielPreTax) {
-                        if ($totalExchangeRielPreTax >= 1200000) {
-                            $averageWage    = 1200000;
-                        }else if($totalExchangeRielPreTax >= 400000){
-                            $averageWage    = $totalExchangeRielPreTax;
+                    $exchangNSSF = ExchangeRate::where('type','NSSF')->orderBy('id','desc')->first();
+                    if ($exchangNSSF) {
+                        $totalExchangeRielPreTax =  $exchangNSSF->amount_riel * $totalBasicSalary;
+                        if ($totalExchangeRielPreTax) {
+                            if ($totalExchangeRielPreTax >= 1200000) {
+                                $averageWage    = 1200000;
+                            }else if($totalExchangeRielPreTax >= 400000){
+                                $averageWage    = $totalExchangeRielPreTax;
+                            }else{
+                                $averageWage = 400000;
+                            }
                         }else{
-                            $averageWage = 400000;
+                            $averageWage = 0;
                         }
-                    }else{
-                        $averageWage = 0;
+                        
+                        $occupationalRisk = (0.008 * $averageWage);
+                        $healthCare = (0.026 * $averageWage);
+                        $workerContributionUsd = ($averageWage * 0.02);
+                        $workerContributionRiel = (round($workerContributionUsd, -2) / $exchangNSSF->amount_riel);
+                        $dataNSSF = NationalSocialSecurityFund::create([
+                            'employee_id'                   => $item->id,
+                            'total_pre_tax_salary_usd'      => number_format($totalBasicSalary, 2),
+                            'total_pre_tax_salary_riel'     => number_format($totalExchangeRielPreTax),
+                            'total_average_wage'            => number_format($averageWage),
+                            'total_occupational_risk'       => number_format($occupationalRisk),
+                            'total_health_care'             => number_format($healthCare),
+                            'pension_contribution_usd'      => number_format($workerContributionUsd),
+                            'pension_contribution_riel'     => number_format($workerContributionRiel, 2),
+                            'corporate_contribution'        => number_format($workerContributionUsd),
+                            'created_by'                    => Auth::user()->id,
+                        ]);
                     }
-                    
-                    $occupationalRisk = (0.008 * $averageWage);
-                    $healthCare = (0.026 * $averageWage);
-                    $workerContributionUsd = ($averageWage * 0.02);
-                    $workerContributionRiel = (round($workerContributionUsd, -2) / $request->exchange_rate);
-                    $dataNSSF = NationalSocialSecurityFund::create([
-                        'employee_id'                   => $item->id,
-                        'total_pre_tax_salary_usd'      => number_format($totalBasicSalary, 2),
-                        'total_pre_tax_salary_riel'     => number_format($totalExchangeRielPreTax),
-                        'total_average_wage'            => number_format($averageWage),
-                        'total_occupational_risk'       => number_format($occupationalRisk),
-                        'total_health_care'             => number_format($healthCare),
-                        'pension_contribution_usd'      => number_format($workerContributionUsd),
-                        'pension_contribution_riel'     => number_format($workerContributionRiel, 2),
-                        'corporate_contribution'        => number_format($workerContributionUsd),
-                        'created_by'                    => Auth::user()->id,
-                    ]);
                     
                     // $pension_contribution = '5.9';
                     $pension_contribution = $dataNSSF->pension_contribution_riel;

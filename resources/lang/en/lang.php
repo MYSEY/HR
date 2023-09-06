@@ -218,6 +218,7 @@ return[
     "edit_transferrend"=>"Edit Transferrend",
     "edit_promoted"=> "Edit Promoted",
     "employee_status"=> "Employee Status",
+    "exchange_type"=> "Exchange Type",
     "facebook"=>"Facebook",
     "field"=>"Field",
     "field_are_require"=>"Field(*) are require",

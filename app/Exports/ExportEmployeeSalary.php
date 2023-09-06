@@ -8,7 +8,6 @@ use Maatwebsite\Excel\Events\AfterSheet;
 use Maatwebsite\Excel\Concerns\WithEvents;
 use Illuminate\Database\Eloquent\Collection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
-use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithColumnWidths;
 use Maatwebsite\Excel\Concerns\WithCustomStartCell;
@@ -63,16 +62,25 @@ class ExportEmployeeSalary implements FromCollection, WithColumnWidths, WithHead
                 "basic_salary" => $value->basic_salary,
                 "child_allowance" => $value->total_child_allowance,
                 "phone_allowance" => $phone_allowance,
+                "monthly_quarterly_bonuses" => $value->monthly_quarterly_bonuses,
                 "KNY_/_pchum_ben" => $value->total_kny_phcumben,
+                "annual_incentive_bonus" => $value->annual_incentive_bonus,
                 "seniority_pay_included_tax" => $value->seniority_pay_included_tax,
                 "pension_fund" => $value->total_pension_fund,
                 "base_salary_received_usd" => $value->base_salary_received_usd,
-                "base_salary_received_reil" => $value->total_tax_base_riel,
+                "base_salary_received_reil" => $value->base_salary_received_riel,
+                "Spouse" => $value->spouse,
+                "Dependent Child" => $value->children,
+                "Charges To Be Reduced" => $value->total_charges_reduced,
+                "Total Tax Base Riel" => $value->total_tax_base_riel,
                 "Tax Rate" => $value->total_rate,
                 "Personal Tax(USD)" => $value->total_salary_tax_usd,
                 "Personal Tax(Riels)" => $value->total_salary_tax_riel,
                 "seniority_pay_excluded_tax" => $value->seniority_pay_excluded_tax,
+                "seniority Backford" => $value->seniority_backford,
                 "severance_pay" => $value->total_severance_pay,
+                "Loan Amount" => $value->loan_amount,
+                "Total Amount Car" => $value->total_amount_car,
                 "net_salary" => $value->total_salary,
                 "payment_date" => $value->PayrollPaymentDate,
                 "created_at" => $value->Created,
@@ -108,19 +116,28 @@ class ExportEmployeeSalary implements FromCollection, WithColumnWidths, WithHead
             'H' => 10,      
             'I' => 13,      
             'J' => 15,      
-            'K' => 15,      
+            'K' => 20,      
             'L' => 20,      
-            'M' => 10,      
+            'M' => 20,      
             'N' => 22,      
             'O' => 22,      
-            'P' => 8,      
-            'Q' => 16,      
-            'R' => 16,      
-            'S' => 10,      
-            'T' => 15,      
-            'U' => 13,      
-            'V' => 13,
-            'W' => 13,
+            'P' => 20,      
+            'Q' => 10,      
+            'R' => 7,      
+            'S' => 20,      
+            'T' => 20,      
+            'U' => 20,      
+            'V' => 10,
+            'W' => 20,
+            'X' => 20,
+            'Y' => 20,
+            'Z' => 20,
+            'AA' => 16,
+            'AB' => 17,
+            'AC' => 17,
+            'AD' => 15,
+            'AE' => 13,
+            'AF' => 13,
         ];
     }
     public function registerEvents(): array {
@@ -131,25 +148,25 @@ class ExportEmployeeSalary implements FromCollection, WithColumnWidths, WithHead
                 $rows = $this->export_datas;
 
                 // block merge cells 
-                $sheet->mergeCells('A2:W2');
+                $sheet->mergeCells('A2:AF2');
                 $sheet->setCellValue('A2', "ខេមា​ មីក្រូហិរញ្ញវត្ថុ លីមីតធីត");
-                $sheet->getDelegate()->getStyle('A2:U2')->getFont()->setSize(18)->setName('Khmer OS Muol Pali')->setUnderline('A2:W2');
-                $event->sheet->getDelegate()->getStyle('A2:W2')
+                $sheet->getDelegate()->getStyle('A2:U2')->getFont()->setSize(18)->setName('Khmer OS Muol Pali')->setUnderline('A2:AF2');
+                $event->sheet->getDelegate()->getStyle('A2:AF2')
                 ->getAlignment()
                 ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
-                $sheet->mergeCells('A3:W3');
+                $sheet->mergeCells('A3:AF3');
                 $sheet->setCellValue('A3', "តារាងលំអិតអំពីប្រាក់បៀវត្សរបស់បុគ្គលិក");
-                $sheet->getDelegate()->getStyle('A3:U3')->getFont()->setName('Khmer OS Muol Light')->setSize(12)->setUnderline('A3:W3');
-                $event->sheet->getDelegate()->getStyle('A3:W3')
+                $sheet->getDelegate()->getStyle('A3:U3')->getFont()->setName('Khmer OS Muol Light')->setSize(12)->setUnderline('A3:AF3');
+                $event->sheet->getDelegate()->getStyle('A3:AF3')
                 ->getAlignment()
                 ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
-                $sheet->mergeCells('A4:W4');
+                $sheet->mergeCells('A4:AF4');
                 $sheet->setCellValue('A4', "ប្រចាំខែមេសា ឆ្នាំ២០២៣");
-                $sheet->getDelegate()->getStyle('A4:W4')->getFont()->setSize(9)->setName('Khmer OS Fasthand')
+                $sheet->getDelegate()->getStyle('A4:AF4')->getFont()->setSize(9)->setName('Khmer OS Fasthand')
                 ->setSize(10);
-                $event->sheet->getDelegate()->getStyle('A4:W4')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+                $event->sheet->getDelegate()->getStyle('A4:AF4')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
             },
         ];
     }
@@ -167,16 +184,25 @@ class ExportEmployeeSalary implements FromCollection, WithColumnWidths, WithHead
             "Basic Salary",
             "Child Allowance",
             "Phone Allowance",
+            "Monthly Quarterly Bonuses",
             "KNY / Pchum Ben",
+            "Annual Incentive Bonus",
             "Seniority Pay(Included Tax)",
             "Pension Fund",
             "Base Salary Received USD",
             "Base Salary Received Riel",
+            "Spouse",
+            "Dependent child",
+            "Charges To Be Reduced",
+            "Total Tax Base Riel",
             "Tax Rate",
             "Personal Tax(USD)",
             "Personal Tax(Riels)",
             "Seniority Pay(Excluded Tax)",
+            "seniority Backford",
             "Severance Pay",
+            "Loan Amount",
+            "Total Amount Car",
             "Net Salary",
             "Payment Date",
             "Created At",

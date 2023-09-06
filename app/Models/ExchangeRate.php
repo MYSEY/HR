@@ -13,6 +13,14 @@ class ExchangeRate extends Model
 
     protected $table = 'exchange_rates';
     protected $guarded = ['id'];
+    protected $fillable = [
+        'amount_usd',
+        'amount_riel',
+        'change_date',
+        'type',
+        'created_by',
+        'updated_by',
+    ];
 
     public function createdBy()
     {

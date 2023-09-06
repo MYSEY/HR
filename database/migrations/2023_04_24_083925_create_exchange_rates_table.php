@@ -19,6 +19,7 @@ return new class extends Migration
             $table->decimal('amount_usd');
             $table->string('amount_riel');
             $table->date('change_date')->nullable();
+            $table->string('type')->nullable();
             $table->bigInteger('created_by')->unsigned()->nullable();
             $table->bigInteger('updated_by')->unsigned()->nullable();
             $table->dateTime('deleted_at')->nullable();

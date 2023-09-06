@@ -241,6 +241,7 @@ return[
 	"edit_transferrend"=>"កែសម្រួលការផ្ទេរប្រាក់",
 	"edit_promoted"=> "កែសម្រួលការតំឡើង",
     "employee_status"=> "ស្ថានភាពបុគ្គលិក",
+	"exchange_type"=> "ប្រភេទផ្លាស់ប្តូរ",
 	"facebook"=>"ហ្វេសប៊ុក",
 	"field"=>"វាល",
 	"field_are_require"=>"វាល (*) គឺតម្រូវឱ្យមាន",
