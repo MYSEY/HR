@@ -36,6 +36,7 @@ class Payroll extends Model
         'total_kny_phcumben',
         'annual_incentive_bonus',
         'seniority_pay_included_tax',
+        'total_gross',
         'total_pension_fund',
         'base_salary_received_usd',
         'base_salary_received_riel',

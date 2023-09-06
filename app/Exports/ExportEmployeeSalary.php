@@ -9,6 +9,7 @@ use Maatwebsite\Excel\Concerns\WithEvents;
 use Illuminate\Database\Eloquent\Collection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\FromCollection;
+use PhpOffice\PhpSpreadsheet\Style\Border;
 use Maatwebsite\Excel\Concerns\WithColumnWidths;
 use Maatwebsite\Excel\Concerns\WithCustomStartCell;
 
@@ -46,44 +47,43 @@ class ExportEmployeeSalary implements FromCollection, WithColumnWidths, WithHead
         })
         ->when($yearLy, function ($query, $yearLy) {
             $query->whereYear('payment_date', $yearLy);
-        })->get();
+        })->orderBy('employee_id')->get();
         $dataExport = [];
         $i = 1;
         foreach ($payroll as $value) {
-            $phone_allowance = $value->phone_allowance == null ? '0.00' : $value->phone_allowance;
             $dataExport[] = [
                 "no" => $i,
-                "employee_id" => $value->users->number_employee,
-                "name" => $value->users->employee_name_en,
-                "position" => $value->users->EmployeePosition,
-                "department" => $value->users->EmployeeDepartment,
-                "location" => $value->users->EmployeeBranch,
-                "join_date" => $value->users->joinOfDate,
-                "basic_salary" => $value->basic_salary,
-                "child_allowance" => $value->total_child_allowance,
-                "phone_allowance" => $phone_allowance,
-                "monthly_quarterly_bonuses" => $value->monthly_quarterly_bonuses,
-                "KNY_/_pchum_ben" => $value->total_kny_phcumben,
-                "annual_incentive_bonus" => $value->annual_incentive_bonus,
-                "seniority_pay_included_tax" => $value->seniority_pay_included_tax,
-                "pension_fund" => $value->total_pension_fund,
-                "base_salary_received_usd" => $value->base_salary_received_usd,
-                "base_salary_received_reil" => $value->base_salary_received_riel,
-                "Spouse" => $value->spouse,
-                "Dependent Child" => $value->children,
-                "Charges To Be Reduced" => $value->total_charges_reduced,
-                "Total Tax Base Riel" => $value->total_tax_base_riel,
-                "Tax Rate" => $value->total_rate,
-                "Personal Tax(USD)" => $value->total_salary_tax_usd,
-                "Personal Tax(Riels)" => $value->total_salary_tax_riel,
-                "seniority_pay_excluded_tax" => $value->seniority_pay_excluded_tax,
-                "seniority Backford" => $value->seniority_backford,
-                "severance_pay" => $value->total_severance_pay,
-                "Loan Amount" => $value->loan_amount,
-                "Total Amount Car" => $value->total_amount_car,
-                "net_salary" => $value->total_salary,
-                "payment_date" => $value->PayrollPaymentDate,
-                "created_at" => $value->Created,
+                "employee_id"       => intval($value->users->number_employee),
+                "name"              => $value->users->employee_name_en,
+                "position"          => $value->users->EmployeePosition,
+                "department"        => $value->users->EmployeeDepartment,
+                "location"          => $value->users->EmployeeBranch,
+                "join_date"         => $value->users->joinOfDate,
+                "basic_salary"      => $value->basic_salary,
+                "Base Salary Received"          => $value->total_gross_salary,
+                "child_allowance"               => $value->total_child_allowance ?? "0",
+                "phone_allowance"               => $value->phone_allowance ?? "0",
+                "monthly_quarterly_bonuses"     => $value->monthly_quarterly_bonuses,
+                "KNY_/_pchum_ben"               => $value->total_kny_phcumben,
+                "annual_incentive_bonus"        => $value->annual_incentive_bonus,
+                "seniority_pay_included_tax"    => $value->seniority_pay_included_tax,
+                "Total Gross"                   => $value->total_gross,
+                "pension_fund"                  => $value->total_pension_fund,
+                "base_salary_received_usd"      => $value->base_salary_received_usd,
+                "base_salary_received_reil"     => $value->base_salary_received_riel,
+                "Spouse"                        => $value->spouse,
+                "Dependent Child"               => $value->children ?? "0",
+                "Charges To Be Reduced"         => $value->total_charges_reduced,
+                "Total Tax Base Riel"           => $value->total_tax_base_riel,
+                "Tax Rate"                      => $value->total_rate ?? "0",
+                "Personal Tax(USD)"             => $value->total_salary_tax_usd,
+                "Personal Tax(Riels)"           => $value->total_salary_tax_riel,
+                "seniority_pay_excluded_tax"    => $value->seniority_pay_excluded_tax,
+                "seniority Backford"            => $value->seniority_backford,
+                "severance_pay"                 => $value->total_severance_pay,
+                "Loan Amount"                   => $value->loan_amount ?? "0",
+                "Total Amount Car"              => $value->total_amount_car ?? "0",
+                "net_salary"                    => $value->total_salary
             ];
             $i++;
         }
@@ -113,29 +113,29 @@ class ExportEmployeeSalary implements FromCollection, WithColumnWidths, WithHead
             'E' => 40,      
             'F' => 15,      
             'G' => 15,      
-            'H' => 10,      
-            'I' => 13,      
+            'H' => 14,      
+            'I' => 18,      
             'J' => 15,      
             'K' => 20,      
-            'L' => 20,      
+            'L' => 18,      
             'M' => 20,      
-            'N' => 22,      
-            'O' => 22,      
-            'P' => 20,      
+            'N' => 23,      
+            'O' => 20,      
+            'P' => 15,      
             'Q' => 10,      
-            'R' => 7,      
-            'S' => 20,      
-            'T' => 20,      
+            'R' => 20,      
+            'S' => 22,      
+            'T' => 5,      
             'U' => 20,      
-            'V' => 10,
-            'W' => 20,
-            'X' => 20,
-            'Y' => 20,
-            'Z' => 20,
-            'AA' => 16,
+            'V' => 20,
+            'W' => 18,
+            'X' => 5,
+            'Y' => 15,
+            'Z' => 18,
+            'AA' => 20,
             'AB' => 17,
-            'AC' => 17,
-            'AD' => 15,
+            'AC' => 14,
+            'AD' => 13,
             'AE' => 13,
             'AF' => 13,
         ];
@@ -146,18 +146,38 @@ class ExportEmployeeSalary implements FromCollection, WithColumnWidths, WithHead
                 /** @var Sheet $sheet */
                 $sheet = $event->sheet;
                 $rows = $this->export_datas;
+                
+                //SetHeaderColor
+                $event->sheet->getDelegate()->getStyle('A2')->getFont()->getColor()->setARGB('DD4B39');
+                $event->sheet->getDelegate()->getStyle('A3')->getFont()->getColor()->setARGB('0000CC');
+                $event->sheet->getDelegate()->getStyle('A4')->getFont()->getColor()->setARGB('3923A9');
+                $event->sheet->getDelegate()->getStyle('A5:AF5')->getFont()->getColor()->setARGB('3923A9');
+
+                $event->sheet->getStyle('A5:AF5')->applyFromArray([
+                    'borders' => [
+                        'allBorders' => [
+                            'borderStyle' => Border::BORDER_THIN,
+                            'color' => ['argb' => '000000'],
+                        ],
+                    ],
+                ]);
+
+                //SetColumn Center
+                $sheet->getDelegate()->getStyle('A5:AF5')->getFont()->setName('Khmer OS Battambang')->setSize(8)->setUnderline('A3:AF3');
+                // $event->sheet->getDelegate()->getStyle('B5')->getAlignment()
+                // ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
                 // block merge cells 
                 $sheet->mergeCells('A2:AF2');
                 $sheet->setCellValue('A2', "ខេមា​ មីក្រូហិរញ្ញវត្ថុ លីមីតធីត");
-                $sheet->getDelegate()->getStyle('A2:U2')->getFont()->setSize(18)->setName('Khmer OS Muol Pali')->setUnderline('A2:AF2');
+                $sheet->getDelegate()->getStyle('A2:AF2')->getFont()->setSize(18)->setName('Khmer OS Muol Pali')->setUnderline('A2:AF2');
                 $event->sheet->getDelegate()->getStyle('A2:AF2')
                 ->getAlignment()
                 ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
                 $sheet->mergeCells('A3:AF3');
                 $sheet->setCellValue('A3', "តារាងលំអិតអំពីប្រាក់បៀវត្សរបស់បុគ្គលិក");
-                $sheet->getDelegate()->getStyle('A3:U3')->getFont()->setName('Khmer OS Muol Light')->setSize(12)->setUnderline('A3:AF3');
+                $sheet->getDelegate()->getStyle('A3:AF3')->getFont()->setName('Khmer OS Muol Light')->setSize(12)->setUnderline('A3:AF3');
                 $event->sheet->getDelegate()->getStyle('A3:AF3')
                 ->getAlignment()
                 ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
@@ -182,12 +202,14 @@ class ExportEmployeeSalary implements FromCollection, WithColumnWidths, WithHead
             "Location",
             "Join Date",
             "Basic Salary",
+            "Base Salary Received",
             "Child Allowance",
             "Phone Allowance",
             "Monthly Quarterly Bonuses",
             "KNY / Pchum Ben",
             "Annual Incentive Bonus",
             "Seniority Pay(Included Tax)",
+            "Total Gross",
             "Pension Fund",
             "Base Salary Received USD",
             "Base Salary Received Riel",
@@ -203,9 +225,7 @@ class ExportEmployeeSalary implements FromCollection, WithColumnWidths, WithHead
             "Severance Pay",
             "Loan Amount",
             "Total Amount Car",
-            "Net Salary",
-            "Payment Date",
-            "Created At",
+            "Net Salary"
         ];
     }
 }

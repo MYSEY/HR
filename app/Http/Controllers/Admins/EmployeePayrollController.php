@@ -712,12 +712,13 @@ class EmployeePayrollController extends Controller
                     $data['basic_salary']                   = $item->basic_salary;
                     $data['spouse']                         = $item->spouse;
                     $data['children']                       = $children;
-                    $data['total_gross_salary']             = $totalGrossSalary;
+                    $data['total_gross_salary']             = $totalBasicSalary;
                     $data['total_child_allowance']          = $totalAmountChild;
                     $data['phone_allowance']                = $item->phone_allowance;
                     $data['total_kny_phcumben']             = $totalBunus;
                     $data['total_severance_pay']            = $totalSeverancePay;
                     $data['seniority_pay_included_tax']     = $seniorityPayableTax;
+                    $data['total_gross']                    = $totalGrossSalary;
                     $data['total_pension_fund']             = $pension_contribution;
                     $data['base_salary_received_usd']       = $baseSalaryReceivedUsd;
                     $data['base_salary_received_riel']      = $totalExchangeRiel;

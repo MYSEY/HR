@@ -25,6 +25,7 @@ return new class extends Migration
             $table->decimal('monthly_quarterly_bonuses',50,2)->default(0);
             $table->decimal('total_kny_phcumben',50,2)->default(0);
             $table->decimal('annual_incentive_bonus',50,2)->default(0);
+            $table->decimal('total_gross',50,2)->default(0);
             $table->decimal('total_pension_fund',50,2)->default(0);
             $table->decimal('seniority_pay_included_tax',50,2)->default(0);
             $table->decimal('base_salary_received_usd',50,2)->default(0);
