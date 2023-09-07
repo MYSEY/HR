@@ -730,12 +730,12 @@ class EmployeePayrollController extends Controller
                     $data['total_gross']                    = $totalGrossSalary;
                     $data['total_pension_fund']             = $pension_contribution;
                     $data['base_salary_received_usd']       = $baseSalaryReceivedUsd;
-                    $data['base_salary_received_riel']      = $totalExchangeRiel;
-                    $data['total_tax_base_riel']            = $totalTtaxBbaseRiel;
+                    $data['base_salary_received_riel']      = number_format($totalExchangeRiel);
+                    $data['total_tax_base_riel']            = number_format($totalTtaxBbaseRiel);
                     $data['total_charges_reduced']          = $totalChargesReduced;
                     $data['total_rate']                     = $totalTax;
                     $data['seniority_pay_excluded_tax']     = $taxExemptionSalary;
-                    $data['total_salary_tax_riel']          = $totalSalaryTaxRiel;
+                    $data['total_salary_tax_riel']          = number_format($totalSalaryTaxRiel);
                     $data['total_salary_tax_usd']           = $totalSalaryTaxUsd;
                     $data['total_salary']                   = round($totalNetSalary, 2);
                     $data['exchange_rate']                  = $request->exchange_rate;
