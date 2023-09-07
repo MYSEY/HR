@@ -49,7 +49,7 @@
                     <select class="select form-control" id="branch_id" name="branch_id" value="{{old('branch_id')}}">
                         <option value="">@lang('lang.all_location')</option>
                         @foreach ($branch as $item)
-                            <option value="{{$item->id}}">{{$item->branch_name_kh}}</option>
+                            <option value="{{$item->id}}">{{Helper::getLang() == 'en' ? $item->branch_name_en : $item->branch_name_kh}}</option>
                         @endforeach
                     </select>
                 </div>

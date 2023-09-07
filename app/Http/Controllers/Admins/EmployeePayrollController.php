@@ -109,29 +109,38 @@ class EmployeePayrollController extends Controller
      */
     public function store(Request $request)
     {
-        // try{
+        try{
             $employee = User::where('date_of_commencement','<=',$request->payment_date)->whereIn('emp_status',['Probation','1','10','2'])->get();
             if (!$employee->isEmpty()) {
                 foreach ($employee as $item) {
                     //function first month join work
                     $totalFirstSeverancPay = 0;
                     if (count(Payroll::where('employee_id',$item->id)->get()) == 0) {
-                        //total day in months
-                        $currentYear = Carbon::createFromDate($item->date_of_commencement)->format('Y-m-d');
-                        $endMonth = Carbon::createFromDate($item->date_of_commencement)->endOfMonth();
-                   
+                        //total day in monthsd
+                        $startMonth = Carbon::createFromDate($item->date_of_commencement)->format('m');
+                        $startendMonth = Carbon::createFromDate($item->date_of_commencement)->endOfMonth()->format('d');
+
                         $start_date = Carbon::createFromDate($item->date_of_commencement);
+                        $endMonth = Carbon::createFromDate($item->date_of_commencement)->endOfMonth();
                         $end_date = Date::createFromDate($endMonth);
                         $commencementDate   = Carbon::parse($start_date);
                         $resumptionDate     = Carbon::parse($end_date);
-                        $toDays 		= $resumptionDate->diffInWeekdays($commencementDate);
+                        $toDays 		    = $resumptionDate->diffInWeekdays($commencementDate);
                         if ($toDays==0) {
                             $totalBasicSalary = $item->basic_salary;
                         } else {
-                            if ($toDays >= 22) {
-                                $totalBasicSalary = $item->basic_salary;
+                            if ($startMonth == 02 && $startendMonth == 28 || $startendMonth == 29) {
+                                if ($toDays == 20 || $toDays == 21) {
+                                    $totalBasicSalary = $item->basic_salary;
+                                } else {
+                                    $totalBasicSalary = ($item->basic_salary / 22) * $toDays;
+                                }
                             }else{
-                                $totalBasicSalary = ($item->basic_salary / 22) * $toDays;
+                                if ($toDays >= 22) {
+                                    $totalBasicSalary = $item->basic_salary;
+                                }else{
+                                    $totalBasicSalary = ($item->basic_salary / 22) * $toDays;
+                                }
                             }
                         }
                     } else {
@@ -741,11 +750,11 @@ class EmployeePayrollController extends Controller
                 Toastr::error('Can not employee prayroll','Error');
                 return redirect()->back();
             }
-        // }catch(\Exception $e){
-        //     DB::rollback();
-        //     Toastr::error('Prayroll created fail','Error');
-        //     return redirect()->back();
-        // }
+        }catch(\Exception $e){
+            DB::rollback();
+            Toastr::error('Prayroll created fail','Error');
+            return redirect()->back();
+        }
     }
 
     /**

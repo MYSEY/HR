@@ -61,9 +61,9 @@ class ExportEmployeeSalary implements FromCollection, WithColumnWidths, WithHead
                 "join_date"         => $value->users->joinOfDate,
                 "basic_salary"      => $value->basic_salary,
                 "Base Salary Received"          => $value->total_gross_salary,
-                "child_allowance"               => $value->total_child_allowance ?? "0",
+                "Child Allowance"               => $value->total_child_allowance ?? "0",
                 "phone_allowance"               => $value->phone_allowance ?? "0",
-                "monthly_quarterly_bonuses"     => $value->monthly_quarterly_bonuses,
+                "Monthly Quarterly Bonuses"     => $value->monthly_quarterly_bonuses,
                 "KNY_/_pchum_ben"               => $value->total_kny_phcumben,
                 "annual_incentive_bonus"        => $value->annual_incentive_bonus,
                 "seniority_pay_included_tax"    => $value->seniority_pay_included_tax,
@@ -107,29 +107,29 @@ class ExportEmployeeSalary implements FromCollection, WithColumnWidths, WithHead
     {
         return [
             'A' => 4,
-            'B' => 20,      
-            'C' => 30,      
-            'D' => 40,      
-            'E' => 40,      
-            'F' => 15,      
-            'G' => 15,      
-            'H' => 14,      
-            'I' => 18,      
-            'J' => 15,      
-            'K' => 20,      
-            'L' => 18,      
-            'M' => 20,      
-            'N' => 23,      
-            'O' => 20,      
-            'P' => 15,      
-            'Q' => 10,      
-            'R' => 20,      
-            'S' => 22,      
-            'T' => 5,      
-            'U' => 20,      
+            'B' => 20,
+            'C' => 30,
+            'D' => 40,
+            'E' => 40,
+            'F' => 15,
+            'G' => 15,
+            'H' => 14,
+            'I' => 18,
+            'J' => 15,
+            'K' => 20,
+            'L' => 18,
+            'M' => 20,
+            'N' => 23,
+            'O' => 20,
+            'P' => 15,
+            'Q' => 10,
+            'R' => 20,
+            'S' => 22,
+            'T' => 10,
+            'U' => 20,
             'V' => 20,
             'W' => 18,
-            'X' => 5,
+            'X' => 7,
             'Y' => 15,
             'Z' => 18,
             'AA' => 20,
@@ -162,11 +162,6 @@ class ExportEmployeeSalary implements FromCollection, WithColumnWidths, WithHead
                     ],
                 ]);
 
-                //SetColumn Center
-                // $sheet->getDelegate()->getStyle('A5:AF5')->getFont()->setName('Khmer OS Battambang')->setSize(8)->setUnderline('A5:AF3');
-                // $event->sheet->getDelegate()->getStyle('B5')->getAlignment()
-                // ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-
                 // block merge cells 
                 $sheet->mergeCells('A2:AF2');
                 $sheet->setCellValue('A2', "ខេមា​ មីក្រូហិរញ្ញវត្ថុ លីមីតធីត");
@@ -184,8 +179,7 @@ class ExportEmployeeSalary implements FromCollection, WithColumnWidths, WithHead
 
                 $sheet->mergeCells('A4:AF4');
                 $sheet->setCellValue('A4', "ប្រចាំខែមេសា ឆ្នាំ២០២៣");
-                $sheet->getDelegate()->getStyle('A4:AF4')->getFont()->setSize(9)->setName('Khmer OS Fasthand')
-                ->setSize(10);
+                $sheet->getDelegate()->getStyle('A4:AF4')->getFont()->setSize(9)->setName('Khmer OS Fasthand')->setSize(10);
                 $event->sheet->getDelegate()->getStyle('A4:AF4')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
             },
         ];

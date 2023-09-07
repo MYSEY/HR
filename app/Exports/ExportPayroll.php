@@ -20,6 +20,7 @@ class ExportPayroll implements FromCollection, WithColumnWidths, WithHeadings, W
 {
     protected $register_events_title;
     protected $register_events_title_sub_title;
+    protected $monthly_title;
     protected $text_title;
     protected $header_table;
     protected $export_datas;
@@ -34,8 +35,9 @@ class ExportPayroll implements FromCollection, WithColumnWidths, WithHeadings, W
         }
         $payroll=[];
         if ($request->tab_status == 1) {
-            $this->register_events_title = "R2";
-            $this->register_events_title_sub_title = "R3";
+            $this->register_events_title = "AF2";
+            $this->register_events_title_sub_title = "AF3";
+            $this->monthly_title = 'AF4';
             $this->text_title = "តារាងលំអិតអំពីប្រាក់បៀវត្សរបស់បុគ្គលិក";
             $datas = Payroll::with("users")
             ->join('users', 'payrolls.employee_id', '=', 'users.id')
@@ -65,47 +67,74 @@ class ExportPayroll implements FromCollection, WithColumnWidths, WithHeadings, W
                 "Branch",
                 "Join Date",
                 "Basic Salary",
+                "Base Salary Received",
                 "Child Allowance",
                 "Phone Allowance",
+                "Monthly Quarterly Bonuses",
                 "KNY / Pchum Ben",
+                "Annual incentive Bonus",
+                "seniority_pay_included_tax",
                 "Total Gross Salary",
-                "Seniority Payable Tax",
                 "Pension Fund",
-                "Base Salary Received",
-                "Tax-free Seniority",
+                "base_salary_received_usd",
+                "base_salary_received_reil",
+                "Spouse",
+                "Dependent Child",
+                "Charges To Be Reduced",
+                "Total Tax Base Riel",
+                "Tax Rate",
+                "Personal Tax(USD)",
+                "Personal Tax(Riels)",
+                "seniority_pay_excluded_tax",
+                "Seniority Backford",
+                "Loan Amount",
+                "Total Amount Car",
                 "Severance Pay",
                 "Net Salary",
-                "Payment Date",
             ];
             foreach ($datas as $key => $pay) {
                 $payment_date = Carbon::parse($pay->payment_date)->format('d-M-Y');
                 $phone_allowance = $pay->phone_allowance == null ? "0.00" : $pay->phone_allowance;
                 $payroll[]=[
-                    $pay->users == null ? '' : $pay->users->number_employee ,
+                    $pay->users == null ? '' : intval($pay->users->number_employee),
                     $pay->users == null ? '' : $pay->users->employee_name_en,
                     $pay->users == null ? '' : $pay->users->EmployeeDepartment,
                     $pay->users == null ? '' : $pay->users->EmployeePosition,
                     $pay->users == null ? '' : $pay->users->EmployeeBranch,
                     $pay->users == null ? '' : $pay->users->joinOfDate,
-
                     $pay->basic_salary,
+                    $pay->total_gross_salary,
                     $pay->total_child_allowance,
                     $phone_allowance,
+                    $pay->monthly_quarterly_bonuses,
                     $pay->total_kny_phcumben,
-                    $pay->total_gross_salary,
-                    $pay->seniority_payable_tax,
+                    $pay->annual_incentive_bonus,
+                    $pay->seniority_pay_included_tax,
+                    $pay->total_gross,
                     $pay->total_pension_fund,
                     $pay->base_salary_received_usd,
+                    $pay->base_salary_received_riel,
+                    $pay->spouse,
+                    $pay->children,
+                    $pay->total_charges_reduced,
+                    $pay->total_tax_base_riel,
+                    $pay->total_rate,
+                    $pay->total_salary_tax_usd,
+                    $pay->total_salary_tax_riel,
+                    $pay->seniority_payable_tax,
                     $pay->seniority_pay_excluded_tax,
+                    $pay->seniority_backford,
                     $pay->total_severance_pay,
-                    $pay->total_salary,
-                    $payment_date,
+                    $pay->loan_amount,
+                    $pay->total_amount_car,
+                    $pay->total_salary
                 ];
             }
         }else if ($request->tab_status == 2) {
             $this->register_events_title = "L2";
             $this->register_events_title_sub_title = "L3";
-            $this->text_title = "NSSF";
+            $this->monthly_title = "L4";
+            $this->text_title = "តារាងបង់ភាគទានលើហានិ.ការងារ ថែទាំសុខភាព និងផែ្នកសោធន";
             $datas = NationalSocialSecurityFund::with("users")
             ->join('users', 'national_social_security_funds.employee_id', '=', 'users.id')
             ->select(
@@ -125,8 +154,7 @@ class ExportPayroll implements FromCollection, WithColumnWidths, WithHeadings, W
             })
             ->when($yearLy, function ($query, $yearLy) {
                 $query->whereYear('national_social_security_funds.created_at', $yearLy);
-            })
-            ->get();
+            })->get();
             $this->header_table = [
                 "Employee ID",
                 "Full Name",
@@ -144,16 +172,16 @@ class ExportPayroll implements FromCollection, WithColumnWidths, WithHeadings, W
             foreach ($datas as $key => $nssf) {
                 $created_at = Carbon::parse($nssf->created_at)->format('d-M-Y');
                 $payroll[]=[
-                    $nssf->users == null ? '' : $nssf->users->number_employee,
+                    $nssf->users == null ? '' : intval($nssf->users->number_employee),
                     $nssf->users == null ? '' : $nssf->users->employee_name_en,
                     $nssf->users == null ? '' : $nssf->users->joinOfDate,
-                    '$ '.$nssf->total_pre_tax_salary_usd,
-                    '៛ '.$nssf->total_pre_tax_salary_riel,
+                    intval($nssf->total_pre_tax_salary_usd),
+                    $nssf->total_pre_tax_salary_riel,
                     $nssf->total_average_wage,
                     $nssf->total_occupational_risk,
                     $nssf->total_health_care,
-                    '៛ '.$nssf->pension_contribution_usd,
-                    '$ '.$nssf->pension_contribution_riel,
+                    $nssf->pension_contribution_usd,
+                    $nssf->pension_contribution_riel,
                     $nssf->corporate_contribution,
                     $created_at,
                 ];
@@ -161,7 +189,8 @@ class ExportPayroll implements FromCollection, WithColumnWidths, WithHeadings, W
         }else if($request->tab_status == 3){
             $this->register_events_title = "H2";
             $this->register_events_title_sub_title = "H3";
-            $this->text_title = "Khmer New Year / Pchum Ben Benefit";
+            $this->monthly_title = "H4";
+            $this->text_title = "ប្រាក់ឧបត្ថម្ភថ្នាក់គ្រប់គ្រង និងបុគ្គលិកសម្រាប់អបអរបុណ្យចូលឆ្នាំខ្មែរ ឆ្នាំ២០២២";
             $datas = Bonus::with("users")->get();
             $this->header_table = [
                 "Employee ID",
@@ -176,11 +205,11 @@ class ExportPayroll implements FromCollection, WithColumnWidths, WithHeadings, W
             foreach ($datas as $key => $bonus) {
                 $created_at = Carbon::parse($bonus->created_at)->format('d-M-Y');
                 $payroll[]=[
-                    $bonus->users == null ? '' : $bonus->users->number_employee,
+                    $bonus->users == null ? '' : intval($bonus->users->number_employee),
                     $bonus->users == null ? '' : $bonus->users->employee_name_en,
                     $bonus->users == null ? '' : $bonus->users->joinOfDate,
                     $bonus->number_of_working_days. "Days",
-                    '$ '.$bonus->base_salary,
+                    $bonus->base_salary,
                     $bonus->base_salary_received,
                     $bonus->total_allowance,
                     $created_at,
@@ -189,6 +218,7 @@ class ExportPayroll implements FromCollection, WithColumnWidths, WithHeadings, W
         }else if ($request->tab_status == 4) {
             $this->register_events_title = "J2";
             $this->register_events_title_sub_title = "J3";
+            $this->monthly_title = "J4";
             $this->text_title = "Seniority Pay";
             $datas = Seniority::with("users")
             ->join('users', 'seniorities.employee_id', '=', 'users.id')
@@ -209,8 +239,7 @@ class ExportPayroll implements FromCollection, WithColumnWidths, WithHeadings, W
             })
             ->when($yearLy, function ($query, $yearLy) {
                 $query->whereYear('seniorities.created_at', $yearLy);
-            })
-            ->get();
+            })->get();
             $this->header_table = [
                 "Employee ID",
                 "Full Name",
@@ -226,7 +255,7 @@ class ExportPayroll implements FromCollection, WithColumnWidths, WithHeadings, W
             foreach ($datas as $key => $seniority) {
                 $created_at = Carbon::parse($seniority->created_at)->format('d-M-Y');
                 $payroll[]=[
-                    $seniority->users == null ? '' : $seniority->users->number_employee,
+                    $seniority->users == null ? '' : intval($seniority->users->number_employee),
                     $seniority->users == null ? '' : $seniority->users->employee_name_en,
                     $seniority->users == null ? '' : $seniority->users->EmployeePosition,
                     $seniority->users == null ? '' : $seniority->users->joinOfDate,
@@ -241,6 +270,7 @@ class ExportPayroll implements FromCollection, WithColumnWidths, WithHeadings, W
         }else {
             $this->register_events_title = "G2";
             $this->register_events_title_sub_title = "G3";
+            $this->monthly_title = "G4";
             $this->text_title = "Severance Pay";
             $datas = SeverancePay::with("users")
             ->join('users', 'severance_pays.employee_id', '=', 'users.id')
@@ -261,8 +291,7 @@ class ExportPayroll implements FromCollection, WithColumnWidths, WithHeadings, W
             })
             ->when($yearLy, function ($query, $yearLy) {
                 $query->whereYear('severance_pays.created_at', $yearLy);
-            })
-            ->get();
+            })->get();
             $this->header_table = [
                 "Employee ID",
                 "Full Name",
@@ -275,7 +304,7 @@ class ExportPayroll implements FromCollection, WithColumnWidths, WithHeadings, W
             foreach ($datas as $key => $severance) {
                 $created_at = Carbon::parse($severance->created_at)->format('d-M-Y');
                 $payroll[]=[
-                    $severance->users == null ? '' : $severance->users->number_employee,
+                    $severance->users == null ? '' : intval($severance->users->number_employee),
                     $severance->users == null ? '' : $severance->users->employee_name_en,
                     $severance->users == null ? '' : $severance->users->EmployeePosition,
                     $severance->users == null ? '' : $severance->users->joinOfDate,
@@ -300,30 +329,39 @@ class ExportPayroll implements FromCollection, WithColumnWidths, WithHeadings, W
 
     public function startCell(): string
     {
-        return 'A4';
+        return 'A5';
     }
     public function registerEvents(): array {
         return [
             AfterSheet::class => function(AfterSheet $event) {
                 /** @var Sheet $sheet */
                 $sheet = $event->sheet;
-
+                
+                //SetHeaderColor
+                $event->sheet->getDelegate()->getStyle('A2')->getFont()->getColor()->setARGB('DD4B39');
+                $event->sheet->getDelegate()->getStyle('A3')->getFont()->getColor()->setARGB('0000CC');
+                $event->sheet->getDelegate()->getStyle('A4')->getFont()->getColor()->setARGB('3923A9');
+                $event->sheet->getDelegate()->getStyle('A5:AF5')->getFont()->getColor()->setARGB('3923A9');
+                
                 // block merge cells 
                 $sheet->mergeCells('A2:'.$this->register_events_title);
                 $sheet->setCellValue('A2', "ខេមា​ មីក្រូហិរញ្ញវត្ថុ លីមីតធីត");
                 $sheet->getDelegate()->getStyle('A2:'.$this->register_events_title)->getFont()->setName('Khmer OS Muol Pali')
                 ->setSize(18)->setUnderline('A2:'.$this->register_events_title);
-                $event->sheet->getDelegate()->getStyle('A2:'.$this->register_events_title)
-                ->getAlignment()
+                $event->sheet->getDelegate()->getStyle('A2:'.$this->register_events_title)->getAlignment()
                 ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
                 $sheet->mergeCells('A3:'.$this->register_events_title_sub_title);
                 $sheet->setCellValue('A3',$this->text_title);
                 $sheet->getDelegate()->getStyle('A3:'.$this->register_events_title_sub_title)->getFont()->setName('Khmer OS Muol Light')
                 ->setSize(12);
-                $event->sheet->getDelegate()->getStyle('A3:'.$this->register_events_title_sub_title)
-                ->getAlignment()
+                $event->sheet->getDelegate()->getStyle('A3:'.$this->register_events_title_sub_title)->getAlignment()
                 ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+
+                $sheet->mergeCells('A4:'.$this->monthly_title);
+                $sheet->setCellValue('A4', "ប្រចាំខែមេសា ឆ្នាំ២០២៣");
+                $sheet->getDelegate()->getStyle('A4:'.$this->monthly_title)->getFont()->setSize(9)->setName('Khmer OS Fasthand')->setSize(10);
+                $event->sheet->getDelegate()->getStyle('A4:'.$this->monthly_title)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
             },
         ];
@@ -332,24 +370,38 @@ class ExportPayroll implements FromCollection, WithColumnWidths, WithHeadings, W
     public function columnWidths(): array
     {
         return [
-            'A' => 14,
-            'B' => 20,      
-            'C' => 20,      
-            'D' => 20,      
-            'E' => 20,      
-            'F' => 20,      
-            'G' => 15,      
-            'H' => 15,      
-            'I' => 15,      
-            'J' => 15,      
-            'K' => 15,      
-            'L' => 15,      
-            'M' => 15,      
-            'N' => 15,      
-            'O' => 15,      
-            'P' => 15,      
-            'Q' => 15,      
-            'R' => 15,
+            'A' => 10,
+            'B' => 20,
+            'C' => 30,
+            'D' => 40,
+            'E' => 40,
+            'F' => 15,
+            'G' => 15,
+            'H' => 14,
+            'I' => 18,
+            'J' => 15,
+            'K' => 20,
+            'L' => 18,
+            'M' => 20,
+            'N' => 23,
+            'O' => 24,
+            'P' => 15,
+            'Q' => 15,
+            'R' => 22,
+            'S' => 22,
+            'T' => 10,
+            'U' => 18,
+            'V' => 20,
+            'W' => 18,
+            'X' => 7,
+            'Y' => 17,
+            'Z' => 18,
+            'AA' => 22,
+            'AB' => 17,
+            'AC' => 14,
+            'AD' => 13,
+            'AE' => 15,
+            'AF' => 13,
         ];
     }
     public function headings(): array

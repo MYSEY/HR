@@ -49,7 +49,7 @@
                     <select class="select form-control" id="branch_id" name="branch_id" value="{{old('branch_id')}}">
                         <option value="">@lang('lang.location')</option>
                         @foreach ($branchs as $item)
-                            <option value="{{$item->id}}">{{$item->branch_name_kh}}</option>
+                            <option value="{{$item->id}}">{{Helper::getLang() == 'en' ? $item->branch_name_en : $item->branch_name_kh}}</option>
                         @endforeach
                     </select>
                 </div>
@@ -59,7 +59,7 @@
                     <select class="select form-control" id="department_id" name="department_id" value="{{old('department_id')}}">
                         <option value="">@lang('lang.department')</option>
                         @foreach ($departments as $item)
-                            <option value="{{$item->id}}">{{$item->name_english}}</option>
+                            <option value="{{$item->id}}">{{ Helper::getLang() == 'en' ? $item->name_english : $item->name_khmers}}</option>
                         @endforeach
                     </select>
                 </div>

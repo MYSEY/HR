@@ -94,7 +94,7 @@
                                         <thead>
                                             <tr>
                                                 <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="#: activate to sort column descending" style="width: 30px;">#</th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Type: activate to sort column ascending" style="width: 772.237px;">@lang('lang.type')</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Type: activate to sort column ascending" style="width: 772.237px;">@lang('lang.trainer_type')</th>
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Company Name: activate to sort column ascending" style="width: 772.237px;">@lang('lang.company_name')</th>
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Name (KH): activate to sort column ascending" style="width: 772.237px;">@lang('lang.name') (@lang('lang.kh'))</th>
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Name (EN): activate to sort column ascending" style="width: 772.237px;">@lang('lang.name') (@lang('lang.en'))</th>
@@ -179,7 +179,7 @@
                             <div class="row">
                                 <div class="col-sm-6">
                                     <div class="form-group">
-                                        <label>@lang('lang.type') <span class="text-danger">*</span></label>
+                                        <label>@lang('lang.trainer_type') <span class="text-danger">*</span></label>
                                         <select class="select form-control" id="change-type" name="type" required>
                                             <option value="1">@lang('lang.internal')</option>
                                             <option value="2">@lang('lang.external')</option>
@@ -274,7 +274,7 @@
                             <div class="row">
                                 <div class="col-sm-6">
                                     <div class="form-group">
-                                        <label>@lang('lang.type') <span class="text-danger">*</span></label>
+                                        <label>@lang('lang.trainer_type') <span class="text-danger">*</span></label>
                                         <select class="select form-control" id="e_change_type" name="type" required>
                                             {{-- <option value="1">Internal</option>
                                             <option value="2">External</option> --}}
@@ -627,7 +627,7 @@
                         '</tr>';
                     });
                 }else{
-                    var tr = '<tr><td colspan=11 align="center">ពុំមានទិន្នន័យសម្រាប់បង្ហាញ</td></tr>';
+                    var tr = '<tr><td colspan=11 align="center">@lang("lang.no_data_available_for_display")</td></tr>';
                 }
                 $(".btn_trainer tbody").html(tr);
             }

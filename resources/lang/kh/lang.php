@@ -536,6 +536,7 @@ return[
 	"to_"=>"ទៅកាន់",
 	"time"=>"ម៉ោង",
 	"title"=>"ចំណងជើង",
+    "trainer_type"=>"Trainer Type",
 	"type_of_training"=>"ប្រភេទនៃវគ្គបណ្តុះបណ្តាល",
 	"tax_rate"=>"អត្រាពន្ធ",
 	"taxes_on_fees"=>"ពន្ធលើថ្លៃសេវា",
