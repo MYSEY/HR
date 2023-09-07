@@ -90,6 +90,7 @@ return[
 	"black_list"=>"បញ្ជីខ្មៅ",
 	"branch_from"=>"ពីសាខា",
 	"branch_to"=>"ទៅសាខា",
+    "base_salary_received"=>"បៀវត្សគោល ទទួលបាន",
 	"cambodia"=>"ប្រទេសកម្ពុជា",
 	"cancel"=>"បោះបង់",
 	"category"=>"ប្រភេទ",
