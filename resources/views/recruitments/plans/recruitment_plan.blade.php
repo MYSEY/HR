@@ -76,10 +76,9 @@
                             <select class="select form-control floating select2-hidden-accessible" data-select2-id="select2-data-1-cyfe" id="position_id" name="position_id" tabindex="-1" aria-hidden="true">
                                 <option value="" data-select2-id="select2-data-3-c0n2">@lang('lang.all_position') </option>
                                 @foreach ($positions as $position )
-                                    <option value="{{ $position->id }}">{{ session()->get('locale') == 'en' ? $position->name_english : $position->name_khmer}}</option>
+                                    <option value="{{ $position->id }}">{{ Helper::getLang() == 'en' ? $position->name_english : $position->name_khmer}}</option>
                                 @endforeach
                             </select>
-                            {{-- <label class="focus-label">Position</label> --}}
                         </div>
                     </div>
                     <div class="col-sm-6 col-md-2">
@@ -87,10 +86,9 @@
                             <select class="select form-control" id="branch_id" data-select2-id="select2-data-2-c0n2" name="branch_id">
                                 <option value="" data-select2-id="select2-data-2-c0n2">@lang('lang.all_location')</option>
                                 @foreach ($branchs as $item)
-                                    <option value="{{$item->id}}">{{ session()->get('locale') == 'en' ? $item->branch_name_en : $item->branch_name_kh}}</option>
+                                    <option value="{{$item->id}}">{{ Helper::getLang() == 'en' ? $item->branch_name_en : $item->branch_name_kh}}</option>
                                 @endforeach
                             </select>
-                            {{-- <label class="focus-label">Location</label> --}}
                         </div>
                     </div>
                     <div class=".col-sm-6  col-md-2">
@@ -477,7 +475,6 @@
                     var div ='<div class="card text-center">'+
                         '<div class="card-body">'+
                             '<p class="card-text">@lang("lang.no_data_available_for_display").</p>'+
-                            // '<a href="#"  data-bs-target="#add_plan" class="btn btn-primary">Add New</a>'+
                         '</div>'+
                     '</div>';
                 }

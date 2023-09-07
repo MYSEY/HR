@@ -47,7 +47,7 @@ class EmployeePayrollController extends Controller
         $data = $this->payrollRepo->getAllPayroll($request);
         $user = User::all();
         $branch = Branchs::all();
-        $exChangeRate= ExchangeRate::orderBy('id', 'desc')->first();
+        $exChangeRate= ExchangeRate::where('type','Salary')->orderBy('id','desc')->first();
         return view('payrolls.index',compact('data','user','branch','exChangeRate'));
     }
 
@@ -109,29 +109,38 @@ class EmployeePayrollController extends Controller
      */
     public function store(Request $request)
     {
-        // try{
+        try{
             $employee = User::where('date_of_commencement','<=',$request->payment_date)->whereIn('emp_status',['Probation','1','10','2'])->get();
             if (!$employee->isEmpty()) {
                 foreach ($employee as $item) {
                     //function first month join work
                     $totalFirstSeverancPay = 0;
                     if (count(Payroll::where('employee_id',$item->id)->get()) == 0) {
-                        //total day in months
-                        $currentYear = Carbon::createFromDate($item->date_of_commencement)->format('Y-m-d');
-                        $endMonth = Carbon::createFromDate($item->date_of_commencement)->endOfMonth();
-                   
+                        //total day in monthsd
+                        $startMonth = Carbon::createFromDate($item->date_of_commencement)->format('m');
+                        $startendMonth = Carbon::createFromDate($item->date_of_commencement)->endOfMonth()->format('d');
+
                         $start_date = Carbon::createFromDate($item->date_of_commencement);
+                        $endMonth = Carbon::createFromDate($item->date_of_commencement)->endOfMonth();
                         $end_date = Date::createFromDate($endMonth);
                         $commencementDate   = Carbon::parse($start_date);
                         $resumptionDate     = Carbon::parse($end_date);
-                        $toDays 		= $resumptionDate->diffInWeekdays($commencementDate);
+                        $toDays 		    = $resumptionDate->diffInWeekdays($commencementDate);
                         if ($toDays==0) {
                             $totalBasicSalary = $item->basic_salary;
                         } else {
-                            if ($toDays >= 22) {
-                                $totalBasicSalary = $item->basic_salary;
+                            if ($startMonth == 02 && $startendMonth == 28 || $startendMonth == 29) {
+                                if ($toDays == 20 || $toDays == 21) {
+                                    $totalBasicSalary = $item->basic_salary;
+                                } else {
+                                    $totalBasicSalary = ($item->basic_salary / 22) * $toDays;
+                                }
                             }else{
-                                $totalBasicSalary = ($item->basic_salary / 22) * $toDays;
+                                if ($toDays >= 22) {
+                                    $totalBasicSalary = $item->basic_salary;
+                                }else{
+                                    $totalBasicSalary = ($item->basic_salary / 22) * $toDays;
+                                }
                             }
                         }
                     } else {
@@ -158,35 +167,38 @@ class EmployeePayrollController extends Controller
                    
                     // dd($totalBasicSalary);
                     //National Social Security Fund (NSSF) Formula
-                    $totalExchangeRielPreTax =  $request->exchange_rate * $totalBasicSalary;
-                    if ($totalExchangeRielPreTax) {
-                        if ($totalExchangeRielPreTax >= 1200000) {
-                            $averageWage    = 1200000;
-                        }else if($totalExchangeRielPreTax >= 400000){
-                            $averageWage    = $totalExchangeRielPreTax;
+                    $exchangNSSF = ExchangeRate::where('type','NSSF')->orderBy('id','desc')->first();
+                    if ($exchangNSSF) {
+                        $totalExchangeRielPreTax =  $exchangNSSF->amount_riel * $totalBasicSalary;
+                        if ($totalExchangeRielPreTax) {
+                            if ($totalExchangeRielPreTax >= 1200000) {
+                                $averageWage    = 1200000;
+                            }else if($totalExchangeRielPreTax >= 400000){
+                                $averageWage    = $totalExchangeRielPreTax;
+                            }else{
+                                $averageWage = 400000;
+                            }
                         }else{
-                            $averageWage = 400000;
+                            $averageWage = 0;
                         }
-                    }else{
-                        $averageWage = 0;
+                        
+                        $occupationalRisk = (0.008 * $averageWage);
+                        $healthCare = (0.026 * $averageWage);
+                        $workerContributionUsd = ($averageWage * 0.02);
+                        $workerContributionRiel = (round($workerContributionUsd, -2) / $exchangNSSF->amount_riel);
+                        $dataNSSF = NationalSocialSecurityFund::create([
+                            'employee_id'                   => $item->id,
+                            'total_pre_tax_salary_usd'      => number_format($totalBasicSalary, 2),
+                            'total_pre_tax_salary_riel'     => number_format($totalExchangeRielPreTax),
+                            'total_average_wage'            => number_format($averageWage),
+                            'total_occupational_risk'       => number_format($occupationalRisk),
+                            'total_health_care'             => number_format($healthCare),
+                            'pension_contribution_usd'      => number_format($workerContributionUsd),
+                            'pension_contribution_riel'     => number_format($workerContributionRiel, 2),
+                            'corporate_contribution'        => number_format($workerContributionUsd),
+                            'created_by'                    => Auth::user()->id,
+                        ]);
                     }
-                    
-                    $occupationalRisk = (0.008 * $averageWage);
-                    $healthCare = (0.026 * $averageWage);
-                    $workerContributionUsd = ($averageWage * 0.02);
-                    $workerContributionRiel = (round($workerContributionUsd, -2) / $request->exchange_rate);
-                    $dataNSSF = NationalSocialSecurityFund::create([
-                        'employee_id'                   => $item->id,
-                        'total_pre_tax_salary_usd'      => number_format($totalBasicSalary, 2),
-                        'total_pre_tax_salary_riel'     => number_format($totalExchangeRielPreTax),
-                        'total_average_wage'            => number_format($averageWage),
-                        'total_occupational_risk'       => number_format($occupationalRisk),
-                        'total_health_care'             => number_format($healthCare),
-                        'pension_contribution_usd'      => number_format($workerContributionUsd),
-                        'pension_contribution_riel'     => number_format($workerContributionRiel, 2),
-                        'corporate_contribution'        => number_format($workerContributionUsd),
-                        'created_by'                    => Auth::user()->id,
-                    ]);
                     
                     // $pension_contribution = '5.9';
                     $pension_contribution = $dataNSSF->pension_contribution_riel;
@@ -709,20 +721,21 @@ class EmployeePayrollController extends Controller
                     $data['basic_salary']                   = $item->basic_salary;
                     $data['spouse']                         = $item->spouse;
                     $data['children']                       = $children;
-                    $data['total_gross_salary']             = $totalGrossSalary;
+                    $data['total_gross_salary']             = $totalBasicSalary;
                     $data['total_child_allowance']          = $totalAmountChild;
                     $data['phone_allowance']                = $item->phone_allowance;
                     $data['total_kny_phcumben']             = $totalBunus;
                     $data['total_severance_pay']            = $totalSeverancePay;
                     $data['seniority_pay_included_tax']     = $seniorityPayableTax;
+                    $data['total_gross']                    = $totalGrossSalary;
                     $data['total_pension_fund']             = $pension_contribution;
                     $data['base_salary_received_usd']       = $baseSalaryReceivedUsd;
-                    $data['base_salary_received_riel']      = $totalExchangeRiel;
-                    $data['total_tax_base_riel']            = $totalTtaxBbaseRiel;
+                    $data['base_salary_received_riel']      = number_format($totalExchangeRiel);
+                    $data['total_tax_base_riel']            = number_format($totalTtaxBbaseRiel);
                     $data['total_charges_reduced']          = $totalChargesReduced;
                     $data['total_rate']                     = $totalTax;
                     $data['seniority_pay_excluded_tax']     = $taxExemptionSalary;
-                    $data['total_salary_tax_riel']          = $totalSalaryTaxRiel;
+                    $data['total_salary_tax_riel']          = number_format($totalSalaryTaxRiel);
                     $data['total_salary_tax_usd']           = $totalSalaryTaxUsd;
                     $data['total_salary']                   = round($totalNetSalary, 2);
                     $data['exchange_rate']                  = $request->exchange_rate;
@@ -737,11 +750,11 @@ class EmployeePayrollController extends Controller
                 Toastr::error('Can not employee prayroll','Error');
                 return redirect()->back();
             }
-        // }catch(\Exception $e){
-        //     DB::rollback();
-        //     Toastr::error('Prayroll created fail','Error');
-        //     return redirect()->back();
-        // }
+        }catch(\Exception $e){
+            DB::rollback();
+            Toastr::error('Prayroll created fail','Error');
+            return redirect()->back();
+        }
     }
 
     /**

@@ -5,6 +5,11 @@
     data-layout-style="default">
 
 <head>
+    <style>
+        .page-wrapper{
+            min-height: 0px !important
+        }
+    </style>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">

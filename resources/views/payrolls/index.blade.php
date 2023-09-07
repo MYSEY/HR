@@ -45,7 +45,7 @@
                             <select class="select form-control" id="branch_id" data-select2-id="select2-data-2-c0n2" name="branch_id">
                                 <option value="" data-select2-id="select2-data-2-c0n2">@lang('lang.all_location')</option>
                                 @foreach ($branch as $item)
-                                    <option value="{{$item->id}}">{{session()->get('locale') == 'en' ? $item->branch_name_en : $item->branch_name_kh }}</option>
+                                    <option value="{{$item->id}}">{{ Helper::getLang() == 'en' ? $item->branch_name_en : $item->branch_name_kh }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -224,12 +224,12 @@
                                                             <td>$<a href="#">{{ $item->seniority_pay_included_tax}}</a></td>
                                                             <td>$<a href="#">{{ $item->total_pension_fund}}</a></td>
                                                             <td>$<a href="#">{{ $item->base_salary_received_usd}}</a></td>
-                                                            <td><span>៛</span><a href="#">{{ number_format((int)$item->base_salary_received_riel) }}</a></td>
+                                                            <td><span>៛</span><a href="#">{{ $item->base_salary_received_riel }}</a></td>
                                                             <td><span>៛</span><a href="#">{{ number_format((int)$item->total_charges_reduced) }}</a></td>
-                                                            <td><span>៛</span><a href="#">{{ number_format((int)$item->total_tax_base_riel) }}</a></td>
+                                                            <td><span>៛</span><a href="#">{{ $item->total_tax_base_riel }}</a></td>
                                                             <td><a href="#">{{ $item->total_rate}}%</a></td>
                                                             <td>$<a href="#">{{ $item->total_salary_tax_usd}}</a></td>
-                                                            <td><span>៛</span><a href="#">{{ number_format((int)$item->total_salary_tax_riel)}}</a></td>
+                                                            <td><span>៛</span><a href="#">{{ $item->total_salary_tax_riel}}</a></td>
                                                             <td>$<a href="#">{{ $item->seniority_pay_excluded_tax}}</a></td>
                                                             <td>$<a href="#">{{ $item->total_severance_pay}}</a></td>
                                                             <td>$<a href="#">{{ $item->total_salary }}</a></td>
@@ -430,12 +430,12 @@
                             '<td>$<a href="#">'+(row.seniority_pay_excluded_tax)+'</a></td>'+
                             '<td>$<a href="#">'+(row.total_pension_fund)+'</a></td>'+
                             '<td>$<a href="#">'+(row.base_salary_received_usd)+'</a></td>'+
-                            '<td><span>៛</span><a href="#">'+(formatCurrencyKH(row.base_salary_received_riel))+'</a></td>'+
+                            '<td><span>៛</span><a href="#">'+(row.base_salary_received_riel)+'</a></td>'+
                             '<td><span>៛</span><a href="#">'+(formatCurrencyKH(row.total_charges_reduced))+'</a></td>'+
-                            '<td><span>៛</span><a href="#">'+(formatCurrencyKH(row.total_tax_base_riel))+'</a></td>'+
+                            '<td><span>៛</span><a href="#">'+(row.total_tax_base_riel)+'</a></td>'+
                             '<td><a href="#">'+(row.total_rate)+'%</a></td>'+
                             '<td>$<a href="#">'+(row.total_salary_tax_usd)+'</a></td>'+
-                            '<td><span>៛</span><a href="#">'+(formatCurrencyKH(row.total_salary_tax_riel))+'</a></td>'+
+                            '<td><span>៛</span><a href="#">'+(row.total_salary_tax_riel)+'</a></td>'+
                             '<td>$<a href="#">'+(row.seniority_pay_excluded_tax)+'</a></td>'+
                             '<td>$<a href="#">'+(row.total_severance_pay)+'</a></td>'+
                             '<td>$<a href="#">'+(row.total_salary )+'</a></td>'+

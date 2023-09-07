@@ -30,19 +30,21 @@
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department Name: activate to sort column ascending" style="width: 772.237px;">@lang('lang.usd')</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department Name: activate to sort column ascending" style="width: 772.237px;">@lang('lang.riel')</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department Name: activate to sort column ascending" style="width: 772.237px;">@lang('lang.change_date')</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department Name: activate to sort column ascending" style="width: 772.237px;">@lang('lang.updated_at')</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department Name: activate to sort column ascending" style="width: 772.237px;">@lang('lang.exchange_type')</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department Name: activate to sort column ascending" style="width: 772.237px;">@lang('lang.created_at')</th>
                                             <th class="text-end sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Action: activate to sort column ascending" style="width: 300.962px;">@lang('lang.action')</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @if (count($data)>0)
-                                            @foreach ($data as $item)
+                                            @foreach ($data as $key=>$item)
                                                 <tr class="odd">
-                                                    <td class="sorting_1 ids">{{$item->id}}</td>
+                                                    <td class="sorting_1 ids">{{++$key ?? ""}}</td>
                                                     <td class="amount_usd">{{$item->amount_usd}}</td>
                                                     <td class="amount_riel">{{number_format($item->amount_riel)}}</td>
                                                     <td class="description">{{\Carbon\Carbon::parse($item->change_date)->format('d-M-Y') ?? ''}}</td>
-                                                    <td>{{ \Carbon\Carbon::parse($item->updated_at)->format('d-M-Y') ?? '' }}</td>
+                                                    <td class="amount_riel">{{$item->type}}</td>
+                                                    <td>{{ \Carbon\Carbon::parse($item->created_at)->format('d-M-Y') ?? '' }}</td>
                                                     <td class="text-end">
                                                         <div class="dropdown dropdown-action">
                                                             <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
@@ -56,7 +58,7 @@
                                             @endforeach
                                         @else
                                             <tr>
-                                                <td colspan="6" style="text-align: center">@lang('lang.no_record_to_display')</td>
+                                                <td colspan="9" style="text-align: center">@lang('lang.no_record_to_display')</td>
                                             </tr>
                                         @endif
                                     </tbody>
@@ -97,6 +99,15 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label >@lang('lang.exchange_type')</label>
+                                    <select class="form-control" id="" name="type" value="type">
+                                        <option value="NSSF">@lang('lang.nssf')</option>
+                                        <option value="Salary">@lang('lang.salary')</option>
+                                    </select>
+                                </div>
+                            </div>
                             <div class="submit-section">
                                 <button type="submit" class="btn btn-primary submit-btn">
                                     <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.Loading') </span>
@@ -134,6 +145,15 @@
                                     <div class="cal-icon">
                                         <input class="form-control datetimepicker" type="text" id="e_change_date" name="change_date" value="">
                                     </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label >@lang('lang.exchange_type')</label>
+                                    <select class="form-control" id="e_type" name="type" value="">
+                                        <option value="NSSF">@lang('lang.nssf')</option>
+                                        <option value="Salary">@lang('lang.salary')</option>
+                                    </select>
                                 </div>
                             </div>
                             <div class="submit-section">
@@ -201,6 +221,7 @@
                         $('#e_amount_usd').val(response.success.amount_usd);
                         $('#e_amount_riel').val(response.success.amount_riel);
                         $('#e_change_date').val(response.success.change_date);
+                        $('#e_type').val(response.success.type);
                         $('#edit_exchange_rate').modal('show');
                     }
                 }

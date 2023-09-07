@@ -49,7 +49,7 @@
                     <select class="select form-control" id="branch_id" name="branch_id" value="{{old('branch_id')}}">
                         <option value="">@lang('lang.location')</option>
                         @foreach ($branch as $item)
-                            <option value="{{$item->id}}">{{$item->branch_name_kh}}</option>
+                            <option value="{{$item->id}}">{{Helper::getLang() == 'en' ? $item->branch_name_en : $item->branch_name_kh}}</option>
                         @endforeach
                     </select>
                 </div>
@@ -141,8 +141,8 @@
                                                     <td>{{ $item->employee_name_kh }}</td>
                                                     <td>{{ $item->employee_name_en }}</td>
                                                     <td>{{ $item->EmployeeGender }}</td>
-                                                    <td>{{ $item->position ? $item->position->name_khmer : "" }}</td>
-                                                    <td>{{ $item->branch ? $item->branch->branch_name_en: "" }}</td>
+                                                    <td>{{ $item->position ? $item->EmployeePosition : "" }}</td>
+                                                    <td>{{ $item->branch ? $item->EmployeeDepartment : "" }}</td>
                                                     <td>{{ \Carbon\Carbon::parse($item->date_of_commencement)->format('d-M-Y') ?? '' }}</td>
                                                     <td>{{ $item->remark }}</td>
                                                 </tr>
