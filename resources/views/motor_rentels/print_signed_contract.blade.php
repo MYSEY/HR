@@ -49,7 +49,7 @@
                     <div>
                         <table style="width:100%">
                             <tr><td class="table_tr">
-                                ឈ្មោះ ... <strong id="p_full_name"></strong> ...<strong id="p_gender"></strong> ... ថ្ងៃខែឆ្នាំកំណើត ... <strong id="p_date_of_birth"></strong> ... សញ្ជាតិ ខ្មែរ
+                                ឈ្មោះ ... <strong id="p_full_name"></strong> .. ភេទ ..<strong id="p_gender"></strong> ... ថ្ងៃខែឆ្នាំកំណើត ... <strong id="p_date_of_birth"></strong> ... សញ្ជាតិ ខ្មែរ
                                 អត្តសញ្ញាណប័ណ្ណលេខ ... <strong id="p_id_card_number"></strong> ... ចុះថ្ងៃទី ............................
                                 ចេញដោយ ............................. អាសយដ្ឋានបច្ចុប្បន្ន ផ្ទះលេខ ... 
                                 <strong id="p_house_no"></strong> ... ផ្លូវ ... <strong id="p_street_no"></strong> ... ក្រុមទី ........................... ភូមិ ... 
@@ -93,16 +93,16 @@
                             <tr>
                                 <td class="table_tr">
                                     <ol class="s" style="margin-left: 40px">
-                                        <li>ម៉ូតូម៉ាក ...........................................</li>
-                                        <li>ប្រភេទ.............................................</li>
+                                        <li>ម៉ូតូម៉ាក ........ <strong id="p_motorcycle_brand"></strong> .........</li>
+                                        <li>ប្រភេទ.......... <strong id="p_category"></strong> ..........</li>
                                         <li>ឆ្នាំផលិត ........ <strong id="p_year_of_manufature"></strong> ........</li>
                                     </ol>
                                 </td>
                                 <td class="table_tr">
                                     <ol class="s" style="margin-left: 40px">
                                         <li>ស្លាកលេខ .......... <strong id="p_number_plate"></strong> ........</li>
-                                        <li>លេខតួ ................................................</li>
-                                        <li>លេខម៉ាស៊ីន .......................................</li>
+                                        <li>លេខតួ ............ <strong id="p_body_number"></strong> ..........</li>
+                                        <li>លេខម៉ាស៊ីន ........ <strong id="p_engine_number"></strong> ...........</li>
                                     </ol>
                                 </td>
                             </tr>
@@ -135,8 +135,8 @@
                         <tr>
                             <td class="table_tr">
                                 <ol class="s" style="margin-left: 40px">
-                                    <li>បរិមាណ ........... គ្រឿង</li>
-                                    <li>ប្រាក់ឈ្នួល ជាលេខ ...... <strong id="p_price_motor_rentel"></strong> ...... ជាអក្សរ .... <strong id="p_price_to_word"></strong> ....</li>
+                                    <li>បរិមាណ .... ១​ .... គ្រឿង</li>
+                                    <li>ប្រាក់ឈ្នួល ជាលេខ ...... <strong id="p_price_motor_rentel"></strong> ...... ជាអក្សរ .... <strong id="p_price_to_word"></strong><strong>ដុល្លារ</strong> ....</li>
                                     <li>កាតព្វកិច្ចពន្ធ: 
                                         <ul>
                                             <li>កាតព្វកិច្ចលើពន្ធកាត់ទុកលើថ្លៃឈ្នួល ១០% ជាបន្ទុករបស់ភាគី <strong>“ខ”</strong>។ ភាគី <strong>“ខ”</strong> ព្រមព្រៀងឲ្យគ្រឹះស្ថាន ខេមា ធ្វើការកាត់ទុកលើថ្លៃឈ្នួល ១០% ដើម្បីយកទៅបង់ពន្ធកាត់ទុកជូន នាយកដ្ឋានពន្ធដាររាជធានីភ្នំពេញ នៅរាល់ពេលដែលគ្រឹះស្ថាន ខេមា ធ្វើការបង់ប្រាក់ឈ្នួល ឲ្យភាគី <strong>“ខ”</strong> ។</li>

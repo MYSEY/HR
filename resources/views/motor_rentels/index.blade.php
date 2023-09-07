@@ -117,6 +117,14 @@
                                                     style="width: 125.15px;">@lang('lang.department')</th>
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                     rowspan="1" colspan="1"
+                                                    aria-label="Start Date: activate to sort column ascending"
+                                                    style="width: 125.15px;">@lang('lang.start_date')</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                    rowspan="1" colspan="1"
+                                                    aria-label="End Date: activate to sort column ascending"
+                                                    style="width: 125.15px;">@lang('lang.end_date')</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                    rowspan="1" colspan="1"
                                                     aria-label="Total Gasoline: activate to sort column ascending"
                                                     style="width: 125.15px;">@lang('lang.total_gasoline') </th>
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
@@ -135,6 +143,14 @@
                                                     rowspan="1" colspan="1"
                                                     aria-label="Taplab Price: activate to sort column ascending"
                                                     style="width: 51.475px;">@lang('lang.taplab_price')</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                    rowspan="1" colspan="1"
+                                                    aria-label="status: activate to sort column ascending"
+                                                    style="width: 51.475px;">@lang('lang.status')</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                    rowspan="1" colspan="1"
+                                                    aria-label="Resignetion Date: activate to sort column ascending"
+                                                    style="width: 51.475px;">@lang('lang.resignation_date')</th>
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                     rowspan="1" colspan="1"
                                                     aria-label="Create at: activate to sort column ascending"
@@ -157,12 +173,38 @@
                                                         <td>{{ $item->MotorEmployee->EmployeeGender }}</td>
                                                         <td>{{ $item->MotorEmployee->EmployeePosition }}</td>
                                                         <td>{{ $item->MotorEmployee->EmployeeDepartment }}</td>
+                                                        <td>{{ $item->start_date ? \Carbon\Carbon::parse($item->start_date)->format('d-M-Y') : '' }}</td>
+                                                        <td>{{ $item->end_date ? \Carbon\Carbon::parse($item->end_date)->format('d-M-Y') : '' }}</td>
                                                         <td>{{ $item->total_gasoline }}</td>
                                                         <td>{{ $item->total_work_day }}</td>
                                                         <td>$ {{ $item->price_engine_oil }}</td>
                                                         <td>$ {{ $item->price_motor_rentel}}</td>
                                                         <td>$ {{ $item->price_taplab_rentel ? $item->price_taplab_rentel : "0.00"}}</td>
-                                                        <td>{{ \Carbon\Carbon::parse($item->created_at)->format('d-M-Y') ?? '' }}</td>
+                                                        <td>
+                                                            <div class="dropdown action-label">
+                                                                @if (!$item->resigned_date)
+                                                                    <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
+                                                                        <i class="fa fa-dot-circle-o text-success"></i>
+                                                                        <span>@lang('lang.active')</span>
+                                                                    </a>
+                                                                @else
+                                                                    <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
+                                                                        <i class="fa fa-dot-circle-o text-danger"></i>
+                                                                        <span>@lang('lang.resignation_date')</span>
+                                                                    </a>
+                                                                @endif
+                                                                    <div class="dropdown-menu dropdown-menu-right" id="btn-status">
+                                                                        <a class="dropdown-item" data-id="{{$item->id}}" data-name="1" data-status-old="{{$item->status}}" href="#">
+                                                                            <i class="fa fa-dot-circle-o text-success"></i> @lang('lang.active')
+                                                                        </a>
+                                                                        <a class="dropdown-item" data-id="{{$item->id}}" data-name="0" data-status-old="{{$item->status}}" href="#">
+                                                                            <i class="fa fa-dot-circle-o text-danger"></i> @lang('lang.resignation_date')
+                                                                        </a>
+                                                                    </div>
+                                                            </div>
+                                                        </td>
+                                                        <td><span style="font-size: 13px" class="badge bg-inverse-danger">{{ $item->resigned_date ? \Carbon\Carbon::parse($item->resigned_date)->format('d-M-Y') :'' }}</span></td>
+                                                        <td>{{ $item->created_at ? \Carbon\Carbon::parse($item->created_at)->format('d-M-Y') : '' }}</td>
                                                         <td class="text-end">
                                                             <div class="dropdown dropdown-action">
                                                                 <a href="#" class="action-icon dropdown-toggle"
@@ -279,15 +321,9 @@
             $('#e_expired_year').val(YearExpireted);
 
             if ($("#start_date").val() || $("#e_start_date").val()) {
-                let startMonth = null;
-                if ($("#e_start_date").val()) {
-                    startMonth = moment($("#e_start_date").val()).format('MM');
-                }else{
-                    startMonth = moment($("#start_date").val()).format('MM');
-                }
-                let lastDay = new Date(YearExpireted, startMonth, 0).getDate();
-                $("#end_date").val(YearExpireted+'-'+startMonth+'-'+lastDay);
-                $("#e_end_date").val(YearExpireted+'-'+startMonth+'-'+lastDay);
+                let lastDay = new Date(YearExpireted, 12, 0).getDate();
+                $("#end_date").val(YearExpireted+'-'+12+'-'+lastDay);
+                $("#e_end_date").val(YearExpireted+'-'+12+'-'+lastDay);
             }
         });
 
@@ -298,6 +334,7 @@
         });
 
         $("#add_new").on("click", function() {
+            $(".m_clear").val(" ");
             $("#shelt_life").val('');
             $("#price_motor_rentel").val('');
             [...Array(currentDiff >= 0 ? currentDiff + 1 : 0).keys()].map((num) => {
@@ -313,6 +350,10 @@
                 $('#product_year').append($('<option>', option));
             });
             $('#add_motor_rentel').modal('show');
+        });
+
+        $("#btn-cancel").on("click", function(){
+            $('#add_motor_rentel').modal('hide');
         });
 
         $(document).on('click','#save-print', function(){
@@ -353,6 +394,10 @@
                     status_print: true,
                     employee_id: $("#c_employee_id").val(),
                     number_plate: $("#number_plate").val(),
+                    motorcycle_brand: $("#motorcycle_brand").val(),
+                    category: $("#category").val(),
+                    body_number: $("#body_number").val(),
+                    engine_number: $("#engine_number").val(),
                     start_date: $("#start_date").val(),
                     end_date: $("#end_date").val(),
                     product_year: $("#product_year").val(),
@@ -378,6 +423,10 @@
                     $("#p_province").text(data.user.currentprovince ? data.user.currentprovince.name_km : "");
                     $("#p_year_of_manufature").text(data.product_year);
                     $("#p_number_plate").text(data.number_plate);
+                    $("#p_motorcycle_brand").text(data.motorcycle_brand);
+                    $("#p_category").text(data.category);
+                    $("#p_body_number").text(data.body_number);
+                    $("#p_engine_number").text(data.engine_number);
                     let start_date = data.start_date.split('-');
                     let end_date = data.end_date.split('-');
                     // start_date
@@ -445,6 +494,10 @@
                     status_print: true,
                     employee_id: $("#e_employee_id").val(),
                     number_plate: $("#e_number_plate").val(),
+                    motorcycle_brand: $("#e_motorcycle_brand").val(),
+                    category: $("#e_category").val(),
+                    body_number: $("#e_body_number").val(),
+                    engine_number: $("#e_engine_number").val(),
                     start_date: $("#e_start_date").val(),
                     end_date: $("#e_end_date").val(),
                     product_year: $("#e_product_year").val(),
@@ -470,6 +523,10 @@
                     $("#p_province").text(data.user.currentprovince ? data.user.currentprovince.name_km : "");
                     $("#p_year_of_manufature").text(data.product_year);
                     $("#p_number_plate").text(data.number_plate);
+                    $("#p_motorcycle_brand").text(data.motorcycle_brand);
+                    $("#p_category").text(data.category);
+                    $("#p_body_number").text(data.body_number);
+                    $("#p_engine_number").text(data.engine_number);
                     let start_date = data.start_date.split('-');
                     let end_date = data.end_date.split('-');
                     // start_date
@@ -518,7 +575,6 @@
                 },
                 dataType: "JSON",
                 success: function(response) {
-                    console.log("response: ", response);
                     if (response.success) {
                         if (response.employee != '') {
                             $('#e_employee_id').html('<option selected disabled value="">@lang("lang.select")</option>');
@@ -549,6 +605,10 @@
                         });
                         $('#e_shelt_life').val(response.success.shelt_life);
                         $('#e_number_plate').val(response.success.number_plate);
+                        $("#e_motorcycle_brand").val(response.success.motorcycle_brand);
+                        $("#e_category").val(response.success.category);
+                        $("#e_body_number").val(response.success.body_number);
+                        $("#e_engine_number").val(response.success.engine_number);
                         $('#e_total_gasoline').val(response.success.total_gasoline);
                         $('#e_total_work_day').val(response.success.total_work_day);
                         $('#e_price_engine_oil').val(response.success.price_engine_oil);
@@ -572,6 +632,87 @@
             $("#btn-text-loading").css('display', 'block');
             showDatas();
         });
+
+        $('body').on('click', '#btn-status a', function() {
+            let id = $(this).attr('data-id');
+            let status = $(this).attr('data-name');
+            let old_status = $(this).attr('data-status-old');
+            let text_status = "";
+            let text_old_status = "";
+            if (old_status == "0") {
+                text_old_status = "@lang('lang.resignation')"
+            }else if(old_status == "1"){
+                text_old_status = "@lang('lang.active')"
+            }
+            let resignation = '';
+            if (status == "0") {
+                text_status = "@lang('lang.resignation')"
+                resignation = '<div class="form-group">'+
+                                '<div class="form-group">'+
+                                    '<label>@lang("lang.resignation_date") <span class="text-danger">*</span></label>'+
+                                    '<input type="date" class="form-control resigned_date">'+
+                                '</div>'+
+                            '</div>';
+            }else if(status == "1"){
+                text_status = "@lang('lang.active')"
+            }
+
+            $.confirm({
+                title: '@lang("lang.change_status")!',
+                contentClass: 'text-center',
+                // backgroundDismiss: 'cancel',
+                content: ''+
+                        '<label>@lang("lang.are_you_sure_want_change_status") '+'<label style="color:red">'+text_old_status+'</label>'+' @lang("lang.to_") '+'<label style="color:red">'+text_status+'</label>'+'?</label>'+
+                        '<input type="hidden" class="form-control status" id="" name="" value="'+status+'">'+
+                        '<input type="hidden" class="form-control id" id="" name="" value="'+id+'">'+
+                        '<form method="post">'+
+                            resignation+
+                        '</form>',
+                buttons: {
+                    confirm: {
+                        text: '@lang("lang.submit")',
+                        btnClass: 'btn-blue',
+                        action: function() {
+                            var id = this.$content.find('.id').val();
+                            var status = this.$content.find('.status').val();
+                            var resigned_date = this.$content.find('.resigned_date').val();
+                            if (status == "0") {
+                                if ($(".resigned_date").val() ==""){
+                                    $(".resigned_date").css("border","solid 1px red");
+                                    return false;
+                                }
+                            }
+                            axios.post('{{ URL('motor-rentel/status') }}', {
+                                    'id': id,
+                                    'status': status,
+                                    'resigned_date': resigned_date,
+                                }).then(function(response) {
+                                new Noty({
+                                    title: "",
+                                    text: "@lang('lang.the_process_has_been_successfully').",
+                                    type: "success",
+                                    icon: true
+                                }).show();
+                                $('.card-footer').remove();
+                                window.location.replace("{{ URL('motor-rentel/list') }}");
+                            }).catch(function(error) {
+                                new Noty({
+                                    title: "",
+                                    text: "@lang('lang.something_went_wrong_please_try_again_later').",
+                                    type: "error",
+                                    icon: true
+                                }).show();
+                            });
+                        }
+                    },
+                    cancel: {
+                        text: '@lang("lang.cancel")',
+                        btnClass: 'btn-red btn-sm',
+                    },
+                }
+            });
+        });
+        
     });
 
     function showDatas(){
@@ -583,24 +724,55 @@
             'to_date': $("#to_date").val(),
         }).then(function(response) {
             var rows = response.data.data;
+           
             if (rows.length > 0) {
                 var tr = "";
+                let no = 0;
                 $(rows).each(function(e, row) {
+                    no++;
+                    let status = '';
+                    if (!row.resigned_date || row.status == 1) {
+                        status ='<a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">'+
+                            '<i class="fa fa-dot-circle-o text-success"></i>'+
+                            '<span>@lang("lang.active")</span>'+
+                        '</a>';
+                    }else{      
+                        status ='<a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">'+
+                            '<i class="fa fa-dot-circle-o text-danger"></i>'+
+                            '<span>@lang("lang.resignation_date")</span>'+
+                        '</a>';
+                    }
                     let createdAt = moment(row.created_at).format('D-MMM-YYYY')
+                    let resigned_date = row.resigned_date ? moment(row.resigned_date).format('D-MMM-YYYY'): "";
+                    let start_date = row.start_date ? moment(row.start_date).format('D-MMM-YYYY'): "";
+                    let end_date = row.end_date ? moment(row.end_date).format('D-MMM-YYYY'): "";
                     tr += '<tr class="odd">' +
-                        '<td class="ids">' + (row.id) + '</td>' +
+                        '<td class="ids">' + (no) + '</td>' +
                         '<td class="number_employee_id"><a href="{{url("motor-rentel/detail")}}/'+row.id+'">' + (row.number_employee) + '</a></td>' +
                         '<td>' + (row.employee_name_en) + '</td>' +
                         '<td>' + (row.user.gender == null ? "" : row.user.gender.name_english) + '</td>' +
                         '<td>' + (row.user.position ? row.user.position.name_english : "") + '</td>' +
                         '<td>' + (row.user.department.name_english) + '</td>' +
+                        '<td>' + (start_date) + '</td>' +
+                        '<td>' + (end_date) + '</td>' +
                         '<td>' + (row.total_gasoline) + '</td>' +
                         '<td>' + (row.total_work_day) + '</td>' +
                         '<td>$ ' + (row.price_engine_oil) + '</td>' +
                         '<td>$ ' + (row.price_motor_rentel) + '</td>' +
                         '<td>$ ' + (row.price_taplab_rentel ? row.price_taplab_rentel : "0.00") + '</td>' +
+                        '<td>'+
+                            '<div class="dropdown action-label">'+
+                                (status)+
+                                '<div class="dropdown-menu dropdown-menu-right" id="btn-status">'+
+                                    '<a class="dropdown-item" data-id="'+(row.id)+'" data-name="1" data-status-old="'+(row.status)+'" href="#">'+
+                                        '<i class="fa fa-dot-circle-o text-success"></i> @lang("lang.active")</a>'+
+                                    '<a class="dropdown-item" data-id="'+(row.id)+'" data-name="0" data-status-old="'+(row.status)+'" href="#">'+
+                                        '<i class="fa fa-dot-circle-o text-danger"></i> @lang("lang.resignation_date")</a>'+
+                                '</div>'+
+                            '</div>'+
+                        '</td>'+
+                        '<td><span style="font-size: 13px" class="badge bg-inverse-danger">'+(resigned_date)+'</span></td>'+
                         '<td>' + (createdAt) + '</td>' +
-                        // '<td>' + (row.price_motor_rentel - (row.price_motor_rentel * row.tax_rate) / 100) + '</td>' +
                         '<td class="text-end">' +
                         '<div class="dropdown dropdown-action">' +
                         '<a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">' +
@@ -620,7 +792,7 @@
                 });
             } else {
                 var tr =
-                    '<tr><td colspan=13 align="center">ពុំមានទិន្នន័យសម្រាប់បង្ហាញ</td></tr>';
+                    '<tr><td colspan=17 align="center">ពុំមានទិន្នន័យសម្រាប់បង្ហាញ</td></tr>';
             }
             $(".tbl-motor tbody").html(tr);
             $("#btn-text-loading").hide();

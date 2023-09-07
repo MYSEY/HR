@@ -9,9 +9,21 @@ var convertNumberToWords = function (n) {
     if (x == -1) x = n.length;
     if (x > 15) return 'too big';
     var str = '';
-     if (x != n.length) {
-        let st = Math.trunc(n)
-        if (st >= 0) {
+    
+    const decimalCount = num => {
+        // Convert to String
+        const numStr = String(num);
+        // String Contains Decimal
+        if (numStr.includes('.')) {
+            return numStr.split('.')[1].length;
+        };
+        // String Does Not Contain Decimal
+        return 0;
+    }
+    var num = Number(n)
+    let numDecimal = decimalCount(num);
+    if (x != n.length) {
+        if (numDecimal > 0) {
             var y = n.length;
             str += 'ក្បៀស';
             for (var i = x + 1; i < y; i++) str += single_digit[n[i]] + ' ';

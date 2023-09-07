@@ -24,6 +24,10 @@ return new class extends Migration
             $table->string('expired_year')->nullable();
             $table->integer('shelt_life')->nullable();
             $table->string('number_plate')->nullable();
+            $table->string('motorcycle_brand')->nullable();
+            $table->string('category')->nullable();
+            $table->string('body_number')->nullable();
+            $table->string('engine_number')->nullable();
             $table->integer('total_gasoline')->nullable();
             $table->integer('total_work_day')->nullable();
             $table->decimal('price_engine_oil')->nullable();
@@ -31,6 +35,8 @@ return new class extends Migration
             $table->string('taplab_rentel')->nullable();
             $table->decimal('price_taplab_rentel')->nullable();
             $table->integer('tax_rate')->nullable();
+            $table->date('resigned_date')->nullable();
+            $table->boolean('status')->nullable();
             $table->bigInteger('created_by')->unsigned()->nullable();
             $table->bigInteger('updated_by')->unsigned()->nullable();
             $table->dateTime('deleted_at')->nullable();

@@ -94,8 +94,8 @@
                                     </li>
                                     <li><strong>@lang('lang.total_amount_of_workday'):</strong> {{ $data->total_work_day }}</li>
                                     <li><strong>@lang('lang.total_gasoline') (@lang('lang.month')):</strong>
-                                        {{ number_format($data->total_gasoline * $data->total_work_day * $data->gasoline_price_per_liter) }}
-                                        ៛</li>
+                                        {{ number_format($data->total_gasoline * $data->total_work_day) }} L
+                                    </li>
                                 </ul>
                             </div>
                             <div class="col-lg-6 m-b-20">
@@ -124,27 +124,27 @@
                                             <td>@lang('lang.gross_motor_rental_fee') ($) :</td>
                                             <td>
                                                 <span class="float-end">$
-                                                    {{ number_format($data->price_motor_rentel, 2) }}</span>
+                                                    {{ number_format($data->amount_price_motor_rentel, 2) }}</span>
                                             </td>
                                             <td>@lang('lang.motor_rental_fee_tax') ({{$data->tax_rate}}%) : </td>
                                             <td>
                                                 <span class="float-end">$
-                                                    {{ number_format(($data->price_motor_rentel * $data->tax_rate) / 100, 2) }}</span>
+                                                    {{ number_format(($data->amount_price_motor_rentel * $data->tax_rate) / 100, 2) }}</span>
                                             </td>
                                         </tr>
                                         <tr>
                                             <td>@lang('lang.gross_taplab_fee') ($): </td>
                                             <td><span class="float-end">$
-                                                {{ number_format($data->price_taplab_rentel, 2) }}</span></td>
+                                                {{ number_format($data->amount_price_taplab_rentel, 2) }}</span></td>
                                             <td>@lang('lang.taplab_fee_tax') ({{$data->tax_rate}}%) :</td>
                                             <td>
                                                 <span class="float-end">$
-                                                    {{ number_format(($data->price_taplab_rentel * $data->tax_rate) / 100, 2) }}</span>
+                                                    {{ number_format(($data->amount_price_taplab_rentel * $data->tax_rate) / 100, 2) }}</span>
                                             </td>
                                         </tr>
                                         <tr>
                                             <td>@lang('lang.engine_oil') ($):</td>
-                                            <td><span class="float-end">$ {{ $data->price_engine_oil }}</span></td>
+                                            <td><span class="float-end">$ {{ $data->amount_price_engine_oil }}</span></td>
                                             <td></td>
                                             <td></td>
                                         </tr>
@@ -162,12 +162,12 @@
                                         <tr class="tr-background-83">
                                             <td>@lang('lang.total_earnings') ($): </td>
                                             <td>
-                                                <span class="float-end">$ {{ number_format($data->price_motor_rentel + $data->price_taplab_rentel + $data->price_engine_oil, 2) }}</span>
+                                                <span class="float-end">$ {{ number_format($data->amount_price_motor_rentel + $data->amount_price_taplab_rentel + $data->amount_price_engine_oil, 2) }}</span>
                                             </td>
                                             <td>@lang('lang.total_deductions') ($): </td>
                                             <td>
                                                 <span class="float-end">$
-                                                    {{ number_format((($data->price_taplab_rentel * $data->tax_rate) + ($data->price_motor_rentel * $data->tax_rate)) / 100, 2) }}</span>
+                                                    {{ number_format((($data->amount_price_taplab_rentel * $data->tax_rate) + ($data->amount_price_motor_rentel * $data->tax_rate)) / 100, 2) }}</span>
                                             </td>
                                         </tr>
                                         <tr class="tr-background-83">
@@ -186,7 +186,7 @@
                                             <td class="td-border"></td>
                                             <td class="td-background-cc">@lang('lang.total_net_pay') ($):</td>
                                             <td class="td-background-cc">
-                                                <span class="float-end">$ {{number_format(($data->price_motor_rentel + $data->price_taplab_rentel + $data->price_engine_oil) - ((($data->price_taplab_rentel * $data->tax_rate) + ($data->price_motor_rentel * $data->tax_rate)) / 100), 2) }} </span>
+                                                <span class="float-end">$ {{number_format($data->amount_price_engine_oil + ($data->amount_price_motor_rentel - ($data->amount_price_motor_rentel * $data->tax_rate) / 100) + ($data->amount_price_taplab_rentel - ($data->amount_price_taplab_rentel * $data->tax_rate) / 100 ), 2) }} </span>
                                             </td>
                                         </tr>
                                         <tr>

@@ -24,6 +24,10 @@ class MotorRentel extends Model
         'expired_year',
         'shelt_life',
         'number_plate',
+        'motorcycle_brand',
+        'category',
+        'body_number',
+        'engine_number',
         'total_gasoline',
         'total_work_day',
         'price_engine_oil',
@@ -31,6 +35,7 @@ class MotorRentel extends Model
         'taplab_rentel',
         'price_taplab_rentel',
         'tax_rate',
+        'status',
         'created_by',
         'updated_by',
     ];

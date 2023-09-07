@@ -17,19 +17,28 @@ class MotorRentalDetail extends Model
 
     protected $fillable = [
         'employee_id',
-        'gasoline_price_per_liter',
+        'motor_rental_id',
         'start_date',
         'end_date',
         'product_year',
         'expired_year',
         'shelt_life',
         'number_plate',
+        'motorcycle_brand',
+        'category',
+        'body_number',
+        'engine_number',
         'total_gasoline',
         'total_work_day',
         'price_engine_oil',
         'price_motor_rentel',
         'taplab_rentel',
         'price_taplab_rentel',
+        'resigned_date',
+        'gasoline_price_per_liter',
+        'amount_price_motor_rentel',
+        'amount_price_engine_oil',
+        'amount_price_taplab_rentel',
         'tax_rate',
         'created_by',
         'updated_by',
@@ -44,7 +53,9 @@ class MotorRentalDetail extends Model
     {
         return $this->belongsTo(User::class ,'updated_by');
     }
-
+    public function motorrental(){
+        return $this->belongsTo(MotorRentel::class,'motor_rental_id');
+    }
     public function user()
     {
         return $this->belongsTo(User::class ,'employee_id')
@@ -58,6 +69,11 @@ class MotorRentalDetail extends Model
             'branch_id',
             'gender'])
         ->with('department')->with('position')->with('gender')->with('branch');
+    }
+
+    public function getMotorRentalAttribute(){
+        $motor = MotorRentel::where("id", $this->motor_rental_id)->first();
+        return $motor;
     }
 
     public function getMotorEmployeeAttribute(){

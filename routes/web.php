@@ -147,6 +147,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('motor-rentel/pay',[MotorRentelController::class,'indexPay']);
     Route::post('motor-rentel/search',[MotorRentelController::class,'indexPaySearch']);
     Route::post('motor-rentel/create-pay',[MotorRentelController::class,'storePay']);
+    Route::post('motor-rentel/status',[MotorRentelController::class,'processing']);
 
 
     Route::post('payroll/create',[EmployeePayrollController::class,'store']);

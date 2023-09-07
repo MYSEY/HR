@@ -33,11 +33,11 @@ class ExportMotorRentel implements FromCollection, WithColumnWidths, WithHeading
             $i++;
             $amount_real = ($value->total_gasoline * $value->total_work_day * $value->gasoline_price_per_liter);
             $this->totalGagolineAmount += $amount_real;
-            $this->totalAmountMotor += $value->price_engine_oil;
-            $this->totaPriceMotor += $value->price_motor_rentel;
-            $this->totaPriceTaplab += $value->price_taplab_rentel;
-            $this->totalTaxFee += (($value->price_motor_rentel * $value->tax_rate) / 100);
-            $this->totalAmount += ($value->price_motor_rentel - ($value->price_motor_rentel * $value->tax_rate) / 100) + ($value->price_taplab_rentel - ($value->price_taplab_rentel * $value->tax_rate) / 100 );
+            $this->totalAmountMotor += $value->amount_price_engine_oil;
+            $this->totaPriceMotor += $value->amount_price_motor_rentel;
+            $this->totaPriceTaplab += $value->amount_price_taplab_rentel;
+            // $this->totalTaxFee += (($value->amount_price_motor_rentel * $value->tax_rate) / 100);
+            $this->totalAmount += $value->amount_price_engine_oil + ($value->amount_price_motor_rentel - ($value->amount_price_motor_rentel * $value->tax_rate) / 100) + ($value->amount_price_taplab_rentel - ($value->amount_price_taplab_rentel * $value->tax_rate) / 100 );
             $dataExport[] = [
                 "number" => $i,
                 "number_employee" => $value->MotorEmployee->number_employee,
@@ -55,13 +55,13 @@ class ExportMotorRentel implements FromCollection, WithColumnWidths, WithHeading
                 "total_work_day" => $value->total_work_day,
                 "total_gasoline_liters" => $value->total_gasoline * $value->total_work_day,
                 "price_engine_oil" => number_format($amount_real, 2),
-                "total_price_gasoline" => $value->price_engine_oil,
-                "price_motor_rentel" => $value->price_motor_rentel,
-                "taplab_rentel" => $value->taplab_rentel,
-                "price_taplab_rentel" => $value->price_taplab_rentel,
+                "total_price_gasoline" => $value->amount_price_engine_oil,
+                "price_motor_rentel" => $value->amount_price_motor_rentel,
+                // "taplab_rentel" => $value->taplab_rentel,
+                "price_taplab_rentel" => $value->amount_price_taplab_rentel,
                 "tax_rate" => $value->tax_rate,
-                "taxes_on_fees" =>  ($value->price_motor_rentel * $value->tax_rate) / 100,
-                "amount" => ($value->price_motor_rentel - ($value->price_motor_rentel * $value->tax_rate) / 100) + ($value->price_taplab_rentel - ($value->price_taplab_rentel * $value->tax_rate) / 100 ),
+                // "taxes_on_fees" =>  ($value->amount_price_motor_rentel * $value->tax_rate) / 100,
+                "amount" => $value->amount_price_engine_oil + ($value->amount_price_motor_rentel - ($value->amount_price_motor_rentel * $value->tax_rate) / 100) + ($value->amount_price_taplab_rentel - ($value->amount_price_taplab_rentel * $value->tax_rate) / 100 ),
             ];
         }
         $this->export_datas = $dataExport;
@@ -197,16 +197,16 @@ class ExportMotorRentel implements FromCollection, WithColumnWidths, WithHeading
                 $sheet->getDelegate()->getStyle("R".$fromMerge)->getFont()->setName('Khmer OS Battambang')
                 ->setSize(9)->setBold("R".$fromMerge);
 
-                $sheet->setCellValue("T".$fromMerge, number_format( $this->totaPriceTaplab,2));
-                $sheet->getDelegate()->getStyle("T".$fromMerge)->getFont()->setName('Khmer OS Battambang')
-                ->setSize(9)->setBold("T".$fromMerge);
+                $sheet->setCellValue("S".$fromMerge, number_format( $this->totaPriceTaplab,2));
+                $sheet->getDelegate()->getStyle("S".$fromMerge)->getFont()->setName('Khmer OS Battambang')
+                ->setSize(9)->setBold("S".$fromMerge);
 
-                $sheet->setCellValue("V".$fromMerge, number_format($this->totalTaxFee,2));
-                $sheet->getDelegate()->getStyle("V".$fromMerge)->getFont()->setName('Khmer OS Battambang')
-                ->setSize(9)->setBold("V".$fromMerge);
-                $sheet->setCellValue("W".$fromMerge, number_format($this->totalAmount,2));
-                $sheet->getDelegate()->getStyle("W".$fromMerge)->getFont()->setName('Khmer OS Battambang')
-                ->setSize(9)->setBold("W".$fromMerge);
+                // $sheet->setCellValue("V".$fromMerge, number_format($this->totalTaxFee,2));
+                // $sheet->getDelegate()->getStyle("V".$fromMerge)->getFont()->setName('Khmer OS Battambang')
+                // ->setSize(9)->setBold("V".$fromMerge);
+                $sheet->setCellValue("U".$fromMerge, number_format($this->totalAmount,2));
+                $sheet->getDelegate()->getStyle("U".$fromMerge)->getFont()->setName('Khmer OS Battambang')
+                ->setSize(9)->setBold("U".$fromMerge);
             },
         ];
     }
@@ -232,10 +232,10 @@ class ExportMotorRentel implements FromCollection, WithColumnWidths, WithHeading
                 "ចំនួនជារៀល",
                 "ថ្លៃទិញប្រេងម៉ាស៊ីន",
                 "ថ្លៃឈ្នួលម៉ូតូ ដុល្លារ/USD",
-                "Taplabs",
+                // "Taplabs",
                 "ថ្លៃឈ្នួល Taplabs ដុល្លារ/USD",
-                "អត្រាជាប់ពន្ធ",
-                "ពន្ធលើថ្លៃឈ្នួល",
+                "អត្រាជាប់ពន្ធ (%)",
+                // "ពន្ធលើថ្លៃឈ្នួល",
                 "ប្រាក់ទទួលបានបន្ទាប់ពីដកពន្ធ",
                 "សម្គាល់នៃកិច្ចសន្យា",
         ];

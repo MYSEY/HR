@@ -30,6 +30,33 @@
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
+                                <label class="">@lang('lang.motorcycle_brand') <span class="text-danger">*</span></label>
+                                <input class="form-control e_emp_required " type="text" id="e_motorcycle_brand" name="motorcycle_brand" value="{{old('motorcycle_brand')}}" required>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="">@lang('lang.category') <span class="text-danger">*</span></label>
+                                <input class="form-control e_emp_required " type="text" id="e_category" name="category" value="{{old('category')}}" required>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="">@lang('lang.body_number') <span class="text-danger">*</span></label>
+                                <input class="form-control e_emp_required " type="text" id="e_body_number" name="body_number" value="{{old('body_number')}}" required>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="">@lang('lang.engine_number') <span class="text-danger">*</span></label>
+                                <input class="form-control e_emp_required " type="text" id="e_engine_number" name="engine_number" value="{{old('engine_number')}}" required>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
                                 <label class="">@lang('lang.start_date') <span class="text-danger">*</span></label>
                                 <div class="cal-icon">
                                     <input class="form-control datetimepicker e_emp_required @error('start_date') is-invalid @enderror" type="text" id="e_start_date" required name="start_date" value="{{old('employee_name_kh')}}">

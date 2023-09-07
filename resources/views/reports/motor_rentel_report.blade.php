@@ -194,10 +194,10 @@
                                                 rowspan="1" colspan="1"
                                                 aria-label="Tax rate: activate to sort column ascending"
                                                 style="width: 89.6px;">@lang('lang.tax_rate')</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                            {{-- <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                 rowspan="1" colspan="1"
                                                 aria-label="Taxes on fees: activate to sort column ascending"
-                                                style="width: 89.6px;">@lang('lang.taxes_on_fees')</th>
+                                                style="width: 89.6px;">@lang('lang.taxes_on_fees')</th> --}}
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                 rowspan="1" colspan="1"
                                                 aria-label="Amount: activate to sort column ascending"
@@ -237,14 +237,14 @@
                                                     <td>{{ $item->total_gasoline * $item->total_work_day }}</td>
                                                     <td>{{ number_format($item->total_gasoline * $item->total_work_day * $item->gasoline_price_per_liter, 2) }}៛
                                                     </td>
-                                                    <td class="price_engine_oil">$ {{ $item->price_engine_oil }}</td>
-                                                    <td class="price_motor_rentel">$ {{ $item->price_motor_rentel }}</td>
+                                                    <td class="price_engine_oil">$ {{ $item->amount_price_engine_oil }}</td>
+                                                    <td class="price_motor_rentel">$ {{ $item->amount_price_motor_rentel }}</td>
                                                     <td >{{ $item->taplab_rentel }}</td>
-                                                    <td >$ {{ $item->price_taplab_rentel }}</td>
+                                                    <td >$ {{ $item->amount_price_taplab_rentel ? $item->amount_price_taplab_rentel : "0.00" }}</td>
                                                     <td class="tax_rate">{{ $item->tax_rate }}%</td>
-                                                    <td>$ {{ ($item->price_motor_rentel * $item->tax_rate) / 100 }}</td>
+                                                    {{-- <td>$ {{ ($item->price_motor_rentel * $item->tax_rate) / 100 }}</td> --}}
                                                     <td>$
-                                                        {{ ($item->price_motor_rentel - ($item->price_motor_rentel * $item->tax_rate) / 100) + ($item->price_taplab_rentel - ($item->price_taplab_rentel * $item->tax_rate) / 100 )  }}
+                                                        {{ $item->amount_price_engine_oil + ($item->amount_price_motor_rentel - ($item->amount_price_motor_rentel * $item->tax_rate) / 100) + ($item->amount_price_taplab_rentel - ($item->amount_price_taplab_rentel * $item->tax_rate) / 100 )  }}
                                                     </td>
                                                     <td>{{ \Carbon\Carbon::parse($item->created_at)->format('d-M-Y') ?? '' }}</td>
                                                     <td>
@@ -338,14 +338,14 @@
 
                                     '<td>'+( row.total_gasoline * row.total_work_day )+'</td>'+
                                     '<td>'+( (row.total_gasoline * row.total_work_day * row.gasoline_price_per_liter).toFixed(2))+'៛</td>'+
-                                    '<td class="price_engine_oil">$ '+ ( row.price_engine_oil )+'</td>'+
-                                    '<td class="price_motor_rentel">$ '+ ( row.price_motor_rentel )+'</td>'+
+                                    '<td class="price_engine_oil">$ '+ ( row.amount_price_engine_oil )+'</td>'+
+                                    '<td class="price_motor_rentel">$ '+ ( row.amount_price_motor_rentel )+'</td>'+
                                     '<td >'+ ( row.taplab_rentel )+'</td>'+
-                                    '<td >$ '+ ( row.price_taplab_rentel )+'</td>'+
+                                    '<td >$ '+ ( row.amount_price_taplab_rentel )+'</td>'+
 
                                     '<td class="tax_rate">'+( row.tax_rate )+'%</td>'+
-                                    '<td>$ '+ ( (row.price_motor_rentel * row.tax_rate) / 100 )+'</td>'+
-                                    '<td>$ '+( (row.price_motor_rentel - (row.price_motor_rentel * row.tax_rate) / 100 ) + (row.price_taplab_rentel - (row.price_taplab_rentel * row.tax_rate) / 100 ))+'</td>'+
+                                    // '<td>$ '+ ( (row.amount_price_motor_rentel * row.tax_rate) / 100 )+'</td>'+
+                                    '<td>$ '+((row.amount_price_motor_rentel - (row.amount_price_motor_rentel * row.tax_rate) / 100 ) + (row.amount_price_taplab_rentel - (row.amount_price_taplab_rentel * row.tax_rate) / 100 ) + Number(row.amount_price_engine_oil))+'</td>'+
                                     '<td>'+( created_at )+'</td>'+
                                     '<td>'+
                                         '<div class="dropdown dropdown-action">' +
@@ -363,7 +363,7 @@
                     });
                 } else {
                     var tr =
-                        '<tr><td colspan=24 align="center">ពុំមានទិន្នន័យសម្រាប់បង្ហាញ</td></tr>';
+                        '<tr><td colspan=25 align="center">ពុំមានទិន្នន័យសម្រាប់បង្ហាញ</td></tr>';
                 }
                 $(".tbl-motor-rport tbody").html(tr);
                 $("#btn-text-loading").hide();
