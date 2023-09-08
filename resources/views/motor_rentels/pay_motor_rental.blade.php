@@ -274,7 +274,7 @@
                         let created_at = moment(row.created_at).format('D-MMM-YYYY')
                         let start_date = moment(row.start_date).format('D-MMM-YYYY')
                         let end_date = moment(row.end_date).format('D-MMM-YYYY')
-                        let resigned_date = moment(row.resigned_date).format('D-MMM-YYYY')
+                        let resigned_date = row.resigned_date ? moment(row.resigned_date).format('D-MMM-YYYY') : '';
                         let resigned ="";
                         if (row.resigned_date) {
                             resigned = "bg-inverse-danger"
