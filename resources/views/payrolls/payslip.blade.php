@@ -61,7 +61,7 @@
                             </div>
                             <div class="col-md-4">
                                 <h4 class="payslip-title">@lang('lang.employee_payslip')</h4>
-                                <h5 class="payslip-title" style="color: red">@lang('lang.monthly_payroll') : {{Carbon\Carbon::createFromDate($payslip->payment_date)->format('M Y')}}</h5>
+                                <h5 class="payslip-title">{{Helper::getLang() == 'en' ? Helper::geENMonths($payslip->payment_date)  : Helper::getKhmerMonths($payslip->payment_date)}}</h5>
                             </div>
                         </div>
                         <div class="row">
@@ -75,7 +75,7 @@
                             </div>
                             <div class="col-lg-6 m-b-20">
                                 <ul class="list-unstyled">
-                                    <li><strong>@lang('lang.employee_name') :</strong> {{$payslip->users == null ? "" : $payslip->users->employee_name_en}}</li>
+                                    <li><strong>@lang('lang.employee_name') :</strong> {{Helper::getLang() == 'en' ? $payslip->users->employee_name_en : $payslip->users->employee_name_kh}}</li>
                                     <li><strong>@lang('lang.department') :</strong> {{$payslip->users == null ? "" : $payslip->users->EmployeeDepartment}}</li>
                                     <li><strong>@lang('lang.basic_rate') :</strong> {{$payslip->total_rate}}%</li>
                                 </ul>
@@ -88,9 +88,9 @@
                                         <thead>
                                             <tr class="tr-bckground-ch">
                                                 <th>@lang('lang.earning') </th>
-                                                <th style="text-align: center;">@lang('lang.amount')</th>
+                                                <th style="text-align: right;">@lang('lang.amount')</th>
                                                 <th>@lang('lang.deduction') </th>
-                                                <th style="text-align: center;">@lang('lang.amount')</th>
+                                                <th style="text-align: right;">@lang('lang.amount')</th>
                                             </tr>
                                         </thead>
                                         

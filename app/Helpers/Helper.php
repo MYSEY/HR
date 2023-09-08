@@ -3,8 +3,9 @@
 namespace App\Helpers;
 
 use \Carbon\Carbon;
-use App\Models\Setting;
 use App\Models\User;
+use App\Models\Setting;
+use KhmerDateTime\KhmerDateTime;
 
 class Helper
 {
@@ -107,5 +108,33 @@ class Helper
     static function getLang()
     {
         return app()->getLocale();
+    }
+
+    static function getKhmerMonths($data){
+        $month = Carbon::now()->format('Y');
+        $dateTime = KhmerDateTime::parse($month);
+        $monthKH = $dateTime->fullMonth();
+        $yearKH = $dateTime->year();
+        $result = "ប្រាក់បៀវត្សរ៍ប្ររ៍ចាំខែ".' : '.$monthKH.' '.$yearKH;
+        return $result;
+    }
+    static function geENMonths($data){
+        $month = Carbon::now()->format('M Y');
+        $result = "Employee Payslip".' : '.$month;
+        return $result;
+    }
+
+    static function getKhmerMonthsMotorRantal($data){
+        $month = Carbon::now()->format('Y');
+        $dateTime = KhmerDateTime::parse($month);
+        $monthKH = $dateTime->fullMonth();
+        $yearKH = $dateTime->year();
+        $result = "ថ្លៃជួលម៉ូតូប្រចាំខែ".' : '.$monthKH.' '.$yearKH;
+        return $result;
+    }
+    static function getENMonthsMotorRantal($data){
+        $month = Carbon::now()->format('M Y');
+        $result = "Monthly Motor Rental Fee".' : '.$month;
+        return $result;
     }
 }
