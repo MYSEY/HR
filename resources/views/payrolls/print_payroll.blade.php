@@ -99,7 +99,7 @@
                             <td><span class="float-end">$0.00</span></td>
                         </tr>
                         <tr>
-                            <td class="border-0 text-nowrap">@lang('lang.bonus')(@lang('lang.annual/PB/KNY'))</td>
+                            <td class="border-0 text-nowrap">@lang('lang.allowance')(@lang('lang.annual/PB/KNY'))</td>
                             <td class="border-0 fw-bolder"><span class="float-end">${{$payslip->total_kny_phcumben}}</span></td>
                         </tr>
                         <tr>
@@ -129,7 +129,7 @@
                             <td class="border-0 fw-bolder"><span class="float-end">$ 0.00</span></td>
                         </tr> --}}
                         <tr>
-                            <td class="border-0 text-nowrap">@lang('lang.phone')</td>
+                            <td class="border-0 text-nowrap">@lang('lang.phone_allowance')</td>
                             <td class="border-0 fw-bolder"><span class="float-end">${{$payslip->phone_allowance ?? '0.00'}}</span></td>
                         </tr>
                         <tr>

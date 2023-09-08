@@ -98,7 +98,7 @@
                                                     <th class="sorting sorting_asc" tabindex="0"
                                                         aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
                                                         aria-sort="ascending"
-                                                        aria-label="Employee: activate to sort column descending">@lang('lang.name')</th>
+                                                        aria-label="Employee: activate to sort column descending">@lang('lang.employee_name')</th>
                                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                         rowspan="1" colspan="1"
                                                         aria-label="Email: activate to sort column ascending">@lang('lang.position')
@@ -212,7 +212,7 @@
                                                                 </h2>
                                                             </td>
                                                             <td><a href="#">{{ $item->users == null ? '' : $item->users->number_employee }}</a></td>
-                                                            <td><a href="#">{{ $item->users == null ? '' : $item->users->employee_name_en }}</span></a></td>
+                                                            <td><a href="#">{{ $item->users == null ? '' : $item->users->EmployeeName }}</span></a></td>
                                                             <td><a href="#">{{ $item->users == null ? '' : $item->users->EmployeePosition }}</a></td>
                                                             <td><a href="#">{{ $item->users == null ? '' : $item->users->EmployeeDepartment }}</a></td>
                                                             <td><a href="#">{{ $item->users == null ? '' : $item->users->EmployeeBranch }}</a></td>
@@ -381,6 +381,7 @@
         });
     });
     function showdatas(params) {
+        var localeLanguage = '{{ config('app.locale') }}';
         $.ajax({
             type: "post",
             url: "{{ url('payroll-search') }}",
@@ -418,10 +419,10 @@
                                 '</h2>'+
                             '</td>'+
                             '<td><a href="#">'+(row.users == null ? '' : row.users.number_employee )+'</a></td>'+
-                            '<td> <a href="#">'+(row.users == null ? '' : row.users.employee_name_en )+'</span></a></td>'+
-                            '<td><a href="#">'+(row.users == null ? '' : row.users.position.name_english )+'</a></td>'+
-                            '<td><a href="#">'+(row.users == null ? '' : row.users.department.name_english )+'</a></td>'+
-                            '<td><a href="#">'+(row.users == null ? '' : row.users.branch.branch_name_en )+'</a></td>'+
+                            '<td> <a href="#">'+(row.users == null ? '' : localeLanguage == 'en' ? row.users.employee_name_en : row.users.employee_name_kh )+'</span></a></td>'+
+                            '<td><a href="#">'+(row.users == null ? '' : localeLanguage == 'en' ? row.users.position.name_english :row.users.position.name_khmer )+'</a></td>'+
+                            '<td><a href="#">'+(row.users == null ? '' : localeLanguage == 'en' ? row.users.department.name_english : row.users.department.name_khmer )+'</a></td>'+
+                            '<td><a href="#">'+(row.users == null ? '' : localeLanguage == 'en' ? row.users.branch.branch_name_en : row.users.branch.branch_name_kh)+'</a></td>'+
                             '<td>'+(join_date)+'</td>'+
                             '<td>$<a href="#">'+(row.basic_salary )+'</a></td>'+
                             '<td>$<a href="#">'+(row.total_child_allowance )+'</a></td>'+
@@ -441,11 +442,11 @@
                             '<td>$<a href="#">'+(row.total_salary )+'</a></td>'+
                             '<td>'+(payment_date)+'</td>'+
                             '<td>'+(created_at)+'</td>'+
-                            '<td><a class="btn btn-sm btn-primary" href="{{url("payslip")}}/'+(row.employee_id)+'">Generate Slip</a></td>'+
+                            '<td><a class="btn btn-sm btn-primary" href="{{url("payslip")}}/'+(row.employee_id)+'">@lang("lang.generate_payslip")</a></td>'+
                         '</tr>';
                     });
                 }else{
-                    var tr = '<tr><td colspan=22 align="center">ពុំមានទិន្នន័យសម្រាប់បង្ហាញ</td></tr>';
+                    var tr = '<tr><td colspan=22 align="center">@lang("lang.no_record_to_display")</td></tr>';
                 }
                 $(".tbl_payment_salary tbody").html(tr);
             }

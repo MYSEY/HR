@@ -35,7 +35,7 @@ class PayrollRepository extends BaseRepository
         $currentYear = Carbon::createFromDate()->format('Y');
         $currentMonth = Carbon::createFromDate()->format('m');
         if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer') {
-            return Payroll::with('users')->with('chiledren')->orderBy('employee_id')->get();
+            return Payroll::with('users')->with('chiledren')->orderBy('fdc_date')->get();
             // return Payroll::with('users')->whereMonth('payment_date','<=',$currentMonth)->whereYear('payment_date','>=',$currentYear)->get();
         } else {
             return Payroll::with("users")->where('employee_id',Auth::user()->id)->get();

@@ -1316,6 +1316,7 @@
         });
     });
     function showDatabytab(tab, filter){
+        var localeLanguage = '{{ config('app.locale') }}';
         let data = {
             "_token": "{{ csrf_token() }}",
         };
@@ -1347,6 +1348,11 @@
                 var tr = '';
                 if (data) {
                     data.map((emp) => {
+                        if(localeLanguage == 'en'){
+                            var gender = emp.EmployeeGender == 23 ? 'Male' : 'Female';
+                        }else{
+                            var gender = emp.EmployeeGender == 23 ? 'ប្រុស' : 'ស្រី';
+                        }
                         let tag_a = '';
                         if (emp.profile != null) {
                             tag_a = '<a href="{{asset("/uploads/images")}}/'+(emp.profile)+'" class="avatar">'+
@@ -1520,11 +1526,11 @@
                                 '<td><a href="{{url("employee/profile")}}/'+(emp.id)+'">'+(emp.number_employee)+'</a></td>'+
                                 '<td><a href="{{url("employee/profile")}}/'+(emp.id)+'">'+(emp.employee_name_kh)+'</a></td>'+
                                 '<td><a href="{{url("employee/profile")}}/'+(emp.id)+'">'+(emp.employee_name_en)+'</a></td>'+
-                                '<td>'+(emp.EmployeeGender == 23 ? 'Male' : 'Female')+'</td>'+
+                                '<td>'+(gender)+'</td>'+
                                 '<td>'+(DOB)+'</td>'+
-                                '<td>'+(emp.branch ? emp.branch.branch_name_en: "")+'</td>'+
-                                '<td>'+(emp.department ? emp.department.name_english: "")+'</td>'+
-                                '<td>'+(emp.position ? emp.position.name_english: "")+'</td>'+
+                                '<td>'+(localeLanguage == 'en' ? emp.branch.branch_name_en : emp.branch.branch_name_kh)+'</td>'+
+                                '<td>'+(localeLanguage == 'en' ? emp.department.name_english :  emp.department.name_khmer)+'</td>'+
+                                '<td>'+(localeLanguage == 'en' ? emp.position.name_english : emp.position.name_khmer)+'</td>'+
                                 '<td>'+(emp.positiontype ? emp.positiontype.name_english : "")+'</td>'+
                                 '<td>'+(emp.personal_phone_number)+'</td>'+
                                 '<td>'+

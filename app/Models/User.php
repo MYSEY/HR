@@ -251,6 +251,9 @@ class User extends Authenticatable
         return asset($this->getUploadImage($this->employment_book, 'original', 'default_user'));
     }
 
+    public function getEmployeeNameAttribute(){
+        return Helper::getLang() == 'en' ? $this->employee_name_en : $this->employee_name_kh;
+    }
     public function getEmployeePositionAttribute(){
         return (Helper::getLang() == 'en') ? optional($this->position)->name_english : optional($this->position)->name_khmer;
     }
