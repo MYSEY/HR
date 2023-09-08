@@ -1,36 +1,73 @@
-<div id="print_payroll" hidden>
-    <div class="card-header">
-        <div class="card-header">
-            {{-- logo company --}}
-            <div style="margin-top: 10px">
-                <img style="width:auto;height: 80px;"alt='White' id="image_logo_print" src="http://127.0.0.1:8000/admin/img/logo/cammalogo.png">&nbsp;&nbsp;
-            </div>
-    
-            <div style="margin-top:-75px; text-align: center">
-                <h3 class="payslip-title-center">@lang('lang.employee_payslip')</h3>
-                <p class="payslip-title-center">@lang('lang.monthly_payroll') : {{Carbon\Carbon::createFromDate($payslip->payment_date)->format('M Y')}}</strong>
-                </p>
-            </div>
-            <div style="width: 35%">
-                <label>@lang('lang.camma_microfinance_limited')</label>
-                <span>{{$payslip->users == null ? "" : $payslip->users->BranchAddress}}</span>
-            </div>
-            <div style="display:flex; margin-top: 5%;">
-                <div style="width: 350%">
-                    <strong>@lang('lang.employee_id') :</strong> <span>{{$payslip->users == null ? "" : $payslip->users->number_employee}}</span><br>
-                    <strong>@lang('lang.position') :</strong> <span>{{$payslip->users == null ? "" : $payslip->users->EmployeePosition}}</span><br>
-                    <strong>@lang('lang.joining_date') :</strong> <span>{{$payslip->users == null ? "" : $payslip->users->joinOfDate}}</span><br>
-                    <strong>@lang('lang.location') :</strong> <span>{{$payslip->users == null ? "" : $payslip->users->EmployeeBranch}}</span><br>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <style>
+        .relate {
+            position: relative;
+        }
+        .page[size="A5"] {
+            width: 21cm;
+            height: 29.7cm;
+        }
+        .page[size="A5"][layout="landscape"] {
+            width: 29.7cm;
+            height: 21cm;
+        }
+        .img-sign {
+            width:auto;
+            height: 90px;
+            object-fit: cover;
+        }
+        .table-font{
+            font-family: 'Nunito','Nokora', sans-serif, serif;
+            border-collapse: collapse;
+            width: 90%;
+            font-size: 11px;
+        }
+        .A5{
+            font-size: 11px;
+        }
+        table .table-font{
+            font-family: 'Nunito','Nokora', sans-serif, serif;
+            border-collapse: collapse;
+            border: 1px;
+        }
+    </style>
+</head>
+<body>
+    <div id="print_payroll" hidden>
+        <div size="A5" class="relate page">
+            <div style="justify-content: center;justify-item:center">
+                <div>
+                    <img alt='logo' class="img-sign" src="{{ asset('/admin/img/logo/commalogo1.png') }}">
                 </div>
-                <div style="width: 350%">
-                    <strong>@lang('lang.employee_name') :</strong> <span>{{$payslip->users == null ? "" : $payslip->users->employee_name_en}}</span><br>
-                    <strong>@lang('lang.department') :</strong> <span>{{$payslip->users == null ? "" : $payslip->users->EmployeeDepartment}}</span><br>
-                    <strong>@lang('lang.basic_rate') :</strong> <span>{{$payslip->total_rate}}%</span><br>
+        
+                <div style="margin-top:-85px; text-align: center">
+                    <h3 class="payslip-title-center">@lang('lang.employee_payslip')</h3>
+                    <p class="payslip-title-center">{{ Helper::getLang() == 'en' ? Helper::geENMonths($payslip->payment_date)  : Helper::getKhmerMonths($payslip->payment_date)}}</p>
                 </div>
-            </div>
-            <br>
-            <span>
-                <table class="table-a">
+                <div style="width: 40%">
+                    <label>@lang('lang.camma_microfinance_limited')</label><br>
+                    <span>{{$payslip->users == null ? "" : $payslip->users->BranchAddress}}</span>
+                </div>
+                <div style="display:flex; margin-top: 5%;">
+                    <div style="width: 350%">
+                        <strong>@lang('lang.employee_id') :</strong> <span>{{$payslip->users == null ? "" : $payslip->users->number_employee}}</span><br>
+                        <strong>@lang('lang.position') :</strong> <span>{{$payslip->users == null ? "" : $payslip->users->EmployeePosition}}</span><br>
+                        <strong>@lang('lang.joining_date') :</strong> <span>{{$payslip->users == null ? "" : $payslip->users->joinOfDate}}</span><br>
+                        <strong>@lang('lang.location') :</strong> <span>{{$payslip->users == null ? "" : $payslip->users->EmployeeBranch}}</span><br>
+                    </div>
+                    <div style="width: 350%">
+                        <strong>@lang('lang.employee_name') :</strong> <span>{{Helper::getLang() == 'en' ? $payslip->users->employee_name_en :  $payslip->users->employee_name_kh}}</span><br>
+                        <strong>@lang('lang.department') :</strong> <span>{{$payslip->users == null ? "" : $payslip->users->EmployeeDepartment}}</span><br>
+                        <strong>@lang('lang.basic_rate') :</strong> <span>{{$payslip->total_rate}}%</span><br>
+                    </div>
+                </div>
+                <br>
+                <table class="table-font">
                     <thead>
                         <tr>
                             <th>@lang('lang.earning') </th>
@@ -49,7 +86,7 @@
                         
                         <tr>
                             <td class="border-0 text-nowrap">@lang('lang.increasment')</td>
-                            <td class="border-0 fw-bolder"><span class="float-end">$ 0.00</span></td>
+                            <td class="border-0 fw-bolder"><span class="float-end">${{$payslip->salary_increas ?? '0'}}</span></td>
                             <td class="border-0 text-nowrap">@lang('lang.pension_fund')</td>
                             <td class="border-0 fw-bolder"><span class="float-end">${{$payslip->total_pension_fund}}</span></td>
                         </tr>
@@ -126,17 +163,19 @@
                         </tr>
                     </tbody>
                 </table>
-            </span><br>
-            <div style="display: flex">
-                <div class="payslip-title-center">
-                    <p style="text-align: center"><strong>@lang('lang.employer_signature')</strong></p><br><br><br>
-                    <p>......... /............. /..........</p>
-                </div>
-                <div class="payslip-title-center" style="margin-left: 58%">
-                    <p style="text-align: center"><strong>@lang('lang.employee_signature')</strong></p><br><br><br>
-                    <p>......... /............ /..........</p>
+                <br>
+                <div style="display: flex">
+                    <div class="payslip-title-center">
+                        <p style="text-align: center"><strong>@lang('lang.employer_signature')</strong></p><br><br><br>
+                        <p>......... /............. /..........</p>
+                    </div>
+                    <div class="payslip-title-center" style="margin-left: 58%">
+                        <p style="text-align: center"><strong>@lang('lang.employee_signature')</strong></p><br><br><br>
+                        <p>......... /............ /..........</p>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+</body>
+</html>

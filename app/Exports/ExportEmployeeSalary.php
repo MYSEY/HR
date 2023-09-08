@@ -4,12 +4,13 @@ namespace App\Exports;
 
 use Carbon\Carbon;
 use App\Models\Payroll;
+use KhmerDateTime\KhmerDateTime;
 use Maatwebsite\Excel\Events\AfterSheet;
 use Maatwebsite\Excel\Concerns\WithEvents;
+use PhpOffice\PhpSpreadsheet\Style\Border;
 use Illuminate\Database\Eloquent\Collection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\FromCollection;
-use PhpOffice\PhpSpreadsheet\Style\Border;
 use Maatwebsite\Excel\Concerns\WithColumnWidths;
 use Maatwebsite\Excel\Concerns\WithCustomStartCell;
 
@@ -178,11 +179,20 @@ class ExportEmployeeSalary implements FromCollection, WithColumnWidths, WithHead
                 ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
                 $sheet->mergeCells('A4:AF4');
-                $sheet->setCellValue('A4', "ប្រចាំខែមេសា ឆ្នាំ២០២៣");
+                $sheet->setCellValue('A4',$this->getKhmerMonths());
                 $sheet->getDelegate()->getStyle('A4:AF4')->getFont()->setSize(9)->setName('Khmer OS Fasthand')->setSize(10);
                 $event->sheet->getDelegate()->getStyle('A4:AF4')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
             },
         ];
+    }
+
+    public function getKhmerMonths(){
+        $month = Carbon::now()->format('Y-m-d');
+        $dateTime = KhmerDateTime::parse($month);
+        $monthKH = $dateTime->fullMonth();
+        $yearKH = $dateTime->year();
+        $result = "ប្រចាំខែ".$monthKH.' '.'ឆ្នាំ'.$yearKH;
+        return $result;
     }
     
     public function headings(): array

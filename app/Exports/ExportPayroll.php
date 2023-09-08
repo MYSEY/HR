@@ -2,19 +2,20 @@
 
 namespace App\Exports;
 
+use Carbon\Carbon;
 use App\Models\Bonus;
-use App\Models\NationalSocialSecurityFund;
 use App\Models\Payroll;
 use App\Models\Seniority;
 use App\Models\SeverancePay;
-use Carbon\Carbon;
+use KhmerDateTime\KhmerDateTime;
+use Maatwebsite\Excel\Events\AfterSheet;
+use App\Models\NationalSocialSecurityFund;
+use Maatwebsite\Excel\Concerns\WithEvents;
 use Illuminate\Database\Eloquent\Collection;
+use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithColumnWidths;
 use Maatwebsite\Excel\Concerns\WithCustomStartCell;
-use Maatwebsite\Excel\Concerns\WithEvents;
-use Maatwebsite\Excel\Concerns\WithHeadings;
-use Maatwebsite\Excel\Events\AfterSheet;
 
 class ExportPayroll implements FromCollection, WithColumnWidths, WithHeadings, WithCustomStartCell, WithEvents
 {
@@ -94,7 +95,6 @@ class ExportPayroll implements FromCollection, WithColumnWidths, WithHeadings, W
             ];
             foreach ($datas as $key => $pay) {
                 $payment_date = Carbon::parse($pay->payment_date)->format('d-M-Y');
-                $phone_allowance = $pay->phone_allowance == null ? "0.00" : $pay->phone_allowance;
                 $payroll[]=[
                     $pay->users == null ? '' : intval($pay->users->number_employee),
                     $pay->users == null ? '' : $pay->users->employee_name_en,
@@ -104,8 +104,8 @@ class ExportPayroll implements FromCollection, WithColumnWidths, WithHeadings, W
                     $pay->users == null ? '' : $pay->users->joinOfDate,
                     $pay->basic_salary,
                     $pay->total_gross_salary,
-                    $pay->total_child_allowance,
-                    $phone_allowance,
+                    $pay->total_child_allowance ?? '0',
+                    $pay->phone_allowance ?? '0',
                     $pay->monthly_quarterly_bonuses,
                     $pay->total_kny_phcumben,
                     $pay->annual_incentive_bonus,
@@ -114,19 +114,19 @@ class ExportPayroll implements FromCollection, WithColumnWidths, WithHeadings, W
                     $pay->total_pension_fund,
                     $pay->base_salary_received_usd,
                     $pay->base_salary_received_riel,
-                    $pay->spouse,
-                    $pay->children,
+                    $pay->spouse ?? '0',
+                    $pay->children ?? '0',
                     $pay->total_charges_reduced,
                     $pay->total_tax_base_riel,
-                    $pay->total_rate,
+                    $pay->total_rate ?? '0',
                     $pay->total_salary_tax_usd,
                     $pay->total_salary_tax_riel,
                     $pay->seniority_payable_tax,
                     $pay->seniority_pay_excluded_tax,
-                    $pay->seniority_backford,
-                    $pay->total_severance_pay,
-                    $pay->loan_amount,
-                    $pay->total_amount_car,
+                    $pay->seniority_backford ?? '0',
+                    $pay->total_severance_pay ?? '0',
+                    $pay->loan_amount ?? '0',
+                    $pay->total_amount_car ?? '0',
                     $pay->total_salary
                 ];
             }
@@ -359,7 +359,7 @@ class ExportPayroll implements FromCollection, WithColumnWidths, WithHeadings, W
                 ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
                 $sheet->mergeCells('A4:'.$this->monthly_title);
-                $sheet->setCellValue('A4', "ប្រចាំខែមេសា ឆ្នាំ២០២៣");
+                $sheet->setCellValue('A4', $this->getKhmerMonths());
                 $sheet->getDelegate()->getStyle('A4:'.$this->monthly_title)->getFont()->setSize(9)->setName('Khmer OS Fasthand')->setSize(10);
                 $event->sheet->getDelegate()->getStyle('A4:'.$this->monthly_title)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
@@ -367,6 +367,14 @@ class ExportPayroll implements FromCollection, WithColumnWidths, WithHeadings, W
         ];
     }
 
+    public function getKhmerMonths(){
+        $month = Carbon::now()->format('Y-m-d');
+        $dateTime = KhmerDateTime::parse($month);
+        $monthKH = $dateTime->fullMonth();
+        $yearKH = $dateTime->year();
+        $result = "ប្រចាំខែ".$monthKH.' '.'ឆ្នាំ'.$yearKH;
+        return $result;
+    }
     public function columnWidths(): array
     {
         return [
