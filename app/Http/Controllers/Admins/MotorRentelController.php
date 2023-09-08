@@ -126,7 +126,7 @@ class MotorRentelController extends Controller
 
     public function storePay(Request $request)
     {
-        // try {
+        try {
 
             $month = Carbon::now()->month;
             $year = Carbon::now()->year;
@@ -257,10 +257,10 @@ class MotorRentelController extends Controller
             Toastr::success('Created successfully.', 'Success');
             return redirect()->back();
             DB::commit();
-        // } catch (\Throwable $exp) {
-        //     DB::rollback();
-        //     Toastr::error('Created fail.', 'Error');
-        // }
+        } catch (\Throwable $exp) {
+            DB::rollback();
+            Toastr::error('Created fail.', 'Error');
+        }
     }
 
     /**

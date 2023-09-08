@@ -150,7 +150,7 @@
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                     rowspan="1" colspan="1"
                                                     aria-label="Resignetion Date: activate to sort column ascending"
-                                                    style="width: 51.475px;">@lang('lang.resignation_date')</th>
+                                                    style="width: 51.475px;">@lang('lang.last_working_day')</th>
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                     rowspan="1" colspan="1"
                                                     aria-label="Create at: activate to sort column ascending"
@@ -163,13 +163,13 @@
                                         </thead>
                                         <tbody>
                                             @if (count($data) > 0)
-                                                @foreach ($data as $item)
+                                                @foreach ($data as $key=>$item)
                                                     <tr class="odd">
-                                                        <td class="ids">{{ $item->id }}</td>
+                                                        <td class="ids">{{ ++$key }}</td>
                                                         <td class="number_employee_id">
                                                             {{ $item->MotorEmployee->number_employee }}
                                                         </td>
-                                                        <td>{{ $item->MotorEmployee->employee_name_en }}</td>
+                                                        <td>{{ Helper::getLang() == 'en' ? $item->MotorEmployee->employee_name_en : $item->MotorEmployee->employee_name_kh }}</td>
                                                         <td>{{ $item->MotorEmployee->EmployeeGender }}</td>
                                                         <td>{{ $item->MotorEmployee->EmployeePosition }}</td>
                                                         <td>{{ $item->MotorEmployee->EmployeeDepartment }}</td>
@@ -190,7 +190,7 @@
                                                                 @else
                                                                     <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
                                                                         <i class="fa fa-dot-circle-o text-danger"></i>
-                                                                        <span>@lang('lang.resignation_date')</span>
+                                                                        <span>@lang('lang.resigned_motor')</span>
                                                                     </a>
                                                                 @endif
                                                                     <div class="dropdown-menu dropdown-menu-right" id="btn-status">
@@ -198,7 +198,7 @@
                                                                             <i class="fa fa-dot-circle-o text-success"></i> @lang('lang.active')
                                                                         </a>
                                                                         <a class="dropdown-item" data-id="{{$item->id}}" data-name="0" data-status-old="{{$item->status}}" href="#">
-                                                                            <i class="fa fa-dot-circle-o text-danger"></i> @lang('lang.resignation_date')
+                                                                            <i class="fa fa-dot-circle-o text-danger"></i> @lang('lang.resigned_motor')
                                                                         </a>
                                                                     </div>
                                                             </div>
@@ -640,16 +640,16 @@
             let text_status = "";
             let text_old_status = "";
             if (old_status == "0") {
-                text_old_status = "@lang('lang.resignation')"
+                text_old_status = "@lang('lang.resigned_motor')"
             }else if(old_status == "1"){
                 text_old_status = "@lang('lang.active')"
             }
             let resignation = '';
             if (status == "0") {
-                text_status = "@lang('lang.resignation')"
+                text_status = "@lang('lang.resigned_motor')"
                 resignation = '<div class="form-group">'+
                                 '<div class="form-group">'+
-                                    '<label>@lang("lang.resignation_date") <span class="text-danger">*</span></label>'+
+                                    '<label>@lang("lang.last_working_day") <span class="text-danger">*</span></label>'+
                                     '<input type="date" class="form-control resigned_date">'+
                                 '</div>'+
                             '</div>';
@@ -665,7 +665,7 @@
                         '<label>@lang("lang.are_you_sure_want_change_status") '+'<label style="color:red">'+text_old_status+'</label>'+' @lang("lang.to_") '+'<label style="color:red">'+text_status+'</label>'+'?</label>'+
                         '<input type="hidden" class="form-control status" id="" name="" value="'+status+'">'+
                         '<input type="hidden" class="form-control id" id="" name="" value="'+id+'">'+
-                        '<form method="post">'+
+                        '<form method="post"> <br>'+
                             resignation+
                         '</form>',
                 buttons: {
@@ -716,6 +716,7 @@
     });
 
     function showDatas(){
+        var localeLanguage = '{{ config('app.locale') }}';
         axios.post('{{ URL('motor-rentel/list') }}', {
             'research':true,
             'employee_id': $("#employee_id").val(),
@@ -739,7 +740,7 @@
                     }else{      
                         status ='<a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">'+
                             '<i class="fa fa-dot-circle-o text-danger"></i>'+
-                            '<span>@lang("lang.resignation_date")</span>'+
+                            '<span>@lang("lang.resigned_motor")</span>'+
                         '</a>';
                     }
                     let createdAt = moment(row.created_at).format('D-MMM-YYYY')
@@ -748,11 +749,11 @@
                     let end_date = row.end_date ? moment(row.end_date).format('D-MMM-YYYY'): "";
                     tr += '<tr class="odd">' +
                         '<td class="ids">' + (no) + '</td>' +
-                        '<td class="number_employee_id"><a href="{{url("motor-rentel/detail")}}/'+row.id+'">' + (row.number_employee) + '</a></td>' +
-                        '<td>' + (row.employee_name_en) + '</td>' +
-                        '<td>' + (row.user.gender == null ? "" : row.user.gender.name_english) + '</td>' +
-                        '<td>' + (row.user.position ? row.user.position.name_english : "") + '</td>' +
-                        '<td>' + (row.user.department.name_english) + '</td>' +
+                        '<td class="number_employee_id">' + (row.number_employee) + '</td>' +
+                        '<td>' + (localeLanguage == 'en' ? row.employee_name_en : row.employee_name_kh ) + '</td>' +
+                        '<td>' + (row.user.gender == null ? "" : localeLanguage == 'en' ? row.user.gender.name_english : row.user.gender.name_khmer) + '</td>' +
+                        '<td>' + (row.user.position ? localeLanguage == 'en' ? row.user.position.name_english : row.user.position.name_khmer : "") + '</td>' +
+                        '<td>' + (localeLanguage == 'en' ? row.user.department.name_english : row.user.department.name_khmer ) + '</td>' +
                         '<td>' + (start_date) + '</td>' +
                         '<td>' + (end_date) + '</td>' +
                         '<td>' + (row.total_gasoline) + '</td>' +
@@ -767,7 +768,7 @@
                                     '<a class="dropdown-item" data-id="'+(row.id)+'" data-name="1" data-status-old="'+(row.status)+'" href="#">'+
                                         '<i class="fa fa-dot-circle-o text-success"></i> @lang("lang.active")</a>'+
                                     '<a class="dropdown-item" data-id="'+(row.id)+'" data-name="0" data-status-old="'+(row.status)+'" href="#">'+
-                                        '<i class="fa fa-dot-circle-o text-danger"></i> @lang("lang.resignation_date")</a>'+
+                                        '<i class="fa fa-dot-circle-o text-danger"></i> @lang("lang.resigned_motor")</a>'+
                                 '</div>'+
                             '</div>'+
                         '</td>'+
