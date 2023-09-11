@@ -73,6 +73,7 @@ class Payroll extends Model
             'department_id',
             'position_id',
             'branch_id',
+            'account_number',
             'date_of_commencement'])
         ->with('department')->with('position')->with('branch');
     }

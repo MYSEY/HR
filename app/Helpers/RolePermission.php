@@ -161,6 +161,12 @@ function menu(){
                     'permission'=>1
                 ],
                 [
+                    'value'=> Helper::getLang() == 'en' ? 'Bank Transfer Report':'របាយការណ៍ការផ្ទេរប្រាក់តាមធនាគារ',
+                    'url'=>"reports/bank-transfer",
+                    'table'=>18,
+                    'permission'=>1
+                ],
+                [
                     'value'=> Helper::getLang() == 'en' ? 'Motor Rental Report': 'របាយការណ៍ជួលម៉ូតូ',
                     'url'=>"reports/motor-rentel-report",
                     'table'=>19,
