@@ -6,6 +6,7 @@ use App\Exports\ExportEmployeeReport;
 use App\Exports\ExportTraining;
 use App\Http\Controllers\Controller;
 use App\Models\Branchs;
+use App\Models\Payroll;
 use App\Models\StaffPromoted;
 use App\Models\Trainer;
 use App\Models\Training;
@@ -270,5 +271,15 @@ class ReportsController extends Controller
         }
         $export = new ExportTraining($dataTrainings);
         return Excel::download($export, 'ReportTraining.xlsx');
+    }
+
+    public function bankTransfer() {
+        $monthly = Carbon::now()->format('m');
+        $currentYear = Carbon::now()->format('Y');
+        $data = Payroll::with('users')
+        ->whereMonth('payment_date', $monthly)
+        ->whereYear('payment_date', $currentYear)
+        ->orderBy('employee_id')->get();
+        return view('reports.bank_transfer',compact('data'));
     }
 }

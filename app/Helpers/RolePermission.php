@@ -161,6 +161,12 @@ function menu(){
                     'permission'=>1
                 ],
                 [
+                    'value'=> Helper::getLang() == 'en' ? 'Bank Transfer Report':'របាយការណ៍ការផ្ទេរប្រាក់តាមធនាគារ',
+                    'url'=>"reports/bank-transfer",
+                    'table'=>18,
+                    'permission'=>1
+                ],
+                [
                     'value'=> Helper::getLang() == 'en' ? 'Motor Rental Report': 'របាយការណ៍ជួលម៉ូតូ',
                     'url'=>"reports/motor-rentel-report",
                     'table'=>19,
@@ -195,7 +201,7 @@ function menu(){
         [
             'name'=>'',
             'icon'=>'<i class="la la-key"></i> <span> </span> <span class="menu-arrow"></span>',
-            'value'=> Helper::getLang() == 'en' ? 'Configuration':'ការកំណត់​រចនាសម្ព័ន្',
+            'value'=> Helper::getLang() == 'en' ? 'Configuration':'ការកំណត់​រចនាសម្ព័ន្ធ',
             'table'=>24,
             'permission'=>1,
             'child'=>[
