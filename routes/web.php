@@ -115,6 +115,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
 
     Route::get('/branch', [BranchController::class,'index']);
     Route::post('/branch/store', [BranchController::class,'store']);
+    Route::get('/branch/edit', [BranchController::class,'edit']);
     Route::post('/branch/delete', [BranchController::class,'destroy']);
     Route::post('/branch/update', [BranchController::class,'update']);
 

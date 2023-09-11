@@ -61,10 +61,12 @@ class BranchController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request)
     {
-        $data = Branchs::find($id);
-        return view('branchs.edit',compact('data'));
+        $data = Branchs::where('id',$request->id)->first();
+        return response()->json([
+            'success'=>$data,
+        ]);
     }
 
     /**
