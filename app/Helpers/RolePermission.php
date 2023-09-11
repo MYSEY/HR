@@ -195,7 +195,7 @@ function menu(){
         [
             'name'=>'',
             'icon'=>'<i class="la la-key"></i> <span> </span> <span class="menu-arrow"></span>',
-            'value'=> Helper::getLang() == 'en' ? 'Configuration':'ការកំណត់​រចនាសម្ព័ន្',
+            'value'=> Helper::getLang() == 'en' ? 'Configuration':'ការកំណត់​រចនាសម្ព័ន្ធ',
             'table'=>24,
             'permission'=>1,
             'child'=>[
