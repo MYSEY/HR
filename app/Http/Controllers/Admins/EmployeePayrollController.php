@@ -164,44 +164,6 @@ class EmployeePayrollController extends Controller
                             $totalBasicSalary = $item->basic_salary;
                         }
                     }
-                   
-                    // dd($totalBasicSalary);
-                    //National Social Security Fund (NSSF) Formula
-                    $exchangNSSF = ExchangeRate::where('type','NSSF')->orderBy('id','desc')->first();
-                    if ($exchangNSSF) {
-                        $totalExchangeRielPreTax =  $exchangNSSF->amount_riel * $totalBasicSalary;
-                        if ($totalExchangeRielPreTax) {
-                            if ($totalExchangeRielPreTax >= 1200000) {
-                                $averageWage    = 1200000;
-                            }else if($totalExchangeRielPreTax >= 400000){
-                                $averageWage    = $totalExchangeRielPreTax;
-                            }else{
-                                $averageWage = 400000;
-                            }
-                        }else{
-                            $averageWage = 0;
-                        }
-                        
-                        $occupationalRisk = (0.008 * $averageWage);
-                        $healthCare = (0.026 * $averageWage);
-                        $workerContributionUsd = ($averageWage * 0.02);
-                        $workerContributionRiel = (round($workerContributionUsd, -2) / $exchangNSSF->amount_riel);
-                        $dataNSSF = NationalSocialSecurityFund::create([
-                            'employee_id'                   => $item->id,
-                            'total_pre_tax_salary_usd'      => number_format($totalBasicSalary, 2),
-                            'total_pre_tax_salary_riel'     => number_format($totalExchangeRielPreTax),
-                            'total_average_wage'            => number_format($averageWage),
-                            'total_occupational_risk'       => number_format($occupationalRisk),
-                            'total_health_care'             => number_format($healthCare),
-                            'pension_contribution_usd'      => number_format($workerContributionUsd),
-                            'pension_contribution_riel'     => number_format($workerContributionRiel, 2),
-                            'corporate_contribution'        => number_format($workerContributionUsd),
-                            'created_by'                    => Auth::user()->id,
-                        ]);
-                    }
-                    
-                    // $pension_contribution = '5.9';
-                    $pension_contribution = $dataNSSF->pension_contribution_riel;
                     
                     //calculated khmer_new_year and pchumBen_bonus
                     $totalBunus = 0;
@@ -326,6 +288,7 @@ class EmployeePayrollController extends Controller
                         $totalGrossSalaryTaxFree = $totalBasicSalary + $item->phone_allowance;
                         $totalSeverancePay1 =  $totalGrossSalaryTaxFree != null ? $totalGrossSalaryTaxFree : $totalGrossSalaryTaxFree;
                     }
+                    
                     if($item->emp_status == 2){
                         $type_fdc2 = 'seniority';
                         $totalGrossSalaryTaxFree = $totalBasicSalary + $totalBunus + $item->phone_allowance + $totalAmountChild;;
@@ -349,8 +312,8 @@ class EmployeePayrollController extends Controller
                         $dataTotalSeverancePay1 = $totalFirstSeverancPay == null ? $totalGrossSalary2 : $totalFirstSeverancPay;
                         $totalSeverancePay2 =  $dataTotalSeverancePay1 != null ? $dataTotalSeverancePay1 + $totalBunus + $item->phone_allowance + $totalAmountChild : $totalGrossSalaryTaxFree;
                     }
+
                     //sum salary and sum other benefit befor tax free
-                   
                     $dataGrossSalary = GrossSalaryPay::create([
                         'employee_id'               => $item->id,
                         'basic_salary'              => $item->basic_salary,
@@ -364,12 +327,49 @@ class EmployeePayrollController extends Controller
                     ]);
     
                     // dd($dataGrossSalary);
-                    if (count(Payroll::where('employee_id',$item->id)->get()) == 0) {
-                        $totalGrossSalary = $totalGrossSalaryTaxFree;
-                    }else{
-                        $totalGrossSalary = $dataGrossSalary->total_gross_salary;
+                    // if (count(Payroll::where('employee_id',$item->id)->get()) == 0) {
+                    //     $totalGrossSalary = $totalGrossSalaryTaxFree;
+                    // }else{
+                    //     $totalGrossSalary = $dataGrossSalary->total_gross_salary;
+                    // }
+
+                    $totalGrossSalary = $dataGrossSalary->total_gross_salary;
+
+                    //National Social Security Fund (NSSF) Formula
+                    $exchangNSSF = ExchangeRate::where('type','NSSF')->orderBy('id','desc')->first();
+                    if ($exchangNSSF) {
+                        $totalExchangeRielPreTax =  $exchangNSSF->amount_riel * round($totalGrossSalary, 2);
+                        if ($totalExchangeRielPreTax) {
+                            if ($totalExchangeRielPreTax >= 1200000) {
+                                $averageWage    = 1200000;
+                            }else if($totalExchangeRielPreTax >= 400000){
+                                $averageWage    = $totalExchangeRielPreTax;
+                            }else{
+                                $averageWage = 400000;
+                            }
+                        }else{
+                            $averageWage = 0;
+                        }
+                         
+                        $occupationalRisk = (0.008 * $averageWage);
+                        $healthCare = (0.026 * $averageWage);
+                        $workerContributionUsd = ($averageWage * 0.02);
+                        $workerContributionRiel = $workerContributionUsd / $exchangNSSF->amount_riel;
+                        $dataNSSF = NationalSocialSecurityFund::create([
+                            'employee_id'                   => $item->id,
+                            'total_pre_tax_salary_usd'      => number_format($totalGrossSalary, 2),
+                            'total_pre_tax_salary_riel'     => number_format($totalExchangeRielPreTax),
+                            'total_average_wage'            => number_format($averageWage),
+                            'total_occupational_risk'       => round($occupationalRisk, 2),
+                            'total_health_care'             => round($healthCare, -2),
+                            'pension_contribution_usd'      => round($workerContributionUsd, -2),
+                            'pension_contribution_riel'     => round($workerContributionRiel, 2),
+                            'corporate_contribution'        => round($workerContributionUsd, -2),
+                            'created_by'                    => Auth::user()->id,
+                        ]);
                     }
-                    
+                    $pension_contribution = $dataNSSF->pension_contribution_riel;
+ 
                     //function Seniority pay
                     $seniorityPayableTax = 0;
                     $taxExemptionSalary = 0;
@@ -428,7 +428,7 @@ class EmployeePayrollController extends Controller
                     //function ដក​ pensin fund
                     $baseSalaryReceivedUsd = $totalGrossSalary + $seniorityPayableTax - $pension_contribution;
                     // functin exchange riel rate gross salary after tax
-                    $totalExchangeRiel = $baseSalaryReceivedUsd * $request->exchange_rate;
+                    $totalExchangeRiel = round($baseSalaryReceivedUsd, 2) * $request->exchange_rate;
                     //total that បូកបន្ថែមលើបន្ទុកកូននិងប្រពន្ធ
                     $totalChargesReducedChild = $childrenAllowance->reduced_burden_children;
                     $totalChargesReducedSpouse = $childrenAllowance->spouse_allowance;

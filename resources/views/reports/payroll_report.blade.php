@@ -206,7 +206,7 @@
                                                         @foreach ($payroll as $item)
                                                             <tr class="odd">
                                                                 <td><a href="#">{{ $item->users == null ? '' : $item->users->number_employee }}</a></td>
-                                                                <td><a href="#">{{ $item->users == null ? '' : $item->users->employee_name_en }}</a></td>
+                                                                <td><a href="#">{{ Helper::getLang() == 'en' ? $item->users->employee_name_en : $item->users->employee_name_kh }}</a></td>
                                                                 <td><a href="#">{{$item->users == null ? '' : $item->users->EmployeeDepartment}}</a></td>
                                                                 <td><a href="#">{{ $item->users == null ? '' : $item->users->EmployeePosition}}</a></td>
                                                                 <td><a href="#">{{ $item->users == null ? '' : $item->users->EmployeeBranch}}</a></td>
@@ -301,7 +301,7 @@
                                                         @foreach ($dataNSSF as $item)
                                                             <tr class="odd">
                                                                 <td><a href="#">{{ $item->users == null ? '' : $item->users->number_employee }}</a></td>
-                                                                <td><a href="#">{{ $item->users == null ? '' : $item->users->employee_name_en }}</a></td></td></td>
+                                                                <td><a href="#">{{ Helper::getLang() == 'en' ? $item->users->employee_name_en : $item->users->employee_name_kh }}</a></td></td></td>
                                                                 <td>{{ $item->users == null ? '' : $item->users->joinOfDate }}</td>
                                                                 <td>${{ $item->total_pre_tax_salary_usd }}</td>
                                                                 <td><span>៛</span>{{ $item->total_pre_tax_salary_riel }}</td>
@@ -371,7 +371,7 @@
                                                         @foreach ($benefit as $item)
                                                             <tr class="odd">
                                                                 <td><a href="#">{{ $item->users == null ? '' : $item->users->number_employee }}</a></td>
-                                                                <td><a href="#">{{ $item->users == null ? '' : $item->users->employee_name_en }}</a></td></td></td>
+                                                                <td><a href="#">{{ Helper::getLang() == 'en' ? $item->users->employee_name_en : $item->users->employee_name_kh }}</a></td></td></td>
                                                                 <td>{{ $item->users == null ? '' : $item->users->joinOfDate }}</td>
                                                                 <td>{{ $item->number_of_working_days }} Days</td>
                                                                 <td>${{ $item->base_salary }}</td>
@@ -419,7 +419,7 @@
                                                         @foreach ($dataSeniority as $item)
                                                             <tr class="odd">
                                                                 <td><a href="#">{{ $item->users == null ? '' : $item->users->number_employee }}</a></td>
-                                                                <td><a href="#">{{ $item->users == null ? '' : $item->users->employee_name_en }}</a></td>
+                                                                <td><a href="#">{{ Helper::getLang() == 'en' ? $item->users->employee_name_en : $item->users->employee_name_kh }}</a></td>
                                                                 <td>{{ $item->users == null ? '' : $item->users->EmployeePosition }}</td>
                                                                 <td>{{ $item->users == null ? '' : $item->users->joinOfDate }}</td>
                                                                 <td>{{ $item->payment_of_month }}</td>
@@ -465,7 +465,7 @@
                                                         @foreach ($severancePay as $item)
                                                             <tr class="odd">
                                                                 <td><a href="#">{{ $item->users == null ? '' : $item->users->number_employee }}</a></td>
-                                                                <td><a href="#">{{ $item->users == null ? '' : $item->users->employee_name_en }}</a></td>
+                                                                <td><a href="#">{{ Helper::getLang() == 'en' ? $item->users->employee_name_en : $item->users->employee_name_kh }}</a></td>
                                                                 <td>{{ $item->users == null ? '' : $item->users->EmployeePosition }}</td>
                                                                 <td>{{ $item->users == null ? '' : $item->users->joinOfDate }}</td>
                                                                 <td>${{ $item->total_severanec_pay }}</td>

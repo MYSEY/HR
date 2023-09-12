@@ -426,7 +426,7 @@ return[
 	"payment"=>"ចំណាយ",
 	"payment_have_save_success"=>"ការទូទាត់សំណងបានជោគជ័យ",
 	"payments"=>"ការទូទាត់",
-	"payroll"=>"Payroll ប្រាក់បៀវត្សន៍",
+	"payroll"=>"ប្រាក់បៀវត្សន៍",
 	"payroll_report"=>"របាយការណ៍ប្រាក់បៀវត្សន៍",
 	"payroll_statement"=>"របាយការណ៍ប្រាក់បៀវត្សរ៍",
 	"payroll_amount"=>"ចំនួនប្រាក់បៀវត្សរ៍",
