@@ -184,17 +184,17 @@ class EmployeePayrollController extends Controller
                             if($hildayMonth == $payMonth && $hildayDays >= $payDays){
                                 if ($totalStartDays > $dayOfYear) {
                                     $percent = $value->amount_percent / 100;
-                                    $totalAllowanceBunus = ($totalBasicSalary * $percent);
+                                    $totalAllowanceBunus = ($item->basic_salary * $percent);
                                 } else {
-                                    $totalPercent = ($totalBasicSalary * $value->amount_percent) / 100;
+                                    $totalPercent = ($item->basic_salary * $value->amount_percent) / 100;
                                     $percentSalary = $totalPercent * $totalStartDays;
                                     $totalAllowanceBunus = $percentSalary / $dayOfYear;
                                 }
                                 $dataBonus = Bonus::create([
                                     'employee_id'               => $item->id,
                                     'number_of_working_days'    => $totalStartDays,
-                                    'base_salary'               => $totalBasicSalary,
-                                    'base_salary_received'      => $totalBasicSalary,
+                                    'base_salary'               => $item->basic_salary,
+                                    'base_salary_received'      => $item->basic_salary,
                                     'total_allowance'           => $totalAllowanceBunus,
                                     'bouns_type'                => $value->title,
                                     'created_by'                => Auth::user()->id,
@@ -285,7 +285,7 @@ class EmployeePayrollController extends Controller
                         }
                     }
                     if($item->emp_status == 'Probation'){
-                        $totalGrossSalaryTaxFree = $totalBasicSalary + $item->phone_allowance;
+                        $totalGrossSalaryTaxFree = $totalBasicSalary + $item->phone_allowance + $totalAmountChild;
                         $totalSeverancePay1 =  $totalGrossSalaryTaxFree != null ? $totalGrossSalaryTaxFree : $totalGrossSalaryTaxFree;
                     }
                     
