@@ -241,6 +241,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('/reports/training-export', [ReportsController::class,'trainingExport']);
 
     Route::get('/reports/bank-transfer', [ReportsController::class,'bankTransfer']);
+    Route::get('/reports/bank-transfer-export', [ReportsController::class,'bankTransferExport']);
     
     // test export excel
     Route::get('motor-rentel/export',[PayrollReportController::class,'export']);

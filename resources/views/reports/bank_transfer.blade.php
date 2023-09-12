@@ -41,9 +41,9 @@
                                 <span class="btn-text-print"><i class="fa fa-print fa-lg"></i> @lang('lang.print')</span>
                                 <span id="btn-print-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>
                             </button>
-                            <button class="btn btn-white" id="btn_export">
+                            <button class="btn btn-white" id="btn-export">
                                 <span class="btn-text-print-excel"><i class="fa fa-file-excel-o"></i> @lang('lang.excel')</span>
-                                <span id="btn-print-loading-excel" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>
+                                {{-- <span id="btn-print-loading-excel" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span> --}}
                             </button>
                         </div>
                         @endif
@@ -193,6 +193,10 @@
     $(function() {
         $("#btn_print").on("click", function() {
             print_pdf();
+        });
+        $("#btn-export").on("click", function(){
+            var url = "{{URL::to('reports/bank-transfer-export')}}?"
+            window.location = url;
         });
     });
 

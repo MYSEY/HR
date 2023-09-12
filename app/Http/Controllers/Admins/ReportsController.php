@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admins;
 
+use App\Exports\ExportBankTransfer;
 use App\Exports\ExportEmployeeReport;
 use App\Exports\ExportTraining;
 use App\Http\Controllers\Controller;
@@ -281,5 +282,15 @@ class ReportsController extends Controller
         ->whereYear('payment_date', $currentYear)
         ->orderBy('employee_id')->get();
         return view('reports.bank_transfer',compact('data'));
+    }
+    public function bankTransferExport(){
+        $monthly = Carbon::now()->format('m');
+        $currentYear = Carbon::now()->format('Y');
+        $data = Payroll::with('users')
+        ->whereMonth('payment_date', $monthly)
+        ->whereYear('payment_date', $currentYear)
+        ->orderBy('employee_id')->get();
+        $export = new ExportBankTransfer($data);
+        return Excel::download($export, 'ReportBankTransfer.xlsx');
     }
 }
