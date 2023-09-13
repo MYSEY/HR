@@ -253,6 +253,17 @@
                             </div>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>@lang('lang.salary_increase')</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">$</span>
+                                    <input type="number" class="form-control" id="e_salary_increas" name="salary_increas" placeholder="" value="{{old('salary_increas')}}">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     
                     {{-- Bank Info --}}
                     <div class="form-group col-md-12 col-12" element="div" bp-field-wrapper="true" bp-field-name="Identity" bp-field-type="custom_html">

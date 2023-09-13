@@ -86,10 +86,10 @@ class PayrollReportController extends Controller
                 $query->where('users.employee_name_en', 'LIKE', '%'.$employee_name.'%');
             })
             ->when($Monthly, function ($query, $Monthly) {
-                $query->whereMonth('national_social_security_funds.created_at', $Monthly);
+                $query->whereMonth('payment_date', $Monthly);
             })
             ->when($yearLy, function ($query, $yearLy) {
-                $query->whereYear('national_social_security_funds.created_at', $yearLy);
+                $query->whereYear('payment_date', $yearLy);
             })->get();
         }else if($request->tab_status == 3){
             
@@ -111,10 +111,10 @@ class PayrollReportController extends Controller
                 $query->where('users.employee_name_en', 'LIKE', '%'.$employee_name.'%');
             })
             ->when($Monthly, function ($query, $Monthly) {
-                $query->whereMonth('seniorities.created_at', $Monthly);
+                $query->whereMonth('payment_date', $Monthly);
             })
             ->when($yearLy, function ($query, $yearLy) {
-                $query->whereYear('seniorities.created_at', $yearLy);
+                $query->whereYear('payment_date', $yearLy);
             })
             ->get();
         }else {
@@ -133,10 +133,10 @@ class PayrollReportController extends Controller
                 $query->where('users.employee_name_en', 'LIKE', '%'.$employee_name.'%');
             })
             ->when($Monthly, function ($query, $Monthly) {
-                $query->whereMonth('severance_pays.created_at', $Monthly);
+                $query->whereMonth('payment_date', $Monthly);
             })
             ->when($yearLy, function ($query, $yearLy) {
-                $query->whereYear('severance_pays.created_at', $yearLy);
+                $query->whereYear('payment_date', $yearLy);
             })
             ->get();
         }

@@ -114,6 +114,7 @@ class EmployeeRepository extends BaseRepository
             'gender'  => $request->gender,
             'role_id'  => $request->role_id,
             'basic_salary'  => $request->basic_salary,
+            'salary_increas'  => $request->salary_increas,
             'phone_allowance'  => $request->phone_allowance,
             'position_id'  => $request->position_id,
             'position_type'  => $request->position_type,

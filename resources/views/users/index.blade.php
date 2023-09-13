@@ -446,6 +446,7 @@
                         $('#e_unit').val(response.success.unit);
                         $('#e_level').val(response.success.level);
                         $('#e_basic_salary').val(response.success.basic_salary);
+                        $('#e_salary_increas').val(response.success.salary_increas);
                         $('#e_phone_allowance').val(response.success.phone_allowance);
                         $('#e_date_of_commencement').val(response.success.date_of_commencement);
                         $('#e_number_of_children').val(response.success.number_of_children);
