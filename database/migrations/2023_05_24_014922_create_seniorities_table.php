@@ -8,6 +8,7 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
+     * php artisan migrate:refresh --path=database/migrations/2023_05_24_014922_create_seniorities_table.php
      *
      * @return void
      */
@@ -21,6 +22,7 @@ return new class extends Migration
             $table->string('tax_exemption_salary',50,2)->nullable();
             $table->string('taxable_salary',50,2)->nullable();
             $table->string('payment_of_month')->nullable();
+            $table->date('payment_date')->nullable();
             $table->bigInteger('created_by')->unsigned()->nullable();
             $table->bigInteger('updated_by')->unsigned()->nullable();
             $table->dateTime('deleted_at')->nullable();

@@ -21,6 +21,7 @@ class Bonus extends Model
         'base_salary',
         'base_salary_received',
         'total_allowance',
+        'payment_date',
         'created_by',
         'updated_by',
     ];

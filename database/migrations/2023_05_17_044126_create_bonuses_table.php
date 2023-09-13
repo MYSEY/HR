@@ -22,6 +22,7 @@ return new class extends Migration
             $table->decimal('base_salary_received',50,2)->default(0);
             $table->decimal('total_allowance',50,2)->default(0);
             $table->string('bouns_type')->nullable();
+            $table->date('payment_date')->nullable();
             $table->bigInteger('created_by')->unsigned()->nullable();
             $table->bigInteger('updated_by')->unsigned()->nullable();
             $table->dateTime('deleted_at')->nullable();

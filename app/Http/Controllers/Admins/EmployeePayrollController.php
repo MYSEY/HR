@@ -197,6 +197,7 @@ class EmployeePayrollController extends Controller
                                     'base_salary_received'      => $item->basic_salary,
                                     'total_allowance'           => $totalAllowanceBunus,
                                     'bouns_type'                => $value->title,
+                                    'payment_date'              => $request->payment_date,
                                     'created_by'                => Auth::user()->id,
                                 ]);
                             }
@@ -354,17 +355,18 @@ class EmployeePayrollController extends Controller
                         $occupationalRisk = (0.008 * $averageWage);
                         $healthCare = (0.026 * $averageWage);
                         $workerContributionUsd = ($averageWage * 0.02);
-                        $workerContributionRiel = $workerContributionUsd / $exchangNSSF->amount_riel;
+                        $workerContributionRiel = (round($workerContributionUsd, -2) / $exchangNSSF->amount_riel);
                         $dataNSSF = NationalSocialSecurityFund::create([
                             'employee_id'                   => $item->id,
                             'total_pre_tax_salary_usd'      => number_format($totalGrossSalary, 2),
                             'total_pre_tax_salary_riel'     => number_format($totalExchangeRielPreTax),
                             'total_average_wage'            => number_format($averageWage),
-                            'total_occupational_risk'       => round($occupationalRisk, 2),
-                            'total_health_care'             => round($healthCare, -2),
-                            'pension_contribution_usd'      => round($workerContributionUsd, -2),
-                            'pension_contribution_riel'     => round($workerContributionRiel, 2),
-                            'corporate_contribution'        => round($workerContributionUsd, -2),
+                            'total_occupational_risk'       => number_format($occupationalRisk),
+                            'total_health_care'             => number_format($healthCare),
+                            'pension_contribution_usd'      => number_format($workerContributionUsd),
+                            'pension_contribution_riel'     => number_format($workerContributionRiel, 2),
+                            'corporate_contribution'        => number_format($workerContributionUsd),
+                            'payment_date'                  => $request->payment_date,
                             'created_by'                    => Auth::user()->id,
                         ]);
                     }
@@ -418,6 +420,7 @@ class EmployeePayrollController extends Controller
                                 'tax_exemption_salary'  => number_format($taxExemptionSalary, 2),
                                 'taxable_salary'        => number_format($totaltaxableSalary, 2),
                                 'payment_of_month'      => $paymentOfMonth,
+                                'payment_date'          => $request->payment_date,
                                 'created_by'            => Auth::user()->id,
                             ]);
                             $seniorityPayableTax = $seniority->taxable_salary ?? 0;
@@ -695,6 +698,7 @@ class EmployeePayrollController extends Controller
                                 'employee_id'                   => $item->id,
                                 'total_severanec_pay'           => $dataSeveranc,
                                 'total_contract_severance_pay'  => $totalContractSeverancePay,
+                                'payment_date'                  => $request->payment_date,
                                 'created_by'                    => Auth::user()->id,
                             ]);
                             $totalSeverancePay = $dataSeverance->total_contract_severance_pay;
@@ -709,6 +713,7 @@ class EmployeePayrollController extends Controller
                                 'employee_id'                   => $item->id,
                                 'total_severanec_pay'           => $dataSeveranc,
                                 'total_contract_severance_pay'  => $totalContractSeverancePay,
+                                'payment_date'                  => $request->payment_date,
                                 'created_by'                    => Auth::user()->id,
                             ]);
                             $totalSeverancePay = $dataSeverance->total_contract_severance_pay;

@@ -290,11 +290,11 @@ class ExportEmployeeSalary implements FromCollection, WithColumnWidths, WithHead
                 $sheet->getDelegate()->getStyle("P".$rows)->getFont()->setName('Khmer OS Battambang')->setSize(9)->setBold("P".$rows);
                 $event->sheet->getDelegate()->getStyle("P".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
                 //total setCellValue Q
-                $sheet->setCellValue("Q".$rows, $this->totalPensionFund);
+                $sheet->setCellValue("Q".$rows, number_format($this->totalPensionFund, 2));
                 $sheet->getDelegate()->getStyle("Q".$rows)->getFont()->setName('Khmer OS Battambang')->setSize(9)->setBold("Q".$rows);
                 $event->sheet->getDelegate()->getStyle("Q".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
                 //total setCellValue R
-                $sheet->setCellValue("R".$rows, $this->TotalBaseSalaryReceivedUsd);
+                $sheet->setCellValue("R".$rows, number_format($this->TotalBaseSalaryReceivedUsd, 2));
                 $sheet->getDelegate()->getStyle("R".$rows)->getFont()->setName('Khmer OS Battambang')->setSize(9)->setBold("R".$rows);
                 $event->sheet->getDelegate()->getStyle("R".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
                 //total setCellValue S
@@ -322,7 +322,7 @@ class ExportEmployeeSalary implements FromCollection, WithColumnWidths, WithHead
                 $sheet->getDelegate()->getStyle("X".$rows)->getFont()->setName('Khmer OS Battambang')->setSize(9)->setBold("X".$rows);
                 $event->sheet->getDelegate()->getStyle("X".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
                 //total setCellValue Y
-                $sheet->setCellValue("Y".$rows, $this->totalSalaryTaxUsd);
+                $sheet->setCellValue("Y".$rows, number_format($this->totalSalaryTaxUsd, 2));
                 $sheet->getDelegate()->getStyle("Y".$rows)->getFont()->setName('Khmer OS Battambang')->setSize(9)->setBold("Y".$rows);
                 $event->sheet->getDelegate()->getStyle("Y".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
                 //total setCellValue Z
@@ -330,7 +330,7 @@ class ExportEmployeeSalary implements FromCollection, WithColumnWidths, WithHead
                 $sheet->getDelegate()->getStyle("Z".$rows)->getFont()->setName('Khmer OS Battambang')->setSize(9)->setBold("Z".$rows);
                 $event->sheet->getDelegate()->getStyle("Z".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
                 //total setCellValue AA
-                $sheet->setCellValue("AA".$rows, $this->totalSeniorityPayExcludedTax);
+                $sheet->setCellValue("AA".$rows, number_format($this->totalSeniorityPayExcludedTax, 2));
                 $sheet->getDelegate()->getStyle("AA".$rows)->getFont()->setName('Khmer OS Battambang')->setSize(9)->setBold("AA".$rows);
                 $event->sheet->getDelegate()->getStyle("AA".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
                 //total setCellValue AB
@@ -350,7 +350,7 @@ class ExportEmployeeSalary implements FromCollection, WithColumnWidths, WithHead
                 $sheet->getDelegate()->getStyle("AE".$rows)->getFont()->setName('Khmer OS Battambang')->setSize(9)->setBold("AE".$rows);
                 $event->sheet->getDelegate()->getStyle("AE".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
                 //total setCellValue AF
-                $sheet->setCellValue("AF".$rows, $this->totalSalaryNetPay);
+                $sheet->setCellValue("AF".$rows, number_format($this->totalSalaryNetPay, 2));
                 $sheet->getDelegate()->getStyle("AF".$rows)->getFont()->setName('Khmer OS Battambang')->setSize(9)->setBold("AF".$rows);
                 $event->sheet->getDelegate()->getStyle("AF".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
             },

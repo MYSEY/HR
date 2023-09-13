@@ -90,8 +90,7 @@ class PayrollReportController extends Controller
             })
             ->when($yearLy, function ($query, $yearLy) {
                 $query->whereYear('national_social_security_funds.created_at', $yearLy);
-            })
-            ->get();
+            })->get();
         }else if($request->tab_status == 3){
             
             $payroll = Bonus::with("users")->get();

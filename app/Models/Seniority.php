@@ -22,6 +22,7 @@ class Seniority extends Model
         'tax_exemption_salary',
         'taxable_salary',
         'payment_of_month',
+        'payment_date',
         'created_by',
     ];
 
