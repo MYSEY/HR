@@ -56,11 +56,8 @@
                                     <div class="profile-basic">
                                         <div class="row">
                                             <div class="col-md-12">
-                                                <div class="profile-info-left">
-                                                    <h3 class="payslip-title-center">@lang('lang.camma_microfinance_limited')</h3>
-                                                    <p class="payslip-title-center">@lang('lang.payroll_statement')(..... <span id="monthly"></span> ......) &nbsp;
-                                                    </p>
-                                                </div>
+                                                <h3 class="payslip-title-center">@lang('lang.camma_microfinance_limited')</h3>
+                                                <p class="payslip-title-center">@lang('lang.payroll_statement')(..... <span id="monthly"></span> ......) &nbsp; </p>
                                             </div>
                                         </div>
                                     </div>

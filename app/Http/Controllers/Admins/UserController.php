@@ -20,6 +20,7 @@ use App\Http\Requests\UserUpdated;
 use App\Models\GenerateIdEmployee;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Models\EmployeeStatusHistory;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -425,7 +426,13 @@ class UserController extends Controller
                     'resign_reason' => $request->resign_reason
                 ]);
             }
-            
+            $status_date = Carbon::now();
+            EmployeeStatusHistory::create([
+                'employee_id'   =>  $request->id,
+                'status'        =>  $request->emp_status,
+                'status_date'   =>  $status_date,
+                'created_by'    =>  Auth::user()->id,
+            ]);
             DB::commit();
             return ['message' => 'successfull'];
         } catch (\Exception $exp) {
