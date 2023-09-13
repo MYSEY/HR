@@ -88,6 +88,7 @@ class BankController extends Controller
         try{
             Bank::where('id',$request->id)->update([
                 'name'  => $request->name,
+                'fee'  => $request->fee,
                 'updated_by'    => Auth::user()->id 
             ]);
             Toastr::success('Bank Updated successfully.','Success');

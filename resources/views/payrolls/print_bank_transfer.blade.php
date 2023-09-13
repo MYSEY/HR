@@ -7,7 +7,7 @@
         </div>
         <div style="margin-top:-90px; text-align: center">
             <h3>@lang('lang.camma_microfinance_limited')</h3>
-            <p class="payslip-title-center">@lang('lang.payroll_statement')(…......April.........)  &nbsp;
+            <p class="payslip-title-center">@lang('lang.payroll_statement')(........ <span id="p_monthly"></span> .......)  &nbsp;
             </p>
         </div>
         <div style="display:flex;">
@@ -18,12 +18,12 @@
                 <body>
                     <tr>
                         <td class="style-oadding-lest">@lang('lang.payroll_amount')</td>
-                        <th>$ 103602.48</th>
+                        <th>$ <span id="p_total_saraly"></span></th>
                         <td></td>
                     </tr>
                     <tr>
                         <td class="style-oadding-lest">@lang('lang.payroll_service')</td>
-                        <th>$ 47.48</th>
+                        <th>$ <span id="p_total_fee"></span></th>
                         <td></td>
                     </tr>
                     <tr>
@@ -33,13 +33,13 @@
                     </tr>
                     <tr>
                         <td class="style-oadding-lest">@lang('lang.total_pay')</td>
-                        <th>$ 1036490.96</th>
-                        <td>@lang('lang.valid_date') : ( 1/25/2023 )</td>
+                        <th>$ <span id="p_total_pay"></span></th>
+                        <td>@lang('lang.valid_date') : ( <span id="p_valid_date"></span> )</td>
                     </tr>
                     <tr>
                         <td class="style-oadding-lest">@lang('lang.fee_charge_deduce_from_main_account')</td>
                         <td></td>
-                        <td>@lang('lang.valid_time') : ( 11:00AM )</td>
+                        <td>@lang('lang.valid_time') : ( <span id="p_valid_date_time"></span> )</td>
                     </tr>
                 </body>
             </table>
@@ -66,14 +66,14 @@
                         @foreach ($data as $key=>$item)
                             @php
                                 $totolSaraly += $item->total_salary;
-                                $totolFee += 0.20;
+                                $totolFee += $item->users->bank ? $item->users->bank->fee : 0;
                             @endphp
                             <tr class="odd">
                                 <td>{{++$key}}</td>
                                 <td>{{ $item->users == null ? '' : $item->users->employee_name_kh}}</td>
                                 <td>{{ $item->users == null ? '' : $item->users->employee_name_en }}</td>
                                 <td>{{ $item->users == null ? '' : $item->users->account_number }}</td>
-                                <td>$ 0.20</td>
+                                <td>$ {{$item->users->bank ? $item->users->bank->fee : 0.00}}</td>
                                 <td>$ {{$item->total_salary}}</td>
                                 <td></td>
                             </tr>
