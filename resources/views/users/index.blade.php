@@ -655,7 +655,7 @@
                                 }).catch(function(error) {
                                     new Noty({
                                         title: "",
-                                        text: '@lang("lang.something_went_wrong_please_try again_later")',
+                                        text: '@lang("lang.something_went_wrong_please_try_again_later")',
                                         type: "error",
                                         icon: true
                                     }).show();
@@ -740,7 +740,7 @@
                                 }).catch(function(error) {
                                     new Noty({
                                         title: "",
-                                        text: '@lang("lang.something_went_wrong_please_try again_later")',
+                                        text: '@lang("lang.something_went_wrong_please_try_again_later")',
                                         type: "error",
                                         icon: true
                                     }).show();
@@ -810,7 +810,7 @@
                                 }).catch(function(error) {
                                     new Noty({
                                         title: "",
-                                        text: '@lang("lang.something_went_wrong_please_try again_later")',
+                                        text: '@lang("lang.something_went_wrong_please_try_again_later")',
                                         type: "error",
                                         icon: true
                                     }).show();
@@ -893,7 +893,7 @@
                                 }).catch(function(error) {
                                     new Noty({
                                         title: "",
-                                        text: '@lang("lang.something_went_wrong_please_try again_later")',
+                                        text: '@lang("lang.something_went_wrong_please_try_again_later")',
                                         type: "error",
                                         icon: true
                                     }).show();
@@ -962,7 +962,7 @@
                                 }).catch(function(error) {
                                     new Noty({
                                         title: "",
-                                        text: '@lang("lang.something_went_wrong_please_try again_later")',
+                                        text: '@lang("lang.something_went_wrong_please_try_again_later")',
                                         type: "error",
                                         icon: true
                                     }).show();

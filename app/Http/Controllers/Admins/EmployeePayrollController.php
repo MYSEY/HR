@@ -116,7 +116,7 @@ class EmployeePayrollController extends Controller
                     $PayMonthRequret = Payroll::where('employee_id',$item->id)->where('payment_date','=',$request->payment_date)->first();
                     if ($PayMonthRequret) {
                         DB::rollback();
-                        Toastr::error('This mongth created payroll already','Error');
+                        Toastr::error('This month created payroll already','Error');
                         return redirect()->back();
                     } else {
                         //function first month join work
