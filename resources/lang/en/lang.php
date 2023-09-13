@@ -68,6 +68,7 @@ return[
     "bank_information"=>"Bank Information",
     "bank_account_no"=>"Bank Account No",
     "bank_account_number"=>"Bank Account Number",
+    "bank_transfer"=>"Bank Transfer",
     "bank_transfer_report"=>"Bank Transfer Reports",
     "birthday_reminder"=>"Birthday Reminder",
     "birthday"=>"Birthday",

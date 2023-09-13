@@ -27,8 +27,9 @@
                                     <thead>
                                         <tr>
                                             <th style="width: 30px;" class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="#: activate to sort column descending">#</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department Name: activate to sort column ascending" style="width: 772.237px;">@lang('lang.name')</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department Name: activate to sort column ascending" style="width: 772.237px;">@lang('lang.created_at')</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Name: activate to sort column ascending" style="width: 772.237px;">@lang('lang.name')</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="fee: activate to sort column ascending" style="width: 772.237px;">@lang('lang.fee')</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="create at: activate to sort column ascending" style="width: 772.237px;">@lang('lang.created_at')</th>
                                             <th class="text-end sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Action: activate to sort column ascending" style="width: 300.962px;">@lang('lang.action')</th>
                                         </tr>
                                     </thead>
@@ -38,6 +39,7 @@
                                                 <tr class="odd">
                                                     <td class="sorting_1 ids">{{$item->id}}</td>
                                                     <td class="name">{{$item->name}}</td>
+                                                    <td class="fee">{{$item->fee}}</td>
                                                     <td>{{ \Carbon\Carbon::parse($item->created_at)->format('d-M-Y') ?? '' }}</td>
                                                     <td class="text-end">
                                                         <div class="dropdown dropdown-action">
@@ -60,7 +62,6 @@
             </div>
         </div>
 
-
         <div id="add_bank" class="modal custom-modal fade" role="dialog" data-bs-backdrop="static">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
@@ -76,6 +77,10 @@
                             <div class="form-group">
                                 <label>@lang('lang.name') <span class="text-danger">*</span></label>
                                 <input class="form-control @error('name') is-invalid @enderror" type="text" name="name" required>
+                            </div>
+                            <div class="form-group">
+                                <label>@lang('lang.fee') <span class="text-danger">*</span></label>
+                                <input class="form-control @error('fee') is-invalid @enderror" type="text" name="fee" required>
                             </div>
                             <div class="submit-section">
                                 <button type="submit" class="btn btn-primary submit-btn">
@@ -105,6 +110,10 @@
                             <div class="form-group">
                                 <label>@lang('lang.name') <span class="text-danger">*</span></label>
                                 <input class="form-control @error('name') is-invalid @enderror" type="text" id="e_name" name="name">
+                            </div>
+                            <div class="form-group">
+                                <label>@lang('lang.fee') <span class="text-danger">*</span></label>
+                                <input class="form-control @error('fee') is-invalid @enderror" type="text" id="e_fee" name="fee">
                             </div>
                             <div class="submit-section">
                                 <button type="submit" class="btn btn-primary submit-btn">
@@ -154,6 +163,7 @@
             var _this = $(this).parents('tr');
             $('.e_id').val(_this.find('.ids').text());
             $('#e_name').val(_this.find('.name').text());
+            $('#e_fee').val(_this.find('.fee').text());
         });
         $('.delete').on('click',function(){
             var _this = $(this).parents('tr');

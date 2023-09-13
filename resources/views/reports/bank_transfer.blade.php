@@ -1,23 +1,17 @@
 @extends('layouts.master')
 <style>
-    .profile-info-left {
-        border-right: 0px dashed #cccccc !important;
+    input[type="time"] {
+        position: relative;
     }
-
-    .td-border {
-        border: none !important
-    }
-
-    .tr-bckground-ch {
-        background-color: chocolate !important
-    }
-
-    .tr-background-83 {
-        background-color: #83d85c;
-    }
-
-    .td-background-cc {
-        background-color: #cccccc !important;
+    input[type="time"]::-webkit-calendar-picker-indicator {
+        display: block;
+        top: 0;
+        right: 0;
+        height: 100%;
+        width: 100%;
+        position: absolute;
+        background: transparent;
+        transform: scale(12)
     }
 </style>
 @section('content')
@@ -36,15 +30,9 @@
                 <div class="col-auto float-end ms-auto">
                     <div class="btn-group">
                         @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer')
-                        <div class="btn-group btn-group-sm">
-                            <button class="btn btn-white" id="btn_print">
-                                <span class="btn-text-print"><i class="fa fa-print fa-lg"></i> @lang('lang.print')</span>
-                                <span id="btn-print-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>
-                            </button>
-                            <button class="btn btn-white" id="btn-export">
-                                <span class="btn-text-print-excel"><i class="fa fa-file-excel-o"></i> @lang('lang.excel')</span>
-                                {{-- <span id="btn-print-loading-excel" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span> --}}
-                            </button>
+                        <div class="col-auto float-end ms-auto">
+                            <a href="#" class="btn add-btn" id="btn-export"><i class="fa fa-file-excel-o"></i>@lang('lang.excel')</a>
+                            <a href="#" class="btn add-btn me-2" data-bs-toggle="modal" data-bs-target="#add_bank_transfer"><i class="fa fa-print fa-lg"></i> @lang('lang.print')</a>
                         </div>
                         @endif
                     </div>
@@ -68,11 +56,8 @@
                                     <div class="profile-basic">
                                         <div class="row">
                                             <div class="col-md-12">
-                                                <div class="profile-info-left">
-                                                    <h3 class="payslip-title-center">@lang('lang.camma_microfinance_limited')</h3>
-                                                    <p class="payslip-title-center">@lang('lang.payroll_statement')(…......April.........) &nbsp;
-                                                    </p>
-                                                </div>
+                                                <h3 class="payslip-title-center">@lang('lang.camma_microfinance_limited')</h3>
+                                                <p class="payslip-title-center">@lang('lang.payroll_statement')(..... <span id="monthly"></span> ......) &nbsp; </p>
                                             </div>
                                         </div>
                                     </div>
@@ -88,12 +73,12 @@
                                     <body>
                                         <tr>
                                             <td>@lang('lang.payroll_amount')</td>
-                                            <th>$ 103602.48</th>
+                                            <th>$ <span id="total_saraly"></span></th>
                                             <td></td>
                                         </tr>
                                         <tr>
                                             <td>@lang('lang.payroll_service')</td>
-                                            <th>$ 47.48</th>
+                                            <th>$ <span id="total_fee"></span></th>
                                             <td></td>
                                         </tr>
                                         <tr>
@@ -103,13 +88,13 @@
                                         </tr>
                                         <tr>
                                             <td>@lang('lang.total_pay')</td>
-                                            <th>$ 1036490.96</th>
-                                            <td>@lang('lang.valid_date') : ( 1/25/2023 )</td>
+                                            <th>$ <span id="total_pay"></span></th>
+                                            <td>@lang('lang.valid_date') : ( ......./....../....... )</td>
                                         </tr>
                                         <tr>
                                             <td>@lang('lang.fee_charge_deduce_from_main_account')</td>
                                             <td></td>
-                                            <td>@lang('lang.valid_time') : ( 11:00AM )</td>
+                                            <td>@lang('lang.valid_time') : ( ......... )</td>
                                         </tr>
                                     </body>
                                 </table>
@@ -136,14 +121,14 @@
                                             @foreach ($data as $key=>$item)
                                                 @php
                                                     $totolSaraly += $item->total_salary;
-                                                    $totolFee += 0.20;
+                                                    $totolFee += $item->users->bank ? $item->users->bank->fee : 0;
                                                 @endphp
                                                 <tr class="odd">
                                                     <td>{{++$key}}</td>
                                                     <td>{{ $item->users == null ? '' : $item->users->employee_name_kh}}</td>
                                                     <td>{{ $item->users == null ? '' : $item->users->employee_name_en }}</td>
                                                     <td>{{ $item->users == null ? '' : $item->users->account_number }}</td>
-                                                    <td>$ 0.20</td>
+                                                    <td>$ {{$item->users->bank ? $item->users->bank->fee : 0.00}}</td>
                                                     <td>$ {{$item->total_salary}}</td>
                                                     <td></td>
                                                 </tr>
@@ -151,8 +136,8 @@
                                         @endif
                                         <tr>
                                             <th colspan="4" class="text-end">@lang('lang.total_amount')</th>
-                                            <th>$ {{$totolFee}}</th>
-                                            <th>$ {{$totolSaraly}}</th>
+                                            <th>$ <span class="td_total_fee">{{$totolFee}}</span></th>
+                                            <th>$ <span class="td_total_saraly">{{$totolSaraly}}</span></th>
                                             <td></td>
                                         </tr>
                                     </body>
@@ -185,14 +170,91 @@
             </div>
         </div>
     </div>
+
+    <div id="add_bank_transfer" class="modal custom-modal fade" style="display: none;" aria-hidden="true" data-bs-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">@lang('lang.bank_transfer')</h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form class="needs-validation" novalidate>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>@lang('lang.valid_date') <span class="text-danger">*</span></label>
+                                    <div class="cal-icon">
+                                        <input class="form-control datetimepicker required" type="text" id="bank_valid_date" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>@lang('lang.valid_time') <span class="text-danger">*</span></label>
+                                    <input class="form-control required" type="time" id="bank_valid_time" >
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="submit-section">
+                            <button type="button" class="btn btn-primary" id="btn_print">
+                                <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading') </span>
+                                <span class="btn-text">@lang('lang.submit')</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
     @include('payrolls.print_bank_transfer')
 @endsection
 
 @include('includs.script')
+<script src="{{asset('/admin/js/validation-field.js')}}"></script>
 <script type="text/javascript">
     $(function() {
+        let monthly = moment().format('MMMM');
+        $("#monthly").text(monthly);
+        $("#total_fee").text($(".td_total_fee").text());
+        $("#total_saraly").text($(".td_total_saraly").text());
+        $("#total_pay").text(parseFloat($(".td_total_saraly").text()) + parseFloat($(".td_total_fee").text()));
+
         $("#btn_print").on("click", function() {
-            print_pdf();
+            var num_miss = 0;
+            $("#p_monthly").text(monthly);
+            $("#p_total_fee").text($(".td_total_fee").text());
+            $("#p_total_saraly").text($(".td_total_saraly").text());
+            $("#p_total_pay").text(parseFloat($(".td_total_saraly").text()) + parseFloat($(".td_total_fee").text()));
+            let date = moment($("#bank_valid_date").val()).format('D/M/YYYY');
+            let time = moment($("#bank_valid_time").val(), "hh:mm:ss A").format("hh:mm A");
+            $("#p_valid_date").text(date);
+            $("#p_valid_date_time").text(time);
+            $(".required").each(function(){
+                if($(this).val()==""){ 
+                    num_miss++;
+                    $(this).css("border-color","#dc3545")
+                }else{
+                    $(this).css("border-color","#198754")
+                }
+            });
+            $(".loading-icon").css('display', 'block');
+            $("#btn_print").prop('disabled', true);
+            $(".btn-text").css("display", "none");
+            if (num_miss>0) {
+                setTimeout(function () {
+                    $("#btn_print").attr('disabled',false);
+                    $(".loading-icon").css('display', 'none');
+                    $(".btn-text").css("display", 'block');
+                }, 500);
+                return false;
+            }else{
+                print_pdf();
+            }
+            
         });
         $("#btn-export").on("click", function(){
             var url = "{{URL::to('reports/bank-transfer-export')}}?"
@@ -202,17 +264,13 @@
 
     function print_pdf(type) {
         $("#print_purchase").show();
-
-        $("#btn-print-loading").css('display', 'block');
-        $("#btn_print").prop('disabled', true);
-        $(".btn-text-print").hide();
-
         window.setTimeout(function() {
             $("#print_purchase").hide();
-            $("#btn_print").prop('disabled', false);
-            $(".btn-text-print").show();
-            $("#btn-print-loading").css('display', 'none');
+            $("#btn_print").attr('disabled',false);
+            $(".loading-icon").css('display', 'none');
+            $(".btn-text").css("display", 'block');
 
+            $("#add_bank_transfer").modal("hide")
         }, 2000);
         $("#print_purchase").printThis({
             importCSS: false,

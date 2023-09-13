@@ -74,8 +74,9 @@ class Payroll extends Model
             'position_id',
             'branch_id',
             'account_number',
+            'bank_name',
             'date_of_commencement'])
-        ->with('department')->with('position')->with('branch');
+        ->with('department')->with('position')->with('branch')->with('bank');
     }
     public function NSSF(){
         return $this->belongsTo(NationalSocialSecurityFund::class ,'employee_id','id');

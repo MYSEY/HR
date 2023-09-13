@@ -78,6 +78,7 @@ return[
 	"body_number"=>"លេខតួ",
 	"bank_name"=>"ឈ្មោះធនាគារ",
 	"bank_account"=>"គណនីធនាគារ",
+	"bank_transfer"=>"ផ្ទេរប្រាក់តាមធនាគារ",
 	"bank_transfer_report"=>"របាយការណ៍ផ្ទេរប្រាក់តាមធនាគារ",
 	"birthday_reminder"=>"ការរំលឹកថ្ងៃកំណើត",
 	"birthday"=>"ថ្ងៃកំណើត",

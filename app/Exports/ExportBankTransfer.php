@@ -25,7 +25,7 @@ class ExportBankTransfer implements FromCollection, WithColumnWidths, WithHeadin
         $dataExport = [];
         foreach ($export_data as $value) {
             $this->totalAmount += $value->total_salary;
-            $this->totalFee +=  0.20;
+            $this->totalFee +=  $value->users->bank ? $value->users->bank->fee : 0;
             $i++;
             $this->num = $i;
             $dataExport[] = [
@@ -33,7 +33,7 @@ class ExportBankTransfer implements FromCollection, WithColumnWidths, WithHeadin
                 "employee_name_en" => $value->users->employee_name_kh,
                 "employee_gender" => $value->users->employee_name_en,
                 "account_number" => $value->users->account_number,
-                "fee" => 0.20,
+                "fee" => $value->users->bank ? $value->users->bank->fee : 0,
                 "total_salary" => $value->total_salary,
             ];
         }
@@ -96,9 +96,9 @@ class ExportBankTransfer implements FromCollection, WithColumnWidths, WithHeadin
                 $sheet->setCellValue('A2', "CAMMA Microfinance Limited");
                 $sheet->getDelegate()->getStyle('A2:G2')->getFont()->setName('Khmer OS Muol Light')->setSize(12)->setUnderline('A2:G2');
                 $event->sheet->getDelegate()->getStyle('A2:G2')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-
+                $monthly = Carbon::now()->format('M');
                 $sheet->mergeCells('A3:G3');
-                $sheet->setCellValue('A3', "Payroll Statement (…......April.........)");
+                $sheet->setCellValue('A3', "Payroll Statement (…......".$monthly.".........)");
                 $sheet->getDelegate()->getStyle('A3:G3')->getFont()->setName('Arial')->setSize(10);
                 $event->sheet->getDelegate()->getStyle('A3:G3')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
@@ -109,13 +109,13 @@ class ExportBankTransfer implements FromCollection, WithColumnWidths, WithHeadin
                 $sheet->setCellValue("B5", "Payroll Amount");
                 $sheet->getDelegate()->getStyle("B5")->getFont()->setName('Arial')->setSize(9);
 
-                $sheet->setCellValue("D5", "103602.48");
+                $sheet->setCellValue("D5", $this->totalAmount);
                 $sheet->getDelegate()->getStyle("D5")->getFont()->setName('Arial')->setSize(9)->setBold("D5");
 
                 $sheet->setCellValue("B6", "Payroll Service");
                 $sheet->getDelegate()->getStyle("B6")->getFont()->setName('Arial')->setSize(9);
 
-                $sheet->setCellValue("D6", "37");
+                $sheet->setCellValue("D6", $this->totalFee);
                 $sheet->getDelegate()->getStyle("D6")->getFont()->setName('Arial')->setSize(9)->setBold("D6");
 
                 $sheet->setCellValue("B7", "Local Fee ");
@@ -123,17 +123,17 @@ class ExportBankTransfer implements FromCollection, WithColumnWidths, WithHeadin
 
                 $sheet->setCellValue("B8", "Total pay");
                 $sheet->getDelegate()->getStyle("B8")->getFont()->setName('Arial')->setSize(9);
-                $sheet->setCellValue("D8", "103639.48");
+                $sheet->setCellValue("D8", $this->totalAmount+$this->totalFee);
                 $sheet->getDelegate()->getStyle("D8")->getFont()->setName('Arial')->setSize(9)->setBold("D8");
 
                 $sheet->setCellValue("B9", "Fee charge deduce from main account");
                 $sheet->getDelegate()->getStyle("B9")->getFont()->setName('Arial')->setSize(9);
 
 
-                $sheet->setCellValue("F8", "Valid Date : ( 1/25/2023 )");
+                $sheet->setCellValue("F8", "Valid Date : ( ......./......../........ )");
                 $sheet->getDelegate()->getStyle("F8")->getFont()->setName('Arial')->setSize(9);
 
-                $sheet->setCellValue("F9", "Valid Time : ( 11:00AM )");
+                $sheet->setCellValue("F9", "Valid Time : ( ......... )");
                 $sheet->getDelegate()->getStyle("F9")->getFont()->setName('Arial')->setSize(9);
 
                 $fromMerge = $this->num+11;
@@ -228,11 +228,11 @@ class ExportBankTransfer implements FromCollection, WithColumnWidths, WithHeadin
                 $event->sheet->getDelegate()->getStyle('F'.($dateMerge+1).':G'.($dateMerge+1))->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
                 $sheet->mergeCells('F'.($dateMerge+4).':G'.($dateMerge+4));
-                $sheet->setCellValue('F'.($dateMerge+4), "Mr Pheng Putmetrey");
+                $sheet->setCellValue('F'.($dateMerge+4), "Mr. Chhor Oudam");
                 $sheet->getDelegate()->getStyle('F'.($dateMerge+4).':G'.($dateMerge+4))->getFont()->setName('Arial')->setSize(10)->setBold('F'.($dateMerge+4).':G'.($dateMerge+4));
                 $event->sheet->getDelegate()->getStyle('F'.($dateMerge+4).':G'.($dateMerge+4))->getAlignment()->setWrapText(true)->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
                 $sheet->mergeCells('F'.($dateMerge+5).':G'.($dateMerge+5));
-                $sheet->setCellValue('F'.$dateMerge+5, "Head of HR and Admin Department.");
+                $sheet->setCellValue('F'.$dateMerge+5, "Senior Personnel & Recruitement Manager.");
                 $sheet->getDelegate()->getStyle('F'.($dateMerge+5).':G'.($dateMerge+5))->getFont()->setName('Arial')->setSize(10);
                 $event->sheet->getDelegate()->getStyle('F'.($dateMerge+5).':G'.($dateMerge+5))->getAlignment()->setWrapText(true)->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
