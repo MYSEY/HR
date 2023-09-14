@@ -193,7 +193,7 @@
                                         </thead>
                                         <tbody>
                                             @if (count($dataTrainings) > 0)
-                                                @foreach ($dataTrainings as $item)
+                                                @foreach ($dataTrainings as $key=>$item)
                                                     @php
                                                         $price = 0;
                                                         $discount = 0;
@@ -212,9 +212,9 @@
                                                             }
                                                         }
                                                     @endphp
-                                                    @foreach ($item->employees as $key=>$emp)
+                                                    @foreach ($item->employees as $emp)
                                                         <tr class="odd">
-                                                            <td class="ids">{{ $item->id }}</td>
+                                                            <td class="ids">{{ ++$key }}</td>
                                                             <td>{{ $emp->number_employee }}</td>
                                                             <td>{{ $emp->employee_name_kh }}</td>
                                                             <td>{{$emp->employee_name_en}}</td>
@@ -319,6 +319,7 @@
                 dataPrint = data;
                 var tr = "";
                 var tr_print = "";
+                let num = 0;
                 if (data.length > 0) {
                     data.map((item) =>{
                         let start_date = moment(item.start_date).format('DD-MMM-YYYY');
@@ -341,13 +342,15 @@
                                 trainer += trai.type == 2 ? trai.name_en : trai.employee.employee_name_en +', ';
                             });
                         }
-                        item.employees.map((emp) => {
+                        
+                        item.employees.map((emp, index) => {
+                            num ++;
                             let date_ofcommencement = moment(emp.date_of_commencement).format('DD-MMM-YYYY');
                             let currentDate = new Date();
                             let join_date = new Date(emp.date_of_commencement);
                             let empl_period = diff_year_month_day(join_date, currentDate);
                             tr +='<tr class="odd">'+
-                                '<td class="ids">'+(item.id )+'</td>'+
+                                '<td class="ids">'+(num)+'</td>'+
                                 '<td>'+(emp.number_employee )+'</td>'+
                                 '<td>'+(emp.employee_name_kh )+'</td>'+
                                 '<td>'+(emp.employee_name_en)+'</td>'+

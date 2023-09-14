@@ -139,9 +139,9 @@
                                         </thead>
                                         <tbody>
                                             @if (count($dataTrainings) > 0)
-                                                @foreach ($dataTrainings as $item)
+                                                @foreach ($dataTrainings as $key=>$item)
                                                     <tr class="odd">
-                                                        <td class="sorting_1 ids">{{ $item->id }}</td>
+                                                        <td class="sorting_1 ids">{{ ++$key }}</td>
                                                         <td class="training_type_name">{{ $item->training_type == 1 ? "Internal" : "External" }}</td>
                                                         <td class="course_name">{{ $item->course_name }}</td>
                                                         <td>
@@ -362,8 +362,8 @@
             $('#e_trainer').html('');
             $('#e_status').html('<option value=""></option>');
             var _this = $(this).parents('tr');
-            $('.e_id').val(_this.find('.ids').text());
             let id = $(this).data("id");
+            $('.e_id').val(id);
             $("#e_id").val(id)
             $.ajax({
                 type: "GET",
@@ -468,8 +468,8 @@
         });
 
         $('.delete').on('click', function() {
-            var _this = $(this).parents('tr');
-            $('.e_id').val(_this.find('.ids').text());
+            let id = $(this).data("id");
+            $('.e_id').val(id);
         });
     });
     function showdatas(params) {
@@ -491,11 +491,11 @@
                 $(".loading-icon-search").css('display', 'none');
                 var tr = "";
                 if (data.length > 0) {
-                    data.map((row) =>{
+                    data.map((row, index) =>{
                         let start_date = moment(row.start_date).format('D-MMM-YYYY')
                         let end_date = moment(row.end_date).format('D-MMM-YYYY')
                         tr += '<tr class="odd">'+
-                                '<td class="sorting_1 ids">'+(row.id)+'</td>'+
+                                '<td class="sorting_1 ids">'+(index+1)+'</td>'+
                                 '<td class="training_type_name">'+(row.training_type == 1 ? "@lang('lang.internal')" : "@lang('lang.external')")+'</td>'+
                                 '<td class="course_name">'+(row.course_name)+'</td>'+
                                 '<td>'+

@@ -108,9 +108,9 @@
                                         </thead>
                                         <tbody>
                                             @if (count($data)>0)
-                                                @foreach ($data as $item)
+                                                @foreach ($data as $key=>$item)
                                                     <tr class="odd">
-                                                        <td class="sorting_1 ids">{{$item->id}}</td>
+                                                        <td class="sorting_1 ids">{{++$key}}</td>
                                                         <td class="type">{{$item->type == 1 ? "Internal": "External"}}</td>
                                                         <td class="company_name">{{$item->company_name ? $item->company_name : ""}}</td>
                                                         <td class="name_kh">{{$item->type == 1 ? $item->EmployeeIn->employee_name_kh : $item->name_kh}}</td>
@@ -440,8 +440,10 @@
             $('#e_change_type').html('<option value=""></option>');
             $('#e_status').html('<option value=""></option>');
             var _this = $(this).parents('tr');
-           
-            $('.e_id').val(_this.find('.ids').text());
+            let id = $(this).data("id");
+            // $('.e_id').val(_this.find('.ids').text());
+            $('.e_id').val(id);
+
             $('#e_company_name').val(_this.find('.company_name').text());
             $('#e_name_en').val(_this.find('.name_en').text());
             $('#e_name_kh').val(_this.find('.name_kh').text());
@@ -459,7 +461,7 @@
                 $(".e-trainer-external").hide();
                 $(".e-trainer-internal").show();
                 $('#e_change_type').append('<option selected value="1">@lang("lang.internal")</option> <option value="2">@lang("lang.external")</option>');
-                let _id = _this.find('.ids').text();
+                let _id = id;
                 $.ajax({
                         type: "GET",
                         url: "{{url('trainer/edit')}}",
@@ -488,8 +490,9 @@
         });
 
         $('.delete').on('click',function(){
-            var _this = $(this).parents('tr');
-            $('.e_id').val(_this.find('.ids').text());
+            // var _this = $(this).parents('tr');
+            let id = $(this).data("id");
+            $('.e_id').val(id);
         });
 
         $('body').on('click', '#btn-status a', function() {
@@ -574,7 +577,7 @@
                 $(".loading-icon-research").css('display', 'none');
                 var tr = "";
                 if (data.length > 0) {
-                    data.map((row) =>{
+                    data.map((row, index) =>{
                         let created_at = moment(row.created_at).format('D-MMM-YYYY');
                         let trainer_status = "";
                         let status_color = "";
@@ -587,7 +590,7 @@
                             
                         }
                         tr += '<tr class="odd">'+
-                            '<td class="sorting_1 ids">'+(row.id)+'</td>'+
+                            '<td class="sorting_1 ids">'+(index+1)+'</td>'+
                             '<td class="type">'+(row.type == 1 ? "@lang('lang.internal')": "@lang('lang.external')")+'</td>'+
                             '<td class="company_name">'+(row.company_name ? row.company_name : "")+'</td>'+
                             '<td class="name_kh">'+(row.type == 1 ? row.employee_name_kh : row.name_kh)+'</td>'+

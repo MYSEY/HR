@@ -48,9 +48,9 @@
                     </thead>
                     <tbody>
                         @if (count($trainer) > 0)
-                            @foreach ($trainer as $item)
+                            @foreach ($trainer as $key=>$item)
                                 <tr>
-                                    <td style="width: 5%">{{$item->id}}</td>
+                                    <td style="width: 5%">{{++$key}}</td>
                                     <td >{{$item->type == 1 ? "Internal" : "External"}}</td>
                                     <td >{{$item->type == 1 ? $item->EmployeeIn->employee_name_kh : $item->name_kh}}</td>
                                     <td >{{$item->type == 1 ? $item->EmployeeIn->employee_name_en : $item->name_en}}</td>
@@ -86,9 +86,9 @@
             </thead>
             <tbody>
                 @if (count($employees) > 0)
-                    @foreach ($employees as $item)
+                    @foreach ($employees as $key=>$item)
                         <tr>
-                            <td style="width: 5%">{{$item->id}}</td>
+                            <td style="width: 5%">{{++$key}}</td>
                             <td >{{$item->number_employee}}</td>
                             <td >{{$item->employee_name_kh}}</td>
                             <td >{{$item->employee_name_en}}</td>

@@ -45,25 +45,36 @@
                 {{-- @csrf --}}
                 <div class="row filter-btn"> 
                     <div class="col-sm-2 col-md-2"> 
-                        <div class="form-group">
+                        <div class="form-group cls-research">
                             <input type="text" class="form-control" name="employee_id" id="employee_id" placeholder="@lang('lang.employee_id')" value="{{old('number_employee')}}">
                         </div>
                     </div>
                     <div class="col-sm-6 col-md-2">
-                        <div class="form-group ">
+                        <div class="form-group cls-research">
                             <input type="text" class="form-control" name="employee_name" id="employee_name" placeholder="@lang('lang.employee_name')" value="{{old('employee_name')}}">
                         </div>
                     </div>
                     <div class="col-sm-6 col-md-2 col-lg-2 col-xl-2">
-                        <div class="form-group ">
+                        <div class="form-group cls-research">
                             {{-- <div class="cal-icon"> --}}
                                 <input class="form-control" type="month" id="filter_month">
                             {{-- </div> --}}
                         </div>
                     </div>
-                    <div class="col-sm-6 col-md-6">
+                    <div class="col-sm-6 col-md-2 col-lg-2 col-xl-2">
+                        <div class="form-group" id="col-branch">
+                            <select class="select form-control" id="branch_id" data-select2-id="select2-data-2-c0n2" name="branch_id">
+                                <option value="" data-select2-id="select2-data-2-c0n2">@lang('lang.all_location')</option>
+                                @foreach ($branchs as $item)
+                                    <option value="{{$item->id}}">{{ Helper::getLang() == 'en' ? $item->branch_name_en : $item->branch_name_kh }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                   
+                    <div class="col-sm-6 col-md-4">
                         <div style="display: flex" class="float-end">
-                            <button type="button" class="btn btn-sm btn-success submit-btn me-2" data-dismiss="modal">
+                            <button type="button" class="btn btn-sm btn-success submit-btn me-2">
                                 <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading') </span>
                                 <span class="btn-txt">@lang('lang.search')</span>
                             </button>
@@ -506,6 +517,9 @@
                 $("#table_print_benefit").hide();
                 $("#table_print_seniority_pay").hide();
                 $("#table_print_severance_pay").hide();
+                $("#col-branch").css("display", "block");
+                $(".cls-research").css("display", "block");
+                $(".submit-btn").css('display', 'block');
             }else if (tab_status == 2) {
                 $("#title_print").text("NSSF");
                 $("#table_print_basic_salary").hide();
@@ -513,6 +527,9 @@
                 $("#table_print_benefit").hide();
                 $("#table_print_seniority_pay").hide();
                 $("#table_print_severance_pay").hide();
+                $("#col-branch").css("display", "none");
+                $(".cls-research").css("display", "block");
+                $(".submit-btn").css('display', 'block');
             }else if (tab_status == 3) {
                 $("#title_print").text("Khmer New Year / Pchum Ben Benefit");
                 $("#table_print_basic_salary").hide();
@@ -520,6 +537,9 @@
                 $("#table_print_benefit").show();
                 $("#table_print_seniority_pay").hide();
                 $("#table_print_severance_pay").hide();
+                $("#col-branch").css("display", "none");
+                $(".cls-research").css("display", "none");
+                $(".submit-btn").css('display', 'none');
             }else if (tab_status == 4) {
                 $("#title_print").text("Seniority Pay");
                 $("#table_print_basic_salary").hide();
@@ -527,6 +547,9 @@
                 $("#table_print_benefit").hide();
                 $("#table_print_seniority_pay").show();
                 $("#table_print_severance_pay").hide();
+                $("#col-branch").css("display", "none");
+                $(".cls-research").css("display", "block");
+                $(".submit-btn").css('display', 'block');
             }else if (tab_status == 5) {
                 $("#title_print").text("Severance Pay");
                 $("#table_print_basic_salary").hide();
@@ -534,6 +557,9 @@
                 $("#table_print_benefit").hide();
                 $("#table_print_seniority_pay").hide();
                 $("#table_print_severance_pay").show();
+                $("#col-branch").css("display", "none");
+                $(".cls-research").css("display", "block");
+                $(".submit-btn").css('display', 'block');
             }
         });
         $(".reset-btn").on("click", function() {
@@ -549,6 +575,7 @@
             let params = {
                 employee_id: $("#employee_id").val(),
                 employee_name: $("#employee_name").val(),
+                branch_id: $("#branch_id").val(),
                 filter_month: $("#filter_month").val(),
             };
             showdatas(tab_status, params);
@@ -589,6 +616,7 @@
                 tab_status,
                 employee_id: params.employee_id ? params.employee_id : null,
                 employee_name: params.employee_name ? params.employee_name : null,
+                branch_id: params.branch_id ? params.branch_id : null,
                 filter_month: params.filter_month ? params.filter_month : null,
             },
             dataType: "JSON",

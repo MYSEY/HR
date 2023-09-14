@@ -37,7 +37,8 @@ class PayrollReportController extends Controller
         $dataSeniority = Seniority::orderBy('employee_id')->get();
         $severancePay = SeverancePay::orderBy('employee_id')->get();
         $benefit = Bonus::with("users")->orderBy('employee_id')->get();
-        return view('reports.payroll_report',compact('payroll','dataNSSF','dataSeniority','severancePay','benefit'));
+        $branchs = Branchs::get();
+        return view('reports.payroll_report',compact('payroll','dataNSSF','dataSeniority','severancePay','benefit','branchs'));
     }
 
     public function filter(Request $request)
@@ -57,12 +58,16 @@ class PayrollReportController extends Controller
                 'users.number_employee',
                 'users.employee_name_en',
                 'users.employee_name_kh',
+                'users.branch_id',
             )
             ->when($request->employee_id, function ($query, $employee_id) {
                 $query->where('users.number_employee', 'LIKE', '%'.$employee_id.'%');
             })
             ->when($request->employee_name, function ($query, $employee_name) {
                 $query->where('users.employee_name_en', 'LIKE', '%'.$employee_name.'%');
+            })
+            ->when($request->branch_id, function ($query, $branch_id) {
+                $query->where('users.branch_id', $branch_id);
             })
             ->when($Monthly, function ($query, $Monthly) {
                 $query->whereMonth('payment_date', $Monthly);
