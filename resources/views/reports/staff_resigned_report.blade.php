@@ -138,9 +138,9 @@
                                     </thead>
                                     <tbody>
                                         @if (count($employees) > 0)
-                                            @foreach ($employees as $item)
+                                            @foreach ($employees as $key=>$item)
                                                 <tr class="odd">
-                                                    <td class="ids">{{ $item->id }}</td>
+                                                    <td class="ids">{{ ++$key }}</td>
                                                     <td>{{ $item->number_employee }}</td>
                                                     <td>{{ $item->employee_name_kh }}</td>
                                                     <td>{{ $item->employee_name_en }}</td>
@@ -204,8 +204,8 @@
                         let date_of_commencement = moment(row.date_of_commencement).format('D-MMM-YYYY');
                         let resign_date = moment(row.resign_date).format('D-MMM-YYYY');
                         tr += '<tr class="odd">'+
-                                    '<td class="ids">'+(row.id)+'</td>'+
-                                    '<td><a href="#">' + (row.number_employee) + '</a></td>'+
+                                    '<td class="ids">'+(e+1)+'</td>'+
+                                    '<td>' + (row.number_employee) + '</td>'+
                                     '<td>'+( row.employee_name_kh )+'</td>'+
                                     '<td>'+( row.employee_name_en )+'</td>'+
                                     '<td>'+( row.gender == null ? "" : row.gender.name_english )+'</td>'+

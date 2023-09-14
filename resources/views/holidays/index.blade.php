@@ -38,9 +38,9 @@
                                         </thead>
                                         <tbody>
                                             @if (count($data) > 0)
-                                                @foreach ($data as $item)
+                                                @foreach ($data as $key=>$item)
                                                     <tr>
-                                                        <td class="ids">{{$item->id}}</td>
+                                                        <td class="ids">{{++$key}}</td>
                                                         <td class="title">{{$item->Day}}</td>
                                                         <td class="title">{{$item->title}}</td>
                                                         <td style="text-align: center;" class="amount_percent"><a href="#">{{$item->amount_percent}}</a></td>

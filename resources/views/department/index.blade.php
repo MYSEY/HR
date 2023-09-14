@@ -35,9 +35,9 @@
                                     </thead>
                                     <tbody>
                                         @if (count($data)>0)
-                                            @foreach ($data as $item)
+                                            @foreach ($data as $key=>$item)
                                                 <tr class="odd">
-                                                    <td class="sorting_1 ids">{{$item->id}}</td>
+                                                    <td class="sorting_1 ids">{{++$key}}</td>
                                                     <td class="name_khmer">{{$item->name_khmer}}</td>
                                                     <td class="name_english">{{$item->name_english}}</td>
                                                     <td>{{ \Carbon\Carbon::parse($item->created_at)->format('d-M-Y') ?? '' }}</td>
@@ -166,14 +166,15 @@
     $(function(){
         $('.update').on('click',function(){
             var _this = $(this).parents('tr');
-            $('.e_id').val(_this.find('.ids').text());
+            let id = $(this).data("id");
+            $('.e_id').val(id);
             $('#e_name_khmer').val(_this.find('.name_khmer').text());
             $('#e_name_english').val(_this.find('.name_english').text());
         });
 
         $('.delete').on('click',function(){
-            var _this = $(this).parents('tr');
-            $('.e_id').val(_this.find('.ids').text());
+            let id = $(this).data("id");
+            $('.e_id').val(id);
         });
     });
 </script>

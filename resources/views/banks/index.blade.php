@@ -35,9 +35,9 @@
                                     </thead>
                                     <tbody>
                                         @if (count($data)>0)
-                                            @foreach ($data as $item)
+                                            @foreach ($data as $key=>$item)
                                                 <tr class="odd">
-                                                    <td class="sorting_1 ids">{{$item->id}}</td>
+                                                    <td class="sorting_1 ids">{{++$key}}</td>
                                                     <td class="name">{{$item->name}}</td>
                                                     <td class="fee">{{$item->fee}}</td>
                                                     <td>{{ \Carbon\Carbon::parse($item->created_at)->format('d-M-Y') ?? '' }}</td>
@@ -134,7 +134,7 @@
                     <div class="modal-body">
                         <div class="form-header">
                             <h3>@lang('lang.delete')</h3>
-                            <p>@lang('lang.are_you_sure want_to_delete')?</p>
+                            <p>@lang('lang.are_you_sure_want_to_delete')?</p>
                         </div>
                         <div class="modal-btn delete-action">
                             <form action="{{url('bank/delete')}}" method="POST">
@@ -160,14 +160,16 @@
 <script>
     $(function(){
         $('.update').on('click',function(){
+            let id = $(this).data("id");
+            $('.e_id').val(id);
             var _this = $(this).parents('tr');
-            $('.e_id').val(_this.find('.ids').text());
             $('#e_name').val(_this.find('.name').text());
             $('#e_fee').val(_this.find('.fee').text());
         });
         $('.delete').on('click',function(){
-            var _this = $(this).parents('tr');
-            $('.e_id').val(_this.find('.ids').text());
+            // var _this = $(this).parents('tr');
+            let id = $(this).data("id");
+            $('.e_id').val(id);
         });
     });
 </script>

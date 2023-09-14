@@ -111,9 +111,9 @@
                                     </thead>
                                     <tbody>
                                         @if (count($staffPromotes) > 0)
-                                            @foreach ($staffPromotes as $item)
+                                            @foreach ($staffPromotes as $key=>$item)
                                                 <tr class="odd">
-                                                    <td class="ids">{{ $item->id }}</td>
+                                                    <td class="ids">{{ ++$key }}</td>
                                                     <td>{{ $item->employee->employee_name_en }}</td>
                                                     <td>{{ $item->employee->EmployeeBranchAbbreviations }}</td>
                                                     <td>{{ $item->posit_id }}</td>
@@ -160,8 +160,8 @@
                     $(rows).each(function(e, row) {
                         let date = moment(row.date).format('d-MMM-YYYY');
                         tr += '<tr class="odd">'+
-                                    '<td class="ids">'+(row.id)+'</td>'+
-                                    '<td><a href="#">' + (row.employee.employee_name_en) + '</a></td>'+
+                                    '<td class="ids">'+(e+1)+'</td>'+
+                                    '<td>' + (row.employee.employee_name_en) + '</td>'+
                                     '<td>'+( row.employee.branch.abbreviations )+'</td>'+
                                     '<td>'+( row.posit_id )+'</td>'+
                                     '<td>'+( row.position_promoted_to)+'</td>'+

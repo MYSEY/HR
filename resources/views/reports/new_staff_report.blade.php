@@ -134,15 +134,15 @@
                                     </thead>
                                     <tbody>
                                         @if (count($employees) > 0)
-                                            @foreach ($employees as $item)
+                                            @foreach ($employees as $key=>$item)
                                                 <tr class="odd">
-                                                    <td class="ids">{{ $item->id }}</td>
+                                                    <td class="ids">{{ ++$key }}</td>
                                                     <td>{{ $item->number_employee }}</td>
                                                     <td>{{ $item->employee_name_kh }}</td>
                                                     <td>{{ $item->employee_name_en }}</td>
                                                     <td>{{ $item->EmployeeGender }}</td>
                                                     <td>{{ $item->position ? $item->EmployeePosition : "" }}</td>
-                                                    <td>{{ $item->branch ? $item->EmployeeDepartment : "" }}</td>
+                                                    <td>{{ $item->branch ? $item->EmployeeBranch : "" }}</td>
                                                     <td>{{ \Carbon\Carbon::parse($item->date_of_commencement)->format('d-M-Y') ?? '' }}</td>
                                                     <td>{{ $item->remark }}</td>
                                                 </tr>
@@ -184,6 +184,7 @@
             $(this).prop('disabled', true);
             $(".btn-text-search").hide();
             $("#btn-text-loading").css('display', 'block');
+            var localeLanguage = '{{ config('app.locale') }}';
             axios.post('{{ URL('reports/new_staff-report') }}', {
                 'research':true,
                 'employee_id': $("#employee_id").val(),
@@ -198,13 +199,13 @@
                     $(rows).each(function(e, row) {
                         let date_of_commencement = moment(row.date_of_commencement).format('D-MMM-YYYY');
                         tr += '<tr class="odd">'+
-                                    '<td class="ids">'+(row.id)+'</td>'+
-                                    '<td><a href="#">' + (row.number_employee) + '</a></td>'+
+                                    '<td class="ids">'+(e+1)+'</td>'+
+                                    '<td>' + (row.number_employee) + '</td>'+
                                     '<td>'+( row.employee_name_kh )+'</td>'+
                                     '<td>'+( row.employee_name_en )+'</td>'+
                                     '<td>'+( row.gender == null ? "" : row.gender.name_english )+'</td>'+
-                                    '<td>'+( row.position ? row.position.name_khmer : "" )+'</td>'+
-                                    '<td>'+( row.branch.branch_name_en )+'</td>'+
+                                    '<td>'+( row.position ? localeLanguage == 'en' ? row.position.name_english : row.position.name_khmer: "" )+'</td>'+
+                                    '<td>'+( row.branch ? localeLanguage == 'en' ? row.branch.branch_name_en : row.branch.branch_name_kh : "" )+'</td>'+
                                     '<td>'+( date_of_commencement )+'</td>'+
                                     '<td>'+( row.remark ? row.remark : "" )+'</td>'+
                                 '</tr>';

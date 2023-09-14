@@ -37,9 +37,9 @@
                                     </thead>
                                     <tbody>
                                         @if (count($data)>0)
-                                            @foreach ($data as $item)
+                                            @foreach ($data as $key=>$item)
                                                 <tr class="odd">
-                                                    <td class="sorting_1 ids">{{$item->id}}</td>
+                                                    <td class="sorting_1 ids">{{++$key}}</td>
                                                     <td>{{$item->branch_name_kh}}</td>
                                                     <td>{{$item->branch_name_en}}</td>
                                                     <td>{{$item->address}}</td>
@@ -49,7 +49,7 @@
                                                         <div class="dropdown dropdown-action">
                                                             <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
                                                             <div class="dropdown-menu dropdown-menu-right">
-                                                                <a class="dropdown-item update" data-toggle="modal" data-id="{{$item->id}}" data-target="#edit_branch"><i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')</a>
+                                                                <a class="dropdown-item update" data-toggle="modal" data-id="{{$item->id}}"><i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')</a>
                                                                 <a class="dropdown-item delete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_branch"><i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
                                                             </div>
                                                         </div>
@@ -116,7 +116,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">@lang('lang.edit_branch')</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">×</span>
                         </button>
                     </div>
@@ -206,8 +206,8 @@
         });
 
         $('.delete').on('click',function(){
-            var _this = $(this).parents('tr');
-            $('.e_id').val(_this.find('.ids').text());
+            let id = $(this).data("id");
+            $('.e_id').val(id);
         });
     });
 </script>
