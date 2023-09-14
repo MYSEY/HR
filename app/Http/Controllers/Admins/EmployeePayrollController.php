@@ -295,11 +295,12 @@ class EmployeePayrollController extends Controller
                             $totalGrossSalaryTaxFree = $totalBasicSalary + $item->phone_allowance + $totalAmountChild;
                             $totalSeverancePay1 =  $totalGrossSalaryTaxFree != null ? $totalGrossSalaryTaxFree : $totalGrossSalaryTaxFree;
                         }
-                        
+                        $totalSeniority = 0;
                         if($item->emp_status == 2){
                             $type_fdc2 = 'seniority';
-                            $totalGrossSalaryTaxFree = $totalBasicSalary + $totalBunus + $item->phone_allowance + $totalAmountChild;;
+                            $totalGrossSalaryTaxFree = $totalBasicSalary + $totalBunus + $item->phone_allowance + $totalAmountChild;
                             $totalSeverancePay1 =  $totalGrossSalaryTaxFree != null ? $totalGrossSalaryTaxFree : $totalGrossSalaryTaxFree;
+                            $totalSeniority =  $totalGrossSalaryTaxFree != null ? $totalGrossSalaryTaxFree : $totalGrossSalaryTaxFree;
                         }
                         $totalSeverancePaySalary1 = 0;
                         if($item->emp_status == 1){
@@ -327,6 +328,7 @@ class EmployeePayrollController extends Controller
                             'total_gross_salary'        => $totalGrossSalaryTaxFree,
                             'total_fdc1'                => $totalSeverancePay1,
                             'total_fdc2'                => $totalSeverancePay2,
+                            'total_seniority'           => $totalSeniority,
                             'payment_date'              => $request->payment_date,
                             'type_fdc1'                 => $type_fdc1,
                             'type_fdc2'                 => $type_fdc2,
@@ -399,11 +401,12 @@ class EmployeePayrollController extends Controller
                                     $currentMonth = Carbon::createFromDate($nextYear.'-07-01')->format('Y-m-d');
                                 }
                                 
-                                $totalSalary = GrossSalaryPay::where('employee_id', $item->id)->when($currentYear ,function ($query, $fdc_end) {
+                                $totalSalary = GrossSalaryPay::where('employee_id', $item->id)->where('type_fdc2','seniority')->when($currentYear ,function ($query, $fdc_end) {
                                     $query->where('payment_date', '>=',$fdc_end);
                                 })->when($currentMonth, function($query, $currentMonth){
                                     $query->where('payment_date', '>=',$currentMonth);
-                                })->pluck('total_fdc1')->avg();
+                                })->pluck('total_seniority')->avg();
+                                
                                 $totalSalaryReceive = ($totalSalary / 22) * 7.5;
                                 $totalGrossExchange = 2000000 / $request->exchange_rate;
                                 if ($totalSalaryReceive > $totalGrossExchange) {

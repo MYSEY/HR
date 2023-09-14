@@ -30,14 +30,13 @@
                 <div class="col-auto float-end ms-auto">
                     <div class="btn-group">
                         @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer')
-                        <div class="col-auto float-end ms-auto">
-                            <a href="#" class="btn add-btn" id="btn-export"><i class="fa fa-file-excel-o"></i>@lang('lang.excel')</a>
-                            <a href="#" class="btn add-btn me-2" data-bs-toggle="modal" data-bs-target="#add_bank_transfer"><i class="fa fa-print fa-lg"></i> @lang('lang.print')</a>
-                        </div>
+                            <div class="col-auto float-end ms-auto">
+                                <a href="#" class="btn add-btn" id="btn-export"><i class="fa fa-file-excel-o"></i>@lang('lang.excel')</a>
+                                <a href="#" class="btn add-btn me-2" data-bs-toggle="modal" data-bs-target="#add_bank_transfer"><i class="fa fa-print fa-lg"></i> @lang('lang.print')</a>
+                            </div>
                         @endif
                     </div>
                 </div>
-
             </div>
         </div>
 
@@ -73,12 +72,12 @@
                                     <body>
                                         <tr>
                                             <td>@lang('lang.payroll_amount')</td>
-                                            <th>$ <span id="total_saraly"></span></th>
+                                            <th>$<span id="total_saraly"></span></th>
                                             <td></td>
                                         </tr>
                                         <tr>
                                             <td>@lang('lang.payroll_service')</td>
-                                            <th>$ <span id="total_fee"></span></th>
+                                            <th>$<span id="total_fee"></span></th>
                                             <td></td>
                                         </tr>
                                         <tr>
@@ -88,7 +87,7 @@
                                         </tr>
                                         <tr>
                                             <td>@lang('lang.total_pay')</td>
-                                            <th>$ <span id="total_pay"></span></th>
+                                            <th>$<span id="total_pay"></span></th>
                                             <td>@lang('lang.valid_date') : ( ......./....../....... )</td>
                                         </tr>
                                         <tr>
@@ -100,50 +99,52 @@
                                 </table>
                             </div>
                             <div class="col-md-12 mt-4">
-                                <table class="table table-striped ">
-                                    <thead>
-                                        <tr>
-                                            <th>@lang('lang._no').</th>
-                                            <th>@lang('lang.name_in_khmer')</th>
-                                            <th>@lang('lang.name_in_english')</th>
-                                            <th>@lang('lang.bank_account_number')</th>
-                                            <th>@lang('lang.fee')</th>
-                                            <th>@lang('lang.amounts')</th>
-                                            <th>@lang('lang.other')</th>
-                                        </tr>
-                                    </thead>
-                                    <body>
-                                        @php
-                                            $totolSaraly = 0;
-                                            $totolFee = 0;
-                                        @endphp
-                                        @if (count($data)>0)
-                                            @foreach ($data as $key=>$item)
-                                                @php
-                                                    $totolSaraly += $item->total_salary;
-                                                    $totolFee += $item->users->bank ? $item->users->bank->fee : 0;
-                                                @endphp
-                                                <tr class="odd">
-                                                    <td>{{++$key}}</td>
-                                                    <td>{{ $item->users == null ? '' : $item->users->employee_name_kh}}</td>
-                                                    <td>{{ $item->users == null ? '' : $item->users->employee_name_en }}</td>
-                                                    <td>{{ $item->users == null ? '' : $item->users->account_number }}</td>
-                                                    <td>$ {{$item->users->bank ? $item->users->bank->fee : 0.00}}</td>
-                                                    <td>$ {{$item->total_salary}}</td>
-                                                    <td></td>
-                                                </tr>
-                                            @endforeach
-                                        @endif
-                                        <tr>
-                                            <th colspan="4" class="text-end">@lang('lang.total_amount')</th>
-                                            <th>$ <span class="td_total_fee">{{$totolFee}}</span></th>
-                                            <th>$ <span class="td_total_saraly">{{$totolSaraly}}</span></th>
-                                            <td></td>
-                                        </tr>
-                                    </body>
-                                </table>
+                                <div class="table-responsive">
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>@lang('lang._no').</th>
+                                                <th>@lang('lang.name_in_khmer')</th>
+                                                <th>@lang('lang.name_in_english')</th>
+                                                <th>@lang('lang.bank_account_number')</th>
+                                                <th>@lang('lang.fee')</th>
+                                                <th>@lang('lang.amounts')</th>
+                                                <th>@lang('lang.other')</th>
+                                            </tr>
+                                        </thead>
+                                        <body>
+                                            @php
+                                                $totolSaraly = 0;
+                                                $totolFee = 0;
+                                            @endphp
+                                            @if (count($data)>0)
+                                                @foreach ($data as $key=>$item)
+                                                    @php
+                                                        $totolSaraly += $item->total_salary;
+                                                        $totolFee += $item->users->bank ? $item->users->bank->fee : 0;
+                                                    @endphp
+                                                    <tr class="odd">
+                                                        <td>{{++$key}}</td>
+                                                        <td>{{ $item->users == null ? '' : $item->users->employee_name_kh}}</td>
+                                                        <td>{{ $item->users == null ? '' : $item->users->employee_name_en }}</td>
+                                                        <td>{{ $item->users == null ? '' : $item->users->account_number }}</td>
+                                                        <td>${{$item->users->bank ? $item->users->bank->fee : 0.00}}</td>
+                                                        <td>${{$item->total_salary}}</td>
+                                                        <td></td>
+                                                    </tr>
+                                                @endforeach
+                                            @endif
+                                            <tr>
+                                                <th colspan="4" class="text-end">@lang('lang.total_amount')</th>
+                                                <th>$<span class="td_total_fee">{{number_format($totolFee, 2)}}</span></th>
+                                                <th>$<span class="td_total_saraly">{{$totolSaraly}}</span></th>
+                                                <td></td>
+                                            </tr>
+                                        </body>
+                                    </table>
+                                </div>
                             </div>
-                            <div class="col-sm-3 payslip-title-center mt-3">
+                            {{-- <div class="col-sm-3 payslip-title-center mt-3">
                                 <p>@lang('lang.date'): ......... /............. /..........</p>
                                 <p>@lang('lang.approved_by')</p><br><br><br>
 
@@ -163,7 +164,7 @@
 
                                 <p><strong>@lang('lang.mr._chhor_oudam')</strong></p>
                                 <p>@lang('lang.senior_personnel_&_recruitement_manager')</p>
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
                 </div>
