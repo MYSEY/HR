@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('type_fdc1')->nullable();
             $table->decimal('total_fdc2',50,2)->default(0);
             $table->string('type_fdc2')->nullable();
+            $table->string('total_seniority')->nullable();
             $table->date('payment_date')->nullable();
             $table->bigInteger('created_by')->unsigned()->nullable();
             $table->bigInteger('updated_by')->unsigned()->nullable();

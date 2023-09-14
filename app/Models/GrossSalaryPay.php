@@ -22,6 +22,7 @@ class GrossSalaryPay extends Model
         'type_fdc1',
         'total_fdc2',
         'type_fdc2',
+        'total_seniority',
         'payment_date',
         'created_by',
         'updated_by',

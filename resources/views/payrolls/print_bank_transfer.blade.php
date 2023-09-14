@@ -18,12 +18,12 @@
                 <body>
                     <tr>
                         <td class="style-oadding-lest">@lang('lang.payroll_amount')</td>
-                        <th>$ <span id="p_total_saraly"></span></th>
+                        <th>$<span id="p_total_saraly"></span></th>
                         <td></td>
                     </tr>
                     <tr>
                         <td class="style-oadding-lest">@lang('lang.payroll_service')</td>
-                        <th>$ <span id="p_total_fee"></span></th>
+                        <th>$<span id="p_total_fee"></span></th>
                         <td></td>
                     </tr>
                     <tr>
@@ -33,7 +33,7 @@
                     </tr>
                     <tr>
                         <td class="style-oadding-lest">@lang('lang.total_pay')</td>
-                        <th>$ <span id="p_total_pay"></span></th>
+                        <th>$<span id="p_total_pay"></span></th>
                         <td>@lang('lang.valid_date') : ( <span id="p_valid_date"></span> )</td>
                     </tr>
                     <tr>
@@ -73,16 +73,16 @@
                                 <td>{{ $item->users == null ? '' : $item->users->employee_name_kh}}</td>
                                 <td>{{ $item->users == null ? '' : $item->users->employee_name_en }}</td>
                                 <td>{{ $item->users == null ? '' : $item->users->account_number }}</td>
-                                <td>$ {{$item->users->bank ? $item->users->bank->fee : 0.00}}</td>
-                                <td>$ {{$item->total_salary}}</td>
+                                <td>${{$item->users->bank ? $item->users->bank->fee : 0.00}}</td>
+                                <td>${{$item->total_salary}}</td>
                                 <td></td>
                             </tr>
                         @endforeach
                     @endif
                     <tr>
                         <th colspan="4" style="text-align: center">@lang('lang.total_amount')</th>
-                        <th>$ {{$totolFee}}</th>
-                        <th>$ {{$totolSaraly}}</th>
+                        <th>${{number_format($totolFee, 2)}}</th>
+                        <th>${{$totolSaraly}}</th>
                         <td></td>
                     </tr>
                 </body>
