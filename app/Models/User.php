@@ -308,7 +308,8 @@ class User extends Authenticatable
         return optional($this->branch)->abbreviations;
     }
     public function getBranchAddressAttribute(){
-        return optional($this->branch)->address;
+        return (Helper::getLang() == 'en') ? optional($this->branch)->address : optional($this->branch)->address_kh;
+
     }
     public function getjoinOfDateAttribute(){
         if ($this->date_of_commencement) {
