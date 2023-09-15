@@ -40,7 +40,6 @@
 
                                 <form method="POST" action="{{ route('login') }}">
                                     @csrf
-                                    <p id="show_change_password" hidden></p>
                                     <div class="form-group">
                                         <label>Employee ID <span class="text-danger">*</span></label>
                                         <input id="number_employee" type="text" class="form-control @error('number_employee') is-invalid @enderror" required name="number_employee" value="{{ old('number_employee') }}">
@@ -109,27 +108,5 @@
                 </div>
             </div>
         </div>
-
-        <script>
-            $(function(){
-                $('.change_password').on('click', function () {
-                    if ($('#show_change_password').text() === 'show' || $('#show_change_password').text() === '') {
-                        $(".old_password").text('');
-                        $("#old_password").hide();
-                        $('.new_change_password').show();
-                        $('.account-logo').hide();
-                        $('#show_change_password').text('hide');
-                        $(".change_password").text("Back?");
-                    }else {
-                        $(".change_password").text("Change password?");
-                        $("#old_password").show();
-                        $(".old_password").text('Password');
-                        $('#show_change_password').text('show');
-                        $('.new_change_password').hide();
-                        $('.account-logo').show();
-                    }
-                });
-            });
-        </script>
     </body>
 </html>

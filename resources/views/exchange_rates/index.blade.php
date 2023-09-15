@@ -85,7 +85,7 @@
                             <input type="hidden" name="id" class="e_id">
                             <div class="form-group">
                                 <label>@lang('lang.usd') <span class="text-danger">*</span></label>
-                                <input class="form-control @error('amount') is-invalid @enderror" type="number" id="" name="amount_usd" placeholder="1.00" required>
+                                <input class="form-control @error('amount') is-invalid @enderror" type="number" id="" name="amount_usd" value="1" required>
                             </div>
                             <div class="form-group">
                                 <label>@lang('lang.riel') <span class="text-danger">*</span></label>
@@ -133,7 +133,7 @@
                             @csrf
                             <div class="form-group">
                                 <label>@lang('lang.usd') <span class="text-danger">*</span></label>
-                                <input class="form-control @error('amount') is-invalid @enderror" type="number" id="e_amount_usd" name="amount_usd" required>
+                                <input class="form-control @error('amount') is-invalid @enderror" type="number" id="e_amount_usd" name="amount_usd" value="1" required>
                             </div>
                             <div class="form-group">
                                 <label>@lang('lang.riel') <span class="text-danger">*</span></label>

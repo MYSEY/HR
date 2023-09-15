@@ -111,7 +111,7 @@ class ExportEmployeeSalary implements FromCollection, WithColumnWidths, WithHead
                 "department"        => $value->users->EmployeeDepartment,
                 "location"          => $value->users->EmployeeBranch,
                 "join_date"         => $value->users->joinOfDate,
-                "basic_salary"      => $value->basic_salary,
+                "basic_salary"      => number_format($value->basic_salary, 2),
                 "Base Salary Received"          => $value->total_gross_salary,
                 "Child Allowance"               => $value->total_child_allowance ?? "0",
                 "phone_allowance"               => $value->phone_allowance ?? "0",
@@ -125,7 +125,7 @@ class ExportEmployeeSalary implements FromCollection, WithColumnWidths, WithHead
                 "base_salary_received_reil"     => $value->base_salary_received_riel,
                 "Spouse"                        => $value->spouse,
                 "Dependent Child"               => $value->children ?? "0",
-                "Charges To Be Reduced"         => $value->total_charges_reduced,
+                "Charges To Be Reduced"         => number_format($value->total_charges_reduced, 2),
                 "Total Tax Base Riel"           => $value->total_tax_base_riel,
                 "Tax Rate"                      => $value->total_rate ?? "0",
                 "Personal Tax(USD)"             => $value->total_salary_tax_usd,
@@ -254,7 +254,7 @@ class ExportEmployeeSalary implements FromCollection, WithColumnWidths, WithHead
                 $event->sheet->getDelegate()->getStyle("A".$rows.':G'.$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 
                 //total setCellValue H
-                $sheet->setCellValue("H".$rows, number_format($this->totalAmountBasicSalary, 2));
+                $sheet->setCellValue("H".$rows, $this->totalAmountBasicSalary);
                 $sheet->getDelegate()->getStyle("H".$rows)->getFont()->setName('Khmer OS Battambang')->setSize(9)->setBold("H".$rows);
                 $event->sheet->getDelegate()->getStyle("H".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
                 //total setCellValue I
@@ -298,7 +298,7 @@ class ExportEmployeeSalary implements FromCollection, WithColumnWidths, WithHead
                 $sheet->getDelegate()->getStyle("R".$rows)->getFont()->setName('Khmer OS Battambang')->setSize(9)->setBold("R".$rows);
                 $event->sheet->getDelegate()->getStyle("R".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
                 //total setCellValue S
-                $sheet->setCellValue("S".$rows, number_format($this->totalBaseSalaryReceivedRiel));
+                $sheet->setCellValue("S".$rows, number_format($this->totalBaseSalaryReceivedRiel, 2));
                 $sheet->getDelegate()->getStyle("S".$rows)->getFont()->setName('Khmer OS Battambang')->setSize(9)->setBold("S".$rows);
                 $event->sheet->getDelegate()->getStyle("S".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
                 //total setCellValue T
@@ -314,7 +314,7 @@ class ExportEmployeeSalary implements FromCollection, WithColumnWidths, WithHead
                 $sheet->getDelegate()->getStyle("V".$rows)->getFont()->setName('Khmer OS Battambang')->setSize(9)->setBold("V".$rows);
                 $event->sheet->getDelegate()->getStyle("V".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
                 //total setCellValue V
-                $sheet->setCellValue("W".$rows, number_format($this->totalTaxBaseRiel));
+                $sheet->setCellValue("W".$rows, number_format($this->totalTaxBaseRiel, 2));
                 $sheet->getDelegate()->getStyle("W".$rows)->getFont()->setName('Khmer OS Battambang')->setSize(9)->setBold("W".$rows);
                 $event->sheet->getDelegate()->getStyle("W".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
                 //total setCellValue X
@@ -326,7 +326,7 @@ class ExportEmployeeSalary implements FromCollection, WithColumnWidths, WithHead
                 $sheet->getDelegate()->getStyle("Y".$rows)->getFont()->setName('Khmer OS Battambang')->setSize(9)->setBold("Y".$rows);
                 $event->sheet->getDelegate()->getStyle("Y".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
                 //total setCellValue Z
-                $sheet->setCellValue("Z".$rows, number_format($this->totalSalaryTaxRiel));
+                $sheet->setCellValue("Z".$rows, number_format($this->totalSalaryTaxRiel, 2));
                 $sheet->getDelegate()->getStyle("Z".$rows)->getFont()->setName('Khmer OS Battambang')->setSize(9)->setBold("Z".$rows);
                 $event->sheet->getDelegate()->getStyle("Z".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
                 //total setCellValue AA

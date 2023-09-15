@@ -67,7 +67,7 @@ class LoginController extends Controller
         $change_password= "";
         $hashedPassword = User::select('employee_name_en','number_employee', 'password','email')->where('number_employee', $request->number_employee)->first();
         if($hashedPassword == null){
-            Toastr::error('Wrong employee ID Or password', 'Error');
+            Toastr::error('Wrong EmployeeID Or Password', 'Error');
             return redirect('login');
         }
         if ($request->new_password && $request->password_confirmation) {
@@ -83,7 +83,7 @@ class LoginController extends Controller
                     return redirect()->back();
                 }
             } else {
-                Toastr::error('Wrong employee ID Or current password', 'Error');
+                Toastr::error('Wrong EmployeeID Or Current Password', 'Error');
                 return redirect()->back();
             }
         }else{
@@ -110,20 +110,20 @@ class LoginController extends Controller
         ];
         if (Auth::attempt(['number_employee' => $number_employee, 'password' => $password, 'role_id' => ['1','2']])) {
             DB::table('activity_logs')->insert($activityLog);
-            Toastr::success('Login successfully.', 'Success');
             return redirect('dashboad/admin')->with([
-                'dataUpComming'=>$dataUserUpComming,
-                'dataProbation'=>$dataUserProbation,
-                'dataShortList' => $dataShortList,
-                'dataContract'  => $dataContract
+                'dataUpComming' =>  $dataUserUpComming,
+                'dataProbation' =>  $dataUserProbation,
+                'dataShortList' =>  $dataShortList,
+                'dataContract'  =>  $dataContract
             ]);
+            Toastr::success('Login successfully.', 'Success');
             // return redirect('dashboad/admin');
         } elseif (Auth::attempt(['number_employee' => $number_employee, 'password' => $password, 'role_id' => '3'])) {
             DB::table('activity_logs')->insert($activityLog);
             Toastr::success('Login successfully.', 'Success');
             return redirect('dashboad/employee');
         } else {
-            Toastr::error('Wrong employee ID Or password', 'Error');
+            Toastr::error('Wrong EmployeeID Or Password', 'Error');
             return redirect('login');
         }
     }

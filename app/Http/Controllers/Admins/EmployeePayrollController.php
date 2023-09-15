@@ -109,7 +109,7 @@ class EmployeePayrollController extends Controller
      */
     public function store(Request $request)
     {
-        try{
+        // try{
             $employee = User::where('date_of_commencement','<=',$request->payment_date)->whereIn('emp_status',['Probation','1','10','2'])->get();
             if (!$employee->isEmpty()) {
                 foreach ($employee as $item) {
@@ -224,21 +224,23 @@ class EmployeePayrollController extends Controller
                         //function children allowance
                         $number_of_children = count($dataDateOfBirth);
                         $childrenAllowance = ChildrenAllowance::first();
-                        if ($number_of_children) {
-                            if ($number_of_children == 0) {
-                                $totalAmountChild = 0;
-                            } else if($number_of_children == 1) {
-                                $totalAmountChild = $childrenAllowance->total_children_allowance * 1;
-                            }else if($number_of_children == 2){
-                                $totalAmountChild = $childrenAllowance->total_children_allowance * 2;
-                            }else if($number_of_children == 3){
-                                $totalAmountChild = $childrenAllowance->total_children_allowance * 3;
-                            }else if($number_of_children == 4){
-                                $totalAmountChild = $childrenAllowance->total_children_allowance * 4;
+                        $totalChildAllowance = 0;
+                        if ($item->emp_status == 1 || $item->emp_status == 10 || $item->emp_status == 2) {
+                            if ($number_of_children) {
+                                if ($number_of_children == 0) {
+                                    $totalChildAllowance = 0;
+                                } else if($number_of_children == 1) {
+                                    $totalChildAllowance = $childrenAllowance->total_children_allowance * 1;
+                                }else if($number_of_children == 2){
+                                    $totalChildAllowance = $childrenAllowance->total_children_allowance * 2;
+                                }else if($number_of_children == 3){
+                                    $totalChildAllowance = $childrenAllowance->total_children_allowance * 3;
+                                }else if($number_of_children == 4){
+                                    $totalChildAllowance = $childrenAllowance->total_children_allowance * 4;
+                                }
                             }
-                        }else{
-                            $totalAmountChild = 0;
                         }
+                        
         
                         //calcute last severance pay 12
                         $total_fdc1 = 0;
@@ -292,23 +294,23 @@ class EmployeePayrollController extends Controller
                             }
                         }
                         if($item->emp_status == 'Probation'){
-                            $totalGrossSalaryTaxFree = $totalBasicSalary + $item->phone_allowance + $totalAmountChild;
+                            $totalGrossSalaryTaxFree = $totalBasicSalary + $item->phone_allowance;
                             $totalSeverancePay1 =  $totalGrossSalaryTaxFree != null ? $totalGrossSalaryTaxFree : $totalGrossSalaryTaxFree;
                         }
                         $totalSeniority = 0;
                         if($item->emp_status == 2){
                             $type_fdc2 = 'seniority';
-                            $totalGrossSalaryTaxFree = $totalBasicSalary + $totalBunus + $item->phone_allowance + $totalAmountChild;
+                            $totalGrossSalaryTaxFree = $totalBasicSalary + $totalBunus + $item->phone_allowance + $totalChildAllowance;
                             $totalSeverancePay1 =  $totalGrossSalaryTaxFree != null ? $totalGrossSalaryTaxFree : $totalGrossSalaryTaxFree;
                             $totalSeniority =  $totalGrossSalaryTaxFree != null ? $totalGrossSalaryTaxFree : $totalGrossSalaryTaxFree;
                         }
                         $totalSeverancePaySalary1 = 0;
                         if($item->emp_status == 1){
                             $severancePay = $totalSeverancePaySalary1 == null ? $totalBasicSalary : $totalSeverancePaySalary1;
-                            $totalGrossSalaryTaxFree = $severancePay + $totalBunus + $item->phone_allowance + $totalAmountChild;
+                            $totalGrossSalaryTaxFree = $severancePay + $totalBunus + $item->phone_allowance + $totalChildAllowance;
                             $total_fdc = $total_fdc1 > $total_fdc2 ? $total_fdc2 : $total_fdc1;
                             $dataTotalSeverancePay1 = $totalFirstSeverancPay == null ? $total_fdc : $totalFirstSeverancPay;
-                            $totalSeverancePay1 =  $dataTotalSeverancePay1 != null ? $dataTotalSeverancePay1 + $totalBunus + $item->phone_allowance + $totalAmountChild : $totalGrossSalaryTaxFree;
+                            $totalSeverancePay1 =  $dataTotalSeverancePay1 != null ? $dataTotalSeverancePay1 + $totalBunus + $item->phone_allowance + $totalChildAllowance : $totalGrossSalaryTaxFree;
                         }
                         $totalSeverancePaySalary2 = 0;
                         if($item->emp_status == 10){
@@ -316,9 +318,9 @@ class EmployeePayrollController extends Controller
                             $type_fdc2 = 'fdc2';
                             $totalSeverancePay1 = 0;
                             $severancePay = $totalSeverancePaySalary2 == null ? $totalBasicSalary : $totalSeverancePaySalary2;
-                            $totalGrossSalaryTaxFree = $severancePay + $totalBunus + $item->phone_allowance + $totalAmountChild;
+                            $totalGrossSalaryTaxFree = $severancePay + $totalBunus + $item->phone_allowance + $totalChildAllowance;
                             $dataTotalSeverancePay1 = $totalFirstSeverancPay == null ? $totalGrossSalary2 : $totalFirstSeverancPay;
-                            $totalSeverancePay2 =  $dataTotalSeverancePay1 != null ? $dataTotalSeverancePay1 + $totalBunus + $item->phone_allowance + $totalAmountChild : $totalGrossSalaryTaxFree;
+                            $totalSeverancePay2 =  $dataTotalSeverancePay1 != null ? $dataTotalSeverancePay1 + $totalBunus + $item->phone_allowance + $totalChildAllowance : $totalGrossSalaryTaxFree;
                         }
 
                         //sum salary and sum other benefit befor tax free
@@ -735,7 +737,7 @@ class EmployeePayrollController extends Controller
                         $data['spouse']                         = $item->spouse;
                         $data['children']                       = $children;
                         $data['total_gross_salary']             = $totalBasicSalary;
-                        $data['total_child_allowance']          = $totalAmountChild;
+                        $data['total_child_allowance']          = $totalChildAllowance;
                         $data['phone_allowance']                = $item->phone_allowance;
                         $data['total_kny_phcumben']             = $totalBunus;
                         $data['total_severance_pay']            = $totalSeverancePay;
@@ -764,11 +766,11 @@ class EmployeePayrollController extends Controller
                 Toastr::error('Can not employee payroll','Error');
                 return redirect()->back();
             }
-        }catch(\Exception $e){
-            DB::rollback();
-            Toastr::error('Payroll created fail','Error');
-            return redirect()->back();
-        }
+        // }catch(\Exception $e){
+        //     DB::rollback();
+        //     Toastr::error('Payroll created fail','Error');
+        //     return redirect()->back();
+        // }
     }
 
     /**

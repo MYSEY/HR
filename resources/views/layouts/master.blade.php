@@ -48,7 +48,6 @@
 
     <link rel="stylesheet" href="{{ asset('admin/css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('admin/css/noty.css') }}">
-    {{-- <link rel="stylesheet" href="{{ asset('admin/css/noty.css.map')}}"> --}}
     <link rel="stylesheet" href="{{ asset('admin/css/mint.css') }}">
     {{-- message toastr --}}
     <link rel="stylesheet" href="{{ asset('admin/css/toastr.min.css') }}">
@@ -63,8 +62,6 @@
             /* font-family: 'Jaldi', sans-serif; */
         }
     </style>
-
-    {{-- <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" /> --}}
 </head>
 
 <body>
