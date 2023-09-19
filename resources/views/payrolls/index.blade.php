@@ -446,7 +446,7 @@
                         '</tr>';
                     });
                 }else{
-                    var tr = '<tr><td colspan=22 align="center">@lang("lang.no_record_to_display")</td></tr>';
+                    var tr = '<tr><td colspan=27 align="center">@lang("lang.no_record_to_display")</td></tr>';
                 }
                 $(".tbl_payment_salary tbody").html(tr);
             }

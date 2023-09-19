@@ -109,7 +109,7 @@ class EmployeePayrollController extends Controller
      */
     public function store(Request $request)
     {
-        // try{
+        try{
             $employee = User::where('date_of_commencement','<=',$request->payment_date)->whereIn('emp_status',['Probation','1','10','2'])->get();
             if (!$employee->isEmpty()) {
                 foreach ($employee as $item) {
@@ -265,7 +265,8 @@ class EmployeePayrollController extends Controller
                                 //old salary and total old days
                                 $totalOldDay = $totalDayInMonth - $totalNewDays;
                                 $total_fdc1 = ($item->basic_salary / $totalDayInMonth) * $totalOldDay;
-                                $totalSeverancePaySalary1 = $total_fdc2 + $total_fdc1;
+
+                                // $totalSeverancePaySalary1 = $total_fdc2 + $total_fdc1;
                                 $type_fdc2 = 'fdc2';
                             }
                             $type_fdc1 = 'fdc1';
@@ -299,19 +300,21 @@ class EmployeePayrollController extends Controller
                         }
                         $totalSeniority = 0;
                         if($item->emp_status == 2){
+                            $type_fdc1 = 'fdc1';
                             $type_fdc2 = 'seniority';
                             $totalGrossSalaryTaxFree = $totalBasicSalary + $totalBunus + $item->phone_allowance + $totalChildAllowance;
-                            $totalSeverancePay1 =  $totalGrossSalaryTaxFree != null ? $totalGrossSalaryTaxFree : $totalGrossSalaryTaxFree;
+                            $totalSeverancePay1 =  $totalFirstSeverancPay;
                             $totalSeniority =  $totalGrossSalaryTaxFree != null ? $totalGrossSalaryTaxFree : $totalGrossSalaryTaxFree;
                         }
-                        $totalSeverancePaySalary1 = 0;
+                        // $totalSeverancePaySalary1 = 0;
                         if($item->emp_status == 1){
-                            $severancePay = $totalSeverancePaySalary1 == null ? $totalBasicSalary : $totalSeverancePaySalary1;
-                            $totalGrossSalaryTaxFree = $severancePay + $totalBunus + $item->phone_allowance + $totalChildAllowance;
+                            // $severancePay = $totalSeverancePaySalary1 == null ? $totalBasicSalary : $totalSeverancePaySalary1;
+                            $totalGrossSalaryTaxFree = $totalBasicSalary + $totalBunus + $item->phone_allowance + $totalChildAllowance;
                             $total_fdc = $total_fdc1 > $total_fdc2 ? $total_fdc2 : $total_fdc1;
                             $dataTotalSeverancePay1 = $totalFirstSeverancPay == null ? $total_fdc : $totalFirstSeverancPay;
                             $totalSeverancePay1 =  $dataTotalSeverancePay1 != null ? $dataTotalSeverancePay1 + $totalBunus + $item->phone_allowance + $totalChildAllowance : $totalGrossSalaryTaxFree;
                         }
+                        
                         $totalSeverancePaySalary2 = 0;
                         if($item->emp_status == 10){
                             $type_fdc1 = null;
@@ -338,13 +341,13 @@ class EmployeePayrollController extends Controller
                         ]);
         
                         // dd($dataGrossSalary);
-                        // if (count(Payroll::where('employee_id',$item->id)->get()) == 0) {
-                        //     $totalGrossSalary = $totalGrossSalaryTaxFree;
-                        // }else{
-                        //     $totalGrossSalary = $dataGrossSalary->total_gross_salary;
-                        // }
+                        if (count(Payroll::where('employee_id',$item->id)->get()) == 0) {
+                            $totalGrossSalary = $totalGrossSalaryTaxFree;
+                        }else{
+                            $totalGrossSalary = $dataGrossSalary->total_gross_salary;
+                        }
 
-                        $totalGrossSalary = $dataGrossSalary->total_gross_salary;
+                        // $totalGrossSalary = $dataGrossSalary->total_gross_salary;
                         //National Social Security Fund (NSSF) Formula
                         $exchangNSSF = ExchangeRate::where('type','NSSF')->orderBy('id','desc')->first();
                         if ($exchangNSSF) {
@@ -745,14 +748,14 @@ class EmployeePayrollController extends Controller
                         $data['total_gross']                    = $totalGrossSalary;
                         $data['total_pension_fund']             = $pension_contribution;
                         $data['base_salary_received_usd']       = $baseSalaryReceivedUsd;
-                        $data['base_salary_received_riel']      = $totalExchangeRiel;
-                        $data['total_tax_base_riel']            = $totalTtaxBbaseRiel;
+                        $data['base_salary_received_riel']      = round($totalExchangeRiel, 3);
+                        $data['total_tax_base_riel']            = round($totalTtaxBbaseRiel, 3);
                         $data['total_charges_reduced']          = $totalChargesReduced;
                         $data['total_rate']                     = $totalTax;
                         $data['seniority_pay_excluded_tax']     = $taxExemptionSalary;
-                        $data['total_salary_tax_riel']          = $totalSalaryTaxRiel;
+                        $data['total_salary_tax_riel']          = round($totalSalaryTaxRiel, 3);
                         $data['total_salary_tax_usd']           = $totalSalaryTaxUsd;
-                        $data['total_salary']                   = round($totalNetSalary, 2);
+                        $data['total_salary']                   = $totalNetSalary;
                         $data['exchange_rate']                  = $request->exchange_rate;
                         $data['created_by']                     = Auth::user()->id;
                         Payroll::create($data);
@@ -766,11 +769,11 @@ class EmployeePayrollController extends Controller
                 Toastr::error('Can not employee payroll','Error');
                 return redirect()->back();
             }
-        // }catch(\Exception $e){
-        //     DB::rollback();
-        //     Toastr::error('Payroll created fail','Error');
-        //     return redirect()->back();
-        // }
+        }catch(\Exception $e){
+            DB::rollback();
+            Toastr::error('Payroll created fail','Error');
+            return redirect()->back();
+        }
     }
 
     /**

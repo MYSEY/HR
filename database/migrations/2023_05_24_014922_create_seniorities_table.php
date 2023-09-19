@@ -18,9 +18,9 @@ return new class extends Migration
             $table->id();
             $table->integer('employee_id');
             $table->decimal('total_average_salary',50,2)->nullable();
-            $table->string('total_salary_receive',50,2)->nullable();
-            $table->string('tax_exemption_salary',50,2)->nullable();
-            $table->string('taxable_salary',50,2)->nullable();
+            $table->decimal('total_salary_receive',50,2)->nullable();
+            $table->decimal('tax_exemption_salary',50,2)->nullable();
+            $table->decimal('taxable_salary',50,2)->nullable();
             $table->string('payment_of_month')->nullable();
             $table->date('payment_date')->nullable();
             $table->bigInteger('created_by')->unsigned()->nullable();
