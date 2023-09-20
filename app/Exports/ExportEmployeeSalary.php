@@ -132,7 +132,7 @@ class ExportEmployeeSalary implements FromCollection, WithColumnWidths, WithHead
                 "Total Tax Base Riel"           => number_format($value->total_tax_base_riel),
                 "Tax Rate"                      => number_format($value->total_rate, 2),
                 "Personal Tax(USD)"             => number_format($value->total_salary_tax_usd, 2),
-                "Personal Tax(Riels)"           => number_format($value->total_salary_tax_riel),
+                "Personal Tax(Riels)"           => number_format($value->total_salary_tax_riel,2),
                 "Seniority Pay Excluded Tax"    => number_format($value->seniority_pay_excluded_tax, 2),
                 "Seniority Backford"            => number_format($value->seniority_backford, 2),
                 "Severance Pay"                 => number_format($value->total_severance_pay, 2),

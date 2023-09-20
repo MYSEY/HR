@@ -272,8 +272,8 @@ class EmployeePayrollController extends Controller
                             $type_fdc1 = 'fdc1';
                             $totalSeverancePay2 = $total_fdc2;
                         }
-                        $totalGrossSalary1 =0;
-                        $totalGrossSalary2 =0;
+                        $totalGrossSalary1 = 0;
+                        $totalGrossSalary2 = 0;
                         if ($item->emp_status == 10) {
                             $dataGrossSalaryPay2 = GrossSalaryPay::where('employee_id',$item->id)->whereNotNull('type_fdc2')->count(); 
                             if($dataGrossSalaryPay2 == 12){
@@ -347,11 +347,10 @@ class EmployeePayrollController extends Controller
                             $totalGrossSalary = $dataGrossSalary->total_gross_salary;
                         }
 
-                        // $totalGrossSalary = $dataGrossSalary->total_gross_salary;
                         //National Social Security Fund (NSSF) Formula
                         $exchangNSSF = ExchangeRate::where('type','NSSF')->orderBy('id','desc')->first();
                         if ($exchangNSSF) {
-                            $totalExchangeRielPreTax =  $exchangNSSF->amount_riel * round($totalGrossSalary, 2);
+                            $totalExchangeRielPreTax =  $exchangNSSF->amount_riel * $totalGrossSalary;
                             if ($totalExchangeRielPreTax) {
                                 if ($totalExchangeRielPreTax >= 1200000) {
                                     $averageWage    = 1200000;
@@ -367,16 +366,16 @@ class EmployeePayrollController extends Controller
                             $occupationalRisk = (0.008 * $averageWage);
                             $healthCare = (0.026 * $averageWage);
                             $workerContributionUsd = ($averageWage * 0.02);
-                            $workerContributionRiel = (round($workerContributionUsd, -2) / $exchangNSSF->amount_riel);
+                            $workerContributionRiel = $workerContributionUsd / $exchangNSSF->amount_riel;
                             $dataNSSF = NationalSocialSecurityFund::create([
                                 'employee_id'                   => $item->id,
-                                'total_pre_tax_salary_usd'      => number_format($totalGrossSalary, 2),
+                                'total_pre_tax_salary_usd'      => $totalGrossSalary,
                                 'total_pre_tax_salary_riel'     => number_format($totalExchangeRielPreTax),
                                 'total_average_wage'            => number_format($averageWage),
                                 'total_occupational_risk'       => number_format($occupationalRisk),
                                 'total_health_care'             => number_format($healthCare),
                                 'pension_contribution_usd'      => number_format($workerContributionUsd),
-                                'pension_contribution_riel'     => number_format($workerContributionRiel, 2),
+                                'pension_contribution_riel'     => round($workerContributionRiel, 2),
                                 'corporate_contribution'        => number_format($workerContributionUsd),
                                 'payment_date'                  => $request->payment_date,
                                 'created_by'                    => Auth::user()->id,

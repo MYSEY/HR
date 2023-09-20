@@ -173,7 +173,7 @@ class ExportPayroll implements FromCollection, WithColumnWidths, WithHeadings, W
                     number_format($pay->total_tax_base_riel),
                     number_format($pay->total_rate, 2),
                     number_format($pay->total_salary_tax_usd, 2),
-                    number_format($pay->total_salary_tax_riel),
+                    number_format($pay->total_salary_tax_riel,2),
                     number_format($pay->seniority_pay_excluded_tax, 2),
                     number_format($pay->seniority_backford, 2),
                     number_format($pay->total_severance_pay, 2),
