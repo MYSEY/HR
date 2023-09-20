@@ -369,7 +369,7 @@ class EmployeePayrollController extends Controller
                             $workerContributionRiel = $workerContributionUsd / $exchangNSSF->amount_riel;
                             $dataNSSF = NationalSocialSecurityFund::create([
                                 'employee_id'                   => $item->id,
-                                'total_pre_tax_salary_usd'      => $totalGrossSalary,
+                                'total_pre_tax_salary_usd'      => number_format($totalGrossSalary, 2),
                                 'total_pre_tax_salary_riel'     => number_format($totalExchangeRielPreTax),
                                 'total_average_wage'            => number_format($averageWage),
                                 'total_occupational_risk'       => number_format($occupationalRisk),
