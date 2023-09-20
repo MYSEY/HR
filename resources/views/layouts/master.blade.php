@@ -6,7 +6,7 @@
 
 <head>
     <style>
-        .page-wrapper{
+        .page-wrapper {
             min-height: 0px !important
         }
     </style>
@@ -56,9 +56,41 @@
     {{-- <link href="https://fonts.googleapis.com/css?family=Nokora" rel="stylesheet">
     <!-- laravel font style-->
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet" type="text/css"> --}}
+
     <style>
-        body,option,label,.chartjs-size-monitor-shrink,#k_chart_cashin_cahout,.chartjs-render-monitor,canvas,#k_chart_receive_pay,.chartjs-size-monitor,.fontKH,.f,.form-control,.modal-title,.menu-item,.menu-title,.k-portlet__head-title,tr,li,a,label,.ui-helper-hidden-accessible,div,button,h1,h2,b,h3,title,.swal2-title,.content-header-title,.btn,.swal2-title{
-            font-family:  'Nunito', "Khmer OS Battambang", sans-serif, serif;
+        body,
+        option,
+        label,
+        .chartjs-size-monitor-shrink,
+        #k_chart_cashin_cahout,
+        .chartjs-render-monitor,
+        canvas,
+        #k_chart_receive_pay,
+        .chartjs-size-monitor,
+        .fontKH,
+        .f,
+        .form-control,
+        .modal-title,
+        .menu-item,
+        .menu-title,
+        .k-portlet__head-title,
+        tr,
+        li,
+        a,
+        label,
+        .ui-helper-hidden-accessible,
+        div,
+        button,
+        h1,
+        h2,
+        b,
+        h3,
+        title,
+        .swal2-title,
+        .content-header-title,
+        .btn,
+        .swal2-title {
+            font-family: 'Nunito', "Khmer OS Battambang", sans-serif, serif;
             /* font-family: 'Jaldi', sans-serif; */
         }
     </style>
@@ -101,53 +133,107 @@
                         {{ $icon }}
                     </a>
                 </li> --}}
-                
+
                 <li class="nav-item dropdown has-arrow flag-nav">
                     <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="" role="button">
                         @switch(App::getLocale())
                             @case('en')
-                                <img src="{{asset('/admin/img/us.png')}}" alt="" height="20"><span>English</span>
+                                <img src="{{ asset('/admin/img/us.png') }}" alt="" height="20"><span>English</span>
                             @break
+
                             @case('kh')
-                                <img src="{{asset('/admin/img/flag-of-cambodia-logo.png')}}" alt="" height="20"><span>English</span>
+                                <img src="{{ asset('/admin/img/flag-of-cambodia-logo.png') }}" alt=""
+                                    height="20"><span>English</span>
                             @break
+
                             @default
-                            <img src="{{asset('/admin/img/us.png')}}" alt="" height="20"><span>English</span>
+                                <img src="{{ asset('/admin/img/us.png') }}" alt=""
+                                    height="20"><span>English</span>
                         @endswitch
                     </a>
-                    
-                    
+
+
                     <div class="dropdown-menu dropdown-menu-right">
                         <a href="{{ url('lang/en') }}" class="dropdown-item">
-                            <img src="{{asset('/admin/img/us.png')}}" alt="" height="20"> English
+                            <img src="{{ asset('/admin/img/us.png') }}" alt="" height="20"> English
                         </a>
                         <a href="{{ url('lang/kh') }}" class="dropdown-item">
-                            <img src="{{asset('/admin/img/flag-of-cambodia-logo.png')}}" alt="" height="20"> Khmer
+                            <img src="{{ asset('/admin/img/flag-of-cambodia-logo.png') }}" alt=""
+                                height="20"> Khmer
                         </a>
                     </div>
                 </li>
 
-                {{-- <li class="nav-item dropdown">
-                    <a href="" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">
-                        <i class="fa fa-bell-o"></i> <span class="badge rounded-pill">3</span>
-                    </a> 
+                @if (count(notification()))
+                    {{-- @dd(notification()) --}}
+                    @foreach (notification() as $key)
+                        <li class="nav-item dropdown" id="{{ $key->id }}">
+                            <a href="" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">
+                                @if ($key->unread)
+                                    <i class="fa fa-bell-o"></i> <span
+                                        class="badge rounded-pill pending">{{ $key->unread }}</span>
+                                @endif
+                            </a>
+                            <div class="dropdown-menu notifications">
+                                <div class="topnav-dropdown-header">
+                                    <span class="notification-title">Notifications</span>
+                                </div>
+                                <div class="noti-content">
+                                    <ul class="notification-list">
+                                        <li class="notification-message">
+                                            <a href="">
+                                                <div class="media d-flex">
+                                                    <span class="avatar flex-shrink-0">
+                                                        @if ($key->profile != null)
+                                                            <img alt="profile" src="{{ asset('/uploads/images/' . $key->profile) }}">
+                                                        @else
+                                                            <img alt="profile" src="{{ asset('admin/img/defuals/default-user-icon.png') }}">
+                                                        @endif
+                                                        {{-- <img alt="" src="{{ asset('/uploads/images/' . $key->profile) }}"> --}}
+                                                    </span>
+                                                    <div class="media-body flex-grow-1">
+                                                        <p class="noti-details"><span class="noti-title">{{$key->employee_name_en}}</span> added new task
+                                                            {{-- <span class="noti-title">Patient appointment booking</span> --}}
+                                                        </p>
+                                                        <p class="noti-time"><span class="notification-time">4 mins ago</span></p>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="topnav-dropdown-footer">
+                                    <a href="">View all Notifications</a>
+                                </div>
+                            </div>
+                        </li>
+                    @endforeach
+                @endif
+                <li class="nav-item dropdown">
+                    <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">
+                        <i class="fa fa-comment" aria-hidden="true"></i><span class="badge rounded-pill">1</span>
+                    </a>
                     <div class="dropdown-menu notifications">
                         <div class="topnav-dropdown-header">
-                            <span class="notification-title">Notifications</span>
+                            <span class="notification-title">Messages</span>
+                            {{-- <a href="javascript:void(0)" class="clear-noti"> Clear All </a> --}}
                         </div>
                         <div class="noti-content">
                             <ul class="notification-list">
                                 <li class="notification-message">
-                                    <a href="">
-                                        <div class="media d-flex">
-                                            <span class="avatar flex-shrink-0">
-                                                <img alt="" src="{{asset('/admin/img/avatar-02.jpg')}}">
-                                            </span>
-                                            <div class="media-body flex-grow-1">
-                                                <p class="noti-details"><span class="noti-title">John Doe</span> added new task 
-                                                    <span class="noti-title">Patient appointment booking</span>
-                                                </p>
-                                                <p class="noti-time"><span class="notification-time">4 mins ago</span></p>
+                                    <a href="{{url('/chart')}}">
+                                        <div class="list-item">
+                                            <div class="list-left">
+                                                <span class="avatar">
+                                                    <img alt=""
+                                                        src="https://smarthr.dreamguystech.com/laravel/template/public/assets/img/profiles/avatar-09.jpg">
+                                                </span>
+                                            </div>
+                                            <div class="list-body">
+                                                <span class="message-author">Yos Radavid </span>
+                                                <span class="message-time">12:28 AM</span>
+                                                <div class="clearfix"></div>
+                                                <span class="message-content">IT support</span>
                                             </div>
                                         </div>
                                     </a>
@@ -155,11 +241,11 @@
                             </ul>
                         </div>
                         <div class="topnav-dropdown-footer">
-                            <a href="">View all Notifications</a>
+                            <a href="https://smarthr.dreamguystech.com/laravel/template/public/chat">View all
+                                Messages</a>
                         </div>
                     </div>
-                </li> --}}
-
+                </li>
                 <li class="nav-item dropdown has-arrow main-drop">
                     <a href="javascript:void(0);" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">
                         <span class="avatar">
@@ -173,10 +259,11 @@
                         <span>{{ Auth::user()->employee_name_en }}</span>
                     </a>
                     <div class="dropdown-menu">
-                        <a class="dropdown-item" href="{{ url('/employee/profile/' . Auth::user()->id) }}">@lang("lang.my_profile")</a>
+                        <a class="dropdown-item"
+                            href="{{ url('/employee/profile/' . Auth::user()->id) }}">@lang('lang.my_profile')</a>
                         <a class="dropdown-item" href="{{ route('logout') }}"
                             onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                            @lang("lang.log_out")
+                            @lang('lang.log_out')
                         </a>
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                             @csrf
@@ -190,10 +277,11 @@
                 <a href="" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"
                     aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
                 <div class="dropdown-menu dropdown-menu-right">
-                    <a class="dropdown-item" href="{{ url('/employee/profile/' . Auth::user()->id) }}">@lang("lang.my_profile")</a>
+                    <a class="dropdown-item"
+                        href="{{ url('/employee/profile/' . Auth::user()->id) }}">@lang('lang.my_profile')</a>
                     <a class="dropdown-item" href="{{ route('logout') }}"
                         onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                        @lang("lang.log_out")
+                        @lang('lang.log_out')
                     </a>
                     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                         @csrf
@@ -201,7 +289,7 @@
                 </div>
             </div>
         </div>
-       
+
         <div class="sidebar" id="sidebar">
             <div class="slimScrollDiv" style="position: relative; overflow:hidden; width: 100%; height: 346px;">
                 <div class="sidebar-inner slimscroll" style="overflow: auto; width: 100%; height: 346px;">
@@ -209,15 +297,17 @@
                         <ul class="sidebar-vertical">
                             @foreach (menu() as $menu)
                                 @if (isset($menu['child']))
-                                    @if (RolePermission($menu['table'],$menu['permission']))
-                                        <li class="menu-title"><span>{{$menu['name']}}</span></li>
+                                    @if (RolePermission($menu['table'], $menu['permission']))
+                                        <li class="menu-title"><span>{{ $menu['name'] }}</span></li>
                                         <li class="submenu">
-                                            <a href="javascript:void(0);">{!! $menu['icon'] !!}<span>{{$menu['value']}}</span><span class="menu-arrow"></span></a>
+                                            <a href="javascript:void(0);">{!! $menu['icon'] !!}<span>{{ $menu['value'] }}</span><span
+                                                    class="menu-arrow"></span></a>
                                             <ul style="display: none;">
                                                 @foreach ($menu['child'] as $sub_menu)
                                                     @if (RolePermission($sub_menu['table'], $sub_menu['permission']))
                                                         <li>
-                                                            <a class="" href="{{url($sub_menu['url'])}}">{{$sub_menu['value']}}</a>
+                                                            <a class=""
+                                                                href="{{ url($sub_menu['url']) }}">{{ $sub_menu['value'] }}</a>
                                                         </li>
                                                     @endif
                                                 @endforeach
@@ -225,9 +315,10 @@
                                         </li>
                                     @endif
                                 @else
-                                    @if (RolePermission($menu['table'],$menu['permission']))
+                                    @if (RolePermission($menu['table'], $menu['permission']))
                                         <li class="">
-                                            <a href="{{url($menu['url'])}}">{!! $menu['icon'] !!}<span>{{$menu['value']}}</span></a>
+                                            <a
+                                                href="{{ url($menu['url']) }}">{!! $menu['icon'] !!}<span>{{ $menu['value'] }}</span></a>
                                         </li>
                                     @endif
                                 @endif
@@ -304,6 +395,27 @@
     {{-- <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script> --}}
     {{-- <script src="{{asset('/admin/js/MSelectDBox.min.js')}}"></script> --}}
     <div class="sidebar-overlay"></div>
+    <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            var pusher = new Pusher('78cefbf5b6efd1a4795a', {
+                cluster: 'eu'
+            });
+            var channel = pusher.subscribe('my-channel');
+            channel.bind('my-event', function(data) {
+                if (data.from) {
+                    let pending = parseInt($('#' + data.from).find('.pending').html());
+                    if (pending) {
+                        $('#' + data.from).find('.pending').html(pending + 1);
+                    } else {
+                        $('#' + data.from).html(
+                            '<a href="#" class="nav-link" data-toggle="dropdown"><i class="fa fa-bell-o"></i> <span class="badge rounded-pill pending">1</span></a>'
+                        );
+                    }
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>

@@ -1,5 +1,6 @@
 <?php
 
+use App\Events\FormSubmitted;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admins\RoleConroller;
@@ -25,10 +26,12 @@ use App\Http\Controllers\Admins\TrainingTypeController;
 use App\Http\Controllers\Admins\PayrollReportController;
 use App\Http\Controllers\Admins\LeavesEmployeeController;
 use App\Http\Controllers\Admins\CandidateResumeController;
+use App\Http\Controllers\Admins\ChartController;
 use App\Http\Controllers\Admins\EmployeePayrollController;
 use App\Http\Controllers\Admins\EmployeeProfileController;
 use App\Http\Controllers\Admins\RecruitmentPlanController;
 use App\Http\Controllers\Admins\ChildrenAllowanceController;
+use App\Http\Controllers\Admins\TaskController;
 use App\Http\Controllers\LanguageController;
 use App\Models\StaffPromoted;
 use Illuminate\Support\Facades\Lang;
@@ -276,5 +279,28 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('children/edit',[ChildrenAllowanceController::class,'edit']);
     Route::post('children/update',[ChildrenAllowanceController::class,'update']);
     Route::post('children/delete',[ChildrenAllowanceController::class,'destroy']);
+
+    // test send message 
+    Route::get('/task', [TaskController::class, 'index']);
+    Route::post('/save_task', [TaskController::class, 'save_task']);
+
+    // test chart
+    Route::get('/chart', [ChartController::class, 'index']);
+    Route::post('/broadcast', [ChartController::class, 'broadcast']);
+    Route::post('/receive', [ChartController::class, 'receive']);
 });
 Route::get('lang/{locale}', [LanguageController::class, "lang"]);
+
+/// test pusher
+Route::get('/sender', function() {
+    return view('sender');
+});
+
+Route::post('/sender', function() {
+    $text = request()->text;
+    event(new FormSubmitted($text));
+});
+Route::post('/count', function() {
+    $text = request()->text;
+    event(new FormSubmitted($text));
+});

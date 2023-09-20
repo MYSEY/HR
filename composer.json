@@ -18,6 +18,7 @@
         "needim/noty": "^3.1",
         "phannaly/php-datetime-khmer": "^1.0",
         "psr/simple-cache": "^2.0",
+        "pusher/pusher-php-server": "^7.2",
         "rsmalc/laravel-noty": "^2.5"
     },
     "require-dev": {

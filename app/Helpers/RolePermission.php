@@ -13,6 +13,12 @@ function RolePermission($table_id,$permission_type_id)
         return true;
     }
 }
+function notification (){
+    $notifications = DB::select("SELECT users.id, users.employee_name_en, users.employee_name_kh, users.email, users.profile,
+    COUNT(is_read) AS unread FROM users LEFT JOIN messages ON users.id = messages.from AND messages.is_read = 0 WHERE users.id = ".Auth::id()." GROUP BY users.id, 
+    users.employee_name_en, users.employee_name_kh, users.email, users.profile");
+    return $notifications;
+}
 function menu(){
     return $data=[
         [
@@ -101,15 +107,15 @@ function menu(){
             'permission'=>1,
             'child'=>[
                 [
-                    'value'=> Helper::getLang() == 'en' ? 'Recruitment Plan': 'ផែនការជ្រើសរើសបុគ្គលិក',
-                    'url'=>"recruitment/plan-list",
-                    'table'=>7,
-                    'permission'=>1
-                ],
-                [
                     'value'=> Helper::getLang() == 'en' ? 'Candidate CV': 'CV បេក្ខជន',
                     'url'=>"recruitment/candidate-resume/list",
                     'table'=>8,
+                    'permission'=>1
+                ],
+                [
+                    'value'=> Helper::getLang() == 'en' ? 'Recruitment Plan': 'ផែនការជ្រើសរើសបុគ្គលិក',
+                    'url'=>"recruitment/plan-list",
+                    'table'=>7,
                     'permission'=>1
                 ],
             ]
@@ -266,6 +272,12 @@ function menu(){
                 [
                     'value'=> Helper::getLang() == 'en' ? 'Forgot Password' : 'ភ្លេច​លេខសម្ងាត់​',
                     'url'=>"change/password",
+                    'table'=>27,
+                    'permission'=>1
+                ],
+                [
+                    'value'=> Helper::getLang() == 'en' ? 'Task' : 'កិច្ចការ',
+                    'url'=>"task",
                     'table'=>27,
                     'permission'=>1
                 ],
