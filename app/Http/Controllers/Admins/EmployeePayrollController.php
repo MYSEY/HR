@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Admins;
 
-use App\Exports\ExportEmployeeSalary;
 use DateTime;
 use DatePeriod;
 use DateInterval;
 use App\Models\User;
 use App\Models\Bonus;
 use App\Models\Taxes;
+use App\Models\Branchs;
 use App\Models\Holiday;
 use App\Models\Payroll;
 use App\Models\Seniority;
@@ -21,13 +21,14 @@ use Illuminate\Support\Carbon;
 use App\Models\ChildrenAllowance;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use App\Models\Branchs;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Auth;
-use App\Models\NationalSocialSecurityFund;
-use App\Repositories\Admin\PayrollRepository;
 use Illuminate\Support\Facades\Date;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\ExportEmployeeSalary;
+use App\Models\EmployeeStatusHistory;
+use App\Models\NationalSocialSecurityFund;
+use App\Repositories\Admin\PayrollRepository;
 
 class EmployeePayrollController extends Controller
 {
@@ -109,7 +110,7 @@ class EmployeePayrollController extends Controller
      */
     public function store(Request $request)
     {
-        try{
+        // try{
             $employee = User::where('date_of_commencement','<=',$request->payment_date)->whereIn('emp_status',['Probation','1','10','2'])->get();
             if (!$employee->isEmpty()) {
                 foreach ($employee as $item) {
@@ -265,13 +266,13 @@ class EmployeePayrollController extends Controller
                                 //old salary and total old days
                                 $totalOldDay = $totalDayInMonth - $totalNewDays;
                                 $total_fdc1 = ($item->basic_salary / $totalDayInMonth) * $totalOldDay;
-
-                                // $totalSeverancePaySalary1 = $total_fdc2 + $total_fdc1;
                                 $type_fdc2 = 'fdc2';
                             }
                             $type_fdc1 = 'fdc1';
                             $totalSeverancePay2 = $total_fdc2;
+                            $totalBasicSalary = $item->basic_salary;
                         }
+
                         $totalGrossSalary1 = 0;
                         $totalGrossSalary2 = 0;
                         if ($item->emp_status == 10) {
@@ -306,12 +307,12 @@ class EmployeePayrollController extends Controller
                             $totalSeverancePay1 =  $totalFirstSeverancPay;
                             $totalSeniority =  $totalGrossSalaryTaxFree != null ? $totalGrossSalaryTaxFree : $totalGrossSalaryTaxFree;
                         }
-                        // $totalSeverancePaySalary1 = 0;
+                        
                         if($item->emp_status == 1){
-                            // $severancePay = $totalSeverancePaySalary1 == null ? $totalBasicSalary : $totalSeverancePaySalary1;
                             $totalGrossSalaryTaxFree = $totalBasicSalary + $totalBunus + $item->phone_allowance + $totalChildAllowance;
-                            $total_fdc = $total_fdc1 > $total_fdc2 ? $total_fdc2 : $total_fdc1;
-                            $dataTotalSeverancePay1 = $totalFirstSeverancPay == null ? $total_fdc : $totalFirstSeverancPay;
+                            // $total_fdc = $total_fdc1 > $total_fdc2 ? $total_fdc2 : $total_fdc1;
+                            // $dataTotalSeverancePay1 = $totalFirstSeverancPay == null ? $total_fdc1 : $totalFirstSeverancPay;
+                            $dataTotalSeverancePay1 = $total_fdc1;
                             $totalSeverancePay1 =  $dataTotalSeverancePay1 != null ? $dataTotalSeverancePay1 + $totalBunus + $item->phone_allowance + $totalChildAllowance : $totalGrossSalaryTaxFree;
                         }
                         
@@ -768,11 +769,11 @@ class EmployeePayrollController extends Controller
                 Toastr::error('Can not employee payroll','Error');
                 return redirect()->back();
             }
-        }catch(\Exception $e){
-            DB::rollback();
-            Toastr::error('Payroll created fail','Error');
-            return redirect()->back();
-        }
+        // }catch(\Exception $e){
+        //     DB::rollback();
+        //     Toastr::error('Payroll created fail','Error');
+        //     return redirect()->back();
+        // }
     }
 
     /**

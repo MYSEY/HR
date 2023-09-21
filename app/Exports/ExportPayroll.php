@@ -21,6 +21,7 @@ use Maatwebsite\Excel\Concerns\WithCustomStartCell;
 
 class ExportPayroll implements FromCollection, WithColumnWidths, WithHeadings, WithCustomStartCell, WithEvents
 {
+    protected $num;
     protected $register_events_title;
     protected $register_events_title_sub_title;
     protected $monthly_title;
@@ -121,7 +122,10 @@ class ExportPayroll implements FromCollection, WithColumnWidths, WithHeadings, W
                 "ប្រាកឧបត្ថម្ភថ្លៃផ្ញើរឡាន",
                 "បៀវត្ស​ត្រូវទទួល បានបន្ទាប់ពីដកពន្ធ($)"
             ];
+            $i = 1;
             foreach ($datas as $pay) {
+                $i++;
+                $this->num = $i;
                 $this->totalAmountBasicSalary += $pay->basic_salary;
                 $this->totalBaseSalaryReceived += $pay->total_gross_salary;
                 $this->totalChildAllowance += $pay->total_child_allowance;
@@ -402,6 +406,20 @@ class ExportPayroll implements FromCollection, WithColumnWidths, WithHeadings, W
                         ],
                     ],
                 ]);
+                $n=5;
+                if ($this->num > 0) {
+                    foreach ($this->export_datas as $key=>$value) {
+                        $n++;
+                        $event->sheet->getStyle('A'.$n.':AE'.$n)->applyFromArray([
+                            'borders' => [
+                                'allBorders' => [
+                                    'borderStyle' => Border::BORDER_THIN,
+                                    'color' => ['argb' => '000000'],
+                                ],
+                            ],
+                        ]);
+                    }
+                }
                 $event->sheet->getStyle('A'.$rows.':AE'.$rows)->applyFromArray([
                     'borders' => [
                         'allBorders' => [
