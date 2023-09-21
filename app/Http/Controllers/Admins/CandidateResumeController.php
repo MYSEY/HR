@@ -22,6 +22,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 
 class CandidateResumeController extends Controller
 {
@@ -137,6 +138,45 @@ class CandidateResumeController extends Controller
         return response()->json(['employees'=>$dataEmp]);
     }
     
+    public function import(Request $request)
+    {
+        $file = $request->file;
+        $filesize = filesize($file);
+        $extension = $request->file->extension();
+        $spreadsheet = IOFactory::load($file);
+        $allDataInSheet = $spreadsheet->getActiveSheet()->toArray();
+        if ($extension == "xlsx" || $extension == "xls" || $extension == "csv") {
+            $userID = Auth::user()->id;
+            $i = 0;
+            $re = 1;
+            foreach ($allDataInSheet as $csv) {
+                $i++;
+                if ($i != 1) {
+                    $arr = [
+                        'name_kh'               => $csv[0],
+                        'name_en'               => $csv[1],
+                        'gender'                => $csv[2],
+                        'current_position'      => $csv[3],
+                        'companey_name'         => $csv[4],
+                        'current_address'       => $csv[5],
+                        'position_applied'      => $csv[6],
+                        'location_applied'      => $csv[7],
+                        'received_date'         => $csv[8],
+                        'recruitment_channel'   => $csv[9],
+                        'contact_number'        => $csv[10],
+                        'status'                => "1",
+                        'updated_by'            => $userID,
+                        'created_at'            => Carbon::now(),
+                    ];
+                    DB::table('candidate_resumes')->insert($arr);
+                }
+            }
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+    
     /**
      * Show the form for editing the specified resource.
      *
@@ -208,20 +248,20 @@ class CandidateResumeController extends Controller
                 $filenameGuarant = $request->hidden_cv;
             }
             $dataUpdate = [
-                'name_kh' => $request->name_kh,
-                'name_en' => $request->name_en,
-                'gender' => $request->gender,
-                'current_position' => $request->current_position,
-                'companey_name' => $request->companey_name,
-                'position_applied' => $request->position_applied,
-                'current_address' => $request->current_address,
-                'location_applied' => $request->location_applied,
-                'received_date' => $request->received_date,
-                'recruitment_channel' => $request->recruitment_channel,
-                'contact_number' => $request->contact_number,
-                'status' => $request->status,
-                'cv' => $filenameGuarant,
-                'updated_by' => Auth::user()->id 
+                'name_kh'               => $request->name_kh,
+                'name_en'               => $request->name_en,
+                'gender'                => $request->gender,
+                'current_position'      => $request->current_position,
+                'companey_name'         => $request->companey_name,
+                'position_applied'      => $request->position_applied,
+                'current_address'       => $request->current_address,
+                'location_applied'      => $request->location_applied,
+                'received_date'         => $request->received_date,
+                'recruitment_channel'   => $request->recruitment_channel,
+                'contact_number'        => $request->contact_number,
+                'status'                => $request->status,
+                'cv'                    => $filenameGuarant,
+                'updated_by'            => Auth::user()->id,
             ];
             CandidateResume::where('id',$request->id)->update($dataUpdate);
             Toastr::success('Candidate resume updated successfully.','Success');

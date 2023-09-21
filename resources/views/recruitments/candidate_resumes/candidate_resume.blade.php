@@ -17,7 +17,8 @@
                     </ul>
                 </div>
                 <div class="col-auto float-end ms-auto">
-                    <a href="#" class="btn add-btn" id="add_new" data-bs-toggle="modal" data-bs-target="#add_user"><i class="fa fa-plus"></i> @lang('lang.add_new')</a>
+                    <a href="#" class="btn add-btn" data-toggle="modal" id="import_new_cvs"><i class="fa fa-plus"></i>@lang('lang.import')</a>
+                    <a href="#" class="btn add-btn me-2" id="add_new" data-bs-toggle="modal" data-bs-target="#add_user"><i class="fa fa-plus"></i> @lang('lang.add_new')</a>
                 </div>
             </div>
         </div>
@@ -93,7 +94,7 @@
         @include('recruitments.candidate_resumes.modal_form_create')
         @include('recruitments.candidate_resumes.modal_form_edit')
         @include('recruitments.candidate_resumes.modal_form_create_emp')
-        {{-- <input id="example" type="text"> --}}
+        @include('recruitments.candidate_resumes.import')
 
     </div>
 @endsection
@@ -103,6 +104,11 @@
 
 <script type="text/javascript">
     $(function(){
+        $("#import_new_cvs").on("click", function() {
+            $(".thanLess").hide();
+            $("#thanLess").text("");
+            $('#import_motor_cv').modal('show');
+        });
         $("#btn_tab_short_list, #btn_not_tab_short_list").on("click", function(){
             let tab_status = $(this).attr('data-tab-id');
             showDatas(tab_status);
@@ -248,7 +254,8 @@
         });
         $('.delete').on('click', function() {
             var _this = $(this).parents('tr');
-            $('.e_id').val(_this.find('.ids').text());
+            let id = $(this).data('id');
+            $('.e_id').val(id);
         });
         $(document).on('click','.update', function(){
             let id = $(this).data("id");

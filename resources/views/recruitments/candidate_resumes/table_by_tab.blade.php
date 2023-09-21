@@ -62,9 +62,13 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <small class="block text-ellipsis">
-                                                        <a href="{{asset("/uploads/images/".$item->cv)}}" target="_blank" class="subdrop"><i class="la la-file-pdf"></i> <span>@lang('lang.preview_cv')</span></a>
-                                                    </small>
+                                                    @if ($item->cv)
+                                                        <small class="block text-ellipsis">
+                                                            <a href="{{asset("/uploads/images/".$item->cv)}}" target="_blank" class="subdrop"><i class="la la-file-pdf"></i> <span>@lang('lang.preview_cv')</span></a>
+                                                        </small>
+                                                    @else
+                                                        <span>@lang('lang.no_cv')</span>
+                                                    @endif
                                                 </td>
                                                 <td>{{ $item->remark }}</td>
                                                 <td class="text-end">

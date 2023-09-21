@@ -58,7 +58,29 @@ function menu(){
             ]
         ],
         [
+            
             'name'=>'HR',
+            'icon'=>'<i class="la la-briefcase"></i> <span></span> <span class="menu-arrow"></span>',
+            'value'=> Helper::getLang() == 'en' ? 'Recruitment': 'ការជ្រើសរើសបុគ្គលិក',
+            'table'=>7,
+            'permission'=>1,
+            'child'=>[
+                [
+                    'value'=> Helper::getLang() == 'en' ? 'Candidate CV': 'CV បេក្ខជន',
+                    'url'=>"recruitment/candidate-resume/list",
+                    'table'=>8,
+                    'permission'=>1
+                ],
+                [
+                    'value'=> Helper::getLang() == 'en' ? 'Recruitment Plan': 'ផែនការជ្រើសរើសបុគ្គលិក',
+                    'url'=>"recruitment/plan-list",
+                    'table'=>7,
+                    'permission'=>1
+                ],
+            ]
+        ],
+        [
+            'name'=>'',
             'icon'=>'<i class="la la-money"></i> <span></span> <span class="menu-arrow"></span>',
             'value'=> Helper::getLang() == 'en' ? 'Payroll':'ប្រាក់បៀវត្សរ៍',
             'table'=>4,
@@ -89,27 +111,6 @@ function menu(){
                     'value'=> Helper::getLang() == 'en' ? 'Pay Motor Rental': 'បង់ថ្លៃជួលម៉ូតូ',
                     'url'=>"motor-rentel/pay",
                     'table'=>6,
-                    'permission'=>1
-                ],
-            ]
-        ],
-        [
-            'name'=>'',
-            'icon'=>'<i class="la la-briefcase"></i> <span></span> <span class="menu-arrow"></span>',
-            'value'=> Helper::getLang() == 'en' ? 'Recruitment': 'ការជ្រើសរើសបុគ្គលិក',
-            'table'=>7,
-            'permission'=>1,
-            'child'=>[
-                [
-                    'value'=> Helper::getLang() == 'en' ? 'Recruitment Plan': 'ផែនការជ្រើសរើសបុគ្គលិក',
-                    'url'=>"recruitment/plan-list",
-                    'table'=>7,
-                    'permission'=>1
-                ],
-                [
-                    'value'=> Helper::getLang() == 'en' ? 'Candidate CV': 'CV បេក្ខជន',
-                    'url'=>"recruitment/candidate-resume/list",
-                    'table'=>8,
                     'permission'=>1
                 ],
             ]
