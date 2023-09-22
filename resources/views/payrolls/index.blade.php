@@ -521,7 +521,7 @@
                 return false;
             }else{
                 let button_ok = {
-                            text: '@lang("lang.ok")',
+                            text: '@lang("lang.pay")',
                             btnClass: 'btn-blue',
                             action: function () {
                                 axios.post('{{ URL('payroll/create') }}', {

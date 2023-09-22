@@ -394,7 +394,7 @@ return[
     "orders"=>"Orders",
     "other"=>"Other",
     "occupational_risk"=>"Occupational Risk",
-    "ok"=>"OK",
+    "pay"=>"Pay Now",
     "other_deduction"=>"Other Deduction",
     "phone"=>"Phone",
     "phone1"=>"Phone One",
