@@ -48,9 +48,10 @@ class EmployeePayrollController extends Controller
         $user = User::all();
         $branch = Branchs::all();
         // $exChangeRate= ExchangeRate::where('type','Salary')->orderBy('id','desc')->first();
-        // $exChangeRate = ExchangeRate::whereIn('type', ['Salary', 'NSSF'])->limit(2)->orderBy('created_at','desc')->latest()->get();
-        $exChangeRateSalary= ExchangeRate::where('type','Salary')->orderBy('id','desc')->first();
-        $exChangeRateNSSF= ExchangeRate::where('type','NSSF')->orderBy('id','desc')->first();
+        $Monthly= Carbon::now()->format('m');
+        $yearLy = Carbon::now()->format('Y');
+        $exChangeRateSalary= ExchangeRate::where('type','Salary')->whereMonth("change_date", $Monthly)->whereYear("change_date", $yearLy)->orderBy('id','desc')->first();
+        $exChangeRateNSSF= ExchangeRate::where('type','NSSF')->whereMonth("change_date", $Monthly)->whereYear("change_date", $yearLy)->orderBy('id','desc')->first();
 
         return view('payrolls.index',compact('data','user','branch','exChangeRateSalary', 'exChangeRateNSSF'));
     }

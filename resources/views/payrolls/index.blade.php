@@ -299,19 +299,18 @@
                                         <label>@lang('lang.rile')</label>
                                         <div class="input-group">
                                             <span class="input-group-text">៛</span>
-                                            <input type="number" class="form-control pay_required" id="exchange_rate_nssf" disabled name="" placeholder="" value="{{$exChangeRateNSSF == null ? "" : $exChangeRateNSSF->amount_riel }}">
+                                            <input type="number" class="form-control pay_required" id="exchange_rate_nssf" disabled name="" placeholder="" value="{{$exChangeRateNSSF == null ? "0.00" : $exChangeRateNSSF->amount_riel }}">
                                             <input type="hidden" class="form-control" id="exchange_rate_nssf_preview" name="" placeholder="" value="{{ $exChangeRateNSSF == null ? "" : $exChangeRateNSSF->amount_riel }}">
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-sm-3 align-center">
                                     <button type="button" id="btn-edix-nssf" class="btn btn-white me-2">Edit</button>
-                                    <button type="button" class="btn btn-primary" id="btn-save-nssf" data-id="1" style="display: none">Save</button>
+                                    <button type="button" class="btn btn-primary" id="btn-save-nssf" data-id="1" data-exchange="{{ $exChangeRateNSSF == null ? "" : $exChangeRateNSSF->id }}" style="display: none">Save</button>
                                 </div>
                             </div>
 
-
-                            <div class="content-title">@lang('lang.exchange_rate')@lang('lang.salary')</div>
+                            <div class="content-title">@lang('lang.exchange_rate') @lang('lang.salary')</div>
                             <div class="row">
                                 <div class="col-sm-4">
                                     <div class="form-group">
@@ -327,14 +326,15 @@
                                         <label>@lang('lang.rile')</label>
                                         <div class="input-group">
                                             <span class="input-group-text">៛</span>
-                                            <input type="number" class="form-control pay_required" id="exchange_rate" disabled placeholder="" value="{{$exChangeRateSalary == null ? "" : $exChangeRateSalary->amount_riel }}">
+                                            <input type="number" class="form-control pay_required" id="exchange_rate" disabled placeholder="" value="{{$exChangeRateSalary == null ? "0.00" : $exChangeRateSalary->amount_riel }}">
                                             <input type="hidden" class="form-control" id="exchange_rate_preview" name="exchange_rate" placeholder="" value="{{ $exChangeRateSalary == null ? "" : $exChangeRateSalary->amount_riel }}">
+                                            <input type="hidden" class="form-control" id="exchange_rate_salary_id" value="{{ $exChangeRateSalary == null ? "" : $exChangeRateSalary->id }}">
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-sm-3 align-center">
                                     <button type="button" id="btn-edix-salary" class="btn btn-white me-2">Edit</button>
-                                    <button type="button" class="btn btn-primary" id="btn-save-salary" data-id="2" style="display: none">Save</button>
+                                    <button type="button" class="btn btn-primary" id="btn-save-salary" data-id="2" data-exchange="{{ $exChangeRateSalary == null ? "" : $exChangeRateSalary->id }}" style="display: none">Save</button>
                                 </div>
                             </div>
                             <div class="row">
@@ -417,10 +417,12 @@
 
         $("#btn-save-nssf, #btn-save-salary").on("click", function(){
             let condiction_btn = $(this).data('id');
+            let id = $(this).data('exchange');
             let change_date  = moment().format('YYYY-MM-D');
             let data = {
                 "_token": "{{ csrf_token() }}",
                 'change_date': change_date,
+                "id": id,
             };
             if (condiction_btn == 1) {
                 if (!$("#exchange_rate_nssf").val()) {
@@ -508,10 +510,9 @@
             let exchange_rate_nssf = $("#exchange_rate_nssf_preview").val();
             let num_miss = 0;
             $(".pay_required").each(function(){
-                if($(this).val()==""){
+                if($(this).val()=="0.00" || $(this).val()==""){
                     num_miss++;
                     $(this).css("border-color","#dc3545")
-                    return false;
                 }else{
                     $(this).css("border-color","#198754")
                 }
@@ -558,7 +559,7 @@
                         '<div class="form-group">' +
                             '<div class="content-title">@lang("lang.exchange_rate") @lang("lang.nssf")</div>'+
                             '<span style="margin-left: 15px;"> 1 @lang("lang.us_dollar")  =  '+(exchange_rate_nssf)+' @lang("lang.rile")</span>'+
-                            '<div class="content-title">@lang("lang.exchange_rate")@lang("lang.salary")</div>'+
+                            '<div class="content-title">@lang("lang.exchange_rate") @lang("lang.salary")</div>'+
                             '<span style="margin-left: 15px;">1 @lang("lang.us_dollar") = '+(exchange_rate_salary)+' @lang("lang.rile")</span>'+
                             '<input type="hidden" class="form-control id" id="" name="">'+
                         '</div>' +

@@ -30,15 +30,25 @@ class ExchangeRateController extends Controller
     public function create(Request $request)
     {
         try{
-            $data = ExchangeRate::create([
-                'amount_usd' => $request->amount_usd,
-                'amount_riel' => $request->amount_riel,
-                'change_date' => $request->change_date,
-                'type'        => $request->type,
-                'updated_by' => Auth::user()->id 
-            ]);
+            if ($request->id) {
+                $data = ExchangeRate::find($request->id);
+                $data->update([
+                    'amount_usd' => $request->amount_usd,
+                    'amount_riel' => $request->amount_riel,
+                    'change_date' => $request->change_date,
+                    'type'        => $request->type,
+                    'updated_by' => Auth::user()->id 
+                ]);
+            }else{
+                $data = ExchangeRate::create([
+                    'amount_usd' => $request->amount_usd,
+                    'amount_riel' => $request->amount_riel,
+                    'change_date' => $request->change_date,
+                    'type'        => $request->type,
+                    'updated_by' => Auth::user()->id 
+                ]);
+            }
             return response()->json(['success'=>$data]);
-            return redirect()->back();
         }catch(\Exception $e){
             DB::rollback();
             Toastr::error('Exchange rate fail.','Error');
