@@ -136,6 +136,9 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('payroll',[EmployeePayrollController::class,'index']);
     Route::post('payroll-search',[EmployeePayrollController::class,'search']);
     Route::get('payroll-export',[EmployeePayrollController::class,'export']);
+    Route::post('payroll/create',[EmployeePayrollController::class,'store']);
+    Route::post('payroll/delete',[EmployeePayrollController::class,'destroy']);
+    Route::get('payslip/{employee_id}',[EmployeePayrollController::class,'paySlip']);
     
     // Motor Rental
     Route::get('motor-rentel/list',[MotorRentelController::class,'index']);
@@ -149,11 +152,6 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('motor-rentel/search',[MotorRentelController::class,'indexPaySearch']);
     Route::post('motor-rentel/create-pay',[MotorRentelController::class,'storePay']);
     Route::post('motor-rentel/status',[MotorRentelController::class,'processing']);
-
-
-    Route::post('payroll/create',[EmployeePayrollController::class,'store']);
-    Route::post('payroll/delete',[EmployeePayrollController::class,'destroy']);
-    Route::get('payslip/{employee_id}',[EmployeePayrollController::class,'paySlip']);
 
     //Payroll Item
     Route::get('payroll/item',[PayrollItemController::class,'index']);
@@ -206,6 +204,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     // route exchange rate
     Route::get('/exchange-rate/list', [ExchangeRateController::class,'index']);
     Route::post('/exchange-rate/store', [ExchangeRateController::class,'store']);
+    Route::post('/exchange-rate/create', [ExchangeRateController::class,'create']);
     Route::post('/exchange-rate/update', [ExchangeRateController::class,'update']);
     Route::get('/exchange-rate/edit', [ExchangeRateController::class,'edit']);
     Route::post('/exchange-rate/delete', [ExchangeRateController::class,'destroy']);

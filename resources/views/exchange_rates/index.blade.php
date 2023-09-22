@@ -203,8 +203,8 @@
 <script>
     $(function(){
         $('.delete').on('click',function(){
-            var _this = $(this).parents('tr');
-            $('.e_id').val(_this.find('.ids').text());
+            let id = $(this).data("id");
+            $('.e_id').val(id);
         });
         $('.update').on('click',function(){
             let id = $(this).data("id");

@@ -18,7 +18,7 @@ class ExchangeRateController extends Controller
      */
     public function index()
     {
-        $data = ExchangeRate::orderBy('id')->get();
+        $data = ExchangeRate::orderBy('change_date','desc')->get();
         return view('exchange_rates.index',  compact('data'));
     }
 
@@ -27,9 +27,23 @@ class ExchangeRateController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+        try{
+            $data = ExchangeRate::create([
+                'amount_usd' => $request->amount_usd,
+                'amount_riel' => $request->amount_riel,
+                'change_date' => $request->change_date,
+                'type'        => $request->type,
+                'updated_by' => Auth::user()->id 
+            ]);
+            return response()->json(['success'=>$data]);
+            return redirect()->back();
+        }catch(\Exception $e){
+            DB::rollback();
+            Toastr::error('Exchange rate fail.','Error');
+            return redirect()->back();
+        }
     }
 
     /**

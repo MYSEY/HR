@@ -7,6 +7,15 @@
     .reset-btn{
         color: #fff !important
     }
+    .content-title {
+        border-bottom: 1px solid #ccc;
+        padding-top: 6px;
+        padding-bottom: 5px;
+        color: #983D3A;
+        font-size: 14px;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
 </style>
 @section('content')
     <div class="">
@@ -271,28 +280,61 @@
                     </div>
     
                     <div class="modal-body">
-                        <form action="{{ url('payroll/create') }}" method="POST" class="needs-validation" novalidate>
+                        <form class="needs-validation" novalidate>
                             @csrf
-                            <h5>@lang('lang.exchange_rate')</h5>
+                            <div class="content-title">@lang('lang.exchange_rate') @lang('lang.nssf')</div>
+                            
                             <div class="row">
-                                <div class="col-sm-6">
+                                <div class="col-sm-4">
                                     <div class="form-group">
                                         <label>@lang('lang.us_dollar')</label>
                                         <div class="input-group">
                                             <span class="input-group-text">$</span>
-                                            <input type="number" class="form-control" id="" name="" placeholder="" value="1.00">
+                                            <input type="number" class="form-control" disabled id="exchange_rate_nssf_usd" name="" placeholder="" value="1.00">
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-sm-6">
+                                <div class="col-sm-5">
                                     <div class="form-group">
                                         <label>@lang('lang.rile')</label>
                                         <div class="input-group">
                                             <span class="input-group-text">៛</span>
-                                            <input type="number" class="form-control" id="exchange_rate" disabled name="exchange_rate" placeholder="" value="{{$exChangeRate == null ? "" : $exChangeRate->amount_riel }}">
-                                            <input type="hidden" class="form-control" id="exchange_rate" name="exchange_rate" placeholder="" value="{{ $exChangeRate == null ? "" : $exChangeRate->amount_riel }}">
+                                            <input type="number" class="form-control pay_required" id="exchange_rate_nssf" disabled name="" placeholder="" value="{{$exChangeRateNSSF == null ? "" : $exChangeRateNSSF->amount_riel }}">
+                                            <input type="hidden" class="form-control" id="exchange_rate_nssf_preview" name="" placeholder="" value="{{ $exChangeRateNSSF == null ? "" : $exChangeRateNSSF->amount_riel }}">
                                         </div>
                                     </div>
+                                </div>
+                                <div class="col-sm-3 align-center">
+                                    <button type="button" id="btn-edix-nssf" class="btn btn-white me-2">Edit</button>
+                                    <button type="button" class="btn btn-primary" id="btn-save-nssf" data-id="1" style="display: none">Save</button>
+                                </div>
+                            </div>
+
+
+                            <div class="content-title">@lang('lang.exchange_rate')@lang('lang.salary')</div>
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label>@lang('lang.us_dollar')</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text">$</span>
+                                            <input type="number" class="form-control" id="exchange_rate_salary_en" disabled name="" placeholder="" value="1.00">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-5">
+                                    <div class="form-group">
+                                        <label>@lang('lang.rile')</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text">៛</span>
+                                            <input type="number" class="form-control pay_required" id="exchange_rate" disabled placeholder="" value="{{$exChangeRateSalary == null ? "" : $exChangeRateSalary->amount_riel }}">
+                                            <input type="hidden" class="form-control" id="exchange_rate_preview" name="exchange_rate" placeholder="" value="{{ $exChangeRateSalary == null ? "" : $exChangeRateSalary->amount_riel }}">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3 align-center">
+                                    <button type="button" id="btn-edix-salary" class="btn btn-white me-2">Edit</button>
+                                    <button type="button" class="btn btn-primary" id="btn-save-salary" data-id="2" style="display: none">Save</button>
                                 </div>
                             </div>
                             <div class="row">
@@ -300,14 +342,14 @@
                                     <div class="form-group">
                                         <label>@lang('lang.payment_date') <span class="text-danger">*</span></label>
                                         <div class="cal-icon">
-                                            <input class="form-control datetimepicker" type="text" id="payment_date" name="payment_date" required>
+                                            <input class="form-control datetimepicker pay_required" type="text" id="payment_date" name="payment_date" required>
                                         </div>
                                     </div>
                                 </div>
                             </div>
     
                             <div class="submit-section">
-                                <button type="submit" class="btn btn-primary submit-btn">@lang('lang.submit')</button>
+                                <button type="button" class="btn btn-primary submit-btn" id="btn-payroll">@lang('lang.submit')</button>
                             </div>
                         </form>
                     </div>
@@ -347,6 +389,87 @@
 <script src="{{asset('/admin/js/validation-field.js')}}"></script>
 <script>
     $(function(){
+        $(document).ready(function(){
+            $("#btn-edix-nssf").click(function(){
+                $("#btn-save-nssf").toggle();
+                if ($(this).text() == "Edit") { 
+                    $('#exchange_rate_nssf').prop('disabled', false);
+                    $(this).text("Cancel"); 
+                } else { 
+                    $(this).text("Edit");
+                    $('#exchange_rate_nssf').prop('disabled', true);
+                }; 
+            });
+        });
+
+        $(document).ready(function(){
+            $("#btn-edix-salary").click(function(){
+                $("#btn-save-salary").toggle();
+                if ($(this).text() == "Edit") { 
+                    $('#exchange_rate').prop('disabled', false);
+                    $(this).text("Cancel"); 
+                } else { 
+                    $(this).text("Edit"); 
+                    $('#exchange_rate').prop('disabled', true);
+                }; 
+            });
+        });
+
+        $("#btn-save-nssf, #btn-save-salary").on("click", function(){
+            let condiction_btn = $(this).data('id');
+            let change_date  = moment().format('YYYY-MM-D');
+            let data = {
+                "_token": "{{ csrf_token() }}",
+                'change_date': change_date,
+            };
+            if (condiction_btn == 1) {
+                if (!$("#exchange_rate_nssf").val()) {
+                    $("#exchange_rate_nssf").css("border","solid 1px red");
+                    return false;
+                }
+                data.amount_usd = $("#exchange_rate_nssf_usd").val();
+                data.amount_riel = $("#exchange_rate_nssf").val();
+                data.type = "NSSF";
+            }
+            if (condiction_btn == 2) {
+                if (!$("#exchange_rate").val()) {
+                    $("#exchange_rate").css("border","solid 1px red");
+                    return false;
+                }
+                data.amount_usd = $("#exchange_rate_salary_en").val();
+                data.amount_riel = $("#exchange_rate").val();
+                data.type = "Salary";
+            }
+            $.ajax({
+                type: "post",
+                url: "{{ url('exchange-rate/create') }}",
+                data,
+                dataType: "JSON",
+                success: function(response) {
+                    new Noty({
+                        title: "",
+                        text: "@lang('lang.exchange_rate_created_successfully').",
+                        type: "success",
+                        timeout: 3000,
+                        icon: true
+                    }).show();
+                    if (condiction_btn == 1) {
+                        $('#exchange_rate_nssf').prop('disabled', true);
+                        $("#btn-save-nssf").toggle();
+                        $("#btn-edix-nssf").text("Edit");
+                        $("#exchange_rate_nssf_preview").val(response.success.amount_riel)
+                    };
+                    if (condiction_btn == 2) {
+                        $('#exchange_rate').prop('disabled', true);
+                        $("#btn-save-salary").toggle();
+                        $("#btn-edix-salary").text("Edit");
+                        $("#exchange_rate_preview").val(response.success.amount_riel)
+                    }
+                   
+                }
+            });
+        });
+
         $('.payrollDelete').on('click',function(){
             var _this = $(this).parents('tr');
             $('.e_id').val(_this.find('.ids').text());
@@ -378,6 +501,87 @@
             };
             var url = "{{URL::to('payroll-export')}}?" + $.param(query)
             window.location = url;
+        });
+
+        $("#btn-payroll").on("click",function() {
+            let exchange_rate_salary = $("#exchange_rate_preview").val();
+            let exchange_rate_nssf = $("#exchange_rate_nssf_preview").val();
+            let num_miss = 0;
+            $(".pay_required").each(function(){
+                if($(this).val()==""){
+                    num_miss++;
+                    $(this).css("border-color","#dc3545")
+                    return false;
+                }else{
+                    $(this).css("border-color","#198754")
+                }
+            });
+            if (num_miss>0) {
+                return false;
+            }else{
+                let button_ok = {
+                            text: '@lang("lang.ok")',
+                            btnClass: 'btn-blue',
+                            action: function () {
+                                axios.post('{{ URL('payroll/create') }}', {
+                                    'exchange_rate': exchange_rate_salary,
+                                    'payment_date': $("#payment_date").val(),
+                                }).then(function(response) {
+                                    new Noty({
+                                        title: "",
+                                        text: "Created payroll successfully",
+                                        type: "success",
+                                        timeout: 3000,
+                                        icon: true
+                                    }).show();
+                                    window.location.replace("{{ URL('payroll') }}");
+                                }).catch(function(error) {
+                                    console.log(error);
+                                    new Noty({
+                                        title: "",
+                                        text: "@lang('lang.something_went_wrong_please_try_again_later').",
+                                        type: "error",
+                                        timeout: 3000,
+                                        icon: true
+                                    }).show();
+                                });
+                            }
+                        };
+                    
+                $.confirm({
+                    // icon: 'fa fa-warning',
+                    title: '@lang("lang.are_you_sure_you_want_to_pay")',
+                    titleClass: 'text-center',
+                    type: 'blue',
+                    content: '' +
+                    '<form action="" class="formName">' +
+                        '<div class="form-group">' +
+                            '<div class="content-title">@lang("lang.exchange_rate") @lang("lang.nssf")</div>'+
+                            '<span style="margin-left: 15px;"> 1 @lang("lang.us_dollar")  =  '+(exchange_rate_nssf)+' @lang("lang.rile")</span>'+
+                            '<div class="content-title">@lang("lang.exchange_rate")@lang("lang.salary")</div>'+
+                            '<span style="margin-left: 15px;">1 @lang("lang.us_dollar") = '+(exchange_rate_salary)+' @lang("lang.rile")</span>'+
+                            '<input type="hidden" class="form-control id" id="" name="">'+
+                        '</div>' +
+                    '</form>',
+                    onOpenBefore: function () {
+                        $(".jconfirm-buttons").addClass("jconfirm-buttons-center");
+                    },
+                    buttons: {
+                        cancel: {
+                            text: '@lang("lang.cancel")',
+                            btnClass: 'btn-red btn-sm',
+                        },
+                        button_ok,
+                    },
+                    onContentReady: function () {
+                        var jc = this;
+                        this.$content.find('form').on('submit', function (e) {
+                            e.preventDefault();
+                            jc.$$formSubmit.trigger('click');
+                        });
+                    }
+                });
+            }
         });
     });
     function showdatas(params) {

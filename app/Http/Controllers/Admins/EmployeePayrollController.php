@@ -48,8 +48,12 @@ class EmployeePayrollController extends Controller
         $data = $this->payrollRepo->getAllPayroll($request);
         $user = User::all();
         $branch = Branchs::all();
-        $exChangeRate= ExchangeRate::where('type','Salary')->orderBy('id','desc')->first();
-        return view('payrolls.index',compact('data','user','branch','exChangeRate'));
+        // $exChangeRate= ExchangeRate::where('type','Salary')->orderBy('id','desc')->first();
+        // $exChangeRate = ExchangeRate::whereIn('type', ['Salary', 'NSSF'])->limit(2)->orderBy('created_at','desc')->latest()->get();
+        $exChangeRateSalary= ExchangeRate::where('type','Salary')->orderBy('id','desc')->first();
+        $exChangeRateNSSF= ExchangeRate::where('type','NSSF')->orderBy('id','desc')->first();
+
+        return view('payrolls.index',compact('data','user','branch','exChangeRateSalary', 'exChangeRateNSSF'));
     }
 
     public function search(Request $request) {
