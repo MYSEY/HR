@@ -86,15 +86,15 @@
                                     <table class="table table-striped custom-table mb-0 datatable dataTable no-footer tbl_employee" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
                                         <thead>
                                             <tr>
-                                                <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
+                                                <th class="sorting sorting_asc stuck-scroll-3" tabindex="0" aria-controls="DataTables_Table_0"
                                                     rowspan="1" colspan="1" aria-sort="ascending"
                                                     aria-label="Profile: activate to sort column descending"
                                                     style="width: 178px;">@lang('lang.profile')</th>
-                                                <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
+                                                <th class="sorting sorting_asc stuck-scroll-3" tabindex="0" aria-controls="DataTables_Table_0"
                                                     rowspan="1" colspan="1" aria-sort="ascending"
                                                     aria-label="Employee ID: activate to sort column descending"
                                                     style="width: 178px;">@lang('lang.employee_id')</th>
-                                                <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
+                                                <th class="sorting sorting_asc stuck-scroll-3" tabindex="0" aria-controls="DataTables_Table_0"
                                                     rowspan="1" colspan="1" aria-sort="ascending"
                                                     aria-label="Employee Name: activate to sort column descending"
                                                     style="width: 178px;">@lang('lang.name')</th>
@@ -139,7 +139,7 @@
                                             @if (count($users) > 0)
                                                 @foreach ($users as $item)
                                                     <tr class="odd">
-                                                        <td>
+                                                        <td class="stuck-scroll-3">
                                                             <h2>
                                                                 @if ($item->profile != null)
                                                                     <a href="#" class="avatar">
@@ -152,8 +152,8 @@
                                                                 @endif
                                                             </h2>
                                                         </td>
-                                                        <td><a href="{{ route('employee.profile', $item->id) }}">{{$item->number_employee}}</td>
-                                                        <td>
+                                                        <td class="stuck-scroll-3"><a href="{{ route('employee.profile', $item->id) }}">{{$item->number_employee}}</td>
+                                                        <td class="stuck-scroll-3">
                                                             <a href="{{ route('employee.profile', $item->id) }}">{{ $item->employee_name_en }}</a>
                                                         </td>
                                                         <td>

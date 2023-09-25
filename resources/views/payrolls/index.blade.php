@@ -97,18 +97,18 @@
                                             id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info"  cellspacing="0">
                                             <thead>
                                                 <tr>
-                                                    <th class="sorting sorting_asc" tabindex="0"
+                                                    <th class="sorting sorting_asc stuck-scroll-3" tabindex="0"
                                                         aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
                                                         aria-sort="ascending"
                                                         aria-label="Employee: activate to sort column descending">@lang('lang.profile')
                                                     </th>
-                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                    <th class="sorting stuck-scroll-3" tabindex="0" aria-controls="DataTables_Table_0"
                                                         rowspan="1" colspan="1">@lang('lang.employee_id')</th>
-                                                    <th class="sorting sorting_asc" tabindex="0"
+                                                    <th class="sorting sorting_asc stuck-scroll-3" tabindex="0"
                                                         aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
                                                         aria-sort="ascending"
                                                         aria-label="Employee: activate to sort column descending">@lang('lang.employee_name')</th>
-                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                    <th class="sorting stuck-scroll-3" tabindex="0" aria-controls="DataTables_Table_0"
                                                         rowspan="1" colspan="1"
                                                         aria-label="Email: activate to sort column ascending">@lang('lang.position')
                                                     </th>
@@ -207,7 +207,7 @@
                                                     @foreach ($data as $item)
                                                         <tr class="odd">
                                                             {{-- <td class="ids" hidden>{{$item->id}}</td> --}}
-                                                            <td class="sorting_1">
+                                                            <td class="sorting_1 stuck-scroll-3">
                                                                 <h2 class="table-avatar">
                                                                     @if ($item->users->profile !=null)
                                                                         <a href="{{asset('/uploads/images/'.$item->users->profile)}}"  class="avatar">
@@ -220,8 +220,8 @@
                                                                     @endif
                                                                 </h2>
                                                             </td>
-                                                            <td><a href="#">{{ $item->users == null ? '' : $item->users->number_employee }}</a></td>
-                                                            <td><a href="#">{{ $item->users == null ? '' : $item->users->EmployeeName }}</span></a></td>
+                                                            <td class="stuck-scroll-3"><a href="#">{{ $item->users == null ? '' : $item->users->number_employee }}</a></td>
+                                                            <td class="stuck-scroll-3"><a href="#">{{ $item->users == null ? '' : $item->users->EmployeeName }}</span></a></td>
                                                             <td><a href="#">{{ $item->users == null ? '' : $item->users->EmployeePosition }}</a></td>
                                                             <td><a href="#">{{ $item->users == null ? '' : $item->users->EmployeeDepartment }}</a></td>
                                                             <td><a href="#">{{ $item->users == null ? '' : $item->users->EmployeeBranch }}</a></td>
@@ -618,13 +618,13 @@
                                     '</a>';
                         }
                         tr +='<tr class="odd">'+
-                            '<td class="sorting_1">'+
+                            '<td class="sorting_1 stuck-scroll-3">'+
                                 '<h2 class="table-avatar">'+
                                     (profile)+
                                 '</h2>'+
                             '</td>'+
-                            '<td><a href="#">'+(row.users == null ? '' : row.users.number_employee )+'</a></td>'+
-                            '<td> <a href="#">'+(row.users == null ? '' : localeLanguage == 'en' ? row.users.employee_name_en : row.users.employee_name_kh )+'</span></a></td>'+
+                            '<td class="stuck-scroll-3"><a href="#">'+(row.users == null ? '' : row.users.number_employee )+'</a></td>'+
+                            '<td class="stuck-scroll-3"> <a href="#">'+(row.users == null ? '' : localeLanguage == 'en' ? row.users.employee_name_en : row.users.employee_name_kh )+'</span></a></td>'+
                             '<td><a href="#">'+(row.users == null ? '' : localeLanguage == 'en' ? row.users.position.name_english :row.users.position.name_khmer )+'</a></td>'+
                             '<td><a href="#">'+(row.users == null ? '' : localeLanguage == 'en' ? row.users.department.name_english : row.users.department.name_khmer )+'</a></td>'+
                             '<td><a href="#">'+(row.users == null ? '' : localeLanguage == 'en' ? row.users.branch.branch_name_en : row.users.branch.branch_name_kh)+'</a></td>'+

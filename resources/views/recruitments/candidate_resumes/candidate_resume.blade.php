@@ -734,9 +734,9 @@
                             }
                             if (staff.short_list == 1) {
                                 tr += '<tr class="odd">'+
-                                    '<td class="ids">'+(num)+'</td>'+
-                                    '<td >'+(staff.name_kh)+' </td>'+
-                                    '<td >'+(staff.name_en)+'</td>'+
+                                    '<td class="ids stuck-scroll-3">'+(num)+'</td>'+
+                                    '<td class="stuck-scroll-3">'+(staff.name_kh)+' </td>'+
+                                    '<td class="stuck-scroll-3">'+(staff.name_en)+'</td>'+
                                     '<td >'+(staff.option.name_english)+'</td>'+
                                     '<td >'+(staff.position.name_english)+'</td>'+
                                     '<td >'+(staff.branch.branch_name_en)+'</td>'+
@@ -767,9 +767,9 @@
                                 num ++;
                             }else if (staff.short_list == 2) {
                                 tr_not_list += '<tr class="odd">'+
-                                    '<td class="ids">'+(num)+'</td>'+
-                                    '<td >'+(staff.name_kh)+' </td>'+
-                                    '<td >'+(staff.name_en)+'</td>'+
+                                    '<td class="ids stuck-scroll-3">'+(num)+'</td>'+
+                                    '<td class="stuck-scroll-3">'+(staff.name_kh)+' </td>'+
+                                    '<td class="stuck-scroll-3">'+(staff.name_en)+'</td>'+
                                     '<td >'+(staff.option.name_english)+'</td>'+
                                     '<td >'+(staff.position.name_english)+'</td>'+
                                     '<td >'+(staff.branch.branch_name_en)+'</td>'+
@@ -827,9 +827,9 @@
                                 status_show_failed = interview_result;
                             }
                             tr_failed += '<tr class="odd">'+
-                                '<td class="ids">'+(num)+'</td>'+
-                                '<td >'+(staff_result.name_kh )+'</td>'+
-                                '<td >'+(staff_result.name_en)+'</td>'+
+                                '<td class="ids stuck-scroll-3">'+(num)+'</td>'+
+                                '<td class="stuck-scroll-3">'+(staff_result.name_kh )+'</td>'+
+                                '<td class="stuck-scroll-3">'+(staff_result.name_en)+'</td>'+
                                 '<td >'+(staff_result.option.name_english)+'</td>'+
                                 '<td >'+(staff_result.position.name_english)+'</td>'+
                                 '<td >'+(staff_result.branch.branch_name_en)+'</td>'+
@@ -882,9 +882,9 @@
                                             '</div>'+
                                         '</div>';
                             tr_re += ' <tr class="odd">'+
-                                '<td class="ids">'+(num)+'</td>'+
-                                '<td >'+(staff_result.name_kh )+'</td>'+
-                                '<td >'+(staff_result.name_en)+'</td>'+
+                                '<td class="ids stuck-scroll-3">'+(num)+'</td>'+
+                                '<td class="stuck-scroll-3">'+(staff_result.name_kh )+'</td>'+
+                                '<td class="stuck-scroll-3">'+(staff_result.name_en)+'</td>'+
                                 '<td >'+(staff_result.option.name_english)+'</td>'+
                                 '<td >'+(staff_result.position.name_english)+'</td>'+
                                 '<td >'+(staff_result.branch.branch_name_en)+'</td>'+
@@ -909,9 +909,9 @@
                             if (staff_result.status == "Cancel") {
                                 action = "";
                                 tr_ct_cancel += ' <tr class="odd">'+
-                                    '<td class="ids">'+(num)+'</td>'+
-                                    '<td class="name_kh" >'+(staff_result.name_kh )+'</td>'+
-                                    '<td class="name_en">'+(staff_result.name_en)+'</td>'+
+                                    '<td class="ids stuck-scroll-3">'+(num)+'</td>'+
+                                    '<td class="name_kh stuck-scroll-3" >'+(staff_result.name_kh )+'</td>'+
+                                    '<td class="name_en stuck-scroll-3">'+(staff_result.name_en)+'</td>'+
                                     '<td class="gender_name_english"><input type="text" class="gender_id" data-gender="'+(staff_result.gender)+'" hidden>'+(staff_result.option.name_english)+'</td>'+
                                     '<td class="position" ><input type="text" class="position_id" data-postion="'+(staff_result.position_applied)+'" hidden>'+(staff_result.position.name_english)+'</td>'+
                                     '<td class="branch"><input type="text" class="branch_id" data-branch="'+(staff_result.location_applied)+'" hidden>'+(staff_result.branch.branch_name_en)+'</td>'+
@@ -929,9 +929,9 @@
                                     dataAprove = true;
                                 }
                                 tr_ct += ' <tr class="odd">'+
-                                    '<td class="ids">'+(num)+'</td>'+
-                                    '<td class="name_kh" >'+(staff_result.name_kh )+'</td>'+
-                                    '<td class="name_en">'+(staff_result.name_en)+'</td>'+
+                                    '<td class="ids stuck-scroll-3">'+(num)+'</td>'+
+                                    '<td class="name_kh stuck-scroll-3" >'+(staff_result.name_kh )+'</td>'+
+                                    '<td class="name_en stuck-scroll-3">'+(staff_result.name_en)+'</td>'+
                                     '<td class="gender_name_english"><input type="text" class="gender_id" data-gender="'+(staff_result.gender)+'" hidden>'+(staff_result.option.name_english)+'</td>'+
                                     '<td class="position" ><input type="text" class="position_id" data-postion="'+(staff_result.position_applied)+'" hidden>'+(staff_result.position.name_english)+'</td>'+
                                     '<td class="branch"><input type="text" class="branch_id" data-branch="'+(staff_result.location_applied)+'" hidden>'+(staff_result.branch.branch_name_en)+'</td>'+

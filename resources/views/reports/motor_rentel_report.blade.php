@@ -110,14 +110,14 @@
                                     id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
                                     <thead>
                                         <tr>
-                                            <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
+                                            <th class="sorting sorting_asc stuck-scroll-3" tabindex="0" aria-controls="DataTables_Table_0"
                                                 rowspan="1" colspan="1" aria-sort="ascending"
                                                 aria-label="Profle: activate to sort column descending"
                                                 style="width: 265.913px;">#</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1"
+                                            <th class="sorting stuck-scroll-3" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1"
                                                 colspan="1" aria-label="Employee ID: activate to sort column ascending"
                                                 style="width: 94.0625px;">@lang('lang.employee_id')</th>
-                                            <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
+                                            <th class="sorting sorting_asc stuck-scroll-3" tabindex="0" aria-controls="DataTables_Table_0"
                                                 rowspan="1" colspan="1" aria-sort="ascending"
                                                 aria-label="Employee name: activate to sort column descending"
                                                 style="width: 178px;">@lang('lang.employee_name')</th>
@@ -226,11 +226,11 @@
                                                     }
                                                 @endphp
                                                 <tr class="odd {{$resigned_date}}">
-                                                    <td class="ids">{{++$key ?? ""}}</td>
-                                                    <td class="number_employee_id">
+                                                    <td class="ids stuck-scroll-3">{{++$key ?? ""}}</td>
+                                                    <td class="number_employee_id stuck-scroll-3">
                                                         <a href="{{ url('/motor-rentel/detail', $item->id) }}">{{ $item->MotorEmployee->number_employee }}</a>
                                                     </td>
-                                                    <td>{{ Helper::getLang() == 'en' ? $item->MotorEmployee->employee_name_en : $item->MotorEmployee->employee_name_kh }}</td>
+                                                    <td class="stuck-scroll-3">{{ Helper::getLang() == 'en' ? $item->MotorEmployee->employee_name_en : $item->MotorEmployee->employee_name_kh }}</td>
                                                     <td>{{ $item->MotorEmployee->EmployeeGender }}</td>
                                                     <td>{{ $item->MotorEmployee->EmployeeBranch }}</td>
                                                     <td>{{ $item->MotorEmployee->EmployeePosition }}</td>
@@ -337,9 +337,9 @@
                             resigned = "bg-inverse-danger"
                         }
                         tr += '<tr class="odd '+(resigned)+'">'+
-                                    '<td class="ids">'+(e+1)+'</td>'+
-                                    '<td class="number_employee_id"><a href="{{url("motor-rentel/detail")}}/'+row.id+'">' + (row.number_employee) + '</a></td>'+
-                                    '<td>'+( localeLanguage == 'en' ? row.employee_name_en : row.employee_name_kh )+'</td>'+
+                                    '<td class="ids stuck-scroll-3">'+(e+1)+'</td>'+
+                                    '<td class="number_employee_id stuck-scroll-3"><a href="{{url("motor-rentel/detail")}}/'+row.id+'">' + (row.number_employee) + '</a></td>'+
+                                    '<td class="stuck-scroll-3">'+( localeLanguage == 'en' ? row.employee_name_en : row.employee_name_kh )+'</td>'+
                                     '<td>'+( row.user.gender == null ? "" : localeLanguage == 'en' ? row.user.gender.name_english : row.user.gender.name_khmer )+'</td>'+
                                     '<td>'+( row.user.branch ? localeLanguage == 'en' ? row.user.branch.branch_name_en : row.user.branch.branch_name_kh :"" )+'</td>'+
                                     '<td>'+( row.user.position ? localeLanguage == 'en' ? row.user.position.name_english : row.user.position.name_khmer : "" )+'</td>'+

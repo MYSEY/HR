@@ -9,6 +9,79 @@
         .page-wrapper{
             min-height: 0px !important
         }
+        /** class scroll 2 nth child*/
+        thead th.stuck {
+            background: #fff !important;
+            position: sticky !important;
+            left: 0 !important;
+            z-index: 1 !important;
+        }
+        thead th.stuck:nth-child(2) {
+            left:  80px !important;
+        }
+        tbody td.stuck {
+            background: #fff !important;
+            position: sticky;
+            left: 0;
+            z-index: 1;
+        }
+        tbody td.stuck:nth-child(2) {
+            left: 84px;
+        }
+
+        /** class scroll 3 bth-child */
+        thead th.stuck-scroll-3 {
+            background: #fff !important;
+            position: sticky !important;
+            left: 0 !important;
+            z-index: 1 !important;
+        }
+        thead th.stuck-scroll-3:nth-child(3) {
+            left:  80px !important;
+        }
+        tbody td.stuck-scroll-3 {
+            background: #fff !important;
+            position: sticky;
+            left: 0;
+            z-index: 1;
+        }
+        tbody td.stuck-scroll-3:nth-child(3) {
+            left: 84px;
+        }
+        
+        /** class scroll 4 bth-child */
+        thead th.stuck-scroll-4 {
+            background: #fff !important;
+            position: sticky !important;
+            left: 0 !important;
+            z-index: 1 !important;
+        }
+        thead th.stuck-scroll-4:nth-child(4) {
+            left:  80px !important;
+        }
+        tbody td.stuck-scroll-4 {
+            background: #fff !important;
+            position: sticky;
+            left: 0;
+            z-index: 1;
+        }
+        tbody td.stuck-scroll-4:nth-child(4) {
+            left: 84px;
+        }
+
+        /** class scroll one nth-child*/
+        thead th.stuck-scroll {
+            background: #fff !important;
+            position: sticky !important;
+            left: 0 !important;
+            z-index: 1 !important;
+        }
+        .table-striped .stuck-scroll {
+            background-color: #fff;
+            position: sticky;
+            left: 0;
+            z-index: 1;
+        }
     </style>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 

@@ -93,14 +93,14 @@
                                         id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
                                         <thead>
                                             <tr>
-                                                <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
+                                                <th class="sorting sorting_asc stuck-scroll-3" tabindex="0" aria-controls="DataTables_Table_0"
                                                     rowspan="1" colspan="1" aria-sort="ascending"
                                                     aria-label="Profle: activate to sort column descending"
                                                     style="width: 94.0625px;">#</th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1"
+                                                <th class="sorting stuck-scroll-3" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1"
                                                     colspan="1" aria-label="Employee ID: activate to sort column ascending"
                                                     style="width: 94.0625px;">@lang('lang.employee_id')</th>
-                                                <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
+                                                <th class="sorting sorting_asc stuck-scroll-3" tabindex="0" aria-controls="DataTables_Table_0"
                                                     rowspan="1" colspan="1" aria-sort="ascending"
                                                     aria-label="Employee name: activate to sort column descending"
                                                     style="width: 178px;">@lang('lang.employee_name')</th>
@@ -165,11 +165,11 @@
                                             @if (count($data) > 0)
                                                 @foreach ($data as $key=>$item)
                                                     <tr class="odd">
-                                                        <td class="ids">{{ ++$key }}</td>
-                                                        <td class="number_employee_id">
+                                                        <td class="ids stuck-scroll-3">{{ ++$key }}</td>
+                                                        <td class="number_employee_id stuck-scroll-3">
                                                             {{ $item->MotorEmployee->number_employee }}
                                                         </td>
-                                                        <td>{{ Helper::getLang() == 'en' ? $item->MotorEmployee->employee_name_en : $item->MotorEmployee->employee_name_kh }}</td>
+                                                        <td class="stuck-scroll-3">{{ Helper::getLang() == 'en' ? $item->MotorEmployee->employee_name_en : $item->MotorEmployee->employee_name_kh }}</td>
                                                         <td>{{ $item->MotorEmployee->EmployeeGender }}</td>
                                                         <td>{{ $item->MotorEmployee->EmployeePosition }}</td>
                                                         <td>{{ $item->MotorEmployee->EmployeeDepartment }}</td>
@@ -748,9 +748,9 @@
                     let start_date = row.start_date ? moment(row.start_date).format('D-MMM-YYYY'): "";
                     let end_date = row.end_date ? moment(row.end_date).format('D-MMM-YYYY'): "";
                     tr += '<tr class="odd">' +
-                        '<td class="ids">' + (no) + '</td>' +
-                        '<td class="number_employee_id">' + (row.number_employee) + '</td>' +
-                        '<td>' + (localeLanguage == 'en' ? row.employee_name_en : row.employee_name_kh ) + '</td>' +
+                        '<td class="ids stuck-scroll-3">' + (no) + '</td>' +
+                        '<td class="number_employee_id stuck-scroll-3">' + (row.number_employee) + '</td>' +
+                        '<td class="stuck-scroll-3">' + (localeLanguage == 'en' ? row.employee_name_en : row.employee_name_kh ) + '</td>' +
                         '<td>' + (row.user.gender == null ? "" : localeLanguage == 'en' ? row.user.gender.name_english : row.user.gender.name_khmer) + '</td>' +
                         '<td>' + (row.user.position ? localeLanguage == 'en' ? row.user.position.name_english : row.user.position.name_khmer : "") + '</td>' +
                         '<td>' + (localeLanguage == 'en' ? row.user.department.name_english : row.user.department.name_khmer ) + '</td>' +

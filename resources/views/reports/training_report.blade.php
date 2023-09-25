@@ -115,14 +115,14 @@
                                         id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
                                         <thead>
                                             <tr>
-                                                <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
+                                                <th class="sorting sorting_asc stuck-scroll-3" tabindex="0" aria-controls="DataTables_Table_0"
                                                     rowspan="1" colspan="1" aria-sort="ascending"
                                                     aria-label="Profle: activate to sort column descending"
                                                     style="width: 94.0625px;">#</th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1"
+                                                <th class="sorting stuck-scroll-3" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1"
                                                     colspan="1" aria-label="Employee ID: activate to sort column ascending"
                                                     style="width: 94.0625px;">@lang('lang.id_card')</th>
-                                                <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
+                                                <th class="sorting sorting_asc stuck-scroll-3" tabindex="0" aria-controls="DataTables_Table_0"
                                                     rowspan="1" colspan="1" aria-sort="ascending"
                                                     aria-label="Employee name: activate to sort column descending"
                                                     style="width: 178px;">@lang('lang.name_kh')</th>
@@ -214,9 +214,9 @@
                                                     @endphp
                                                     @foreach ($item->employees as $emp)
                                                         <tr class="odd">
-                                                            <td class="ids">{{ ++$key }}</td>
-                                                            <td>{{ $emp->number_employee }}</td>
-                                                            <td>{{ $emp->employee_name_kh }}</td>
+                                                            <td class="ids stuck-scroll-3">{{ ++$key }}</td>
+                                                            <td class="stuck-scroll-3">{{ $emp->number_employee }}</td>
+                                                            <td class="stuck-scroll-3">{{ $emp->employee_name_kh }}</td>
                                                             <td>{{$emp->employee_name_en}}</td>
                                                             <td>{{$emp->EmployeeGender}}</td>
                                                             <td>{{$emp->EmployeePosition}}</td>
@@ -350,9 +350,9 @@
                             let join_date = new Date(emp.date_of_commencement);
                             let empl_period = diff_year_month_day(join_date, currentDate);
                             tr +='<tr class="odd">'+
-                                '<td class="ids">'+(num)+'</td>'+
-                                '<td>'+(emp.number_employee )+'</td>'+
-                                '<td>'+(emp.employee_name_kh )+'</td>'+
+                                '<td class="ids stuck-scroll-3">'+(num)+'</td>'+
+                                '<td class="stuck-scroll-3">'+(emp.number_employee )+'</td>'+
+                                '<td class="stuck-scroll-3">'+(emp.employee_name_kh )+'</td>'+
                                 '<td>'+(emp.employee_name_en)+'</td>'+
                                 '<td>'+(emp.gender.name_english)+'</td>'+
                                 '<td>'+(emp.position.name_english)+'</td>'+

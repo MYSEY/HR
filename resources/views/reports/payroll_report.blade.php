@@ -24,6 +24,7 @@
         height: auto;
         width: auto;
     }
+
 </style>
 @section('content')
 <div class="">
@@ -133,8 +134,8 @@
                                                 id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
                                                 <thead>
                                                     <tr>
-                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Employee ID: activate to sort column ascending" style="width: 94.0625px;">@lang('lang.employee_id')</th>
-                                                        <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Employee Name: activate to sort column descending" style="width: 178px;">@lang('lang.employee_name')</th>
+                                                        <th class="sorting stuck" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Employee ID: activate to sort column ascending" style="width: 94.0625px;">@lang('lang.employee_id')</th>
+                                                        <th class="sorting sorting_asc stuck" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Employee Name: activate to sort column descending" style="width: 178px;">@lang('lang.employee_name')</th>
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department: activate to sort column ascending" style="width: 125.15px;">@lang('lang.department')</th>
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department: activate to sort column ascending" style="width: 125.15px;">@lang('lang.position')</th>
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department: activate to sort column ascending" style="width: 125.15px;">@lang('lang.location')</th>
@@ -216,8 +217,8 @@
                                                     @if (count($payroll)>0)
                                                         @foreach ($payroll as $item)
                                                             <tr class="odd">
-                                                                <td><a href="#">{{ $item->users == null ? '' : $item->users->number_employee }}</a></td>
-                                                                <td><a href="#">{{ Helper::getLang() == 'en' ? $item->users->employee_name_en : $item->users->employee_name_kh }}</a></td>
+                                                                <td class="stuck"><a href="#">{{ $item->users == null ? '' : $item->users->number_employee }}</a></td>
+                                                                <td class="stuck"><a href="#">{{ Helper::getLang() == 'en' ? $item->users->employee_name_en : $item->users->employee_name_kh }}</a></td>
                                                                 <td><a href="#">{{$item->users == null ? '' : $item->users->EmployeeDepartment}}</a></td>
                                                                 <td><a href="#">{{ $item->users == null ? '' : $item->users->EmployeePosition}}</a></td>
                                                                 <td><a href="#">{{ $item->users == null ? '' : $item->users->EmployeeBranch}}</a></td>
@@ -264,9 +265,9 @@
                                             <table class="table table-striped custom-table datatable dataTable no-footer" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
                                                 <thead>
                                                     <tr>
-                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                        <th class="sorting stuck" tabindex="0" aria-controls="DataTables_Table_0"
                                                             rowspan="1" colspan="1">@lang('lang.employee_id')</th>
-                                                        <th class="sorting sorting_asc" tabindex="0"
+                                                        <th class="sorting sorting_asc stuck" tabindex="0"
                                                             aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
                                                             aria-sort="ascending"
                                                             aria-label="Employee: activate to sort column descending">@lang('lang.name')
@@ -311,8 +312,8 @@
                                                     @if (count($dataNSSF) > 0)
                                                         @foreach ($dataNSSF as $item)
                                                             <tr class="odd">
-                                                                <td><a href="#">{{ $item->users == null ? '' : $item->users->number_employee }}</a></td>
-                                                                <td><a href="#">{{ Helper::getLang() == 'en' ? $item->users->employee_name_en : $item->users->employee_name_kh }}</a></td></td></td>
+                                                                <td class="stuck"><a href="#">{{ $item->users == null ? '' : $item->users->number_employee }}</a></td>
+                                                                <td class="stuck"><a href="#">{{ Helper::getLang() == 'en' ? $item->users->employee_name_en : $item->users->employee_name_kh }}</a></td></td></td>
                                                                 <td>{{ $item->users == null ? '' : $item->users->joinOfDate }}</td>
                                                                 <td>${{ $item->total_pre_tax_salary_usd }}</td>
                                                                 <td><span>៛</span>{{ $item->total_pre_tax_salary_riel }}</td>
@@ -581,9 +582,6 @@
             showdatas(tab_status, params);
         });
         $(".btn_excel").on("click", function() {
-            // $("#btn-text-loading-excel").css('display', 'block');
-            // $(".btn_excel").prop('disabled', true);
-            // $(".btn-text-excel").css("display", "none");
             let query = {
                 employee_id: $("#employee_id").val(),
                 employee_name: $("#employee_name").val(),
@@ -636,9 +634,9 @@
                             let join_date = moment(row.users.date_of_commencement).format('D-MMM-YYYY')
                             let payment_date = moment(row.payment_date).format('D-MMM-YYYY')
                             tr +='<tr class="odd">'+
-                                '<td><a href="#">'+(row.users == null ? '' : row.users.number_employee )+'</a></td>'+
-                                '<td><a href="#">'+(row.users == null ? '' : row.users.employee_name_en )+'</a></td>'+
-                                '<td><a href="#">'+(row.users == null ? '' : row.users.department.name_english)+'</a></td>'+
+                                '<td class="stuck"><a href="#">'+(row.users == null ? '' : row.users.number_employee )+'</a></td>'+
+                                '<td class="stuck"><a href="#">'+(row.users == null ? '' : row.users.employee_name_en )+'</a></td>'+
+                                '<td ><a href="#">'+(row.users == null ? '' : row.users.department.name_english)+'</a></td>'+
                                 '<td><a href="#">'+(row.users == null ? '' : row.users.position.name_english)+'</a></td>'+
                                 '<td><a href="#">'+(row.users == null ? '' : row.users.branch.branch_name_en)+'</a></td>'+
                                 '<td>'+(join_date)+'</td>'+
