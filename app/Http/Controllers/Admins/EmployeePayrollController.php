@@ -155,8 +155,6 @@ class EmployeePayrollController extends Controller
                                 }
                             }
                         } else {
-                            $monthToPay = Carbon::createFromDate($item->fdc_date)->format('Y-m');
-                            $currentMonthToPay = Carbon::createFromDate($request->payment_date)->format('Y-m');
                             if($item->p_status == 1){
                                 $totalBasicSalarySeveran = $item->total_current_salary == null ? $item->basic_salary : $item->total_current_salary;
                                 //function get first severance pay

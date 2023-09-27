@@ -346,17 +346,25 @@
                                                     </td>
                                                     <td>
                                                         <div class="dropdown action-label">
-                                                            @if ($item->emp_status=='1')
-                                                                <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
-                                                                    <i class="fa fa-dot-circle-o text-info"></i>
-                                                                    <span>FDC-1</span>
-                                                                </a>
-                                                            @elseif ($item->emp_status=='10' || $item->p_status == '10')
+                                                            @if ($item->p_status=='10')
                                                                 <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
                                                                     <i class="fa fa-dot-circle-o text-info"></i>
                                                                     <span>FDC-2</span>
                                                                 </a>
+                                                            @else
+                                                                @if ($item->emp_status=='1')
+                                                                    <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
+                                                                        <i class="fa fa-dot-circle-o text-info"></i>
+                                                                        <span>FDC-1</span>
+                                                                    </a>
+                                                                @elseif ($item->emp_status=='10')
+                                                                    <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
+                                                                        <i class="fa fa-dot-circle-o text-info"></i>
+                                                                        <span>FDC-2</span>
+                                                                    </a>
+                                                                @endif
                                                             @endif
+                                                           
                                                             @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer')
                                                                 <div class="dropdown-menu dropdown-menu-right btn-emp-status" id="btn-emp-status">
                                                                     <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="1" href="#">
@@ -495,7 +503,12 @@
                                                     </td>
                                                     <td>
                                                         <div class="dropdown action-label">
-                                                            @if ($item->emp_status=='2' || $item->p_status == '2')
+                                                            @if ($item->p_status=='2')
+                                                                <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
+                                                                    <i class="fa fa-dot-circle-o text-dark"></i>
+                                                                    <span>UDC</span>
+                                                                </a>
+                                                            @else
                                                                 <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
                                                                     <i class="fa fa-dot-circle-o text-dark"></i>
                                                                     <span>UDC</span>

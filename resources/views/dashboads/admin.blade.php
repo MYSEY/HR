@@ -551,9 +551,16 @@
                         if (emp.emp_status == "Probation") {
                             total_probatio ++;
                         } 
-                        if (emp.emp_status == "1" || emp.emp_status == "10" || emp.p_status == "10") {
-                            total_fdc++;
-                        } 
+                        if(emp.p_status == "10"){
+                            if (emp.emp_status == "1" || emp.emp_status == "10") {
+                                total_fdc++;
+                            }
+                        }else{
+                            if (emp.emp_status == "1" || emp.emp_status == "10") {
+                                total_fdc++;
+                            }
+                        }
+                         
                         if (emp.emp_status == "2" || emp.p_status == "2") {
                             total_udc++;
                         }
