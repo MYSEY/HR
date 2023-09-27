@@ -393,6 +393,7 @@ class UserController extends Controller
                 $totalCurrentSalary = $totalnewSalary + $totalOldSalary;
                 User::where('id',$request->id)->update([
                     'emp_status' => $request->emp_status,
+                    'p_status' => $request->emp_status,
                     'fdc_date' => $request->start_date,
                     'fdc_end' => $request->end_dete,
                     'salary_increas' => $request->total_salary_increase,
@@ -403,15 +404,16 @@ class UserController extends Controller
                 ]);
             }else if($request->emp_status == '10'){
                 User::where('id',$request->id)->update([
-                    'emp_status' => $request->emp_status,
+                    'p_status' => $request->emp_status,
                     'fdc_date' => $request->start_date,
                     'fdc_end' => $request->end_dete,
+                    'udc_end_date' => $request->start_date,
                     'resign_reason' => $request->resign_reason
                 ]);
             }else if($request->emp_status == 2){
                 User::where('id',$request->id)->update([
-                    'emp_status' => $request->emp_status,
-                    'fdc_date' => $request->start_date,
+                    'p_status' => $request->emp_status,
+                    'udc_end_date' => $request->start_date,
                     'resign_reason' => $request->resign_reason
                 ]);
             }else if($request->emp_status == "Probation"){

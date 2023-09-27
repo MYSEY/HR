@@ -69,6 +69,7 @@ class CreateUsersTable extends Migration
             $table->string('marital_status')->nullable();
             $table->date('fdc_date')->nullable();
             $table->date('fdc_end')->nullable();
+            $table->date('udc_end_date')->nullable();
             $table->date('resign_date')->nullable();
             $table->string('resign_reason')->nullable();
             $table->string('remark')->nullable();
@@ -78,6 +79,7 @@ class CreateUsersTable extends Migration
             $table->boolean('users_permission')->nullable();
             $table->string('status')->nullable();
             $table->string('emp_status')->nullable();
+            $table->string('p_status')->nullable();
             $table->boolean('is_loan')->nullable();
             $table->string('type')->nullable();
             $table->unsignedBigInteger('created_by')->nullable();

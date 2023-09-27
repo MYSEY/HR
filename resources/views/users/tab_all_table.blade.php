@@ -351,7 +351,7 @@
                                                                     <i class="fa fa-dot-circle-o text-info"></i>
                                                                     <span>FDC-1</span>
                                                                 </a>
-                                                            @elseif ($item->emp_status=='10')
+                                                            @elseif ($item->emp_status=='10' || $item->p_status == '10')
                                                                 <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
                                                                     <i class="fa fa-dot-circle-o text-info"></i>
                                                                     <span>FDC-2</span>
@@ -495,7 +495,7 @@
                                                     </td>
                                                     <td>
                                                         <div class="dropdown action-label">
-                                                            @if ($item->emp_status=='2')
+                                                            @if ($item->emp_status=='2' || $item->p_status == '2')
                                                                 <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
                                                                     <i class="fa fa-dot-circle-o text-dark"></i>
                                                                     <span>UDC</span>

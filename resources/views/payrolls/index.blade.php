@@ -108,7 +108,7 @@
                                                         aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
                                                         aria-sort="ascending"
                                                         aria-label="Employee: activate to sort column descending">@lang('lang.employee_name')</th>
-                                                    <th class="sorting stuck-scroll-3" tabindex="0" aria-controls="DataTables_Table_0"
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                         rowspan="1" colspan="1"
                                                         aria-label="Email: activate to sort column ascending">@lang('lang.position')
                                                     </th>
@@ -206,7 +206,6 @@
                                                 @if (count($data) > 0)
                                                     @foreach ($data as $item)
                                                         <tr class="odd">
-                                                            {{-- <td class="ids" hidden>{{$item->id}}</td> --}}
                                                             <td class="sorting_1 stuck-scroll-3">
                                                                 <h2 class="table-avatar">
                                                                     @if ($item->users->profile !=null)
@@ -245,16 +244,6 @@
                                                             <td>{{ $item->PayrollPaymentDate }}</td>
                                                             <td>{{ $item->Created }}</td>
                                                             <td><a class="btn btn-sm btn-primary" href="{{ url('payslip', $item->employee_id) }}">@lang('lang.generate_payslip')</a></td>
-                                                            {{-- <td class="text-end">
-                                                                <div class="dropdown dropdown-action">
-                                                                    <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i  class="material-icons">more_vert</i></a>
-                                                                    @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer')
-                                                                        <div class="dropdown-menu dropdown-menu-right">
-                                                                            <a class="dropdown-item payrollDelete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_payroll"><i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
-                                                                        </div>
-                                                                    @endif
-                                                                </div>
-                                                            </td> --}}
                                                         </tr>
                                                     @endforeach
                                                 @endif
@@ -521,33 +510,33 @@
                 return false;
             }else{
                 let button_ok = {
-                            text: '@lang("lang.pay")',
-                            btnClass: 'btn-blue',
-                            action: function () {
-                                axios.post('{{ URL('payroll/create') }}', {
-                                    'exchange_rate': exchange_rate_salary,
-                                    'payment_date': $("#payment_date").val(),
-                                }).then(function(response) {
-                                    new Noty({
-                                        title: "",
-                                        text: "Created payroll successfully",
-                                        type: "success",
-                                        timeout: 3000,
-                                        icon: true
-                                    }).show();
-                                    window.location.replace("{{ URL('payroll') }}");
-                                }).catch(function(error) {
-                                    console.log(error);
-                                    new Noty({
-                                        title: "",
-                                        text: "@lang('lang.something_went_wrong_please_try_again_later').",
-                                        type: "error",
-                                        timeout: 3000,
-                                        icon: true
-                                    }).show();
-                                });
-                            }
-                        };
+                    text: '@lang("lang.pay")',
+                    btnClass: 'btn-blue',
+                    action: function () {
+                        axios.post('{{ URL('payroll/create') }}', {
+                            'exchange_rate': exchange_rate_salary,
+                            'payment_date': $("#payment_date").val(),
+                        }).then(function(response) {
+                            new Noty({
+                                title: "",
+                                text: "Created payroll successfully",
+                                type: "success",
+                                timeout: 3000,
+                                icon: true
+                            }).show();
+                            window.location.replace("{{ URL('payroll') }}");
+                        }).catch(function(error) {
+                            console.log(error);
+                            new Noty({
+                                title: "",
+                                text: "@lang('lang.something_went_wrong_please_try_again_later').",
+                                type: "error",
+                                timeout: 3000,
+                                icon: true
+                            }).show();
+                        });
+                    }
+                };
                     
                 $.confirm({
                     // icon: 'fa fa-warning',
