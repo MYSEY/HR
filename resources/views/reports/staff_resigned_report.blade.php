@@ -145,8 +145,8 @@
                                                     <td>{{ $item->employee_name_kh }}</td>
                                                     <td>{{ $item->employee_name_en }}</td>
                                                     <td>{{ $item->EmployeeGender }}</td>
-                                                    <td>{{ $item->position ? $item->position->name_khmer : "" }}</td>
-                                                    <td>{{ $item->branch ? $item->branch->branch_name_en: "" }}</td>
+                                                    <td>{{ $item->EmployeePosition}}</td>
+                                                    <td>{{ $item->EmployeeBranch}}</td>
                                                     <td>{{ \Carbon\Carbon::parse($item->date_of_commencement)->format('d-M-Y') ?? '' }}</td>
                                                     <td>{{ \Carbon\Carbon::parse($item->resign_date)->format('d-M-Y') ?? '' }}</td>
                                                     <td>{{ $item->remark }}</td>

@@ -499,6 +499,7 @@ return[
 	"preview_employment_book_not_found"=> "រកមិនឃើញសៀវភៅការងារ",
 	"please_enter_all_requried_information"=> "សូមបញ្ចូលព័ត៌មានដែលត្រូវការទាំងអស់",
 	"public_holidays"=> "ថ្ងៃឈប់សម្រាក",
+	"please_input_start_date"=> "សូមបញ្ចូលកាលបរិច្ឆេទចាប់ផ្តើម",
 	"qty"=>"បរិមាណ",
 	"quantity"=>"បរិមាណ",
 	"retired"=>"ចូលនិវត្តន៍",

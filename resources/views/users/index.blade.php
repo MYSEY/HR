@@ -476,8 +476,8 @@
             });
         });
         $('.userDelete').on('click',function(){
-            var _this = $(this).parents('tr');
-            $('.e_id').val(_this.find('.ids').text());
+            let id = $(this).data("id");
+            $('.e_id').val(id);
             $('.e_profile').val(_this.find('.image').text());
         });
 

@@ -64,7 +64,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('employee/contact/delete', [EmployeeProfileController::class, 'deleteContact']);
 
     //Training
-    Route::post('employee/training/create', [EmployeeProfileController::class, 'updatedTraining']);
+    Route::post('employee/training/create', [EmployeeProfileController::class, 'createTraining']);
     Route::get('employee/training/edit', [EmployeeProfileController::class, 'editTraining']);
     Route::post('employee/training/update', [EmployeeProfileController::class, 'updateTraining']);
     Route::post('employee/training/delete', [EmployeeProfileController::class, 'deleteTraining']);

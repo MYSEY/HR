@@ -548,11 +548,11 @@
                         if (emp.gender && emp.gender.name_english == "Female") {
                             total_female++;
                         } 
-                        if (emp.emp_status == "Probation") {
+                        if (emp.emp_status == "Probation" && emp.p_status == null) {
                             total_probatio ++;
                         } 
-                        if(emp.p_status == "10"){
-                            if (emp.emp_status == "1" || emp.emp_status == "10") {
+                        if(emp.p_status){
+                            if (emp.p_status == "1" || emp.p_status == "10") {
                                 total_fdc++;
                             }
                         }else{
@@ -928,6 +928,8 @@
     }
 
     function dashboadAchieveBranch(datas) {
+        var date = new Date();
+        let currenYear = date.getFullYear();
         let dataAchive = {
             datasets: [{
                     label: '@lang("lang.total_staff")',
@@ -938,7 +940,7 @@
                     stack: 'Stack 0',
                 },
                 {
-                    label: '@lang("lang.current") @lang("lang.&") @lang("lang.recruited") 2023',
+                    label: '@lang("lang.current") @lang("lang.&") @lang("lang.recruited") ' + currenYear,
                     data: [],
                     backgroundColor: [
                         "yellow"
@@ -1188,7 +1190,12 @@
                     }
                 });
             }
-            labelStaffResignation.push(reason.name_english);
+            var localeLanguage = '{{ config('app.locale') }}';
+            if (localeLanguage == 'en') {
+                labelStaffResignation.push(reason.name_english);
+            } else {
+                labelStaffResignation.push(reason.name_khmer);
+            }
             staffResignationData.push((totalValueStaffResignation / datas.totalEmployee) * 100);
         });
         if (totalStaffResign > 0) {
@@ -1216,7 +1223,7 @@
             });
             staffResignationData.push(dataSumTermination, dataSumDeath, dataSumLayoff, dataSumSuspension, dataSumFallProbation);
         }
-        labelStaffResignation.push("Termination","Death","Lay Off", "No need to input", "Failed Probation");
+        // labelStaffResignation.push("Termination","Death","Lay Off", "No need to input", "Failed Probation");
         dataReasonStaffResignation.labels = labelStaffResignation;
         dataReasonStaffResignation.datasets[0].data = staffResignationData;
         let data = dataReasonStaffResignation;
@@ -1257,6 +1264,7 @@
     }
 
     function dashboardTypeOfStaff(datas) {
+        var localeLanguage = '{{ config('app.locale') }}';
         let dataTypeStaff = {
             datasets: [
             ]
@@ -1292,14 +1300,26 @@
                     total,
                     name_english: position.name_english
                 });
-                type_labels.push(position.name_english);
+                if (localeLanguage == 'en') {
+                    type_labels.push(position.name_english);
+                } else {
+                    type_labels.push(position.name_khmer);
+                }
             }
             if (position.type ==  "gender") {
-                dataTypeStaff.datasets.push(
-                    {
-                        label: '% '+position.name_english,
-                    },
-                )
+                if (localeLanguage == 'en') {
+                    dataTypeStaff.datasets.push(
+                        {
+                            label: '% '+position.name_english,
+                        },
+                    )
+                } else {
+                    dataTypeStaff.datasets.push(
+                        {
+                            label: '% '+position.name_khmer,
+                        },
+                    )
+                }
             }  
         });
         dataTypeStaff.datasets[0].backgroundColor = ["green"];
@@ -1309,7 +1329,11 @@
         dataTypeStaff.datasets[1].stack = 'Stack 1';
         dataTypeStaff.datasets[1].data = [];
     
-        type_labels.push('total')
+        if (localeLanguage == 'en') {
+            type_labels.push('total')
+        } else {
+            type_labels.push('សរុប')
+        }
         dataTypeStaff.labels = type_labels;
         dataTypeStaff.datasets[0].data = [
             (data_value[0].male / datas.employee_position_type.length) * 100,

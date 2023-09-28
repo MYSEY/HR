@@ -258,7 +258,7 @@
             </div>
         </div>
 
-        <div id="edit_trainer" class="modal custom-modal fade hr-modal-select2" aria-hidden="true">
+        {{-- <div id="edit_trainer" class="modal custom-modal fade hr-modal-select2" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -276,8 +276,6 @@
                                     <div class="form-group">
                                         <label>@lang('lang.trainer_type') <span class="text-danger">*</span></label>
                                         <select class="select form-control" id="e_change_type" name="type" required>
-                                            {{-- <option value="1">Internal</option>
-                                            <option value="2">External</option> --}}
                                         </select>
                                     </div>
                                 </div>
@@ -350,7 +348,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
 
         <!-- Delete training type Modal -->
         <div class="modal custom-modal fade" id="delete_trainer" role="dialog">
@@ -423,17 +421,17 @@
                 $(".trainer-external").show();
                 $(".trainer_required").attr("required", "true");
             }
-            if (e_id == 1) {
-                $(".e-trainer-external").hide();
-                $(".e-trainer-internal").show();
-                $(".data-clear").val("");
-                $('.e_trainer_required').removeAttr('required');
-            }else{
-                $(".data-clear").val("");
-                $(".e-trainer-internal").hide();
-                $(".e-trainer-external").show();
-                $(".e_trainer_required").attr("required", "true");
-            }
+            // if (e_id == 1) {
+            //     $(".e-trainer-external").hide();
+            //     $(".e-trainer-internal").show();
+            //     $(".data-clear").val("");
+            //     $('.e_trainer_required').removeAttr('required');
+            // }else{
+            //     $(".data-clear").val("");
+            //     $(".e-trainer-internal").hide();
+            //     $(".e-trainer-external").show();
+            //     $(".e_trainer_required").attr("required", "true");
+            // }
         });
 
         $('.update').on('click',function(){

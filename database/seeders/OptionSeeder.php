@@ -308,6 +308,36 @@ class OptionSeeder extends Seeder
             'type' => 'emp_status',
             'created_by'    => Auth::id(),
         ]);
+        Option::firstOrCreate([
+            'name_khmer' => 'បញ្ចប់',
+            'name_english'=> 'Termination',
+            'type' => 'emp_status',
+            'created_by'    => Auth::id(),
+        ]);
+        Option::firstOrCreate([
+            'name_khmer' => 'Death',
+            'name_english'=> 'Death',
+            'type' => 'emp_status',
+            'created_by'    => Auth::id(),
+        ]);
+        Option::firstOrCreate([
+            'name_khmer' => 'បញ្ឈប់',
+            'name_english'=> 'Lay Off',
+            'type' => 'emp_status',
+            'created_by'    => Auth::id(),
+        ]);
+        Option::firstOrCreate([
+            'name_khmer' => 'No need to input',
+            'name_english'=> 'No need to input',
+            'type' => 'emp_status',
+            'created_by'    => Auth::id(),
+        ]);
+        Option::firstOrCreate([
+            'name_khmer' => 'ការសាកល្បងមិនបានជោគជ័យ',
+            'name_english'=> 'Failed Probation',
+            'type' => 'emp_status',
+            'created_by'    => Auth::id(),
+        ]);
         
         //position type
         Option::firstOrCreate([
