@@ -548,20 +548,14 @@
                         if (emp.gender && emp.gender.name_english == "Female") {
                             total_female++;
                         } 
-                        if (emp.emp_status == "Probation" && emp.p_status == null) {
+                        if (emp.emp_status == "Probation") {
                             total_probatio ++;
                         } 
-                        if(emp.p_status){
-                            if (emp.p_status == "1" || emp.p_status == "10") {
-                                total_fdc++;
-                            }
-                        }else{
-                            if (emp.emp_status == "1" || emp.emp_status == "10") {
-                                total_fdc++;
-                            }
+                        if (emp.emp_status == "1" || emp.emp_status == "10") {
+                            total_fdc++;
                         }
                          
-                        if (emp.emp_status == "2" || emp.p_status == "2") {
+                        if (emp.emp_status == "2") {
                             total_udc++;
                         }
 

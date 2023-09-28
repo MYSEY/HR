@@ -318,11 +318,11 @@
                                                                 <td>${{ $item->total_pre_tax_salary_usd }}</td>
                                                                 <td><span>៛</span>{{ $item->total_pre_tax_salary_riel }}</td>
                                                                 <td>{{ $item->total_average_wage }}</td>
-                                                                <td>{{ $item->total_occupational_risk }}</td>
+                                                                <td>{{ number_format($item->total_occupational_risk) }}</td>
                                                                 <td>{{ $item->total_health_care }}</td>
-                                                                <td><span>៛</span>{{ $item->pension_contribution_usd }}</td>
+                                                                <td><span>៛</span>{{ number_format($item->pension_contribution_usd) }}</td>
                                                                 <td>${{ $item->pension_contribution_riel }}</td>
-                                                                <td><span>៛</span>{{ $item->corporate_contribution }}</td>
+                                                                <td><span>៛</span>{{ number_format($item->corporate_contribution) }}</td>
                                                                 <td>{{ Carbon\Carbon::parse($item->created_at)->format('d-M-Y') }}</td>
                                                             </tr>
                                                         @endforeach
@@ -678,11 +678,11 @@
                                     '<td>$'+(row.total_pre_tax_salary_usd )+'</td>'+
                                     '<td><span>៛</span>'+(row.total_pre_tax_salary_riel )+'</td>'+
                                     '<td>'+(row.total_average_wage )+'</td>'+
-                                    '<td>'+(row.total_occupational_risk )+'</td>'+
+                                    '<td>'+(formatCurrencyKH(row.total_occupational_risk) )+'</td>'+
                                     '<td>'+(row.total_health_care )+'</td>'+
-                                    '<td><span>៛</span>'+(row.pension_contribution_usd )+'</td>'+
+                                    '<td><span>៛</span>'+(formatCurrencyKH(row.pension_contribution_usd) )+'</td>'+
                                     '<td>$'+(row.pension_contribution_riel )+'</td>'+
-                                    '<td><span>៛</span>'+(row.corporate_contribution )+'</td>'+
+                                    '<td><span>៛</span>'+(formatCurrencyKH(row.corporate_contribution) )+'</td>'+
                                     '<td>'+(created_at)+'</td>'+
                             '</tr>';
                         });

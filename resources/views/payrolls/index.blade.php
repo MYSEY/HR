@@ -129,6 +129,10 @@
                                                     </th>
                                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                         rowspan="1" colspan="1"
+                                                        aria-label="Join Date: activate to sort column ascending">@lang('lang.base_salary_received')
+                                                    </th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                        rowspan="1" colspan="1"
                                                         aria-label="Join Date: activate to sort column ascending">@lang('lang.child_allowance')
                                                     </th>
                                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
@@ -226,6 +230,7 @@
                                                             <td><a href="#">{{ $item->users == null ? '' : $item->users->EmployeeBranch }}</a></td>
                                                             <td>{{ $item->users == null ? '' : $item->users->joinOfDate }}</td>
                                                             <td>$<a href="#">{{ $item->basic_salary }}</a></td>
+                                                            <td>$<a href="#">{{ $item->total_gross_salary }}</a></td>
                                                             <td>$<a href="#">{{ $item->total_child_allowance }}</a></td>
                                                             <td>$<a href="#">{{ $item->phone_allowance == null ? '0.00' : $item->phone_allowance}}</a></td>
                                                             <td>$<a href="#">{{ $item->total_kny_phcumben}}</a></td>
@@ -619,6 +624,7 @@
                             '<td><a href="#">'+(row.users == null ? '' : localeLanguage == 'en' ? row.users.branch.branch_name_en : row.users.branch.branch_name_kh)+'</a></td>'+
                             '<td>'+(join_date)+'</td>'+
                             '<td>$<a href="#">'+(row.basic_salary )+'</a></td>'+
+                            '<td>$<a href="#">'+(row.total_gross_salary )+'</a></td>'+
                             '<td>$<a href="#">'+(row.total_child_allowance )+'</a></td>'+
                             '<td>$<a href="#">'+(row.phone_allowance == null ? '0.00' : row.phone_allowance)+'</a></td>'+
                             '<td>$<a href="#">'+(row.total_kny_phcumben)+'</a></td>'+

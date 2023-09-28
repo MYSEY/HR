@@ -346,30 +346,16 @@
                                                     </td>
                                                     <td>
                                                         <div class="dropdown action-label">
-                                                            @if ($item->p_status)
-                                                                @if ($item->p_status=='1')
-                                                                    <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
-                                                                        <i class="fa fa-dot-circle-o text-info"></i>
-                                                                        <span>FDC-1</span>
-                                                                    </a>
-                                                                @elseif ($item->p_status=='10')
-                                                                    <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
-                                                                        <i class="fa fa-dot-circle-o text-info"></i>
-                                                                        <span>FDC-2</span>
-                                                                    </a>
-                                                                @endif
-                                                            @else
-                                                                @if ($item->emp_status=='1')
-                                                                    <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
-                                                                        <i class="fa fa-dot-circle-o text-info"></i>
-                                                                        <span>FDC-1</span>
-                                                                    </a>
-                                                                @elseif ($item->emp_status=='10')
-                                                                    <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
-                                                                        <i class="fa fa-dot-circle-o text-info"></i>
-                                                                        <span>FDC-2</span>
-                                                                    </a>
-                                                                @endif
+                                                            @if ($item->emp_status=='1')
+                                                                <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
+                                                                    <i class="fa fa-dot-circle-o text-info"></i>
+                                                                    <span>FDC-1</span>
+                                                                </a>
+                                                            @elseif ($item->emp_status=='10')
+                                                                <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
+                                                                    <i class="fa fa-dot-circle-o text-info"></i>
+                                                                    <span>FDC-2</span>
+                                                                </a>
                                                             @endif
                                                            
                                                             @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer')

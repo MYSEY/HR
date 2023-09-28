@@ -60,9 +60,9 @@ class UserController extends Controller
         $province = Province::all();
         $bank = Bank::all();
         if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer') {
-            $dataProbation = User::with('role')->with('department')->where('emp_status','Probation')->where('p_status', null)->get();
-            $dataFDC = User::with('role')->with('department')->whereIn('emp_status',['1','10'])->orWhereIn('p_status',['1','10'])->get();
-            $dataUDC = User::with('role')->with('department')->where('emp_status','2')->orWhere('p_status','2')->get();
+            $dataProbation = User::with('role')->with('department')->where('emp_status','Probation')->get();
+            $dataFDC = User::with('role')->with('department')->whereIn('emp_status',['1','10'])->get();
+            $dataUDC = User::with('role')->with('department')->where('emp_status','2')->get();
             $dataCanContract = User::with('role')->with('department')->where('emp_status','Cancel')->get();
             $dataResign = User::with('role')->with('department')->whereIn('emp_status', ['3','4','5','6','7','8','9'])->get();
         }else{
@@ -394,7 +394,6 @@ class UserController extends Controller
                 $totalCurrentSalary = $totalnewSalary + $totalOldSalary;
                 User::where('id',$request->id)->update([
                     'emp_status' => $request->emp_status,
-                    'p_status' => $request->emp_status,
                     'fdc_date' => $request->start_date,
                     'fdc_end' => $request->end_dete,
                     'salary_increas' => $request->total_salary_increase,
@@ -408,13 +407,13 @@ class UserController extends Controller
                     'p_status' => $request->emp_status,
                     'fdc_date' => $request->start_date,
                     'fdc_end' => $request->end_dete,
-                    'udc_end_date' => $request->start_date,
+                    'udc_end_date' => $request->end_dete,
                     'resign_reason' => $request->resign_reason
                 ]);
             }else if($request->emp_status == 2){
                 User::where('id',$request->id)->update([
+                    // 'emp_status' => $request->emp_status,
                     'p_status' => $request->emp_status,
-                    'udc_end_date' => $request->start_date,
                     'resign_reason' => $request->resign_reason
                 ]);
             }else if($request->emp_status == "Probation"){
