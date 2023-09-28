@@ -622,8 +622,9 @@
             });
         });
         $('.delete').on('click', function() {
-            var _this = $(this).parents('tr');
-            $('.e_id').val(_this.find('.ids').text());
+            let id = $(this).data("id");
+            // var _this = $(this).parents('tr');
+            $('.e_id').val(id);
         });
 
         $(".btn-search").on("click", function() {

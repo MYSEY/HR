@@ -110,14 +110,14 @@
                                                 <tr>
                                                     <td>{{ $item->TransferEmp->employee_name_en }}</td>
                                                     <td>{{ $key == 0 ? $item->TransferEmp->branch->abbreviations: $branch_name }}</td>
-                                                    <td>{{ $item->TransferredBranch->abbreviations }}</td>
+                                                    <td>{{ $item->TransferredBranch }}</td>
                                                     <td>{{ $key == 0 ? $item->TransferEmp->position->name_english : $position_name}}</td>
-                                                    <td>{{ $item->TransferredPosition->name_english}}</td>
+                                                    <td>{{ $item->TransferredPosition}}</td>
                                                     <td>{{ \Carbon\Carbon::parse($item->date)->format('d-M-Y') ?? '' }}</td>
                                                 </tr>
                                                 @php
-                                                    $branch_name = $item->TransferredBranch->abbreviations;
-                                                    $position_name = $item->TransferredPosition->name_english;
+                                                    $branch_name = $item->TransferredBranch;
+                                                    $position_name = $item->TransferredPosition;
                                                 @endphp
                                             @endforeach
                                         @endif
