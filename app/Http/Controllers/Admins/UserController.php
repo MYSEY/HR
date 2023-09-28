@@ -393,7 +393,7 @@ class UserController extends Controller
                 
                 $totalCurrentSalary = $totalnewSalary + $totalOldSalary;
                 User::where('id',$request->id)->update([
-                    // 'emp_status' => $request->emp_status,
+                    'emp_status' => $request->emp_status,
                     'p_status' => $request->emp_status,
                     'fdc_date' => $request->start_date,
                     'fdc_end' => $request->end_dete,
