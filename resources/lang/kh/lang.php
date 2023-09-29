@@ -74,6 +74,7 @@ return[
 	"add_new_bank"=>"បន្ថែមធនាគារថ្មី",
 	"add_holiday"=>"បន្ថែមថ្ងៃឈប់សម្រាក",
 	"allowance"=>"ប្រាក់ឧបត្ថម្ភ",
+	"achived_by_branches"=>"សម្រេចបានដោយសាខា",
 	"bank"=>"ធនាគារ",
 	"banks"=>"ធនាគារ",
 	"body_number"=>"លេខតួ",

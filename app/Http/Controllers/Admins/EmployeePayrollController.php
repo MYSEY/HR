@@ -271,7 +271,7 @@ class EmployeePayrollController extends Controller
                                 $totalOldDay = $totalDayInMonth - $totalNewDays;
                                 $total_fdc1 = ($item->basic_salary / $totalDayInMonth) * $totalOldDay;
 
-                                // $totalSeverancePaySalary1 = $total_fdc2 + $total_fdc1;
+                                $totalSeverancePaySalary1 = $item->basic_salary;
                                 $type_fdc2 = 'fdc2';
                             }
                             $type_fdc1 = 'fdc1';
@@ -321,10 +321,10 @@ class EmployeePayrollController extends Controller
                             $totalSeniority =  $dataTotalSeverancePay1 != null ? $dataTotalSeverancePay1 + $totalBunus + $item->phone_allowance + $totalChildAllowance : $totalGrossSalaryTaxFree;
                         }
                         
-                        // $totalSeverancePaySalary1 = 0;
+                        $totalSeverancePaySalary1 = 0;
                         if($item->emp_status == 1){
-                            // $severancePay = $totalSeverancePaySalary1 == null ? $totalBasicSalary : $totalSeverancePaySalary1;
-                            $totalGrossSalaryTaxFree = $totalBasicSalary + $totalBunus + $item->phone_allowance + $totalChildAllowance;
+                            $severancePay = $totalSeverancePaySalary1 == null ? $totalBasicSalary : $totalSeverancePaySalary1;
+                            $totalGrossSalaryTaxFree = $severancePay + $totalBunus + $item->phone_allowance + $totalChildAllowance;
                             $total_fdc = $total_fdc1 > $total_fdc2 ? $total_fdc2 : $total_fdc1;
                             $dataTotalSeverancePay1 = $totalFirstSeverancPay == null ? $total_fdc : $totalFirstSeverancPay;
                             $totalSeverancePay1 =  $dataTotalSeverancePay1 != null ? $dataTotalSeverancePay1 + $totalBunus + $item->phone_allowance + $totalChildAllowance : $totalGrossSalaryTaxFree;

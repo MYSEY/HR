@@ -61,6 +61,7 @@ return[
     "average_wage"=>"Average Wage",
 	"add_new_transferrend"=>"Add New Transferrend",
     "allowance"=>"Allowance",
+	"achived_by_branches"=>"Achived by Branches",
     "bank"=>"Bank",
     "banks"=>"Banks",
     "body_number"=>"Body Number",
