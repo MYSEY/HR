@@ -311,6 +311,7 @@ class EmployeePayrollController extends Controller
                             $totalSeverancePay1 =  $totalFirstSeverancPay;
                             $totalSeniority =  $totalGrossSalaryTaxFree != null ? $totalGrossSalaryTaxFree : $totalGrossSalaryTaxFree;
                         }
+                        
                         if($item->p_status == 2){
                             $type_fdc2 = 'seniority';
                             $severancePay = $totalFirstSeverancPay == null ? $totalBasicSalary : $totalFirstSeverancPay;
