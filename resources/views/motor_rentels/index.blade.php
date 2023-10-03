@@ -142,7 +142,7 @@
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                     rowspan="1" colspan="1"
                                                     aria-label="Taplab Price: activate to sort column ascending"
-                                                    style="width: 51.475px;">@lang('lang.taplab_price')</th>
+                                                    style="width: 51.475px;">@lang('lang.tablet_price')</th>
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                     rowspan="1" colspan="1"
                                                     aria-label="status: activate to sort column ascending"
@@ -177,9 +177,9 @@
                                                         <td>{{ $item->end_date ? \Carbon\Carbon::parse($item->end_date)->format('d-M-Y') : '' }}</td>
                                                         <td>{{ $item->total_gasoline }}</td>
                                                         <td>{{ $item->total_work_day }}</td>
-                                                        <td>$ {{ $item->price_engine_oil }}</td>
-                                                        <td>$ {{ $item->price_motor_rentel}}</td>
-                                                        <td>$ {{ $item->price_taplab_rentel ? $item->price_taplab_rentel : "0.00"}}</td>
+                                                        <td>៛ {{ number_format($item->price_engine_oil) }}</td>
+                                                        <td>៛ {{ number_format($item->price_motor_rentel)}}</td>
+                                                        <td>៛ {{ $item->price_taplab_rentel ? number_format($item->price_taplab_rentel) : "0000"}}</td>
                                                         <td>
                                                             <div class="dropdown action-label">
                                                                 @if (!$item->resigned_date)
@@ -299,16 +299,16 @@
             // block Price motor rentel
             let newYearExpireted = 0;
             if (ageMotorrentel >= 0 && ageMotorrentel <= 5) {
-                $("#price_motor_rentel").val(30);
-                $('#e_price_motor_rentel').val(30);
+                $("#price_motor_rentel").val(120000);
+                $('#e_price_motor_rentel').val(120000);
                 newYearExpireted = 5
             } else if (ageMotorrentel > 5 && ageMotorrentel <= 7) {
-                $("#price_motor_rentel").val(25);
-                $('#e_price_motor_rentel').val(25);
+                $("#price_motor_rentel").val(100000);
+                $('#e_price_motor_rentel').val(100000);
                 newYearExpireted = 7
             } else if (ageMotorrentel > 7 && ageMotorrentel <= 10) {
-                $("#price_motor_rentel").val(20);
-                $('#e_price_motor_rentel').val(20);
+                $("#price_motor_rentel").val(80000);
+                $('#e_price_motor_rentel').val(80000);
                 newYearExpireted = 10;
             } else {
                 $("#price_motor_rentel").val(0);
@@ -541,7 +541,7 @@
                     $("#p_a_day").text(start_date[2]);
                     $("#p_a_month").text(start_date[1]);
                     $("#p_a_year").text(start_date[0]);
-                    $("#p_price_motor_rentel").text(data.price_motor_rentel);
+                    $("#p_price_motor_rentel").text(Number(data.price_motor_rentel));
                     let price_to_word = convertNumberToWords(data.price_motor_rentel)
                     $("#p_price_to_word").text(price_to_word);
                     print_pdf();
@@ -759,9 +759,9 @@
                         '<td>' + (end_date) + '</td>' +
                         '<td>' + (row.total_gasoline) + '</td>' +
                         '<td>' + (row.total_work_day) + '</td>' +
-                        '<td>$ ' + (row.price_engine_oil) + '</td>' +
-                        '<td>$ ' + (row.price_motor_rentel) + '</td>' +
-                        '<td>$ ' + (row.price_taplab_rentel ? row.price_taplab_rentel : "0.00") + '</td>' +
+                        '<td>៛ ' + (Number(row.price_engine_oil)) + '</td>' +
+                        '<td>៛ ' + (Number(row.price_motor_rentel)) + '</td>' +
+                        '<td>៛ ' + (row.price_taplab_rentel ? Number(row.price_taplab_rentel) : "0000") + '</td>' +
                         '<td>'+
                             '<div class="dropdown action-label">'+
                                 (status)+

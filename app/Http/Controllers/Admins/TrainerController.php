@@ -21,7 +21,7 @@ class TrainerController extends Controller
     public function index()
     {
         $data = Trainer::with("employee")->get();
-        $employee = User::whereIn("emp_status", ['1','2'])->get();
+        $employee = User::whereIn("emp_status", ['1','2', '10'])->orWhereIn("p_status", ['1','2', '10'])->get();
         return view('trainers.index', compact('data', 'employee'));
     }
     public function filter(Request $request)

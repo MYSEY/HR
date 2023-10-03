@@ -136,7 +136,7 @@
                             <td class="table_tr">
                                 <ol class="s" style="margin-left: 40px">
                                     <li>បរិមាណ .... ១​ .... គ្រឿង</li>
-                                    <li>ប្រាក់ឈ្នួល ជាលេខ ...... <strong id="p_price_motor_rentel"></strong> ...... ជាអក្សរ .... <strong id="p_price_to_word"></strong><strong>ដុល្លារ</strong> ....</li>
+                                    <li>ប្រាក់ឈ្នួល ជាលេខ ...... <strong id="p_price_motor_rentel"></strong> ...... ជាអក្សរ .... <strong id="p_price_to_word"></strong><strong>រៀល</strong> ....</li>
                                     <li>កាតព្វកិច្ចពន្ធ: 
                                         <ul>
                                             <li>កាតព្វកិច្ចលើពន្ធកាត់ទុកលើថ្លៃឈ្នួល ១០% ជាបន្ទុករបស់ភាគី <strong>“ខ”</strong>។ ភាគី <strong>“ខ”</strong> ព្រមព្រៀងឲ្យគ្រឹះស្ថាន ខេមា ធ្វើការកាត់ទុកលើថ្លៃឈ្នួល ១០% ដើម្បីយកទៅបង់ពន្ធកាត់ទុកជូន នាយកដ្ឋានពន្ធដាររាជធានីភ្នំពេញ នៅរាល់ពេលដែលគ្រឹះស្ថាន ខេមា ធ្វើការបង់ប្រាក់ឈ្នួល ឲ្យភាគី <strong>“ខ”</strong> ។</li>

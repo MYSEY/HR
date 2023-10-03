@@ -349,7 +349,7 @@ class MotorRentelController extends Controller
             $dataUpdate = [
                 'employee_id' => $request->employee_id,
                 'number_plate' => $request->number_plate,
-                'motorcycle_brand' => $request->requestcycle_brand,
+                'motorcycle_brand' => $request->motorcycle_brand,
                 'category' => $request->category,
                 'body_number' => $request->body_number,
                 'engine_number' => $request->engine_number,

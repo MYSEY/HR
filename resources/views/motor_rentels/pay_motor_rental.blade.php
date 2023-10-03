@@ -150,15 +150,11 @@
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                     rowspan="1" colspan="1"
                                                     aria-label="Taplab Price: activate to sort column ascending"
-                                                    style="width: 89.6px;">@lang('lang.taplab_price')</th>
+                                                    style="width: 89.6px;">@lang('lang.tablet_price')</th>
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                     rowspan="1" colspan="1"
                                                     aria-label="Tax rate: activate to sort column ascending"
                                                     style="width: 89.6px;">@lang('lang.tax_rate')</th>
-                                                {{-- <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                    rowspan="1" colspan="1"
-                                                    aria-label="Taxes on fees: activate to sort column ascending"
-                                                    style="width: 89.6px;">@lang('lang.taxes_on_fees')</th> --}}
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                     rowspan="1" colspan="1"
                                                     aria-label="Amount: activate to sort column ascending"
@@ -174,7 +170,7 @@
                                                 <th class="text-center sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                     rowspan="1" colspan="1"
                                                     aria-label="Status: activate to sort column ascending"
-                                                    style="width: 55.5625px;">@lang('lang.action')</th>
+                                                    style="width: 55.5625px;">@lang('lang.payslip')</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -206,18 +202,18 @@
                                                         <td class="total_work_day">{{ $item->total_work_day }}</td>
         
                                                         <td>{{ $item->total_gasoline * $item->total_work_day }}</td>
-                                                        <td>{{ number_format($item->total_gasoline * $item->total_work_day * $item->gasoline_price_per_liter, 2) }} ៛
+                                                        <td>{{ number_format($item->total_gasoline * $item->total_work_day * $item->gasoline_price_per_liter) }} ៛
                                                         </td>
-                                                        <td class="price_engine_oil">$ {{ $item->amount_price_engine_oil }}</td>
-                                                        <td class="price_motor_rentel">$ {{ $item->amount_price_motor_rentel }}</td>
-                                                        <td >$ {{ $item->amount_price_taplab_rentel ? $item->amount_price_taplab_rentel : "0.00" }}</td>
+                                                        <td class="price_engine_oil">{{ number_format($item->amount_price_engine_oil) }} ៛</td>
+                                                        <td class="price_motor_rentel">{{ number_format($item->amount_price_motor_rentel) }} ៛</td>
+                                                        <td >{{ $item->amount_price_taplab_rentel ? number_format($item->amount_price_taplab_rentel) : "0000" }} ៛</td>
                                                         <td class="tax_rate">{{ $item->tax_rate }}%</td>
-                                                        {{-- <td>$ {{ ($item->amount_price_motor_rentel * $item->tax_rate) / 100 }}</td> --}}
-                                                        <td>$ {{ $item->amount_price_engine_oil + ($item->amount_price_motor_rentel - ($item->amount_price_motor_rentel * $item->tax_rate) / 100) + ($item->amount_price_taplab_rentel - ($item->amount_price_taplab_rentel * $item->tax_rate) / 100 )  }}
+                                                        <td>{{ ($item->total_gasoline * $item->total_work_day * $item->gasoline_price_per_liter) + ($item->amount_price_engine_oil + ($item->amount_price_motor_rentel - ($item->amount_price_motor_rentel * $item->tax_rate) / 100) + ($item->amount_price_taplab_rentel - ($item->amount_price_taplab_rentel * $item->tax_rate) / 100 )) }} ៛
                                                         </td>
                                                         <td><span style="font-size: 13px" class="badge bg-inverse-danger">{{ $item->resigned_date ? \Carbon\Carbon::parse($item->resigned_date)->format('d-M-Y') :'' }}</span></td>
                                                         <td>{{ $item->created_at ? \Carbon\Carbon::parse($item->created_at)->format('d-M-Y') : '' }}</td>
-                                                        <td>
+                                                        <td><a class="btn btn-sm btn-primary" href="{{ url('/motor-rentel/detail', $item->id) }}">@lang('lang.generate_payslip')</a></td>
+                                                        {{-- <td>
                                                             <div class="dropdown dropdown-action">
                                                                 <a href="#" class="action-icon dropdown-toggle"
                                                                     data-bs-toggle="dropdown" aria-expanded="false"><i
@@ -232,7 +228,7 @@
                                                                     </div>
                                                                 @endif
                                                             </div>
-                                                        </td>
+                                                        </td> --}}
                                                     </tr>
                                                 @endforeach
                                             @endif
@@ -296,28 +292,27 @@
                                     '<td class="total_gasoline">'+( row.total_gasoline )+' (L)</td>'+
                                     '<td class="total_work_day">'+( row.total_work_day )+'</td>'+
                                     '<td>'+( row.total_gasoline * row.total_work_day )+'</td>'+
-                                    '<td>'+( (row.total_gasoline * row.total_work_day * row.gasoline_price_per_liter).toFixed(2))+'៛</td>'+
-                                    '<td class="price_engine_oil">$ '+ ( row.amount_price_engine_oil )+'</td>'+
-                                    '<td class="price_motor_rentel">$ '+ ( row.amount_price_motor_rentel )+'</td>'+
-                                    '<td >$ '+ ( row.amount_price_taplab_rentel )+'</td>'+
-
+                                    '<td>'+((row.total_gasoline * row.total_work_day * row.gasoline_price_per_liter))+' ៛</td>'+
+                                    '<td class="price_engine_oil">'+ ( Number(row.amount_price_engine_oil) )+' ៛</td>'+
+                                    '<td class="price_motor_rentel">'+ ( Number(row.amount_price_motor_rentel) )+' ៛</td>'+
+                                    '<td >'+ ( row.amount_price_taplab_rentel ? Number(row.amount_price_taplab_rentel) : "0000" )+' ៛</td>'+
                                     '<td class="tax_rate">'+( row.tax_rate )+'%</td>'+
-                                    // '<td>$ '+ ( (row.amount_price_motor_rentel * row.tax_rate) / 100 )+'</td>'+
-                                    '<td>$ '+( (row.amount_price_motor_rentel - (row.amount_price_motor_rentel * row.tax_rate) / 100 ) + (row.amount_price_taplab_rentel - (row.amount_price_taplab_rentel * row.tax_rate) / 100 ) + Number(row.amount_price_engine_oil))+'</td>'+
+                                    '<td>'+((row.total_gasoline * row.total_work_day * row.gasoline_price_per_liter) + (row.amount_price_motor_rentel - (row.amount_price_motor_rentel * row.tax_rate) / 100 ) + (row.amount_price_taplab_rentel - (row.amount_price_taplab_rentel * row.tax_rate) / 100 ) + Number(row.amount_price_engine_oil))+' ៛</td>'+
                                     '<td><span style="font-size: 13px" class="badge bg-inverse-danger">'+(resigned_date)+'</span></td>'+
                                     '<td>'+(created_at)+'</td>'+
-                                    '<td>'+
-                                        '<div class="dropdown dropdown-action">' +
-                                        '<a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">' +
-                                        '<i class="material-icons">more_vert</i>' +
-                                        '</a>' +
-                                        '<div class="dropdown-menu dropdown-menu-right">' +
-                                        '<a class="dropdown-item motor_detail" data-id="{{'(row.id)'}}" href="{{url("motor-rentel/detail")}}/'+row.id+'">' +
-                                        '<i class="fa fa-eye m-r-5"></i> View' +
-                                        '</a>' +
-                                        '</div>' +
-                                        '</div>' +
-                                    '</td>'+
+                                    '<td><a class="btn btn-sm btn-primary" href="{{url("motor-rentel/detail")}}/'+row.id+'">@lang('lang.generate_payslip')</a></td>'+
+                                    // '<td>'+
+                                    //     '<div class="dropdown dropdown-action">' +
+                                    //     '<a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">' +
+                                    //     '<i class="material-icons">more_vert</i>' +
+                                    //     '</a>' +
+                                    //     '<div class="dropdown-menu dropdown-menu-right">' +
+                                    //     '<a class="dropdown-item motor_detail" data-id="{{'(row.id)'}}" href="{{url("motor-rentel/detail")}}/'+row.id+'">' +
+                                    //     '<i class="fa fa-eye m-r-5"></i> View' +
+                                    //     '</a>' +
+                                    //     '</div>' +
+                                    //     '</div>' +
+                                    // '</td>'+
                                 '</tr>';
                     });
                 } else {
