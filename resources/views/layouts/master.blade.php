@@ -136,19 +136,6 @@
 
     <div class="main-wrapper">
         <div class="header">
-            <div class="header-left">
-                <a href="#" class="logo">
-                    <img src="{{ asset('/admin/img/camma-logo.png') }}" alt="Image" style="width: 100%;
-                    max-width: 248px;
-                    height: auto;
-                    margin: 0 auto;">
-                </a>
-                <a href="#" class="logo2">
-                    <img src="{{ asset('/admin/img/logo/commalogo1.png') }}" width="100" height="100"
-                        alt="">
-                </a>
-            </div>
-
             <a id="toggle_btn" href="javascript:void(0);">
                 <span class="bar-icon">
                     <span></span>
@@ -156,6 +143,19 @@
                     <span></span>
                 </span>
             </a>
+            <div class="header-left">
+                <a href="#" class="logo">
+                    <img src="{{ asset('/admin/img/camma-logo.png') }}" alt="Image" style="width: 100%;
+                    max-width: 248px;
+                    height: auto;
+                    margin: 0 auto;">
+                </a>
+                {{-- <a href="#" class="logo2">
+                    <img src="{{ asset('/admin/img/logo/commalogo1.png') }}" width="100" height="100"
+                        alt="">
+                </a> --}}
+            </div>
+
             <a id="mobile_btn" class="mobile_btn" href=""><i class="fa fa-bars"></i></a>
 
             <ul class="nav user-menu">
