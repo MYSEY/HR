@@ -127,7 +127,7 @@
             let text_label = "";
             let button_ok = {
                         text: '@lang("lang.ok")',
-                        btnClass: 'btn-blue',
+                        btnClass: 'add-btn-status',
                         action: function () {
                             var id = this.$content.find('.id').val();
                             axios.post('{{ URL('recruitment/candidate-resume/createemp') }}', {
@@ -178,7 +178,7 @@
                     button_ok,
                     cancel: {
                         text: '@lang("lang.cancel")',
-                        btnClass: 'btn-red btn-sm',
+                        btnClass: 'btn-secondary btn-sm',
                     },
                 },
                 onContentReady: function () {
@@ -211,7 +211,7 @@
                 buttons: {
                     formSubmit: {
                         text: '@lang("lang.ok")',
-                        btnClass: 'btn-blue',
+                        btnClass: 'add-btn-status',
                         action: function () {
                             var id = this.$content.find('.id').val();
                             axios.post('{{ URL('recruitment/candidate-resume/status') }}', {
@@ -240,7 +240,7 @@
                     },
                     cancel: {
                         text: '@lang("lang.cancel")',
-                        btnClass: 'btn-red btn-sm',
+                        btnClass: 'btn-secondary btn-sm',
                     },
                 },
                 onContentReady: function () {
@@ -258,6 +258,7 @@
             $('.e_id').val(id);
         });
         $(document).on('click','.update', function(){
+            var localeLanguage = '{{ config('app.locale') }}';
             let id = $(this).data("id");
             $("#e_id").val(id);
             $.ajax({
@@ -274,7 +275,7 @@
                             $.each(response.position, function(i, item) {
                                 $('#e_position_applied').append($('<option>', {
                                     value: item.id,
-                                    text: item.name_english,
+                                    text: localeLanguage == 'en' ? item.name_english : item.name_khmer,
                                     selected: item.id == response.success.position_applied
                                 }));
                             });
@@ -284,7 +285,7 @@
                             $.each(response.branch, function(i, item) {
                                 $('#e_location_applied').append($('<option>', {
                                     value: item.id,
-                                    text: item.branch_name_en,
+                                    text: localeLanguage == 'en' ? item.branch_name_en : item.branch_name_kh,
                                     selected: item.id == response.success.location_applied
                                 }));
                             });
@@ -294,7 +295,7 @@
                             $.each(response.gender, function(i, item) {
                                 $('#e_gender').append($('<option>', {
                                     value: item.id,
-                                    text: item.name_english,
+                                    text: localeLanguage == 'en' ? item.name_english : item.name_khmer,
                                     selected: item.id == response.success.gender
                                 }));
                             });
@@ -379,7 +380,7 @@
                     buttons: {
                         confirm: {
                             text: '@lang("lang.submit")',
-                            btnClass: 'btn-blue',
+                            btnClass: 'add-btn-status',
                             action: function() {
                                 var c_status = this.$content.find('.status').val();
                                 var short_list = this.$content.find('.showtList').val();
@@ -444,7 +445,7 @@
                         },
                         cancel: {
                             text: '@lang("lang.cancel")',
-                            btnClass: 'btn-red btn-sm',
+                            btnClass: 'btn-secondary btn-sm',
                         },
                     }
                 }); 
@@ -540,7 +541,7 @@
                     buttons: {
                         confirm: {
                             text: '@lang("lang.submit")',
-                            btnClass: 'btn-blue',
+                            btnClass: 'add-btn-status',
                             action: function() {
                                 var status = this.$content.find('.status').val();
                                 var joined_interview = this.$content.find('.joined_interview').val();
@@ -599,7 +600,7 @@
                         },
                         cancel: {
                             text: '@lang("lang.cancel")',
-                            btnClass: 'btn-red btn-sm',
+                            btnClass: 'btn-secondary btn-sm',
                         },
                     }
                 }); 
@@ -627,7 +628,7 @@
                     buttons: {
                         confirm: {
                             text: '@lang("lang.submit")',
-                            btnClass: 'btn-blue',
+                            btnClass: 'add-btn-status',
                             action: function() {
                                 var status = this.$content.find('.status').val();
                                 var contract_date = this.$content.find('.contract_date').val();
@@ -673,7 +674,7 @@
                         },
                         cancel: {
                             text: '@lang("lang.cancel")',
-                            btnClass: 'btn-red btn-sm',
+                            btnClass: 'btn-secondary btn-sm',
                         },
                     },
                     onContentReady: function () {

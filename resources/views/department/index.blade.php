@@ -147,7 +147,7 @@
                                 <div class="row">
                                     <div class="submit-section" style="text-align: center">
                                         <button type="submit" class="btn btn-primary submit-btn me-2">@lang('lang.delete')</button>
-                                        <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-danger">@lang('lang.cancel')</a>
+                                        <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-secondary">@lang('lang.cancel')</a>
                                     </div>
                                 </div>
                             </form>

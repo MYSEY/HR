@@ -414,6 +414,7 @@ return[
 	"number_of_working_days"=>"ចំនួនថ្ងៃធ្វើការ",
 	"non-shortlisted"=>"មិនស្ថិតក្នុងតារាងបេក្ខជន",
 	"nationality"=>"សញ្ជាតិ",
+	"ok"=>"រក្សាទុក",
 	"option"=>"ជម្រើស",
 	"order_number"=>"លេខរៀង",
 	"orders"=>"កុម្ម៉ង់",

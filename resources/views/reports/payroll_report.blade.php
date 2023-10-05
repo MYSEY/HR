@@ -5,9 +5,6 @@
         padding: 8px !important;
     }
 
-    .reset-btn {
-        color: #fff !important
-    }
     #filter_month {
         position: relative;
     }
@@ -75,7 +72,7 @@
                    
                     <div class="col-sm-6 col-md-4">
                         <div style="display: flex" class="float-end">
-                            <button type="button" class="btn btn-sm btn-success submit-btn me-2">
+                            <button type="button" class="btn btn-sm btn-outline-secondary submit-btn me-2">
                                 <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading') </span>
                                 <span class="btn-txt">@lang('lang.search')</span>
                             </button>
@@ -87,7 +84,7 @@
                                 <span class="btn-text-excel"><i class="fa fa-file-excel-o" aria-hidden="true"></i> <label >@lang('lang.excel')</label></span>
                                 <span id="btn-text-loading-excel" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>
                             </button>
-                            <button type="button" class="btn btn-sm btn-warning reset-btn">
+                            <button type="button" class="btn btn-sm btn-outline-secondary reset-btn">
                                 <span class="btn-text-reset">@lang('lang.reload')</span>
                                 <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>
                             </button>
@@ -318,7 +315,7 @@
                                                                 <td>${{ $item->total_pre_tax_salary_usd }}</td>
                                                                 <td><span>៛</span>{{ $item->total_pre_tax_salary_riel }}</td>
                                                                 <td>{{ $item->total_average_wage }}</td>
-                                                                <td>{{ number_format($item->total_occupational_risk) }}</td>
+                                                                <td>{{ number_format($item->total_occupational_risk)}}</td>
                                                                 <td>{{ $item->total_health_care }}</td>
                                                                 <td><span>៛</span>{{ number_format($item->pension_contribution_usd) }}</td>
                                                                 <td>${{ $item->pension_contribution_riel }}</td>

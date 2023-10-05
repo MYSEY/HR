@@ -588,11 +588,19 @@
                         let date_of_daymonth = moment(emp.date_of_birth).format("MM-DD");
                         let current_year = moment().format("YYYY");
                         let date_of_birth = moment(date_of_daymonth+'-'+current_year).format("D-MMM-YYYY");
+                        let tag_a = '';
+                        if (emp.profile != null) {
+                            tag_a = '<a href="#" class="avatar">'+
+                                        '<img alt="" src="{{asset("/uploads/images")}}/'+(emp.profile)+'">'+
+                                    '</a>';
+                        }else {
+                            tag_a = '<a href="#" class="avatar">'+
+                                    '<img alt="" src="{{asset("admin/img/defuals/default-user-icon.png")}}">'+
+                                '</a>';
+                        };
                         div += '<div class="leave-info-box">'+
                                     '<div class="media d-flex align-items-center">'+
-                                        '<a href="#" class="avatar">'+
-                                            '<img alt="" id="profile-imge" src="{{asset("/uploads/images")}}/'+(emp.profile)+'">'+
-                                        '</a>'+
+                                        (tag_a)+
                                         '<div class="media-body flex-grow-1">'+
                                             '<div class="text-sm my-0" >'+(emp.employee_name_en)+'</div>'+
                                         '</div>'+
@@ -1450,8 +1458,12 @@
                 },
                 title: {
                     display: true,
-                    text: "@lang('lang.staff_training_by_branch_internal')"
+                    text: "@lang('lang.staff_training_by_branch')"
                 },
+                subtitle: {
+                    display: true,
+                    text: '( @lang("lang.internal") )'
+                }
             },
             responsive: true,
             interaction: {
@@ -1509,6 +1521,7 @@
             dataStaffTraining.datasets[0].data.push(dataTypeExternal.length);
         } 
         let optionExternal = {
+            
             plugins: {
                 legend: {
                     display: false,
@@ -1524,8 +1537,12 @@
                 },
                 title: {
                     display: true,
-                    text: "@lang('lang.staff_training_by_branch_external')"
+                    text: "@lang('lang.staff_training_by_branch')"
                 },
+                subtitle: {
+                    display: true,
+                    text: '( @lang("lang.external") )'
+                }
             },
             responsive: true,
             interaction: {

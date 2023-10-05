@@ -4,9 +4,6 @@
         min-height: 38px !important;
         padding: 9px !important;
     }
-    .reset-btn{
-        color: #fff !important
-    }
     .wrapper {
         width: 100%;
         height: auto;
@@ -100,7 +97,7 @@
                     </div>
                     <div class="col-sm-6 col-md-6">
                         <div style="display: flex" class="float-end">
-                            <button type="button" class="btn btn-sm btn-success btn-search me-2">
+                            <button type="button" class="btn btn-sm btn-outline-secondary btn-search me-2">
                                 <span class="search-loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading') </span>
                                 <span class="btn-search-txt">@lang('lang.search')</span>
                             </button>
@@ -112,7 +109,7 @@
                                 <span class="btn-text-excel"><i class="fa fa-file-excel-o" aria-hidden="true"></i> @lang('lang.excel')</span>
                                 <span id="btn-text-loading-excel" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>
                             </button>
-                            <button type="button" class="btn btn-sm btn-warning reset-btn">
+                            <button type="button" class="btn btn-sm btn-outline-secondary reset-btn">
                                 <span class="btn-text-reset">@lang('lang.reload')</span>
                                 <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>
                             </button>

@@ -16,7 +16,7 @@ function RolePermission($table_id,$permission_type_id)
 function menu(){
     return $data=[
         [
-            'name'=> Helper::getLang() == 'en' ? 'Main': 'មេ',
+            'name'=> Helper::getLang() == 'en' ? 'HR Management System': 'ប្រព័ន្ធគ្រប់គ្រងធនធានមនុស្ស',
             'icon'=>'<i class="la la-dashboard"></i> <span></span> <span class="menu-arrow"></span>',
             'value'=> Helper::getLang() == 'en' ? 'Dashboard': 'ផ្ទាំងគ្រប់គ្រង',
             'table'=>2,
@@ -37,7 +37,7 @@ function menu(){
             ]
         ],
         [
-            'name'=>Helper::getLang() == 'en' ? 'Employee': "បុគ្គលិក",
+            'name'=>"",
             'icon'=>'<i class="la la-user"></i> <span></span> <span class="menu-arrow"></span>',
             'value'=> Helper::getLang() == 'en' ? 'Employee': "បុគ្គលិក",
             'table'=>3,
@@ -59,7 +59,7 @@ function menu(){
         ],
         [
             
-            'name'=>'HR',
+            'name'=>'',
             'icon'=>'<i class="la la-briefcase"></i> <span></span> <span class="menu-arrow"></span>',
             'value'=> Helper::getLang() == 'en' ? 'Recruitment': 'ការជ្រើសរើសបុគ្គលិក',
             'table'=>7,

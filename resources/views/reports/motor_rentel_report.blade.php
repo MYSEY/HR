@@ -5,9 +5,6 @@
         padding: 9px !important;
     }
 
-    .reset-btn {
-        color: #fff !important
-    }
     .ui-datepicker-calendar {
         display: none;
     }
@@ -83,7 +80,7 @@
             <div class="col-md-6"></div>
             <div class="col-sm-6 col-md-6">
                 <div style="display: flex" class="float-end">
-                    <button type="button" class="btn btn-sm btn-success btn-search me-2" data-dismiss="modal">
+                    <button type="button" class="btn btn-sm btn-outline-secondary btn-search me-2" data-dismiss="modal">
                         <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>
                         <span class="btn-text-search">@lang('lang.search')</span>
                     </button>
@@ -91,7 +88,7 @@
                         <span class="btn-text-excel"><i class="fa fa-file-excel-o" aria-hidden="true"></i> @lang('lang.excel')</span>
                         <span id="btn-text-loading-excel" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>
                     </button>
-                    <button type="button" class="btn btn-sm btn-warning reset-btn">
+                    <button type="button" class="btn btn-sm btn-outline-secondary reset-btn">
                         <span class="btn-text-reset">@lang('lang.reload')</span>
                         <span id="btn-reset-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>
                     </button>

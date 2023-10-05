@@ -41,9 +41,9 @@
                     </div>
                     <div class="row"> 
                         <div class="col-sm-6"> 
-                            <div class="form-group">
+                            <div class="form-group hr-form-group-select2">
                                 <label>@lang('lang.role_name') <span class="text-danger">*</span></label>
-                                <select class="form-control @error('role_id') is-invalid @enderror" name="role_id" id="e_role_id" required>
+                                <select class="form-control hr-select2-option requered @error('role_id') is-invalid @enderror" name="role_id" id="e_role_id" required>
                                     <option selected disabled value=""> --@lang('lang.select')--</option>
                                 </select>
                             </div>
@@ -51,7 +51,7 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label>@lang('lang.gender')</label>
-                                <select class="form-control" id="e_gender" name="gender">
+                                <select class="form-control select floating" id="e_gender" name="gender">
                                 </select>
                             </div>
                         </div>
@@ -131,7 +131,7 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="">@lang('lang.marital_status')</label>
-                                <select class="form-control" id="e_marital_status" name="marital_status" value="{{old('marital_status')}}">
+                                <select class="form-control select floating" id="e_marital_status" name="marital_status" value="{{old('marital_status')}}">
                                     <option value="@lang('lang.married')">@lang('lang.married')</option>
                                     <option value="@lang('lang.single')">@lang('lang.single')</option>
                                 </select>
@@ -140,7 +140,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>@lang('lang.nationality')</label>
-                                <select class="form-control" id="e_nationality" name="nationality" value="{{old('nationality')}}">
+                                <select class="form-control select floating" id="e_nationality" name="nationality" value="{{old('nationality')}}">
                                     <option value="@lang('lang.khmer')">@lang('lang.khmer')</option>
                                     <option value="@lang('lang.chinese')">@lang('lang.chinese')</option>
                                 </select>
@@ -209,7 +209,7 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="">@lang('lang.spouse')</label>
-                                <select class="form-control" id="e_spouse" name="spouse" value="{{old('spouse')}}">
+                                <select class="form-control select floating" id="e_spouse" name="spouse" value="{{old('spouse')}}">
                                     
                                 </select>
                             </div>
@@ -217,7 +217,7 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label>@lang('lang.loan')</label>
-                                <select class="form-control" id="e_is_loan" name="is_loan" value="{{old('is_loan')}}">
+                                <select class="form-control select floating" id="e_is_loan" name="is_loan" value="{{old('is_loan')}}">
                                     <option selected disabled> -- @lang('lang.select') --</option>
                                 </select>
                             </div>    
@@ -299,7 +299,7 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="">@lang('lang.identity_type')</label>
-                                <select class="form-control" id="e_identity_type" name="identity_type" value="{{old('identity_type')}}">
+                                <select class="form-control select floating" id="e_identity_type" name="identity_type" value="{{old('identity_type')}}">
                                     <option selected disabled> -- @lang('lang.select') --</option>
                                 </select>
                             </div>

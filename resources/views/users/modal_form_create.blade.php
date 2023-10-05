@@ -38,9 +38,9 @@
                     </div>
                     <div class="row">
                         <div class="col-md-6">
-                            <div class="form-group">
+                            <div class="form-group hr-form-group-select2">
                                 <label>@lang('lang.role_name') <span class="text-danger">*</span></label>
-                                <select class="form-control @error('role_id') is-invalid @enderror" name="role_id" id="role_id" required>
+                                <select class="form-control hr-select2-option requered @error('role_id') is-invalid @enderror" name="role_id" id="role_id" required>
                                     <option selected disabled value=""> --@lang('lang.select')--</option>
                                     @foreach ($role as $itme )
                                         <option value="{{ $itme->id }}"> {{ $itme->role_name }}</option>
@@ -51,7 +51,7 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label>@lang('lang.gender')</label>
-                                <select class="form-control" id="gender" name="gender" value="{{old('gender')}}">
+                                <select class="form-control select floating" id="gender" name="gender" value="{{old('gender')}}">
                                     <option selected disabled value=""> --@lang('lang.select')--</option>
                                     @foreach ($optionGender as $item)
                                         <option value="{{$item->id}}"> {{ Helper::getLang() == 'en' ? $item->name_english : $item->name_khmer }}</option>
@@ -117,7 +117,7 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="">@lang('lang.position_type')</label>
-                                <select class="form-control" id="position_type" name="position_type" value="{{old('position_type')}}">
+                                <select class="form-control select floating" id="position_type" name="position_type" value="{{old('position_type')}}">
                                     @foreach ($optionPositionType as $item)
                                         <option value="{{$item->id}}">{{Helper::getLang() == 'en' ? $item->name_english : $item->name_khmer}}</option>
                                     @endforeach
@@ -144,7 +144,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>@lang('lang.nationality')</label>
-                                <select class="form-control" id="nationality" name="nationality" value="{{old('nationality')}}">
+                                <select class="form-control select floating" id="nationality" name="nationality" value="{{old('nationality')}}">
                                     <option value="@lang('lang.khmer')">@lang('lang.khmer')</option>
                                     <option value="@lang('lang.chinese')">@lang('lang.chinese')</option>
                                 </select>
@@ -153,7 +153,7 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="">@lang('lang.marital_status')</label>
-                                <select class="form-control" id="marital_status" name="marital_status" value="{{old('marital_status')}}">
+                                <select class="form-control select floating" id="marital_status" name="marital_status" value="{{old('marital_status')}}">
                                     <option value="@lang('lang.married')">@lang('lang.married')</option>
                                     <option value="@lang('lang.single')">@lang('lang.single')</option>
                                 </select>
@@ -221,7 +221,7 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="">@lang('lang.spouse')</label>
-                                <select class="form-control" id="spouse" name="spouse" value="{{old('spouse')}}">
+                                <select class="form-control select floating" id="spouse" name="spouse" value="{{old('spouse')}}">
                                     <option value="0">No</option>
                                     <option value="1">Yes</option>
                                 </select>
@@ -230,7 +230,7 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label>@lang('lang.loan')</label>
-                                <select class="form-control" id="is_loan" name="is_loan" value="{{old('is_loan')}}">
+                                <select class="form-control select floating" id="is_loan" name="is_loan" value="{{old('is_loan')}}">
                                     <option value="1">Yes</option>
                                     <option value="0" selected>No</option>
                                 </select>
@@ -286,7 +286,7 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="">@lang('lang.bank_name')</label>
-                                <select class="form-control" id="bank_name" name="bank_name" value="{{old('bank_name')}}">
+                                <select class="form-control select floating" id="bank_name" name="bank_name" value="{{old('bank_name')}}">
                                     <option value="">--@lang('lang.select')--</option>
                                     @foreach ($bank as $item)
                                         <option value="{{$item->id}}">{{$item->name}}</option>
@@ -317,7 +317,7 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="">@lang('lang.identity_type')</label>
-                                <select class="form-control" id="identity_type" name="identity_type" value="{{old('identity_type')}}">
+                                <select class="form-control select floating" id="identity_type" name="identity_type" value="{{old('identity_type')}}">
                                     <option selected disabled> --@lang('lang.select')--</option>
                                     @foreach ($optionIdentityType as $item)
                                         <option value="{{$item->id}}">{{Helper::getLang() == 'en' ? $item->name_english : $item->name_khmer}}</option>

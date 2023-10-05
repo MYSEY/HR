@@ -185,7 +185,7 @@
                                 <div class="row">
                                     <div class="submit-section" style="text-align: center">
                                         <button type="submit" class="btn btn-primary submit-btn me-2">Delete</button>
-                                        <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-danger">Cancel</a>
+                                        <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-secondary">Cancel</a>
                                     </div>
                                 </div>
                             </form>

@@ -4,10 +4,6 @@
         min-height: 38px !important;
         padding: 9px !important;
     }
-    .reset-btn{
-        /* background: #ffbc34 !important; */
-        color: #fff !important
-    }
 </style>
 @section('content')
     <div class="">
@@ -68,11 +64,11 @@
                     </div>
                     <div class="col-sm-2 col-md-2">
                         <div style="display: flex" class="float-end">
-                            <button type="button" class="btn btn-sm btn-success me-2" id="btn_research">
+                            <button type="button" class="btn btn-sm btn-outline-secondary me-2" id="btn_research">
                                 <span class="loading-icon-research" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>
                                 <span class="btn-txt-research">@lang('lang.search')</span>
                             </button>
-                            <button type="button" class="btn btn-sm btn-warning reset-btn">
+                            <button type="button" class="btn btn-sm btn-outline-secondary reset-btn">
                                 <span class="btn-text-reset">@lang('lang.reload')</span>
                                 <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>
                             </button>
@@ -368,7 +364,7 @@
                                 <div class="row">
                                     <div class="submit-section" style="text-align: center">
                                         <button type="submit" class="btn btn-primary submit-btn me-2">@lang('lang.delete')</button>
-                                        <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-danger">@lang('lang.cancel')</a>
+                                        <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-secondary">@lang('lang.cancel')</a>
                                     </div>
                                 </div>
                             </form>
@@ -522,7 +518,7 @@
                 buttons: {
                     confirm: {
                         text: '@lang("lang.submit")',
-                        btnClass: 'btn-blue',
+                        btnClass: 'add-btn-status',
                         action: function() {
                             var trainer_status = this.$content.find('.trainer_status').val();
                             var id = this.$content.find('.id').val();
@@ -551,7 +547,7 @@
                     },
                     cancel: {
                         text: '@lang("lang.cancel")',
-                        btnClass: 'btn-red btn-sm',
+                        btnClass: 'btn-secondary btn-sm',
                     },
                 }
             });

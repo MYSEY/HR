@@ -5,6 +5,11 @@
     data-layout-style="default">
 
 <head>
+    @if (App::getLocale() == "kh")
+        <link href="{{ asset('admin/css/style-font-kh.css') }}" rel="stylesheet" type="text/css">
+    @else
+        <link href="{{ asset('admin/css/style-font-en.css') }}" rel="stylesheet" type="text/css">
+    @endif
     <style>
         .page-wrapper{
             min-height: 0px !important
@@ -125,16 +130,6 @@
     {{-- message toastr --}}
     <link rel="stylesheet" href="{{ asset('admin/css/toastr.min.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
-    <!-- font khmer -->
-    {{-- <link href="https://fonts.googleapis.com/css?family=Nokora" rel="stylesheet">
-    <!-- laravel font style-->
-    <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet" type="text/css"> --}}
-    <style>
-        body,option,label,.chartjs-size-monitor-shrink,#k_chart_cashin_cahout,.chartjs-render-monitor,canvas,#k_chart_receive_pay,.chartjs-size-monitor,.fontKH,.f,.form-control,.modal-title,.menu-item,.menu-title,.k-portlet__head-title,tr,li,a,label,.ui-helper-hidden-accessible,div,button,h1,h2,b,h3,title,.swal2-title,.content-header-title,.btn,.swal2-title{
-            font-family:  'Nunito', "Khmer OS Battambang", sans-serif, serif;
-            /* font-family: 'Jaldi', sans-serif; */
-        }
-    </style>
 </head>
 
 <body>
@@ -143,8 +138,10 @@
         <div class="header">
             <div class="header-left">
                 <a href="#" class="logo">
-                    <img src="{{ asset('/admin/img/logo/commalogo1.png') }}" width="100" height="100"
-                        alt="">
+                    <img src="{{ asset('/admin/img/camma-logo.png') }}" alt="Image" style="width: 100%;
+                    max-width: 248px;
+                    height: auto;
+                    margin: 0 auto;">
                 </a>
                 <a href="#" class="logo2">
                     <img src="{{ asset('/admin/img/logo/commalogo1.png') }}" width="100" height="100"
@@ -283,9 +280,9 @@
                             @foreach (menu() as $menu)
                                 @if (isset($menu['child']))
                                     @if (RolePermission($menu['table'],$menu['permission']))
-                                        <li class="menu-title"><span>{{$menu['name']}}</span></li>
+                                        <li class="menu-title"><span style="border-bottom: 3px solid #dc0000; font-weight: bold; font-size: 17px;">{{$menu['name']}}</span></li>
                                         <li class="submenu">
-                                            <a href="javascript:void(0);">{!! $menu['icon'] !!}<span>{{$menu['value']}}</span><span class="menu-arrow"></span></a>
+                                            <a href="javascript:void(0);" style="border-bottom: 3px solid #f0f0f0;">{!! $menu['icon'] !!}<span>{{$menu['value']}}</span><span class="menu-arrow"></span></a>
                                             <ul style="display: none;">
                                                 @foreach ($menu['child'] as $sub_menu)
                                                     @if (RolePermission($sub_menu['table'], $sub_menu['permission']))

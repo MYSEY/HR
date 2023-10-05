@@ -4,9 +4,6 @@
         min-height: 38px !important;
         padding: 9px !important;
     }
-    .reset-btn{
-        color: #fff !important
-    }
     .content-title {
         border-bottom: 1px solid #ccc;
         padding-top: 6px;
@@ -66,7 +63,7 @@
                     </div>
                     <div class="col-sm-6 col-md-4 ">
                         <div style="display: flex" class="float-end">
-                            <button type="button" class="btn btn-sm btn-success btn-search me-2" data-dismiss="modal">
+                            <button type="button" class="btn btn-sm btn-outline-secondary btn-search me-2" data-dismiss="modal">
                                 <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading') </span>
                                 <span class="btn-txt">@lang('lang.search')</span>
                             </button>
@@ -74,7 +71,7 @@
                                 <span class="btn-text-excel"><i class="fa fa-file-excel-o" aria-hidden="true"></i> @lang('lang.excel')</span>
                                 <span id="btn-text-loading-excel" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>
                             </button>
-                            <button type="button" class="btn btn-sm btn-warning reset-btn">
+                            <button type="button" class="btn btn-sm btn-outline-secondary reset-btn">
                                 <span class="btn-text-reset">@lang('lang.reload')</span>
                                 <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>
                             </button>
@@ -367,7 +364,7 @@
                                 <div class="row">
                                     <div class="submit-section" style="text-align: center">
                                         <button type="submit" class="btn btn-primary submit-btn me-2">@lang('lang.delete')</button>
-                                        <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-danger">@lang('lang.cancel')</a>
+                                        <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-secondary">@lang('lang.cancel')</a>
                                     </div>
                                 </div>
                             </form>
@@ -516,7 +513,7 @@
             }else{
                 let button_ok = {
                     text: '@lang("lang.pay")',
-                    btnClass: 'btn-blue',
+                    btnClass: 'add-btn-status',
                     action: function () {
                         axios.post('{{ URL('payroll/create') }}', {
                             'exchange_rate': exchange_rate_salary,
@@ -564,7 +561,7 @@
                     buttons: {
                         cancel: {
                             text: '@lang("lang.cancel")',
-                            btnClass: 'btn-red btn-sm',
+                            btnClass: 'btn-secondary btn-sm',
                         },
                         button_ok,
                     },

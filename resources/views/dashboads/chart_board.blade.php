@@ -73,14 +73,14 @@
     <div class="col-md-6">
         <div class="card dash-widget">
             <div class="card-body">
-                <canvas id="staff_Training_by_branch_internal"></canvas>
+                <canvas id="staff_Training_by_branch_external"></canvas>
             </div>
         </div>
     </div>
     <div class="col-md-6">
         <div class="card dash-widget">
             <div class="card-body">
-                <canvas id="staff_Training_by_branch_external"></canvas>
+                <canvas id="staff_Training_by_branch_internal"></canvas>
             </div>
         </div>
     </div>

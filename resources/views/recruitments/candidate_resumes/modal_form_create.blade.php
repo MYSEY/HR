@@ -27,7 +27,7 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="">@lang('lang.gender')</label>
-                                <select class="form-control form-select" name="gender" id="gender">
+                                <select class="form-control select floating" name="gender" id="gender">
                                     @foreach ($gender as $gen )
                                     <option value="{{ $gen->id }}">{{ Helper::getLang() == 'en' ? $gen->name_english : $gen->name_khmer }}</option>
                                     @endforeach

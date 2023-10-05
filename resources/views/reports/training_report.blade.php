@@ -8,10 +8,6 @@
     .ui-datepicker-calendar {
         display: none;
     }
-    .reset-btn{
-        /* background: #ffbc34 !important; */
-        color: #fff !important
-    }
 </style>
 @section('content')
     <div class="">
@@ -82,7 +78,7 @@
                 <div class="row filter-btn">
                     <div class="col-sm-2 col-md-12">
                         <div style="display: flex" class="float-end">
-                            <button type="button" class="btn btn-sm btn-success submit-btn me-2" id="btn-research" data-dismiss="modal">
+                            <button type="button" class="btn btn-sm btn-outline-secondary submit-btn me-2" id="btn-research" data-dismiss="modal">
                                 <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>
                                 <span class="btn-txt">@lang('lang.search')</span>
                             </button>
@@ -94,7 +90,7 @@
                                 <span class="btn-text-excel"><i class="fa fa-file-excel-o" aria-hidden="true"></i> @lang('lang.excel')</span>
                                 <span id="btn-text-loading-excel" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>
                             </button>
-                            <button type="button" class="btn btn-sm btn-warning reset-btn">
+                            <button type="button" class="btn btn-sm btn-outline-secondary reset-btn">
                                 <span class="btn-text-reset">@lang('lang.reload')</span>
                                 <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>
                             </button>
