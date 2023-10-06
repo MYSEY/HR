@@ -525,11 +525,11 @@ class EmployeePayrollController extends Controller
                             }else{
                                 $totalSalaryTaxRiel = ($totalExchangeRiel * $totalTax) / 100 - $taxRate->tax_deduction_amount;
                             }
-        
                             //ពន្ធលើប្រាក់បៀវត្ស រៀល/Riel
                             $totalSalaryTaxUsd = $totalSalaryTaxRiel / $request->exchange_rate;
+
                             //ពន្ធលើប្រាក់បៀវត្ស ដុល្លារ/USD
-                            $totalSalaryAfterTax = $baseSalaryReceivedUsd - $totalSalaryTaxUsd;
+                            $totalSalaryAfterTax = $baseSalaryReceivedUsd - round($totalSalaryTaxUsd,2);
                         } else if($number_of_children == 1 && $item->spouse == 0) {
                             $taxRate = Taxes::where('from', '<=' ,$totalTtaxBbaseRiel)->where('to','>=',$totalTtaxBbaseRiel)->first();
                             $totalTax = $taxRate->tax_rate;
