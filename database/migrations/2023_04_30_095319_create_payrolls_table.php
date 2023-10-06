@@ -18,7 +18,7 @@ return new class extends Migration
             $table->id();
             $table->integer('employee_id');
             $table->decimal('basic_salary',50,4)->default(0);
-            $table->decimal('total_gross_salary',50)->default(0);
+            $table->decimal('total_gross_salary',50,4)->default(0);
             $table->date('payment_date')->nullable();
             $table->decimal('total_child_allowance',50,4)->default(0);
             $table->decimal('phone_allowance')->nullable();
