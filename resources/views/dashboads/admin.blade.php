@@ -340,7 +340,7 @@
                                 <div class="col-md-6 col-6 text-center">
                                     <div class="stats-box mb-4">
                                         <p>@lang('lang.total_female')</p>
-                                        <h3 id="total-female"></h3>
+                                        <h3 id="total-female">0</h3>
                                     </div>
                                 </div>
                             </div>
@@ -375,7 +375,7 @@
                         <p><i class="fa fa-dot-circle-o text-info"></i> <span class="me-2">@lang('lang.age')</span></p>
                         <div class="stats-list">
                             <div class="stats-info">
-                                <p>18 - 24 <strong><small id="total-age-18"></small></strong></p>
+                                <p>18 - 24 <strong><small id="total-age-18">0</small></strong></p>
                                 <div class="progress">
                                     <div class="progress-bar bg-success" role="progressbar" id="progressbar-18" aria-valuemin="0"></div>
                                 </div>
@@ -532,6 +532,7 @@
             dataType: "JSON",
             success: function(response) {
                 let totalStaff = response.totalStaff;
+                console.log(totalStaff);
                 if (totalStaff.length > 0 ) {
                     let total_female = 0;
                     let total_probatio = 0;
@@ -1049,7 +1050,7 @@
                 },
                 title: {
                     display: true,
-                    text: '% @lang("lang.achived_by_branches")'
+                    text: '% @lang("lang.total_inactive_staff")'
                 },
             },
             responsive: true,

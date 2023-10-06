@@ -345,10 +345,10 @@ class EmployeePayrollController extends Controller
                         $dataGrossSalary = GrossSalaryPay::create([
                             'employee_id'               => $item->id,
                             'basic_salary'              => $item->basic_salary,
-                            'total_gross_salary'        => $totalGrossSalaryTaxFree,
-                            'total_fdc1'                => $totalSeverancePay1,
-                            'total_fdc2'                => $totalSeverancePay2,
-                            'total_seniority'           => $totalSeniority,
+                            'total_gross_salary'        => round($totalGrossSalaryTaxFree,2),
+                            'total_fdc1'                => round($totalSeverancePay1,2),
+                            'total_fdc2'                => round($totalSeverancePay2,2),
+                            'total_seniority'           => round($totalSeniority,2),
                             'payment_date'              => $request->payment_date,
                             'type_fdc1'                 => $type_fdc1,
                             'type_fdc2'                 => $type_fdc2,
@@ -453,7 +453,7 @@ class EmployeePayrollController extends Controller
                                 $taxExemptionSalary = $seniority->tax_exemption_salary ?? 0;
                             }
                         }
-        
+                        
                         //function ដក​ pensin fund
                         $baseSalaryReceivedUsd = $totalGrossSalary + $seniorityPayableTax - $pension_contribution;
                         // functin exchange riel rate gross salary after tax
@@ -712,7 +712,6 @@ class EmployeePayrollController extends Controller
                             //ពន្ធលើប្រាក់បៀវត្ស ដុល្លារ/USD
                             $totalSalaryAfterTax = $baseSalaryReceivedUsd - $totalSalaryTaxUsd;
                         }
-        
                         //function Severance Pay ti 1
                         $totalSeverancePay = 0;
                         if ($item->emp_status == 1) {
@@ -746,7 +745,6 @@ class EmployeePayrollController extends Controller
                             }
                         }
                         $totalNetSalary = $totalSalaryAfterTax + $totalSeverancePay + $taxExemptionSalary;
-        
                         $data   = $request->all();
                         $data['employee_id']                    = $item->id;
                         $data['basic_salary']                   = $item->basic_salary;
@@ -756,7 +754,7 @@ class EmployeePayrollController extends Controller
                         $data['total_child_allowance']          = $totalChildAllowance;
                         $data['phone_allowance']                = $item->phone_allowance;
                         $data['total_kny_phcumben']             = $totalBunus;
-                        $data['total_severance_pay']            = $totalSeverancePay;
+                        $data['total_severance_pay']            = round($totalSeverancePay,3);
                         $data['seniority_pay_included_tax']     = $seniorityPayableTax;
                         $data['total_gross']                    = $totalGrossSalary;
                         $data['total_pension_fund']             = $pension_contribution;
