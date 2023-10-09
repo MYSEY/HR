@@ -526,7 +526,7 @@ class EmployeePayrollController extends Controller
                                 $totalSalaryTaxRiel = ($totalExchangeRiel * $totalTax) / 100 - $taxRate->tax_deduction_amount;
                             }
                             //ពន្ធលើប្រាក់បៀវត្ស រៀល/Riel
-                            $totalSalaryTaxUsd = $totalSalaryTaxRiel / $request->exchange_rate;
+                            $totalSalaryTaxUsd = round($totalSalaryTaxRiel,2) / $request->exchange_rate;
 
                             //ពន្ធលើប្រាក់បៀវត្ស ដុល្លារ/USD
                             $totalSalaryAfterTax = $baseSalaryReceivedUsd - round($totalSalaryTaxUsd,2);
@@ -546,10 +546,10 @@ class EmployeePayrollController extends Controller
                             }
 
                             //ពន្ធលើប្រាក់បៀវត្ស រៀល/Riel
-                            $totalSalaryTaxUsd = $totalSalaryTaxRiel / $request->exchange_rate;
+                            $totalSalaryTaxUsd = round($totalSalaryTaxRiel,2) / $request->exchange_rate;
         
                             //ពន្ធលើប្រាក់បៀវត្ស ដុល្លារ/USD
-                            $totalSalaryAfterTax = $baseSalaryReceivedUsd - $totalSalaryTaxUsd;
+                            $totalSalaryAfterTax = $baseSalaryReceivedUsd - round($totalSalaryTaxUsd,2);
                         }else if($number_of_children == 0 && $item->spouse == 1) {
                             
                             $taxRate = Taxes::where('from', '<=' ,$totalTtaxBbaseRiel)->where('to','>=',$totalTtaxBbaseRiel)->first();
@@ -567,10 +567,10 @@ class EmployeePayrollController extends Controller
                             }
                             
                             //ពន្ធលើប្រាក់បៀវត្ស រៀល/Riel
-                            $totalSalaryTaxUsd = $totalSalaryTaxRiel / $request->exchange_rate;
+                            $totalSalaryTaxUsd = round($totalSalaryTaxRiel,2) / $request->exchange_rate;
         
                             //ពន្ធលើប្រាក់បៀវត្ស ដុល្លារ/USD
-                            $totalSalaryAfterTax = $baseSalaryReceivedUsd - $totalSalaryTaxUsd;
+                            $totalSalaryAfterTax = $baseSalaryReceivedUsd - round($totalSalaryTaxUsd,2);
                         }else if($number_of_children == 1 && $item->spouse == 1) {
                             //​cululate salaray Taxable
                             $taxRate = Taxes::where('from', '<=' ,$totalTtaxBbaseRiel)->where('to','>=',$totalTtaxBbaseRiel)->first();
@@ -588,9 +588,9 @@ class EmployeePayrollController extends Controller
                             }
 
                             //ពន្ធលើប្រាក់បៀវត្ស រៀល/Riel
-                            $totalSalaryTaxUsd = $totalSalaryTaxRiel / $request->exchange_rate;
+                            $totalSalaryTaxUsd = round($totalSalaryTaxRiel,2) / $request->exchange_rate;
                             //ពន្ធលើប្រាក់បៀវត្ស ដុល្លារ/USD
-                            $totalSalaryAfterTax = $baseSalaryReceivedUsd - $totalSalaryTaxUsd;
+                            $totalSalaryAfterTax = $baseSalaryReceivedUsd - round($totalSalaryTaxUsd,2);
                         }else if($number_of_children == 2 && $item->spouse == 0){
                             //​cululate salaray Taxable
                             $taxRate = Taxes::where('from', '<=' ,$totalTtaxBbaseRiel)->where('to','>=',$totalTtaxBbaseRiel)->first();
@@ -608,9 +608,9 @@ class EmployeePayrollController extends Controller
                             }
 
                             //ពន្ធលើប្រាក់បៀវត្ស រៀល/Riel
-                            $totalSalaryTaxUsd = $totalSalaryTaxRiel / $request->exchange_rate;
+                            $totalSalaryTaxUsd = round($totalSalaryTaxRiel,2) / $request->exchange_rate;
                             //ពន្ធលើប្រាក់បៀវត្ស ដុល្លារ/USD
-                            $totalSalaryAfterTax = $baseSalaryReceivedUsd - $totalSalaryTaxUsd;
+                            $totalSalaryAfterTax = $baseSalaryReceivedUsd - round($totalSalaryTaxUsd,2);
                         }else if($number_of_children == 2 && $item->spouse == 1){
                             //​cululate salaray Taxable
                             $taxRate = Taxes::where('from', '<=' ,$totalTtaxBbaseRiel)->where('to','>=',$totalTtaxBbaseRiel)->first();
@@ -628,9 +628,9 @@ class EmployeePayrollController extends Controller
                             }
 
                             //ពន្ធលើប្រាក់បៀវត្ស រៀល/Riel
-                            $totalSalaryTaxUsd = $totalSalaryTaxRiel / $request->exchange_rate;
+                            $totalSalaryTaxUsd = round($totalSalaryTaxRiel,2) / $request->exchange_rate;
                             //ពន្ធលើប្រាក់បៀវត្ស ដុល្លារ/USD
-                            $totalSalaryAfterTax = $baseSalaryReceivedUsd - $totalSalaryTaxUsd;
+                            $totalSalaryAfterTax = $baseSalaryReceivedUsd - round($totalSalaryTaxUsd,2);
                         }else if($number_of_children == 3 && $item->spouse == 0){
                             //​cululate salaray Taxable
                             $taxRate = Taxes::where('from', '<=' ,$totalTtaxBbaseRiel)->where('to','>=',$totalTtaxBbaseRiel)->first();
@@ -648,9 +648,9 @@ class EmployeePayrollController extends Controller
                             }
 
                             //ពន្ធលើប្រាក់បៀវត្ស រៀល/Riel
-                            $totalSalaryTaxUsd = $totalSalaryTaxRiel / $request->exchange_rate;
+                            $totalSalaryTaxUsd = round($totalSalaryTaxRiel,2) / $request->exchange_rate;
                             //ពន្ធលើប្រាក់បៀវត្ស ដុល្លារ/USD
-                            $totalSalaryAfterTax = $baseSalaryReceivedUsd - $totalSalaryTaxUsd;
+                            $totalSalaryAfterTax = $baseSalaryReceivedUsd - round($totalSalaryTaxUsd,2);
                         }else if($number_of_children == 3 && $item->spouse == 1){
                             //​cululate salaray Taxable
                             $taxRate = Taxes::where('from', '<=' ,$totalTtaxBbaseRiel)->where('to','>=',$totalTtaxBbaseRiel)->first();
@@ -668,9 +668,9 @@ class EmployeePayrollController extends Controller
                             }
 
                             //ពន្ធលើប្រាក់បៀវត្ស រៀល/Riel
-                            $totalSalaryTaxUsd = $totalSalaryTaxRiel / $request->exchange_rate;
+                            $totalSalaryTaxUsd = round($totalSalaryTaxRiel,2) / $request->exchange_rate;
                             //ពន្ធលើប្រាក់បៀវត្ស ដុល្លារ/USD
-                            $totalSalaryAfterTax = $baseSalaryReceivedUsd - $totalSalaryTaxUsd;
+                            $totalSalaryAfterTax = $baseSalaryReceivedUsd - round($totalSalaryTaxUsd,2);
                         }else if($number_of_children == 4 && $item->spouse == 0){
                             //​cululate salaray Taxable
                             $taxRate = Taxes::where('from', '<=' ,$totalTtaxBbaseRiel)->where('to','>=',$totalTtaxBbaseRiel)->first();
@@ -688,9 +688,9 @@ class EmployeePayrollController extends Controller
                             }
 
                             //ពន្ធលើប្រាក់បៀវត្ស រៀល/Riel
-                            $totalSalaryTaxUsd = $totalSalaryTaxRiel / $request->exchange_rate;
+                            $totalSalaryTaxUsd = round($totalSalaryTaxRiel,2) / $request->exchange_rate;
                             //ពន្ធលើប្រាក់បៀវត្ស ដុល្លារ/USD
-                            $totalSalaryAfterTax = $baseSalaryReceivedUsd - $totalSalaryTaxUsd;
+                            $totalSalaryAfterTax = $baseSalaryReceivedUsd - round($totalSalaryTaxUsd,2);
                         }else if($number_of_children == 4 && $item->spouse == 1){
                             //​cululate salaray Taxable
                             $taxRate = Taxes::where('from', '<=' ,$totalTtaxBbaseRiel)->where('to','>=',$totalTtaxBbaseRiel)->first();
@@ -708,9 +708,9 @@ class EmployeePayrollController extends Controller
                             }
 
                             //ពន្ធលើប្រាក់បៀវត្ស រៀល/Riel
-                            $totalSalaryTaxUsd = $totalSalaryTaxRiel / $request->exchange_rate;
+                            $totalSalaryTaxUsd = round($totalSalaryTaxRiel,2) / $request->exchange_rate;
                             //ពន្ធលើប្រាក់បៀវត្ស ដុល្លារ/USD
-                            $totalSalaryAfterTax = $baseSalaryReceivedUsd - $totalSalaryTaxUsd;
+                            $totalSalaryAfterTax = $baseSalaryReceivedUsd - round($totalSalaryTaxUsd,2);
                         }
                         //function Severance Pay ti 1
                         $totalSeverancePay = 0;
@@ -764,7 +764,7 @@ class EmployeePayrollController extends Controller
                         $data['total_charges_reduced']          = $totalChargesReduced;
                         $data['total_rate']                     = $totalTax;
                         $data['seniority_pay_excluded_tax']     = $taxExemptionSalary;
-                        $data['total_salary_tax_riel']          = round($totalSalaryTaxRiel, 3);
+                        $data['total_salary_tax_riel']          = round($totalSalaryTaxRiel,3);
                         $data['total_salary_tax_usd']           = $totalSalaryTaxUsd;
                         $data['total_salary']                   = $totalNetSalary;
                         $data['exchange_rate']                  = $request->exchange_rate;
