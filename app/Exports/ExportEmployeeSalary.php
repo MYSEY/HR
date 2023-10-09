@@ -14,6 +14,7 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithColumnWidths;
 use Maatwebsite\Excel\Concerns\WithCustomStartCell;
+use Nette\Utils\Strings;
 
 class ExportEmployeeSalary implements FromCollection, WithColumnWidths, WithHeadings, WithCustomStartCell, WithEvents
 {
@@ -106,6 +107,10 @@ class ExportEmployeeSalary implements FromCollection, WithColumnWidths, WithHead
             $this->totalLoanAmount += $value->loan_amount;
             $this->totalAmountCar += $value->total_amount_car;
             $this->totalSalaryNetPay += $value->total_salary;
+
+            $basic_salary = number_format($value->basic_salary, 2);
+            $totalSalaryTaxRiel = number_format($value->total_salary_tax_riel, 0);
+            $total_salary = number_format($value->total_salary, 2);
             $dataExport[] = [
                 "no" => $i,
                 "employee_id"       => intval($value->users->number_employee),
@@ -114,7 +119,7 @@ class ExportEmployeeSalary implements FromCollection, WithColumnWidths, WithHead
                 "department"        => $value->users->EmployeeDepartment,
                 "location"          => $value->users->EmployeeBranch,
                 "Join Date"         => $value->users->joinOfDate,
-                "Basic Salary"      => number_format($value->basic_salary, 2),
+                "Basic Salary"      => $basic_salary,
                 "Base Salary Received"          => number_format($value->total_gross_salary, 2),
                 "Child Allowance"               => number_format($value->total_child_allowance),
                 "Phone Allowance"               => number_format($value->phone_allowance, 2),
@@ -132,13 +137,13 @@ class ExportEmployeeSalary implements FromCollection, WithColumnWidths, WithHead
                 "Total Tax Base Riel"           => number_format($value->total_tax_base_riel),
                 "Tax Rate"                      => number_format($value->total_rate, 2),
                 "Personal Tax(USD)"             => number_format($value->total_salary_tax_usd, 2),
-                "Personal Tax(Riels)"           => number_format($value->total_salary_tax_riel,2),
+                "Personal Tax(Riels)"           => $totalSalaryTaxRiel,
                 "Seniority Pay Excluded Tax"    => number_format($value->seniority_pay_excluded_tax, 2),
                 "Seniority Backford"            => number_format($value->seniority_backford, 2),
                 "Severance Pay"                 => number_format($value->total_severance_pay, 2),
                 "Loan Amount"                   => number_format($value->loan_amount, 2),
                 "Total Amount Car"              => number_format($value->total_amount_car, 2),
-                "net_salary"                    => abs($value->total_salary)
+                "net_salary"                    => $total_salary
             ];
             $i++;
         }
