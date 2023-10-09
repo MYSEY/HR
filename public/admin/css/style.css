@@ -1948,12 +1948,12 @@ input[type=file].form-control {
     float: left;
     font-size: 26px;
     line-height: 70px;
-    padding: 0 10px;
+    padding: 0 20px;
   }
   .header #toggle_btn .bar-icon {
     display: inline-block;
     width: 21px;
-    padding-top: 20px;
+    padding-top: 13px;
   }
   .header #toggle_btn .bar-icon span {
     background-color: #ffffff;

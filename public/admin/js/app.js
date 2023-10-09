@@ -400,6 +400,8 @@ $(document).ready(function() {
 	// Small Sidebar
 
 	$(document).on('click', '#toggle_btn', function() {
+		$(this).find("#menu-unfold").toggle();
+		$(this).find("#menu-fold").toggle();
 		if($('body').hasClass('mini-sidebar')) {
 			$('body').removeClass('mini-sidebar');
 			$('.subdrop + ul').slideDown();
