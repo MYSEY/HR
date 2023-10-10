@@ -108,7 +108,12 @@ class ExportEmployeeSalary implements FromCollection, WithColumnWidths, WithHead
             $this->totalAmountCar += $value->total_amount_car;
             $this->totalSalaryNetPay += $value->total_salary;
 
-            $basic_salary = number_format($value->basic_salary, 2);
+            if (is_numeric($value->basic_salary)) {
+                $basic_salary = number_format($value->basic_salary, 2);
+            } else {
+                $basic_salary = number_format($value->basic_salary, 2);
+            }
+            
             $totalSalaryTaxRiel = number_format($value->total_salary_tax_riel, 0);
             $total_salary = number_format($value->total_salary, 2);
             $dataExport[] = [
@@ -133,7 +138,7 @@ class ExportEmployeeSalary implements FromCollection, WithColumnWidths, WithHead
                 "Base Salary Received Reil"     => number_format($value->base_salary_received_riel),
                 "Spouse"                        => number_format($value->spouse, 2),
                 "Dependent Child"               => number_format($value->children, 2),
-                "Charges To Be Reduced"         => number_format($value->total_charges_reduced),
+                "Charges To Be Reduced"         => number_format($value->total_charges_reduced,2),
                 "Total Tax Base Riel"           => number_format($value->total_tax_base_riel),
                 "Tax Rate"                      => number_format($value->total_rate, 2),
                 "Personal Tax(USD)"             => number_format($value->total_salary_tax_usd, 2),

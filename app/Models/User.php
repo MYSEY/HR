@@ -50,6 +50,7 @@ class User extends Authenticatable
         'basic_salary',
         'salary_increas',
         'total_current_salary',
+        'total_severancey_pay',
         'phone_allowance',
         'password',
         'phone',

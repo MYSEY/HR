@@ -399,6 +399,7 @@ class UserController extends Controller
                     'salary_increas' => $request->total_salary_increase,
                     'basic_salary' => $totalBasicSalary,
                     'total_current_salary' => $totalCurrentSalary,
+                    'total_severancey_pay' => $totalnewSalary,
                     'pre_salary' => $dataSalary->basic_salary,
                     'resign_reason' => $request->resign_reason
                 ]);
@@ -427,11 +428,10 @@ class UserController extends Controller
                     'resign_reason' => $request->resign_reason
                 ]);
             }
-            $status_date = Carbon::now();
             EmployeeStatusHistory::create([
                 'employee_id'   =>  $request->id,
                 'status'        =>  $request->emp_status,
-                'status_date'   =>  $status_date,
+                'status_date'   =>  $request->start_date,
                 'created_by'    =>  Auth::user()->id,
             ]);
             DB::commit();
