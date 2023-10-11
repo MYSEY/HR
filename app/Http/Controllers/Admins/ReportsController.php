@@ -3,22 +3,37 @@
 namespace App\Http\Controllers\Admins;
 
 use App\Exports\ExportBankTransfer;
+use App\Exports\ExportEFiling;
 use App\Exports\ExportEmployeeReport;
 use App\Exports\ExportTraining;
 use App\Http\Controllers\Controller;
 use App\Models\Branchs;
 use App\Models\Payroll;
+use App\Models\Position;
 use App\Models\StaffPromoted;
 use App\Models\Trainer;
 use App\Models\Training;
 use App\Models\Transferred;
 use App\Models\User;
+use App\Repositories\Admin\ReportRepository;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 
 class ReportsController extends Controller
 {
+    private $reportRepo;
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+
+    public function __construct(ReportRepository $reportRepo)
+    {
+        $this->reportRepo = $reportRepo;
+    }
+
     public function employee(){
         $users = User::whereNot("emp_status", null)->get();
         return view('reports.employee_report',compact('users'));
@@ -38,9 +53,11 @@ class ReportsController extends Controller
             'success'=>$users,
         ]);
     }
+
     public function export(Request $request) {
         return Excel::download(new ExportEmployeeReport($request), 'EmployeeReport.xlsx');
     }
+
     public function newStaff(Request $request){
         $from_date = null;
         $to_date = null;
@@ -77,6 +94,7 @@ class ReportsController extends Controller
             return view('reports.new_staff_report', compact('employees', 'branch'));
         }
     }
+
     public function staffResigned(Request $request){
         $join_date = null;
         $leave_of_absence = null;
@@ -112,6 +130,7 @@ class ReportsController extends Controller
             return view('reports.staff_resigned_report', compact('employees', 'branch'));
         }
     }
+
     public function staffPromoted(Request $request){
         $from_date = null;
         $to_date = null;
@@ -150,6 +169,7 @@ class ReportsController extends Controller
             return view('reports.staff_promoted_report', compact('staffPromotes', 'branch'));
         }
     }
+
     public function staffTransferred(Request $request){
         $from_date = null;
         $to_date = null;
@@ -283,6 +303,7 @@ class ReportsController extends Controller
         ->orderBy('employee_id')->get();
         return view('reports.bank_transfer',compact('data'));
     }
+
     public function bankTransferExport(){
         $monthly = Carbon::now()->format('m');
         $currentYear = Carbon::now()->format('Y');
@@ -292,5 +313,23 @@ class ReportsController extends Controller
         ->orderBy('employee_id')->get();
         $export = new ExportBankTransfer($data);
         return Excel::download($export, 'ReportBankTransfer.xlsx');
+    }
+
+    public function eFilingSalary(){
+        $payroll = Payroll::with('users')->orderBy('id', 'DESC')->get();
+        $positions = Position::get();
+        return view('reports.e_filing_salary',compact('payroll','positions'));
+    }
+    public function eFilingFilter(Request $request)
+    {
+        $data = $this->reportRepo->getEFilingSalary($request);
+        return response()->json([
+            'success'=>$data,
+        ]);
+    }
+    public function efilingSalaryExport(Request $request){
+        $data = $this->reportRepo->getEFilingSalary($request);
+        $export = new ExportEFiling($data);
+        return Excel::download($export, 'ReportEFiling.xlsx');
     }
 }

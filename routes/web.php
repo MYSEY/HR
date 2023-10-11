@@ -241,6 +241,11 @@ Route::middleware(['auth:sanctum'])->group(function(){
 
     Route::get('/reports/bank-transfer', [ReportsController::class,'bankTransfer']);
     Route::get('/reports/bank-transfer-export', [ReportsController::class,'bankTransferExport']);
+
+    Route::get('/reports/e-filing', [ReportsController::class,'eFilingSalary']);
+    Route::post('/reports/e-filing-filter', [ReportsController::class,'eFilingFilter']);
+    Route::get('/reports/e-filing-export', [ReportsController::class,'efilingSalaryExport']);
+    
     
     // test export excel
     Route::get('motor-rentel/export',[PayrollReportController::class,'export']);

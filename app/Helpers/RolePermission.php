@@ -168,33 +168,39 @@ function menu(){
                     'permission'=>1
                 ],
                 [
+                    'value'=> Helper::getLang() == 'en' ? 'E-Filing Salary Report':'របាយការណ៍ប្រាក់បៀវត្សរ៍ E-Filing',
+                    'url'=>"reports/e-filing",
+                    'table'=>19,
+                    'permission'=>1
+                ],
+                [
                     'value'=> Helper::getLang() == 'en' ? 'Motor Rental Report': 'របាយការណ៍ជួលម៉ូតូ',
                     'url'=>"reports/motor-rentel-report",
-                    'table'=>19,
+                    'table'=>20,
                     'permission'=>1
                 ],
                 [
                     'value'=> Helper::getLang() == 'en' ? 'New Staff Report': 'របាយការណ៍បុគ្គលិកថ្មី',
                     'url'=>"reports/new_staff-report",
-                    'table'=>20,
+                    'table'=>21,
                     'permission'=>1
                 ],
                 [
                     'value'=> Helper::getLang() == 'en' ? 'Staff Resigned Report': 'របាយការណ៍លាឈប់បុគ្គលិក',
                     'url'=>"reports/staff-resigned-report",
-                    'table'=>21,
+                    'table'=>22,
                     'permission'=>1
                 ],
                 [
                     'value'=> Helper::getLang() == 'en' ? 'Promoted Staff Report': 'របាយការណ៍បុគ្គលិកដែលត្រូវបានតំឡើង',
                     'url'=>"reports/promoted-staff-report",
-                    'table'=>22,
+                    'table'=>23,
                     'permission'=>1
                 ],
                 [
                     'value'=> Helper::getLang() == 'en' ? 'Transferred Staff Report': 'របាយការណ៍បុគ្គលិកដែលត្រូវបានផ្ទេរ',
                     'url'=>"reports/transferred-staff-report",
-                    'table'=>23,
+                    'table'=>24,
                     'permission'=>1
                 ],
             ]
