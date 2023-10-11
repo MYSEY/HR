@@ -180,6 +180,10 @@ class User extends Authenticatable
     public function gender(){
         return $this->belongsTo(Option::class,'gender','id');
     }
+    // total child
+    public function totalChild(){
+        return $this->hasMany(ChildrenInfor::class,'employee_id','id');
+    }
 
     public function banks(){
         return $this->belongsTo(Bank::class,'bank_name','id');
@@ -348,6 +352,12 @@ class User extends Authenticatable
         if ($this->date_of_birth) {
             return Carbon::parse($this->date_of_birth)->format('d-M-Y');
         }
+    }
+
+    // total child
+    public function getTotalChildAttribute(){
+       $totalChild = ChildrenInfor::where('employee_id',$this->id)->count();
+        return $totalChild;
     }
 
     //// GET Current address EN
