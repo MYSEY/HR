@@ -625,7 +625,7 @@
                             '<td>$<a href="#">'+(row.total_child_allowance )+'</a></td>'+
                             '<td>$<a href="#">'+(row.phone_allowance == null ? '0.00' : row.phone_allowance)+'</a></td>'+
                             '<td>$<a href="#">'+(row.total_kny_phcumben)+'</a></td>'+
-                            '<td>$<a href="#">'+(row.seniority_pay_excluded_tax)+'</a></td>'+
+                            '<td>$<a href="#">'+(row.seniority_pay_included_tax)+'</a></td>'+
                             '<td>$<a href="#">'+(row.total_pension_fund)+'</a></td>'+
                             '<td>$<a href="#">'+(row.base_salary_received_usd)+'</a></td>'+
                             '<td><span>៛</span><a href="#">'+(formatCurrencyKH(row.base_salary_received_riel))+'</a></td>'+

@@ -177,7 +177,7 @@ class ExportPayroll implements FromCollection, WithColumnWidths, WithHeadings, W
                     number_format($pay->total_tax_base_riel),
                     number_format($pay->total_rate, 2),
                     number_format($pay->total_salary_tax_usd, 2),
-                    number_format($pay->total_salary_tax_riel,2),
+                    number_format($pay->total_salary_tax_riel),
                     number_format($pay->seniority_pay_excluded_tax, 2),
                     number_format($pay->seniority_backford, 2),
                     number_format($pay->total_severance_pay, 2),
@@ -517,11 +517,11 @@ class ExportPayroll implements FromCollection, WithColumnWidths, WithHeadings, W
                 $sheet->getDelegate()->getStyle("T".$rows)->getFont()->setName('Khmer OS Battambang')->setSize(9)->setBold("T".$rows);
                 $event->sheet->getDelegate()->getStyle("T".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
                 //total setCellValue U
-                $sheet->setCellValue("U".$rows, number_format($this->totalChargesReduced));
+                $sheet->setCellValue("U".$rows, number_format($this->totalChargesReduced,2));
                 $sheet->getDelegate()->getStyle("U".$rows)->getFont()->setName('Khmer OS Battambang')->setSize(9)->setBold("U".$rows);
                 $event->sheet->getDelegate()->getStyle("U".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
                 //total setCellValue V
-                $sheet->setCellValue("V".$rows, number_format($this->totalTaxBaseRiel));
+                $sheet->setCellValue("V".$rows, number_format($this->totalTaxBaseRiel,2));
                 $sheet->getDelegate()->getStyle("V".$rows)->getFont()->setName('Khmer OS Battambang')->setSize(9)->setBold("V".$rows);
                 $event->sheet->getDelegate()->getStyle("V".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
                 //total setCellValue W
@@ -533,7 +533,7 @@ class ExportPayroll implements FromCollection, WithColumnWidths, WithHeadings, W
                 $sheet->getDelegate()->getStyle("X".$rows)->getFont()->setName('Khmer OS Battambang')->setSize(9)->setBold("X".$rows);
                 $event->sheet->getDelegate()->getStyle("X".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
                 //total setCellValue Y
-                $sheet->setCellValue("Y".$rows, number_format($this->totalSalaryTaxRiel));
+                $sheet->setCellValue("Y".$rows, number_format($this->totalSalaryTaxRiel,2));
                 $sheet->getDelegate()->getStyle("Y".$rows)->getFont()->setName('Khmer OS Battambang')->setSize(9)->setBold("Y".$rows);
                 $event->sheet->getDelegate()->getStyle("Y".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
                 //total setCellValue Z

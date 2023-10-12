@@ -367,39 +367,41 @@ class UserController extends Controller
         try {
             if ($request->emp_status == '1') {
                 //total day in months
-                $endMonth = Carbon::createFromDate($request->start_date)->format('m');
-                $totalDayInMonth = Carbon::now()->month($endMonth)->daysInMonth;
+                // $endMonth = Carbon::createFromDate($request->start_date)->format('m');
+                // $totalDayInMonth = Carbon::now()->month($endMonth)->daysInMonth;
                 
                 //find start date employee join date
-                $date_of_month = Carbon::createFromDate($request->start_date)->format('Y-m');
-                $currentYear = $date_of_month.'-'.$totalDayInMonth;
+                // $date_of_month = Carbon::createFromDate($request->start_date)->format('Y-m');
+                // $currentYear = $date_of_month.'-'.$totalDayInMonth;
 
                 //find total working day in month
-                $startDate = Carbon::parse($request->start_date);
-                $endDate = Carbon::parse($currentYear);
+                // $startDate = Carbon::parse($request->start_date);
+                // $endDate = Carbon::parse($currentYear);
 
-                // new salary and new total days
+                //total day in  passt probation and total salary passt probation days
+                // $dataSalary = User::where('id',$request->id)->first();
+                // $totalNewDays = $startDate->diffInDays($endDate) + 1;
+                // $totalBasicSalary = $dataSalary->basic_salary + $request->total_salary_increase;
+                // $totalnewSalary = ($totalBasicSalary / $totalDayInMonth) * $totalNewDays;
+                
+                //total day in  probation and total salary in probation days
+                // $totalOldDay = $totalDayInMonth - $totalNewDays;
+                // $totalOldSalary = 0;
+                // if ($totalOldDay) {
+                //     $totalOldSalary = ($dataSalary->basic_salary / $totalDayInMonth)  * $totalOldDay;
+                // }
+                // $totalCurrentSalary = $totalnewSalary + $totalOldSalary;
+
                 $dataSalary = User::where('id',$request->id)->first();
-                $totalNewDays = $startDate->diffInDays($endDate) + 1;
                 $totalBasicSalary = $dataSalary->basic_salary + $request->total_salary_increase;
-                $totalnewSalary = ($totalBasicSalary / $totalDayInMonth) * $totalNewDays;
-                
-                //old salary and total old days
-                $totalOldDay = $totalDayInMonth - $totalNewDays;
-                $totalOldSalary = 0;
-                if ($totalOldDay) {
-                    $totalOldSalary = ($dataSalary->basic_salary / $totalDayInMonth)  * $totalOldDay;
-                }
-                
-                $totalCurrentSalary = $totalnewSalary + $totalOldSalary;
                 User::where('id',$request->id)->update([
                     'emp_status' => $request->emp_status,
                     'fdc_date' => $request->start_date,
                     'fdc_end' => $request->end_dete,
                     'salary_increas' => $request->total_salary_increase,
                     'basic_salary' => $totalBasicSalary,
-                    'total_current_salary' => $totalCurrentSalary,
-                    'total_severancey_pay' => $totalnewSalary,
+                    // 'total_current_salary' => $totalCurrentSalary,
+                    // 'total_severancey_pay' => $totalnewSalary,
                     'pre_salary' => $dataSalary->basic_salary,
                     'resign_reason' => $request->resign_reason
                 ]);

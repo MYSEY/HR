@@ -114,7 +114,7 @@ class EmployeePayrollController extends Controller
      */
     public function store(Request $request)
     {
-        try{
+        // try{
             $employee = User::where('date_of_commencement','<=',$request->payment_date)->whereIn('emp_status',['Probation','1','10','2'])->get();
             if (!$employee->isEmpty()) {
                 foreach ($employee as $item) {
@@ -126,6 +126,7 @@ class EmployeePayrollController extends Controller
                     } else {
                         //function first month join work
                         $totalFirstSeverancPay = 0;
+                        $totalBaseSalaryRecived = 0;
                         if (count(Payroll::where('employee_id',$item->id)->get()) == 0) {
                             //total day in monthsd
                             $startMonth = Carbon::createFromDate($item->date_of_commencement)->format('m');
@@ -155,11 +156,40 @@ class EmployeePayrollController extends Controller
                                 }
                             }
                         } else {
+                            
                             $monthToPay = Carbon::createFromDate($item->fdc_date)->format('Y-m');
                             $currentMonthToPay = Carbon::createFromDate($request->payment_date)->format('Y-m');
                             if($monthToPay == $currentMonthToPay){
-                                $totalBasicSalary = $item->total_current_salary != null ? $item->total_current_salary : $item->basic_salary;
-                                $totalFirstSeverancPay = $item->total_severancey_pay;
+
+                                // $totalBasicSalary = $item->total_current_salary == null ? $item->basic_salary : $item->total_current_salary;
+                                //function get first severance pay
+                                $endMonth = Carbon::createFromDate($item->fdc_date)->format('m');
+                                $totalDayInMonth = Carbon::now()->month($endMonth)->daysInMonth;
+                                //find start date employee join date
+                                $date_of_month = Carbon::createFromDate($item->fdc_date)->format('Y-m');
+                                $currentYear = $date_of_month.'-'.$totalDayInMonth;
+                                //find total working day in month
+                                $startDate = Carbon::parse($item->fdc_date);
+                                $endDate = Carbon::parse($currentYear);
+
+                                // new salary and new total days
+                                // $totalNewDays = $startDate->diffInDays($endDate);
+                                // $totalFirstSeverancPay = ($totalBasicSalary / $totalDayInMonth) * $totalNewDays;
+
+
+
+                                //total day in  passt probation and total salary passt probation days
+                                $totalNewDays = $startDate->diffInDays($endDate) + 1;
+                                $totalSeverancePayLast = ($item->basic_salary / $totalDayInMonth) * $totalNewDays;
+                                
+                                //total day in  probation and total salary in probation days
+                                $totalOldDay = $totalDayInMonth - $totalNewDays;
+                                $totalSeverancePayFirst = 0;
+                                if ($totalOldDay) {
+                                    $totalSeverancePayFirst = ($item->pre_salary / $totalDayInMonth)  * $totalOldDay;
+                                }
+                                $totalBaseSalaryRecived = $totalSeverancePayLast + $totalSeverancePayFirst;
+                                $totalFirstSeverancPay = $totalSeverancePayLast;
                             }else{
                                 $totalBasicSalary = $item->basic_salary;
                             }
@@ -236,13 +266,21 @@ class EmployeePayrollController extends Controller
                             }
                         }
                         
-        
                         //calcute last severance pay 1
-                        $totalSeveranceP1 = 0;
+                        $SeverancePay1 = null;
+                        $SeverancePay2 = null;
+                        $totalSeniority = 0;
                         $type_fdc1 = null;
                         $type_fdc2 = null;
-                        $totalSeveranceP2 = 0;
-                        $totalSeverancePay2 = 0;
+                        $type_udc = null;
+
+                        $totalSeverancyPaySalary = $totalBaseSalaryRecived != null ? $totalBaseSalaryRecived : $totalBasicSalary;
+                        $totalSalaryNetPay = $totalSeverancyPaySalary + $totalBunus + $item->phone_allowance + $totalChildAllowance;
+                        $totalSalarySeverancyPay = $totalSeverancyPaySalary + $totalBunus + $item->phone_allowance + $totalChildAllowance;
+
+                        $totalSeverancePay = $totalFirstSeverancPay != null ? $totalFirstSeverancPay : $totalBasicSalary;
+                        $totalOtherBenefit = $totalSeverancePay + $totalBunus + $item->phone_allowance + $totalChildAllowance;
+                        // dd($totalSalarySeverancyPay);
                         if ($item->emp_status == 1) {
                             $dataGrossSalaryPay1 = GrossSalaryPay::where('employee_id',$item->id)->whereNotNull('type_fdc1')->count(); 
                             if($dataGrossSalaryPay1 == 12){
@@ -250,99 +288,84 @@ class EmployeePayrollController extends Controller
                                 $totalDayInMonth = Carbon::now()->month($endMonth)->daysInMonth;
                                 $date_of_month = Carbon::createFromDate($item->fdc_end)->format('Y-m');
                                 $currentYear = $date_of_month.'-'.$totalDayInMonth;
-                                $totalGrossSalary = $item->basic_salary + $totalBunus + $item->phone_allowance + $totalChildAllowance;
                                 // new salary and new total days
                                 $startDate = Carbon::parse($item->fdc_end);
                                 $endDate = Carbon::parse($currentYear);
                                 $totalNewDays = $startDate->diffInDays($endDate) + 1;
-                                $totalSeveranceP2 = ($totalGrossSalary / $totalDayInMonth) * $totalNewDays;
+                                $SeverancePay2 = ($totalSalarySeverancyPay / $totalDayInMonth) * $totalNewDays;
                                 //old salary and total old days
                                 $totalOldDay = $totalDayInMonth - $totalNewDays;
-                                $totalSeveranceP1 = ($totalGrossSalary / $totalDayInMonth) * $totalOldDay;
-
-                                // $totalSeverancePaySalary1 = $item->basic_salary;
+                                $SeverancePay1 = ($totalSalarySeverancyPay / $totalDayInMonth) * $totalOldDay;
                                 $type_fdc2 = 'fdc2';
+                                $type_udc = 'seniority';
                             }
-                            $type_fdc1 = 'fdc1';
-                            $totalSeverancePay2 = $totalSeveranceP2;
                         }
-                        // dd($totalSeveranceP1);
-                        //calcute last severance pay 2
-                        $totalGrossSalary1 = 0;
-                        $totalGrossSalary2 = 0;
+
                         if ($item->emp_status == 10) {
-                            $dataGrossSalaryPay2 = GrossSalaryPay::where('employee_id',$item->id)->whereNotNull('type_fdc2')->count(); 
-                            if($dataGrossSalaryPay2 == 12){
+                            $dataGrossSalaryPay1 = GrossSalaryPay::where('employee_id',$item->id)->whereNotNull('type_fdc2')->count(); 
+                            if($dataGrossSalaryPay1 == 12){
                                 $endMonth = Carbon::createFromDate($item->fdc_end)->format('m');
                                 $totalDayInMonth = Carbon::now()->month($endMonth)->daysInMonth;
                                 $date_of_month = Carbon::createFromDate($item->fdc_end)->format('Y-m');
                                 $currentYear = $date_of_month.'-'.$totalDayInMonth;
-                                $totalGrossSalary = $item->basic_salary + $totalBunus + $item->phone_allowance + $totalChildAllowance;
                                 // new salary and new total days
                                 $startDate = Carbon::parse($item->fdc_end);
                                 $endDate = Carbon::parse($currentYear);
                                 $totalNewDays = $startDate->diffInDays($endDate) + 1;
-                                $totalGrossSalary1 = ($totalGrossSalary / $totalDayInMonth) * $totalNewDays;
-        
                                 //old salary and total old days
                                 $totalOldDay = $totalDayInMonth - $totalNewDays;
-                                $totalGrossSalary2 = ($totalGrossSalary / $totalDayInMonth) * $totalOldDay;
-                                $totalSeverancePaySalary2 = $totalGrossSalary1 + $totalGrossSalary2;
+                                $SeverancePay2 = ($totalSalarySeverancyPay / $totalDayInMonth) * $totalOldDay;
                             }
                         }
-                        if($item->emp_status == 'Probation'){
-                            $totalGrossSalaryTaxFree = $totalBasicSalary + $item->phone_allowance;
-                            $totalSeverancePay1 =  $totalGrossSalaryTaxFree != null ? $totalGrossSalaryTaxFree : $totalGrossSalaryTaxFree;
-                        }
-                        $totalSeniority = 0;
-                        if($item->emp_status == 2){
-                            $type_fdc1 = 'fdc1';
-                            $type_fdc2 = 'seniority';
-                            $totalGrossSalaryTaxFree = $totalBasicSalary + $totalBunus + $item->phone_allowance + $totalChildAllowance;
-                            $totalSeverancePay1 =  $totalFirstSeverancPay;
-                            $totalSeniority =  $totalGrossSalaryTaxFree != null ? $totalGrossSalaryTaxFree : $totalGrossSalaryTaxFree;
-                        }
-                        
-                        if($item->emp_status == 1){
-                            $severancePay = $item->basic_salary == null ? $totalBasicSalary : $item->basic_salary;
-                            $totalGrossSalaryTaxFree = $severancePay + $totalBunus + $item->phone_allowance + $totalChildAllowance;
-                            $total_fdc = $totalSeveranceP1 > $totalSeveranceP2 ? $totalSeveranceP2 : $totalSeveranceP1;
-                            $dataTotalSeverancePay1 = $totalFirstSeverancPay == null ? $total_fdc : $totalFirstSeverancPay;
-                            $totalSeverancePay1 =  $dataTotalSeverancePay1 != null ? $dataTotalSeverancePay1 : $totalGrossSalaryTaxFree;
-                        }
-                        
-                        $totalSeverancePaySalary2 = 0;
-                        if($item->emp_status == 10){
-                            $type_fdc1 = null;
-                            $type_fdc2 = 'fdc2';
-                            $totalSeverancePay1 = 0;
-                            $severancePay = $totalSeverancePaySalary2 == null ? $totalBasicSalary : $totalSeverancePaySalary2;
-                            $totalGrossSalaryTaxFree = $severancePay + $totalBunus + $item->phone_allowance + $totalChildAllowance;
-                            $dataTotalSeverancePay1 = $totalFirstSeverancPay == null ? $totalGrossSalary2 : $totalFirstSeverancPay;
-                            $totalSeverancePay2 =  $dataTotalSeverancePay1 != null ? $dataTotalSeverancePay1 + $totalBunus + $item->phone_allowance + $totalChildAllowance : $totalGrossSalaryTaxFree;
-                        }
 
+                        $dataTotalSeverancePay1 = $SeverancePay1 != null ? $SeverancePay1 : $totalOtherBenefit;
+                        $totalSeverancePay1 =  $dataTotalSeverancePay1 != null ? $dataTotalSeverancePay1 : $totalSalarySeverancyPay;
+                        $totalSeverancePay2 = $SeverancePay2;
+                        $totalSeniority = $totalSalarySeverancyPay;
+                        // dd($totalSeverancePay2);
+
+                        
+                        $dataTotalSeverancePay2 = $SeverancePay2 != null ? $SeverancePay2 : $totalOtherBenefit;
+                        if ($item->emp_status == 'Probation') {
+                            $type_fdc1 = null;
+                        } elseif($item->emp_status == 1) {
+                            $type_fdc1 = 'fdc1';
+                        }elseif($item->emp_status == 10){
+                            $type_fdc1 = null;
+                            $totalSeniority = null;
+                            $type_fdc2 = 'fdc2';
+                            $totalSeverancePay1 = null;
+                            $totalSeverancePay2 = null;
+                            $totalSeverancePay2 =  $dataTotalSeverancePay2 != null ? $dataTotalSeverancePay2 : $totalSalarySeverancyPay;
+                        }elseif($item->emp_status == 2){
+                            $type_udc = 'seniority';
+                            $totalSeverancePay1 = null;
+                            $totalSeverancePay2 = null;
+                            $dataTotalSeverancePay1 = $SeverancePay1 != null ? $SeverancePay1 : $totalOtherBenefit;
+                            $totalSeniority =  $dataTotalSeverancePay1 != null ? $dataTotalSeverancePay1 : $totalSalarySeverancyPay;
+                        }
+                        
                         //sum salary and sum other benefit befor tax free
                         $dataGrossSalary = GrossSalaryPay::create([
                             'employee_id'               => $item->id,
                             'basic_salary'              => $item->basic_salary,
-                            'total_gross_salary'        => round($totalGrossSalaryTaxFree,2),
+                            'total_gross_salary'        => round($totalSalaryNetPay,2),
                             'total_fdc1'                => round($totalSeverancePay1,2),
                             'total_fdc2'                => round($totalSeverancePay2,2),
                             'total_seniority'           => round($totalSeniority,2),
                             'payment_date'              => $request->payment_date,
                             'type_fdc1'                 => $type_fdc1,
                             'type_fdc2'                 => $type_fdc2,
+                            'type_udc'                  => $type_udc,
                             'created_by'                => Auth::user()->id
                         ]);
         
                         // dd($dataGrossSalary);
                         if (count(Payroll::where('employee_id',$item->id)->get()) == 0) {
-                            $totalGrossSalary = $totalGrossSalaryTaxFree;
+                            $totalGrossSalary = $totalSalaryNetPay;
                         }else{
                             $totalGrossSalary = $dataGrossSalary->total_gross_salary;
                         }
-
                         //National Social Security Fund (NSSF) Formula
                         $exchangNSSF = ExchangeRate::where('type','NSSF')->orderBy('id','desc')->first();
                         if ($exchangNSSF) {
@@ -399,8 +422,7 @@ class EmployeePayrollController extends Controller
                                 if ($currentDate == 12) {
                                     $currentMonth = Carbon::createFromDate($nextYear.'-07-01')->format('Y-m-d');
                                 }
-                                
-                                $totalSalary = GrossSalaryPay::where('employee_id', $item->id)->where('type_fdc2','seniority')->when($currentYear ,function ($query, $fdc_end) {
+                                $totalSalary = GrossSalaryPay::where('employee_id', $item->id)->where('type_udc','seniority')->when($currentYear ,function ($query, $fdc_end) {
                                     $query->where('payment_date', '>=',$fdc_end);
                                 })->when($currentMonth, function($query, $currentMonth){
                                     $query->where('payment_date', '>=',$currentMonth);
@@ -773,11 +795,11 @@ class EmployeePayrollController extends Controller
                 Toastr::error('Can not employee payroll','Error');
                 return redirect()->back();
             }
-        }catch(\Exception $e){
-            DB::rollback();
-            Toastr::error('Payroll created fail','Error');
-            return redirect()->back();
-        }
+        // }catch(\Exception $e){
+        //     DB::rollback();
+        //     Toastr::error('Payroll created fail','Error');
+        //     return redirect()->back();
+        // }
     }
 
     /**
