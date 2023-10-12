@@ -332,4 +332,10 @@ class ReportsController extends Controller
         $export = new ExportEFiling($data);
         return Excel::download($export, 'ReportEFiling.xlsx');
     }
+
+    public function eFormSalary(){
+        $payroll = Payroll::with('users')->orderBy('id', 'DESC')->get();
+        $positions = Position::get();
+        return view('reports.e_form_report',compact('payroll','positions'));
+    }
 }

@@ -121,8 +121,10 @@ Route::middleware(['auth:sanctum'])->group(function(){
 
     // users
     Route::get('users', [UserController::class,'index']);
+    Route::get('user/form/create', [UserController::class,'formCreate']);
     Route::post('users', [UserController::class,'filter']);
     Route::post('users/store', [UserController::class,'store']);
+    Route::post('users/create', [UserController::class,'create']);
     Route::post('users/update', [UserController::class,'update']);
     Route::post('users/delete', [UserController::class,'destroy']);
     Route::get('users/edit', [UserController::class,'edit']);
@@ -245,7 +247,10 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('/reports/e-filing', [ReportsController::class,'eFilingSalary']);
     Route::post('/reports/e-filing-filter', [ReportsController::class,'eFilingFilter']);
     Route::get('/reports/e-filing-export', [ReportsController::class,'efilingSalaryExport']);
-    
+
+    Route::get('/reports/e-form', [ReportsController::class,'eFormSalary']);
+    Route::post('/reports/e-form-filter', [ReportsController::class,'eFormFilter']);
+    Route::get('/reports/e-form-export', [ReportsController::class,'eFormSalaryExport']);
     
     // test export excel
     Route::get('motor-rentel/export',[PayrollReportController::class,'export']);

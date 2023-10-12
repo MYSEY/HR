@@ -27,7 +27,8 @@
                     @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer')
                     <a href="#" class="btn add-btn" data-toggle="modal" id="import_employee"><i
                         class="fa fa-plus"></i>@lang('lang.import')</a>
-                        <a href="#" class="btn add-btn me-2" data-toggle="modal" id="add_new"><i class="fa fa-plus"></i>@lang('lang.add_new')</a>
+                        {{-- <a href="#" class="btn add-btn me-2" data-toggle="modal" id="add_new"><i class="fa fa-plus"></i>@lang('lang.add_new')</a> --}}
+                        <a href="{{url('user/form/create')}}" class="btn add-btn me-2"><i class="fa fa-plus"></i> @lang('lang.add_new')</a>
                     @endif
                 </div>
             </div>

@@ -110,6 +110,37 @@ class UserController extends Controller
                                         ));
     }
 
+    public function formCreate() {
+        $role = Role::all();
+        $position = Position::all();
+        $department = Department::all();
+        $optionStatus = Option::where('type','status')->get();
+        $autoEmpId   = $this->generate_EmployeeId(Carbon::today())['number_employee'];
+        $optionGender = Option::where('type','gender')->get();
+        $optionPositionType = Option::where('type','position_type')->get();
+        $optionLoan = Option::where('type','loan')->get();
+        $optionSpouse = Option::where('type','is_spouse')->get();
+        $optionIdentityType = Option::where('type','identity_type')->get();
+        $branch = Branchs::all();
+        $province = Province::all();
+        $bank = Bank::all();
+        return view('users.form_create',compact(
+                                            'role',
+                                            'position',
+                                            'department',
+                                            'optionStatus',
+                                            'autoEmpId',
+                                            'optionGender',
+                                            'branch',
+                                            'optionIdentityType', 
+                                            'province',
+                                            'bank',
+                                            'optionPositionType',
+                                            'optionLoan',
+                                            'optionSpouse',
+                                        ));
+    }
+
     public function filter(Request $request){
         try{
             $data = $this->employeeRepo->getAllUsers($request);
@@ -141,9 +172,18 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+        try{
+            $this->employeeRepo->createUsers($request);
+            DB::commit();
+            Toastr::success('Create employee successfully.','Success');
+            return redirect('users');
+        }catch(\Exception $e){
+            DB::rollback();
+            Toastr::error('Create employee fail','Error');
+            return redirect()->back();
+        }
     }
 
     /**
@@ -152,7 +192,7 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(UserRequest $request)
+    public function store(Request $request)
     {
         try{
             $this->employeeRepo->createUsers($request);

@@ -43,6 +43,10 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'number_employee',
+        'last_name_kh',
+        'first_name_kh',
+        'last_name_en',
+        'first_name_en',
         'employee_name_kh',
         'employee_name_en',
         'email',
@@ -65,7 +69,9 @@ class User extends Authenticatable
         'gender',
         'date_of_birth',
         'id_card_number',
+        'id_number_nssf',
         'nationality',
+        'ethnicity',
         'date_of_commencement',
         'guarantee_letter',
         'employment_book',

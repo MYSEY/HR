@@ -20,12 +20,17 @@ class CreateUsersTable extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('number_employee')->nullable();
+            $table->string('last_name_kh');
+            $table->string('first_name_kh');
+            $table->string('last_name_en');
+            $table->string('first_name_en');
             $table->string('employee_name_kh');
             $table->string('employee_name_en');
             $table->integer('gender')->nullable();
             $table->date('date_of_birth')->nullable();
             $table->integer('spouse')->nullable();
             $table->string('id_card_number')->nullable();
+            $table->string('id_number_nssf')->nullable();
             $table->string('department_id')->nullable();
             $table->string('position_id')->nullable();
             $table->integer('branch_id')->nullable();
@@ -46,6 +51,7 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->string('position_type')->nullable();
             $table->string('nationality')->nullable();
+            $table->string('ethnicity')->nullable();
             $table->longText('guarantee_letter')->nullable();
             $table->longText('employment_book')->nullable();
             $table->string('identity_type')->nullable();
