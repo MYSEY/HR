@@ -516,68 +516,51 @@
                     .width(150);
         }
         // block Current Address
-        $("#current_province, #e_current_province").on("change", function(){
-            let id = $("#current_province").val() ?? $("#current_province").val() ?? $("#e_current_province").val() ?? $("#e_current_province").val();
+        $("#current_province").on("change", function(){
+            let id = $("#current_province").val() ?? $("#current_province").val();
             let optionSelect = "currentProvince";
 
             $('#current_district').html('<option selected disabled> -- @lang("lang.select") --</option>');
             $('#current_commune').html('<option selected disabled> --@lang("lang.select") --</option>');
             $('#current_village').html('<option selected disabled> --@lang("lang.select") --</option>');
-
-            $('#e_current_district').html('<option selected disabled> --@lang("lang.select") --</option>');
-            $('#e_current_commune').html('<option selected disabled> --@lang("lang.select") --</option>');
-            $('#e_current_village').html('<option selected disabled> --@lang("lang.select") --</option>');
-
             showProvince(id, optionSelect);
         });
 
-        $("#current_district, #e_current_district").on("change", function(){
-            let id = $("#current_district").val() ?? $("#current_district").val() ?? $("#e_current_district").val() ?? $("#e_current_district").val();
+        $("#current_district").on("change", function(){
+            let id = $("#current_district").val() ?? $("#current_district").val();
             let optionSelect = "currentDistrict";
             $('#current_commune').html('<option selected disabled> --@lang("lang.select") --</option>');
             $('#current_village').html('<option selected disabled> --@lang("lang.select") --</option>');
-
-            $('#e_current_commune').html('<option selected disabled> --@lang("lang.select") --</option>');
-            $('#e_current_village').html('<option selected disabled> --@lang("lang.select") --</option>');
             showProvince(id, optionSelect);
         });
 
-        $("#current_commune, #e_current_commune").on("change", function(){
-            let id = $("#current_commune").val() ?? $("#current_commune").val() ?? $("#e_current_commune").val() ?? $("#e_current_commune").val();
+        $("#current_commune").on("change", function(){
+            let id = $("#current_commune").val() ?? $("#current_commune").val();
             let optionSelect = "currentCommune";
             $('#current_village').html('<option selected disabled> --@lang("lang.select") --</option>');
-            $('#e_current_village').html('<option selected disabled> --@lang("lang.select") --</option>');
             showProvince(id, optionSelect);
         });
 
         // block Permanent Address
-        $("#permanent_province, #e_permanent_province").on("change", function(){
-            let id = $("#permanent_province").val() ?? $("#permanent_province").val() ?? $("#e_permanent_province").val() ?? $("#e_permanent_province").val();
+        $("#permanent_province").on("change", function(){
+            let id = $("#permanent_province").val() ?? $("#permanent_province").val();
             let optionSelect = "permanentProvince";
             $('#permanent_district').html('<option selected disabled> --@lang("lang.select") --</option>');
             $('#permanent_commune').html('<option selected disabled> --@lang("lang.select") --</option>');
             $('#permanent_village').html('<option selected disabled> --@lang("lang.select") --</option>');
-
-            $('#e_permanent_district').html('<option selected disabled> --@lang("lang.select") --</option>');
-            $('#e_permanent_commune').html('<option selected disabled> --@lang("lang.select") --</option>');
-            $('#e_permanent_village').html('<option selected disabled> --@lang("lang.select") --</option>');
             showProvince(id, optionSelect);
         });
-        $("#permanent_district, #e_permanent_district").on("change", function(){
-            let id = $("#permanent_district").val() ?? $("#permanent_district").val() ?? $("#e_permanent_district").val() ?? $("#e_permanent_district").val();
+        $("#permanent_district").on("change", function(){
+            let id = $("#permanent_district").val() ?? $("#permanent_district").val();
             let optionSelect = "permanentDistrict";
             $('#permanent_commune').html('<option selected disabled> --@lang("lang.select") --</option>');
             $('#permanent_village').html('<option selected disabled> --@lang("lang.select") --</option>');
-
-            $('#e_permanent_commune').html('<option selected disabled> --@lang("lang.select") --</option>');
-            $('#e_permanent_village').html('<option selected disabled> --@lang("lang.select") --</option>');
             showProvince(id, optionSelect);
         });
-        $("#permanent_commune, #e_permanent_commune").on("change", function(){
-            let id = $("#permanent_commune").val() ?? $("#permanent_commune").val() ?? $("#e_permanent_commune").val() ?? $("#e_permanent_commune").val();
+        $("#permanent_commune").on("change", function(){
+            let id = $("#permanent_commune").val() ?? $("#permanent_commune").val()
             let optionSelect = "permanentCommune";
             $('#permanent_village').html('<option selected disabled> --@lang("lang.select") --</option>');
-            $('#e_permanent_village').html('<option selected disabled> --@lang("lang.select") --</option>');
             showProvince(id, optionSelect);
         });
         $("#profile").on("change", function () {
@@ -641,22 +624,16 @@
                         }
                         if (optionSelect == "currentProvince") {
                             $('#current_district').append($('<option>', option));
-                            $('#e_current_district').append($('<option>', option));
                         }else if(optionSelect == "currentDistrict"){
                             $('#current_commune').append($('<option>', option));
-                            $('#e_current_commune').append($('<option>', option));
                         }else if (optionSelect == "currentCommune") {
                             $('#current_village').append($('<option>', option));
-                            $('#e_current_village').append($('<option>', option));
                         }else if (optionSelect == "permanentProvince") {
                             $('#permanent_district').append($('<option>', option));
-                            $('#e_permanent_district').append($('<option>', option));
                         }else if (optionSelect == "permanentDistrict") {
                             $('#permanent_commune').append($('<option>', option));
-                            $('#e_permanent_commune').append($('<option>', option));
                         }else if (optionSelect == "permanentCommune") {
                             $('#permanent_village').append($('<option>', option));
-                            $('#e_permanent_village').append($('<option>', option));
                         }
                     
                     });

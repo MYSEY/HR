@@ -140,6 +140,9 @@ class UserController extends Controller
                                             'optionSpouse',
                                         ));
     }
+    public function formEdit() {
+        return view('users.form_edit');
+    }
 
     public function filter(Request $request){
         try{
@@ -358,13 +361,14 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(UserUpdated $request)
+    public function update(Request $request)
     {
         try{
             $this->employeeRepo->updatedUsers($request);
             DB::commit();
             Toastr::success('Updated employee successfully.','Success');
-            return redirect()->back();
+            return redirect('users');
+            // return redirect()->back();
         }catch(\Exception $e){
             DB::rollback();
             Toastr::error('Update employee fail','Error');
