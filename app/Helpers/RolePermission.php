@@ -174,6 +174,12 @@ function menu(){
                     'permission'=>1
                 ],
                 [
+                    'value'=> Helper::getLang() == 'en' ? 'E-Form Salary Report':'របាយការណ៍ប្រាក់បៀវត្សរ៍ E-Form',
+                    'url'=>"reports/e-form",
+                    'table'=>19,
+                    'permission'=>1
+                ],
+                [
                     'value'=> Helper::getLang() == 'en' ? 'Motor Rental Report': 'របាយការណ៍ជួលម៉ូតូ',
                     'url'=>"reports/motor-rentel-report",
                     'table'=>20,

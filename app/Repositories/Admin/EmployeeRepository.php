@@ -71,6 +71,10 @@ class EmployeeRepository extends BaseRepository
     public function createUsers($request){
         $data = $request->all(); 
         $newDateTime = Carbon::parse($data['date_of_commencement'])->addMonths(3);
+        $fullNameKH = $request->last_name_kh.' '.$request->first_name_kh;
+        $fullNameEN = $request->last_name_en.' '.$request->first_name_en;
+        $data['employee_name_kh'] = $fullNameKH;
+        $data['employee_name_en'] = $fullNameEN;
         $data['fdc_date'] = $newDateTime;
         $data['emp_status'] = 'Probation';
         $data['created_by'] = Auth::user()->id;
