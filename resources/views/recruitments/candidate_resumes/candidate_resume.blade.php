@@ -300,8 +300,10 @@
                                 }));
                             });
                         }
-                        $('#e_name_kh').val(response.success.name_kh);
-                        $('#e_name_en').val(response.success.name_en);
+                        $('#e_last_name_kh').val(response.success.last_name_kh);
+                        $('#e_first_name_kh').val(response.success.first_name_kh);
+                        $('#e_last_name_en').val(response.success.last_name_en);
+                        $('#e_first_name_en').val(response.success.first_name_en);
                         $('#e_current_position').val(response.success.current_position);
                         $('#e_companey_name').val(response.success.companey_name);
                         $('#e_current_address').val(response.success.current_address);

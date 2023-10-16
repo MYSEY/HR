@@ -122,6 +122,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     // users
     Route::get('users', [UserController::class,'index']);
     Route::get('user/form/create', [UserController::class,'formCreate']);
+    Route::get('user/form/edit/{id}', [UserController::class,'formEdit']);
     Route::post('users', [UserController::class,'filter']);
     Route::post('users/store', [UserController::class,'store']);
     Route::post('users/create', [UserController::class,'create']);

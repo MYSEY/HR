@@ -111,10 +111,16 @@ class EmployeeRepository extends BaseRepository
         }else{
             $filenameBook = $request->hidden_file_employment_book;
         }
+        $fullNameKH = $request->last_name_kh.' '.$request->first_name_kh;
+        $fullNameEN = $request->last_name_en.' '.$request->first_name_en;
         return User::where('id',$request->id)->update([
             'number_employee'  => $request->number_employee,
-            'employee_name_kh'  => $request->employee_name_kh,
-            'employee_name_en'  => $request->employee_name_en,
+            'last_name_kh'  => $request->last_name_kh,
+            'first_name_kh'  => $request->first_name_kh,
+            'last_name_en'  => $request->last_name_en,
+            'first_name_en'  => $request->first_name_en,
+            'employee_name_kh'  => $fullNameKH,
+            'employee_name_en'  => $fullNameEN,
             'gender'  => $request->gender,
             'role_id'  => $request->role_id,
             'basic_salary'  => $request->basic_salary,

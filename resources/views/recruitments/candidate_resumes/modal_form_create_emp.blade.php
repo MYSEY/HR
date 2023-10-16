@@ -22,13 +22,13 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="">@lang('lang.name') (@lang('lang.kh')) <span class="text-danger">*</span></label>
-                                <input class="form-control employee_name_kh emp_required" type="text" id="employee_name_kh" name="employee_name_kh" required>
+                                <input class="form-control employee_name_kh emp_required" type="text" id="employee_name_kh" name="employee_name_kh" required disabled>
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="">@lang('lang.name') (@lang('lang.en')) <span class="text-danger">*</span></label>
-                                <input class="form-control employee_name_en emp_required clear_data" type="text" id="employee_name_en" name="employee_name_en" required>
+                                <input class="form-control employee_name_en emp_required clear_data" type="text" id="employee_name_en" name="employee_name_en" required disabled>
                             </div>
                         </div>
                         <div class="col-sm-6">

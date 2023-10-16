@@ -13,14 +13,26 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="">
-                                <label class="">@lang('lang.name') (@lang('lang.kh')) <span class="text-danger">*</span></label>
-                                <input class="form-control @error('name_kh') is-invalid @enderror" type="text" id="name_kh" required name="name_kh" value="{{old('name_kh')}}">
+                                <label class="">@lang('lang.last_name') (@lang('lang.kh')) <span class="text-danger">*</span></label>
+                                <input class="form-control @error('last_name_kh') is-invalid @enderror" type="text" id="last_name_kh" required name="last_name_kh" value="{{old('last_name_kh')}}">
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="">@lang('lang.name') (@lang('lang.en')) <span class="text-danger">*</span></label>
-                                <input class="form-control @error('name_en') is-invalid @enderror" type="text" id="name_en" required name="name_en" value="{{old('name_en')}}">
+                                <label class="">@lang('lang.first_name') (@lang('lang.kh')) <span class="text-danger">*</span></label>
+                                <input class="form-control @error('first_name_kh') is-invalid @enderror" type="text" id="first_name_kh" required name="first_name_kh" value="{{old('first_name_kh')}}">
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="">@lang('lang.last_name') (@lang('lang.en')) <span class="text-danger">*</span></label>
+                                <input class="form-control @error('last_name_en') is-invalid @enderror" type="text" id="last_name_en" required name="last_name_en" value="{{old('last_name_en')}}">
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="">@lang('lang.first_name') (@lang('lang.en')) <span class="text-danger">*</span></label>
+                                <input class="form-control @error('first_name_en') is-invalid @enderror" type="text" id="first_name_en" required name="first_name_en" value="{{old('first_name_en')}}">
                             </div>
                         </div>
 
