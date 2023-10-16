@@ -94,6 +94,8 @@ class CandidateResumeController extends Controller
         try {
             $data = $request->all();
             $data['created_by'] = Auth::user()->id;
+            $data['name_kh'] = $request->last_name_kh.' '.$request->first_name_kh;
+            $data['name_en'] = $request->last_name_en.' '.$request->first_name_en;
             $data['status'] = "1";
             CandidateResume::create($data);
             DB::commit();
@@ -152,18 +154,24 @@ class CandidateResumeController extends Controller
             foreach ($allDataInSheet as $csv) {
                 $i++;
                 if ($i != 1) {
+                    $fulNameKH = $csv[0].' '.$csv[1];
+                    $fulNameEN = $csv[2].' '.$csv[3];
                     $arr = [
-                        'name_kh'               => $csv[0],
-                        'name_en'               => $csv[1],
-                        'gender'                => $csv[2],
-                        'current_position'      => $csv[3],
-                        'companey_name'         => $csv[4],
-                        'current_address'       => $csv[5],
-                        'position_applied'      => $csv[6],
-                        'location_applied'      => $csv[7],
-                        'received_date'         => $csv[8],
-                        'recruitment_channel'   => $csv[9],
-                        'contact_number'        => $csv[10],
+                        'name_kh'               => $fulNameKH,
+                        'name_en'               => $fulNameEN,
+                        'last_name_kh'          => $csv[0],
+                        'first_name_kh'         => $csv[1],
+                        'last_name_en'          => $csv[2],
+                        'first_name_en'         => $csv[3],
+                        'gender'                => $csv[4],
+                        'current_position'      => $csv[5],
+                        'companey_name'         => $csv[6],
+                        'current_address'       => $csv[7],
+                        'position_applied'      => $csv[8],
+                        'location_applied'      => $csv[9],
+                        'received_date'         => $csv[10],
+                        'recruitment_channel'   => $csv[11],
+                        'contact_number'        => $csv[12],
                         'status'                => "1",
                         'updated_by'            => $userID,
                         'created_at'            => Carbon::now(),
@@ -247,9 +255,15 @@ class CandidateResumeController extends Controller
             }else{
                 $filenameGuarant = $request->hidden_cv;
             }
+            $fullNameKH = $request->last_name_kh.' '.$request->first_name_kh;
+            $fullNameEN = $request->last_name_en.' '.$request->first_name_en;
             $dataUpdate = [
-                'name_kh'               => $request->name_kh,
-                'name_en'               => $request->name_en,
+                'last_name_kh'          => $request->last_name_kh,
+                'first_name_kh'         => $request->first_name_kh,
+                'last_name_en'          => $request->last_name_en,
+                'first_name_en'         => $request->first_name_en,
+                'name_kh'               => $fullNameKH,
+                'name_en'               => $fullNameEN,
                 'gender'                => $request->gender,
                 'current_position'      => $request->current_position,
                 'companey_name'         => $request->companey_name,
@@ -405,6 +419,10 @@ class CandidateResumeController extends Controller
                 $candidate = CandidateResume::where("id", $request->id) ->first();
                 $emp_data = [
                     'number_employee' => $candidate->number_employee,
+                    'last_name_kh' => $candidate->last_name_kh,
+                    'first_name_kh' => $candidate->first_name_kh,
+                    'last_name_en' => $candidate->last_name_en,
+                    'first_name_en' => $candidate->first_name_en,
                     'employee_name_kh' => $candidate->name_kh,
                     'employee_name_en' => $candidate->name_en,
                     'gender' => $candidate->gender,
