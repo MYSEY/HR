@@ -56,6 +56,9 @@ class CreateUsersTable extends Migration
             $table->integer('identity_number')->nullable();
             $table->date('issue_date')->nullable();
             $table->date('issue_expired_date')->nullable();
+            $table->boolean('type_of_employees_nssf')->nullable();
+            $table->boolean('spouse_nssf')->nullable();
+            $table->boolean('status_nssf')->nullable();
             $table->string('current_province')->nullable();
             $table->string('current_district')->nullable();
             $table->string('current_commune')->nullable();

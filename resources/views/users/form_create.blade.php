@@ -1,4 +1,9 @@
 @extends('layouts.master')
+<style>
+    .card_background_color{
+        background-color: #f8f9fa !important;
+    }
+</style>
 @section('content')
     <div class="page-header">
         <div class="row align-items-center">
@@ -12,7 +17,7 @@
         </div>
     </div>
     <div class="tab-pane fade active show" id="bank_statutory" role="tabpanel">
-        <div class="card">
+        <div class="card card_background_color">
             <div class="card-body">
                 <form action="{{url('users/create')}}" method="POST" enctype="multipart/form-data"  class="needs-validation" novalidate>
                     @csrf
@@ -174,32 +179,6 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label>@lang('lang.nationality')</label>
-                                <select class="form-control select floating" id="nationality" name="nationality" value="{{old('nationality')}}">
-                                    <option value="@lang('lang.khmer')">@lang('lang.khmer')</option>
-                                    <option value="@lang('lang.chinese')">@lang('lang.chinese')</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <label class="">@lang('lang.marital_status')</label>
-                                <select class="form-control select floating" id="marital_status" name="marital_status" value="{{old('marital_status')}}">
-                                    <option value="@lang('lang.married')">@lang('lang.married')</option>
-                                    <option value="@lang('lang.single')">@lang('lang.single')</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <label class="">@lang('lang.guarantee_letter') (@lang('lang.pdf')) <span class="text-danger">*</span></label>
-                                <input class="form-control @error('guarantee_letter') is-invalid @enderror" type="file" id="guarantee_letter" required name="guarantee_letter" value="{{old('guarantee_letter')}}">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <label class="">@lang('lang.personal_phone')<span class="text-danger">*</span></label>
@@ -214,8 +193,8 @@
                         </div>
                         <div class="col-sm-4">
                             <div class="form-group">
-                                <label class="">@lang('lang.employment_book') (@lang('lang.pdf'))</label>
-                                <input class="form-control @error('employment_book') is-invalid @enderror" type="file" id="employment_book" name="employment_book" value="{{old('employment_book')}}">
+                                <label class="">@lang('lang.guarantee_letter') (@lang('lang.pdf')) <span class="text-danger">*</span></label>
+                                <input class="form-control @error('guarantee_letter') is-invalid @enderror" type="file" id="guarantee_letter" required name="guarantee_letter" value="{{old('guarantee_letter')}}">
                             </div>
                         </div>
                     </div>
@@ -234,11 +213,8 @@
                         </div>
                         <div class="col-sm-4">
                             <div class="form-group">
-                                <label class="">@lang('lang.spouse')</label>
-                                <select class="form-control select floating" id="spouse" name="spouse" value="{{old('spouse')}}">
-                                    <option value="0">No</option>
-                                    <option value="1">Yes</option>
-                                </select>
+                                <label class="">@lang('lang.employment_book') (@lang('lang.pdf'))</label>
+                                <input class="form-control @error('employment_book') is-invalid @enderror" type="file" id="employment_book" name="employment_book" value="{{old('employment_book')}}">
                             </div>
                         </div>
                     </div>
@@ -328,12 +304,52 @@
                             </div>
                         </div>
                     </div>
-                    {{-- Identities --}}
+
+                    {{-- Personal Information --}}
                     <div class="form-group col-md-12 col-12" element="div" bp-field-wrapper="true" bp-field-name="Identity" bp-field-type="custom_html">
-                        <label class="navbar-brand custom-navbar-brand mb-0" style="width: 100%; background: #dfe6e9; padding: 6px;font-size: 20px;font-weight: normal !important;">@lang('lang.identities')</label>
+                        <label class="navbar-brand custom-navbar-brand mb-0" style="width: 100%; background: #dfe6e9; padding: 6px;font-size: 20px;font-weight: normal !important;">@lang('lang.personal_informations')</label>
                     </div>
                     <div class="row">
-                        <div class="col-sm-3">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>@lang('lang.nationality')</label>
+                                <select class="form-control select floating" id="nationality" name="nationality" value="{{old('nationality')}}">
+                                    <option value="@lang('lang.khmer')">@lang('lang.khmer')</option>
+                                    <option value="@lang('lang.chinese')">@lang('lang.chinese')</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>@lang('lang.ethnicity')</label>
+                                <input class="form-control" type="number" id="ethnicity" name="ethnicity" value="{{old('ethnicity')}}">
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="">@lang('lang.marital_status')</label>
+                                <select class="form-control select floating" id="marital_status" name="marital_status" value="{{old('marital_status')}}">
+                                    <option value="@lang('lang.married')">@lang('lang.married')</option>
+                                    <option value="@lang('lang.single')">@lang('lang.single')</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label>@lang('lang.id_card_number') <span class="text-danger">*</span></label>
+                                <input class="form-control" type="text" id="id_card_number" name="id_card_number">
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="">@lang('lang.spouse')</label>
+                                <select class="form-control select floating" id="spouse" name="spouse" value="{{old('spouse')}}">
+                                    <option value="0">No</option>
+                                    <option value="1">Yes</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
                             <div class="form-group">
                                 <label class="">@lang('lang.identity_type')</label>
                                 <select class="form-control select floating" id="identity_type" name="identity_type" value="{{old('identity_type')}}">
@@ -344,13 +360,13 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-sm-3">
+                        <div class="col-sm-4">
                             <div class="form-group">
                                 <label class="">@lang('lang.identity_number') </label>
                                 <input class="form-control" type="number" id="identity_number" name="identity_number" value="{{old('identity_number')}}">
                             </div>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-4">
                             <div class="form-group">
                                 <label>@lang('lang.issue_date')</label>
                                 <div class="cal-icon">
@@ -358,7 +374,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-4">
                             <div class="form-group">
                                 <label>@lang('lang.issue_expired_date')</label>
                                 <div class="cal-icon">
@@ -367,6 +383,47 @@
                             </div>
                         </div>
                     </div>
+
+                     {{-- NSSF infor --}}
+                    <div class="form-group col-md-12 col-12" element="div" bp-field-wrapper="true" bp-field-name="Identity" bp-field-type="custom_html">
+                        <label class="navbar-brand custom-navbar-brand mb-0" style="width: 100%; background: #dfe6e9; padding: 6px;font-size: 20px;font-weight: normal !important;">@lang('lang.nssf_infor')</label>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="">@lang('lang.id_number_nssf') </label>
+                                <input class="form-control" type="number" id="id_number_nssf" name="id_number_nssf" value="{{old('id_number_nssf')}}">
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="">@lang('lang.type_of_employees')</label>
+                                <select class="form-control select floating" name="type_of_employees_nssf">
+                                    <option value="1">និវាសនជន</option>
+                                    <option value="2">អនិវាសនជន</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="">@lang('lang.spouse_nssf')</label>
+                                <select class="form-control select floating" id="spouse_nssf">
+                                    <option value="1">Yes</option>
+                                    <option value="2">No</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="">@lang('lang.status') (@lang('lang.nssf'))</label>
+                                <select class="form-control select floating" id="status_nssf" name="status_nssf">
+                                    <option value="1">@lang('lang.working')</option>
+                                    <option value="2">@lang('lang.not_working')</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
                     {{-- Created Current Address --}}
                     <div class="form-group col-md-12 col-12" element="div" bp-field-wrapper="true" bp-field-name="Identity" bp-field-type="custom_html">
                         <label class="navbar-brand custom-navbar-brand mb-0" style="width: 100%; background: #dfe6e9; padding: 6px;font-size: 20px;font-weight: normal !important;">@lang('lang.current_address')</label>
