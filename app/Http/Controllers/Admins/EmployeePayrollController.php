@@ -127,6 +127,7 @@ class EmployeePayrollController extends Controller
                         //function first month join work
                         $totalFirstSeverancPay = 0;
                         $totalBaseSalaryRecived = 0;
+                        $totalBasicSalary = 0;
                         if (count(Payroll::where('employee_id',$item->id)->get()) == 0) {
                             //total day in monthsd
                             $startMonth = Carbon::createFromDate($item->date_of_commencement)->format('m');
@@ -156,12 +157,9 @@ class EmployeePayrollController extends Controller
                                 }
                             }
                         } else {
-                            
                             $monthToPay = Carbon::createFromDate($item->fdc_date)->format('Y-m');
                             $currentMonthToPay = Carbon::createFromDate($request->payment_date)->format('Y-m');
                             if($monthToPay == $currentMonthToPay){
-
-                                // $totalBasicSalary = $item->total_current_salary == null ? $item->basic_salary : $item->total_current_salary;
                                 //function get first severance pay
                                 $endMonth = Carbon::createFromDate($item->fdc_date)->format('m');
                                 $totalDayInMonth = Carbon::now()->month($endMonth)->daysInMonth;
@@ -171,12 +169,6 @@ class EmployeePayrollController extends Controller
                                 //find total working day in month
                                 $startDate = Carbon::parse($item->fdc_date);
                                 $endDate = Carbon::parse($currentYear);
-
-                                // new salary and new total days
-                                // $totalNewDays = $startDate->diffInDays($endDate);
-                                // $totalFirstSeverancPay = ($totalBasicSalary / $totalDayInMonth) * $totalNewDays;
-
-
 
                                 //total day in  passt probation and total salary passt probation days
                                 $totalNewDays = $startDate->diffInDays($endDate) + 1;
@@ -188,13 +180,13 @@ class EmployeePayrollController extends Controller
                                 if ($totalOldDay) {
                                     $totalSeverancePayFirst = ($item->pre_salary / $totalDayInMonth)  * $totalOldDay;
                                 }
-                                $totalBaseSalaryRecived = $totalSeverancePayLast + $totalSeverancePayFirst;
-                                $totalFirstSeverancPay = $totalSeverancePayLast;
+                                $totalBaseSalaryRecived = round($totalSeverancePayLast,2) + round($totalSeverancePayFirst,2);
+                                $totalFirstSeverancPay = round($totalSeverancePayLast,2);
                             }else{
                                 $totalBasicSalary = $item->basic_salary;
                             }
                         }
-                        // dd($totalFirstSeverancPay);
+                        // dd(round($totalBaseSalaryRecived,2));
                         //calculated khmer_new_year and pchumBen_bonus
                         $totalBunus = 0;
                         if ($item->emp_status == 1 || $item->emp_status == 10 || $item->emp_status == 2) {
@@ -277,10 +269,9 @@ class EmployeePayrollController extends Controller
                         $totalSeverancyPaySalary = $totalBaseSalaryRecived != null ? $totalBaseSalaryRecived : $totalBasicSalary;
                         $totalSalaryNetPay = $totalSeverancyPaySalary + $totalBunus + $item->phone_allowance + $totalChildAllowance;
                         $totalSalarySeverancyPay = $totalSeverancyPaySalary + $totalBunus + $item->phone_allowance + $totalChildAllowance;
-
+                        
                         $totalSeverancePay = $totalFirstSeverancPay != null ? $totalFirstSeverancPay : $totalBasicSalary;
                         $totalOtherBenefit = $totalSeverancePay + $totalBunus + $item->phone_allowance + $totalChildAllowance;
-                        // dd($totalSalarySeverancyPay);
                         if ($item->emp_status == 1) {
                             $dataGrossSalaryPay1 = GrossSalaryPay::where('employee_id',$item->id)->whereNotNull('type_fdc1')->count(); 
                             if($dataGrossSalaryPay1 == 12){
@@ -298,6 +289,7 @@ class EmployeePayrollController extends Controller
                                 $SeverancePay1 = ($totalSalarySeverancyPay / $totalDayInMonth) * $totalOldDay;
                                 $type_fdc2 = 'fdc2';
                                 $type_udc = 'seniority';
+                                $totalSeniority = $totalSalarySeverancyPay;
                             }
                         }
 
@@ -317,13 +309,10 @@ class EmployeePayrollController extends Controller
                                 $SeverancePay2 = ($totalSalarySeverancyPay / $totalDayInMonth) * $totalOldDay;
                             }
                         }
-
                         $dataTotalSeverancePay1 = $SeverancePay1 != null ? $SeverancePay1 : $totalOtherBenefit;
                         $totalSeverancePay1 =  $dataTotalSeverancePay1 != null ? $dataTotalSeverancePay1 : $totalSalarySeverancyPay;
                         $totalSeverancePay2 = $SeverancePay2;
-                        $totalSeniority = $totalSalarySeverancyPay;
-                        // dd($totalSeverancePay2);
-
+                        $totalBasicSalary = $totalBaseSalaryRecived != null ? $totalBaseSalaryRecived : $totalBasicSalary;
                         
                         $dataTotalSeverancePay2 = $SeverancePay2 != null ? $SeverancePay2 : $totalOtherBenefit;
                         if ($item->emp_status == 'Probation') {
