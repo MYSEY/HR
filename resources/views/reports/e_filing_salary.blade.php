@@ -103,13 +103,15 @@
                                         id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
                                         <thead>
                                             <tr>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="#: activate to sort column ascending">#</th>
+                                                <th class="sorting stuck-scroll-4" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="#: activate to sort column ascending">#</th>
+                                                <th class="sorting stuck-scroll-4" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Employee ID: activate to sort column ascending">@lang('lang.employee_id')</th>
+                                                <th class="sorting stuck-scroll-4" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name kh : activate to sort column descending">@lang('lang.last_name') @lang('lang.kh')</th>
+                                                <th class="sorting stuck-scroll-4" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name kh : activate to sort column descending">@lang('lang.first_name') @lang('lang.kh')</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name en: activate to sort column descending">@lang('lang.last_name') @lang('lang.en')</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name en: activate to sort column descending">@lang('lang.first_name') @lang('lang.en')</th>
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="ID card number: activate to sort column descending">@lang('lang.id_card_number')</th>
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="TID: activate to sort column descending">TID</th>
                                                 <th class="sorting " tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Passport: activate to sort column descending">@lang('lang.passport')</th>
-                                                <th class="sorting " tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Employee ID: activate to sort column ascending">@lang('lang.employee_id')</th>
-                                                <th class="sorting stuck" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name kh : activate to sort column descending">@lang('lang.name_kh')</th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name en: activate to sort column descending">@lang('lang.name_en')</th>
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Gender: activate to sort column ascending">@lang('lang.gender')</th>
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Nationality: activate to sort column ascending">@lang('lang.nationality')</th>
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Ethnicity: activate to sort column ascending">@lang('lang.ethnicity')</th>
@@ -130,22 +132,24 @@
                                             @if (count($payroll)>0)
                                                 @foreach ($payroll as $key=>$item)
                                                     <tr class="odd">
-                                                        <td >{{++$key}}</td>
+                                                        <td class="stuck-scroll-4">{{++$key}}</td>
+                                                        <td class="stuck-scroll-4"><a href="#">{{$item->users->number_employee}}</a></td>
+                                                        <td class="stuck-scroll-4"><a href="#">{{$item->users->last_name_kh}}</a></td>
+                                                        <td class="stuck-scroll-4"><a href="#">{{$item->users->first_name_kh}}</a></td>
+                                                        <td ><a href="#">{{$item->users->last_name_en}}</a></td>
+                                                        <td ><a href="#">{{$item->users->first_name_en}}</a></td>
                                                         <td >{{$item->users->id_card_number ? $item->users->id_card_number : ""}}</td>
                                                         <td ></td>
-                                                        <td class=""></td>
-                                                        <td class=""><a href="#">{{$item->users->number_employee}}</a></td>
-                                                        <td class="stuck"><a href="#">{{$item->users->employee_name_kh}}</a></td>
-                                                        <td ><a href="#">{{$item->users->employee_name_en}}</a></td>
+                                                        <td class="">{{$item->users->identity_number}}</td>
                                                         <td >{{$item->users->EmployeeGender}}</td>
                                                         <td >{{$item->users->nationality? $item->users->nationality : ""}}</td>
-                                                        <td ></td>
+                                                        <td >{{$item->users->ethnicity? $item->users->ethnicity : ""}}</td>
                                                         <td >{{$item->users->DOB}}</td>
                                                         <td >{{$item->users->phone_number}}</td>
                                                         <td >{{$item->users->email ? $item->users->email : ""}}</td>
-                                                        <td >{{$item->users->EmployeePositionType}}</td>
+                                                        <td >{{$item->users->type_of_employees_nssf}}</td>
                                                         <td>{{ $item->users == null ? '' : $item->users->EmployeePosition}}</td>
-                                                        <td>{{ $item->spouse == null ? '' : $item->users->spouse}}</td>
+                                                        <td>{{ $item->spouse_nssf == null ? '' : $item->users->spouse_nssf}}</td>
                                                         <td>{{ $item->users->TotalChild}}</td>
                                                         <td>$ {{$item->users->basic_salary}}</td>
                                                         <td></td>
@@ -238,22 +242,24 @@
                         let join_date = row.users.date_of_birth ? moment(row.users.date_of_birth).format('D-MMM-YYYY'): "";
                         let payment_date = moment(row.payment_date).format('D-MMM-YYYY');
                         tr +='<tr class="odd">'+
-                                '<td >'+(index)+'</td>'+
+                                '<td class="stuck-scroll-4">'+(index)+'</td>'+
+                                '<td class="stuck-scroll-4"><a href="#">'+(row.users.number_employee)+'</a></td>'+
+                                '<td class="stuck-scroll-4"><a href="#">'+(row.users.last_name_kh)+'</a></td>'+
+                                '<td class="stuck-scroll-4"><a href="#">'+(row.users.first_name_kh)+'</a></td>'+
+                                '<td ><a href="#">'+(row.users.last_name_en)+'</a></td>'+
+                                '<td ><a href="#">'+(row.users.first_name_en)+'</a></td>'+
                                 '<td >'+(row.users.id_card_number ? row.users.id_card_number : "")+'</td>'+
                                 '<td ></td>'+
-                                '<td class=""></td>'+
-                                '<td class=""><a href="#">'+(row.users.number_employee)+'</a></td>'+
-                                '<td class="stuck"><a href="#">'+(row.users.employee_name_kh)+'</a></td>'+
-                                '<td ><a href="#">'+(row.users.employee_name_en)+'</a></td>'+
+                                '<td class="">'+(row.users.identity_number)+'</td>'+
                                 '<td >'+(row.users.gender ? row.users.gender.name_english : "")+'</td>'+
                                 '<td >'+(row.users.nationality? row.users.nationality : "")+'</td>'+
-                                '<td ></td>'+
+                                '<td >'+(row.users.ethnicity? row.users.ethnicity : "")+'</td>'+
                                 '<td >'+(join_date)+'</td>'+
                                 '<td >'+(row.users.phone_number)+'</td>'+
                                 '<td >'+(row.users.email ? row.users.email : "")+'</td>'+
-                                '<td >'+(row.users.positiontype ? row.users.positiontype.name_english : "")+'</td>'+
+                                '<td >'+(row.users.type_of_employees_nssf ? row.users.type_of_employees_nssf : "")+'</td>'+
                                 '<td>'+(row.users.position ?  row.users.position.name_english : "")+'</td>'+
-                                '<td>'+(row.spouse == null ? '' : row.users.spouse)+'</td>'+
+                                '<td>'+(row.spouse_nssf == null ? '' : row.users.spouse_nssf)+'</td>'+
                                 '<td>'+(row.users.total_child.length)+'</td>'+
                                 '<td>$ '+(row.users.basic_salary)+'</td>'+
                                 '<td></td>'+

@@ -14,6 +14,8 @@ function RolePermission($table_id,$permission_type_id)
     }
 }
 function menu(){
+    // $valuePayroll = nl2br("Compensation and\r\nBenefits");
+    // dd($valuePayroll);
     return $data=[
         [
             'name'=> Helper::getLang() == 'en' ? 'HR Management System': 'ប្រព័ន្ធគ្រប់គ្រងធនធានមនុស្ស',
@@ -82,7 +84,7 @@ function menu(){
         [
             'name'=>'',
             'icon'=>'<i class="la la-money"></i> <span></span> <span class="menu-arrow"></span>',
-            'value'=> Helper::getLang() == 'en' ? 'Payroll':'ប្រាក់បៀវត្សរ៍',
+            'value'=> Helper::getLang() == 'en' ? 'C&B' :'សំណងនិងអត្ថប្រយោជន៍',
             'table'=>4,
             'permission'=>1,
             'child'=>[

@@ -31,19 +31,21 @@ class ExportEFiling implements FromCollection, WithColumnWidths, WithHeadings, W
                 "number" => $i,
                 "id_card_number" => $value->users->id_card_number ? $value->users->id_card_number : "",
                 "TID" => "",
-                "passport" => "",
+                "passport" => $value->users->identity_number,
                 // "number_employee" => $value->users->number_employee,
-                "employee_name_kh" => $value->users->employee_name_kh,
-                "employee_name_en" => $value->users->employee_name_en,
+                "last_name_kh" => $value->users->last_name_kh,
+                "first_name_kh" => $value->users->first_name_kh,
+                "last_name_en" => $value->users->last_name_en,
+                "first_name_en" => $value->users->first_name_en,
                 "gender" => $value->users->EmployeeGender,
                 "nationality" => $value->users->nationality? $value->users->nationality : "",
-                "ethnicity"=> "",
+                "ethnicity"=> $value->users->ethnicity,
                 "date_of_birthday" => $value->users->DOB,
                 "phone_number" => $value->users->phone_number,
                 "email" => $value->users->email ? $value->users->email : "",
-                "positiontype" => $value->users->EmployeePositionType,
+                "positiontype" => $value->users->type_of_employees_nssf,
                 "position" => $value->users == null ? '' : $value->users->EmployeePosition,
-                "spouse" => $value->spouse == null ? '' : $value->users->spouse,
+                "spouse" => $value->spouse_nssf == null ? '' : $value->users->spouse_nssf,
                 "total_child" => $value->users->TotalChild,
                 "basic_salary" => $value->users->basic_salary,
                 "additional_benefits"=> "",
@@ -172,27 +174,27 @@ class ExportEFiling implements FromCollection, WithColumnWidths, WithHeadings, W
             
                 $fromMerge = $this->totalRecord+6+1;
                 $toMerge = $this->totalRecord+6+1;
-                $sheet->mergeCells("O".$fromMerge.':P'.$toMerge);
-                $sheet->setCellValue('O'.$fromMerge, "សរុប");
-                $sheet->getDelegate()->getStyle("O".$fromMerge.':P'.$toMerge)->getFont()->setName('Khmer OS Muol Light')
+                $sheet->mergeCells("Q".$fromMerge.':R'.$toMerge);
+                $sheet->setCellValue('Q'.$fromMerge, "សរុប");
+                $sheet->getDelegate()->getStyle("Q".$fromMerge.':R'.$toMerge)->getFont()->setName('Khmer OS Muol Light')
                             ->setSize(9);
                 
-                $event->sheet->getDelegate()->getStyle("O".$fromMerge.':P'.$toMerge)
+                $event->sheet->getDelegate()->getStyle("Q".$fromMerge.':R'.$toMerge)
                 ->getAlignment()
                 ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
                 //set value to body
-                $sheet->setCellValue("Q".$fromMerge, number_format($this->totalBasicSalary,2));
-                $sheet->getDelegate()->getStyle("Q".$fromMerge)->getFont()->setName('Khmer OS Battambang')
-                ->setSize(9)->setBold("Q".$fromMerge);
-
-                $sheet->setCellValue("R".$fromMerge, number_format(0));
-                $sheet->getDelegate()->getStyle("R".$fromMerge)->getFont()->setName('Khmer OS Battambang')
-                ->setSize(9)->setBold("R".$fromMerge);
-
-                $sheet->setCellValue("S".$fromMerge, number_format($this->totalBaseSalaryReceived,2));
+                $sheet->setCellValue("S".$fromMerge, number_format($this->totalBasicSalary,2));
                 $sheet->getDelegate()->getStyle("S".$fromMerge)->getFont()->setName('Khmer OS Battambang')
                 ->setSize(9)->setBold("S".$fromMerge);
+
+                $sheet->setCellValue("T".$fromMerge, number_format(0));
+                $sheet->getDelegate()->getStyle("T".$fromMerge)->getFont()->setName('Khmer OS Battambang')
+                ->setSize(9)->setBold("T".$fromMerge);
+
+                $sheet->setCellValue("U".$fromMerge, number_format($this->totalBaseSalaryReceived,2));
+                $sheet->getDelegate()->getStyle("U".$fromMerge)->getFont()->setName('Khmer OS Battambang')
+                ->setSize(9)->setBold("U".$fromMerge);
             },
         ];
     }
@@ -204,8 +206,10 @@ class ExportEFiling implements FromCollection, WithColumnWidths, WithHeadings, W
                 "លេខអត្តសញ្ញាណប័ណ្ណ" ,
                 "TID",
                 "លិខិតឆ្លងដែន",
-                "ឈ្មោះ (ខ្មែរ)*",
-                "ឈ្មោះ (ឡាតាំង)*",
+                "នាមត្រកូល(ខ្មែរ)*",
+                "នាមខ្លួន(ខ្មែរ)*",
+                "នាមត្រកូល(ឡាតាំង)*",
+                "នាមខ្លួន(ឡាតាំង)*",
                 "ភេទ*",
                 "សញ្ជាតិ*",
                 "ជនជាតិ*",
