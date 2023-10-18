@@ -82,22 +82,22 @@ class ExportEFiling implements FromCollection, WithColumnWidths, WithHeadings, W
             'F' => 30,      
             'G' => 15,      
             'H' => 15,      
-            'I' => 10,      
-            'J' => 10,      
-            'K' => 10,      
-            'L' => 10,      
+            'I' => 20,      
+            'J' => 20,      
+            'K' => 20,      
+            'L' => 20,      
             'M' => 15,      
-            'N' => 10,      
-            'O' => 10,      
+            'N' => 20,      
+            'O' => 20,      
             'P' => 15,      
-            'Q' => 10,      
+            'Q' => 20,      
             'R' => 15,      
-            'S' => 10,      
-            'T' => 10,      
+            'S' => 20,      
+            'T' => 20,      
             'U' => 15,      
-            'V' => 10,
-            'W' => 10,
-            'X' => 10,
+            'V' => 20,
+            'W' => 20,
+            'X' => 20,
         ];
     }
 
@@ -109,13 +109,13 @@ class ExportEFiling implements FromCollection, WithColumnWidths, WithHeadings, W
                 $sheet = $event->sheet;
 
                 // block merge cells 
-                // $sheet->mergeCells('A2:Z2');
-                // $sheet->setCellValue('A2', "បញ្ជីទូទាត់ថ្លៃទិញសាំង និងប្រេងម៉ាស៊ីន");
-                // $sheet->getDelegate()->getStyle('A2:Z2')->getFont()->setName('Khmer OS Muol Light')
-                // ->setSize(12)->setUnderline('A2:Z2');
-                // $event->sheet->getDelegate()->getStyle('A2:Z2')
-                // ->getAlignment()
-                // ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+                $sheet->mergeCells('A2:V2');
+                $sheet->setCellValue('A2', "របាយការណ៍ E-Filing");
+                $sheet->getDelegate()->getStyle('A2:V2')->getFont()->setName('Khmer OS Muol Light')
+                ->setSize(12)->setUnderline('A2:V2');
+                $event->sheet->getDelegate()->getStyle('A2:V2')
+                ->getAlignment()
+                ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
                 // $month = Carbon::now()->format('M');
                 // $year = Carbon::now()->format('Y');
@@ -165,10 +165,10 @@ class ExportEFiling implements FromCollection, WithColumnWidths, WithHeadings, W
                 $sheet->getDelegate()->getStyle('A6:Z6')->getFont()->setName('Khmer OS Battambang')
                 ->setSize(9)->setBold('A6:Z6');
 
-                $sheet->mergeCells('F5:L5');
+                $sheet->mergeCells('F5:N5');
                 $sheet->setCellValue('F5', "ព័ត៌មានរូបវន្តបុគ្គល (បើបំពេញលេខTIDរួច មិនតម្រូវឱ្យបំពេញព័ត៌មាននេះទៀតទេ)");
 
-                $event->sheet->getDelegate()->getStyle('F5:L5')
+                $event->sheet->getDelegate()->getStyle('F5:N5')
                 ->getAlignment()
                 ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
             

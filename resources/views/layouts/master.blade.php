@@ -288,7 +288,7 @@
                                     @if (RolePermission($menu['table'],$menu['permission']))
                                         <li class="menu-title"><span style="border-bottom: 3px solid #dc0000; font-weight: bold; font-size: 17px;">{{$menu['name']}}</span></li>
                                         <li class="submenu">
-                                            <a href="javascript:void(0);" style="border-bottom: 3px solid #f0f0f0;">{!! $menu['icon'] !!}<span>{{$menu['value']}}</span><span class="menu-arrow"></span></a>
+                                            <a href="javascript:void(0);" style="border-bottom: 3px solid #f0f0f0;">{!! $menu['icon'] !!}{{$menu['value']}}<span class="menu-arrow"></span></a>
                                             <ul style="display: none;">
                                                 @foreach ($menu['child'] as $sub_menu)
                                                     @if (RolePermission($sub_menu['table'], $sub_menu['permission']))

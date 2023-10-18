@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admins;
 
 use App\Exports\ExportBankTransfer;
 use App\Exports\ExportEFiling;
+use App\Exports\ExportEForm;
 use App\Exports\ExportEmployeeReport;
 use App\Exports\ExportTraining;
 use App\Http\Controllers\Controller;
@@ -337,5 +338,16 @@ class ReportsController extends Controller
         $payroll = Payroll::with('users')->orderBy('id', 'DESC')->get();
         $positions = Position::get();
         return view('reports.e_form_report',compact('payroll','positions'));
+    }
+    public function eFormFilter(Request $request){
+        $data = $this->reportRepo->getEFilingSalary($request);
+        return response()->json([
+            'success'=>$data,
+        ]);
+    }
+    public function eFormSalaryExport(Request $request){
+        $data = $this->reportRepo->getEFilingSalary($request);
+        $export = new ExportEForm($data);
+        return Excel::download($export, 'ReportEForm.xlsx');
     }
 }

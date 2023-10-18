@@ -170,13 +170,13 @@ function menu(){
                     'permission'=>1
                 ],
                 [
-                    'value'=> Helper::getLang() == 'en' ? 'E-Filing Salary Report':'របាយការណ៍ប្រាក់បៀវត្សរ៍ E-Filing',
+                    'value'=> Helper::getLang() == 'en' ? 'E-Filing Report':'របាយការណ៍ E-Filing',
                     'url'=>"reports/e-filing",
                     'table'=>19,
                     'permission'=>1
                 ],
                 [
-                    'value'=> Helper::getLang() == 'en' ? 'E-Form Salary Report':'របាយការណ៍ប្រាក់បៀវត្សរ៍ E-Form',
+                    'value'=> Helper::getLang() == 'en' ? 'E-Form Report':'របាយការណ៍ E-Form',
                     'url'=>"reports/e-form",
                     'table'=>19,
                     'permission'=>1
@@ -221,7 +221,7 @@ function menu(){
             'permission'=>1,
             'child'=>[
                 [
-                    'value'=> Helper::getLang() == 'en' ? 'Taxe':'ពន្ធ',
+                    'value'=> Helper::getLang() == 'en' ? 'Tax':'ពន្ធ',
                     'url'=>"taxes",
                     'table'=>24,
                     'permission'=>1
