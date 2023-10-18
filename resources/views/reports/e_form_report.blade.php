@@ -116,6 +116,7 @@
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Type of worker: activate to sort column ascending">@lang('lang.type_of_employees')</th>
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Status: activate to sort column ascending">@lang('lang.status') </th>
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Salary: activate to sort column ascending">@lang('lang.salary')</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Joining Date: activate to sort column ascending">@lang('lang.payment_date')</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -139,6 +140,7 @@
                                                         <td>{{ $item->users->type_of_employees_nssf ? $item->users->type_of_employees_nssf == 1 ? 'និវាសនជន' : "អនិវាសនជន" : ""}}</td>
                                                         <td>{{ $item->users->status_nssf ? $item->users->status_nssf == 1 ? 'Working' : 'Not working' : ""}}</td>
                                                         <td>៛ {{$item->base_salary_received_riel}}</td>
+                                                        <td>{{ \Carbon\Carbon::parse($item->payment_date)->format('d-M-Y')}}</td>
                                                     </tr>
                                                 @endforeach
                                             @endif

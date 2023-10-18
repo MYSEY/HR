@@ -606,6 +606,11 @@ strong {
   object-fit: cover;
   border-radius: 50%;
 }
+@media (max-width: 991px) {
+  .avatar > img {
+    margin-top: 22%;
+  }
+}
 .avatar .avatar-title {
   width: 100%;
   height: 100%;
@@ -1906,8 +1911,8 @@ input[type=file].form-control {
 }
 
 .header {
-  background: #fff;
-  background: linear-gradient(to right, #fff 0%, #fff 100%);
+  /* background: #fff;
+  background: linear-gradient(to right, #fff 0%, #fff 100%); */
   border-bottom: 1px solid transparent;
   height: 60px;
   z-index: 1002;
@@ -1940,8 +1945,10 @@ input[type=file].form-control {
   .header .header-left {
     position: absolute;
     width: 100%;
+    background-color: #f2f1f1;
   }
 }
+
 @media (min-width: 991px) {
   .header #toggle_btn {
     color: #999;
@@ -1990,8 +1997,23 @@ input[type=file].form-control {
   display: none;
   float: left;
 }
-@media (max-width: 991px) {
+/* @media (max-width: 991px) {
   .header .mobile_btn {
+    color: #999;
+    font-size: 24px;
+    height: 60px;
+    line-height: 60px;
+    width: 60px;
+    z-index: 10;
+    padding: 18 20px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: block;
+  }
+} */
+@media (max-width: 991px) {
+  .header .mobile_btn, .bar-icon  {
     color: #999;
     font-size: 24px;
     height: 60px;
@@ -2086,7 +2108,7 @@ input[type=file].form-control {
   border: 0;
 }
 .header .user-menu.nav > li > a {
-  color: #ffffff;
+  color: #3c3c3c;
   font-size: 15px;
   line-height: 60px;
   height: 60px;
@@ -2290,6 +2312,7 @@ input[type=file].form-control {
 .sidebar .sidebar-menu,
 .two-col-bar .sidebar-menu {
   padding: 10px 0;
+  background-color: white;
 }
 .sidebar .sidebar-menu ul,
 .two-col-bar .sidebar-menu ul {
@@ -2591,7 +2614,7 @@ input[type=file].form-control {
 
 @media (min-width: 992px) {
   .mini-sidebar .sidebar {
-    width: 60px;
+    width: 45px;
   }
   .mini-sidebar .sidebar .menu-title {
     visibility: hidden;
@@ -3540,7 +3563,7 @@ input[type=file].form-control {
 }
 
 [data-layout-mode=light] .header {
-  background: #ffffff;
+  /* background: #ffffff; */
   border-color: transparent;
 }
 [data-layout-mode=light] .header .page-title-box h3 {
@@ -4481,7 +4504,7 @@ input[type=file].form-control {
 }
 
 [data-topbar=light] body .header {
-  background: #ffffff;
+  /* background: #ffffff; */
   border-color: transparent;
 }
 [data-topbar=light] body .header .page-title-box h3 {

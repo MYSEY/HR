@@ -162,7 +162,8 @@
                 </a> --}}
             </div>
 
-            <a id="mobile_btn" class="mobile_btn" href=""><i class="fa fa-bars"></i></a>
+            {{-- <a id="mobile_btn" class="mobile_btn" href=""><i class="fa fa-bars"></i></a> --}}
+            <a id="mobile_btn" class="mobile_btn" href=""></a>
 
             <ul class="nav user-menu">
                 {{-- @php
