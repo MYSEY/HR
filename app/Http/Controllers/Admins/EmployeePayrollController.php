@@ -269,6 +269,7 @@ class EmployeePayrollController extends Controller
                         $totalSeverancyPaySalary = $totalBaseSalaryRecived != null ? $totalBaseSalaryRecived : $totalBasicSalary;
                         $totalSalaryNetPay = $totalSeverancyPaySalary + $totalBunus + $item->phone_allowance + $totalChildAllowance;
                         $totalSalarySeverancyPay = $totalSeverancyPaySalary + $totalBunus + $item->phone_allowance + $totalChildAllowance;
+                        $totalSeniority = $totalSeverancyPaySalary + $totalBunus + $item->phone_allowance + $totalChildAllowance;
                         
                         $totalSeverancePay = $totalFirstSeverancPay != null ? $totalFirstSeverancPay : $totalBasicSalary;
                         $totalOtherBenefit = $totalSeverancePay + $totalBunus + $item->phone_allowance + $totalChildAllowance;
@@ -286,10 +287,14 @@ class EmployeePayrollController extends Controller
                                 $SeverancePay2 = ($totalSalarySeverancyPay / $totalDayInMonth) * $totalNewDays;
                                 //old salary and total old days
                                 $totalOldDay = $totalDayInMonth - $totalNewDays;
-                                $SeverancePay1 = ($totalSalarySeverancyPay / $totalDayInMonth) * $totalOldDay;
+                                if($totalOldDay){
+                                    $SeverancePay1 = ($totalSalarySeverancyPay / $totalDayInMonth) * $totalOldDay;
+                                }
                                 $type_fdc2 = 'fdc2';
                                 $type_udc = 'seniority';
-                                $totalSeniority = $totalSalarySeverancyPay;
+                                $totalOtherBenefit = 0;
+                                $totalSalarySeverancyPay = 0;
+                                $totalSeniority = $totalSeniority;
                             }
                         }
 
@@ -306,7 +311,11 @@ class EmployeePayrollController extends Controller
                                 $totalNewDays = $startDate->diffInDays($endDate) + 1;
                                 //old salary and total old days
                                 $totalOldDay = $totalDayInMonth - $totalNewDays;
-                                $SeverancePay2 = ($totalSalarySeverancyPay / $totalDayInMonth) * $totalOldDay;
+                                if($totalOldDay){
+                                    $SeverancePay2 = ($totalSalarySeverancyPay / $totalDayInMonth) * $totalOldDay;
+                                }
+                                $totalOtherBenefit = 0;
+                                $totalSalarySeverancyPay = 0;
                             }
                         }
                         $dataTotalSeverancePay1 = $SeverancePay1 != null ? $SeverancePay1 : $totalOtherBenefit;
@@ -713,8 +722,8 @@ class EmployeePayrollController extends Controller
                                 $totalContractSeverancePay = $dataSeveranc * 0.05;
                                 $dataSeverance = SeverancePay::create([
                                     'employee_id'                   => $item->id,
-                                    'total_severanec_pay'           => $dataSeveranc,
-                                    'total_contract_severance_pay'  => $totalContractSeverancePay,
+                                    'total_severanec_pay'           => round($dataSeveranc,2),
+                                    'total_contract_severance_pay'  => round($totalContractSeverancePay,2),
                                     'payment_date'                  => $request->payment_date,
                                     'created_by'                    => Auth::user()->id,
                                 ]);
@@ -728,8 +737,8 @@ class EmployeePayrollController extends Controller
                                 $totalContractSeverancePay = $dataSeveranc * 0.05;
                                 $dataSeverance = SeverancePay::create([
                                     'employee_id'                   => $item->id,
-                                    'total_severanec_pay'           => $dataSeveranc,
-                                    'total_contract_severance_pay'  => $totalContractSeverancePay,
+                                    'total_severanec_pay'           => round($dataSeveranc,2),
+                                    'total_contract_severance_pay'  => round($totalContractSeverancePay,2),
                                     'payment_date'                  => $request->payment_date,
                                     'created_by'                    => Auth::user()->id,
                                 ]);
