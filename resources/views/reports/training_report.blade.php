@@ -306,6 +306,12 @@
         });
     });
     function showdatas(param) {  
+        const today = new Date();
+const jan1st2023 = new Date('2023-01-01');
+
+const diff = diffDates(jan1st2023, today);
+
+console.log(diff); // { years: 0, months: 9, days: 18 }
         $.ajax({
             url: "{{ url('reports/training-report') }}",
             type: 'POST',
@@ -344,7 +350,8 @@
                             let date_ofcommencement = moment(emp.date_of_commencement).format('DD-MMM-YYYY');
                             let currentDate = new Date();
                             let join_date = new Date(emp.date_of_commencement);
-                            let empl_period = diff_year_month_day(join_date, currentDate);
+                            const empl_period = diffDates(join_date, currentDate);
+
                             tr +='<tr class="odd">'+
                                 '<td class="ids stuck-scroll-3">'+(num)+'</td>'+
                                 '<td class="stuck-scroll-3">'+(emp.number_employee )+'</td>'+
@@ -380,18 +387,31 @@
             }
         });
     }
-    function diff_year_month_day(dt1, dt2){
-        var time =(dt2.getTime() - dt1.getTime()) / 1000;
-        var year  = Math.abs(Math.round((time/(60 * 60 * 24))/365.25));
-        //   var month = Math.abs(Math.round(time/(60 * 60 * 24 * 7 * 4)));
-        let current_year = moment(dt2).format('YYYY');
-        let current_year2 = moment(dt2).format('YYYY-MM-D');
-        let current_month = moment(dt1).format('MM-D');
-        var month = Math.abs(parseInt(moment(current_year+'-'+current_month).diff(dt2, 'months', true)));
-        //   var days = Math.abs(Math.round(time/(3600 * 24)));
-        var days = Math.abs(parseInt(moment(current_year+'-'+current_month).diff(current_year2, 'days')));
-        return year +" years, " + month + " months, " + days + " days";
+    function diffDates(date1, date2) {
+        // Calculate the difference in milliseconds between the two dates.
+        const diffInMs = Math.abs(date2.getTime() - date1.getTime());
 
+        // Calculate the difference in seconds, minutes, hours, days, and years.
+        const diffInSecs = diffInMs / 1000;
+        const diffInMins = diffInSecs / 60;
+        const diffInHours = diffInMins / 60;
+        const diffInDays = diffInHours / 24;
+        const diffInYears = diffInDays / 365.25;
+
+        // Round the difference in years, months, and days to the nearest integer.
+        const years = Math.floor(diffInYears);
+        const months = Math.floor((diffInYears - years) * 12);
+        // const days = Math.floor(((diffInYears - years) * 12 - months) * 30);
+
+        var today = new Date();
+        let join_date = new Date(date1).getDate();
+        let total_current_date = today.getDate();
+        if (join_date > total_current_date) {
+            var days = join_date - total_current_date;
+        }else{
+            var days = total_current_date - join_date;
+        }
+        return years +" years, " + months + " months, " + days + " days";
     }
     function print_pdf(type) {
         $("#print_purchase").show();

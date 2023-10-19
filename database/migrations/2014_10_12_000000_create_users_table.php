@@ -99,18 +99,34 @@ class CreateUsersTable extends Migration
 
         DB::table('users')->insert(
             [
-                'number_employee'=>'230-0000',
-                'employee_name_kh'=>'Developer',
-                'employee_name_en'=>'Developer',
-                'email'=>'administrator@gmail.com',
-                'password'=>Hash::make('ASDasd12345$$'),
-                'role_id'=>'1',
-                'users_permission'=>1,
-                'status'=> 'Active',
-                'profile'=>'',
-                'created_at'=>now(),
-                'updated_at'=>now(),
-                'created_by'    => Auth::id(),
+                [
+                    'number_employee'=>'000-0000',
+                    'employee_name_kh'=>'Developer',
+                    'employee_name_en'=>'Developer',
+                    'email'=>'administrator@gmail.com',
+                    'password'=>Hash::make('ASDasd12345$$'),
+                    'role_id'=>'2',
+                    'users_permission'=>1,
+                    'status'=> 'Active',
+                    'profile'=>'',
+                    'created_at'=>now(),
+                    'updated_at'=>now(),
+                    'created_by'    => Auth::id(),
+                ],
+                [
+                    'number_employee'=>'230-0000',
+                    'employee_name_kh'=>'Administrator',
+                    'employee_name_en'=>'Administrator',
+                    'email'=>'administrator@gmail.com',
+                    'password'=>Hash::make('Camma@123'),
+                    'role_id'=>'1',
+                    'users_permission'=>1,
+                    'status'=> 'Active',
+                    'profile'=>'',
+                    'created_at'=>now(),
+                    'updated_at'=>now(),
+                    'created_by'    => Auth::id(),
+                ]
             ]
         );
 

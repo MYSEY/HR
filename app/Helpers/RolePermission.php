@@ -16,7 +16,8 @@ function RolePermission($table_id,$permission_type_id)
 function menu(){
     // $valuePayroll = nl2br("Compensation and\r\nBenefits");
     // dd($valuePayroll);
-    return $data=[
+    $role_id =Auth::user()->role_id;
+    $data=[
         [
             'name'=> Helper::getLang() == 'en' ? 'HR Management System': 'ប្រព័ន្ធគ្រប់គ្រងធនធានមនុស្ស',
             'icon'=>'<i class="la la-dashboard"></i> <span></span> <span class="menu-arrow"></span>',
@@ -286,13 +287,16 @@ function menu(){
                 ],
             ]
         ],
-        [
+    ];
+    if ($role_id == 2) {
+        $data[] = [
             'name'=>'',
             'icon'=>'<i class="la la-key"></i> <span></span>',
             'value'=> Helper::getLang() == 'en' ? 'Roles Permission' : 'ការអនុញ្ញាតតួនាទី',
             'table'=>6,
             'permission'=>1,
             'url'=>"role",
-        ],
-    ];
+        ];
+    }
+    return  $data;
 }
