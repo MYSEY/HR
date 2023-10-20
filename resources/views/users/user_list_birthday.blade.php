@@ -1,9 +1,4 @@
 @extends('layouts.master')
-<style>
-    /* .custom-table td {
-        padding: 10px 10px !important;
-    } */
-</style>
 @section('content')
     <div class="">
         <div class="page-header">

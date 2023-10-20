@@ -306,12 +306,6 @@
         });
     });
     function showdatas(param) {  
-        const today = new Date();
-const jan1st2023 = new Date('2023-01-01');
-
-const diff = diffDates(jan1st2023, today);
-
-console.log(diff); // { years: 0, months: 9, days: 18 }
         $.ajax({
             url: "{{ url('reports/training-report') }}",
             type: 'POST',

@@ -1326,6 +1326,27 @@
                 }
             });
         });
+        $(".btn-export").on("click", function (){
+            var query = {
+                number_employee: $("#number_employee").val(),
+                employee_name: $("#employee_name").val(),
+            }
+            if (tab_status == 1) {
+                query.emp_status = "Upcoming";
+            }else if (tab_status == 2) {
+                query.emp_status = "Probation";
+            }else if (tab_status == 3) {
+                query.emp_status = 'FDC';
+            }else if (tab_status == 4) {
+                query.emp_status = "2";
+            }else if (tab_status == 5) {
+                query.emp_status = "resign_reason";
+            }else if (tab_status == 6) {
+                query.emp_status = "cancel";
+            };
+            var url = "{{URL::to('users/export')}}?" + $.param(query)
+            window.location = url;
+        });
     });
     function showDatabytab(tab, filter){
         var localeLanguage = '{{ config('app.locale') }}';
@@ -1360,11 +1381,6 @@
                 var tr = '';
                 if (data) {
                     data.map((emp) => {
-                        if(localeLanguage == 'en'){
-                            var gender = emp.EmployeeGender == 23 ? 'Male' : 'Female';
-                        }else{
-                            var gender = emp.EmployeeGender == 23 ? 'ប្រុស' : 'ស្រី';
-                        }
                         let tag_a = '';
                         if (emp.profile != null) {
                             tag_a = '<a href="{{asset("/uploads/images")}}/'+(emp.profile)+'" class="avatar">'+
@@ -1538,7 +1554,7 @@
                                 '<td class="stuck-scroll-4"><a href="{{url("employee/profile")}}/'+(emp.id)+'">'+(emp.number_employee)+'</a></td>'+
                                 '<td class="stuck-scroll-4"><a href="{{url("employee/profile")}}/'+(emp.id)+'">'+(emp.employee_name_kh)+'</a></td>'+
                                 '<td><a href="{{url("employee/profile")}}/'+(emp.id)+'">'+(emp.employee_name_en)+'</a></td>'+
-                                '<td>'+(gender)+'</td>'+
+                                '<td>'+(emp.gender ? localeLanguage == 'en'?  emp.gender.name_english : emp.gender.name_khmer : "")+'</td>'+
                                 '<td>'+(DOB)+'</td>'+
                                 '<td>'+(localeLanguage == 'en' ? emp.branch.branch_name_en : emp.branch.branch_name_kh)+'</td>'+
                                 '<td>'+(localeLanguage == 'en' ? emp.department.name_english :  emp.department.name_khmer)+'</td>'+

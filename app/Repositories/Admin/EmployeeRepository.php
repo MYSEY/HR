@@ -37,7 +37,7 @@ class EmployeeRepository extends BaseRepository
         if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer') {
             if($request->emp_status || $request->employee_id || $request->employee_name){
                 $dataUser = [];
-                $dataUser = User::with('role')->with('department')->with('position')->with('branch')->with('positiontype')
+                $dataUser = User::with('role')->with("gender")->with('department')->with('position')->with('branch')->with('positiontype')
                 ->when($request->emp_status, function ($query, $emp_status) {
                     if ($emp_status == "resign_reason") {
                         $query->with("resignStatus");

@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Controllers\Admins;
+
+use App\Exports\ExportEmployee;
 use App\Models\Bank;
 use App\Models\Role;
 use App\Models\User;
@@ -27,6 +29,7 @@ use Illuminate\Support\Facades\Hash;
 use App\Traits\UploadFiles\UploadFIle;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use App\Repositories\Admin\EmployeeRepository;
+use Maatwebsite\Excel\Facades\Excel;
 
 class UserController extends Controller
 {
@@ -208,18 +211,6 @@ class UserController extends Controller
             return redirect()->back();
         }
     }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
     /**
      * Show the form for editing the specified resource.
      *
@@ -307,13 +298,13 @@ class UserController extends Controller
                             'last_name_en'          => $item[3],
                             'first_name_en'         => $item[4],
                             'gender'                => $item[5],
-                            'date_of_birth'         => $item[6] == null ? null : Carbon::createFromDate($item[6])->format('Y-m-d'),
+                            'date_of_birth'         => $item[6] ? Carbon::createFromDate($item[6])->format('Y-m-d') : null,
                             'emp_status'            => $item[7],
                             'role_id'               => $item[8],
-                            'date_of_commencement'  => $item[9] == null ? null : Carbon::createFromDate($item[9])->format('Y-m-d'),
-                            'fdc_date'              => $item[10] == null ? null :  Carbon::createFromDate($item[10])->format('Y-m-d'),
-                            'fdc_end'               => $item[11] == null ? null : Carbon::createFromDate($item[11])->format('Y-m-d'),
-                            'resign_date'           => $item[12] == null ? null : Carbon::createFromDate($item[12])->format('Y-m-d'),
+                            'date_of_commencement'  => $item[9] ? Carbon::createFromDate($item[9])->format('Y-m-d') : null,
+                            'fdc_date'              => $item[10] ? Carbon::createFromDate($item[10])->format('Y-m-d'): null,
+                            'fdc_end'               => $item[11] ? Carbon::createFromDate($item[11])->format('Y-m-d'): null,
+                            'resign_date'           => $item[12] ? Carbon::createFromDate($item[12])->format('Y-m-d'): null,
                             'resign_reason'         => $item[13],
                             'branch_id'             => $item[14],
                             'department_id'         => $item[15],
@@ -335,8 +326,8 @@ class UserController extends Controller
                             'is_loan'               => $item[31],
                             'identity_type'         => $item[32],
                             'identity_number'       => $item[33],
-                            'issue_date'            => $item[34] == null ? null : Carbon::createFromDate($item[34])->format('Y-m-d'),
-                            'issue_expired_date'    => $item[35] == null ? null : Carbon::createFromDate($item[35])->format('Y-m-d'),
+                            'issue_date'            => $item[34] ? Carbon::createFromDate($item[34])->format('Y-m-d') : null,
+                            'issue_expired_date'    => $item[35] ? Carbon::createFromDate($item[35])->format('Y-m-d') : null,
                             'password'              => Hash::make($item[36]),
                             'type'                  => 'uploade',
                             'created_by'            => Auth::user()->id,
@@ -416,32 +407,6 @@ class UserController extends Controller
     {
         try {
             if ($request->emp_status == '1') {
-                //total day in months
-                // $endMonth = Carbon::createFromDate($request->start_date)->format('m');
-                // $totalDayInMonth = Carbon::now()->month($endMonth)->daysInMonth;
-                
-                //find start date employee join date
-                // $date_of_month = Carbon::createFromDate($request->start_date)->format('Y-m');
-                // $currentYear = $date_of_month.'-'.$totalDayInMonth;
-
-                //find total working day in month
-                // $startDate = Carbon::parse($request->start_date);
-                // $endDate = Carbon::parse($currentYear);
-
-                //total day in  passt probation and total salary passt probation days
-                // $dataSalary = User::where('id',$request->id)->first();
-                // $totalNewDays = $startDate->diffInDays($endDate) + 1;
-                // $totalBasicSalary = $dataSalary->basic_salary + $request->total_salary_increase;
-                // $totalnewSalary = ($totalBasicSalary / $totalDayInMonth) * $totalNewDays;
-                
-                //total day in  probation and total salary in probation days
-                // $totalOldDay = $totalDayInMonth - $totalNewDays;
-                // $totalOldSalary = 0;
-                // if ($totalOldDay) {
-                //     $totalOldSalary = ($dataSalary->basic_salary / $totalDayInMonth)  * $totalOldDay;
-                // }
-                // $totalCurrentSalary = $totalnewSalary + $totalOldSalary;
-
                 $dataSalary = User::where('id',$request->id)->first();
                 $totalBasicSalary = $dataSalary->basic_salary + $request->total_salary_increase;
                 User::where('id',$request->id)->update([
@@ -492,5 +457,11 @@ class UserController extends Controller
             DB::rollBack();
             return response()->json(['message' => $exp->getMessage()], 500);
         }
+    }
+
+    public function export(Request $request){
+        $data = $this->employeeRepo->getAllUsers($request);
+        $export = new ExportEmployee($data);
+        return Excel::download($export, 'Employee.xlsx');
     }
 }
