@@ -705,21 +705,19 @@ class EmployeePayrollController extends Controller
                             ]);
                             $totalSeverancePay = $dataSeverance->total_contract_severance_pay;
                         }
-                        // if ($item->emp_status == 1) {
-                        //     $dataGrossSalaryPay = GrossSalaryPay::where('employee_id',$item->id)->whereNotNull('type_fdc1')->count();
-                        //     if ($dataGrossSalaryPay == 13) {
-                        //         $dataSeveranc = GrossSalaryPay::where('employee_id', $item->id)->whereNotNull('type_fdc1')->sum('total_fdc1');
-                        //         $totalContractSeverancePay = $dataSeveranc * 0.05;
-                        //         $dataSeverance = SeverancePay::create([
-                        //             'employee_id'                   => $item->id,
-                        //             'total_severanec_pay'           => round($dataSeveranc,2),
-                        //             'total_contract_severance_pay'  => round($totalContractSeverancePay,2),
-                        //             'payment_date'                  => $request->payment_date,
-                        //             'created_by'                    => Auth::user()->id,
-                        //         ]);
-                        //         $totalSeverancePay = $dataSeverance->total_contract_severance_pay;
-                        //     }
-                        // }
+
+                        if($monthEndDate == $paymentDate){
+                            $dataSeveranc = GrossSalaryPay::where('employee_id', $item->id)->whereNotNull('type_fdc2')->sum('total_fdc2');
+                            $totalContractSeverancePay = $dataSeveranc * 0.05;
+                            $dataSeverance = SeverancePay::create([
+                                'employee_id'                   => $item->id,
+                                'total_severanec_pay'           => $dataSeveranc,
+                                'total_contract_severance_pay'  => $totalContractSeverancePay,
+                                'payment_date'                  => $request->payment_date,
+                                'created_by'                    => Auth::user()->id,
+                            ]);
+                            $totalSeverancePay = $dataSeverance->total_contract_severance_pay;
+                        }
 
                         $totalNetSalary = $totalSalaryAfterTax + $totalSeverancePay + $taxExemptionSalary;
                         $data   = $request->all();
