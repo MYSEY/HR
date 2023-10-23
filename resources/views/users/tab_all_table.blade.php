@@ -185,8 +185,8 @@
                                                         <span class="badge bg-inverse-success">{{ $item->role == null ? "" : $item->role->role_name }}</span>
                                                     </td>
                                                     <td>$ <a href="#">{{$item->basic_salary}}</a></td>
-                                                    <td>$ <a href="#">{{$item->salary_increas}}</a></td>
-                                                    <td>$ <a href="#">{{$item->phone_allowance == null ? '00' : $item->phone_allowance}}</a></td>
+                                                    <td>$<a href="#">{{$item->salary_increas == null ? '0.00' : $item->salary_increas}}</a></td>
+                                                    <td>$<a href="#">{{$item->phone_allowance == null ? '0.00' : number_format($item->phone_allowance,2)}}</a></td>
                                                     <td>{{$item->joinOfDate}}</td>
                                                     <td>{{$item->PassDate}}</td>
                                                     <td>
@@ -330,8 +330,8 @@
                                                         <span class="badge bg-inverse-success">{{ $item->role == null ? "" : $item->role->role_name }}</span>
                                                     </td>
                                                     <td>$<a href="#">{{$item->basic_salary}}</a></td>
-                                                    <td>$<a href="#">{{$item->salary_increas}}</a></td>
-                                                    <td>$<a href="#">{{number_format($item->phone_allowance) == null ? '00' : $item->phone_allowance}}</a></td>
+                                                    <td>$<a href="#">{{$item->salary_increas == null ? '0.00' : $item->salary_increas}}</a></td>
+                                                    <td>$<a href="#">{{$item->phone_allowance == null ? '0.00' : number_format($item->phone_allowance,2)}}</a></td>
                                                     <td>{{$item->joinOfDate}}</td>
                                                     <td>{{$item->FDCStartDate}}</td>
                                                     <td>{{$item->FDCEndDate}}</td>

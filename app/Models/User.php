@@ -100,6 +100,7 @@ class User extends Authenticatable
         'marital_status',
         'fdc_date',
         'fdc_end',
+        'severance_pay_date',
         'udc_end_date',
         'resign_date',
         'resign_reason',

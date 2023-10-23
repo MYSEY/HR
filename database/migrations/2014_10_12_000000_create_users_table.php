@@ -41,7 +41,7 @@ class CreateUsersTable extends Migration
             $table->date('date_of_commencement')->nullable();
             $table->decimal('pre_salary',50,2)->default(0);
             $table->decimal('basic_salary',50,2)->default(0);
-            $table->decimal('salary_increas',50,2)->default(0);
+            $table->integer('salary_increas')->nullable();
             $table->date('change_date')->nullable();
             $table->integer('phone_allowance')->nullable();
             $table->string('email_verified_at')->nullable();
@@ -77,6 +77,7 @@ class CreateUsersTable extends Migration
             $table->string('marital_status')->nullable();
             $table->date('fdc_date')->nullable();
             $table->date('fdc_end')->nullable();
+            $table->date('severance_pay_date')->nullable();
             $table->date('udc_end_date')->nullable();
             $table->date('resign_date')->nullable();
             $table->string('resign_reason')->nullable();
