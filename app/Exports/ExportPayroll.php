@@ -173,7 +173,7 @@ class ExportPayroll implements FromCollection, WithColumnWidths, WithHeadings, W
                     number_format($pay->base_salary_received_riel),
                     number_format($pay->spouse, 2),
                     number_format($pay->children, 2),
-                    number_format($pay->total_charges_reduced, 2),
+                    number_format($pay->total_charges_reduced),
                     number_format($pay->total_tax_base_riel),
                     number_format($pay->total_rate, 2),
                     number_format($pay->total_salary_tax_usd, 2),
@@ -517,7 +517,7 @@ class ExportPayroll implements FromCollection, WithColumnWidths, WithHeadings, W
                 $sheet->getDelegate()->getStyle("T".$rows)->getFont()->setName('Khmer OS Battambang')->setSize(9)->setBold("T".$rows);
                 $event->sheet->getDelegate()->getStyle("T".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
                 //total setCellValue U
-                $sheet->setCellValue("U".$rows, number_format($this->totalChargesReduced,2));
+                $sheet->setCellValue("U".$rows, number_format($this->totalChargesReduced));
                 $sheet->getDelegate()->getStyle("U".$rows)->getFont()->setName('Khmer OS Battambang')->setSize(9)->setBold("U".$rows);
                 $event->sheet->getDelegate()->getStyle("U".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
                 //total setCellValue V
