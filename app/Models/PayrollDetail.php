@@ -2,30 +2,28 @@
 
 namespace App\Models;
 
-use App\Models\User;
+use Carbon\Carbon;
 use App\Models\Bonus;
 use App\Models\Seniority;
 use App\Models\SeverancePay;
 use App\Models\ChildrenInfor;
 use App\Models\GrossSalaryPay;
-use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\NationalSocialSecurityFund;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Payroll extends Model
+class PayrollDetail extends Model
 {
     use HasFactory;
-    use SoftDeletes;
+    // use SoftDeletes;
 
-    protected $table = 'payrolls';
+    protected $table = 'payroll_details';
     protected $guarded = ['id'];
 
 
     protected $fillable = [
         'employee_id',
-        'number_employee',
         'basic_salary',
         'total_gross_salary',
         'payment_date',

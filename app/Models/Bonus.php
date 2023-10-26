@@ -17,6 +17,7 @@ class Bonus extends Model
 
     protected $fillable = [
         'employee_id',
+        'number_employee',
         'number_of_working_days',
         'base_salary',
         'base_salary_received',

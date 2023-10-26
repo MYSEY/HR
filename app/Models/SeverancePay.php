@@ -17,6 +17,7 @@ class SeverancePay extends Model
 
     protected $fillable = [
         'employee_id',
+        'number_employee',
         'total_severanec_pay',
         'total_contract_severance_pay',
         'status',

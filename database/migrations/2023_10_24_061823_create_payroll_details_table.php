@@ -8,16 +8,14 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
-     *  php artisan migrate:refresh --path=database/migrations/2023_04_30_095319_create_payrolls_table.php
      *
      * @return void
      */
     public function up()
     {
-        Schema::create('payrolls', function (Blueprint $table) {
+        Schema::create('payroll_details', function (Blueprint $table) {
             $table->id();
             $table->integer('employee_id');
-            $table->string('number_employee')->nullable();
             $table->decimal('basic_salary',50,2)->default(0);
             $table->decimal('total_gross_salary',50)->default(0);
             $table->date('payment_date')->nullable();
@@ -62,6 +60,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('payrolls');
+        Schema::dropIfExists('payroll_details');
     }
 };

@@ -17,6 +17,7 @@ return new class extends Migration
         Schema::create('severance_pays', function (Blueprint $table) {
             $table->id();
             $table->integer('employee_id')->nullable();
+            $table->string('number_employee')->nullable();
             $table->decimal('total_severanec_pay',50,2)->nullable();
             $table->decimal('total_contract_severance_pay',50,2)->nullable();
             $table->date('payment_date')->nullable();

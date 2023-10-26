@@ -143,6 +143,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('payroll/create',[EmployeePayrollController::class,'store']);
     Route::post('payroll/delete',[EmployeePayrollController::class,'destroy']);
     Route::get('payslip/{employee_id}',[EmployeePayrollController::class,'paySlip']);
+    Route::post('import/payroll',[EmployeePayrollController::class,'importPayroll']);
     
     // Motor Rental
     Route::get('motor-rentel/list',[MotorRentelController::class,'index']);

@@ -17,6 +17,7 @@ class Seniority extends Model
 
     protected $fillable = [
         'employee_id',
+        'number_employee',
         'total_average_salary',
         'total_salary_receive',
         'tax_exemption_salary',

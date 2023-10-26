@@ -350,6 +350,7 @@ return[
 	"import_new_rental"=>"នាំចូលការជួលថ្មី",
 	"import_new_candidate_cv"=>"នាំចូល CV បេក្ខជនថ្មី",
 	"import_excel_/_XLS_XLSX_or_CSV"=>"នាំចូល Excel / XLS, XLSX ឬ CSV",
+    "import_payroll"=>"Import Payroll",
 	"issue_expired_date"=>"កាលបរិច្ឆេទបញ្ហាផុតកំណត់",
 	"included_tax"=>"ពន្ធរួមបញ្ចូល",
 	"join_date"=>"កាលបរិច្ឆេទចូលធ្វើការ",

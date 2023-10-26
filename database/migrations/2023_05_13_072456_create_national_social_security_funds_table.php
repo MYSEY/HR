@@ -17,6 +17,7 @@ return new class extends Migration
         Schema::create('national_social_security_funds', function (Blueprint $table) {
             $table->id();
             $table->integer('employee_id');
+            $table->string('number_employee')->nullable();
             $table->string('total_pre_tax_salary_usd',50,2)->default(0);
             $table->string('total_pre_tax_salary_riel',50,2)->default(0);
             $table->string('total_average_wage',50,2)->default(0);

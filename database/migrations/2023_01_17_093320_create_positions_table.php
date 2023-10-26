@@ -9,6 +9,7 @@ class CreatePositionsTable extends Migration
     /**
      * Run the migrations.
      *
+     * php artisan migrate:refresh --path=database/migrations/2023_01_17_093320_create_positions_table.php
      * @return void
      */
     public function up()
@@ -19,6 +20,8 @@ class CreatePositionsTable extends Migration
             $table->string('name_english');
             $table->string('type')->nullable();
             $table->integer('parent_id')->nullable();
+            $table->string('position_type')->nullable();
+            $table->string('position_range')->nullable();
             $table->bigInteger('created_by')->unsigned()->nullable();
             $table->bigInteger('updated_by')->unsigned()->nullable();
             $table->dateTime('deleted_at')->nullable();

@@ -16,6 +16,7 @@ class GrossSalaryPay extends Model
 
     protected $fillable = [
         'employee_id',
+        'number_employee',
         'basic_salary',
         'total_gross_salary',
         'total_fdc1',

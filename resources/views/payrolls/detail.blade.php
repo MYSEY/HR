@@ -27,7 +27,7 @@
                 </div>
                 <div class="col-auto float-end ms-auto">
                     @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer')
-                        <a href="#" class="btn add-btn" data-toggle="modal" id="importPayroll"><i class="fa fa-plus"></i>@lang('lang.import')</a>
+                        <a href="#" class="btn add-btn" data-toggle="modal" id=""><i class="fa fa-plus"></i>@lang('lang.import')</a>
                         <a href="#" class="btn add-btn me-2" data-bs-toggle="modal" data-bs-target="#add_salary"><i class="fa fa-plus"></i> @lang('lang.add_new')</a>
                     @endif
                 </div>
@@ -349,18 +349,38 @@
             </div>
         </div>
 
-        @include('payrolls.import_payroll')
+        <!-- Delete Payroll Modal -->
+        <div class="modal custom-modal fade" id="delete_payroll" role="dialog">
+            <div class="modal-dialog modal-sm modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <div class="form-header">
+                            <h3>@lang('lang.deleted')!</h3>
+                            <p>@lang('lang.are_you_sure_want_to_delete')?</p>
+                        </div>
+                        <div class="modal-btn delete-action">
+                            <form action="{{url('payroll/delete')}}" method="POST">
+                                @csrf
+                                <input type="hidden" name="id" class="e_id" value="">
+                                <div class="row">
+                                    <div class="submit-section" style="text-align: center">
+                                        <button type="submit" class="btn btn-primary submit-btn me-2">@lang('lang.delete')</button>
+                                        <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-secondary">@lang('lang.cancel')</a>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /Delete Payroll Modal -->
     </div>
 @endsection
 @include('includs.script')
 <script src="{{asset('/admin/js/validation-field.js')}}"></script>
 <script>
     $(function(){
-        $("#importPayroll").on("click", function() {
-            $(".thanLess").hide();
-            $("#thanLess").text("");
-            $('#importPayrollModal').modal('show');
-        });
         $(document).ready(function(){
             $("#btn-edix-nssf").click(function(){
                 $("#btn-save-nssf").toggle();

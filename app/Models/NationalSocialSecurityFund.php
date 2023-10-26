@@ -18,6 +18,7 @@ class NationalSocialSecurityFund extends Model
 
     protected $fillable = [
         'employee_id',
+        'number_employee',
         'total_pre_tax_salary_usd',
         'total_pre_tax_salary_riel',
         'total_average_wage',
