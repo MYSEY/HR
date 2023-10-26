@@ -223,6 +223,7 @@ class EmployeePayrollController extends Controller
                                 }
                                 $dataBonus = Bonus::create([
                                     'employee_id'               => $item->id,
+                                    'number_employee'           => $item->number_employee,
                                     'number_of_working_days'    => $totalStartDays,
                                     'base_salary'               => $item->basic_salary,
                                     'base_salary_received'      => $item->basic_salary,
@@ -330,6 +331,7 @@ class EmployeePayrollController extends Controller
                     //sum salary and sum other benefit befor tax free
                     $dataGrossSalary = GrossSalaryPay::create([
                         'employee_id'               => $item->id,
+                        'number_employee'           => $item->number_employee,
                         'basic_salary'              => $item->basic_salary,
                         'total_gross_salary'        => round($totalSalaryNetPay,2),
                         'total_fdc1'                => round($totalSeverancePay1,2),
@@ -369,6 +371,7 @@ class EmployeePayrollController extends Controller
                         $workerContributionRiel = round($workerContributionUsd,-2) / $exchangNSSF->amount_riel;
                         $dataNSSF = NationalSocialSecurityFund::create([
                             'employee_id'                   => $item->id,
+                            'number_employee'               => $item->number_employee,
                             'total_pre_tax_salary_usd'      => number_format($totalGrossSalary, 2),
                             'total_pre_tax_salary_riel'     => number_format($totalExchangeRielPreTax),
                             'total_average_wage'            => number_format($averageWage),
@@ -426,6 +429,7 @@ class EmployeePayrollController extends Controller
                             $paymentOfMonth = $PaymentOfMonth;
                             $seniority = Seniority::create([
                                 'employee_id'           => $item->id,
+                                'number_employee'       => $item->number_employee,
                                 'total_average_salary'  => $totalSalary,
                                 'total_salary_receive'  => number_format($totalSalaryReceive, 2),
                                 'tax_exemption_salary'  => number_format($taxExemptionSalary, 2),
@@ -706,6 +710,7 @@ class EmployeePayrollController extends Controller
                         $totalContractSeverancePay = $dataSeveranc * 0.05;
                         $dataSeverance = SeverancePay::create([
                             'employee_id'                   => $item->id,
+                            'number_employee'               => $item->number_employee,
                             'total_severanec_pay'           => round($dataSeveranc,2),
                             'total_contract_severance_pay'  => round($totalContractSeverancePay,2),
                             'payment_date'                  => $request->payment_date,
@@ -719,6 +724,7 @@ class EmployeePayrollController extends Controller
                         $totalContractSeverancePay = $dataSeveranc * 0.05;
                         $dataSeverance = SeverancePay::create([
                             'employee_id'                   => $item->id,
+                            'number_employee'               => $item->number_employee,
                             'total_severanec_pay'           => $dataSeveranc,
                             'total_contract_severance_pay'  => $totalContractSeverancePay,
                             'payment_date'                  => $request->payment_date,
@@ -730,6 +736,7 @@ class EmployeePayrollController extends Controller
                     $totalNetSalary = $totalSalaryAfterTax + $totalSeverancePay + $taxExemptionSalary;
                     $data   = $request->all();
                     $data['employee_id']                    = $item->id;
+                    $data['number_employee']                = $item->number_employee;
                     $data['basic_salary']                   = $item->basic_salary;
                     $data['spouse']                         = $item->spouse;
                     $data['children']                       = $children;
