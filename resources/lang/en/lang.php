@@ -587,6 +587,7 @@ return[
     "staff_training_by_branch"=>"Staff Training by Branch",
     "staff_training_by_branch"=>"Staff Training by Branch",
     "something_went_wrong_please_try_again_later"=>"Something went wrong please try again later",
+    "seniority_backford"=>"Seniority Backford",
     "to"=>"To",
     "to_"=>"To",
     "time"=>"Time",

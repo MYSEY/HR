@@ -605,6 +605,7 @@ return[
 	"staff_training_by_branch_internal"=>"វគ្គបណ្តុះបណ្តាលបុគ្គលិកតាមសាខាផ្ទៃក្នុង",
 	"staff_training_by_branch_external"=>"ការបណ្តុះបណ្តាលបុគ្គលិកតាមសាខាខាងក្រៅ",
 	"something_went_wrong_please_try_again_later"=>"មានអ្វីមួយខុសប្រក្រតី សូមព្យាយាមម្តងទៀតនៅពេលក្រោយ",
+    "seniority_backford"=>"ប្រាក់រំលឹកអតីតភាពការងារ",
 	"select"=>"ជ្រើសរើស",
 	"self_enterprise"=>"អត្ត.នៅសហគ្រាស",
 	"select_field_of_study"=>"ជ្រើសរើសមុខវិជ្ជាសិក្សា",

@@ -30,10 +30,10 @@ return new class extends Migration
             $table->decimal('total_pension_fund',50,2)->default(0);
             $table->decimal('seniority_pay_included_tax',50,2)->default(0);
             $table->decimal('base_salary_received_usd',50,2)->default(0);
-            $table->string('base_salary_received_riel',50,2)->default(0);
+            $table->string('base_salary_received_riel')->nullable();
             $table->integer('spouse')->default(0);
             $table->integer('children')->default(0);
-            $table->string('total_charges_reduced',50,2)->default(0);
+            $table->string('total_charges_reduced')->nullable();
             $table->string('total_tax_base_riel',50,2)->default(0);
             $table->integer('total_rate')->default(0);
             $table->decimal('total_salary_tax_usd',50,2)->default(0);

@@ -847,11 +847,38 @@ class EmployeePayrollController extends Controller
             foreach ($AllPayroll as $item) {
                 $i++;
                 if ($i != 1) {
+                    $employee = User::where("number_employee", $item[0])->first();
                     Payroll::create([
-                        'number_employee'       => $item[0],
-                        'employee_name_kh'      => $item[1],
-                        'employee_name_en'      => $item[2],
-                        'created_by'            => Auth::user()->id,
+                        'employee_id'                   => $employee->id,
+                        'number_employee'               => $item[0],
+                        'basic_salary'                  => $item[1],
+                        'total_gross_salary'            => $item[2],
+                        'total_child_allowance'         => $item[3],
+                        'phone_allowance'               => $item[4],
+                        'monthly_quarterly_bonuses'     => $item[5],
+                        'total_kny_phcumben'            => $item[6],
+                        'annual_incentive_bonus'        => $item[7],
+                        'seniority_pay_included_tax'    => $item[8],
+                        'total_gross'                   => $item[9],
+                        'total_pension_fund'            => $item[10],
+                        'base_salary_received_usd'      => $item[11],
+                        'base_salary_received_riel'     => $item[12],
+                        'spouse'                        => $item[13],
+                        'children'                      => $item[14],
+                        'total_charges_reduced'         => $item[15],
+                        'total_tax_base_riel'           => $item[16],
+                        'total_rate'                    => $item[17],
+                        'total_salary_tax_usd'          => $item[18],
+                        'total_salary_tax_riel'         => $item[19],
+                        'seniority_pay_excluded_tax'    => $item[20],
+                        'seniority_backford'            => $item[21],
+                        'total_severance_pay'           => $item[22],
+                        'loan_amount'                   => $item[23],
+                        'total_amount_car'              => $item[24],
+                        'total_salary'                  => $item[25],
+                        'payment_date'                  => $item[26],
+                        'exchange_rate'                 => $item[27],
+                        'created_by'                    => Auth::user()->id,
                     ]);
                 }
             }
