@@ -7,12 +7,13 @@ use App\Models\Bonus;
 use App\Models\Branchs;
 use App\Models\Payroll;
 use App\Models\Seniority;
+use App\Models\Department;
+use App\Exports\ExportNSSF;
 use App\Models\SeverancePay;
 use Illuminate\Http\Request;
-use App\Exports\ExportMotorRentel;
 use App\Exports\ExportPayroll;
+use App\Exports\ExportMotorRentel;
 use App\Http\Controllers\Controller;
-use App\Models\Department;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Models\NationalSocialSecurityFund;
 use App\Repositories\Admin\MotorRentalRepository;
@@ -41,6 +42,54 @@ class PayrollReportController extends Controller
         return view('reports.payroll_report',compact('payroll','dataNSSF','dataSeniority','severancePay','benefit','branchs'));
     }
 
+    public function reportNssf(){
+        $payroll = Payroll::with('users')->orderBy('employee_id')->get();
+        $dataNSSF = NationalSocialSecurityFund::orderBy('employee_id')->get();
+        $dataSeniority = Seniority::orderBy('employee_id')->get();
+        $severancePay = SeverancePay::orderBy('employee_id')->get();
+        $benefit = Bonus::with("users")->orderBy('employee_id')->get();
+        $branchs = Branchs::get();
+        return view('reports.C&B.snnf_report',compact('payroll','dataNSSF','dataSeniority','severancePay','benefit','branchs'));
+    }
+    public function nssfFilter(Request $request){
+        $Monthly = null;
+        $yearLy = null;
+        if ($request->filter_month) {
+            $Monthly = Carbon::createFromDate($request->filter_month)->format('m');
+            $yearLy = Carbon::createFromDate($request->filter_month)->format('Y');
+        }
+        $nssf = NationalSocialSecurityFund::with("users")
+        ->leftJoin('users', 'national_social_security_funds.employee_id', '=', 'users.id')
+        ->leftJoin('options','options.id','=','users.gender')
+        ->leftJoin('positions','positions.id','=','users.position_id')
+        ->select(
+            'national_social_security_funds.*',
+            'users.number_employee',
+            'users.employee_name_en',
+            'users.employee_name_kh',
+            'options.name_khmer',
+            'options.name_english',
+            'options.type',
+            'options.type',
+            'positions.name_khmer as positionNameKhmer',
+            'positions.name_english as positionNameEnglish',
+        )
+        ->when($request->employee_id, function ($query, $employee_id) {
+            $query->where('users.number_employee', 'LIKE', '%'.$employee_id.'%');
+        })
+        ->when($request->employee_name, function ($query, $employee_name) {
+            $query->where('users.employee_name_en', 'LIKE', '%'.$employee_name.'%');
+        })
+        ->when($Monthly, function ($query, $Monthly) {
+            $query->whereMonth('payment_date', $Monthly);
+        })
+        ->when($yearLy, function ($query, $yearLy) {
+            $query->whereYear('payment_date', $yearLy);
+        })->get();
+        return response()->json([
+            'success'=>$nssf,
+        ]);
+    }
     public function filter(Request $request)
     {
         $Monthly = null;
@@ -154,6 +203,10 @@ class PayrollReportController extends Controller
     // Export payroll
     public function payrollExport(Request $request){
         return Excel::download(new ExportPayroll($request), 'ReportPayroll.xlsx');
+    }
+
+    public function nssfExport(Request $request){
+        return Excel::download(new ExportNSSF($request), 'NSSF.xlsx');
     }
 
     public function motorrentel(Request $request)

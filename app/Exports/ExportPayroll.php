@@ -212,34 +212,38 @@ class ExportPayroll implements FromCollection, WithColumnWidths, WithHeadings, W
                 $query->whereYear('national_social_security_funds.created_at', $yearLy);
             })->get();
             $this->header_table = [
-                "Employee ID",
-                "Full Name",
-                "Join Date",
-                "Total salary before tax dollars",
-                "Total salary before tax Riel",
-                "Average wage",
-                "Occupational risk",
-                "Health Care ",
-                "Pension contribution Riel",
-                "Pension contribution dollar",
-                "Enterprise pension contribution",
+                "ល.រ",
+                "ប័ណ្ណ ការងារ",
+                "គោត្តនាម និងនាម",
+                "ភេទ",
+                "មុខងារ",
+                "ថ្ងៃចូលធ្វើការ",
+                "បៀវត្សសរុបមុនបង់ពន្ធដុល្លារ",
+                "បៀវត្សសរុបមុនបង់ពន្ធរៀល",
+                "ប្រាក់ឈ្នួលមធ្យម",
+                "ហានិ.ការងារ",
+                "ថែទាំសុខភាព",
+                "ភាគទានស.ធ កម្មករនិយោជិតដុល្លារ",
+                "ភាគទានស.ធ កម្មករនិយោជិតរៀល",
+                "ភាគទានស.ធ សហគ្រាស",
                 "Created At",
             ];
             foreach ($datas as $key => $nssf) {
-                $created_at = Carbon::parse($nssf->created_at)->format('d-M-Y');
                 $payroll[]=[
+                    $key,
                     $nssf->users == null ? '' : intval($nssf->users->number_employee),
                     $nssf->users == null ? '' : $nssf->users->employee_name_en,
+                    $nssf->users == null ? '' : $nssf->users->EmployeeGender,
+                    $nssf->users == null ? '' : $nssf->users->EmployeePosition,
                     $nssf->users == null ? '' : $nssf->users->joinOfDate,
-                    intval($nssf->total_pre_tax_salary_usd),
+                    $nssf->total_pre_tax_salary_usd,
                     $nssf->total_pre_tax_salary_riel,
                     $nssf->total_average_wage,
                     $nssf->total_occupational_risk,
                     $nssf->total_health_care,
                     $nssf->pension_contribution_usd,
                     $nssf->pension_contribution_riel,
-                    $nssf->corporate_contribution,
-                    $created_at,
+                    $nssf->corporate_contribution
                 ];
             }
         }else if($request->tab_status == 3){

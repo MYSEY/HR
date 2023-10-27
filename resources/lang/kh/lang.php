@@ -427,6 +427,7 @@ return[
 	"number_of_working_days"=>"ចំនួនថ្ងៃធ្វើការ",
 	"non-shortlisted"=>"មិនស្ថិតក្នុងតារាងបេក្ខជន",
 	"non_taxable_salary"=>"ប្រាក់បៀវត្សមិនជាប់ពន្ធ",
+    "nssf_report"=>"របាយការណ៍​ ប.ស.ស",
 	"nationality"=>"សញ្ជាតិ",
 	"ok"=>"រក្សាទុក",
 	"option"=>"ជម្រើស",

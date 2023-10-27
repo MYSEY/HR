@@ -188,13 +188,13 @@ class EmployeePayrollController extends Controller
                             if ($totalOldDay) {
                                 $totalSeverancePayFirst = ($item->pre_salary / $totalDayInMonth)  * $totalOldDay;
                             }
-                            $totalBaseSalaryRecived = round($totalSeverancePayLast,2) + round($totalSeverancePayFirst,2);
+                            $totalBaseSalaryRecived = $totalSeverancePayLast + $totalSeverancePayFirst;
                             $totalFirstSeverancPay = round($totalSeverancePayLast,2);
                         }else{
                             $totalBasicSalary = $item->basic_salary;
                         }
                     }
-                    // dd(round($totalBaseSalaryRecived,2));
+                    // dd($totalBaseSalaryRecived);
                     //calculated khmer_new_year and pchumBen_bonus
                     $totalBunus = 0;
                     if ($item->emp_status == 1 || $item->emp_status == 10 || $item->emp_status == 2) {
@@ -307,8 +307,7 @@ class EmployeePayrollController extends Controller
                     $totalBasicSalary = $totalBaseSalaryRecived != null ? $totalBaseSalaryRecived : $totalBasicSalary;
                     
                     $dataTotalSeverancePay2 = $SeverancePay2 != null ? $SeverancePay2 : $totalOtherBenefit;
-
-                    $totalSalaryNetPay = $totalSeverancyPaySalary + $totalBunus + $item->phone_allowance + $totalChildAllowance;
+                    $totalSalaryNetPay = round($totalSeverancyPaySalary,2) + $totalBunus + $item->phone_allowance + $totalChildAllowance;
                     if ($item->emp_status == 'Probation') {
                         $type_fdc1 = null;
                     } elseif($item->emp_status == 1) {
@@ -373,10 +372,10 @@ class EmployeePayrollController extends Controller
                             'employee_id'                   => $item->id,
                             'number_employee'               => $item->number_employee,
                             'total_pre_tax_salary_usd'      => number_format($totalGrossSalary, 2),
-                            'total_pre_tax_salary_riel'     => number_format($totalExchangeRielPreTax),
-                            'total_average_wage'            => number_format($averageWage),
+                            'total_pre_tax_salary_riel'     => $totalExchangeRielPreTax,
+                            'total_average_wage'            => $averageWage,
                             'total_occupational_risk'       => round($occupationalRisk,-2),
-                            'total_health_care'             => number_format($healthCare),
+                            'total_health_care'             => $healthCare,
                             'pension_contribution_usd'      => round($workerContributionUsd, -2),
                             'pension_contribution_riel'     => round($workerContributionRiel, 2),
                             'corporate_contribution'        => round($workerContributionUsd, -2),

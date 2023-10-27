@@ -405,6 +405,7 @@ return[
     "nationality"=>"Nationality",
     "non-shortlisted"=>"Non-Shortlisted",
     "non_taxable_salary"=>"Non Taxable Salary",
+    "nssf_report"=>"NSSF Report",
     "ok"=>"ok",
     "option"=>"Option",
     "order_number"=>"Order Number",

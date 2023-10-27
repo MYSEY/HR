@@ -159,7 +159,7 @@ function menu(){
                     'permission'=>1
                 ],
                 [
-                    'value'=> Helper::getLang() == 'en' ? 'Payroll Report':'របាយការណ៍ប្រាក់បៀវត្សរ៍បុគ្គលិក',
+                    'value'=> Helper::getLang() == 'en' ? 'C&B Report':'របាយការណ៍ប្រាក់បៀវត្សរ៍បុគ្គលិក',
                     'url'=>"reports/payroll-report",
                     'table'=>18,
                     'permission'=>1
