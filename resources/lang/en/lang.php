@@ -274,7 +274,7 @@ return[
     "from_re"=>"From",
     "fdc"=>"FDC",
     "fdc_start_date"=>"FDC Start Date",
-    "fdc_end_date"=>"FDC end Date",
+    "contract_deadline"=>"Contract Deadline",
     "female"=>"Female",
     "fee"=>"Fee",
     "fee_charge_deduce_from_main_account"=>"Fee charge deduce from main account",

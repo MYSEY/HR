@@ -270,7 +270,7 @@
                                     '<input type="hidden" class="form-control id" value="'+id+'">'+
                                 '</div>'+
                                 '<div class="form-group">'+
-                                    '<label>@lang("lang.end_date") <span class="text-danger">*</span></label>'+
+                                    '<label>@lang("lang.contract_deadline") <span class="text-danger">*</span></label>'+
                                     '<input type="date" class="form-control end_dete" value="'+end_date+'">'+
                                 '</div>'+
                                 '<div class="form-group">'+
@@ -361,7 +361,7 @@
                                     '<input type="hidden" class="form-control id" value="'+id+'">'+
                                 '</div>'+
                                 '<div class="form-group">'+
-                                    '<label>@lang("lang.end_date") <span class="text-danger">*</span></label>'+
+                                    '<label>@lang("lang.contract_deadline") <span class="text-danger">*</span></label>'+
                                     '<input type="date" class="form-control end_dete" value="">'+
                                 '</div>'+
                                 '<label>@lang("lang.reason")</label>'+

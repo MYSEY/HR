@@ -319,9 +319,9 @@
                                                                 <td>{{ $item->users == null ? '' : $item->users->joinOfDate }}</td>
                                                                 <td>${{ $item->total_pre_tax_salary_usd }}</td>
                                                                 <td><span>៛</span>{{ $item->total_pre_tax_salary_riel }}</td>
-                                                                <td>{{ $item->total_average_wage }}</td>
+                                                                <td>{{ number_format($item->total_average_wage) }}</td>
                                                                 <td>{{ number_format($item->total_occupational_risk)}}</td>
-                                                                <td>{{ $item->total_health_care }}</td>
+                                                                <td>{{ number_format($item->total_health_care) }}</td>
                                                                 <td><span>៛</span>{{ number_format($item->pension_contribution_usd) }}</td>
                                                                 <td>${{ $item->pension_contribution_riel }}</td>
                                                                 <td><span>៛</span>{{ number_format($item->corporate_contribution) }}</td>
@@ -508,7 +508,7 @@
 <script src="{{ asset('/admin/js/validation-field.js') }}"></script>
 <script src="{{ asset('/admin/js/date-range-bicker.js') }}"></script>
 <script>
-    $(function() {
+    $(function() {x
         var tab_status = 1;
         $("#tab_btl_basic_salary, #tab_btn_NSSF, #tab_btn_Benefit, #tab_btn_seniority, #tab_btn_severance_pay").on("click", function() {
             tab_status = $(this).attr('data-tab-id');
