@@ -63,9 +63,9 @@
                                                     <td>
                                                         <span class="badge bg-inverse-success">{{ $item->role == null ? "" : $item->role->role_name }}</span>
                                                     </td>
-                                                    <td>$ <a href="#">{{$item->basic_salary}}</a></td>
-                                                    <td>$ <a href="#">{{$item->salary_increas}}</a></td>
-                                                    <td>$ <a href="#">{{$item->phone_allowance == null ? '00' : $item->phone_allowance}}</a></td>
+                                                    <td>$<a href="#">{{$item->basic_salary}}</a></td>
+                                                    <td>$<a href="#">{{$item->salary_increas}}</a></td>
+                                                    <td>$<a href="#">{{$item->phone_allowance == null ? '00' : $item->phone_allowance}}</a></td>
                                                     <td>{{$item->joinOfDate}}</td>
                                                     <td>
                                                         @if ($item->is_loan == '1')
@@ -481,8 +481,8 @@
                                                     <td>
                                                         <span class="badge bg-inverse-success">{{ $item->role == null ? "" : $item->role->role_name }}</span>
                                                     </td>
-                                                    <td>$ <a href="#">{{$item->basic_salary}}</a></td>
-                                                    <td>$ <a href="#">{{$item->phone_allowance == null ? '00' : $item->phone_allowance}}</a></td>
+                                                    <td>$<a href="#">{{$item->basic_salary}}</a></td>
+                                                    <td>$<a href="#">{{$item->phone_allowance == null ? '00' : $item->phone_allowance}}</a></td>
                                                     <td>{{$item->joinOfDate}}</td>
                                                     <td>{{$item->FDCStartDate}}</td>
                                                     <td>
@@ -622,8 +622,8 @@
                                                     <td>
                                                         <span class="badge bg-inverse-success">{{ $item->role == null ? "" : $item->role->role_name }}</span>
                                                     </td>
-                                                    <td>$ <a href="#">{{$item->basic_salary}}</a></td>
-                                                    <td>$ <a href="#">{{$item->phone_allowance == null ? '00' : $item->phone_allowance}}</a></td>
+                                                    <td>$<a href="#">{{$item->basic_salary}}</a></td>
+                                                    <td>$<a href="#">{{$item->phone_allowance == null ? '00' : $item->phone_allowance}}</a></td>
                                                     <td>{{$item->joinOfDate}}</td>
                                                     <td>{{$item->ResignDates}}</td>
                                                     <td>{{$item->EmployeeResignReason == null ? $item->resign_reason : $item->EmployeeResignReason}}</td>
@@ -745,8 +745,8 @@
                                                     <td>
                                                         <span class="badge bg-inverse-success">{{ $item->role == null ? "" : $item->role->role_name }}</span>
                                                     </td>
-                                                    <td>$ <a href="#">{{$item->basic_salary}}</a></td>
-                                                    <td>$ <a href="#">{{$item->phone_allowance == null ? '00' : $item->phone_allowance}}</a></td>
+                                                    <td>$<a href="#">{{$item->basic_salary}}</a></td>
+                                                    <td>$<a href="#">{{$item->phone_allowance == null ? '00' : $item->phone_allowance}}</a></td>
                                                     <td>{{$item->joinOfDate}}</td>
                                                     <td>{{$item->ResignDates}}</td>
                                                     <td>{{$item->EmployeeResignReason == null ? $item->resign_reason : $item->EmployeeResignReason}}</td>
@@ -868,8 +868,8 @@
                                                     <td>
                                                         <span class="badge bg-inverse-success">{{ $item->role == null ? "" : $item->role->role_name }}</span>
                                                     </td>
-                                                    <td>$ <a href="#">{{$item->basic_salary}}</a></td>
-                                                    <td>$ <a href="#">{{$item->phone_allowance == null ? '00' : $item->phone_allowance}}</a></td>
+                                                    <td>$<a href="#">{{$item->basic_salary}}</a></td>
+                                                    <td>$<a href="#">{{$item->phone_allowance == null ? '00' : $item->phone_allowance}}</a></td>
                                                     <td>{{$item->joinOfDate}}</td>
                                                     <td>{{$item->PassDate}}</td>
                                                     <td>
@@ -1011,8 +1011,8 @@
                                                     <td>
                                                         <span class="badge bg-inverse-success">{{ $item->role == null ? "" : $item->role->role_name }}</span>
                                                     </td>
-                                                    <td>$ <a href="#">{{$item->basic_salary}}</a></td>
-                                                    <td>$ <a href="#">{{$item->phone_allowance == null ? '00' : $item->phone_allowance}}</a></td>
+                                                    <td>$<a href="#">{{$item->basic_salary}}</a></td>
+                                                    <td>$<a href="#">{{$item->phone_allowance == null ? '00' : $item->phone_allowance}}</a></td>
                                                     <td>{{$item->joinOfDate}}</td>
                                                     <td>{{$item->FDCStartDate}}</td>
                                                     <td>{{$item->FDCEndDate}}</td>
@@ -1161,8 +1161,8 @@
                                                     <td>
                                                         <span class="badge bg-inverse-success">{{ $item->role == null ? "" : $item->role->role_name }}</span>
                                                     </td>
-                                                    <td>$ <a href="#">{{$item->basic_salary}}</a></td>
-                                                    <td>$ <a href="#">{{$item->phone_allowance == null ? '00' : $item->phone_allowance}}</a></td>
+                                                    <td>$<a href="#">{{$item->basic_salary}}</a></td>
+                                                    <td>$<a href="#">{{$item->phone_allowance == null ? '00' : $item->phone_allowance}}</a></td>
                                                     <td>{{$item->joinOfDate}}</td>
                                                     <td>{{$item->FDCStartDate}}</td>
                                                     <td>
