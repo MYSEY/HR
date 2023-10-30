@@ -15,13 +15,7 @@ class Branchs extends Model
     */
 
     protected $table = 'branchs';
-    // protected $primaryKey = 'id';
-    // public $timestamps = false;
     protected $guarded = ['id'];
-    // protected $fillable = [];
-    // protected $hidden = [];
-    // protected $dates = [];
-
     /*
     |--------------------------------------------------------------------------
     | FUNCTIONS

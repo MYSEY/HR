@@ -102,7 +102,8 @@
                                             <thead>
                                                 <tr>
                                                     <th class="sorting sorting_asc stuck" tabindex="0" aria-controls="DataTables_Table_0"
-                                                        rowspan="1" colspan="1">@lang('lang.employee_id')</th>
+                                                        rowspan="1" colspan="1">@lang('lang.employee_id')
+                                                    </th>
                                                     <th class="sorting sorting_asc stuck" tabindex="0"
                                                         aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
                                                         aria-sort="ascending"
@@ -122,6 +123,11 @@
                                                         aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
                                                         aria-sort="ascending"
                                                         aria-label="Employee: activate to sort column descending">@lang('lang.position')
+                                                    </th>
+                                                    <th class="sorting" tabindex="0"
+                                                        aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
+                                                        aria-sort="ascending"
+                                                        aria-label="Employee: activate to sort column descending">@lang('lang.location')
                                                     </th>
                                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                         rowspan="1" colspan="1"
@@ -164,10 +170,11 @@
                                                     @foreach ($dataNSSF as $item)
                                                         <tr class="odd">
                                                             <td class="stuck"><a href="#">{{ $item->users == null ? '' : $item->users->number_employee }}</a></td>
-                                                            <td class="stuck"><a href="#">{{ $item->users->last_name_kh }}</a></td>
-                                                            <td class="stuck"><a href="#">{{ $item->users->first_name_kh }}</a></td>
+                                                            <td class="stuck"><a href="#">{{ $item->LastName }}</a></td>
+                                                            <td class="stuck"><a href="#">{{ $item->FirstName }}</a></td>
                                                             <td><a href="#">{{ $item->users->EmployeeGender }}</a></td>
                                                             <td><a href="#">{{ $item->users->EmployeePosition }}</a></td>
+                                                            <td><a href="#">{{ $item->users->EmployeeBranch }}</a></td>
                                                             <td>{{ $item->users == null ? '' : $item->users->joinOfDate }}</td>
                                                             <td>${{ $item->total_pre_tax_salary_usd }}</td>
                                                             <td><span>៛</span>{{ number_format($item->total_pre_tax_salary_riel) }}</td>
@@ -266,10 +273,11 @@
                         let created_at = moment(row.created_at).format('D-MMM-YYYY')
                         tr +='<tr class="odd">'+
                                 '<td><a href="#">'+(row.users == null ? '' : row.users.number_employee )+'</a></td>'+
-                                '<td><a href="#">'+(row.users == null ? '' : row.users.last_name_kh )+'</a></td></td></td>'+
-                                '<td><a href="#">'+(row.users == null ? '' : row.users.first_name_kh )+'</a></td></td></td>'+
-                                '<td><a href="#">'+(localeLanguage == 'en' ? row.name_english  : row.name_khmer )+'</a></td></td></td>'+
-                                '<td><a href="#">'+(localeLanguage == 'en' ? row.positionNameEnglish  : row.positionNameKhmer )+'</a></td></td></td>'+
+                                '<td><a href="#">'+(row.users == null ? '' : row.users.last_name_kh )+'</a></td>'+
+                                '<td><a href="#">'+(row.users == null ? '' : row.users.first_name_kh )+'</a></td>'+
+                                '<td><a href="#">'+(localeLanguage == 'en' ? row.name_english  : row.name_khmer )+'</a></td>'+
+                                '<td><a href="#">'+(localeLanguage == 'en' ? row.positionNameEnglish  : row.positionNameKhmer )+'</a></td>'+
+                                '<td><a href="#">'+(localeLanguage == 'en' ? row.branck_en  : row.branck_kh )+'</a></td>'+
                                 '<td>'+(join_date)+'</td>'+
                                 '<td>$'+(row.total_pre_tax_salary_usd )+'</td>'+
                                 '<td><span>៛</span>'+(formatCurrencyKH(row.total_pre_tax_salary_riel) )+'</td>'+
@@ -283,7 +291,11 @@
                         '</tr>';
                     });
                 }else {
-                    var tr = '<tr><td colspan=13 align="center">ពុំមានទិន្នន័យសម្រាប់បង្ហាញ</td></tr>';
+                    if(localeLanguage == 'en'){
+                        var tr = '<tr><td colspan=15 align="center">No data available in table</td></tr>';
+                    }else{
+                        var tr = '<tr><td colspan=15 align="center">ពុំមានទិន្នន័យសម្រាប់បង្ហាញ</td></tr>';
+                    }
                 }
                 $(".tbl_nssf tbody").html(tr);
                 $("#table_print_filter_nssf tbody").html(tr);
