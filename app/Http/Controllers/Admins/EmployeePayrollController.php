@@ -372,7 +372,7 @@ class EmployeePayrollController extends Controller
                         $dataNSSF = NationalSocialSecurityFund::create([
                             'employee_id'                   => $item->id,
                             'number_employee'               => $item->number_employee,
-                            'total_pre_tax_salary_usd'      => number_format($totalGrossSalary, 2),
+                            'total_pre_tax_salary_usd'      => $totalGrossSalary,
                             'total_pre_tax_salary_riel'     => $totalExchangeRielPreTax,
                             'total_average_wage'            => $averageWage,
                             'total_occupational_risk'       => round($occupationalRisk,-2),

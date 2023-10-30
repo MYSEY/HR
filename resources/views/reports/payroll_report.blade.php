@@ -508,7 +508,7 @@
 <script src="{{ asset('/admin/js/validation-field.js') }}"></script>
 <script src="{{ asset('/admin/js/date-range-bicker.js') }}"></script>
 <script>
-    $(function() {x
+    $(function() {
         var tab_status = 1;
         $("#tab_btl_basic_salary, #tab_btn_NSSF, #tab_btn_Benefit, #tab_btn_seniority, #tab_btn_severance_pay").on("click", function() {
             tab_status = $(this).attr('data-tab-id');
@@ -540,9 +540,9 @@
                 $("#table_print_benefit").show();
                 $("#table_print_seniority_pay").hide();
                 $("#table_print_severance_pay").hide();
-                $("#col-branch").css("display", "none");
-                $(".cls-research").css("display", "none");
-                $(".submit-btn").css('display', 'none');
+                $("#col-branch").css("display", "block");
+                $(".cls-research").css("display", "block");
+                $(".submit-btn").css('display', 'block');
             }else if (tab_status == 4) {
                 $("#title_print").text("Seniority Pay");
                 $("#table_print_basic_salary").hide();

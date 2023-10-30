@@ -222,11 +222,14 @@ Route::middleware(['auth:sanctum'])->group(function(){
 
     Route::get('/reports/payroll-report', [PayrollReportController::class,'index']);
     Route::post('/reports/payroll-report', [PayrollReportController::class,'filter']);
+    Route::get('/reports/payroll-export', [PayrollReportController::class,'payrollExport']);
+
+    //report nssf
     Route::get('/reports/nssf-report', [PayrollReportController::class,'reportNssf']);
     Route::post('/reports/nssf-report', [PayrollReportController::class,'nssfFilter']);
     Route::get('/reports/nssf-export', [PayrollReportController::class,'nssfExport']);
-
-    Route::get('/reports/payroll-export', [PayrollReportController::class,'payrollExport']);
+    //report 
+    Route::get('/reports/benefit-report', [PayrollReportController::class,'reportBenefitKNYPCh']);
 
     Route::get('/reports/motor-rentel-report', [PayrollReportController::class,'motorrentel']);
     Route::post('/reports/motor-rentel-report', [PayrollReportController::class,'motorrentel']);

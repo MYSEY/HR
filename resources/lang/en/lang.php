@@ -87,6 +87,7 @@ return[
     "branch_from"=>"Branch From",
     "branch_to"=>"Branch To",
     "base_salary_received"=>"Base Salary Received",
+    "benefit_khy"=>"Report Allowance Khmer New Year and Pchum Ben",
     "cambodia"=>"Cambodia",
     "cancel"=>"Cancel",
     "cancel_date"=>"Cancel Date",

@@ -52,10 +52,10 @@ class ExportNSSF implements FromCollection, WithColumnWidths, WithHeadings, With
             $query->where('users.employee_name_en', 'LIKE', '%'.$employee_name.'%');
         })
         ->when($Monthly, function ($query, $Monthly) {
-            $query->whereMonth('national_social_security_funds.created_at', $Monthly);
+            $query->whereMonth('national_social_security_funds.payment_date', $Monthly);
         })
         ->when($yearLy, function ($query, $yearLy) {
-            $query->whereYear('national_social_security_funds.created_at', $yearLy);
+            $query->whereYear('national_social_security_funds.payment_date', $yearLy);
         })->get();
         $i = 1;
         foreach ($datas as $key => $value) {
@@ -69,7 +69,6 @@ class ExportNSSF implements FromCollection, WithColumnWidths, WithHeadings, With
             $this->pensionContributionUsd += $value->pension_contribution_usd;
             $this->pensionContributionRiel += $value->pension_contribution_riel;
             $this->corporateContribution += $value->corporate_contribution;
-
             $nssf[]=[
                 $i,
                 $value->users == null ? '' : intval($value->users->number_employee),

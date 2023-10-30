@@ -43,13 +43,14 @@ class PayrollReportController extends Controller
     }
 
     public function reportNssf(){
-        $payroll = Payroll::with('users')->orderBy('employee_id')->get();
-        $dataNSSF = NationalSocialSecurityFund::orderBy('employee_id')->get();
-        $dataSeniority = Seniority::orderBy('employee_id')->get();
-        $severancePay = SeverancePay::orderBy('employee_id')->get();
-        $benefit = Bonus::with("users")->orderBy('employee_id')->get();
+        $dataNSSF = NationalSocialSecurityFund::orderBy('employee_id','DESC')->get();
         $branchs = Branchs::get();
-        return view('reports.C&B.snnf_report',compact('payroll','dataNSSF','dataSeniority','severancePay','benefit','branchs'));
+        return view('reports.C&B.snnf_report',compact('dataNSSF','branchs'));
+    }
+    public function reportBenefitKNYPCh(){
+        $benefit = Bonus::with("users")->orderBy('employee_id','DESC')->get();
+        $branchs = Branchs::get();
+        return view('reports.C&B.benefit_report',compact('benefit','branchs'));
     }
     public function nssfFilter(Request $request){
         $Monthly = null;
