@@ -240,6 +240,10 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('/reports/seniorities-pay', [PayrollReportController::class,'reportSenorityPay']);
     Route::post('/reports/seniorities-pay', [PayrollReportController::class,'SenorityPayFilter']);
     Route::get('/reports/seniorities-pay-export', [PayrollReportController::class,'SenorityPayExport']);
+    //Tax Report
+    Route::get('/reports/tax-report', [PayrollReportController::class,'TaxReport']);
+    Route::post('/reports/tax-report', [PayrollReportController::class,'TaxFilter']);
+    Route::get('/reports/tax-report-export', [PayrollReportController::class,'TaxExport']);
 
     Route::get('/reports/motor-rentel-report', [PayrollReportController::class,'motorrentel']);
     Route::post('/reports/motor-rentel-report', [PayrollReportController::class,'motorrentel']);

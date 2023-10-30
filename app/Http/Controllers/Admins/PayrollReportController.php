@@ -7,6 +7,7 @@ use App\Models\Bonus;
 use App\Models\Branchs;
 use App\Models\Payroll;
 use App\Models\Seniority;
+use App\Exports\ExportTax;
 use App\Models\Department;
 use App\Exports\ExportNSSF;
 use App\Models\SeverancePay;
@@ -36,13 +37,13 @@ class PayrollReportController extends Controller
     }
     public function index()
     {
-        $payroll = Payroll::with('users')->get();
+        $payroll = Payroll::with('users')->orderBy('id', 'DESC')->get();
         $branchs = Branchs::get();
         return view('reports.payroll_report',compact('payroll','branchs'));
     }
 
     public function reportNssf(){
-        $dataNSSF = NationalSocialSecurityFund::with('users')->get();
+        $dataNSSF = NationalSocialSecurityFund::with('users')->orderBy('id', 'DESC')->get();
         $branchs = Branchs::get();
         return view('reports.poyrolls.snnf_report',compact('dataNSSF','branchs'));
     }
@@ -52,12 +53,12 @@ class PayrollReportController extends Controller
         return view('reports.poyrolls.benefit_report',compact('benefit','branchs'));
     }
     public function reportSeverancePay(){
-        $severancePay = SeverancePay::orderBy('employee_id')->get();
+        $severancePay = SeverancePay::orderBy('employee_id')->orderBy('id', 'DESC')->get();
         $branchs = Branchs::get();
         return view('reports.poyrolls.severance_pay_report',compact('severancePay','branchs'));
     }
     public function reportSenorityPay(){
-        $dataSeniority = Seniority::all();
+        $dataSeniority = Seniority::with('users')->orderBy('id', 'DESC')->get();
         $branchs = Branchs::get();
         return view('reports.poyrolls.seniority_pay_report',compact('dataSeniority','branchs'));
     }
@@ -105,7 +106,57 @@ class PayrollReportController extends Controller
             'success'=>$benefit,
         ]);
     }
-   
+    public function TaxReport(){
+        $payroll = Payroll::with('users')->orderBy('id', 'DESC')->get();
+        $branchs = Branchs::get();
+        return view('reports.poyrolls.tax_report',compact('payroll','branchs'));
+    }
+    public function TaxFilter(Request $request){
+        $Monthly = null;
+        $yearLy = null;
+        if ($request->filter_month) {
+            $Monthly = Carbon::createFromDate($request->filter_month)->format('m');
+            $yearLy = Carbon::createFromDate($request->filter_month)->format('Y');
+        }
+        $taxReport=[];
+        $taxReport = Payroll::with("users")
+        ->leftJoin('users', 'payrolls.employee_id', '=', 'users.id')
+        ->leftJoin('positions','positions.id','=','users.position_id')
+        ->leftJoin('branchs','branchs.id','=','users.branch_id')
+        ->leftJoin('departments','departments.id','=','users.department_id')
+        ->select(
+            'payrolls.*',
+            'users.number_employee',
+            'users.employee_name_en',
+            'users.employee_name_kh',
+            'users.branch_id',
+            'positions.name_khmer as position_name_kh',
+            'positions.name_english as position_name_en',
+            'branchs.branch_name_kh as branck_kh',
+            'branchs.branch_name_en as branck_en',
+            'departments.name_khmer as depart_name_kh',
+            'departments.name_english as depart_name_en',
+        )
+        ->when($request->employee_id, function ($query, $employee_id) {
+            $query->where('users.number_employee', 'LIKE', '%'.$employee_id.'%');
+        })
+        ->when($request->employee_name, function ($query, $employee_name) {
+            $query->where('users.employee_name_en', 'LIKE', '%'.$employee_name.'%');
+        })
+        ->when($request->branch_id, function ($query, $branch_id) {
+            $query->where('users.branch_id', $branch_id);
+        })
+        ->when($Monthly, function ($query, $Monthly) {
+            $query->whereMonth('payment_date', $Monthly);
+        })
+        ->when($yearLy, function ($query, $yearLy) {
+            $query->whereYear('payment_date', $yearLy);
+        })->get();
+        
+        return response()->json([
+            'success'=>$taxReport,
+        ]);
+    }
     public function nssfFilter(Request $request){
         $Monthly = null;
         $yearLy = null;
@@ -294,6 +345,9 @@ class PayrollReportController extends Controller
     }
     public function SenorityPayExport(Request $request){
         return Excel::download(new ExportSeniorityPay($request), 'seniority_pay.xlsx');
+    }
+    public function TaxExport(Request $request){
+        return Excel::download(new ExportTax($request), 'ReportTax.xlsx');
     }
     public function motorrentel(Request $request)
     {

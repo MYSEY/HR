@@ -682,6 +682,7 @@ return[
     "trainsferend_date"=>'កាលបរិច្ឆេទផ្ទេរ',
     "transferred_from"=>'ផ្ទេរពី',
     "transferred_to"=>'ផ្ទេរទៅ',
+    "tax_report"=>'របាយការណ៍ពន្ធ',
 	"unactive"=>"មិនដំណើរការ",
 	"update"=>"កែប្រែ",
 	"updated_by"=>"បានធ្វើបច្ចុប្បន្នភាពដោយ",

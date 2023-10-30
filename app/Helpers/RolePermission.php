@@ -165,6 +165,12 @@ function menu(){
                     'permission'=>1
                 ],
                 [
+                    'value'=> Helper::getLang() == 'en' ? 'Tax Report':'របាយការណ៍ពន្ធ',
+                    'url'=>"reports/tax-report",
+                    'table'=>18,
+                    'permission'=>1
+                ],
+                [
                     'value'=> Helper::getLang() == 'en' ? 'NSSF Report':'របាយការណ៍ ប.ស.ស',
                     'url'=>"reports/nssf-report",
                     'table'=>18,
@@ -177,13 +183,13 @@ function menu(){
                     'permission'=>1
                 ],
                 [
-                    'value'=> Helper::getLang() == 'en' ? 'Severance Pay':'របាយការណ៍ប្រាក់បំណាច់កិច្ចសន្យាការងាររបស់បុគ្គលិក',
+                    'value'=> Helper::getLang() == 'en' ? 'Severance Pay Report':'របាយការណ៍ប្រាក់បំណាច់កិច្ចសន្យាការងាររបស់បុគ្គលិក',
                     'url'=>"reports/severance-pay-report",
                     'table'=>18,
                     'permission'=>1
                 ],
                 [
-                    'value'=> Helper::getLang() == 'en' ? 'Seniorities Pay':'របាយការណ៍ប្រាក់បំណាច់អតីតភាពការងាររបស់បុគ្គលិក',
+                    'value'=> Helper::getLang() == 'en' ? 'Seniorities Pay Report':'របាយការណ៍ប្រាក់បំណាច់អតីតភាពការងាររបស់បុគ្គលិក',
                     'url'=>"reports/seniorities-pay",
                     'table'=>18,
                     'permission'=>1

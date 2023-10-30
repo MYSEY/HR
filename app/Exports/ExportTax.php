@@ -19,14 +19,9 @@ use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithColumnWidths;
 use Maatwebsite\Excel\Concerns\WithCustomStartCell;
 
-class ExportPayroll implements FromCollection, WithColumnWidths, WithHeadings, WithCustomStartCell, WithEvents
+class ExportTax implements FromCollection, WithColumnWidths, WithHeadings, WithCustomStartCell, WithEvents
 {
     protected $num;
-    protected $register_events_title;
-    protected $register_events_title_sub_title;
-    protected $monthly_title;
-    protected $text_title;
-    protected $header_table;
     protected $export_datas;
 
 
@@ -112,7 +107,7 @@ class ExportPayroll implements FromCollection, WithColumnWidths, WithHeadings, W
             $this->totalSeverancePay += $pay->total_severance_pay;
             $this->totalLoanAmount += $pay->loan_amount;
             $this->totalAmountCar += $pay->total_amount_car;
-            $this->totalSalaryNetPay += $pay->total_salary;
+            $this->totalSalaryNetPay += $pay->total_salary * $pay->exchange_rate;
 
             $payroll[]=[
                 $i,
@@ -146,7 +141,7 @@ class ExportPayroll implements FromCollection, WithColumnWidths, WithHeadings, W
                 number_format($pay->total_severance_pay, 2),
                 number_format($pay->loan_amount, 2),
                 number_format($pay->total_amount_car, 2),
-                $pay->total_salary
+                number_format($pay->total_salary * $pay->exchange_rate)
             ];
         }
         $this->export_datas = $payroll;
@@ -222,7 +217,7 @@ class ExportPayroll implements FromCollection, WithColumnWidths, WithHeadings, W
                 ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
                 $sheet->mergeCells('A3:AF3');
-                $sheet->setCellValue('A3', "តារាងលំអិតអំពីប្រាក់បៀវត្សរបស់បុគ្គលិក");
+                $sheet->setCellValue('A3', "តារាងលំអិតអំពីការបង់ពន្ធលើប្រាក់បៀវត្ស");
                 $sheet->getDelegate()->getStyle('A3:AF3')->getFont()->setName('Khmer OS Muol Light')->setSize(12)->setUnderline('A3:AF3');
                 $event->sheet->getDelegate()->getStyle('A3:AF3')->getAlignment()
                 ->setWrapText(true)
@@ -422,7 +417,7 @@ class ExportPayroll implements FromCollection, WithColumnWidths, WithHeadings, W
             "ប្រាក់បំណាច់កិច្ចសន្យា",
             "ចំនួនប្រាក់កម្ចី",
             "ប្រាកឧបត្ថម្ភថ្លៃផ្ញើរឡាន",
-            "បៀវត្ស​ត្រូវទទួល បានបន្ទាប់ពីដកពន្ធ($)"
+            "បៀវត្ស​បន្ទាប់ពីដកពន្ធ(រៀល)"
         ];
     }
 }

@@ -657,6 +657,7 @@ return[
     "trainsferend_date"=>'Transferred Date',
     "transferred_from"=>'Transferred From',
     "transferred_to"=>'Transferred To',
+    "tax_report"=>'Tax Report',
     "update"=>"Update",
     "updated_by"=>"Updated By",
     "updated_at"=>"Updated At",

@@ -136,24 +136,24 @@
                                                         <td class="stuck-scroll-4"><a href="#">{{$item->users->number_employee}}</a></td>
                                                         <td class="stuck-scroll-4"><a href="#">{{$item->users->last_name_kh}}</a></td>
                                                         <td class="stuck-scroll-4"><a href="#">{{$item->users->first_name_kh}}</a></td>
-                                                        <td ><a href="#">{{$item->users->last_name_en}}</a></td>
-                                                        <td ><a href="#">{{$item->users->first_name_en}}</a></td>
-                                                        <td >{{$item->users->id_card_number ? $item->users->id_card_number : ""}}</td>
-                                                        <td ></td>
+                                                        <td><a href="#">{{$item->users->last_name_en}}</a></td>
+                                                        <td><a href="#">{{$item->users->first_name_en}}</a></td>
+                                                        <td>{{$item->users->id_card_number ? $item->users->id_card_number : ""}}</td>
+                                                        <td></td>
                                                         <td class="">{{$item->users->identity_number}}</td>
-                                                        <td >{{$item->users->EmployeeGender}}</td>
-                                                        <td >{{$item->users->nationality? $item->users->nationality : ""}}</td>
-                                                        <td >{{$item->users->ethnicity? $item->users->ethnicity : ""}}</td>
-                                                        <td >{{$item->users->DOB}}</td>
-                                                        <td >{{$item->users->phone_number}}</td>
-                                                        <td >{{$item->users->email ? $item->users->email : ""}}</td>
-                                                        <td >{{$item->users->type_of_employees_nssf}}</td>
+                                                        <td>{{$item->users->EmployeeGender}}</td>
+                                                        <td>{{$item->users->nationality ? $item->users->nationality : ""}}</td>
+                                                        <td>{{$item->users->ethnicity ? $item->users->ethnicity : ""}}</td>
+                                                        <td>{{$item->users->DOB}}</td>
+                                                        <td>{{$item->users->phone_number}}</td>
+                                                        <td>{{$item->users->email ? $item->users->email : ""}}</td>
+                                                        <td>{{$item->users->type_of_employees_nssf}}</td>
                                                         <td>{{ $item->users == null ? '' : $item->users->EmployeePosition}}</td>
                                                         <td>{{ $item->spouse_nssf == null ? '' : $item->users->spouse_nssf}}</td>
                                                         <td>{{ $item->users->TotalChild}}</td>
-                                                        <td>$ {{$item->users->basic_salary}}</td>
+                                                        <td>${{$item->users->basic_salary}}</td>
                                                         <td></td>
-                                                        <td>$ {{$item->base_salary_received_usd}}</td>
+                                                        <td>${{$item->base_salary_received_usd}}</td>
                                                         <td>{{ \Carbon\Carbon::parse($item->payment_date)->format('d-M-Y')}}</td>
                                                     </tr>
                                                 @endforeach
