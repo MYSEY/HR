@@ -34,6 +34,8 @@
                                             <th style="width: 30px;" class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="#: activate to sort column descending">#</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department Name: activate to sort column ascending" style="width: 772.237px;">@lang('lang.name') (@lang('lang.kh'))</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department Name: activate to sort column ascending" style="width: 772.237px;">@lang('lang.name') (@lang('lang.en'))</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department Name: activate to sort column ascending" style="width: 772.237px;">@lang('lang.position_range')</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department Name: activate to sort column ascending" style="width: 772.237px;">@lang('lang.position_type')</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department Name: activate to sort column ascending" style="width: 772.237px;">@lang('lang.created_at')</th>
                                             <th class="text-end sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Action: activate to sort column ascending" style="width: 300.962px;">@lang('lang.action')</th>
                                         </tr>
@@ -45,6 +47,8 @@
                                                     <td class="sorting_1 ids">{{++$key}}</td>
                                                     <td class="name_khmer">{{$item->name_khmer}}</td>
                                                     <td class="name_english">{{$item->name_english}}</td>
+                                                    <td class="position_range">{{$item->position_range}}</td>
+                                                    <td class="position_type">{{$item->position_type}}</td>
                                                     <td>{{ \Carbon\Carbon::parse($item->created_at)->format('d-M-Y') ?? '' }}</td>
                                                     <td class="text-end">
                                                         <div class="dropdown dropdown-action">
@@ -82,11 +86,29 @@
                             @csrf
                             <div class="form-group">
                                 <label>@lang('lang.name') (@lang('lang.kh')) <span class="text-danger">*</span></label>
-                                <input class="form-control @error('name_khmer') is-invalid @enderror" type="text" name="name_khmer" required>
+                                <input class="form-control @error('name_khmer') is-invalid @enderror" type="text" name="name_khmer" required value="{{old('name_khmer')}}">
                             </div>
                             <div class="form-group">
                                 <label>@lang('lang.name') (@lang('lang.en')) <span class="text-danger">*</span></label>
-                                <input class="form-control @error('name_english') is-invalid @enderror" type="text" name="name_english" required>
+                                <input class="form-control @error('name_english') is-invalid @enderror" type="text" name="name_english" required value="{{old('name_english')}}">
+                            </div>
+                            <div class="form-group">
+                                <label>@lang('lang.position_range') <span class="text-danger">*</span></label>
+                                <select class="form-control select floating" id="position_range" name="position_range" required value="{{old('position_range')}}">
+                                    <option selected disabled> --@lang('lang.select')--</option>
+                                    @foreach ($positionRange as $item)
+                                        <option value="{{Helper::getLang() == 'en' ? $item->name_english : $item->name_khmer}}">{{Helper::getLang() == 'en' ? $item->name_english : $item->name_khmer}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>@lang('lang.position_type') <span class="text-danger">*</span></label>
+                                <select class="form-control select floating" id="position_type" name="position_type" value="{{old('position_type')}}">
+                                    <option selected disabled> --@lang('lang.select')--</option>
+                                    @foreach ($positionType as $item)
+                                        <option value="{{Helper::getLang() == 'en' ? $item->name_english : $item->name_khmer}}">{{Helper::getLang() == 'en' ? $item->name_english : $item->name_khmer}}</option>
+                                    @endforeach
+                                </select>
                             </div>
                             <div class="submit-section">
                                 <button type="submit" class="btn btn-primary submit-btn">
@@ -112,7 +134,6 @@
                     <div class="modal-body">
                         <form action="{{url('position/update')}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
                             @csrf
-                            <input type="hidden" name="id" class="e_id" value="">
                             <div class="form-group">
                                 <label>@lang('lang.name') (@lang('lang.kh')) <span class="text-danger">*</span></label>
                                 <input class="form-control @error('name_khmer') is-invalid @enderror" type="text" id="e_name_khmer" name="name_khmer">
@@ -121,6 +142,20 @@
                                 <label>@lang('lang.name') (@lang('lang.en')) <span class="text-danger">*</span></label>
                                 <input class="form-control @error('name_english') is-invalid @enderror" type="text" id="e_name_english" name="name_english">
                             </div>
+                            <div class="form-group">
+                                <label>@lang('lang.position_range') <span class="text-danger">*</span></label>
+                                <select class="form-control select" id="e_position_range" name="position_range" value="">
+                                    
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>@lang('lang.position_type') <span class="text-danger">*</span></label>
+                                <select class="form-control select" id="e_position_type" name="position_type" value="">
+                                    
+                                </select>
+                            </div>
+                            <input type="hidden" name="id" id="e_id" value="">
+
                             <div class="submit-section">
                                 <button type="submit" class="btn btn-primary submit-btn">
                                     <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading') </span>
@@ -145,7 +180,7 @@
                         <div class="modal-btn delete-action">
                             <form action="{{url('position/delete')}}" method="POST">
                                 @csrf
-                                <input type="hidden" name="id" class="e_id" value="">
+                                <input type="hidden" name="id" id="e_id" value="">
                                 <div class="row">
                                     <div class="submit-section" style="text-align: center">
                                         <button type="submit" class="btn btn-primary submit-btn me-2">@lang('lang.delete')</button>
@@ -167,11 +202,42 @@
 <script>
     $(function(){
         $('.update').on('click',function(){
+            var localeLanguage = '{{ config('app.locale') }}';
             let id = $(this).data("id");
-            var _this = $(this).parents('tr');
-            $('.e_id').val(id);
-            $('#e_name_khmer').val(_this.find('.name_khmer').text());
-            $('#e_name_english').val(_this.find('.name_english').text());
+            $.ajax({
+                type: "GET",
+                url: "{{url('position/edit')}}",
+                data: {
+                    id : id
+                },
+                dataType: "JSON",
+                success: function (response) {
+                    if (response.success) {
+                        console.log(response.success.id);
+                        if (response.positionType != '') {
+                            $.each(response.positionType, function(i, item) {
+                                $('#e_position_type').append($('<option>', {
+                                    value: item.name_english,
+                                    text: localeLanguage == 'en' ? item.name_english : item.name_khmer,
+                                    selected: item.name_english == response.success.position_type
+                                }));
+                            });
+                        }
+                        if (response.positionRange != '') {
+                            $.each(response.positionRange, function(i, item) {
+                                $('#e_position_range').append($('<option>', {
+                                    value: item.name_english,
+                                    text: localeLanguage == 'en' ? item.name_english : item.name_khmer,
+                                    selected: item.name_english == response.success.position_range
+                                }));
+                            });
+                        }
+                        $('#e_id').val(response.success.id);
+                        $('#e_name_khmer').val(response.success.name_khmer);
+                        $('#e_name_english').val(response.success.name_english);
+                    }
+                }
+            });
         });
         $('.delete').on('click',function(){
             let id = $(this).data("id");

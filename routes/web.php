@@ -110,6 +110,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
 
     Route::get('/position', [PositionController::class,'index']);
     Route::post('/position/store', [PositionController::class,'store']);
+    Route::get('/position/edit', [PositionController::class,'edit']);
     Route::post('/position/update', [PositionController::class,'update']);
     Route::post('/position/delete', [PositionController::class,'destroy']);
 

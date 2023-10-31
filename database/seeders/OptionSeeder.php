@@ -352,5 +352,54 @@ class OptionSeeder extends Seeder
             'type' => 'position_type',
             'created_by'    => Auth::id(),
         ]);
+        //position range
+        Option::firstOrCreate([
+            'name_khmer' => 'នាយក',
+            'name_english'=> 'Director',
+            'type' => 'position_range',
+            'created_by'    => Auth::id(),
+        ]);
+        Option::firstOrCreate([
+            'name_khmer' => 'អ្នកគ្រប់គ្រង​ទូទៅ',
+            'name_english'=> 'General Manager',
+            'type' => 'position_range',
+            'created_by'    => Auth::id(),
+        ]);
+        Option::firstOrCreate([
+            'name_khmer' => 'អ្នកគ្រប់គ្រង',
+            'name_english'=> 'Manager',
+            'type' => 'position_range',
+            'created_by'    => Auth::id(),
+        ]);
+        Option::firstOrCreate([
+            'name_khmer' => 'នាយក​រង',
+            'name_english'=> 'Deputy Manager',
+            'type' => 'position_range',
+            'created_by'    => Auth::id(),
+        ]);
+        Option::firstOrCreate([
+            'name_khmer' => 'មេការ',
+            'name_english'=> 'Supervisor',
+            'type' => 'position_range',
+            'created_by'    => Auth::id(),
+        ]);
+        Option::firstOrCreate([
+            'name_khmer' => 'មន្ត្រី',
+            'name_english'=> 'Officer',
+            'type' => 'position_range',
+            'created_by'    => Auth::id(),
+        ]);
+        Option::firstOrCreate([
+            'name_khmer' => 'ជំនួយការ',
+            'name_english'=> 'Assistant',
+            'type' => 'position_range',
+            'created_by'    => Auth::id(),
+        ]);
+        Option::firstOrCreate([
+            'name_khmer' => 'ផ្សេងៗ',
+            'name_english'=> 'Others',
+            'type' => 'position_range',
+            'created_by'    => Auth::id(),
+        ]);
     }
 }
