@@ -28,10 +28,10 @@
     <div class="page-header">
         <div class="row align-items-center">
             <div class="col">
-                <h3 class="page-title">@lang('lang.payroll_report')</h3>
+                <h3 class="page-title">@lang('lang.tax_report')</h3>
                 <ul class="breadcrumb">
                     <li class="breadcrumb-item"><a href="">@lang('lang.dashboard')</a></li>
-                    <li class="breadcrumb-item active">@lang('lang.payroll_report')</li>
+                    <li class="breadcrumb-item active">@lang('lang.tax_report')</li>
                 </ul>
             </div>
         </div>
@@ -76,10 +76,6 @@
                                 <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading') </span>
                                 <span class="btn-txt">@lang('lang.search')</span>
                             </button>
-                            <button type="button" class="btn btn-sm btn-outline-secondary btn_print me-2">
-                                <span class="btn-text-print"><i class="fa fa-print fa-lg"></i> @lang('lang.print')</span>
-                                <span id="btn-text-loading-print" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>
-                            </button>
                             <button type="button" class="btn btn-sm btn-outline-secondary btn_excel me-2">
                                 <span class="btn-text-excel"><i class="fa fa-file-excel-o" aria-hidden="true"></i> <label >@lang('lang.excel')</label></span>
                                 <span id="btn-text-loading-excel" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>
@@ -88,7 +84,6 @@
                                 <span class="btn-text-reset">@lang('lang.reload')</span>
                                 <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>
                             </button>
-                            
                         </div>
                     </div>
                 </div>
@@ -151,7 +146,6 @@
                                                     rowspan="1" colspan="1"
                                                     aria-label="Join Date: activate to sort column ascending">@lang('lang.gross_salary')(@lang('lang.riel'))
                                                 </th>
-                                                
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                     rowspan="1" colspan="1"
                                                     aria-label="Join Date: activate to sort column ascending">@lang('lang.salary_charges_reduced')
@@ -216,7 +210,7 @@
                                                         <td>$<a href="#">{{ $item->seniority_pay_excluded_tax}}</a></td>
                                                         <td>$<a href="#">{{ $item->seniority_backford}}</a></td>
                                                         <td>$<a href="#">{{ $item->total_severance_pay}}</a></td>
-                                                        <td>$<a href="#">{{ $item->total_salary }}</a></td>
+                                                        <td><span>៛</span><a href="#">{{ number_format($item->total_salary * $item->exchange_rate) }}</a></td>
                                                         <td>{{ $item->payment_date}}</td>
                                                     </tr>
                                                 @endforeach
@@ -235,7 +229,6 @@
   
 @endsection
 @include('includs.script')
-@include('payrolls.print_payroll_report')
 <script src="{{ asset('/admin/js/validation-field.js') }}"></script>
 <script src="{{ asset('/admin/js/date-range-bicker.js') }}"></script>
 <script>
@@ -266,27 +259,15 @@
                 filter_month: $("#filter_month").val(),
                 tab_status: tab_status
             };
-            var url = "{{URL::to('reports/payroll-export')}}?" + $.param(query)
+            var url = "{{URL::to('reports/tax-report-export')}}?" + $.param(query)
             window.location = url;
-        });
-        $(".btn_print").on("click", function() {
-            $("#btn-text-loading-print").css('display', 'block');
-            $(".btn_print").prop('disabled', true);
-            $(".btn-text-print").css("display", "none");
-            let params = {
-                employee_id: $("#employee_id").val(),
-                employee_name: $("#employee_name").val(),
-                filter_month: $("#filter_month").val(),
-                btn_print: true
-            };
-            showdatas(tab_status, params)
-            print_pdf();
         });
     });
     function showdatas(tab_status, params) {
+        var localeLanguage = '{{ config('app.locale') }}';
         $.ajax({
             type: "post",
-            url: "{{ url('reports/payroll-report') }}",
+            url: "{{ url('reports/tax-report') }}",
             data: {
                 "_token": "{{ csrf_token() }}",
                 tab_status,
@@ -302,162 +283,50 @@
                 $(".btn-txt").show();
                 $(".loading-icon").css('display', 'none')
                 var tr = "";
-                if (tab_status == 1 ) {
-                    if (data.length > 0) {
-                        let dollar = "$";
-                        if (params.btn_print) {
-                            dollar ="";
-                        }
-                        data.map((row) => {
-                            let join_date = moment(row.users.date_of_commencement).format('D-MMM-YYYY')
-                            let payment_date = moment(row.payment_date).format('D-MMM-YYYY')
-                            tr +='<tr class="odd">'+
-                                '<td class="stuck"><a href="#">'+(row.users == null ? '' : row.users.number_employee )+'</a></td>'+
-                                '<td class="stuck"><a href="#">'+(row.users == null ? '' : row.users.employee_name_en )+'</a></td>'+
-                                '<td ><a href="#">'+(row.users == null ? '' : row.users.department.name_english)+'</a></td>'+
-                                '<td><a href="#">'+(row.users == null ? '' : row.users.position.name_english)+'</a></td>'+
-                                '<td><a href="#">'+(row.users == null ? '' : row.users.branch.branch_name_en)+'</a></td>'+
-                                '<td>'+(join_date)+'</td>'+
-                                '<td>'+(dollar)+'<a href="#">'+(row.basic_salary )+'</a></td>'+
-                                '<td>'+(dollar)+'<a href="#">'+(row.total_gross_salary )+'</a></td>'+
-                                '<td>'+(dollar)+'<a href="#">'+(row.total_child_allowance )+'</a></td>'+
-                                '<td>'+(dollar)+'<a href="#">'+(row.phone_allowance == null ? '0.00' : row.phone_allowance)+'</a></td>'+
-                                '<td>'+(dollar)+'<a href="#">'+(row.total_kny_phcumben)+'</a></td>'+
-                                '<td>'+(dollar)+'<a href="#">'+(row.total_gross )+'</a></td>'+
-                                '<td>'+(dollar)+'<a href="#">'+(row.seniority_pay_included_tax)+'</a></td>'+
-                                '<td>'+(dollar)+'<a href="#">'+(row.total_pension_fund)+'</a></td>'+
-                                '<td>'+(dollar)+'<a href="#">'+(row.base_salary_received_usd)+'</a></td>'+
-                                '<td><span>៛</span><a href="#">'+(formatCurrencyKH(row.base_salary_received_riel))+'</a></td>'+
-                                '<td><span>៛</span><a href="#">'+(row.total_charges_reduced == '0' ? '0.00' : formatCurrencyKH(row.total_charges_reduced))+'</a></td>'+
-                                '<td><span>៛</span><a href="#">'+(formatCurrencyKH(row.total_tax_base_riel))+'</a></td>'+
-                                '<td><a href="#">'+(row.total_rate)+'%</a></td>'+
-                                '<td>'+(dollar)+'<a href="#">'+(row.total_salary_tax_usd)+'</a></td>'+
-                                '<td><span>៛</span><a href="#">'+(row.total_salary_tax_riel == '0' ? '0.00' : formatCurrencyKH(row.total_salary_tax_riel))+'</a></td>'+
-                                '<td>'+(dollar)+'<a href="#">'+(row.seniority_pay_excluded_tax)+'</a></td>'+
-                                '<td>'+(dollar)+'<a href="#">'+(row.total_severance_pay)+'</a></td>'+
-                                '<td>'+(dollar)+'<a href="#">'+(row.total_salary )+'</a></td>'+
-                                '<td>'+(payment_date)+'</td>'+
-                            '</tr>';
-                        });
-                    }else{
-                        var tr = '<tr><td colspan=30 align="center">ពុំមានទិន្នន័យសម្រាប់បង្ហាញ</td></tr>';
-                    }
-                    $(".tbl_payment_salary tbody").html(tr);
-                    $("#table_print_filter_basic_salary tbody").html(tr);
-                }else if (tab_status == 2) {
-                    if (data.length > 0) {
-                        data.map((row) => {
-                            let join_date = moment(row.users.date_of_commencement).format('D-MMM-YYYY')
-                            let created_at = moment(row.created_at).format('D-MMM-YYYY')
-                            tr +='<tr class="odd">'+
-                                    '<td><a href="#">'+(row.users == null ? '' : row.users.number_employee )+'</a></td>'+
-                                    '<td><a href="#">'+(row.users == null ? '' : row.users.employee_name_en )+'</a></td></td></td>'+
-                                    '<td>'+(join_date)+'</td>'+
-                                    '<td>$'+(row.total_pre_tax_salary_usd )+'</td>'+
-                                    '<td><span>៛</span>'+(row.total_pre_tax_salary_riel )+'</td>'+
-                                    '<td>'+(row.total_average_wage )+'</td>'+
-                                    '<td>'+(formatCurrencyKH(row.total_occupational_risk) )+'</td>'+
-                                    '<td>'+(row.total_health_care )+'</td>'+
-                                    '<td><span>៛</span>'+(formatCurrencyKH(row.pension_contribution_usd) )+'</td>'+
-                                    '<td>$'+(row.pension_contribution_riel )+'</td>'+
-                                    '<td><span>៛</span>'+(formatCurrencyKH(row.corporate_contribution) )+'</td>'+
-                                    '<td>'+(created_at)+'</td>'+
-                            '</tr>';
-                        });
-                    }else {
-                        var tr = '<tr><td colspan=13 align="center">ពុំមានទិន្នន័យសម្រាប់បង្ហាញ</td></tr>';
-                    }
-                    $(".tbl_nssf tbody").html(tr);
-                    $("#table_print_filter_nssf tbody").html(tr);
-                }else if (tab_status == 3) {
-                    if (data.length > 0) {
-                        data.map((row) => {
-                            let join_date = moment(row.users.date_of_commencement).format('D-MMM-YYYY')
-                            let created_at = moment(row.created_at).format('D-MMM-YYYY')
-                            tr +='<tr class="odd">'+
-                                '<td><a href="#">'+(row.users == null ? '' : row.users.number_employee)+'</a></td>'+
-                                '<td><a href="#">'+(row.users == null ? '' : row.users.employee_name_en)+'</a></td>'+
-                                '<td>'+(row.users == null ? '' : join_date)+'</td>'+
-                                '<td>'+(row.number_of_working_days)+' Days</td>'+
-                                '<td>$'+(row.base_salary)+'</td>'+
-                                '<td>$'+(row.base_salary_received)+'</td>'+
-                                '<td>$'+(row.total_allowance)+'</td>'+
-                                '<td>'+(created_at)+'</td>'+
-                            '</tr>';
-                        });
-                    }else {
-                        var tr = '<tr><td colspan=8 align="center">ពុំមានទិន្នន័យសម្រាប់បង្ហាញ</td></tr>';
-                    }
-                    $(".table_banefit tbody").html(tr);
-                    $("#table_print_filter_benefit tbody").html(tr);
-                }else if(tab_status == 4){
-                    if (data.length > 0) {
-                        data.map((row) => {
-                            let join_date = moment(row.users.date_of_commencement).format('D-MMM-YYYY')
-                            let created_at = moment(row.created_at).format('D-MMM-YYYY')
-                            tr +='<tr class="odd">'+
-                                '<td><a href="#">'+(row.users == null ? '' : row.users.number_employee )+'</a></td>'+
-                                '<td><a href="#">'+(row.users == null ? '' : row.users.employee_name_en )+'</a></td>'+
-                                '<td>'+(row.users == null ? '' : row.users.position.name_english )+'</td>'+
-                                '<td>'+(join_date)+'</td>'+
-                                '<td>'+(row.payment_of_month )+'</td>'+
-                                '<td>$'+(row.total_average_salary )+'</td>'+
-                                '<td>$'+(row.total_salary_receive )+'</td>'+
-                                '<td>$'+(row.tax_exemption_salary )+'</td>'+
-                                '<td>$'+(row.taxable_salary )+'</td>'+
-                                '<td>'+(created_at)+'</td>'+
-                            '</tr>';
-                        });
-                    }else {
-                        var tr = '<tr><td colspan=10 align="center">ពុំមានទិន្នន័យសម្រាប់បង្ហាញ</td></tr>';
-                    }
-                    $(".tbl_seniority_pay tbody").html(tr);
-                    $("#table_print_filter_seniority_pay tbody").html(tr);
-                }else{
-                    if (data.length > 0) {
-                        data.map((row) => {
-                            let join_date = moment(row.users.date_of_commencement).format('D-MMM-YYYY')
-                            let created_at = moment(row.created_at).format('D-MMM-YYYY')
-                            tr +='<tr class="odd">'+
-                                '<td><a href="#">'+(row.users == null ? '' : row.users.number_employee )+'</a></td>'+
-                                '<td><a href="#">'+(row.users == null ? '' : row.users.employee_name_en )+'</a></td>'+
-                                '<td>'+(row.users == null ? '' : row.users.position.name_english )+'</td>'+
-                                '<td>'+(join_date)+'</td>'+
-                                '<td>$'+(row.total_severanec_pay )+'</td>'+
-                                '<td>$'+(row.total_contract_severance_pay )+'</td>'+
-                                '<td>'+(created_at)+'</td>'+
-                            '</tr>';
-                        });
-                    }else {
-                        var tr = '<tr><td colspan=7 align="center">ពុំមានទិន្នន័យសម្រាប់បង្ហាញ</td></tr>';
-                    }
-                    $(".tbl_severance_pay tbody").html(tr);
-                    $("#table_print_filter_severance_pay tbody").html(tr);
-                }
                     
+                if (data.length > 0) {
+                    let dollar = "$";
+                    data.map((row) => {
+                        let join_date = moment(row.users.date_of_commencement).format('D-MMM-YYYY')
+                        let payment_date = moment(row.payment_date).format('D-MMM-YYYY')
+                        tr +='<tr class="odd">'+
+                            '<td class="stuck"><a href="#">'+(row.users == null ? '' : row.users.number_employee )+'</a></td>'+
+                            '<td class="stuck"><a href="#">'+(localeLanguage == 'en' ? row.users.employee_name_en : row.users.employee_name_kh )+'</a></td>'+
+                            '<td ><a href="#">'+(localeLanguage == 'en' ? row.depart_name_en : row.depart_name_kh )+'</a></td>'+
+                            '<td><a href="#">'+(localeLanguage == 'en' ? row.position_name_en : row.position_name_kh)+'</a></td>'+
+                            '<td><a href="#">'+(localeLanguage == 'en' ? row.branck_en : row.branck_kh)+'</a></td>'+
+                            '<td>'+(join_date)+'</td>'+
+                            '<td>'+(dollar)+'<a href="#">'+(row.basic_salary )+'</a></td>'+
+                            '<td>'+(dollar)+'<a href="#">'+(row.total_gross_salary )+'</a></td>'+
+                            '<td>'+(dollar)+'<a href="#">'+(row.total_child_allowance )+'</a></td>'+
+                            '<td>'+(dollar)+'<a href="#">'+(row.phone_allowance == null ? '0.00' : row.phone_allowance)+'</a></td>'+
+                            '<td>'+(dollar)+'<a href="#">'+(row.total_kny_phcumben)+'</a></td>'+
+                            '<td>'+(dollar)+'<a href="#">'+(row.total_gross )+'</a></td>'+
+                            '<td>'+(dollar)+'<a href="#">'+(row.seniority_pay_included_tax)+'</a></td>'+
+                            '<td>'+(dollar)+'<a href="#">'+(row.total_pension_fund)+'</a></td>'+
+                            '<td>'+(dollar)+'<a href="#">'+(row.base_salary_received_usd)+'</a></td>'+
+                            '<td><span>៛</span><a href="#">'+(formatCurrencyKH(row.base_salary_received_riel))+'</a></td>'+
+                            '<td><span>៛</span><a href="#">'+(row.total_charges_reduced == '0' ? '0.00' : formatCurrencyKH(row.total_charges_reduced))+'</a></td>'+
+                            '<td><span>៛</span><a href="#">'+(formatCurrencyKH(row.total_tax_base_riel))+'</a></td>'+
+                            '<td><a href="#">'+(row.total_rate)+'%</a></td>'+
+                            '<td>'+(dollar)+'<a href="#">'+(row.total_salary_tax_usd)+'</a></td>'+
+                            '<td><span>៛</span><a href="#">'+(row.total_salary_tax_riel == '0' ? '0.00' : formatCurrencyKH(row.total_salary_tax_riel))+'</a></td>'+
+                            '<td>'+(dollar)+'<a href="#">'+(row.seniority_pay_excluded_tax)+'</a></td>'+
+                            '<td>'+(dollar)+'<a href="#">'+(row.seniority_backford)+'</a></td>'+
+                            '<td>'+(dollar)+'<a href="#">'+(row.total_severance_pay)+'</a></td>'+
+                            '<td><span>៛</span><a href="#">'+(formatCurrencyKH(row.total_salary * row.exchange_rate))+'</a></td>'+
+                            '<td>'+(payment_date)+'</td>'+
+                        '</tr>';
+                    });
+                }else{
+                    var tr = '<tr><td colspan=30 align="center">ពុំមានទិន្នន័យសម្រាប់បង្ហាញ</td></tr>';
+                }
+                $(".tbl_payment_salary tbody").html(tr);
+                $("#table_print_filter_basic_salary tbody").html(tr);
             }
         });
     }
     function formatCurrencyKH(currency) {
         return parseInt(currency).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    }
-    function print_pdf(type) {
-        $("#print_purchase").show();
-        window.setTimeout(function() {
-            $("#print_purchase").hide();
-            $(".btn_print").prop('disabled', false);
-            $(".btn-text-print").show();
-            $("#btn-text-loading-print").css('display', 'none');
-        }, 2000);
-        $("#print_purchase").printThis({
-            importCSS: false,
-            importStyle: true,
-            loadCSS: "{{asset('/admin/css/style_print_report_payroll.css')}}",
-            header: "",
-            printDelay: 1000,
-            formValues: false,
-            canvas: false,
-            doctypeString: "",
-        });
     }
 </script>

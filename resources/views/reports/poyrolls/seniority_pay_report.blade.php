@@ -28,10 +28,10 @@
     <div class="page-header">
         <div class="row align-items-center">
             <div class="col">
-                <h3 class="page-title">@lang('lang.benefit_khy')</h3>
+                <h3 class="page-title">@lang('lang.seniorities_pay_report')</h3>
                 <ul class="breadcrumb">
                     <li class="breadcrumb-item"><a href="">@lang('lang.dashboard')</a></li>
-                    <li class="breadcrumb-item active">@lang('lang.benefit_khy')</li>
+                    <li class="breadcrumb-item active">@lang('lang.seniorities_pay_report')</li>
                 </ul>
             </div>
         </div>
@@ -72,7 +72,7 @@
                    
                     <div class="col-sm-6 col-md-4">
                         <div style="display: flex" class="float-end">
-                            <button type="button" class="btn btn-sm btn-outline-secondary submit-btn me-2">
+                            <button type="button" class="btn btn-sm btn-outline-secondary btn-search me-2">
                                 <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading') </span>
                                 <span class="btn-txt">@lang('lang.search')</span>
                             </button>
@@ -97,63 +97,49 @@
                             <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                                 <div class="row">
                                     <div class="col-sm-12">
-                                        <table class="table table-striped custom-table datatable dataTable no-footer table_banefit" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
+                                        <table class="table table-striped custom-table datatable dataTable no-footer tbl_seniority_pay"
+                                            id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
                                             <thead>
                                                 <tr>
-                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                        rowspan="1" colspan="1">@lang('lang.employee_id')</th>
-                                                    <th class="sorting sorting_asc" tabindex="0"
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1">@lang('lang.employee_id')</th>
+                                                    <th class="sorting sorting_asc stuck" tabindex="0"
                                                         aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
                                                         aria-sort="ascending"
-                                                        aria-label="Employee: activate to sort column descending">@lang('lang.name')
+                                                        aria-label="Employee: activate to sort column descending">@lang('lang.last_name')
                                                     </th>
-                                                    <th class="sorting" tabindex="0"
+                                                    <th class="sorting sorting_asc stuck" tabindex="0"
                                                         aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
                                                         aria-sort="ascending"
-                                                        aria-label="Employee: activate to sort column descending">@lang('lang.gender')
+                                                        aria-label="Employee: activate to sort column descending">@lang('lang.first_name')
                                                     </th>
-                                                    <th class="sorting" tabindex="0"
-                                                        aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
-                                                        aria-sort="ascending"
-                                                        aria-label="Employee: activate to sort column descending">@lang('lang.position')
-                                                    </th>
-                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                        rowspan="1" colspan="1"
-                                                        aria-label="Join Date: activate to sort column ascending">@lang('lang.join_date')
-                                                    </th>
-                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                        rowspan="1" colspan="1"
-                                                        aria-label="Salary: activate to sort column ascending">@lang('lang.number_of_working_days')</th>
-                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                        rowspan="1" colspan="1"
-                                                        aria-label="Salary: activate to sort column ascending">@lang('lang.basic_salary')</th>
-                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                        rowspan="1" colspan="1"
-                                                        aria-label="Salary: activate to sort column ascending">@lang('lang.basic_salary_received')
-                                                    </th>
-                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                        rowspan="1" colspan="1"
-                                                        aria-label="Payslip: activate to sort column ascending">
-                                                        @lang('lang.total_allowance')</th>
-                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                        rowspan="1" colspan="1"
-                                                        aria-label="Salary: activate to sort column ascending">@lang('lang.created_at')
-                                                    </th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending">@lang('lang.gender')</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending">@lang('lang.position')</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending">@lang('lang.location')</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">@lang('lang.join_date')</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">@lang('lang.month')</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Payslip: activate to sort column ascending">@lang('lang.total_average_salary')</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Payslip: activate to sort column ascending">@lang('lang.total_salary_receive')</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Payslip: activate to sort column ascending">@lang('lang.tax_exemption_salary')</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Payslip: activate to sort column ascending">@lang('lang.taxable_salary')</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Salary: activate to sort column ascending">@lang('lang.created_at')</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                @if (count($benefit) > 0)
-                                                    @foreach ($benefit as $item)
+                                                @if (count($dataSeniority) > 0)
+                                                    @foreach ($dataSeniority as $item)
                                                         <tr class="odd">
                                                             <td><a href="#">{{ $item->users == null ? '' : $item->users->number_employee }}</a></td>
-                                                            <td><a href="#">{{ Helper::getLang() == 'en' ? $item->users->employee_name_en : $item->users->employee_name_kh }}</a></td>
-                                                            <td><a href="#">{{ $item->users->EmployeeGender }}</a></td>
-                                                            <td><a href="#">{{ $item->users->EmployeePosition }}</a></td>
+                                                            <td class="stuck"><a href="#">{{ $item->LastName }}</a></td>
+                                                            <td class="stuck"><a href="#">{{ $item->FirstName }}</a></td>
+                                                            <td>{{ $item->users == null ? '' : $item->users->EmployeeGender }}</td>
+                                                            <td>{{ $item->users == null ? '' : $item->users->EmployeePosition }}</td>
+                                                            <td><a href="#">{{ $item->users->EmployeeBranch }}</a></td>
                                                             <td>{{ $item->users == null ? '' : $item->users->joinOfDate }}</td>
-                                                            <td>{{ $item->number_of_working_days }} Days</td>
-                                                            <td>${{ $item->base_salary }}</td>
-                                                            <td>${{ $item->base_salary_received }}</td>
-                                                            <td>${{ $item->total_allowance }}</td>
+                                                            <td>{{ $item->payment_of_month }}</td>
+                                                            <td>${{ $item->total_average_salary }}</td>
+                                                            <td>${{ $item->total_salary_receive }}</td>
+                                                            <td>${{ $item->tax_exemption_salary }}</td>
+                                                            <td>${{ $item->taxable_salary }}</td>
                                                             <td>{{ Carbon\Carbon::parse($item->created_at)->format('d-M-Y') }}</td>
                                                         </tr>
                                                     @endforeach
@@ -181,10 +167,10 @@
             $(this).prop('disabled', true);
             $(".btn-text-reset").hide();
             $("#btn-text-loading").css('display', 'block');
-            window.location.replace("{{ URL('reports/benefit-report') }}");
+            window.location.replace("{{ URL('reports/seniorities-pay') }}");
         });
-        $(".submit-btn").on("click", function(){
-            $(".submit-btn").prop('disabled', true);
+        $(".btn-search").on("click", function(){
+            $(".btn-search").prop('disabled', true);
             $(".btn-txt").hide();
             $(".loading-icon").css('display', 'block')
             let params = {
@@ -201,14 +187,15 @@
                 employee_name: $("#employee_name").val(),
                 filter_month: $("#filter_month").val()
             };
-            var url = "{{URL::to('reports/benefit-export')}}?" + $.param(query)
+            var url = "{{URL::to('reports/seniorities-pay-export')}}?" + $.param(query)
             window.location = url;
         });
     });
     function showdatas(params) {
+        var localeLanguage = '{{ config('app.locale') }}';
         $.ajax({
             type: "post",
-            url: "{{ url('reports/benefit-report') }}",
+            url: "{{ url('reports/seniorities-pay') }}",
             data: {
                 "_token": "{{ csrf_token() }}",
                 employee_id: params.employee_id ? params.employee_id : null,
@@ -219,29 +206,37 @@
             dataType: "JSON",
             success: function(response) {
                 let data =  response.success;
-                $(".submit-btn").prop('disabled', false);
+                $(".btn-search").prop('disabled', false);
                 $(".btn-txt").show();
                 $(".loading-icon").css('display', 'none')
                 var tr = "";
                 if (data.length > 0) {
                     data.map((row) => {
                         let join_date = moment(row.users.date_of_commencement).format('D-MMM-YYYY')
+                        let contract_deadline = moment(row.users.fdc_end).format('D-MMM-YYYY')
                         let created_at = moment(row.created_at).format('D-MMM-YYYY')
                         tr +='<tr class="odd">'+
                             '<td><a href="#">'+(row.users == null ? '' : row.users.number_employee)+'</a></td>'+
-                            '<td><a href="#">'+(row.users == null ? '' : row.users.employee_name_en)+'</a></td>'+
+                            '<td><a href="#">'+(row.users == null ? '' : row.users.last_name_kh )+'</a></td>'+
+                            '<td><a href="#">'+(row.users == null ? '' : row.users.first_name_kh )+'</a></td>'+
+                            '<td><a href="#">'+(localeLanguage == 'en' ? row.name_english  : row.name_khmer )+'</a></td>'+
+                            '<td><a href="#">'+(localeLanguage == 'en' ? row.positionNameEnglish  : row.positionNameKhmer )+'</a></td>'+
+                            '<td><a href="#">'+(localeLanguage == 'en' ? row.branck_en  : row.branck_kh )+'</a></td>'+
                             '<td>'+(row.users == null ? '' : join_date)+'</td>'+
-                            '<td>'+(row.number_of_working_days)+' Days</td>'+
-                            '<td>$'+(row.base_salary)+'</td>'+
-                            '<td>$'+(row.base_salary_received)+'</td>'+
-                            '<td>$'+(row.total_allowance)+'</td>'+
+                            '<td>'+(row.users == null ? '' : contract_deadline)+'</td>'+
+                            '<td>'+(row.total_severanec_pay)+'</td>'+
+                            '<td>$'+(row.total_contract_severance_pay)+'</td>'+
                             '<td>'+(created_at)+'</td>'+
                         '</tr>';
                     });
                 }else {
-                    var tr = '<tr><td colspan=8 align="center">ពុំមានទិន្នន័យសម្រាប់បង្ហាញ</td></tr>';
+                    if(localeLanguage == 'en'){
+                        var tr = '<tr><td colspan=15 align="center">No data available in table</td></tr>';
+                    }else{
+                        var tr = '<tr><td colspan=15 align="center">ពុំមានទិន្នន័យសម្រាប់បង្ហាញ</td></tr>';
+                    }
                 }
-                $(".table_banefit tbody").html(tr);
+                $(".tbl_seniority_pay tbody").html(tr);
                 $("#table_print_filter_benefit tbody").html(tr);
             }
         });

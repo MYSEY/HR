@@ -115,6 +115,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
 
     Route::get('/position', [PositionController::class,'index']);
     Route::post('/position/store', [PositionController::class,'store']);
+    Route::get('/position/edit', [PositionController::class,'edit']);
     Route::post('/position/update', [PositionController::class,'update']);
     Route::post('/position/delete', [PositionController::class,'destroy']);
 
@@ -229,12 +230,26 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('/reports/payroll-report', [PayrollReportController::class,'filter']);
     Route::get('/reports/payroll-export', [PayrollReportController::class,'payrollExport']);
 
-    //report nssf
+    //Report nssf
     Route::get('/reports/nssf-report', [PayrollReportController::class,'reportNssf']);
     Route::post('/reports/nssf-report', [PayrollReportController::class,'nssfFilter']);
     Route::get('/reports/nssf-export', [PayrollReportController::class,'nssfExport']);
-    //report 
+    //Report benefit
     Route::get('/reports/benefit-report', [PayrollReportController::class,'reportBenefitKNYPCh']);
+    Route::post('/reports/benefit-report', [PayrollReportController::class,'BenefitFilter']);
+    Route::get('/reports/benefit-export', [PayrollReportController::class,'BenefitExport']);
+    //Report Severancey pay
+    Route::get('/reports/severance-pay-report', [PayrollReportController::class,'reportSeverancePay']);
+    Route::post('/reports/severance-pay-report', [PayrollReportController::class,'SeverancePayFilter']);
+    Route::get('/reports/severance-pay-export', [PayrollReportController::class,'SeverancePayExport']);
+    //Report Senority pay
+    Route::get('/reports/seniorities-pay', [PayrollReportController::class,'reportSenorityPay']);
+    Route::post('/reports/seniorities-pay', [PayrollReportController::class,'SenorityPayFilter']);
+    Route::get('/reports/seniorities-pay-export', [PayrollReportController::class,'SenorityPayExport']);
+    //Tax Report
+    Route::get('/reports/tax-report', [PayrollReportController::class,'TaxReport']);
+    Route::post('/reports/tax-report', [PayrollReportController::class,'TaxFilter']);
+    Route::get('/reports/tax-report-export', [PayrollReportController::class,'TaxExport']);
 
     Route::get('/reports/motor-rentel-report', [PayrollReportController::class,'motorrentel']);
     Route::post('/reports/motor-rentel-report', [PayrollReportController::class,'motorrentel']);

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admins;
 
+use App\Models\Option;
 use App\Models\Position;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -20,7 +21,9 @@ class PositionController extends Controller
     public function index()
     {
         $data = Position::all();
-        return view('positions.index',compact('data'));
+        $positionType = Option::where('type','position_type')->get();
+        $positionRange = Option::where('type','position_range')->get();
+        return view('positions.index',compact('data','positionType','positionRange'));
     }
 
     /**
@@ -71,10 +74,16 @@ class PositionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request)
     {
-        $data = Position::find($id);
-        return view('positions.edit',compact('data'));
+        $data = Position::where('id',$request->id)->first();
+        $positionType = Option::where('type','position_type')->get();
+        $positionRange = Option::where('type','position_range')->get();
+        return response()->json([
+            'success'=>$data,
+            'positionType'  => $positionType,
+            'positionRange' => $positionRange
+        ]);
     }
 
     /**
@@ -90,6 +99,8 @@ class PositionController extends Controller
             Position::where('id',$request->id)->update([
                 'name_khmer'  => $request->name_khmer,
                 'name_english'  => $request->name_english,
+                'position_type'  => $request->position_type,
+                'position_range'  => $request->position_range,
                 'updated_by'    => Auth::user()->id 
             ]);
             Toastr::success('Position Updated successfully.','Success');
