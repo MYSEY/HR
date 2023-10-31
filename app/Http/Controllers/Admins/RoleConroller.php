@@ -6,6 +6,8 @@ use App\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Models\permissions;
+use App\Models\User;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Auth;
 
@@ -25,6 +27,17 @@ class RoleConroller extends Controller
         $permissionList=DB::select($sql);
         $role=Role::where('status',1)->get();
         return view('roles.index',compact('role','permissionList'));
+        // $role=Role::with("useruse")->where('status',1)->get();
+        // return view('roles.role_index', compact('role'));
+    }
+    public function formCreate() {
+        return view('roles.form_create');
+    }
+
+    public function detail(Request $request) {
+        $role=Role::where('id',$request->id)->first();
+        $user_use = User::where("role_id", $request->id)->get();
+        return view('roles.role_detail', compact('role','user_use'));
     }
 
     /**
@@ -32,9 +45,27 @@ class RoleConroller extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+        
+        $role = Role::create([
+            'role_name' => $request->role_name,
+            'role_type' => $request->role_type,
+            'status'    => 1,
+            'created_by'    => Auth::user()->id
+        ]);
+       
+        if ($request->role_permission) {
+            foreach ($request->role_permission as $key => $item) {
+                $items = [];
+                foreach ($item["permission"] as $key => $per) {
+                    $per['parent_id'] = $request->parent_id;
+                    $per['role_id'] = $role->id;
+                    $items[] = $per;
+                    permissions::create($per);
+                }
+            }
+        }
     }
 
     /**
@@ -82,9 +113,11 @@ class RoleConroller extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request)
     {
-        //
+        $role=Role::where('id',$request->id)->first();
+        $permissions = permissions::where("role_id", $request->id)->get();
+        return view('roles.form_edit', compact('role','permissions'));
     }
 
     /**

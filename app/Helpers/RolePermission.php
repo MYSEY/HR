@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 function RolePermission($table_id,$permission_type_id)
 {
     $id=Auth::user()->role_id;
-    $role_permission = permissions::where('role_id',$id)->where('table_id',$table_id)->where('permission_type_id',$permission_type_id)->get();
+    $role_permission = permissions::where('role_id',$id)->where('table_id',$table_id)->get();
     if(count($role_permission)>0){
         return true;
     }
@@ -89,6 +89,12 @@ function menu(){
             'table'=>4,
             'permission'=>1,
             'child'=>[
+                [
+                    'value'=> Helper::getLang() == 'en' ? 'Fringe Benefit': 'អត្ថប្រយោជន៍​បន្ថែម',
+                    'url'=>"fringe-benefit",
+                    'table'=>4,
+                    'permission'=>1
+                ],
                 [
                     'value'=> Helper::getLang() == 'en' ? 'Employee Salary': 'ប្រាក់បៀវត្សរ៍បុគ្គលិក',
                     'url'=>"payroll",
@@ -288,7 +294,7 @@ function menu(){
             ]
         ],
     ];
-    if ($role_id == 2) {
+    // if ($role_id == 2) {
         $data[] = [
             'name'=>'',
             'icon'=>'<i class="la la-key"></i> <span></span>',
@@ -297,6 +303,6 @@ function menu(){
             'permission'=>1,
             'url'=>"role",
         ];
-    }
+    // }
     return  $data;
 }

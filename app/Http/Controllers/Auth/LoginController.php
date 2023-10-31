@@ -108,7 +108,8 @@ class LoginController extends Controller
             'description' => 'has log in',
             'date_time'   => $todayDate,
         ];
-        if (Auth::attempt(['number_employee' => $number_employee, 'password' => $password, 'role_id' => ['1','2']])) {
+        // if (Auth::attempt(['number_employee' => $number_employee, 'password' => $password, 'role_id' => ['1','2']])) {
+        if (Auth::attempt(['number_employee' => $number_employee, 'password' => $password])) {
             DB::table('activity_logs')->insert($activityLog);
             return redirect('dashboad/admin')->with([
                 'dataUpComming' =>  $dataUserUpComming,
@@ -118,7 +119,8 @@ class LoginController extends Controller
             ]);
             Toastr::success('Login successfully.', 'Success');
             // return redirect('dashboad/admin');
-        } elseif (Auth::attempt(['number_employee' => $number_employee, 'password' => $password, 'role_id' => '3'])) {
+        // } elseif (Auth::attempt(['number_employee' => $number_employee, 'password' => $password, 'role_id' => '3'])) {
+        } elseif (Auth::attempt(['number_employee' => $number_employee, 'password' => $password])) {
             DB::table('activity_logs')->insert($activityLog);
             Toastr::success('Login successfully.', 'Success');
             return redirect('dashboad/employee');

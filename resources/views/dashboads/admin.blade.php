@@ -401,7 +401,7 @@
             <div class="col-md-12 col-lg-6 col-xl-4 d-flex">
                 <div class="card flex-fill">
                     <div class="card-body">
-                        <h4 class="card-title">@lang('lang.birthday_reminder') <span class="badge bg-inverse-danger ms-2" id="total-date-birthday">0</span></h4>
+                        <h4 class="card-title">@lang('lang.birthday_reminder') <span class="bg-inverse-danger ms-2" id="total-date-birthday">0</span></h4>
                         <div class="card-detail">
                             <div id="birthday-staff" style="width: -webkit-fill-available"></div>
                         </div>

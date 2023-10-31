@@ -17,8 +17,10 @@ class Role extends Model
         'role_type',
         'updated_by',
     ];
-
-
+    public function useruse()
+    {
+        return $this->hasMany(User::class, 'role_id', 'id');
+    }
     public function createdBy()
     {
         return $this->belongsTo(User::class, 'created_by');

@@ -29,6 +29,7 @@ use App\Http\Controllers\Admins\EmployeePayrollController;
 use App\Http\Controllers\Admins\EmployeeProfileController;
 use App\Http\Controllers\Admins\RecruitmentPlanController;
 use App\Http\Controllers\Admins\ChildrenAllowanceController;
+use App\Http\Controllers\Admins\FringeBenefitController;
 use App\Http\Controllers\LanguageController;
 use App\Models\StaffPromoted;
 use Illuminate\Support\Facades\Lang;
@@ -98,9 +99,13 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('/leaves/employee', [LeavesEmployeeController::class,'index']);
 
     Route::get('role', [RoleConroller::class,'index']);
+    Route::get('role/create', [RoleConroller::class,'formCreate']);
+    Route::get('role/edit/{id}', [RoleConroller::class,'edit']);
+    Route::post('role/create', [RoleConroller::class,'create']);
     Route::post('role/store', [RoleConroller::class,'store']);
     Route::post('role/update', [RoleConroller::class,'update']);
     Route::post('role/delete', [RoleConroller::class,'destroy']);
+    Route::get('role/detail/{id}', [RoleConroller::class,'detail']);
     Route::Resource('permission', PermissionController::class);
 
     Route::get('/department', [DepartmentController::class,'index']);
@@ -296,5 +301,14 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('children/edit',[ChildrenAllowanceController::class,'edit']);
     Route::post('children/update',[ChildrenAllowanceController::class,'update']);
     Route::post('children/delete',[ChildrenAllowanceController::class,'destroy']);
+
+    // route fringe benefits
+    Route::get('/fringe-benefit', [FringeBenefitController::class,'index']);
+    Route::post('/fringe-benefit/store', [FringeBenefitController::class,'store']);
+    Route::post('/fringe-benefit/create', [FringeBenefitController::class,'create']);
+    Route::post('/fringe-benefit/update', [FringeBenefitController::class,'update']);
+    Route::get('/fringe-benefit/edit', [FringeBenefitController::class,'edit']);
+    Route::post('/fringe-benefit/delete', [FringeBenefitController::class,'destroy']);
+    Route::post('/fringe-benefit/import', [FringeBenefitController::class,'import']);
 });
 Route::get('lang/{locale}', [LanguageController::class, "lang"]);

@@ -190,6 +190,9 @@ class User extends Authenticatable
     public function gender(){
         return $this->belongsTo(Option::class,'gender','id');
     }
+    public function employeeGender(){
+        return $this->belongsTo(Option::class,'gender','id');
+    }
     // total child
     public function totalChild(){
         return $this->hasMany(ChildrenInfor::class,'employee_id','id');
