@@ -146,7 +146,7 @@ class EmployeePayrollController extends Controller
                         $end_date = Date::createFromDate($endMonth);
                         $commencementDate   = Carbon::parse($start_date);
                         $resumptionDate     = Carbon::parse($end_date);
-                        $toDays 		    = $resumptionDate->diffInWeekdays($commencementDate);
+                        $toDays 		    = $resumptionDate->diffInWeekdays($commencementDate) + 1;
                         if ($toDays==0) {
                             $totalBasicSalary = $item->basic_salary;
                         } else {
@@ -194,7 +194,7 @@ class EmployeePayrollController extends Controller
                             $totalBasicSalary = $item->basic_salary;
                         }
                     }
-                    // dd($totalBaseSalaryRecived);
+                    // dd($totalBasicSalary);
                     //calculated khmer_new_year and pchumBen_bonus
                     $totalBunus = 0;
                     if ($item->emp_status == 1 || $item->emp_status == 10 || $item->emp_status == 2) {
@@ -851,39 +851,44 @@ class EmployeePayrollController extends Controller
             foreach ($AllPayroll as $item) {
                 $i++;
                 if ($i != 1) {
-                    $employee = User::where("number_employee", $item[0])->first();
-                    Payroll::create([
-                        'employee_id'                   => $employee->id,
-                        'number_employee'               => $item[0],
-                        'basic_salary'                  => $item[1],
-                        'total_gross_salary'            => $item[2],
-                        'total_child_allowance'         => $item[3],
-                        'phone_allowance'               => $item[4],
-                        'monthly_quarterly_bonuses'     => $item[5],
-                        'total_kny_phcumben'            => $item[6],
-                        'annual_incentive_bonus'        => $item[7],
-                        'seniority_pay_included_tax'    => $item[8],
-                        'total_gross'                   => $item[9],
-                        'total_pension_fund'            => $item[10],
-                        'base_salary_received_usd'      => $item[11],
-                        'base_salary_received_riel'     => $item[12],
-                        'spouse'                        => $item[13],
-                        'children'                      => $item[14],
-                        'total_charges_reduced'         => $item[15],
-                        'total_tax_base_riel'           => $item[16],
-                        'total_rate'                    => $item[17],
-                        'total_salary_tax_usd'          => $item[18],
-                        'total_salary_tax_riel'         => $item[19],
-                        'seniority_pay_excluded_tax'    => $item[20],
-                        'seniority_backford'            => $item[21],
-                        'total_severance_pay'           => $item[22],
-                        'loan_amount'                   => $item[23],
-                        'total_amount_car'              => $item[24],
-                        'total_salary'                  => $item[25],
-                        'payment_date'                  => $item[26],
-                        'exchange_rate'                 => $item[27],
-                        'created_by'                    => Auth::user()->id,
-                    ]);
+                    $payroll = Payroll::where('payment_date',$item[26])->first();
+                    if ($payroll == null) {
+                        $employee = User::where("number_employee", $item[0])->first();
+                        Payroll::create([
+                            'employee_id'                   => $employee->id,
+                            'number_employee'               => $item[0],
+                            'basic_salary'                  => $item[1],
+                            'total_gross_salary'            => $item[2],
+                            'total_child_allowance'         => $item[3],
+                            'phone_allowance'               => $item[4],
+                            'monthly_quarterly_bonuses'     => $item[5],
+                            'total_kny_phcumben'            => $item[6],
+                            'annual_incentive_bonus'        => $item[7],
+                            'seniority_pay_included_tax'    => $item[8],
+                            'total_gross'                   => $item[9],
+                            'total_pension_fund'            => $item[10],
+                            'base_salary_received_usd'      => $item[11],
+                            'base_salary_received_riel'     => $item[12],
+                            'spouse'                        => $item[13],
+                            'children'                      => $item[14],
+                            'total_charges_reduced'         => $item[15],
+                            'total_tax_base_riel'           => $item[16],
+                            'total_rate'                    => $item[17],
+                            'total_salary_tax_usd'          => $item[18],
+                            'total_salary_tax_riel'         => $item[19],
+                            'seniority_pay_excluded_tax'    => $item[20],
+                            'seniority_backford'            => $item[21],
+                            'total_severance_pay'           => $item[22],
+                            'loan_amount'                   => $item[23],
+                            'total_amount_car'              => $item[24],
+                            'total_salary'                  => $item[25],
+                            'payment_date'                  => $item[26],
+                            'exchange_rate'                 => $item[27],
+                            'created_by'                    => Auth::user()->id,
+                        ]);
+                    } else {
+                        return response()->json(['error'=>$dataArray]);
+                    }
                 }
             }
             if($dataArray){

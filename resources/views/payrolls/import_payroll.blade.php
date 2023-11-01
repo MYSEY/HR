@@ -44,8 +44,7 @@
 
         $(".upload_file_data").on("click", function() {
             if ($('#result_file').val() == "") {
-                $("#thanLess").text("@lang('lang.please_select_a_xls,_xlsx_and_csv_file_and_size_less_then_1_MB')").css(
-                    "color", "red");
+                $("#thanLess").text("@lang('lang.please_select_a_xls,_xlsx_and_csv_file_and_size_less_then_1_MB')").css("color", "red");
                 $(".thanLess").show();
                 return false;
             }
@@ -84,16 +83,13 @@
                         if (data == 0) {
                             $("#importPayrollModal").modal("show");
                             data == 0;
-                            $("#thanLess").text(
-                                "@lang('lang.please_select_a_xls,_xlsx_and_csv_file_and_size_less_then_1_MB')"
-                                ).css("color", "red");
+                            $("#thanLess").text("@lang('lang.please_select_a_xls,_xlsx_and_csv_file_and_size_less_then_1_MB')").css("color", "red");
                             $(".thanLess").show();
                         }
                     }
                 });
             }else{
-                $("#thanLess").text("@lang('lang.please_select_a_xls,_xlsx_and_csv_file_and_size_less_then_1_MB')").css(
-                    "color", "red");
+                $("#thanLess").text("@lang('lang.please_select_a_xls,_xlsx_and_csv_file_and_size_less_then_1_MB')").css("color", "red");
                 $(".thanLess").show();
             }
         });
