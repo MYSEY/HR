@@ -32,11 +32,11 @@ class PayrollRepository extends BaseRepository
     }
 
     public function getAllPayroll(){
-        $currentYear = Carbon::createFromDate()->format('Y');
-        $currentMonth = Carbon::createFromDate()->format('m');
+        $Monthly= Carbon::now()->format('m');
+        $yearLy = Carbon::now()->format('Y');
         if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer') {
-            return Payroll::with('users')->with('chiledren')->orderBy('id','DESC')->get();
-            // return Payroll::with('users')->whereMonth('payment_date','<=',$currentMonth)->whereYear('payment_date','>=',$currentYear)->get();
+            // return Payroll::with('users')->with('chiledren')->orderBy('id','DESC')->get();
+            return Payroll::with('users')->whereMonth('payment_date','<=',$Monthly)->whereYear('payment_date','>=',$yearLy)->get();
         } else {
             return Payroll::with("users")->where('employee_id',Auth::user()->id)->orderBy('id','DESC')->get();
         }

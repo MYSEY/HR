@@ -76,7 +76,7 @@ class ExportNSSF implements FromCollection, WithColumnWidths, WithHeadings, With
                 $value->users == null ? '' : $value->users->EmployeeGender,
                 $value->users == null ? '' : $value->users->EmployeePosition,
                 $value->users == null ? '' : $value->users->joinOfDate,
-                $value->total_pre_tax_salary_usd,
+                number_format($value->total_pre_tax_salary_usd,2),
                 number_format($value->total_pre_tax_salary_riel),
                 number_format($value->total_average_wage),
                 number_format($value->total_occupational_risk),

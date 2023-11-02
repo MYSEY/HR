@@ -101,7 +101,8 @@
                                                         aria-label="Employee: activate to sort column descending">@lang('lang.profile')
                                                     </th>
                                                     <th class="sorting stuck-scroll-3" tabindex="0" aria-controls="DataTables_Table_0"
-                                                        rowspan="1" colspan="1">@lang('lang.employee_id')</th>
+                                                        rowspan="1" colspan="1">@lang('lang.employee_id')
+                                                    </th>
                                                     <th class="sorting sorting_asc stuck-scroll-3" tabindex="0"
                                                         aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
                                                         aria-sort="ascending"

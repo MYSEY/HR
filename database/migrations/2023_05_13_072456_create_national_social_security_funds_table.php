@@ -18,7 +18,7 @@ return new class extends Migration
             $table->id();
             $table->integer('employee_id');
             $table->string('number_employee')->nullable();
-            $table->string('total_pre_tax_salary_usd',50,2)->default(0);
+            $table->decimal('total_pre_tax_salary_usd',50,2)->default(0);
             $table->string('total_pre_tax_salary_riel',50,2)->default(0);
             $table->string('total_average_wage',50,2)->default(0);
             $table->string('total_occupational_risk',50,2)->default(0);

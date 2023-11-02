@@ -1,4 +1,4 @@
-<div id="importPayrollModal" class="modal custom-modal fade" role="dialog">
+<div id="importSeverancePayModal" class="modal custom-modal fade" role="dialog">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -60,37 +60,31 @@
                 $(".btn-text-submit").hide();
                 $("#btn-loading").css('display', 'block');
 
-                $("#importPayrollModal").modal("show");
+                $("#importSeverancePayModal").modal("show");
                 $.ajax({
                     type: 'POST',
-                    url: "{{ url('import/payroll') }}",
+                    url: "{{ url('import/severance-pay') }}",
                     data: form_data,
                     contentType: false,
                     cache: false,
                     processData: false,
                     success: function(data) {
-                        console.log(data);
                         if (data == 1) {
-                            $("#importPayrollModal").modal("hide");
+                            $("#importSeverancePayModal").modal("hide");
                             toastr.success('Data has been save success');
-                            window.location.replace("{{ URL('payroll') }}");
+                            window.location.replace("{{ URL('severance-pay') }}");
                         }
                         if (data == 2) {
-                            $("#importPayrollModal").modal("hide");
+                            $("#importSeverancePayModal").modal("hide");
                             $("#thanLess").text("Data duplicate").css("color", "red");
                             $(".thanLess").show();
                         }
                         if (data == 0) {
-                            $("#importPayrollModal").modal("show");
+                            $("#importSeverancePayModal").modal("show");
                             data == 0;
                             $("#thanLess").text("@lang('lang.please_select_a_xls,_xlsx_and_csv_file_and_size_less_then_1_MB')").css("color", "red");
                             $(".thanLess").show();
                         }
-                        // if (data == 3) {
-                        //     $("#importPayrollModal").modal("hide");
-                        //     toastr.error('Data has been already this months');
-                        //     window.location.replace("{{ URL('payroll') }}");
-                        // }
                     }
                 });
             }else{

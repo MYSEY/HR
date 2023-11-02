@@ -311,6 +311,7 @@ class EmployeePayrollController extends Controller
                     $totalSalaryNetPay = round($totalSeverancyPaySalary,2) + $totalBunus + $item->phone_allowance + $totalChildAllowance;
                     if ($item->emp_status == 'Probation') {
                         $type_fdc1 = null;
+                        $totalSeverancePay1 = null;
                     } elseif($item->emp_status == 1) {
                         $type_fdc1 = 'fdc1';
                     }elseif($item->emp_status == 10){
@@ -393,13 +394,13 @@ class EmployeePayrollController extends Controller
                         $currentDate = Carbon::createFromDate($request->payment_date)->format('m');
                         $PaymentOfMonth = Carbon::parse($request->payment_date)->format('M-Y');
                         if ($currentDate == 6 || $currentDate == 12) {
-                            $nextYear = Carbon::parse($item->fdc_end)->format('Y');
+                            $nextYear = Carbon::parse($item->udc_end_date)->format('Y');
                             $currentYear = null;
                             $currentMonth = null;
-                            $preYear = Carbon::createFromDate($item->fdc_end)->format('Y');
+                            $preYear = Carbon::createFromDate($item->udc_end_date)->format('Y');
                             if($currentDate == 6){  
                                 if ($preYear == $nextYear) {
-                                    $currentYear = $item->fdc_end;
+                                    $currentYear = $item->udc_end_date;
                                 }else{
                                     $currentYear =  Carbon::createFromDate($nextYear.'-01-01')->format('Y-m-d');
                                 }
@@ -407,8 +408,8 @@ class EmployeePayrollController extends Controller
                             if ($currentDate == 12) {
                                 $currentMonth = Carbon::createFromDate($nextYear.'-07-01')->format('Y-m-d');
                             }
-                            $totalSalary = GrossSalaryPay::where('employee_id', $item->id)->where('type_udc','seniority')->when($currentYear ,function ($query, $fdc_end) {
-                                $query->where('payment_date', '>=',$fdc_end);
+                            $totalSalary = GrossSalaryPay::where('employee_id', $item->id)->where('type_udc','seniority')->when($currentYear ,function ($query, $udc_end_date) {
+                                $query->where('payment_date', '>=',$udc_end_date);
                             })->when($currentMonth, function($query, $currentMonth){
                                 $query->where('payment_date', '>=',$currentMonth);
                             })->pluck('total_seniority')->avg();
@@ -851,44 +852,39 @@ class EmployeePayrollController extends Controller
             foreach ($AllPayroll as $item) {
                 $i++;
                 if ($i != 1) {
-                    $payroll = Payroll::where('payment_date',$item[26])->first();
-                    if ($payroll == null) {
-                        $employee = User::where("number_employee", $item[0])->first();
-                        Payroll::create([
-                            'employee_id'                   => $employee->id,
-                            'number_employee'               => $item[0],
-                            'basic_salary'                  => $item[1],
-                            'total_gross_salary'            => $item[2],
-                            'total_child_allowance'         => $item[3],
-                            'phone_allowance'               => $item[4],
-                            'monthly_quarterly_bonuses'     => $item[5],
-                            'total_kny_phcumben'            => $item[6],
-                            'annual_incentive_bonus'        => $item[7],
-                            'seniority_pay_included_tax'    => $item[8],
-                            'total_gross'                   => $item[9],
-                            'total_pension_fund'            => $item[10],
-                            'base_salary_received_usd'      => $item[11],
-                            'base_salary_received_riel'     => $item[12],
-                            'spouse'                        => $item[13],
-                            'children'                      => $item[14],
-                            'total_charges_reduced'         => $item[15],
-                            'total_tax_base_riel'           => $item[16],
-                            'total_rate'                    => $item[17],
-                            'total_salary_tax_usd'          => $item[18],
-                            'total_salary_tax_riel'         => $item[19],
-                            'seniority_pay_excluded_tax'    => $item[20],
-                            'seniority_backford'            => $item[21],
-                            'total_severance_pay'           => $item[22],
-                            'loan_amount'                   => $item[23],
-                            'total_amount_car'              => $item[24],
-                            'total_salary'                  => $item[25],
-                            'payment_date'                  => $item[26],
-                            'exchange_rate'                 => $item[27],
-                            'created_by'                    => Auth::user()->id,
-                        ]);
-                    } else {
-                        return response()->json(['error'=>$dataArray]);
-                    }
+                    $employee = User::where("number_employee", $item[0])->first();
+                    Payroll::create([
+                        'employee_id'                   => $employee->id,
+                        'number_employee'               => $item[0],
+                        'basic_salary'                  => $item[1],
+                        'total_gross_salary'            => $item[2],
+                        'total_child_allowance'         => $item[3],
+                        'phone_allowance'               => $item[4],
+                        'monthly_quarterly_bonuses'     => $item[5],
+                        'total_kny_phcumben'            => $item[6],
+                        'annual_incentive_bonus'        => $item[7],
+                        'seniority_pay_included_tax'    => $item[8],
+                        'total_gross'                   => $item[9],
+                        'total_pension_fund'            => $item[10],
+                        'base_salary_received_usd'      => $item[11],
+                        'base_salary_received_riel'     => $item[12],
+                        'spouse'                        => $item[13],
+                        'children'                      => $item[14],
+                        'total_charges_reduced'         => $item[15],
+                        'total_tax_base_riel'           => $item[16],
+                        'total_rate'                    => $item[17],
+                        'total_salary_tax_usd'          => $item[18],
+                        'total_salary_tax_riel'         => $item[19],
+                        'seniority_pay_excluded_tax'    => $item[20],
+                        'seniority_backford'            => $item[21],
+                        'total_severance_pay'           => $item[22],
+                        'loan_amount'                   => $item[23],
+                        'total_amount_car'              => $item[24],
+                        'total_salary'                  => $item[25],
+                        'payment_date'                  => $item[26],
+                        'exchange_rate'                 => $item[27],
+                        'created_by'                    => Auth::user()->id,
+                    ]);
                 }
             }
             if($dataArray){

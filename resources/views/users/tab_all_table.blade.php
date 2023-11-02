@@ -484,7 +484,7 @@
                                                     <td>$<a href="#">{{$item->basic_salary}}</a></td>
                                                     <td>$<a href="#">{{$item->phone_allowance == null ? '00' : $item->phone_allowance}}</a></td>
                                                     <td>{{$item->joinOfDate}}</td>
-                                                    <td>{{$item->FDCStartDate}}</td>
+                                                    <td>{{$item->UDCStartDate}}</td>
                                                     <td>
                                                         @if ($item->is_loan == '1')
                                                             <span style="font-size: 13px" class="badge bg-inverse-danger">Yes</span>

@@ -233,7 +233,7 @@ return[
 	"employees"=>"បញ្ជីទំនាក់ទំនងបុគ្គលិក",
 	"employee"=>"បុគ្គលិក",
 	"employee_id"=>"លេខសំគាល់ បុគ្គលិក",
-	"employee_name"=>"ឈ្មោះ​បុគ្គលិក",
+	"employee_name"=>"គោត្តនាម និងនាម",
 	"employment_type"=>"ប្រភេទ​ការងារ",
 	"employee_salary"=>"ប្រាក់ខែបុគ្គលិក",
 	"employees_information"=>"ព័ត៌មានអំពីបុគ្គលិក",

@@ -302,139 +302,48 @@
                 $(".btn-txt").show();
                 $(".loading-icon").css('display', 'none')
                 var tr = "";
-                if (tab_status == 1 ) {
-                    if (data.length > 0) {
-                        let dollar = "$";
-                        if (params.btn_print) {
-                            dollar ="";
-                        }
-                        data.map((row) => {
-                            let join_date = moment(row.users.date_of_commencement).format('D-MMM-YYYY')
-                            let payment_date = moment(row.payment_date).format('D-MMM-YYYY')
-                            tr +='<tr class="odd">'+
-                                '<td class="stuck"><a href="#">'+(row.users == null ? '' : row.users.number_employee )+'</a></td>'+
-                                '<td class="stuck"><a href="#">'+(row.users == null ? '' : row.users.employee_name_en )+'</a></td>'+
-                                '<td ><a href="#">'+(row.users == null ? '' : row.users.department.name_english)+'</a></td>'+
-                                '<td><a href="#">'+(row.users == null ? '' : row.users.position.name_english)+'</a></td>'+
-                                '<td><a href="#">'+(row.users == null ? '' : row.users.branch.branch_name_en)+'</a></td>'+
-                                '<td>'+(join_date)+'</td>'+
-                                '<td>'+(dollar)+'<a href="#">'+(row.basic_salary )+'</a></td>'+
-                                '<td>'+(dollar)+'<a href="#">'+(row.total_gross_salary )+'</a></td>'+
-                                '<td>'+(dollar)+'<a href="#">'+(row.total_child_allowance )+'</a></td>'+
-                                '<td>'+(dollar)+'<a href="#">'+(row.phone_allowance == null ? '0.00' : row.phone_allowance)+'</a></td>'+
-                                '<td>'+(dollar)+'<a href="#">'+(row.total_kny_phcumben)+'</a></td>'+
-                                '<td>'+(dollar)+'<a href="#">'+(row.total_gross )+'</a></td>'+
-                                '<td>'+(dollar)+'<a href="#">'+(row.seniority_pay_included_tax)+'</a></td>'+
-                                '<td>'+(dollar)+'<a href="#">'+(row.total_pension_fund)+'</a></td>'+
-                                '<td>'+(dollar)+'<a href="#">'+(row.base_salary_received_usd)+'</a></td>'+
-                                '<td><span>៛</span><a href="#">'+(formatCurrencyKH(row.base_salary_received_riel))+'</a></td>'+
-                                '<td><span>៛</span><a href="#">'+(row.total_charges_reduced == '0' ? '0.00' : formatCurrencyKH(row.total_charges_reduced))+'</a></td>'+
-                                '<td><span>៛</span><a href="#">'+(formatCurrencyKH(row.total_tax_base_riel))+'</a></td>'+
-                                '<td><a href="#">'+(row.total_rate)+'%</a></td>'+
-                                '<td>'+(dollar)+'<a href="#">'+(row.total_salary_tax_usd)+'</a></td>'+
-                                '<td><span>៛</span><a href="#">'+(row.total_salary_tax_riel == '0' ? '0.00' : formatCurrencyKH(row.total_salary_tax_riel))+'</a></td>'+
-                                '<td>'+(dollar)+'<a href="#">'+(row.seniority_pay_excluded_tax)+'</a></td>'+
-                                '<td>'+(dollar)+'<a href="#">'+(row.total_severance_pay)+'</a></td>'+
-                                '<td>'+(dollar)+'<a href="#">'+(row.total_salary )+'</a></td>'+
-                                '<td>'+(payment_date)+'</td>'+
-                            '</tr>';
-                        });
-                    }else{
-                        var tr = '<tr><td colspan=30 align="center">ពុំមានទិន្នន័យសម្រាប់បង្ហាញ</td></tr>';
+                if (data.length > 0) {
+                    let dollar = "$";
+                    if (params.btn_print) {
+                        dollar ="";
                     }
-                    $(".tbl_payment_salary tbody").html(tr);
-                    $("#table_print_filter_basic_salary tbody").html(tr);
-                }else if (tab_status == 2) {
-                    if (data.length > 0) {
-                        data.map((row) => {
-                            let join_date = moment(row.users.date_of_commencement).format('D-MMM-YYYY')
-                            let created_at = moment(row.created_at).format('D-MMM-YYYY')
-                            tr +='<tr class="odd">'+
-                                    '<td><a href="#">'+(row.users == null ? '' : row.users.number_employee )+'</a></td>'+
-                                    '<td><a href="#">'+(row.users == null ? '' : row.users.employee_name_en )+'</a></td></td></td>'+
-                                    '<td>'+(join_date)+'</td>'+
-                                    '<td>$'+(row.total_pre_tax_salary_usd )+'</td>'+
-                                    '<td><span>៛</span>'+(row.total_pre_tax_salary_riel )+'</td>'+
-                                    '<td>'+(row.total_average_wage )+'</td>'+
-                                    '<td>'+(formatCurrencyKH(row.total_occupational_risk) )+'</td>'+
-                                    '<td>'+(row.total_health_care )+'</td>'+
-                                    '<td><span>៛</span>'+(formatCurrencyKH(row.pension_contribution_usd) )+'</td>'+
-                                    '<td>$'+(row.pension_contribution_riel )+'</td>'+
-                                    '<td><span>៛</span>'+(formatCurrencyKH(row.corporate_contribution) )+'</td>'+
-                                    '<td>'+(created_at)+'</td>'+
-                            '</tr>';
-                        });
-                    }else {
-                        var tr = '<tr><td colspan=13 align="center">ពុំមានទិន្នន័យសម្រាប់បង្ហាញ</td></tr>';
-                    }
-                    $(".tbl_nssf tbody").html(tr);
-                    $("#table_print_filter_nssf tbody").html(tr);
-                }else if (tab_status == 3) {
-                    if (data.length > 0) {
-                        data.map((row) => {
-                            let join_date = moment(row.users.date_of_commencement).format('D-MMM-YYYY')
-                            let created_at = moment(row.created_at).format('D-MMM-YYYY')
-                            tr +='<tr class="odd">'+
-                                '<td><a href="#">'+(row.users == null ? '' : row.users.number_employee)+'</a></td>'+
-                                '<td><a href="#">'+(row.users == null ? '' : row.users.employee_name_en)+'</a></td>'+
-                                '<td>'+(row.users == null ? '' : join_date)+'</td>'+
-                                '<td>'+(row.number_of_working_days)+' Days</td>'+
-                                '<td>$'+(row.base_salary)+'</td>'+
-                                '<td>$'+(row.base_salary_received)+'</td>'+
-                                '<td>$'+(row.total_allowance)+'</td>'+
-                                '<td>'+(created_at)+'</td>'+
-                            '</tr>';
-                        });
-                    }else {
-                        var tr = '<tr><td colspan=8 align="center">ពុំមានទិន្នន័យសម្រាប់បង្ហាញ</td></tr>';
-                    }
-                    $(".table_banefit tbody").html(tr);
-                    $("#table_print_filter_benefit tbody").html(tr);
-                }else if(tab_status == 4){
-                    if (data.length > 0) {
-                        data.map((row) => {
-                            let join_date = moment(row.users.date_of_commencement).format('D-MMM-YYYY')
-                            let created_at = moment(row.created_at).format('D-MMM-YYYY')
-                            tr +='<tr class="odd">'+
-                                '<td><a href="#">'+(row.users == null ? '' : row.users.number_employee )+'</a></td>'+
-                                '<td><a href="#">'+(row.users == null ? '' : row.users.employee_name_en )+'</a></td>'+
-                                '<td>'+(row.users == null ? '' : row.users.position.name_english )+'</td>'+
-                                '<td>'+(join_date)+'</td>'+
-                                '<td>'+(row.payment_of_month )+'</td>'+
-                                '<td>$'+(row.total_average_salary )+'</td>'+
-                                '<td>$'+(row.total_salary_receive )+'</td>'+
-                                '<td>$'+(row.tax_exemption_salary )+'</td>'+
-                                '<td>$'+(row.taxable_salary )+'</td>'+
-                                '<td>'+(created_at)+'</td>'+
-                            '</tr>';
-                        });
-                    }else {
-                        var tr = '<tr><td colspan=10 align="center">ពុំមានទិន្នន័យសម្រាប់បង្ហាញ</td></tr>';
-                    }
-                    $(".tbl_seniority_pay tbody").html(tr);
-                    $("#table_print_filter_seniority_pay tbody").html(tr);
+                    data.map((row) => {
+                        let join_date = moment(row.users.date_of_commencement).format('D-MMM-YYYY')
+                        let payment_date = moment(row.payment_date).format('D-MMM-YYYY')
+                        tr +='<tr class="odd">'+
+                            '<td class="stuck"><a href="#">'+(row.users == null ? '' : row.users.number_employee )+'</a></td>'+
+                            '<td class="stuck"><a href="#">'+(row.users == null ? '' : row.users.employee_name_en )+'</a></td>'+
+                            '<td ><a href="#">'+(row.users == null ? '' : row.users.department.name_english)+'</a></td>'+
+                            '<td><a href="#">'+(row.users == null ? '' : row.users.position.name_english)+'</a></td>'+
+                            '<td><a href="#">'+(row.users == null ? '' : row.users.branch.branch_name_en)+'</a></td>'+
+                            '<td>'+(join_date)+'</td>'+
+                            '<td>'+(dollar)+'<a href="#">'+(row.basic_salary )+'</a></td>'+
+                            '<td>'+(dollar)+'<a href="#">'+(row.total_gross_salary )+'</a></td>'+
+                            '<td>'+(dollar)+'<a href="#">'+(row.total_child_allowance )+'</a></td>'+
+                            '<td>'+(dollar)+'<a href="#">'+(row.phone_allowance == null ? '0.00' : row.phone_allowance)+'</a></td>'+
+                            '<td>'+(dollar)+'<a href="#">'+(row.total_kny_phcumben)+'</a></td>'+
+                            '<td>'+(dollar)+'<a href="#">'+(row.total_gross )+'</a></td>'+
+                            '<td>'+(dollar)+'<a href="#">'+(row.seniority_pay_included_tax)+'</a></td>'+
+                            '<td>'+(dollar)+'<a href="#">'+(row.total_pension_fund)+'</a></td>'+
+                            '<td>'+(dollar)+'<a href="#">'+(row.base_salary_received_usd)+'</a></td>'+
+                            '<td><span>៛</span><a href="#">'+(formatCurrencyKH(row.base_salary_received_riel))+'</a></td>'+
+                            '<td><span>៛</span><a href="#">'+(row.total_charges_reduced == '0' ? '0.00' : formatCurrencyKH(row.total_charges_reduced))+'</a></td>'+
+                            '<td><span>៛</span><a href="#">'+(formatCurrencyKH(row.total_tax_base_riel))+'</a></td>'+
+                            '<td><a href="#">'+(row.total_rate)+'%</a></td>'+
+                            '<td>'+(dollar)+'<a href="#">'+(row.total_salary_tax_usd)+'</a></td>'+
+                            '<td><span>៛</span><a href="#">'+(row.total_salary_tax_riel == '0' ? '0.00' : formatCurrencyKH(row.total_salary_tax_riel))+'</a></td>'+
+                            '<td>'+(dollar)+'<a href="#">'+(row.seniority_pay_excluded_tax)+'</a></td>'+
+                            '<td>'+(dollar)+'<a href="#">'+(row.seniority_backford)+'</a></td>'+
+                            '<td>'+(dollar)+'<a href="#">'+(row.total_severance_pay)+'</a></td>'+
+                            '<td>'+(dollar)+'<a href="#">'+(row.total_salary )+'</a></td>'+
+                            '<td>'+(payment_date)+'</td>'+
+                        '</tr>';
+                    });
                 }else{
-                    if (data.length > 0) {
-                        data.map((row) => {
-                            let join_date = moment(row.users.date_of_commencement).format('D-MMM-YYYY')
-                            let created_at = moment(row.created_at).format('D-MMM-YYYY')
-                            tr +='<tr class="odd">'+
-                                '<td><a href="#">'+(row.users == null ? '' : row.users.number_employee )+'</a></td>'+
-                                '<td><a href="#">'+(row.users == null ? '' : row.users.employee_name_en )+'</a></td>'+
-                                '<td>'+(row.users == null ? '' : row.users.position.name_english )+'</td>'+
-                                '<td>'+(join_date)+'</td>'+
-                                '<td>$'+(row.total_severanec_pay )+'</td>'+
-                                '<td>$'+(row.total_contract_severance_pay )+'</td>'+
-                                '<td>'+(created_at)+'</td>'+
-                            '</tr>';
-                        });
-                    }else {
-                        var tr = '<tr><td colspan=7 align="center">ពុំមានទិន្នន័យសម្រាប់បង្ហាញ</td></tr>';
-                    }
-                    $(".tbl_severance_pay tbody").html(tr);
-                    $("#table_print_filter_severance_pay tbody").html(tr);
+                    var tr = '<tr><td colspan=30 align="center">ពុំមានទិន្នន័យសម្រាប់បង្ហាញ</td></tr>';
                 }
-                    
+                $(".tbl_payment_salary tbody").html(tr);
+                $("#table_print_filter_basic_salary tbody").html(tr);
             }
         });
     }

@@ -176,11 +176,11 @@
                                                             <td><a href="#">{{ $item->users->EmployeePosition }}</a></td>
                                                             <td><a href="#">{{ $item->users->EmployeeBranch }}</a></td>
                                                             <td>{{ $item->users == null ? '' : $item->users->joinOfDate }}</td>
-                                                            <td>${{ $item->total_pre_tax_salary_usd }}</td>
+                                                            <td>${{ number_format($item->total_pre_tax_salary_usd,2) }}</td>
                                                             <td><span>៛</span>{{ number_format($item->total_pre_tax_salary_riel) }}</td>
-                                                            <td>{{ number_format($item->total_average_wage) }}</td>
-                                                            <td>{{ number_format($item->total_occupational_risk)}}</td>
-                                                            <td>{{ number_format($item->total_health_care) }}</td>
+                                                            <td><span>៛</span>{{ number_format($item->total_average_wage) }}</td>
+                                                            <td><span>៛</span>{{ number_format($item->total_occupational_risk,2)}}</td>
+                                                            <td>{{ number_format($item->total_health_care,2) }}</td>
                                                             <td><span>៛</span>{{ number_format($item->pension_contribution_usd) }}</td>
                                                             <td>${{ $item->pension_contribution_riel }}</td>
                                                             <td><span>៛</span>{{ number_format($item->corporate_contribution) }}</td>
@@ -298,7 +298,6 @@
                     }
                 }
                 $(".tbl_nssf tbody").html(tr);
-                $("#table_print_filter_nssf tbody").html(tr);
             }
         });
     }

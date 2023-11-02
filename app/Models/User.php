@@ -346,6 +346,11 @@ class User extends Authenticatable
             return Carbon::parse($this->fdc_date)->format('d-M-Y');
         }
     }
+    public function getUDCStartDateAttribute(){
+        if ($this->udc_end_date) {
+            return Carbon::parse($this->udc_end_date)->format('d-M-Y');
+        }
+    }
     public function getFDCEndDateAttribute(){
         if ($this->fdc_end) {
             return Carbon::parse($this->fdc_end)->format('d-M-Y');

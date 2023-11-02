@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admins;
 
 use Carbon\Carbon;
+use App\Models\User;
 use App\Models\Bonus;
 use App\Models\Branchs;
 use App\Models\Payroll;
@@ -14,11 +15,14 @@ use App\Models\SeverancePay;
 use Illuminate\Http\Request;
 use App\Exports\ExportBenefit;
 use App\Exports\ExportPayroll;
+use App\Models\GrossSalaryPay;
 use App\Exports\ExportMotorRentel;
 use App\Exports\ExportSeniorityPay;
 use App\Exports\ExportSeverancePay;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 use App\Models\NationalSocialSecurityFund;
 use App\Repositories\Admin\MotorRentalRepository;
 
@@ -432,5 +436,77 @@ class PayrollReportController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+
+    public function SeverancePay(){
+        $branch = Branchs::get();
+        $data = GrossSalaryPay::with('users')->where('type_fdc1','fdc1')->get();
+        return view('severance_pays.index',compact('data','branch'));
+    }
+    public function SeverancePayFil(Request $request){
+        $nssf = GrossSalaryPay::with("users")->where('type_fdc1','fdc1')
+        ->leftJoin('users', 'gross_salary_pays.employee_id', '=', 'users.id')
+        ->leftJoin('positions','positions.id','=','users.position_id')
+        ->leftJoin('branchs','branchs.id','=','users.branch_id')
+        ->leftJoin('departments','departments.id','=','users.department_id')
+        ->select(
+            'gross_salary_pays.*',
+            'users.number_employee',
+            'users.employee_name_en',
+            'users.employee_name_kh',
+            'positions.name_khmer as position_name_khmer',
+            'positions.name_english as position_name_english',
+            'branchs.branch_name_kh',
+            'branchs.branch_name_en',
+            'departments.name_khmer as depart_name_kh',
+            'departments.name_english as depart_name_en',
+        )
+        ->when($request->employee_id, function ($query, $employee_id) {
+            $query->where('users.number_employee', 'LIKE', '%'.$employee_id.'%');
+        })
+        ->when($request->employee_name, function ($query, $employee_name) {
+            $query->where('users.employee_name_en', 'LIKE', '%'.$employee_name.'%');
+        })
+        ->when($request->branch_id, function ($query, $branch_id) {
+            $query->where('users.branch_id', $branch_id);
+        })->get();
+        return response()->json([
+            'success'=>$nssf,
+        ]);
+    }
+    public function importSeverancePay(Request $request){
+        $file = $request->file;
+        $filesize = filesize($file);
+        $extension = $request->file->extension();
+        $spreadsheet = IOFactory::load($file);
+        $AllSeverancePay =  $spreadsheet->getSheetByName('Severance Pay')->toArray();
+        // dd($AllSeverancePay);
+        if ($extension == "xlsx" || $extension == "xls" || $extension == "csv") {
+            $i = 0;
+            $dataArray = [];
+            foreach ($AllSeverancePay as $item) {
+                $i++;
+                if ($i != 1) {
+                    $employee = User::where("number_employee", $item[0])->first();
+                    GrossSalaryPay::create([
+                        'employee_id'                   => $employee->id,
+                        'number_employee'               => $item[0],
+                        'basic_salary'                  => $item[2],
+                        'total_gross_salary'            => $item[3],
+                        'total_fdc1'                    => $item[4],
+                        'type_fdc1'                     => $item[5],
+                        'payment_date'                  => $item[6],
+                        'created_by'                    => Auth::user()->id,
+                    ]);
+                }
+            }
+            if($dataArray){
+                return response()->json(['error'=>$dataArray]);
+            }
+            return 1;
+        } else {
+            return 0;
+        }
     }
 }

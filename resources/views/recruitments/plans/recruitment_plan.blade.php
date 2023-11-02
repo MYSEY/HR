@@ -142,7 +142,7 @@
                                         <select class="form-select hr-select2-option" name="position_id" id="select-position-opsition" required>
                                             <option selected disabled value="">@lang('lang.select')</option>
                                             @foreach ($positions as $item)
-                                                <option value="{{ $item->id }}">{{ session()->get('locale') == 'en' ? $item->name_english :  $item->name_khmer}}</option>
+                                                <option value="{{ $item->id }}">{{ Helper::getLang() == 'en' ? $item->name_english :  $item->name_khmer}}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -153,7 +153,7 @@
                                         <select class="form-select hr-select2-option" name="branch_id" required>
                                             <option selected disabled value="">@lang('lang.select')</option>
                                             @foreach ($branchs as $item)
-                                                <option value="{{ $item->id }}">{{ session()->get('locale') == 'en' ? $item->branch_name_en : $item->branch_name_kh }}</option>
+                                                <option value="{{ $item->id }}">{{ Helper::getLang() == 'en' ? $item->branch_name_en : $item->branch_name_kh }}</option>
                                             @endforeach
                                         </select>
                                     </div>
