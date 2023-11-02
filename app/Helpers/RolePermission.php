@@ -90,14 +90,26 @@ function menu(){
             'permission'=>1,
             'child'=>[
                 [
-                    'value'=> Helper::getLang() == 'en' ? 'Fringe Benefit': 'អត្ថប្រយោជន៍​បន្ថែម',
-                    'url'=>"fringe-benefit",
+                    'value'=> Helper::getLang() == 'en' ? 'Employee Salary': 'ប្រាក់បៀវត្សរ៍បុគ្គលិក',
+                    'url'=>"payroll",
                     'table'=>4,
                     'permission'=>1
                 ],
                 [
-                    'value'=> Helper::getLang() == 'en' ? 'Employee Salary': 'ប្រាក់បៀវត្សរ៍បុគ្គលិក',
-                    'url'=>"payroll",
+                    'value'=> Helper::getLang() == 'en' ? 'Import NSSF': 'នាំចូល ប.ស.ស',
+                    'url'=>"import-nssf",
+                    'table'=>4,
+                    'permission'=>1
+                ],
+                [
+                    'value'=> Helper::getLang() == 'en' ? 'Import Severance Pay': 'នាំចូលប្រាក់បំណាច់កិច្ចសន្យា',
+                    'url'=>"severance-pay",
+                    'table'=>4,
+                    'permission'=>1
+                ],
+                [
+                    'value'=> Helper::getLang() == 'en' ? 'Fringe Benefit': 'អត្ថប្រយោជន៍​បន្ថែម',
+                    'url'=>"fringe-benefit",
                     'table'=>4,
                     'permission'=>1
                 ],
