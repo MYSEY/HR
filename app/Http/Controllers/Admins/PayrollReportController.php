@@ -509,4 +509,48 @@ class PayrollReportController extends Controller
             return 0;
         }
     }
+
+    public function ImportIndex(){
+        $branch = Branchs::get();
+        $DataNSSF = NationalSocialSecurityFund::all();
+        return view('NSSFs.index',compact('DataNSSF','branch'));
+    }
+    public function ImportNSSF(Request $request){
+        $file = $request->file;
+        $filesize = filesize($file);
+        $extension = $request->file->extension();
+        $spreadsheet = IOFactory::load($file);
+        $AllNSSF =  $spreadsheet->getSheetByName('import nssf')->toArray();
+        // dd($AllNSSF);
+        if ($extension == "xlsx" || $extension == "xls" || $extension == "csv") {
+            $i = 0;
+            $dataArray = [];
+            foreach ($AllNSSF as $item) {
+                $i++;
+                if ($i != 1) {
+                    $employee = User::where("number_employee", $item[0])->first();
+                    NationalSocialSecurityFund::create([
+                        'employee_id'               => $employee->id,
+                        'number_employee'           => $item[0],
+                        'total_pre_tax_salary_usd'  => $item[2],
+                        'total_pre_tax_salary_riel' => $item[3],
+                        'total_average_wage'        => $item[4],
+                        'total_occupational_risk'   => $item[5],
+                        'total_health_care'         => $item[6],
+                        'pension_contribution_usd'  => $item[7],
+                        'pension_contribution_riel' => $item[8],
+                        'corporate_contribution'    => $item[9],
+                        'payment_date'              => $item[10],
+                        'created_by'                => Auth::user()->id,
+                    ]);
+                }
+            }
+            if($dataArray){
+                return response()->json(['error'=>$dataArray]);
+            }
+            return 1;
+        } else {
+            return 0;
+        }
+    }
 }

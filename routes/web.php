@@ -230,6 +230,8 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('/reports/payroll-report', [PayrollReportController::class,'filter']);
     Route::get('/reports/payroll-export', [PayrollReportController::class,'payrollExport']);
 
+    Route::get('/import-nssf', [PayrollReportController::class,'ImportIndex']);
+    Route::post('/import-nssf', [PayrollReportController::class,'ImportNSSF']);
     //Report nssf
     Route::get('/reports/nssf-report', [PayrollReportController::class,'reportNssf']);
     Route::post('/reports/nssf-report', [PayrollReportController::class,'nssfFilter']);

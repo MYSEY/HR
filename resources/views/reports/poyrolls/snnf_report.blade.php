@@ -158,7 +158,12 @@
                                                         aria-label="Payslip: activate to sort column ascending">@lang('lang.pension_contribution_dollar')</th>
                                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                         rowspan="1" colspan="1"
-                                                        aria-label="Payslip: activate to sort column ascending">@lang('lang.enterprise_pension_contribution')</th>
+                                                        aria-label="Payslip: activate to sort column ascending">@lang('lang.enterprise_pension_contribution')
+                                                    </th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                        rowspan="1" colspan="1"
+                                                        aria-label="Payslip: activate to sort column ascending">@lang('lang.payment_date')
+                                                    </th>
                                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                         rowspan="1" colspan="1"
                                                         aria-label="Salary: activate to sort column ascending">@lang('lang.created_at')
@@ -184,6 +189,7 @@
                                                             <td><span>៛</span>{{ number_format($item->pension_contribution_usd) }}</td>
                                                             <td>${{ $item->pension_contribution_riel }}</td>
                                                             <td><span>៛</span>{{ number_format($item->corporate_contribution) }}</td>
+                                                            <td>{{ Carbon\Carbon::parse($item->payment_date)->format('d-M-Y') }}</td>
                                                             <td>{{ Carbon\Carbon::parse($item->created_at)->format('d-M-Y') }}</td>
                                                         </tr>
                                                     @endforeach
@@ -270,6 +276,7 @@
                 if (data.length > 0) {
                     data.map((row) => {
                         let join_date = moment(row.users.date_of_commencement).format('D-MMM-YYYY')
+                        let payment_date = moment(row.payment_date).format('D-MMM-YYYY')
                         let created_at = moment(row.created_at).format('D-MMM-YYYY')
                         tr +='<tr class="odd">'+
                                 '<td><a href="#">'+(row.users == null ? '' : row.users.number_employee )+'</a></td>'+
@@ -287,6 +294,7 @@
                                 '<td><span>៛</span>'+(formatCurrencyKH(row.pension_contribution_usd) )+'</td>'+
                                 '<td>$'+(row.pension_contribution_riel )+'</td>'+
                                 '<td><span>៛</span>'+(formatCurrencyKH(row.corporate_contribution) )+'</td>'+
+                                '<td>'+(payment_date)+'</td>'+
                                 '<td>'+(created_at)+'</td>'+
                         '</tr>';
                     });

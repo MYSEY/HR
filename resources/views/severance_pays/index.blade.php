@@ -19,16 +19,15 @@
         <div class="page-header">
             <div class="row align-items-center">
                 <div class="col">
-                    <h3 class="page-title">@lang('lang.severance_pay')</h3>
+                    <h3 class="page-title">@lang('lang.import_severance_pay')</h3>
                     <ul class="breadcrumb">
                         <li class="breadcrumb-item"><a href="#">@lang('lang.dashboard')</a></li>
-                        <li class="breadcrumb-item active">@lang('lang.severance_pay')</li>
+                        <li class="breadcrumb-item active">@lang('lang.import_severance_pay')</li>
                     </ul>
                 </div>
                 <div class="col-auto float-end ms-auto">
                     @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer')
                         <a href="#" class="btn add-btn" data-toggle="modal" id="importSeverancePay"><i class="fa fa-plus"></i>@lang('lang.import')</a>
-                        <a href="#" class="btn add-btn me-2" data-bs-toggle="modal" data-bs-target="#add_department"><i class="fa fa-plus"></i> @lang('lang.add_new')</a>
                     @endif
                 </div>
             </div>
@@ -115,7 +114,7 @@
                                                     <td><a href="#">{{ $item->users == null ? '' : $item->users->EmployeeDepartment}}</a></td>
                                                     <td><a href="#">{{ $item->users == null ? '' : $item->users->EmployeeBranch }}</a></td>
                                                     <td>{{ $item->users == null ? '' : $item->users->joinOfDate}}</td>
-                                                    <td>{{ $item->users == null ? '' : $item->users->FDCEndDate}}</td>
+                                                    <td>{{ $item->users == null ? '' : $item->users->UDCStartDate}}</td>
                                                     <td>${{$item->basic_salary}}</td>
                                                     <td>${{$item->total_fdc1}}</td>
                                                     <td>{{$item->PayrollPaymentDate}}</td>
