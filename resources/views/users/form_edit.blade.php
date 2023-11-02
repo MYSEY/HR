@@ -223,6 +223,18 @@
                                 </select>
                             </div>   
                         </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label>@lang('lang.fdc_start_date')</label>
+                                <input class="form-control datetimepicker  @error('fdc_date') is-invalid @enderror" id="e_fdc_date" required name="fdc_date" type="text" value="{{old('fdc_date')}}">
+                            </div>   
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label>@lang('lang.contract_deadline')</label>
+                                <input class="form-control datetimepicker  @error('udc_end_date') is-invalid @enderror" id="e_udc_end_date" required name="udc_end_date" type="text" value="{{old('udc_end_date')}}">
+                            </div>   
+                        </div>
                     </div>
                     {{-- basic salary infor --}}
                     <div class="form-group col-md-12 col-12" element="div" bp-field-wrapper="true" bp-field-name="Identity" bp-field-type="custom_html">
@@ -815,6 +827,8 @@
                     $('#e_first_name_en').val(response.success.first_name_en);
                     $('#e_first_name_kh').val(response.success.first_name_kh);
                     $('#e_date_of_birth').val(response.success.date_of_birth);
+                    $('#e_fdc_date').val(response.success.fdc_date);
+                    $('#e_udc_end_date').val(response.success.udc_end_date);
                     $('#e_id_card_number').val(response.success.id_card_number);
                     $('#e_id_number_nssf').val(response.success.id_number_nssf);
                     $('#e_ethnicity').val(response.success.ethnicity);

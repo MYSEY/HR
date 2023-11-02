@@ -414,7 +414,7 @@ class UserController extends Controller
                     'emp_status' => $request->emp_status,
                     'fdc_date' => $request->start_date,
                     'fdc_end' => $request->end_dete,
-                    'severance_pay_date' => $request->end_dete,
+                    'udc_end_date' => $request->start_date,
                     'salary_increas' => $request->total_salary_increase,
                     'basic_salary' => $totalBasicSalary,
                     // 'total_current_salary' => $totalCurrentSalary,
@@ -427,14 +427,13 @@ class UserController extends Controller
                     'emp_status' => $request->emp_status,
                     'fdc_date' => $request->start_date,
                     'fdc_end' => $request->end_dete,
-                    'severance_pay_date' => $request->end_dete,
+                    'udc_end_date' => $request->start_date,
                     'resign_reason' => $request->resign_reason
                 ]);
             }else if($request->emp_status == 2){
                 User::where('id',$request->id)->update([
                     'emp_status' => $request->emp_status,
                     'fdc_date' => $request->start_date,
-                    'severance_pay_date' => $request->end_dete,
                     'udc_end_date' => $request->start_date,
                     'resign_reason' => $request->resign_reason
                 ]);

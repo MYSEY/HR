@@ -77,7 +77,6 @@ class CreateUsersTable extends Migration
             $table->string('marital_status')->nullable();
             $table->date('fdc_date')->nullable();
             $table->date('fdc_end')->nullable();
-            $table->date('severance_pay_date')->nullable();
             $table->date('udc_end_date')->nullable();
             $table->date('resign_date')->nullable();
             $table->string('resign_reason')->nullable();

@@ -130,6 +130,8 @@ class EmployeeRepository extends BaseRepository
             'position_type'  => $request->position_type,
             'department_id'  => $request->department_id,
             'date_of_birth'  => $request->date_of_birth,
+            'fdc_date'  => $request->fdc_date,
+            'udc_end_date'  => $request->udc_end_date,
             'id_number_nssf'  => $request->id_number_nssf,
             'email'  => $request->email,
             'branch_id'  => $request->branch_id,
