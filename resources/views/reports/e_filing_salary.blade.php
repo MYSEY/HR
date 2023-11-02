@@ -123,38 +123,38 @@
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Spouse: activate to sort column ascending">@lang('lang.spouse') </th>
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Dependent child: activate to sort column ascending">@lang('lang.dependent_child') </th>
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Salary: activate to sort column ascending">@lang('lang.salary')</th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Additional benefits: activate to sort column ascending">@lang('lang.additional_benefits')</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Additional benefits: activate to sort column ascending">@lang('lang.fringe_benefits')</th>
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Non-taxable salary: activate to sort column ascending">@lang('lang.non_taxable_salary')</th>
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Joining Date: activate to sort column ascending">@lang('lang.payment_date')</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @if (count($payroll)>0)
-                                                @foreach ($payroll as $key=>$item)
+                                            @if (count($dataPayrolls)>0)
+                                                @foreach ($dataPayrolls as $key=>$item)
                                                     <tr class="odd">
                                                         <td class="stuck-scroll-4">{{++$key}}</td>
-                                                        <td class="stuck-scroll-4"><a href="#">{{$item->users->number_employee}}</a></td>
-                                                        <td class="stuck-scroll-4"><a href="#">{{$item->users->last_name_kh}}</a></td>
-                                                        <td class="stuck-scroll-4"><a href="#">{{$item->users->first_name_kh}}</a></td>
-                                                        <td><a href="#">{{$item->users->last_name_en}}</a></td>
-                                                        <td><a href="#">{{$item->users->first_name_en}}</a></td>
-                                                        <td>{{$item->users->id_card_number ? $item->users->id_card_number : ""}}</td>
-                                                        <td></td>
-                                                        <td class="">{{$item->users->identity_number}}</td>
-                                                        <td>{{$item->users->EmployeeGender}}</td>
-                                                        <td>{{$item->users->nationality ? $item->users->nationality : ""}}</td>
-                                                        <td>{{$item->users->ethnicity ? $item->users->ethnicity : ""}}</td>
-                                                        <td>{{$item->users->DOB}}</td>
-                                                        <td>{{$item->users->phone_number}}</td>
-                                                        <td>{{$item->users->email ? $item->users->email : ""}}</td>
-                                                        <td>{{$item->users->type_of_employees_nssf}}</td>
-                                                        <td>{{ $item->users == null ? '' : $item->users->EmployeePosition}}</td>
-                                                        <td>{{ $item->spouse_nssf == null ? '' : $item->users->spouse_nssf}}</td>
-                                                        <td>{{ $item->users->TotalChild}}</td>
-                                                        <td>${{$item->users->basic_salary}}</td>
-                                                        <td></td>
-                                                        <td>${{$item->base_salary_received_usd}}</td>
-                                                        <td>{{ \Carbon\Carbon::parse($item->payment_date)->format('d-M-Y')}}</td>
+                                                        <td class="stuck-scroll-4"><a href="#">{{$item["users"]->number_employee}}</a></td>
+                                                        <td class="stuck-scroll-4"><a href="#">{{$item["users"]->last_name_kh}}</a></td>
+                                                        <td class="stuck-scroll-4"><a href="#">{{$item["users"]->first_name_kh}}</a></td>
+                                                        <td ><a href="#">{{$item["users"]->last_name_en}}</a></td>
+                                                        <td ><a href="#">{{$item["users"]->first_name_en}}</a></td>
+                                                        <td >{{$item["users"]->id_card_number ? $item["users"]->id_card_number : ""}}</td>
+                                                        <td ></td>
+                                                        <td class="">{{$item["users"]->identity_number}}</td>
+                                                        <td >{{$item["users"]->EmployeeGender}}</td>
+                                                        <td >{{$item["users"]->nationality? $item["users"]->nationality : ""}}</td>
+                                                        <td >{{$item["users"]->ethnicity? $item["users"]->ethnicity : ""}}</td>
+                                                        <td >{{$item["users"]->DOB}}</td>
+                                                        <td >{{$item["users"]->phone_number}}</td>
+                                                        <td >{{$item["users"]->email ? $item["users"]->email : ""}}</td>
+                                                        <td >{{$item["users"]->type_of_employees_nssf}}</td>
+                                                        <td>{{ $item["users"] == null ? '' : $item["users"]->EmployeePosition}}</td>
+                                                        <td>{{ $item["users"]->spouse_nssf == null ? '' : $item["users"]->spouse_nssf}}</td>
+                                                        <td>{{ $item["users"]->TotalChild}}</td>
+                                                        <td>៛ {{number_format($item["base_salary_received_riel"])}}</td>
+                                                        <td>៛ {{number_format($item["total_benefits"])}}</td>
+                                                        <td>$ {{number_format($item["non_taxable_salary"])}}</td>
+                                                        <td>{{ \Carbon\Carbon::parse($item["payment_date"])->format('d-M-Y')}}</td>
                                                     </tr>
                                                 @endforeach
                                             @endif
@@ -239,7 +239,7 @@
                     let index = 0;
                     data.map((row) => {
                         index++;
-                        let join_date = row.users.date_of_birth ? moment(row.users.date_of_birth).format('D-MMM-YYYY'): "";
+                        let date_of_birth = row.users.date_of_birth ? moment(row.users.date_of_birth).format('D-MMM-YYYY'): "";
                         let payment_date = moment(row.payment_date).format('D-MMM-YYYY');
                         tr +='<tr class="odd">'+
                                 '<td class="stuck-scroll-4">'+(index)+'</td>'+
@@ -254,21 +254,21 @@
                                 '<td >'+(row.users.gender ? row.users.gender.name_english : "")+'</td>'+
                                 '<td >'+(row.users.nationality? row.users.nationality : "")+'</td>'+
                                 '<td >'+(row.users.ethnicity? row.users.ethnicity : "")+'</td>'+
-                                '<td >'+(join_date)+'</td>'+
+                                '<td >'+(date_of_birth)+'</td>'+
                                 '<td >'+(row.users.phone_number)+'</td>'+
                                 '<td >'+(row.users.email ? row.users.email : "")+'</td>'+
                                 '<td >'+(row.users.type_of_employees_nssf ? row.users.type_of_employees_nssf : "")+'</td>'+
                                 '<td>'+(row.users.position ?  row.users.position.name_english : "")+'</td>'+
                                 '<td>'+(row.spouse_nssf == null ? '' : row.users.spouse_nssf)+'</td>'+
                                 '<td>'+(row.users.total_child.length)+'</td>'+
-                                '<td>$ '+(row.users.basic_salary)+'</td>'+
-                                '<td></td>'+
-                                '<td>$ '+(row.base_salary_received_usd)+'</td>'+
+                                '<td>៛ '+(row.base_salary_received_riel)+'</td>'+
+                                '<td>៛ '+(Number(row.total_benefits).toFixed(0))+'</td>'+
+                                '<td>៛ '+(Number(row.non_taxable_salary).toFixed(0))+'</td>'+
                                 '<td>'+(payment_date)+'</td>'+
                         '</tr>';
                     });
                 }else{
-                    var tr = '<tr><td colspan=20 align="center">ពុំមានទិន្នន័យសម្រាប់បង្ហាញ</td></tr>';
+                    var tr = '<tr><td colspan=23 align="center">ពុំមានទិន្នន័យសម្រាប់បង្ហាញ</td></tr>';
                 }
                 $(".tbl_e_filing_salary tbody").html(tr);
                 // $("#table_print_filter_basic_salary tbody").html(tr);   

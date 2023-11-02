@@ -287,8 +287,12 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('/reports/e-form', [ReportsController::class,'eFormSalary']);
     Route::post('/reports/e-form-filter', [ReportsController::class,'eFormFilter']);
     Route::get('/reports/e-form-export', [ReportsController::class,'eFormSalaryExport']);
+
+    Route::get('/reports/fringe-benefits-report', [ReportsController::class,'fringeBenefit']);
+    Route::post('/reports/fringe-benefits-filter', [ReportsController::class,'fringeBenefitFilter']);
+    Route::get('/reports/fringe-benefits-export', [ReportsController::class,'fringeBenefitExport']);
     
-    // test export excel
+    // export excel
     Route::get('motor-rentel/export',[PayrollReportController::class,'export']);
     Route::post('motor-rentel/import',[MotorRentelController::class,'import']);
 
@@ -326,7 +330,6 @@ Route::middleware(['auth:sanctum'])->group(function(){
     // route fringe benefits
     Route::get('/fringe-benefit', [FringeBenefitController::class,'index']);
     Route::post('/fringe-benefit/store', [FringeBenefitController::class,'store']);
-    Route::post('/fringe-benefit/create', [FringeBenefitController::class,'create']);
     Route::post('/fringe-benefit/update', [FringeBenefitController::class,'update']);
     Route::get('/fringe-benefit/edit', [FringeBenefitController::class,'edit']);
     Route::post('/fringe-benefit/delete', [FringeBenefitController::class,'destroy']);

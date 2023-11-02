@@ -24,26 +24,28 @@ class ExportEForm implements FromCollection, WithColumnWidths, WithHeadings, Wit
         $dataExport = [];
         foreach ($export_data as $value) {
             $i++;
-            $this->totalBaseSalaryReceived += $value->base_salary_received_riel;
+            $this->totalBaseSalaryReceived += $value["total_gross"];
+            $joinOfDate = Carbon::createFromDate($value["users"]->date_of_commencement)->format('d-m-Y');
+            $date_of_birth = Carbon::createFromDate($value["users"]->date_of_birth)->format('d-m-Y');
             $dataExport[] = [
                 "number" => $i,
-                "number_employee"               => $value->users->number_employee,
-                "id_number_nssf"                => $value->users->id_number_nssf,
-                "id_card_number"                => $value->users->id_card_number,
-                "last_name_kh"                  => $value->users->last_name_kh,
-                "first_name_kh"                 => $value->users->first_name_kh,
-                "last_name_en"                  => $value->users->last_name_en,
-                "first_name_en"                 => $value->users->first_name_en,
-                "gender"                        => $value->users->EmployeeGender,
-                "date_of_birthday"              => $value->users->DOB,
-                "nationality"                   => $value->users->nationality? $value->users->nationality : "",
-                "join_date"                     => $value->users->joinOfDate,
+                "number_employee"               => $value["users"]->number_employee,
+                "id_number_nssf"                => $value["users"]->id_number_nssf,
+                "id_card_number"                => $value["users"]->id_card_number,
+                "last_name_kh"                  => $value["users"]->last_name_kh,
+                "first_name_kh"                 => $value["users"]->first_name_kh,
+                "last_name_en"                  => $value["users"]->last_name_en,
+                "first_name_en"                 => $value["users"]->first_name_en,
+                "gender"                        => $value["users"]->EmployeeGender,
+                "date_of_birthday"              => $date_of_birth,
+                "nationality"                   => $value["users"]->nationality? $value["users"]->nationality : "",
+                "join_date"                     => $joinOfDate,
                 "group"                         => "",
-                "position"                      => $value->users == null ? '' : $value->users->joinOfDate,
-                "type_of_employees_nssf"        => $value->users->type_of_employees_nssf,
-                "status_nssf"                   => $value->users->status_nssf,
-                "base_salary_received_usd"      => $value->base_salary_received_riel,
-                "payment_date"                  => Carbon::parse($value->payment_date)->format('d-M-Y'),
+                "position"                      => $value["users"] == null ? '' : $value["users"]->position->position_range,
+                "type_of_employees_nssf"        => $value["users"]->type_of_employees_nssf,
+                "status_nssf"                   => $value["users"]->status_nssf,
+                "total_gross"                   => $value["total_gross"],
+                "payment_date"                  => Carbon::parse($value["payment_date"])->format('d-M-Y'),
             ];
         }
         $this->export_datas = $dataExport;

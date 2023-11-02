@@ -136,10 +136,10 @@
                                                         <td >{{$item->users->nationality? $item->nationality : ""}}</td>
                                                         <td >{{$item->users->joinOfDate}}</td>
                                                         <td> </td>
-                                                        <td>{{ $item->users == null ? '' : $item->users->EmployeePosition}}</td>
+                                                        <td>{{ $item->users == null ? '' : $item->users->position->position_range}}</td>
                                                         <td>{{ $item->users->type_of_employees_nssf ? $item->users->type_of_employees_nssf == 1 ? 'និវាសនជន' : "អនិវាសនជន" : ""}}</td>
                                                         <td>{{ $item->users->status_nssf ? $item->users->status_nssf == 1 ? 'Working' : 'Not working' : ""}}</td>
-                                                        <td>៛ {{$item->base_salary_received_riel}}</td>
+                                                        <td>$ {{$item->total_gross}}</td>
                                                         <td>{{ \Carbon\Carbon::parse($item->payment_date)->format('d-M-Y')}}</td>
                                                     </tr>
                                                 @endforeach

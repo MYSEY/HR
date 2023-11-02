@@ -52,7 +52,7 @@
                                                     <td >{{$item->employee->employee_name_en}}</td>
                                                     <td >{{$item->employee->employeeGender ? $item->employee->employeeGender : ""}}</td>
                                                     <td >{{$item->employee->position ? $item->employee->position->name_english : ""}}</td>
-                                                    <td >{{\Carbon\Carbon::parse($item->employee->join_date)->format('d-M-Y') ?? ''}}</td>
+                                                    <td >{{\Carbon\Carbon::parse($item->employee->date_of_commencement)->format('d-M-Y') ?? ''}}</td>
                                                     <td >$ {{number_format($item->amount_usd,2)}}</td>
                                                     <td >៛ {{number_format($item->amount_riel)}}</td>
                                                     <td >{{\Carbon\Carbon::parse($item->request_date)->format('d-M-Y') ?? ''}}</td>
@@ -109,7 +109,7 @@
                                         <label class="">@lang('lang.amount') (@lang('lang.usd'))</label>
                                         <div class="input-group">
                                             <span class="input-group-text">$</span>
-                                            <input class="form-control" type="number" id="amount_usd" name="amount_usd" value="{{old('amount_usd')}}">
+                                            <input class="form-control" min="0" max="10" step="0.00" value="0.00" id="amount_usd" name="amount_usd" value="{{old('amount_usd')}}">
                                         </div>
                                     </div>
                                 </div>

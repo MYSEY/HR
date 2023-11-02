@@ -35,7 +35,8 @@ class FringeBenefit extends Model
             'position_id',
             'branch_id',
             'gender',
-        ])->with('position')->with('employeeGender');
+            'date_of_commencement',
+        ])->with('employeeGender')->with('position')->with('branch');
     }
 
     public function createdBy()

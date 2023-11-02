@@ -231,6 +231,12 @@ function menu(){
                     'permission'=>1
                 ],
                 [
+                    'value'=> Helper::getLang() == 'en' ? 'Fringe Benefits Report':'របាយការណ៍អត្ថប្រយោជន៍បន្ថែ',
+                    'url'=>"reports/fringe-benefits-report",
+                    'table'=>19,
+                    'permission'=>1
+                ],
+                [
                     'value'=> Helper::getLang() == 'en' ? 'Motor Rental Report': 'របាយការណ៍ជួលម៉ូតូ',
                     'url'=>"reports/motor-rentel-report",
                     'table'=>20,
