@@ -17,6 +17,7 @@ class ExportEFiling implements FromCollection, WithColumnWidths, WithHeadings, W
     protected $totalRecord;
     protected $totalBasicSalary;
     protected $totalBaseSalaryReceived;
+    protected $totalFringbenefits;
 
     public function __construct($export_data)
     {
@@ -25,32 +26,34 @@ class ExportEFiling implements FromCollection, WithColumnWidths, WithHeadings, W
         $dataExport = [];
         foreach ($export_data as $value) {
             $i++;
-            $this->totalBasicSalary += $value->users->basic_salary;
-            $this->totalBaseSalaryReceived += $value->base_salary_received_usd;
+            $this->totalBasicSalary += $value["base_salary_received_riel"];
+            $this->totalBaseSalaryReceived += $value["non_taxable_salary"];
+            $this->totalFringbenefits += $value["total_benefits"];
+            $date_of_birth = Carbon::createFromDate($value["users"]->date_of_birth)->format('d-m-Y');
             $dataExport[] = [
                 "number" => $i,
-                "id_card_number" => $value->users->id_card_number ? $value->users->id_card_number : "",
-                "TID" => "",
-                "passport" => $value->users->identity_number,
-                // "number_employee" => $value->users->number_employee,
-                "last_name_kh" => $value->users->last_name_kh,
-                "first_name_kh" => $value->users->first_name_kh,
-                "last_name_en" => $value->users->last_name_en,
-                "first_name_en" => $value->users->first_name_en,
-                "gender" => $value->users->EmployeeGender,
-                "nationality" => $value->users->nationality? $value->users->nationality : "",
-                "ethnicity"=> $value->users->ethnicity,
-                "date_of_birthday" => $value->users->DOB,
-                "phone_number" => $value->users->phone_number,
-                "email" => $value->users->email ? $value->users->email : "",
-                "positiontype" => $value->users->type_of_employees_nssf,
-                "position" => $value->users == null ? '' : $value->users->EmployeePosition,
-                "spouse" => $value->spouse_nssf == null ? '' : $value->users->spouse_nssf,
-                "total_child" => $value->users->TotalChild,
-                "basic_salary" => $value->users->basic_salary,
-                "additional_benefits"=> "",
-                "base_salary_received_usd" => $value->base_salary_received_usd,
-                "payment_date" => Carbon::parse($value->payment_date)->format('d-M-Y'),
+                "id_card_number"            => $value["users"]->id_card_number ? $value["users"]->id_card_number : "",
+                "TID"                       => "",
+                "passport"                  => $value["users"]->identity_number,
+                // "number_employee"        => $value["users"]->number_employee,
+                "last_name_kh"              => $value["users"]->last_name_kh,
+                "first_name_kh"             => $value["users"]->first_name_kh,
+                "last_name_en"              => $value["users"]->last_name_en,
+                "first_name_en"             => $value["users"]->first_name_en,
+                "gender"                    => $value["users"]->EmployeeGender,
+                "nationality"               => $value["users"]->nationality? $value["users"]->nationality : "",
+                "ethnicity"                 => $value["users"]->ethnicity,
+                "date_of_birthday"          => $date_of_birth,
+                "phone_number"              => $value["users"]->phone_number,
+                "email"                     => $value["users"]->email ? $value["users"]->email : "",
+                "positiontype"              => $value["users"]->type_of_employees_nssf,
+                "position"                  => $value["users"] == null ? '' : $value["users"]->position->position_range,
+                "spouse"                    => $value["users"]->spouse_nssf == null ? '' : $value["users"]->spouse_nssf,
+                "total_child"               => $value["users"]->TotalChild,
+                "base_salary_received_riel" => $value["base_salary_received_riel"],
+                "fringe_benefits"           => number_format($value["total_benefits"]),
+                "non_taxable_salary"        => number_format($value["non_taxable_salary"]),
+                "payment_date"              => Carbon::parse($value["payment_date"])->format('d-M-Y'),
             ];
         }
         $this->export_datas = $dataExport;
@@ -188,11 +191,11 @@ class ExportEFiling implements FromCollection, WithColumnWidths, WithHeadings, W
                 $sheet->getDelegate()->getStyle("S".$fromMerge)->getFont()->setName('Khmer OS Battambang')
                 ->setSize(9)->setBold("S".$fromMerge);
 
-                $sheet->setCellValue("T".$fromMerge, number_format(0));
+                $sheet->setCellValue("T".$fromMerge, number_format($this->totalFringbenefits));
                 $sheet->getDelegate()->getStyle("T".$fromMerge)->getFont()->setName('Khmer OS Battambang')
                 ->setSize(9)->setBold("T".$fromMerge);
 
-                $sheet->setCellValue("U".$fromMerge, number_format($this->totalBaseSalaryReceived,2));
+                $sheet->setCellValue("U".$fromMerge, number_format($this->totalBaseSalaryReceived));
                 $sheet->getDelegate()->getStyle("U".$fromMerge)->getFont()->setName('Khmer OS Battambang')
                 ->setSize(9)->setBold("U".$fromMerge);
             },

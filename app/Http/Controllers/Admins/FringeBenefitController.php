@@ -136,7 +136,7 @@ class FringeBenefitController extends Controller
                 'amount_usd' => $request->amount_usd,
                 'amount_riel' => $request->amount_riel,
                 'request_date' => $request->request_date,
-                'paid_date' => $request->tax_date,
+                'paid_date' => $request->paid_date,
                 'remark' => $request->remark,
                 'updated_by' => Auth::user()->id 
             ]);

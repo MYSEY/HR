@@ -6,9 +6,11 @@ use App\Exports\ExportBankTransfer;
 use App\Exports\ExportEFiling;
 use App\Exports\ExportEForm;
 use App\Exports\ExportEmployeeReport;
+use App\Exports\ExportFringeBenefits;
 use App\Exports\ExportTraining;
 use App\Http\Controllers\Controller;
 use App\Models\Branchs;
+use App\Models\FringeBenefit;
 use App\Models\Payroll;
 use App\Models\Position;
 use App\Models\StaffPromoted;
@@ -19,6 +21,7 @@ use App\Models\User;
 use App\Repositories\Admin\ReportRepository;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 
 class ReportsController extends Controller
@@ -316,10 +319,10 @@ class ReportsController extends Controller
         return Excel::download($export, 'ReportBankTransfer.xlsx');
     }
 
-    public function eFilingSalary(){
-        $payroll = Payroll::with('users')->orderBy('id', 'DESC')->get();
+    public function eFilingSalary(Request $request){
+        $dataPayrolls = $this->reportRepo->getEFilingSalary($request);
         $positions = Position::get();
-        return view('reports.e_filing_salary',compact('payroll','positions'));
+        return view('reports.e_filing_salary',compact('dataPayrolls','positions'));
     }
     public function eFilingFilter(Request $request)
     {
@@ -349,5 +352,22 @@ class ReportsController extends Controller
         $data = $this->reportRepo->getEFilingSalary($request);
         $export = new ExportEForm($data);
         return Excel::download($export, 'ReportEForm.xlsx');
+    }
+
+    public function fringeBenefit(Request $request){
+        $datas = $this->reportRepo->getFringeBenefits($request);
+        $positions = Position::get();
+        return view('reports.fringe_benefits_report',compact('datas','positions'));
+    }
+    public function fringeBenefitFilter(Request $request){
+        $data = $this->reportRepo->getFringeBenefits($request);
+        return response()->json([
+            'success'=>$data,
+        ]);
+    }
+    public function fringeBenefitExport(Request $request){
+        $data = $this->reportRepo->getFringeBenefits($request);
+        $export = new ExportFringeBenefits($data);
+        return Excel::download($export, 'ReportFringeBenefits.xlsx');
     }
 }
