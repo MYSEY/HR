@@ -19,7 +19,7 @@
         <div class="page-header">
             <div class="row align-items-center">
                 <div class="col">
-                    <h3 class="page-title">@lang('lang.employee_salary')</h3>
+                    <h3 class="page-title">@lang('lang.prayroll_preview')</h3>
                     <ul class="breadcrumb">
                         <li class="breadcrumb-item"><a href="#">@lang('lang.dashboard')</a></li>
                         <li class="breadcrumb-item active">@lang('lang.salary')</li>
@@ -27,7 +27,7 @@
                 </div>
                 <div class="col-auto float-end ms-auto">
                     @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer')
-                        <a href="#" class="btn add-btn" data-toggle="modal" id=""><i class="fa fa-plus"></i>@lang('lang.import')</a>
+                        {{-- <a href="#" class="btn add-btn" data-toggle="modal" id=""><i class="fa fa-plus"></i>@lang('lang.import')</a> --}}
                         <a href="#" class="btn add-btn me-2" data-bs-toggle="modal" data-bs-target="#add_salary"><i class="fa fa-plus"></i> @lang('lang.add_new')</a>
                     @endif
                 </div>
@@ -527,7 +527,7 @@
                                 timeout: 3000,
                                 icon: true
                             }).show();
-                            window.location.replace("{{ URL('payroll') }}");
+                            window.location.replace("{{ URL('payroll/preview') }}");
                         }).catch(function(error) {
                             console.log(error);
                             new Noty({

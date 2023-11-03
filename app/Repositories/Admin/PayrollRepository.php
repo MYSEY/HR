@@ -3,6 +3,7 @@
 namespace App\Repositories\Admin;
 
 use App\Models\Payroll;
+use App\Models\payrollPreview;
 use Illuminate\Support\Carbon;
 use App\Repositories\BaseRepository;
 use Illuminate\Support\Facades\Auth;
@@ -40,5 +41,8 @@ class PayrollRepository extends BaseRepository
         } else {
             return Payroll::with("users")->where('employee_id',Auth::user()->id)->orderBy('id','DESC')->get();
         }
+    }
+    public function getAllPayrollPreview(){
+        return payrollPreview::with('users')->with('chiledren')->orderBy('id','DESC')->get();
     }
 }

@@ -15,6 +15,7 @@ use Illuminate\Http\Request;
 use App\Models\ChildrenInfor;
 use App\Models\PayrollDetail;
 use App\Models\GrossSalaryPay;
+use App\Models\payrollPreview;
 use Illuminate\Support\Carbon;
 use App\Models\ChildrenAllowance;
 use Illuminate\Support\Facades\DB;
@@ -54,17 +55,14 @@ class EmployeePayrollController extends Controller
 
         return view('payrolls.index',compact('data','user','branch','exChangeRateSalary', 'exChangeRateNSSF'));
     }
-    public function payrollDetail(Request $request){
-        $data = $this->payrollRepo->getAllPayroll($request);
+    public function payrollPreview(Request $request){
+        $data = $this->payrollRepo->getAllPayrollPreview($request);
         $user = User::all();
         $branch = Branchs::all();
-        // $exChangeRate= ExchangeRate::where('type','Salary')->orderBy('id','desc')->first();
-        $Monthly= Carbon::now()->format('m');
-        $yearLy = Carbon::now()->format('Y');
         $exChangeRateSalary= ExchangeRate::where('type','Salary')->orderBy('id','desc')->first();
         $exChangeRateNSSF= ExchangeRate::where('type','NSSF')->orderBy('id','desc')->first();
 
-        return view('payrolls.detail',compact('data','user','branch','exChangeRateSalary', 'exChangeRateNSSF'));
+        return view('payrolls.preview',compact('data','user','branch','exChangeRateSalary', 'exChangeRateNSSF'));
     }
     public function search(Request $request) {
         $Monthly = null;
@@ -762,7 +760,7 @@ class EmployeePayrollController extends Controller
                     $data['total_salary']                   = $totalNetSalary;
                     $data['exchange_rate']                  = $request->exchange_rate;
                     $data['created_by']                     = Auth::user()->id;
-                    Payroll::create($data);
+                    payrollPreview::create($data);
                 }
                 Toastr::success('Created payroll successfully.','Success');
                 return redirect()->back();
