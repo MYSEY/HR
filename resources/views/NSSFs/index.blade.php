@@ -56,6 +56,11 @@
                         <input type="text" class="form-control" name="employee_name" id="employee_name" placeholder="@lang('lang.employee_name')" value="{{old('employee_name')}}">
                     </div>
                 </div>
+                <div class="col-sm-6 col-md-2 col-lg-2 col-xl-2">
+                    <div class="form-group ">
+                        <input class="form-control" type="month" id="filter_month">
+                    </div>
+                </div>
                 <div class="col-sm-2 col-md-2">
                     <div class="form-group">
                         <select class="select form-control" id="branch_id" data-select2-id="select2-data-2-c0n2" name="branch_id">
@@ -66,11 +71,7 @@
                         </select>
                     </div>
                 </div>
-                <div class="col-sm-6 col-md-2 col-lg-2 col-xl-2">
-                    <div class="form-group ">
-                        <input class="form-control" type="month" id="filter_month">
-                    </div>
-                </div>
+                
                 <div class="col-sm-4 col-md-4">
                     <div style="display: flex" class="float-end">
                         <button type="button" class="btn btn-sm btn-outline-secondary btn-search me-2" data-dismiss="modal">
@@ -231,9 +232,8 @@
                         let payment_date = moment(row.payment_date).format('D-MMM-YYYY')
                         let created_at = moment(row.created_at).format('D-MMM-YYYY')
                         tr +='<tr class="odd">'+
-                                '<td><a href="#">'+(row.users == null ? '' : row.users.number_employee )+'</a></td>'+
-                                '<td><a href="#">'+(row.users == null ? '' : row.users.last_name_kh )+'</a></td>'+
-                                '<td><a href="#">'+(row.users == null ? '' : row.users.first_name_kh )+'</a></td>'+
+                                '<td class="sorting sorting_asc stuck"><a href="#">'+(row.users == null ? '' : row.users.number_employee )+'</a></td>'+
+                                '<td class="sorting sorting_asc stuck"><a href="#">'+(localeLanguage == 'en' ? row.users.employee_name_en : row.users.employee_name_kh )+'</a></td>'+
                                 '<td><a href="#">'+(localeLanguage == 'en' ? row.name_english  : row.name_khmer )+'</a></td>'+
                                 '<td><a href="#">'+(localeLanguage == 'en' ? row.positionNameEnglish  : row.positionNameKhmer )+'</a></td>'+
                                 '<td><a href="#">'+(localeLanguage == 'en' ? row.branck_en  : row.branck_kh )+'</a></td>'+
