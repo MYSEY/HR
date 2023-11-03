@@ -26,6 +26,7 @@ return new class extends Migration
             $table->string('pension_contribution_usd',50,2)->default(0);
             $table->string('pension_contribution_riel',50,2)->default(0);
             $table->string('corporate_contribution',50,2)->default(0);
+            $table->string('exchange_rate')->nullable();
             $table->date('payment_date')->nullable();
             $table->bigInteger('created_by')->unsigned()->nullable();
             $table->bigInteger('updated_by')->unsigned()->nullable();

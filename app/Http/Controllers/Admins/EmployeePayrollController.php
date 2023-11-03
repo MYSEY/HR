@@ -381,6 +381,7 @@ class EmployeePayrollController extends Controller
                             'pension_contribution_usd'      => round($workerContributionUsd, -2),
                             'pension_contribution_riel'     => round($workerContributionRiel, 2),
                             'corporate_contribution'        => round($workerContributionUsd, -2),
+                            'exchange_rate'                 => $exchangNSSF->amount_riel,
                             'payment_date'                  => $request->payment_date,
                             'created_by'                    => Auth::user()->id,
                         ]);
@@ -853,7 +854,7 @@ class EmployeePayrollController extends Controller
                 $i++;
                 if ($i != 1) {
                     $employee = User::where("number_employee", $item[0])->first();
-                    Payroll::create([
+                    Payroll::firstOrCreate([
                         'employee_id'                   => $employee->id,
                         'number_employee'               => $item[0],
                         'basic_salary'                  => $item[2],

@@ -72,7 +72,7 @@
                         if (data == 1) {
                             $("#importNssfModal").modal("hide");
                             toastr.success('Data has been save success');
-                            window.location.replace("{{ URL('severance-pay') }}");
+                            window.location.replace("{{ URL('import-nssf') }}");
                         }
                         if (data == 2) {
                             $("#importNssfModal").modal("hide");

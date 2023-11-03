@@ -66,12 +66,12 @@
                         </select>
                     </div>
                 </div>
-                {{-- <div class="col-sm-6 col-md-2 col-lg-2 col-xl-2">
+                <div class="col-sm-6 col-md-2 col-lg-2 col-xl-2">
                     <div class="form-group ">
                         <input class="form-control" type="month" id="filter_month">
                     </div>
-                </div> --}}
-                <div class="col-sm-6 col-md-6">
+                </div>
+                <div class="col-sm-4 col-md-4">
                     <div style="display: flex" class="float-end">
                         <button type="button" class="btn btn-sm btn-outline-secondary btn-search me-2" data-dismiss="modal">
                             <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading') </span>
@@ -100,68 +100,22 @@
                             <table class="table table-striped custom-table datatable dataTable no-footer" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
                                 <thead>
                                     <tr>
-                                        <th class="sorting sorting_asc stuck" tabindex="0" aria-controls="DataTables_Table_0"
-                                            rowspan="1" colspan="1">@lang('lang.employee_id')
-                                        </th>
-                                        <th class="sorting sorting_asc stuck" tabindex="0"
-                                            aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
-                                            aria-sort="ascending"
-                                            aria-label="Employee: activate to sort column descending">@lang('lang.employee_name')
-                                        </th>
-                                        <th class="sorting" tabindex="0"
-                                            aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
-                                            aria-sort="ascending"
-                                            aria-label="Employee: activate to sort column descending">@lang('lang.gender')
-                                        </th>
-                                        <th class="sorting" tabindex="0"
-                                            aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
-                                            aria-sort="ascending"
-                                            aria-label="Employee: activate to sort column descending">@lang('lang.position')
-                                        </th>
-                                        <th class="sorting" tabindex="0"
-                                            aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
-                                            aria-sort="ascending"
-                                            aria-label="Employee: activate to sort column descending">@lang('lang.location')
-                                        </th>
-                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                            rowspan="1" colspan="1"
-                                            aria-label="Join Date: activate to sort column ascending">@lang('lang.join_date')
-                                        </th>
-                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                            rowspan="1" colspan="1"
-                                            aria-label="Salary: activate to sort column ascending">@lang('lang.total_salary_before_tax_dollars')@lang('lang.usd')</th>
-                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                            rowspan="1" colspan="1"
-                                            aria-label="Salary: activate to sort column ascending">@lang('lang.total_salary_before_tax_riel')@lang('lang.riel')</th>
-                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                            rowspan="1" colspan="1"
-                                            aria-label="Salary: activate to sort column ascending">@lang('lang.average_wage')
-                                        </th>
-                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                            rowspan="1" colspan="1"
-                                            aria-label="Payslip: activate to sort column ascending"> @lang('lang.occupational_risk')</th>
-                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                            rowspan="1" colspan="1"
-                                            aria-label="Payslip: activate to sort column ascending">@lang('lang.health_care')
-                                        </th>
-                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                            rowspan="1" colspan="1"
-                                            aria-label="Payslip: activate to sort column ascending">@lang('lang.pension_contribution_riel')</th>
-                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                            rowspan="1" colspan="1"
-                                            aria-label="Payslip: activate to sort column ascending">@lang('lang.pension_contribution_dollar')</th>
-                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                            rowspan="1" colspan="1"
-                                            aria-label="Payslip: activate to sort column ascending">@lang('lang.enterprise_pension_contribution')
-                                        </th>
-                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                            rowspan="1" colspan="1"
-                                            aria-label="Payslip: activate to sort column ascending">@lang('lang.payment_date')
-                                        </th>
-                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                            rowspan="1" colspan="1"
-                                            aria-label="Salary: activate to sort column ascending">@lang('lang.created_at')
-                                        </th>
+                                        <th class="sorting sorting_asc stuck" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1">@lang('lang.employee_id')</th>
+                                        <th class="sorting sorting_asc stuck" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Employee: activate to sort column descending">@lang('lang.employee_name')</th>
+                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Employee: activate to sort column descending">@lang('lang.gender')</th>
+                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Employee: activate to sort column descending">@lang('lang.position')</th>
+                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Employee: activate to sort column descending">@lang('lang.location')</th>
+                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">@lang('lang.join_date')</th>
+                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Salary: activate to sort column ascending">@lang('lang.total_salary_before_tax_dollars')@lang('lang.usd')</th>
+                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Salary: activate to sort column ascending">@lang('lang.total_salary_before_tax_riel')@lang('lang.riel')</th>
+                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Salary: activate to sort column ascending">@lang('lang.average_wage')</th>
+                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Payslip: activate to sort column ascending"> @lang('lang.occupational_risk')</th>
+                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Payslip: activate to sort column ascending">@lang('lang.health_care')</th>
+                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Payslip: activate to sort column ascending">@lang('lang.pension_contribution_riel')</th>
+                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Payslip: activate to sort column ascending">@lang('lang.pension_contribution_dollar')</th>
+                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Payslip: activate to sort column ascending">@lang('lang.enterprise_pension_contribution')</th>
+                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Payslip: activate to sort column ascending">@lang('lang.payment_date')</th>
+                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Salary: activate to sort column ascending">@lang('lang.created_at')</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -177,8 +131,8 @@
                                                 <td>${{ number_format($item->total_pre_tax_salary_usd,2) }}</td>
                                                 <td><span>៛</span>{{ number_format($item->total_pre_tax_salary_riel) }}</td>
                                                 <td><span>៛</span>{{ number_format($item->total_average_wage) }}</td>
-                                                <td><span>៛</span>{{ number_format($item->total_occupational_risk,2)}}</td>
-                                                <td>{{ number_format($item->total_health_care,2) }}</td>
+                                                <td><span>៛</span>{{ number_format($item->total_occupational_risk)}}</td>
+                                                <td>{{ number_format($item->total_health_care) }}</td>
                                                 <td><span>៛</span>{{ number_format($item->pension_contribution_usd) }}</td>
                                                 <td>${{ $item->pension_contribution_riel }}</td>
                                                 <td><span>៛</span>{{ number_format($item->corporate_contribution) }}</td>

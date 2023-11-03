@@ -489,7 +489,7 @@ class PayrollReportController extends Controller
                 $i++;
                 if ($i != 1) {
                     $employee = User::where("number_employee", $item[0])->first();
-                    GrossSalaryPay::create([
+                    GrossSalaryPay::firstOrCreate([
                         'employee_id'                   => $employee->id,
                         'number_employee'               => $item[0],
                         'basic_salary'                  => $item[2],
@@ -529,7 +529,7 @@ class PayrollReportController extends Controller
                 $i++;
                 if ($i != 1) {
                     $employee = User::where("number_employee", $item[0])->first();
-                    NationalSocialSecurityFund::create([
+                    NationalSocialSecurityFund::firstOrCreate([
                         'employee_id'               => $employee->id,
                         'number_employee'           => $item[0],
                         'total_pre_tax_salary_usd'  => $item[2],
@@ -540,7 +540,8 @@ class PayrollReportController extends Controller
                         'pension_contribution_usd'  => $item[7],
                         'pension_contribution_riel' => $item[8],
                         'corporate_contribution'    => $item[9],
-                        'payment_date'              => $item[10],
+                        'exchange_rate'             => $item[10],
+                        'payment_date'              => $item[11],
                         'created_by'                => Auth::user()->id,
                     ]);
                 }

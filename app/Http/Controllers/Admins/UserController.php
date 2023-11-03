@@ -289,7 +289,7 @@ class UserController extends Controller
                     }else{
                         $fullNameKH = $item[1].' '.$item[2];
                         $fullNameEN = $item[3].' '.$item[4];
-                        $emp = User::create([
+                        $emp = User::firstOrCreate([
                             'number_employee'       => $item[0],
                             'employee_name_kh'      => $fullNameKH,
                             'employee_name_en'      => $fullNameEN,
@@ -334,7 +334,7 @@ class UserController extends Controller
                             'created_by'            => Auth::user()->id,
                         ]);
                         if($emp){
-                            GenerateIdEmployee::create([
+                            GenerateIdEmployee::firstOrCreate([
                                 'employee_id'       => $emp->id,
                                 'number_employee'   => $emp->number_employee,
                                 'created_by'        => Auth::user()->id,

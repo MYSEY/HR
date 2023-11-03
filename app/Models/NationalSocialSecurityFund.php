@@ -27,6 +27,7 @@ class NationalSocialSecurityFund extends Model
         'pension_contribution_usd',
         'pension_contribution_riel',
         'corporate_contribution',
+        'exchange_rate',
         'payment_date',
         'created_by',
         'updated_by',
