@@ -25,10 +25,10 @@ class RoleConroller extends Controller
         }
         $sql="SELECT t.id,t.name,(SELECT COUNT(*) FROM permissions p_view WHERE p_view.status=1 and p_view.table_id=t.id and p_view.permission_type_id=1) as _view,(SELECT COUNT(*) FROM permissions p_view WHERE p_view.status=1 and p_view.table_id=t.id and p_view.permission_type_id=2) as _add,(SELECT COUNT(*) FROM permissions p_view WHERE p_view.status=1 and p_view.table_id=t.id and p_view.permission_type_id=3) as _update,(SELECT COUNT(*) FROM permissions p_view WHERE p_view.status=1 and p_view.table_id=t.id and p_view.permission_type_id=4) as _delete FROM tables t WHERE t.status=1";
         $permissionList=DB::select($sql);
-        $role=Role::where('status',1)->get();
-        return view('roles.index',compact('role','permissionList'));
-        // $role=Role::with("useruse")->where('status',1)->get();
-        // return view('roles.role_index', compact('role'));
+        // $role=Role::where('status',1)->get();
+        // return view('roles.index',compact('role','permissionList'));
+        $role=Role::with("useruse")->where('status',1)->get();
+        return view('roles.role_index', compact('role'));
     }
     public function formCreate() {
         return view('roles.form_create');

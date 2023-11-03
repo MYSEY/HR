@@ -73,1039 +73,7 @@
     }
 </style>
 @section('content')
-    <div class="page-header">
-        <div class="row align-items-center">
-            <div class="col">
-                <h3 class="page-title">@lang('lang.add_roles')</h3>
-                <ul class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="{{ url('/dashboad/role') }}">@lang('lang.dashboard')</a></li>
-                    <li class="breadcrumb-item active">@lang('lang.add_roles')</li>
-                </ul>
-            </div>
-        </div>
-    </div>
-    <div class="tab-pane fade active show" id="bank_statutory" role="tabpanel">
-        <div class="card card_background_color">
-            <div class="card-body">
-                <form >
-                    <input type="text" hidden name="parent_id" id="parent_id" value="{{Auth::user()->role_id}}">
-                    {{-- @csrf --}}
-                    <div class="row">
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label class="">@lang('lang.name') <span class="text-danger">*</span></label>
-                                <input class="form-control @error('name') is-invalid @enderror" type="text"
-                                    id="role_name" required name="role_name" value="{{ old('role_name') }}">
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label class="">@lang('lang.type') <span class="text-danger">*</span></label>
-                                <select class="form-control" id="role_type" name="role_type" required>
-                                    <option selected disabled value=""> -- @lang('lang.select') --</option>
-                                    <option value="admin">@lang('lang.admin')</option>
-                                    <option value="developer">@lang('lang.developer')</option>
-                                    <option value="employee">@lang('lang.employee')</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label class="">@lang('lang.remark')</label>
-                                <textarea style="height: 44px;" type="text" rows="3" class="form-control" name="remark" id="remark" value="{{ old('remark') }}"></textarea>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group col-md-12 col-12" element="div" bp-field-wrapper="true" bp-field-name="Identity"
-                        bp-field-type="custom_html">
-                        <label class="navbar-brand custom-navbar-brand mb-0"
-                            style="width: 100%; font-size: 22px;font-weight: normal !important;">@lang('lang.permission')
-                            <span class="text-danger">*</span></label>
-                    </div>
-                    {{-- Block dashboad --}}
-                    <div class="row">
-                        <div class="col-md-2">
-                            <label style="font-weight: normal !important;">@lang('lang.dashboard')</label>
-                        </div>
-                       <div class="col-md-4">
-                            <div class="form-group row">
-                                <div class="col-md-12">
-                                    <label class="container-checkbox">@lang('lang.all')
-                                        <input type="checkbox" id="dashboad_all" name="dashboad_all"> <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container-checkbox">@lang('lang.employee')
-                                        <input type="checkbox" class="dashboad_checkbox" id="dashboad_employee" name="dashboad_employee"> <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container-checkbox">@lang('lang.age_of_employee')
-                                        <input type="checkbox" class="dashboad_checkbox" id="dashboad_age_of_employee" name="dashboad_age_of_employee"> <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container-checkbox">@lang('lang.birthday_reminder')
-                                        <input type="checkbox" class="dashboad_checkbox" id="dashboad_birthday_reminder" name="dashboad_birthday_reminder"> <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                            </div>
-                       </div>
-                       <div class="col-md-3">
-                            <div class="form-group row">
-                                <div class="col-md-12">
-                                    <label class="container-checkbox">@lang('lang.total_number_of_staff')
-                                        <input type="checkbox" class="dashboad_checkbox" id="dashboad_total_number_of_staff" name="dashboad_total_number_of_staff"> <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container-checkbox">% @lang('lang.total_inactive_staff')
-                                        <input type="checkbox" class="dashboad_checkbox" id="dashboad_total_inactive_staff" name="dashboad_total_inactive_staff"> <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container-checkbox">% @lang('lang.resigned_staff')
-                                        <input type="checkbox" class="dashboad_checkbox" id="dashboad_resigned_staff" name="dashboad_resigned_staff"> <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container-checkbox">% @lang("lang.reasons_of_staff’s_exit")
-                                        <input type="checkbox" class="dashboad_checkbox" id="dashboad_reasons_of_staff’s_exit" name="dashboad_reasons"> <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                       <div class="col-md-3">
-                            <div class="form-group row">
-                                <div class="col-md-12">
-                                    <label class="container-checkbox">% @lang('lang.staff_ratio')
-                                        <input type="checkbox" class="dashboad_checkbox" id="dashboad_staff_ratio" name="dashboad_staff_ratio"> <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container-checkbox">@lang('lang.staff_taking_leave')
-                                        <input type="checkbox" class="dashboad_checkbox" id="dashboad_staff_taking_leave" name="dashboad_staff_taking_leave"> <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container-checkbox">@lang('lang.staff_training_by_branch') (Internal)
-                                        <input type="checkbox" class="dashboad_checkbox" id="dashboad_staff_training_by_branch" name="dashboad_staff_training_by_branch"> <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container-checkbox">@lang('lang.staff_training_by_branch') (External)
-                                        <input type="checkbox" class="dashboad_checkbox" id="dashboad_staff_training_by_branch_external" name="dashboad_staff_training_by_branch_external"> <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <hr>
-                    {{-- Block Employee --}}
-                    <div class="row">
-                        <div class="col-md-2">
-                            <label style="font-weight: bold;">@lang('lang.employee')</label>
-                        </div>
-                        <div class="col-md-10">
-                            <label class="container-checkbox">@lang('lang.all')
-                                <input type="checkbox" id="employee_all" name="employee_all"> <span class="checkmark"></span>
-                            </label>
-                        </div>
-                       <div class="col-md-12">
-                            <div class="form-group row">
-                                <div class="col-md-2">
-                                    <label class="container-checkbox">@lang('lang.all_employee')
-                                        <input type="checkbox" class="employee_checkbox" id="all_employee" name="all_employee"> <span class="checkmark"></span>
-                                    </label>
-                                    {{-- <label >@lang('lang.all_employee')</label> --}}
-                                </div>
-                                <div class="col-md-4">
-                                    <label class="container-checkbox">@lang('lang.view')
-                                        <input type="checkbox" class="employee_checkbox all_employee_checkbox" id="employee_view" data-id="1" data-name="is_view" name="employee_view"> <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container-checkbox">@lang('lang.add')
-                                        <input type="checkbox" class="employee_checkbox all_employee_checkbox" id="employee_add" data-id="1" data-name="is_add" name="employee_add"> <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container-checkbox">@lang('lang.import')
-                                        <input type="checkbox" class="employee_checkbox all_employee_checkbox" id="employee_import" data-id="1" data-name="is_import" name="employee_import"> <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                                <div class="col-md-3">
-                                    <label class="container-checkbox">@lang('lang.edit')
-                                        <input type="checkbox" class="employee_checkbox all_employee_checkbox" id="employee_edit" data-id="1" data-name="is_update" name="employee_edit"> <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container-checkbox">@lang('lang.delete')
-                                        <input type="checkbox" class="employee_checkbox all_employee_checkbox" id="employee_delete" name="employee_delete" > <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container-checkbox">@lang('lang.cancel')
-                                        <input type="checkbox" class="employee_checkbox all_employee_checkbox" id="employee_cancel" name="employee_cancel"> <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                                <div class="col-md-3">
-                                    <label class="container-checkbox">@lang('lang.print')
-                                        <input type="checkbox" class="employee_checkbox all_employee_checkbox" id="employee_print" name="employee_print"> <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container-checkbox">@lang('lang.export')
-                                        <input type="checkbox" class="employee_checkbox all_employee_checkbox" id="employee_export" name="employee_export"> <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                         {{-- block leave employee --}}
-                        <div class="col-md-12">
-                            <div class="form-group row">
-                                <div class="col-md-2">
-                                    {{-- <label >@lang('lang.leaves_employee')</label> --}}
-                                    <label class="container-checkbox">@lang('lang.leaves_employee')
-                                        <input type="checkbox" class="employee_checkbox" id="leaves_employee" name="leaves_employee"> <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                                <div class="col-md-4">
-                                    <label class="container-checkbox">@lang('lang.view')
-                                        <input type="checkbox" class="employee_checkbox leaves_employee_checkbox" id="leaves_employee_view" name="leaves_employee_view"> <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container-checkbox">@lang('lang.add')
-                                        <input type="checkbox" class="employee_checkbox leaves_employee_checkbox" id="leaves_employee_add" name="leaves_employee_add"> <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container-checkbox">@lang('lang.import')
-                                        <input type="checkbox" class="employee_checkbox leaves_employee_checkbox" id="leaves_employee_import" name="leaves_employee_import"> <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                                <div class="col-md-3">
-                                    <label class="container-checkbox">@lang('lang.edit')
-                                        <input type="checkbox" class="employee_checkbox leaves_employee_checkbox" id="leaves_employee_edit" name="leaves_employee_edit"> <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container-checkbox">@lang('lang.delete')
-                                        <input type="checkbox" class="employee_checkbox leaves_employee_checkbox" id="leaves_employee_delete" name="leaves_employee_delete" > <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container-checkbox">@lang('lang.cancel')
-                                        <input type="checkbox" class="employee_checkbox leaves_employee_checkbox" id="leaves_employee_cancel" name="leaves_employee_cancel"> <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                                <div class="col-md-3">
-                                    <label class="container-checkbox">@lang('lang.print')
-                                        <input type="checkbox" class="employee_checkbox leaves_employee_checkbox" id="leaves_employee_print" name="leaves_employee_print"> <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container-checkbox">@lang('lang.export')
-                                        <input type="checkbox" class="employee_checkbox leaves_employee_checkbox" id="leaves_employee_export" name="leaves_employee_export"> <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <hr>
-                     {{-- block Recruitment --}}
-                    <div class="row">
-                        <div class="col-md-2">
-                            <label style="font-weight: bold;">@lang('lang.recruitments')</label>
-                        </div>
-                        <div class="col-md-10">
-                            <label class="container-checkbox">@lang('lang.all')
-                                <input type="checkbox" id="recruitments_all" name="recruitments_all"> <span class="checkmark"></span>
-                            </label>
-                        </div>
-                        {{-- block Candidate CVs --}}
-                        <div class="col-md-12">
-                            <div class="form-group row">
-                                <div class="col-md-2">
-                                    {{-- <label >@lang('lang.candidate_CVs')</label> --}}
-                                    <label class="container-checkbox">@lang('lang.candidate_CVs')
-                                        <input type="checkbox" class="recruitment_checkbox" id="candidate_CVs" name="candidate_CVs"> <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                                <div class="col-md-4">
-                                    <label class="container-checkbox">@lang('lang.view')
-                                        <input type="checkbox" class="recruitment_checkbox candidate_CVs_checkbox" id="candidate_cv_view" name="candidate_cv_view"> <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container-checkbox">@lang('lang.add')
-                                        <input type="checkbox" class="recruitment_checkbox candidate_CVs_checkbox" id="candidate_cv_add" name="candidate_cv_add"> <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container-checkbox">@lang('lang.import')
-                                        <input type="checkbox" class="recruitment_checkbox candidate_CVs_checkbox" id="candidate_cv_import" name="candidate_cv_import"> <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                                <div class="col-md-3">
-                                    <label class="container-checkbox">@lang('lang.edit')
-                                        <input type="checkbox" class="recruitment_checkbox candidate_CVs_checkbox" id="candidate_cv_edit" name="candidate_cv_edit"> <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container-checkbox">@lang('lang.approve')
-                                        <input type="checkbox" class="recruitment_checkbox candidate_CVs_checkbox" id="candidate_cv_approve" name="candidate_cv_approve"> <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container-checkbox">@lang('lang.delete')
-                                        <input type="checkbox" class="recruitment_checkbox candidate_CVs_checkbox" id="candidate_cv_delete" name="candidate_cv_delete" > <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                                <div class="col-md-3">
-                                    <label class="container-checkbox">@lang('lang.cancel')
-                                        <input type="checkbox" class="recruitment_checkbox candidate_CVs_checkbox" id="candidate_cv_cancel" name="candidate_cv_cancel"> <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container-checkbox">@lang('lang.print')
-                                        <input type="checkbox" class="recruitment_checkbox candidate_CVs_checkbox" id="candidate_cv_print" name="candidate_cv_print"> <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container-checkbox">@lang('lang.export')
-                                        <input type="checkbox" class="recruitment_checkbox candidate_CVs_checkbox" id="candidate_cv_export" name="candidate_cv_export"> <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                        {{-- block Recruitment Plan --}}
-                        <div class="col-md-12">
-                            <div class="form-group row">
-                                <div class="col-md-2">
-                                    {{-- <label >@lang('lang.recruitment_plans')</label> --}}
-                                    <label class="container-checkbox">@lang('lang.recruitment_plans')
-                                        <input type="checkbox" class="recruitment_checkbox" id="recruitment_plans" name="recruitment_plans"> <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                                <div class="col-md-4">
-                                    <label class="container-checkbox">@lang('lang.view')
-                                        <input type="checkbox" class="recruitment_checkbox recruitment_plans_checkbox" id="recruitment_plan_view" name="recruitment_plan_view"> <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container-checkbox">@lang('lang.add')
-                                        <input type="checkbox" class="recruitment_checkbox recruitment_plans_checkbox" id="recruitment_plan_add" name="recruitment_plan_add"> <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                                <div class="col-md-3">
-                                    <label class="container-checkbox">@lang('lang.edit')
-                                        <input type="checkbox" class="recruitment_checkbox recruitment_plans_checkbox" id="recruitment_plan_edit" name="recruitment_plan_edit"> <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container-checkbox">@lang('lang.delete')
-                                        <input type="checkbox" class="recruitment_checkbox recruitment_plans_checkbox" id="recruitment_plan_delete" name="recruitment_plan_delete" > <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                                <div class="col-md-3">
-                                    <label class="container-checkbox">@lang('lang.print')
-                                        <input type="checkbox" class="recruitment_checkbox recruitment_plans_checkbox" id="recruitment_plan_print" name="recruitment_plan_print"> <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container-checkbox">@lang('lang.export')
-                                        <input type="checkbox" class="recruitment_checkbox recruitment_plans_checkbox" id="recruitment_plan_export" name="recruitment_plan_export"> <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <hr>
-                    {{-- block C&B --}}
-                    <div class="row">
-                        <div class="col-md-2">
-                            <label style="font-weight: bold;">@lang('lang.compensation_and_benefits')</label>
-                        </div>
-                        <div class="col-md-10">
-                            <label class="container-checkbox">@lang('lang.all')
-                                <input type="checkbox" id="c_and_b_all" name="c_and_b_all"> <span class="checkmark"></span>
-                            </label>
-                        </div>
-                         {{-- block Employee Salary --}}
-                       <div class="col-md-12">
-                            <div class="form-group row">
-                                <div class="col-md-2">
-                                    {{-- <label >@lang('lang.employee_salary')</label> --}}
-                                    <label class="container-checkbox">@lang('lang.employee_salary')
-                                        <input type="checkbox" class="c_and_b_checkbox" id="employee_salary" name="employee_salary"> <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                                <div class="col-md-4">
-                                    <label class="container-checkbox">@lang('lang.view')
-                                        <input type="checkbox" class="c_and_b_checkbox employee_salary_checkbox" id="c_and_b_view" name="c_and_b_all"> <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container-checkbox">@lang('lang.add')
-                                        <input type="checkbox" class="c_and_b_checkbox employee_salary_checkbox" id="c_and_b_add" name="c_and_b_all"> <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container-checkbox">@lang('lang.approve')
-                                        <input type="checkbox" class="c_and_b_checkbox employee_salary_checkbox" id="c_and_b_approve" name="c_and_b_all"> <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                                <div class="col-md-3">
-                                    <label class="container-checkbox">@lang('lang.edit')
-                                        <input type="checkbox" class="c_and_b_checkbox employee_salary_checkbox" id="c_and_b_edit" name="c_and_b_all"> <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container-checkbox">@lang('lang.delete')
-                                        <input type="checkbox" class="c_and_b_checkbox employee_salary_checkbox" id="c_and_b_delete" name="c_and_b_all" > <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                                <div class="col-md-3">
-                                    <label class="container-checkbox">@lang('lang.print')
-                                        <input type="checkbox" class="c_and_b_checkbox employee_salary_checkbox" id="c_and_b_print" name="c_and_b_all"> <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container-checkbox">@lang('lang.export')
-                                        <input type="checkbox" class="c_and_b_checkbox employee_salary_checkbox" id="c_and_b_export" name="c_and_b_all"> <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                            </div>
-                       </div>
-                    </div>
-                    <hr>
-                    {{-- block Motor Rentals --}}
-                    <div class="row">
-                        <div class="col-md-2">
-                            <label style="font-weight: bold;">@lang('lang.motor_rentals')</label>
-                        </div>
-                        <div class="col-md-10">
-                            <label class="container-checkbox">@lang('lang.all')
-                                <input type="checkbox" id="motor_rental_check_all" name="motor_rental_check_all"> <span class="checkmark"></span>
-                            </label>
-                        </div>
-                        {{-- block Motor Rental --}}
-                        <div class="col-md-12">
-                            <div class="form-group row">
-                                <div class="col-md-2">
-                                    {{-- <label >@lang('lang.motor_rentals')</label> --}}
-                                    <label class="container-checkbox">@lang('lang.motor_rentals')
-                                        <input type="checkbox" class="motor_rental_checkbox" id="motor_rentals" name="motor_rentals"> <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                                <div class="col-md-4">
-                                    <label class="container-checkbox">@lang('lang.view')
-                                        <input type="checkbox" class="motor_rental_checkbox motor_rentals_checkbox" id="motor_rental_view" name="motor_rental_view"> <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container-checkbox">@lang('lang.add')
-                                        <input type="checkbox" class="motor_rental_checkbox motor_rentals_checkbox" id="motor_rental_add" name="motor_rental_add"> <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container-checkbox">@lang('lang.import')
-                                        <input type="checkbox" class="motor_rental_checkbox motor_rentals_checkbox" id="motor_rental_import" name="motor_rental_import"> <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                                <div class="col-md-3">
-                                    <label class="container-checkbox">@lang('lang.edit')
-                                        <input type="checkbox" class="motor_rental_checkbox motor_rentals_checkbox" id="motor_rental_edit" name="motor_rental_edit"> <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container-checkbox">@lang('lang.delete')
-                                        <input type="checkbox" class="motor_rental_checkbox motor_rentals_checkbox" id="motor_rental_delete" name="motor_rental_delete" > <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                                <div class="col-md-3">
-                                    <label class="container-checkbox">@lang('lang.print')
-                                        <input type="checkbox" class="motor_rental_checkbox motor_rentals_checkbox" id="motor_rental_print" name="motor_rental_print"> <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container-checkbox">@lang('lang.export')
-                                        <input type="checkbox" class="motor_rental_checkbox motor_rentals_checkbox" id="motor_rental_export" name="motor_rental_export"> <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                        {{-- block Pay Motor Rental --}}
-                        <div class="col-md-12">
-                            <div class="form-group row">
-                                <div class="col-md-2">
-                                    {{-- <label >@lang('lang.pay_motor_rentals')</label> --}}
-                                    <label class="container-checkbox">@lang('lang.pay_motor_rentals')
-                                        <input type="checkbox" class="motor_rental_checkbox" id="pay_motor_rentals" name="pay_motor_rentals"> <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                                <div class="col-md-4">
-                                    <label class="container-checkbox">@lang('lang.view')
-                                        <input type="checkbox" class="motor_rental_checkbox pay_motor_rentals_checkbox" id="Pay_motor_rental_view" name="Pay_motor_rental_view"> <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container-checkbox">@lang('lang.add')
-                                        <input type="checkbox" class="motor_rental_checkbox pay_motor_rentals_checkbox" id="Pay_motor_rental_add" name="Pay_motor_rental_add"> <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container-checkbox">@lang('lang.approve')
-                                        <input type="checkbox" class="motor_rental_checkbox pay_motor_rentals_checkbox" id="Pay_motor_rental_approve" name="Pay_motor_rental_approve"> <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                                <div class="col-md-3">
-                                    <label class="container-checkbox">@lang('lang.edit')
-                                        <input type="checkbox" class="motor_rental_checkbox pay_motor_rentals_checkbox" id="Pay_motor_rental_edit" name="Pay_motor_rental_edit"> <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container-checkbox">@lang('lang.delete')
-                                        <input type="checkbox" class="motor_rental_checkbox pay_motor_rentals_checkbox" id="Pay_motor_rental_delete" name="Pay_motor_rental_delete" > <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                                <div class="col-md-3">
-                                    <label class="container-checkbox">@lang('lang.print')
-                                        <input type="checkbox" class="motor_rental_checkbox pay_motor_rentals_checkbox" id="Pay_motor_rental_print" name="Pay_motor_rental_print"> <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container-checkbox">@lang('lang.export')
-                                        <input type="checkbox" class="motor_rental_checkbox pay_motor_rentals_checkbox" id="Pay_motor_rental_export" name="Pay_motor_rental_export"> <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <hr>
-                    {{-- block Trainings--}}
-                    <div class="row">
-                        <div class="col-md-2">
-                            <label style="font-weight: bold;">@lang('lang.trainings')</label>
-                        </div>
-                        <div class="col-md-10">
-                            <label class="container-checkbox">@lang('lang.all')
-                                <input type="checkbox" id="training_check_all" name="training_check_all"> <span class="checkmark"></span>
-                            </label>
-                        </div>
-                       {{-- block Trainer--}}
-                        <div class="col-md-12">
-                            <div class="form-group row">
-                                <div class="col-md-2">
-                                    {{-- <label >@lang('lang.trainer')</label> --}}
-                                    <label class="container-checkbox">@lang('lang.trainer')
-                                        <input type="checkbox" class="training_checkbox" id="trainer" name="trainer"> <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                                <div class="col-md-4">
-                                    <label class="container-checkbox">@lang('lang.view')
-                                        <input type="checkbox" class="training_checkbox trainer_checkbox" id="trainer_check_view" name="trainer_check_view"> <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container-checkbox">@lang('lang.add')
-                                        <input type="checkbox" class="training_checkbox trainer_checkbox" id="trainer_check_add" name="trainer_check_add"> <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                                <div class="col-md-3">
-                                    <label class="container-checkbox">@lang('lang.edit')
-                                        <input type="checkbox" class="training_checkbox trainer_checkbox" id="trainer_check_edit" name="trainer_check_edit"> <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container-checkbox">@lang('lang.delete')
-                                        <input type="checkbox" class="training_checkbox trainer_checkbox" id="trainer_check_delete" name="trainer_check_delete" > <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                                <div class="col-md-3">
-                                    <label class="container-checkbox">@lang('lang.print')
-                                        <input type="checkbox" class="training_checkbox trainer_checkbox" id="trainer_check_print" name="trainer_check_print"> <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container-checkbox">@lang('lang.export')
-                                        <input type="checkbox" class="training_checkbox trainer_checkbox" id="trainer_check_export" name="trainer_check_export"> <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                        {{-- block Training List --}}
-                        <div class="col-md-12">
-                            <div class="form-group row">
-                                <div class="col-md-2">
-                                    {{-- <label >@lang('lang.training')</label> --}}
-                                    <label class="container-checkbox">@lang('lang.training')
-                                        <input type="checkbox" class="training_checkbox" id="training" name="training"> <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                                <div class="col-md-4">
-                                    <label class="container-checkbox">@lang('lang.view')
-                                        <input type="checkbox" class="training_checkbox training_checkbox_block" id="training_check_view" name="training_check_view"> <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container-checkbox">@lang('lang.add')
-                                        <input type="checkbox" class="training_checkbox training_checkbox_block" id="training_check_add" name="training_check_add"> <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                                <div class="col-md-3">
-                                    <label class="container-checkbox">@lang('lang.edit')
-                                        <input type="checkbox" class="training_checkbox training_checkbox_block" id="training_check_edit" name="training_check_edit"> <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container-checkbox">@lang('lang.delete')
-                                        <input type="checkbox" class="training_checkbox training_checkbox_block" id="training_check_delete" name="training_check_delete" > <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                                <div class="col-md-3">
-                                    <label class="container-checkbox">@lang('lang.print')
-                                        <input type="checkbox" class="training_checkbox training_checkbox_block" id="training_check_print" name="training_check_print"> <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container-checkbox">@lang('lang.export')
-                                        <input type="checkbox" class="training_checkbox training_checkbox_block" id="training_check_export" name="training_check_export"> <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                        {{-- block Training report --}}
-                        <div class="col-md-12">
-                            <div class="form-group row">
-                                <div class="col-md-2">
-                                    {{-- <label >@lang('lang.training_reports')</label> --}}
-                                    <label class="container-checkbox">@lang('lang.training_reports')
-                                        <input type="checkbox" class="training_checkbox" id="training_reports" name="training_reports"> <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                                <div class="col-md-4">
-                                    <label class="container-checkbox">@lang('lang.view')
-                                        <input type="checkbox" class="training_checkbox training_reports_checkbox" id="report_training_check_view" name="report_training_check_view"> <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container-checkbox">@lang('lang.print')
-                                        <input type="checkbox" class="training_checkbox training_reports_checkbox" id="report_training_check_print" name="report_training_check_print" > <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container-checkbox">@lang('lang.export')
-                                        <input type="checkbox" class="training_checkbox training_reports_checkbox" id="report_training_check_export" name="report_training_check_export"> <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <hr>
-                    {{-- block reports--}}
-                    <div class="row">
-                        <div class="col-md-2">
-                            <label style="font-weight: bold;">@lang('lang.reports')</label>
-                        </div>
-                        <div class="col-md-10">
-                            <label class="container-checkbox">@lang('lang.all')
-                                <input type="checkbox" id="reports_check_all" name="reports_check_all"> <span class="checkmark"></span>
-                            </label>
-                        </div>
-
-                        <div class="col-md-12">
-                            <div class="form-group row">
-                                {{-- block Employee report --}}
-                                <div class="col-md-2">
-                                    {{-- <label >@lang('lang.employee_reports')</label> --}}
-                                    <label class="container-checkbox">@lang('lang.employee_reports')
-                                        <input type="checkbox" class="reports_checkbox" id="employee_reports" name="employee_reports"> <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                                <div class="col-md-2">
-                                    <label class="container-checkbox">@lang('lang.view')
-                                        <input type="checkbox" class="reports_checkbox employee_reports_checkbox" id="report_employee_check_view" name="report_employee_check_view"> <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container-checkbox">@lang('lang.print')
-                                        <input type="checkbox" class="reports_checkbox employee_reports_checkbox" id="report_employee_check_print" name="report_employee_check_print" > <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container-checkbox">@lang('lang.export')
-                                        <input type="checkbox" class="reports_checkbox employee_reports_checkbox" id="report_employee_check_export" name="report_employee_check_export"> <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                                {{-- block Paylroll report --}}
-                                <div class="col-md-2">
-                                    {{-- <label >@lang('lang.payroll_report')</label> --}}
-                                    <label class="container-checkbox">@lang('lang.payroll_report')
-                                        <input type="checkbox" class="reports_checkbox" id="payroll_report" name="payroll_report"> <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                                <div class="col-md-2">
-                                    <label class="container-checkbox">@lang('lang.view')
-                                        <input type="checkbox" class="reports_checkbox payroll_report_checkbox" id="payroll_report_check_view" name="payroll_report_check_view"> <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container-checkbox">@lang('lang.print')
-                                        <input type="checkbox" class="reports_checkbox payroll_report_checkbox" id="payroll_report_check_print" name="payroll_report_check_print" > <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container-checkbox">@lang('lang.export')
-                                        <input type="checkbox" class="reports_checkbox payroll_report_checkbox" id="payroll_report_check_export" name="payroll_report_check_export"> <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                                {{-- block Transfer report --}}
-                                <div class="col-md-2">
-                                    {{-- <label >@lang('lang.bank_transfer_report')</label> --}}
-                                    <label class="container-checkbox">@lang('lang.bank_transfer_report')
-                                        <input type="checkbox" class="reports_checkbox" id="bank_transfer_report" name="bank_transfer_report"> <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                                <div class="col-md-2">
-                                    <label class="container-checkbox">@lang('lang.view')
-                                        <input type="checkbox" class="reports_checkbox bank_transfer_report_checkbox" id="bank_transfer_report_check_view" name="bank_transfer_report_check_view"> <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container-checkbox">@lang('lang.print')
-                                        <input type="checkbox" class="reports_checkbox bank_transfer_report_checkbox" id="bank_transfer_report_check_print" name="bank_transfer_report_check_print" > <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container-checkbox">@lang('lang.export')
-                                        <input type="checkbox" class="reports_checkbox bank_transfer_report_checkbox" id="bank_transfer_report_check_export" name="bank_transfer_report_check_export"> <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-md-12">
-                            <div class="form-group row">
-                                {{-- block E-Filing report --}}
-                                <div class="col-md-2">
-                                    {{-- <label >@lang('lang.e_filing_report')</label> --}}
-                                    <label class="container-checkbox">@lang('lang.e_filing_report')
-                                        <input type="checkbox" class="reports_checkbox" id="e_filing_report" name="e_filing_report"> <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                                <div class="col-md-2">
-                                    <label class="container-checkbox">@lang('lang.view')
-                                        <input type="checkbox" class="reports_checkbox e_filing_report_checkbox" id="e_filing_report_check_view" name="e_filing_report_check_view"> <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container-checkbox">@lang('lang.print')
-                                        <input type="checkbox" class="reports_checkbox e_filing_report_checkbox" id="e_filing_report_check_print" name="e_filing_report_check_print" > <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container-checkbox">@lang('lang.export')
-                                        <input type="checkbox" class="reports_checkbox e_filing_report_checkbox" id="e_filing_report_check_export" name="e_filing_report_check_export"> <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                                {{-- block E-form report --}}
-                                <div class="col-md-2">
-                                    {{-- <label >@lang('lang.e_form_report')</label> --}}
-                                    <label class="container-checkbox">@lang('lang.e_form_report')
-                                        <input type="checkbox" class="reports_checkbox" id="e_form_report" name="e_form_report"> <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                                <div class="col-md-2">
-                                    <label class="container-checkbox">@lang('lang.view')
-                                        <input type="checkbox" class="reports_checkbox e_form_report_checkbox" id="e_form_report_check_view" name="e_form_report_check_view"> <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container-checkbox">@lang('lang.print')
-                                        <input type="checkbox" class="reports_checkbox e_form_report_checkbox" id="e_form_report_check_print" name="e_form_report_check_print" > <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container-checkbox">@lang('lang.export')
-                                        <input type="checkbox" class="reports_checkbox e_form_report_checkbox" id="e_form_report_check_export" name="e_form_report_check_export"> <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                                {{-- block Motor Rantel report --}}
-                                <div class="col-md-2">
-                                    {{-- <label >@lang('lang.motor_rental_reports')</label> --}}
-                                    <label class="container-checkbox">@lang('lang.motor_rental_reports')
-                                        <input type="checkbox" class="reports_checkbox" id="motor_rental_reports" name="motor_rental_reports"> <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                                <div class="col-md-2">
-                                    <label class="container-checkbox">@lang('lang.view')
-                                        <input type="checkbox" class="reports_checkbox motor_rental_reports_checkbox" id="motor_rental_reports_check_view" name="motor_rental_reports_check_view"> <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container-checkbox">@lang('lang.print')
-                                        <input type="checkbox" class="reports_checkbox motor_rental_reports_checkbox" id="motor_rental_reports_check_print" name="motor_rental_reports_check_print" > <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container-checkbox">@lang('lang.export')
-                                        <input type="checkbox" class="reports_checkbox motor_rental_reports_checkbox" id="motor_rental_reports_check_export" name="motor_rental_reports_check_export"> <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                       <div class="col-md-12">
-                            <div class="form-group row">
-                                {{-- block New Staff report --}}
-                                <div class="col-md-2">
-                                    {{-- <label >@lang('lang.new_staff_reports')</label> --}}
-                                    <label class="container-checkbox">@lang('lang.new_staff_reports')
-                                        <input type="checkbox" class="reports_checkbox" id="new_staff_reports" name="new_staff_reports"> <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                                <div class="col-md-2">
-                                    <label class="container-checkbox">@lang('lang.view')
-                                        <input type="checkbox" class="reports_checkbox new_staff_reports_checkbox" id="new_staff_reports_check_view" name="new_staff_reports_check_view"> <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container-checkbox">@lang('lang.print')
-                                        <input type="checkbox" class="reports_checkbox new_staff_reports_checkbox" id="new_staff_reports_check_print" name="new_staff_reports_check_print" > <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container-checkbox">@lang('lang.export')
-                                        <input type="checkbox" class="reports_checkbox new_staff_reports_checkbox" id="new_staff_reports_check_export" name="new_staff_reports_check_export"> <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                                {{-- block Staff Resinged report --}}
-                                <div class="col-md-2">
-                                    {{-- <label >@lang('lang.staff_resigned_reports')</label> --}}
-                                    <label class="container-checkbox">@lang('lang.staff_resigned_reports')
-                                        <input type="checkbox" class="reports_checkbox" id="staff_resigned_reports" name="staff_resigned_reports"> <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                                <div class="col-md-2">
-                                    <label class="container-checkbox">@lang('lang.view')
-                                        <input type="checkbox" class="reports_checkbox staff_resigned_reports_checkbox" id="staff_resigned_reports_check_view" name="staff_resigned_reports_check_view"> <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container-checkbox">@lang('lang.print')
-                                        <input type="checkbox" class="reports_checkbox staff_resigned_reports_checkbox" id="staff_resigned_reports_check_print" name="staff_resigned_reports_check_print" > <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container-checkbox">@lang('lang.export')
-                                        <input type="checkbox" class="reports_checkbox staff_resigned_reports_checkbox" id="staff_resigned_reports_check_export" name="staff_resigned_reports_check_export"> <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                                {{-- block Promoted report --}}
-                                <div class="col-md-2">
-                                    {{-- <label >@lang('lang.promoted_staff_report')</label> --}}
-                                    <label class="container-checkbox">@lang('lang.promoted_staff_report')
-                                        <input type="checkbox" class="reports_checkbox" id="promoted_staff_report" name="promoted_staff_report"> <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                                <div class="col-md-2">
-                                    <label class="container-checkbox">@lang('lang.view')
-                                        <input type="checkbox" class="reports_checkbox promoted_staff_report_checkbox" id="promoted_staff_report_check_view" name="promoted_staff_report_check_view"> <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container-checkbox">@lang('lang.print')
-                                        <input type="checkbox" class="reports_checkbox promoted_staff_report_checkbox" id="promoted_staff_report_check_print" name="promoted_staff_report_check_print" > <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container-checkbox">@lang('lang.export')
-                                        <input type="checkbox" class="reports_checkbox promoted_staff_report_checkbox" id="promoted_staff_report_check_export" name="promoted_staff_report_check_export"> <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="form-group row">
-                                {{-- block Transferred Staff report --}}
-                                <div class="col-md-2">
-                                    {{-- <label >@lang('lang.transferred_staff_report')</label> --}}
-                                    <label class="container-checkbox">@lang('lang.transferred_staff_report')
-                                        <input type="checkbox" class="reports_checkbox" id="transferred_staff_report" name="transferred_staff_report"> <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                                <div class="col-md-2">
-                                    <label class="container-checkbox">@lang('lang.view')
-                                        <input type="checkbox" class="reports_checkbox transferred_staff_report_checkbox" id="transferred_staff_report_check_view" name="transferred_staff_report_check_view"> <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container-checkbox">@lang('lang.print')
-                                        <input type="checkbox" class="reports_checkbox transferred_staff_report_checkbox" id="transferred_staff_report_check_print" name="transferred_staff_report_check_print" > <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container-checkbox">@lang('lang.export')
-                                        <input type="checkbox" class="reports_checkbox transferred_staff_report_checkbox" id="transferred_staff_report_check_export" name="transferred_staff_report_check_export"> <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <hr>
-                    {{-- block Configuration --}}
-                    <div class="row">
-                        <div class="col-md-2">
-                            <label style="font-weight: bold;">@lang('lang.configuration')</label>
-                        </div>
-                        <div class="col-md-10">
-                            <label class="container-checkbox">@lang('lang.all')
-                                <input type="checkbox" id="configuration_check_all" name="configuration_check_all"> <span class="checkmark"></span>
-                            </label>
-                        </div>
-
-                        <div class="col-md-12">
-                            <div class="form-group row">
-                                {{-- block Tax --}}
-                                <div class="col-md-2">
-                                    {{-- <label >@lang('lang.taxes')</label> --}}
-                                    <label class="container-checkbox">@lang('lang.taxes')
-                                        <input type="checkbox" class="configuration_checkbox" id="taxes" name="taxes"> <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                                <div class="col-md-2">
-                                    <label class="container-checkbox">@lang('lang.view')
-                                        <input type="checkbox" class="configuration_checkbox taxes_checkbox" id="taxes_check_view" name="taxes_check_view"> <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container-checkbox">@lang('lang.add')
-                                        <input type="checkbox" class="configuration_checkbox taxes_checkbox" id="taxes_check_add" name="taxes_check_add"> <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container-checkbox">@lang('lang.edit')  
-                                        <input type="checkbox" class="configuration_checkbox taxes_checkbox" id="taxes_check_edit" name="taxes_check_edit"> <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container-checkbox">@lang('lang.delete')
-                                        <input type="checkbox" class="configuration_checkbox taxes_checkbox" id="taxes_check_delete" name="taxes_check_delete" > <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                                {{-- block Exchange Rate --}}
-                                <div class="col-md-2">
-                                    {{-- <label >@lang('lang.exchange_rate')</label> --}}
-                                    <label class="container-checkbox">@lang('lang.exchange_rate')
-                                        <input type="checkbox" class="configuration_checkbox" id="exchange_rate" name="exchange_rate"> <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                                <div class="col-md-2">
-                                    <label class="container-checkbox">@lang('lang.view')
-                                        <input type="checkbox" class="configuration_checkbox exchange_rate_checkbox" id="exchange_rate_check_view" name="exchange_rate_check_view"> <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container-checkbox">@lang('lang.add')
-                                        <input type="checkbox" class="configuration_checkbox exchange_rate_checkbox" id="exchange_rate_check_add" name="exchange_rate_check_add"> <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container-checkbox">@lang('lang.edit')  
-                                        <input type="checkbox" class="configuration_checkbox exchange_rate_checkbox" id="exchange_rate_check_edit" name="exchange_rate_check_edit"> <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container-checkbox">@lang('lang.delete')
-                                        <input type="checkbox" class="configuration_checkbox exchange_rate_checkbox" id="exchange_rate_check_delete" name="exchange_rate_check_delete" > <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                                {{-- block Public Holiday --}}
-                                <div class="col-md-2">
-                                    {{-- <label >@lang('lang.public_holidays')</label> --}}
-                                    <label class="container-checkbox">@lang('lang.public_holidays')
-                                        <input type="checkbox" class="configuration_checkbox" id="public_holidays" name="public_holidays"> <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                                <div class="col-md-2">
-                                    <label class="container-checkbox">@lang('lang.view')
-                                        <input type="checkbox" class="configuration_checkbox public_holidays_checkbox" id="public_holidays_check_view" name="public_holidays_check_view"> <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container-checkbox">@lang('lang.add')
-                                        <input type="checkbox" class="configuration_checkbox public_holidays_checkbox" id="public_holidays_check_add" name="public_holidays_check_add"> <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container-checkbox">@lang('lang.edit')  
-                                        <input type="checkbox" class="configuration_checkbox public_holidays_checkbox" id="public_holidays_check_edit" name="public_holidays_check_edit"> <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container-checkbox">@lang('lang.delete')
-                                        <input type="checkbox" class="configuration_checkbox public_holidays_checkbox" id="public_holidays_check_delete" name="public_holidays_check_delete" > <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="form-group row">
-                                {{-- block children allowance --}}
-                                <div class="col-md-2">
-                                    {{-- <label >@lang('lang.children_allowance')</label> --}}
-                                    <label class="container-checkbox">@lang('lang.children_allowance')
-                                        <input type="checkbox" class="configuration_checkbox" id="children_allowance" name="children_allowance"> <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                                <div class="col-md-2">
-                                    <label class="container-checkbox">@lang('lang.view')
-                                        <input type="checkbox"class="configuration_checkbox children_allowance_checkbox" id="children_allowance_check_view" name="children_allowance_check_view"> <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container-checkbox">@lang('lang.add')
-                                        <input type="checkbox"class="configuration_checkbox children_allowance_checkbox" id="children_allowance_check_add" name="children_allowance_check_add"> <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container-checkbox">@lang('lang.edit')  
-                                        <input type="checkbox"class="configuration_checkbox children_allowance_checkbox" id="children_allowance_check_edit" name="children_allowance_check_edit"> <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container-checkbox">@lang('lang.delete')
-                                        <input type="checkbox"class="configuration_checkbox children_allowance_checkbox" id="children_allowance_check_delete" name="children_allowance_check_delete" > <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <hr>
-                     {{-- block Setting --}}
-                     <div class="row">
-                        <div class="col-md-2">
-                            <label style="font-weight: bold;">@lang('lang.setting')</label>
-                        </div>
-                        <div class="col-md-10">
-                            <label class="container-checkbox">@lang('lang.all')
-                                <input type="checkbox" id="setting_check_all" name="setting_check_all"> <span class="checkmark"></span>
-                            </label>
-                        </div>
-
-                        <div class="col-md-12">
-                            <div class="form-group row">
-                                {{-- block Bank --}}
-                                <div class="col-md-2">
-                                    {{-- <label >@lang('lang.bank')</label> --}}
-                                    <label class="container-checkbox">@lang('lang.bank')
-                                        <input type="checkbox" class="setting_checkbox" id="bank" name="bank"> <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                                <div class="col-md-2">
-                                    <label class="container-checkbox">@lang('lang.view')
-                                        <input type="checkbox" class="setting_checkbox bank_checkbox" id="bank_check_view" name="bank_check_view"> <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container-checkbox">@lang('lang.add')
-                                        <input type="checkbox" class="setting_checkbox bank_checkbox" id="bank_check_add" name="bank_check_add"> <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container-checkbox">@lang('lang.edit')  
-                                        <input type="checkbox" class="setting_checkbox bank_checkbox" id="bank_check_edit" name="bank_check_edit"> <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container-checkbox">@lang('lang.delete')
-                                        <input type="checkbox" class="setting_checkbox bank_checkbox" id="bank_check_delete" name="bank_check_delete" > <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                                {{-- block Position --}}
-                                <div class="col-md-2">
-                                    {{-- <label >@lang('lang.position')</label> --}}
-                                    <label class="container-checkbox">@lang('lang.position')
-                                        <input type="checkbox" class="setting_checkbox" id="position" name="position"> <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                                <div class="col-md-2">
-                                    <label class="container-checkbox">@lang('lang.view')
-                                        <input type="checkbox" class="setting_checkbox position_checkbox" id="position_check_view" name="position_check_view"> <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container-checkbox">@lang('lang.add')
-                                        <input type="checkbox" class="setting_checkbox position_checkbox" id="position_check_add" name="position_check_add"> <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container-checkbox">@lang('lang.edit')  
-                                        <input type="checkbox" class="setting_checkbox position_checkbox" id="position_check_edit" name="position_check_edit"> <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container-checkbox">@lang('lang.delete')
-                                        <input type="checkbox" class="setting_checkbox position_checkbox" id="position_check_delete" name="position_check_delete"> <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                                {{-- block Branch --}}
-                                <div class="col-md-2">
-                                    {{-- <label >@lang('lang.branch')</label> --}}
-                                    <label class="container-checkbox">@lang('lang.branch')
-                                        <input type="checkbox" class="setting_checkbox" id="branch" name="branch"> <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                                <div class="col-md-2">
-                                    <label class="container-checkbox">@lang('lang.view')
-                                        <input type="checkbox" class="setting_checkbox branch_checkbox" id="branch_check_view" name="branch_check_view"> <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container-checkbox">@lang('lang.add')
-                                        <input type="checkbox" class="setting_checkbox branch_checkbox" id="branch_check_add" name="branch_check_add"> <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container-checkbox">@lang('lang.edit')  
-                                        <input type="checkbox" class="setting_checkbox branch_checkbox" id="branch_check_edit" name="branch_check_edit"> <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container-checkbox">@lang('lang.delete')
-                                        <input type="checkbox" class="setting_checkbox branch_checkbox" id="branch_check_delete" name="branch_check_delete"> <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="form-group row">
-                                {{-- block Departerment --}}
-                                <div class="col-md-2">
-                                    {{-- <label >@lang('lang.department')</label> --}}
-                                    <label class="container-checkbox">@lang('lang.department')
-                                        <input type="checkbox" class="setting_checkbox" id="department" name="department"> <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                                <div class="col-md-2">
-                                    <label class="container-checkbox">@lang('lang.view')
-                                        <input type="checkbox" class="setting_checkbox department_checkbox" id="department_check_view" name="department_check_view"> <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container-checkbox">@lang('lang.add')
-                                        <input type="checkbox" class="setting_checkbox department_checkbox" id="department_check_add" name="department_check_add"> <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container-checkbox">@lang('lang.edit')  
-                                        <input type="checkbox" class="setting_checkbox department_checkbox" id="department_check_edit" name="department_check_edit"> <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container-checkbox">@lang('lang.delete')
-                                        <input type="checkbox" class="setting_checkbox department_checkbox" id="department_check_delete" name="department_check_delete" > <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                                {{-- block Forgot Password --}}
-                                <div class="col-md-2">
-                                    {{-- <label >@lang('lang.forgot_password?')</label> --}}
-                                    <label class="container-checkbox">@lang('lang.forgot_password?')
-                                        <input type="checkbox" class="setting_checkbox" id="forgot_password" name="forgot_password"> <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                                <div class="col-md-2">
-                                    <label class="container-checkbox">@lang('lang.view')
-                                        <input type="checkbox" class="setting_checkbox forgot_password_checkbox" id="forgot_password_check_view" name="forgot_password_check_view"> <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container-checkbox">@lang('lang.add')
-                                        <input type="checkbox" class="setting_checkbox forgot_password_checkbox" id="forgot_password_check_add" name="forgot_password_check_add"> <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container-checkbox">@lang('lang.edit')  
-                                        <input type="checkbox" class="setting_checkbox forgot_password_checkbox" id="forgot_password_check_edit" name="forgot_password_check_edit"> <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container-checkbox">@lang('lang.delete')
-                                        <input type="checkbox" class="setting_checkbox forgot_password_checkbox" id="forgot_password_check_delete" name="forgot_password_check_delete" > <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <hr>
-                    {{-- block Role --}}
-                    <div class="row">
-                        <div class="col-md-2">
-                            <label style="font-weight: bold;">@lang('lang.roles')</label>
-                        </div>
-                        <div class="col-md-10">
-                            <label class="container-checkbox">@lang('lang.all')
-                                <input type="checkbox" id="role_check_all" name="role_check_all"> <span class="checkmark"></span>
-                            </label>
-                        </div>
-                         {{-- block Permission --}}
-                       <div class="col-md-12">
-                            <div class="form-group row">
-                                <div class="col-md-2">
-                                    <label >@lang('lang.permission')</label>
-                                </div>
-                                <div class="col-md-4">
-                                    <label class="container-checkbox">@lang('lang.view')
-                                        <input type="checkbox" class="role_checkbox" id="role_check_view" name="role_check_view"> <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container-checkbox">@lang('lang.add')
-                                        <input type="checkbox" class="role_checkbox" id="role_check_add" name="role_check_add"> <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                                <div class="col-md-4">
-                                    <label class="container-checkbox">@lang('lang.edit')
-                                        <input type="checkbox" class="role_checkbox" id="role_check_edit" name="role_check_edit"> <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container-checkbox">@lang('lang.delete')
-                                        <input type="checkbox" class="role_checkbox" id="role_check_delete" name="role_check_delete" > <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                                <div class="col-md-2">
-                                    <label class="container-checkbox">@lang('lang.print')
-                                        <input type="checkbox" class="role_checkbox" id="role_check_print" name="role_check_print"> <span class="checkmark"></span>
-                                    </label>
-                                    <label class="container-checkbox">@lang('lang.export')
-                                        <input type="checkbox" class="role_checkbox" id="role_check_export" name="role_check_export"> <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                            </div>
-                       </div>
-                    </div>
-                    <hr>
-                    <div class="submit-section">
-                        <button type="button" class="btn btn-primary create-btn">
-                            <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i>
-                                @lang('lang.loading') </span>
-                            <span class="btn-txt">@lang('lang.submit')</span>
-                        </button>
-                        <a href="{{ url('role') }}" class="btn btn-secondary btn-cancel">@lang('lang.cancel')</a>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
+@include('roles.interface_create')
 @endsection
 @include('includs.script')
 <script src="{{ asset('/admin/js/validation-field.js') }}"></script>
@@ -1116,7 +84,767 @@
     $(function(){
         var data = roleCheckboxs();
         $(".create-btn").on("click", function() {
-            console.log("data: ", data);
+            let data = [];
+            // block all employee
+            let all_employee_checkbox = $('.all_employee_checkbox').filter(':checked').length;
+            let leaves_employee_checkbox = $('.leaves_employee_checkbox').filter(':checked').length;
+            let employee_all = $('#employee_all').filter(':checked').length;
+            if (all_employee_checkbox) {
+                data.push({
+                    name: "all_employee",
+                    permission: [
+                        {
+                            "name":"All Employee",
+                            "table_id":"3",
+                            "is_view": $("#employee_view").val(),
+                            "is_create": $("#employee_add").val(),
+                            "is_import": $("#employee_import").val(),
+                            "is_update": $("#employee_edit").val(),
+                            "is_delete": $("#employee_delete").val(),
+                            "is_cancel": $("#employee_cancel").val(),
+                            "is_print": $("#employee_print").val(),
+                            "is_export": $("#employee_export").val(),
+                        }
+                    ]
+                })
+            }
+            if (leaves_employee_checkbox) {
+                data.push({
+                    name: "leaves_employee",
+                    permission: [
+                        {
+                            "name":"Leaves Employee",
+                            "is_view": $("#leaves_employee_view").val(),
+                            "is_create": $("#leaves_employee_add").val(),
+                            "is_import": $("#leaves_employee_import").val(),
+                            "is_update": $("#leaves_employee_edit").val(),
+                            "is_delete": $("#leaves_employee_delete").val(),
+                            "is_cancel": $("#leaves_employee_cancel").val(),
+                            "is_print": $("#leaves_employee_print").val(),
+                            "is_export": $("#leaves_employee_export").val(),
+                        }
+                    ]
+                })
+            }
+            if (employee_all) {
+                data.push({
+                    name: "employee_block",
+                    permission: [
+                        {
+                            "is_all": $("#employee_all").val(),
+                            "name":"Employee",
+                        },
+                    ]
+                });
+            }
+
+            // block all recruitment
+            let candidate_CVs_checkbox = $('.candidate_CVs_checkbox').filter(':checked').length;
+            let recruitment_plans_checkbox = $('.recruitment_plans_checkbox').filter(':checked').length;
+            let recruitments_all = $('#recruitments_all').filter(':checked').length;
+            if (candidate_CVs_checkbox) {
+                data.push({
+                    name: "candidate_cv",
+                    permission: [
+                        {
+                            "name":"Candidate CV",
+                            "table_id":"8",
+                            "is_view": $("#candidate_cv_view").val(),
+                            "is_create": $("#candidate_cv_add").val(),
+                            "is_import": $("#candidate_cv_import").val(),
+                            "is_update": $("#candidate_cv_edit").val(),
+                            "is_approve": $("#candidate_cv_approve").val(),
+                            "is_delete": $("#candidate_cv_delete").val(),
+                            "is_cancel": $("#candidate_cv_cancel").val(),
+                            "is_print": $("#candidate_cv_print").val(),
+                            "is_export": $("#candidate_cv_export").val(),
+                        }
+                    ]
+                })
+            }
+            if (recruitment_plans_checkbox) {
+                data.push({
+                    name: "recruitment_plan",
+                    permission: [
+                        {
+                            "name":"Recruitment Plan",
+                            "table_id":"7",
+                            "is_view": $("#recruitment_plan_view").val(),
+                            "is_create": $("#recruitment_plan_add").val(),
+                            "is_update": $("#recruitment_plan_edit").val(),
+                            "is_delete": $("#recruitment_plan_delete").val(),
+                            "is_print": $("#recruitment_plan_print").val(),
+                            "is_export": $("#recruitment_plan_export").val(),
+                        }
+                    ]
+                })
+            }
+            if (recruitments_all) {
+                data.push({
+                    name: "recruitments",
+                    permission: [
+                        {
+                            "is_all": $('#recruitments_all').val(),
+                            "name":"recruitments",
+                        },
+                    
+                    ]
+                });
+            }
+
+            // block C&B 
+            let employee_salary_checkbox = $('.employee_salary_checkbox').filter(':checked').length;
+            let cb_nssf_checkbox = $('.cb_nssf_checkbox').filter(':checked').length;
+            let severance_pay_checkbox = $('.severance_pay_checkbox').filter(':checked').length;
+            let fringe_benefits_checkbox = $('.fringe_benefits_checkbox').filter(':checked').length;
+            let c_and_b_all = $('#c_and_b_all').filter(':checked').length;
+            if (employee_salary_checkbox) {
+                data.push({
+                    name: "payroll",
+                    permission: [
+                        {
+                            "name":"Payroll",
+                            "table_id":"4",
+                            "is_view": $("#c_and_b_view").val(),
+                            "is_create": $("#c_and_b_add").val(),
+                            "is_update": $("#c_and_b_edit").val(),
+                            "is_approve": $("#c_and_b_approve").val(),
+                            "is_delete": $("#c_and_b_delete").val(),
+                            "is_print": $("#c_and_b_print").val(),
+                            "is_export": $("#c_and_b_export").val(),
+                        }
+                    ]
+                })
+            }
+            if (cb_nssf_checkbox) {
+                data.push({
+                    name: "nssf",
+                    permission: [
+                        {
+                            "name":"nssf",
+                            "table_id":"4",
+                            "is_view": $("#cb_nssf_view").val(),
+                            "is_import": $("#cb_nssf_import").val(),
+                            "is_print": $("#cb_nssf_print").val(),
+                            "is_export": $("#cb_nssf_export").val(),
+                        }
+                    ]
+                })
+            }
+            if (severance_pay_checkbox) {
+                data.push({
+                    name: "Severance Pay",
+                    permission: [
+                        {
+                            "name":"Severance Pay",
+                            "table_id":"4",
+                            "is_view": $("#severance_pay_view").val(),
+                            "is_import": $("#severance_pay_import").val(),
+                            "is_print": $("#severance_pay_print").val(),
+                            "is_export": $("#severance_pay_export").val(),
+                        }
+                    ]
+                })
+            }
+            if (fringe_benefits_checkbox) {
+                data.push({
+                    name: "Fringe Benefits",
+                    permission: [
+                        {
+                            "name":"Fringe Benefits",
+                            "table_id":"4",
+                            "is_view": $("#fringe_benefits_view").val(),
+                            "is_create": $("#fringe_benefits_add").val(),
+                            "is_update": $("#fringe_benefits_edit").val(),
+                            "is_import": $("#fringe_benefits_import").val(),
+                            "is_delete": $("#fringe_benefits_delete").val(),
+                            "is_print": $("#fringe_benefits_print").val(),
+                            "is_export": $("#fringe_benefits_export").val(),
+                        }
+                    ]
+                })
+            }
+            if (c_and_b_all) {
+                data.push({
+                    name: "Compensation and Benefits",
+                    permission: [
+                        {
+                            "is_all": $("#c_and_b_all").val(),
+                            "name":"Compensation and Benefits",
+                        },
+                    ]
+                });
+            }
+
+            //block motor rentals 
+            let motor_rentals_checkbox = $('.motor_rentals_checkbox').filter(':checked').length;
+            let pay_motor_rentals_checkbox = $('.pay_motor_rentals_checkbox').filter(':checked').length;
+            let motor_rental_check_all = $('#motor_rental_check_all').filter(':checked').length;
+            if (motor_rentals_checkbox) {
+                data.push({
+                    name: "motor_rental",
+                    permission: [
+                        {
+                            "name":"Motor Rental",
+                            "table_id":"5",
+                            "is_view": $("#motor_rental_view").val(),
+                            "is_create": $("#motor_rental_add").val(),
+                            "is_import": $("#motor_rental_import").val(),
+                            "is_update": $("#motor_rental_edit").val(),
+                            "is_delete": $("#motor_rental_delete").val(),
+                            "is_print": $("#motor_rental_print").val(),
+                            "is_export": $("#motor_rental_export").val(),
+                        },
+                    ]
+                })
+            }
+            if (pay_motor_rentals_checkbox) {
+                data.push({
+                    name: "pay_motor_rental",
+                    permission: [
+                        {
+                            "name":"Pay Motor Rental",
+                                "table_id":"6",
+                                "is_view": $("#Pay_motor_rental_view").val(),
+                                "is_create": $("#Pay_motor_rental_add").val(),
+                                "is_approve": $("#Pay_motor_rental_approve").val(),
+                                "is_update": $("#Pay_motor_rental_edit").val(),
+                                "is_delete": $("#Pay_motor_rental_delete").val(),
+                                "is_print": $("#Pay_motor_rental_print").val(),
+                                "is_export": $("#Pay_motor_rental_export").val(),
+                        },
+                    ]
+                })
+            }
+            if (motor_rental_check_all) {
+                data.push({
+                    name: "Motor Rentals",
+                    permission: [
+                        {
+                            "is_all": $("#motor_rental_check_all").val(),
+                            "name":"Motor Rentals",
+                        },
+                    ]
+                });
+            }
+
+            //block Trainings 
+            let trainer_checkbox = $('.trainer_checkbox').filter(':checked').length;
+            let training_checkbox_block = $('.training_checkbox_block').filter(':checked').length;
+            let training_reports_checkbox = $('.training_reports_checkbox').filter(':checked').length;
+            let training_check_all = $('#training_check_all').filter(':checked').length;
+            if (trainer_checkbox) {
+                data.push({
+                    name: "Trainer",
+                    permission: [
+                        {
+                            "name":"Trainer",
+                            "table_id":"10",
+                            "is_view": $("#training_check_view").val(),
+                            "is_create": $("#training_check_add").val(),
+                            "is_update": $("#training_check_edit").val(),
+                            "is_delete": $("#training_check_delete").val(),
+                            "is_print": $("#training_check_print").val(),
+                            "is_export": $("#training_check_export").val(),
+                        },
+                    ]
+                })
+            }
+            if (training_checkbox_block) {
+                data.push({
+                    name: "Training",
+                    permission: [
+                        {
+                            "name":"Training",
+                            "table_id":"10",
+                            "is_view": $("#trainer_check_view").val(),
+                            "is_create": $("#trainer_check_add").val(),
+                            "is_update": $("#trainer_check_edit").val(),
+                            "is_delete": $("#trainer_check_delete").val(),
+                            "is_print": $("#trainer_check_print").val(),
+                            "is_export": $("#trainer_check_export").val(),
+                        },
+                    ]
+                })
+            }
+            if (training_reports_checkbox) {
+                data.push({
+                    name: "Training_Report",
+                    permission: [
+                        {
+                            "name":"Training Report",
+                            "table_id":"10",
+                            "is_view": $("#report_training_check_view").val(),
+                            "is_print": $("#report_training_check_print").val(),
+                            "is_export": $("#report_training_check_export").val(),
+                        },
+                    ]
+                })
+            }
+            if (training_check_all) {
+                data.push({
+                    name: "Trainings",
+                    permission: [
+                        {
+                            "is_all": $("#training_check_all").val(),
+                            "name":"Trainings",
+                        },
+                    ]
+                });
+            }
+
+            // block reports 
+            let employee_reports_checkbox = $('.employee_reports_checkbox').filter(':checked').length;
+            let payroll_report_checkbox = $('.payroll_report_checkbox').filter(':checked').length;
+            let tax_report_checkbox = $('.tax_report_checkbox').filter(':checked').length;
+            let nssf_report_checkbox = $('.nssf_report_checkbox').filter(':checked').length;
+            let kmh_pchum_report_checkbox = $('.kmh_pchum_report_checkbox').filter(':checked').length;
+            let severance_pay_report_checkbox = $('.severance_pay_report_checkbox').filter(':checked').length;
+            let seniorities_pay_report_checkbox = $('.seniorities_pay_report_checkbox').filter(':checked').length;
+            let fringe_benefits_report_checkbox = $('.fringe_benefits_report_checkbox').filter(':checked').length;
+            let bank_transfer_report_checkbox = $('.bank_transfer_report_checkbox').filter(':checked').length;
+            let e_filing_report_checkbox = $('.e_filing_report_checkbox').filter(':checked').length;
+            let e_form_report_checkbox = $('.e_form_report_checkbox').filter(':checked').length;
+            let motor_rental_reports_checkbox = $('.motor_rental_reports_checkbox').filter(':checked').length;
+            let new_staff_reports_checkbox = $('.new_staff_reports_checkbox').filter(':checked').length;
+            let staff_resigned_reports_checkbox = $('.staff_resigned_reports_checkbox').filter(':checked').length;
+            let transferred_staff_report_checkbox = $('.transferred_staff_report_checkbox').filter(':checked').length;
+            let promoted_staff_report_checkbox = $('.promoted_staff_report_checkbox').filter(':checked').length;
+            let reports_check_all = $('#reports_check_all').filter(':checked').length;
+            if (employee_reports_checkbox) {
+                data.push({
+                    name: "Employee_Reports",
+                    permission: [
+                        {
+                            "name":"Employee Reports",
+                            "table_id":"17",
+                            "is_view": $("#report_employee_check_view").val(),
+                            "is_print": $("#report_employee_check_print").val(),
+                            "is_export": $("#report_employee_check_export").val(),
+                        },
+                    ]
+                })
+            }
+            if (payroll_report_checkbox) {
+                data.push({
+                    name: "Payroll_Reports",
+                    permission: [
+                        {
+                            "name":"Payroll Reports",
+                            "table_id":"18",
+                            "is_view": $("#payroll_report_check_view").val(),
+                            "is_print": $("#payroll_report_check_print").val(),
+                            "is_export": $("#payroll_report_check_export").val(),
+                    },
+                    ]
+                })
+            }
+            if (tax_report_checkbox) {
+                data.push({
+                    name: "tax_report",
+                    permission: [
+                        {
+                            "name":"Tax Reports",
+                            "table_id":"18",
+                            "is_view": $("#tax_report_check_view").val(),
+                            "is_print": $("#tax_report_check_print").val(),
+                            "is_export": $("#tax_report_check_export").val(),
+                    },
+                    ]
+                })
+            }
+            if (nssf_report_checkbox) {
+                data.push({
+                    name: "nssf_report",
+                    permission: [
+                        {
+                            "name":"NSSF Reports",
+                            "table_id":"18",
+                            "is_view": $("#nssf_report_check_view").val(),
+                            "is_print": $("#nssf_report_check_print").val(),
+                            "is_export": $("#nssf_report_check_export").val(),
+                    },
+                    ]
+                })
+            }
+            if (kmh_pchum_report_checkbox) {
+                data.push({
+                    name: "kmh_pchum_report",
+                    permission: [
+                        {
+                            "name":"Khm Pchum Reports",
+                            "table_id":"18",
+                            "is_view": $("#kmh_pchum_report_check_view").val(),
+                            "is_print": $("#kmh_pchum_report_check_print").val(),
+                            "is_export": $("#kmh_pchum_report_check_export").val(),
+                    },
+                    ]
+                })
+            }
+            if (severance_pay_report_checkbox) {
+                data.push({
+                    name: "severance_pay_report",
+                    permission: [
+                        {
+                            "name":"Severance Pay Reports",
+                            "table_id":"18",
+                            "is_view": $("#severance_pay_report_check_view").val(),
+                            "is_print": $("#severance_pay_report_check_print").val(),
+                            "is_export": $("#severance_pay_report_check_export").val(),
+                    },
+                    ]
+                })
+            }
+            if (seniorities_pay_report_checkbox) {
+                data.push({
+                    name: "seniorities_pay_report",
+                    permission: [
+                        {
+                            "name":"Seniorities Pay Reports",
+                            "table_id":"18",
+                            "is_view": $("#seniorities_pay_report_check_view").val(),
+                            "is_print": $("#seniorities_pay_report_check_print").val(),
+                            "is_export": $("#seniorities_pay_report_check_export").val(),
+                    },
+                    ]
+                })
+            }
+            if (fringe_benefits_report_checkbox) {
+                data.push({
+                    name: "fringe_benefits_report",
+                    permission: [
+                        {
+                            "name":"Fringe Benefits Reports",
+                            "table_id":"18",
+                            "is_view": $("#fringe_benefits_report_check_view").val(),
+                            "is_print": $("#fringe_benefits_report_check_print").val(),
+                            "is_export": $("#fringe_benefits_report_check_export").val(),
+                    },
+                    ]
+                })
+            }
+            if (bank_transfer_report_checkbox) {
+                data.push({
+                    name: "Bank_Transfer_Reports",
+                    permission: [
+                        {
+                            "name":"Bank Transfer Reports",
+                            "is_view": $("#bank_transfer_report_check_view").val(),
+                            "is_print": $("#bank_transfer_report_check_print").val(),
+                            "is_export": $("#bank_transfer_report_check_export").val(),
+                    },
+                    ]
+                })
+            }
+            if (e_filing_report_checkbox) {
+                data.push({
+                    name: "E-Filing_Reports",
+                    permission: [
+                        {
+                            "name":"E-Filing Reports",
+                            "is_view": $("#e_filing_report_check_view").val(),
+                            "is_print": $("#e_filing_report_check_print").val(),
+                            "is_export": $("#e_filing_report_check_export").val(),
+                    },
+                    ]
+                })
+            }
+            if (e_form_report_checkbox) {
+                data.push({
+                    name: "E-Form_Reports",
+                    permission: [
+                        {
+                            "name":"E-Form Reports",
+                            "is_view": $("#e_form_report_check_view").val(),
+                            "is_print": $("#e_form_report_check_print").val(),
+                            "is_export": $("#e_form_report_check_export").val(),
+                    },
+                    ]
+                })
+            }
+            if (motor_rental_reports_checkbox) {
+                data.push({
+                    name: "Motor_Rental_Reports",
+                    permission: [
+                        {
+                            "name":"Motor Rental Reports",
+                            "table_id":"19",
+                            "is_view": $("#motor_rental_reports_check_view").val(),
+                            "is_print": $("#motor_rental_reports_check_print").val(),
+                            "is_export": $("#motor_rental_reports_check_export").val(),
+                    },
+                    ]
+                })
+            }
+            if (new_staff_reports_checkbox) {
+                data.push({
+                    name: "New_Staff_Reports",
+                    permission: [
+                        {
+                            "name":"New Staff Reports",
+                            "table_id":"20",
+                            "is_view": $("#new_staff_reports_check_view").val(),
+                            "is_print": $("#new_staff_reports_check_print").val(),
+                            "is_export": $("#new_staff_reports_check_export").val(),
+                        },
+                    ]
+                })
+            }
+            if (staff_resigned_reports_checkbox) {
+                data.push({
+                    name: "Staff_Resigned_Reports",
+                    permission: [
+                        {
+                            "name":"Staff Resigned Reports",
+                            "table_id":"21",
+                            "is_view": $("#staff_resigned_reports_check_view").val(),
+                            "is_print": $("#staff_resigned_reports_check_print").val(),
+                            "is_export": $("#staff_resigned_reports_check_export").val(),
+                        },
+                    ]
+                })
+            }
+            if (transferred_staff_report_checkbox) {
+                data.push({
+                    name: "Transferred_Staff_Reports",
+                    permission: [
+                        {
+                            "name":"Transferred Staff Reports",
+                            "table_id":"23",
+                            "is_view": $("#transferred_staff_report_check_view").val(),
+                            "is_print": $("#transferred_staff_report_check_print").val(),
+                            "is_export": $("#transferred_staff_report_check_export").val(),
+                        },
+                    ]
+                })
+            }
+            if (promoted_staff_report_checkbox) {
+                data.push({
+                    name: "Promoted_Staff_Reports",
+                    permission: [
+                        {
+                            "name":"Promoted Staff Reports",
+                            "table_id":"22",
+                            "is_view": $("#promoted_staff_report_check_view").val(),
+                            "is_print": $("#promoted_staff_report_check_print").val(),
+                            "is_export": $("#promoted_staff_report_check_export").val(),
+                        },
+                    ]
+                })
+            }
+            if (reports_check_all) {
+                data.push({
+                    name: "reports",
+                    permission: [
+                        {
+                            "is_all": $("#reports_check_all").val(),
+                            "name":"reports",
+                        },
+                    ]
+                });
+            }
+
+            //block Configuration
+            let taxes_checkbox = $('.taxes_checkbox').filter(':checked').length;
+            let exchange_rate_checkbox = $('.exchange_rate_checkbox').filter(':checked').length;
+            let public_holidays_checkbox = $('.public_holidays_checkbox').filter(':checked').length;
+            let children_allowance_checkbox = $('.children_allowance_checkbox').filter(':checked').length;
+            let configuration_check_all = $('#configuration_check_all').filter(':checked').length;
+            if (taxes_checkbox) {
+                data.push({
+                    name: "Tax",
+                    permission: [
+                        {
+                            "name":"Tax",
+                            "table_id":"24",
+                            "is_view": $("#taxes_check_view").val(),
+                            "is_create": $("#taxes_check_add").val(),
+                            "is_update": $("#taxes_check_edit").val(),
+                            "is_delete": $("#taxes_check_delete").val(),
+                        },
+                    ]
+                })
+            }
+            if (exchange_rate_checkbox) {
+                data.push({
+                    name: "Exchange_Rate",
+                    permission: [
+                        {
+                            "name":"Exchange Rate",
+                            "table_id":"25",
+                            "is_view": $("#exchange_rate_check_view").val(),
+                            "is_create": $("#exchange_rate_check_add").val(),
+                            "is_update": $("#exchange_rate_check_edit").val(),
+                            "is_delete": $("#exchange_rate_check_delete").val(),
+                        },
+                    ]
+                })
+            }
+            if (public_holidays_checkbox) {
+                data.push({
+                    name: "Public_Holidays",
+                    permission: [
+                        {
+                            "name":"Public Holidays",
+                            "table_id":"12",
+                            "is_view": $("#public_holidays_check_view").val(),
+                            "is_create": $("#public_holidays_check_add").val(),
+                            "is_update": $("#public_holidays_check_edit").val(),
+                            "is_delete": $("#public_holidays_check_delete").val(),
+                        },
+                    ]
+                })
+            }
+            if (children_allowance_checkbox) {
+                data.push({
+                    name: "Children_Allowance",
+                    permission: [
+                        {
+                            "name":"Children Allowance",
+                            "table_id":"26",
+                            "is_view": $("#children_allowance_check_view").val(),
+                            "is_create": $("#children_allowance_check_add").val(),
+                            "is_update": $("#children_allowance_check_edit").val(),
+                            "is_delete": $("#children_allowance_check_delete").val(),
+                        },
+                    ]
+                })
+            }
+            if (configuration_check_all) {
+                data.push({
+                    name: "configuration",
+                    permission: [
+                        {
+                            "is_all": $("#configuration_check_all").val(),
+                            "name":"Configuration",
+                        },
+                    ]
+                });
+            }
+
+            // block settings
+            let bank_checkbox = $('.bank_checkbox').filter(':checked').length;
+            let position_checkbox = $('.position_checkbox').filter(':checked').length;
+            let branch_checkbox = $('.branch_checkbox').filter(':checked').length;
+            let department_checkbox = $('.department_checkbox').filter(':checked').length;
+            let forgot_password_checkbox = $('.forgot_password_checkbox').filter(':checked').length;
+            let setting_check_all = $('#setting_check_all').filter(':checked').length;
+            if (bank_checkbox) {
+                data.push({
+                    name: "Bank",
+                    permission: [
+                        {
+                            "name":"Bank",
+                            "table_id":"13",
+                            "is_view": $("#bank_check_view").val(),
+                            "is_create": $("#bank_check_add").val(),
+                            "is_update": $("#bank_check_edit").val(),
+                            "is_delete": $("#bank_check_delete").val(),
+                        },
+                    ]
+                })
+            }
+            if (position_checkbox) {
+                data.push({
+                    name: "Position",
+                    permission: [
+                        {
+                            "name":"Position",
+                            "table_id":"15",
+                            "is_view": $("#position_check_view").val(),
+                            "is_create": $("#position_check_add").val(),
+                            "is_update": $("#position_check_edit").val(),
+                            "is_delete": $("#position_check_delete").val(),
+                        },
+                    ]
+                })
+            }
+            if (branch_checkbox) {
+                data.push({
+                    name: "Branch",
+                    permission: [
+                        {
+                            "name":"Branch",
+                            "table_id":"16",
+                            "is_view": $("#branch_check_view").val(),
+                            "is_create": $("#branch_check_add").val(),
+                            "is_update": $("#branch_check_edit").val(),
+                            "is_delete": $("#branch_check_delete").val(),
+                        },
+                    ]
+                })
+            }
+            if (department_checkbox) {
+                data.push({
+                    name: "Department",
+                    permission: [
+                        {
+                            "name":"Department",
+                            "table_id":"14",
+                            "is_view": $("#department_check_view").val(),
+                            "is_create": $("#department_check_add").val(),
+                            "is_update": $("#department_check_edit").val(),
+                            "is_delete": $("#department_check_delete").val(),
+                        },
+                    ]
+                })
+            }
+            if (forgot_password_checkbox) {
+                data.push({
+                    name: "Forgot_Password",
+                    permission: [
+                        {
+                            "name":"Forgot Password",
+                            "is_view": $("#forgot_password_check_view").val(),
+                            "is_create": $("#forgot_password_check_add").val(),
+                            "is_update": $("#forgot_password_check_edit").val(),
+                            "is_delete": $("#forgot_password_check_delete").val(),
+                        },
+                    ]
+                })
+            }
+            if (setting_check_all) {
+                data.push({
+                    name: "setting",
+                    permission: [
+                        {
+                            "is_all": $("#setting_check_all").val(),
+                            "name":"Setting",
+                        },
+                    ]
+                });
+            }
+            // block roles
+            let role_checkbox = $('.role_checkbox').filter(':checked').length;
+            let role_check_all = $('#role_check_all').filter(':checked').length;
+            if (role_checkbox) {
+                data.push({
+                    name: "role Permission",
+                    permission: [
+                        {
+                            "name":"Role Permission",
+                            "is_view": $("#role_check_view").val(),
+                            "is_create": $("#role_check_add").val(),
+                            "is_update": $("#role_check_edit").val(),
+                            "is_delete": $("#role_check_delete").val(),
+                            "is_print": $("#role_check_print").val(),
+                            "is_export": $("#role_check_export").val(),
+                        },  
+                    ]
+                });
+            }
+            if (role_check_all) {
+                data.push({
+                    name: "role",
+                    permission: [
+                        {
+                            "is_all": $("#role_check_all").val(),
+                            "name":"Role",
+                        },  
+                    ]
+                });
+            }
+            console.log("data: ",data);
             return false;
             let url = "{{url('role/create')}}";
             $.ajax({

@@ -614,6 +614,7 @@ return[
     "staff_training_by_branch"=>"Staff Training by Branch",
     "something_went_wrong_please_try_again_later"=>"Something went wrong please try again later",
     "seniority_backford"=>"Seniority Backford",
+    "severance_pay"=>"Severance Pay",
     "severance_pay_report"=>"Severance Pay Report",
     "severance_pay"=>"Severance Pay",
     "seniorities_pay_report"=>"Seniorities Pay Report",
