@@ -28,7 +28,7 @@
                 <div class="col-auto float-end ms-auto">
                     @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer')
                         <a href="#" class="btn add-btn" data-toggle="modal" id="importPayroll"><i class="fa fa-plus"></i>@lang('lang.import')</a>
-                        <a href="#" class="btn add-btn me-2" data-bs-toggle="modal" data-bs-target="#add_salary"><i class="fa fa-plus"></i> @lang('lang.add_new')</a>
+                        {{-- <a href="#" class="btn add-btn me-2" data-bs-toggle="modal" data-bs-target="#add_salary"><i class="fa fa-plus"></i> @lang('lang.add_new')</a> --}}
                     @endif
                 </div>
             </div>

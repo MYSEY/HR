@@ -518,6 +518,7 @@ return[
 	"please_input_start_date"=> "Please Input Start Date",
 	"please_input_end_date"=> "Please Input End Date",
 	"position_range"=> "Position Range",
+	"payroll_preview"=> "Payroll Preview",
     "qty"=>"Qty",
     "quantity"=>"Quantity",
     "rile"=>"Riels",

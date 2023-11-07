@@ -10,10 +10,10 @@ use App\Models\Holiday;
 use App\Models\Payroll;
 use App\Models\Seniority;
 use App\Models\ExchangeRate;
+use App\Models\PreviewBonus;
 use App\Models\SeverancePay;
 use Illuminate\Http\Request;
 use App\Models\ChildrenInfor;
-use App\Models\PayrollDetail;
 use App\Models\GrossSalaryPay;
 use App\Models\payrollPreview;
 use Illuminate\Support\Carbon;
@@ -25,9 +25,11 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Date;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\ExportEmployeeSalary;
+use App\Models\PreviewGrossSalaryPay;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use App\Models\NationalSocialSecurityFund;
 use App\Repositories\Admin\PayrollRepository;
+use App\Models\PreviewNationalSocialSecurityFund;
 
 class EmployeePayrollController extends Controller
 {
@@ -126,7 +128,10 @@ class EmployeePayrollController extends Controller
             $employee = User::where('date_of_commencement','<=',$request->payment_date)->whereIn('emp_status',['Probation','1','10','2'])->get();
             if (!$employee->isEmpty()) {
                 foreach ($employee as $item) {
-                    // Payroll::where('employee_id',$item->id)->delete();
+                    payrollPreview::where('employee_id',$item->id)->delete();
+                    PreviewNationalSocialSecurityFund::where('employee_id',$item->id)->delete();
+                    PreviewNationalSocialSecurityFund::where('employee_id',$item->id)->delete();
+                    PreviewBonus::where('employee_id',$item->id)->delete();
                     //function first month join work
                     $totalFirstSeverancPay = 0;
                     $totalBaseSalaryRecived = 0;
@@ -189,7 +194,6 @@ class EmployeePayrollController extends Controller
                             $totalBasicSalary = $item->basic_salary;
                         }
                     }
-                    // dd($totalBasicSalary);
                     //calculated khmer_new_year and pchumBen_bonus
                     $totalBunus = 0;
                     if ($item->emp_status == 1 || $item->emp_status == 10 || $item->emp_status == 2) {
@@ -216,7 +220,7 @@ class EmployeePayrollController extends Controller
                                     $percentSalary = $totalPercent * $totalStartDays;
                                     $totalAllowanceBunus = $percentSalary / $dayOfYear;
                                 }
-                                $dataBonus = Bonus::create([
+                                $dataBonus = PreviewBonus::create([
                                     'employee_id'               => $item->id,
                                     'number_employee'           => $item->number_employee,
                                     'number_of_working_days'    => $totalStartDays,
@@ -296,12 +300,11 @@ class EmployeePayrollController extends Controller
                         $type_udc = 'seniority';
                         $totalSeniority = $totalSalarySeverancyPay;
                     }
-                    // dd($SeverancePay1);
+                    
                     $dataTotalSeverancePay1 = $SeverancePay1 != null ? $SeverancePay1 : $totalOtherBenefit;
                     $totalSeverancePay1 =  $dataTotalSeverancePay1 != null ? $dataTotalSeverancePay1 : $totalSalarySeverancyPay;
                     $totalSeverancePay2 = $SeverancePay2;
                     $totalBasicSalary = $totalBaseSalaryRecived != null ? $totalBaseSalaryRecived : $totalBasicSalary;
-                    // dd($totalSeverancePay1);
                     $dataTotalSeverancePay2 = $SeverancePay2 != null ? $SeverancePay2 : $totalOtherBenefit;
                     $totalSalaryNetPay = round($totalSeverancyPaySalary,2) + $totalBunus + $item->phone_allowance + $totalChildAllowance;
                     if ($item->emp_status == 'Probation') {
@@ -325,7 +328,7 @@ class EmployeePayrollController extends Controller
                     }
                     
                     //sum salary and sum other benefit befor tax free
-                    $dataGrossSalary = GrossSalaryPay::create([
+                    $dataGrossSalary = PreviewGrossSalaryPay::create([
                         'employee_id'               => $item->id,
                         'number_employee'           => $item->number_employee,
                         'basic_salary'              => $item->basic_salary,
@@ -339,8 +342,6 @@ class EmployeePayrollController extends Controller
                         'type_udc'                  => $type_udc,
                         'created_by'                => Auth::user()->id
                     ]);
-    
-                    // dd($dataGrossSalary);
                     if (count(Payroll::where('employee_id',$item->id)->get()) == 0) {
                         $totalGrossSalary = $totalSalaryNetPay;
                     }else{
@@ -365,7 +366,7 @@ class EmployeePayrollController extends Controller
                         $healthCare = (0.026 * $averageWage);
                         $workerContributionUsd = ($averageWage * 0.02);
                         $workerContributionRiel = round($workerContributionUsd,-2) / $exchangNSSF->amount_riel;
-                        $dataNSSF = NationalSocialSecurityFund::create([
+                        $dataNSSF = PreviewNationalSocialSecurityFund::create([
                             'employee_id'                   => $item->id,
                             'number_employee'               => $item->number_employee,
                             'total_pre_tax_salary_usd'      => $totalGrossSalary,
@@ -777,6 +778,109 @@ class EmployeePayrollController extends Controller
         }
     }
 
+    public function payrollApproved(Request $request){
+        try{
+            $dataPayroll = payrollPreview::where('payment_date',$request->payment_date)->get();
+            $dataNssf = PreviewNationalSocialSecurityFund::where('payment_date',$request->payment_date)->get();
+            $dataGrossSalaryPay = PreviewGrossSalaryPay::where('payment_date',$request->payment_date)->get();
+            $dataBonus = PreviewBonus::where('payment_date',$request->payment_date)->get();
+            foreach ($dataBonus as $item) {
+                Bonus::create([
+                    'employee_id'             => $item->employee_id,
+                    'number_employee'         => $item->number_employee,
+                    'number_of_working_days'  => $item->number_of_working_days,
+                    'base_salary'             => $item->base_salary,
+                    'base_salary_received'    => $item->base_salary_received,
+                    'total_allowance'         => $item->total_allowance,
+                    'payment_date'            => $item->payment_date,
+                    'bouns_type'              => $item->bouns_type,
+                    'created_by'              => $item->created_by,
+                ]);
+                PreviewBonus::where('payment_date',$request->payment_date)->delete();
+            }
+            foreach ($dataNssf as $item) {
+                NationalSocialSecurityFund::create([
+                    'employee_id'               => $item->employee_id,
+                    'number_employee'           => $item->number_employee,
+                    'total_pre_tax_salary_usd'  => $item->total_pre_tax_salary_usd,
+                    'total_pre_tax_salary_riel' => $item->total_pre_tax_salary_riel,
+                    'total_average_wage'        => $item->total_average_wage,
+                    'total_occupational_risk'   => $item->total_occupational_risk,
+                    'total_health_care'         => $item->total_health_care,
+                    'pension_contribution_usd'  => $item->pension_contribution_usd,
+                    'pension_contribution_riel' => $item->pension_contribution_riel,
+                    'corporate_contribution'    => $item->corporate_contribution,
+                    'exchange_rate'             => $item->exchange_rate,
+                    'payment_date'              => $item->payment_date,
+                    'created_by'                => $item->created_by,
+                ]);
+                PreviewNationalSocialSecurityFund::where('payment_date',$request->payment_date)->delete();
+            }
+            foreach ($dataGrossSalaryPay as $item) {
+                GrossSalaryPay::create([
+                    'employee_id'           => $item->employee_id,
+                    'number_employee'       => $item->number_employee,
+                    'basic_salary'          => $item->basic_salary,
+                    'total_gross_salary'    => $item->total_gross_salary,
+                    'total_fdc1'            => $item->total_fdc1,
+                    'type_fdc1'             => $item->type_fdc1,
+                    'total_fdc2'            => $item->total_fdc2,
+                    'type_fdc2'             => $item->type_fdc2,
+                    'type_udc'              => $item->type_udc,
+                    'total_seniority'       => $item->total_seniority,
+                    'payment_date'          => $item->payment_date,
+                    'payment_date'          => $item->payment_date,
+                    'created_by'            => $item->created_by,
+                ]);
+                PreviewGrossSalaryPay::where('payment_date',$request->payment_date)->delete();
+            }
+            foreach ($dataPayroll as $item) {
+                Payroll::create([
+                    'employee_id'               => $item->employee_id,
+                    'number_employee'           => $item->number_employee,
+                    'basic_salary'              => $item->basic_salary,
+                    'total_gross_salary'        => $item->total_gross_salary,
+                    'payment_date'              => $item->payment_date,
+                    'total_child_allowance'     => $item->total_child_allowance,
+                    'phone_allowance'           => $item->phone_allowance,
+                    'monthly_quarterly_bonuses' => $item->monthly_quarterly_bonuses,
+                    'total_kny_phcumben'        => $item->total_kny_phcumben,
+                    'annual_incentive_bonus'    => $item->annual_incentive_bonus,
+                    'total_gross'               => $item->total_gross,
+                    'total_pension_fund'        => $item->total_pension_fund,
+                    'seniority_pay_included_tax'=> $item->seniority_pay_included_tax,
+                    'base_salary_received_usd'  => $item->base_salary_received_usd,
+                    'base_salary_received_riel' => $item->base_salary_received_riel,
+                    'spouse'                    => $item->spouse,
+                    'children'                  => $item->children,
+                    'total_charges_reduced'     => $item->total_charges_reduced,
+                    'total_tax_base_riel'       => $item->total_tax_base_riel,
+                    'total_rate'                => $item->total_rate,
+                    'total_salary_tax_usd'      => $item->total_salary_tax_usd,
+                    'total_salary_tax_riel'     => $item->total_salary_tax_riel,
+                    'total_amount_reduced'      => $item->total_amount_reduced,
+                    'seniority_pay_excluded_tax'=> $item->seniority_pay_excluded_tax,
+                    'seniority_backford'        => $item->seniority_backford,
+                    'total_severance_pay'       => $item->total_severance_pay,
+                    'loan_amount'               => $item->loan_amount,
+                    'total_amount_car'          => $item->total_amount_car,
+                    'total_salary'              => $item->total_salary,
+                    'exchange_rate'             => $item->exchange_rate,
+                    'adjustment'                => $item->adjustment,
+                    'leaves'                    => $item->leaves,
+                    'created_by'                => $item->created_by,
+                ]);
+                payrollPreview::where('payment_date',$request->payment_date)->delete();
+            }
+            Toastr::success('Approved payroll successfully.','Success');
+            return redirect()->back();
+            DB::commit();
+        }catch(\Exception $e){
+            DB::rollback();
+            Toastr::error('Approved Payroll fail','Error');
+            return redirect()->back();
+        }
+    }
     /**
      * Display the specified resource.
      *

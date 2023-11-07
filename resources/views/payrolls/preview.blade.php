@@ -19,7 +19,7 @@
         <div class="page-header">
             <div class="row align-items-center">
                 <div class="col">
-                    <h3 class="page-title">@lang('lang.prayroll_preview')</h3>
+                    <h3 class="page-title">@lang('lang.payroll_preview')</h3>
                     <ul class="breadcrumb">
                         <li class="breadcrumb-item"><a href="#">@lang('lang.dashboard')</a></li>
                         <li class="breadcrumb-item active">@lang('lang.salary')</li>
@@ -64,6 +64,11 @@
                     </div>
                     <div class="col-sm-6 col-md-4 ">
                         <div style="display: flex" class="float-end">
+                            {{-- <a class="btn btn-sm btn-outline-secondary btn_approved me-2" data-dismiss="modal">
+                                <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading') </span>
+                                <span class="btn-txt">@lang('lang.approved')</span>
+                            </a> --}}
+                            
                             <button type="button" class="btn btn-sm btn-outline-secondary btn-search me-2" data-dismiss="modal">
                                 <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading') </span>
                                 <span class="btn-txt">@lang('lang.search')</span>
@@ -76,7 +81,6 @@
                                 <span class="btn-text-reset">@lang('lang.reload')</span>
                                 <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>
                             </button>
-                            
                         </div>
                     </div>
                 </div>
@@ -197,11 +201,7 @@
                                                         rowspan="1" colspan="1"
                                                         aria-label="Salary: activate to sort column ascending">@lang('lang.created_at')
                                                     </th>
-                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                        rowspan="1" colspan="1"
-                                                        aria-label="Payslip: activate to sort column ascending">@lang('lang.payslip')
-                                                    </th>
-                                                    {{-- <th class="text-end no-sort sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Action: activate to sort column ascending" style="width: 50.825px;">@lang('lang.action')</th> --}}
+                                                    <th class="text-end no-sort sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Action: activate to sort column ascending" style="width: 50.825px;">@lang('lang.action')</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -246,7 +246,11 @@
                                                             <td>$<a href="#">{{ $item->total_salary }}</a></td>
                                                             <td>{{ $item->PayrollPaymentDate }}</td>
                                                             <td>{{ $item->Created }}</td>
-                                                            <td><a class="btn btn-sm btn-primary" href="{{ url('payslip', $item->employee_id) }}">@lang('lang.generate_payslip')</a></td>
+                                                            <td>
+                                                                @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer')
+                                                                    <a class="btn btn-success btn_approved" href="#" data-id="{{$item->payment_date}}"> @lang('lang.approved')</a> 
+                                                                @endif
+                                                            </td>
                                                         </tr>
                                                     @endforeach
                                                 @endif
@@ -348,33 +352,6 @@
                 </div>
             </div>
         </div>
-
-        <!-- Delete Payroll Modal -->
-        <div class="modal custom-modal fade" id="delete_payroll" role="dialog">
-            <div class="modal-dialog modal-sm modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-body">
-                        <div class="form-header">
-                            <h3>@lang('lang.deleted')!</h3>
-                            <p>@lang('lang.are_you_sure_want_to_delete')?</p>
-                        </div>
-                        <div class="modal-btn delete-action">
-                            <form action="{{url('payroll/delete')}}" method="POST">
-                                @csrf
-                                <input type="hidden" name="id" class="e_id" value="">
-                                <div class="row">
-                                    <div class="submit-section" style="text-align: center">
-                                        <button type="submit" class="btn btn-primary submit-btn me-2">@lang('lang.delete')</button>
-                                        <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-secondary">@lang('lang.cancel')</a>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- /Delete Payroll Modal -->
     </div>
 @endsection
 @include('includs.script')
@@ -497,6 +474,44 @@
             window.location = url;
         });
 
+        $('body').on('click','.btn_approved',function(){
+            var payment_date = $(this).data('id');
+            $.confirm({
+                title: '@lang("lang.approve")',
+                content: "@lang('lang.are_you_sure_want_to_approve')?",
+                type: 'blue',
+                typeAnimated: true,
+                buttons: {
+                    tryAgain: {
+                        text: 'ok',
+                        btnClass: 'btn-blue',
+                        action: function(){
+                        axios.post('{{ URL('payroll/approved') }}',{
+                            'payment_date': payment_date,
+                        }).then(function(response) {
+                            new Noty({
+                                title: "",
+                                text: '@lang("lang.the_process_has_been_successfully")',
+                                type: "success",
+                                icon: true
+                            }).show();
+                            $('.card-footer').remove();
+                            window.location.replace("{{ URL('payroll/preview') }}");
+                            }).catch(function(error) {
+                                new Noty({
+                                    title: "",
+                                    text: '@lang("lang.something_went_wrong_please_try_again_later")',
+                                    type: "error",
+                                    icon: true
+                                }).show();
+                            });
+                        }
+                    },
+                        close: function () {
+                    }
+                }
+            });
+        });
         $("#btn-payroll").on("click",function() {
             let exchange_rate_salary = $("#exchange_rate_preview").val();
             let exchange_rate_nssf = $("#exchange_rate_nssf_preview").val();

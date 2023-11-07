@@ -152,6 +152,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('import/payroll',[EmployeePayrollController::class,'importPayroll']);
     
     Route::get('payroll/preview',[EmployeePayrollController::class,'payrollPreview']);
+    Route::post('payroll/approved',[EmployeePayrollController::class,'payrollApproved']);
 
 
     // Motor Rental

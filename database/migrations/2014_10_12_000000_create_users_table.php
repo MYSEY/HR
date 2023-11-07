@@ -105,7 +105,7 @@ class CreateUsersTable extends Migration
                     'employee_name_en'=>'Developer',
                     'email'=>'administrator@gmail.com',
                     'password'=>Hash::make('ASDasd12345$$'),
-                    'role_id'=>'2',
+                    'role_id'=>'1',
                     'users_permission'=>1,
                     'status'=> 'Active',
                     'profile'=>'',
@@ -159,7 +159,7 @@ class CreateUsersTable extends Migration
                     ],
                     [
                         'table_id'=>$value->id,
-                        'role_id'=>2,
+                        'role_id'=>1,
                         'permission_type_id'=>$i,
                         'status'=>1,
                         'created_at'=>now(),
