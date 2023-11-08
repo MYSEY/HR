@@ -78,7 +78,7 @@ class ExportEmployeeSalary implements FromCollection, WithColumnWidths, WithHead
             $query->whereYear('payment_date', $yearLy);
         })->orderBy('employee_id')->get();
         $dataExport = [];
-        $i = 1;
+        $i = 0;
         foreach ($payroll as $value) {
             $i++;
             $this->num = $i;
@@ -150,7 +150,6 @@ class ExportEmployeeSalary implements FromCollection, WithColumnWidths, WithHead
                 "Total Amount Car"              => number_format($value->total_amount_car, 2),
                 "net_salary"                    => $total_salary
             ];
-            $i++;
         }
         $this->export_datas = $dataExport;
     }

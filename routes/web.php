@@ -151,8 +151,10 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('payslip/{employee_id}',[EmployeePayrollController::class,'paySlip']);
     Route::post('import/payroll',[EmployeePayrollController::class,'importPayroll']);
     
-    Route::get('payroll/preview',[EmployeePayrollController::class,'payrollPreview']);
+    Route::get('payroll/review',[EmployeePayrollController::class,'payrollRview']);
+    Route::post('payroll/review/search',[EmployeePayrollController::class,'payrollReviewSearch']);
     Route::post('payroll/approved',[EmployeePayrollController::class,'payrollApproved']);
+    Route::get('payroll/review/export',[EmployeePayrollController::class,'payrollPreviwExport']);
 
 
     // Motor Rental

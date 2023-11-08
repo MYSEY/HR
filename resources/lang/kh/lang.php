@@ -539,7 +539,7 @@ return[
 	"please_input_start_date"=> "សូមបញ្ចូលកាលបរិច្ឆេទចាប់ផ្តើម",
 	"please_input_end_date"=> "សូមបញ្ចូលកាលបរិច្ឆេទបញ្ចប់",
 	"position_range"=> "ជួរមុខតំណែង",
-	"payroll_preview"=> "Payroll Preview",
+	"payroll_review"=> "ពិនិត្យប្រាក់បៀវត្សរ៍",
 	"qty"=>"បរិមាណ",
 	"quantity"=>"បរិមាណ",
 	"retired"=>"ចូលនិវត្តន៍",

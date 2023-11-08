@@ -25,6 +25,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Date;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\ExportEmployeeSalary;
+use App\Exports\ExportReviewPayroll;
 use App\Models\PreviewGrossSalaryPay;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use App\Models\NationalSocialSecurityFund;
@@ -57,14 +58,14 @@ class EmployeePayrollController extends Controller
 
         return view('payrolls.index',compact('data','user','branch','exChangeRateSalary', 'exChangeRateNSSF'));
     }
-    public function payrollPreview(Request $request){
+    public function payrollRview(Request $request){
         $data = $this->payrollRepo->getAllPayrollPreview($request);
         $user = User::all();
         $branch = Branchs::all();
         $exChangeRateSalary= ExchangeRate::where('type','Salary')->orderBy('id','desc')->first();
         $exChangeRateNSSF= ExchangeRate::where('type','NSSF')->orderBy('id','desc')->first();
 
-        return view('payrolls.preview',compact('data','user','branch','exChangeRateSalary', 'exChangeRateNSSF'));
+        return view('payrolls.review',compact('data','user','branch','exChangeRateSalary', 'exChangeRateNSSF'));
     }
     public function search(Request $request) {
         $Monthly = null;
@@ -106,6 +107,44 @@ class EmployeePayrollController extends Controller
         return Excel::download(new ExportEmployeeSalary($request), 'EmployeeSalary.xlsx');
     }
 
+    public function payrollPreviwExport(Request $request) {
+        return Excel::download(new ExportReviewPayroll($request), 'ReviewPayroll.xlsx');
+    }
+    public function payrollReviewSearch(Request $request){
+        $Monthly = null;
+        $yearLy = null;
+        if ($request->filter_month) {
+            $Monthly = Carbon::createFromDate($request->filter_month)->format('m');
+            $yearLy = Carbon::createFromDate($request->filter_month)->format('Y');
+        }
+        $payroll = payrollPreview::with("users")
+        ->join('users', 'payroll_previews.employee_id', '=', 'users.id')
+        ->select(
+            'payroll_previews.*',
+            'users.number_employee',
+            'users.employee_name_en',
+            'users.employee_name_kh',
+            'users.branch_id',
+        )
+        ->when($request->employee_id, function ($query, $employee_id) {
+            $query->where('users.number_employee', 'LIKE', '%'.$employee_id.'%');
+        })
+        ->when($request->employee_name, function ($query, $employee_name) {
+            $query->where('users.employee_name_en', 'LIKE', '%'.$employee_name.'%');
+        })
+        ->when($request->branch_id, function ($query, $branch_id) {
+            $query->where('users.branch_id', $branch_id);
+        })
+        ->when($Monthly, function ($query, $Monthly) {
+            $query->whereMonth('payment_date', $Monthly);
+        })
+        ->when($yearLy, function ($query, $yearLy) {
+            $query->whereYear('payment_date', $yearLy);
+        })->orderBy('id','DESC')->get();
+        return response()->json([
+            'success'=>$payroll,
+        ]);
+    }
     /**
      * Show the form for creating a new resource.
      *

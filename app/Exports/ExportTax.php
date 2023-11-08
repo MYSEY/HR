@@ -79,7 +79,7 @@ class ExportTax implements FromCollection, WithColumnWidths, WithHeadings, WithC
         ->when($yearLy, function ($query, $yearLy) {
             $query->whereYear('payment_date', $yearLy);
         })->get();
-        $i = 1;
+        $i = 0;
         foreach ($datas as $pay) {
             $i++;
             $this->num = $i;

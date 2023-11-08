@@ -19,10 +19,10 @@
         <div class="page-header">
             <div class="row align-items-center">
                 <div class="col">
-                    <h3 class="page-title">@lang('lang.payroll_preview')</h3>
+                    <h3 class="page-title">@lang('lang.payroll_review')</h3>
                     <ul class="breadcrumb">
                         <li class="breadcrumb-item"><a href="#">@lang('lang.dashboard')</a></li>
-                        <li class="breadcrumb-item active">@lang('lang.salary')</li>
+                        <li class="breadcrumb-item active">@lang('lang.payroll_review')</li>
                     </ul>
                 </div>
                 <div class="col-auto float-end ms-auto">
@@ -248,7 +248,7 @@
                                                             <td>{{ $item->Created }}</td>
                                                             <td>
                                                                 @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer')
-                                                                    <a class="btn btn-success btn_approved" href="#" data-id="{{$item->payment_date}}"> @lang('lang.approved')</a> 
+                                                                    <a class="btn btn-success btn_approved" href="#" data-id="{{$item->payment_date}}"> @lang('lang.approve')</a> 
                                                                 @endif
                                                             </td>
                                                         </tr>
@@ -449,7 +449,7 @@
             $(this).prop('disabled', true);
             $(".btn-text-reset").hide();
             $("#btn-text-loading").css('display', 'block');
-            window.location.replace("{{ URL('payroll') }}");
+            window.location.replace("{{ URL('payroll/review') }}");
         });
         $(".btn-search").on("click", function(){
             $(".btn-search").prop('disabled', true);
@@ -470,7 +470,7 @@
                 employee_name: $("#employee_name").val(),
                 filter_month: $("#filter_month").val(),
             };
-            var url = "{{URL::to('payroll-export')}}?" + $.param(query)
+            var url = "{{URL::to('payroll/review/export')}}?" + $.param(query)
             window.location = url;
         });
 
@@ -596,7 +596,7 @@
         var localeLanguage = '{{ config('app.locale') }}';
         $.ajax({
             type: "post",
-            url: "{{ url('payroll-search') }}",
+            url: "{{ url('payroll/review/search') }}",
             data: {
                 "_token": "{{ csrf_token() }}",
                 branch_id: params.branch_id ? params.branch_id : null,

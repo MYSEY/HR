@@ -441,7 +441,7 @@ class PayrollReportController extends Controller
 
     public function SeverancePay(){
         $branch = Branchs::get();
-        $data = GrossSalaryPay::with('users')->where('type_fdc1','fdc1')->get();
+        $data = GrossSalaryPay::with('users')->where('type_fdc1','fdc1')->orderBy('id','DESC')->get();
         return view('severance_pays.index',compact('data','branch'));
     }
     public function SeverancePayFil(Request $request){
