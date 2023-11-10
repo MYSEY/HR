@@ -105,12 +105,7 @@
                                                     <th class="sorting sorting_asc stuck" tabindex="0"
                                                         aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
                                                         aria-sort="ascending"
-                                                        aria-label="Employee: activate to sort column descending">@lang('lang.last_name')
-                                                    </th>
-                                                    <th class="sorting sorting_asc stuck" tabindex="0"
-                                                        aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
-                                                        aria-sort="ascending"
-                                                        aria-label="Employee: activate to sort column descending">@lang('lang.first_name')
+                                                        aria-label="Employee: activate to sort column descending">@lang('lang.employee_name')
                                                     </th>
                                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending">@lang('lang.gender')</th>
                                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending">@lang('lang.position')</th>
@@ -129,8 +124,7 @@
                                                     @foreach ($dataSeniority as $item)
                                                         <tr class="odd">
                                                             <td><a href="#">{{ $item->users == null ? '' : $item->users->number_employee }}</a></td>
-                                                            <td class="stuck"><a href="#">{{ $item->LastName }}</a></td>
-                                                            <td class="stuck"><a href="#">{{ $item->FirstName }}</a></td>
+                                                            <td class="stuck"><a href="#">{{ $item->users == null ? '' : $item->users->EmployeeName }}</a></td>
                                                             <td>{{ $item->users == null ? '' : $item->users->EmployeeGender }}</td>
                                                             <td>{{ $item->users == null ? '' : $item->users->EmployeePosition }}</td>
                                                             <td><a href="#">{{ $item->users->EmployeeBranch }}</a></td>
@@ -217,8 +211,7 @@
                         let created_at = moment(row.created_at).format('D-MMM-YYYY')
                         tr +='<tr class="odd">'+
                             '<td><a href="#">'+(row.users == null ? '' : row.users.number_employee)+'</a></td>'+
-                            '<td><a href="#">'+(row.users == null ? '' : row.users.last_name_kh )+'</a></td>'+
-                            '<td><a href="#">'+(row.users == null ? '' : row.users.first_name_kh )+'</a></td>'+
+                            '<td><a href="#">'+(localeLanguage == 'en' ? row.users.employee_name_en : row.users.employee_name_kh )+'</a></td>'+
                             '<td><a href="#">'+(localeLanguage == 'en' ? row.name_english  : row.name_khmer )+'</a></td>'+
                             '<td><a href="#">'+(localeLanguage == 'en' ? row.positionNameEnglish  : row.positionNameKhmer )+'</a></td>'+
                             '<td><a href="#">'+(localeLanguage == 'en' ? row.branck_en  : row.branck_kh )+'</a></td>'+

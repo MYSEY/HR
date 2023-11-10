@@ -8,14 +8,16 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
+     * php artisan migrate:refresh --path=database/migrations/2023_11_03_092821_create_payroll_previews_table.php
      *
      * @return void
      */
     public function up()
     {
-        Schema::create('payroll_details', function (Blueprint $table) {
+        Schema::create('payroll_previews', function (Blueprint $table) {
             $table->id();
             $table->integer('employee_id');
+            $table->string('number_employee')->nullable();
             $table->decimal('basic_salary',50,2)->default(0);
             $table->decimal('total_gross_salary',50)->default(0);
             $table->date('payment_date')->nullable();
@@ -28,10 +30,10 @@ return new class extends Migration
             $table->decimal('total_pension_fund',50,2)->default(0);
             $table->decimal('seniority_pay_included_tax',50,2)->default(0);
             $table->decimal('base_salary_received_usd',50,2)->default(0);
-            $table->string('base_salary_received_riel',50,2)->default(0);
+            $table->string('base_salary_received_riel')->nullable();
             $table->integer('spouse')->default(0);
             $table->integer('children')->default(0);
-            $table->string('total_charges_reduced',50,2)->default(0);
+            $table->string('total_charges_reduced')->nullable();
             $table->string('total_tax_base_riel',50,2)->default(0);
             $table->integer('total_rate')->default(0);
             $table->decimal('total_salary_tax_usd',50,2)->default(0);
@@ -60,6 +62,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('payroll_details');
+        Schema::dropIfExists('payroll_previews');
     }
 };
