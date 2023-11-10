@@ -1,15 +1,25 @@
 
-var roleCheckboxs = function () {
-    var data = [];
+$(function(){
     // block dahboard
     $("#dashboad_all").on("click", function(){
         if (!$(this).prop("checked")) {
             $(".dashboad_checkbox").prop("checked", false);
-            $(".dashboad_checkbox").val(0);
+            $(this).val(0)
         }
         if ($(this).prop("checked")) {
             $(".dashboad_checkbox").prop("checked", true);
+            $(this).val(1)
             $(".dashboad_checkbox").val(1);
+        }
+    });
+    $(".dashboad_checkbox").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(this).prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(this).prop("checked", true);
+            $(this).val(1)
         }
     });
     $(document).ready(function(){
@@ -18,9 +28,11 @@ var roleCheckboxs = function () {
             var countCheckedCheckboxes = checkboxes.filter(':checked').length;
             if (countCheckedCheckboxes == $('input.dashboad_checkbox').length) {
                 $("#dashboad_all").prop("checked", true);
+                $("#dashboad_all").val(1)
             };
             if (countCheckedCheckboxes < $('input.dashboad_checkbox').length) {
                 $("#dashboad_all").prop("checked", false);
+                $("#dashboad_all").val(0)
             };
         });
     });
@@ -237,10 +249,10 @@ var roleCheckboxs = function () {
         recruitment_plans_checkbox.change(function(){
             let countAllCheckboxes = recruitment_plans_checkbox.filter(':checked').length;
             if (countAllCheckboxes == $('input.recruitment_plans_checkbox').length) {
-                $("#leaves_employee").prop("checked", true);
+                $("#recruitment_plans").prop("checked", true);
             };
             if (countAllCheckboxes < $('input.recruitment_plans_checkbox').length) {
-                $("#leaves_employee").prop("checked", false);
+                $("#recruitment_plans").prop("checked", false);
             };
         });
 
@@ -1518,5 +1530,4 @@ var roleCheckboxs = function () {
             };
         });
     });
-    return data;
-}
+});

@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Models\permissions;
 use App\Models\User;
 use Brian2694\Toastr\Facades\Toastr;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 class RoleConroller extends Controller
@@ -27,8 +28,34 @@ class RoleConroller extends Controller
         $permissionList=DB::select($sql);
         // $role=Role::where('status',1)->get();
         // return view('roles.index',compact('role','permissionList'));
-        $role=Role::with("useruse")->where('status',1)->get();
+        $role=Role::with("useruse")->where("created_by", Auth::user()->id)->get();
         return view('roles.role_index', compact('role'));
+    }
+    public function filter(Request $request) {
+        $from_date = null;
+        $to_date = null;
+        if ($request->from_date) {
+            $from_date = Carbon::createFromDate($request->from_date)->format('Y-m-d H:i:s');
+        }
+        if ($request->to_date) {
+            $to_date = Carbon::createFromDate($request->to_date.' '.'23:59:59')->format('Y-m-d H:i:s');
+        }
+        $role=Role::with("useruse")
+        ->where("created_by", Auth::user()->id)
+        ->when($request->role_name, function ($query, $role_name) {
+            $query->where('role_name', 'LIKE', '%'.$role_name.'%');
+        })
+        ->when($request->role_type, function ($query, $role_type) {
+            $query->where('role_type', $role_type);
+        })
+        ->when($from_date, function ($query, $from_date) {
+            $query->where('created_at', '>=', $from_date);
+        })
+        ->when($to_date, function ($query, $to_date) {
+            $query->where('created_at','<=', $to_date);
+        })
+        ->get();
+        return response()->json(['role'=>$role]);
     }
     public function formCreate() {
         return view('roles.form_create');
@@ -47,25 +74,34 @@ class RoleConroller extends Controller
      */
     public function create(Request $request)
     {
-        
-        $role = Role::create([
-            'role_name' => $request->role_name,
-            'role_type' => $request->role_type,
-            'status'    => 1,
-            'created_by'    => Auth::user()->id
-        ]);
-       
-        if ($request->role_permission) {
-            foreach ($request->role_permission as $key => $item) {
-                $items = [];
-                foreach ($item["permission"] as $key => $per) {
-                    $per['parent_id'] = $request->parent_id;
-                    $per['role_id'] = $role->id;
-                    $items[] = $per;
-                    permissions::create($per);
+        try{
+            $role = Role::create([
+                'role_name'     => $request->role_name,
+                'role_type'     => $request->role_type,
+                'status'        => 1,
+                'created_by'    => Auth::user()->id
+            ]);
+            if ($request->role_permission) {
+                foreach ($request->role_permission as $key => $item) {
+                    foreach ($item["permission"] as $key => $per) {
+                        if ($per["name"] == "Dashboard") {
+                            $per['is_dashboard'] = json_encode($per);
+                        }
+                        $per['parent_id'] = $request->parent_id;
+                        $per['role_id'] = $role->id;
+                        $per['is_active'] = 1;
+                        permissions::create($per);
+                    }
                 }
             }
-        }
+            return response()->json([
+                'message'=>"successfully",
+                'status'=>200
+            ]);
+        }catch(\Exception $e){
+            DB::rollback();
+            return response()->json(['message' => $e->getMessage()], 500);
+        } 
     }
 
     /**
@@ -116,10 +152,46 @@ class RoleConroller extends Controller
     public function edit(Request $request)
     {
         $role=Role::where('id',$request->id)->first();
-        $permissions = permissions::where("role_id", $request->id)->get();
-        return view('roles.form_edit', compact('role','permissions'));
+        $permissions = permissions::where("role_id", $request->id)->get()->toArray();
+        $arrayPermissions = [];
+        foreach ($permissions as $row) {
+            $arrayPermissions[$row["name"]] = $row;
+        }
+        return view('roles.form_edit', compact('role','arrayPermissions'));
     }
 
+    public function updateRole(Request $request)
+    {
+        try{
+            Role::where('id',$request->id)->update([
+                'role_name'     => $request->role_name,
+                'role_type'     => $request->role_type,
+                'updated_by'    => Auth::user()->id
+            ]);
+            permissions::where('role_id',$request->id)->delete();
+            if ($request->role_permission) {
+                foreach ($request->role_permission as $key => $item) {
+                    foreach ($item["permission"] as $key => $per) {
+                        if ($per["name"] == "Dashboard") {
+                            $per['is_dashboard'] = json_encode($per);
+                        }
+                        $per['parent_id'] = $request->parent_id;
+                        $per['role_id'] = $request->id;
+                        $per['created_by'] = Auth::user()->id;
+                        $per['updated_by'] = Auth::user()->id;
+                        permissions::create($per);
+                    }
+                }
+            }
+            return response()->json([
+                'message'=>"Update role successfully",
+                'status'=>200
+            ]);
+        }catch(\Exception $e){
+            DB::rollback();
+            return response()->json(['message' => $e->getMessage()], 500);
+        }
+    }
     /**
      * Update the specified resource in storage.
      *
@@ -144,6 +216,24 @@ class RoleConroller extends Controller
             return redirect()->back();
         }
     }
+    public function processing(Request $request)
+    {
+        try {
+            Role::where('id',$request->id)->update([
+                'status' => $request->role_status,
+            ]);
+            permissions::where('role_id',$request->id)->update([
+                'is_active' => $request->role_status,
+            ]);
+            DB::commit();
+            return response()->json([
+                'message' => 'The process has been successfully.'
+            ]);
+        } catch (\Exception $exp) {
+            DB::rollBack();
+            return response()->json(['message' => $exp->getMessage()], 500);
+        }
+    }
 
     /**
      * Remove the specified resource from storage.
@@ -155,6 +245,7 @@ class RoleConroller extends Controller
     {
         try{
             Role::destroy($request->id);
+            permissions::destroy("role_id", $request->id);
             Toastr::success('Role Name deleted successfully','Success');
             return redirect()->back();
         }catch(\Exception $e){

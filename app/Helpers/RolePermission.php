@@ -5,13 +5,37 @@ use App\Models\permissions;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
+use function PHPUnit\Framework\returnSelf;
+
 function RolePermission($table_id,$permission_type_id)
 {
     $id=Auth::user()->role_id;
     $role_permission = permissions::where('role_id',$id)->where('table_id',$table_id)->get();
+    // dd($role_permission);
     if(count($role_permission)>0){
         return true;
     }
+}
+class dataRolePermission{
+    public $value;
+    public $checkbox;
+    public $is_dashboard;
+}
+function SetCheckbox($datas,$permission_name,$permission_checkbox){
+    $dataObject = new dataRolePermission();
+    if (array_key_exists($permission_name,$datas) && $datas[$permission_name][$permission_checkbox]){
+        if ($permission_name == "Dashboard") {
+            $dataObject->is_dashboard = json_decode($datas[$permission_name][$permission_checkbox], true);
+        }else{
+            $dataObject->value = $datas[$permission_name][$permission_checkbox];
+            $dataObject->checkbox = $datas[$permission_name][$permission_checkbox] == 1 ? "checked" : "";
+        }
+    } else{
+        $dataObject->value = 0;
+        $dataObject->checkbox = "";
+        $dataObject->is_dashboard = "";
+    }
+    return $dataObject;
 }
 function menu(){
     // $valuePayroll = nl2br("Compensation and\r\nBenefits");
@@ -22,7 +46,7 @@ function menu(){
             'name'=> Helper::getLang() == 'en' ? 'HR Management System': 'ប្រព័ន្ធគ្រប់គ្រងធនធានមនុស្ស',
             'icon'=>'<i class="la la-dashboard"></i> <span></span> <span class="menu-arrow"></span>',
             'value'=> Helper::getLang() == 'en' ? 'Dashboard': 'ផ្ទាំងគ្រប់គ្រង',
-            'table'=>2,
+            'table'=>1,
             'permission'=>1,
             'child'=>[
                 [
@@ -339,18 +363,26 @@ function menu(){
                     'table'=>27,
                     'permission'=>1
                 ],
-            ]
+            ],
         ],
-    ];
-    // if ($role_id == 2) {
-        $data[] = [
+        [
             'name'=>'',
             'icon'=>'<i class="la la-key"></i> <span></span>',
             'value'=> Helper::getLang() == 'en' ? 'Roles Permission' : 'ការអនុញ្ញាតតួនាទី',
             'table'=>6,
             'permission'=>1,
             'url'=>"role",
-        ];
+        ],
+    ];
+    // if ($role_id == 2) {
+        // $data[] = [
+        //     'name'=>'',
+        //     'icon'=>'<i class="la la-key"></i> <span></span>',
+        //     'value'=> Helper::getLang() == 'en' ? 'Roles Permission' : 'ការអនុញ្ញាតតួនាទី',
+        //     'table'=>6,
+        //     'permission'=>1,
+        //     'url'=>"role",
+        // ];
     // }
     return  $data;
 }

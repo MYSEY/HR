@@ -1,32 +1,21 @@
-<div class="page-header">
-    <div class="row align-items-center">
-        <div class="col">
-            <h3 class="page-title">@lang('lang.add_roles')</h3>
-            <ul class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{ url('/dashboad/role') }}">@lang('lang.dashboard')</a></li>
-                <li class="breadcrumb-item active">@lang('lang.add_roles')</li>
-            </ul>
-        </div>
-    </div>
-</div>
 <div class="tab-pane fade active show" id="bank_statutory" role="tabpanel">
     <div class="card card_background_color">
         <div class="card-body">
-            <form >
+            <form class="was-validated">
+                @csrf
                 <input type="text" hidden name="parent_id" id="parent_id" value="{{Auth::user()->role_id}}">
-                {{-- @csrf --}}
                 <div class="row">
                     <div class="col-md-3">
                         <div class="form-group">
                             <label class="">@lang('lang.name') <span class="text-danger">*</span></label>
-                            <input class="form-control @error('name') is-invalid @enderror" type="text"
+                            <input class="form-control role_required @error('name') is-invalid @enderror" type="text"
                                 id="role_name" required name="role_name" value="{{ old('role_name') }}">
                         </div>
                     </div>
                     <div class="col-md-3">
-                        <div class="form-group">
+                        <div class="form-group hr-form-group-select2">
                             <label class="">@lang('lang.type') <span class="text-danger">*</span></label>
-                            <select class="form-control" id="role_type" name="role_type" required>
+                            <select class="form-control hr-select2-option role_required" id="role_type" name="role_type" required>
                                 <option selected disabled value=""> -- @lang('lang.select') --</option>
                                 <option value="admin">@lang('lang.admin')</option>
                                 <option value="developer">@lang('lang.developer')</option>
@@ -59,13 +48,13 @@
                                     <input type="checkbox" id="dashboad_all" name="dashboad_all"> <span class="checkmark"></span>
                                 </label>
                                 <label class="container-checkbox">@lang('lang.employee')
-                                    <input type="checkbox" class="dashboad_checkbox" id="dashboad_employee" name="dashboad_employee"> <span class="checkmark"></span>
+                                    <input type="checkbox" class="dashboad_checkbox" id="dashboad_employee" value="0"> <span class="checkmark"></span>
                                 </label>
                                 <label class="container-checkbox">@lang('lang.age_of_employee')
-                                    <input type="checkbox" class="dashboad_checkbox" id="dashboad_age_of_employee" name="dashboad_age_of_employee"> <span class="checkmark"></span>
+                                    <input type="checkbox" class="dashboad_checkbox" id="dashboad_age_of_employee" value="0"> <span class="checkmark"></span>
                                 </label>
                                 <label class="container-checkbox">@lang('lang.birthday_reminder')
-                                    <input type="checkbox" class="dashboad_checkbox" id="dashboad_birthday_reminder" name="dashboad_birthday_reminder"> <span class="checkmark"></span>
+                                    <input type="checkbox" class="dashboad_checkbox" id="dashboad_birthday_reminder" value="0"> <span class="checkmark"></span>
                                 </label>
                             </div>
                         </div>
@@ -74,16 +63,16 @@
                         <div class="form-group row">
                             <div class="col-md-12">
                                 <label class="container-checkbox">@lang('lang.total_number_of_staff')
-                                    <input type="checkbox" class="dashboad_checkbox" id="dashboad_total_number_of_staff" name="dashboad_total_number_of_staff"> <span class="checkmark"></span>
+                                    <input type="checkbox" class="dashboad_checkbox" id="dashboad_total_number_of_staff" value="0"> <span class="checkmark"></span>
                                 </label>
                                 <label class="container-checkbox">% @lang('lang.total_inactive_staff')
-                                    <input type="checkbox" class="dashboad_checkbox" id="dashboad_total_inactive_staff" name="dashboad_total_inactive_staff"> <span class="checkmark"></span>
+                                    <input type="checkbox" class="dashboad_checkbox" id="dashboad_total_inactive_staff" value="0"> <span class="checkmark"></span>
                                 </label>
                                 <label class="container-checkbox">% @lang('lang.resigned_staff')
-                                    <input type="checkbox" class="dashboad_checkbox" id="dashboad_resigned_staff" name="dashboad_resigned_staff"> <span class="checkmark"></span>
+                                    <input type="checkbox" class="dashboad_checkbox" id="dashboad_resigned_staff" value="0"> <span class="checkmark"></span>
                                 </label>
                                 <label class="container-checkbox">% @lang("lang.reasons_of_staff’s_exit")
-                                    <input type="checkbox" class="dashboad_checkbox" id="dashboad_reasons_of_staff’s_exit" name="dashboad_reasons"> <span class="checkmark"></span>
+                                    <input type="checkbox" class="dashboad_checkbox" id="dashboad_reasons_of_staff’s_exit" value="0"> <span class="checkmark"></span>
                                 </label>
                             </div>
                         </div>
@@ -92,16 +81,16 @@
                         <div class="form-group row">
                             <div class="col-md-12">
                                 <label class="container-checkbox">% @lang('lang.staff_ratio')
-                                    <input type="checkbox" class="dashboad_checkbox" id="dashboad_staff_ratio" name="dashboad_staff_ratio"> <span class="checkmark"></span>
+                                    <input type="checkbox" class="dashboad_checkbox" id="dashboad_staff_ratio" value="0"> <span class="checkmark"></span>
                                 </label>
                                 <label class="container-checkbox">@lang('lang.staff_taking_leave')
-                                    <input type="checkbox" class="dashboad_checkbox" id="dashboad_staff_taking_leave" name="dashboad_staff_taking_leave"> <span class="checkmark"></span>
+                                    <input type="checkbox" class="dashboad_checkbox" id="dashboad_staff_taking_leave" value="0"> <span class="checkmark"></span>
                                 </label>
                                 <label class="container-checkbox">@lang('lang.staff_training_by_branch') (Internal)
-                                    <input type="checkbox" class="dashboad_checkbox" id="dashboad_staff_training_by_branch" name="dashboad_staff_training_by_branch"> <span class="checkmark"></span>
+                                    <input type="checkbox" class="dashboad_checkbox" id="dashboad_staff_training_by_branch_internal" value="0"> <span class="checkmark"></span>
                                 </label>
                                 <label class="container-checkbox">@lang('lang.staff_training_by_branch') (External)
-                                    <input type="checkbox" class="dashboad_checkbox" id="dashboad_staff_training_by_branch_external" name="dashboad_staff_training_by_branch_external"> <span class="checkmark"></span>
+                                    <input type="checkbox" class="dashboad_checkbox" id="dashboad_staff_training_by_branch_external" value="0"> <span class="checkmark"></span>
                                 </label>
                             </div>
                         </div>
@@ -1210,10 +1199,9 @@
                 </div>
                 <hr>
                 <div class="submit-section">
-                    <button type="button" class="btn btn-primary create-btn">
-                        <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i>
-                            @lang('lang.loading') </span>
-                        <span class="btn-txt">@lang('lang.submit')</span>
+                    <button type="button" class="btn btn-primary btn_save" id="btn_save">
+                        <span class="btn-text-save">@lang('lang.submit')</span>
+                        <span id="btn-save-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading') </span>
                     </button>
                     <a href="{{ url('role') }}" class="btn btn-secondary btn-cancel">@lang('lang.cancel')</a>
                 </div>

@@ -15,6 +15,7 @@ class Role extends Model
         'id',
         'role_name',
         'role_type',
+        'created_by',
         'updated_by',
     ];
     public function useruse()

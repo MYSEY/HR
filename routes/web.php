@@ -99,13 +99,16 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('/leaves/employee', [LeavesEmployeeController::class,'index']);
 
     Route::get('role', [RoleConroller::class,'index']);
+    Route::post('role/search', [RoleConroller::class,'filter']);
     Route::get('role/create', [RoleConroller::class,'formCreate']);
     Route::get('role/edit/{id}', [RoleConroller::class,'edit']);
     Route::post('role/create', [RoleConroller::class,'create']);
     Route::post('role/store', [RoleConroller::class,'store']);
     Route::post('role/update', [RoleConroller::class,'update']);
+    Route::post('role/update-role', [RoleConroller::class,'updateRole']);
     Route::post('role/delete', [RoleConroller::class,'destroy']);
     Route::get('role/detail/{id}', [RoleConroller::class,'detail']);
+    Route::post('role/status', [RoleConroller::class,'processing']);
     Route::Resource('permission', PermissionController::class);
 
     Route::get('/department', [DepartmentController::class,'index']);
