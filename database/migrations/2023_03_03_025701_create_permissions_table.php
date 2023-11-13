@@ -22,6 +22,8 @@ return new class extends Migration
             $table->boolean('status')->nullable();
             $table->integer('parent_id');
             $table->string('name');
+            $table->json('is_dashboard',200)->nullable();
+            $table->boolean('is_all')->nullable();
             $table->boolean('is_active')->nullable();
             $table->boolean('is_create')->nullable();
             $table->boolean('is_view')->nullable();
@@ -36,6 +38,9 @@ return new class extends Migration
             $table->boolean('is_access')->nullable();
             $table->boolean('is_view_report')->nullable();
             $table->boolean('is_operation')->nullable();
+            $table->unsignedBigInteger('created_by')->nullable();
+            $table->unsignedBigInteger('updated_by')->nullable();
+            $table->dateTime('deleted_at')->nullable();
             $table->timestamps();
         });
     }

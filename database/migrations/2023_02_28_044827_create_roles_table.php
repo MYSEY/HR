@@ -24,29 +24,6 @@ return new class extends Migration
             $table->dateTime('deleted_at')->nullable();
             $table->timestamps();
         });
-        DB::table('roles')->insert([
-            [
-                'role_name'=>'Admin',
-                'role_type'=>'admin',
-                'status'=>1,
-                'created_at'=>now(),
-                'updated_at'=>now()
-            ],
-            [
-                'role_name'=>'Developer',
-                'role_type'=>'developer',
-                'status'=>1,
-                'created_at'=>now(),
-                'updated_at'=>now()
-            ],
-            [
-                'role_name'=>'Employee',
-                'role_type'=>'employee',
-                'status'=>1,
-                'created_at'=>now(),
-                'updated_at'=>now()
-            ]]
-        );
     }
 
     /**

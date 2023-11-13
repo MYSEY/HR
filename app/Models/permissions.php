@@ -12,6 +12,35 @@ class permissions extends Model
     protected $table = 'permissions';
     protected $guarded = ['id'];
 
+    protected $fillable = [
+        'id',
+       'table_id',
+       'role_id',
+       'permission_type_id',
+       'status',
+       'parent_id',
+       'name',
+       'is_dashboard',
+       'is_all',
+       'is_active',
+       'is_create',
+       'is_view',
+       'is_update',
+       'is_delete',
+       'is_cancel',
+       'is_accept',
+       'is_approve',
+       'is_print',
+       'is_import',
+       'is_export',
+       'is_access',
+       'is_view_report',
+       'is_operation',
+       'created_by',
+       'updated_by',
+       'deleted_at',
+    ];
+
     public function createdBy()
     {
         return $this->belongsTo(User::class, 'created_by');
