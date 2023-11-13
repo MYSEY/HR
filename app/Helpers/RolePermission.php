@@ -91,7 +91,7 @@ function menu(){
             'child'=>[
                 [
                     'value'=> Helper::getLang() == 'en' ? 'Employee Salary': 'ប្រាក់បៀវត្សរ៍បុគ្គលិក',
-                    'url'=>"payroll/preview",
+                    'url'=>"payroll/review",
                     'table'=>4,
                     'permission'=>1
                 ],

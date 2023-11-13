@@ -87,6 +87,7 @@
             </form>
         @endif
         {!! Toastr::message() !!}
+        <button type="button" class="btn btn-sm btn-outline-secondary delete_all">Delete All</button>
         <div class="content">
             <div class="page-menu">
                 <div class="row">
@@ -99,11 +100,7 @@
                                             id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info"  cellspacing="0">
                                             <thead>
                                                 <tr>
-                                                    <th class="sorting sorting_asc stuck-scroll-3" tabindex="0"
-                                                        aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
-                                                        aria-sort="ascending"
-                                                        aria-label="Employee: activate to sort column descending">@lang('lang.profile')
-                                                    </th>
+                                                    <th width="50px"><input type="checkbox" id="master"></th>
                                                     <th class="sorting stuck-scroll-3" tabindex="0" aria-controls="DataTables_Table_0"
                                                         rowspan="1" colspan="1">@lang('lang.employee_id')</th>
                                                     <th class="sorting sorting_asc stuck-scroll-3" tabindex="0"
@@ -208,19 +205,7 @@
                                                 @if (count($data) > 0)
                                                     @foreach ($data as $item)
                                                         <tr class="odd">
-                                                            <td class="sorting_1 stuck-scroll-3">
-                                                                <h2 class="table-avatar">
-                                                                    @if ($item->users->profile !=null)
-                                                                        <a href="{{asset('/uploads/images/'.$item->users->profile)}}"  class="avatar">
-                                                                            <img alt="" src="{{asset('/uploads/images/'.$item->users->profile)}}">
-                                                                        </a>
-                                                                    @else
-                                                                        <a href="{{asset('admin/img/defuals/default-user-icon.png')}}">
-                                                                            <img alt="" src="{{asset('admin/img/defuals/default-user-icon.png')}}">
-                                                                        </a>
-                                                                    @endif
-                                                                </h2>
-                                                            </td>
+                                                            <td><input type="checkbox" class="sub_chk" data-id="{{$item->id}}"></td>
                                                             <td class="stuck-scroll-3"><a href="#">{{ $item->users == null ? '' : $item->users->number_employee }}</a></td>
                                                             <td class="stuck-scroll-3"><a href="#">{{ $item->users == null ? '' : $item->users->EmployeeName }}</span></a></td>
                                                             <td><a href="#">{{ $item->users == null ? '' : $item->users->EmployeePosition }}</a></td>
@@ -358,6 +343,65 @@
 <script src="{{asset('/admin/js/validation-field.js')}}"></script>
 <script>
     $(function(){
+        $('#master').on('click', function(e) {
+            if($(this).is(':checked',true)){
+                $(".sub_chk").prop('checked', true);
+            } else {  
+                $(".sub_chk").prop('checked',false);
+            }  
+        });
+        $('.delete_all').on('click', function(e) {
+            var allVals = [];  
+            $(".sub_chk:checked").each(function() {  
+                allVals.push($(this).attr('data-id'));
+            });
+            var join_selected_values = allVals.join(",");
+            if(allVals.length <=0)  
+            {
+                $.alert({
+                    title: '@lang("lang.delete")!',
+                    content: 'Please select row.',
+                });
+            }  else {
+                $.confirm({
+                    title: '@lang("lang.delete")!',
+                    content: "@lang('lang.are_you_sure_want_to_delete')?",
+                    type: 'red',
+                    typeAnimated: true,
+                    buttons: {
+                        tryAgain: {
+                            text: 'ok',
+                            btnClass: 'btn-red',
+                            action: function(){
+                                var id = this.$content.find('.id').val();
+                                axios.post('{{ URL('payroll/review/delete') }}', {
+                                    ids : join_selected_values
+                                }).then(function(response) {
+                                    new Noty({
+                                        title: "",
+                                        text: "@lang('lang.the_process_has_been_successfully').",
+                                        type: "success",
+                                        timeout: 3000,
+                                        icon: true
+                                    }).show();
+                                    window.location.replace("{{ URL('payroll/review') }}");
+                                }).catch(function(error) {
+                                    new Noty({
+                                        title: "",
+                                        text: "@lang('lang.something_went_wrong_please_try_again_later').",
+                                        type: "error",
+                                        icon: true
+                                    }).show();
+                                });
+                            }
+                        },
+                        close: function () {
+                        }
+                    }
+                }); 
+            } 
+        });
+
         $(document).ready(function(){
             $("#btn-edix-nssf").click(function(){
                 $("#btn-save-nssf").toggle();
@@ -441,10 +485,6 @@
             });
         });
 
-        $('.payrollDelete').on('click',function(){
-            var _this = $(this).parents('tr');
-            $('.e_id').val(_this.find('.ids').text());
-        });
         $(".reset-btn").on("click", function() {
             $(this).prop('disabled', true);
             $(".btn-text-reset").hide();
@@ -496,7 +536,7 @@
                                 icon: true
                             }).show();
                             $('.card-footer').remove();
-                            window.location.replace("{{ URL('payroll/preview') }}");
+                            window.location.replace("{{ URL('payroll/review') }}");
                             }).catch(function(error) {
                                 new Noty({
                                     title: "",

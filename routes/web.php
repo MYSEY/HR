@@ -155,6 +155,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('payroll/review/search',[EmployeePayrollController::class,'payrollReviewSearch']);
     Route::post('payroll/approved',[EmployeePayrollController::class,'payrollApproved']);
     Route::get('payroll/review/export',[EmployeePayrollController::class,'payrollPreviwExport']);
+    Route::post('payroll/review/delete',[EmployeePayrollController::class,'payrollReviewDelete']);
 
 
     // Motor Rental

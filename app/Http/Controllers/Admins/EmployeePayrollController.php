@@ -1034,4 +1034,17 @@ class EmployeePayrollController extends Controller
             return 0;
         }
     }
+
+    public function payrollReviewDelete(Request $request){
+        try{
+            $ids = $request->ids;
+            payrollPreview::whereIn('id',explode(",",$ids))->delete();
+            Toastr::success('Payroll deleted successfully.','Success');
+            return redirect()->back();
+        }catch(\Exception $e){
+            DB::rollback();
+            Toastr::error('Payroll delete fail','Error');
+            return redirect()->back();
+        }
+    }
 }
