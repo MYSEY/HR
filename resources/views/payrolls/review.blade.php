@@ -64,11 +64,6 @@
                     </div>
                     <div class="col-sm-6 col-md-4 ">
                         <div style="display: flex" class="float-end">
-                            {{-- <a class="btn btn-sm btn-outline-secondary btn_approved me-2" data-dismiss="modal">
-                                <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading') </span>
-                                <span class="btn-txt">@lang('lang.approved')</span>
-                            </a> --}}
-                            
                             <button type="button" class="btn btn-sm btn-outline-secondary btn-search me-2" data-dismiss="modal">
                                 <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading') </span>
                                 <span class="btn-txt">@lang('lang.search')</span>
@@ -88,6 +83,8 @@
         @endif
         {!! Toastr::message() !!}
         <button type="button" class="btn btn-sm btn-outline-secondary delete_all">Delete All</button>
+        <button type="button" class="btn btn-sm btn-outline-secondary btn_approved" href="#" data-id=""> @lang('lang.approve')</button> 
+
         <div class="content">
             <div class="page-menu">
                 <div class="row">
@@ -100,15 +97,10 @@
                                             id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info"  cellspacing="0">
                                             <thead>
                                                 <tr>
-                                                    <th width="50px"><input type="checkbox" id="master"></th>
-                                                    <th class="sorting stuck-scroll-3" tabindex="0" aria-controls="DataTables_Table_0"
-                                                        rowspan="1" colspan="1">@lang('lang.employee_id')</th>
-                                                    <th class="sorting sorting_asc stuck-scroll-3" tabindex="0"
-                                                        aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
-                                                        aria-sort="ascending"
-                                                        aria-label="Employee: activate to sort column descending">@lang('lang.employee_name')</th>
-                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                        rowspan="1" colspan="1"
+                                                    <th><input type="checkbox" id="checkAll"></th>
+                                                    <th class="sorting stuck-scroll-3" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1">@lang('lang.employee_id')</th>
+                                                    <th class=" stuck-scroll-3" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending">@lang('lang.employee_name')</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
                                                         aria-label="Email: activate to sort column ascending">@lang('lang.position')
                                                     </th>
                                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
@@ -198,14 +190,15 @@
                                                         rowspan="1" colspan="1"
                                                         aria-label="Salary: activate to sort column ascending">@lang('lang.created_at')
                                                     </th>
-                                                    <th class="text-end no-sort sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Action: activate to sort column ascending" style="width: 50.825px;">@lang('lang.action')</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 @if (count($data) > 0)
                                                     @foreach ($data as $item)
                                                         <tr class="odd">
-                                                            <td><input type="checkbox" class="sub_chk" data-id="{{$item->id}}"></td>
+                                                            <td>
+                                                                <input type="checkbox" class="sub_chk" data-id="{{$item->id}}">
+                                                            </td>
                                                             <td class="stuck-scroll-3"><a href="#">{{ $item->users == null ? '' : $item->users->number_employee }}</a></td>
                                                             <td class="stuck-scroll-3"><a href="#">{{ $item->users == null ? '' : $item->users->EmployeeName }}</span></a></td>
                                                             <td><a href="#">{{ $item->users == null ? '' : $item->users->EmployeePosition }}</a></td>
@@ -231,11 +224,6 @@
                                                             <td>$<a href="#">{{ $item->total_salary }}</a></td>
                                                             <td>{{ $item->PayrollPaymentDate }}</td>
                                                             <td>{{ $item->Created }}</td>
-                                                            <td>
-                                                                @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer')
-                                                                    <a class="btn btn-success btn_approved" href="#" data-id="{{$item->payment_date}}"> @lang('lang.approve')</a> 
-                                                                @endif
-                                                            </td>
                                                         </tr>
                                                     @endforeach
                                                 @endif
@@ -343,7 +331,7 @@
 <script src="{{asset('/admin/js/validation-field.js')}}"></script>
 <script>
     $(function(){
-        $('#master').on('click', function(e) {
+        $('#checkAll').on('click', function(e) {
             if($(this).is(':checked',true)){
                 $(".sub_chk").prop('checked', true);
             } else {  
@@ -360,7 +348,7 @@
             {
                 $.alert({
                     title: '@lang("lang.delete")!',
-                    content: 'Please select row.',
+                    content: 'Please select item befor delete.',
                 });
             }  else {
                 $.confirm({
@@ -515,42 +503,54 @@
         });
 
         $('body').on('click','.btn_approved',function(){
-            var payment_date = $(this).data('id');
-            $.confirm({
-                title: '@lang("lang.approve")',
-                content: "@lang('lang.are_you_sure_want_to_approve')?",
-                type: 'blue',
-                typeAnimated: true,
-                buttons: {
-                    tryAgain: {
-                        text: 'ok',
-                        btnClass: 'btn-blue',
-                        action: function(){
-                        axios.post('{{ URL('payroll/approved') }}',{
-                            'payment_date': payment_date,
-                        }).then(function(response) {
-                            new Noty({
-                                title: "",
-                                text: '@lang("lang.the_process_has_been_successfully")',
-                                type: "success",
-                                icon: true
-                            }).show();
-                            $('.card-footer').remove();
-                            window.location.replace("{{ URL('payroll/review') }}");
-                            }).catch(function(error) {
+            var allVals = [];  
+            $(".sub_chk:checked").each(function() {  
+                allVals.push($(this).attr('data-id'));
+            });
+            var join_selected_values = allVals.join(",");
+            if(allVals.length <=0)  
+            {
+                $.alert({
+                    title: '@lang("lang.approve")!',
+                    content: 'Please select item befor approve.',
+                });
+            }  else {
+                $.confirm({
+                    title: '@lang("lang.approve")',
+                    content: "@lang('lang.are_you_sure_want_to_approve')?",
+                    type: 'blue',
+                    typeAnimated: true,
+                    buttons: {
+                        tryAgain: {
+                            text: 'ok',
+                            btnClass: 'btn-blue',
+                            action: function(){
+                            axios.post('{{ URL('payroll/approved') }}',{
+                                'ids': join_selected_values,
+                            }).then(function(response) {
                                 new Noty({
                                     title: "",
-                                    text: '@lang("lang.something_went_wrong_please_try_again_later")',
-                                    type: "error",
+                                    text: '@lang("lang.the_process_has_been_successfully")',
+                                    type: "success",
                                     icon: true
                                 }).show();
-                            });
+                                $('.card-footer').remove();
+                                window.location.replace("{{ URL('payroll') }}");
+                                }).catch(function(error) {
+                                    new Noty({
+                                        title: "",
+                                        text: '@lang("lang.something_went_wrong_please_try_again_later")',
+                                        type: "error",
+                                        icon: true
+                                    }).show();
+                                });
+                            }
+                        },
+                            close: function () {
                         }
-                    },
-                        close: function () {
                     }
-                }
-            });
+                });
+            }
         });
         $("#btn-payroll").on("click",function() {
             let exchange_rate_salary = $("#exchange_rate_preview").val();
@@ -582,7 +582,7 @@
                                 timeout: 3000,
                                 icon: true
                             }).show();
-                            window.location.replace("{{ URL('payroll/preview') }}");
+                            window.location.replace("{{ URL('payroll/review') }}");
                         }).catch(function(error) {
                             console.log(error);
                             new Noty({
@@ -656,22 +656,10 @@
                         let join_date = moment(row.users.date_of_commencement).format('D-MMM-YYYY');
                         let payment_date = moment(row.payment_date).format('D-MMM-YYYY');
                         let created_at = moment(row.created_at).format('D-MMM-YYYY');
-                        let profile = '<a href="{{asset("admin/img/defuals/default-user-icon.png")}}">'+
-                                        '<img alt="" src="{{asset("admin/img/defuals/default-user-icon.png")}}">'+
-                                    '</a>';
-                        if (row.users.profile != null) {
-                            profile ='<a href="{{asset("/uploads/images")}}/'+(row.users.profile)+'" class="avatar">'+
-                                        '<img alt="" src="{{asset("/uploads/images")}}/'+(row.users.profile)+'">'+
-                                    '</a>';
-                        }
                         tr +='<tr class="odd">'+
-                            '<td class="sorting_1 stuck-scroll-3">'+
-                                '<h2 class="table-avatar">'+
-                                    (profile)+
-                                '</h2>'+
-                            '</td>'+
+                            '<td class="stuck-scroll-3"><input type="checkbox" class="sub_chk"></a></td>'+
                             '<td class="stuck-scroll-3"><a href="#">'+(row.users == null ? '' : row.users.number_employee )+'</a></td>'+
-                            '<td class="stuck-scroll-3"> <a href="#">'+(row.users == null ? '' : localeLanguage == 'en' ? row.users.employee_name_en : row.users.employee_name_kh )+'</span></a></td>'+
+                            '<td class="stuck-scroll-3"><a href="#">'+(row.users == null ? '' : localeLanguage == 'en' ? row.users.employee_name_en : row.users.employee_name_kh )+'</span></a></td>'+
                             '<td><a href="#">'+(row.users == null ? '' : localeLanguage == 'en' ? row.users.position.name_english :row.users.position.name_khmer )+'</a></td>'+
                             '<td><a href="#">'+(row.users == null ? '' : localeLanguage == 'en' ? row.users.department.name_english : row.users.department.name_khmer )+'</a></td>'+
                             '<td><a href="#">'+(row.users == null ? '' : localeLanguage == 'en' ? row.users.branch.branch_name_en : row.users.branch.branch_name_kh)+'</a></td>'+
@@ -705,7 +693,7 @@
             }
         });
     }
-
+   
     function formatCurrencyKH(currency) {
         return parseInt(currency).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }

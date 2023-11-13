@@ -819,10 +819,11 @@ class EmployeePayrollController extends Controller
 
     public function payrollApproved(Request $request){
         try{
-            $dataPayroll = payrollPreview::where('payment_date',$request->payment_date)->get();
-            $dataNssf = PreviewNationalSocialSecurityFund::where('payment_date',$request->payment_date)->get();
-            $dataGrossSalaryPay = PreviewGrossSalaryPay::where('payment_date',$request->payment_date)->get();
-            $dataBonus = PreviewBonus::where('payment_date',$request->payment_date)->get();
+            $ids = $request->ids;
+            $dataPayroll = payrollPreview::whereIn('id',explode(",",$ids))->get();
+            $dataNssf = PreviewNationalSocialSecurityFund::whereIn('id',explode(",",$ids))->get();
+            $dataGrossSalaryPay = PreviewGrossSalaryPay::whereIn('id',explode(",",$ids))->get();
+            $dataBonus = PreviewBonus::whereIn('id',explode(",",$ids))->get();
             foreach ($dataBonus as $item) {
                 Bonus::create([
                     'employee_id'             => $item->employee_id,
@@ -835,7 +836,7 @@ class EmployeePayrollController extends Controller
                     'bouns_type'              => $item->bouns_type,
                     'created_by'              => $item->created_by,
                 ]);
-                PreviewBonus::where('payment_date',$request->payment_date)->delete();
+                PreviewBonus::whereIn('id',explode(",",$ids))->delete();
             }
             foreach ($dataNssf as $item) {
                 NationalSocialSecurityFund::create([
@@ -853,7 +854,7 @@ class EmployeePayrollController extends Controller
                     'payment_date'              => $item->payment_date,
                     'created_by'                => $item->created_by,
                 ]);
-                PreviewNationalSocialSecurityFund::where('payment_date',$request->payment_date)->delete();
+                PreviewNationalSocialSecurityFund::whereIn('id',explode(",",$ids))->delete();
             }
             foreach ($dataGrossSalaryPay as $item) {
                 GrossSalaryPay::create([
@@ -871,7 +872,7 @@ class EmployeePayrollController extends Controller
                     'payment_date'          => $item->payment_date,
                     'created_by'            => $item->created_by,
                 ]);
-                PreviewGrossSalaryPay::where('payment_date',$request->payment_date)->delete();
+                PreviewGrossSalaryPay::whereIn('id',explode(",",$ids))->delete();
             }
             foreach ($dataPayroll as $item) {
                 Payroll::create([
@@ -909,7 +910,7 @@ class EmployeePayrollController extends Controller
                     'leaves'                    => $item->leaves,
                     'created_by'                => $item->created_by,
                 ]);
-                payrollPreview::where('payment_date',$request->payment_date)->delete();
+                payrollPreview::whereIn('id',explode(",",$ids))->delete();
             }
             Toastr::success('Approved payroll successfully.','Success');
             return redirect()->back();
