@@ -16,12 +16,13 @@ return new class extends Migration
     {
         Schema::create('permissions', function (Blueprint $table) {
             $table->id();
-            $table->integer('table_id')->nullable();
-            $table->integer('role_id');
-            $table->integer('permission_type_id')->nullable();
-            $table->boolean('status')->nullable();
-            $table->integer('parent_id');
             $table->string('name');
+            $table->integer('menu_id')->nullable();
+            $table->integer('sub_menu_id')->nullable();
+            $table->string('icon')->nullable();
+            $table->string('url')->nullable();
+            $table->integer('role_id');
+            $table->integer('parent_id');
             $table->json('is_dashboard',200)->nullable();
             $table->boolean('is_all')->nullable();
             $table->boolean('is_active')->nullable();

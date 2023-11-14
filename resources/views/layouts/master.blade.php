@@ -143,12 +143,6 @@
                         <path id="menu-fold" d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 000 13.8z"></path>
                     </svg>
                 </span>
-                {{-- <span class="bar-icon">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </span>
-            </a> --}}
             <div class="header-left">
                 <a href="#" class="logo">
                     <img src="{{ asset('/admin/img/camma-logo.png') }}" alt="Image" style="width: 100%;
@@ -156,29 +150,11 @@
                     height: auto;
                     margin: 0 auto;">
                 </a>
-                {{-- <a href="#" class="logo2">
-                    <img src="{{ asset('/admin/img/logo/commalogo1.png') }}" width="100" height="100"
-                        alt="">
-                </a> --}}
             </div>
 
-            {{-- <a id="mobile_btn" class="mobile_btn" href=""><i class="fa fa-bars"></i></a> --}}
             <a id="mobile_btn" class="mobile_btn" href=""></a>
 
             <ul class="nav user-menu">
-                {{-- @php
-                    $language = session()->get('locale');
-                    $icon = $language == 'en' ? 'ខ្មែរ' : 'English';
-                    $languagee = session()->get('locale');
-                    $khen = $languagee == 'en' ? 'kh' : 'en';
-                @endphp
-                <li class="dropdown dropdown-language nav-item">
-                    <a class="dropdown-toggle nav-link" href="/{{ $khen }}" aria-haspopup="true"
-                        aria-expanded="false">
-                        {{ $icon }}
-                    </a>
-                </li> --}}
-                
                 <li class="nav-item dropdown has-arrow flag-nav">
                     <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="" role="button">
                         @switch(App::getLocale())
@@ -193,7 +169,6 @@
                         @endswitch
                     </a>
                     
-                    
                     <div class="dropdown-menu dropdown-menu-right">
                         <a href="{{ url('lang/en') }}" class="dropdown-item">
                             <img src="{{asset('/admin/img/us.png')}}" alt="" height="20"> English
@@ -203,39 +178,6 @@
                         </a>
                     </div>
                 </li>
-
-                {{-- <li class="nav-item dropdown">
-                    <a href="" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">
-                        <i class="fa fa-bell-o"></i> <span class="badge rounded-pill">3</span>
-                    </a> 
-                    <div class="dropdown-menu notifications">
-                        <div class="topnav-dropdown-header">
-                            <span class="notification-title">Notifications</span>
-                        </div>
-                        <div class="noti-content">
-                            <ul class="notification-list">
-                                <li class="notification-message">
-                                    <a href="">
-                                        <div class="media d-flex">
-                                            <span class="avatar flex-shrink-0">
-                                                <img alt="" src="{{asset('/admin/img/avatar-02.jpg')}}">
-                                            </span>
-                                            <div class="media-body flex-grow-1">
-                                                <p class="noti-details"><span class="noti-title">John Doe</span> added new task 
-                                                    <span class="noti-title">Patient appointment booking</span>
-                                                </p>
-                                                <p class="noti-time"><span class="notification-time">4 mins ago</span></p>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="topnav-dropdown-footer">
-                            <a href="">View all Notifications</a>
-                        </div>
-                    </div>
-                </li> --}}
 
                 <li class="nav-item dropdown has-arrow main-drop">
                     <a href="javascript:void(0);" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">
@@ -284,30 +226,27 @@
                 <div class="sidebar-inner slimscroll" style="overflow: auto; width: 100%; height: 346px;">
                     <div id="sidebar-menu" class="sidebar-menu">
                         <ul class="sidebar-vertical">
-                            @foreach (menu() as $menu)
-                                @if (isset($menu['child']))
-                                    @if (RolePermission($menu['table'],$menu['permission']))
-                                        <li class="menu-title"><span style="border-bottom: 3px solid #dc0000; font-weight: bold; font-size: 17px;">{{$menu['name']}}</span></li>
-                                        <li class="submenu">
-                                            <a href="javascript:void(0);" style="border-bottom: 3px solid #f0f0f0;">{!! $menu['icon'] !!}{{$menu['value']}}<span class="menu-arrow"></span></a>
-                                            <ul style="display: none;">
-                                                @foreach ($menu['child'] as $sub_menu)
-                                                    @if (RolePermission($sub_menu['table'], $sub_menu['permission']))
-                                                        <li>
-                                                            <a class="" href="{{url($sub_menu['url'])}}">{{$sub_menu['value']}}</a>
-                                                        </li>
-                                                    @endif
-                                                @endforeach
-                                            </ul>
-                                        </li>
-                                    @endif
-                                @else
-                                    @if (RolePermission($menu['table'],$menu['permission']))
-                                        <li class="">
-                                            <a href="{{url($menu['url'])}}">{!! $menu['icon'] !!}<span>{{$menu['value']}}</span></a>
-                                        </li>
-                                    @endif
-                                @endif
+                            <li class="menu-title"><span style="border-bottom: 3px solid #dc0000; font-weight: bold; font-size: 17px;">@lang('lang.hr_management_system')</span></li>
+                            @foreach (RolePermission()->menu as $menu)
+                                <li class="submenu">
+                                    <a href="javascript:void(0);" style="border-bottom: 3px solid #f0f0f0;">
+                                        <i class="{{$menu["icon"]}}"></i><span>@lang($menu["name"])</span><span class="menu-arrow"></span>
+                                    </a>
+                                    <ul style="display: none;">
+                                        @foreach (RolePermission()->subMenu as $sub_menu)
+                                            @if ($sub_menu["sub_menu_id"] == $menu["menu_id"])
+                                                <li>
+                                                    <a class="" href="{{url($sub_menu['url'])}}">@lang($sub_menu["name"])</a>
+                                                </li>
+                                            @endif
+                                        @endforeach
+                                    </ul>
+                                </li>
+                            @endforeach
+                            @foreach (RolePermission()->singleMenu as $singlemenu)
+                                <li class="">
+                                    <a href="{{url($singlemenu['url'])}}"><i class="{{$singlemenu["icon"]}}"></i><span>@lang($singlemenu["name"])</span></a>
+                                </li>
                             @endforeach
                         </ul>
                     </div>
