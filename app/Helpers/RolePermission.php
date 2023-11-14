@@ -55,9 +55,22 @@ function SetCheckbox($datas,$permission_name,$permission_checkbox){
             $dataObject->checkbox = $datas[$permission_name][$permission_checkbox] == 1 ? "checked" : "";
         }
     } else{
+        $dataJson = [
+            "is_employee"=>"0",
+            "is_age_of_employee"=>"0",
+            "is_birthday_reminder"=>"0",
+            "is_total_number_of_staff"=>"0",
+            "is_total_inactive_staff"=>"0",
+            "is_resigned_staff"=>"0",
+            "is_reasons_of_staff"=>"0",
+            "is_staff_ratio"=>"0",
+            "is_staff_taking_leave"=>"0",
+            "is_staff_training_internal"=>"0",
+            "is_staff_training_external"=>"0"
+        ];
         $dataObject->value = 0;
         $dataObject->checkbox = "";
-        $dataObject->is_dashboard = "";
+        $dataObject->is_dashboard = $dataJson;
     }
     return $dataObject;
 }
