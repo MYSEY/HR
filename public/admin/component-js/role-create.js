@@ -1,16 +1,30 @@
 var dataPermission = function () {
     let data = [];
-
     // block dashboard
     let dashboad_checkbox = $('.dashboad_checkbox').filter(':checked').length;
     let dashboad_all = $('#dashboad_all').filter(':checked').length;
+    if (dashboad_all || dashboad_checkbox) {
+        data.push({
+            name: "Dashboards",
+            permission: [
+                {
+                    "menu_id":"1",
+                    "icon":"la la-dashboard",
+                    "is_all": $("#dashboad_all").val(),
+                    "name":"lang.dashboards",
+                },  
+            ]
+        });
+    }
     if (dashboad_checkbox) {
         data.push({
             name: "Dashboard",
             permission: [
                 {
-                    "name":"Dashboard",
-                    "table_id":"1",
+                    "name":"lang.admin_dashboard",
+                    "sub_menu_id":"1",
+                    "menu_id":"2",
+                    "url":"dashboad/admin",
                     "is_employee": $("#dashboad_employee").val(),
                     "is_age_of_employee": $("#dashboad_age_of_employee").val(),
                     "is_birthday_reminder": $("#dashboad_birthday_reminder").val(),
@@ -26,29 +40,33 @@ var dataPermission = function () {
             ]
         })
     }
-    if (dashboad_all) {
-        data.push({
-            name: "Dashboards",
-            permission: [
-                {
-                    "is_all": $("#dashboad_all").val(),
-                    "name":"Dashboards",
-                },  
-            ]
-        });
-    }
 
     // block all employee
     let all_employee_checkbox = $('.all_employee_checkbox').filter(':checked').length;
     let leaves_employee_checkbox = $('.leaves_employee_checkbox').filter(':checked').length;
     let employee_all = $('#employee_all').filter(':checked').length;
+    if (employee_all || all_employee_checkbox || leaves_employee_checkbox) {
+        data.push({
+            name: "employee_block",
+            permission: [
+                {
+                    "menu_id":"4",
+                    "icon":"la la-user",
+                    "name":"lang.employee",
+                    "is_all": $("#employee_all").val(),
+                },
+            ]
+        });
+    }
     if (all_employee_checkbox) {
         data.push({
             name: "all_employee",
             permission: [
                 {
-                    "name":"All Employee",
-                    "table_id":"3",
+                    "name":"lang.all_employee",
+                    "menu_id":"5",
+                    "sub_menu_id":"4",
+                    "url":"users",
                     "is_view": $("#employee_view").val(),
                     "is_create": $("#employee_add").val(),
                     "is_import": $("#employee_import").val(),
@@ -66,7 +84,10 @@ var dataPermission = function () {
             name: "leaves_employee",
             permission: [
                 {
-                    "name":"Leaves Employee",
+                    "name":"lang.leaves_employee",
+                    "sub_menu_id":"4",
+                    "menu_id":"6",
+                    "url":"leaves/employee",
                     "is_view": $("#leaves_employee_view").val(),
                     "is_create": $("#leaves_employee_add").val(),
                     "is_import": $("#leaves_employee_import").val(),
@@ -79,29 +100,34 @@ var dataPermission = function () {
             ]
         })
     }
-    if (employee_all) {
-        data.push({
-            name: "employee_block",
-            permission: [
-                {
-                    "is_all": $("#employee_all").val(),
-                    "name":"Employee",
-                },
-            ]
-        });
-    }
 
     // block all recruitment
     let candidate_CVs_checkbox = $('.candidate_CVs_checkbox').filter(':checked').length;
     let recruitment_plans_checkbox = $('.recruitment_plans_checkbox').filter(':checked').length;
     let recruitments_all = $('#recruitments_all').filter(':checked').length;
+    if (recruitments_all || candidate_CVs_checkbox || recruitment_plans_checkbox) {
+        data.push({
+            name: "recruitments",
+            permission: [
+                {
+                    "menu_id":"7",
+                    "icon":"la la-briefcase",
+                    "name":"lang.recruitments",
+                    "is_all": $('#recruitments_all').val(),
+                },
+            
+            ]
+        });
+    }
     if (candidate_CVs_checkbox) {
         data.push({
             name: "candidate_cv",
             permission: [
                 {
-                    "name":"Candidate CV",
-                    "table_id":"8",
+                    "name":"lang.candidate_cv",
+                    "sub_menu_id":"7",
+                    "menu_id":"8",
+                    "url":"recruitment/candidate-resume/list",
                     "is_view": $("#candidate_cv_view").val(),
                     "is_create": $("#candidate_cv_add").val(),
                     "is_import": $("#candidate_cv_import").val(),
@@ -120,8 +146,10 @@ var dataPermission = function () {
             name: "recruitment_plan",
             permission: [
                 {
-                    "name":"Recruitment Plan",
-                    "table_id":"7",
+                    "name":"lang.recruitment_plan",
+                    "sub_menu_id":"7",
+                    "menu_id":"9",
+                    "url":"recruitment/plan-list",
                     "is_view": $("#recruitment_plan_view").val(),
                     "is_create": $("#recruitment_plan_add").val(),
                     "is_update": $("#recruitment_plan_edit").val(),
@@ -132,18 +160,6 @@ var dataPermission = function () {
             ]
         })
     }
-    if (recruitments_all) {
-        data.push({
-            name: "recruitments",
-            permission: [
-                {
-                    "is_all": $('#recruitments_all').val(),
-                    "name":"recruitments",
-                },
-            
-            ]
-        });
-    }
 
     // block C&B 
     let employee_salary_checkbox = $('.employee_salary_checkbox').filter(':checked').length;
@@ -151,13 +167,28 @@ var dataPermission = function () {
     let severance_pay_checkbox = $('.severance_pay_checkbox').filter(':checked').length;
     let fringe_benefits_checkbox = $('.fringe_benefits_checkbox').filter(':checked').length;
     let c_and_b_all = $('#c_and_b_all').filter(':checked').length;
+    if (c_and_b_all || employee_salary_checkbox || cb_nssf_checkbox || severance_pay_checkbox || fringe_benefits_checkbox) {
+        data.push({
+            name: "Compensation and Benefits",
+            permission: [
+                {
+                    "menu_id":"10",
+                    "icon":"la la-money",
+                    "name":"lang.c&b",
+                    "is_all": $("#c_and_b_all").val(),
+                },
+            ]
+        });
+    }
     if (employee_salary_checkbox) {
         data.push({
             name: "payroll",
             permission: [
                 {
-                    "name":"Payroll",
-                    "table_id":"4",
+                    "name":"lang.employee_salary",
+                    "sub_menu_id":"10",
+                    "menu_id":"11",
+                    "url":"payroll/preview",
                     "is_view": $("#c_and_b_view").val(),
                     "is_create": $("#c_and_b_add").val(),
                     "is_update": $("#c_and_b_edit").val(),
@@ -174,8 +205,10 @@ var dataPermission = function () {
             name: "nssf",
             permission: [
                 {
-                    "name":"nssf",
-                    "table_id":"4",
+                    "name":"lang.nssf",
+                    "sub_menu_id":"10",
+                    "menu_id":"12",
+                    "url":"import-nssf",
                     "is_view": $("#cb_nssf_view").val(),
                     "is_import": $("#cb_nssf_import").val(),
                     "is_print": $("#cb_nssf_print").val(),
@@ -189,8 +222,10 @@ var dataPermission = function () {
             name: "Severance Pay",
             permission: [
                 {
-                    "name":"Severance Pay",
-                    "table_id":"4",
+                    "name":"lang.severance_pay",
+                    "sub_menu_id":"10",
+                    "menu_id":"13",
+                    "url":"severance-pay",
                     "is_view": $("#severance_pay_view").val(),
                     "is_import": $("#severance_pay_import").val(),
                     "is_print": $("#severance_pay_print").val(),
@@ -204,8 +239,10 @@ var dataPermission = function () {
             name: "Fringe Benefits",
             permission: [
                 {
-                    "name":"Fringe Benefits",
-                    "table_id":"4",
+                    "name":"lang.fringe_benefits",
+                    "sub_menu_id":"10",
+                    "menu_id":"14",
+                    "url":"fringe-benefit",
                     "is_view": $("#fringe_benefits_view").val(),
                     "is_create": $("#fringe_benefits_add").val(),
                     "is_update": $("#fringe_benefits_edit").val(),
@@ -217,29 +254,34 @@ var dataPermission = function () {
             ]
         })
     }
-    if (c_and_b_all) {
-        data.push({
-            name: "Compensation and Benefits",
-            permission: [
-                {
-                    "is_all": $("#c_and_b_all").val(),
-                    "name":"Compensation and Benefits",
-                },
-            ]
-        });
-    }
 
     //block motor rentals 
     let motor_rentals_checkbox = $('.motor_rentals_checkbox').filter(':checked').length;
     let pay_motor_rentals_checkbox = $('.pay_motor_rentals_checkbox').filter(':checked').length;
     let motor_rental_check_all = $('#motor_rental_check_all').filter(':checked').length;
+    if (motor_rental_check_all || motor_rentals_checkbox || pay_motor_rentals_checkbox) {
+        data.push({
+            name: "Motor Rentals",
+            permission: [
+                {
+                    "menu_id":"15",
+                    "icon":"la la-motorcycle",
+                    "is_all":"1",
+                    "name":"lang.motor_rentals",
+                    "is_all": $("#motor_rental_check_all").val(),
+                },
+            ]
+        });
+    }
     if (motor_rentals_checkbox) {
         data.push({
             name: "motor_rental",
             permission: [
                 {
-                    "name":"Motor Rental",
-                    "table_id":"5",
+                    "name":"lang.motor_rental",
+                    "sub_menu_id":"15",
+                    "menu_id":"16",
+                    "url":"motor-rentel/list",
                     "is_view": $("#motor_rental_view").val(),
                     "is_create": $("#motor_rental_add").val(),
                     "is_import": $("#motor_rental_import").val(),
@@ -256,29 +298,20 @@ var dataPermission = function () {
             name: "pay_motor_rental",
             permission: [
                 {
-                    "name":"Pay Motor Rental",
-                        "table_id":"6",
-                        "is_view": $("#Pay_motor_rental_view").val(),
-                        "is_create": $("#Pay_motor_rental_add").val(),
-                        "is_approve": $("#Pay_motor_rental_approve").val(),
-                        "is_update": $("#Pay_motor_rental_edit").val(),
-                        "is_delete": $("#Pay_motor_rental_delete").val(),
-                        "is_print": $("#Pay_motor_rental_print").val(),
-                        "is_export": $("#Pay_motor_rental_export").val(),
+                    "name":"lang.pay_motor_rental",
+                    "sub_menu_id":"15",
+                    "menu_id":"17",
+                    "url":"motor-rentel/pay",
+                    "is_view": $("#Pay_motor_rental_view").val(),
+                    "is_create": $("#Pay_motor_rental_add").val(),
+                    "is_approve": $("#Pay_motor_rental_approve").val(),
+                    "is_update": $("#Pay_motor_rental_edit").val(),
+                    "is_delete": $("#Pay_motor_rental_delete").val(),
+                    "is_print": $("#Pay_motor_rental_print").val(),
+                    "is_export": $("#Pay_motor_rental_export").val(),
                 },
             ]
         })
-    }
-    if (motor_rental_check_all) {
-        data.push({
-            name: "Motor Rentals",
-            permission: [
-                {
-                    "is_all": $("#motor_rental_check_all").val(),
-                    "name":"Motor Rentals",
-                },
-            ]
-        });
     }
 
     //block Trainings 
@@ -286,13 +319,29 @@ var dataPermission = function () {
     let training_checkbox_block = $('.training_checkbox_block').filter(':checked').length;
     let training_reports_checkbox = $('.training_reports_checkbox').filter(':checked').length;
     let training_check_all = $('#training_check_all').filter(':checked').length;
+    if (training_check_all || trainer_checkbox || training_checkbox_block || training_reports_checkbox) {
+        data.push({
+            name: "Trainings",
+            permission: [
+                {
+                    "menu_id":"18",
+                    "icon":"la la-edit",
+                    "is_all":"1",
+                    "name":"lang.trainings",
+                    "is_all": $("#training_check_all").val(),
+                },
+            ]
+        });
+    }
     if (trainer_checkbox) {
         data.push({
             name: "Trainer",
             permission: [
                 {
-                    "name":"Trainer",
-                    "table_id":"10",
+                    "name":"lang.trainer",
+                    "sub_menu_id":"18",
+                    "menu_id":"19",
+                    "url":"trainer/list",
                     "is_view": $("#training_check_view").val(),
                     "is_create": $("#training_check_add").val(),
                     "is_update": $("#training_check_edit").val(),
@@ -308,8 +357,10 @@ var dataPermission = function () {
             name: "Training",
             permission: [
                 {
-                    "name":"Training",
-                    "table_id":"10",
+                    "name":"lang.training",
+                    "sub_menu_id":"18",
+                    "menu_id":"20",
+                    "url":"training/list",
                     "is_view": $("#trainer_check_view").val(),
                     "is_create": $("#trainer_check_add").val(),
                     "is_update": $("#trainer_check_edit").val(),
@@ -325,25 +376,16 @@ var dataPermission = function () {
             name: "Training_Report",
             permission: [
                 {
-                    "name":"Training Report",
-                    "table_id":"10",
+                    "name":"lang.training_report",
+                    "sub_menu_id":"18",
+                    "menu_id":"21",
+                    "url":"reports/training-report",
                     "is_view": $("#report_training_check_view").val(),
                     "is_print": $("#report_training_check_print").val(),
                     "is_export": $("#report_training_check_export").val(),
                 },
             ]
         })
-    }
-    if (training_check_all) {
-        data.push({
-            name: "Trainings",
-            permission: [
-                {
-                    "is_all": $("#training_check_all").val(),
-                    "name":"Trainings",
-                },
-            ]
-        });
     }
 
     // block reports 
@@ -363,14 +405,31 @@ var dataPermission = function () {
     let staff_resigned_reports_checkbox = $('.staff_resigned_reports_checkbox').filter(':checked').length;
     let transferred_staff_report_checkbox = $('.transferred_staff_report_checkbox').filter(':checked').length;
     let promoted_staff_report_checkbox = $('.promoted_staff_report_checkbox').filter(':checked').length;
-    let reports_check_all = $('#reports_check_all').filter(':checked').length;
+    let reports_check_all = $('.reports_checkbox').filter(':checked').length;
+    if (reports_check_all) {
+        data.push({
+            name: "reports",
+            permission: [
+                {
+                    "menu_id":"22",
+                    "icon":"la la-pie-chart",
+                    "is_all":"1",
+                    "name":"lang.reports",
+                    "is_all": $("#reports_check_all").val(),
+                },
+            ]
+        });
+    }
+
     if (employee_reports_checkbox) {
         data.push({
             name: "Employee_Reports",
             permission: [
                 {
-                    "name":"Employee Reports",
-                    "table_id":"17",
+                    "name":"lang.employee_reports",
+                    "sub_menu_id":"22",
+                    "menu_id":"23",
+                    "url":"reports/employee-report",
                     "is_view": $("#report_employee_check_view").val(),
                     "is_print": $("#report_employee_check_print").val(),
                     "is_export": $("#report_employee_check_export").val(),
@@ -383,8 +442,10 @@ var dataPermission = function () {
             name: "Payroll_Reports",
             permission: [
                 {
-                    "name":"Payroll Reports",
-                    "table_id":"18",
+                    "name":"lang.payroll_reports",
+                    "sub_menu_id":"22",
+                    "menu_id":"24",
+                    "url":"reports/payroll-report",
                     "is_view": $("#payroll_report_check_view").val(),
                     "is_print": $("#payroll_report_check_print").val(),
                     "is_export": $("#payroll_report_check_export").val(),
@@ -397,8 +458,10 @@ var dataPermission = function () {
             name: "tax_report",
             permission: [
                 {
-                    "name":"Tax Reports",
-                    "table_id":"18",
+                    "name":"lang.tax_reports",
+                    "sub_menu_id":"22",
+                    "menu_id":"25",
+                    "url":"reports/tax-report",
                     "is_view": $("#tax_report_check_view").val(),
                     "is_print": $("#tax_report_check_print").val(),
                     "is_export": $("#tax_report_check_export").val(),
@@ -411,8 +474,10 @@ var dataPermission = function () {
             name: "nssf_report",
             permission: [
                 {
-                    "name":"NSSF Reports",
-                    "table_id":"18",
+                    "name":"lang.nssf_reports",
+                    "sub_menu_id":"22",
+                    "menu_id":"26",
+                    "url":"reports/nssf-report",
                     "is_view": $("#nssf_report_check_view").val(),
                     "is_print": $("#nssf_report_check_print").val(),
                     "is_export": $("#nssf_report_check_export").val(),
@@ -425,8 +490,10 @@ var dataPermission = function () {
             name: "kmh_pchum_report",
             permission: [
                 {
-                    "name":"Khm Pchum Reports",
-                    "table_id":"18",
+                    "name":"lang.khm_pchum_reports",
+                    "sub_menu_id":"22",
+                    "menu_id":"27",
+                    "url":"reports/benefit-report",
                     "is_view": $("#kmh_pchum_report_check_view").val(),
                     "is_print": $("#kmh_pchum_report_check_print").val(),
                     "is_export": $("#kmh_pchum_report_check_export").val(),
@@ -439,8 +506,10 @@ var dataPermission = function () {
             name: "severance_pay_report",
             permission: [
                 {
-                    "name":"Severance Pay Reports",
-                    "table_id":"18",
+                    "name":"lang.severance_pay_reports",
+                    "sub_menu_id":"22",
+                    "menu_id":"28",
+                    "url":"reports/severance-pay-report",
                     "is_view": $("#severance_pay_report_check_view").val(),
                     "is_print": $("#severance_pay_report_check_print").val(),
                     "is_export": $("#severance_pay_report_check_export").val(),
@@ -453,12 +522,14 @@ var dataPermission = function () {
             name: "seniorities_pay_report",
             permission: [
                 {
-                    "name":"Seniorities Pay Reports",
-                    "table_id":"18",
+                    "name":"lang.seniorities_pay_reports",
+                    "sub_menu_id":"22",
+                    "menu_id":"29",
+                    "url":"reports/seniorities-pay",
                     "is_view": $("#seniorities_pay_report_check_view").val(),
                     "is_print": $("#seniorities_pay_report_check_print").val(),
                     "is_export": $("#seniorities_pay_report_check_export").val(),
-            },
+                },
             ]
         })
     }
@@ -467,12 +538,14 @@ var dataPermission = function () {
             name: "fringe_benefits_report",
             permission: [
                 {
-                    "name":"Fringe Benefits Reports",
-                    "table_id":"18",
+                    "name":"lang.fringe_benefits_reports",
+                    "sub_menu_id":"22",
+                    "menu_id":"30",
+                    "url":"reports/fringe-benefits-report",
                     "is_view": $("#fringe_benefits_report_check_view").val(),
                     "is_print": $("#fringe_benefits_report_check_print").val(),
                     "is_export": $("#fringe_benefits_report_check_export").val(),
-            },
+                },
             ]
         })
     }
@@ -481,11 +554,14 @@ var dataPermission = function () {
             name: "Bank_Transfer_Reports",
             permission: [
                 {
-                    "name":"Bank Transfer Reports",
+                    "name":"lang.bank_transfer_reports",
+                    "sub_menu_id":"22",
+                    "menu_id":"31",
+                    "url":"reports/bank-transfer",
                     "is_view": $("#bank_transfer_report_check_view").val(),
                     "is_print": $("#bank_transfer_report_check_print").val(),
                     "is_export": $("#bank_transfer_report_check_export").val(),
-            },
+                },
             ]
         })
     }
@@ -494,11 +570,14 @@ var dataPermission = function () {
             name: "E-Filing_Reports",
             permission: [
                 {
-                    "name":"E-Filing Reports",
+                    "name":"lang.e_filing_reports",
+                    "sub_menu_id":"22",
+                    "menu_id":"32",
+                    "url":"reports/e-filing",
                     "is_view": $("#e_filing_report_check_view").val(),
                     "is_print": $("#e_filing_report_check_print").val(),
                     "is_export": $("#e_filing_report_check_export").val(),
-            },
+                },
             ]
         })
     }
@@ -507,11 +586,14 @@ var dataPermission = function () {
             name: "E-Form_Reports",
             permission: [
                 {
-                    "name":"E-Form Reports",
+                    "name":"lang.e_form_reports",
+                    "sub_menu_id":"22",
+                    "menu_id":"33",
+                    "url":"reports/e-form",
                     "is_view": $("#e_form_report_check_view").val(),
                     "is_print": $("#e_form_report_check_print").val(),
                     "is_export": $("#e_form_report_check_export").val(),
-            },
+                },
             ]
         })
     }
@@ -520,12 +602,14 @@ var dataPermission = function () {
             name: "Motor_Rental_Reports",
             permission: [
                 {
-                    "name":"Motor Rental Reports",
-                    "table_id":"19",
+                    "name":"lang.motor_rental_reports",
+                    "sub_menu_id":"22",
+                    "menu_id":"34",
+                    "url":"reports/motor-rentel-report",
                     "is_view": $("#motor_rental_reports_check_view").val(),
                     "is_print": $("#motor_rental_reports_check_print").val(),
                     "is_export": $("#motor_rental_reports_check_export").val(),
-            },
+                },
             ]
         })
     }
@@ -534,8 +618,10 @@ var dataPermission = function () {
             name: "New_Staff_Reports",
             permission: [
                 {
-                    "name":"New Staff Reports",
-                    "table_id":"20",
+                    "name":"lang.new_staff_reports",
+                    "sub_menu_id":"22",
+                    "menu_id":"35",
+                    "url":"reports/new_staff-report",
                     "is_view": $("#new_staff_reports_check_view").val(),
                     "is_print": $("#new_staff_reports_check_print").val(),
                     "is_export": $("#new_staff_reports_check_export").val(),
@@ -548,8 +634,10 @@ var dataPermission = function () {
             name: "Staff_Resigned_Reports",
             permission: [
                 {
-                    "name":"Staff Resigned Reports",
-                    "table_id":"21",
+                    "name":"lang.staff_resigned_reports",
+                    "sub_menu_id":"22",
+                    "menu_id":"36",
+                    "url":"reports/staff-resigned-report",
                     "is_view": $("#staff_resigned_reports_check_view").val(),
                     "is_print": $("#staff_resigned_reports_check_print").val(),
                     "is_export": $("#staff_resigned_reports_check_export").val(),
@@ -562,8 +650,10 @@ var dataPermission = function () {
             name: "Transferred_Staff_Reports",
             permission: [
                 {
-                    "name":"Transferred Staff Reports",
-                    "table_id":"23",
+                    "name":"lang.transferred_staff_reports",
+                    "sub_menu_id":"22",
+                    "menu_id":"37",
+                    "url":"reports/transferred-staff-report",
                     "is_view": $("#transferred_staff_report_check_view").val(),
                     "is_print": $("#transferred_staff_report_check_print").val(),
                     "is_export": $("#transferred_staff_report_check_export").val(),
@@ -576,8 +666,10 @@ var dataPermission = function () {
             name: "Promoted_Staff_Reports",
             permission: [
                 {
-                    "name":"Promoted Staff Reports",
-                    "table_id":"22",
+                    "name":"lang.promoted_staff_reports",
+                    "sub_menu_id":"22",
+                    "menu_id":"38",
+                    "url":"reports/promoted-staff-report",
                     "is_view": $("#promoted_staff_report_check_view").val(),
                     "is_print": $("#promoted_staff_report_check_print").val(),
                     "is_export": $("#promoted_staff_report_check_export").val(),
@@ -585,31 +677,35 @@ var dataPermission = function () {
             ]
         })
     }
-    if (reports_check_all) {
-        data.push({
-            name: "reports",
-            permission: [
-                {
-                    "is_all": $("#reports_check_all").val(),
-                    "name":"reports",
-                },
-            ]
-        });
-    }
 
     //block Configuration
     let taxes_checkbox = $('.taxes_checkbox').filter(':checked').length;
     let exchange_rate_checkbox = $('.exchange_rate_checkbox').filter(':checked').length;
     let public_holidays_checkbox = $('.public_holidays_checkbox').filter(':checked').length;
     let children_allowance_checkbox = $('.children_allowance_checkbox').filter(':checked').length;
-    let configuration_check_all = $('#configuration_check_all').filter(':checked').length;
+    let configuration_check_all = $('.configuration_checkbox').filter(':checked').length;
+    if (configuration_check_all) {
+        data.push({
+            name: "configuration",
+            permission: [
+                {
+                    "menu_id":"39",
+                    "icon":"la la-key",
+                    "name":"lang.configuration",
+                    "is_all": $("#configuration_check_all").val(),
+                },
+            ]
+        });
+    }
     if (taxes_checkbox) {
         data.push({
             name: "Tax",
             permission: [
                 {
-                    "name":"Tax",
-                    "table_id":"24",
+                    "name":"lang.tax",
+                    "sub_menu_id":"39",
+                    "menu_id":"40",
+                    "url":"taxes",
                     "is_view": $("#taxes_check_view").val(),
                     "is_create": $("#taxes_check_add").val(),
                     "is_update": $("#taxes_check_edit").val(),
@@ -623,8 +719,10 @@ var dataPermission = function () {
             name: "Exchange_Rate",
             permission: [
                 {
-                    "name":"Exchange Rate",
-                    "table_id":"25",
+                    "name":"lang.exchange_rate",
+                    "sub_menu_id":"39",
+                    "menu_id":"41",
+                    "url":"exchange-rate/list",
                     "is_view": $("#exchange_rate_check_view").val(),
                     "is_create": $("#exchange_rate_check_add").val(),
                     "is_update": $("#exchange_rate_check_edit").val(),
@@ -638,8 +736,10 @@ var dataPermission = function () {
             name: "Public_Holidays",
             permission: [
                 {
-                    "name":"Public Holidays",
-                    "table_id":"12",
+                    "name":"lang.public_holidays",
+                    "sub_menu_id":"39",
+                    "menu_id":"42",
+                    "url":"holidays",
                     "is_view": $("#public_holidays_check_view").val(),
                     "is_create": $("#public_holidays_check_add").val(),
                     "is_update": $("#public_holidays_check_edit").val(),
@@ -653,8 +753,10 @@ var dataPermission = function () {
             name: "Children_Allowance",
             permission: [
                 {
-                    "name":"Children Allowance",
-                    "table_id":"26",
+                    "name":"lang.children_allowance",
+                    "sub_menu_id":"39",
+                    "menu_id":"43",
+                    "url":"children/allowance",
                     "is_view": $("#children_allowance_check_view").val(),
                     "is_create": $("#children_allowance_check_add").val(),
                     "is_update": $("#children_allowance_check_edit").val(),
@@ -663,17 +765,6 @@ var dataPermission = function () {
             ]
         })
     }
-    if (configuration_check_all) {
-        data.push({
-            name: "configuration",
-            permission: [
-                {
-                    "is_all": $("#configuration_check_all").val(),
-                    "name":"Configuration",
-                },
-            ]
-        });
-    }
 
     // block settings
     let bank_checkbox = $('.bank_checkbox').filter(':checked').length;
@@ -681,14 +772,29 @@ var dataPermission = function () {
     let branch_checkbox = $('.branch_checkbox').filter(':checked').length;
     let department_checkbox = $('.department_checkbox').filter(':checked').length;
     let forgot_password_checkbox = $('.forgot_password_checkbox').filter(':checked').length;
-    let setting_check_all = $('#setting_check_all').filter(':checked').length;
+    let setting_check_all = $('.setting_checkbox').filter(':checked').length;
+    if (setting_check_all) {
+        data.push({
+            name: "setting",
+            permission: [
+                {
+                    "menu_id":"44",
+                    "icon":"la la-cog",
+                    "name":"lang.setting",
+                    "is_all": $("#setting_check_all").val(),
+                },
+            ]
+        });
+    }
     if (bank_checkbox) {
         data.push({
             name: "Bank",
             permission: [
                 {
-                    "name":"Bank",
-                    "table_id":"13",
+                    "name":"lang.bank",
+                    "sub_menu_id":"44",
+                    "menu_id":"45",
+                    "url":"bank",
                     "is_view": $("#bank_check_view").val(),
                     "is_create": $("#bank_check_add").val(),
                     "is_update": $("#bank_check_edit").val(),
@@ -702,8 +808,10 @@ var dataPermission = function () {
             name: "Position",
             permission: [
                 {
-                    "name":"Position",
-                    "table_id":"15",
+                    "name":"lang.position",
+                    "sub_menu_id":"44",
+                    "menu_id":"46",
+                    "url":"position",
                     "is_view": $("#position_check_view").val(),
                     "is_create": $("#position_check_add").val(),
                     "is_update": $("#position_check_edit").val(),
@@ -717,8 +825,10 @@ var dataPermission = function () {
             name: "Branch",
             permission: [
                 {
-                    "name":"Branch",
-                    "table_id":"16",
+                    "name":"lang.branch",
+                    "sub_menu_id":"44",
+                    "menu_id":"47",
+                    "url":"branch",
                     "is_view": $("#branch_check_view").val(),
                     "is_create": $("#branch_check_add").val(),
                     "is_update": $("#branch_check_edit").val(),
@@ -732,8 +842,10 @@ var dataPermission = function () {
             name: "Department",
             permission: [
                 {
-                    "name":"Department",
-                    "table_id":"14",
+                    "name":"lang.department",
+                    "sub_menu_id":"44",
+                    "menu_id":"48",
+                    "url":"department",
                     "is_view": $("#department_check_view").val(),
                     "is_create": $("#department_check_add").val(),
                     "is_update": $("#department_check_edit").val(),
@@ -747,7 +859,10 @@ var dataPermission = function () {
             name: "Forgot_Password",
             permission: [
                 {
-                    "name":"Forgot Password",
+                    "name":"lang.forgot_password",
+                    "sub_menu_id":"44",
+                    "menu_id":"49",
+                    "url":"change/password",
                     "is_view": $("#forgot_password_check_view").val(),
                     "is_create": $("#forgot_password_check_add").val(),
                     "is_update": $("#forgot_password_check_edit").val(),
@@ -756,43 +871,24 @@ var dataPermission = function () {
             ]
         })
     }
-    if (setting_check_all) {
-        data.push({
-            name: "setting",
-            permission: [
-                {
-                    "is_all": $("#setting_check_all").val(),
-                    "name":"Setting",
-                },
-            ]
-        });
-    }
+   
     // block roles
     let role_checkbox = $('.role_checkbox').filter(':checked').length;
-    let role_check_all = $('#role_check_all').filter(':checked').length;
     if (role_checkbox) {
         data.push({
             name: "role Permission",
             permission: [
                 {
-                    "name":"Role Permission",
+                    "icon":"la la-key",
+                    "name":"lang.role_permission",
+                    "url":"role",
+                    "is_all": $("#role_check_all").val(),
                     "is_view": $("#role_check_view").val(),
                     "is_create": $("#role_check_add").val(),
                     "is_update": $("#role_check_edit").val(),
                     "is_delete": $("#role_check_delete").val(),
                     "is_print": $("#role_check_print").val(),
                     "is_export": $("#role_check_export").val(),
-                },  
-            ]
-        });
-    }
-    if (role_check_all) {
-        data.push({
-            name: "role",
-            permission: [
-                {
-                    "is_all": $("#role_check_all").val(),
-                    "name":"Role",
                 },  
             ]
         });
