@@ -147,7 +147,7 @@ class RolePermissionSeeder extends Seeder
                 "name"=>"lang.employee_salary",
                 "sub_menu_id"=>"10",
                 "menu_id"=>"11",
-                "url"=>"payroll/preview",
+                "url"=>"payroll/review",
                 "is_view"=>"1",
                 "is_create"=>"1",
                 "is_update"=>"1",

@@ -147,7 +147,7 @@
                                 <label>@lang('lang.position')<span class="text-danger">*</span></label>
                                 <select class="form-control hr-select2-option requered @error('position_id') is-invalid @enderror" name="position_id" id="position_id" required>
                                     <option selected disabled value=""> -- @lang('lang.select')--</option>
-                                    @foreach ($position as $positions )
+                                    @foreach ($position as $positions)
                                         <option value="{{ $positions->id }}">{{Helper::getLang() == 'en' ? $positions->name_english : $positions->name_khmer}}</option>
                                     @endforeach
                                 </select>
@@ -322,7 +322,7 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label>@lang('lang.ethnicity')</label>
-                                <input class="form-control" type="number" id="ethnicity" name="ethnicity" value="{{old('ethnicity')}}">
+                                <input class="form-control" type="text" id="ethnicity" name="ethnicity" value="{{old('ethnicity')}}">
                             </div>
                         </div>
                         <div class="col-sm-4">
@@ -384,7 +384,7 @@
                         </div>
                     </div>
 
-                     {{-- NSSF infor --}}
+                    {{-- NSSF infor --}}
                     <div class="form-group col-md-12 col-12" element="div" bp-field-wrapper="true" bp-field-name="Identity" bp-field-type="custom_html">
                         <label class="navbar-brand custom-navbar-brand mb-0" style="width: 100%; background: #dfe6e9; padding: 6px;font-size: 20px;font-weight: normal !important;">@lang('lang.nssf_infor')</label>
                     </div>

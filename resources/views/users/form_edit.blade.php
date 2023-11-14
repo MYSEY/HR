@@ -311,7 +311,7 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label>@lang('lang.ethnicity')</label>
-                                <input class="form-control" type="number" id="e_ethnicity" name="ethnicity" value="{{old('ethnicity')}}">
+                                <input class="form-control" type="text" id="e_ethnicity" name="ethnicity" value="{{old('ethnicity')}}">
                             </div>
                         </div>
                         <div class="col-sm-4">
