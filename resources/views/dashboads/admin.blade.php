@@ -325,92 +325,97 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-12 col-lg-6 col-xl-4 d-flex">
-                <div class="card flex-fill">
-                    <div class="card-body">
-                        <h4 class="card-title">@lang('lang.employee')</h4>
-                        <div class="statistics">
-                            <div class="row">
-                                <div class="col-md-6 col-6 text-center">
-                                    <div class="stats-box mb-4">
-                                        <p>@lang('lang.total_employee')</p>
-                                        <h3 id="total-staff"></h3>
+            @if (permissionAccess("2","is_dashboard")->is_dashboard["is_employee"] == "1")
+                <div class="col-md-12 col-lg-6 col-xl-4 d-flex">
+                    <div class="card flex-fill">
+                        <div class="card-body">
+                            <h4 class="card-title">@lang('lang.employee')</h4>
+                            <div class="statistics">
+                                <div class="row">
+                                    <div class="col-md-6 col-6 text-center">
+                                        <div class="stats-box mb-4">
+                                            <p>@lang('lang.total_employee')</p>
+                                            <h3 id="total-staff"></h3>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-6 text-center">
+                                        <div class="stats-box mb-4">
+                                            <p>@lang('lang.total_female')</p>
+                                            <h3 id="total-female">0</h3>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="col-md-6 col-6 text-center">
-                                    <div class="stats-box mb-4">
-                                        <p>@lang('lang.total_female')</p>
-                                        <h3 id="total-female">0</h3>
+                            </div>
+                            <div class="progress mb-4">
+                                <div class="progress-bar bg-purple" role="progressbar" style="width: 30%" aria-valuenow="30"
+                                    aria-valuemin="0" aria-valuemax="100"><span id="percentage-interview"></span></div>
+                                <div class="progress-bar bg-success" role="progressbar" style="width: 22%" aria-valuenow="18"
+                                    aria-valuemin="0" aria-valuemax="100"><span id="percantage-probation"></span></div>
+                                <div class="progress-bar bg-text-info" role="progressbar" style="width: 24%" aria-valuenow="12"
+                                    aria-valuemin="0" aria-valuemax="100"><span id="percantage-fdc"></span></div>
+                                <div class="progress-bar bg-danger" role="progressbar" style="width: 26%" aria-valuenow="14"
+                                    aria-valuemin="0" aria-valuemax="100"><span id="percantage-udc"></span></div>
+                            </div>
+                            <div>
+                                <p><i class="fa fa-dot-circle-o text-purple me-2"></i>@lang('lang.up-coming')<span
+                                        id="total-interview" class="float-end">0</span></p>
+                                <p><i class="fa fa-dot-circle-o text-success me-2"></i>@lang('lang.probation')<span
+                                        id="total-probation" class="float-end">0</span></p>
+                                <p><i class="fa fa-dot-circle-o text-info me-2"></i>@lang('lang.fdc')<span
+                                        id="total-fdc" class="float-end">0</span></p>
+                                <p><i class="fa fa-dot-circle-o text-danger me-2"></i>@lang('lang.udc') <span
+                                        id="total-udc" class="float-end">0</span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endif
+            @if (permissionAccess("2","is_dashboard")->is_dashboard["is_age_of_employee"] == "1")
+                <div class="col-md-12 col-lg-12 col-xl-4 d-flex">
+                    <div class="card flex-fill dash-statistics">
+                        <div class="card-body">
+                            <h5 class="card-title">@lang('lang.age_of_employee')</h5>
+                            <p><i class="fa fa-dot-circle-o text-info"></i> <span class="me-2">@lang('lang.age')</span></p>
+                            <div class="stats-list">
+                                <div class="stats-info">
+                                    <p>18 - 24 <strong><small id="total-age-18">0</small></strong></p>
+                                    <div class="progress">
+                                        <div class="progress-bar bg-success" role="progressbar" id="progressbar-18" aria-valuemin="0"></div>
+                                    </div>
+                                </div>
+                                <div class="stats-info">
+                                    <p>25 - 44 <strong id="total-age-25">0</strong></p>
+                                    <div class="progress">
+                                        <div class="progress-bar bg-info" role="progressbar" id="progressbar-25" aria-valuemin="0"></div>
+                                    </div>
+                                </div>
+                                <div class="stats-info">
+                                    <p>45 - 60 <strong id="total-age-45">0</strong></p>
+                                    <div class="progress">
+                                        <div class="progress-bar bg-danger" role="progressbar"
+                                        id="progressbar-45" aria-valuemin="0"></div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="progress mb-4">
-                            <div class="progress-bar bg-purple" role="progressbar" style="width: 30%" aria-valuenow="30"
-                                aria-valuemin="0" aria-valuemax="100"><span id="percentage-interview"></span></div>
-                            <div class="progress-bar bg-success" role="progressbar" style="width: 22%" aria-valuenow="18"
-                                aria-valuemin="0" aria-valuemax="100"><span id="percantage-probation"></span></div>
-                            <div class="progress-bar bg-text-info" role="progressbar" style="width: 24%" aria-valuenow="12"
-                                aria-valuemin="0" aria-valuemax="100"><span id="percantage-fdc"></span></div>
-                            <div class="progress-bar bg-danger" role="progressbar" style="width: 26%" aria-valuenow="14"
-                                aria-valuemin="0" aria-valuemax="100"><span id="percantage-udc"></span></div>
-                        </div>
-                        <div>
-                            <p><i class="fa fa-dot-circle-o text-purple me-2"></i>@lang('lang.up-coming')<span
-                                    id="total-interview" class="float-end">0</span></p>
-                            <p><i class="fa fa-dot-circle-o text-success me-2"></i>@lang('lang.probation')<span
-                                    id="total-probation" class="float-end">0</span></p>
-                            <p><i class="fa fa-dot-circle-o text-info me-2"></i>@lang('lang.fdc')<span
-                                    id="total-fdc" class="float-end">0</span></p>
-                            <p><i class="fa fa-dot-circle-o text-danger me-2"></i>@lang('lang.udc') <span
-                                    id="total-udc" class="float-end">0</span></p>
-                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-12 col-lg-12 col-xl-4 d-flex">
-                <div class="card flex-fill dash-statistics">
-                    <div class="card-body">
-                        <h5 class="card-title">@lang('lang.age_of_employee')</h5>
-                        <p><i class="fa fa-dot-circle-o text-info"></i> <span class="me-2">@lang('lang.age')</span></p>
-                        <div class="stats-list">
-                            <div class="stats-info">
-                                <p>18 - 24 <strong><small id="total-age-18">0</small></strong></p>
-                                <div class="progress">
-                                    <div class="progress-bar bg-success" role="progressbar" id="progressbar-18" aria-valuemin="0"></div>
-                                </div>
+            @endif
+            @if (permissionAccess("2","is_dashboard")->is_dashboard["is_birthday_reminder"] == "1")
+                <div class="col-md-12 col-lg-6 col-xl-4 d-flex">
+                    <div class="card flex-fill">
+                        <div class="card-body">
+                            <h4 class="card-title">@lang('lang.birthday_reminder') <span class="bg-inverse-danger ms-2" id="total-date-birthday">0</span></h4>
+                            <div class="card-detail">
+                                <div id="birthday-staff" style="width: -webkit-fill-available"></div>
                             </div>
-                            <div class="stats-info">
-                                <p>25 - 44 <strong id="total-age-25">0</strong></p>
-                                <div class="progress">
-                                    <div class="progress-bar bg-info" role="progressbar" id="progressbar-25" aria-valuemin="0"></div>
-                                </div>
-                            </div>
-                            <div class="stats-info">
-                                <p>45 - 60 <strong id="total-age-45">0</strong></p>
-                                <div class="progress">
-                                    <div class="progress-bar bg-danger" role="progressbar"
-                                    id="progressbar-45" aria-valuemin="0"></div>
-                                </div>
+                            <div class="load-more text-center" id="btn-more">
+                                <a class="text-dark" href="{{ url('/users/birthday') }}">@lang('lang.more')</a>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            
-            <div class="col-md-12 col-lg-6 col-xl-4 d-flex">
-                <div class="card flex-fill">
-                    <div class="card-body">
-                        <h4 class="card-title">@lang('lang.birthday_reminder') <span class="bg-inverse-danger ms-2" id="total-date-birthday">0</span></h4>
-                        <div class="card-detail">
-                            <div id="birthday-staff" style="width: -webkit-fill-available"></div>
-                        </div>
-                        <div class="load-more text-center" id="btn-more">
-                            <a class="text-dark" href="{{ url('/users/birthday') }}">@lang('lang.more')</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            @endif
         </div>
         @include('dashboads.chart_board')
         <?php 
@@ -820,7 +825,9 @@
                 options: option,
                 plugins: [ChartDataLabels]
             }
-            new Chart(db.name, dataChart);
+            if ($("#access_staff_take_leave").val() ==1) {
+                new Chart(db.name, dataChart);
+            }
         });
     }
 
@@ -927,7 +934,9 @@
             options: option,
             plugins: [ChartDataLabels]
         }
-        new Chart('HRMS_dashboards', dataChart);
+        if ($("#access_HRMS_dashboards").val() ==1) {
+            new Chart('HRMS_dashboards', dataChart);
+        }
     }
 
     function dashboadAchieveBranch(datas) {
@@ -1070,7 +1079,9 @@
             options: option,
             plugins: [ChartDataLabels]
         }
-        new Chart('achived_by_branches', dataChart);
+        if ($("#access_achived_by_branches").val() ==1) {
+            new Chart('achived_by_branches', dataChart);  
+        }
     }
 
     function dashboardStaffResign(datas) {
@@ -1155,7 +1166,9 @@
             options: option,
             plugins: [ChartDataLabels]
         }
-        new Chart('staff_resignation', dataChart);
+        if ($("#access_staff_resignation").val() == 1) {
+            new Chart('staff_resignation', dataChart);
+        }
     }
 
     function dascboardReasonOffStaff(datas) {
@@ -1263,7 +1276,9 @@
             options: option,
             plugins: [ChartDataLabels]
         }
-        new Chart("reasons_staff_resignation", dataChart);
+        if ($("#access_reasons_staff_resignation").val() == 1) {
+            new Chart("reasons_staff_resignation", dataChart);
+        }
     }
 
     function dashboardTypeOfStaff(datas) {
@@ -1406,7 +1421,9 @@
             options: option,
             plugins: [ChartDataLabels]
         }
-        new Chart('type_of_staff', dataChart);
+        if ($("#access_type_of_staff").val() == 1) {
+            new Chart('type_of_staff', dataChart);
+        }
     }
 
     function dashboardTrainingInternal(datas){
@@ -1485,7 +1502,9 @@
             options: optionInternal,
             plugins: [ChartDataLabels]
         }
-        new Chart('staff_Training_by_branch_internal', dataChartInternal);
+        if ($("#access_staff_Training_by_branch_internal").val() == 1) {
+            new Chart('staff_Training_by_branch_internal', dataChartInternal);
+        }
     }
 
     function dashboardTrainingExternal(datas){
@@ -1565,7 +1584,10 @@
             options: optionExternal,
             plugins: [ChartDataLabels]
         }
-        new Chart('staff_Training_by_branch_external', dataChartExternal);
+        if ($("#access_staff_Training_by_branch_external").val() == 1) {
+            new Chart('staff_Training_by_branch_external', dataChartExternal);
+        }
+       
     }
     function mergeEmployeeArrays(data) {
         let mergedEmployeeArray = [];
