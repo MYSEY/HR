@@ -91,26 +91,27 @@ class UserController extends Controller
             $dataResign = User::where('role_id',Auth::user()->role_id)->whereIn('emp_status', ['3','4','5','6','7','8','9'])->with('department')->get();
         }
        
-        return view('users.index',compact('data',
-                                            'role',
-                                            'position',
-                                            'department',
-                                            'optionStatus',
-                                            'autoEmpId',
-                                            'optionGender',
-                                            'branch',
-                                            'optionIdentityType', 
-                                            'province',
-                                            'bank',
-                                            'optionPositionType',
-                                            'optionLoan',
-                                            'optionSpouse',
-                                            'dataProbation',
-                                            'dataFDC',
-                                            'dataUDC',
-                                            'dataCanContract',
-                                            'dataResign'
-                                        ));
+        return view('users.index',compact(
+            'data',
+            'role',
+            'position',
+            'department',
+            'optionStatus',
+            'autoEmpId',
+            'optionGender',
+            'branch',
+            'optionIdentityType', 
+            'province',
+            'bank',
+            'optionPositionType',
+            'optionLoan',
+            'optionSpouse',
+            'dataProbation',
+            'dataFDC',
+            'dataUDC',
+            'dataCanContract',
+            'dataResign'
+        ));
     }
 
     public function formCreate() {
@@ -128,20 +129,20 @@ class UserController extends Controller
         $province = Province::all();
         $bank = Bank::all();
         return view('users.form_create',compact(
-                                            'role',
-                                            'position',
-                                            'department',
-                                            'optionStatus',
-                                            'autoEmpId',
-                                            'optionGender',
-                                            'branch',
-                                            'optionIdentityType', 
-                                            'province',
-                                            'bank',
-                                            'optionPositionType',
-                                            'optionLoan',
-                                            'optionSpouse',
-                                        ));
+            'role',
+            'position',
+            'department',
+            'optionStatus',
+            'autoEmpId',
+            'optionGender',
+            'branch',
+            'optionIdentityType', 
+            'province',
+            'bank',
+            'optionPositionType',
+            'optionLoan',
+            'optionSpouse',
+        ));
     }
     public function formEdit() {
         return view('users.form_edit');
