@@ -27,6 +27,7 @@
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Role: activate to sort column ascending" style="width: 80.8125px;">@lang('lang.salary_increase')</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Role: activate to sort column ascending" style="width: 80.8125px;">@lang('lang.phone_allowance')</th>
                                             <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending" style="width: 87.1125px;">@lang('lang.join_date')</th>
+                                            <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Past Date: activate to sort column ascending" style="width: 87.1125px;">@lang('lang.past_date')</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Role: activate to sort column ascending" style="width: 135.163px;">@lang('lang.loan')</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Role: activate to sort column ascending" style="width: 135.163px;">@lang('lang.status')</th>
                                             <th class="text-end no-sort sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Action: activate to sort column ascending" style="width: 50.825px;">@lang('lang.action')</th>
@@ -64,9 +65,10 @@
                                                         <span class="badge bg-inverse-success">{{ $item->role == null ? "" : $item->role->role_name }}</span>
                                                     </td>
                                                     <td>$<a href="#">{{$item->basic_salary}}</a></td>
-                                                    <td>$<a href="#">{{$item->salary_increas}}</a></td>
+                                                    <td>$<a href="#">{{$item->salary_increas == null ? '0.00' : $item->salary_increas}}</a></td>
                                                     <td>$<a href="#">{{$item->phone_allowance == null ? '00' : $item->phone_allowance}}</a></td>
                                                     <td>{{$item->joinOfDate}}</td>
+                                                    <td>{{$item->PassDate}}</td>
                                                     <td>
                                                         @if ($item->is_loan == '1')
                                                             <span style="font-size: 13px" class="badge bg-inverse-danger">Yes</span>
@@ -75,14 +77,14 @@
                                                         @endif
                                                     </td>
                                                     <td>
-                                                        <div class="dropdown action-label">
-                                                            @if ($item->emp_status=='Upcoming')
-                                                                <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
-                                                                    <i class="fa fa-dot-circle-o text-success"></i>
-                                                                    <span>{{ $item->emp_status }}</span>
-                                                                </a>
-                                                            @endif
-                                                            @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer')
+                                                        @if (permissionAccess("5","is_update")->value == "1")
+                                                            <div class="dropdown action-label">
+                                                                @if ($item->emp_status=='Upcoming')
+                                                                    <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
+                                                                        <i class="fa fa-dot-circle-o text-success"></i>
+                                                                        <span>{{ $item->emp_status }}</span>
+                                                                    </a>
+                                                                @endif
                                                                 <div class="dropdown-menu dropdown-menu-right btn-emp-status" id="btn-emp-status">
                                                                     <input type="text" name="" class="join_date" value="{{$item == null ? "" : $item->date_of_commencement}}" hidden>
                                                                     <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-id="Probation" href="#">
@@ -92,20 +94,30 @@
                                                                         <i class="fa fa-dot-circle-o text-danger"></i>@lang('lang.cancel')
                                                                     </a>
                                                                 </div>
-                                                            @endif
-                                                        </div>
+                                                            </div>
+                                                        @else
+                                                            <a class="btn btn-white btn-sm btn-rounded" href="#">
+                                                                <i class="fa fa-dot-circle-o text-success"></i> <span>{{ $item->emp_status }}</span>
+                                                            </a>
+                                                        @endif
                                                     </td>
                                                     <td class="text-end">
-                                                        <div class="dropdown dropdown-action">
-                                                            <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i  class="material-icons">more_vert</i></a>
-                                                            @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer')
+                                                        @if (permissionAccess("5","is_update")->value == "1" || permissionAccess("5","is_print")->value == "1" || permissionAccess("5","is_delete")->value == "1")
+                                                            <div class="dropdown dropdown-action">
+                                                                <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i  class="material-icons">more_vert</i></a>
                                                                 <div class="dropdown-menu dropdown-menu-right">
-                                                                    <a class="dropdown-item" href="{{url('user/form/edit',$item->id)}}" data-id="{{$item->id}}"><i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')</a>
-                                                                    <a class="dropdown-item btn_print" data-id="{{$item->id}}"><i class="fa fa-print fa-lg m-r-5"></i> @lang('lang.print')</a>
-                                                                    <a class="dropdown-item userDelete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_user"><i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
+                                                                    @if (permissionAccess("5","is_update")->value == "1")
+                                                                        <a class="dropdown-item" href="{{url('user/form/edit',$item->id)}}" data-id="{{$item->id}}"><i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')</a>
+                                                                    @endif
+                                                                    @if (permissionAccess("5","is_print")->value == "1")
+                                                                        <a class="dropdown-item btn_print" data-id="{{$item->id}}"><i class="fa fa-print fa-lg m-r-5"></i> @lang('lang.print')</a>
+                                                                    @endif
+                                                                    @if (permissionAccess("5","is_delete")->value == "1")
+                                                                        <a class="dropdown-item userDelete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_user"><i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
+                                                                    @endif
                                                                 </div>
-                                                            @endif
-                                                        </div>
+                                                            </div>
+                                                        @endif
                                                     </td>
                                                 </tr>
                                             @endforeach
@@ -199,57 +211,65 @@
                                                     <td>
                                                         <div class="dropdown action-label">
                                                             @if ($item->emp_status=='Probation')
-                                                                <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
-                                                                    <i class="fa fa-dot-circle-o text-success"></i>
-                                                                    <span>{{ $item->emp_status }}</span>
+                                                                @if (permissionAccess("5","is_update")->value == "1")
+                                                                    <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
+                                                                        <i class="fa fa-dot-circle-o text-success"></i>
+                                                                        <span>{{ $item->emp_status }}</span>
+                                                                    </a>
+                                                                @else
+                                                                    <a class="btn btn-white btn-sm btn-rounded" href="#">
+                                                                        <i class="fa fa-dot-circle-o text-success"></i> <span>{{ $item->emp_status }}</span>
+                                                                    </a>
+                                                                @endif
+                                                             @endif
+                                                            <div class="dropdown-menu dropdown-menu-right btn-emp-status" id="btn-emp-status">
+                                                                <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-Salary-Increase="{{$item->salary_increas == null ? "" : $item->salary_increas}}" data-id="1" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-success"></i> FDC-1
                                                                 </a>
-                                                            @endif
-                                                            @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer')
-                                                                <div class="dropdown-menu dropdown-menu-right btn-emp-status" id="btn-emp-status">
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-Salary-Increase="{{$item->salary_increas == null ? "" : $item->salary_increas}}" data-id="1" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-success"></i> FDC-1
-                                                                    </a>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="10" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-success"></i> FDC-2
-                                                                    </a>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="2" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-warning"></i> UDC
-                                                                    </a>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="3" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-danger"></i> Resignation
-                                                                    </a>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="4" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-danger"></i> Termination
-                                                                    </a>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="5" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-danger"></i> Death
-                                                                    </a>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="6" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-danger"></i> Retired
-                                                                    </a>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="7" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-danger"></i> Lay Off
-                                                                    </a>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="8" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-danger"></i> No need to input
-                                                                    </a>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="9" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-danger"></i> Failed Probation
-                                                                    </a>
-                                                                </div>
-                                                            @endif
+                                                                <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="10" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-success"></i> FDC-2
+                                                                </a>
+                                                                <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="2" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-warning"></i> UDC
+                                                                </a>
+                                                                <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="3" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-danger"></i> Resignation
+                                                                </a>
+                                                                <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="4" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-danger"></i> Termination
+                                                                </a>
+                                                                <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="5" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-danger"></i> Death
+                                                                </a>
+                                                                <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="6" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-danger"></i> Retired
+                                                                </a>
+                                                                <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="7" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-danger"></i> Lay Off
+                                                                </a>
+                                                                <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="8" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-danger"></i> No need to input
+                                                                </a>
+                                                                <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="9" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-danger"></i> Failed Probation
+                                                                </a>
+                                                            </div>
                                                         </div>
                                                     </td>
                                                     <td class="text-end">
-                                                        <div class="dropdown dropdown-action">
-                                                            <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i  class="material-icons">more_vert</i></a>
-                                                            @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer')
+                                                        @if (permissionAccess("5","is_update")->value == "1" || permissionAccess("5","is_delete")->value == "1")
+                                                            <div class="dropdown dropdown-action">
+                                                                <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i  class="material-icons">more_vert</i></a>
                                                                 <div class="dropdown-menu dropdown-menu-right">
-                                                                    <a class="dropdown-item" href="{{url('user/form/edit',$item->id)}}" data-id="{{$item->id}}"><i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')</a>
-                                                                    <a class="dropdown-item userDelete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_user"><i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
+                                                                    @if (permissionAccess("5","is_update")->value == "1")
+                                                                        <a class="dropdown-item" href="{{url('user/form/edit',$item->id)}}" data-id="{{$item->id}}"><i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')</a>
+                                                                    @endif
+                                                                    @if (permissionAccess("5","is_delete")->value == "1")
+                                                                        <a class="dropdown-item userDelete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_user"><i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
+                                                                    @endif
                                                                 </div>
-                                                            @endif
-                                                        </div>
+                                                            </div>
+                                                        @endif
                                                     </td>
                                                 </tr>
                                             @endforeach
@@ -346,64 +366,78 @@
                                                     </td>
                                                     <td>
                                                         <div class="dropdown action-label">
-                                                            @if ($item->emp_status=='1')
-                                                                <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
-                                                                    <i class="fa fa-dot-circle-o text-info"></i>
-                                                                    <span>FDC-1</span>
-                                                                </a>
-                                                            @elseif ($item->emp_status=='10')
-                                                                <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
-                                                                    <i class="fa fa-dot-circle-o text-info"></i>
-                                                                    <span>FDC-2</span>
-                                                                </a>
+                                                            @if (permissionAccess("5","is_update")->value == "1")
+                                                                @if ($item->emp_status=='1')
+                                                                    <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
+                                                                        <i class="fa fa-dot-circle-o text-info"></i>
+                                                                        <span>FDC-1</span>
+                                                                    </a>
+                                                                @elseif ($item->emp_status=='10')
+                                                                    <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
+                                                                        <i class="fa fa-dot-circle-o text-info"></i>
+                                                                        <span>FDC-2</span>
+                                                                    </a>
+                                                                @endif
+                                                            @else
+                                                                @if ($item->emp_status=='1')
+                                                                    <a class="btn btn-white btn-sm btn-rounded" href="#">
+                                                                        <i class="fa fa-dot-circle-o text-success"></i> <span>FDC-{{ $item->emp_status }}</span>
+                                                                    </a>
+                                                                @elseif ($item->emp_status=='10')
+                                                                    <a class="btn btn-white btn-sm btn-rounded" href="#">
+                                                                        <i class="fa fa-dot-circle-o text-success"></i> <span>FDC-2</span>
+                                                                    </a>
+                                                                @endif
                                                             @endif
                                                            
-                                                            @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer')
-                                                                <div class="dropdown-menu dropdown-menu-right btn-emp-status" id="btn-emp-status">
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="1" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-success"></i> FDC-1
-                                                                    </a>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="10" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-success"></i> FDC-2
-                                                                    </a>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="2" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-warning"></i> UDC
-                                                                    </a>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="3" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-danger"></i> Resignation
-                                                                    </a>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="4" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-danger"></i> Termination
-                                                                    </a>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="5" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-danger"></i> Death
-                                                                    </a>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="6" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-danger"></i> Retired
-                                                                    </a>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="7" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-danger"></i> Lay Off
-                                                                    </a>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="8" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-danger"></i> No need to input
-                                                                    </a>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="9" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-danger"></i> Failed Probation
-                                                                    </a>
-                                                                </div>
-                                                            @endif
+                                                            <div class="dropdown-menu dropdown-menu-right btn-emp-status" id="btn-emp-status">
+                                                                <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="1" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-success"></i> FDC-1
+                                                                </a>
+                                                                <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="10" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-success"></i> FDC-2
+                                                                </a>
+                                                                <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="2" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-warning"></i> UDC
+                                                                </a>
+                                                                <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="3" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-danger"></i> Resignation
+                                                                </a>
+                                                                <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="4" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-danger"></i> Termination
+                                                                </a>
+                                                                <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="5" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-danger"></i> Death
+                                                                </a>
+                                                                <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="6" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-danger"></i> Retired
+                                                                </a>
+                                                                <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="7" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-danger"></i> Lay Off
+                                                                </a>
+                                                                <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="8" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-danger"></i> No need to input
+                                                                </a>
+                                                                <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="9" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-danger"></i> Failed Probation
+                                                                </a>
+                                                            </div>
                                                         </div>
                                                     </td>
                                                     <td class="text-end">
-                                                        <div class="dropdown dropdown-action">
-                                                            <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i  class="material-icons">more_vert</i></a>
-                                                            @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer')
+                                                        @if (permissionAccess("5","is_update")->value == "1" || permissionAccess("5","is_delete")->value == "1")
+                                                            <div class="dropdown dropdown-action">
+                                                                <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i  class="material-icons">more_vert</i></a>
                                                                 <div class="dropdown-menu dropdown-menu-right">
-                                                                    <a class="dropdown-item" href="{{url('user/form/edit',$item->id)}}" data-id="{{$item->id}}"><i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')</a>
-                                                                    <a class="dropdown-item userDelete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_user"><i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
+                                                                    @if (permissionAccess("5","is_update")->value == "1")
+                                                                        <a class="dropdown-item" href="{{url('user/form/edit',$item->id)}}" data-id="{{$item->id}}"><i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')</a>
+                                                                    @endif
+                                                                    @if (permissionAccess("5","is_delete")->value == "1")
+                                                                        <a class="dropdown-item userDelete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_user"><i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
+                                                                    @endif
                                                                 </div>
-                                                            @endif
-                                                        </div>
+                                                            </div>
+                                                        @endif
                                                     </td>
                                                 </tr>
                                             @endforeach
@@ -442,6 +476,7 @@
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Mobile: activate to sort column ascending" style="width: 83.3625px;">@lang('lang.contact_number')</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Role: activate to sort column ascending" style="width: 80.8125px;">@lang('lang.role_name')</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Role: activate to sort column ascending" style="width: 80.8125px;">@lang('lang.basic_salary')</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Role: activate to sort column ascending" style="width: 80.8125px;">@lang('lang.salary_increase')</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Role: activate to sort column ascending" style="width: 80.8125px;">@lang('lang.phone_allowance')</th>
                                             <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending" style="width: 87.1125px;">@lang('lang.join_date')</th>
                                             <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending" style="width: 87.1125px;">@lang('lang.udc_date')</th>
@@ -482,6 +517,7 @@
                                                         <span class="badge bg-inverse-success">{{ $item->role == null ? "" : $item->role->role_name }}</span>
                                                     </td>
                                                     <td>$<a href="#">{{$item->basic_salary}}</a></td>
+                                                    <td>$<a href="#">{{$item->salary_increas == null ? '0.00' : $item->salary_increas}}</a></td>
                                                     <td>$<a href="#">{{$item->phone_allowance == null ? '00' : $item->phone_allowance}}</a></td>
                                                     <td>{{$item->joinOfDate}}</td>
                                                     <td>{{$item->UDCStartDate}}</td>
@@ -496,54 +532,56 @@
                                                     </td>
                                                     <td>
                                                         <div class="dropdown action-label">
-                                                            @if ($item->p_status=='2')
+                                                            @if (permissionAccess("5","is_update")->value == "1")
                                                                 <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
                                                                     <i class="fa fa-dot-circle-o text-dark"></i>
                                                                     <span>UDC</span>
                                                                 </a>
                                                             @else
-                                                                <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
-                                                                    <i class="fa fa-dot-circle-o text-dark"></i>
-                                                                    <span>UDC</span>
+                                                                <a class="btn btn-white btn-sm btn-rounded" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-success"></i> <span>UDC</span>
                                                                 </a>
                                                             @endif
-                                                            @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer')
-                                                                <div class="dropdown-menu dropdown-menu-right" id="btn-emp-status">
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="3" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-danger"></i> Resignation
-                                                                    </a>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="4" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-danger"></i> Termination
-                                                                    </a>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="5" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-danger"></i> Death
-                                                                    </a>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="6" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-danger"></i> Retired
-                                                                    </a>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="7" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-danger"></i> Lay Off
-                                                                    </a>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="8" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-danger"></i> No need to input
-                                                                    </a>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="9" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-danger"></i> Failed Probation
-                                                                    </a>
-                                                                </div>
-                                                            @endif
+                                                            
+                                                            <div class="dropdown-menu dropdown-menu-right" id="btn-emp-status">
+                                                                <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="3" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-danger"></i> Resignation
+                                                                </a>
+                                                                <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="4" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-danger"></i> Termination
+                                                                </a>
+                                                                <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="5" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-danger"></i> Death
+                                                                </a>
+                                                                <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="6" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-danger"></i> Retired
+                                                                </a>
+                                                                <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="7" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-danger"></i> Lay Off
+                                                                </a>
+                                                                <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="8" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-danger"></i> No need to input
+                                                                </a>
+                                                                <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="9" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-danger"></i> Failed Probation
+                                                                </a>
+                                                            </div>
                                                         </div>
                                                     </td>
                                                     <td class="text-end">
-                                                        <div class="dropdown dropdown-action">
-                                                            <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i  class="material-icons">more_vert</i></a>
-                                                            @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer')
+                                                        @if (permissionAccess("5","is_update")->value == "1" || permissionAccess("5","is_delete")->value == "1")
+                                                            <div class="dropdown dropdown-action">
+                                                                <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i  class="material-icons">more_vert</i></a>
                                                                 <div class="dropdown-menu dropdown-menu-right">
-                                                                    <a class="dropdown-item" href="{{url('user/form/edit',$item->id)}}" data-id="{{$item->id}}"><i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')</a>
-                                                                    <a class="dropdown-item userDelete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_user"><i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
+                                                                    @if (permissionAccess("5","is_update")->value == "1")
+                                                                        <a class="dropdown-item" href="{{url('user/form/edit',$item->id)}}" data-id="{{$item->id}}"><i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')</a>
+                                                                    @endif
+                                                                    @if (permissionAccess("5","is_delete")->value == "1")
+                                                                        <a class="dropdown-item userDelete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_user"><i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
+                                                                    @endif
                                                                 </div>
-                                                            @endif
-                                                        </div>
+                                                            </div>
+                                                        @endif
                                                     </td>
                                                 </tr>
                                             @endforeach
@@ -582,6 +620,7 @@
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Mobile: activate to sort column ascending" style="width: 83.3625px;">@lang('lang.contact_number')</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Role: activate to sort column ascending" style="width: 80.8125px;">@lang('lang.role_name')</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Role: activate to sort column ascending" style="width: 80.8125px;">@lang('lang.basic_salary')</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Role: activate to sort column ascending" style="width: 80.8125px;">@lang('lang.salary_increase')</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Role: activate to sort column ascending" style="width: 80.8125px;">@lang('lang.phone_allowance')</th>
                                             <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending" style="width: 87.1125px;">@lang('lang.join_date')</th>
                                             <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending" style="width: 87.1125px;">@lang('lang.resign_date')</th>
@@ -623,6 +662,7 @@
                                                         <span class="badge bg-inverse-success">{{ $item->role == null ? "" : $item->role->role_name }}</span>
                                                     </td>
                                                     <td>$<a href="#">{{$item->basic_salary}}</a></td>
+                                                    <td>$<a href="#">{{$item->salary_increas == null ? '0.00' : $item->salary_increas}}</a></td>
                                                     <td>$<a href="#">{{$item->phone_allowance == null ? '00' : $item->phone_allowance}}</a></td>
                                                     <td>{{$item->joinOfDate}}</td>
                                                     <td>{{$item->ResignDates}}</td>
@@ -658,15 +698,15 @@
                                                         </div>
                                                     </td>
                                                     <td class="text-end">
-                                                        <div class="dropdown dropdown-action">
-                                                            <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i  class="material-icons">more_vert</i></a>
-                                                            @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer')
+                                                        @if (permissionAccess("5","is_delete")->value == "1")
+                                                            <div class="dropdown dropdown-action">
+                                                                <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i  class="material-icons">more_vert</i></a>
                                                                 <div class="dropdown-menu dropdown-menu-right">
                                                                     {{-- <a class="dropdown-item userUpdate" data-id="{{$item->id}}"><i class="fa fa-pencil m-r-5"></i> Edit</a> --}}
                                                                     <a class="dropdown-item userDelete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_user"><i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
                                                                 </div>
-                                                            @endif
-                                                        </div>
+                                                            </div>
+                                                        @endif
                                                     </td>
                                                 </tr>
                                             @endforeach
@@ -705,6 +745,7 @@
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Mobile: activate to sort column ascending" style="width: 83.3625px;">@lang('lang.contact_number')</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Role: activate to sort column ascending" style="width: 80.8125px;">@lang('lang.role_name')</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Role: activate to sort column ascending" style="width: 80.8125px;">@lang('lang.basic_salary')</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Role: activate to sort column ascending" style="width: 80.8125px;">@lang('lang.salary_increase')</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Role: activate to sort column ascending" style="width: 80.8125px;">@lang('lang.phone_allowance')</th>
                                             <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending" style="width: 87.1125px;">@lang('lang.join_date')</th>
                                             <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending" style="width: 87.1125px;">@lang('lang.resign_date')</th>
@@ -746,6 +787,7 @@
                                                         <span class="badge bg-inverse-success">{{ $item->role == null ? "" : $item->role->role_name }}</span>
                                                     </td>
                                                     <td>$<a href="#">{{$item->basic_salary}}</a></td>
+                                                    <td>$<a href="#">{{$item->salary_increas == null ? '0.00' : $item->salary_increas}}</a></td>
                                                     <td>$<a href="#">{{$item->phone_allowance == null ? '00' : $item->phone_allowance}}</a></td>
                                                     <td>{{$item->joinOfDate}}</td>
                                                     <td>{{$item->ResignDates}}</td>
@@ -781,15 +823,15 @@
                                                         </div>
                                                     </td>
                                                     <td class="text-end">
-                                                        <div class="dropdown dropdown-action">
-                                                            <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i  class="material-icons">more_vert</i></a>
-                                                            @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer')
+                                                        @if (permissionAccess("5","is_delete")->value == "1")
+                                                            <div class="dropdown dropdown-action">
+                                                                <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i  class="material-icons">more_vert</i></a>
                                                                 <div class="dropdown-menu dropdown-menu-right">
                                                                     {{-- <a class="dropdown-item userUpdate" data-id="{{$item->id}}"><i class="fa fa-pencil m-r-5"></i> Edit</a> --}}
                                                                     <a class="dropdown-item userDelete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_user"><i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
                                                                 </div>
-                                                            @endif
-                                                        </div>
+                                                            </div>
+                                                        @endif
                                                     </td>
                                                 </tr>
                                             @endforeach
@@ -829,6 +871,7 @@
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Mobile: activate to sort column ascending" style="width: 83.3625px;">@lang('lang.contact_number')</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Role: activate to sort column ascending" style="width: 80.8125px;">@lang('lang.role_name')</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Role: activate to sort column ascending" style="width: 80.8125px;">@lang('lang.basic_salary')</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Role: activate to sort column ascending" style="width: 80.8125px;">@lang('lang.salary_increase')</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Role: activate to sort column ascending" style="width: 80.8125px;">@lang('lang.phone_allowance')</th>
                                             <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending" style="width: 87.1125px;">@lang('lang.join_date')</th>
                                             <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending" style="width: 87.1125px;">@lang('lang.past_date')</th>
@@ -869,6 +912,7 @@
                                                         <span class="badge bg-inverse-success">{{ $item->role == null ? "" : $item->role->role_name }}</span>
                                                     </td>
                                                     <td>$<a href="#">{{$item->basic_salary}}</a></td>
+                                                    <td>$<a href="#">{{$item->salary_increas == null ? '0.00' : $item->salary_increas}}</a></td>
                                                     <td>$<a href="#">{{$item->phone_allowance == null ? '00' : $item->phone_allowance}}</a></td>
                                                     <td>{{$item->joinOfDate}}</td>
                                                     <td>{{$item->PassDate}}</td>
@@ -882,57 +926,65 @@
                                                     <td>
                                                         <div class="dropdown action-label">
                                                             @if ($item->emp_status=='Probation')
-                                                                <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
-                                                                    <i class="fa fa-dot-circle-o text-success"></i>
-                                                                    <span>{{ $item->emp_status }}</span>
+                                                                @if (permissionAccess("5","is_update")->value == "1")
+                                                                    <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
+                                                                        <i class="fa fa-dot-circle-o text-success"></i>
+                                                                        <span>{{ $item->emp_status }}</span>
+                                                                    </a>
+                                                                @else
+                                                                    <a class="btn btn-white btn-sm btn-rounded" href="#">
+                                                                        <i class="fa fa-dot-circle-o text-success"></i> <span>{{ $item->emp_status }}</span>
+                                                                    </a>
+                                                                @endif
+                                                            @endif
+                                                            <div class="dropdown-menu dropdown-menu-right btn-emp-status" id="btn-emp-status">
+                                                                <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-Salary-Increase="{{$item->salary_increas == null ? "" : $item->salary_increas}}" data-id="1" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-success"></i> FDC-1
                                                                 </a>
-                                                            @endif
-                                                            @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer')
-                                                                <div class="dropdown-menu dropdown-menu-right btn-emp-status" id="btn-emp-status">
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-Salary-Increase="{{$item->salary_increas == null ? "" : $item->salary_increas}}" data-id="1" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-success"></i> FDC-1
-                                                                    </a>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="10" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-success"></i> FDC-2
-                                                                    </a>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="2" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-warning"></i> UDC
-                                                                    </a>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="3" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-danger"></i> Resignation
-                                                                    </a>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="4" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-danger"></i> Termination
-                                                                    </a>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="5" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-danger"></i> Death
-                                                                    </a>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="6" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-danger"></i> Retired
-                                                                    </a>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="7" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-danger"></i> Lay Off
-                                                                    </a>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="8" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-danger"></i> No need to input
-                                                                    </a>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="9" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-danger"></i> Failed Probation
-                                                                    </a>
-                                                                </div>
-                                                            @endif
+                                                                <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="10" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-success"></i> FDC-2
+                                                                </a>
+                                                                <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="2" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-warning"></i> UDC
+                                                                </a>
+                                                                <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="3" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-danger"></i> Resignation
+                                                                </a>
+                                                                <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="4" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-danger"></i> Termination
+                                                                </a>
+                                                                <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="5" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-danger"></i> Death
+                                                                </a>
+                                                                <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="6" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-danger"></i> Retired
+                                                                </a>
+                                                                <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="7" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-danger"></i> Lay Off
+                                                                </a>
+                                                                <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="8" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-danger"></i> No need to input
+                                                                </a>
+                                                                <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="9" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-danger"></i> Failed Probation
+                                                                </a>
+                                                            </div>
                                                         </div>
                                                     </td>
                                                     <td class="text-end">
-                                                        <div class="dropdown dropdown-action">
-                                                            <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i  class="material-icons">more_vert</i></a>
-                                                            @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer')
+                                                        @if (permissionAccess("5","is_update")->value == "1" || permissionAccess("5","is_delete")->value == "1")
+                                                            <div class="dropdown dropdown-action">
+                                                                <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i  class="material-icons">more_vert</i></a>
                                                                 <div class="dropdown-menu dropdown-menu-right">
-                                                                    <a class="dropdown-item userUpdate" data-id="{{$item->id}}"><i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')</a>
-                                                                    <a class="dropdown-item userDelete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_user"><i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
+                                                                    @if (permissionAccess("5","is_update")->value == "1")
+                                                                        <a class="dropdown-item userUpdate" data-id="{{$item->id}}"><i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')</a>
+                                                                    @endif
+                                                                    @if (permissionAccess("5","is_delete")->value == "1")
+                                                                        <a class="dropdown-item userDelete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_user"><i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
+                                                                    @endif
                                                                 </div>
-                                                            @endif
-                                                        </div>
+                                                            </div>
+                                                        @endif
                                                     </td>
                                                 </tr>
                                             @endforeach
@@ -971,6 +1023,7 @@
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Mobile: activate to sort column ascending" style="width: 83.3625px;">@lang('lang.contact_number')</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Role: activate to sort column ascending" style="width: 80.8125px;">@lang('lang.role_name')</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Role: activate to sort column ascending" style="width: 80.8125px;">@lang('lang.basic_salary')</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Role: activate to sort column ascending" style="width: 80.8125px;">@lang('lang.salary_increase')</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Role: activate to sort column ascending" style="width: 80.8125px;">@lang('lang.phone_allowance')</th>
                                             <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending" style="width: 87.1125px;">@lang('lang.join_date')</th>
                                             <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending" style="width: 87.1125px;">@lang('lang.fdc_start_date')</th>
@@ -1012,6 +1065,7 @@
                                                         <span class="badge bg-inverse-success">{{ $item->role == null ? "" : $item->role->role_name }}</span>
                                                     </td>
                                                     <td>$<a href="#">{{$item->basic_salary}}</a></td>
+                                                    <td>$<a href="#">{{$item->salary_increas == null ? '0.00' : $item->salary_increas}}</a></td>
                                                     <td>$<a href="#">{{$item->phone_allowance == null ? '00' : $item->phone_allowance}}</a></td>
                                                     <td>{{$item->joinOfDate}}</td>
                                                     <td>{{$item->FDCStartDate}}</td>
@@ -1027,63 +1081,77 @@
                                                     </td>
                                                     <td>
                                                         <div class="dropdown action-label">
-                                                            @if ($item->emp_status=='1')
-                                                                <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
-                                                                    <i class="fa fa-dot-circle-o text-info"></i>
-                                                                    <span>FDC-1</span>
-                                                                </a>
-                                                            @elseif ($item->emp_status=='10')
-                                                                <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
-                                                                    <i class="fa fa-dot-circle-o text-info"></i>
-                                                                    <span>FDC-2</span>
-                                                                </a>
+                                                            @if (permissionAccess("5","is_update")->value == "1")
+                                                                @if ($item->emp_status=='1')
+                                                                    <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
+                                                                        <i class="fa fa-dot-circle-o text-info"></i>
+                                                                        <span>FDC-1</span>
+                                                                    </a>
+                                                                @elseif ($item->emp_status=='10')
+                                                                    <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
+                                                                        <i class="fa fa-dot-circle-o text-info"></i>
+                                                                        <span>FDC-2</span>
+                                                                    </a>
+                                                                @endif
+                                                            @else
+                                                                @if ($item->emp_status=='1')
+                                                                    <a class="btn btn-white btn-sm btn-rounded" href="#">
+                                                                        <i class="fa fa-dot-circle-o text-success"></i> <span>FDC-{{ $item->emp_status }}</span>
+                                                                    </a>
+                                                                @elseif ($item->emp_status=='10')
+                                                                    <a class="btn btn-white btn-sm btn-rounded" href="#">
+                                                                        <i class="fa fa-dot-circle-o text-success"></i> <span>FDC-2</span>
+                                                                    </a>
+                                                                @endif
                                                             @endif
-                                                            @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer')
-                                                                <div class="dropdown-menu dropdown-menu-right btn-emp-status" id="btn-emp-status">
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="1" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-success"></i> FDC-1
-                                                                    </a>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="10" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-success"></i> FDC-2
-                                                                    </a>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="2" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-warning"></i> UDC
-                                                                    </a>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="3" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-danger"></i> Resignation
-                                                                    </a>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="4" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-danger"></i> Termination
-                                                                    </a>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="5" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-danger"></i> Death
-                                                                    </a>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="6" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-danger"></i> Retired
-                                                                    </a>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="7" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-danger"></i> Lay Off
-                                                                    </a>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="8" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-danger"></i> No need to input
-                                                                    </a>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="9" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-danger"></i> Failed Probation
-                                                                    </a>
-                                                                </div>
-                                                            @endif
+                                                            <div class="dropdown-menu dropdown-menu-right btn-emp-status" id="btn-emp-status">
+                                                                <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="1" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-success"></i> FDC-1
+                                                                </a>
+                                                                <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="10" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-success"></i> FDC-2
+                                                                </a>
+                                                                <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="2" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-warning"></i> UDC
+                                                                </a>
+                                                                <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="3" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-danger"></i> Resignation
+                                                                </a>
+                                                                <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="4" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-danger"></i> Termination
+                                                                </a>
+                                                                <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="5" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-danger"></i> Death
+                                                                </a>
+                                                                <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="6" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-danger"></i> Retired
+                                                                </a>
+                                                                <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="7" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-danger"></i> Lay Off
+                                                                </a>
+                                                                <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="8" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-danger"></i> No need to input
+                                                                </a>
+                                                                <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="9" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-danger"></i> Failed Probation
+                                                                </a>
+                                                            </div>
                                                         </div>
                                                     </td>
                                                     <td class="text-end">
-                                                        <div class="dropdown dropdown-action">
-                                                            <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i  class="material-icons">more_vert</i></a>
-                                                            @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer')
+                                                        @if (permissionAccess("5","is_update")->value == "1" || permissionAccess("5","is_delete")->value == "1")
+                                                            <div class="dropdown dropdown-action">
+                                                                <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i  class="material-icons">more_vert</i></a>
                                                                 <div class="dropdown-menu dropdown-menu-right">
-                                                                    <a class="dropdown-item userUpdate" data-id="{{$item->id}}"><i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')</a>
-                                                                    <a class="dropdown-item userDelete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_user"><i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
+                                                                    @if (permissionAccess("5","is_update")->value == "1")
+                                                                        <a class="dropdown-item userUpdate" data-id="{{$item->id}}"><i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')</a>
+                                                                    @endif
+                                                                    @if (permissionAccess("5","is_delete")->value == "1")
+                                                                        <a class="dropdown-item userDelete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_user"><i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
+                                                                    @endif
                                                                 </div>
-                                                            @endif
-                                                        </div>
+                                                            </div>
+                                                        @endif
                                                     </td>
                                                 </tr>
                                             @endforeach
@@ -1122,6 +1190,7 @@
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Mobile: activate to sort column ascending" style="width: 83.3625px;">@lang('lang.contact_number')</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Role: activate to sort column ascending" style="width: 80.8125px;">@lang('lang.role_name')</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Role: activate to sort column ascending" style="width: 80.8125px;">@lang('lang.basic_salary')</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Role: activate to sort column ascending" style="width: 80.8125px;">@lang('lang.salary_increase')</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Role: activate to sort column ascending" style="width: 80.8125px;">@lang('lang.phone_allowance')</th>
                                             <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending" style="width: 87.1125px;">@lang('lang.join_date')</th>
                                             <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending" style="width: 87.1125px;">@lang('lang.udc_date')</th>
@@ -1162,6 +1231,7 @@
                                                         <span class="badge bg-inverse-success">{{ $item->role == null ? "" : $item->role->role_name }}</span>
                                                     </td>
                                                     <td>$<a href="#">{{$item->basic_salary}}</a></td>
+                                                    <td>$<a href="#">{{$item->salary_increas == null ? '0.00' : $item->salary_increas}}</a></td>
                                                     <td>$<a href="#">{{$item->phone_allowance == null ? '00' : $item->phone_allowance}}</a></td>
                                                     <td>{{$item->joinOfDate}}</td>
                                                     <td>{{$item->FDCStartDate}}</td>
@@ -1177,48 +1247,56 @@
                                                     <td>
                                                         <div class="dropdown action-label">
                                                             @if ($item->emp_status=='2')
-                                                                <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
-                                                                    <i class="fa fa-dot-circle-o text-dark"></i>
-                                                                    <span>UDC</span>
+                                                                @if (permissionAccess("5","is_update")->value == "1")
+                                                                    <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
+                                                                        <i class="fa fa-dot-circle-o text-dark"></i>
+                                                                        <span>UDC</span>
+                                                                    </a>
+                                                                @else
+                                                                    <a class="btn btn-white btn-sm btn-rounded" href="#">
+                                                                        <i class="fa fa-dot-circle-o text-success"></i> <span>UDC</span>
+                                                                    </a>
+                                                                @endif
+                                                            @endif
+                                                            <div class="dropdown-menu dropdown-menu-right" id="btn-emp-status">
+                                                                <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="3" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-danger"></i> Resignation
                                                                 </a>
-                                                            @endif
-                                                            @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer')
-                                                                <div class="dropdown-menu dropdown-menu-right" id="btn-emp-status">
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="3" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-danger"></i> Resignation
-                                                                    </a>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="4" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-danger"></i> Termination
-                                                                    </a>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="5" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-danger"></i> Death
-                                                                    </a>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="6" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-danger"></i> Retired
-                                                                    </a>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="7" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-danger"></i> Lay Off
-                                                                    </a>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="8" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-danger"></i> No need to input
-                                                                    </a>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="9" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-danger"></i> Failed Probation
-                                                                    </a>
-                                                                </div>
-                                                            @endif
+                                                                <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="4" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-danger"></i> Termination
+                                                                </a>
+                                                                <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="5" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-danger"></i> Death
+                                                                </a>
+                                                                <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="6" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-danger"></i> Retired
+                                                                </a>
+                                                                <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="7" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-danger"></i> Lay Off
+                                                                </a>
+                                                                <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="8" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-danger"></i> No need to input
+                                                                </a>
+                                                                <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="9" href="#">
+                                                                    <i class="fa fa-dot-circle-o text-danger"></i> Failed Probation
+                                                                </a>
+                                                            </div>
                                                         </div>
                                                     </td>
                                                     <td class="text-end">
-                                                        <div class="dropdown dropdown-action">
-                                                            <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i  class="material-icons">more_vert</i></a>
-                                                            @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer')
+                                                        @if (permissionAccess("5","is_update")->value == "1" || permissionAccess("5","is_delete")->value == "1")
+                                                            <div class="dropdown dropdown-action">
+                                                                <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i  class="material-icons">more_vert</i></a>
                                                                 <div class="dropdown-menu dropdown-menu-right">
-                                                                    <a class="dropdown-item userUpdate" data-id="{{$item->id}}"><i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')</a>
-                                                                    <a class="dropdown-item userDelete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_user"><i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
+                                                                    @if (permissionAccess("5","is_update")->value == "1")
+                                                                        <a class="dropdown-item userUpdate" data-id="{{$item->id}}"><i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')</a>
+                                                                    @endif
+                                                                    @if (permissionAccess("5","is_delete")->value == "1")
+                                                                        <a class="dropdown-item userDelete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_user"><i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
+                                                                    @endif
                                                                 </div>
-                                                            @endif
-                                                        </div>
+                                                            </div>
+                                                        @endif
                                                     </td>
                                                 </tr>
                                             @endforeach
@@ -1349,6 +1427,8 @@
         });
     });
     function showDatabytab(tab, filter){
+        let is_update = "{{ Helper::permissionAccess('5','is_update') }}";
+        let is_delete = "{{ Helper::permissionAccess('5','is_delete') }}";
         var localeLanguage = '{{ config('app.locale') }}';
         let data = {
             "_token": "{{ csrf_token() }}",
@@ -1364,7 +1444,7 @@
         }else if (tab == 5) {
             data.emp_status = "resign_reason";
         }else if (tab == 6) {
-            data.emp_status = "cancel";
+            data.emp_status = "Cancel";
         };
         data.employee_id = filter.number_employee ? filter.number_employee : null;
         data.employee_name = filter.employee_name ? filter.employee_name: null;
@@ -1380,7 +1460,9 @@
                 var data = response.data;
                 var tr = '';
                 if (data) {
+                    let index = 0;
                     data.map((emp) => {
+                        index++;
                         let tag_a = '';
                         if (emp.profile != null) {
                             tag_a = '<a href="{{asset("/uploads/images")}}/'+(emp.profile)+'" class="avatar">'+
@@ -1453,24 +1535,32 @@
                                     '<i class="fa fa-dot-circle-o text-danger"></i> @lang("lang.cancel")'+
                                 '</a>'+
                             '</div>';
-                            btn_edit = '<a class="dropdown-item userUpdate" data-id="'+(emp.id)+'"><i class="fa fa-pencil m-r-5"></i> @lang("lang.edit")</a>';
+                            if (is_update == 1) {
+                                btn_edit = '<a class="dropdown-item userUpdate" data-id="'+(emp.id)+'"><i class="fa fa-pencil m-r-5"></i> @lang("lang.edit")</a>';
+                            }
                         }else if (emp.emp_status == "Probation") {
                             emp_status = "Probation";
                             status_color = "text-success";
                             resign_status_td ="";
-                            btn_edit = '<a class="dropdown-item userUpdate" data-id="'+(emp.id)+'"><i class="fa fa-pencil m-r-5"></i> @lang("lang.edit")</a>';
+                            if (is_update == 1) {
+                                btn_edit = '<a class="dropdown-item userUpdate" data-id="'+(emp.id)+'"><i class="fa fa-pencil m-r-5"></i> @lang("lang.edit")</a>';
+                            }
                         }else if(emp.emp_status == '1'){
                             emp_status = "FDC-1";
                             status_color = "text-info";
                             td = '<td>'+(fdc_end)+'</td>';
                             resign_status_td ="";
-                            btn_edit = '<a class="dropdown-item userUpdate" data-id="'+(emp.id)+'"><i class="fa fa-pencil m-r-5"></i> @lang("lang.edit")</a>';
+                            if (is_update == 1) {
+                                btn_edit = '<a class="dropdown-item userUpdate" data-id="'+(emp.id)+'"><i class="fa fa-pencil m-r-5"></i> @lang("lang.edit")</a>';
+                            }
                         }else if(emp.emp_status == '10'){
                             emp_status = "FDC-2";
                             status_color = "text-info";
                             td = '<td>'+(fdc_end)+'</td>';
                             resign_status_td ="";
-                            btn_edit = '<a class="dropdown-item userUpdate" data-id="'+(emp.id)+'"><i class="fa fa-pencil m-r-5"></i> @lang("lang.edit")</a>';
+                            if (is_update == 1) {
+                                btn_edit = '<a class="dropdown-item userUpdate" data-id="'+(emp.id)+'"><i class="fa fa-pencil m-r-5"></i> @lang("lang.edit")</a>';
+                            }
                         }else if(emp.emp_status == '2'){
                             emp_status = "UDC";
                             status_color = "text-danger";
@@ -1498,7 +1588,9 @@
                                     '<i class="fa fa-dot-circle-o text-danger"></i> Fall Probation'+
                                 '</a>'+
                             '</div>';
-                            btn_edit = '<a class="dropdown-item userUpdate" data-id="'+(emp.id)+'"><i class="fa fa-pencil m-r-5"></i> @lang("lang.edit")</a>';
+                            if (is_update == 1) {
+                                btn_edit = '<a class="dropdown-item userUpdate" data-id="'+(emp.id)+'"><i class="fa fa-pencil m-r-5"></i> @lang("lang.edit")</a>';
+                            }
                         }else if(emp.emp_status == '3'){
                             emp_status = "Resignation";
                             status_color = "text-danger";
@@ -1540,12 +1632,33 @@
                                         '</a>'+
                                         (all_status)+
                                     '</div>';
+                        if (!is_update || is_update == 0) {
+                            empStatus = '<a class="btn btn-white btn-sm btn-rounded" href="#">'+
+                                            '<i class="fa fa-dot-circle-o '+(status_color)+'"></i>'+
+                                            '<span>'+(emp_status)+'</span>'+
+                                        '</a>';
+                        }         
                         if (all_status =="" && emp.emp_status !="Upcoming") {
                             empStatus = '<span style="font-size: 13px" class="badge bg-inverse-danger">'+(emp_status)+'</span>';
                         }
-
+                        let deleted = "";
+                        if (is_delete == 1) {
+                            deleted = '<a class="dropdown-item userDelete" href="#" data-toggle="modal" data-id="'+(emp.id)+'" data-target="#delete_user"><i class="fa fa-trash-o m-r-5"></i> @lang("lang.delete")</a>';
+                        }
+                        let dropdown_action = "";
+                        if (is_delete == 1 || is_update == 1) {
+                            dropdown_action = '<div class="dropdown dropdown-action">'+
+                                '<a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">'+
+                                '<i  class="material-icons">more_vert</i>'+
+                                '</a>'+
+                                '<div class="dropdown-menu dropdown-menu-right">'+
+                                    (btn_edit)+
+                                    (deleted)+
+                                '</div>'+
+                            '</div>';
+                        }
                         tr +='<tr class="odd">'+
-                                '<td class="ids stuck-scroll-4">'+(emp.id)+'</td>'+
+                                '<td class="ids stuck-scroll-4">'+(index)+'</td>'+
                                 '<td class="sorting_1 stuck-scroll-4">'+
                                     '<h2 class="table-avatar">'+
                                         (tag_a)+
@@ -1556,9 +1669,9 @@
                                 '<td><a href="{{url("employee/profile")}}/'+(emp.id)+'">'+(emp.employee_name_en)+'</a></td>'+
                                 '<td>'+(emp.gender ? localeLanguage == 'en'?  emp.gender.name_english : emp.gender.name_khmer : "")+'</td>'+
                                 '<td>'+(DOB)+'</td>'+
-                                '<td>'+(localeLanguage == 'en' ? emp.branch.branch_name_en : emp.branch.branch_name_kh)+'</td>'+
-                                '<td>'+(localeLanguage == 'en' ? emp.department.name_english :  emp.department.name_khmer)+'</td>'+
-                                '<td>'+(localeLanguage == 'en' ? emp.position.name_english : emp.position.name_khmer)+'</td>'+
+                                '<td>'+(emp.branch ? localeLanguage == 'en' ? emp.branch.branch_name_en : emp.branch.branch_name_kh : "")+'</td>'+
+                                '<td>'+(emp.department ? localeLanguage == 'en' ? emp.department.name_english :  emp.department.name_khmer : "")+'</td>'+
+                                '<td>'+(emp.position ? localeLanguage == 'en' ? emp.position.name_english : emp.position.name_khmer : "")+'</td>'+
                                 '<td>'+(emp.positiontype ? emp.positiontype.name_english : "")+'</td>'+
                                 '<td>'+(emp.personal_phone_number)+'</td>'+
                                 '<td>'+
@@ -1578,15 +1691,7 @@
                                     (empStatus)+
                                 '</td>'+
                                 '<td class="text-end">'+
-                                    '<div class="dropdown dropdown-action">'+
-                                        '<a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">'+
-                                        '<i  class="material-icons">more_vert</i>'+
-                                        '</a>'+
-                                        '<div class="dropdown-menu dropdown-menu-right">'+
-                                            (btn_edit)+
-                                            '<a class="dropdown-item userDelete" href="#" data-toggle="modal" data-id="'+(emp.id)+'" data-target="#delete_user"><i class="fa fa-trash-o m-r-5"></i> @lang("lang.delete")</a>'+
-                                        '</div>'+
-                                    '</div>'+
+                                    (dropdown_action)+
                                 '</td>'+
                         '</tr>';
                     });

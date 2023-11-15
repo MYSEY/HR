@@ -2,9 +2,11 @@
 
 namespace App\Helpers;
 
+use App\Models\permissions;
 use \Carbon\Carbon;
 use App\Models\User;
 use App\Models\Setting;
+use Illuminate\Support\Facades\Auth;
 use KhmerDateTime\KhmerDateTime;
 
 class Helper
@@ -136,5 +138,15 @@ class Helper
         $month = Carbon::now()->format('M Y');
         $result = "Monthly Motor Rental Fee".' : '.$month;
         return $result;
+    }
+
+    static function permissionAccess($menu_id,$name_button){
+        $id=Auth::user()->role_id;
+        $permission = permissions::where('role_id',$id)->get()->toArray();
+        $arrayPermissions = [];
+        foreach ($permission as $row) {
+            $arrayPermissions[$row["menu_id"]] = $row;
+        }
+        return $arrayPermissions[$menu_id][$name_button];
     }
 }

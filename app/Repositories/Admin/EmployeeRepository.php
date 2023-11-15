@@ -41,7 +41,7 @@ class EmployeeRepository extends BaseRepository
                 ->when($request->emp_status, function ($query, $emp_status) {
                     if ($emp_status == "resign_reason") {
                         $query->with("resignStatus");
-                        $query->whereNotIn('emp_status',['1','2','10','Probation','Upcoming']); 
+                        $query->whereNotIn('emp_status',['1','2','10','Probation','Upcoming','Cancel']); 
                     }else if($emp_status == "FDC"){
                         $query->whereIn('emp_status', ['1','10']);
                     }else{

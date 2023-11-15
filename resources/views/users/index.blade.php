@@ -21,14 +21,16 @@
 
                 </div>
                 <div class="col-auto float-end ms-auto">
-                    @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer')
+                    @if (permissionAccess("5","is_import")->value == "1")
                         <a href="#" class="btn add-btn" data-toggle="modal" id="import_employee"><i class="fa fa-plus"></i>@lang('lang.import')</a>
+                    @endif
+                    @if (permissionAccess("5","is_create")->value == "1")
                         <a href="{{url('user/form/create')}}" class="btn add-btn me-2"><i class="fa fa-plus"></i> @lang('lang.add_new')</a>
                     @endif
                 </div>
             </div>
         </div>
-        @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer')
+        @if (permissionAccess("5","is_view")->value == "1")
             <form class="needs-validation" novalidate>
                 @csrf
                 <div class="row filter-btn">
@@ -62,41 +64,39 @@
                     </div>
                 </div>
             </form>
-        @endif
-       
-        {!! Toastr::message() !!}
-       
-        <div class="content">
-            <div class="page-menu">
-                <div class="row">
-                    <div class="col-md-12 col-ms-12 p-0">
-                        <ul class="nav nav-tabs nav-tabs-bottom" role="tablist">
-                            <li class="nav-item" role="presentation">
-                                <a class="nav-link active" data-bs-toggle="tab" id="tab_candidate_resume" href="#tbl_candidate_resume" aria-selected="true" role="tab" data-tab-id="1">@lang('lang.upcoming_staff')({{count($data)}})</a>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <a class="nav-link" data-bs-toggle="tab" id="tab_cancel" href="#tbl_cancel" aria-selected="false" data-tab-id="6" role="tab" tabindex="-1">@lang('lang.canceled_contract')({{count($dataCanContract)}})</a>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <a class="nav-link" data-bs-toggle="tab" id="tab_probation" href="#tbl_probations" aria-selected="false" role="tab" data-tab-id="2" tabindex="-1">@lang('lang.probation')({{count($dataProbation)}})</a>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <a class="nav-link" data-bs-toggle="tab" id="tab_fdc" href="#tbl_fdc" aria-selected="false" role="tab" data-tab-id="3" tabindex="-1">@lang('lang.fdc')({{count($dataFDC)}})</a>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <a class="nav-link" data-bs-toggle="tab" id="tab_udc" href="#tbl_udc" aria-selected="false" data-tab-id="4" role="tab" tabindex="-1">@lang('lang.udc')({{count($dataUDC)}})</a>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <a class="nav-link" data-bs-toggle="tab" id="tab_reason" href="#tbl_reject" aria-selected="false" data-tab-id="5" role="tab" tabindex="-1">@lang('lang.resigned_staff')({{count($dataResign)}})</a>
-                            </li>
-                        </ul>
-                        <div class="tab-content">
-                            @include('users.tab_all_table')
+            {!! Toastr::message() !!}
+            <div class="content">
+                <div class="page-menu">
+                    <div class="row">
+                        <div class="col-md-12 col-ms-12 p-0">
+                            <ul class="nav nav-tabs nav-tabs-bottom" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <a class="nav-link active" data-bs-toggle="tab" id="tab_candidate_resume" href="#tbl_candidate_resume" aria-selected="true" role="tab" data-tab-id="1">@lang('lang.upcoming_staff')({{count($data)}})</a>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <a class="nav-link" data-bs-toggle="tab" id="tab_cancel" href="#tbl_cancel" aria-selected="false" data-tab-id="6" role="tab" tabindex="-1">@lang('lang.canceled_contract')({{count($dataCanContract)}})</a>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <a class="nav-link" data-bs-toggle="tab" id="tab_probation" href="#tbl_probations" aria-selected="false" role="tab" data-tab-id="2" tabindex="-1">@lang('lang.probation')({{count($dataProbation)}})</a>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <a class="nav-link" data-bs-toggle="tab" id="tab_fdc" href="#tbl_fdc" aria-selected="false" role="tab" data-tab-id="3" tabindex="-1">@lang('lang.fdc')({{count($dataFDC)}})</a>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <a class="nav-link" data-bs-toggle="tab" id="tab_udc" href="#tbl_udc" aria-selected="false" data-tab-id="4" role="tab" tabindex="-1">@lang('lang.udc')({{count($dataUDC)}})</a>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <a class="nav-link" data-bs-toggle="tab" id="tab_reason" href="#tbl_reject" aria-selected="false" data-tab-id="5" role="tab" tabindex="-1">@lang('lang.resigned_staff')({{count($dataResign)}})</a>
+                                </li>
+                            </ul>
+                            <div class="tab-content">
+                                @include('users.tab_all_table')
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        @endif
 
         @include('users.import')
        

@@ -12,146 +12,6 @@
                 </div>
             </div>
         </div>
-
-        {{-- <div class="row">
-            <div class="col-md-3">
-                <div class="card">
-                    <div class="card-body">
-                        <ul class="nav nav-tabs nav-tabs-solid nav-justified flex-column" role="tablist">
-                            <li class="nav-item" role="presentation"><a class="nav-link active" data-bs-toggle="tab" href="#Personal" aria-selected="true" role="tab">Personal Informations</a></li>
-                            <li class="nav-item" role="presentation"><a class="nav-link" data-bs-toggle="tab" href="#education" aria-selected="false" role="tab" tabindex="-1">Education Informations</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-9">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="tab-content">
-                            <div id="Personal" class="tab-pane active show" role="tabpanel">
-                                <div class="row form-group">
-                                    <div class="col-md-4">
-                                        <div class="title"><strong>Employee ID</strong></div>
-                                        <label class="text">{{ $data->number_employee }}</label>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="title"><strong>Name Khmer</strong></div>
-                                        <label class="text">{{ $data->employee_name_kh }}</label>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="title"><strong>Name English</strong></div>
-                                        <label class="text">{{ $data->employee_name_en }}</label>
-                                    </div>
-                                </div>
-                                <div class="row form-group">
-                                    <div class="col-md-4">
-                                        <div class="title"><strong>Gender</strong></div>
-                                        <label class="text">{{ $data->gender == 1 ? 'Male' : 'Female' }}</label>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="title"><strong>Phone</strong></div>
-                                        <label class="text">{{ $data->personal_phone_number }}</label>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="title"><strong>Date of Birth</strong></div>
-                                        <label class="text">{{ \Carbon\Carbon::parse($data->date_of_birth)->format('d-M-Y') ?? '' }}</label>
-                                    </div>
-                                </div>
-                                <div class="row form-group">
-                                    <div class="col-md-4">
-                                        <div class="title"><strong>Email</strong></div>
-                                        <label class="text">{{ $data->email }}</label>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="title"><strong>Position</strong></div>
-                                        <label class="text">{{ $data->EmployeePosition }}</label>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="title"><strong>Departement</strong></div>
-                                        <label class="text">{{ $data->EmployeeDepartment }}</label>
-                                    </div>
-                                </div>
-                                <div class="row form-group">
-                                    <div class="col-md-4">
-                                        <div><strong>Join Date</strong></div>
-                                        <label class="text">{{ $data->joinOfDate }}</label>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="title"><strong>Unit</strong></div>
-                                        <label class="text">{{$data->unit}}</label>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="title"><strong>Level</strong></div>
-                                        <label class="text">{{ $data->level }}</label>
-                                    </div>
-                                </div>
-
-                                <div class="row form-group">
-                                    <div class="col-md-4">
-                                        <div><strong>Nationality</strong></div>
-                                        <label class="text">{{ $data->nationality }}</label>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="title"><strong>Position Type</strong></div>
-                                        <label class="text">{{ $data->EmployeePositionType }}</label>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="title"><strong>Identity Type</strong></div>
-                                        <label class="text">{{ $data->EmployeeIdentityType }}</label>
-                                    </div>
-                                </div>
-
-                                <div class="row form-group">
-                                    <div class="col-md-4">
-                                        <div><strong>Identity Number</strong></div>
-                                        <label class="text">{{ $data->identity_number }}</label>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="title"><strong>Issue Date</strong></div>
-                                        <label class="text">{{ \Carbon\Carbon::parse($data->issue_date)->format('d-M-Y') ?? '' }}</label>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="title"><strong>Issue Expired Date</strong></div>
-                                        <label class="text">{{ \Carbon\Carbon::parse($data->issue_expired_date)->format('d-M-Y') ?? '' }}</label>
-                                    </div>
-                                </div>
-                                <div class="row form-group">
-                                    <div class="col-md-4">
-                                        <div class="title"><strong>Loan</strong></div>
-                                        <label class="text">{{ $data->EmployeeIsLoan}}</label>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div><strong>Marital Status</strong></div>
-                                        <label class="text">{{ $data->marital_status }}</label>
-                                    </div>
-                                </div>
-                            </div>
-        
-                            <div id="education" class="tab-pane fade" role="tabpanel">
-                                <div class="table-responsive">
-                                    <table class="table">
-                                        <thead>
-                                            <tr>
-                                                <th>title</th>
-                                                <th></th>
-                                                <th>Sex</th>
-                                                <th>Age</th>
-                                                <th>Action</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div> --}}
-
-        
-
         <div class="card mb-0">
             <div class="card-body">
                 <div class="row">
@@ -177,7 +37,9 @@
                                             <div class="staff-id">@lang('lang.position') : {{ $data->EmployeePosition }}</div>
                                             <div class="staff-id">@lang('lang.branch') : {{ $data->EmployeeBranch }}</div>
                                             <div class="staff-id">@lang('lang.join_date') : {{ $data->joinOfDate }}</div>
-                                            <div class="staff-id">@lang('lang.change_password') <a href="#" id="btn-change-password">@lang('lang.click_here')</a></div>
+                                            @if (permissionAccess("5","is_update")->value == "1")
+                                                <div class="staff-id">@lang('lang.change_password') <a href="#" id="btn-change-password">@lang('lang.click_here')</a></div>
+                                            @endif
                                         </div>
                                     </div>
                                     <div class="col-md-7">
@@ -285,7 +147,11 @@
                     <div class="col-md-6 d-flex">
                         <div class="card profile-box flex-fill">
                             <div class="card-body">
-                                <h3 class="card-title">@lang('lang.emergency_contact') <a href="" class="edit-icon" data-bs-toggle="modal" data-bs-target="#emergency_contact_modal"><i class="fa fa-pencil"></i></a></h3>
+                                <h3 class="card-title">@lang('lang.emergency_contact') 
+                                    @if (permissionAccess("5","is_create")->value == "1")
+                                        <a href="" class="edit-icon" data-bs-toggle="modal" data-bs-target="#emergency_contact_modal"><i class="fa fa-pencil"></i></a>
+                                    @endif
+                                </h3>
                                 <div class="table-responsive">
                                     <table class="table table-nowrap">
                                         <thead>
@@ -307,15 +173,19 @@
                                                         <td>{{$item->phone}}</td>
                                                         <td>{{$item->phone_2}}</td>
                                                         <td style="text-align: center">
-                                                            <div class="dropdown dropdown-action">
-                                                                <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i  class="material-icons">more_vert</i></a>
-                                                                @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer')
+                                                            @if (permissionAccess("5","is_update")->value == "1" || permissionAccess("5","is_delete")->value == "1")
+                                                                <div class="dropdown dropdown-action">
+                                                                    <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i  class="material-icons">more_vert</i></a>
                                                                     <div class="dropdown-menu dropdown-menu-right">
-                                                                        <a class="dropdown-item contactUpdate" data-id="{{$item->id}}" data-bs-target="#contact_modal"><i class="fa fa-pencil m-r-5"></i> Edit</a>
-                                                                        <a class="dropdown-item contactDelete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_contact"><i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
+                                                                        @if (permissionAccess("5","is_update")->value == "1")
+                                                                            <a class="dropdown-item contactUpdate" data-id="{{$item->id}}" data-bs-target="#contact_modal"><i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')</a>
+                                                                        @endif
+                                                                        @if (permissionAccess("5","is_delete")->value == "1")
+                                                                            <a class="dropdown-item contactDelete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_contact"><i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
+                                                                        @endif
                                                                     </div>
-                                                                @endif
-                                                            </div>
+                                                                </div>
+                                                            @endif
                                                         </td>
                                                     </tr>
                                                 @endforeach
@@ -352,7 +222,11 @@
                     <div class="col-md-6 d-flex">
                         <div class="card profile-box flex-fill">
                             <div class="card-body">
-                                <h3 class="card-title">@lang('lang.children_informations') <a href="#" class="edit-icon" data-bs-toggle="modal" data-bs-target="#family_info_modal"><i class="fa fa-pencil"></i></a></h3>
+                                <h3 class="card-title">@lang('lang.children_informations') 
+                                    @if (permissionAccess("5","is_create")->value == "1")
+                                    <a href="#" class="edit-icon" data-bs-toggle="modal" data-bs-target="#family_info_modal"><i class="fa fa-pencil"></i></a>
+                                    @endif
+                                </h3>
                                 <div class="table-responsive">
                                     <table class="table table-nowrap">
                                         <thead>
@@ -374,15 +248,19 @@
                                                     <td>{{$item->ChildrenGender}}</td>
                                                     <td>{{$item->YearsOfChildren}}</td>
                                                     <td style="text-align: center">
-                                                        <div class="dropdown dropdown-action">
-                                                            <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i  class="material-icons">more_vert</i></a>
-                                                            @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer')
+                                                        @if (permissionAccess("5","is_update")->value == "1" || permissionAccess("5","is_delete")->value == "1")
+                                                            <div class="dropdown dropdown-action">
+                                                                <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i  class="material-icons">more_vert</i></a>
                                                                 <div class="dropdown-menu dropdown-menu-right">
-                                                                    <a class="dropdown-item childrenUpdate" data-id="{{$item->id}}" data-bs-target="#family_edit_info_modal"><i class="fa fa-pencil m-r-5"></i> Edit</a>
+                                                                    @if (permissionAccess("5","is_update")->value == "1" )
+                                                                    <a class="dropdown-item childrenUpdate" data-id="{{$item->id}}" data-bs-target="#family_edit_info_modal"><i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')</a>
+                                                                    @endif
+                                                                    @if (permissionAccess("5","is_delete")->value == "1" )
                                                                     <a class="dropdown-item childrenDelete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_children"><i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
+                                                                    @endif
                                                                 </div>
-                                                            @endif
-                                                        </div>
+                                                            </div>
+                                                        @endif
                                                     </td>
                                                 </tr>
                                                @endforeach
@@ -399,7 +277,11 @@
                     <div class="col-md-6 d-flex">
                         <div class="card profile-box flex-fill">
                             <div class="card-body">
-                                <h3 class="card-title">@lang('lang.education_informations') <a href="#" class="edit-icon" data-bs-toggle="modal" data-bs-target="#education_info"><i class="fa fa-pencil"></i></a></h3>
+                                <h3 class="card-title">@lang('lang.education_informations') 
+                                    @if (permissionAccess("5","is_create")->value == "1")
+                                    <a href="#" class="edit-icon" data-bs-toggle="modal" data-bs-target="#education_info"><i class="fa fa-pencil"></i></a>
+                                    @endif
+                                </h3>
                                 <div class="experience-box">
                                     <ul class="experience-list">
                                         @if (count($educations) > 0)
@@ -427,7 +309,11 @@
                     <div class="col-md-6 d-flex">
                         <div class="card profile-box flex-fill">
                             <div class="card-body">
-                                <h3 class="card-title">@lang('lang.experience_informations') <a href="#" class="edit-icon" data-bs-toggle="modal" data-bs-target="#experience_info"><i class="fa fa-pencil"></i></a></h3>
+                                <h3 class="card-title">@lang('lang.experience_informations') 
+                                    @if (permissionAccess("5","is_create")->value == "1")
+                                    <a href="#" class="edit-icon" data-bs-toggle="modal" data-bs-target="#experience_info"><i class="fa fa-pencil"></i></a>
+                                    @endif
+                                </h3>
                                 <div class="experience-box">
                                     @if (count($experiences)>0)
                                         @foreach ($experiences as $item)

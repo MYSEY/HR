@@ -2,7 +2,11 @@
     <div class="col-md-12 d-flex">
         <div class="card profile-box flex-fill">
             <div class="card-body">
-                <h3 class="card-title">@lang('lang.promoted') <a href="#" class="edit-icon" data-bs-toggle="modal" data-bs-target="#PromotionModal"><i class="fa fa-pencil"></i></a></h3>
+                <h3 class="card-title">@lang('lang.promoted') 
+                    @if (permissionAccess("5","is_create")->value == "1")
+                    <a href="#" class="edit-icon" data-bs-toggle="modal" data-bs-target="#PromotionModal"><i class="fa fa-pencil"></i></a>
+                    @endif
+                </h3>
                 <div class="table-responsive">
                     <table class="table table-nowrap">
                         <thead>
@@ -29,15 +33,19 @@
                                         <td style="color:#26AF49">{{$item->position_promoted_to}}</td>
                                         <td>{{$item->PormotDate}}</td>
                                         <td style="text-align: center">
-                                            <div class="dropdown dropdown-action">
-                                                <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i  class="material-icons">more_vert</i></a>
-                                                @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer')
+                                            @if (permissionAccess("5","is_update")->value == "1" || permissionAccess("5","is_delete")->value == "1")
+                                                <div class="dropdown dropdown-action">
+                                                    <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i  class="material-icons">more_vert</i></a>
                                                     <div class="dropdown-menu dropdown-menu-right">
-                                                        <a class="dropdown-item promoteUpdate" data-id="{{$item->id}}" data-bs-target="#promote_edit"><i class="fa fa-pencil m-r-5"></i> Edit</a>
+                                                        @if (permissionAccess("5","is_update")->value == "1")
+                                                        <a class="dropdown-item promoteUpdate" data-id="{{$item->id}}" data-bs-target="#promote_edit"><i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')</a>
+                                                        @endif
+                                                        @if (permissionAccess("5","is_delete")->value == "1")
                                                         <a class="dropdown-item promoteDelete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_promote"><i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
+                                                        @endif
                                                     </div>
-                                                @endif
-                                            </div>
+                                                </div>
+                                            @endif
                                         </td>
                                     </tr>
                                 @endforeach
