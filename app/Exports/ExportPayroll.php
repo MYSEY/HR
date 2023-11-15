@@ -116,7 +116,7 @@ class ExportPayroll implements FromCollection, WithColumnWidths, WithHeadings, W
 
             $payroll[]=[
                 $i,
-                $pay->users == null ? '' : intval($pay->users->number_employee),
+                $pay->users == null ? '' : $pay->users->number_employee,
                 Helper::getLang() == 'en' ? $pay->users->employee_name_en : $pay->users->employee_name_kh,
                 $pay->users == null ? '' : $pay->users->EmployeeDepartment,
                 $pay->users == null ? '' : $pay->users->EmployeePosition,

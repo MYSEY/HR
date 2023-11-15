@@ -59,7 +59,7 @@ class ExportSeverancePay implements FromCollection, WithColumnWidths, WithHeadin
             $this->totalContractSeverancePay += $value->total_contract_severance_pay;
             $severance_pay[]=[
                 $i,
-                $value->users == null ? '' : intval($value->users->number_employee),
+                $value->users == null ? '' : $value->users->number_employee,
                 $value->users == null ? '' : $value->users->employee_name_en,
                 $value->users == null ? '' : $value->users->EmployeeGender,
                 $value->users == null ? '' : $value->users->EmployeePosition,

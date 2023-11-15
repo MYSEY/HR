@@ -71,7 +71,7 @@ class ExportNSSF implements FromCollection, WithColumnWidths, WithHeadings, With
             $this->corporateContribution += $value->corporate_contribution;
             $nssf[]=[
                 $i,
-                $value->users == null ? '' : intval($value->users->number_employee),
+                $value->users == null ? '' : $value->users->number_employee,
                 $value->users == null ? '' : $value->users->employee_name_en,
                 $value->users == null ? '' : $value->users->EmployeeGender,
                 $value->users == null ? '' : $value->users->EmployeePosition,
