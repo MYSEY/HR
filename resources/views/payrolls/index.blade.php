@@ -64,9 +64,6 @@
                     </div>
                     <div class="col-sm-6 col-md-4">
                         <div style="display: flex" class="float-end">
-                            <a href="{{url('payroll/review')}}" class="btn btn-sm btn-outline-secondary me-2" data-dismiss="modal">
-                                Back
-                            </a>
                             <button type="button" class="btn btn-sm btn-outline-secondary btn-search me-2" data-dismiss="modal">
                                 <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading') </span>
                                 <span class="btn-txt">@lang('lang.search')</span>

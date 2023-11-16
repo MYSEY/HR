@@ -318,6 +318,7 @@ return[
     "gross_motor_rental_fee"=>"Gross Motor Rental fee",
     "gross_taplab_fee"=>"Gross Taplab Fee",
     "guarantee_letter"=>"Guarantee letter",
+    "generate_payroll"=>"Generate Payroll",
     "hello"=>"Hello",
     "health_care"=>"Health Care",
     "head_of_hr_and_admin_department"=>"Head of HR and Admin Department",

@@ -333,6 +333,7 @@ return[
 	"gross_motor_rental_fee"=>"ថ្លៃជួលម៉ូតូសរុប",
 	"gross_taplab_fee"=>"ថ្លៃសេវា Taplab សរុប",
 	"guarantee_letter"=>"លិខិតធានា",
+    "generate_payroll"=>"បង្កើតប្រាក់ខែ",
 	"hello"=>"សួស្តី",
 	"health_care"=>"ថែទាំសុខភាព",
 	"head_of_hr_and_admin_department"=>"ប្រធានផ្នែកធនធានមនុស្ស និងរដ្ឋបាល",
