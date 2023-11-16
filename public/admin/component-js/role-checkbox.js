@@ -4,6 +4,7 @@ $(function(){
     $("#dashboad_all").on("click", function(){
         if (!$(this).prop("checked")) {
             $(".dashboad_checkbox").prop("checked", false);
+            $(".dashboad_checkbox").val(0);
             $(this).val(0)
         }
         if ($(this).prop("checked")) {
@@ -23,9 +24,9 @@ $(function(){
         }
     });
     $(document).ready(function(){
-        var checkboxes = $('.dashboad_checkbox');
+        let checkboxes = $('.dashboad_checkbox');
         checkboxes.change(function(){
-            var countCheckedCheckboxes = checkboxes.filter(':checked').length;
+            let countCheckedCheckboxes = checkboxes.filter(':checked').length;
             if (countCheckedCheckboxes == $('input.dashboad_checkbox').length) {
                 $("#dashboad_all").prop("checked", true);
                 $("#dashboad_all").val(1)
