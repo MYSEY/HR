@@ -59,16 +59,18 @@
                     </ul>
                 </div>
                 <div class="col-auto float-end ms-auto">
+                    @if (permissionAccess("9","is_create")->value == "1")
                     <a href="#" class="btn add-btn" id="add_new" data-bs-toggle="modal"
                         data-bs-target="#add_plan"><i class="fa fa-plus"></i> @lang('lang.add_new')</a>
+                    @endif
                 </div>
             </div>
         </div>
-        @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer')
+        @if (permissionAccess("9","is_view")->value == "1")
             <form class="needs-validation" novalidate>
                 @csrf
                 <div class="row filter-btn">
-                     <div class="col-sm-6 col-md-2"> 
+                        <div class="col-sm-6 col-md-2"> 
                         <div class="form-group">
                             <select class="select form-control floating select2-hidden-accessible" data-select2-id="select2-data-1-cyfe" id="position_id" name="position_id" tabindex="-1" aria-hidden="true">
                                 <option value="" data-select2-id="select2-data-3-c0n2">@lang('lang.all_position') </option>
@@ -101,14 +103,19 @@
                                 <span class="search-loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading') </span>
                                 <span class="btn-search-txt">@lang('lang.search')</span>
                             </button>
-                            <button type="button" class="btn btn-outline-secondary btn-sm btn_print me-2">
-                                <span class="btn-text-print"><i class="fa fa-print fa-lg"></i> @lang('lang.print')</span>
-                                <span id="btn-text-loading-print" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>
-                            </button>
+                            @if (permissionAccess("9","is_print")->value == "1")
+                                <button type="button" class="btn btn-outline-secondary btn-sm btn_print me-2">
+                                    <span class="btn-text-print"><i class="fa fa-print fa-lg"></i> @lang('lang.print')</span>
+                                    <span id="btn-text-loading-print" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>
+                                </button>
+                            @endif
+                            @if (permissionAccess("9","is_export")->value == "1")
                             <button type="button" class="btn btn-outline-secondary btn-sm me-2 btn_excel">
                                 <span class="btn-text-excel"><i class="fa fa-file-excel-o" aria-hidden="true"></i> @lang('lang.excel')</span>
                                 <span id="btn-text-loading-excel" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>
                             </button>
+                            @endif
+                           
                             <button type="button" class="btn btn-sm btn-outline-secondary reset-btn">
                                 <span class="btn-text-reset">@lang('lang.reload')</span>
                                 <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>
@@ -117,96 +124,96 @@
                     </div>
                 </div>
             </form>
-        @endif
-        {!! Toastr::message() !!}
-        <div class="">
-            <div id="card_by_branch"></div>
-        </div>
-        <div id="add_plan" class="modal custom-modal fade hr-modal-select2" role="dialog">
-            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">@lang('lang.add_new_plan')</h5>
-                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">×</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <form action="{{ url('recruitment/plan-store') }}" method="POST" enctype="multipart/form-data"
-                            class="needs-validation" novalidate>
-                            @csrf
-                            <div class="row">
-                                <div class="col-sm-6 col-md-6">
-                                    <div class="form-group hr-form-group-select2">
-                                        <label>@lang('lang.position')<span class="text-danger">*</span></label>
-                                        <select class="form-select hr-select2-option" name="position_id" id="select-position-opsition" required>
-                                            <option selected disabled value="">@lang('lang.select')</option>
-                                            @foreach ($positions as $item)
-                                                <option value="{{ $item->id }}">{{ Helper::getLang() == 'en' ? $item->name_english :  $item->name_khmer}}</option>
-                                            @endforeach
-                                        </select>
+            {!! Toastr::message() !!}
+            <div class="">
+                <div id="card_by_branch"></div>
+            </div>
+            <div id="add_plan" class="modal custom-modal fade hr-modal-select2" role="dialog">
+                <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">@lang('lang.add_new_plan')</h5>
+                            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="{{ url('recruitment/plan-store') }}" method="POST" enctype="multipart/form-data"
+                                class="needs-validation" novalidate>
+                                @csrf
+                                <div class="row">
+                                    <div class="col-sm-6 col-md-6">
+                                        <div class="form-group hr-form-group-select2">
+                                            <label>@lang('lang.position')<span class="text-danger">*</span></label>
+                                            <select class="form-select hr-select2-option" name="position_id" id="select-position-opsition" required>
+                                                <option selected disabled value="">@lang('lang.select')</option>
+                                                @foreach ($positions as $item)
+                                                    <option value="{{ $item->id }}">{{ Helper::getLang() == 'en' ? $item->name_english :  $item->name_khmer}}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 col-md-6">
+                                        <div class="form-group hr-form-group-select2">
+                                            <label>@lang('lang.location') <span class="text-danger">*</span></label>
+                                            <select class="form-select hr-select2-option" name="branch_id" required>
+                                                <option selected disabled value="">@lang('lang.select')</option>
+                                                @foreach ($branchs as $item)
+                                                    <option value="{{ $item->id }}">{{ Helper::getLang() == 'en' ? $item->branch_name_en : $item->branch_name_kh }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="col-sm-6 col-md-6">
-                                    <div class="form-group hr-form-group-select2">
-                                        <label>@lang('lang.location') <span class="text-danger">*</span></label>
-                                        <select class="form-select hr-select2-option" name="branch_id" required>
-                                            <option selected disabled value="">@lang('lang.select')</option>
-                                            @foreach ($branchs as $item)
-                                                <option value="{{ $item->id }}">{{ Helper::getLang() == 'en' ? $item->branch_name_en : $item->branch_name_kh }}</option>
-                                            @endforeach
-                                        </select>
+                                <div class="row new_element_inp">
+                                    <div class="col-sm-6 col-md-6 element-plan-month-year">
+                                        <div class="form-group">
+                                            <label>@lang('lang.plan_of_year') <span class="text-danger">*</span></label>
+                                            <input class="form-control plan_date" type="month" name="plan_date[]" required>
+                                        </div>
                                     </div>
-                                </div>
-                            </div>
-                            <div class="row new_element_inp">
-                                <div class="col-sm-6 col-md-6 element-plan-month-year">
-                                    <div class="form-group">
-                                        <label>@lang('lang.plan_of_year') <span class="text-danger">*</span></label>
-                                        <input class="form-control plan_date" type="month" name="plan_date[]" required>
-                                    </div>
-                                </div>
-                                <div class="col-sm-6 col-md-6 element-plan-total-staff">
-                                    <div class="form-group">
-                                        <label>@lang('lang.total_staff') <span class="text-danger">*</span></label>
-                                        <div style="display: flex">
-                                            <input class="form-control me-3 @error('total_staff') is-invalid @enderror" type="number" name="total_staff[]" required>
-                                            <div>
-                                                <a href="javascript:void(0);" class="delete-icon education-delete-element"><i class="fa fa-trash-o" style="margin-top: 12px;"></i></a>
+                                    <div class="col-sm-6 col-md-6 element-plan-total-staff">
+                                        <div class="form-group">
+                                            <label>@lang('lang.total_staff') <span class="text-danger">*</span></label>
+                                            <div style="display: flex">
+                                                <input class="form-control me-3 @error('total_staff') is-invalid @enderror" type="number" name="total_staff[]" required>
+                                                <div>
+                                                    <a href="javascript:void(0);" class="delete-icon education-delete-element"><i class="fa fa-trash-o" style="margin-top: 12px;"></i></a>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div id="multi_add_plan"></div>
-                            <div class="row">
-                                <div class="col-ms-12 col-md-12">
-                                    <div class="add-more">
-                                        <a class="float-end" id="btnAddEducation"><i class="fa fa-plus-circle"></i> @lang('lang.add_more')</a>
+                                <div id="multi_add_plan"></div>
+                                <div class="row">
+                                    <div class="col-ms-12 col-md-12">
+                                        <div class="add-more">
+                                            <a class="float-end" id="btnAddEducation"><i class="fa fa-plus-circle"></i> @lang('lang.add_more')</a>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            
-                            <div class="row">
-                                <div class="col-sm-12 col-md-12">
-                                    <div class="form-group">
-                                        <label class="">@lang('lang.remark')</label>
-                                        <textarea type="text" rows="3" class="form-control" name="remark" id="remark" value="{{ old('remark') }}"></textarea>
+                                
+                                <div class="row">
+                                    <div class="col-sm-12 col-md-12">
+                                        <div class="form-group">
+                                            <label class="">@lang('lang.remark')</label>
+                                            <textarea type="text" rows="3" class="form-control" name="remark" id="remark" value="{{ old('remark') }}"></textarea>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="submit-section">
-                                <button type="submit" class="btn btn-primary submit-btn">
-                                    <span class="loading-icon" style="display: none"><i
-                                            class="fa fa-spinner fa-spin"></i> @lang('lang.loading') </span>
-                                    <span class="btn-txt">@lang('lang.submit')</span>
-                                </button>
-                            </div>
-                        </form>
+                                <div class="submit-section">
+                                    <button type="submit" class="btn btn-primary submit-btn">
+                                        <span class="loading-icon" style="display: none"><i
+                                                class="fa fa-spinner fa-spin"></i> @lang('lang.loading') </span>
+                                        <span class="btn-txt">@lang('lang.submit')</span>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        @endif
     </div>
     @include('recruitments.plans.recruitment_plan_print')
 @endsection

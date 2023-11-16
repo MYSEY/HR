@@ -48,17 +48,21 @@
                                                 <td >{{$item->contact_number}}</td>
                                                 <td >
                                                     <div class="dropdown action-label">
-                                                        <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
-                                                            <i class="fa fa-dot-circle-o text-purple"></i>
-                                                            <span>@lang('lang.received_cv')</span>
-                                                        </a>
-                                                        @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer')
-                                                            <div class="dropdown-menu dropdown-menu-right" id="btn-status">
-                                                                <a class="dropdown-item" data-emp-id="{{$item->id}}"  data-id="2" href="#">
-                                                                    <i class="fa fa-dot-circle-o text-warning"></i> @lang('lang.shortlisted')
-                                                                </a>
-                                                            </div>
+                                                        @if (permissionAccess("8","is_update")->value == "1")
+                                                            <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
+                                                                <i class="fa fa-dot-circle-o text-purple"></i>
+                                                                <span>@lang('lang.received_cv')</span>
+                                                            </a>
+                                                        @else
+                                                            <a class="btn btn-white btn-sm btn-rounded" href="#">
+                                                                <i class="fa fa-dot-circle-o text-purple"></i> <span>@lang('lang.received_cv')</span>
+                                                            </a>
                                                         @endif
+                                                        <div class="dropdown-menu dropdown-menu-right" id="btn-status">
+                                                            <a class="dropdown-item" data-emp-id="{{$item->id}}"  data-id="2" href="#">
+                                                                <i class="fa fa-dot-circle-o text-warning"></i> @lang('lang.shortlisted')
+                                                            </a>
+                                                        </div>
                                                     </div>
                                                 </td>
                                                 <td>
@@ -72,20 +76,20 @@
                                                 </td>
                                                 <td>{{ $item->remark }}</td>
                                                 <td class="text-end">
-                                                    <div class="dropdown dropdown-action">
-                                                        <a href="#" class="action-icon dropdown-toggle"
-                                                            data-bs-toggle="dropdown" aria-expanded="false"><i
-                                                                class="material-icons">more_vert</i></a>
-                                                        @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer')
+                                                    @if (permissionAccess("8","is_update")->value == "1" || permissionAccess("8","is_delete")->value == "1")
+                                                        <div class="dropdown dropdown-action">
+                                                            <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
                                                             <div class="dropdown-menu dropdown-menu-right">
-                                                                <a class="dropdown-item update"
-                                                                    data-id="{{ $item->id }}"><i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')</a>
-                                                                <a class="dropdown-item delete" href="#"
-                                                                    data-toggle="modal" data-id="{{ $item->id }}"
+                                                                @if (permissionAccess("8","is_update")->value == "1")
+                                                                    <a class="dropdown-item update" data-id="{{ $item->id }}"><i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')</a>
+                                                                @endif
+                                                                @if (permissionAccess("8","is_delete")->value == "1")
+                                                                    <a class="dropdown-item delete" href="#" data-toggle="modal" data-id="{{ $item->id }}"
                                                                     data-target="#delete_candidate"><i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
+                                                                @endif
                                                             </div>
-                                                        @endif
-                                                    </div>
+                                                        </div>
+                                                    @endif
                                                 </td>
                                             </tr>
                                             @php

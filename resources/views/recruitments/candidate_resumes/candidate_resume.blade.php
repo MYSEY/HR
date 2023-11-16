@@ -17,12 +17,17 @@
                     </ul>
                 </div>
                 <div class="col-auto float-end ms-auto">
+                    @if (permissionAccess("8","is_import")->value == "1")
                     <a href="#" class="btn add-btn" data-toggle="modal" id="import_new_cvs"><i class="fa fa-plus"></i>@lang('lang.import')</a>
+                    @endif
+                    @if (permissionAccess("8","is_create")->value == "1")
                     <a href="#" class="btn add-btn me-2" id="add_new" data-bs-toggle="modal" data-bs-target="#add_user"><i class="fa fa-plus"></i> @lang('lang.add_new')</a>
+                    @endif
                 </div>
             </div>
         </div>
         {!! Toastr::message() !!}
+        @if (permissionAccess("8","is_view")->value == "1")
         <div class="">
             <div class="page-menu">
                 <div class="row">
@@ -34,7 +39,7 @@
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" data-bs-toggle="tab" id="btn_tab_short_list" href="#tab_short_list" aria-selected="false" role="tab" data-tab-id="2"
-                                    tabindex="-1">@lang('lang.shortlisted')(<span id="dataShortList">{{$dataShortList}})</span></a>
+                                    tabindex="-1">@lang('lang.shortlisted')(<span id="dataShortList">{{$dataShortList}}</span>)</a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" data-bs-toggle="tab" id="btn_not_tab_short_list" href="#tab_not_short_list" aria-selected="false" role="tab" data-tab-id="2"
@@ -65,7 +70,7 @@
                 @include('recruitments.candidate_resumes.table_by_tab')
             </div>
         </div>
-
+        @endif
         <!-- Delete training type Modal -->
         <div class="modal custom-modal fade" id="delete_candidate" role="dialog">
             <div class="modal-dialog modal-sm modal-dialog-centered">
@@ -691,6 +696,11 @@
         });
     });
     function showDatas(btn_tab){
+        let is_update = "{{ Helper::permissionAccess('8','is_update') }}";
+        let is_delete = "{{ Helper::permissionAccess('8','is_delete') }}";
+        let is_cancel = "{{ Helper::permissionAccess('8','is_cancel') }}";
+        let is_print = "{{ Helper::permissionAccess('8','is_print') }}";
+        let is_approve = "{{ Helper::permissionAccess('8','is_approve') }}";
         var status_tab = btn_tab;
         $.ajax({
             type: "GET",
@@ -735,6 +745,14 @@
                                         '<a href="{{asset("/uploads/images")}}/'+(staff.cv)+'" target="_blank" class="subdrop"><i class="la la-file-pdf"></i> <span>@lang("lang.preview_cv")</span></a>'+
                                     '</small>'
                             }
+                            let dropdown_menu = '<a class="btn btn-white btn-sm btn-rounded" href="#">'+
+                                                    (tag_i)+ '<span>'+(text_status)+'</span>'+
+                                                '</a>';
+                                if (is_update == 1) {
+                                    dropdown_menu = '<a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">'+
+                                                    (tag_i)+ '<span>'+(text_status)+'</span>'+
+                                                '</a>';
+                                }
                             if (staff.short_list == 1) {
                                 tr += '<tr class="odd">'+
                                     '<td class="ids stuck-scroll-3">'+(num)+'</td>'+
@@ -749,13 +767,8 @@
                                     '<td >'+(staff.committee_interview ? staff.committee_interview : "")+'</td>'+
                                     '<td >'+
                                         '<div class="dropdown action-label">'+
-                                            '<a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">'+
-                                                (tag_i)+ '<span>'+(text_status)+'</span>'+
-                                            '</a>'+
+                                           (dropdown_menu)+
                                             '<div class="dropdown-menu dropdown-menu-right" id="btn-status">'+
-                                                // '<a class="dropdown-item" data-emp-id="'+(staff.id)+'"  data-id="2" href="#">'+
-                                                //     '<i class="fa fa-dot-circle-o text-warning"></i> Shortlisted'+
-                                                // '</a>'+
                                                 '<a class="dropdown-item" data-emp-id="'+(staff.id)+'"  data-id="3" data-id-short="shortlist"  href="#">'+
                                                     '<i class="fa fa-dot-circle-o text-info"></i> @lang("lang.interviewed")'+
                                                 '</a>'+
@@ -769,6 +782,7 @@
                                 '</tr>';
                                 num ++;
                             }else if (staff.short_list == 2) {
+                               
                                 tr_not_list += '<tr class="odd">'+
                                     '<td class="ids stuck-scroll-3">'+(num)+'</td>'+
                                     '<td class="stuck-scroll-3">'+(staff.name_kh)+' </td>'+
@@ -781,15 +795,13 @@
                                     '</td>'+
                                     '<td >'+
                                         '<div class="dropdown action-label">'+
-                                            '<a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">'+
-                                                (tag_i)+ '<span>'+(text_status)+'</span>'+
-                                            '</a>'+
+                                            (dropdown_menu)+
                                             '<div class="dropdown-menu dropdown-menu-right" id="btn-status">'+
                                                 '<a class="dropdown-item" data-emp-id="'+(staff.id)+'"  data-id="2" data-id-short="non-shortlist" href="#">'+
                                                     '<i class="fa fa-dot-circle-o text-warning"></i> @lang("lang.shortlisted")'+
                                                 '</a>'+
                                             '</div>'+
-                                        '</div>'+
+                                        '</div>'
                                     '</td>'+
                                     '<td>'+(staff.remark ? staff.remark: "")+'</td>'+
                                 '</tr>';
@@ -816,10 +828,16 @@
                             let status_show_failed = "";
                             let interviewed_date = staff_result.interviewed_date ? moment(staff_result.interviewed_date).format('MMM-D-YYYY') : "";
                             if (staff_result.interviewed_result == "5") {
+                                let dropdown_menu = '<a class="btn btn-white btn-sm btn-rounded" href="#">'+
+                                                    '<i class="fa fa-dot-circle-o text-info"></i><span>@lang("lang.interviewed")</span>'+
+                                                '</a>';
+                                if (is_update == 1) {
+                                    dropdown_menu =  '<a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">'+
+                                                    '<i class="fa fa-dot-circle-o text-info"></i><span>@lang("lang.interviewed")</span>'+
+                                                '</a>';
+                                }
                                 status_show_failed = '<div class="dropdown action-label">'+
-                                            '<a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">'+
-                                                '<i class="fa fa-dot-circle-o text-info"></i><span>@lang("lang.interviewed")</span>'+
-                                            '</a>'+
+                                           (dropdown_menu)+
                                             '<div class="dropdown-menu dropdown-menu-right" id="btn-status">'+
                                                 '<a class="dropdown-item" data-emp-id="'+(staff_result.id)+'"  data-id="6" data-status="'+(staff_result.status)+'" href="#">'+
                                                     '<i class="fa fa-dot-circle-o text-info"></i> @lang("lang.interviewed")'+
@@ -873,10 +891,16 @@
                                             '<i class="fa fa-dot-circle-o text-success"></i> @lang("lang.complete")'+
                                         '</a>';
                             }
-                            status_show = '<div class="dropdown action-label">'+
-                                            '<a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">'+
+                            let dropdown_menu = '<a class="btn btn-white btn-sm btn-rounded" href="#">'+
+                                                    (tag_i)+ '<span>'+(text_status)+'</span>'+
+                                                '</a>';
+                            if (is_update == 1) {
+                                dropdown_menu = '<a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">'+
                                                 (tag_i)+ '<span>'+ (text_status)+'</span>'+
-                                            '</a>'+
+                                            '</a>';
+                            }
+                            status_show = '<div class="dropdown action-label">'+
+                                            (dropdown_menu)+
                                             '<div class="dropdown-menu dropdown-menu-right" id="btn-status">'+
                                                 '<a class="dropdown-item" data-emp-id="'+(staff_result.id)+'"  data-id="3" data-status="'+(staff_result.status)+'" href="#">'+
                                                     '<i class="fa fa-dot-circle-o text-info"></i> @lang("lang.interviewed")'+
@@ -931,6 +955,38 @@
                                 if (staff_result.id_card_number && staff_result.position_type && staff_result.department_id) {
                                     dataAprove = true;
                                 }
+                                let dropdown_action = "";
+                                let cancel = "";
+                                let approve = "";
+                                let print = "";
+                                if (is_print == 1 || is_approve == 1 || is_cancel == 1) {
+                                    if (is_print == 1 ) {
+                                        print = '<a class="dropdown-item btn_print_signed_contract" href="#" data-print-status="4" data-id="'+(staff_result.id)+'">'+
+                                                    '<i class="fa fa-print fa-lg m-r-5"></i> @lang("lang.print")'+
+                                                '</a>';
+                                    }
+                                    if (is_approve == 1) {
+                                        approve =  '<a class="btn btn-sm dropdown-item btn_approve" href="#" data-id-card="'+(dataAprove)+'" data-id="'+(staff_result.id)+'">'+
+                                                    '<i class="fa fa-dot-circle-o text-success"></i>'+
+                                                    '<span> @lang("lang.approve")</span>'+
+                                                '</a>';
+                                    }
+                                    if (is_cancel) {
+                                        cancel = '<a class="dropdown-item btn_cancel text-danger" href="#" data-id="'+(staff_result.id)+'">'+
+                                                    '  <span aria-hidden="true">&times;</span> @lang("lang.cancel")'+
+                                                '</a>';
+                                    }
+                                    dropdown_action = '<div class="dropdown dropdown-action">'+
+                                            '<a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">'+
+                                                '<i class="material-icons">more_vert</i>'+
+                                            '</a>'+
+                                            '<div class="dropdown-menu dropdown-menu-right">'+
+                                                (print)+
+                                                (approve)+
+                                                (cancel)+
+                                            '</div>'+
+                                        '</div>';
+                                }
                                 tr_ct += ' <tr class="odd">'+
                                     '<td class="ids stuck-scroll-3">'+(num)+'</td>'+
                                     '<td class="name_kh stuck-scroll-3" >'+(staff_result.name_kh )+'</td>'+
@@ -944,23 +1000,7 @@
                                     '<td >'+(staff_result.remark ? staff_result.remark: "")+'</td>'+
                                     '<td>'+
                                         '<input type="text" class="phone_number" data-phone-number="'+(staff_result.contact_number)+'" hidden>'+
-                                        '<div class="dropdown dropdown-action">'+
-                                            '<a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">'+
-                                                '<i class="material-icons">more_vert</i>'+
-                                            '</a>'+
-                                            '<div class="dropdown-menu dropdown-menu-right">'+
-                                                '<a class="dropdown-item btn_print_signed_contract" href="#" data-print-status="4" data-id="'+(staff_result.id)+'">'+
-                                                    '<i class="fa fa-print fa-lg m-r-5"></i> @lang("lang.print")'+
-                                                '</a>'+
-                                                '<a class="btn btn-sm dropdown-item btn_approve" href="#" data-id-card="'+(dataAprove)+'" data-id="'+(staff_result.id)+'">'+
-                                                    '<i class="fa fa-dot-circle-o text-success"></i>'+
-                                                    '<span> @lang("lang.approve")</span>'+
-                                                '</a>'+
-                                                '<a class="dropdown-item btn_cancel text-danger" href="#" data-id="'+(staff_result.id)+'">'+
-                                                    '  <span aria-hidden="true">&times;</span> @lang("lang.cancel")'+
-                                                '</a>'+
-                                            '</div>'+
-                                        '</div>'+
+                                        (dropdown_action)+
                                     '</td>'+
                                 '</tr>';
                                 num ++;
