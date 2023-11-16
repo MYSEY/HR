@@ -30,7 +30,7 @@
                 </div>
                 <div class="col-auto float-end ms-auto">
                     <div class="btn-group">
-                        @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer')
+                        @if (permissionAccess("20","is_print")->value == "1" )
                         <div class="btn-group btn-group-sm">
                             <button class="btn btn-white" id="btn_print">
                                 <span class="btn-text-print"><i class="fa fa-print fa-lg"></i> @lang('lang.print')</span>

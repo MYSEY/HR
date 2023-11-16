@@ -35,13 +35,13 @@
                 </div>
                 <div class="col-auto float-end ms-auto">
                     <div class="btn-group">
-                        @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer')
-                        <div class="btn-group btn-group-sm">
-                            <button class="btn btn-white" id="btn_print">
-                                <span class="btn-text-print"><i class="fa fa-print fa-lg"></i> @lang('lang.print')</span>
-                                <span id="btn-print-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>
-                            </button>
-                        </div>
+                        @if (permissionAccess("17","is_print")->value == "1" || permissionAccess("34","is_print")->value == "1")
+                            <div class="btn-group btn-group-sm">
+                                <button class="btn btn-white" id="btn_print">
+                                    <span class="btn-text-print"><i class="fa fa-print fa-lg"></i> @lang('lang.print')</span>
+                                    <span id="btn-print-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>
+                                </button>
+                            </div>
                         @endif
                     </div>
                 </div>

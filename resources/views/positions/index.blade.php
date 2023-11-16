@@ -16,61 +16,70 @@
                     </ul>
                 </div>
                 <div class="col-auto float-end ms-auto">
+                    @if (permissionAccess("46","is_create")->value == "1")
                     <a href="#" class="btn add-btn" data-bs-toggle="modal" data-bs-target="#add_postion"><i class="fa fa-plus"></i> @lang('lang.add_new')</a>
+                    @endif
                 </div>
             </div>
         </div>
+        @if (permissionAccess("46","is_view")->value == "1")
         {!! Toastr::message() !!}
-        <div class="row">
-            <div class="col-md-12">
-                <div class="table-responsive">
-                    <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <table class="table table-striped custom-table mb-0 datatable dataTable no-footer"
-                                    id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
-                                    <thead>
-                                        <tr>
-                                            <th style="width: 30px;" class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="#: activate to sort column descending">#</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department Name: activate to sort column ascending" style="width: 772.237px;">@lang('lang.name') (@lang('lang.kh'))</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department Name: activate to sort column ascending" style="width: 772.237px;">@lang('lang.name') (@lang('lang.en'))</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department Name: activate to sort column ascending" style="width: 772.237px;">@lang('lang.position_range')</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department Name: activate to sort column ascending" style="width: 772.237px;">@lang('lang.position_type')</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department Name: activate to sort column ascending" style="width: 772.237px;">@lang('lang.created_at')</th>
-                                            <th class="text-end sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Action: activate to sort column ascending" style="width: 300.962px;">@lang('lang.action')</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @if (count($data)>0)
-                                            @foreach ($data as $key=>$item)
-                                                <tr class="odd">
-                                                    <td class="sorting_1 ids">{{++$key}}</td>
-                                                    <td class="name_khmer">{{$item->name_khmer}}</td>
-                                                    <td class="name_english">{{$item->name_english}}</td>
-                                                    <td class="position_range">{{$item->position_range}}</td>
-                                                    <td class="position_type">{{$item->position_type}}</td>
-                                                    <td>{{ \Carbon\Carbon::parse($item->created_at)->format('d-M-Y') ?? '' }}</td>
-                                                    <td class="text-end">
-                                                        <div class="dropdown dropdown-action">
-                                                            <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
-                                                            <div class="dropdown-menu dropdown-menu-right">
-                                                                <a class="dropdown-item update" data-toggle="modal" data-id="{{$item->id}}" data-target="#edit_position"><i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')</a>
-                                                                <a class="dropdown-item delete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_position"><i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
-                                                            </div>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            @endforeach
-                                        @endif
-                                    </tbody>
-                                </table>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="table-responsive">
+                        <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <table class="table table-striped custom-table mb-0 datatable dataTable no-footer"
+                                        id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
+                                        <thead>
+                                            <tr>
+                                                <th style="width: 30px;" class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="#: activate to sort column descending">#</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department Name: activate to sort column ascending" style="width: 772.237px;">@lang('lang.name') (@lang('lang.kh'))</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department Name: activate to sort column ascending" style="width: 772.237px;">@lang('lang.name') (@lang('lang.en'))</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department Name: activate to sort column ascending" style="width: 772.237px;">@lang('lang.position_range')</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department Name: activate to sort column ascending" style="width: 772.237px;">@lang('lang.position_type')</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department Name: activate to sort column ascending" style="width: 772.237px;">@lang('lang.created_at')</th>
+                                                <th class="text-end sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Action: activate to sort column ascending" style="width: 300.962px;">@lang('lang.action')</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @if (count($data)>0)
+                                                @foreach ($data as $key=>$item)
+                                                    <tr class="odd">
+                                                        <td class="sorting_1 ids">{{++$key}}</td>
+                                                        <td class="name_khmer">{{$item->name_khmer}}</td>
+                                                        <td class="name_english">{{$item->name_english}}</td>
+                                                        <td class="position_range">{{$item->position_range}}</td>
+                                                        <td class="position_type">{{$item->position_type}}</td>
+                                                        <td>{{ \Carbon\Carbon::parse($item->created_at)->format('d-M-Y') ?? '' }}</td>
+                                                        <td class="text-end">
+                                                            @if (permissionAccess("46","is_update")->value == "1" || permissionAccess("46","is_delete")->value == "1")
+                                                                <div class="dropdown dropdown-action">
+                                                                    <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
+                                                                    <div class="dropdown-menu dropdown-menu-right">
+                                                                        @if (permissionAccess("46","is_update")->value == "1")
+                                                                        <a class="dropdown-item update" data-toggle="modal" data-id="{{$item->id}}" data-target="#edit_position"><i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')</a>
+                                                                        @endif
+                                                                        @if (permissionAccess("46","is_delete")->value == "1")
+                                                                        <a class="dropdown-item delete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_position"><i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
+                                                                        @endif
+                                                                    </div>
+                                                                </div>
+                                                            @endif
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                            @endif
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-
+        @endif
 
         <div id="add_postion" class="modal custom-modal fade" role="dialog" data-bs-backdrop="static">
             <div class="modal-dialog modal-dialog-centered" role="document">

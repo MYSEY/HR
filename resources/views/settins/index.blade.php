@@ -77,7 +77,9 @@
                                         </div>
                                     </div>
                                     <div class="form-group text-center">
+                                        @if (permissionAccess("49","is_create")->value == "1")
                                         <button class="btn btn-primary account-btn submit-btn" type="submit">@lang('lang.reset_password')</button>
+                                        @endif
                                     </div>
                                     <div class="account-footer">
                                         <p>@lang('lang.remember_your_password')? <a href="{{url('/')}}">@lang('lang.login')</a></p>

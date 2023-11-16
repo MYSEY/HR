@@ -38,7 +38,7 @@
     </div>
     
     <div class="">
-        @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer')
+        @if (permissionAccess("33","is_view")->value == "1")
             <form>
                 {{-- @csrf --}}
                 <div class="row filter-btn"> 
@@ -74,10 +74,12 @@
                                 <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading') </span>
                                 <span class="btn-txt">@lang('lang.search')</span>
                             </button>
-                            <button type="button" class="btn btn-sm btn-outline-secondary btn_excel me-2">
-                                <span class="btn-text-excel"><i class="fa fa-file-excel-o" aria-hidden="true"></i> <label >@lang('lang.excel')</label></span>
-                                <span id="btn-text-loading-excel" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>
-                            </button>
+                            @if (permissionAccess("33","is_export")->value == "1")
+                                <button type="button" class="btn btn-sm btn-outline-secondary btn_excel me-2">
+                                    <span class="btn-text-excel"><i class="fa fa-file-excel-o" aria-hidden="true"></i> <label >@lang('lang.excel')</label></span>
+                                    <span id="btn-text-loading-excel" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>
+                                </button>
+                            @endif
                             <button type="button" class="btn btn-sm btn-outline-secondary reset-btn">
                                 <span class="btn-text-reset">@lang('lang.reload')</span>
                                 <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>
@@ -87,72 +89,72 @@
                     </div>
                 </div>
             </form>
-        @endif
-        <div class="content">
-            <div class="row">
-                <div class="col-md-12 p-0">
-                    <div class="table-responsive">
-                        <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
-                            <div class="row">
-                                <div class="col-sm-12">
-                                    <table class="table table-striped custom-table datatable dataTable no-footer tbl_e_form_salary"
-                                        id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
-                                        <thead>
-                                            <tr>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="#: activate to sort column ascending">#</th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Self.Enterprise: activate to sort column descending">@lang('lang.self_enterprise')</th>
-                                                <th class="sorting stuck-scroll-4" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="ID number. nssf: activate to sort column descending">@lang('lang.id_number_nssf')</th>
-                                                <th class="sorting stuck-scroll-4" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="People's ID: activate to sort column descending">@lang("lang.people's_id")</th>
-                                                <th class="sorting stuck-scroll-4" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name kh : activate to sort column descending">@lang('lang.last_name') @lang('lang.kh')</th>
-                                                <th class="sorting stuck-scroll-4" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name kh : activate to sort column descending">@lang('lang.first_name') @lang('lang.kh')</th>
-                                                <th class="sorting " tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name en: activate to sort column descending">@lang('lang.last_name') @lang('lang.en')</th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name en: activate to sort column descending">@lang('lang.first_name') @lang('lang.en')</th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Gender: activate to sort column ascending">@lang('lang.gender')</th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Date Of Birth: activate to sort column ascending">@lang('lang.date_of_birth')</th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Nationality: activate to sort column ascending">@lang('lang.nationality')</th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">@lang('lang.join_date') </th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Group: activate to sort column ascending">@lang('lang.group')</th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Position: activate to sort column ascending">@lang('lang.position') </th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Type of worker: activate to sort column ascending">@lang('lang.type_of_employees')</th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Status: activate to sort column ascending">@lang('lang.status') </th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Salary: activate to sort column ascending">@lang('lang.salary')</th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Joining Date: activate to sort column ascending">@lang('lang.payment_date')</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @if (count($payroll)>0)
-                                                @foreach ($payroll as $key=>$item)
-                                                    <tr class="odd">
-                                                        <td >{{++$key}}</td>
-                                                        <td class=""><a href="#">{{$item->users->number_employee}}</a></td>
-                                                        <td class="stuck-scroll-4">{{$item->users->id_number_nssf ? $item->users->id_number_nssf : ""}}</td>
-                                                        <td class="stuck-scroll-4">{{$item->users->id_card_number ? $item->users->id_card_number : ""}}</td>
-                                                        <td class="stuck-scroll-4"><a href="#">{{$item->users->last_name_kh}}</a></td>
-                                                        <td class="stuck-scroll-4"><a href="#">{{$item->users->first_name_kh}}</a></td>
-                                                        <td ><a href="#">{{$item->users->last_name_en}}</a></td>
-                                                        <td ><a href="#">{{$item->users->first_name_en}}</a></td>
-                                                        <td >{{$item->users->EmployeeGender}}</td>
-                                                        <td >{{$item->users->DOB}}</td>
-                                                        <td >{{$item->users->nationality? $item->nationality : ""}}</td>
-                                                        <td >{{$item->users->joinOfDate}}</td>
-                                                        <td> </td>
-                                                        <td>{{ $item->users == null ? '' : $item->users->position->position_range}}</td>
-                                                        <td>{{ $item->users->type_of_employees_nssf ? $item->users->type_of_employees_nssf == 1 ? 'និវាសនជន' : "អនិវាសនជន" : ""}}</td>
-                                                        <td>{{ $item->users->status_nssf ? $item->users->status_nssf == 1 ? 'Working' : 'Not working' : ""}}</td>
-                                                        <td>$ {{$item->total_gross}}</td>
-                                                        <td>{{ \Carbon\Carbon::parse($item->payment_date)->format('d-M-Y')}}</td>
-                                                    </tr>
-                                                @endforeach
-                                            @endif
-                                        </tbody>
-                                    </table>
+            <div class="content">
+                <div class="row">
+                    <div class="col-md-12 p-0">
+                        <div class="table-responsive">
+                            <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <table class="table table-striped custom-table datatable dataTable no-footer tbl_e_form_salary"
+                                            id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
+                                            <thead>
+                                                <tr>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="#: activate to sort column ascending">#</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Self.Enterprise: activate to sort column descending">@lang('lang.self_enterprise')</th>
+                                                    <th class="sorting stuck-scroll-4" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="ID number. nssf: activate to sort column descending">@lang('lang.id_number_nssf')</th>
+                                                    <th class="sorting stuck-scroll-4" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="People's ID: activate to sort column descending">@lang("lang.people's_id")</th>
+                                                    <th class="sorting stuck-scroll-4" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name kh : activate to sort column descending">@lang('lang.last_name') @lang('lang.kh')</th>
+                                                    <th class="sorting stuck-scroll-4" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name kh : activate to sort column descending">@lang('lang.first_name') @lang('lang.kh')</th>
+                                                    <th class="sorting " tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name en: activate to sort column descending">@lang('lang.last_name') @lang('lang.en')</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name en: activate to sort column descending">@lang('lang.first_name') @lang('lang.en')</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Gender: activate to sort column ascending">@lang('lang.gender')</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Date Of Birth: activate to sort column ascending">@lang('lang.date_of_birth')</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Nationality: activate to sort column ascending">@lang('lang.nationality')</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">@lang('lang.join_date') </th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Group: activate to sort column ascending">@lang('lang.group')</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Position: activate to sort column ascending">@lang('lang.position') </th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Type of worker: activate to sort column ascending">@lang('lang.type_of_employees')</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Status: activate to sort column ascending">@lang('lang.status') </th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Salary: activate to sort column ascending">@lang('lang.salary')</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Joining Date: activate to sort column ascending">@lang('lang.payment_date')</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @if (count($payroll)>0)
+                                                    @foreach ($payroll as $key=>$item)
+                                                        <tr class="odd">
+                                                            <td >{{++$key}}</td>
+                                                            <td class=""><a href="#">{{$item->users->number_employee}}</a></td>
+                                                            <td class="stuck-scroll-4">{{$item->users->id_number_nssf ? $item->users->id_number_nssf : ""}}</td>
+                                                            <td class="stuck-scroll-4">{{$item->users->id_card_number ? $item->users->id_card_number : ""}}</td>
+                                                            <td class="stuck-scroll-4"><a href="#">{{$item->users->last_name_kh}}</a></td>
+                                                            <td class="stuck-scroll-4"><a href="#">{{$item->users->first_name_kh}}</a></td>
+                                                            <td ><a href="#">{{$item->users->last_name_en}}</a></td>
+                                                            <td ><a href="#">{{$item->users->first_name_en}}</a></td>
+                                                            <td >{{$item->users->EmployeeGender}}</td>
+                                                            <td >{{$item->users->DOB}}</td>
+                                                            <td >{{$item->users->nationality? $item->nationality : ""}}</td>
+                                                            <td >{{$item->users->joinOfDate}}</td>
+                                                            <td> </td>
+                                                            <td>{{ $item->users == null ? '' : $item->users->position->position_range}}</td>
+                                                            <td>{{ $item->users->type_of_employees_nssf ? $item->users->type_of_employees_nssf == 1 ? 'និវាសនជន' : "អនិវាសនជន" : ""}}</td>
+                                                            <td>{{ $item->users->status_nssf ? $item->users->status_nssf == 1 ? 'Working' : 'Not working' : ""}}</td>
+                                                            <td>$ {{$item->total_gross}}</td>
+                                                            <td>{{ \Carbon\Carbon::parse($item->payment_date)->format('d-M-Y')}}</td>
+                                                        </tr>
+                                                    @endforeach
+                                                @endif
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        @endif
     </div>
 </div>
 @endsection

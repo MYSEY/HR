@@ -12,40 +12,44 @@
                 </div>
             </div>
         </div>
-        {!! Toastr::message() !!}
-        <div class="row">
-            <div class="col-md-12">
-                <div class="table-responsive">
-                    <table class="table table-bordered review-table mb-0">
-                        <thead>
-                            <tr>
-                                <th>@lang('lang.children_allowance')</th>
-                                <th>@lang('lang.reduced_burden_children')</th>
-                                <th>@lang('lang.reduced_burden_spouse')</th>
-                                <th style="text-align: center;">@lang('lang.action')</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @if (count($data)>0)
-                                @foreach ($data as $item)
-                                    <tr>
-                                        <td hidden class="ids">{{$item->id}}</td>
-                                        <td><div class="input-group"><span class="input-group-text">$</span><input type="text" class="form-control" value="{{$item->total_children_allowance}}"></td>
-                                        <td><div class="input-group"><span class="input-group-text">៛</span><input type="number" class="form-control" value="{{$item->reduced_burden_children}}"></div></td>
-                                        <td><div class="input-group"><span class="input-group-text">៛</span><input type="number" class="form-control" value="{{$item->spouse_allowance}}"></div></td>
-                                        <td style="text-align: center;">
-                                            <a class="btn btn-success update" data-toggle="modal" data-id="{{$item->id}}" data-target="#edit_children_allowance"><i class="fa fa-pencil m-r-5"></i></a>
-                                            {{-- <a class="btn btn-danger delete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_taxes"><i class="fa fa-trash-o m-r-5"></i></a> --}}
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            @endif
-                        </tbody>
-                    </table>
+        @if (permissionAccess("43","is_view")->value == "1")
+            {!! Toastr::message() !!}
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="table-responsive">
+                        <table class="table table-bordered review-table mb-0">
+                            <thead>
+                                <tr>
+                                    <th>@lang('lang.children_allowance')</th>
+                                    <th>@lang('lang.reduced_burden_children')</th>
+                                    <th>@lang('lang.reduced_burden_spouse')</th>
+                                    <th style="text-align: center;">@lang('lang.action')</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (count($data)>0)
+                                    @foreach ($data as $item)
+                                        <tr>
+                                            <td hidden class="ids">{{$item->id}}</td>
+                                            <td><div class="input-group"><span class="input-group-text">$</span><input type="text" disabled class="form-control" value="{{$item->total_children_allowance}}"></td>
+                                            <td><div class="input-group"><span class="input-group-text">៛</span><input type="number" disabled class="form-control" value="{{$item->reduced_burden_children}}"></div></td>
+                                            <td><div class="input-group"><span class="input-group-text">៛</span><input type="number" disabled class="form-control" value="{{$item->spouse_allowance}}"></div></td>
+                                            <td style="text-align: center;">
+                                                @if (permissionAccess("43","is_update")->value == "1")
+                                                <a class="btn btn-success update" data-toggle="modal" data-id="{{$item->id}}" data-target="#edit_children_allowance"><i class="fa fa-pencil m-r-5"></i></a>
+                                                @endif
+                                                
+                                                {{-- <a class="btn btn-danger delete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_taxes"><i class="fa fa-trash-o m-r-5"></i></a> --}}
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                @endif
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
-        </div>
-
+        @endif
         <div id="edit_children_allowance" class="modal custom-modal fade" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                 <div class="modal-content">

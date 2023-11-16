@@ -307,11 +307,14 @@
                                 <label class="container-checkbox">@lang('lang.add')
                                     <input type="checkbox" class="c_and_b_checkbox employee_salary_checkbox" id="c_and_b_add"> <span class="checkmark"></span>
                                 </label>
-                                <label class="container-checkbox">@lang('lang.approve')
-                                    <input type="checkbox" class="c_and_b_checkbox employee_salary_checkbox" id="c_and_b_approve"> <span class="checkmark"></span>
+                                <label class="container-checkbox">@lang('lang.import')
+                                    <input type="checkbox" class="c_and_b_checkbox employee_salary_checkbox" id="c_and_b_import"> <span class="checkmark"></span>
                                 </label>
                             </div>
                             <div class="col-md-3">
+                                <label class="container-checkbox">@lang('lang.approve')
+                                    <input type="checkbox" class="c_and_b_checkbox employee_salary_checkbox" id="c_and_b_approve"> <span class="checkmark"></span>
+                                </label>
                                 <label class="container-checkbox">@lang('lang.edit')
                                     <input type="checkbox" class="c_and_b_checkbox employee_salary_checkbox" id="c_and_b_edit"> <span class="checkmark"></span>
                                 </label>

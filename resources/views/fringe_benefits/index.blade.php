@@ -11,74 +11,85 @@
                     </ul>
                 </div>
                 <div class="col-auto float-end ms-auto">
+                    @if (permissionAccess("14","is_import")->value == "1")
                     <a href="#" class="btn add-btn" data-toggle="modal" id="import_new_cvs"><i class="fa fa-plus"></i>@lang('lang.import')</a>
+                    @endif
+                    @if (permissionAccess("14","is_create")->value == "1")
                     <a href="#" class="btn add-btn me-2" data-bs-toggle="modal" data-bs-target="#add_fring_benefit"><i class="fa fa-plus"></i> @lang('lang.add_new')</a>
+                    @endif
                 </div>
             </div>
         </div>
+        @if (permissionAccess("14","is_view")->value == "1")
         {!! Toastr::message() !!}
-        <div class="row">
-            <div class="col-md-12">
-                <div class="table-responsive">
-                    <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <table class="table table-striped custom-table mb-0 datatable dataTable no-footer"
-                                    id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
-                                    <thead>
-                                        <tr>
-                                            <th style="width: 30px;" class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="#: activate to sort column descending">#</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Employee ID: activate to sort column ascending">@lang('lang.employee_id')</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Name: activate to sort column ascending">@lang('lang.name') (@lang('lang.kh'))</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Name: activate to sort column ascending">@lang('lang.name') (@lang('lang.en'))</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Gender: activate to sort column ascending">@lang('lang.gender')</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Position: activate to sort column ascending">@lang('lang.position')</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join date: activate to sort column ascending">@lang('lang.join_date')</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Amount usd: activate to sort column ascending">@lang('lang.amount') (@lang('lang.usd'))</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Amount riel: activate to sort column ascending">@lang('lang.amount') (@lang('lang.riel'))</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Request date: activate to sort column ascending">@lang('lang.request_date')</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Payment date: activate to sort column ascending">@lang('lang.paid_date')</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Remark: activate to sort column ascending">@lang('lang.remark')</th>
-                                            <th class="text-end sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Action: activate to sort column ascending">@lang('lang.action')</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @if (count($data)>0)
-                                            @foreach ($data as $key=>$item)
-                                                <tr class="odd">
-                                                    <td class="ids">{{++$key ?? ""}}</td>
-                                                    <td >{{$item->employee->number_employee}}</td>
-                                                    <td >{{$item->employee->employee_name_kh}}</td>
-                                                    <td >{{$item->employee->employee_name_en}}</td>
-                                                    <td >{{$item->employee->employeeGender ? $item->employee->employeeGender : ""}}</td>
-                                                    <td >{{$item->employee->position ? $item->employee->position->name_english : ""}}</td>
-                                                    <td >{{\Carbon\Carbon::parse($item->employee->date_of_commencement)->format('d-M-Y') ?? ''}}</td>
-                                                    <td >$ {{number_format($item->amount_usd,2)}}</td>
-                                                    <td >៛ {{number_format($item->amount_riel)}}</td>
-                                                    <td >{{\Carbon\Carbon::parse($item->request_date)->format('d-M-Y') ?? ''}}</td>
-                                                    <td>{{\Carbon\Carbon::parse($item->paid_date)->format('d-M-Y') ?? '' }}</td>
-                                                    <td>{{ $item->remark ? $item->remark : ""}}</td>
-                                                    <td class="text-end">
-                                                        <div class="dropdown dropdown-action">
-                                                            <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
-                                                            <div class="dropdown-menu dropdown-menu-right">
-                                                                <a class="dropdown-item update"  data-id="{{$item->id}}"><i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')</a>
-                                                                <a class="dropdown-item delete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_fringe_benefit"><i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
-                                                            </div>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            @endforeach
-                                        @endif
-                                    </tbody>
-                                </table>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="table-responsive">
+                        <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <table class="table table-striped custom-table mb-0 datatable dataTable no-footer"
+                                        id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
+                                        <thead>
+                                            <tr>
+                                                <th style="width: 30px;" class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="#: activate to sort column descending">#</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Employee ID: activate to sort column ascending">@lang('lang.employee_id')</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Name: activate to sort column ascending">@lang('lang.name') (@lang('lang.kh'))</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Name: activate to sort column ascending">@lang('lang.name') (@lang('lang.en'))</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Gender: activate to sort column ascending">@lang('lang.gender')</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Position: activate to sort column ascending">@lang('lang.position')</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join date: activate to sort column ascending">@lang('lang.join_date')</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Amount usd: activate to sort column ascending">@lang('lang.amount') (@lang('lang.usd'))</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Amount riel: activate to sort column ascending">@lang('lang.amount') (@lang('lang.riel'))</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Request date: activate to sort column ascending">@lang('lang.request_date')</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Payment date: activate to sort column ascending">@lang('lang.paid_date')</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Remark: activate to sort column ascending">@lang('lang.remark')</th>
+                                                <th class="text-end sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Action: activate to sort column ascending">@lang('lang.action')</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @if (count($data)>0)
+                                                @foreach ($data as $key=>$item)
+                                                    <tr class="odd">
+                                                        <td class="ids">{{++$key ?? ""}}</td>
+                                                        <td >{{$item->employee->number_employee}}</td>
+                                                        <td >{{$item->employee->employee_name_kh}}</td>
+                                                        <td >{{$item->employee->employee_name_en}}</td>
+                                                        <td >{{$item->employee->employeeGender ? $item->employee->employeeGender : ""}}</td>
+                                                        <td >{{$item->employee->position ? $item->employee->position->name_english : ""}}</td>
+                                                        <td >{{\Carbon\Carbon::parse($item->employee->date_of_commencement)->format('d-M-Y') ?? ''}}</td>
+                                                        <td >$ {{number_format($item->amount_usd,2)}}</td>
+                                                        <td >៛ {{number_format($item->amount_riel)}}</td>
+                                                        <td >{{\Carbon\Carbon::parse($item->request_date)->format('d-M-Y') ?? ''}}</td>
+                                                        <td>{{\Carbon\Carbon::parse($item->paid_date)->format('d-M-Y') ?? '' }}</td>
+                                                        <td>{{ $item->remark ? $item->remark : ""}}</td>
+                                                        <td class="text-end">
+                                                            @if (permissionAccess("14","is_update")->value == "1" || permissionAccess("14","is_delete")->value == "1")
+                                                                <div class="dropdown dropdown-action">
+                                                                    <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
+                                                                    <div class="dropdown-menu dropdown-menu-right">
+                                                                        @if (permissionAccess("14","is_update")->value == "1" )
+                                                                        <a class="dropdown-item update"  data-id="{{$item->id}}"><i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')</a>
+                                                                        @endif
+                                                                        @if (permissionAccess("14","is_delete")->value == "1" )
+                                                                        <a class="dropdown-item delete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_fringe_benefit"><i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
+                                                                        @endif
+                                                                    </div>
+                                                                </div>
+                                                            @endif
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                            @endif
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-
+        @endif
         <div id="add_fring_benefit" class="modal custom-modal fade hr-modal-select2" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                 <div class="modal-content">
