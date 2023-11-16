@@ -26,7 +26,7 @@
             </div>
         </div>
     </div>
-    @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer')
+    @if (permissionAccess("30","is_view")->value == "1")
         <div class="row filter-btn">
             <div class="col-sm-2 col-md-2"> 
                 <div class="form-group cls-research">
@@ -51,10 +51,12 @@
                         <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading') </span>
                         <span class="btn-txt">@lang('lang.search')</span>
                     </button>
-                    <button type="button" class="btn btn-sm btn-outline-secondary btn_excel me-2">
-                        <span class="btn-text-excel"><i class="fa fa-file-excel-o" aria-hidden="true"></i> <label >@lang('lang.excel')</label></span>
-                        <span id="btn-text-loading-excel" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>
-                    </button>
+                    @if (permissionAccess("30","is_export")->value == "1")
+                        <button type="button" class="btn btn-sm btn-outline-secondary btn_excel me-2">
+                            <span class="btn-text-excel"><i class="fa fa-file-excel-o" aria-hidden="true"></i> <label >@lang('lang.excel')</label></span>
+                            <span id="btn-text-loading-excel" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>
+                        </button>
+                    @endif
                     <button type="button" class="btn btn-sm btn-outline-secondary reset-btn">
                         <span class="btn-text-reset">@lang('lang.reload')</span>
                         <span id="btn-reset-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>
@@ -62,77 +64,77 @@
                 </div>
             </div>
         </div>
-    @endif
-    <div class="content">
-        <div class="row">
-            <div class="col-md-12 p-0">
-                <div class="table-responsive">
-                    <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <table class="table table-striped custom-table mb-0 datatable dataTable no-footer tbl_fringe_benefit_report"
-                                    id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
-                                    <thead>
-                                        <tr>
-                                            <th tabindex="0" aria-controls="DataTables_Table_0" rowspan="2" style="vertical-align:bottom" >#</th>
-                                            <th tabindex="0" aria-controls="DataTables_Table_0" rowspan="2" style="vertical-align:bottom">@lang('lang.employee_id')</th>
-                                            <th tabindex="0" aria-controls="DataTables_Table_0" colspan="2" style="text-align: center">@lang('lang.names_and_surnames')</th>
-                                            <th tabindex="0" aria-controls="DataTables_Table_0" rowspan="2" style="vertical-align:bottom" >@lang('lang.gender')</th>
-                                            <th tabindex="0" aria-controls="DataTables_Table_0" rowspan="2" style="vertical-align:bottom" >@lang('lang.position')</th>
-                                            <th tabindex="0" aria-controls="DataTables_Table_0" rowspan="2" style="vertical-align:bottom" >@lang('lang.location')</th>
-                                            <th tabindex="0" aria-controls="DataTables_Table_0" rowspan="2" style="vertical-align:bottom">@lang('lang.join_date')</th>
-                                            <th tabindex="0" aria-controls="DataTables_Table_0" colspan="2" style="text-align: center">@lang('lang.total_cost')</th>
-                                            <th tabindex="0" aria-controls="DataTables_Table_0" colspan="2" style="vertical-align:bottom; text-align: center">@lang('lang.tax_deduction') (50%)</th>
-                                            <th tabindex="0" aria-controls="DataTables_Table_0" colspan="2" style="vertical-align:bottom; text-align: center">@lang('lang.withholding_tax_rate') (20%)</th>
-                                            <th tabindex="0" aria-controls="DataTables_Table_0" colspan="2" style="vertical-align:bottom; text-align: center">@lang('lang.earnings_after_tax')</th>
-                                            <th tabindex="0" aria-controls="DataTables_Table_0" rowspan="2" style="vertical-align:bottom"  >@lang("lang.cashier's_signature")</th>
-                                        </tr>
-                                        <tr>
-                                            <th>@lang('lang.name') (@lang('lang.kh'))</th>
-                                            <th>@lang('lang.name') (@lang('lang.en'))</th>
-                                            <th>@lang('lang.usd')</th>
-                                            <th>@lang('lang.riel')</th>
-                                            <th>@lang('lang.usd')</th>
-                                            <th>@lang('lang.riel')</th>
-                                            <th>@lang('lang.usd')</th>
-                                            <th>@lang('lang.riel')</th>
-                                            <th>@lang('lang.usd')</th>
-                                            <th>@lang('lang.riel')</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @if (count($datas) > 0)
-                                            @foreach ($datas as $key=>$item)
-                                                <tr>
-                                                    <td>{{ ++$key }}</td>
-                                                    <td>{{ $item["employee"]->number_employee }}</td>
-                                                    <td>{{ $item["employee"]->employee_name_kh }}</td>
-                                                    <td>{{ $item["employee"]->employee_name_en }}</td>
-                                                    <td >{{$item["employee"]->employeeGender ? $item["employee"]->employeeGender : ""}}</td>
-                                                    <td >{{$item["employee"]->position ? $item["employee"]->position->name_english : ""}}</td>
-                                                    <td >{{$item["employee"]->branch ? $item["employee"]->branch->branch_name_en : ""}}</td>
-                                                    <td >{{\Carbon\Carbon::parse($item["employee"]->date_of_commencement)->format('d-M-Y') ?? ''}}</td>
-                                                    <td >{{ $item["amount_usd"] }}</td>
-                                                    <td >{{ number_format($item["amount_riel"])}}</td>
-                                                    <td >{{ $item["tax_deduction_usd"] }}</td>
-                                                    <td >{{ number_format($item["tax_deduction_riel"])}}</td>
-                                                    <td >{{ $item["withholding_tax_rate_usd"]}}</td>
-                                                    <td >{{ number_format($item["withholding_tax_rate_riel"])}}</td>
-                                                    <td >{{ $item["earnings_after_tax_usd"]}}</td>
-                                                    <td >{{ number_format($item["earnings_after_tax_riel"])}}</td>
-                                                    <td ></td>
-                                                </tr>
-                                            @endforeach
-                                        @endif
-                                    </tbody>
-                                </table>
+        <div class="content">
+            <div class="row">
+                <div class="col-md-12 p-0">
+                    <div class="table-responsive">
+                        <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <table class="table table-striped custom-table mb-0 datatable dataTable no-footer tbl_fringe_benefit_report"
+                                        id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
+                                        <thead>
+                                            <tr>
+                                                <th tabindex="0" aria-controls="DataTables_Table_0" rowspan="2" style="vertical-align:bottom" >#</th>
+                                                <th tabindex="0" aria-controls="DataTables_Table_0" rowspan="2" style="vertical-align:bottom">@lang('lang.employee_id')</th>
+                                                <th tabindex="0" aria-controls="DataTables_Table_0" colspan="2" style="text-align: center">@lang('lang.names_and_surnames')</th>
+                                                <th tabindex="0" aria-controls="DataTables_Table_0" rowspan="2" style="vertical-align:bottom" >@lang('lang.gender')</th>
+                                                <th tabindex="0" aria-controls="DataTables_Table_0" rowspan="2" style="vertical-align:bottom" >@lang('lang.position')</th>
+                                                <th tabindex="0" aria-controls="DataTables_Table_0" rowspan="2" style="vertical-align:bottom" >@lang('lang.location')</th>
+                                                <th tabindex="0" aria-controls="DataTables_Table_0" rowspan="2" style="vertical-align:bottom">@lang('lang.join_date')</th>
+                                                <th tabindex="0" aria-controls="DataTables_Table_0" colspan="2" style="text-align: center">@lang('lang.total_cost')</th>
+                                                <th tabindex="0" aria-controls="DataTables_Table_0" colspan="2" style="vertical-align:bottom; text-align: center">@lang('lang.tax_deduction') (50%)</th>
+                                                <th tabindex="0" aria-controls="DataTables_Table_0" colspan="2" style="vertical-align:bottom; text-align: center">@lang('lang.withholding_tax_rate') (20%)</th>
+                                                <th tabindex="0" aria-controls="DataTables_Table_0" colspan="2" style="vertical-align:bottom; text-align: center">@lang('lang.earnings_after_tax')</th>
+                                                <th tabindex="0" aria-controls="DataTables_Table_0" rowspan="2" style="vertical-align:bottom"  >@lang("lang.cashier's_signature")</th>
+                                            </tr>
+                                            <tr>
+                                                <th>@lang('lang.name') (@lang('lang.kh'))</th>
+                                                <th>@lang('lang.name') (@lang('lang.en'))</th>
+                                                <th>@lang('lang.usd')</th>
+                                                <th>@lang('lang.riel')</th>
+                                                <th>@lang('lang.usd')</th>
+                                                <th>@lang('lang.riel')</th>
+                                                <th>@lang('lang.usd')</th>
+                                                <th>@lang('lang.riel')</th>
+                                                <th>@lang('lang.usd')</th>
+                                                <th>@lang('lang.riel')</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @if (count($datas) > 0)
+                                                @foreach ($datas as $key=>$item)
+                                                    <tr>
+                                                        <td>{{ ++$key }}</td>
+                                                        <td>{{ $item["employee"]->number_employee }}</td>
+                                                        <td>{{ $item["employee"]->employee_name_kh }}</td>
+                                                        <td>{{ $item["employee"]->employee_name_en }}</td>
+                                                        <td >{{$item["employee"]->employeeGender ? $item["employee"]->employeeGender : ""}}</td>
+                                                        <td >{{$item["employee"]->position ? $item["employee"]->position->name_english : ""}}</td>
+                                                        <td >{{$item["employee"]->branch ? $item["employee"]->branch->branch_name_en : ""}}</td>
+                                                        <td >{{\Carbon\Carbon::parse($item["employee"]->date_of_commencement)->format('d-M-Y') ?? ''}}</td>
+                                                        <td >{{ $item["amount_usd"] }}</td>
+                                                        <td >{{ number_format($item["amount_riel"])}}</td>
+                                                        <td >{{ $item["tax_deduction_usd"] }}</td>
+                                                        <td >{{ number_format($item["tax_deduction_riel"])}}</td>
+                                                        <td >{{ $item["withholding_tax_rate_usd"]}}</td>
+                                                        <td >{{ number_format($item["withholding_tax_rate_riel"])}}</td>
+                                                        <td >{{ $item["earnings_after_tax_usd"]}}</td>
+                                                        <td >{{ number_format($item["earnings_after_tax_riel"])}}</td>
+                                                        <td ></td>
+                                                    </tr>
+                                                @endforeach
+                                            @endif
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    @endif
 @endsection
 @include('includs.script')
 <script>

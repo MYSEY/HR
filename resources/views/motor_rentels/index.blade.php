@@ -22,17 +22,16 @@
                     </ul>
                 </div>
                 <div class="col-auto float-end ms-auto">
-                    @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer')
-                        <a href="#" class="btn add-btn" data-toggle="modal" id="import_new_motor_rentel"><i
-                            class="fa fa-plus"></i>@lang('lang.import')</a>
-                        <a href="#" class="btn add-btn me-2" data-toggle="modal" data-toggle="modal" id="add_new"><i
-                                class="fa fa-plus"></i>@lang('lang.add_new')</a>
-                           
+                    @if (permissionAccess("16","is_import")->value == "1")
+                        <a href="#" class="btn add-btn" data-toggle="modal" id="import_new_motor_rentel"><i class="fa fa-plus"></i>@lang('lang.import')</a>
+                    @endif
+                    @if (permissionAccess("16","is_create")->value == "1")
+                        <a href="#" class="btn add-btn me-2" data-toggle="modal" data-toggle="modal" id="add_new"><i class="fa fa-plus"></i>@lang('lang.add_new')</a>
                     @endif
                 </div>
             </div>
         </div>
-        @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer')
+        @if (permissionAccess("16","is_view")->value == "1")
             <div class="row filter-row-btn">
                 <div class="col-sm-2 col-md-2">
                     <div class="form-group form-focus select-focus">
@@ -78,118 +77,131 @@
                     </div>
                 </div>
             </div>
-        @endif
-        <div class="content">
-            <div class="row">
-                <div class="col-md-12 p-0">
-                    <div class="table-responsive">
-                        <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
-                            <div class="row">
-                                <div class="col-sm-12">
-                                    <table class="table table-striped custom-table mb-0 datatable dataTable no-footer tbl-motor"
-                                        id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
-                                        <thead>
-                                            <tr>
-                                                <th class="sorting sorting_asc stuck-scroll-3" tabindex="0" aria-controls="DataTables_Table_0"
-                                                    rowspan="1" colspan="1" aria-sort="ascending"
-                                                    aria-label="Profle: activate to sort column descending"
-                                                    style="width: 94.0625px;">#</th>
-                                                <th class="sorting stuck-scroll-3" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1"
-                                                    colspan="1" aria-label="Employee ID: activate to sort column ascending"
-                                                    style="width: 94.0625px;">@lang('lang.employee_id')</th>
-                                                <th class="sorting sorting_asc stuck-scroll-3" tabindex="0" aria-controls="DataTables_Table_0"
-                                                    rowspan="1" colspan="1" aria-sort="ascending"
-                                                    aria-label="Employee name: activate to sort column descending"
-                                                    style="width: 178px;">@lang('lang.employee_name')</th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1"
-                                                    colspan="1" aria-label="Gender: activate to sort column ascending"
-                                                    style="width: 125.15px;">@lang('lang.gender')</th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                    rowspan="1" colspan="1"
-                                                    aria-label="Position: activate to sort column ascending"
-                                                    style="width: 125.15px;">@lang('lang.position')</th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                    rowspan="1" colspan="1"
-                                                    aria-label="Department: activate to sort column ascending"
-                                                    style="width: 125.15px;">@lang('lang.department')</th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                    rowspan="1" colspan="1"
-                                                    aria-label="Start Date: activate to sort column ascending"
-                                                    style="width: 125.15px;">@lang('lang.start_date')</th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                    rowspan="1" colspan="1"
-                                                    aria-label="End Date: activate to sort column ascending"
-                                                    style="width: 125.15px;">@lang('lang.end_date')</th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                    rowspan="1" colspan="1"
-                                                    aria-label="Total Gasoline: activate to sort column ascending"
-                                                    style="width: 125.15px;">@lang('lang.total_gasoline') </th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                    rowspan="1" colspan="1"
-                                                    aria-label="Total working days: activate to sort column ascending"
-                                                    style="width: 125.15px;">@lang('lang.total_working_days')</th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                    rowspan="1" colspan="1"
-                                                    aria-label="Price engine oil: activate to sort column ascending"
-                                                    style="width: 125.15px;">@lang('lang.price_engine_oil')</th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                    rowspan="1" colspan="1"
-                                                    aria-label="Price motor rentel: activate to sort column ascending"
-                                                    style="width: 51.475px;">@lang('lang.price_motor_rentel')</th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                    rowspan="1" colspan="1"
-                                                    aria-label="Taplab Price: activate to sort column ascending"
-                                                    style="width: 51.475px;">@lang('lang.tablet_price')</th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                    rowspan="1" colspan="1"
-                                                    aria-label="status: activate to sort column ascending"
-                                                    style="width: 51.475px;">@lang('lang.status')</th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                    rowspan="1" colspan="1"
-                                                    aria-label="Resignetion Date: activate to sort column ascending"
-                                                    style="width: 51.475px;">@lang('lang.last_working_day')</th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                    rowspan="1" colspan="1"
-                                                    aria-label="Create at: activate to sort column ascending"
-                                                    style="width: 51.475px;">@lang('lang.created_at')</th>
-                                                <th class="text-center sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                    rowspan="1" colspan="1"
-                                                    aria-label="Status: activate to sort column ascending"
-                                                    style="width: 55.5625px;">@lang('lang.action')</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @if (count($data) > 0)
-                                                @foreach ($data as $key=>$item)
-                                                    <tr class="odd">
-                                                        <td class="ids stuck-scroll-3">{{ ++$key }}</td>
-                                                        <td class="number_employee_id stuck-scroll-3">
-                                                            {{ $item->MotorEmployee->number_employee }}
-                                                        </td>
-                                                        <td class="stuck-scroll-3">{{ Helper::getLang() == 'en' ? $item->MotorEmployee->employee_name_en : $item->MotorEmployee->employee_name_kh }}</td>
-                                                        <td>{{ $item->MotorEmployee->EmployeeGender }}</td>
-                                                        <td>{{ $item->MotorEmployee->EmployeePosition }}</td>
-                                                        <td>{{ $item->MotorEmployee->EmployeeDepartment }}</td>
-                                                        <td>{{ $item->start_date ? \Carbon\Carbon::parse($item->start_date)->format('d-M-Y') : '' }}</td>
-                                                        <td>{{ $item->end_date ? \Carbon\Carbon::parse($item->end_date)->format('d-M-Y') : '' }}</td>
-                                                        <td>{{ $item->total_gasoline }}</td>
-                                                        <td>{{ $item->total_work_day }}</td>
-                                                        <td>៛ {{ number_format($item->price_engine_oil) }}</td>
-                                                        <td>៛ {{ number_format($item->price_motor_rentel)}}</td>
-                                                        <td>៛ {{ $item->price_taplab_rentel ? number_format($item->price_taplab_rentel) : "0000"}}</td>
-                                                        <td>
-                                                            <div class="dropdown action-label">
-                                                                @if (!$item->resigned_date)
-                                                                    <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
-                                                                        <i class="fa fa-dot-circle-o text-success"></i>
-                                                                        <span>@lang('lang.active')</span>
-                                                                    </a>
-                                                                @else
-                                                                    <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
-                                                                        <i class="fa fa-dot-circle-o text-danger"></i>
-                                                                        <span>@lang('lang.resigned_motor')</span>
-                                                                    </a>
-                                                                @endif
+            <div class="content">
+                <div class="row">
+                    <div class="col-md-12 p-0">
+                        <div class="table-responsive">
+                            <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <table class="table table-striped custom-table mb-0 datatable dataTable no-footer tbl-motor"
+                                            id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
+                                            <thead>
+                                                <tr>
+                                                    <th class="sorting sorting_asc stuck-scroll-3" tabindex="0" aria-controls="DataTables_Table_0"
+                                                        rowspan="1" colspan="1" aria-sort="ascending"
+                                                        aria-label="Profle: activate to sort column descending"
+                                                        style="width: 94.0625px;">#</th>
+                                                    <th class="sorting stuck-scroll-3" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1"
+                                                        colspan="1" aria-label="Employee ID: activate to sort column ascending"
+                                                        style="width: 94.0625px;">@lang('lang.employee_id')</th>
+                                                    <th class="sorting sorting_asc stuck-scroll-3" tabindex="0" aria-controls="DataTables_Table_0"
+                                                        rowspan="1" colspan="1" aria-sort="ascending"
+                                                        aria-label="Employee name: activate to sort column descending"
+                                                        style="width: 178px;">@lang('lang.employee_name')</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1"
+                                                        colspan="1" aria-label="Gender: activate to sort column ascending"
+                                                        style="width: 125.15px;">@lang('lang.gender')</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                        rowspan="1" colspan="1"
+                                                        aria-label="Position: activate to sort column ascending"
+                                                        style="width: 125.15px;">@lang('lang.position')</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                        rowspan="1" colspan="1"
+                                                        aria-label="Department: activate to sort column ascending"
+                                                        style="width: 125.15px;">@lang('lang.department')</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                        rowspan="1" colspan="1"
+                                                        aria-label="Start Date: activate to sort column ascending"
+                                                        style="width: 125.15px;">@lang('lang.start_date')</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                        rowspan="1" colspan="1"
+                                                        aria-label="End Date: activate to sort column ascending"
+                                                        style="width: 125.15px;">@lang('lang.end_date')</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                        rowspan="1" colspan="1"
+                                                        aria-label="Total Gasoline: activate to sort column ascending"
+                                                        style="width: 125.15px;">@lang('lang.total_gasoline') </th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                        rowspan="1" colspan="1"
+                                                        aria-label="Total working days: activate to sort column ascending"
+                                                        style="width: 125.15px;">@lang('lang.total_working_days')</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                        rowspan="1" colspan="1"
+                                                        aria-label="Price engine oil: activate to sort column ascending"
+                                                        style="width: 125.15px;">@lang('lang.price_engine_oil')</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                        rowspan="1" colspan="1"
+                                                        aria-label="Price motor rentel: activate to sort column ascending"
+                                                        style="width: 51.475px;">@lang('lang.price_motor_rentel')</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                        rowspan="1" colspan="1"
+                                                        aria-label="Taplab Price: activate to sort column ascending"
+                                                        style="width: 51.475px;">@lang('lang.tablet_price')</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                        rowspan="1" colspan="1"
+                                                        aria-label="status: activate to sort column ascending"
+                                                        style="width: 51.475px;">@lang('lang.status')</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                        rowspan="1" colspan="1"
+                                                        aria-label="Resignetion Date: activate to sort column ascending"
+                                                        style="width: 51.475px;">@lang('lang.last_working_day')</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                        rowspan="1" colspan="1"
+                                                        aria-label="Create at: activate to sort column ascending"
+                                                        style="width: 51.475px;">@lang('lang.created_at')</th>
+                                                    <th class="text-center sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                        rowspan="1" colspan="1"
+                                                        aria-label="Status: activate to sort column ascending"
+                                                        style="width: 55.5625px;">@lang('lang.action')</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @if (count($data) > 0)
+                                                    @foreach ($data as $key=>$item)
+                                                        <tr class="odd">
+                                                            <td class="ids stuck-scroll-3">{{ ++$key }}</td>
+                                                            <td class="number_employee_id stuck-scroll-3">
+                                                                {{ $item->MotorEmployee->number_employee }}
+                                                            </td>
+                                                            <td class="stuck-scroll-3">{{ Helper::getLang() == 'en' ? $item->MotorEmployee->employee_name_en : $item->MotorEmployee->employee_name_kh }}</td>
+                                                            <td>{{ $item->MotorEmployee->EmployeeGender }}</td>
+                                                            <td>{{ $item->MotorEmployee->EmployeePosition }}</td>
+                                                            <td>{{ $item->MotorEmployee->EmployeeDepartment }}</td>
+                                                            <td>{{ $item->start_date ? \Carbon\Carbon::parse($item->start_date)->format('d-M-Y') : '' }}</td>
+                                                            <td>{{ $item->end_date ? \Carbon\Carbon::parse($item->end_date)->format('d-M-Y') : '' }}</td>
+                                                            <td>{{ $item->total_gasoline }}</td>
+                                                            <td>{{ $item->total_work_day }}</td>
+                                                            <td>៛ {{ number_format($item->price_engine_oil) }}</td>
+                                                            <td>៛ {{ number_format($item->price_motor_rentel)}}</td>
+                                                            <td>៛ {{ $item->price_taplab_rentel ? number_format($item->price_taplab_rentel) : "0000"}}</td>
+                                                            <td>
+                                                                <div class="dropdown action-label">
+                                                                    @if (permissionAccess("16","is_update")->value == "1")
+                                                                        @if (!$item->resigned_date)
+                                                                            <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
+                                                                                <i class="fa fa-dot-circle-o text-success"></i>
+                                                                                <span>@lang('lang.active')</span>
+                                                                            </a>
+                                                                        @else
+                                                                            <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
+                                                                                <i class="fa fa-dot-circle-o text-danger"></i>
+                                                                                <span>@lang('lang.resigned_motor')</span>
+                                                                            </a>
+                                                                        @endif
+                                                                    @else
+                                                                        @if (!$item->resigned_date)
+                                                                            <a class="btn btn-white btn-sm btn-rounded" href="#">
+                                                                                <i class="fa fa-dot-circle-o text-success"></i>
+                                                                                    <span>@lang('lang.active')</span>
+                                                                            </a>
+                                                                        @else
+                                                                            <a class="btn btn-white btn-sm btn-rounded" href="#">
+                                                                                <i class="fa fa-dot-circle-o text-danger"></i>
+                                                                                <span>@lang('lang.resigned_motor')</span>
+                                                                            </a>
+                                                                        @endif
+                                                                    @endif
                                                                     <div class="dropdown-menu dropdown-menu-right" id="btn-status">
                                                                         <a class="dropdown-item" data-id="{{$item->id}}" data-name="1" data-status-old="{{$item->status}}" href="#">
                                                                             <i class="fa fa-dot-circle-o text-success"></i> @lang('lang.active')
@@ -198,67 +210,66 @@
                                                                             <i class="fa fa-dot-circle-o text-danger"></i> @lang('lang.resigned_motor')
                                                                         </a>
                                                                     </div>
-                                                            </div>
-                                                        </td>
-                                                        <td><span style="font-size: 13px" class="badge bg-inverse-danger">{{ $item->resigned_date ? \Carbon\Carbon::parse($item->resigned_date)->format('d-M-Y') :'' }}</span></td>
-                                                        <td>{{ $item->created_at ? \Carbon\Carbon::parse($item->created_at)->format('d-M-Y') : '' }}</td>
-                                                        <td class="text-end">
-                                                            <div class="dropdown dropdown-action">
-                                                                <a href="#" class="action-icon dropdown-toggle"
-                                                                    data-bs-toggle="dropdown" aria-expanded="false"><i
-                                                                        class="material-icons">more_vert</i></a>
-                                                                @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer')
-                                                                    <div class="dropdown-menu dropdown-menu-right">
-                                                                        <a class="dropdown-item update"
-                                                                            data-id="{{ $item->id }}"><i
-                                                                                class="fa fa-pencil m-r-5"></i> @lang('lang.edit')</a>
-                                                                        <a class="dropdown-item delete" href="#"
-                                                                            data-toggle="modal" data-id="{{ $item->id }}"
-                                                                            data-target="#delete_motor_rentel"><i
+                                                                </div>
+                                                            </td>
+                                                            <td><span style="font-size: 13px" class="badge bg-inverse-danger">{{ $item->resigned_date ? \Carbon\Carbon::parse($item->resigned_date)->format('d-M-Y') :'' }}</span></td>
+                                                            <td>{{ $item->created_at ? \Carbon\Carbon::parse($item->created_at)->format('d-M-Y') : '' }}</td>
+                                                            <td class="text-end">
+                                                                @if (permissionAccess("16","is_update")->value == "1" || permissionAccess("16","is_delete")->value == "1")
+                                                                    <div class="dropdown dropdown-action">
+                                                                        <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
+                                                                        <div class="dropdown-menu dropdown-menu-right">
+                                                                            @if (permissionAccess("16","is_update")->value == "1")
+                                                                            <a class="dropdown-item update" data-id="{{ $item->id }}"><i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')</a>
+                                                                            @endif
+                                                                            @if (permissionAccess("16","is_delete")->value == "1")
+                                                                            <a class="dropdown-item delete" href="#" data-toggle="modal" data-id="{{ $item->id }}" data-target="#delete_motor_rentel"><i
                                                                                 class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
+                                                                            @endif
+                                                                            
+                                                                        </div>
                                                                     </div>
                                                                 @endif
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                @endforeach
-                                            @else
-                                            
-                                            @endif
-                                        </tbody>
-                                    </table>
+                                                            </td>
+                                                        </tr>
+                                                    @endforeach
+                                                @else
+                                                
+                                                @endif
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-        
-                @include('motor_rentels.modal_form_create')
-                @include('motor_rentels.modal_form_edit')
-                @include('motor_rentels.import')
-                {{-- @include('components.loarding-table', ["column"=> 9, "rol"=> 7]) --}}
-                <!-- Delete Training Modal -->
-                <div class="modal custom-modal fade" id="delete_motor_rentel" role="dialog">
-                    <div class="modal-dialog modal-sm modal-dialog-centered">
-                        <div class="modal-content">
-                            <div class="modal-body">
-                                <div class="form-header">
-                                    <h3>@lang('lang.delete')</h3>
-                                    <p>@lang('lang.are_you_sure_want_to_delete')?</p>
+            </div>
+        @endif
+        @include('motor_rentels.modal_form_create')
+        @include('motor_rentels.modal_form_edit')
+        @include('motor_rentels.import')
+        {{-- @include('components.loarding-table', ["column"=> 9, "rol"=> 7]) --}}
+        <!-- Delete Training Modal -->
+        <div class="modal custom-modal fade" id="delete_motor_rentel" role="dialog">
+            <div class="modal-dialog modal-sm modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <div class="form-header">
+                            <h3>@lang('lang.delete')</h3>
+                            <p>@lang('lang.are_you_sure_want_to_delete')?</p>
+                        </div>
+                        <div class="modal-btn delete-action">
+                            <form action="{{ url('motor-rentel/delete') }}" method="POST">
+                                @csrf
+                                <input type="hidden" name="id" class="e_id" value="">
+                                <div class="row">
+                                    <div class="submit-section" style="text-align: center">
+                                        <button type="submit" class="btn btn-primary submit-btn me-2">@lang('lang.delete')</button>
+                                        <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-secondary">@lang('lang.cancel')</a>
+                                    </div>
                                 </div>
-                                <div class="modal-btn delete-action">
-                                    <form action="{{ url('motor-rentel/delete') }}" method="POST">
-                                        @csrf
-                                        <input type="hidden" name="id" class="e_id" value="">
-                                        <div class="row">
-                                            <div class="submit-section" style="text-align: center">
-                                                <button type="submit" class="btn btn-primary submit-btn me-2">@lang('lang.delete')</button>
-                                                <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-secondary">@lang('lang.cancel')</a>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -714,6 +725,8 @@
     });
 
     function showDatas(){
+        let is_update = "{{ Helper::permissionAccess('16','is_update') }}";
+        let is_delete = "{{ Helper::permissionAccess('16','is_delete') }}";
         var localeLanguage = '{{ config('app.locale') }}';
         axios.post('{{ URL('motor-rentel/list') }}', {
             'research':true,
@@ -730,17 +743,54 @@
                 $(rows).each(function(e, row) {
                     no++;
                     let status = '';
-                    if (!row.resigned_date || row.status == 1) {
-                        status ='<a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">'+
-                            '<i class="fa fa-dot-circle-o text-success"></i>'+
-                            '<span>@lang("lang.active")</span>'+
-                        '</a>';
-                    }else{      
-                        status ='<a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">'+
-                            '<i class="fa fa-dot-circle-o text-danger"></i>'+
-                            '<span>@lang("lang.resigned_motor")</span>'+
-                        '</a>';
+                    if (is_update == 1) {
+                        if (!row.resigned_date || row.status == 1) {
+                            status ='<a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">'+
+                                '<i class="fa fa-dot-circle-o text-success"></i>'+
+                                '<span>@lang("lang.active")</span>'+
+                            '</a>';
+                        }else{      
+                            status ='<a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">'+
+                                '<i class="fa fa-dot-circle-o text-danger"></i>'+
+                                '<span>@lang("lang.resigned_motor")</span>'+
+                            '</a>';
+                        }
+                    }else{
+                        if (!row.resigned_date || row.status == 1){
+                            status= '<a class="btn btn-white btn-sm btn-rounded" href="#">'+
+                                '<i class="fa fa-dot-circle-o text-success"></i> <span>@lang("lang.active")</span>'+
+                            '</a>';
+                        }else{
+                            status = '<a class="btn btn-white btn-sm btn-rounded" href="#">'+
+                                '<i class="fa fa-dot-circle-o text-danger"></i> <span>@lang("lang.resigned_motor")</span>'+
+                            '</a>';
+                        }
                     }
+                    let dropdown_action = "";
+                    let deleted = "";
+                    let updated = "";
+                    if (is_update == 1 || is_delete == 1) {
+                        if (is_update == 1) {
+                            updated = ' <a class="dropdown-item update" data-id="'+(row.id)+'">' +
+                                    '<i class="fa fa-pencil m-r-5"></i> @lang("lang.edit")' +
+                                '</a>';
+                        }
+                        if (is_delete ==1 ) {
+                            deleted = '<a class="dropdown-item delete" href="#" data-toggle="modal" data-id="'+(row.id)+'" data-target="#delete_motor_rentel">' +
+                                    '<i class="fa fa-trash-o m-r-5"></i> @lang("lang.delete")' +
+                                '</a>';
+                        }
+                        dropdown_action = '<div class="dropdown dropdown-action">' +
+                            '<a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">' +
+                                '<i class="material-icons">more_vert</i>' +
+                            '</a>' +
+                            '<div class="dropdown-menu dropdown-menu-right">' +
+                                 (updated)+
+                                 (deleted)+
+                            '</div>' +
+                        '</div>';
+                    }
+                    
                     let createdAt = moment(row.created_at).format('D-MMM-YYYY')
                     let resigned_date = row.resigned_date ? moment(row.resigned_date).format('D-MMM-YYYY'): "";
                     let start_date = row.start_date ? moment(row.start_date).format('D-MMM-YYYY'): "";
@@ -773,19 +823,7 @@
                         '<td><span style="font-size: 13px" class="badge bg-inverse-danger">'+(resigned_date)+'</span></td>'+
                         '<td>' + (createdAt) + '</td>' +
                         '<td class="text-end">' +
-                        '<div class="dropdown dropdown-action">' +
-                        '<a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">' +
-                        '<i class="material-icons">more_vert</i>' +
-                        '</a>' +
-                        '<div class="dropdown-menu dropdown-menu-right">' +
-                        ' <a class="dropdown-item update" data-id="'+(row.id)+'">' +
-                        '<i class="fa fa-pencil m-r-5"></i> @lang("lang.edit")' +
-                        '</a>' +
-                        '<a class="dropdown-item delete" href="#" data-toggle="modal" data-id="'+(row.id)+'" data-target="#delete_motor_rentel">' +
-                        '<i class="fa fa-trash-o m-r-5"></i> @lang("lang.delete")' +
-                        '</a>' +
-                        '</div>' +
-                        '</div>' +
+                            (dropdown_action)+
                         '</td>' +
                         ' </tr>';
                 });

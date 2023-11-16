@@ -1307,7 +1307,7 @@ $(function(){
             };
             if (countCheckedCheckboxes < $('input.configuration_checkbox').length) {
                 $("#configuration_check_all").prop("checked", false);
-                $("#configuration_check_all").val(1)
+                $("#configuration_check_all").val(0)
             };
         });
     });

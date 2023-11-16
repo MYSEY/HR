@@ -38,7 +38,7 @@
     </div>
     
     <div class="">
-        @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer')
+        @if (permissionAccess("32","is_view")->value == "1")
             <form>
                 {{-- @csrf --}}
                 <div class="row filter-btn"> 
@@ -78,10 +78,13 @@
                                 <span class="btn-text-print"><i class="fa fa-print fa-lg"></i> @lang('lang.print')</span>
                                 <span id="btn-text-loading-print" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>
                             </button> --}}
-                            <button type="button" class="btn btn-sm btn-outline-secondary btn_excel me-2">
-                                <span class="btn-text-excel"><i class="fa fa-file-excel-o" aria-hidden="true"></i> <label >@lang('lang.excel')</label></span>
-                                <span id="btn-text-loading-excel" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>
-                            </button>
+                            @if (permissionAccess("32","is_export")->value == "1")
+                                <button type="button" class="btn btn-sm btn-outline-secondary btn_excel me-2">
+                                    <span class="btn-text-excel"><i class="fa fa-file-excel-o" aria-hidden="true"></i> <label >@lang('lang.excel')</label></span>
+                                    <span id="btn-text-loading-excel" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>
+                                </button>
+                            @endif
+                            
                             <button type="button" class="btn btn-sm btn-outline-secondary reset-btn">
                                 <span class="btn-text-reset">@lang('lang.reload')</span>
                                 <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>
@@ -91,82 +94,82 @@
                     </div>
                 </div>
             </form>
-        @endif
-        <div class="content">
-            <div class="row">
-                <div class="col-md-12 p-0">
-                    <div class="table-responsive">
-                        <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
-                            <div class="row">
-                                <div class="col-sm-12">
-                                    <table class="table table-striped custom-table datatable dataTable no-footer tbl_e_filing_salary"
-                                        id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
-                                        <thead>
-                                            <tr>
-                                                <th class="sorting stuck-scroll-4" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="#: activate to sort column ascending">#</th>
-                                                <th class="sorting stuck-scroll-4" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Employee ID: activate to sort column ascending">@lang('lang.employee_id')</th>
-                                                <th class="sorting stuck-scroll-4" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name kh : activate to sort column descending">@lang('lang.last_name') @lang('lang.kh')</th>
-                                                <th class="sorting stuck-scroll-4" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name kh : activate to sort column descending">@lang('lang.first_name') @lang('lang.kh')</th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name en: activate to sort column descending">@lang('lang.last_name') @lang('lang.en')</th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name en: activate to sort column descending">@lang('lang.first_name') @lang('lang.en')</th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="ID card number: activate to sort column descending">@lang('lang.id_card_number')</th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="TID: activate to sort column descending">TID</th>
-                                                <th class="sorting " tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Passport: activate to sort column descending">@lang('lang.passport')</th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Gender: activate to sort column ascending">@lang('lang.gender')</th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Nationality: activate to sort column ascending">@lang('lang.nationality')</th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Ethnicity: activate to sort column ascending">@lang('lang.ethnicity')</th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Date Of Birth: activate to sort column ascending">@lang('lang.date_of_birth')</th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Phone number: activate to sort column ascending">@lang('lang.phone_number') </th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending">@lang('lang.email') </th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Position Type: activate to sort column ascending">@lang('lang.position_type') </th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Position: activate to sort column ascending">@lang('lang.position') </th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Spouse: activate to sort column ascending">@lang('lang.spouse') </th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Dependent child: activate to sort column ascending">@lang('lang.dependent_child') </th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Salary: activate to sort column ascending">@lang('lang.salary')</th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Additional benefits: activate to sort column ascending">@lang('lang.fringe_benefits')</th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Non-taxable salary: activate to sort column ascending">@lang('lang.non_taxable_salary')</th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Joining Date: activate to sort column ascending">@lang('lang.payment_date')</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @if (count($dataPayrolls)>0)
-                                                @foreach ($dataPayrolls as $key=>$item)
-                                                    <tr class="odd">
-                                                        <td class="stuck-scroll-4">{{++$key}}</td>
-                                                        <td class="stuck-scroll-4"><a href="#">{{$item["users"]->number_employee}}</a></td>
-                                                        <td class="stuck-scroll-4"><a href="#">{{$item["users"]->last_name_kh}}</a></td>
-                                                        <td class="stuck-scroll-4"><a href="#">{{$item["users"]->first_name_kh}}</a></td>
-                                                        <td ><a href="#">{{$item["users"]->last_name_en}}</a></td>
-                                                        <td ><a href="#">{{$item["users"]->first_name_en}}</a></td>
-                                                        <td >{{$item["users"]->id_card_number ? $item["users"]->id_card_number : ""}}</td>
-                                                        <td ></td>
-                                                        <td class="">{{$item["users"]->identity_number}}</td>
-                                                        <td >{{$item["users"]->EmployeeGender}}</td>
-                                                        <td >{{$item["users"]->nationality? $item["users"]->nationality : ""}}</td>
-                                                        <td >{{$item["users"]->ethnicity? $item["users"]->ethnicity : ""}}</td>
-                                                        <td >{{$item["users"]->DOB}}</td>
-                                                        <td >{{$item["users"]->phone_number}}</td>
-                                                        <td >{{$item["users"]->email ? $item["users"]->email : ""}}</td>
-                                                        <td >{{$item["users"]->type_of_employees_nssf}}</td>
-                                                        <td>{{ $item["users"] == null ? '' : $item["users"]->EmployeePosition}}</td>
-                                                        <td>{{ $item["users"]->spouse_nssf == null ? '' : $item["users"]->spouse_nssf}}</td>
-                                                        <td>{{ $item["users"]->TotalChild}}</td>
-                                                        <td>៛ {{number_format($item["base_salary_received_riel"])}}</td>
-                                                        <td>៛ {{number_format($item["total_benefits"])}}</td>
-                                                        <td>$ {{number_format($item["non_taxable_salary"])}}</td>
-                                                        <td>{{ \Carbon\Carbon::parse($item["payment_date"])->format('d-M-Y')}}</td>
-                                                    </tr>
-                                                @endforeach
-                                            @endif
-                                        </tbody>
-                                    </table>
+            <div class="content">
+                <div class="row">
+                    <div class="col-md-12 p-0">
+                        <div class="table-responsive">
+                            <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <table class="table table-striped custom-table datatable dataTable no-footer tbl_e_filing_salary"
+                                            id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
+                                            <thead>
+                                                <tr>
+                                                    <th class="sorting stuck-scroll-4" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="#: activate to sort column ascending">#</th>
+                                                    <th class="sorting stuck-scroll-4" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Employee ID: activate to sort column ascending">@lang('lang.employee_id')</th>
+                                                    <th class="sorting stuck-scroll-4" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name kh : activate to sort column descending">@lang('lang.last_name') @lang('lang.kh')</th>
+                                                    <th class="sorting stuck-scroll-4" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name kh : activate to sort column descending">@lang('lang.first_name') @lang('lang.kh')</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name en: activate to sort column descending">@lang('lang.last_name') @lang('lang.en')</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name en: activate to sort column descending">@lang('lang.first_name') @lang('lang.en')</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="ID card number: activate to sort column descending">@lang('lang.id_card_number')</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="TID: activate to sort column descending">TID</th>
+                                                    <th class="sorting " tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Passport: activate to sort column descending">@lang('lang.passport')</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Gender: activate to sort column ascending">@lang('lang.gender')</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Nationality: activate to sort column ascending">@lang('lang.nationality')</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Ethnicity: activate to sort column ascending">@lang('lang.ethnicity')</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Date Of Birth: activate to sort column ascending">@lang('lang.date_of_birth')</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Phone number: activate to sort column ascending">@lang('lang.phone_number') </th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending">@lang('lang.email') </th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Position Type: activate to sort column ascending">@lang('lang.position_type') </th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Position: activate to sort column ascending">@lang('lang.position') </th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Spouse: activate to sort column ascending">@lang('lang.spouse') </th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Dependent child: activate to sort column ascending">@lang('lang.dependent_child') </th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Salary: activate to sort column ascending">@lang('lang.salary')</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Additional benefits: activate to sort column ascending">@lang('lang.fringe_benefits')</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Non-taxable salary: activate to sort column ascending">@lang('lang.non_taxable_salary')</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Joining Date: activate to sort column ascending">@lang('lang.payment_date')</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @if (count($dataPayrolls)>0)
+                                                    @foreach ($dataPayrolls as $key=>$item)
+                                                        <tr class="odd">
+                                                            <td class="stuck-scroll-4">{{++$key}}</td>
+                                                            <td class="stuck-scroll-4"><a href="#">{{$item["users"]->number_employee}}</a></td>
+                                                            <td class="stuck-scroll-4"><a href="#">{{$item["users"]->last_name_kh}}</a></td>
+                                                            <td class="stuck-scroll-4"><a href="#">{{$item["users"]->first_name_kh}}</a></td>
+                                                            <td ><a href="#">{{$item["users"]->last_name_en}}</a></td>
+                                                            <td ><a href="#">{{$item["users"]->first_name_en}}</a></td>
+                                                            <td >{{$item["users"]->id_card_number ? $item["users"]->id_card_number : ""}}</td>
+                                                            <td ></td>
+                                                            <td class="">{{$item["users"]->identity_number}}</td>
+                                                            <td >{{$item["users"]->EmployeeGender}}</td>
+                                                            <td >{{$item["users"]->nationality? $item["users"]->nationality : ""}}</td>
+                                                            <td >{{$item["users"]->ethnicity? $item["users"]->ethnicity : ""}}</td>
+                                                            <td >{{$item["users"]->DOB}}</td>
+                                                            <td >{{$item["users"]->phone_number}}</td>
+                                                            <td >{{$item["users"]->email ? $item["users"]->email : ""}}</td>
+                                                            <td >{{$item["users"]->type_of_employees_nssf}}</td>
+                                                            <td>{{ $item["users"] == null ? '' : $item["users"]->EmployeePosition}}</td>
+                                                            <td>{{ $item["users"]->spouse_nssf == null ? '' : $item["users"]->spouse_nssf}}</td>
+                                                            <td>{{ $item["users"]->TotalChild}}</td>
+                                                            <td>៛ {{number_format($item["base_salary_received_riel"])}}</td>
+                                                            <td>៛ {{number_format($item["total_benefits"])}}</td>
+                                                            <td>$ {{number_format($item["non_taxable_salary"])}}</td>
+                                                            <td>{{ \Carbon\Carbon::parse($item["payment_date"])->format('d-M-Y')}}</td>
+                                                        </tr>
+                                                    @endforeach
+                                                @endif
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        @endif
     </div>
 </div>
 @endsection

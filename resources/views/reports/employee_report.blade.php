@@ -4,10 +4,6 @@
         min-height: 38px !important;
         padding: 8px !important;
     }
-
-    .reset-btn {
-        color: #fff !important
-    }
 </style>
 @section('content')
     <div class="">
@@ -22,7 +18,7 @@
                 </div>
             </div>
         </div>
-        @if (Auth::user()->RolePermission == 'admin')
+        @if (permissionAccess("23","is_view")->value == "1")
             <form class="needs-validation" novalidate>
                 @csrf
                 <div class="row filter-btn"> 
@@ -59,15 +55,17 @@
                     {{-- <div class="col-md-6 col-sm-6"></div> --}}
                     <div class="col-sm-6 col-md-6">
                         <div style="display: flex" class="float-end">
-                            <button type="button" class="btn btn-sm btn-success me-2 btn-search" data-dismiss="modal">
+                            <button type="button" class="btn btn-sm btn-outline-secondary me-2 btn-search" data-dismiss="modal">
                                 <span class="loading-icon-search" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading') </span>
                                 <span class="btn-txt-search">@lang('lang.search')</span>
                             </button>
-                            <button type="button" class="btn btn-sm btn-outline-secondary btn_excel me-2">
-                                <span class="btn-text-excel"><i class="fa fa-file-excel-o" aria-hidden="true"></i> @lang('lang.excel')</span>
-                                <span id="btn-text-loading-excel" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>
-                            </button>
-                            <button type="button" class="btn btn-sm btn-warning reset-btn">
+                            @if (permissionAccess("23","is_export")->value == "1")
+                                <button type="button" class="btn btn-sm btn-outline-secondary btn_excel me-2">
+                                    <span class="btn-text-excel"><i class="fa fa-file-excel-o" aria-hidden="true"></i> @lang('lang.excel')</span>
+                                    <span id="btn-text-loading-excel" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>
+                                </button>
+                            @endif
+                            <button type="button" class="btn btn-sm btn-outline-secondary reset-btn">
                                 <span class="btn-text-reset">@lang('lang.reload')</span>
                                 <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>
                             </button>
@@ -75,145 +73,145 @@
                     </div>
                 </div>
             </form>
-        @endif
-        <div class="content">
-            <div class="row">
-                <div class="col-md-12 p-0">
-                    <div class="table-responsive">
-                        <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
-                            <div class="row">
-                                <div class="col-sm-12 col-md-12">
-                                    <table class="table table-striped custom-table mb-0 datatable dataTable no-footer tbl_employee" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
-                                        <thead>
-                                            <tr>
-                                                <th class="sorting sorting_asc stuck-scroll-3" tabindex="0" aria-controls="DataTables_Table_0"
-                                                    rowspan="1" colspan="1" aria-sort="ascending"
-                                                    aria-label="Profile: activate to sort column descending"
-                                                    style="width: 178px;">@lang('lang.profile')</th>
-                                                <th class="sorting sorting_asc stuck-scroll-3" tabindex="0" aria-controls="DataTables_Table_0"
-                                                    rowspan="1" colspan="1" aria-sort="ascending"
-                                                    aria-label="Employee ID: activate to sort column descending"
-                                                    style="width: 178px;">@lang('lang.employee_id')</th>
-                                                <th class="sorting sorting_asc stuck-scroll-3" tabindex="0" aria-controls="DataTables_Table_0"
-                                                    rowspan="1" colspan="1" aria-sort="ascending"
-                                                    aria-label="Employee Name: activate to sort column descending"
-                                                    style="width: 178px;">@lang('lang.name')</th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1"
-                                                    colspan="1" aria-label="Employee Type: activate to sort column ascending"
-                                                    style="width: 108.188px;">@lang('lang.role_name')</th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1"
-                                                    colspan="1" aria-label="Department: activate to sort column ascending"
-                                                    style="width: 125.15px;">@lang('lang.department')</th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1"
-                                                    colspan="1" aria-label="Department: activate to sort column ascending"
-                                                    style="width: 125.15px;">@lang('lang.position')</th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1"
-                                                    colspan="1" aria-label="Department: activate to sort column ascending"
-                                                    style="width: 125.15px;">@lang('lang.location')</th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1"
-                                                    colspan="1" aria-label="DOB: activate to sort column ascending"
-                                                    style="width: 81.0625px;">@lang('lang.join_date')</th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                    rowspan="1" colspan="1"
-                                                    aria-label="DOB: activate to sort column ascending" style="width: 81.0625px;">
-                                                    @lang('lang.date_of_birth')</th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                    rowspan="1" colspan="1"
-                                                    aria-label="Martial Status: activate to sort column ascending"
-                                                    style="width: 100.25px;">@lang('lang.maritial_status')</th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                    rowspan="1" colspan="1"
-                                                    aria-label="Gender: activate to sort column ascending"
-                                                    style="width: 52.95px;">@lang('lang.gender')</th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                    rowspan="1" colspan="1"
-                                                    aria-label="Salary: activate to sort column ascending"
-                                                    style="width: 51.475px;">@lang('lang.basic_salary')</th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                    rowspan="1" colspan="1"
-                                                    aria-label="Status: activate to sort column ascending"
-                                                    style="width: 51.475px;">@lang('lang.status')</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @if (count($users) > 0)
-                                                @foreach ($users as $item)
-                                                    <tr class="odd">
-                                                        <td class="stuck-scroll-3">
-                                                            <h2>
-                                                                @if ($item->profile != null)
-                                                                    <a href="#" class="avatar">
-                                                                        <img src="{{ asset('/uploads/images/' . $item->profile) }}" alt="">
-                                                                    </a>
-                                                                @else
-                                                                    <a href="{{ asset('admin/img/defuals/default-user-icon.png') }}">
-                                                                        <img alt="" src="{{ asset('admin/img/defuals/default-user-icon.png') }}">
-                                                                    </a>
+            <div class="content">
+                <div class="row">
+                    <div class="col-md-12 p-0">
+                        <div class="table-responsive">
+                            <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+                                <div class="row">
+                                    <div class="col-sm-12 col-md-12">
+                                        <table class="table table-striped custom-table mb-0 datatable dataTable no-footer tbl_employee" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
+                                            <thead>
+                                                <tr>
+                                                    <th class="sorting sorting_asc stuck-scroll-3" tabindex="0" aria-controls="DataTables_Table_0"
+                                                        rowspan="1" colspan="1" aria-sort="ascending"
+                                                        aria-label="Profile: activate to sort column descending"
+                                                        style="width: 178px;">@lang('lang.profile')</th>
+                                                    <th class="sorting sorting_asc stuck-scroll-3" tabindex="0" aria-controls="DataTables_Table_0"
+                                                        rowspan="1" colspan="1" aria-sort="ascending"
+                                                        aria-label="Employee ID: activate to sort column descending"
+                                                        style="width: 178px;">@lang('lang.employee_id')</th>
+                                                    <th class="sorting sorting_asc stuck-scroll-3" tabindex="0" aria-controls="DataTables_Table_0"
+                                                        rowspan="1" colspan="1" aria-sort="ascending"
+                                                        aria-label="Employee Name: activate to sort column descending"
+                                                        style="width: 178px;">@lang('lang.name')</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1"
+                                                        colspan="1" aria-label="Employee Type: activate to sort column ascending"
+                                                        style="width: 108.188px;">@lang('lang.role_name')</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1"
+                                                        colspan="1" aria-label="Department: activate to sort column ascending"
+                                                        style="width: 125.15px;">@lang('lang.department')</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1"
+                                                        colspan="1" aria-label="Department: activate to sort column ascending"
+                                                        style="width: 125.15px;">@lang('lang.position')</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1"
+                                                        colspan="1" aria-label="Department: activate to sort column ascending"
+                                                        style="width: 125.15px;">@lang('lang.location')</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1"
+                                                        colspan="1" aria-label="DOB: activate to sort column ascending"
+                                                        style="width: 81.0625px;">@lang('lang.join_date')</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                        rowspan="1" colspan="1"
+                                                        aria-label="DOB: activate to sort column ascending" style="width: 81.0625px;">
+                                                        @lang('lang.date_of_birth')</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                        rowspan="1" colspan="1"
+                                                        aria-label="Martial Status: activate to sort column ascending"
+                                                        style="width: 100.25px;">@lang('lang.maritial_status')</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                        rowspan="1" colspan="1"
+                                                        aria-label="Gender: activate to sort column ascending"
+                                                        style="width: 52.95px;">@lang('lang.gender')</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                        rowspan="1" colspan="1"
+                                                        aria-label="Salary: activate to sort column ascending"
+                                                        style="width: 51.475px;">@lang('lang.basic_salary')</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                        rowspan="1" colspan="1"
+                                                        aria-label="Status: activate to sort column ascending"
+                                                        style="width: 51.475px;">@lang('lang.status')</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @if (count($users) > 0)
+                                                    @foreach ($users as $item)
+                                                        <tr class="odd">
+                                                            <td class="stuck-scroll-3">
+                                                                <h2>
+                                                                    @if ($item->profile != null)
+                                                                        <a href="#" class="avatar">
+                                                                            <img src="{{ asset('/uploads/images/' . $item->profile) }}" alt="">
+                                                                        </a>
+                                                                    @else
+                                                                        <a href="{{ asset('admin/img/defuals/default-user-icon.png') }}">
+                                                                            <img alt="" src="{{ asset('admin/img/defuals/default-user-icon.png') }}">
+                                                                        </a>
+                                                                    @endif
+                                                                </h2>
+                                                            </td>
+                                                            <td class="stuck-scroll-3"><a href="{{ route('employee.profile', $item->id) }}">{{$item->number_employee}}</td>
+                                                            <td class="stuck-scroll-3">
+                                                                <a href="{{ route('employee.profile', $item->id) }}">{{ $item->employee_name_en }}</a>
+                                                            </td>
+                                                            <td>
+                                                                <a href="{{ route('employee.profile', $item->id) }}">{{ $item->RolePermission }}</a>
+                                                            </td>
+                                                            <td>
+                                                                <a href="{{ route('employee.profile', $item->id) }}">{{ $item->EmployeeDepartment }}</a>
+                                                            </td>
+                                                            <td>
+                                                                <a href="{{ route('employee.profile', $item->id) }}">{{ $item->EmployeePosition }}</a>
+                                                            </td>
+                                                            <td>
+                                                                <a href="{{ route('employee.profile', $item->id) }}">{{ $item->EmployeeBranch }}</a>
+                                                            </td>
+                                                            <td>{{ $item->joinOfDate ?? '' }}</td>
+                                                            <td>{{ $item->DOB ?? '' }}</td>
+                                                            <td>{{ $item->marital_status }}</td>
+                                                            <td>{{ $item->EmployeeGender }}</td>
+                                                            <td>$ <a href="#">{{ $item->basic_salary }}</a></td>
+                                                            <td>
+                                                                @if ($item->emp_status== "Upcoming")
+                                                                    <span style="font-size: 13px" class="badge bg-inverse-success">@lang('lang.upcoming')</span>
+                                                                @elseif ($item->emp_status == "Probation")
+                                                                    <span style="font-size: 13px" class="badge bg-inverse-success">@lang('lang.probation')</span>
+                                                                @elseif ($item->emp_status == "1")
+                                                                    <span style="font-size: 13px" class="badge bg-inverse-success">@lang('lang.fdc')-1</span>
+                                                                @elseif ($item->emp_status == "10")
+                                                                    <span style="font-size: 13px" class="badge bg-inverse-success">@lang('lang.fdc')-2</span>
+                                                                @elseif ($item->emp_status == "2")
+                                                                    <span style="font-size: 13px" class="badge bg-inverse-success">@lang('lang.udc')</span>
+                                                                @elseif ($item->emp_status=='3')
+                                                                    <span style="font-size: 13px" class="badge bg-inverse-danger">@lang('lang.resignation')</span>
+                                                                @elseif ($item->emp_status=='4')
+                                                                    <span style="font-size: 13px" class="badge bg-inverse-danger">@lang('lang.termination')</span>
+                                                                @elseif ($item->emp_status=='5')
+                                                                    <span style="font-size: 13px" class="badge bg-inverse-danger">@lang('lang.death')</span>
+                                                                @elseif ($item->emp_status=='6')
+                                                                    <span style="font-size: 13px" class="badge bg-inverse-danger">@lang('lang.retired')</span>
+                                                                @elseif ($item->emp_status=='7')
+                                                                    <span style="font-size: 13px" class="badge bg-inverse-danger">@lang('lang.lay_off')</span>
+                                                                @elseif ($item->emp_status=='8')
+                                                                    <span style="font-size: 13px" class="badge bg-inverse-danger">@lang('lang.suspension')</span>
+                                                                @elseif ($item->emp_status=='9')
+                                                                    <span style="font-size: 13px" class="badge bg-inverse-danger">@lang('lang.fall_probation')</span>
+                                                                @elseif ($item->emp_status=='Cancel')
+                                                                    <span style="font-size: 13px" class="badge bg-inverse-danger">@lang('lang.cancel')</span>
                                                                 @endif
-                                                            </h2>
-                                                        </td>
-                                                        <td class="stuck-scroll-3"><a href="{{ route('employee.profile', $item->id) }}">{{$item->number_employee}}</td>
-                                                        <td class="stuck-scroll-3">
-                                                            <a href="{{ route('employee.profile', $item->id) }}">{{ $item->employee_name_en }}</a>
-                                                        </td>
-                                                        <td>
-                                                            <a href="{{ route('employee.profile', $item->id) }}">{{ $item->RolePermission }}</a>
-                                                        </td>
-                                                        <td>
-                                                            <a href="{{ route('employee.profile', $item->id) }}">{{ $item->EmployeeDepartment }}</a>
-                                                        </td>
-                                                        <td>
-                                                            <a href="{{ route('employee.profile', $item->id) }}">{{ $item->EmployeePosition }}</a>
-                                                        </td>
-                                                        <td>
-                                                            <a href="{{ route('employee.profile', $item->id) }}">{{ $item->EmployeeBranch }}</a>
-                                                        </td>
-                                                        <td>{{ $item->joinOfDate ?? '' }}</td>
-                                                        <td>{{ $item->DOB ?? '' }}</td>
-                                                        <td>{{ $item->marital_status }}</td>
-                                                        <td>{{ $item->EmployeeGender }}</td>
-                                                        <td>$ <a href="#">{{ $item->basic_salary }}</a></td>
-                                                        <td>
-                                                            @if ($item->emp_status== "Upcoming")
-                                                                <span style="font-size: 13px" class="badge bg-inverse-success">@lang('lang.upcoming')</span>
-                                                            @elseif ($item->emp_status == "Probation")
-                                                                <span style="font-size: 13px" class="badge bg-inverse-success">@lang('lang.probation')</span>
-                                                            @elseif ($item->emp_status == "1")
-                                                                <span style="font-size: 13px" class="badge bg-inverse-success">@lang('lang.fdc')-1</span>
-                                                            @elseif ($item->emp_status == "10")
-                                                                <span style="font-size: 13px" class="badge bg-inverse-success">@lang('lang.fdc')-2</span>
-                                                            @elseif ($item->emp_status == "2")
-                                                                <span style="font-size: 13px" class="badge bg-inverse-success">@lang('lang.udc')</span>
-                                                            @elseif ($item->emp_status=='3')
-                                                                <span style="font-size: 13px" class="badge bg-inverse-danger">@lang('lang.resignation')</span>
-                                                            @elseif ($item->emp_status=='4')
-                                                                <span style="font-size: 13px" class="badge bg-inverse-danger">@lang('lang.termination')</span>
-                                                            @elseif ($item->emp_status=='5')
-                                                                <span style="font-size: 13px" class="badge bg-inverse-danger">@lang('lang.death')</span>
-                                                            @elseif ($item->emp_status=='6')
-                                                                <span style="font-size: 13px" class="badge bg-inverse-danger">@lang('lang.retired')</span>
-                                                            @elseif ($item->emp_status=='7')
-                                                                <span style="font-size: 13px" class="badge bg-inverse-danger">@lang('lang.lay_off')</span>
-                                                            @elseif ($item->emp_status=='8')
-                                                                <span style="font-size: 13px" class="badge bg-inverse-danger">@lang('lang.suspension')</span>
-                                                            @elseif ($item->emp_status=='9')
-                                                                <span style="font-size: 13px" class="badge bg-inverse-danger">@lang('lang.fall_probation')</span>
-                                                            @elseif ($item->emp_status=='Cancel')
-                                                                <span style="font-size: 13px" class="badge bg-inverse-danger">@lang('lang.cancel')</span>
-                                                            @endif
-                                                        </td>
-                                                    </tr>
-                                                @endforeach
-                                            @endif
-                                        </tbody>
-                                    </table>
+                                                            </td>
+                                                        </tr>
+                                                    @endforeach
+                                                @endif
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        @endif
     </div>
     
 @endsection
@@ -311,13 +309,13 @@
                             '<td><a href="{{url("employee/profile")}}/'+(row.id)+'">'+(row.number_employee)+'</td>'+
                             '<td><a href="{{url("employee/profile")}}/'+(row.id)+'">'+(row.employee_name_en)+'</a></td>'+
                             '<td><a href="{{url("employee/profile")}}/'+(row.id)+'">'+(row.role ? row.role.name : "")+'</a></td>'+
-                            '<td><a href="{{url("employee/profile")}}/'+(row.id)+'">'+(row.department.name_english)+'</a></td>'+
-                            '<td><a href="{{url("employee/profile")}}/'+(row.id)+'">'+(row.position.name_english	)+'</a></td>'+
+                            '<td><a href="{{url("employee/profile")}}/'+(row.id)+'">'+(row.department ? row.department.name_english : "")+'</a></td>'+
+                            '<td><a href="{{url("employee/profile")}}/'+(row.id)+'">'+(row.position ? row.position.name_english : "")+'</a></td>'+
                             '<td><a href="{{url("employee/profile")}}/'+(row.id)+'">'+(row.branch.branch_name_en)+'</a></td>'+
                             '<td>'+(join_date)+'</td>'+
                             '<td>'+(date_of_birth)+'</td>'+
                             '<td>'+(row.marital_status ? row.marital_status : "" )+'</td>'+
-                            '<td>'+(row.gender.name_english	 )+'</td>'+
+                            '<td>'+(row.gender ? row.gender.name_english : "")+'</td>'+
                             '<td>$ <a href="#">'+(row.basic_salary )+'</a></td>'+
                             '<td>'+
                                 (emp_status)+

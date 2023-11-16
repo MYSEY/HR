@@ -11,66 +11,70 @@
                     </ul>
                 </div>
                 <div class="col-auto float-end ms-auto">
+                    @if (permissionAccess("42","is_create")->value == "1")
                     <a href="#" class="btn add-btn" data-bs-toggle="modal" data-bs-target="#add_holiday"><i class="fa fa-plus"></i> @lang('lang.add_new')</a>
+                    @endif
                 </div>
             </div>
         </div>
-        {!! Toastr::message() !!}
-
-        <div class="tab-pane show" role="tabpanel">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="table-responsive">
-                        <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
-                            <div class="row">
-                                <div class="col-sm-12">
-                                    <table class="table table-striped custom-table datatable dataTable no-footer" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
-                                        <thead>
-                                            <tr>
-                                                <th>#</th>
-                                                <th>@lang('lang.days')</th>
-                                                <th>@lang('lang.title')</th>
-                                                <th>@lang('lang.amount_percent')(%)</th>
-                                                <th>@lang('lang.period_month')</th>
-                                                <th>@lang('lang.created_at')</th>
-                                                <th class="text-end">@lang('lang.action')</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @if (count($data) > 0)
-                                                @foreach ($data as $key=>$item)
-                                                    <tr>
-                                                        <td class="ids">{{++$key}}</td>
-                                                        <td class="title">{{$item->Day}}</td>
-                                                        <td class="title">{{$item->title}}</td>
-                                                        <td style="text-align: center;" class="amount_percent"><a href="#">{{$item->amount_percent}}</a></td>
-                                                        <td class="period_month">{{$item->PeriodPayment}}</td>
-                                                        <td>{{$item->created_at}}</td>
-                                                        <td class="text-end">
-                                                            <div class="dropdown dropdown-action">
-                                                                <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
-                                                                <div class="dropdown-menu dropdown-menu-right">
-                                                                    <a class="dropdown-item update" data-toggle="modal" data-id="{{$item->id}}" data-target="#edit_holiday"><i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')</a>
-                                                                </div>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                @endforeach
-                                            @else
+        @if (permissionAccess("42","is_view")->value == "1")
+            {!! Toastr::message() !!}
+            <div class="tab-pane show" role="tabpanel">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="table-responsive">
+                            <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <table class="table table-striped custom-table datatable dataTable no-footer" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
+                                            <thead>
                                                 <tr>
-                                                    <td colspan="8" style="text-align: center">@lang('lang.no_record_to_display')</td>
+                                                    <th>#</th>
+                                                    <th>@lang('lang.days')</th>
+                                                    <th>@lang('lang.title')</th>
+                                                    <th>@lang('lang.amount_percent')(%)</th>
+                                                    <th>@lang('lang.period_month')</th>
+                                                    <th>@lang('lang.created_at')</th>
+                                                    <th class="text-end">@lang('lang.action')</th>
                                                 </tr>
-                                            @endif
-                                        </tbody>
-                                    </table>
+                                            </thead>
+                                            <tbody>
+                                                @if (count($data) > 0)
+                                                    @foreach ($data as $key=>$item)
+                                                        <tr>
+                                                            <td class="ids">{{++$key}}</td>
+                                                            <td class="title">{{$item->Day}}</td>
+                                                            <td class="title">{{$item->title}}</td>
+                                                            <td style="text-align: center;" class="amount_percent"><a href="#">{{$item->amount_percent}}</a></td>
+                                                            <td class="period_month">{{$item->PeriodPayment}}</td>
+                                                            <td>{{$item->created_at}}</td>
+                                                            <td class="text-end">
+                                                                @if (permissionAccess("42","is_update")->value == "1")
+                                                                    <div class="dropdown dropdown-action">
+                                                                        <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
+                                                                        <div class="dropdown-menu dropdown-menu-right">
+                                                                            <a class="dropdown-item update" data-toggle="modal" data-id="{{$item->id}}" data-target="#edit_holiday"><i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')</a>
+                                                                        </div>
+                                                                    </div>
+                                                                @endif
+                                                            </td>
+                                                        </tr>
+                                                    @endforeach
+                                                @else
+                                                    <tr>
+                                                        <td colspan="8" style="text-align: center">@lang('lang.no_record_to_display')</td>
+                                                    </tr>
+                                                @endif
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-
+        @endif
         <div class="modal custom-modal fade" id="add_holiday" style="display: none;" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">

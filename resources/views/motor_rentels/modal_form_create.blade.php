@@ -165,10 +165,12 @@
                             <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading') </span>
                             <span class="btn-txt">@lang('lang.submit')</span>
                         </button>
-                        <button type="button" class="btn btn-primary" data-btn="1" id="save-print">
-                            <span class="btn-text-print">@lang('lang.print')</span>
-                            <span id="btn-print-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>
-                        </button>
+                        @if (permissionAccess("16","is_print")->value == "1")
+                            <button type="button" class="btn btn-primary" data-btn="1" id="save-print">
+                                <span class="btn-text-print">@lang('lang.print')</span>
+                                <span id="btn-print-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>
+                            </button>
+                        @endif
                         <button type="button" id="btn-cancel" class="btn btn-secondary btn-cancel">@lang('lang.cancel')</button>
                     </div>
                 </form>

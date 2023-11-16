@@ -26,7 +26,7 @@
                 </div>
             </div>
         </div>
-        @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer')
+        @if (permissionAccess("21","is_view")->value == "1" )
             <form  class="needs-validation" novalidate>
                 {{-- @csrf --}}
                 
@@ -82,14 +82,18 @@
                                 <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>
                                 <span class="btn-txt">@lang('lang.search')</span>
                             </button>
-                            <button type="button" class="btn btn-sm btn-outline-secondary btn_print me-2">
-                                <span class="btn-text-print"><i class="fa fa-print fa-lg"></i> @lang('lang.print')</span>
-                                <span id="btn-text-loading-print" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>
-                            </button>
-                            <button type="button" class="btn btn-sm btn-outline-secondary btn_excel me-2">
-                                <span class="btn-text-excel"><i class="fa fa-file-excel-o" aria-hidden="true"></i> @lang('lang.excel')</span>
-                                <span id="btn-text-loading-excel" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>
-                            </button>
+                            @if (permissionAccess("21","is_print")->value == "1" )
+                                <button type="button" class="btn btn-sm btn-outline-secondary btn_print me-2">
+                                    <span class="btn-text-print"><i class="fa fa-print fa-lg"></i> @lang('lang.print')</span>
+                                    <span id="btn-text-loading-print" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>
+                                </button>
+                            @endif
+                            @if (permissionAccess("21","is_export")->value == "1" )
+                                <button type="button" class="btn btn-sm btn-outline-secondary btn_excel me-2">
+                                    <span class="btn-text-excel"><i class="fa fa-file-excel-o" aria-hidden="true"></i> @lang('lang.excel')</span>
+                                    <span id="btn-text-loading-excel" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>
+                                </button>
+                            @endif
                             <button type="button" class="btn btn-sm btn-outline-secondary reset-btn">
                                 <span class="btn-text-reset">@lang('lang.reload')</span>
                                 <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>
@@ -98,152 +102,152 @@
                     </div>
                 </div>
             </form>
-        @endif
-        <div class="content">
-            <div class="row">
-                <div class="col-md-12 p-0">
-                    <div class="table-responsive">
-                        <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
-                            <div class="row">
-                                <div class="col-sm-12">
-                                    <table
-                                        class="table table-striped custom-table mb-0 datatable dataTable no-footer tbl-traingin-report"
-                                        id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
-                                        <thead>
-                                            <tr>
-                                                <th class="sorting sorting_asc stuck-scroll-3" tabindex="0" aria-controls="DataTables_Table_0"
-                                                    rowspan="1" colspan="1" aria-sort="ascending"
-                                                    aria-label="Profle: activate to sort column descending"
-                                                    style="width: 94.0625px;">#</th>
-                                                <th class="sorting stuck-scroll-3" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1"
-                                                    colspan="1" aria-label="Employee ID: activate to sort column ascending"
-                                                    style="width: 94.0625px;">@lang('lang.id_card')</th>
-                                                <th class="sorting sorting_asc stuck-scroll-3" tabindex="0" aria-controls="DataTables_Table_0"
-                                                    rowspan="1" colspan="1" aria-sort="ascending"
-                                                    aria-label="Employee name: activate to sort column descending"
-                                                    style="width: 178px;">@lang('lang.name_kh')</th>
-                                                <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
-                                                    rowspan="1" colspan="1" aria-sort="ascending"
-                                                    aria-label="Employee name: activate to sort column descending"
-                                                    style="width: 178px;">@lang('lang.name_en')</th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1"
-                                                    colspan="1" aria-label="Gender: activate to sort column ascending"
-                                                    style="width: 125.15px;">@lang('lang.gender')</th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                    rowspan="1" colspan="1"
-                                                    aria-label="Position: activate to sort column ascending"
-                                                    style="width: 125.15px;">@lang('lang.position')</th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                    rowspan="1" colspan="1"
-                                                    aria-label="Date of Employment: activate to sort column ascending"
-                                                    style="width: 125.15px;">@lang('lang.date_of_employment')</th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                    rowspan="1" colspan="1"
-                                                    aria-label="Seniority: activate to sort column ascending"
-                                                    style="width: 125.15px;">@lang('lang.length_of_employment')</th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                    rowspan="1" colspan="1"
-                                                    aria-label="Course Name: activate to sort column ascending"
-                                                    style="width: 125.15px;">@lang('lang.course_name')</th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                    rowspan="1" colspan="1"
-                                                    aria-label="Branch name: activate to sort column ascending"
-                                                    style="width: 125.15px;">@lang('lang.location')</th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                    rowspan="1" colspan="1"
-                                                    aria-label="Start Date: activate to sort column ascending"
-                                                    style="width: 125.15px;">@lang('lang.start_date')</th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                    rowspan="1" colspan="1"
-                                                    aria-label="End Date: activate to sort column ascending"
-                                                    style="width: 125.15px;">@lang('lang.end_date')</th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                    rowspan="1" colspan="1"
-                                                    aria-label="Duration of service: activate to sort column ascending"
-                                                    style="width: 125.15px;">@lang('lang.duration_term')</th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                    rowspan="1" colspan="1"
-                                                    aria-label="Price/Unit: activate to sort column ascending"
-                                                    style="width: 125.15px;">@lang('lang.price/unit')</th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                    rowspan="1" colspan="1"
-                                                    aria-label="Discount Price: activate to sort column ascending"
-                                                    style="width: 125.15px;">@lang('lang.discount_fee')</th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                    rowspan="1" colspan="1"
-                                                    aria-label="Total: activate to sort column ascending"
-                                                    style="width: 125.15px;">@lang('lang.total')</th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                    rowspan="1" colspan="1"
-                                                    aria-label="Trainer: activate to sort column ascending"
-                                                    style="width: 125.15px;">@lang('lang.trainer')</th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                    rowspan="1" colspan="1"
-                                                    aria-label="Type of Training: activate to sort column ascending"
-                                                    style="width: 125.15px;">@lang('lang.type_of_training')</th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                    rowspan="1" colspan="1"
-                                                    aria-label="Remarks: activate to sort column ascending"
-                                                    style="width: 125.15px;">@lang('lang.remark')</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @if (count($dataTrainings) > 0)
-                                                @foreach ($dataTrainings as $key=>$item)
-                                                    @php
-                                                        $price = 0;
-                                                        $discount = 0;
-                                                        $total = 0;
-                                                        if (count($item->employee_id) > 0) {
-                                                            $price =  $item->cost_price / count($item->employee_id);
-                                                            $discount = ($price * $item->discount) / 100;
-                                                            $total = $price - $discount;
-                                                        }
-                                                        $trainer = null;
-                                                        if (count($item->trainers) == 1) {
-                                                            $trainer = $item->trainers[0]->type == 2 ? $item->trainers[0]->name_en : $item->trainers[0]->employee->employee_name_en;
-                                                        }else{
-                                                            foreach ($item->trainers as $key => $trai) {
-                                                                $trainer .= $trai->type == 2 ? $trai->name_en : $trai->employee->employee_name_en.', ';
+            <div class="content">
+                <div class="row">
+                    <div class="col-md-12 p-0">
+                        <div class="table-responsive">
+                            <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <table
+                                            class="table table-striped custom-table mb-0 datatable dataTable no-footer tbl-traingin-report"
+                                            id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
+                                            <thead>
+                                                <tr>
+                                                    <th class="sorting sorting_asc stuck-scroll-3" tabindex="0" aria-controls="DataTables_Table_0"
+                                                        rowspan="1" colspan="1" aria-sort="ascending"
+                                                        aria-label="Profle: activate to sort column descending"
+                                                        style="width: 94.0625px;">#</th>
+                                                    <th class="sorting stuck-scroll-3" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1"
+                                                        colspan="1" aria-label="Employee ID: activate to sort column ascending"
+                                                        style="width: 94.0625px;">@lang('lang.id_card')</th>
+                                                    <th class="sorting sorting_asc stuck-scroll-3" tabindex="0" aria-controls="DataTables_Table_0"
+                                                        rowspan="1" colspan="1" aria-sort="ascending"
+                                                        aria-label="Employee name: activate to sort column descending"
+                                                        style="width: 178px;">@lang('lang.name_kh')</th>
+                                                    <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
+                                                        rowspan="1" colspan="1" aria-sort="ascending"
+                                                        aria-label="Employee name: activate to sort column descending"
+                                                        style="width: 178px;">@lang('lang.name_en')</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1"
+                                                        colspan="1" aria-label="Gender: activate to sort column ascending"
+                                                        style="width: 125.15px;">@lang('lang.gender')</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                        rowspan="1" colspan="1"
+                                                        aria-label="Position: activate to sort column ascending"
+                                                        style="width: 125.15px;">@lang('lang.position')</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                        rowspan="1" colspan="1"
+                                                        aria-label="Date of Employment: activate to sort column ascending"
+                                                        style="width: 125.15px;">@lang('lang.date_of_employment')</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                        rowspan="1" colspan="1"
+                                                        aria-label="Seniority: activate to sort column ascending"
+                                                        style="width: 125.15px;">@lang('lang.length_of_employment')</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                        rowspan="1" colspan="1"
+                                                        aria-label="Course Name: activate to sort column ascending"
+                                                        style="width: 125.15px;">@lang('lang.course_name')</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                        rowspan="1" colspan="1"
+                                                        aria-label="Branch name: activate to sort column ascending"
+                                                        style="width: 125.15px;">@lang('lang.location')</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                        rowspan="1" colspan="1"
+                                                        aria-label="Start Date: activate to sort column ascending"
+                                                        style="width: 125.15px;">@lang('lang.start_date')</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                        rowspan="1" colspan="1"
+                                                        aria-label="End Date: activate to sort column ascending"
+                                                        style="width: 125.15px;">@lang('lang.end_date')</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                        rowspan="1" colspan="1"
+                                                        aria-label="Duration of service: activate to sort column ascending"
+                                                        style="width: 125.15px;">@lang('lang.duration_term')</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                        rowspan="1" colspan="1"
+                                                        aria-label="Price/Unit: activate to sort column ascending"
+                                                        style="width: 125.15px;">@lang('lang.price/unit')</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                        rowspan="1" colspan="1"
+                                                        aria-label="Discount Price: activate to sort column ascending"
+                                                        style="width: 125.15px;">@lang('lang.discount_fee')</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                        rowspan="1" colspan="1"
+                                                        aria-label="Total: activate to sort column ascending"
+                                                        style="width: 125.15px;">@lang('lang.total')</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                        rowspan="1" colspan="1"
+                                                        aria-label="Trainer: activate to sort column ascending"
+                                                        style="width: 125.15px;">@lang('lang.trainer')</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                        rowspan="1" colspan="1"
+                                                        aria-label="Type of Training: activate to sort column ascending"
+                                                        style="width: 125.15px;">@lang('lang.type_of_training')</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                        rowspan="1" colspan="1"
+                                                        aria-label="Remarks: activate to sort column ascending"
+                                                        style="width: 125.15px;">@lang('lang.remark')</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @if (count($dataTrainings) > 0)
+                                                    @foreach ($dataTrainings as $key=>$item)
+                                                        @php
+                                                            $price = 0;
+                                                            $discount = 0;
+                                                            $total = 0;
+                                                            if (count($item->employee_id) > 0) {
+                                                                $price =  $item->cost_price / count($item->employee_id);
+                                                                $discount = ($price * $item->discount) / 100;
+                                                                $total = $price - $discount;
                                                             }
-                                                        }
-                                                    @endphp
-                                                    @foreach ($item->employees as $emp)
-                                                        <tr class="odd">
-                                                            <td class="ids stuck-scroll-3">{{ ++$key }}</td>
-                                                            <td class="stuck-scroll-3">{{ $emp->number_employee }}</td>
-                                                            <td class="stuck-scroll-3">{{ $emp->employee_name_kh }}</td>
-                                                            <td>{{$emp->employee_name_en}}</td>
-                                                            <td>{{$emp->EmployeeGender}}</td>
-                                                            <td>{{$emp->EmployeePosition}}</td>
-                                                            <td>{{ \Carbon\Carbon::parse($emp->date_of_commencement)->format('d-M-Y') ?? '' }}</td>
-                                                            <td>{{$emp->SeniorityYearsOfEmployee}}</td>
-                                                            <td>{{$item->course_name}}</td>
-                                                            <td>{{$emp->EmployeeBranch}}</td>
-                                                            <td>{{ \Carbon\Carbon::parse($item->start_date)->format('d-M-Y') ?? '' }}</td>
-                                                            <td>{{ \Carbon\Carbon::parse($item->end_date)->format('d-M-Y') ?? '' }}</td>
-                                                            <td>
-                                                                <span style="font-size: 13px" class="badge bg-inverse-danger">{{ $item->duration_month ? \Carbon\Carbon::parse($item->end_date)->addMonth($item->duration_month)->format('d-M-Y'): 0}}</span>
-                                                            </td>
-                                                            <td>$ {{round($price, 2)}}</td>
-                                                            <td>$ {{round($discount, 2)}}</td>
-                                                            <td>$ {{round($total, 2)}}</td>
-                                                            <td> {{$trainer}}</td>
-                                                            <td>{{ $item->training_type == 1 ? "Internal" : "External"}}</td>
-                                                            <td>{{$item->remark ? $item->remark : ""}}</td>
-                                                        </tr>
+                                                            $trainer = null;
+                                                            if (count($item->trainers) == 1) {
+                                                                $trainer = $item->trainers[0]->type == 2 ? $item->trainers[0]->name_en : $item->trainers[0]->employee->employee_name_en;
+                                                            }else{
+                                                                foreach ($item->trainers as $key => $trai) {
+                                                                    $trainer .= $trai->type == 2 ? $trai->name_en : $trai->employee->employee_name_en.', ';
+                                                                }
+                                                            }
+                                                        @endphp
+                                                        @foreach ($item->employees as $emp)
+                                                            <tr class="odd">
+                                                                <td class="ids stuck-scroll-3">{{ ++$key }}</td>
+                                                                <td class="stuck-scroll-3">{{ $emp->number_employee }}</td>
+                                                                <td class="stuck-scroll-3">{{ $emp->employee_name_kh }}</td>
+                                                                <td>{{$emp->employee_name_en}}</td>
+                                                                <td>{{$emp->EmployeeGender}}</td>
+                                                                <td>{{$emp->EmployeePosition}}</td>
+                                                                <td>{{ \Carbon\Carbon::parse($emp->date_of_commencement)->format('d-M-Y') ?? '' }}</td>
+                                                                <td>{{$emp->SeniorityYearsOfEmployee}}</td>
+                                                                <td>{{$item->course_name}}</td>
+                                                                <td>{{$emp->EmployeeBranch}}</td>
+                                                                <td>{{ \Carbon\Carbon::parse($item->start_date)->format('d-M-Y') ?? '' }}</td>
+                                                                <td>{{ \Carbon\Carbon::parse($item->end_date)->format('d-M-Y') ?? '' }}</td>
+                                                                <td>
+                                                                    <span style="font-size: 13px" class="badge bg-inverse-danger">{{ $item->duration_month ? \Carbon\Carbon::parse($item->end_date)->addMonth($item->duration_month)->format('d-M-Y'): 0}}</span>
+                                                                </td>
+                                                                <td>$ {{round($price, 2)}}</td>
+                                                                <td>$ {{round($discount, 2)}}</td>
+                                                                <td>$ {{round($total, 2)}}</td>
+                                                                <td> {{$trainer}}</td>
+                                                                <td>{{ $item->training_type == 1 ? "Internal" : "External"}}</td>
+                                                                <td>{{$item->remark ? $item->remark : ""}}</td>
+                                                            </tr>
+                                                        @endforeach
                                                     @endforeach
-                                                @endforeach
-                                            @endif
-                                        </tbody>
-                                    </table>
+                                                @endif
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        @endif
     </div>
     
     @include('training.templete_print_report')

@@ -450,14 +450,20 @@
                                     value="{{SetCheckbox($arrayPermissions,"lang.employee_salary","is_create")->value}}"
                                     > <span class="checkmark"></span>
                                 </label>
+                                <label class="container-checkbox">@lang('lang.import')
+                                    <input type="checkbox" class="c_and_b_checkbox employee_salary_checkbox" id="c_and_b_import"
+                                    {{SetCheckbox($arrayPermissions,"lang.employee_salary","is_import")->checkbox}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.employee_salary","is_import")->value}}"
+                                    > <span class="checkmark"></span>
+                                </label>
+                            </div>
+                            <div class="col-md-3">
                                 <label class="container-checkbox">@lang('lang.approve')
                                     <input type="checkbox" class="c_and_b_checkbox employee_salary_checkbox" id="c_and_b_approve"
                                     {{SetCheckbox($arrayPermissions,"lang.employee_salary","is_approve")->checkbox}}
                                     value="{{SetCheckbox($arrayPermissions,"lang.employee_salary","is_approve")->value}}"
                                     > <span class="checkmark"></span>
                                 </label>
-                            </div>
-                            <div class="col-md-3">
                                 <label class="container-checkbox">@lang('lang.edit')
                                     <input type="checkbox" class="c_and_b_checkbox employee_salary_checkbox" id="c_and_b_edit"
                                     {{SetCheckbox($arrayPermissions,"lang.employee_salary","is_update")->checkbox}}
@@ -706,7 +712,7 @@
                             <div class="col-md-4">
                                 <label class="container-checkbox">@lang('lang.view')
                                     <input type="checkbox" class="motor_rental_checkbox pay_motor_rentals_checkbox" id="Pay_motor_rental_view"
-                                    {{SetCheckbox($arrayPermissions,"Pay Motor Rental","is_view")->checkbox}}
+                                    {{SetCheckbox($arrayPermissions,"lang.pay_motor_rental","is_view")->checkbox}}
                                     value="{{SetCheckbox($arrayPermissions,"lang.pay_motor_rental","is_view")->value}}"
                                     > <span class="checkmark"></span>
                                 </label>
@@ -1122,20 +1128,20 @@
                             <div class="col-md-2">
                                 <label class="container-checkbox">@lang('lang.view')
                                     <input type="checkbox" class="reports_checkbox bank_transfer_report_checkbox" id="bank_transfer_report_check_view" 
-                                    {{SetCheckbox($arrayPermissions,"lang.fringe_benefits_reports","is_view")->checkbox}}
-                                    value="{{SetCheckbox($arrayPermissions,"lang.fringe_benefits_reports","is_view")->value}}"
+                                    {{SetCheckbox($arrayPermissions,"lang.bank_transfer_reports","is_view")->checkbox}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.bank_transfer_reports","is_view")->value}}"
                                     > <span class="checkmark"></span>
                                 </label>
                                 <label class="container-checkbox">@lang('lang.print')
                                     <input type="checkbox" class="reports_checkbox bank_transfer_report_checkbox" id="bank_transfer_report_check_print" 
-                                    {{SetCheckbox($arrayPermissions,"lang.fringe_benefits_reports","is_print")->checkbox}}
-                                    value="{{SetCheckbox($arrayPermissions,"lang.fringe_benefits_reports","is_print")->value}}"
+                                    {{SetCheckbox($arrayPermissions,"lang.bank_transfer_reports","is_print")->checkbox}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.bank_transfer_reports","is_print")->value}}"
                                     > <span class="checkmark"></span>
                                 </label>
                                 <label class="container-checkbox">@lang('lang.export')
                                     <input type="checkbox" class="reports_checkbox bank_transfer_report_checkbox" id="bank_transfer_report_check_export" 
-                                    {{SetCheckbox($arrayPermissions,"lang.fringe_benefits_reports","is_export")->checkbox}}
-                                    value="{{SetCheckbox($arrayPermissions,"lang.fringe_benefits_reports","is_export")->value}}"
+                                    {{SetCheckbox($arrayPermissions,"lang.bank_transfer_reports","is_export")->checkbox}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.bank_transfer_reports","is_export")->value}}"
                                     > <span class="checkmark"></span>
                                 </label>
                             </div>
@@ -1148,20 +1154,20 @@
                             <div class="col-md-2">
                                 <label class="container-checkbox">@lang('lang.view')
                                     <input type="checkbox" class="reports_checkbox fringe_benefits_report_checkbox" id="fringe_benefits_report_check_view" 
-                                    {{SetCheckbox($arrayPermissions,"lang.bank_transfer_reports","is_view")->checkbox}}
-                                    value="{{SetCheckbox($arrayPermissions,"lang.bank_transfer_reports","is_view")->value}}"
+                                    {{SetCheckbox($arrayPermissions,"lang.fringe_benefits_reports","is_view")->checkbox}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.fringe_benefits_reports","is_view")->value}}"
                                     > <span class="checkmark"></span>
                                 </label>
                                 <label class="container-checkbox">@lang('lang.print')
                                     <input type="checkbox" class="reports_checkbox fringe_benefits_report_checkbox" id="fringe_benefits_report_check_print" 
-                                    {{SetCheckbox($arrayPermissions,"lang.bank_transfer_reports","is_print")->checkbox}}
-                                    value="{{SetCheckbox($arrayPermissions,"lang.bank_transfer_reports","is_print")->value}}"
+                                    {{SetCheckbox($arrayPermissions,"lang.fringe_benefits_reports","is_print")->checkbox}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.fringe_benefits_reports","is_print")->value}}"
                                      > <span class="checkmark"></span>
                                 </label>
                                 <label class="container-checkbox">@lang('lang.export')
                                     <input type="checkbox" class="reports_checkbox fringe_benefits_report_checkbox" id="fringe_benefits_report_check_export" 
-                                    {{SetCheckbox($arrayPermissions,"lang.bank_transfer_reports","is_export")->checkbox}}
-                                    value="{{SetCheckbox($arrayPermissions,"lang.bank_transfer_reports","is_export")->value}}"
+                                    {{SetCheckbox($arrayPermissions,"lang.fringe_benefits_reports","is_export")->checkbox}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.fringe_benefits_reports","is_export")->value}}"
                                     > <span class="checkmark"></span>
                                 </label>
                             </div>
@@ -1313,20 +1319,20 @@
                             <div class="col-md-2">
                                 <label class="container-checkbox">@lang('lang.view')
                                     <input type="checkbox" class="reports_checkbox promoted_staff_report_checkbox" id="promoted_staff_report_check_view" 
-                                    {{SetCheckbox($arrayPermissions,"lang.transferred_staff_reports","is_view")->checkbox}}
-                                    value="{{SetCheckbox($arrayPermissions,"lang.transferred_staff_reports","is_view")->value}}"
+                                    {{SetCheckbox($arrayPermissions,"lang.promoted_staff_reports","is_view")->checkbox}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.promoted_staff_reports","is_view")->value}}"
                                     > <span class="checkmark"></span>
                                 </label>
                                 <label class="container-checkbox">@lang('lang.print')
                                     <input type="checkbox" class="reports_checkbox promoted_staff_report_checkbox" id="promoted_staff_report_check_print" 
-                                    {{SetCheckbox($arrayPermissions,"lang.transferred_staff_reports","is_print")->checkbox}}
-                                    value="{{SetCheckbox($arrayPermissions,"lang.transferred_staff_reports","is_print")->value}}"
+                                    {{SetCheckbox($arrayPermissions,"lang.promoted_staff_reports","is_print")->checkbox}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.promoted_staff_reports","is_print")->value}}"
                                     > <span class="checkmark"></span>
                                 </label>
                                 <label class="container-checkbox">@lang('lang.export')
                                     <input type="checkbox" class="reports_checkbox promoted_staff_report_checkbox" id="promoted_staff_report_check_export" 
-                                    {{SetCheckbox($arrayPermissions,"lang.transferred_staff_reports","is_export")->checkbox}}
-                                    value="{{SetCheckbox($arrayPermissions,"lang.transferred_staff_reports","is_export")->value}}"
+                                    {{SetCheckbox($arrayPermissions,"lang.promoted_staff_reports","is_export")->checkbox}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.promoted_staff_reports","is_export")->value}}"
                                     > <span class="checkmark"></span>
                                 </label>
                             </div>
@@ -1344,20 +1350,20 @@
                             <div class="col-md-2">
                                 <label class="container-checkbox">@lang('lang.view')
                                     <input type="checkbox" class="reports_checkbox transferred_staff_report_checkbox" id="transferred_staff_report_check_view" 
-                                    {{SetCheckbox($arrayPermissions,"lang.promoted_staff_reports","is_view")->checkbox}}
-                                    value="{{SetCheckbox($arrayPermissions,"lang.promoted_staff_reports","is_view")->value}}"
+                                    {{SetCheckbox($arrayPermissions,"lang.transferred_staff_reports","is_view")->checkbox}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.transferred_staff_reports","is_view")->value}}"
                                     > <span class="checkmark"></span>
                                 </label>
                                 <label class="container-checkbox">@lang('lang.print')
                                     <input type="checkbox" class="reports_checkbox transferred_staff_report_checkbox" id="transferred_staff_report_check_print" 
-                                    {{SetCheckbox($arrayPermissions,"lang.promoted_staff_reports","is_print")->checkbox}}
-                                    value="{{SetCheckbox($arrayPermissions,"lang.promoted_staff_reports","is_print")->value}}"
+                                    {{SetCheckbox($arrayPermissions,"lang.transferred_staff_reports","is_print")->checkbox}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.transferred_staff_reports","is_print")->value}}"
                                     > <span class="checkmark"></span>
                                 </label>
                                 <label class="container-checkbox">@lang('lang.export')
                                     <input type="checkbox" class="reports_checkbox transferred_staff_report_checkbox" id="transferred_staff_report_check_export" 
-                                    {{SetCheckbox($arrayPermissions,"lang.promoted_staff_reports","is_export")->checkbox}}
-                                    value="{{SetCheckbox($arrayPermissions,"lang.promoted_staff_reports","is_export")->value}}"
+                                    {{SetCheckbox($arrayPermissions,"lang.transferred_staff_reports","is_export")->checkbox}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.transferred_staff_reports","is_export")->value}}"
                                     > <span class="checkmark"></span>
                                 </label>
                             </div>

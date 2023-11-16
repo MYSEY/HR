@@ -26,14 +26,14 @@
                     </ul>
                 </div>
                 <div class="col-auto float-end ms-auto">
-                    @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer')
+                    @if (permissionAccess("13","is_import")->value == "1")
                         <a href="#" class="btn add-btn" data-toggle="modal" id="importSeverancePay"><i class="fa fa-plus"></i>@lang('lang.import')</a>
                     @endif
                 </div>
             </div>
         </div>
 
-        @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer')
+        @if (permissionAccess("13","is_view")->value == "1")
             <form>
                 {{-- @csrf --}}
                 <div class="row filter-btn"> 
@@ -68,10 +68,12 @@
                                 <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading') </span>
                                 <span class="btn-txt">@lang('lang.search')</span>
                             </button>
-                            <button type="button" class="btn btn-sm btn-outline-secondary btn_excel me-2">
-                                <span class="btn-text-excel"><i class="fa fa-file-excel-o" aria-hidden="true"></i> @lang('lang.excel')</span>
-                                <span id="btn-text-loading-excel" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>
-                            </button>
+                            @if (permissionAccess("13","is_export")->value == "1")
+                                <button type="button" class="btn btn-sm btn-outline-secondary btn_excel me-2">
+                                    <span class="btn-text-excel"><i class="fa fa-file-excel-o" aria-hidden="true"></i> @lang('lang.excel')</span>
+                                    <span id="btn-text-loading-excel" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>
+                                </button>
+                            @endif
                             <button type="button" class="btn btn-sm btn-outline-secondary reset-btn">
                                 <span class="btn-text-reset">@lang('lang.reload')</span>
                                 <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>
@@ -80,55 +82,55 @@
                     </div>
                 </div>
             </form>
-        @endif
-        {!! Toastr::message() !!}
+            {!! Toastr::message() !!}
 
-        <div class="row">
-            <div class="col-md-12">
-                <div class="table-responsive">
-                    <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <table class="table table-striped custom-table datatable dataTable no-footer table_severance_pay" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
-                                    <thead>
-                                        <tr>
-                                            <th class="sorting stuck-scroll-3" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1">@lang('lang.employee_id')</th>
-                                            <th class="sorting sorting_asc stuck-scroll-3" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Employee: activate to sort column descending">@lang('lang.employee_name')</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending">@lang('lang.position')</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending">@lang('lang.department')</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending">@lang('lang.location')</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">@lang('lang.join_date')</th>
-                                            <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending" style="width: 87.1125px;">@lang('lang.fdc_start_date')</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">@lang('lang.basic_salary')</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">@lang('lang.total_gross_salary')</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">@lang('lang.payment_date')</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @if (count($data)>0)
-                                            @foreach ($data as $item)
-                                                <tr class="odd">
-                                                    <td class="stuck-scroll-3"><a href="#">{{ $item->users == null ? '' : $item->users->number_employee}}</a></td>
-                                                    <td class="stuck-scroll-3"><a href="#">{{ $item->users == null ? '' : $item->users->EmployeeName}}</span></a></td>
-                                                    <td><a href="#">{{ $item->users == null ? '' : $item->users->EmployeePosition}}</a></td>
-                                                    <td><a href="#">{{ $item->users == null ? '' : $item->users->EmployeeDepartment}}</a></td>
-                                                    <td><a href="#">{{ $item->users == null ? '' : $item->users->EmployeeBranch }}</a></td>
-                                                    <td>{{ $item->users == null ? '' : $item->users->joinOfDate}}</td>
-                                                    <td>{{ $item->users == null ? '' : $item->users->UDCStartDate}}</td>
-                                                    <td>${{$item->basic_salary}}</td>
-                                                    <td>${{$item->total_fdc1}}</td>
-                                                    <td>{{$item->PayrollPaymentDate}}</td>
-                                                </tr>
-                                            @endforeach
-                                        @endif
-                                    </tbody>
-                                </table>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="table-responsive">
+                        <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <table class="table table-striped custom-table datatable dataTable no-footer table_severance_pay" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
+                                        <thead>
+                                            <tr>
+                                                <th class="sorting stuck-scroll-3" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1">@lang('lang.employee_id')</th>
+                                                <th class="sorting sorting_asc stuck-scroll-3" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Employee: activate to sort column descending">@lang('lang.employee_name')</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending">@lang('lang.position')</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending">@lang('lang.department')</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending">@lang('lang.location')</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">@lang('lang.join_date')</th>
+                                                <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending" style="width: 87.1125px;">@lang('lang.fdc_start_date')</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">@lang('lang.basic_salary')</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">@lang('lang.total_gross_salary')</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">@lang('lang.payment_date')</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @if (count($data)>0)
+                                                @foreach ($data as $item)
+                                                    <tr class="odd">
+                                                        <td class="stuck-scroll-3"><a href="#">{{ $item->users == null ? '' : $item->users->number_employee}}</a></td>
+                                                        <td class="stuck-scroll-3"><a href="#">{{ $item->users == null ? '' : $item->users->EmployeeName}}</span></a></td>
+                                                        <td><a href="#">{{ $item->users == null ? '' : $item->users->EmployeePosition}}</a></td>
+                                                        <td><a href="#">{{ $item->users == null ? '' : $item->users->EmployeeDepartment}}</a></td>
+                                                        <td><a href="#">{{ $item->users == null ? '' : $item->users->EmployeeBranch }}</a></td>
+                                                        <td>{{ $item->users == null ? '' : $item->users->joinOfDate}}</td>
+                                                        <td>{{ $item->users == null ? '' : $item->users->UDCStartDate}}</td>
+                                                        <td>${{$item->basic_salary}}</td>
+                                                        <td>${{$item->total_fdc1}}</td>
+                                                        <td>{{$item->PayrollPaymentDate}}</td>
+                                                    </tr>
+                                                @endforeach
+                                            @endif
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        @endif
         @include('severance_pays.import_severance_pay')
     </div>
 @endsection
