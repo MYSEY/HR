@@ -169,13 +169,17 @@ class EmployeePayrollController extends Controller
                 foreach ($employee as $item) {
                     payrollPreview::where('employee_id',$item->id)->delete();
                     PreviewNationalSocialSecurityFund::where('employee_id',$item->id)->delete();
-                    PreviewNationalSocialSecurityFund::where('employee_id',$item->id)->delete();
+                    PreviewGrossSalaryPay::where('employee_id',$item->id)->delete();
                     PreviewBonus::where('employee_id',$item->id)->delete();
                     //function first month join work
                     $totalFirstSeverancPay = 0;
                     $totalBaseSalaryRecived = 0;
                     $totalBasicSalary = 0;
-                    if (count(Payroll::where('employee_id',$item->id)->get()) == 0) {
+                    $joinDate = Carbon::createFromDate($item->date_of_commencement)->format('m-y');
+                    $paymentDate = Carbon::createFromDate($request->payment_date)->format('m-y');
+                    // dd($paymentDate);
+
+                    if ($joinDate == $paymentDate) {
                         //total day in monthsd
                         $startMonth = Carbon::createFromDate($item->date_of_commencement)->format('m');
                         $startendMonth = Carbon::createFromDate($item->date_of_commencement)->endOfMonth()->format('d');
@@ -825,7 +829,7 @@ class EmployeePayrollController extends Controller
             $dataGrossSalaryPay = PreviewGrossSalaryPay::whereIn('id',explode(",",$ids))->get();
             $dataBonus = PreviewBonus::whereIn('id',explode(",",$ids))->get();
             foreach ($dataBonus as $item) {
-                Bonus::create([
+                Bonus::firstOrCreate([
                     'employee_id'             => $item->employee_id,
                     'number_employee'         => $item->number_employee,
                     'number_of_working_days'  => $item->number_of_working_days,
@@ -839,7 +843,7 @@ class EmployeePayrollController extends Controller
                 PreviewBonus::whereIn('id',explode(",",$ids))->delete();
             }
             foreach ($dataNssf as $item) {
-                NationalSocialSecurityFund::create([
+                NationalSocialSecurityFund::firstOrCreate([
                     'employee_id'               => $item->employee_id,
                     'number_employee'           => $item->number_employee,
                     'total_pre_tax_salary_usd'  => $item->total_pre_tax_salary_usd,
@@ -857,7 +861,7 @@ class EmployeePayrollController extends Controller
                 PreviewNationalSocialSecurityFund::whereIn('id',explode(",",$ids))->delete();
             }
             foreach ($dataGrossSalaryPay as $item) {
-                GrossSalaryPay::create([
+                GrossSalaryPay::firstOrCreate([
                     'employee_id'           => $item->employee_id,
                     'number_employee'       => $item->number_employee,
                     'basic_salary'          => $item->basic_salary,
@@ -875,7 +879,7 @@ class EmployeePayrollController extends Controller
                 PreviewGrossSalaryPay::whereIn('id',explode(",",$ids))->delete();
             }
             foreach ($dataPayroll as $item) {
-                Payroll::create([
+                Payroll::firstOrCreate([
                     'employee_id'               => $item->employee_id,
                     'number_employee'           => $item->number_employee,
                     'basic_salary'              => $item->basic_salary,
@@ -1040,6 +1044,9 @@ class EmployeePayrollController extends Controller
         try{
             $ids = $request->ids;
             payrollPreview::whereIn('id',explode(",",$ids))->delete();
+            PreviewNationalSocialSecurityFund::whereIn('id',explode(",",$ids))->delete();
+            PreviewGrossSalaryPay::whereIn('id',explode(",",$ids))->delete();
+            PreviewBonus::whereIn('id',explode(",",$ids))->delete();
             Toastr::success('Payroll deleted successfully.','Success');
             return redirect()->back();
         }catch(\Exception $e){

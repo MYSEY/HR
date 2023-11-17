@@ -159,22 +159,23 @@
                     <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="" role="button">
                         @switch(App::getLocale())
                             @case('en')
-                                <img src="{{asset('/admin/img/us.png')}}" alt="" height="20"><span>English</span>
+                                <img src="{{asset('/admin/img/us.png')}}" alt="" height="20"><span>{{Helper::getLang() == 'en' ? 'English' : 'អង់គ្លេស'}}</span>
                             @break
+                            
                             @case('kh')
-                                <img src="{{asset('/admin/img/flag-of-cambodia-logo.png')}}" alt="" height="20"><span>English</span>
+                                <img src="{{asset('/admin/img/flag-of-cambodia-logo.png')}}" alt="" height="20"><span> {{Helper::getLang() == 'en' ? 'Khmer' : 'ខ្មែរ'}}</span>
                             @break
                             @default
-                            <img src="{{asset('/admin/img/us.png')}}" alt="" height="20"><span>English</span>
+                            <img src="{{asset('/admin/img/us.png')}}" alt="" height="20"><span>{{Helper::getLang() == 'en' ? 'English' : 'អង់គ្លេស'}}</span>
                         @endswitch
                     </a>
                     
                     <div class="dropdown-menu dropdown-menu-right">
                         <a href="{{ url('lang/en') }}" class="dropdown-item">
-                            <img src="{{asset('/admin/img/us.png')}}" alt="" height="20"> English
+                            <img src="{{asset('/admin/img/us.png')}}" alt="" height="20"> {{Helper::getLang() == 'en' ? 'English' : 'អង់គ្លេស'}}
                         </a>
                         <a href="{{ url('lang/kh') }}" class="dropdown-item">
-                            <img src="{{asset('/admin/img/flag-of-cambodia-logo.png')}}" alt="" height="20"> Khmer
+                            <img src="{{asset('/admin/img/flag-of-cambodia-logo.png')}}" alt="" height="20"> {{Helper::getLang() == 'en' ? 'Khmer' : 'ខ្មែរ'}}
                         </a>
                     </div>
                 </li>
@@ -189,7 +190,7 @@
                             @endif
                             <span class="status online"></span>
                         </span>
-                        <span>{{ Auth::user()->employee_name_en }}</span>
+                        <span>{{ Helper::getLang() == 'en' ? Auth::user()->employee_name_en : Auth::user()->employee_name_kh }}</span>
                     </a>
                     <div class="dropdown-menu">
                         <a class="dropdown-item" href="{{ url('/employee/profile/' . Auth::user()->id) }}">@lang("lang.my_profile")</a>

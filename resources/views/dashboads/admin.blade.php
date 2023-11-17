@@ -271,7 +271,7 @@
         <div class="page-header">
             <div class="row">
                 <div class="col-sm-12">
-                    <h3 class="page-title">@lang("lang.welcome") {{ Auth::user()->employee_name_en }}!</h3>
+                    <h3 class="page-title">@lang("lang.welcome") {{Helper::getLang() == 'en' ? Auth::user()->employee_name_en :  Auth::user()->employee_name_kh}}!</h3>
                     <ul class="breadcrumb">
                         <li class="breadcrumb-item active">@lang('lang.dashboard')</li>
                     </ul>

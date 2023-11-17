@@ -4,7 +4,7 @@
         <div class="page-header">
             <div class="row align-items-center">
                 <div class="col">
-                    <h3 class="page-title">@lang('lang.public_holidays')</h3>
+                    <h3 class="page-title">@lang('lang.public_holidays') {{Helper::getCurrenYear()}}</h3>
                     <ul class="breadcrumb">
                         <li class="breadcrumb-item"><a href="{{ url('/dashboad/employee') }}">@lang('lang.dashboard')</a></li>
                         <li class="breadcrumb-item active">@lang('lang.holidays')</li>
@@ -30,7 +30,7 @@
                                             <thead>
                                                 <tr>
                                                     <th>#</th>
-                                                    <th>@lang('lang.days')</th>
+                                                    <th>@lang('lang.date')</th>
                                                     <th>@lang('lang.title')</th>
                                                     <th>@lang('lang.amount_percent')(%)</th>
                                                     <th>@lang('lang.period_month')</th>
@@ -44,10 +44,10 @@
                                                         <tr>
                                                             <td class="ids">{{++$key}}</td>
                                                             <td class="title">{{$item->Day}}</td>
-                                                            <td class="title">{{$item->title}}</td>
+                                                            <td class="title">{{Helper::getLang() == 'en' ? $item->title_en  :$item->title_kh}}</td>
                                                             <td style="text-align: center;" class="amount_percent"><a href="#">{{$item->amount_percent}}</a></td>
                                                             <td class="period_month">{{$item->PeriodPayment}}</td>
-                                                            <td>{{$item->created_at}}</td>
+                                                            <td>{{Carbon\Carbon::parse($item->created_at)->format('d-M-Y') }}</td>
                                                             <td class="text-end">
                                                                 @if (permissionAccess("42","is_update")->value == "1")
                                                                     <div class="dropdown dropdown-action">
@@ -76,7 +76,7 @@
             </div>
         @endif
         <div class="modal custom-modal fade" id="add_holiday" style="display: none;" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">@lang('lang.add_holiday')</h5>
@@ -87,32 +87,52 @@
                     <div class="modal-body">
                         <form action="{{url('holidays/create')}}" method="POST" class="needs-validation" novalidate>
                             @csrf
-                            <div class="form-group">
-                                <label>@lang('lang.title') <span class="text-danger">*</span></label>
-                                <input class="form-control" type="text" id="title" name="title" required>
-                            </div>
-                            <div class="form-group">
-                                <label>@lang('lang.amount_percent') (%)</label>
-                                <input class="form-control" type="number" id="amount_percent" name="amount_percent">
-                            </div>
-                            <div class="form-group">
-                                <label>@lang('lang.period_month')</label>
-                                <div class="cal-icon">
-                                    <input class="form-control datetimepicker" type="text" id="period_month" name="period_month">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>@lang('lang.title_en') <span class="text-danger">*</span></label>
+                                        <textarea type="text" rows="2" class="form-control" name="title_en" id="title_en" required value="{{old('title_en')}}"></textarea>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>@lang('lang.title_kh') <span class="text-danger">*</span></label>
+                                        <textarea type="text" rows="2" class="form-control" name="title_kh" id="title_kh" required value="{{old('title_kh')}}"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>@lang('lang.amount_percent') (%)</label>
+                                        <input class="form-control" type="number" id="amount_percent" name="amount_percent">
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>@lang('lang.period_month')</label>
+                                        <div class="cal-icon">
+                                            <input class="form-control datetimepicker" type="text" id="period_month" name="period_month">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>@lang('lang.from') <span class="text-danger">*</span></label>
+                                        <div class="cal-icon">
+                                            <input class="form-control datetimepicker" type="text" id="from" name="from" required>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>@lang('lang.to')</label>
+                                        <div class="cal-icon">
+                                            <input class="form-control datetimepicker" type="text" id="to" name="to">
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label>@lang('lang.from') <span class="text-danger">*</span></label>
-                                <div class="cal-icon">
-                                    <input class="form-control datetimepicker" type="text" id="from" name="from" required>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label>@lang('lang.to')</label>
-                                <div class="cal-icon">
-                                    <input class="form-control datetimepicker" type="text" id="to" name="to">
-                                </div>
-                            </div>
+                           
                             <div class="submit-section">
                                 <button class="btn btn-primary submit-btn">
                                     <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading') </span>
@@ -126,7 +146,7 @@
         </div>
 
         <div id="edit_holiday" class="modal custom-modal fade" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">@lang('lang.edit_holiday')</h5>
@@ -137,30 +157,48 @@
                     <div class="modal-body">
                         <form action="{{url('holidays/update')}}" method="POST">
                             @csrf
-                            <div class="form-group">
-                                <label>@lang('lang.title') <span class="text-danger">*</span></label>
-                                <input class="form-control" type="text" id="e_title" name="title" required>
-                            </div>
-                            <div class="form-group">
-                                <label>@lang('lang.amount_percent') (%)</label>
-                                <input class="form-control" type="number" id="e_amount_percent" name="amount_percent">
-                            </div>
-                            <div class="form-group">
-                                <label>@lang('lang.period_month')</label>
-                                <div class="cal-icon">
-                                    <input class="form-control datetimepicker" type="text" id="e_period_month" name="period_month">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>@lang('lang.title_en') <span class="text-danger">*</span></label>
+                                        <textarea type="text" rows="2" class="form-control" name="title_en" id="e_title_en" required value=""></textarea>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="form-group">
-                                <label>@lang('lang.from') <span class="text-danger">*</span></label>
-                                <div class="cal-icon">
-                                    <input class="form-control datetimepicker" type="text" id="e_from" name="from" required>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>@lang('lang.title_kh') <span class="text-danger">*</span></label>
+                                        <textarea type="text" rows="2" class="form-control" name="title_kh" id="e_title_kh" required value=""></textarea>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="form-group">
-                                <label>@lang('lang.to')</label>
-                                <div class="cal-icon">
-                                    <input class="form-control datetimepicker" type="text" id="e_to" name="to">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>@lang('lang.amount_percent') (%)</label>
+                                        <input class="form-control" type="number" id="e_amount_percent" name="amount_percent">
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>@lang('lang.period_month')</label>
+                                        <div class="cal-icon">
+                                            <input class="form-control datetimepicker" type="text" id="e_period_month" name="period_month">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>@lang('lang.from') <span class="text-danger">*</span></label>
+                                        <div class="cal-icon">
+                                            <input class="form-control datetimepicker" type="text" id="e_from" name="from" required>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>@lang('lang.to')</label>
+                                        <div class="cal-icon">
+                                            <input class="form-control datetimepicker" type="text" id="e_to" name="to">
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="submit-section">
@@ -192,7 +230,8 @@
                 dataType: "JSON",
                 success: function (response) {
                     $('#e_id').val(response.success.id);
-                    $('#e_title').val(response.success.title);
+                    $('#e_title_en').val(response.success.title_en);
+                    $('#e_title_kh').val(response.success.title_kh);
                     $('#e_amount_percent').val(response.success.amount_percent);
                     $('#e_period_month').val(response.success.period_month);
                     $('#e_from').val(response.success.from);
