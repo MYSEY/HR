@@ -2313,6 +2313,8 @@ input[type=file].form-control {
 .two-col-bar .sidebar-menu {
   padding: 10px 0;
   background-color: white;
+  overflow-x: auto;
+  height: 100vh;
 }
 .sidebar .sidebar-menu ul,
 .two-col-bar .sidebar-menu ul {

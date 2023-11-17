@@ -223,7 +223,7 @@
        
         <div class="sidebar" id="sidebar">
             <div class="slimScrollDiv" style="position: relative; overflow:hidden; width: 100%; height: 346px;">
-                <div class="sidebar-inner slimscroll" style="overflow: auto; width: 100%; height: 346px;">
+                <div class="sidebar-inner slimscroll">
                     <div id="sidebar-menu" class="sidebar-menu">
                         <ul class="sidebar-vertical">
                             <li class="menu-title"><span style="border-bottom: 3px solid #dc0000; font-weight: bold; font-size: 17px;">@lang('lang.hr_management_system')</span></li>
