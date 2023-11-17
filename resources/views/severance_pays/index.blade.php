@@ -200,7 +200,11 @@
                         '</tr>';
                     });
                 }else {
-                    var tr = '<tr><td colspan=15 align="center">No data available in table</td></tr>';
+                    if(localeLanguage == 'en'){
+                        var tr = '<tr><td colspan=15 align="center">No data available in table</td></tr>';
+                    }else{
+                        var tr = '<tr><td colspan=15 align="center">ពុំមានទិន្នន័យសម្រាប់បង្ហាញ</td></tr>';
+                    }
                 }
                 $(".table_severance_pay tbody").html(tr);
             }

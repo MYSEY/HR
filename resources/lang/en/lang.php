@@ -688,6 +688,8 @@ return[
     "trainer_information"=>"Trainer Information",
     "time_duration"=>"Time Duration",
     "title"=>"Title",
+    "title_en"=>"Title English",
+    "title_kh"=>"Title Khmer",
     "total_employee"=>"Total Employee",
     "total_female"=>"Total Female",
     "total_number_of_staff"=>"Total Number of Staff",

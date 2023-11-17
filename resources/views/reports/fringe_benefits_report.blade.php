@@ -169,6 +169,7 @@
         });
     });
     function showdatas(params) {
+        var localeLanguage = '{{ config('app.locale') }}';
         $.ajax({
             type: "post",
             url: "{{ url('reports/fringe-benefits-filter') }}",
@@ -212,7 +213,11 @@
                         '</tr>';
                     });
                 }else{
-                    var tr = '<tr><td colspan=19 align="center">ពុំមានទិន្នន័យសម្រាប់បង្ហាញ</td></tr>';
+                    if(localeLanguage == 'en'){
+                        var tr = '<tr><td colspan=19 align="center">No data available in table</td></tr>';
+                    }else{
+                        var tr = '<tr><td colspan=19 align="center">ពុំមានទិន្នន័យសម្រាប់បង្ហាញ</td></tr>';
+                    }
                 }
                 $(".tbl_fringe_benefit_report tbody").html(tr);   
             }

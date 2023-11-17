@@ -149,4 +149,17 @@ class Helper
         }
         return $arrayPermissions[$menu_id][$name_button];
     }
+
+    static public function getCurrenYear(){
+        if (Helper::getLang() == 'en') {
+            $month = Carbon::now()->format('Y');
+            $result = $month;
+        }else{
+            $month = Carbon::now()->format('Y');
+            $dateTime = KhmerDateTime::parse($month);
+            $year = $dateTime->year();
+            $result = $year;
+        }
+        return $result;
+    }
 }
