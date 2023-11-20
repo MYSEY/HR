@@ -221,7 +221,6 @@
                 </div>
             </div>
         </div>
-       
         <div class="sidebar" id="sidebar">
             <div class="slimScrollDiv" style="position: relative; overflow:hidden; width: 100%; height: 346px;">
                 <div class="sidebar-inner slimscroll">
@@ -229,25 +228,26 @@
                         <ul class="sidebar-vertical">
                             <li class="menu-title"><span style="border-bottom: 3px solid #dc0000; font-weight: bold; font-size: 17px;">@lang('lang.hr_management_system')</span></li>
                             @foreach (RolePermission()->menu as $menu)
-                                <li class="submenu">
-                                    <a href="javascript:void(0);" style="border-bottom: 3px solid #f0f0f0;">
-                                        <i class="{{$menu["icon"]}}"></i><span>@lang($menu["name"])</span><span class="menu-arrow"></span>
-                                    </a>
-                                    <ul style="display: none;">
-                                        @foreach (RolePermission()->subMenu as $sub_menu)
-                                            @if ($sub_menu["sub_menu_id"] == $menu["menu_id"])
-                                                <li>
-                                                    <a class="" href="{{url($sub_menu['url'])}}">@lang($sub_menu["name"])</a>
-                                                </li>
-                                            @endif
-                                        @endforeach
-                                    </ul>
-                                </li>
-                            @endforeach
-                            @foreach (RolePermission()->singleMenu as $singlemenu)
-                                <li class="">
-                                    <a href="{{url($singlemenu['url'])}}"><i class="{{$singlemenu["icon"]}}"></i><span>@lang($singlemenu["name"])</span></a>
-                                </li>
+                                @if ($menu["menu_id"] == null && $menu["sub_menu_id"] == null)
+                                    <li class="">
+                                        <a href="{{url($menu['url'])}}"><i class="{{$menu["icon"]}}"></i><span>@lang($menu["name"])</span></a>
+                                    </li>
+                                @else
+                                    <li class="submenu">
+                                        <a href="javascript:void(0);" style="border-bottom: 3px solid #f0f0f0;">
+                                            <i class="{{$menu["icon"]}}"></i><span>@lang($menu["name"])</span><span class="menu-arrow"></span>
+                                        </a>
+                                        <ul style="display: none;">
+                                            @foreach (RolePermission()->subMenu as $sub_menu)
+                                                @if ($sub_menu["sub_menu_id"] == $menu["menu_id"])
+                                                    <li>
+                                                        <a class="" href="{{url($sub_menu['url'])}}">@lang($sub_menu["name"])</a>
+                                                    </li>
+                                                @endif
+                                            @endforeach
+                                        </ul>
+                                    </li>
+                                @endif
                             @endforeach
                         </ul>
                     </div>

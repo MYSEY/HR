@@ -10,35 +10,14 @@ use function PHPUnit\Framework\returnSelf;
 class dataMenu {
     public $menu;
     public $subMenu;
-    public $singleMenu;
 }
 function RolePermission()
 {
     $id=Auth::user()->role_id;
-    $role_permission = permissions::where('role_id',$id)->get()->toArray();
-    if(count($role_permission) < 0){
-        return false;
-    }
     $datas = new dataMenu();
-    $menu = [];
-    $singleMenu = [];
-    $subMenu = [];
-    foreach ($role_permission as $groupedSubMenu) {
-        if (!$groupedSubMenu["sub_menu_id"] && !$groupedSubMenu["menu_id"]) {
-            $singleMenu[] = $groupedSubMenu;
-        }else{
-            if (!$groupedSubMenu["sub_menu_id"]) {
-                $menu[] = $groupedSubMenu;
-            }else{
-                $subMenu[] = $groupedSubMenu;
-            }
-        }
-    }
-    $datas->menu = $menu;
-    $datas->singleMenu = $singleMenu;
-    $datas->subMenu = $subMenu;
+    $datas->menu = permissions::where('role_id',$id)->where("sub_menu_id", null)->get()->toArray();
+    $datas->subMenu = permissions::where('role_id',$id)->whereNot("sub_menu_id", null)->get()->toArray();
     return $datas;
-
 }
 class dataRolePermission{
     public $value;
