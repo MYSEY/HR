@@ -329,8 +329,10 @@
                             <div class="form-group">
                                 <label class="">@lang('lang.marital_status')</label>
                                 <select class="form-control select floating" id="marital_status" name="marital_status" value="{{old('marital_status')}}">
-                                    <option value="@lang('lang.married')">@lang('lang.married')</option>
-                                    <option value="@lang('lang.single')">@lang('lang.single')</option>
+                                    <option value="">--@lang('lang.select')--</option>
+                                    @foreach ($maritalStatus as $item)
+                                        <option value="{{$item->id}}">{{Helper::getLang() == 'en' ? $item->name_english : $item->name_khmer}}</option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>

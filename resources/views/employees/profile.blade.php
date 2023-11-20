@@ -130,7 +130,7 @@
                                     </li>
                                     <li>
                                         <div class="title">@lang('lang.marital_status')</div>
-                                        <label class="text">{{ $data->marital_status }}</label>
+                                        <label class="text">{{ $data->EmployeeMaritalStatus }}</label>
                                     </li>
                                     <li>
                                         <div class="title">@lang('lang.loan')</div>

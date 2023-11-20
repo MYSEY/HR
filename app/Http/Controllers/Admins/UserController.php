@@ -125,6 +125,7 @@ class UserController extends Controller
         $optionLoan = Option::where('type','loan')->get();
         $optionSpouse = Option::where('type','is_spouse')->get();
         $optionIdentityType = Option::where('type','identity_type')->get();
+        $maritalStatus = Option::where('type','marital_status')->get();
         $branch = Branchs::all();
         $province = Province::all();
         $bank = Bank::all();
@@ -142,6 +143,7 @@ class UserController extends Controller
             'optionPositionType',
             'optionLoan',
             'optionSpouse',
+            'maritalStatus',
         ));
     }
     public function formEdit() {
@@ -230,6 +232,7 @@ class UserController extends Controller
         $optionPositionType = Option::where('type','position_type')->get();
         $optionLoan = Option::where('type','loan')->get();
         $optionSpouse = Option::where('type','is_spouse')->get();
+        $maritalStatus = Option::where('type','marital_status')->get();
         $bank = Bank::all();
         $province = Province::all();
         $district = District::where('province_id',$data->current_province)->orWhere("province_id",$data->permanent_province )->get();
@@ -250,7 +253,8 @@ class UserController extends Controller
             'villages'=>$villages,
             'optionPositionType'=>$optionPositionType,
             'optionLoan'=>$optionLoan,
-            'optionSpouse'=>$optionSpouse
+            'optionSpouse'=>$optionSpouse,
+            'maritalStatus'=>$maritalStatus
         ]);
     }
 

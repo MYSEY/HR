@@ -4,10 +4,10 @@
         <div class="page-header">
             <div class="row align-items-center">
                 <div class="col">
-                    <h3 class="page-title">@lang('lang.public_holidays') {{Helper::getCurrenYear()}}</h3>
+                    <h3 class="page-title">@lang('lang.holidays') {{Helper::getCurrenYear()}}</h3>
                     <ul class="breadcrumb">
                         <li class="breadcrumb-item"><a href="{{ url('/dashboad/employee') }}">@lang('lang.dashboard')</a></li>
-                        <li class="breadcrumb-item active">@lang('lang.holidays')</li>
+                        <li class="breadcrumb-item active">@lang('lang.public_holidays')</li>
                     </ul>
                 </div>
                 <div class="col-auto float-end ms-auto">

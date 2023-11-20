@@ -401,5 +401,17 @@ class OptionSeeder extends Seeder
             'type' => 'position_range',
             'created_by'    => Auth::id(),
         ]);
+        Option::firstOrCreate([
+            'name_khmer' => 'រៀបការហើយ',
+            'name_english'=> 'Married',
+            'type' => 'marital_status',
+            'created_by'    => Auth::id(),
+        ]);
+        Option::firstOrCreate([
+            'name_khmer' => 'នៅលីវ',
+            'name_english'=> 'Single',
+            'type' => 'marital_status',
+            'created_by'    => Auth::id(),
+        ]);
     }
 }

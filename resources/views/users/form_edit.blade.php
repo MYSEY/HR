@@ -318,8 +318,8 @@
                             <div class="form-group">
                                 <label class="">@lang('lang.marital_status')</label>
                                 <select class="form-control select floating" id="e_marital_status" name="marital_status" value="{{old('marital_status')}}">
-                                    <option value="@lang('lang.married')">@lang('lang.married')</option>
-                                    <option value="@lang('lang.single')">@lang('lang.single')</option>
+                                    {{-- <option value="@lang('lang.married')">@lang('lang.married')</option>
+                                    <option value="@lang('lang.single')">@lang('lang.single')</option> --}}
                                 </select>
                             </div>
                         </div>
@@ -677,6 +677,16 @@
                             }));
                         });
                     }
+                    if (response.maritalStatus != '') {
+                        $('#e_marital_status').html('<option selected disabled> -- @lang("lang.select") --</option>');
+                        $.each(response.maritalStatus, function(i, item) {
+                            $('#e_marital_status').append($('<option>', {
+                                value: item.id,
+                                text: localeLanguage == 'en' ? item.name_english : item.name_khmer,
+                                selected: item.id == response.success.marital_status
+                            }));
+                        });
+                    }
                     if (response.success.spouse == 1) {
                         $("#e_spouse").append('<option selected value="1">Yes</option> <option value="0">No</option>');
                     } else {
@@ -839,7 +849,6 @@
                     $('#e_phone_allowance').val(response.success.phone_allowance);
                     $('#e_date_of_commencement').val(response.success.date_of_commencement);
                     $('#e_number_of_children').val(response.success.number_of_children);
-                    $('#e_marital_status').val(response.success.marital_status);
                     $('#e_nationality').val(response.success.nationality);
                     $('#e_personal_phone_number').val(response.success.personal_phone_number);
                     $('#e_company_phone_number').val(response.success.company_phone_number);
