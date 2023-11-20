@@ -432,6 +432,41 @@
                     <div class="col-md-12">
                         <div class="form-group row">
                             <div class="col-md-2">
+                                <label class="container-checkbox">@lang('lang.generate_payroll')
+                                    <input type="checkbox" class="c_and_b_checkbox" id="generate_payroll" name="generate_payroll"> <span class="checkmark"></span>
+                                </label>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="container-checkbox">@lang('lang.view')
+                                    <input type="checkbox" class="c_and_b_checkbox g_checkbox" id="g_view" 
+                                    {{SetCheckbox($arrayPermissions,"lang.generate_payroll","is_view")->checkbox}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.generate_payroll","is_view")->value}}"
+                                > <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.add')
+                                    <input type="checkbox" class="c_and_b_checkbox g_checkbox" id="g_add" 
+                                    {{SetCheckbox($arrayPermissions,"lang.generate_payroll","is_create")->checkbox}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.generate_payroll","is_create")->value}}"> <span class="checkmark"></span>
+                                </label>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="container-checkbox">@lang('lang.approve')
+                                    <input type="checkbox" class="c_and_b_checkbox g_checkbox" id="g_approve" 
+                                    {{SetCheckbox($arrayPermissions,"lang.generate_payroll","is_approve")->checkbox}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.generate_payroll","is_approve")->value}}"> <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.delete')
+                                    <input type="checkbox" class="c_and_b_checkbox g_checkbox" id="g_delete" 
+                                    {{SetCheckbox($arrayPermissions,"lang.generate_payroll","is_delete")->checkbox}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.generate_payroll","is_delete")->value}}"
+                                    > <span class="checkmark"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group row">
+                            <div class="col-md-2">
                                 {{-- <label >@lang('lang.employee_salary')</label> --}}
                                 <label class="container-checkbox">@lang('lang.employee_salary')
                                     <input type="checkbox" class="c_and_b_checkbox" id="employee_salary" name="employee_salary"> <span class="checkmark"></span>

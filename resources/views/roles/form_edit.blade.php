@@ -117,6 +117,10 @@
                 $("#recruitment_plans").prop("checked", true);
             };
             //module C & B
+            let g_checkbox = $('.g_checkbox').filter(':checked').length;
+            if (g_checkbox == $('input.g_checkbox').length) {
+                $("#generate_payroll").prop("checked", true);
+            };
             let employee_salary_checkbox = $('.employee_salary_checkbox').filter(':checked').length;
             if (employee_salary_checkbox == $('input.employee_salary_checkbox').length) {
                 $("#employee_salary").prop("checked", true);

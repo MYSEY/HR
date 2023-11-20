@@ -512,7 +512,7 @@ class PayrollReportController extends Controller
 
     public function ImportIndex(){
         $branch = Branchs::get();
-        $DataNSSF = NationalSocialSecurityFund::all();
+        $DataNSSF = NationalSocialSecurityFund::where('employee_id',Auth::user()->id)->where('number_employee',Auth::user()->number_employee)->get();
         return view('NSSFs.index',compact('DataNSSF','branch'));
     }
     public function ImportNSSF(Request $request){

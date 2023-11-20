@@ -162,6 +162,7 @@ var dataPermission = function () {
     }
 
     // block C&B 
+    let g_checkbox = $('.g_checkbox').filter(':checked').length;
     let employee_salary_checkbox = $('.employee_salary_checkbox').filter(':checked').length;
     let cb_nssf_checkbox = $('.cb_nssf_checkbox').filter(':checked').length;
     let severance_pay_checkbox = $('.severance_pay_checkbox').filter(':checked').length;
@@ -180,6 +181,23 @@ var dataPermission = function () {
             ]
         });
     }
+    if (g_checkbox) {
+        data.push({
+            name: "generate_payroll",
+            permission: [
+                {
+                    "name":"lang.generate_payroll",
+                    "sub_menu_id":"10",
+                    "menu_id":"50",
+                    "url":"payroll/review",
+                    "is_view": $("#g_view").val(),
+                    "is_create": $("#g_add").val(),
+                    "is_approve": $("#g_approve").val(),
+                    "is_delete": $("#g_delete").val(),
+                }
+            ]
+        })
+    }
     if (employee_salary_checkbox) {
         data.push({
             name: "payroll",
@@ -188,7 +206,7 @@ var dataPermission = function () {
                     "name":"lang.employee_salary",
                     "sub_menu_id":"10",
                     "menu_id":"11",
-                    "url":"payroll/preview",
+                    "url":"payroll",
                     "is_view": $("#c_and_b_view").val(),
                     "is_create": $("#c_and_b_add").val(),
                     "is_import": $("#c_and_b_import").val(),

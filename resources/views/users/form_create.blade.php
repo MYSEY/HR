@@ -35,7 +35,7 @@
                     <div class="row">
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label class="">@lang('lang.last_name') (@lang('lang.kh')) <span
+                                <label class="">@lang('lang.last_name') (@lang('lang.kh'))<span
                                         class="text-danger">*</span></label>
                                 <input class="form-control @error('last_name_kh') is-invalid @enderror" type="text"
                                     id="last_name_kh" required name="last_name_kh"
@@ -44,7 +44,7 @@
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label class="">@lang('lang.first_name') (@lang('lang.kh')) <span
+                                <label class="">@lang('lang.first_name') (@lang('lang.kh'))<span
                                         class="text-danger">*</span></label>
                                 <input class="form-control @error('first_name_kh') is-invalid @enderror" type="text"
                                     id="first_name_kh" required name="first_name_kh"
@@ -62,7 +62,7 @@
                     <div class="row">
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label class="">@lang('lang.last_name') (@lang('lang.en')) <span
+                                <label class="">@lang('lang.last_name') (@lang('lang.en'))<span
                                         class="text-danger">*</span></label>
                                 <input class="form-control @error('last_name_en') is-invalid @enderror" type="text"
                                     id="last_name_en" required name="last_name_en"
@@ -71,7 +71,7 @@
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label class="">@lang('lang.first_name') (@lang('lang.en')) <span
+                                <label class="">@lang('lang.first_name') (@lang('lang.en'))<span
                                         class="text-danger">*</span></label>
                                 <input class="form-control @error('first_name_en') is-invalid @enderror" type="text"
                                     id="first_name_en" required name="first_name_en"
@@ -80,7 +80,7 @@
                         </div>
                         <div class="col-md-4">
                             <div class="form-group hr-form-group-select2">
-                                <label>@lang('lang.role_name') <span class="text-danger">*</span></label>
+                                <label>@lang('lang.role_name')<span class="text-danger">*</span></label>
                                 <select class="form-control hr-select2-option requered @error('role_id') is-invalid @enderror" name="role_id" id="role_id" required>
                                     <option selected disabled value=""> --@lang('lang.select')--</option>
                                     @foreach ($role as $itme )
@@ -122,7 +122,7 @@
                     <div class="row">
                         <div class="col-md-4">
                             <div class="form-group hr-form-group-select2">
-                                <label>@lang('lang.branch') <span class="text-danger">*</span></label>
+                                <label>@lang('lang.branch')<span class="text-danger">*</span></label>
                                 <select class="form-control hr-select2-option requered" id="branch_id" name="branch_id" value="{{old('branch_id')}}" required>
                                     <option selected disabled value=""> --@lang('lang.select')--</option>
                                     @foreach ($branch as $item)

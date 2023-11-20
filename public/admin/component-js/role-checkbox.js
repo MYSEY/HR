@@ -272,6 +272,28 @@ $(function(){
     });
 
     // blcok C&B
+    $("#generate_payroll").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(".g_checkbox").prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(".g_checkbox").prop("checked", true);
+            $(this).val(1)
+            $(".g_checkbox").val(1);
+        }
+    });
+    $(".g_checkbox").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(this).prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(this).prop("checked", true);
+            $(this).val(1)
+        }
+    });
+
     $("#c_and_b_all").on("click", function(){
         if (!$(this).prop("checked")) {
             $(".c_and_b_checkbox").prop("checked", false);
@@ -369,6 +391,16 @@ $(function(){
     });
 
     $(document).ready(function(){
+        let g_checkbox = $('.g_checkbox');
+        g_checkbox.change(function(){
+            let countAllCheckboxes = g_checkbox.filter(':checked').length;
+            if (countAllCheckboxes == $('input.g_checkbox').length) {
+                $("#generate_payroll").prop("checked", true);
+            };
+            if (countAllCheckboxes < $('input.g_checkbox').length) {
+                $("#generate_payroll").prop("checked", false);
+            };
+        });
         let employee_salary_checkbox = $('.employee_salary_checkbox');
         employee_salary_checkbox.change(function(){
             let countAllCheckboxes = employee_salary_checkbox.filter(':checked').length;
