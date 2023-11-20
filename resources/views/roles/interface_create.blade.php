@@ -295,6 +295,31 @@
                     <div class="col-md-12">
                         <div class="form-group row">
                             <div class="col-md-2">
+                                <label class="container-checkbox">@lang('lang.generate_payroll')
+                                    <input type="checkbox" class="c_and_b_checkbox" id="generate_payroll" name="generate_payroll"> <span class="checkmark"></span>
+                                </label>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="container-checkbox">@lang('lang.view')
+                                    <input type="checkbox" class="c_and_b_checkbox g_checkbox" id="g_view"> <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.add')
+                                    <input type="checkbox" class="c_and_b_checkbox g_checkbox" id="g_add"> <span class="checkmark"></span>
+                                </label>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="container-checkbox">@lang('lang.approve')
+                                    <input type="checkbox" class="c_and_b_checkbox g_checkbox" id="g_approve"> <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.delete')
+                                    <input type="checkbox" class="c_and_b_checkbox g_checkbox" id="g_delete" > <span class="checkmark"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group row">
+                            <div class="col-md-2">
                                 {{-- <label >@lang('lang.employee_salary')</label> --}}
                                 <label class="container-checkbox">@lang('lang.employee_salary')
                                     <input type="checkbox" class="c_and_b_checkbox" id="employee_salary" name="employee_salary"> <span class="checkmark"></span>
@@ -332,7 +357,7 @@
                             </div>
                         </div>
                     </div>
-                     {{-- block nssf --}}
+                    {{-- block nssf --}}
                     <div class="col-md-12">
                         <div class="form-group row">
                             <div class="col-md-2">

@@ -105,7 +105,7 @@ class CreateUsersTable extends Migration
                     'employee_name_en'=>'Developer',
                     'email'=>'administrator@gmail.com',
                     'password'=>Hash::make('ASDasd12345$$'),
-                    'role_id'=>'1',
+                    'role_id'=>'2',
                     'users_permission'=>1,
                     'status'=> 'Active',
                     'profile'=>'',
@@ -129,60 +129,6 @@ class CreateUsersTable extends Migration
                 ]
             ]
         );
-
-        $tables=DB::select("select * from tables");
-        foreach($tables as $value){
-            for($i=1;$i<=6;$i++){
-                DB::table('permissions')->insert(
-                    [[
-                        'table_id'=>$value->id,
-                        'role_id'=>1,
-                        'permission_type_id'=>$i,
-                        'status'=>1,
-                        'created_at'=>now(),
-                        'updated_at'=>now(),
-                        'parent_id' =>"",
-                        'name' =>"1",
-                        'is_active' =>"1",
-                        'is_create' =>"1",
-                        'is_view' =>"1",
-                        'is_delete' =>"1",
-                        'is_cancel' =>"1",
-                        'is_accept' =>"1",
-                        'is_approve' =>"1",
-                        'is_print' =>"1",
-                        'is_import' =>"1",
-                        'is_export' =>"1",
-                        'is_access' =>"1",
-                        'is_view_report' =>"1",
-                        'is_operation' =>"1",
-                    ],
-                    [
-                        'table_id'=>$value->id,
-                        'role_id'=>1,
-                        'permission_type_id'=>$i,
-                        'status'=>1,
-                        'created_at'=>now(),
-                        'updated_at'=>now(),
-                        'parent_id' =>"",
-                        'name' =>"1",
-                        'is_active' =>"1",
-                        'is_create' =>"1",
-                        'is_view' =>"1",
-                        'is_delete' =>"1",
-                        'is_cancel' =>"1",
-                        'is_accept' =>"1",
-                        'is_approve' =>"1",
-                        'is_print' =>"1",
-                        'is_import' =>"1",
-                        'is_export' =>"1",
-                        'is_access' =>"1",
-                        'is_view_report' =>"1",
-                        'is_operation' =>"1",
-                    ]]
-                );
-            }
-        }
     }
 
     /**

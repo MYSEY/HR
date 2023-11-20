@@ -605,25 +605,23 @@ class RolePermissionSeeder extends Seeder
                 "parent_id"=>"1",
                 "is_active"=>1,
             ],
-           
-            
         ];
         $roles=Role::get();
         foreach ($roles as $key=>$role) {
             if ($role->role_type == "developer") {
                 $datas[] = [
-                        "icon"=>"la la-key",
-                        "name"=>"lang.role_permission",
-                        "url"=>"role",
-                        "is_all"=>"1",
-                        "is_view"=>"1",
-                        "is_create"=>"1",
-                        "is_update"=>"1",
-                        "is_delete"=>"1",
-                        "is_print"=>"1",
-                        "is_export"=>"1",
-                        "parent_id"=>"1",
-                        "is_active"=>1,
+                    "icon"=>"la la-key",
+                    "name"=>"lang.role_permission",
+                    "url"=>"role",
+                    "is_all"=>"1",
+                    "is_view"=>"1",
+                    "is_create"=>"1",
+                    "is_update"=>"1",
+                    "is_delete"=>"1",
+                    "is_print"=>"1",
+                    "is_export"=>"1",
+                    "parent_id"=>"1",
+                    "is_active"=>1,
                 ];
             }
             foreach ($datas as $key => $item) {

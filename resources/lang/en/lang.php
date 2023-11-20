@@ -369,7 +369,7 @@ return[
     "joining_date"=>"Joining Date",
     "khmer"=>"Khmer",
     "khm_pchum_reports"=>"KHY / Pchum Ben Report",
-    "kh"=>"Kh",
+    "kh"=>"KH",
     "KNY_/_pchum_ben"=>"KNY / Pchum Ben",
     "list"=>"List",
     "lay_off"=>"Lay Off",
