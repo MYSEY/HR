@@ -36,7 +36,7 @@
                     <div class="row">
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label class="">@lang('lang.last_name') (@lang('lang.kh')) <span
+                                <label class="">@lang('lang.last_name') (@lang('lang.kh'))<span
                                         class="text-danger">*</span></label>
                                 <input class="form-control @error('last_name_kh') is-invalid @enderror" type="text"
                                     id="e_last_name_kh" required name="last_name_kh"
@@ -45,7 +45,7 @@
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label class="">@lang('lang.first_name') (@lang('lang.kh')) <span
+                                <label class="">@lang('lang.first_name') (@lang('lang.kh'))<span
                                         class="text-danger">*</span></label>
                                 <input class="form-control @error('first_name_kh') is-invalid @enderror" type="text"
                                     id="e_first_name_kh" required name="first_name_kh"
@@ -62,7 +62,7 @@
                     <div class="row">
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label class="">@lang('lang.last_name') (@lang('lang.en')) <span
+                                <label class="">@lang('lang.last_name') (@lang('lang.en'))<span
                                         class="text-danger">*</span></label>
                                 <input class="form-control @error('last_name_en') is-invalid @enderror" type="text"
                                     id="e_last_name_en" required name="last_name_en"
@@ -71,7 +71,7 @@
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label class="">@lang('lang.first_name') (@lang('lang.en')) <span
+                                <label class="">@lang('lang.first_name') (@lang('lang.en'))<span
                                         class="text-danger">*</span></label>
                                 <input class="form-control @error('first_name_en') is-invalid @enderror" type="text"
                                     id="e_first_name_en" required name="first_name_en"
@@ -80,7 +80,7 @@
                         </div>
                         <div class="col-md-4">
                             <div class="form-group hr-form-group-select2">
-                                <label>@lang('lang.role_name') <span class="text-danger">*</span></label>
+                                <label>@lang('lang.role_name')<span class="text-danger">*</span></label>
                                 <select class="form-control hr-select2-option requered @error('role_id') is-invalid @enderror" name="role_id" id="e_role_id" required>
                                     <option selected disabled value=""> --@lang('lang.select')--</option>
                                 </select>
@@ -115,7 +115,7 @@
                     <div class="row">
                         <div class="col-md-4">
                             <div class="form-group hr-form-group-select2">
-                                <label>@lang('lang.branch') <span class="text-danger">*</span></label>
+                                <label>@lang('lang.branch')<span class="text-danger">*</span></label>
                                 <select class="form-control hr-select2-option" id="e_branch_id" name="branch_id" value="{{old('branch_id')}}">
                                     <option selected disabled value=""> -- @lang('lang.select') --</option>
                                 </select>
@@ -243,7 +243,7 @@
                     <div class="row">
                         <div class="col-sm-4">
                             <div class="form-group">
-                                <label>@lang('lang.basic_salary') <span class="text-danger">*</span></label>
+                                <label>@lang('lang.basic_salary')<span class="text-danger">*</span></label>
                                 <div class="input-group">
                                     <span class="input-group-text">$</span>
                                     <input type="number" class="form-control" id="e_basic_salary" name="basic_salary" placeholder="" value="" required>
@@ -318,14 +318,13 @@
                             <div class="form-group">
                                 <label class="">@lang('lang.marital_status')</label>
                                 <select class="form-control select floating" id="e_marital_status" name="marital_status" value="{{old('marital_status')}}">
-                                    {{-- <option value="@lang('lang.married')">@lang('lang.married')</option>
-                                    <option value="@lang('lang.single')">@lang('lang.single')</option> --}}
+                                    
                                 </select>
                             </div>
                         </div>
                         <div class="col-sm-4">
                             <div class="form-group">
-                                <label>@lang('lang.id_card_number') <span class="text-danger">*</span></label>
+                                <label>@lang('lang.id_card_number')<span class="text-danger">*</span></label>
                                 <input class="form-control" type="text" id="e_id_card_number" name="id_card_number">
                             </div>
                         </div>
@@ -708,9 +707,9 @@
                         $("#e_spouse_nssf").append('<option selected value="2">No</option> <option value="1">Yes</option>');   
                     }
                     if (response.success.status_nssf == 1) {
-                        $("#e_status_nssf").append('<option selected value="1">Working</option> <option value="2">Not working</option>');
+                        $("#e_status_nssf").append('<option selected value="1">@lang("lang.working")</option> <option value="2">Not working</option>');
                     } else {
-                        $("#e_status_nssf").append('<option selected value="2">Not working</option> <option value="1">working</option>');   
+                        $("#e_status_nssf").append('<option selected value="2">@lang("lang.not_working")</option> <option value="1">@lang("lang.not_working")</option>');   
                     }
                     if (response.optionIdentityType != '') {
                         $.each(response.optionIdentityType, function(i, item) {
