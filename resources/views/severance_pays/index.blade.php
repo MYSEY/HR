@@ -57,12 +57,12 @@
                             </select>
                         </div>
                     </div>
-                    {{-- <div class="col-sm-6 col-md-2 col-lg-2 col-xl-2">
+                    <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
                         <div class="form-group ">
                             <input class="form-control" type="month" id="filter_month">
                         </div>
-                    </div> --}}
-                    <div class="col-sm-6 col-md-6">
+                    </div>
+                    <div class="col-sm-4 col-md-4">
                         <div style="display: flex" class="float-end">
                             <button type="button" class="btn btn-sm btn-outline-secondary btn-search me-2" data-dismiss="modal">
                                 <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading') </span>
@@ -172,7 +172,8 @@
                 "_token": "{{ csrf_token() }}",
                 employee_id: params.employee_id ? params.employee_id : null,
                 employee_name: params.employee_name ? params.employee_name : null,
-                branch_id: params.branch_id ? params.branch_id : null
+                branch_id: params.branch_id ? params.branch_id : null,
+                filter_month: params.filter_month ? params.filter_month : null,
             },
             dataType: "JSON",
             success: function(response) {

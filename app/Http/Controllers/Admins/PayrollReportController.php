@@ -440,11 +440,22 @@ class PayrollReportController extends Controller
 
 
     public function SeverancePay(){
-        $branch = Branchs::get();
-        $data = GrossSalaryPay::with('users')->where('type_fdc1','fdc1')->orderBy('id','DESC')->get();
+        if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer') {
+            $branch = Branchs::get();
+            $data = GrossSalaryPay::with('users')->where('type_fdc1','fdc1')->get();
+        } else {
+            $branch = Branchs::get();
+            $data = GrossSalaryPay::with('users')->where('type_fdc1','fdc1')->where('employee_id',Auth::user()->id)->where('number_employee',Auth::user()->number_employee)->get();
+        }
         return view('severance_pays.index',compact('data','branch'));
     }
     public function SeverancePayFil(Request $request){
+        $Monthly = null;
+        $yearLy = null;
+        if ($request->filter_month) {
+            $Monthly = Carbon::createFromDate($request->filter_month)->format('m');
+            $yearLy = Carbon::createFromDate($request->filter_month)->format('Y');
+        }
         $nssf = GrossSalaryPay::with("users")->where('type_fdc1','fdc1')
         ->leftJoin('users', 'gross_salary_pays.employee_id', '=', 'users.id')
         ->leftJoin('positions','positions.id','=','users.position_id')
@@ -470,6 +481,11 @@ class PayrollReportController extends Controller
         })
         ->when($request->branch_id, function ($query, $branch_id) {
             $query->where('users.branch_id', $branch_id);
+        }) ->when($Monthly, function ($query, $Monthly) {
+            $query->whereMonth('payment_date', $Monthly);
+        })
+        ->when($yearLy, function ($query, $yearLy) {
+            $query->whereYear('payment_date', $yearLy);
         })->get();
         return response()->json([
             'success'=>$nssf,
@@ -481,7 +497,6 @@ class PayrollReportController extends Controller
         $extension = $request->file->extension();
         $spreadsheet = IOFactory::load($file);
         $AllSeverancePay =  $spreadsheet->getSheetByName('Severance Pay')->toArray();
-        // dd($AllSeverancePay);
         if ($extension == "xlsx" || $extension == "xls" || $extension == "csv") {
             $i = 0;
             $dataArray = [];
@@ -511,8 +526,13 @@ class PayrollReportController extends Controller
     }
 
     public function ImportIndex(){
-        $branch = Branchs::get();
-        $DataNSSF = NationalSocialSecurityFund::where('employee_id',Auth::user()->id)->where('number_employee',Auth::user()->number_employee)->get();
+        if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer') {
+            $branch = Branchs::get();
+            $DataNSSF = NationalSocialSecurityFund::get();
+        } else {
+            $branch = Branchs::get();
+            $DataNSSF = NationalSocialSecurityFund::where('employee_id',Auth::user()->id)->where('number_employee',Auth::user()->number_employee)->get();
+        }
         return view('NSSFs.index',compact('DataNSSF','branch'));
     }
     public function ImportNSSF(Request $request){
