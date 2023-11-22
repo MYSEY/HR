@@ -37,7 +37,7 @@
                                             <div class="staff-id">@lang('lang.position') : {{ $data->EmployeePosition }}</div>
                                             <div class="staff-id">@lang('lang.branch') : {{ $data->EmployeeBranch }}</div>
                                             <div class="staff-id">@lang('lang.join_date') : {{ $data->joinOfDate }}</div>
-                                            @if (permissionAccess("5","is_update")->value == "1")
+                                            @if (permissionAccess("m2-s1","is_update")->value == "1")
                                                 <div class="staff-id">@lang('lang.change_password') <a href="#" id="btn-change-password">@lang('lang.click_here')</a></div>
                                             @endif
                                         </div>
@@ -148,7 +148,7 @@
                         <div class="card profile-box flex-fill">
                             <div class="card-body">
                                 <h3 class="card-title">@lang('lang.emergency_contact') 
-                                    @if (permissionAccess("5","is_create")->value == "1")
+                                    @if (permissionAccess("m2-s1","is_create")->value == "1")
                                         <a href="" class="edit-icon" data-bs-toggle="modal" data-bs-target="#emergency_contact_modal"><i class="fa fa-pencil"></i></a>
                                     @endif
                                 </h3>
@@ -173,14 +173,14 @@
                                                         <td>{{$item->phone}}</td>
                                                         <td>{{$item->phone_2}}</td>
                                                         <td style="text-align: center">
-                                                            @if (permissionAccess("5","is_update")->value == "1" || permissionAccess("5","is_delete")->value == "1")
+                                                            @if (permissionAccess("m2-s1","is_update")->value == "1" || permissionAccess("m2-s1","is_delete")->value == "1")
                                                                 <div class="dropdown dropdown-action">
                                                                     <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i  class="material-icons">more_vert</i></a>
                                                                     <div class="dropdown-menu dropdown-menu-right">
-                                                                        @if (permissionAccess("5","is_update")->value == "1")
+                                                                        @if (permissionAccess("m2-s1","is_update")->value == "1")
                                                                             <a class="dropdown-item contactUpdate" data-id="{{$item->id}}" data-bs-target="#contact_modal"><i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')</a>
                                                                         @endif
-                                                                        @if (permissionAccess("5","is_delete")->value == "1")
+                                                                        @if (permissionAccess("m2-s1","is_delete")->value == "1")
                                                                             <a class="dropdown-item contactDelete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_contact"><i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
                                                                         @endif
                                                                     </div>
@@ -223,7 +223,7 @@
                         <div class="card profile-box flex-fill">
                             <div class="card-body">
                                 <h3 class="card-title">@lang('lang.children_informations') 
-                                    @if (permissionAccess("5","is_create")->value == "1")
+                                    @if (permissionAccess("m2-s1","is_create")->value == "1")
                                     <a href="#" class="edit-icon" data-bs-toggle="modal" data-bs-target="#family_info_modal"><i class="fa fa-pencil"></i></a>
                                     @endif
                                 </h3>
@@ -248,14 +248,14 @@
                                                     <td>{{$item->ChildrenGender}}</td>
                                                     <td>{{$item->YearsOfChildren}}</td>
                                                     <td style="text-align: center">
-                                                        @if (permissionAccess("5","is_update")->value == "1" || permissionAccess("5","is_delete")->value == "1")
+                                                        @if (permissionAccess("m2-s1","is_update")->value == "1" || permissionAccess("m2-s1","is_delete")->value == "1")
                                                             <div class="dropdown dropdown-action">
                                                                 <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i  class="material-icons">more_vert</i></a>
                                                                 <div class="dropdown-menu dropdown-menu-right">
-                                                                    @if (permissionAccess("5","is_update")->value == "1" )
+                                                                    @if (permissionAccess("m2-s1","is_update")->value == "1" )
                                                                     <a class="dropdown-item childrenUpdate" data-id="{{$item->id}}" data-bs-target="#family_edit_info_modal"><i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')</a>
                                                                     @endif
-                                                                    @if (permissionAccess("5","is_delete")->value == "1" )
+                                                                    @if (permissionAccess("m2-s1","is_delete")->value == "1" )
                                                                     <a class="dropdown-item childrenDelete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_children"><i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
                                                                     @endif
                                                                 </div>
@@ -278,7 +278,7 @@
                         <div class="card profile-box flex-fill">
                             <div class="card-body">
                                 <h3 class="card-title">@lang('lang.education_informations') 
-                                    @if (permissionAccess("5","is_create")->value == "1")
+                                    @if (permissionAccess("m2-s1","is_create")->value == "1")
                                     <a href="#" class="edit-icon" data-bs-toggle="modal" data-bs-target="#education_info"><i class="fa fa-pencil"></i></a>
                                     @endif
                                 </h3>
@@ -310,7 +310,7 @@
                         <div class="card profile-box flex-fill">
                             <div class="card-body">
                                 <h3 class="card-title">@lang('lang.experience_informations') 
-                                    @if (permissionAccess("5","is_create")->value == "1")
+                                    @if (permissionAccess("m2-s1","is_create")->value == "1")
                                     <a href="#" class="edit-icon" data-bs-toggle="modal" data-bs-target="#experience_info"><i class="fa fa-pencil"></i></a>
                                     @endif
                                 </h3>

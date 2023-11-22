@@ -18,7 +18,7 @@
                 </div>
             </div>
         </div>
-        @if (permissionAccess("23","is_view")->value == "1")
+        @if (permissionAccess("m7-s1","is_view")->value == "1")
             <form class="needs-validation" novalidate>
                 @csrf
                 <div class="row filter-btn"> 
@@ -59,7 +59,7 @@
                                 <span class="loading-icon-search" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading') </span>
                                 <span class="btn-txt-search">@lang('lang.search')</span>
                             </button>
-                            @if (permissionAccess("23","is_export")->value == "1")
+                            @if (permissionAccess("m7-s1","is_export")->value == "1")
                                 <button type="button" class="btn btn-sm btn-outline-secondary btn_excel me-2">
                                     <span class="btn-text-excel"><i class="fa fa-file-excel-o" aria-hidden="true"></i> @lang('lang.excel')</span>
                                     <span id="btn-text-loading-excel" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>

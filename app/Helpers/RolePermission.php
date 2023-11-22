@@ -33,7 +33,7 @@ function permissionAccess($menu_id,$name_button){
     }
     $dataObject = new dataRolePermission();
     if (array_key_exists($menu_id,$arrayPermissions) && $arrayPermissions[$menu_id][$name_button]){
-        if ($menu_id == "2") {
+        if ($menu_id == "m1-s1") {
             $dataObject->is_dashboard = json_decode($arrayPermissions[$menu_id][$name_button], true);
         }else{
             $dataObject->value = $arrayPermissions[$menu_id][$name_button];

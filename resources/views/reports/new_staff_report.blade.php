@@ -26,7 +26,7 @@
             </div>
         </div>
     </div>
-    @if (permissionAccess("35","is_view")->value == "1")
+    @if (permissionAccess("m7-s13","is_view")->value == "1")
         <div class="row filter-btn">
             <div class="col-sm-6 col-md-2">
                 <div class="form-group">

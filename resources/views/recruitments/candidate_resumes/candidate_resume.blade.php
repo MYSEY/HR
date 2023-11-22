@@ -17,17 +17,17 @@
                     </ul>
                 </div>
                 <div class="col-auto float-end ms-auto">
-                    @if (permissionAccess("8","is_import")->value == "1")
+                    @if (permissionAccess("m3-s1","is_import")->value == "1")
                     <a href="#" class="btn add-btn" data-toggle="modal" id="import_new_cvs"><i class="fa fa-plus"></i>@lang('lang.import')</a>
                     @endif
-                    @if (permissionAccess("8","is_create")->value == "1")
+                    @if (permissionAccess("m3-s1","is_create")->value == "1")
                     <a href="#" class="btn add-btn me-2" id="add_new" data-bs-toggle="modal" data-bs-target="#add_user"><i class="fa fa-plus"></i> @lang('lang.add_new')</a>
                     @endif
                 </div>
             </div>
         </div>
         {!! Toastr::message() !!}
-        @if (permissionAccess("8","is_view")->value == "1")
+        @if (permissionAccess("m3-s1","is_view")->value == "1")
         <div class="">
             <div class="page-menu">
                 <div class="row">
@@ -696,11 +696,11 @@
         });
     });
     function showDatas(btn_tab){
-        let is_update = "{{ Helper::permissionAccess('8','is_update') }}";
-        let is_delete = "{{ Helper::permissionAccess('8','is_delete') }}";
-        let is_cancel = "{{ Helper::permissionAccess('8','is_cancel') }}";
-        let is_print = "{{ Helper::permissionAccess('8','is_print') }}";
-        let is_approve = "{{ Helper::permissionAccess('8','is_approve') }}";
+        let is_update = "{{ Helper::permissionAccess('m3-s1','is_update') }}";
+        let is_delete = "{{ Helper::permissionAccess('m3-s1','is_delete') }}";
+        let is_cancel = "{{ Helper::permissionAccess('m3-s1','is_cancel') }}";
+        let is_print = "{{ Helper::permissionAccess('m3-s1','is_print') }}";
+        let is_approve = "{{ Helper::permissionAccess('m3-s1','is_approve') }}";
         var status_tab = btn_tab;
         $.ajax({
             type: "GET",

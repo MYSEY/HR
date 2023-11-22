@@ -38,7 +38,7 @@
     </div>
     
     <div class="">
-        @if (permissionAccess("33","is_view")->value == "1")
+        @if (permissionAccess("m7-s11","is_view")->value == "1")
             <form>
                 {{-- @csrf --}}
                 <div class="row filter-btn"> 
@@ -74,7 +74,7 @@
                                 <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading') </span>
                                 <span class="btn-txt">@lang('lang.search')</span>
                             </button>
-                            @if (permissionAccess("33","is_export")->value == "1")
+                            @if (permissionAccess("m7-s11","is_export")->value == "1")
                                 <button type="button" class="btn btn-sm btn-outline-secondary btn_excel me-2">
                                     <span class="btn-text-excel"><i class="fa fa-file-excel-o" aria-hidden="true"></i> <label >@lang('lang.excel')</label></span>
                                     <span id="btn-text-loading-excel" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>

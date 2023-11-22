@@ -77,7 +77,7 @@
                                         </div>
                                     </div>
                                     <div class="form-group text-center">
-                                        @if (permissionAccess("49","is_create")->value == "1")
+                                        @if (permissionAccess("m9-s5","is_create")->value == "1")
                                         <button class="btn btn-primary account-btn submit-btn" type="submit">@lang('lang.reset_password')</button>
                                         @endif
                                     </div>

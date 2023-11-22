@@ -26,14 +26,14 @@
                     </ul>
                 </div>
                 <div class="col-auto float-end ms-auto">
-                    @if (permissionAccess("13","is_import")->value == "1")
+                    @if (permissionAccess("m4-s4","is_import")->value == "1")
                         <a href="#" class="btn add-btn" data-toggle="modal" id="importSeverancePay"><i class="fa fa-plus"></i>@lang('lang.import')</a>
                     @endif
                 </div>
             </div>
         </div>
 
-        @if (permissionAccess("13","is_view")->value == "1")
+        @if (permissionAccess("m4-s4","is_view")->value == "1")
             <form>
                 {{-- @csrf --}}
                 <div class="row filter-btn"> 
@@ -68,7 +68,7 @@
                                 <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading') </span>
                                 <span class="btn-txt">@lang('lang.search')</span>
                             </button>
-                            @if (permissionAccess("13","is_export")->value == "1")
+                            @if (permissionAccess("m4-s4","is_export")->value == "1")
                                 <button type="button" class="btn btn-sm btn-outline-secondary btn_excel me-2">
                                     <span class="btn-text-excel"><i class="fa fa-file-excel-o" aria-hidden="true"></i> @lang('lang.excel')</span>
                                     <span id="btn-text-loading-excel" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>

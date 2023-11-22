@@ -325,7 +325,7 @@
             </div>
         </div>
         <div class="row">
-            @if (permissionAccess("2","is_dashboard")->is_dashboard["is_employee"] == "1")
+            @if (permissionAccess("m1-s1","is_dashboard")->is_dashboard["is_employee"] == "1")
                 <div class="col-md-12 col-lg-6 col-xl-4 d-flex">
                     <div class="card flex-fill">
                         <div class="card-body">
@@ -370,7 +370,7 @@
                     </div>
                 </div>
             @endif
-            @if (permissionAccess("2","is_dashboard")->is_dashboard["is_age_of_employee"] == "1")
+            @if (permissionAccess("m1-s1","is_dashboard")->is_dashboard["is_age_of_employee"] == "1")
                 <div class="col-md-12 col-lg-12 col-xl-4 d-flex">
                     <div class="card flex-fill dash-statistics">
                         <div class="card-body">
@@ -401,7 +401,7 @@
                     </div>
                 </div>
             @endif
-            @if (permissionAccess("2","is_dashboard")->is_dashboard["is_birthday_reminder"] == "1")
+            @if (permissionAccess("m1-s1","is_dashboard")->is_dashboard["is_birthday_reminder"] == "1")
                 <div class="col-md-12 col-lg-6 col-xl-4 d-flex">
                     <div class="card flex-fill">
                         <div class="card-body">

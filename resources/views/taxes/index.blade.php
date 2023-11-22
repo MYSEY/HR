@@ -11,14 +11,14 @@
                     </ul>
                 </div>
                 <div class="col-auto float-end ms-auto">
-                    @if (permissionAccess("40","is_create")->value == "1")
+                    @if (permissionAccess("m8-s1","is_create")->value == "1")
                     <a href="#" class="btn add-btn" data-bs-toggle="modal" data-bs-target="#add_taxes"><i class="fa fa-plus"></i> @lang('lang.add_new')</a>
                     @endif
                     
                 </div>
             </div>
         </div>
-        @if (permissionAccess("40","is_view")->value == "1")
+        @if (permissionAccess("m8-s1","is_view")->value == "1")
             {!! Toastr::message() !!}
             <div class="row">
                 <div class="col-md-12">
@@ -43,7 +43,7 @@
                                             <td><div class="input-group"><span class="input-group-text">៛</span><input type="number" disabled class="form-control" width="100px" value="{{$item->to}}"></div></td>
                                             <td><div class="input-group"><span class="input-group-text">៛</span><input type="number" disabled class="form-control" value="{{$item->tax_deduction_amount}}"></div></td>
                                             <td style="text-align: center;">
-                                                @if (permissionAccess("40","is_update")->value == "1")
+                                                @if (permissionAccess("m8-s1","is_update")->value == "1")
                                                 <a class="btn btn-success update" data-toggle="modal" data-id="{{$item->id}}" data-target="#edit_taxes"><i class="fa fa-pencil m-r-5"></i></a>
                                                 @endif
                                                 {{-- <a class="btn btn-danger delete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_taxes"><i class="fa fa-trash-o m-r-5"></i></a> --}}

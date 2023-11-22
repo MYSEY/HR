@@ -1,14 +1,14 @@
 {{--  block chart board type bar --}}
 <div class="row">
-    <input type="text" hidden id="access_HRMS_dashboards" value="{{permissionAccess("2","is_dashboard")->is_dashboard["is_total_number_of_staff"]}}">
-    <input type="text" hidden id="access_achived_by_branches" value="{{permissionAccess("2","is_dashboard")->is_dashboard["is_total_inactive_staff"]}}">
-    <input type="text" hidden id="access_staff_resignation" value="{{permissionAccess("2","is_dashboard")->is_dashboard["is_resigned_staff"]}}">
-    <input type="text" hidden id="access_reasons_staff_resignation" value="{{permissionAccess("2","is_dashboard")->is_dashboard["is_reasons_of_staff"]}}">
-    <input type="text" hidden id="access_type_of_staff" value="{{permissionAccess("2","is_dashboard")->is_dashboard["is_staff_ratio"]}}">
-    <input type="text" hidden id="access_staff_take_leave" value="{{permissionAccess("2","is_dashboard")->is_dashboard["is_staff_taking_leave"]}}">
-    <input type="text" hidden id="access_staff_Training_by_branch_external" value="{{permissionAccess("2","is_dashboard")->is_dashboard["is_staff_training_internal"]}}">
-    <input type="text" hidden id="access_staff_Training_by_branch_internal" value="{{permissionAccess("2","is_dashboard")->is_dashboard["is_staff_training_external"]}}">
-    @if (permissionAccess("2","is_dashboard")->is_dashboard["is_total_number_of_staff"] == "1")
+    <input type="text" hidden id="access_HRMS_dashboards" value="{{permissionAccess("m1-s1","is_dashboard")->is_dashboard["is_total_number_of_staff"]}}">
+    <input type="text" hidden id="access_achived_by_branches" value="{{permissionAccess("m1-s1","is_dashboard")->is_dashboard["is_total_inactive_staff"]}}">
+    <input type="text" hidden id="access_staff_resignation" value="{{permissionAccess("m1-s1","is_dashboard")->is_dashboard["is_resigned_staff"]}}">
+    <input type="text" hidden id="access_reasons_staff_resignation" value="{{permissionAccess("m1-s1","is_dashboard")->is_dashboard["is_reasons_of_staff"]}}">
+    <input type="text" hidden id="access_type_of_staff" value="{{permissionAccess("m1-s1","is_dashboard")->is_dashboard["is_staff_ratio"]}}">
+    <input type="text" hidden id="access_staff_take_leave" value="{{permissionAccess("m1-s1","is_dashboard")->is_dashboard["is_staff_taking_leave"]}}">
+    <input type="text" hidden id="access_staff_Training_by_branch_external" value="{{permissionAccess("m1-s1","is_dashboard")->is_dashboard["is_staff_training_internal"]}}">
+    <input type="text" hidden id="access_staff_Training_by_branch_internal" value="{{permissionAccess("m1-s1","is_dashboard")->is_dashboard["is_staff_training_external"]}}">
+    @if (permissionAccess("m1-s1","is_dashboard")->is_dashboard["is_total_number_of_staff"] == "1")
         <div class="col-md-6">
             <div class="card dash-widget">
                 <div class="card-body">
@@ -17,7 +17,7 @@
             </div>
         </div>
     @endif
-    @if (permissionAccess("2","is_dashboard")->is_dashboard["is_total_inactive_staff"] == "1")
+    @if (permissionAccess("m1-s1","is_dashboard")->is_dashboard["is_total_inactive_staff"] == "1")
         <div class="col-md-6">
             <div class="card dash-widget">
                 <div class="card-body">
@@ -26,7 +26,7 @@
             </div>
         </div>
     @endif
-    @if (permissionAccess("2","is_dashboard")->is_dashboard["is_resigned_staff"] == "1")
+    @if (permissionAccess("m1-s1","is_dashboard")->is_dashboard["is_resigned_staff"] == "1")
         <div class="col-md-6 col-lg-6 col-xl-6 d-flex">
             <div class="card flex-fill">
                     <div class="statistics">
@@ -51,7 +51,7 @@
             </div>
         </div>
     @endif
-    @if (permissionAccess("2","is_dashboard")->is_dashboard["is_reasons_of_staff"] == "1")
+    @if (permissionAccess("m1-s1","is_dashboard")->is_dashboard["is_reasons_of_staff"] == "1")
         <div class="col-md-6">
             <div class="card dash-widget">
                 <div class="card-body">
@@ -64,7 +64,7 @@
         </div>
     @endif
 {{--  block chart board type bar --}}
-    @if (permissionAccess("2","is_dashboard")->is_dashboard["is_staff_ratio"] == "1")
+    @if (permissionAccess("m1-s1","is_dashboard")->is_dashboard["is_staff_ratio"] == "1")
         <div class="col-md-6">
             <div class="card dash-widget">
                 <div class="card-body">
@@ -73,7 +73,7 @@
             </div>
         </div>
     @endif
-    @if (permissionAccess("2","is_dashboard")->is_dashboard["is_staff_taking_leave"] == "1")
+    @if (permissionAccess("m1-s1","is_dashboard")->is_dashboard["is_staff_taking_leave"] == "1")
         <div class="col-md-6">
             <div class="card dash-widget">
                 <div class="card-body">
@@ -83,7 +83,7 @@
         </div>
     @endif
     
-    @if (permissionAccess("2","is_dashboard")->is_dashboard["is_staff_training_internal"] == "1")
+    @if (permissionAccess("m1-s1","is_dashboard")->is_dashboard["is_staff_training_internal"] == "1")
         <div class="col-md-6">
             <div class="card dash-widget">
                 <div class="card-body">
@@ -92,7 +92,7 @@
             </div>
         </div>
     @endif
-    @if (permissionAccess("2","is_dashboard")->is_dashboard["is_staff_training_external"] == "1")
+    @if (permissionAccess("m1-s1","is_dashboard")->is_dashboard["is_staff_training_external"] == "1")
         <div class="col-md-6">
             <div class="card dash-widget">
                 <div class="card-body">

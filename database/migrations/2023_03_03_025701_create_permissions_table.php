@@ -17,8 +17,8 @@ return new class extends Migration
         Schema::create('permissions', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->integer('menu_id')->nullable();
-            $table->integer('sub_menu_id')->nullable();
+            $table->string('menu_id')->nullable();
+            $table->string('sub_menu_id')->nullable();
             $table->string('icon')->nullable();
             $table->string('url')->nullable();
             $table->integer('role_id');

@@ -59,14 +59,14 @@
                     </ul>
                 </div>
                 <div class="col-auto float-end ms-auto">
-                    @if (permissionAccess("9","is_create")->value == "1")
+                    @if (permissionAccess("m3-s2","is_create")->value == "1")
                     <a href="#" class="btn add-btn" id="add_new" data-bs-toggle="modal"
                         data-bs-target="#add_plan"><i class="fa fa-plus"></i> @lang('lang.add_new')</a>
                     @endif
                 </div>
             </div>
         </div>
-        @if (permissionAccess("9","is_view")->value == "1")
+        @if (permissionAccess("m3-s2","is_view")->value == "1")
             <form class="needs-validation" novalidate>
                 @csrf
                 <div class="row filter-btn">
@@ -103,13 +103,13 @@
                                 <span class="search-loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading') </span>
                                 <span class="btn-search-txt">@lang('lang.search')</span>
                             </button>
-                            @if (permissionAccess("9","is_print")->value == "1")
+                            @if (permissionAccess("m3-s2","is_print")->value == "1")
                                 <button type="button" class="btn btn-outline-secondary btn-sm btn_print me-2">
                                     <span class="btn-text-print"><i class="fa fa-print fa-lg"></i> @lang('lang.print')</span>
                                     <span id="btn-text-loading-print" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>
                                 </button>
                             @endif
-                            @if (permissionAccess("9","is_export")->value == "1")
+                            @if (permissionAccess("m3-s2","is_export")->value == "1")
                             <button type="button" class="btn btn-outline-secondary btn-sm me-2 btn_excel">
                                 <span class="btn-text-excel"><i class="fa fa-file-excel-o" aria-hidden="true"></i> @lang('lang.excel')</span>
                                 <span id="btn-text-loading-excel" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>
