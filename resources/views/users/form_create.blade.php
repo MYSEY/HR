@@ -314,8 +314,8 @@
                             <div class="form-group">
                                 <label>@lang('lang.nationality')</label>
                                 <select class="form-control select floating" id="nationality" name="nationality" value="{{old('nationality')}}">
-                                    <option value="@lang('lang.khmer')">@lang('lang.khmer')</option>
-                                    <option value="@lang('lang.chinese')">@lang('lang.chinese')</option>
+                                    <option value="1">@lang('lang.khmer')</option>
+                                    <option value="1">@lang('lang.chinese')</option>
                                 </select>
                             </div>
                         </div>

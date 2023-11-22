@@ -27,7 +27,7 @@
         <script src="{{asset('/admin/js/app.js')}}"></script>
         <style>
             body {
-                background: url('/admin/img/logo/hero-bg.png');
+                background: url({{asset('/admin/img/logo/hero-bg.png')}});
                 background-size: cover;
                 font-family: Montserrat;
             }

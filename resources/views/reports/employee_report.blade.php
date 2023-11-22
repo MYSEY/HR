@@ -130,6 +130,10 @@
                                                         rowspan="1" colspan="1"
                                                         aria-label="Status: activate to sort column ascending"
                                                         style="width: 51.475px;">@lang('lang.status')</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                        rowspan="1" colspan="1"
+                                                        aria-label="Status: activate to sort column ascending"
+                                                        style="width: 51.475px;">@lang('lang.created_at')</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -167,18 +171,18 @@
                                                             </td>
                                                             <td>{{ $item->joinOfDate ?? '' }}</td>
                                                             <td>{{ $item->DOB ?? '' }}</td>
-                                                            <td>{{ $item->marital_status }}</td>
+                                                            <td>{{ $item->EmployeeMaritalStatus }}</td>
                                                             <td>{{ $item->EmployeeGender }}</td>
-                                                            <td>$ <a href="#">{{ $item->basic_salary }}</a></td>
+                                                            <td>$<a href="#">{{ $item->basic_salary }}</a></td>
                                                             <td>
                                                                 @if ($item->emp_status== "Upcoming")
                                                                     <span style="font-size: 13px" class="badge bg-inverse-success">@lang('lang.upcoming')</span>
                                                                 @elseif ($item->emp_status == "Probation")
                                                                     <span style="font-size: 13px" class="badge bg-inverse-success">@lang('lang.probation')</span>
                                                                 @elseif ($item->emp_status == "1")
-                                                                    <span style="font-size: 13px" class="badge bg-inverse-success">@lang('lang.fdc')-1</span>
+                                                                    <span style="font-size: 13px" class="badge bg-inverse-success">@lang('lang.fdc')</span>
                                                                 @elseif ($item->emp_status == "10")
-                                                                    <span style="font-size: 13px" class="badge bg-inverse-success">@lang('lang.fdc')-2</span>
+                                                                    <span style="font-size: 13px" class="badge bg-inverse-success">@lang('lang.fdc')</span>
                                                                 @elseif ($item->emp_status == "2")
                                                                     <span style="font-size: 13px" class="badge bg-inverse-success">@lang('lang.udc')</span>
                                                                 @elseif ($item->emp_status=='3')
@@ -199,6 +203,7 @@
                                                                     <span style="font-size: 13px" class="badge bg-inverse-danger">@lang('lang.cancel')</span>
                                                                 @endif
                                                             </td>
+                                                            <td>{{ Carbon\Carbon::createFromDate($item->created_at)->format('d-M-Y') }}</td>
                                                         </tr>
                                                     @endforeach
                                                 @endif

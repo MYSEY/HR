@@ -303,8 +303,7 @@
                             <div class="form-group">
                                 <label>@lang('lang.nationality')</label>
                                 <select class="form-control select floating" id="e_nationality" name="nationality" value="{{old('nationality')}}">
-                                    <option value="@lang('lang.khmer')">@lang('lang.khmer')</option>
-                                    <option value="@lang('lang.chinese')">@lang('lang.chinese')</option>
+                                  
                                 </select>
                             </div>
                         </div>
@@ -711,6 +710,11 @@
                     } else {
                         $("#e_status_nssf").append('<option selected value="2">@lang("lang.not_working")</option> <option value="1">@lang("lang.not_working")</option>');   
                     }
+                    if (response.success.nationality == 1) {
+                        $("#e_nationality").append('<option value="1">@lang("lang.khmer")</option> <option value="2">@lang("lang.chinese")</option>');
+                    } else {
+                        $("#e_nationality").append('<option value="2">@lang("lang.chinese")</option> <option value="1">@lang("lang.khmer")</option>');   
+                    }
                     if (response.optionIdentityType != '') {
                         $.each(response.optionIdentityType, function(i, item) {
                             $('#e_identity_type').append($('<option>', {
@@ -848,7 +852,6 @@
                     $('#e_phone_allowance').val(response.success.phone_allowance);
                     $('#e_date_of_commencement').val(response.success.date_of_commencement);
                     $('#e_number_of_children').val(response.success.number_of_children);
-                    $('#e_nationality').val(response.success.nationality);
                     $('#e_personal_phone_number').val(response.success.personal_phone_number);
                     $('#e_company_phone_number').val(response.success.company_phone_number);
                     $('#e_agency_phone_number').val(response.success.agency_phone_number);
