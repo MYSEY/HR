@@ -685,6 +685,16 @@
                             }));
                         });
                     }
+                    if (response.nationality != '') {
+                        $('#e_nationality').html('<option selected disabled> -- @lang("lang.select") --</option>');
+                        $.each(response.nationality, function(i, item) {
+                            $('#e_nationality').append($('<option>', {
+                                value: item.id,
+                                text: localeLanguage == 'en' ? item.name_english : item.name_khmer,
+                                selected: item.id == response.success.nationality
+                            }));
+                        });
+                    }
                     if (response.success.spouse == 1) {
                         $("#e_spouse").append('<option selected value="1">Yes</option> <option value="0">No</option>');
                     } else {
@@ -710,11 +720,7 @@
                     } else {
                         $("#e_status_nssf").append('<option selected value="2">@lang("lang.not_working")</option> <option value="1">@lang("lang.not_working")</option>');   
                     }
-                    if (response.success.nationality == 1) {
-                        $("#e_nationality").append('<option value="1">@lang("lang.khmer")</option> <option value="2">@lang("lang.chinese")</option>');
-                    } else {
-                        $("#e_nationality").append('<option value="2">@lang("lang.chinese")</option> <option value="1">@lang("lang.khmer")</option>');   
-                    }
+                   
                     if (response.optionIdentityType != '') {
                         $.each(response.optionIdentityType, function(i, item) {
                             $('#e_identity_type').append($('<option>', {

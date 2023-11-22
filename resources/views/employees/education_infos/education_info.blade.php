@@ -18,7 +18,7 @@
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="form-group">
-                                                    <label class="focus-label">@lang('lang.institution') <span class="text-danger">*</span></label>
+                                                    <label class="focus-label">@lang('lang.institution')<span class="text-danger">*</span></label>
                                                     <input type="text" value="" id="school[]" name="school[]" class="form-control floating" required>
                                                 </div>
                                             </div>
@@ -31,22 +31,6 @@
                                                             <option value="{{ $item->id }}">{{ $item->name_khmer }}</option>
                                                         @endforeach
                                                     </select>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label class="focus-label">@lang('lang.starting_date') <span class="text-danger">*</span></label>
-                                                    <div class="cal-icon">
-                                                        <input type="date" value="" name="start_date[]" class="form-control floating datetimepicker" required>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label class="focus-label">@lang('lang.complete_date') <span class="text-danger">*</span></label>
-                                                    <div class="cal-icon">
-                                                        <input type="date" value="" name="end_date[]" class="form-control floating datetimepicker" required>
-                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
@@ -65,6 +49,22 @@
                                                 <div class="form-group">
                                                     <label class="focus-label">@lang('lang.grade')</label>
                                                     <input type="text" value="" id="grade[]" name="grade[]" class="form-control floating">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="focus-label">@lang('lang.starting_date')<span class="text-danger">*</span></label>
+                                                    <div class="cal-icon">
+                                                        <input type="date" value="" name="start_date[]" class="form-control floating datetimepicker" required>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="focus-label">@lang('lang.complete_date')<span class="text-danger">*</span></label>
+                                                    <div class="cal-icon">
+                                                        <input type="date" value="" name="end_date[]" class="form-control floating datetimepicker" required>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>

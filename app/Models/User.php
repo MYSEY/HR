@@ -329,6 +329,15 @@ class User extends Authenticatable
         }
         return $maritalStatus ?? "";
     }
+    public function getEmployeeNationalityAttribute(){
+        $data = Option::where('type','nationality')->get();
+        foreach($data as $item){
+            if($this->nationality == $item->id){
+                $nationality = Helper::getLang() == 'en' ? $item->name_english : $item->name_khmer;
+            }
+        }
+        return $nationality ?? "";
+    }
     
     public function getEmployeeBranchAttribute(){
         return (Helper::getLang() == 'en') ? optional($this->branch)->branch_name_en : optional($this->branch)->branch_name_kh;

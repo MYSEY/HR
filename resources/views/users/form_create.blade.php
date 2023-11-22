@@ -235,8 +235,9 @@
                             <div class="form-group">
                                 <label>@lang('lang.loan')</label>
                                 <select class="form-control select floating" id="is_loan" name="is_loan" value="{{old('is_loan')}}">
+                                    <option value="">--@lang('lang.select')--</option>
                                     <option value="1">Yes</option>
-                                    <option value="0" selected>No</option>
+                                    <option value="0">No</option>
                                 </select>
                             </div>
                         </div>
@@ -314,8 +315,10 @@
                             <div class="form-group">
                                 <label>@lang('lang.nationality')</label>
                                 <select class="form-control select floating" id="nationality" name="nationality" value="{{old('nationality')}}">
-                                    <option value="1">@lang('lang.khmer')</option>
-                                    <option value="1">@lang('lang.chinese')</option>
+                                    <option value="">--@lang('lang.select')--</option>
+                                    @foreach ($nationality as $item)
+                                        <option value="{{$item->id}}">{{Helper::getLang() == 'en' ? $item->name_english : $item->name_khmer}}</option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
@@ -346,6 +349,7 @@
                             <div class="form-group">
                                 <label class="">@lang('lang.spouse')</label>
                                 <select class="form-control select floating" id="spouse" name="spouse" value="{{old('spouse')}}">
+                                    <option value="">--@lang('lang.select')--</option>
                                     <option value="0">No</option>
                                     <option value="1">Yes</option>
                                 </select>
@@ -401,6 +405,7 @@
                             <div class="form-group">
                                 <label class="">@lang('lang.type_of_employees')</label>
                                 <select class="form-control select floating" name="type_of_employees_nssf">
+                                    <option value="">--@lang('lang.select')--</option>
                                     <option value="1">និវាសនជន</option>
                                     <option value="2">អនិវាសនជន</option>
                                 </select>
@@ -410,6 +415,7 @@
                             <div class="form-group">
                                 <label class="">@lang('lang.spouse_nssf')</label>
                                 <select class="form-control select floating" id="spouse_nssf">
+                                    <option value="">--@lang('lang.select')--</option>
                                     <option value="1">Yes</option>
                                     <option value="2">No</option>
                                 </select>
@@ -419,6 +425,7 @@
                             <div class="form-group">
                                 <label class="">@lang('lang.status') (@lang('lang.nssf'))</label>
                                 <select class="form-control select floating" id="status_nssf" name="status_nssf">
+                                    <option value="">--@lang('lang.select')--</option>
                                     <option value="1">@lang('lang.working')</option>
                                     <option value="2">@lang('lang.not_working')</option>
                                 </select>

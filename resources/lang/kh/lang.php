@@ -167,6 +167,7 @@ return[
 	"child_allowance"=>"ប្រាក់ឧបត្ថម្ភកូន",
 	"click_here"=>"សូមចុចនៅទីនេះ",
 	"complete_date"=>"កាលបរិច្ឆេទបញ្ចប់",
+    "company_phone_number"=>"លេខទូរស័ព្ទក្រុមហ៊ុន",
 	"camma_microfinance_limited"=>"ខេមា មីក្រូហិរញ្ញវត្ថុ លីមីតធីត",
 	"dashboard"=>"ផ្ទាំងកម្មវិធីដំបូង",
 	"dashboards"=>"ផ្ទាំងកម្មវិធីដំបូង",

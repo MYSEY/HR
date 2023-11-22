@@ -114,6 +114,12 @@ class OptionSeeder extends Seeder
             'created_by'    => Auth::id(),
         ]);
         Option::firstOrCreate([
+            'name_khmer' => 'ចំណេះដឹង​ទូទៅ',
+            'name_english'=>'General Knowledge',
+            'type' => 'field_of_study',
+            'created_by'    => Auth::id(),
+        ]);
+        Option::firstOrCreate([
             'name_khmer' => 'អនុវិទ្យាល័យ',
             'name_english'=>'Secondary School',
             'type' => 'degree',
@@ -411,6 +417,18 @@ class OptionSeeder extends Seeder
             'name_khmer' => 'នៅលីវ',
             'name_english'=> 'Single',
             'type' => 'marital_status',
+            'created_by'    => Auth::id(),
+        ]);
+        Option::firstOrCreate([
+            'name_khmer' => 'ខ្មែរ',
+            'name_english'=> 'Khmer',
+            'type' => 'nationality',
+            'created_by'    => Auth::id(),
+        ]);
+        Option::firstOrCreate([
+            'name_khmer' => 'ចិន',
+            'name_english'=> 'Chinese',
+            'type' => 'nationality',
             'created_by'    => Auth::id(),
         ]);
     }
