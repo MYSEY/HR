@@ -18,6 +18,10 @@ class CandidateResume extends Model
     protected $guarded = ['id'];
     protected $fillable = [
         'number_employee',
+        'last_name_kh',
+        'first_name_kh',
+        'last_name_en',
+        'first_name_en',
         'name_kh',
         'name_en',
         'gender',
@@ -42,6 +46,7 @@ class CandidateResume extends Model
         'interviewed_channel',
         'fdc_date',
         'id_card_number',
+        'id_number_nssf',
         'basic_salary',
         'salary_increas',
         'position_type',

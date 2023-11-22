@@ -10,18 +10,24 @@
         <div class="page-header">
             <div class="row align-items-center">
                 <div class="col">
-                    <h3 class="page-title">Candidate CVs</h3>
+                    <h3 class="page-title">@lang('lang.candidate_CVs')</h3>
                     <ul class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="{{url('/dashboad/employee')}}">Dashboard</a></li>
-                        <li class="breadcrumb-item active">Candidate CVs</li>
+                        <li class="breadcrumb-item"><a href="{{url('/dashboad/employee')}}">@lang('lang.dashboard')</a></li>
+                        <li class="breadcrumb-item active">@lang('lang.candidate_CVs')</li>
                     </ul>
                 </div>
                 <div class="col-auto float-end ms-auto">
-                    <a href="#" class="btn add-btn" id="add_new" data-bs-toggle="modal" data-bs-target="#add_user"><i class="fa fa-plus"></i> Add New</a>
+                    @if (permissionAccess("8","is_import")->value == "1")
+                    <a href="#" class="btn add-btn" data-toggle="modal" id="import_new_cvs"><i class="fa fa-plus"></i>@lang('lang.import')</a>
+                    @endif
+                    @if (permissionAccess("8","is_create")->value == "1")
+                    <a href="#" class="btn add-btn me-2" id="add_new" data-bs-toggle="modal" data-bs-target="#add_user"><i class="fa fa-plus"></i> @lang('lang.add_new')</a>
+                    @endif
                 </div>
             </div>
         </div>
         {!! Toastr::message() !!}
+        @if (permissionAccess("8","is_view")->value == "1")
         <div class="">
             <div class="page-menu">
                 <div class="row">
@@ -29,27 +35,31 @@
                         <ul class="nav nav-tabs nav-tabs-bottom" role="tablist">
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link active" data-bs-toggle="tab" href="#tab_candidate_resume" aria-selected="true"
-                                    role="tab">CVs({{count($data)}})</a>
+                                    role="tab">@lang('lang.cvs')(<span id="data_cv">{{count($data)}}</span>)</a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" data-bs-toggle="tab" id="btn_tab_short_list" href="#tab_short_list" aria-selected="false" role="tab" data-tab-id="2"
-                                    tabindex="-1">Shortlisted({{$dataShortList}})</a>
+                                    tabindex="-1">@lang('lang.shortlisted')(<span id="dataShortList">{{$dataShortList}}</span>)</a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" data-bs-toggle="tab" id="btn_not_tab_short_list" href="#tab_not_short_list" aria-selected="false" role="tab" data-tab-id="2"
-                                    tabindex="-1">Non-Shortlisted({{$dataNon}})</a>
+                                    tabindex="-1">@lang('lang.non-shortlisted')(<span id="dataNon">{{$dataNon}}</span>)</a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link" data-bs-toggle="tab" id="btn_tab_interviewed_failed" href="#tab_interviewed_failed" aria-selected="false" data-tab-id="6"
+                                    role="tab" tabindex="-1">@lang('lang.inter-failed')(<span id="dataFailed">{{$dataFailed}}</span>)</a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" data-bs-toggle="tab" id="btn_tab_interviewed_result" href="#tab_interviewed_result" aria-selected="false" data-tab-id="3"
-                                    role="tab" tabindex="-1">Inter-Result({{$dataResult}})</a>
+                                    role="tab" tabindex="-1">@lang('lang.inter-result')(<span id="dataResult">{{$dataResult}}</span>)</a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" data-bs-toggle="tab" id="btn_tab_signed_contract" href="#tab_signed_contract" aria-selected="false" data-tab-id="4"
-                                    role="tab" tabindex="-1">Processing Contract({{$dataProcessing}})</a>
+                                    role="tab" tabindex="-1">@lang('lang.processing_contract')(<span id="dataProcessing">{{$dataProcessing}}</span>)</a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" data-bs-toggle="tab" id="btn_tab_signed_contract_cancel" href="#tab_signed_contract_cancel" aria-selected="false" data-tab-id="5"
-                                    role="tab" tabindex="-1">Canceled Contract({{$dataCancel}})</a>
+                                    role="tab" tabindex="-1">@lang('lang.canceled_contract')(<span id="dataCancel">{{$dataCancel}}</span>)</a>
                             </li>
                         </ul>
                     </div>
@@ -60,15 +70,15 @@
                 @include('recruitments.candidate_resumes.table_by_tab')
             </div>
         </div>
-
+        @endif
         <!-- Delete training type Modal -->
         <div class="modal custom-modal fade" id="delete_candidate" role="dialog">
             <div class="modal-dialog modal-sm modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-body">
                         <div class="form-header">
-                            <h3>Delete</h3>
-                            <p>Are you sure want to delete?</p>
+                            <h3>@lang('lang.delete')</h3>
+                            <p>@lang('lang.are_you_sure_want_to_delete')?</p>
                         </div>
                         <div class="modal-btn delete-action">
                             <form action="{{url('recruitment/candidate-resume/delete')}}" method="POST">
@@ -76,8 +86,8 @@
                                 <input type="hidden" name="id" class="e_id" value="">
                                 <div class="row">
                                     <div class="submit-section" style="text-align: center">
-                                        <button type="submit" class="btn btn-primary submit-btn me-2">Delete</button>
-                                        <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-danger">Cancel</a>
+                                        <button type="submit" class="btn btn-primary submit-btn me-2">@lang('lang.delete')</button>
+                                        <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-danger">@lang('lang.cancel')</a>
                                     </div>
                                 </div>
                             </form>
@@ -89,7 +99,7 @@
         @include('recruitments.candidate_resumes.modal_form_create')
         @include('recruitments.candidate_resumes.modal_form_edit')
         @include('recruitments.candidate_resumes.modal_form_create_emp')
-        {{-- <input id="example" type="text"> --}}
+        @include('recruitments.candidate_resumes.import')
 
     </div>
 @endsection
@@ -99,12 +109,16 @@
 
 <script type="text/javascript">
     $(function(){
-       
+        $("#import_new_cvs").on("click", function() {
+            $(".thanLess").hide();
+            $("#thanLess").text("");
+            $('#import_motor_cv').modal('show');
+        });
         $("#btn_tab_short_list, #btn_not_tab_short_list").on("click", function(){
             let tab_status = $(this).attr('data-tab-id');
             showDatas(tab_status);
         });
-        $("#btn_tab_interviewed_result, #btn_tab_signed_contract, #btn_tab_signed_contract_cancel").on("click", function(){
+        $("#btn_tab_interviewed_failed, #btn_tab_interviewed_result, #btn_tab_signed_contract, #btn_tab_signed_contract_cancel").on("click", function(){
             let tab_status = $(this).attr('data-tab-id');
             if (tab_status ==  5) {
                 tab_status ="Cancel"
@@ -114,11 +128,11 @@
         $(document).on('click','.btn_approve', function(){
             let id = $(this).data("id");
             let id_card = $(this).attr("data-id-card");
-            let description = "Are you sure want to Approve?";
+            let description = "@lang('lang.are_you_sure_want_to_approve')?";
             let text_label = "";
             let button_ok = {
-                        text: 'OK',
-                        btnClass: 'btn-blue',
+                        text: '@lang("lang.ok")',
+                        btnClass: 'add-btn-status',
                         action: function () {
                             var id = this.$content.find('.id').val();
                             axios.post('{{ URL('recruitment/candidate-resume/createemp') }}', {
@@ -127,30 +141,31 @@
                             }).then(function(response) {
                                 new Noty({
                                     title: "",
-                                    text: "The process has been successfully.",
+                                    text: "@lang('lang.the_process_has_been_successfully').",
                                     type: "success",
                                     timeout: 3000,
                                     icon: true
                                 }).show(); 
                                 showDatas("4");
+                                $("#dataProcessing").text(response.data.dataProcessing);
                             }).catch(function(error) {
                                 new Noty({
                                     title: "",
-                                    text: "Something went wrong please try again later.",
+                                    text: "@lang('lang.something_went_wrong_please_try_again_later').",
                                     type: "error",
                                     icon: true
                                 }).show();
                             });
                         }
                     };
-            if (id_card == "null") {
-                text_label = '<label>You can not Aprove.</label>';
-                description = "Please enter all information for Aprove.";
+            if (id_card == "false") {
+                text_label = '<label>@lang("lang.you_cannot_aprove").</label>';
+                description = "@lang('lang.please_enter_all_requried_information').";
                 button_ok = "";
             }
             $.confirm({
                 icon: 'fa fa-warning',
-                title: 'Approve',
+                title: '@lang("lang.approve")',
                 titleClass: 'text-center',
                 type: 'blue',
                 content: '' +
@@ -167,8 +182,8 @@
                 buttons: {
                     button_ok,
                     cancel: {
-                        text: 'Cancel',
-                        btnClass: 'btn-red btn-sm',
+                        text: '@lang("lang.cancel")',
+                        btnClass: 'btn-secondary btn-sm',
                     },
                 },
                 onContentReady: function () {
@@ -183,7 +198,7 @@
         $(document).on('click','.btn_cancel', function(){
             let id = $(this).data("id");
             $.confirm({
-                title: 'Cancel',
+                title: '@lang("lang.cancel")',
                 icon: 'fa fa-warning',
                 titleClass: 'text-center',
                 type: 'red',
@@ -191,7 +206,7 @@
                 content: '' +
                 '<form action="" class="formName">' +
                     '<div class="form-group" style="text-align: center">' +
-                        '<label>Are you sure want to Cancel?</label>' +
+                        '<label>@lang("lang.are_you_sure_want_to_cancel")?</label>' +
                         '<input type="hidden" class="form-control id" id="" name="" value="'+id+'">'+
                     '</div>' +
                 '</form>',
@@ -200,8 +215,8 @@
                 },
                 buttons: {
                     formSubmit: {
-                        text: 'OK',
-                        btnClass: 'btn-blue',
+                        text: '@lang("lang.ok")',
+                        btnClass: 'add-btn-status',
                         action: function () {
                             var id = this.$content.find('.id').val();
                             axios.post('{{ URL('recruitment/candidate-resume/status') }}', {
@@ -210,16 +225,18 @@
                             }).then(function(response) {
                                 new Noty({
                                     title: "",
-                                    text: "The process has been successfully.",
+                                    text: "@lang('lang.the_process_has_been_successfully').",
                                     type: "success",
                                     timeout: 3000,
                                     icon: true
                                 }).show();
                                 showDatas("4");
+                                $("#dataProcessing").text(response.data.dataProcessing);
+                                $("#dataCancel").text(response.data.dataCancel);
                             }).catch(function(error) {
                                 new Noty({
                                     title: "",
-                                    text: "Something went wrong please try again later.",
+                                    text: "Som@lang('lang.something_went_wrong_please_try_again_later').",
                                     type: "error",
                                     icon: true
                                 }).show();
@@ -227,8 +244,8 @@
                         }
                     },
                     cancel: {
-                        text: 'Close',
-                        btnClass: 'btn-red btn-sm',
+                        text: '@lang("lang.cancel")',
+                        btnClass: 'btn-secondary btn-sm',
                     },
                 },
                 onContentReady: function () {
@@ -242,9 +259,11 @@
         });
         $('.delete').on('click', function() {
             var _this = $(this).parents('tr');
-            $('.e_id').val(_this.find('.ids').text());
+            let id = $(this).data('id');
+            $('.e_id').val(id);
         });
         $(document).on('click','.update', function(){
+            var localeLanguage = '{{ config('app.locale') }}';
             let id = $(this).data("id");
             $("#e_id").val(id);
             $.ajax({
@@ -261,7 +280,7 @@
                             $.each(response.position, function(i, item) {
                                 $('#e_position_applied').append($('<option>', {
                                     value: item.id,
-                                    text: item.name_english,
+                                    text: localeLanguage == 'en' ? item.name_english : item.name_khmer,
                                     selected: item.id == response.success.position_applied
                                 }));
                             });
@@ -271,7 +290,7 @@
                             $.each(response.branch, function(i, item) {
                                 $('#e_location_applied').append($('<option>', {
                                     value: item.id,
-                                    text: item.branch_name_en,
+                                    text: localeLanguage == 'en' ? item.branch_name_en : item.branch_name_kh,
                                     selected: item.id == response.success.location_applied
                                 }));
                             });
@@ -281,13 +300,15 @@
                             $.each(response.gender, function(i, item) {
                                 $('#e_gender').append($('<option>', {
                                     value: item.id,
-                                    text: item.name_english,
+                                    text: localeLanguage == 'en' ? item.name_english : item.name_khmer,
                                     selected: item.id == response.success.gender
                                 }));
                             });
                         }
-                        $('#e_name_kh').val(response.success.name_kh);
-                        $('#e_name_en').val(response.success.name_en);
+                        $('#e_last_name_kh').val(response.success.last_name_kh);
+                        $('#e_first_name_kh').val(response.success.first_name_kh);
+                        $('#e_last_name_en').val(response.success.last_name_en);
+                        $('#e_first_name_en').val(response.success.first_name_en);
                         $('#e_current_position').val(response.success.current_position);
                         $('#e_companey_name').val(response.success.companey_name);
                         $('#e_current_address').val(response.success.current_address);
@@ -306,108 +327,46 @@
         $('body').on('click', '#btn-status a', function() {
             let id = $(this).attr('data-emp-id');
             let status = $(this).data('id');
-            var candi_status = "";
-            if (status == 1) {
-                candi_status = "Received CV";
-            } else if(status == 2) {
-                candi_status = "Shortlisted";
-            }else if(status == 3){
-                candi_status = "Interviewed";
-            }else if(status == 4){
-                candi_status = "Signed Contract";
-            }
-            if (status == 1) {
+            let nonShort = $(this).data('id-short');
+            if(status==2){
                 $.confirm({
-                    title: 'Candidate Resume Status!',
-                    contentClass: 'text-center',
-                    // backgroundDismiss: 'cancel',
-                    content: ''+
-                        '<form method="post" class="formName">'+
-                            '<div class="form-group">'+
-                                '<div class="form-group">'+
-                                    '<label><a href="#">'+candi_status+'</a></label>'+
-                                '</div>'+
-                                '<div class="form-group">'+
-                                    '<p>Do you really want to change Status?</p>'+
-                                    '<input type="hidden" class="form-control status" id="" name="" value="'+status+'">'+
-                                    '<input type="hidden" class="form-control id" id="" name="" value="'+id+'">'+
-                                '</div>'+
-                        '</form>',
-                    buttons: {
-                        confirm: {
-                            text: 'Ok',
-                            btnClass: 'btn-blue',
-                            action: function() {
-                                var status = this.$content.find('.status').val();
-                                var id = this.$content.find('.id').val();
-                                axios.post('{{ URL('recruitment/candidate-resume/status') }}', {
-                                        'id': id,
-                                        'status': status,
-                                    }).then(function(response) {
-                                    if (response.data.message == 'successfull') {
-                                        new Noty({
-                                            title: "",
-                                            text: "The process has been successfully.",
-                                            type: "success",
-                                            timeout: 3000,
-                                            icon: true
-                                        }).show();
-                                        $('.card-footer').remove();
-                                        window.location.replace("{{ URL('recruitment/candidate-resume/list') }}"); 
-                                    }
-                                }).catch(function(error) {
-                                    new Noty({
-                                        title: "",
-                                        text: "Something went wrong please try again later.",
-                                        type: "error",
-                                        icon: true
-                                    }).show();
-                                });
-                            }
-                        },
-                        cancel: {
-                            text: 'Cancel',
-                            btnClass: 'btn-red btn-sm',
-                        },
-                    }
-                });
-            }else if(status==2){
-                $.confirm({
-                    title: 'Candidate Resume Status!',
+                    title: '@lang("lang.candidate_resume_status")!',
                     contentClass: 'text-center',
                     // backgroundDismiss: 'cancel',
                     content: ''+
                         '<form class="needs-validation" novalidate>'+
                             '<div class="form-group">'+
-                                '<label><a href="#">'+candi_status+'</a></label>'+
+                                '<label><a href="#">@lang("lang.shortlisted")</a></label>'+
                             '</div>'+
                             '<input type="hidden" class="form-control status" id="" name="" value="'+status+'">'+
                             '<input type="hidden" class="form-control id" id="" name="" value="'+id+'">'+
                             '<div class="form-group">'+
-                                '<label>Short List</label>'+
+                                '<label>@lang("lang.shortlist")</label>'+
                                 '<select class="form-control form-select showtList" name="short_list">'+
-                                    '<option selected value="1"> Yes</option>'+
-                                    '<option value="2"> No</option>'+
+                                    '<option selected value="1"> @lang("lang.yes")</option>'+
+                                    '<option value="2"> @lang("lang.no")</option>'+
                                 '</select>'+
                             '</div>'+
                             '<div class="form-group interviewed_date">'+
-                                '<label>Interviewed Date <span class="text-danger">*</span></label>'+
+                                '<label>@lang("lang.interviewed_date") <span class="text-danger">*</span></label>'+
                                 '<input type="datetime-local" class="form-control interviewed_dates">'+
                             '</div>'+
                             '<div class="form-group interview_channel">'+
-                                '<label>Interviewed Channel</label>'+
+                                '<label>@lang("lang.interviewed_channel")</label>'+
                                 '<select class="form-control form-select interviewed_channel">'+
                                     '<option selected value="Online"> Online</option>'+
-                                    '<option value="Face to face"> Face to face</option>'+
+                                    '<option value="Face to face"> @lang("lang.face_to_face")</option>'+
                                 '</select>'+
-                                // '<input type="text" class="form-control interviewed_channel">'+
                             '</div>'+
                             '<div class="form-group committee_interviewed">'+
-                                '<label>Interview Committee <span class="text-danger">*</span></label>'+
-                                '<input type="text" id="committeeinterview" class="form-control committee_interview">'+
+                                '<label>@lang("lang.interview_committee") <span class="text-danger">*</span></label>'+
+                                '<select class="form-control hr-select2-option-emp form-select committee_interview" id="committeeinterview" name="states[]" multiple >'+
+                                   
+                                '</select>'+
+                                // '<input type="text" id="committeeinterview" class="form-control committee_interview">'+
                             '</div>'+
                             '<div class="form-group">'+
-                                '<label>Remark</label>'+
+                                '<label>@lang("lang.remark")</label>'+
                                 '<textarea type="text" rows="3" class="form-control remark"></textarea>'+
                             '</div>'+
                         '</form>',
@@ -427,8 +386,8 @@
                         },
                     buttons: {
                         confirm: {
-                            text: 'Submit',
-                            btnClass: 'btn-blue',
+                            text: '@lang("lang.submit")',
+                            btnClass: 'add-btn-status',
                             action: function() {
                                 var c_status = this.$content.find('.status').val();
                                 var short_list = this.$content.find('.showtList').val();
@@ -442,8 +401,17 @@
                                         $(".interviewed_dates").css("border","solid 1px red");
                                         return false;
                                     }
-                                    if ($(".committee_interview").val() ==""){
-                                        $(".committee_interview").css("border","solid 1px red");
+                                    if (!committee_interview.length){
+                                        $(".committee_interviewed").each(function(){
+                                            let formGroup = $(this);
+                                            let value = formGroup.attr("data-select2-id");
+                                            let requeredField = formGroup.find(".hr-select2-option").val();
+                                            if(!value){ 
+                                                formGroup.find(".select2-selection").css("border-color","#dc3545");
+                                            }else if (!requeredField) {
+                                                formGroup.find(".select2-selection").css("border-color","#dc3545");
+                                            }
+                                        });
                                         return false;
                                     }
                                 }
@@ -454,22 +422,28 @@
                                         'short_list': short_list,
                                         'interviewed_date': interviewed_date,
                                         'interviewed_channel': interviewed_channel,
-                                        'committee_interview': committee_interview,
+                                        'committee_interview': committee_interview.toString(),
                                         'remark': remark,
                                     }).then(function(response) {
-                                    new Noty({
-                                        title: "",
-                                        text: "The process has been successfully.",
-                                        type: "success",
-                                        timeout: 3000,
-                                        icon: true
-                                    }).show();
-                                    $('.card-footer').remove();
-                                    window.location.replace("{{ URL('recruitment/candidate-resume/list') }}");
+                                        new Noty({
+                                            title: "",
+                                            text: "@lang('lang.the_process_has_been_successfully').",
+                                            type: "success",
+                                            timeout: 3000,
+                                            icon: true
+                                        }).show();
+                                        if (nonShort == "non-shortlist") {
+                                            showDatas("2");
+                                            $("#data_cv").text(response.data.data);
+                                            $("#dataNon").text(response.data.dataNon);
+                                            $("#dataShortList").text(response.data.dataShortList);
+                                        }else{
+                                            window.location.replace("{{ URL('recruitment/candidate-resume/list') }}");
+                                        }
                                 }).catch(function(error) {
                                     new Noty({
                                         title: "",
-                                        text: "Something went wrong please try again later.",
+                                        text: "@lang('lang.something_went_wrong_please_try_again_later').",
                                         type: "error",
                                         icon: true
                                     }).show();
@@ -477,59 +451,79 @@
                             }
                         },
                         cancel: {
-                            text: 'Cancel',
-                            btnClass: 'btn-red btn-sm',
+                            text: '@lang("lang.cancel")',
+                            btnClass: 'btn-secondary btn-sm',
                         },
                     }
                 }); 
-                
-            }else if(status == 3){
+                $(document).ready(function(){
+                    $('.hr-select2-option-emp').each(function() {
+                        $(this).select2({
+                            width: '100%',
+                            dropdownParent: $(this).parent(),
+                        })
+                    });
+                    axios.get('{{ URL('recruitment/candidate-resume/employee') }}', {
+                    }).then(function(response) {
+                        if (response.data.employees != '') {
+                            $('#committeeinterview').html('');
+                            $.each(response.data.employees, function(i, item) {
+                                $('#committeeinterview').append($('<option>', {
+                                    value: item.employee_name_en,
+                                    text: item.employee_name_en,
+                                    // selected: item.id == response.success.location_applied
+                                }));
+                            });
+                        }
+                    })
+                });
+            }else if(status == 3 || status == 6){
                 let data_status = $(this).attr('data-status');
                 let select_joined_interview  = ""; 
                 if (data_status == 3 ) {
                     select_joined_interview = '<select class="form-control form-select joined_interview" >'+
-                        '<option selected value="1"> Yes</option>'+
+                        '<option selected value="1"> @lang("lang.yes")</option>'+
                     '</select>';
                 }else{
                     select_joined_interview = '<select class="form-control form-select joined_interview" >'+
-                        '<option selected value="1"> Yes</option>'+
-                        '<option value="2"> No</option>'+
-                        '<option value="3"> Delay</option>'+
+                        '<option selected value="1"> @lang("lang.yes")</option>'+
+                        '<option value="2"> @lang("lang.no")</option>'+
+                        '<option value="3"> @lang("lang.delay")</option>'+
                     '</select>';
                 }
                 $.confirm({
-                    title: 'Candidate Resume Status!',
+                    title: '@lang("lang.candidate_resume_status")!',
                     contentClass: 'text-center',
                     // backgroundDismiss: 'cancel',
                     content: ''+
                         '<form class="needs-validation" novalidate>'+
                             '<div class="form-group">'+
-                                '<label><a href="#">'+candi_status+'</a></label>'+
+                                '<label><a href="#">@lang("lang.interviewed")</a></label>'+
                             '</div>'+
                             '<input type="hidden" class="form-control status" id="" name="" value="'+status+'">'+
                             '<input type="hidden" class="form-control id" id="" name="" value="'+id+'">'+
                             '<div class="form-group">'+
-                                '<label>Joined Interview</label>'+
+                                '<label>@lang("lang.joined_interview")</label>'+
                                 select_joined_interview+
                             '</div>'+
                             '<div class="form-group interviewed_date" style="display: none">'+
-                                '<label>Interviewed Date <span class="text-danger">*</span></label>'+
+                                '<label>@lang("lang.interviewed_date") <span class="text-danger">*</span></label>'+
                                 '<input type="datetime-local" class="form-control interviewed_dates">'+
                             '</div>'+
                             '<div class="form-group interviewed_results">'+
-                                '<label>Interviewed Result</label>'+
+                                '<label>@lang("lang.interviewed_result")</label>'+
                                 '<select class="form-control form-select interviewed_result" >'+
-                                    '<option selected value="1"> Passed</option>'+
-                                    '<option value="2"> Failed</option>'+
-                                    '<option value="3"> Waiting</option>'+
-                                    '<option value="4"> Pending</option>'+
-                                    '<option value="5"> High Exected Salary</option>'+
-                                    '<option value="6"> Rejected Offered</option>'+
-                                    '<option value="7"> Black list</option>'+
+                                    '<option selected value="1"> @lang("lang.passed")</option>'+
+                                    '<option value="2">@lang("lang.failed")</option>'+
+                                    '<option value="3">@lang("lang.waiting")</option>'+
+                                    '<option value="4">@lang("lang.pending")</option>'+
+                                    '<option value="5">@lang("lang.high_exected_salary")</option>'+
+                                    '<option value="6">@lang("lang.rejected_offered")</option>'+
+                                    '<option value="7">@lang("lang.black_list")</option>'+
                                 '</select>'+
                             '</div>'+
                             '<div class="form-group">'+
-                                '<label>Remark</label>'+
+                                '<label>@lang("lang.remark")</label>'+
                                 '<textarea type="text" rows="3" class="form-control remark"></textarea>'+
                             '</div>'+
                         '</form>',
@@ -553,8 +547,8 @@
                         },
                     buttons: {
                         confirm: {
-                            text: 'Submit',
-                            btnClass: 'btn-blue',
+                            text: '@lang("lang.submit")',
+                            btnClass: 'add-btn-status',
                             action: function() {
                                 var status = this.$content.find('.status').val();
                                 var joined_interview = this.$content.find('.joined_interview').val();
@@ -582,19 +576,29 @@
                                         'interviewed_date': interviewed_dates,
                                         'remark': remark,
                                     }).then(function(response) {
-                                    new Noty({
-                                        title: "",
-                                        text: "The process has been successfully.",
-                                        type: "success",
-                                        timeout: 3000,
-                                        icon: true
-                                    }).show();
-                                    $('.card-footer').remove();
-                                    window.location.replace("{{ URL('recruitment/candidate-resume/list') }}");
+                                        if (status == 6) {
+                                            showDatas("6");
+                                        };
+                                        if(status == 3) {
+                                            showDatas("3");
+                                        } ;
+                                        if(nonShort == "shortlist") {
+                                            showDatas("2");
+                                        };
+                                        $("#dataFailed").text(response.data.dataFailed);
+                                        $("#dataResult").text(response.data.dataResult);
+                                        $("#dataShortList").text(response.data.dataShortList);
+                                        new Noty({
+                                            title: "",
+                                            text: "@lang('lang.the_process_has_been_successfully').",
+                                            type: "success",
+                                            timeout: 3000,
+                                            icon: true
+                                        }).show();
                                 }).catch(function(error) {
                                     new Noty({
                                         title: "",
-                                        text: "Something went wrong please try again later.",
+                                        text: "@lang('lang.something_went_wrong_please_try_again_later').",
                                         type: "error",
                                         icon: true
                                     }).show();
@@ -602,36 +606,36 @@
                             }
                         },
                         cancel: {
-                            text: 'Cancel',
-                            btnClass: 'btn-red btn-sm',
+                            text: '@lang("lang.cancel")',
+                            btnClass: 'btn-secondary btn-sm',
                         },
                     }
                 }); 
             }else if(status == 4) {
                 $.confirm({
-                    title: 'Candidate Resume Status!',
+                    title: '@lang("lang.candidate_resume_status")!',
                     contentClass: 'text-center',
                     // backgroundDismiss: 'cancel',
                     content: ''+
                         '<form class="needs-validation" novalidate>'+
                             '<div class="form-group">'+
-                                '<label><a href="#">'+candi_status+'</a></label>'+
+                                '<label><a href="#">@lang("lang.signed_contract")</a></label>'+
                             '</div>'+
                             '<input type="hidden" class="form-control status" id="" name="" value="'+status+'">'+
                             '<input type="hidden" class="form-control id" id="" name="" value="'+id+'">'+
                             '<div class="form-group">'+
-                                '<label>Signed Contract Date <span class="text-danger">*</span></label>'+
+                                '<label>@lang("lang.signed_contract_date") <span class="text-danger">*</span></label>'+
                                 '<input type="date" class="form-control contract_date" value="">'+
                             '</div>'+
                             '<div class="form-group">'+
-                                '<label>Join Date <span class="text-danger">*</span></label>'+
+                                '<label>@lang("lang.join_date") <span class="text-danger">*</span></label>'+
                                 '<input type="date" class="form-control join_date" value="">'+
                             '</div>'+
                         '</form>',
                     buttons: {
                         confirm: {
-                            text: 'Submit',
-                            btnClass: 'btn-blue',
+                            text: '@lang("lang.submit")',
+                            btnClass: 'add-btn-status',
                             action: function() {
                                 var status = this.$content.find('.status').val();
                                 var contract_date = this.$content.find('.contract_date').val();
@@ -654,19 +658,21 @@
                                         'contract_date': contract_date,
                                         'join_date': join_date,
                                     }).then(function(response) {
-                                    new Noty({
-                                        title: "",
-                                        text: "The process has been successfully.",
-                                        type: "success",
-                                        timeout: 3000,
-                                        icon: true
-                                    }).show();
-                                    $('.card-footer').remove();
-                                    window.location.replace("{{ URL('recruitment/candidate-resume/list') }}");
+                                        showDatas("3");
+                                        $("#dataFailed").text(response.data.dataFailed);
+                                        $("#dataProcessing").text(response.data.dataProcessing);
+                                        $("#dataResult").text(response.data.dataResult);
+                                        new Noty({
+                                            title: "",
+                                            text: "@lang('lang.the_process_has_been_successfully').",
+                                            type: "success",
+                                            timeout: 3000,
+                                            icon: true
+                                        }).show();
                                 }).catch(function(error) {
                                     new Noty({
                                         title: "",
-                                        text: "Something went wrong please try again later.",
+                                        text: "@lang('lang.something_went_wrong_please_try_again_later').",
                                         type: "error",
                                         icon: true
                                     }).show();
@@ -674,8 +680,8 @@
                             },
                         },
                         cancel: {
-                            text: 'Cancel',
-                            btnClass: 'btn-red btn-sm',
+                            text: '@lang("lang.cancel")',
+                            btnClass: 'btn-secondary btn-sm',
                         },
                     },
                     onContentReady: function () {
@@ -688,25 +694,14 @@
                 }); 
             }
         });
-        // $(document).on('click','.committee_interview', function(){
-        //     var list = [
-        //         {"label": "Apple", "value": "0"},
-        //         {"label": "Orange", "value": "1"},
-        //         {"label": "Banana", "value": "2"}
-        //     ];
-        //     $("#committeeinterview").mSelectDBox({
-        //         "list":list,
-        //         "multiple": true,
-        //         "autoComplete": true,
-        //         "name": "a"
-        //     });
-        // });
-        // $( document ).ready(function() {
-            
-           
-        // });
     });
     function showDatas(btn_tab){
+        let is_update = "{{ Helper::permissionAccess('8','is_update') }}";
+        let is_delete = "{{ Helper::permissionAccess('8','is_delete') }}";
+        let is_cancel = "{{ Helper::permissionAccess('8','is_cancel') }}";
+        let is_print = "{{ Helper::permissionAccess('8','is_print') }}";
+        let is_approve = "{{ Helper::permissionAccess('8','is_approve') }}";
+        var status_tab = btn_tab;
         $.ajax({
             type: "GET",
             url: "{{ url('/recruitment/candidate-resume/show') }}",
@@ -718,11 +713,13 @@
                 let datas = response.datas;
                 if (datas.length > 0) {
                     var tr_re = "";
+                    var tr_failed = "";
                     var tr = "";
                     var tr_not_list = "";
                     var tr_ct = "";
                     var tr_ct_cancel = "";
                     if (btn_tab == 2) {
+                        let num = 1;
                         datas.map((staff) => {
                             let interviewed_date = "";
                             let time = "";
@@ -733,26 +730,34 @@
                             let text_status = "";
                             let tag_i = "";
                             if (staff.status =='1') {
-                                text_status = "Received CV";
+                                text_status = "@lang('lang.received_cv')";
                                 tag_i = '<i class="fa fa-dot-circle-o text-purple"></i>'
                             }else if (staff.status =='2') {
-                                text_status = "Shortlisted";
+                                text_status = "@lang('lang.shortlisted')";
                                 tag_i = '<i class="fa fa-dot-circle-o text-warning"></i>'
                             }else if(staff.status =='3') {
-                                text_status = "Interviewed";
+                                text_status = "@lang('lang.interviewed')";
                                 tag_i = '<i class="fa fa-dot-circle-o text-info"></i>'
                             };
                             let cv =  "";
                             if (staff.cv) {
                                 cv = '<small class="block text-ellipsis">'+
-                                        '<a href="{{asset("/uploads/images")}}/'+(staff.cv)+'" target="_blank" class="subdrop"><i class="la la-file-pdf"></i> <span>Preview CV</span></a>'+
+                                        '<a href="{{asset("/uploads/images")}}/'+(staff.cv)+'" target="_blank" class="subdrop"><i class="la la-file-pdf"></i> <span>@lang("lang.preview_cv")</span></a>'+
                                     '</small>'
                             }
+                            let dropdown_menu = '<a class="btn btn-white btn-sm btn-rounded" href="#">'+
+                                                    (tag_i)+ '<span>'+(text_status)+'</span>'+
+                                                '</a>';
+                                if (is_update == 1) {
+                                    dropdown_menu = '<a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">'+
+                                                    (tag_i)+ '<span>'+(text_status)+'</span>'+
+                                                '</a>';
+                                }
                             if (staff.short_list == 1) {
                                 tr += '<tr class="odd">'+
-                                    '<td class="ids">'+(staff.id)+'</td>'+
-                                    '<td >'+(staff.name_kh)+' </td>'+
-                                    '<td >'+(staff.name_en)+'</td>'+
+                                    '<td class="ids stuck-scroll-3">'+(num)+'</td>'+
+                                    '<td class="stuck-scroll-3">'+(staff.name_kh)+' </td>'+
+                                    '<td class="stuck-scroll-3">'+(staff.name_en)+'</td>'+
                                     '<td >'+(staff.option.name_english)+'</td>'+
                                     '<td >'+(staff.position.name_english)+'</td>'+
                                     '<td >'+(staff.branch.branch_name_en)+'</td>'+
@@ -762,15 +767,10 @@
                                     '<td >'+(staff.committee_interview ? staff.committee_interview : "")+'</td>'+
                                     '<td >'+
                                         '<div class="dropdown action-label">'+
-                                            '<a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">'+
-                                                (tag_i)+ '<span>'+(text_status)+'</span>'+
-                                            '</a>'+
+                                           (dropdown_menu)+
                                             '<div class="dropdown-menu dropdown-menu-right" id="btn-status">'+
-                                                // '<a class="dropdown-item" data-emp-id="'+(staff.id)+'"  data-id="2" href="#">'+
-                                                //     '<i class="fa fa-dot-circle-o text-warning"></i> Shortlisted'+
-                                                // '</a>'+
-                                                '<a class="dropdown-item" data-emp-id="'+(staff.id)+'"  data-id="3" href="#">'+
-                                                    '<i class="fa fa-dot-circle-o text-info"></i> Interviewed'+
+                                                '<a class="dropdown-item" data-emp-id="'+(staff.id)+'"  data-id="3" data-id-short="shortlist"  href="#">'+
+                                                    '<i class="fa fa-dot-circle-o text-info"></i> @lang("lang.interviewed")'+
                                                 '</a>'+
                                             '</div>'+
                                         '</div>'+
@@ -780,11 +780,13 @@
                                     '</td>'+
                                     '<td>'+(staff.remark ? staff.remark: "")+'</td>'+
                                 '</tr>';
+                                num ++;
                             }else if (staff.short_list == 2) {
+                               
                                 tr_not_list += '<tr class="odd">'+
-                                    '<td class="ids">'+(staff.id)+'</td>'+
-                                    '<td >'+(staff.name_kh)+' </td>'+
-                                    '<td >'+(staff.name_en)+'</td>'+
+                                    '<td class="ids stuck-scroll-3">'+(num)+'</td>'+
+                                    '<td class="stuck-scroll-3">'+(staff.name_kh)+' </td>'+
+                                    '<td class="stuck-scroll-3">'+(staff.name_en)+'</td>'+
                                     '<td >'+(staff.option.name_english)+'</td>'+
                                     '<td >'+(staff.position.name_english)+'</td>'+
                                     '<td >'+(staff.branch.branch_name_en)+'</td>'+
@@ -793,82 +795,123 @@
                                     '</td>'+
                                     '<td >'+
                                         '<div class="dropdown action-label">'+
-                                            '<a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">'+
-                                                (tag_i)+ '<span>'+(text_status)+'</span>'+
-                                            '</a>'+
+                                            (dropdown_menu)+
                                             '<div class="dropdown-menu dropdown-menu-right" id="btn-status">'+
-                                                '<a class="dropdown-item" data-emp-id="'+(staff.id)+'"  data-id="2" href="#">'+
-                                                    '<i class="fa fa-dot-circle-o text-warning"></i> Shortlisted'+
+                                                '<a class="dropdown-item" data-emp-id="'+(staff.id)+'"  data-id="2" data-id-short="non-shortlist" href="#">'+
+                                                    '<i class="fa fa-dot-circle-o text-warning"></i> @lang("lang.shortlisted")'+
                                                 '</a>'+
                                             '</div>'+
-                                        '</div>'+
+                                        '</div>'
                                     '</td>'+
                                     '<td>'+(staff.remark ? staff.remark: "")+'</td>'+
                                 '</tr>';
+                                num ++;
                             }
                         });
-                    }else if (btn_tab == 3) {
+                    }
+                    if (status_tab == 6) {
+                        let num =1;
+                        datas.map((staff_result) => {
+                            let interview_result = "";
+                            if (staff_result.interviewed_result == "2") {
+                                interview_result = "@lang('lang.failed')";
+                            }else if (staff_result.interviewed_result == "5") {
+                                interview_result = "@lang('lang.high_exected_salary')";
+                            }else
+                            if (staff_result.interviewed_result == "6") {
+                                interview_result = "@lang('lang.rejected_offered')";
+                            }else if(staff_result.interviewed_result == "7"){
+                                interview_result = '<span class="badge bg-inverse-danger">@lang("lang.black_list")</snap>'
+                            }else{
+                                interview_result = "No";
+                            };
+                            let status_show_failed = "";
+                            let interviewed_date = staff_result.interviewed_date ? moment(staff_result.interviewed_date).format('MMM-D-YYYY') : "";
+                            if (staff_result.interviewed_result == "5") {
+                                let dropdown_menu = '<a class="btn btn-white btn-sm btn-rounded" href="#">'+
+                                                    '<i class="fa fa-dot-circle-o text-info"></i><span>@lang("lang.interviewed")</span>'+
+                                                '</a>';
+                                if (is_update == 1) {
+                                    dropdown_menu =  '<a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">'+
+                                                    '<i class="fa fa-dot-circle-o text-info"></i><span>@lang("lang.interviewed")</span>'+
+                                                '</a>';
+                                }
+                                status_show_failed = '<div class="dropdown action-label">'+
+                                           (dropdown_menu)+
+                                            '<div class="dropdown-menu dropdown-menu-right" id="btn-status">'+
+                                                '<a class="dropdown-item" data-emp-id="'+(staff_result.id)+'"  data-id="6" data-status="'+(staff_result.status)+'" href="#">'+
+                                                    '<i class="fa fa-dot-circle-o text-info"></i> @lang("lang.interviewed")'+
+                                                '</a>'+
+                                            '</div>'+
+                                        '</div>';
+                            }else {
+                                status_show_failed = interview_result;
+                            }
+                            tr_failed += '<tr class="odd">'+
+                                '<td class="ids stuck-scroll-3">'+(num)+'</td>'+
+                                '<td class="stuck-scroll-3">'+(staff_result.name_kh )+'</td>'+
+                                '<td class="stuck-scroll-3">'+(staff_result.name_en)+'</td>'+
+                                '<td >'+(staff_result.option.name_english)+'</td>'+
+                                '<td >'+(staff_result.position.name_english)+'</td>'+
+                                '<td >'+(staff_result.branch.branch_name_en)+'</td>'+
+                                '<td >'+(interviewed_date)+'</td>'+
+                                '<td >'+(interview_result)+'</td>'+
+                                '<td >'+(status_show_failed)+'</td>'+
+                                '<td >'+(staff_result.remark ? staff_result.remark: "")+'</td>'+
+                            '</tr>';
+                            num ++;
+                        })
+                    }
+                    if (btn_tab == 3) {
+                        let num = 1;
                         datas.map((staff_result) => {
                             let text_status = "";
                             let tag_i = "";
                             let interview_result = "";
                             if (staff_result.interviewed_result == 1) {
-                                interview_result = "Passed";
-                            }else
-                            if (staff_result.interviewed_result == "2") {
-                                interview_result = "Failed";
-                            }else
-                            if (staff_result.interviewed_result == "3") {
-                                interview_result = "Waiting";
-                            }else
-                            if (staff_result.interviewed_result == "4") {
-                                interview_result = "Pending";
-                            }else
-                            if (staff_result.interviewed_result == "5") {
-                                interview_result = "High Exected Salary";
-                            }else
-                            if (staff_result.interviewed_result == "6") {
-                                interview_result = "Rejected Offered";
-                            }else if(staff_result.interviewed_result == "7"){
-                                interview_result = "Black list";
-                            }else{
-                                interview_result = "No";
-                            };
+                                interview_result = "@lang('lang.passed')";
+                            }else if (staff_result.interviewed_result == "3") {
+                                interview_result = "@lang('lang.waiting')";
+                            }else if (staff_result.interviewed_result == "4") {
+                                interview_result = "@lang('lang.pending')";
+                            }
 
                             if(staff_result.status =='3') {
-                                text_status = " Interviewed";
+                                text_status = " @lang('lang.interviewed')";
                                 tag_i = '<i class="fa fa-dot-circle-o text-info"></i>'
                             }else if (staff_result.status =='4') {
-                                text_status = "Signed Contract";
+                                text_status = "@lang('lang.signed_contract')";
                                 tag_i = '<i class="fa fa-dot-circle-o text-success"></i>'
                             };
                             let status_show = "";
-                            if (staff_result.interviewed_result == 1 || staff_result.interviewed_result == 3 || staff_result.interviewed_result == 4 || staff_result.interviewed_result == 5) {
-                                let complete = '';
-                                if (staff_result.interviewed_result == 1) {
-                                    complete = '<a class="dropdown-item" data-emp-id="'+(staff_result.id)+'" data-id="4" href="#">'+
-                                                '<i class="fa fa-dot-circle-o text-success"></i> Complete'+
-                                            '</a>';
-                                }
-                                status_show = '<div class="dropdown action-label">'+
-                                                '<a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">'+
-                                                    (tag_i)+ '<span>'+ (text_status)+'</span>'+
-                                                '</a>'+
-                                                '<div class="dropdown-menu dropdown-menu-right" id="btn-status">'+
-                                                    '<a class="dropdown-item" data-emp-id="'+(staff_result.id)+'"  data-id="3" data-status="'+(staff_result.status)+'" href="#">'+
-                                                        '<i class="fa fa-dot-circle-o text-info"></i> Interviewed'+
-                                                    '</a>'+
-                                                   (complete)+
-                                                '</div>'+
-                                            '</div>';
-                            }else{
-                                status_show = '<span class="badge bg-inverse-danger">'+ interview_result+'</snap>';   
-                            }
+                            let complete = '';
                             let interviewed_date = staff_result.interviewed_date ? moment(staff_result.interviewed_date).format('MMM-D-YYYY') : "";
+                            if (staff_result.interviewed_result == 1) {
+                                complete = '<a class="dropdown-item" data-emp-id="'+(staff_result.id)+'" data-id="4" href="#">'+
+                                            '<i class="fa fa-dot-circle-o text-success"></i> @lang("lang.complete")'+
+                                        '</a>';
+                            }
+                            let dropdown_menu = '<a class="btn btn-white btn-sm btn-rounded" href="#">'+
+                                                    (tag_i)+ '<span>'+(text_status)+'</span>'+
+                                                '</a>';
+                            if (is_update == 1) {
+                                dropdown_menu = '<a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">'+
+                                                (tag_i)+ '<span>'+ (text_status)+'</span>'+
+                                            '</a>';
+                            }
+                            status_show = '<div class="dropdown action-label">'+
+                                            (dropdown_menu)+
+                                            '<div class="dropdown-menu dropdown-menu-right" id="btn-status">'+
+                                                '<a class="dropdown-item" data-emp-id="'+(staff_result.id)+'"  data-id="3" data-status="'+(staff_result.status)+'" href="#">'+
+                                                    '<i class="fa fa-dot-circle-o text-info"></i> @lang("lang.interviewed")'+
+                                                '</a>'+
+                                                (complete)+
+                                            '</div>'+
+                                        '</div>';
                             tr_re += ' <tr class="odd">'+
-                                '<td class="ids">'+(staff_result.id)+'</td>'+
-                                '<td >'+(staff_result.name_kh )+'</td>'+
-                                '<td >'+(staff_result.name_en)+'</td>'+
+                                '<td class="ids stuck-scroll-3">'+(num)+'</td>'+
+                                '<td class="stuck-scroll-3">'+(staff_result.name_kh )+'</td>'+
+                                '<td class="stuck-scroll-3">'+(staff_result.name_en)+'</td>'+
                                 '<td >'+(staff_result.option.name_english)+'</td>'+
                                 '<td >'+(staff_result.position.name_english)+'</td>'+
                                 '<td >'+(staff_result.branch.branch_name_en)+'</td>'+
@@ -877,26 +920,25 @@
                                 '<td >'+(status_show)+'</td>'+
                                 '<td >'+(staff_result.remark ? staff_result.remark: "")+'</td>'+
                             '</tr>';
-                        });
-                    }else if (btn_tab == 4 || btn_tab == "Cancel") {
+                            num ++;
+                        })
+                    };
+                    if (btn_tab == 4 || btn_tab == "Cancel") {
+                        let num  =1;
                         datas.map((staff_result) => {
                             let interview_result = "";
                             if (staff_result.interviewed_result == 1) {
-                                interview_result = "Passed";
+                                interview_result = "@lang('lang.passed')";
                             }
                             let join_date = staff_result.join_date ? moment(staff_result.join_date).format('MMM-D-YYYY') : "";
                             let contract_date = staff_result.contract_date ? moment(staff_result.contract_date).format('MMM-D-YYYY') : "";
                             let updated_at =  moment(staff_result.updated_at).format('MMM-D-YYYY');
-                            // let disabled = "";
-                            // if (!staff_result.id_card_number) {
-                            //     disabled = "disabled";
-                            // }
                             if (staff_result.status == "Cancel") {
                                 action = "";
                                 tr_ct_cancel += ' <tr class="odd">'+
-                                    '<td class="ids">'+(staff_result.id)+'</td>'+
-                                    '<td class="name_kh" >'+(staff_result.name_kh )+'</td>'+
-                                    '<td class="name_en">'+(staff_result.name_en)+'</td>'+
+                                    '<td class="ids stuck-scroll-3">'+(num)+'</td>'+
+                                    '<td class="name_kh stuck-scroll-3" >'+(staff_result.name_kh )+'</td>'+
+                                    '<td class="name_en stuck-scroll-3">'+(staff_result.name_en)+'</td>'+
                                     '<td class="gender_name_english"><input type="text" class="gender_id" data-gender="'+(staff_result.gender)+'" hidden>'+(staff_result.option.name_english)+'</td>'+
                                     '<td class="position" ><input type="text" class="position_id" data-postion="'+(staff_result.position_applied)+'" hidden>'+(staff_result.position.name_english)+'</td>'+
                                     '<td class="branch"><input type="text" class="branch_id" data-branch="'+(staff_result.location_applied)+'" hidden>'+(staff_result.branch.branch_name_en)+'</td>'+
@@ -907,11 +949,48 @@
                                     '<td ><span class="badge bg-inverse-danger">'+(staff_result.status)+'</snap></td>'+
                                     '<td >'+(updated_at)+'</td>'+
                                 '</tr>';
+                                num ++;
                             }else{
+                                let dataAprove = false;
+                                if (staff_result.id_card_number && staff_result.position_type && staff_result.department_id) {
+                                    dataAprove = true;
+                                }
+                                let dropdown_action = "";
+                                let cancel = "";
+                                let approve = "";
+                                let print = "";
+                                if (is_print == 1 || is_approve == 1 || is_cancel == 1) {
+                                    if (is_print == 1 ) {
+                                        print = '<a class="dropdown-item btn_print_signed_contract" href="#" data-print-status="4" data-id="'+(staff_result.id)+'">'+
+                                                    '<i class="fa fa-print fa-lg m-r-5"></i> @lang("lang.print")'+
+                                                '</a>';
+                                    }
+                                    if (is_approve == 1) {
+                                        approve =  '<a class="btn btn-sm dropdown-item btn_approve" href="#" data-id-card="'+(dataAprove)+'" data-id="'+(staff_result.id)+'">'+
+                                                    '<i class="fa fa-dot-circle-o text-success"></i>'+
+                                                    '<span> @lang("lang.approve")</span>'+
+                                                '</a>';
+                                    }
+                                    if (is_cancel) {
+                                        cancel = '<a class="dropdown-item btn_cancel text-danger" href="#" data-id="'+(staff_result.id)+'">'+
+                                                    '  <span aria-hidden="true">&times;</span> @lang("lang.cancel")'+
+                                                '</a>';
+                                    }
+                                    dropdown_action = '<div class="dropdown dropdown-action">'+
+                                            '<a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">'+
+                                                '<i class="material-icons">more_vert</i>'+
+                                            '</a>'+
+                                            '<div class="dropdown-menu dropdown-menu-right">'+
+                                                (print)+
+                                                (approve)+
+                                                (cancel)+
+                                            '</div>'+
+                                        '</div>';
+                                }
                                 tr_ct += ' <tr class="odd">'+
-                                    '<td class="ids">'+(staff_result.id)+'</td>'+
-                                    '<td class="name_kh" >'+(staff_result.name_kh )+'</td>'+
-                                    '<td class="name_en">'+(staff_result.name_en)+'</td>'+
+                                    '<td class="ids stuck-scroll-3">'+(num)+'</td>'+
+                                    '<td class="name_kh stuck-scroll-3" >'+(staff_result.name_kh )+'</td>'+
+                                    '<td class="name_en stuck-scroll-3">'+(staff_result.name_en)+'</td>'+
                                     '<td class="gender_name_english"><input type="text" class="gender_id" data-gender="'+(staff_result.gender)+'" hidden>'+(staff_result.option.name_english)+'</td>'+
                                     '<td class="position" ><input type="text" class="position_id" data-postion="'+(staff_result.position_applied)+'" hidden>'+(staff_result.position.name_english)+'</td>'+
                                     '<td class="branch"><input type="text" class="branch_id" data-branch="'+(staff_result.location_applied)+'" hidden>'+(staff_result.branch.branch_name_en)+'</td>'+
@@ -921,36 +1000,23 @@
                                     '<td >'+(staff_result.remark ? staff_result.remark: "")+'</td>'+
                                     '<td>'+
                                         '<input type="text" class="phone_number" data-phone-number="'+(staff_result.contact_number)+'" hidden>'+
-                                        '<div class="dropdown dropdown-action">'+
-                                            '<a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">'+
-                                                '<i class="material-icons">more_vert</i>'+
-                                            '</a>'+
-                                            '<div class="dropdown-menu dropdown-menu-right">'+
-                                                '<a class="dropdown-item btn_print_signed_contract" href="#" data-print-status="4" data-id="'+(staff_result.id)+'">'+
-                                                    '<i class="fa fa-print fa-lg m-r-5"></i> Print'+
-                                                '</a>'+
-                                                '<a class="btn btn-sm dropdown-item btn_approve" href="#" data-id-card="'+(staff_result.id_card_number)+'" data-id="'+(staff_result.id)+'">'+
-                                                    '<i class="fa fa-dot-circle-o text-success"></i>'+
-                                                    '<span> Approve</span>'+
-                                                '</a>'+
-                                                '<a class="dropdown-item btn_cancel text-danger" href="#" data-id="'+(staff_result.id)+'">'+
-                                                    '  <span aria-hidden="true">&times;</span> Cancel'+
-                                                '</a>'+
-                                            '</div>'+
-                                        '</div>'+
+                                        (dropdown_action)+
                                     '</td>'+
                                 '</tr>';
+                                num ++;
                             }
                         });
                     }
                 }else {
-                    var tr = '<tr><td colspan=12 align="center">No record to display</td></tr>';
-                    var tr_not_list = '<tr><td colspan=9 align="center">No record to display</td></tr>';
-                    var tr_re = '<tr><td colspan=10 align="center">No record to display</td></tr>';
-                    var tr_ct = '<tr><td colspan=11 align="center">No record to display</td></tr>';
+                    var tr = '<tr><td colspan=13 align="center">@lang("lang.no_record_to_display")</td></tr>';
+                    var tr_not_list = '<tr><td colspan=9 align="center">@lang("lang.no_record_to_display")</td></tr>';
+                    var tr_failed = '<tr><td colspan=10 align="center">@lang("lang.no_record_to_display")</td></tr>';
+                    var tr_re = '<tr><td colspan=10 align="center">@lang("lang.no_record_to_display")</td></tr>';
+                    var tr_ct = '<tr><td colspan=11 align="center">@lang("lang.no_record_to_display")</td></tr>';
                 }
                 $(".tbl-short-list tbody").html(tr);
                 $(".tbl-not-short-list tbody").html(tr_not_list);
+                $(".tbl-failed tbody").html(tr_failed);
                 $(".tbl-result tbody").html(tr_re);
                 $(".tbl-signed-contract tbody").html(tr_ct);
                 $(".tbl-signed-contract_cancel tbody").html(tr_ct_cancel);

@@ -47,9 +47,6 @@ class MotorRentelController extends Controller
                 'users.number_employee',
                 'users.branch_id',
             )
-            ->when(Auth::user()->RolePermission != "Administrator", function ($query, $rolePermission) {
-                $query->where('motor_rentels.employee_id', Auth::user()->id);
-            })
             ->when($request->employee_id, function ($query, $employee_id) {
                 $query->where('users.number_employee', 'LIKE', '%'.$employee_id.'%');
             })
@@ -78,7 +75,7 @@ class MotorRentelController extends Controller
     {
         $monthly = Carbon::now()->format('m');
         $currentYear = Carbon::now()->format('Y');
-        $data = MotorRentalDetail::with('user')
+        $data = MotorRentalDetail::with('motorrental')->with('user')
             ->whereMonth('created_at', $monthly)
             ->whereYear('created_at', $currentYear)
             ->orderBy('id', 'desc')
@@ -108,10 +105,18 @@ class MotorRentelController extends Controller
     {
         try {
             $data = $request->all();
+            $data['status'] = 1;
             $data['created_by'] = Auth::user()->id;
-            MotorRentel::create($data);
+            $motor = MotorRentel::create($data);
             Toastr::success('Created successfully.', 'Success');
-            return redirect()->back();
+            $getData = MotorRentel::with('user')->where("id", $motor->id)->first();
+            if ($request->status_print) {
+                return response()->json([
+                    'success' => $getData,
+                ]);
+            }else{
+                return redirect()->back();
+            }
             DB::commit();
         } catch (\Throwable $exp) {
             DB::rollback();
@@ -122,27 +127,132 @@ class MotorRentelController extends Controller
     public function storePay(Request $request)
     {
         try {
+
+            $month = Carbon::now()->month;
+            $year = Carbon::now()->year;
+            // Get the first day of the month
+            $first_day_of_month = Carbon::create($year, $month, 1)->startOfMonth();
+            $last_day_of_month = Carbon::now()->lastOfMonth()->format('Y-m-d');
+
+            // count current last day of the month
+            $totalLastDayofMonth = Carbon::now()->daysInMonth;
             $motorRentals = MotorRentel::get();
             foreach ($motorRentals as $key => $motor) {
-                $data = [
-                    'employee_id' => $motor->employee_id,
-                    'number_plate' => $motor->number_plate,
-                    'gasoline_price_per_liter' => $request->gasoline_price_per_liter,
-                    'start_date' => $motor->start_date,
-                    'end_date' => $motor->end_date,
-                    'product_year' => $motor->product_year,
-                    'expired_year' => $motor->expired_year,
-                    'shelt_life' => $motor->shelt_life,
-                    'total_gasoline' => $motor->total_gasoline,
-                    'total_work_day' => $motor->total_work_day,
-                    'price_engine_oil' => $motor->price_engine_oil,
-                    'price_motor_rentel' => $motor->price_motor_rentel,
-                    'taplab_rentel' => $motor->taplab_rentel,
-                    'price_taplab_rentel' => $motor->price_taplab_rentel,
-                    'tax_rate' => $request->tax_rate,
-                    'created_by' => Auth::user()->id
-                ];
-                MotorRentalDetail::create($data);
+                // logic pay by start date
+                $currentMonth1 = Carbon::create($motor->start_date)->format('Y-m');
+                $currentMonth2 = Carbon::create($year,$month)->format('Y-m');
+                if ($motor->status == 1 && $currentMonth1 == $currentMonth2) {
+                    $target_start_date = Carbon::create($motor->start_date);
+                    $last_day = Carbon::create($last_day_of_month);
+                    $payStartDate = $last_day->diffInDays($target_start_date)+1;
+                    $amountMotorPriceInDay = $motor->price_motor_rentel / $totalLastDayofMonth;
+                    $amountEngineOilInDay = $motor->price_engine_oil / $totalLastDayofMonth;
+                    $amountTaplabRentelInDay = $motor->price_taplab_rentel / $totalLastDayofMonth;
+                    $amount_price_motor_rentel = $amountMotorPriceInDay * $payStartDate;
+                    $amount_price_engine_oil = $amountEngineOilInDay * $payStartDate;
+                    $amount_price_taplab_rentel = $amountTaplabRentelInDay * $payStartDate;
+                    $data = [
+                        'employee_id' => $motor->employee_id,
+                        'motor_rental_id' => $motor->id,
+                        'start_date' => $motor->start_date,
+                        'end_date' => $motor->end_date,
+                        'product_year' => $motor->product_year,
+                        'expired_year' => $motor->expired_year,
+                        'shelt_life' => $motor->shelt_life,
+                        'number_plate' => $motor->number_plate,
+                        'motorcycle_brand' => $motor->motorcycle_brand,
+                        'category' => $motor->category,
+                        'body_number' => $motor->body_number,
+                        'engine_number' => $motor->engine_number,
+                        'total_gasoline' => $motor->total_gasoline,
+                        'total_work_day' => $motor->total_work_day,
+                        'price_engine_oil' => $motor->price_engine_oil,
+                        'price_motor_rentel' => $motor->price_motor_rentel,
+                        'taplab_rentel' => $motor->taplab_rentel,
+                        'price_taplab_rentel' => $motor->price_taplab_rentel,
+                        'resigned_date' => $motor->resigned_date,
+                        'gasoline_price_per_liter' => $request->gasoline_price_per_liter,
+                        'amount_price_motor_rentel'=> $amount_price_motor_rentel,
+                        'amount_price_engine_oil' => $amount_price_engine_oil,
+                        'amount_price_taplab_rentel' => $amount_price_taplab_rentel,
+                        'tax_rate' => $request->tax_rate,
+                        'created_by' => Auth::user()->id
+                    ];
+                    MotorRentalDetail::create($data);
+                }
+                // Logic pay resigned date
+                $resignedMonth1 = Carbon::create($motor->resigned_date)->format('Y-m');
+                $resignedMonth2 = Carbon::create($year,$month)->format('Y-m');
+                if ($motor->status == 0 &&  $resignedMonth1 == $resignedMonth2) {
+                    $target_date = Carbon::create($first_day_of_month);
+                    $today = Carbon::create($motor->resigned_date);
+                    $number_of_days = $today->diffInDays($target_date)+1;
+                    $resignedAmountMotorPriceInDay = $motor->price_motor_rentel / $totalLastDayofMonth;
+                    $resignedAmountEngineOilInDay = $motor->price_engine_oil / $totalLastDayofMonth;
+                    $resignedAmountTaplabRentelInDay = $motor->price_taplab_rentel / $totalLastDayofMonth;
+                    $resignedAmount_price_motor_rentel = $resignedAmountMotorPriceInDay * $number_of_days;
+                    $resignedAmount_price_engine_oil = $resignedAmountEngineOilInDay * $number_of_days;
+                    $resignedAmount_price_taplab_rentel = $resignedAmountTaplabRentelInDay * $number_of_days;
+                    $data = [
+                        'employee_id' => $motor->employee_id,
+                        'motor_rental_id' => $motor->id,
+                        'start_date' => $motor->start_date,
+                        'end_date' => $motor->end_date,
+                        'product_year' => $motor->product_year,
+                        'expired_year' => $motor->expired_year,
+                        'shelt_life' => $motor->shelt_life,
+                        'number_plate' => $motor->number_plate,
+                        'motorcycle_brand' => $motor->motorcycle_brand,
+                        'category' => $motor->category,
+                        'body_number' => $motor->body_number,
+                        'engine_number' => $motor->engine_number,
+                        'total_gasoline' => $motor->total_gasoline,
+                        'total_work_day' => $motor->total_work_day,
+                        'price_engine_oil' => $motor->price_engine_oil,
+                        'price_motor_rentel' => $motor->price_motor_rentel,
+                        'taplab_rentel' => $motor->taplab_rentel,
+                        'price_taplab_rentel' => $motor->price_taplab_rentel,
+                        'resigned_date' => $motor->resigned_date,
+                        'gasoline_price_per_liter' => $request->gasoline_price_per_liter,
+                        'amount_price_motor_rentel'=> $resignedAmount_price_motor_rentel,
+                        'amount_price_engine_oil' => $resignedAmount_price_engine_oil,
+                        'amount_price_taplab_rentel' => $resignedAmount_price_taplab_rentel,
+                        'tax_rate' => $request->tax_rate,
+                        'created_by' => Auth::user()->id
+                    ];
+                    MotorRentalDetail::create($data);
+                }
+                //Logic pay old motor start_date < current month
+                if ($motor->status == 1 && $currentMonth1 < $currentMonth2) {
+                    $data = [
+                        'employee_id' => $motor->employee_id,
+                        'motor_rental_id' => $motor->id,
+                        'start_date' => $motor->start_date,
+                        'end_date' => $motor->end_date,
+                        'product_year' => $motor->product_year,
+                        'expired_year' => $motor->expired_year,
+                        'shelt_life' => $motor->shelt_life,
+                        'number_plate' => $motor->number_plate,
+                        'motorcycle_brand' => $motor->motorcycle_brand,
+                        'category' => $motor->category,
+                        'body_number' => $motor->body_number,
+                        'engine_number' => $motor->engine_number,
+                        'total_gasoline' => $motor->total_gasoline,
+                        'total_work_day' => $motor->total_work_day,
+                        'price_engine_oil' => $motor->price_engine_oil,
+                        'price_motor_rentel' => $motor->price_motor_rentel,
+                        'taplab_rentel' => $motor->taplab_rentel,
+                        'price_taplab_rentel' => $motor->price_taplab_rentel,
+                        'resigned_date' => $motor->resigned_date,
+                        'gasoline_price_per_liter' => $request->gasoline_price_per_liter,
+                        'amount_price_motor_rentel'=> $motor->price_motor_rentel,
+                        'amount_price_engine_oil' => $motor->price_engine_oil,
+                        'amount_price_taplab_rentel' => $motor->price_taplab_rentel,
+                        'tax_rate' => $request->tax_rate,
+                        'created_by' => Auth::user()->id
+                    ];
+                    MotorRentalDetail::create($data);
+                }
             }
             Toastr::success('Created successfully.', 'Success');
             return redirect()->back();
@@ -162,7 +272,7 @@ class MotorRentelController extends Controller
     public function edit(Request $request)
     {
         $data = MotorRentel::where("id", $request->id)->first();
-        $employee = User::all();
+        $employee = User::whereIn("emp_status", ["Probation", "1", "2", "10"])->get();
         return response()->json([
             'success' => $data,
             'employee' => $employee,
@@ -190,29 +300,34 @@ class MotorRentelController extends Controller
             foreach ($allDataInSheet as $csv) {
                 $i++;
                 if ($i != 1) {
-                    $start_date = Carbon::createFromDate($csv[2])->format('Y-m-d'); // 2023-04-19
-                    $end_date = Carbon::createFromDate($csv[3])->format('Y-m-d'); // 2023-04-19
                     $employee = User::where("number_employee", $csv[0])->first();
-                    $arr = [
-                        'employee_id'     => $employee->id,
-                        'gasoline_price_per_liter'  => $csv[1],
-                        'start_date'  => $start_date,
-                        'end_date'  => $end_date,
-                        'product_year'  => $csv[4],
-                        'expired_year'  => $csv[5],
-                        'shelt_life'  => $csv[6],
-                        'number_plate'  => $csv[7],
-                        'total_gasoline'  => $csv[8],
-                        'total_work_day'  => $csv[9],
-                        'price_engine_oil'  => $csv[10],
-                        'price_motor_rentel'  => $csv[11],
-                        'taplab_rentel'  => $csv[12],
-                        'price_taplab_rentel'  => $csv[13],
-                        'tax_rate'  => $csv[14],
-                        'created_by'        => $userID,
-                        'created_at'       => Carbon::now(),
-                    ];
-                    DB::table('motor_rentels')->insert($arr);
+                    $start_date = Carbon::createFromDate($csv[1])->format('Y-m-d'); // 2023-04-19
+                    $end_date = Carbon::createFromDate($csv[2])->format('Y-m-d'); // 2023-04-19
+                    if ($employee) {
+                        $arr = [
+                            'employee_id'     => $employee->id,
+                            'start_date'  => $start_date,
+                            'end_date'  => $end_date,
+                            'product_year'  => $csv[3],
+                            'expired_year'  => $csv[4],
+                            'shelt_life'  => $csv[5],
+                            'number_plate'  => $csv[6],
+                            'motorcycle_brand'=> $csv[7],
+                            'category'=> $csv[8],
+                            'body_number'=> $csv[9],
+                            'engine_number'=> $csv[10],
+                            'total_gasoline'  => $csv[11],
+                            'total_work_day'  => $csv[12],
+                            'price_engine_oil'  => $csv[13],
+                            'price_motor_rentel'  => $csv[14],
+                            'taplab_rentel'  => $csv[15],
+                            'price_taplab_rentel'  => $csv[16],
+                            'status' => 1,
+                            'created_by'        => $userID,
+                            'created_at'       => Carbon::now(),
+                        ];
+                        DB::table('motor_rentels')->insert($arr);
+                    }
                 }
             }
             return 1;
@@ -233,7 +348,11 @@ class MotorRentelController extends Controller
         try {
             $dataUpdate = [
                 'employee_id' => $request->employee_id,
-                // 'gasoline_price_per_liter' => $request->gasoline_price_per_liter,
+                'number_plate' => $request->number_plate,
+                'motorcycle_brand' => $request->motorcycle_brand,
+                'category' => $request->category,
+                'body_number' => $request->body_number,
+                'engine_number' => $request->engine_number,
                 'start_date' => $request->start_date,
                 'end_date' => $request->end_date,
                 'product_year' => $request->product_year,
@@ -245,12 +364,18 @@ class MotorRentelController extends Controller
                 'price_motor_rentel' => $request->price_motor_rentel,
                 'taplab_rentel' => $request->taplab_rentel,
                 'price_taplab_rentel' => $request->price_taplab_rentel,
-                // 'tax_rate' => $request->tax_rate,
                 'updated_by' => Auth::user()->id
             ];
             MotorRentel::where('id', $request->id)->update($dataUpdate);
             Toastr::success('Updated successfully.', 'Success');
-            return redirect()->back();
+            $getData = MotorRentel::with('user')->where("id", $request->id)->first();
+            if ($request->status_print) {
+                return response()->json([
+                    'success' => $getData,
+                ]);
+            }else{
+                return redirect()->back();
+            }
             DB::commit();
         } catch (\Exception $e) {
             DB::rollback();
@@ -259,6 +384,21 @@ class MotorRentelController extends Controller
         }
     }
 
+    public function processing(Request $request) {
+        try {
+            MotorRentel::where('id',$request->id)->update([
+                'status' => $request->status,
+                'resigned_date' => $request->resigned_date,
+            ]);
+            DB::commit();
+            return response()->json([
+                'message' => 'The process has been successfully.'
+            ]);
+        } catch (\Exception $exp) {
+            DB::rollBack();
+            return response()->json(['message' => $exp->getMessage()], 500);
+        }
+    }
     /**
      * Remove the specified resource from storage.
      *

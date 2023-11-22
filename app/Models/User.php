@@ -43,6 +43,10 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'number_employee',
+        'last_name_kh',
+        'first_name_kh',
+        'last_name_en',
+        'first_name_en',
         'employee_name_kh',
         'employee_name_en',
         'email',
@@ -50,6 +54,7 @@ class User extends Authenticatable
         'basic_salary',
         'salary_increas',
         'total_current_salary',
+        'total_severancey_pay',
         'phone_allowance',
         'password',
         'phone',
@@ -64,7 +69,9 @@ class User extends Authenticatable
         'gender',
         'date_of_birth',
         'id_card_number',
+        'id_number_nssf',
         'nationality',
+        'ethnicity',
         'date_of_commencement',
         'guarantee_letter',
         'employment_book',
@@ -72,6 +79,9 @@ class User extends Authenticatable
         'identity_number',
         'issue_date',
         'issue_expired_date',
+        'type_of_employees_nssf',
+        'spouse_nssf',
+        'status_nssf',
         'current_province',
         'current_district',
         'current_commune',
@@ -90,6 +100,8 @@ class User extends Authenticatable
         'marital_status',
         'fdc_date',
         'fdc_end',
+        'severance_pay_date',
+        'udc_end_date',
         'resign_date',
         'resign_reason',
         'remark',
@@ -100,7 +112,9 @@ class User extends Authenticatable
         'users_permission',
         'status',
         'emp_status',
+        'p_status',
         'is_loan',
+        'type',
         'created_by',
         'updated_by',
     ];
@@ -149,6 +163,10 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Branchs::class ,'branch_id');
     }
+    public function bank()
+    {
+        return $this->belongsTo(Bank::class ,'bank_name');
+    }
     public function resignStatus(){
         return $this->belongsTo(Option::class,'resign_reason', 'id');
     }
@@ -171,6 +189,13 @@ class User extends Authenticatable
     }
     public function gender(){
         return $this->belongsTo(Option::class,'gender','id');
+    }
+    public function employeeGender(){
+        return $this->belongsTo(Option::class,'gender','id');
+    }
+    // total child
+    public function totalChild(){
+        return $this->hasMany(ChildrenInfor::class,'employee_id','id');
     }
 
     public function banks(){
@@ -220,7 +245,7 @@ class User extends Authenticatable
     }
 
     public function getRolePermissionAttribute(){
-        return optional($this->role)->name;
+        return optional($this->role)->role_type;
     }
 
     public function setGuaranteeLetterAttribute($value)
@@ -250,17 +275,20 @@ class User extends Authenticatable
         return asset($this->getUploadImage($this->employment_book, 'original', 'default_user'));
     }
 
+    public function getEmployeeNameAttribute(){
+        return Helper::getLang() == 'en' ? $this->employee_name_en : $this->employee_name_kh;
+    }
     public function getEmployeePositionAttribute(){
-        return optional($this->position)->name_english;
+        return (Helper::getLang() == 'en') ? optional($this->position)->name_english : optional($this->position)->name_khmer;
     }
     public function getEmployeeDepartmentAttribute(){
-        return optional($this->department)->name_khmer;
+        return (Helper::getLang() == 'en') ? optional($this->department)->name_english : optional($this->department)->name_khmer;
     }
     public function getEmployeeGenderAttribute(){
         $data = Option::where('type','gender')->get();
         foreach($data as $item){
             if($this->gender == $item->id){
-                $Gender = $item->name_english;
+                $Gender = Helper::getLang() == 'en' ? $item->name_english : $item->name_khmer;
             }
         }
         return $Gender ?? "";
@@ -269,7 +297,7 @@ class User extends Authenticatable
         $data = Option::where('type','identity_type')->get();
         foreach($data as $item){
             if($this->identity_type == $item->id){
-                $IdentityType = $item->name_english;
+                $IdentityType = Helper::getLang() == 'en' ? $item->name_english : $item->name_khmer;
             }
         }
         return $IdentityType ?? "";
@@ -278,16 +306,7 @@ class User extends Authenticatable
         $data = Option::where('type','position_type')->get();
         foreach($data as $item){
             if($this->position_type == $item->id){
-                $positionType = $item->name_english;
-            }
-        }
-        return $positionType ?? "";
-    }
-    public function getEmployeeIsLoanAttribute(){
-        $data = Option::where('type','loan')->get();
-        foreach($data as $item){
-            if($this->is_loan == $item->id){
-                $positionType = $item->name_english;
+                $positionType = Helper::getLang() == 'en' ? $item->name_english : $item->name_khmer;
             }
         }
         return $positionType ?? "";
@@ -301,15 +320,25 @@ class User extends Authenticatable
         }
         return $resignReason ?? "";
     }
+    public function getEmployeeMaritalStatusAttribute(){
+        $data = Option::where('type','marital_status')->get();
+        foreach($data as $item){
+            if($this->marital_status == $item->id){
+                $maritalStatus = Helper::getLang() == 'en' ? $item->name_english : $item->name_khmer;
+            }
+        }
+        return $maritalStatus ?? "";
+    }
     
     public function getEmployeeBranchAttribute(){
-        return optional($this->branch)->branch_name_en;
+        return (Helper::getLang() == 'en') ? optional($this->branch)->branch_name_en : optional($this->branch)->branch_name_kh;
     }
     public function getEmployeeBranchAbbreviationsAttribute(){
         return optional($this->branch)->abbreviations;
     }
     public function getBranchAddressAttribute(){
-        return optional($this->branch)->address;
+        return (Helper::getLang() == 'en') ? optional($this->branch)->address : optional($this->branch)->address_kh;
+
     }
     public function getjoinOfDateAttribute(){
         if ($this->date_of_commencement) {
@@ -324,6 +353,11 @@ class User extends Authenticatable
     public function getFDCStartDateAttribute(){
         if ($this->fdc_date) {
             return Carbon::parse($this->fdc_date)->format('d-M-Y');
+        }
+    }
+    public function getUDCStartDateAttribute(){
+        if ($this->udc_end_date) {
+            return Carbon::parse($this->udc_end_date)->format('d-M-Y');
         }
     }
     public function getFDCEndDateAttribute(){
@@ -347,7 +381,13 @@ class User extends Authenticatable
         }
     }
 
-    //// GET Current address
+    // total child
+    public function getTotalChildAttribute(){
+       $totalChild = ChildrenInfor::where('employee_id',$this->id)->count();
+        return $totalChild;
+    }
+
+    //// GET Current address EN
     public function getFullCurrentAddressAttribute()
     {
         $houseNo = $streetNo = $provice_name = $district_name = $conmmunes_name = $villages_name = '';
@@ -360,25 +400,25 @@ class User extends Authenticatable
         $province = Province::all();
         foreach($province as $item){
             if($this->current_province == $item->code){
-                $provice_name = $item->address_en;
+                $provice_name = Helper::getLang() == 'en' ? $item->address_en : $item->address_km;
             }
         }
         $district = District::where('province_id',$this->current_province)->get();
         foreach($district as $item){
             if($this->current_district == $item->code){
-                $district_name = $item->full_name_en;
+                $district_name = Helper::getLang() == 'en' ? $item->full_name_en : $item->full_name_km;
             }
         }
         $Conmmunes = Conmmunes::where('district_id',$this->current_district)->get();
         foreach($Conmmunes as $item){
             if($this->current_commune == $item->code){
-                $conmmunes_name = $item->full_name_en;
+                $conmmunes_name = Helper::getLang() == 'en' ? $item->full_name_en : $item->full_name_km;
             }
         }
         $villages = Villages::all();
         foreach($villages as $item){
             if($this->current_village == $item->code){
-                $villages_name = $item->full_name_en;
+                $villages_name = Helper::getLang() == 'en' ? $item->full_name_en : $item->full_name_km;
             }
         }
         return $houseNo . $streetNo .$villages_name.', '.$conmmunes_name.', '.$district_name.', '.$provice_name;

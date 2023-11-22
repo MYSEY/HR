@@ -16,6 +16,7 @@
         "laravel/ui": "^4.2",
         "maatwebsite/excel": "^3.1",
         "needim/noty": "^3.1",
+        "phannaly/php-datetime-khmer": "^1.0",
         "psr/simple-cache": "^2.0",
         "rsmalc/laravel-noty": "^2.5"
     },

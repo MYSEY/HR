@@ -9,35 +9,32 @@
         <div class="page-header">
             <div class="row align-items-center">
                 <div class="col">
-                    <h3 class="page-title">Detail For Training</h3>
+                    <h3 class="page-title">@lang('lang.detail_for_training')</h3>
                     <ul class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="{{ url('/dashboad/employee') }}">Dashboard</a></li>
-                        <li class="breadcrumb-item active">Training Detail</li>
+                        <li class="breadcrumb-item"><a href="{{ url('/dashboad/employee') }}">@lang('lang.dashboard')</a></li>
+                        <li class="breadcrumb-item active">@lang('lang.training_detail')</li>
                     </ul>
                     <ul class="breadcrumb">
-                        <li class="breadcrumb-item ">Training Type: <label for="" style="color: red">{{$training->training_type == 1 ? "Internal" : "External" }}</label></li>
+                        <li class="breadcrumb-item ">@lang('lang.training_type'): <label for="" style="color: red">{{$training->training_type == 1 ? "Internal" : "External" }}</label></li>
                     </ul>
                     <ul class="breadcrumb">
-                        <li class="breadcrumb-item ">Course name: <label for="" style="color: red">{{$training->course_name}}</label></li>
+                        <li class="breadcrumb-item ">@lang('lang.course_name'): <label for="" style="color: red">{{$training->course_name}}</label></li>
                     </ul>
                     <ul class="breadcrumb">
-                        <li class="breadcrumb-item ">Time Duration: <label for="" style="color: red">
+                        <li class="breadcrumb-item ">@lang('lang.time_duration'): <label for="" style="color: red">
                             {{ \Carbon\Carbon::parse($training->start_date)->format('d-M-Y') ?? '' }}
                             -
                             {{ \Carbon\Carbon::parse($training->end_date)->format('d-M-Y') ?? '' }}
                         </label></li>
                     </ul>
                 </div>
-                {{-- <div class="col-auto float-end ms-auto">
-                    <h4 class=""><a href="{{url('/training/list')}}">Back to list</a></h4>
-                </div> --}}
                 <div class="col-auto float-end ms-auto">
                     <div class="btn-group">
-                        @if (Auth::user()->RolePermission == 'Administrator')
+                        @if (permissionAccess("20","is_print")->value == "1" )
                         <div class="btn-group btn-group-sm">
                             <button class="btn btn-white" id="btn_print">
-                                <span class="btn-text-print"><i class="fa fa-print fa-lg"></i> Print</span>
-                                <span id="btn-print-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading</span>
+                                <span class="btn-text-print"><i class="fa fa-print fa-lg"></i> @lang('lang.print')</span>
+                                <span id="btn-print-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>
                             </button>
                         </div>
                         @endif
@@ -50,7 +47,7 @@
             <div class="col-md-12 d-flex">
                 <div class="card card-table flex-fill">
                     <div class="card-header">
-                        <h3 class="card-title mb-0">Trainer</h3>
+                        <h3 class="card-title mb-0">@lang('lang.trainer')</h3>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
@@ -58,20 +55,20 @@
                                 <thead>
                                     <tr>
                                         <th>#</th>
-                                        <th>Type</th>
-                                        <th>Name kh</th>
-                                        <th>Name EN</th>
-                                        <th>Contact Number</th>
-                                        <th>Email</th>
-                                        <th>Remark</th>
-                                        <th>Created At</th>
+                                        <th>@lang('lang.type')</th>
+                                        <th>@lang('lang.name_kh')</th>
+                                        <th>@lang('lang.name_en')</th>
+                                        <th>@lang('lang.contact_number')</th>
+                                        <th>@lang('lang.email')</th>
+                                        <th>@lang('lang.remark')</th>
+                                        <th>@lang('lang.created_at')</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @if (count($trainer) > 0)
-                                        @foreach ($trainer as $item)
+                                        @foreach ($trainer as $key=>$item)
                                             <tr>
-                                                <td >{{$item->id}}</td>
+                                                <td >{{++$key}}</td>
                                                 <td >{{$item->type == 1 ? "Internal" : "External"}}</td>
                                                 <td >{{$item->type == 1 ? $item->EmployeeIn->employee_name_kh : $item->name_kh}}</td>
                                                 <td >{{$item->type == 1 ? $item->EmployeeIn->employee_name_en : $item->name_en}}</td>
@@ -91,7 +88,7 @@
             <div class="col-md-12 d-flex">
                 <div class="card card-table flex-fill">
                     <div class="card-header">
-                        <h3 class="card-title mb-0">Employee</h3>
+                        <h3 class="card-title mb-0">@lang('lang.employee')</h3>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
@@ -99,21 +96,21 @@
                                 <thead>
                                     <tr>
                                         <th>#</th>
-                                        <th>ID Card</th>
-                                        <th>Name kh</th>
-                                        <th>Name EN</th>
-                                        <th>Gender</th>
-                                        <th>Position</th>
-                                        <th>Dept/ Branch</th>
-                                        <th>Date of Employment</th>
-                                        <th>Rmark</th>
+                                        <th>@lang('lang.id_card')</th>
+                                        <th>@lang('lang.name_kh')</th>
+                                        <th>@lang('lang.name_en')</th>
+                                        <th>@lang('lang.gender')</th>
+                                        <th>@lang('lang.position')</th>
+                                        <th>@lang('lang.location')</th>
+                                        <th>@lang('lang.date_of_employment')</th>
+                                        <th>@lang('lang.remark')</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @if (count($employees) > 0)
-                                        @foreach ($employees as $item)
+                                        @foreach ($employees as $key=>$item)
                                             <tr>
-                                                <td >{{$item->id}}</td>
+                                                <td >{{++$key}}</td>
                                                 <td >{{$item->number_employee}}</td>
                                                 <td >{{$item->employee_name_kh}}</td>
                                                 <td >{{$item->employee_name_en}}</td>

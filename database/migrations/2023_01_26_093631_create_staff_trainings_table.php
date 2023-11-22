@@ -8,6 +8,7 @@ class CreateStaffTrainingsTable extends Migration
 {
     /**
      * Run the migrations.
+     * php artisan migrate:refresh --path=database/migrations/2023_01_26_093631_create_staff_trainings_table.php
      *
      * @return void
      */

@@ -1,39 +1,39 @@
-<div id="add_emp" class="modal custom-modal fade" role="dialog">
+<div id="add_emp" class="modal custom-modal fade hr-modal-select2" role="dialog" data-bs-backdrop="static">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Edit Candidate CV</h5>
+                <h5 class="modal-title">@lang('lang.edit_candidate_cv')</h5>
                 <button type="button" class="close btn-close" data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <form class="was-validated">
+                <form class="was-validated" >
                     @csrf
                     <input type="text" name="" id="candidate_id" hidden>
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="">Employee ID</label>
+                                <label class="">@lang('lang.employee_id')</label>
                                 <input type="text" class="form-control number_employee clear_data" disabled>
                                 <input type="text" class="form-control number_employee clear_data" id="number_employee" name="number_employee" hidden>
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="">Name (KH) <span class="text-danger">*</span></label>
-                                <input class="form-control employee_name_kh emp_required" type="text" id="employee_name_kh" name="employee_name_kh" required>
+                                <label class="">@lang('lang.name') (@lang('lang.kh')) <span class="text-danger">*</span></label>
+                                <input class="form-control employee_name_kh emp_required" type="text" id="employee_name_kh" name="employee_name_kh" required disabled>
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="">Name (EN) <span class="text-danger">*</span></label>
-                                <input class="form-control employee_name_en emp_required clear_data" type="text" id="employee_name_en" name="employee_name_en" required>
+                                <label class="">@lang('lang.name') (@lang('lang.en')) <span class="text-danger">*</span></label>
+                                <input class="form-control employee_name_en emp_required clear_data" type="text" id="employee_name_en" name="employee_name_en" required disabled>
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label>Gender <span class="text-danger">*</span></label>
+                                <label>@lang('lang.gender') <span class="text-danger">*</span></label>
                                 <select class="form-control form-select emp_required clear_data" name="gender" id="emp_gender">
                                 </select>
                             </div>
@@ -41,17 +41,34 @@
                     </div>
                     <div class="row">
                         <div class="col-sm-6">
-                            <div class="form-group">
-                                <label>Position <span class="text-danger">*</span></label>
-                                <select class="form-control form-select emp_required clear_data" name="position_id" id="emp_position" required>
+                            <div class="form-group hr-form-group-select2">
+                                <label>@lang('lang.position') <span class="text-danger">*</span></label>
+                                <select class="hr-select2-option emp_required clear_data" name="position_id" id="emp_position" required>
                                 </select>
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="">Position Type <span class="text-danger">*</span></label>
+                                <label class="">@lang('lang.position_type') <span class="text-danger">*</span></label>
                                 <select class="form-control emp_required clear_data" id="position_type" name="position_type" required>
-                                    <option value="">Please select position type</option>
+                                    <option value="">@lang('lang.select')</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group hr-form-group-select2">
+                                <label>@lang('lang.location') <span class="text-danger">*</span></label>
+                                <select class="hr-select2-option clear_data" name="branch_id" id="emp_branch" required>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group hr-form-group-select2">
+                                <label>@lang('lang.department') <span class="text-danger">*</span></label>
+                                <select class="hr-select2-option emp_required clear_data" id="department_id" name="department_id"  required>
+                                    {{-- <option selected disabled value="">Please select department</option> --}}
                                 </select>
                             </div>
                         </div>
@@ -59,24 +76,7 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>Branch <span class="text-danger">*</span></label>
-                                <select class="form-control form-select clear_data" name="branch_id" id="emp_branch" required>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Department <span class="text-danger">*</span></label>
-                                <select class="form-control emp_required clear_data" id="department_id" name="department_id"  required>
-                                    <option value="">Please select department</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Date Of Birth <span class="text-danger">*</span></label>
+                                <label>@lang('lang.date_of_birth') <span class="text-danger">*</span></label>
                                 <div class="cal-icon">
                                     <input class="form-control clear_data datetimepicker @error('date_of_birth') is-invalid @enderror emp_required" type="text" required id="date_of_birth" name="date_of_birth" required>
                                 </div>
@@ -84,7 +84,7 @@
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="">Join Date <span class="text-danger">*</span></label>
+                                <label class="">@lang('lang.join_date') <span class="text-danger">*</span></label>
                                 <div class="cal-icon">
                                     <input class="form-control clear_data datetimepicker date_of_commencement emp_required" type="text" id="date_of_commencement" name="date_of_commencement" required>
                                 </div>
@@ -94,24 +94,24 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label>ID card number <span class="text-danger">*</span></label>
+                                <label>@lang('lang.id_card_number') <span class="text-danger">*</span></label>
                                 <input class="form-control emp_required clear_data" type="text" id="id_card_number" name="id_card_number" required>
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="">Personal Phone <span class="text-danger">*</span></label>
+                                <label class="">@lang('lang.personal_phone') <span class="text-danger">*</span></label>
                                 <input class="form-control personal_phone_number emp_required clear_data" type="number" id="personal_phone_number" name="personal_phone_number" required>
                             </div>
                         </div>
                     </div>
                     <div class="form-group col-md-12 col-12" element="div" bp-field-wrapper="true" bp-field-name="Identity" bp-field-type="custom_html">
-                        <label class="navbar-brand custom-navbar-brand mb-0" style="width: 100%; background: #dfe6e9; padding: 6px;font-size: 15px;font-weight: normal !important;">Basic Salary</label>
+                        <label class="navbar-brand custom-navbar-brand mb-0" style="width: 100%; background: #dfe6e9; padding: 6px;font-size: 15px;font-weight: normal !important;">@lang('lang.basic_salary')</label>
                     </div>
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label>Basic Salary <span class="text-danger">*</span></label>
+                                <label>@lang('lang.basic_salary') <span class="text-danger">*</span></label>
                                 <div class="input-group">
                                     <span class="input-group-text">$</span>
                                     <input type="number" class="form-control emp_required clear_data" id="basic_salary" name="basic_salary" placeholder="" required>
@@ -120,7 +120,7 @@
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label>Salary Increase</label>
+                                <label>@lang('lang.salary_increase')</label>
                                 <div class="input-group">
                                     <span class="input-group-text">$</span>
                                     <input class="form-control clear_data" type="number" id="salary_to_increase" name="salary_to_increase">
@@ -130,39 +130,39 @@
                     </div>
                      {{-- Created Current Address --}}
                      <div class="form-group col-md-12 col-12" element="div" bp-field-wrapper="true" bp-field-name="Identity" bp-field-type="custom_html">
-                        <label class="navbar-brand custom-navbar-brand mb-0" style="width: 100%; background: #dfe6e9; padding: 6px;font-size: 15px;font-weight: normal !important;">Current Address</label>
+                        <label class="navbar-brand custom-navbar-brand mb-0" style="width: 100%; background: #dfe6e9; padding: 6px;font-size: 15px;font-weight: normal !important;">@lang('lang.current_address')</label>
                     </div>
 
                     {{-- CurrentAddress --}}
                     <div id="CurrentAddress">
                         <div class="row">
                             <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>Province/City <span class="text-danger">*</span></label>
-                                    <select class="form-control clear_data @error('current_province') is-invalid @enderror emp_required" id="current_province" name="current_province" required>
-                                        <option value="" selected> --Select --</option>
+                                <div class="form-group hr-form-group-select2">
+                                    <label>@lang('lang.province/city') <span class="text-danger">*</span></label>
+                                    <select class="form-control hr-select2-option clear_data @error('current_province') is-invalid @enderror emp_required" id="current_province" name="current_province" required>
+                                        <option value="" selected> -- @lang('lang.select') --</option>
                                     </select>
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>District/Khan <span class="text-danger">*</span></label>
-                                    <select class="form-control clear_data  @error('current_district') is-invalid @enderror emp_required" id="current_district" name="current_district" required>
+                                <div class="form-group hr-form-group-select2">
+                                    <label>@lang('lang.district/khan') <span class="text-danger">*</span></label>
+                                    <select class="form-control hr-select2-option clear_data  @error('current_district') is-invalid @enderror emp_required" id="current_district" name="current_district" required>
                                     </select>
                                 </div>
                             </div>
 
                             <div class="col-md-6">
-                                <div class="form-group">
-                                    <label class="no-error-label">Commune/Sangkat <span class="text-danger">*</span></label>
-                                    <select class="form-control no-error-border clear_data @error('current_commune') is-invalid @enderror emp_required" id="current_commune" name="current_commune" required>
+                                <div class="form-group hr-form-group-select2">
+                                    <label class="no-error-label">@lang('lang.commune/sangkat') <span class="text-danger">*</span></label>
+                                    <select class="form-control hr-select2-option no-error-border clear_data @error('current_commune') is-invalid @enderror emp_required" id="current_commune" name="current_commune" required>
                                     </select>
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <div class="form-group">
-                                    <label class="no-error-label">Village <span class="text-danger">*</span></label>
-                                    <select class="form-control no-error-border clear_data @error('current_village') is-invalid @enderror emp_required" id="current_village" name="current_village" required>
+                                <div class="form-group hr-form-group-select2">
+                                    <label class="no-error-label">@lang('lang.village') <span class="text-danger">*</span></label>
+                                    <select class="form-control hr-select2-option no-error-border clear_data @error('current_village') is-invalid @enderror emp_required" id="current_village" name="current_village" required>
                                     </select>
                                 </div>
                             </div>
@@ -172,13 +172,13 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>House No</label>
+                                <label>@lang('lang.house_no')</label>
                                 <input class="form-control clear_data" type="text" id="current_house_no" name="current_house_no">
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>Street No</label>
+                                <label>@lang('lang.street_no')</label>
                                 <input class="form-control clear_data" type="text" id="current_street_no" name="current_street_no">
                             </div>
                         </div>
@@ -186,39 +186,39 @@
 
                     {{-- Created Permanent Address --}}
                     <div class="form-group col-md-12 col-12" element="div" bp-field-wrapper="true" bp-field-name="Identity" bp-field-type="custom_html">
-                        <label class="navbar-brand custom-navbar-brand mb-0" style="width: 100%; background: #dfe6e9; padding: 6px;font-size: 15px;font-weight: normal !important;">Permanent Address</label>
+                        <label class="navbar-brand custom-navbar-brand mb-0" style="width: 100%; background: #dfe6e9; padding: 6px;font-size: 15px;font-weight: normal !important;">@lang('lang.permanent_address')</label>
                     </div>
 
                     {{-- PermanentAddress --}}
                     <div id="PermanentAddress">
                         <div class="row">
                             <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>Province/City <span class="text-danger">*</span></label>
-                                    <select class="form-control clear_data @error('current_commune') is-invalid @enderror emp_required" id="permanent_province" name="permanent_province" required>
-                                        <option value="" selected> --Select --</option>
+                                <div class="form-group hr-form-group-select2">
+                                    <label>@lang('lang.province/city') <span class="text-danger">*</span></label>
+                                    <select class="form-control hr-select2-option clear_data @error('current_commune') is-invalid @enderror emp_required" id="permanent_province" name="permanent_province" required>
+                                        <option value="" selected> -- @lang('lang.select') --</option>
                                     </select>
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>District/Khan</label>
-                                    <select class="select form-control clear_data" id="permanent_district" name="permanent_district" value="{{old('permanent_district')}}">
+                                <div class="form-group hr-form-group-select2">
+                                    <label>@lang('lang.district/khan')</label>
+                                    <select class="select form-control hr-select2-option clear_data" id="permanent_district" name="permanent_district" value="{{old('permanent_district')}}">
                                     </select>
                                 </div>
                             </div>
 
                             <div class="col-md-6">
-                                <div class="form-group ">
-                                    <label class="no-error-label">Commune/Sangkat</label>
-                                    <select class="select form-control no-error-border clear_data" id="permanent_commune" name="permanent_commune" value="{{old('permanent_commune')}}">
+                                <div class="form-group hr-form-group-select2 ">
+                                    <label class="no-error-label">@lang('lang.commune/sangkat')</label>
+                                    <select class="select form-control hr-select2-option no-error-border clear_data" id="permanent_commune" name="permanent_commune" value="{{old('permanent_commune')}}">
                                     </select>
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <div class="form-group">
-                                    <label class="no-error-label">Village</label>
-                                    <select class="select form-control no-error-border clear_data" id="permanent_village" name="permanent_village" value="{{old('permanent_village')}}">
+                                <div class="form-group hr-form-group-select2">
+                                    <label class="no-error-label">@lang('lang.village')</label>
+                                    <select class="select form-control hr-select2-option no-error-border clear_data" id="permanent_village" name="permanent_village" value="{{old('permanent_village')}}">
                                     </select>
                                 </div>
                             </div>
@@ -228,34 +228,36 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>House No</label>
+                                <label>@lang('lang.house_no')</label>
                                 <input class="form-control clear_data" type="text" id="permanent_house_no" name="permanent_house_no">
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>Street No</label>
+                                <label>@lang('lang.street_no')</label>
                                 <input class="form-control clear_data" type="text" id="permanent_street_no" name="permanent_street_no">
                             </div>
                         </div>
                     </div>
                     <div class="col-sm-12">
                         <div class="form-group">
-                            <label class="">Remark</label>
+                            <label class="">@lang('lang.remark')</label>
                             <textarea type="text" rows="3" class="form-control" name="remark" id="remark" value="{{old('remark')}}"></textarea>
                         </div>
                     </div>
 
                     <div class="submit-section">
-                        <button type="button" class="btn btn-primary btn_save_print" id="btn_save_print" data-dismiss="modal" data-btn="1">
-                            <span class="btn-text-print">Print</span>
-                            <span id="btn-print-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading</span>
+                        <button type="button" class="btn btn-primary  btn_save_print" id="btn_save_print" data-dismiss="modal" data-btn="1">
+                            <span class="btn-text-print">@lang('lang.print')</span>
+                            <span id="btn-print-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>
                         </button>
 
                         <button type="button" class="btn btn-primary btn_save" id="btn_save" data-dismiss="modal" data-btn="2">
-                            <span class="btn-text-save">{{ __('Edit') }}</span>
-                            <span id="btn-save-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading </span>
-                           
+                            <span class="btn-text-save">@lang('lang.edit')</span>
+                            <span id="btn-save-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading') </span>
+                        </button>
+                        <button type="button" class="btn btn-secondary btn-cancel" id="btn-cancel">
+                            <span class="btn-text-save">@lang('lang.cancel')</span>
                         </button>
                     </div>
                 </form>
@@ -276,24 +278,24 @@
             let id = $("#current_province").val();
             let optionSelect = "currentProvince";
 
-            $('#current_district').html('<option value=""> --Select --</option>');
-            $('#current_commune').html('<option value=""> --Select --</option>');
-            $('#current_village').html('<option value=""> --Select --</option>');
+            $('#current_district').html('<option value=""> --@lang("lang.select") --</option>');
+            $('#current_commune').html('<option value=""> --@lang("lang.select") --</option>');
+            $('#current_village').html('<option value=""> --@lang("lang.select") --</option>');
             showProvince(id, optionSelect);
         });
 
         $("#current_district").on("change", function(){
             let id = $("#current_district").val();
             let optionSelect = "currentDistrict";
-            $('#current_commune').html('<option value=""> --Select --</option>');
-            $('#current_village').html('<option value=""> --Select --</option>');
+            $('#current_commune').html('<option value=""> --@lang("lang.select") --</option>');
+            $('#current_village').html('<option value=""> --@lang("lang.select") --</option>');
             showProvince(id, optionSelect);
         });
 
         $("#current_commune").on("change", function(){
             let id = $("#current_commune").val();
             let optionSelect = "currentCommune";
-            $('#current_village').html('<option value=""> --Select --</option>');
+            $('#current_village').html('<option value=""> --@lang("lang.select") --</option>');
             showProvince(id, optionSelect);
         });
 
@@ -301,42 +303,46 @@
         $("#permanent_province").on("change", function(){
             let id = $("#permanent_province").val();
             let optionSelect = "permanentProvince";
-            $('#permanent_district').html('<option selected disabled> --Select --</option>');
-            $('#permanent_commune').html('<option selected disabled> --Select --</option>');
-            $('#permanent_village').html('<option selected disabled> --Select --</option>');
+            $('#permanent_district').html('<option selected disabled> --@lang("lang.select") --</option>');
+            $('#permanent_commune').html('<option selected disabled> --@lang("lang.select") --</option>');
+            $('#permanent_village').html('<option selected disabled> --@lang("lang.select") --</option>');
             showProvince(id, optionSelect);
         });
         $("#permanent_district").on("change", function(){
             let id = $("#permanent_district").val();
             let optionSelect = "permanentDistrict";
-            $('#permanent_commune').html('<option selected disabled> --Select --</option>');
-            $('#permanent_village').html('<option selected disabled> --Select --</option>');
+            $('#permanent_commune').html('<option selected disabled> --@lang("lang.select") --</option>');
+            $('#permanent_village').html('<option selected disabled> --@lang("lang.select") --</option>');
             showProvince(id, optionSelect);
         });
         $("#permanent_commune").on("change", function(){
             let id = $("#permanent_commune").val();
             let optionSelect = "permanentCommune";
-            $('#permanent_village').html('<option selected disabled> --Select --</option>');
+            $('#permanent_village').html('<option selected disabled> --@lang("lang.select") --</option>');
             showProvince(id, optionSelect);
+        });
+        $("#btn-cancel").on("click", function() {
+            $('#add_emp').modal('hide');
         });
 
         $(document).on('click','.btn_print_signed_contract', function(){
 
-            $('#current_province').html('<option selected value="">--Select --</option>');
+            $('#current_province').html('<option selected value="">--@lang("lang.select") --</option>');
             $('#current_district').html('<option selected value=""> </option>');
             $('#current_commune').html('<option selected value=""> </option>');
             $('#current_village').html('<option selected value=""> </option>');
 
-            $('#permanent_province').html('<option selected value="">--Select --</option>');
+            $('#permanent_province').html('<option selected value="">--@lang("lang.select") --</option>');
             $('#permanent_district').html('<option selected value=""> </option>');
             $('#permanent_commune').html('<option selected value=""> </option>');
             $('#permanent_village').html('<option selected value=""> </option>');
 
-            $("#position_type").html('<option selected value="">--Select --</option>');
-            $("#department_id").html('<option selected value="">--Select --</option>');
+            $("#position_type").html('<option selected value="">--@lang("lang.select") --</option>');
+            $("#department_id").html('<option selected disabled value="">--@lang("lang.select") --</option>');
             $(".clear_data").val("");
             $("#remark").text("");
             let id = $(this).data("id");
+            var localeLanguage = '{{ config('app.locale') }}';
             $.ajax({
                 type: "GET",
                 url: "{{ url('recruitment/candidate-resume/edit') }}",
@@ -352,7 +358,7 @@
                             $.each(response.position, function(i, item) {
                                 $("#emp_position").append($('<option>', {
                                     value: item.id,
-                                    text: item.name_english,
+                                    text: localeLanguage == 'en' ? item.name_english : item.name_khmer,
                                     selected: item.id == response.success.position_applied
                                 }));
                             });
@@ -362,7 +368,7 @@
                             $.each(response.branch, function(i, item) {
                                 $("#emp_branch").append($('<option>', {
                                     value: item.id,
-                                    text: item.branch_name_en,
+                                    text: localeLanguage == 'en' ? item.branch_name_en : item.branch_name_kh,
                                     selected: item.id == response.success.location_applied
                                 }));
                             });
@@ -372,7 +378,7 @@
                             $.each(response.gender, function(i, item) {
                                 $("#emp_gender").append($('<option>', {
                                     value: item.id,
-                                    text: item.name_english,
+                                    text: localeLanguage == 'en' ? item.name_english : item.name_khmer,
                                     selected: item.id == response.success.gender
                                 }));
                             });
@@ -382,17 +388,17 @@
                             $.each(response.optionPositionType, function(i, item) {
                                 $("#position_type").append($('<option>', {
                                     value: item.id,
-                                    text: item.name_english,
+                                    text: localeLanguage == 'en' ? item.name_english : item.name_khmer,
                                     selected: item.id == response.success.position_type
                                 }));
                             });
                         }
                         if (response.department !='') {
-                            // $("#department_id").html('');
+                            $("#department_id").html('');
                             $.each(response.department, function(i, item) {
                                 $("#department_id").append($('<option>', {
                                     value: item.id,
-                                    text: item.name_english,
+                                    text: localeLanguage == 'en' ? item.name_english : item.name_khmer,
                                     selected: item.id == response.success.department_id
                                 }));
                             });
@@ -401,12 +407,12 @@
                             $.each(response.province, function(i, item) {
                                 $("#current_province").append($('<option>', {
                                     value: item.code,
-                                    text: item.name_en,
+                                    text: localeLanguage == 'en' ? item.name_en : item.name_km,
                                     selected: item.code == response.success.current_province
                                 }));
                                 $("#permanent_province").append($('<option>', {
                                     value: item.code,
-                                    text: item.name_en,
+                                    text: localeLanguage == 'en' ? item.name_en : item.name_km,
                                     selected: item.code == response.success.permanent_province
                                 }));
                             });
@@ -416,14 +422,14 @@
                                 if (item.province_id == response.success.current_province) {
                                     $("#current_district").append($('<option>', {
                                         value: item.code,
-                                        text: item.name_en,
+                                        text: localeLanguage == 'en' ? item.name_en : item.name_km,
                                         selected: item.code == response.success.current_district
                                     }));
                                 }
                                 if (item.province_id == response.success.permanent_province) {
                                     $("#permanent_district").append($('<option>', {
                                         value: item.code,
-                                        text: item.name_en,
+                                        text: localeLanguage == 'en' ? item.name_en : item.name_km,
                                         selected: item.code == response.success.permanent_district
                                     }));
                                 }
@@ -434,14 +440,14 @@
                                 if (item.district_id == response.success.current_district) {
                                     $("#current_commune").append($('<option>', {
                                         value: item.code,
-                                        text: item.name_en,
+                                        text: localeLanguage == 'en' ? item.name_en : item.name_km,
                                         selected: item.code == response.success.current_commune
                                     }));
                                 }
                             if (item.district_id == response.success.permanent_district) {
                                     $("#permanent_commune").append($('<option>', {
                                         value: item.code,
-                                        text: item.name_en,
+                                        text: localeLanguage == 'en' ? item.name_en : item.name_km,
                                         selected: item.code == response.success.permanent_commune
                                     }));
                             }
@@ -452,14 +458,14 @@
                                 if (item.commune_id == response.success.current_commune) {
                                     $("#current_village").append($('<option>', {
                                         value: item.code,
-                                        text: item.name_en,
+                                        text: localeLanguage == 'en' ? item.name_en : item.name_km,
                                         selected: item.code == response.success.current_village
                                     }));
                                 }
                                 if (item.commune_id == response.success.permanent_commune) {
                                     $("#permanent_village").append($('<option>', {
                                         value: item.code,
-                                        text: item.name_en,
+                                        text: localeLanguage == 'en' ? item.name_en : item.name_km,
                                         selected: item.code == response.success.permanent_village
                                     }));
                                 }
@@ -489,6 +495,17 @@
         $("#btn_save_print, #btn_save").on("click", function(){
             let btn_action = $(this).attr('data-btn');
             var num_miss = 0;
+            $(".hr-form-group-select2").each(function(){
+                let formGroup = $(this);
+                let value = formGroup.attr("data-select2-id");
+                let requeredField = formGroup.find(".hr-select2-option").val();
+                let requered = formGroup.find(".emp_required").val();
+                if(!value && requered == ""){ 
+                    formGroup.find(".select2-selection--single").css("border-color","#dc3545");
+                }else if (!requeredField && requered == "") {
+                    formGroup.find(".select2-selection--single").css("border-color","#dc3545");
+                }
+            });
             if (btn_action == 1) {
                 $("#btn-print-loading").css('display', 'block');
                 $("#btn_save_print").prop('disabled', true);
@@ -622,7 +639,6 @@
                     if (btn_action == 2) {
                         $("#add_emp").modal("hide");
                     }
-                    // window.location.replace("{{ URL('recruitment/candidate-resume/list') }}");
                 }).catch(function(error) {
                     new Noty({
                         title: "",
@@ -665,7 +681,7 @@
             url = "{{url('village')}}"
             data.commune_id = id
         }
-
+        var localeLanguage = '{{ config('app.locale') }}';
         $.ajax({
             type: "POST",
             url,
@@ -678,7 +694,7 @@
                     $.each(data, function(i, item) {
                         option = {
                             value: item.code,
-                            text: item.name_en,
+                            text: localeLanguage == 'en' ? item.name_en : item.name_km,
                         }
                         if (optionSelect == "currentProvince") {
                             $('#current_district').append($('<option>', option));

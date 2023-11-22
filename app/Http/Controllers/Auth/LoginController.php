@@ -62,12 +62,12 @@ class LoginController extends Controller
 
         $dataUserUpComming = User::where('date_of_commencement',Carbon::now()->format('Y-m-d'))->where('emp_status','Upcoming')->get()->count();
         $dataUserProbation = User::where('fdc_date',Carbon::now()->format('Y-m-d'))->where('emp_status','Probation')->get()->count();
-        $dataUserFdc = User::where('fdc_end',Carbon::now()->format('Y-m-d'))->whereIn('emp_status',['1','10'])->get()->count();
+        // $dataUserFdc = User::where('fdc_end',Carbon::now()->format('Y-m-d'))->whereIn('emp_status',['1','10'])->get()->count();
         
         $change_password= "";
         $hashedPassword = User::select('employee_name_en','number_employee', 'password','email')->where('number_employee', $request->number_employee)->first();
         if($hashedPassword == null){
-            Toastr::error('Wrong employee ID Or password', 'Error');
+            Toastr::error('Wrong EmployeeID Or Password', 'Error');
             return redirect('login');
         }
         if ($request->new_password && $request->password_confirmation) {
@@ -83,7 +83,7 @@ class LoginController extends Controller
                     return redirect()->back();
                 }
             } else {
-                Toastr::error('Wrong employee ID Or current password', 'Error');
+                Toastr::error('Wrong EmployeeID Or Current Password', 'Error');
                 return redirect()->back();
             }
         }else{
@@ -108,23 +108,24 @@ class LoginController extends Controller
             'description' => 'has log in',
             'date_time'   => $todayDate,
         ];
-        if (Auth::attempt(['number_employee' => $number_employee, 'password' => $password, 'status' => 'Active'])) {
+        // if (Auth::attempt(['number_employee' => $number_employee, 'password' => $password, 'role_id' => ['1','2']])) {
+        if (Auth::attempt(['number_employee' => $number_employee, 'password' => $password])) {
             DB::table('activity_logs')->insert($activityLog);
-            Toastr::success('Login successfully.', 'Success');
             return redirect('dashboad/admin')->with([
-                'dataUpComming'=>$dataUserUpComming,
-                'dataProbation'=>$dataUserProbation,
-                'dataFdc'=>$dataUserFdc,
-                'dataShortList' => $dataShortList,
-                'dataContract'  => $dataContract
+                'dataUpComming' =>  $dataUserUpComming,
+                'dataProbation' =>  $dataUserProbation,
+                'dataShortList' =>  $dataShortList,
+                'dataContract'  =>  $dataContract
             ]);
+            Toastr::success('Login successfully.', 'Success');
             // return redirect('dashboad/admin');
-        } elseif (Auth::attempt(['number_employee' => $number_employee, 'password' => $password, 'status' => null])) {
+        // } elseif (Auth::attempt(['number_employee' => $number_employee, 'password' => $password, 'role_id' => '3'])) {
+        } elseif (Auth::attempt(['number_employee' => $number_employee, 'password' => $password])) {
             DB::table('activity_logs')->insert($activityLog);
             Toastr::success('Login successfully.', 'Success');
-            // return redirect('dashboad/employee');
+            return redirect('dashboad/employee');
         } else {
-            Toastr::error('Wrong employee ID Or password', 'Error');
+            Toastr::error('Wrong EmployeeID Or Password', 'Error');
             return redirect('login');
         }
     }

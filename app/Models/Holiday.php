@@ -2,29 +2,29 @@
 
 namespace App\Models;
 
-use DateTime;
 use App\Models\User;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Model;
-// use Backpack\CRUD\app\Models\Traits\CrudTrait;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Holiday extends Model
 {
-    // use CrudTrait;
-
-    /*
-    |--------------------------------------------------------------------------
-    | GLOBAL VARIABLES
-    |--------------------------------------------------------------------------
-    */
-
+    use HasFactory;
+    use SoftDeletes;
     protected $table = 'holidays';
-    // protected $primaryKey = 'id';
-    // public $timestamps = false;
     protected $guarded = ['id'];
-    // protected $fillable = [];
-    // protected $hidden = [];
-    // protected $dates = [];
+
+    protected $fillable = [
+        'title',
+        'amount_percent',
+        'period_month',
+        'from',
+        'to',
+        'type',
+        'created_by',
+        'updated_by',
+    ];
 
     /*
     |--------------------------------------------------------------------------

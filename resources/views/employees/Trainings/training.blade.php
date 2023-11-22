@@ -2,31 +2,53 @@
     <div class="col-md-12 d-flex">
         <div class="card profile-box flex-fill">
             <div class="card-body">
-                <h3 class="card-title">Training <a href="#" class="edit-icon" data-bs-toggle="modal" data-bs-target="#TrainingModal"><i class="fa fa-pencil"></i></a></h3>
+                <h3 class="card-title">@lang('lang.training') 
+                    @if (permissionAccess("5","is_update")->value == "1")
+                    <a href="#" class="edit-icon" data-bs-toggle="modal" data-bs-target="#TrainingModal"><i class="fa fa-pencil"></i></a>
+                    @endif
+                </h3>
                 <div class="table-responsive">
                     <table class="table table-nowrap">
                         <thead>
                             <tr>
                                 <th>#</th>
-                                <th>Title</th>
-                                <th>Start Date</th>
-                                <th>End Date</th>
-                                <th>Descrition</th>
+                                <th>@lang('lang.course_name')</th>
+                                <th>@lang('lang.start_date')</th>
+                                <th>@lang('lang.end_date')</th>
+                                <th>@lang('lang.remark')</th>
+                                <th>@lang('lang.created_at')</th>
+                                <th style="text-align: center">@lang('lang.action')</th>
                             </tr>
                         </thead>
                         <tbody>
                             @if (count($training)>0)
                                 @foreach ($training as $item)
                                     <tr>
-                                        <td>{{$item->id}}</td>
+                                        <td class="ids">{{$item->id}}</td>
                                         <td>{{$item->title}}</td>
                                         <td>{{$item->TrainingStartDate}}</td>
                                         <td>{{$item->TrainingStartEndDate}}</td>
                                         <td>{{$item->descrition}}</td>
+                                        <td>{{$item->created_at}}</td>
+                                        <td style="text-align: center">
+                                            @if (permissionAccess("5","is_update")->value == "1" || permissionAccess("5","is_delete")->value == "1")
+                                                <div class="dropdown dropdown-action">
+                                                    <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i  class="material-icons">more_vert</i></a>
+                                                    <div class="dropdown-menu dropdown-menu-right">
+                                                        @if (permissionAccess("5","is_update")->value == "1")
+                                                        <a class="dropdown-item trainingUpdate" data-id="{{$item->id}}" data-bs-target="#promote_edit"><i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')</a>
+                                                        @endif
+                                                        @if (permissionAccess("5","is_delte")->value == "1")
+                                                        <a class="dropdown-item trainingDelete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_training"><i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                            @endif
+                                        </td>
                                     </tr>
                                 @endforeach
                             @else
-                                <td colspan="5" style="text-align: center">No record to display</td>
+                                <td colspan="7" style="text-align: center">@lang('lang.no_record_to_display')</td>
                             @endif
                         </tbody>
                     </table>
@@ -34,43 +56,28 @@
             </div>
         </div>
     </div>
-    <div id="TrainingModal" class="modal custom-modal fade" aria-hidden="true" style="display: none;">
-        <div class="modal-dialog modal-dialog-centered modal-md" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
+</div>
+
+@include('employees.Trainings.create')
+@include('employees.Trainings.edit')
+<!-- Delete Promote Modal -->
+<div class="modal custom-modal fade" id="delete_training" role="dialog">
+    <div class="modal-dialog modal-sm modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="form-header">
+                    <h3>Delete</h3>
+                    <p>Are you sure want to delete?</p>
                 </div>
-                <div class="modal-body">
-                    <form action="{{url('/employee/training')}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
+                <div class="modal-btn delete-action">
+                    <form action="{{url('employee/training/delete')}}" method="POST">
                         @csrf
-                        <div class="form-group">
-                            <label>Title <span class="text-danger">*</span></label>
-                            <input type="text" id="title" name="title" class="form-control" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Start Date <span class="text-danger">*</span></label>
-                            <div class="cal-icon">
-                                <input type="text" id="start_date" name="start_date" class="form-control datetimepicker" required>
+                        <input type="hidden" name="id" class="e_train_id" value="">
+                        <div class="row">
+                            <div class="submit-section" style="text-align: center">
+                                <button type="submit" class="btn btn-primary submit-btn me-2">Delete</button>
+                                <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-danger">Cancel</a>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label>End Date <span class="text-danger">*</span></label>
-                            <div class="cal-icon">
-                                <input type="text" id="end_date" name="end_date" class="form-control datetimepicker" required>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label>Descrition</label>
-                            <textarea class="form-control" rows="4" spellcheck="false" id="descrition" name="descrition" style="position: relative;"></textarea>
-                        </div>
-                        <div class="submit-section">
-                            <input type="hidden" name="employee_id" id="employee_id" value="{{ $data->id }}">
-                            <button type="submit" class="btn btn-primary submit-btn" id="bntEmpPromote">
-                                <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> Loading </span>
-                                <span class="btn-txt">{{ __('Submit') }}</span>
-                            </button>
                         </div>
                     </form>
                 </div>
@@ -78,3 +85,34 @@
         </div>
     </div>
 </div>
+<!-- /Delete Promote Modal -->
+
+<script>
+    $(function(){
+        $('.trainingDelete').on('click',function(){
+            var _this = $(this).parents('tr');
+            $('.e_train_id').val(_this.find('.ids').text());
+        });
+        $('.trainingUpdate').on('click',function(){
+            let id = $(this).data("id");
+            $.ajax({
+                type: "GET",
+                url: "{{url('/employee/training/edit')}}",
+                data: {
+                    id : id
+                },
+                dataType: "JSON",
+                success: function (response) {
+                    if (response.success) {
+                        $('#e_train_id').val(response.success.id);
+                        $('#e_title').val(response.success.title);
+                        $('#e_start_date').val(response.success.start_date);
+                        $('#e_end_date').val(response.success.end_date);
+                        $('#e_descritions').val(response.success.descrition);
+                        $('#TrainingModalUpdate').modal('show');
+                    }
+                }
+            });
+        });
+    });
+</script>

@@ -22,6 +22,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 
 class CandidateResumeController extends Controller
 {
@@ -46,7 +47,8 @@ class CandidateResumeController extends Controller
         $data = CandidateResume::where("status", "1")->get();
         $dataShortList = CandidateResume::where("short_list", "1")->where('status','2')->count();
         $dataNon = CandidateResume::where("short_list", "2")->count();
-        $dataResult = CandidateResume::where("status",'3')->count();
+        $dataResult = CandidateResume::where("status",'3')->whereIn("interviewed_result", [1,3,4])->count();
+        $dataFailed = CandidateResume::where("status",'3')->whereNotIn("interviewed_result", [1,3,4])->orWhere('interviewed_result', '=', null)->where('status', 3)->count();
         $dataProcessing = CandidateResume::where("status",'4')->count();
         $dataCancel = CandidateResume::where("status",'Cancel')->count();
         $province = Province::all();
@@ -64,6 +66,7 @@ class CandidateResumeController extends Controller
                 "province",
                 "dataShortList",
                 "dataNon",
+                "dataFailed",
                 "dataResult",
                 'dataProcessing',
                 'dataCancel'
@@ -91,6 +94,8 @@ class CandidateResumeController extends Controller
         try {
             $data = $request->all();
             $data['created_by'] = Auth::user()->id;
+            $data['name_kh'] = $request->last_name_kh.' '.$request->first_name_kh;
+            $data['name_en'] = $request->last_name_en.' '.$request->first_name_en;
             $data['status'] = "1";
             CandidateResume::create($data);
             DB::commit();
@@ -110,10 +115,76 @@ class CandidateResumeController extends Controller
      */
     public function show(Request $request)
     {
-        $datas = CandidateResume::where("status", $request->status)->with("branch")->with("position")->with("option")->get();
+        if ($request->status == 3 || $request->status == 6) {
+            $datas = CandidateResume::with("branch")->with("position")->with("option")
+            ->when($request->status, function ($query, $status) {
+                if ($status == 6) {
+                    $query->whereNotIn('interviewed_result', [1,3,4]);
+                    $query->orWhere('interviewed_result', '=', null); 
+                    $query->where('status', 3);
+                }else{
+                    $query->where('status', $status);
+                    $query->whereIn('interviewed_result', [1,3,4]);
+                }
+            })
+           ->get();
+        }else{
+            $datas = CandidateResume::where("status", $request->status)->with("branch")->with("position")->with("option")->get();
+        }
+        
         return response()->json(['datas'=>$datas]);
     }
 
+    public function showemp(){
+        $dataEmp =  User::whereIn('emp_status',['1','2','10'])->get();
+        return response()->json(['employees'=>$dataEmp]);
+    }
+    
+    public function import(Request $request)
+    {
+        $file = $request->file;
+        $filesize = filesize($file);
+        $extension = $request->file->extension();
+        $spreadsheet = IOFactory::load($file);
+        $allDataInSheet = $spreadsheet->getActiveSheet()->toArray();
+        if ($extension == "xlsx" || $extension == "xls" || $extension == "csv") {
+            $userID = Auth::user()->id;
+            $i = 0;
+            $re = 1;
+            foreach ($allDataInSheet as $csv) {
+                $i++;
+                if ($i != 1) {
+                    $fulNameKH = $csv[0].' '.$csv[1];
+                    $fulNameEN = $csv[2].' '.$csv[3];
+                    $arr = [
+                        'name_kh'               => $fulNameKH,
+                        'name_en'               => $fulNameEN,
+                        'last_name_kh'          => $csv[0],
+                        'first_name_kh'         => $csv[1],
+                        'last_name_en'          => $csv[2],
+                        'first_name_en'         => $csv[3],
+                        'gender'                => $csv[4],
+                        'current_position'      => $csv[5],
+                        'companey_name'         => $csv[6],
+                        'current_address'       => $csv[7],
+                        'position_applied'      => $csv[8],
+                        'location_applied'      => $csv[9],
+                        'received_date'         => $csv[10],
+                        'recruitment_channel'   => $csv[11],
+                        'contact_number'        => $csv[12],
+                        'status'                => "1",
+                        'updated_by'            => $userID,
+                        'created_at'            => Carbon::now(),
+                    ];
+                    DB::table('candidate_resumes')->insert($arr);
+                }
+            }
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+    
     /**
      * Show the form for editing the specified resource.
      *
@@ -184,21 +255,27 @@ class CandidateResumeController extends Controller
             }else{
                 $filenameGuarant = $request->hidden_cv;
             }
+            $fullNameKH = $request->last_name_kh.' '.$request->first_name_kh;
+            $fullNameEN = $request->last_name_en.' '.$request->first_name_en;
             $dataUpdate = [
-                'name_kh' => $request->name_kh,
-                'name_en' => $request->name_en,
-                'gender' => $request->gender,
-                'current_position' => $request->current_position,
-                'companey_name' => $request->companey_name,
-                'position_applied' => $request->position_applied,
-                'current_address' => $request->current_address,
-                'location_applied' => $request->location_applied,
-                'received_date' => $request->received_date,
-                'recruitment_channel' => $request->recruitment_channel,
-                'contact_number' => $request->contact_number,
-                'status' => $request->status,
-                'cv' => $filenameGuarant,
-                'updated_by' => Auth::user()->id 
+                'last_name_kh'          => $request->last_name_kh,
+                'first_name_kh'         => $request->first_name_kh,
+                'last_name_en'          => $request->last_name_en,
+                'first_name_en'         => $request->first_name_en,
+                'name_kh'               => $fullNameKH,
+                'name_en'               => $fullNameEN,
+                'gender'                => $request->gender,
+                'current_position'      => $request->current_position,
+                'companey_name'         => $request->companey_name,
+                'position_applied'      => $request->position_applied,
+                'current_address'       => $request->current_address,
+                'location_applied'      => $request->location_applied,
+                'received_date'         => $request->received_date,
+                'recruitment_channel'   => $request->recruitment_channel,
+                'contact_number'        => $request->contact_number,
+                'status'                => $request->status,
+                'cv'                    => $filenameGuarant,
+                'updated_by'            => Auth::user()->id,
             ];
             CandidateResume::where('id',$request->id)->update($dataUpdate);
             Toastr::success('Candidate resume updated successfully.','Success');
@@ -269,10 +346,10 @@ class CandidateResumeController extends Controller
                     ];
                 }
             }
-            if ($request->status == "3") {
+            if ($request->status == "3" || $request->status == "6") {
                 if ($request->joined_interview == "1") {
                     $dataUpdate = [
-                        'status' => $request->status,
+                        'status' => 3,
                         'joined_interview' => $request->joined_interview,
                         'interviewed_result' => $request->interviewed_result,
                         'remark' =>$request->remark,
@@ -289,7 +366,7 @@ class CandidateResumeController extends Controller
                     ];
                 }else {
                     $dataUpdate = [
-                        'status' => $request->status,
+                        'status' => 3,
                         'joined_interview' => $request->joined_interview,
                         'interviewed_result' =>null,
                         'remark' =>$request->remark,
@@ -313,7 +390,23 @@ class CandidateResumeController extends Controller
             }
             CandidateResume::where('id',$request->id)->update($dataUpdate);
             DB::commit();
-            return ['message' => 'successfull'];
+            $data = CandidateResume::where("status", "1")->count();
+            $dataShortList = CandidateResume::where("short_list", "1")->where('status','2')->count();
+            $dataNon = CandidateResume::where("short_list", "2")->count();
+            $dataResult = CandidateResume::where("status",'3')->whereIn("interviewed_result", [1,3,4])->count();
+            $dataFailed = CandidateResume::where("status",'3')->whereNotIn("interviewed_result", [1,3,4])->orWhere('interviewed_result', '=', null)->where('status', 3)->count();
+            $dataProcessing = CandidateResume::where("status",'4')->count();
+            $dataCancel = CandidateResume::where("status",'Cancel')->count();
+            return response()->json([
+                'message' => 'successfull',
+                "data" => $data,
+                "dataShortList" => $dataShortList,
+                "dataNon" => $dataNon,
+                "dataFailed" => $dataFailed,
+                "dataResult" => $dataResult,
+                'dataProcessing' => $dataProcessing,
+                'dataCancel' => $dataCancel,
+            ]);
         } catch (\Exception $exp) {
             DB::rollBack();
             return response()->json(['message' => $exp->getMessage()], 500);
@@ -326,6 +419,10 @@ class CandidateResumeController extends Controller
                 $candidate = CandidateResume::where("id", $request->id) ->first();
                 $emp_data = [
                     'number_employee' => $candidate->number_employee,
+                    'last_name_kh' => $candidate->last_name_kh,
+                    'first_name_kh' => $candidate->first_name_kh,
+                    'last_name_en' => $candidate->last_name_en,
+                    'first_name_en' => $candidate->first_name_en,
                     'employee_name_kh' => $candidate->name_kh,
                     'employee_name_en' => $candidate->name_en,
                     'gender' => $candidate->gender,
@@ -362,7 +459,8 @@ class CandidateResumeController extends Controller
                 $userData = User::create($emp_data);
                 CandidateResume::where('id',$candidate->id)->update([ 'status' => 5]);
                 DB::commit();
-                return ['message' => 'successfull'];
+                $dataProcessing = CandidateResume::where("status",'4')->count();
+                return response()->json(['message' => 'successfull', "dataProcessing"=>$dataProcessing]);
             }else{
                 $generateID = GenerateIdEmployee::where("number_employee",$request->number_employee )->first();
                 if (!$generateID) {

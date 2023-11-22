@@ -8,6 +8,7 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
+     * php artisan migrate:refresh --path=database/migrations/2023_06_02_062539_create_severance_pays_table.php
      *
      * @return void
      */
@@ -16,8 +17,10 @@ return new class extends Migration
         Schema::create('severance_pays', function (Blueprint $table) {
             $table->id();
             $table->integer('employee_id')->nullable();
+            $table->string('number_employee')->nullable();
             $table->decimal('total_severanec_pay',50,2)->nullable();
             $table->decimal('total_contract_severance_pay',50,2)->nullable();
+            $table->date('payment_date')->nullable();
             $table->bigInteger('created_by')->unsigned()->nullable();
             $table->bigInteger('updated_by')->unsigned()->nullable();
             $table->dateTime('deleted_at')->nullable();

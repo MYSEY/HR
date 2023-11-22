@@ -8,6 +8,7 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
+     * php artisan migrate:refresh --path=database/migrations/2023_06_13_090147_create_candidate_resumes_table.php
      *
      * @return void
      */
@@ -16,6 +17,10 @@ return new class extends Migration
         Schema::create('candidate_resumes', function (Blueprint $table) {
             $table->id();
             $table->string('number_employee')->nullable();
+            $table->string('last_name_kh');
+            $table->string('first_name_kh');
+            $table->string('last_name_en');
+            $table->string('first_name_en');
             $table->string('name_kh');
             $table->string('name_en')->nullable();
             $table->string('gender')->nullable();
@@ -45,6 +50,7 @@ return new class extends Migration
             $table->decimal('basic_salary',50,2)->default(0);
             $table->decimal('salary_increas')->default(0);
             $table->string('id_card_number')->nullable();
+            $table->string('id_number_nssf')->nullable();
             $table->string('current_province')->nullable();
             $table->string('current_district')->nullable();
             $table->string('current_commune')->nullable();

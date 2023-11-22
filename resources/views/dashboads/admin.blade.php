@@ -268,13 +268,12 @@
 </style>
 @section('content')
     <div class="">
-
         <div class="page-header">
             <div class="row">
                 <div class="col-sm-12">
-                    <h3 class="page-title">Welcome {{ Auth::user()->employee_name_en }}!</h3>
+                    <h3 class="page-title">@lang("lang.welcome") {{Helper::getLang() == 'en' ? Auth::user()->employee_name_en :  Auth::user()->employee_name_kh}}!</h3>
                     <ul class="breadcrumb">
-                        <li class="breadcrumb-item active">Dashboard</li>
+                        <li class="breadcrumb-item active">@lang('lang.dashboard')</li>
                     </ul>
                 </div>
             </div>
@@ -286,7 +285,7 @@
                         <span class="dash-widget-icon"><i class="fa fa-user"></i></span>
                         <div class="dash-widget-info">
                             <h3 id="total-resigned-staff"></h3>
-                           <a href="{{ url('/reports/staff-resigned-report') }}"> <span>Resigned Staff</span></a>
+                           <a href="{{ url('/reports/staff-resigned-report') }}"> <span>@lang('lang.resigned_staff')</span></a>
                         </div>
                     </div>
                 </div>
@@ -297,7 +296,7 @@
                         <span class="dash-widget-icon"><i class="fa fa-user"></i></span>
                         <div class="dash-widget-info">
                             <h3 id="total-promoted-staff"></h3>
-                            <a href="{{ url('/reports/promoted-staff-report') }}"><span>Promoted Staff</span></a>
+                            <a href="{{ url('/reports/promoted-staff-report') }}"><span>@lang('lang.promoted_staff')</span></a>
                         </div>
                     </div>
                 </div>
@@ -308,7 +307,7 @@
                         <span class="dash-widget-icon"><i class="fa fa-user"></i></span>
                         <div class="dash-widget-info">
                             <h3 id="total-transferred-staff"></h3>
-                            <a href="{{ url('/reports/transferred-staff-report') }}"> <span>Transferred Staff</span></a>
+                            <a href="{{ url('/reports/transferred-staff-report') }}"> <span>@lang('lang.transferred_staff')</span></a>
                         </div>
                     </div>
                 </div>
@@ -319,109 +318,113 @@
                         <span class="dash-widget-icon"><i class="la la-edit"></i></span>
                         <div class="dash-widget-info">
                             <h3 id="total-training"></h3>
-                            <a href="{{ url('/training/list') }}"><span>Training</span></a>
+                            <a href="{{ url('/training/list') }}"><span>@lang('lang.training')</span></a>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
         <div class="row">
-            <div class="col-md-12 col-lg-6 col-xl-4 d-flex">
-                <div class="card flex-fill">
-                    <div class="card-body">
-                        <h4 class="card-title">Employee</h4>
-                        <div class="statistics">
-                            <div class="row">
-                                <div class="col-md-6 col-6 text-center">
-                                    <div class="stats-box mb-4">
-                                        <p>Total Employee</p>
-                                        <h3 id="total-staff"></h3>
+            @if (permissionAccess("2","is_dashboard")->is_dashboard["is_employee"] == "1")
+                <div class="col-md-12 col-lg-6 col-xl-4 d-flex">
+                    <div class="card flex-fill">
+                        <div class="card-body">
+                            <h4 class="card-title">@lang('lang.employee')</h4>
+                            <div class="statistics">
+                                <div class="row">
+                                    <div class="col-md-6 col-6 text-center">
+                                        <div class="stats-box mb-4">
+                                            <p>@lang('lang.total_employee')</p>
+                                            <h3 id="total-staff"></h3>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-6 text-center">
+                                        <div class="stats-box mb-4">
+                                            <p>@lang('lang.total_female')</p>
+                                            <h3 id="total-female">0</h3>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="col-md-6 col-6 text-center">
-                                    <div class="stats-box mb-4">
-                                        <p>Total Female</p>
-                                        <h3 id="total-female"></h3>
+                            </div>
+                            <div class="progress mb-4">
+                                <div class="progress-bar bg-purple" role="progressbar" style="width: 30%" aria-valuenow="30"
+                                    aria-valuemin="0" aria-valuemax="100"><span id="percentage-interview"></span></div>
+                                <div class="progress-bar bg-success" role="progressbar" style="width: 22%" aria-valuenow="18"
+                                    aria-valuemin="0" aria-valuemax="100"><span id="percantage-probation"></span></div>
+                                <div class="progress-bar bg-text-info" role="progressbar" style="width: 24%" aria-valuenow="12"
+                                    aria-valuemin="0" aria-valuemax="100"><span id="percantage-fdc"></span></div>
+                                <div class="progress-bar bg-danger" role="progressbar" style="width: 26%" aria-valuenow="14"
+                                    aria-valuemin="0" aria-valuemax="100"><span id="percantage-udc"></span></div>
+                            </div>
+                            <div>
+                                <p><i class="fa fa-dot-circle-o text-purple me-2"></i>@lang('lang.up-coming')<span
+                                        id="total-interview" class="float-end">0</span></p>
+                                <p><i class="fa fa-dot-circle-o text-success me-2"></i>@lang('lang.probation')<span
+                                        id="total-probation" class="float-end">0</span></p>
+                                <p><i class="fa fa-dot-circle-o text-info me-2"></i>@lang('lang.fdc')<span
+                                        id="total-fdc" class="float-end">0</span></p>
+                                <p><i class="fa fa-dot-circle-o text-danger me-2"></i>@lang('lang.udc') <span
+                                        id="total-udc" class="float-end">0</span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endif
+            @if (permissionAccess("2","is_dashboard")->is_dashboard["is_age_of_employee"] == "1")
+                <div class="col-md-12 col-lg-12 col-xl-4 d-flex">
+                    <div class="card flex-fill dash-statistics">
+                        <div class="card-body">
+                            <h5 class="card-title">@lang('lang.age_of_employee')</h5>
+                            <p><i class="fa fa-dot-circle-o text-info"></i> <span class="me-2">@lang('lang.age')</span></p>
+                            <div class="stats-list">
+                                <div class="stats-info">
+                                    <p>18 - 24 <strong><small id="total-age-18">0</small></strong></p>
+                                    <div class="progress">
+                                        <div class="progress-bar bg-success" role="progressbar" id="progressbar-18" aria-valuemin="0"></div>
+                                    </div>
+                                </div>
+                                <div class="stats-info">
+                                    <p>25 - 44 <strong id="total-age-25">0</strong></p>
+                                    <div class="progress">
+                                        <div class="progress-bar bg-info" role="progressbar" id="progressbar-25" aria-valuemin="0"></div>
+                                    </div>
+                                </div>
+                                <div class="stats-info">
+                                    <p>45 - 60 <strong id="total-age-45">0</strong></p>
+                                    <div class="progress">
+                                        <div class="progress-bar bg-danger" role="progressbar"
+                                        id="progressbar-45" aria-valuemin="0"></div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="progress mb-4">
-                            <div class="progress-bar bg-purple" role="progressbar" style="width: 30%" aria-valuenow="30"
-                                aria-valuemin="0" aria-valuemax="100"><span id="percentage-interview"></span></div>
-                            <div class="progress-bar bg-success" role="progressbar" style="width: 22%" aria-valuenow="18"
-                                aria-valuemin="0" aria-valuemax="100"><span id="percantage-probation"></span></div>
-                            <div class="progress-bar bg-text-info" role="progressbar" style="width: 24%" aria-valuenow="12"
-                                aria-valuemin="0" aria-valuemax="100"><span id="percantage-fdc"></span></div>
-                            <div class="progress-bar bg-danger" role="progressbar" style="width: 26%" aria-valuenow="14"
-                                aria-valuemin="0" aria-valuemax="100"><span id="percantage-udc"></span></div>
-                        </div>
-                        <div>
-                            <p><i class="fa fa-dot-circle-o text-purple me-2"></i>Up-Coming <span
-                                    id="total-interview" class="float-end">0</span></p>
-                            <p><i class="fa fa-dot-circle-o text-success me-2"></i>Probation <span
-                                    id="total-probation" class="float-end">0</span></p>
-                            <p><i class="fa fa-dot-circle-o text-info me-2"></i>FDC <span
-                                    id="total-fdc" class="float-end">0</span></p>
-                            <p><i class="fa fa-dot-circle-o text-danger me-2"></i>UDC <span
-                                    id="total-udc" class="float-end">0</span></p>
-                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-12 col-lg-12 col-xl-4 d-flex">
-                <div class="card flex-fill dash-statistics">
-                    <div class="card-body">
-                        <h5 class="card-title">Age of Employee</h5>
-                        <p><i class="fa fa-dot-circle-o text-info"></i> <span class="me-2">Age</span></p>
-                        <div class="stats-list">
-                            <div class="stats-info">
-                                <p>18 - 24 <strong><small id="total-age-18"></small></strong></p>
-                                <div class="progress">
-                                    <div class="progress-bar bg-success" role="progressbar" id="progressbar-18" aria-valuemin="0"></div>
-                                </div>
+            @endif
+            @if (permissionAccess("2","is_dashboard")->is_dashboard["is_birthday_reminder"] == "1")
+                <div class="col-md-12 col-lg-6 col-xl-4 d-flex">
+                    <div class="card flex-fill">
+                        <div class="card-body">
+                            <h4 class="card-title">@lang('lang.birthday_reminder') <span class="bg-inverse-danger ms-2" id="total-date-birthday">0</span></h4>
+                            <div class="card-detail">
+                                <div id="birthday-staff" style="width: -webkit-fill-available"></div>
                             </div>
-                            <div class="stats-info">
-                                <p>25 - 44 <strong id="total-age-25">0</strong></p>
-                                <div class="progress">
-                                    <div class="progress-bar bg-info" role="progressbar" id="progressbar-25" aria-valuemin="0"></div>
-                                </div>
-                            </div>
-                            <div class="stats-info">
-                                <p>45 - 60 <strong id="total-age-45">0</strong></p>
-                                <div class="progress">
-                                    <div class="progress-bar bg-danger" role="progressbar"
-                                    id="progressbar-45" aria-valuemin="0"></div>
-                                </div>
+                            <div class="load-more text-center" id="btn-more">
+                                <a class="text-dark" href="{{ url('/users/birthday') }}">@lang('lang.more')</a>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            
-            <div class="col-md-12 col-lg-6 col-xl-4 d-flex">
-                <div class="card flex-fill">
-                    <div class="card-body">
-                        <h4 class="card-title">Birthday Reminder <span class="badge bg-inverse-danger ms-2" id="total-date-birthday">0</span></h4>
-                        <div class="card-detail">
-                            <div id="birthday-staff" style="width: -webkit-fill-available"></div>
-                        </div>
-                        <div class="load-more text-center" id="btn-more">
-                            <a class="text-dark" href="{{ url('/users/birthday') }}">More</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            @endif
         </div>
         @include('dashboads.chart_board')
         <?php 
             $userUpComming = Session::get('dataUpComming');
             $userProbation = Session::get('dataProbation');
-            $userFdc = Session::get('dataFdc');
             $ShortList = Session::get('dataShortList');
             $SignContract = Session::get('dataContract');
         ?>
-        @if ($userUpComming || $userProbation || $userFdc || $ShortList || $SignContract)
+        @if ($userUpComming || $userProbation || $ShortList || $SignContract)
             <div id="showNotyfication" class="modal custom-modal fade" style="display: none;" aria-hidden="true" data-bs-backdrop="static">
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
@@ -503,30 +506,12 @@
                                                     </div>
                                                </div>
                                             @endif
-                                            @if ($userFdc)
-                                               <div class="form-group">
-                                                    <label for="" class="text-danger">Pleas change status fdc to udc</label>
-                                                    <div class="dash-info-list">
-                                                        <div class="dash-card">
-                                                            <div class="dash-card-container">
-                                                                <div class="dash-card-icon">
-                                                                    <i class="fa fa-user-plus"></i>
-                                                                </div>
-                                                                <div class="dash-card-content">
-                                                                    <p>{{$userFdc}} People will be change to employee <a href="{{url('users')}}" target="_blank">link>></a></p>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                               </div>
-                                            @endif
                                         </div>
                                     </section>
                                 </div>
                             </div>
                             <input type="hidden" id="" class="hidden" value="{{$userUpComming}}">
                             <input type="hidden" id="" class="hidden" value="{{$userProbation}}">
-                            <input type="hidden" id="" class="hidden" value="{{$userFdc}}">
                         </div>
                     </div>
                 </div>
@@ -552,6 +537,7 @@
             dataType: "JSON",
             success: function(response) {
                 let totalStaff = response.totalStaff;
+                console.log(totalStaff);
                 if (totalStaff.length > 0 ) {
                     let total_female = 0;
                     let total_probatio = 0;
@@ -573,7 +559,8 @@
                         } 
                         if (emp.emp_status == "1" || emp.emp_status == "10") {
                             total_fdc++;
-                        } 
+                        }
+                         
                         if (emp.emp_status == "2") {
                             total_udc++;
                         }
@@ -607,11 +594,19 @@
                         let date_of_daymonth = moment(emp.date_of_birth).format("MM-DD");
                         let current_year = moment().format("YYYY");
                         let date_of_birth = moment(date_of_daymonth+'-'+current_year).format("D-MMM-YYYY");
+                        let tag_a = '';
+                        if (emp.profile != null) {
+                            tag_a = '<a href="#" class="avatar">'+
+                                        '<img alt="" src="{{asset("/uploads/images")}}/'+(emp.profile)+'">'+
+                                    '</a>';
+                        }else {
+                            tag_a = '<a href="#" class="avatar">'+
+                                    '<img alt="" src="{{asset("admin/img/defuals/default-user-icon.png")}}">'+
+                                '</a>';
+                        };
                         div += '<div class="leave-info-box">'+
                                     '<div class="media d-flex align-items-center">'+
-                                        '<a href="#" class="avatar">'+
-                                            '<img alt="" id="profile-imge" src="{{asset("/uploads/images")}}/'+(emp.profile)+'">'+
-                                        '</a>'+
+                                        (tag_a)+
                                         '<div class="media-body flex-grow-1">'+
                                             '<div class="text-sm my-0" >'+(emp.employee_name_en)+'</div>'+
                                         '</div>'+
@@ -619,7 +614,7 @@
                                     '<div class="row align-items-center mt-3">'+
                                         '<div class="col-6">'+
                                             '<h6 class="mb-0">'+(date_of_birth)+'</h6>'+
-                                            '<span class="text-sm text-muted">Birthday</span>'+
+                                            '<span class="text-sm text-muted">@lang("lang.birthday")</span>'+
                                         '</div>'+
                                         '<div class="col-6 text-end">'+
                                             '<div>'+
@@ -705,8 +700,19 @@
                     position_type: response.position_type
                 };
 
-                let dataTraining = {
-                    employeeTrainings: response.dataEmployeeTrainings.flat(1),
+                const groupedTraining = response.dataEmployeeTrainings.reduce((train, training) => {
+                const group = train[training.training_type] || [];
+                    group.push(training);
+                    train[training.training_type] = group;
+                    return train;
+                }, {});
+                let dataTrainingInternal = {
+                    employeeTrainings: groupedTraining[1] ? groupedTraining[1] : [],
+                    branches: response.branches,
+                }
+                let dataTrainingExternal = {
+                    // employeeTrainings: response.dataEmployeeTrainings.flat(1),
+                    employeeTrainings: groupedTraining[2] ? groupedTraining[2] : [],
                     branches: response.branches,
                 }
                 showDashboard(datas);
@@ -715,7 +721,8 @@
                 dashboardStaffResign(dataStaffResign);
                 dascboardReasonOffStaff(dataReasonStaff);
                 dashboardTypeOfStaff(typeOfStaff);
-                dashboardTraining(dataTraining);
+                dashboardTrainingInternal(dataTrainingInternal);
+                dashboardTrainingExternal(dataTrainingExternal);
             }
         });
     });
@@ -771,14 +778,13 @@
         };
 
         $.each(deshboard, function(i, db) {
-            let text = "";
+            let text = "@lang('lang.staff_taking_leave')";
             let data = {};
             let type = "";
             let option = {};
             if (db.name == "staff_take_leave") {
                 type = "bar";
                 data = db.name == "staff_take_leave" ? dataStaffTakeLeave : dataStaffTraining;
-                text = 'Staff Taking Leave';
                 option = {
                     plugins: {
                         legend: {
@@ -819,7 +825,9 @@
                 options: option,
                 plugins: [ChartDataLabels]
             }
-            new Chart(db.name, dataChart);
+            if ($("#access_staff_take_leave").val() ==1) {
+                new Chart(db.name, dataChart);
+            }
         });
     }
 
@@ -827,7 +835,7 @@
         const dataHRMSdashboards = {
             // labels: [],
             datasets: [{
-                    label: 'Total',
+                    label: '@lang("lang.total")',
                     data: [],
                     backgroundColor: [
                         "red"
@@ -835,7 +843,7 @@
                     stack: 'Stack 0',
                 },
                 {
-                    label: 'Female',
+                    label: '@lang("lang.female")',
                     data: [],
                     backgroundColor: [
                         "green"
@@ -905,7 +913,7 @@
                 },
                 title: {
                     display: true,
-                    text: "Total Number of Staff"
+                    text: "@lang('lang.total_number_of_staff')"
                 },
 
             },
@@ -926,13 +934,17 @@
             options: option,
             plugins: [ChartDataLabels]
         }
-        new Chart('HRMS_dashboards', dataChart);
+        if ($("#access_HRMS_dashboards").val() ==1) {
+            new Chart('HRMS_dashboards', dataChart);
+        }
     }
 
     function dashboadAchieveBranch(datas) {
+        var date = new Date();
+        let currenYear = date.getFullYear();
         let dataAchive = {
             datasets: [{
-                    label: 'Total Staff',
+                    label: '@lang("lang.total_staff")',
                     data: [],
                     backgroundColor: [
                         "green"
@@ -940,7 +952,7 @@
                     stack: 'Stack 0',
                 },
                 {
-                    label: 'Current & Recruited 2023',
+                    label: '@lang("lang.current") @lang("lang.&") @lang("lang.recruited") ' + currenYear,
                     data: [],
                     backgroundColor: [
                         "yellow"
@@ -1016,7 +1028,7 @@
         });
 
         dataAchive.datasets.push({
-            label: '% Achivement',
+            label: '% @lang("lang.achivement")',
             data: dataAchRed,
             backgroundColor: [
                 "red"
@@ -1047,7 +1059,7 @@
                 },
                 title: {
                     display: true,
-                    text: '% Credit Staff Ratio'
+                    text: '% @lang("lang.total_inactive_staff")'
                 },
             },
             responsive: true,
@@ -1067,7 +1079,9 @@
             options: option,
             plugins: [ChartDataLabels]
         }
-        new Chart('achived_by_branches', dataChart);
+        if ($("#access_achived_by_branches").val() ==1) {
+            new Chart('achived_by_branches', dataChart);  
+        }
     }
 
     function dashboardStaffResign(datas) {
@@ -1141,7 +1155,7 @@
                 },
                 title: {
                     display: true,
-                    text: '% Resigned Staff'
+                    text: '% @lang("lang.resigned_staff")'
                 },
             },
         }
@@ -1152,7 +1166,9 @@
             options: option,
             plugins: [ChartDataLabels]
         }
-        new Chart('staff_resignation', dataChart);
+        if ($("#access_staff_resignation").val() == 1) {
+            new Chart('staff_resignation', dataChart);
+        }
     }
 
     function dascboardReasonOffStaff(datas) {
@@ -1190,7 +1206,12 @@
                     }
                 });
             }
-            labelStaffResignation.push(reason.name_english);
+            var localeLanguage = '{{ config('app.locale') }}';
+            if (localeLanguage == 'en') {
+                labelStaffResignation.push(reason.name_english);
+            } else {
+                labelStaffResignation.push(reason.name_khmer);
+            }
             staffResignationData.push((totalValueStaffResignation / datas.totalEmployee) * 100);
         });
         if (totalStaffResign > 0) {
@@ -1218,11 +1239,11 @@
             });
             staffResignationData.push(dataSumTermination, dataSumDeath, dataSumLayoff, dataSumSuspension, dataSumFallProbation);
         }
-        labelStaffResignation.push("Termination","Death","Lay Off", "No need to input", "Failed Probation");
+        // labelStaffResignation.push("Termination","Death","Lay Off", "No need to input", "Failed Probation");
         dataReasonStaffResignation.labels = labelStaffResignation;
         dataReasonStaffResignation.datasets[0].data = staffResignationData;
         let data = dataReasonStaffResignation;
-        let text = "% Reasons of Staff’s Exit";
+        let text = "% @lang('lang.reasons_of_staff’s_exit')";
         let option = {
             responsive: true,
             plugins: {
@@ -1255,10 +1276,13 @@
             options: option,
             plugins: [ChartDataLabels]
         }
-        new Chart("reasons_staff_resignation", dataChart);
+        if ($("#access_reasons_staff_resignation").val() == 1) {
+            new Chart("reasons_staff_resignation", dataChart);
+        }
     }
 
     function dashboardTypeOfStaff(datas) {
+        var localeLanguage = '{{ config('app.locale') }}';
         let dataTypeStaff = {
             datasets: [
             ]
@@ -1294,14 +1318,26 @@
                     total,
                     name_english: position.name_english
                 });
-                type_labels.push(position.name_english);
+                if (localeLanguage == 'en') {
+                    type_labels.push(position.name_english);
+                } else {
+                    type_labels.push(position.name_khmer);
+                }
             }
             if (position.type ==  "gender") {
-                dataTypeStaff.datasets.push(
-                    {
-                        label: '% '+position.name_english,
-                    },
-                )
+                if (localeLanguage == 'en') {
+                    dataTypeStaff.datasets.push(
+                        {
+                            label: '% '+position.name_english,
+                        },
+                    )
+                } else {
+                    dataTypeStaff.datasets.push(
+                        {
+                            label: '% '+position.name_khmer,
+                        },
+                    )
+                }
             }  
         });
         dataTypeStaff.datasets[0].backgroundColor = ["green"];
@@ -1311,7 +1347,11 @@
         dataTypeStaff.datasets[1].stack = 'Stack 1';
         dataTypeStaff.datasets[1].data = [];
     
-        type_labels.push('total')
+        if (localeLanguage == 'en') {
+            type_labels.push('total')
+        } else {
+            type_labels.push('សរុប')
+        }
         dataTypeStaff.labels = type_labels;
         dataTypeStaff.datasets[0].data = [
             (data_value[0].male / datas.employee_position_type.length) * 100,
@@ -1330,7 +1370,7 @@
         ];
         dataTypeStaff.datasets.push(
             {
-                label: 'Total',
+                label: '@lang("lang.total")',
                 data: dataTypeStaffRed,
                 backgroundColor: [
                     "red"
@@ -1361,7 +1401,7 @@
                 },
                 title: {
                     display: true,
-                    text: '% Staff Ratio'
+                    text: '% @lang("lang.staff_ratio")'
                 },
             },
             responsive: true,
@@ -1381,14 +1421,16 @@
             options: option,
             plugins: [ChartDataLabels]
         }
-        new Chart('type_of_staff', dataChart);
+        if ($("#access_type_of_staff").val() == 1) {
+            new Chart('type_of_staff', dataChart);
+        }
     }
 
-    function dashboardTraining(datas){
+    function dashboardTrainingInternal(datas){
         let dataStaffTraining = {
             labels: [],
             datasets: [{
-                label: 'Total Staff',
+                label: '@lang("lang.total_staff")',
                 data: [],
                 backgroundColor: [
                     "green"
@@ -1397,34 +1439,28 @@
             }, ]
         };
         if (datas.branches.length > 0) {
-            
-            // const groupedTraining = datas.employeeTrainings.reduce((train, training) => {
-            // const group = train[training.training_type] || [];
-            //     group.push(training);
-            //     train[training.training_type] = group;
-            //     return train;
-            // }, {});
-            // console.log("groupedTraining: ", groupedTraining);
-
+            let trainingInternal = [];
+            if (datas.employeeTrainings.length > 0) {
+                trainingInternal = mergeEmployeeArrays(datas.employeeTrainings);
+            }
             datas.branches.map((br) => {
-                let totalValue = 0;
+                let  totalValueInternal = 0;
                 if (datas.employeeTrainings.length > 0) {
-                    datas.employeeTrainings.map((emp) => {
+                    trainingInternal.map((emp) => {
                         if (emp.branch_id == br.id) {
-                            totalValue++;
+                            totalValueInternal++;
                         }
-                    })
+                    });
+
                 }
                 dataStaffTraining.labels.push(br.abbreviations);
-                dataStaffTraining.datasets[0].data.push(totalValue);
+                dataStaffTraining.datasets[0].data.push(totalValueInternal);
             });
+            dataStaffTraining.labels.push("Total");
+            dataStaffTraining.datasets[0].data.push(trainingInternal.length);
         } 
-        dataStaffTraining.labels.push("Total");
-        dataStaffTraining.datasets[0].data.push(datas.employeeTrainings.length);
-        let type = "bar";
-        let data = dataStaffTraining;
-        let text = 'Staff Training by Branch External';
-        let option = {
+       
+        let optionInternal = {
             plugins: {
                 legend: {
                     display: false,
@@ -1440,8 +1476,12 @@
                 },
                 title: {
                     display: true,
-                    text
+                    text: "@lang('lang.staff_training_by_branch')"
                 },
+                subtitle: {
+                    display: true,
+                    text: '( @lang("lang.internal") )'
+                }
             },
             responsive: true,
             interaction: {
@@ -1456,16 +1496,110 @@
                 }
             }
         }
-        let dataChart = {
-            type,
-            data,
-            options: option,
+        let dataChartInternal = {
+            type: "bar",
+            data: dataStaffTraining,
+            options: optionInternal,
             plugins: [ChartDataLabels]
         }
-        new Chart('staff_Training_by_branch_external', dataChart);
-        new Chart('staff_Training_by_branch_internal', dataChart);
+        if ($("#access_staff_Training_by_branch_internal").val() == 1) {
+            new Chart('staff_Training_by_branch_internal', dataChartInternal);
+        }
     }
 
+    function dashboardTrainingExternal(datas){
+        let dataStaffTraining = {
+            labels: [],
+            datasets: [{
+                label: '@lang("lang.total_staff")',
+                data: [],
+                backgroundColor: [
+                    "green"
+                ],
+                stack: 'Stack 0',
+            }, ]
+        };
+        if (datas.branches.length > 0) {
+            let dataTypeExternal = [];
+            if (datas.employeeTrainings.length > 0) {
+                dataTypeExternal = mergeEmployeeArrays(datas.employeeTrainings);
+            }
+            datas.branches.map((br) => {
+                let totalValueExternal = 0;
+                let  totalValueInternal = 0;
+                if (datas.employeeTrainings.length > 0) {
+                    dataTypeExternal.map((emp) => {
+                        if (emp.branch_id == br.id) {
+                            totalValueExternal++;
+                        }
+                    });
+                }
+                dataStaffTraining.labels.push(br.abbreviations);
+                dataStaffTraining.datasets[0].data.push(totalValueExternal);
+            });
+            dataStaffTraining.labels.push("Total");
+            dataStaffTraining.datasets[0].data.push(dataTypeExternal.length);
+        } 
+        let optionExternal = {
+            
+            plugins: {
+                legend: {
+                    display: false,
+                },
+                datalabels: {
+                    anchor: 'end',
+                    align: 'top',
+                    font: {
+                        weight: 'bold',
+                        size: 10
+                    },
+                    align: 'center',
+                },
+                title: {
+                    display: true,
+                    text: "@lang('lang.staff_training_by_branch')"
+                },
+                subtitle: {
+                    display: true,
+                    text: '( @lang("lang.external") )'
+                }
+            },
+            responsive: true,
+            interaction: {
+                intersect: false,
+            },
+            scales: {
+                x: {
+                    stacked: true,
+                },
+                y: {
+                    stacked: true
+                }
+            }
+        }
+        
+        let dataChartExternal = {
+            type: "bar",
+            data: dataStaffTraining,
+            options: optionExternal,
+            plugins: [ChartDataLabels]
+        }
+        if ($("#access_staff_Training_by_branch_external").val() == 1) {
+            new Chart('staff_Training_by_branch_external', dataChartExternal);
+        }
+       
+    }
+    function mergeEmployeeArrays(data) {
+        let mergedEmployeeArray = [];
+        for (const dictionary of data) {
+            mergedEmployeeArray = mergedEmployeeArray.concat(dictionary.employee);
+        }
+        let training = mergedEmployeeArray.filter(
+                (value, index, self) =>
+                    index === self.findIndex((t) => t.number_employee === value.number_employee && t.branch_id === value.branch_id)
+            );
+        return training;
+    }
     function monthDiff(dateFrom, dateTo) {
         return dateTo.getMonth() - dateFrom.getMonth() + (12 * (dateTo.getFullYear() - dateFrom.getFullYear()))
     }

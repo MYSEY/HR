@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Helpers\Helper;
 use App\Models\Position;
 use App\Models\Department;
 use Illuminate\Support\Carbon;
@@ -38,7 +39,8 @@ class StaffPromoted extends Model
     }
 
     public function getPostionPromotedAttribute(){
-        return optional($this->position)->name_khmer;
+        // return optional($this->position)->name_khmer;
+        return (Helper::getLang() == 'en') ? optional($this->position)->name_english : optional($this->position)->name_khmer;
     }
     public function getDepartmentPromotedAttribute(){
         return optional($this->department)->name_khmer;

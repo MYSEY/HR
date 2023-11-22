@@ -22,43 +22,13 @@ class TrainingController extends Controller
     public function index()
     {
         $dataTrainings = Training::get();
-        $trainer = Trainer::all();
-       
-        // $trainingType = TrainingType::all();
+        $trainer = Trainer::where("status", 1)->get();
         $employee = User::whereNot("emp_status", null)->get();
-        // $dataTrainings = [];
-        // foreach ($data as $key => $item) {
-        //     $trainers = [];
-        //     foreach ($item->trainer_id as $key => $trai) {
-        //         $dataTrainer = Trainer::where('id', $trai)->first();
-        //         $trainers[] = [
-        //             "name_kh" => $dataTrainer->name_kh,
-        //             "name_en" => $dataTrainer->name_en,
-        //             "email" =>  $dataTrainer->email,
-        //             "number_phone" => $dataTrainer->number_phone,
-        //             "remark" => $dataTrainer->remark,
-        //             "status" => $dataTrainer->status
-        //         ];
-
-        //     }
-        //     $employees = [];
-        //     foreach ($item->employee_id as $key => $empl) {
-        //         $em =  User::where('id', $empl)->select("employee_name_kh", "employee_name_en", "profile")->get();
-        //         $employees[] = [
-        //            "employee_name_kh" => $em[0]->employee_name_kh,
-        //            "employee_name_en" => $em[0]->employee_name_en,
-        //            "profile" => $em[0]->profile
-        //         ];
-        //     }
-        //     $item["trainers"] = $trainers;
-        //     $item["employees"] = $employees;
-        //     $dataTrainings[] = $item;
-        // }
         
         return view('training.index', compact('trainer', 'employee', 'dataTrainings'));
     }
     public function trainer(){
-        $trainer = Trainer::with("employee")->get();
+        $trainer = Trainer::where("status", 1)->with("employee")->get();
         return response()->json([
             'data'=>$trainer,
         ]);

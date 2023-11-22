@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class MotorRentel extends Model
 {
     use HasFactory;
+    use SoftDeletes;
 
     protected $table = 'motor_rentels';
     protected $guarded = ['id'];
@@ -22,6 +24,10 @@ class MotorRentel extends Model
         'expired_year',
         'shelt_life',
         'number_plate',
+        'motorcycle_brand',
+        'category',
+        'body_number',
+        'engine_number',
         'total_gasoline',
         'total_work_day',
         'price_engine_oil',
@@ -29,6 +35,7 @@ class MotorRentel extends Model
         'taplab_rentel',
         'price_taplab_rentel',
         'tax_rate',
+        'status',
         'created_by',
         'updated_by',
     ];
@@ -54,8 +61,24 @@ class MotorRentel extends Model
             'department_id',
             'position_id',
             'branch_id',
-            'gender'])
-        ->with('department')->with('position')->with('gender')->with('branch');
+            'gender',
+            'date_of_birth',
+            'id_card_number',
+            'current_province',
+            'current_district',
+            'current_commune',
+            'current_village',
+            'current_house_no',
+            'current_street_no',
+        ])
+        ->with('department')
+        ->with('position')
+        ->with('gender')
+        ->with('branch')
+        ->with('currentprovince')
+        ->with('currentdistrict')
+        ->with('currentcommune')
+        ->with('currentvillage');
     }
 
     public function getMotorEmployeeAttribute(){

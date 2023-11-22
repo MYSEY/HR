@@ -17,7 +17,9 @@ class Transferred extends Model
     protected $fillable = [
         'employee_id',
         'branch_id',
+        'tranferend_branch_name',
         'position_id',
+        'tranferend_position_name',
         'date',
         'descrition',
         'updated_by'
@@ -37,10 +39,10 @@ class Transferred extends Model
     }
 
     public function getTransferredBranchAttribute(){
-        return optional($this->branch);
+        return optional($this->branch)->tranferend_branch_name;
     }
     public function getTransferredPositionAttribute(){
-        return optional($this->position);
+        return optional($this->position)->name_english;
     }
 
     public function getTransferEmpAttribute(){

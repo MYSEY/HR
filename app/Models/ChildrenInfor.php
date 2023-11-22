@@ -5,11 +5,13 @@ namespace App\Models;
 use Carbon\Carbon;
 use App\Models\Option;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class ChildrenInfor extends Model
 {
     use HasFactory;
+    use SoftDeletes;
 
     protected $table = 'children_infors';
     protected $guarded = ['id'];
