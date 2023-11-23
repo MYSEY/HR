@@ -18,7 +18,7 @@
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label>@lang('lang.name') <span class="text-danger">*</span></label>
-                                                <input class="form-control" type="text" name="name" id="e_name" required>
+                                                <input class="form-control" type="text" name="name" id="e_name_children" required>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
@@ -36,7 +36,7 @@
                                                 <select class="form-control" id="e_sex" name="sex" value="">
                                                     <option selected disabled value=""> -- @lang('lang.select') --</option>
                                                     @foreach ($optionGender as $item)
-                                                        <option value="{{$item->id}}">{{$item->name_english}}</option>
+                                                        <option value="{{$item->id}}">{{Helper::getLang() == 'en' ? $item->name_english : $item->name_khmer}}</option>
                                                     @endforeach
                                                 </select>
                                             </div>

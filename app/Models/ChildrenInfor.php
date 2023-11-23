@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use App\Models\Option;
+use App\Helpers\Helper;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -34,7 +35,8 @@ class ChildrenInfor extends Model
         $years = Carbon::now()->diffInYears($this->date_of_birth);
         $month = Carbon::now()->diffInMonths($this->date_of_birth);
         if ($this->date_of_birth) {
-            return $years.' '.'Year';
+            $yearLang = Helper::getLang() == 'en' ? 'Year' : 'ឆ្នាំ';
+            return $years.' '.$yearLang;
         }
     }
 
@@ -42,7 +44,7 @@ class ChildrenInfor extends Model
         $data = Option::where('type','gender')->get();
         foreach($data as $item){
             if($this->sex == $item->id){
-                $Gender = $item->name_english;
+                $Gender =  Helper::getLang() == 'en' ? $item->name_english : $item->name_khmer;
             }
         }
         return $Gender ?? "";

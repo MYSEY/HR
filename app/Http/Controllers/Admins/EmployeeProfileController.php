@@ -32,6 +32,7 @@ class EmployeeProfileController extends Controller
         $optionDegree = Option::where('type','degree')->get();
         $relationship = Option::where('type','relationship')->get();
         $optionGender = Option::where('type','gender')->get();
+        $EmploymentType = Option::where('type','experience')->get();
         $department = Department::all();
         $position = Position::all();
         $branch = Branchs::all();
@@ -59,7 +60,8 @@ class EmployeeProfileController extends Controller
             'experiences',
             'childrenInfor',
             'optionGender',
-            'empTranferend'
+            'empTranferend',
+            'EmploymentType'
         ));
     }
     public function employeeEducation(Request $request){
@@ -76,7 +78,7 @@ class EmployeeProfileController extends Controller
                             'grade'             => $request->grade[$key] ?? '',
                             'start_date'        => !empty($request->start_date[$key]) ? Carbon::parse($request->start_date[$key])->format('Y-m-d') : '',
                             'end_date'          => !empty($request->end_date[$key]) ? Carbon::parse($request->end_date[$key])->format('Y-m-d') : '',
-                            'updated_by'        => Auth::id(),
+                            'created_by'        => Auth::id(),
                         ]);
                     endif;
                 endforeach;
@@ -87,6 +89,45 @@ class EmployeeProfileController extends Controller
         }catch(\Exception $e){
             DB::rollback();
             Toastr::error('Update education fail','Error');
+            return redirect()->back();
+        }
+    }
+    public function educationEdit(Request $request){
+        $optionOfStudy = Option::where('type','field_of_study')->get();
+        $optionDegree = Option::where('type','degree')->get();
+        $data = Education::where('id',$request->id)->first();
+        return response()->json(['success'=>$data,'optionOfStudy'=>$optionOfStudy,'optionDegree'=>$optionDegree]);
+    }
+    public function educationUpdate(Request $request){
+        try{
+            Education::where('id',$request->id)->update([
+                'employee_id'   => $request->employee_id,
+                'school'        => $request->school,
+                'field_of_study'=> $request->field_of_study,
+                'degree'        => $request->degree,
+                'grade'         => $request->grade,
+                'start_date'    => $request->start_date,
+                'end_date'      => $request->end_date,
+                'updated_by'    => Auth::id(),
+            ]);
+
+            DB::commit();
+            Toastr::success('Update Education successfully.','Success');
+            return redirect()->back();
+        }catch(\Exception $e){
+            DB::rollback();
+            Toastr::error('Update Education fail','Error');
+            return redirect()->back();
+        }
+    }
+    public function educationDelete(Request $request){
+        try{
+            Education::destroy($request->id);
+            Toastr::success('Education deleted successfully.','Success');
+            return redirect()->back();
+        }catch(\Exception $e){
+            DB::rollback();
+            Toastr::error('Education delete fail.','Error');
             return redirect()->back();
         }
     }
@@ -123,7 +164,7 @@ class EmployeeProfileController extends Controller
         }
     }
 
-    public function updateOrCreateExperience(Request $request)
+    public function createExperience(Request $request)
     {
         try {
             if (is_array($request->company_name) && count($request->company_name)) {
@@ -148,6 +189,49 @@ class EmployeeProfileController extends Controller
         }catch(\Exception $e){
             DB::rollback();
             Toastr::error('Update experience fail','Error');
+            return redirect()->back();
+        }
+    }
+    public function editeExperience(Request $request){
+        try{
+            $EmploymentType = Option::where('type','experience')->get();
+            $data = Experience::where('id',$request->id)->first();
+            return response()->json(['success'=>$data,'EmploymentType'=>$EmploymentType]);
+        }catch(\Exception $e){
+            DB::rollback();
+            return redirect()->back();
+        }
+    }
+    public function updateExperience(Request $request){
+        try{
+            Experience::where('id',$request->id)->update([
+                'employee_id'       => $request->employee_id,
+                'employment_type'   => $request->employment_type,
+                'company_name'      => $request->company_name,
+                'position'          => $request->position,
+                'start_date'        => $request->start_date_experience,
+                'end_date'          => $request->end_date_experience,
+                'location'          => $request->location,
+                'updated_by'        => Auth::id(),
+            ]);
+
+            DB::commit();
+            Toastr::success('Update experience successfully.','Success');
+            return redirect()->back();
+        }catch(\Exception $e){
+            DB::rollback();
+            Toastr::error('Update experience fail','Error');
+            return redirect()->back();
+        }
+    }
+    public function deleteExperience(Request $request){
+        try{
+            Experience::destroy($request->id);
+            Toastr::success('Experience deleted successfully.','Success');
+            return redirect()->back();
+        }catch(\Exception $e){
+            DB::rollback();
+            Toastr::error('Experience delete fail.','Error');
             return redirect()->back();
         }
     }

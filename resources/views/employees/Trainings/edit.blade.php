@@ -10,17 +10,17 @@
                 <form action="{{url('employee/training/update')}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
                     @csrf
                     <div class="form-group">
-                        <label>@lang('lang.course_name') <span class="text-danger">*</span></label>
+                        <label>@lang('lang.course_name')<span class="text-danger">*</span></label>
                         <input type="text" id="e_title" name="title" class="form-control" required>
                     </div>
                     <div class="form-group">
-                        <label>@lang('lang.start_date') <span class="text-danger">*</span></label>
+                        <label>@lang('lang.start_date')<span class="text-danger">*</span></label>
                         <div class="cal-icon">
                             <input type="text" id="e_start_date" name="start_date" class="form-control datetimepicker" required>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label>@lang('lang.end_date') <span class="text-danger">*</span></label>
+                        <label>@lang('lang.end_date')<span class="text-danger">*</span></label>
                         <div class="cal-icon">
                             <input type="text" id="e_end_date" name="end_date" class="form-control datetimepicker" required>
                         </div>

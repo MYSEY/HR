@@ -57,12 +57,20 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('/dashboad/show', [DashboadController::class, 'show']);
 
     Route::get('/employee/profile/{id}', [EmployeeProfileController::class, 'employeeProfile'])->name('employee.profile');
-    Route::post('employee/education', [EmployeeProfileController::class, 'employeeEducation'])->name('employee.education');
-    Route::post('employee/experience', [EmployeeProfileController::class, 'updateOrCreateExperience'])->name('employee.experience');
     Route::post('employee/contact', [EmployeeProfileController::class, 'employeeContact'])->name('employee.contact');
     Route::get('employee/contact/edit', [EmployeeProfileController::class, 'editContact']);
     Route::post('employee/contact/update', [EmployeeProfileController::class, 'updateContact']);
     Route::post('employee/contact/delete', [EmployeeProfileController::class, 'deleteContact']);
+    
+    Route::post('employee/experience', [EmployeeProfileController::class, 'createExperience'])->name('employee.experience');
+    Route::get('employee/experience/edite', [EmployeeProfileController::class, 'editeExperience'])->name('employee.experience.edite');
+    Route::post('employee/experience/update', [EmployeeProfileController::class, 'updateExperience'])->name('employee.experience.update');
+    Route::post('employee/experience/delete', [EmployeeProfileController::class, 'deleteExperience'])->name('employee.experience.delete');
+    //Education
+    Route::post('employee/education', [EmployeeProfileController::class, 'employeeEducation'])->name('employee.education');
+    Route::get('employee/education/edit', [EmployeeProfileController::class, 'educationEdit'])->name('employee.educationEdit');
+    Route::post('employee/education/update', [EmployeeProfileController::class, 'educationUpdate'])->name('employee.educationUpdate');
+    Route::post('employee/education/delete', [EmployeeProfileController::class, 'educationDelete'])->name('employee.educationDelete');
 
     //Training
     Route::post('employee/training/create', [EmployeeProfileController::class, 'createTraining']);

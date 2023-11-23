@@ -243,10 +243,12 @@
                             @include('employees.childrens.modal_edit_children')
                         
                             {{-- education_info --}}
-                            @include('employees.education_infos.education_info')
+                            @include('employees.education_infos.education_create')
+                            @include('employees.education_infos.education_edite')
                             
                             {{-- experience_info --}}
-                            @include('employees.experience_infos.experience_info')
+                            @include('employees.experience_infos.experience_create')
+                            @include('employees.experience_infos.experience_edite')
                 
                             {{-- document --}}
                             @include('employees.documents.document')
@@ -388,30 +390,31 @@
                                         </thead>
                                         <tbody>
                                             @if (count($educations))
-                                            @foreach ($educations as $item)
-                                                <tr>
-                                                    <td>{{$item->EducationStartDateEdnDate}}</td>
-                                                    <td>{{$item->school}}</td>
-                                                    <td>{{$item->EdcutionFieldOfStudy}}</td>
-                                                    <td>{{$item->Edcutiondegree}}</td>
-                                                    <td>{{\Carbon\Carbon::parse($item->created_at)->format('d-M-Y') ?? ''}}</td>
-                                                    <td style="text-align: center">
-                                                        @if (permissionAccess("m2-s1","is_update")->value == "1" || permissionAccess("m2-s1","is_delete")->value == "1")
-                                                            <div class="dropdown dropdown-action">
-                                                                <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i  class="material-icons">more_vert</i></a>
-                                                                <div class="dropdown-menu dropdown-menu-right">
-                                                                    @if (permissionAccess("m2-s1","is_update")->value == "1" )
-                                                                    <a class="dropdown-item childrenUpdate" data-id="{{$item->id}}" data-bs-target="#family_edit_info_modal"><i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')</a>
-                                                                    @endif
-                                                                    @if (permissionAccess("m2-s1","is_delete")->value == "1" )
-                                                                    <a class="dropdown-item childrenDelete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_children"><i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
-                                                                    @endif
+                                                @foreach ($educations as $item)
+                                                    <tr>
+                                                        <td hidden class="ids">{{$item->id}}</td>
+                                                        <td>{{$item->EducationStartDateEdnDate}}</td>
+                                                        <td>{{$item->school}}</td>
+                                                        <td>{{$item->EdcutionFieldOfStudy}}</td>
+                                                        <td>{{$item->Edcutiondegree}}</td>
+                                                        <td>{{\Carbon\Carbon::parse($item->created_at)->format('d-M-Y') ?? ''}}</td>
+                                                        <td style="text-align: center">
+                                                            @if (permissionAccess("m2-s1","is_update")->value == "1" || permissionAccess("m2-s1","is_delete")->value == "1")
+                                                                <div class="dropdown dropdown-action">
+                                                                    <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i  class="material-icons">more_vert</i></a>
+                                                                    <div class="dropdown-menu dropdown-menu-right">
+                                                                        @if (permissionAccess("m2-s1","is_update")->value == "1" )
+                                                                            <a class="dropdown-item educationUpdate" data-id="{{$item->id}}"><i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')</a>
+                                                                        @endif
+                                                                        @if (permissionAccess("m2-s1","is_delete")->value == "1" )
+                                                                            <a class="dropdown-item educationDelete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_education"><i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
+                                                                        @endif
+                                                                    </div>
                                                                 </div>
-                                                            </div>
-                                                        @endif
-                                                    </td>
-                                                </tr>
-                                            @endforeach
+                                                            @endif
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
                                             @endif
                                         </tbody>
                                     </table>
@@ -424,24 +427,50 @@
                         <div class="card profile-box flex-fill">
                             <div class="card-body">
                                 <h3 class="card-title">@lang('lang.experience_informations')</h3>
-                                <div class="experience-box">
-                                    @if (count($experiences)>0)
-                                        @foreach ($experiences as $item)
-                                            <ul class="experience-list">
-                                                <li>
-                                                    <div class="experience-user">
-                                                        <div class="before-circle"></div>
-                                                    </div>
-                                                    <div class="experience-content">
-                                                        <div class="timeline-content">
-                                                            <a href="#" class="name">{{$item->position}} at {{$item->company_name}}</a>
-                                                            <span class="time">{{$item->ExperienceStartDateEdnDate}}</span>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                            </ul>
-                                        @endforeach
-                                    @endif
+                                <div class="table-responsive">
+                                    <table class="table table-nowrap">
+                                        <thead>
+                                            <tr>
+                                                <th>@lang('lang.date')</th>
+                                                <th>@lang('lang.company_name')</th>
+                                                <th>@lang('lang.employment_type')</th>
+                                                <th>@lang('lang.job_position')</th>
+                                                <th>@lang('lang.location')</th>
+                                                <th>@lang('lang.created_at')</th>
+                                                <th style="text-align: center">@lang('lang.action')</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @if (count($experiences))
+                                                @foreach ($experiences as $item)
+                                                    <tr>
+                                                        <td hidden class="ids">{{$item->id}}</td>
+                                                        <td>{{$item->ExperienceStartDateEdnDate}}</td>
+                                                        <td>{{$item->company_name}}</td>
+                                                        <td>{{$item->EmpEmploymentType}}</td>
+                                                        <td>{{$item->position}}</td>
+                                                        <td>{{$item->location}}</td>
+                                                        <td>{{\Carbon\Carbon::parse($item->created_at)->format('d-M-Y') ?? ''}}</td>
+                                                        <td style="text-align: center">
+                                                            @if (permissionAccess("m2-s1","is_update")->value == "1" || permissionAccess("m2-s1","is_delete")->value == "1")
+                                                                <div class="dropdown dropdown-action">
+                                                                    <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i  class="material-icons">more_vert</i></a>
+                                                                    <div class="dropdown-menu dropdown-menu-right">
+                                                                        @if (permissionAccess("m2-s1","is_update")->value == "1" )
+                                                                            <a class="dropdown-item experienceUpdate" data-id="{{$item->id}}"><i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')</a>
+                                                                        @endif
+                                                                        @if (permissionAccess("m2-s1","is_delete")->value == "1" )
+                                                                            <a class="dropdown-item experienceDelete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_experience"><i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
+                                                                        @endif
+                                                                    </div>
+                                                                </div>
+                                                            @endif
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                            @endif
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>
@@ -515,7 +544,7 @@
                                 <div class="row">
                                     <div class="submit-section" style="text-align: center">
                                         <button type="submit" class="btn btn-primary submit-btn me-2">Delete</button>
-                                        <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-danger">Cancel</a>
+                                        <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-secondary btn-cancel">Cancel</a>
                                     </div>
                                 </div>
                             </form>
@@ -542,7 +571,7 @@
                             <div class="row">
                                 <div class="submit-section" style="text-align: center">
                                     <button type="submit" class="btn btn-primary submit-btn me-2">Delete</button>
-                                    <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-danger">Cancel</a>
+                                    <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-secondary btn-cancel">Cancel</a>
                                 </div>
                             </div>
                         </form>
@@ -551,7 +580,60 @@
             </div>
         </div>
     </div>
-<!-- /Delete Contact Modal -->
+    <!-- /Delete Contact Modal -->
+
+    <!-- Delete education Modal -->
+    <div class="modal custom-modal fade" id="delete_education" role="dialog">
+        <div class="modal-dialog modal-sm modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="form-header">
+                        <h3>Delete</h3>
+                        <p>Are you sure want to delete?</p>
+                    </div>
+                    <div class="modal-btn delete-action">
+                        <form action="{{url('employee/education/delete')}}" method="POST">
+                            @csrf
+                            <input type="hidden" name="id" class="e_education_id" value="">
+                            <div class="row">
+                                <div class="submit-section" style="text-align: center">
+                                    <button type="submit" class="btn btn-primary submit-btn me-2">Delete</button>
+                                    <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-secondary btn-cancel">Cancel</a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /Delete education Modal -->
+    <!-- Delete experience Modal -->
+    <div class="modal custom-modal fade" id="delete_experience" role="dialog">
+        <div class="modal-dialog modal-sm modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="form-header">
+                        <h3>Delete</h3>
+                        <p>Are you sure want to delete?</p>
+                    </div>
+                    <div class="modal-btn delete-action">
+                        <form action="{{url('employee/experience/delete')}}" method="POST">
+                            @csrf
+                            <input type="hidden" name="id" class="e_experience_id" value="">
+                            <div class="row">
+                                <div class="submit-section" style="text-align: center">
+                                    <button type="submit" class="btn btn-primary submit-btn me-2">Delete</button>
+                                    <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-secondary btn-cancel">Cancel</a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /Delete experience Modal -->
 @endsection
 
 @include('includs.script')
@@ -630,6 +712,14 @@
             var _this = $(this).parents('tr');
             $('.e_contact_id').val(_this.find('.ids').text());
         });
+        $('.educationDelete').on('click',function(){
+            var _this = $(this).parents('tr');
+            $('.e_education_id').val(_this.find('.ids').text());
+        });
+        $('.experienceDelete').on('click',function(){
+            var _this = $(this).parents('tr');
+            $('.e_experience_id').val(_this.find('.ids').text());
+        });
 
         $("#btn-change-passwork").on("click", function() {
             const currentUrl = window.location.pathname.split('/');
@@ -666,7 +756,6 @@
                     window.location.replace("{{ URL('employee/profile') }}/"+currentUrl[3]);
                 },
                 error: function(error) {
-                    console.log(error.responseJSON);
                     new Noty({
                         text: error.responseJSON.message,
                         type: "error",
@@ -690,10 +779,84 @@
                     if (response.success) {
                         $('#e_child_id').val(response.success.id);
                         $('#e_employee_id').val(response.success.employee_id);
-                        $('#e_name').val(response.success.name);
+                        $('#e_name_children').val(response.success.name);
                         $('#e_sex').val(response.success.sex);
                         $('#e_date_of_birth').val(response.success.date_of_birth);
                         $('#family_edit_info_modal').modal('show');
+                    }
+                }
+            });
+        });
+
+        $('.educationUpdate').on('click',function(){
+            let id = $(this).data("id");
+            $.ajax({
+                type: "GET",
+                url: "{{url('employee/education/edit')}}",
+                data: {
+                    id : id
+                },
+                dataType: "JSON",
+                success: function (response) {
+                    if (response.success) {
+                        $('#e_field_of_study').html('<option selected disabled> -- @lang("lang.select") --</option>');
+                        $.each(response.optionOfStudy, function(i, item) {
+                            $('#e_field_of_study').append($('<option>', {
+                                value: item.id,
+                                text: localeLanguage == 'en' ? item.name_english : item.name_khmer,
+                                selected: item.id == response.success.field_of_study
+                            }));
+                        });
+
+                        $('#e_degree').html('<option selected disabled> -- @lang("lang.select") --</option>');
+                        $.each(response.optionDegree, function(i, item) {
+                            $('#e_degree').append($('<option>', {
+                                value: item.id,
+                                text: localeLanguage == 'en' ? item.name_english : item.name_khmer,
+                                selected: item.id == response.success.degree
+                            }));
+                        });
+                        
+                        $('#e_education_id').val(response.success.id);
+                        $('#e_edu_employee_id').val(response.success.employee_id);
+                        $('#e_school').val(response.success.school);
+                        $('#e_grade').val(response.success.grade);
+                        $('#e_start_date').val(response.success.start_date);
+                        $('#e_end_date').val(response.success.end_date);
+                        $('#education_edite').modal('show');
+                    }
+                }
+            });
+        });
+        $('.experienceUpdate').on('click',function(){
+            let id = $(this).data("id");
+            $.ajax({
+                type: "GET",
+                url: "{{url('employee/experience/edite')}}",
+                data: {
+                    id : id
+                },
+                dataType: "JSON",
+                success: function (response) {
+                    console.log(response);
+                    if (response.success) {
+                        
+                        $('#e_employment_type').html('<option selected disabled> -- @lang("lang.select") --</option>');
+                        $.each(response.EmploymentType, function(i, item) {
+                            $('#e_employment_type').append($('<option>', {
+                                value: item.id,
+                                text: localeLanguage == 'en' ? item.name_english : item.name_khmer,
+                                selected: item.id == response.success.employment_type
+                            }));
+                        });
+                        $('#e_experience_id').val(response.success.id);
+                        $('#e_ex_employee_id').val(response.success.employee_id);
+                        $('#e_company_name').val(response.success.company_name);
+                        $('#e_position').val(response.success.position);
+                        $('#e_start_date_experience').val(response.success.start_date);
+                        $('#e_end_date_experience').val(response.success.end_date);
+                        $('#e_location').val(response.success.location);
+                        $('#experience_edite').modal('show');
                     }
                 }
             });
