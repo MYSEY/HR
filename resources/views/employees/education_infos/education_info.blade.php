@@ -26,7 +26,7 @@
                                                 <div class="form-group">
                                                     <label for="">@lang('lang.field_of_study')</label>
                                                     <select class="form-control" id="field_of_study[]" name="field_of_study[]" value="">
-                                                        <option value="">@lang('lang.select_field_of_study')</option>
+                                                        <option selected disabled value=""> --@lang('lang.select')--</option>
                                                         @foreach ($optionOfStudy as $item)
                                                             <option value="{{ $item->id }}">{{ $item->name_khmer }}</option>
                                                         @endforeach
@@ -36,9 +36,8 @@
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label for="">@lang('lang.degree')</label>
-                                                    <select class="form-control" id="degree[]"
-                                                        name="degree[]" value="">
-                                                        <option value="">@lang('lang.select_degree')</option>
+                                                    <select class="form-control" id="degree[]" name="degree[]" value="">
+                                                        <option selected disabled value=""> --@lang('lang.select')--</option>
                                                         @foreach ($optionDegree as $item)
                                                             <option value="{{ $item->id }}">{{ $item->name_khmer }}</option>
                                                         @endforeach
@@ -54,7 +53,7 @@
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label class="focus-label">@lang('lang.starting_date')<span class="text-danger">*</span></label>
-                                                    <div class="cal-icon">
+                                                    <div class="">
                                                         <input type="date" value="" name="start_date[]" class="form-control floating datetimepicker" required>
                                                     </div>
                                                 </div>
@@ -62,7 +61,7 @@
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label class="focus-label">@lang('lang.complete_date')<span class="text-danger">*</span></label>
-                                                    <div class="cal-icon">
+                                                    <div class="">
                                                         <input type="date" value="" name="end_date[]" class="form-control floating datetimepicker" required>
                                                     </div>
                                                 </div>

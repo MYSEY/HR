@@ -449,7 +449,6 @@ return[
     "occupational_risk"=>"Occupational Risk",
     "pay"=>"Pay Now",
     "other_deduction"=>"Other Deduction",
-    "phone"=>"Phone",
     "phone1"=>"Phone One",
     "phone2"=>"Phone Two",
     "phone_number"=>"Phone Number",

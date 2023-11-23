@@ -17,7 +17,7 @@
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label for="">@lang('lang.company_name') <span class="text-danger">*</span></label>
+                                                <label for="">@lang('lang.company_name')<span class="text-danger">*</span></label>
                                                 <input type="text" class="form-control floating" id="company_name[]" name="company_name[]" value="" required>
                                             </div>
                                         </div>
@@ -25,6 +25,7 @@
                                             <div class="form-group">
                                                 <label for="">@lang('lang.employment_type')</label>
                                                 <select class="form-control form-select" id="employment_type[]" name="employment_type[]">
+                                                    <option selected disabled value=""> --@lang('lang.select')--</option>
                                                     <option value="1">Full-Time</option>
                                                     <option value="2">Path-Time</option>
                                                 </select>
@@ -33,13 +34,13 @@
                                         
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label for="">@lang('lang.job_position') <span class="text-danger">*</span></label>
+                                                <label for="">@lang('lang.job_position')<span class="text-danger">*</span></label>
                                                 <input type="text" class="form-control floating" id="position[]" name="position[]" value="" required>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label for="">@lang('lang.period_from') <span class="text-danger">*</span></label>
+                                                <label for="">@lang('lang.period_from')<span class="text-danger">*</span></label>
                                                 <div class="">
                                                     <input type="date" class="form-control floating datetimepicker" id="start_date_experience[]" name="start_date_experience[]" value="" required>
                                                 </div>
@@ -47,7 +48,7 @@
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label for="">@lang('lang.period_to') <span class="text-danger">*</span></label>
+                                                <label for="">@lang('lang.period_to')<span class="text-danger">*</span></label>
                                                 <div class="">
                                                     <input type="date" class="form-control floating datetimepicker" id="end_date_experience[]" name="end_date_experience[]" value="" required>
                                                 </div>

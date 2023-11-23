@@ -16,7 +16,7 @@
         <div class="row">
             <div class="col-lg-8 col-md-8 col-sm-8">
                 <div class="card tab-box">
-                    <div class="row user-tabs">
+                    <div class="row card-body user-tabs">
                         <div class="col-lg-12 col-md-12 col-sm-12 line-tabs">
                             <ul class="nav nav-tabs nav-tabs-bottom" role="tablist">
                                 <li class="nav-item" role="presentation"><a href="#emp_profile" data-bs-toggle="tab" class="nav-link active" aria-selected="true" role="tab">@lang('lang.profile')</a></li>
@@ -26,417 +26,426 @@
                                 <li class="nav-item" role="presentation"><a href="#training" data-bs-toggle="tab" class="nav-link" aria-selected="false" tabindex="-1" role="tab">@lang('lang.training')</a></li>
                             </ul>
                         </div>
+
+                        <div class="tab-content">
+                            <div id="emp_profile" class="pro-overview tab-pane fade show active" role="tabpanel">
+                                <div class="row">
+                                    <div class="col-md-12 d-flex">
+                                        <div class=" profile-box flex-fill">
+                                            <div class="">
+                                                <h3 class="card-title">@lang('lang.personal_informations')</h3>
+                                                <div class="row form-group">
+                                                    <div class="col-md-4">
+                                                        <div class="mb-3">
+                                                            <a href="#">@lang('lang.name')(@lang('lang.kh'))</a>
+                                                        </div>
+                                                        <div>{{ $data->employee_name_kh}}</div>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <div class="mb-3">
+                                                            <a href="#">@lang('lang.name')(@lang('lang.en'))</a>
+                                                        </div>
+                                                        <div>{{ $data->employee_name_en}}</div>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <div class="mb-3">
+                                                            <a href="#">@lang('lang.employee_id')</a>
+                                                        </div>
+                                                        <div class="text">{{ $data->number_employee }}</div>
+                                                    </div>
+                                                </div>
+                                                <div class="row form-group">
+                                                    <div class="col-md-4">
+                                                        <div class="mb-3">
+                                                            <a href="#">@lang('lang.date_of_birth')</a>
+                                                        </div>
+                                                        <div>{{ \Carbon\Carbon::parse($data->date_of_birth)->format('d-M-Y') ?? '' }}</div>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <div class="mb-3">
+                                                            <a href="#">@lang('lang.gender')</a>
+                                                        </div>
+                                                        <div>{{$data->EmployeeGender}}</div>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <div class="mb-3">
+                                                            <a href="#">@lang('lang.id_card_number')</a>
+                                                        </div>
+                                                        <div class="text">{{$data->id_card_number}}</div>
+                                                    </div>
+                                                </div>
+                                                <div class="row form-group">
+                                                    <div class="col-md-4">
+                                                        <div class="mb-3">
+                                                            <a href="#">@lang('lang.department')</a>
+                                                        </div>
+                                                        <div>{{ $data->EmployeeDepartment }}</div>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <div class="mb-3">
+                                                            <a href="#">@lang('lang.position')</a>
+                                                        </div>
+                                                        <div>{{$data->EmployeePosition}}</div>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <div class="mb-3">
+                                                            <a href="#">@lang('lang.branch')</a>
+                                                        </div>
+                                                        <div class="text">{{$data->EmployeeBranch}}</div>
+                                                    </div>
+                                                </div>
+                                                <div class="row form-group">
+                                                    <div class="col-md-4">
+                                                        <div class="mb-3">
+                                                            <a href="#">@lang('lang.join_date')</a>
+                                                        </div>
+                                                        <div>{{ $data->joinOfDate }}</div>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <div class="mb-3">
+                                                            <a href="#">@lang('lang.nationality')</a>
+                                                        </div>
+                                                        <div>{{$data->EmployeeNationality}}</div>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <div class="mb-3">
+                                                            <a href="#">@lang('lang.ethnicity')</a>
+                                                        </div>
+                                                        <div class="text">{{$data->ethnicity}}</div>
+                                                    </div>
+                                                </div>
+                                                <div class="row form-group">
+                                                    <div class="col-md-4">
+                                                        <div class="mb-3">
+                                                            <a href="#">@lang('lang.position_type')</a>
+                                                        </div>
+                                                        <div>{{ $data->EmployeePositionType }}</div>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <div class="mb-3">
+                                                            <a href="#">@lang('lang.unit')</a>
+                                                        </div>
+                                                        <div>{{$data->unit}}</div>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <div class="mb-3">
+                                                            <a href="#">@lang('lang.level')</a>
+                                                        </div>
+                                                        <div class="text">{{$data->level}}</div>
+                                                    </div>
+                                                </div>
+                                                <div class="row form-group">
+                                                    <div class="col-md-4">
+                                                        <div class="mb-3">
+                                                            <a href="#">@lang('lang.identity_type')</a>
+                                                        </div>
+                                                        <div>{{ $data->EmployeeIdentityType }}</div>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <div class="mb-3">
+                                                            <a href="#">@lang('lang.identity_number')</a>
+                                                        </div>
+                                                        <div>{{$data->identity_number}}</div>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <div class="mb-3">
+                                                            <a href="#">@lang('lang.issue_date')</a>
+                                                        </div>
+                                                        <div class="text">{{\Carbon\Carbon::parse($data->issue_date)->format('d-M-Y') ?? ''}}</div>
+                                                    </div>
+                                                </div>
+                                                <div class="row form-group">
+                                                    <div class="col-md-4">
+                                                        <div class="mb-3">
+                                                            <a href="#">@lang('lang.issue_expired_date')</a>
+                                                        </div>
+                                                        <div>{{ \Carbon\Carbon::parse($data->issue_expired_date)->format('d-M-Y') ?? '' }}</div>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <div class="mb-3">
+                                                            <a href="#">@lang('lang.marital_status')</a>
+                                                        </div>
+                                                        <div>{{$data->EmployeeMaritalStatus}}</div>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <div class="mb-3">
+                                                            <a href="#">@lang('lang.loan')</a>
+                                                        </div>
+                                                        <div class="text">
+                                                            @if ($data->is_loan == '1')
+                                                                <span style="font-size: 13px" class="badge bg-inverse-danger">Yes</span>
+                                                            @elseif($data->is_loan == '0')
+                                                                <span style="font-size: 13px" class="badge bg-inverse-success">No</span>
+                                                            @endif
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row form-group">
+                                                    <div class="col-md-4">
+                                                        <div class="mb-3">
+                                                            <a href="#">@lang('lang.personal_phone')</a>
+                                                        </div>
+                                                        <div class="text">{{$data->personal_phone_number}}</div>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <div class="mb-3">
+                                                            <a href="#">@lang('lang.company_phone_number')</a>
+                                                        </div>
+                                                        <div class="text">{{$data->company_phone_number}}</div>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <div class="mb-3">
+                                                            <a href="#">@lang('lang.email')</a>
+                                                        </div>
+                                                        <div>{{ $data->email }}</div>
+                                                    </div>
+                                                </div>
+                                                <div class="row form-group">
+                                                    <div class="col-md-4">
+                                                        <div class="mb-3">
+                                                            <a href="#">@lang('lang.bank_name')</a>
+                                                        </div>
+                                                        <div class="text">{{$data->banks == null ? "" : $data->banks->name }}</div>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <div class="mb-3">
+                                                            <a href="#">@lang('lang.bank_account_no')</a>
+                                                        </div>
+                                                        <div class="text">{{$data->account_number}}</div>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <div class="mb-3">
+                                                            <a href="#">@lang('lang.account_name')</a>
+                                                        </div>
+                                                        <div>{{ $data->account_name }}</div>
+                                                    </div>
+                                                </div>
+                                                <div class="row form-group">
+                                                    <div class="col-md-8">
+                                                        <div class="mb-3">
+                                                            <a href="#">@lang('lang.address')</a>
+                                                        </div>
+                                                        <div class="text">{{$data->FullCurrentAddress ?? ''}}</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                
+                            {{-- document --}}
+                            @include('employees.contacts.create')
+                            @include('employees.contacts.edit')
+                            {{-- End document --}}
+                            {{-- Children information --}}
+                            @include('employees.childrens.modal_create_children')
+                            @include('employees.childrens.modal_edit_children')
+                        
+                            {{-- education_info --}}
+                            @include('employees.education_infos.education_info')
+                            
+                            {{-- experience_info --}}
+                            @include('employees.experience_infos.experience_info')
+                
+                            {{-- document --}}
+                            @include('employees.documents.document')
+                            {{-- End document --}}
+                
+                            {{-- promote --}}
+                            @include('employees.promotes.promote')
+                            {{-- End promote --}}
+                
+                            {{-- Transferred --}}
+                            @include('employees.Transferreds.transferred')
+                            {{-- end Transferred --}}
+                
+                            {{-- Training --}}
+                            @include('employees.Trainings.training')
+                            {{-- End Training --}}
+                        </div>
                     </div>
-                </div>  
-                <div class="tab-content">
-                    <div id="emp_profile" class="pro-overview tab-pane fade show active" role="tabpanel">
-                        <div class="row">
-                            <div class="col-md-12 d-flex">
-                                <div class="card profile-box flex-fill">
-                                    <div class="card-body">
-                                        <h3 class="card-title">@lang('lang.personal_informations')</h3>
-                                        <div class="row form-group">
-                                            <div class="col-md-4">
-                                                <div class="mb-3">
-                                                    <a href="#">@lang('lang.name')(@lang('lang.kh'))</a>
-                                                </div>
-                                                <div>{{ $data->employee_name_kh}}</div>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <div class="mb-3">
-                                                    <a href="#">@lang('lang.name')(@lang('lang.en'))</a>
-                                                </div>
-                                                <div>{{ $data->employee_name_en}}</div>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <div class="mb-3">
-                                                    <a href="#">@lang('lang.employee_id')</a>
-                                                </div>
-                                                <div class="text">{{ $data->number_employee }}</div>
-                                            </div>
-                                        </div>
-                                        <div class="row form-group">
-                                            <div class="col-md-4">
-                                                <div class="mb-3">
-                                                    <a href="#">@lang('lang.date_of_birth')</a>
-                                                </div>
-                                                <div>{{ \Carbon\Carbon::parse($data->date_of_birth)->format('d-M-Y') ?? '' }}</div>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <div class="mb-3">
-                                                    <a href="#">@lang('lang.gender')</a>
-                                                </div>
-                                                <div>{{$data->EmployeeGender}}</div>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <div class="mb-3">
-                                                    <a href="#">@lang('lang.id_card_number')</a>
-                                                </div>
-                                                <div class="text">{{$data->id_card_number}}</div>
-                                            </div>
-                                        </div>
-                                        <div class="row form-group">
-                                            <div class="col-md-4">
-                                                <div class="mb-3">
-                                                    <a href="#">@lang('lang.department')</a>
-                                                </div>
-                                                <div>{{ $data->EmployeeDepartment }}</div>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <div class="mb-3">
-                                                    <a href="#">@lang('lang.position')</a>
-                                                </div>
-                                                <div>{{$data->EmployeePosition}}</div>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <div class="mb-3">
-                                                    <a href="#">@lang('lang.branch')</a>
-                                                </div>
-                                                <div class="text">{{$data->EmployeeBranch}}</div>
-                                            </div>
-                                        </div>
-                                        <div class="row form-group">
-                                            <div class="col-md-4">
-                                                <div class="mb-3">
-                                                    <a href="#">@lang('lang.join_date')</a>
-                                                </div>
-                                                <div>{{ $data->joinOfDate }}</div>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <div class="mb-3">
-                                                    <a href="#">@lang('lang.nationality')</a>
-                                                </div>
-                                                <div>{{$data->EmployeeNationality}}</div>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <div class="mb-3">
-                                                    <a href="#">@lang('lang.ethnicity')</a>
-                                                </div>
-                                                <div class="text">{{$data->ethnicity}}</div>
-                                            </div>
-                                        </div>
-                                        <div class="row form-group">
-                                            <div class="col-md-4">
-                                                <div class="mb-3">
-                                                    <a href="#">@lang('lang.position_type')</a>
-                                                </div>
-                                                <div>{{ $data->EmployeePositionType }}</div>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <div class="mb-3">
-                                                    <a href="#">@lang('lang.unit')</a>
-                                                </div>
-                                                <div>{{$data->unit}}</div>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <div class="mb-3">
-                                                    <a href="#">@lang('lang.level')</a>
-                                                </div>
-                                                <div class="text">{{$data->level}}</div>
-                                            </div>
-                                        </div>
-                                        <div class="row form-group">
-                                            <div class="col-md-4">
-                                                <div class="mb-3">
-                                                    <a href="#">@lang('lang.identity_type')</a>
-                                                </div>
-                                                <div>{{ $data->EmployeeIdentityType }}</div>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <div class="mb-3">
-                                                    <a href="#">@lang('lang.identity_number')</a>
-                                                </div>
-                                                <div>{{$data->identity_number}}</div>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <div class="mb-3">
-                                                    <a href="#">@lang('lang.issue_date')</a>
-                                                </div>
-                                                <div class="text">{{\Carbon\Carbon::parse($data->issue_date)->format('d-M-Y') ?? ''}}</div>
-                                            </div>
-                                        </div>
-                                        <div class="row form-group">
-                                            <div class="col-md-4">
-                                                <div class="mb-3">
-                                                    <a href="#">@lang('lang.issue_expired_date')</a>
-                                                </div>
-                                                <div>{{ \Carbon\Carbon::parse($data->issue_expired_date)->format('d-M-Y') ?? '' }}</div>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <div class="mb-3">
-                                                    <a href="#">@lang('lang.marital_status')</a>
-                                                </div>
-                                                <div>{{$data->EmployeeMaritalStatus}}</div>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <div class="mb-3">
-                                                    <a href="#">@lang('lang.loan')</a>
-                                                </div>
-                                                <div class="text">
-                                                    @if ($data->is_loan == '1')
-                                                        <span style="font-size: 13px" class="badge bg-inverse-danger">Yes</span>
-                                                    @elseif($data->is_loan == '0')
-                                                        <span style="font-size: 13px" class="badge bg-inverse-success">No</span>
-                                                    @endif
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row form-group">
-                                            <div class="col-md-4">
-                                                <div class="mb-3">
-                                                    <a href="#">@lang('lang.personal_phone')</a>
-                                                </div>
-                                                <div class="text">{{$data->personal_phone_number}}</div>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <div class="mb-3">
-                                                    <a href="#">@lang('lang.company_phone_number')</a>
-                                                </div>
-                                                <div class="text">{{$data->company_phone_number}}</div>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <div class="mb-3">
-                                                    <a href="#">@lang('lang.email')</a>
-                                                </div>
-                                                <div>{{ $data->email }}</div>
-                                            </div>
-                                        </div>
-                                        <div class="row form-group">
-                                            <div class="col-md-4">
-                                                <div class="mb-3">
-                                                    <a href="#">@lang('lang.bank_name')</a>
-                                                </div>
-                                                <div class="text">{{$data->banks == null ? "" : $data->banks->name }}</div>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <div class="mb-3">
-                                                    <a href="#">@lang('lang.bank_account_no')</a>
-                                                </div>
-                                                <div class="text">{{$data->account_number}}</div>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <div class="mb-3">
-                                                    <a href="#">@lang('lang.account_name')</a>
-                                                </div>
-                                                <div>{{ $data->account_name }}</div>
-                                            </div>
-                                        </div>
-                                        <div class="row form-group">
-                                            <div class="col-md-8">
-                                                <div class="mb-3">
-                                                    <a href="#">@lang('lang.address')</a>
-                                                </div>
-                                                <div class="text">{{$data->FullCurrentAddress ?? ''}}</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12 d-flex">
-                                <div class="card profile-box flex-fill">
-                                    <div class="card-body">
-                                        <h3 class="card-title">@lang('lang.emergency_contact')</h3>
-                                        <div class="table-responsive">
-                                            <table class="table table-nowrap">
-                                                <thead>
+                </div> 
+                <div class="row">
+                    <div class="col-md-12 d-flex">
+                        <div class="card profile-box flex-fill">
+                            <div class="card-body">
+                                <h3 class="card-title">@lang('lang.emergency_contact')</h3>
+                                <div class="table-responsive">
+                                    <table class="table table-nowrap">
+                                        <thead>
+                                            <tr>
+                                                <th>@lang('lang.name')</th>
+                                                <th>@lang('lang.relationship')</th>
+                                                <th>@lang('lang.phone1')</th>
+                                                <th>@lang('lang.phone2')</th>
+                                                <th>@lang('lang.created_at')</th>
+                                                <th style="text-align: center">@lang('lang.action')</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @if (count($contact))
+                                                @foreach ($contact as $item)
                                                     <tr>
-                                                        <th>@lang('lang.name')</th>
-                                                        <th>@lang('lang.relationship')</th>
-                                                        <th>@lang('lang.phone1')</th>
-                                                        <th>@lang('lang.phone2')</th>
-                                                        <th style="text-align: center">@lang('lang.action')</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    @if (count($contact))
-                                                        @foreach ($contact as $item)
-                                                            <tr>
-                                                                <td hidden class="ids">{{$item->id}}</td>
-                                                                <td>{{$item->name}}</td>
-                                                                <td>{{$item->EmergencyContact}}</td>
-                                                                <td>{{$item->phone}}</td>
-                                                                <td>{{$item->phone_2}}</td>
-                                                                <td style="text-align: center">
-                                                                    @if (permissionAccess("5","is_update")->value == "1" || permissionAccess("5","is_delete")->value == "1")
-                                                                        <div class="dropdown dropdown-action">
-                                                                            <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i  class="material-icons">more_vert</i></a>
-                                                                            <div class="dropdown-menu dropdown-menu-right">
-                                                                                @if (permissionAccess("5","is_update")->value == "1")
-                                                                                    <a class="dropdown-item contactUpdate" data-id="{{$item->id}}" data-bs-target="#contact_modal"><i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')</a>
-                                                                                @endif
-                                                                                @if (permissionAccess("5","is_delete")->value == "1")
-                                                                                    <a class="dropdown-item contactDelete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_contact"><i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
-                                                                                @endif
-                                                                            </div>
-                                                                        </div>
-                                                                    @endif
-                                                                </td>
-                                                            </tr>
-                                                        @endforeach
-                                                    @endif
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-        
-                            <div class="col-md-12 d-flex">
-                                <div class="card profile-box flex-fill">
-                                    <div class="card-body">
-                                        <h3 class="card-title">@lang('lang.children_informations')</h3>
-                                        <div class="table-responsive">
-                                            <table class="table table-nowrap">
-                                                <thead>
-                                                    <tr>
-                                                        <th>@lang('lang.name')</th>
-                                                        <th>@lang('lang.date_of_birth')</th>
-                                                        <th>@lang('lang.gender')</th>
-                                                        <th>@lang('lang.age')</th>
-                                                        <th style="text-align: center">@lang('lang.action')</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    @if (count($childrenInfor))
-                                                       @foreach ($childrenInfor as $item)
-                                                        <tr>
-                                                            <td hidden class="ids">{{$item->id}}</td>
-                                                            <td>{{$item->name}}</td>
-                                                            <td>{{$item->DateofBirthChildren}}</td>
-                                                            <td>{{$item->ChildrenGender}}</td>
-                                                            <td>{{$item->YearsOfChildren}}</td>
-                                                            <td style="text-align: center">
-                                                                @if (permissionAccess("5","is_update")->value == "1" || permissionAccess("5","is_delete")->value == "1")
-                                                                    <div class="dropdown dropdown-action">
-                                                                        <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i  class="material-icons">more_vert</i></a>
-                                                                        <div class="dropdown-menu dropdown-menu-right">
-                                                                            @if (permissionAccess("5","is_update")->value == "1" )
-                                                                            <a class="dropdown-item childrenUpdate" data-id="{{$item->id}}" data-bs-target="#family_edit_info_modal"><i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')</a>
-                                                                            @endif
-                                                                            @if (permissionAccess("5","is_delete")->value == "1" )
-                                                                            <a class="dropdown-item childrenDelete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_children"><i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
-                                                                            @endif
-                                                                        </div>
-                                                                    </div>
-                                                                @endif
-                                                            </td>
-                                                        </tr>
-                                                       @endforeach
-                                                    @endif
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12 d-flex">
-                                <div class="card profile-box flex-fill">
-                                    <div class="card-body">
-                                        <h3 class="card-title">@lang('lang.education_informations')</h3>
-                                        <table class="table table-responsive">
-                                            <thead>
-                                                <tr>
-                                                    <th>@lang('lang.date')</th>
-                                                    <th>@lang('lang.institution')</th>
-                                                    <th>@lang('lang.field_of_study')</th>
-                                                    <th>@lang('lang.degree')</th>
-                                                    <th style="text-align: center">@lang('lang.action')</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @if (count($educations))
-                                                   @foreach ($educations as $item)
-                                                    <tr>
-                                                        <td>{{$item->EducationStartDateEdnDate}}</td>
-                                                        <td>{{$item->school}}</td>
-                                                        <td>{{$item->EdcutionFieldOfStudy}}</td>
-                                                        <td>{{$item->Edcutiondegree}}</td>
+                                                        <td hidden class="ids">{{$item->id}}</td>
+                                                        <td>{{$item->name}}</td>
+                                                        <td>{{$item->EmergencyContact}}</td>
+                                                        <td>{{$item->phone}}</td>
+                                                        <td>{{$item->phone_2}}</td>
+                                                        <td>{{\Carbon\Carbon::parse($item->created_at)->format('d-M-Y') ?? ''}}</td>
                                                         <td style="text-align: center">
                                                             @if (permissionAccess("5","is_update")->value == "1" || permissionAccess("5","is_delete")->value == "1")
                                                                 <div class="dropdown dropdown-action">
                                                                     <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i  class="material-icons">more_vert</i></a>
                                                                     <div class="dropdown-menu dropdown-menu-right">
-                                                                        @if (permissionAccess("5","is_update")->value == "1" )
-                                                                        <a class="dropdown-item childrenUpdate" data-id="{{$item->id}}" data-bs-target="#family_edit_info_modal"><i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')</a>
+                                                                        @if (permissionAccess("5","is_update")->value == "1")
+                                                                            <a class="dropdown-item contactUpdate" data-id="{{$item->id}}" data-bs-target="#contact_modal"><i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')</a>
                                                                         @endif
-                                                                        @if (permissionAccess("5","is_delete")->value == "1" )
-                                                                        <a class="dropdown-item childrenDelete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_children"><i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
+                                                                        @if (permissionAccess("5","is_delete")->value == "1")
+                                                                            <a class="dropdown-item contactDelete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_contact"><i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
                                                                         @endif
                                                                     </div>
                                                                 </div>
                                                             @endif
                                                         </td>
                                                     </tr>
-                                                   @endforeach
-                                                @endif
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-        
-                            <div class="col-md-12 d-flex">
-                                <div class="card profile-box flex-fill">
-                                    <div class="card-body">
-                                        <h3 class="card-title">@lang('lang.experience_informations')</h3>
-                                        <div class="experience-box">
-                                            @if (count($experiences)>0)
-                                                @foreach ($experiences as $item)
-                                                    <ul class="experience-list">
-                                                        <li>
-                                                            <div class="experience-user">
-                                                                <div class="before-circle"></div>
-                                                            </div>
-                                                            <div class="experience-content">
-                                                                <div class="timeline-content">
-                                                                    <a href="#" class="name">{{$item->position}} at {{$item->company_name}}</a>
-                                                                    <span class="time">{{$item->ExperienceStartDateEdnDate}}</span>
-                                                                </div>
-                                                            </div>
-                                                        </li>
-                                                    </ul>
                                                 @endforeach
                                             @endif
-                                        </div>
-                                    </div>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>
                     </div>
-        
-                    {{-- document --}}
-                    @include('employees.contacts.create')
-                    @include('employees.contacts.edit')
-                    {{-- End document --}}
-                    {{-- Children information --}}
-                    @include('employees.childrens.modal_create_children')
-                    @include('employees.childrens.modal_edit_children')
-                
-                    {{-- education_info --}}
-                    @include('employees.education_infos.education_info')
-                    
-                    {{-- experience_info --}}
-                    @include('employees.experience_infos.experience_info')
-        
-                    {{-- document --}}
-                    @include('employees.documents.document')
-                    {{-- End document --}}
-        
-                    {{-- promote --}}
-                    @include('employees.promotes.promote')
-                    {{-- End promote --}}
-        
-                    {{-- Transferred --}}
-                    @include('employees.Transferreds.transferred')
-                    {{-- end Transferred --}}
-        
-                    {{-- Training --}}
-                    @include('employees.Trainings.training')
-                    {{-- End Training --}}
+
+                    <div class="col-md-12 d-flex">
+                        <div class="card profile-box flex-fill">
+                            <div class="card-body">
+                                <h3 class="card-title">@lang('lang.children_informations')</h3>
+                                <div class="table-responsive">
+                                    <table class="table table-nowrap">
+                                        <thead>
+                                            <tr>
+                                                <th>@lang('lang.name')</th>
+                                                <th>@lang('lang.date_of_birth')</th>
+                                                <th>@lang('lang.gender')</th>
+                                                <th>@lang('lang.age')</th>
+                                                <th>@lang('lang.created_at')</th>
+                                                <th style="text-align: center">@lang('lang.action')</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @if (count($childrenInfor))
+                                            @foreach ($childrenInfor as $item)
+                                                <tr>
+                                                    <td hidden class="ids">{{$item->id}}</td>
+                                                    <td>{{$item->name}}</td>
+                                                    <td>{{$item->DateofBirthChildren}}</td>
+                                                    <td>{{$item->ChildrenGender}}</td>
+                                                    <td>{{$item->YearsOfChildren}}</td>
+                                                    <td>{{\Carbon\Carbon::parse($item->created_at)->format('d-M-Y') ?? ''}}</td>
+                                                    <td style="text-align: center">
+                                                        @if (permissionAccess("5","is_update")->value == "1" || permissionAccess("5","is_delete")->value == "1")
+                                                            <div class="dropdown dropdown-action">
+                                                                <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i  class="material-icons">more_vert</i></a>
+                                                                <div class="dropdown-menu dropdown-menu-right">
+                                                                    @if (permissionAccess("5","is_update")->value == "1" )
+                                                                    <a class="dropdown-item childrenUpdate" data-id="{{$item->id}}" data-bs-target="#family_edit_info_modal"><i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')</a>
+                                                                    @endif
+                                                                    @if (permissionAccess("5","is_delete")->value == "1" )
+                                                                    <a class="dropdown-item childrenDelete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_children"><i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
+                                                                    @endif
+                                                                </div>
+                                                            </div>
+                                                        @endif
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                            @endif
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 d-flex">
+                        <div class="card profile-box flex-fill">
+                            <div class="card-body">
+                                <h3 class="card-title">@lang('lang.education_informations')</h3>
+                                <div class="table-responsive">
+                                    <table class="table table-nowrap">
+                                        <thead>
+                                            <tr>
+                                                <th>@lang('lang.date')</th>
+                                                <th>@lang('lang.institution')</th>
+                                                <th>@lang('lang.field_of_study')</th>
+                                                <th>@lang('lang.degree')</th>
+                                                <th>@lang('lang.created_at')</th>
+                                                <th style="text-align: center">@lang('lang.action')</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @if (count($educations))
+                                            @foreach ($educations as $item)
+                                                <tr>
+                                                    <td>{{$item->EducationStartDateEdnDate}}</td>
+                                                    <td>{{$item->school}}</td>
+                                                    <td>{{$item->EdcutionFieldOfStudy}}</td>
+                                                    <td>{{$item->Edcutiondegree}}</td>
+                                                    <td>{{\Carbon\Carbon::parse($item->created_at)->format('d-M-Y') ?? ''}}</td>
+                                                    <td style="text-align: center">
+                                                        @if (permissionAccess("5","is_update")->value == "1" || permissionAccess("5","is_delete")->value == "1")
+                                                            <div class="dropdown dropdown-action">
+                                                                <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i  class="material-icons">more_vert</i></a>
+                                                                <div class="dropdown-menu dropdown-menu-right">
+                                                                    @if (permissionAccess("5","is_update")->value == "1" )
+                                                                    <a class="dropdown-item childrenUpdate" data-id="{{$item->id}}" data-bs-target="#family_edit_info_modal"><i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')</a>
+                                                                    @endif
+                                                                    @if (permissionAccess("5","is_delete")->value == "1" )
+                                                                    <a class="dropdown-item childrenDelete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_children"><i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
+                                                                    @endif
+                                                                </div>
+                                                            </div>
+                                                        @endif
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                            @endif
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 d-flex">
+                        <div class="card profile-box flex-fill">
+                            <div class="card-body">
+                                <h3 class="card-title">@lang('lang.experience_informations')</h3>
+                                <div class="experience-box">
+                                    @if (count($experiences)>0)
+                                        @foreach ($experiences as $item)
+                                            <ul class="experience-list">
+                                                <li>
+                                                    <div class="experience-user">
+                                                        <div class="before-circle"></div>
+                                                    </div>
+                                                    <div class="experience-content">
+                                                        <div class="timeline-content">
+                                                            <a href="#" class="name">{{$item->position}} at {{$item->company_name}}</a>
+                                                            <span class="time">{{$item->ExperienceStartDateEdnDate}}</span>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        @endforeach
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="col-lg-4 col-md-4 col-sm-4">
