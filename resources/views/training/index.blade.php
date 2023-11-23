@@ -24,13 +24,13 @@
                     </ul>
                 </div>
                 <div class="col-auto float-end ms-auto">
-                    @if (permissionAccess("20","is_create")->value == "1")
+                    @if (permissionAccess("m6-s2","is_create")->value == "1")
                     <a href="#" class="btn add-btn" id="btn_add_training" ><i class="fa fa-plus"></i> @lang('lang.add_new')</a>
                     @endif
                 </div>
             </div>
         </div>
-        @if (permissionAccess("20","is_view")->value == "1")
+        @if (permissionAccess("m6-s2","is_view")->value == "1")
             <form class="needs-validation" novalidate>
                 @csrf
                 
@@ -175,12 +175,12 @@
                                                                             class="material-icons">more_vert</i></a>
                                                                     <div class="dropdown-menu dropdown-menu-right">
                                                                         <a class="dropdown-item detail" href="{{ url('/training/detail', $item->id) }}"><i class="fa fa-eye m-r-5"></i> @lang('lang.view_details')</a>
-                                                                        @if (permissionAccess("20","is_update")->value == "1" )
+                                                                        @if (permissionAccess("m6-s2","is_update")->value == "1" )
                                                                         <a class="dropdown-item update" data-toggle="modal" data-id="{{ $item->id }}"
                                                                             data-target="#edit_training"><i
                                                                                 class="fa fa-pencil m-r-5"></i> @lang('lang.edit')</a>
                                                                         @endif
-                                                                        @if (permissionAccess("20","is_delete")->value == "1" )
+                                                                        @if (permissionAccess("m6-s2","is_delete")->value == "1" )
                                                                             <a class="dropdown-item delete" href="#"
                                                                                 data-toggle="modal" data-id="{{ $item->id }}"
                                                                                 data-target="#delete_training"><i

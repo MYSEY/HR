@@ -22,7 +22,7 @@
                 </div>
     
                 <div class="col-auto float-end ms-auto">
-                    @if (permissionAccess("17","is_create")->value == "1")
+                    @if (permissionAccess("m5-s2","is_create")->value == "1")
                         <a href="#" class="btn add-btn" data-bs-toggle="modal" data-bs-target="#add_pay_motor_rentel" id="add_new"><i
                                 class="fa fa-plus"></i>
                             @lang('lang.add_new')</a>
@@ -30,7 +30,7 @@
                 </div>
             </div>
         </div>
-        @if (permissionAccess("17","is_view")->value == "1")
+        @if (permissionAccess("m5-s2","is_view")->value == "1")
             <div class="row filter-row-btn">
                 <div class="col-sm-2 col-md-2">
                     <div class="form-group form-focus select-focus">

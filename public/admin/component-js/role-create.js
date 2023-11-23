@@ -23,7 +23,7 @@ var dataPermission = function () {
                 {
                     "name":"lang.admin_dashboard",
                     "sub_menu_id":"1",
-                    "menu_id":"2",
+                    "menu_id":"m1-s1",
                     "url":"dashboad/admin",
                     "is_employee": $("#dashboad_employee").val(),
                     "is_age_of_employee": $("#dashboad_age_of_employee").val(),
@@ -50,7 +50,7 @@ var dataPermission = function () {
             name: "employee_block",
             permission: [
                 {
-                    "menu_id":"4",
+                    "menu_id":"2",
                     "icon":"la la-user",
                     "name":"lang.employee",
                     "is_all": $("#employee_all").val(),
@@ -64,8 +64,8 @@ var dataPermission = function () {
             permission: [
                 {
                     "name":"lang.all_employee",
-                    "menu_id":"5",
-                    "sub_menu_id":"4",
+                    "menu_id":"m2-s1",
+                    "sub_menu_id":"2",
                     "url":"users",
                     "is_view": $("#employee_view").val(),
                     "is_create": $("#employee_add").val(),
@@ -85,8 +85,8 @@ var dataPermission = function () {
             permission: [
                 {
                     "name":"lang.leaves_employee",
-                    "sub_menu_id":"4",
-                    "menu_id":"6",
+                    "sub_menu_id":"2",
+                    "menu_id":"m2-s2",
                     "url":"leaves/employee",
                     "is_view": $("#leaves_employee_view").val(),
                     "is_create": $("#leaves_employee_add").val(),
@@ -110,7 +110,7 @@ var dataPermission = function () {
             name: "recruitments",
             permission: [
                 {
-                    "menu_id":"7",
+                    "menu_id":"3",
                     "icon":"la la-briefcase",
                     "name":"lang.recruitments",
                     "is_all": $('#recruitments_all').val(),
@@ -125,8 +125,8 @@ var dataPermission = function () {
             permission: [
                 {
                     "name":"lang.candidate_cv",
-                    "sub_menu_id":"7",
-                    "menu_id":"8",
+                    "sub_menu_id":"3",
+                    "menu_id":"m3-s1",
                     "url":"recruitment/candidate-resume/list",
                     "is_view": $("#candidate_cv_view").val(),
                     "is_create": $("#candidate_cv_add").val(),
@@ -147,8 +147,8 @@ var dataPermission = function () {
             permission: [
                 {
                     "name":"lang.recruitment_plan",
-                    "sub_menu_id":"7",
-                    "menu_id":"9",
+                    "sub_menu_id":"3",
+                    "menu_id":"m3-s2",
                     "url":"recruitment/plan-list",
                     "is_view": $("#recruitment_plan_view").val(),
                     "is_create": $("#recruitment_plan_add").val(),
@@ -167,13 +167,13 @@ var dataPermission = function () {
     let cb_nssf_checkbox = $('.cb_nssf_checkbox').filter(':checked').length;
     let severance_pay_checkbox = $('.severance_pay_checkbox').filter(':checked').length;
     let fringe_benefits_checkbox = $('.fringe_benefits_checkbox').filter(':checked').length;
-    let c_and_b_all = $('#c_and_b_all').filter(':checked').length;
-    if (c_and_b_all || employee_salary_checkbox || cb_nssf_checkbox || severance_pay_checkbox || fringe_benefits_checkbox) {
+    let c_and_b_all = $('.c_and_b_checkbox').filter(':checked').length;
+    if (c_and_b_all) {
         data.push({
             name: "Compensation and Benefits",
             permission: [
                 {
-                    "menu_id":"10",
+                    "menu_id":"4",
                     "icon":"la la-money",
                     "name":"lang.c&b",
                     "is_all": $("#c_and_b_all").val(),
@@ -187,8 +187,8 @@ var dataPermission = function () {
             permission: [
                 {
                     "name":"lang.generate_payroll",
-                    "sub_menu_id":"10",
-                    "menu_id":"50",
+                    "sub_menu_id":"4",
+                    "menu_id":"m4-s1",
                     "url":"payroll/review",
                     "is_view": $("#g_view").val(),
                     "is_create": $("#g_add").val(),
@@ -204,8 +204,8 @@ var dataPermission = function () {
             permission: [
                 {
                     "name":"lang.employee_salary",
-                    "sub_menu_id":"10",
-                    "menu_id":"11",
+                    "sub_menu_id":"4",
+                    "menu_id":"m4-s2",
                     "url":"payroll",
                     "is_view": $("#c_and_b_view").val(),
                     "is_create": $("#c_and_b_add").val(),
@@ -225,8 +225,8 @@ var dataPermission = function () {
             permission: [
                 {
                     "name":"lang.nssf",
-                    "sub_menu_id":"10",
-                    "menu_id":"12",
+                    "sub_menu_id":"4",
+                    "menu_id":"m4-s3",
                     "url":"import-nssf",
                     "is_view": $("#cb_nssf_view").val(),
                     "is_import": $("#cb_nssf_import").val(),
@@ -242,8 +242,8 @@ var dataPermission = function () {
             permission: [
                 {
                     "name":"lang.severance_pay",
-                    "sub_menu_id":"10",
-                    "menu_id":"13",
+                    "sub_menu_id":"4",
+                    "menu_id":"m4-s4",
                     "url":"severance-pay",
                     "is_view": $("#severance_pay_view").val(),
                     "is_import": $("#severance_pay_import").val(),
@@ -259,8 +259,8 @@ var dataPermission = function () {
             permission: [
                 {
                     "name":"lang.fringe_benefits",
-                    "sub_menu_id":"10",
-                    "menu_id":"14",
+                    "sub_menu_id":"4",
+                    "menu_id":"m4-s5",
                     "url":"fringe-benefit",
                     "is_view": $("#fringe_benefits_view").val(),
                     "is_create": $("#fringe_benefits_add").val(),
@@ -283,7 +283,7 @@ var dataPermission = function () {
             name: "Motor Rentals",
             permission: [
                 {
-                    "menu_id":"15",
+                    "menu_id":"5",
                     "icon":"la la-motorcycle",
                     "is_all":"1",
                     "name":"lang.motor_rentals",
@@ -298,8 +298,8 @@ var dataPermission = function () {
             permission: [
                 {
                     "name":"lang.motor_rental",
-                    "sub_menu_id":"15",
-                    "menu_id":"16",
+                    "sub_menu_id":"5",
+                    "menu_id":"m5-s1",
                     "url":"motor-rentel/list",
                     "is_view": $("#motor_rental_view").val(),
                     "is_create": $("#motor_rental_add").val(),
@@ -318,8 +318,8 @@ var dataPermission = function () {
             permission: [
                 {
                     "name":"lang.pay_motor_rental",
-                    "sub_menu_id":"15",
-                    "menu_id":"17",
+                    "sub_menu_id":"5",
+                    "menu_id":"m5-s2",
                     "url":"motor-rentel/pay",
                     "is_view": $("#Pay_motor_rental_view").val(),
                     "is_create": $("#Pay_motor_rental_add").val(),
@@ -343,7 +343,7 @@ var dataPermission = function () {
             name: "Trainings",
             permission: [
                 {
-                    "menu_id":"18",
+                    "menu_id":"6",
                     "icon":"la la-edit",
                     "is_all":"1",
                     "name":"lang.trainings",
@@ -358,8 +358,8 @@ var dataPermission = function () {
             permission: [
                 {
                     "name":"lang.trainer",
-                    "sub_menu_id":"18",
-                    "menu_id":"19",
+                    "sub_menu_id":"6",
+                    "menu_id":"m6-s1",
                     "url":"trainer/list",
                     "is_view": $("#trainer_check_view").val(),
                     "is_create": $("#trainer_check_add").val(),
@@ -377,8 +377,8 @@ var dataPermission = function () {
             permission: [
                 {
                     "name":"lang.training",
-                    "sub_menu_id":"18",
-                    "menu_id":"20",
+                    "sub_menu_id":"6",
+                    "menu_id":"m6-s2",
                     "url":"training/list",
                     "is_view": $("#training_check_view").val(),
                     "is_create": $("#training_check_add").val(),
@@ -396,8 +396,8 @@ var dataPermission = function () {
             permission: [
                 {
                     "name":"lang.training_report",
-                    "sub_menu_id":"18",
-                    "menu_id":"21",
+                    "sub_menu_id":"6",
+                    "menu_id":"m6-s3",
                     "url":"reports/training-report",
                     "is_view": $("#report_training_check_view").val(),
                     "is_print": $("#report_training_check_print").val(),
@@ -430,7 +430,7 @@ var dataPermission = function () {
             name: "reports",
             permission: [
                 {
-                    "menu_id":"22",
+                    "menu_id":"7",
                     "icon":"la la-pie-chart",
                     "is_all":"1",
                     "name":"lang.reports",
@@ -446,8 +446,8 @@ var dataPermission = function () {
             permission: [
                 {
                     "name":"lang.employee_reports",
-                    "sub_menu_id":"22",
-                    "menu_id":"23",
+                    "sub_menu_id":"7",
+                    "menu_id":"m7-s1",
                     "url":"reports/employee-report",
                     "is_view": $("#report_employee_check_view").val(),
                     "is_print": $("#report_employee_check_print").val(),
@@ -462,8 +462,8 @@ var dataPermission = function () {
             permission: [
                 {
                     "name":"lang.payroll_reports",
-                    "sub_menu_id":"22",
-                    "menu_id":"24",
+                    "sub_menu_id":"7",
+                    "menu_id":"m7-s2",
                     "url":"reports/payroll-report",
                     "is_view": $("#payroll_report_check_view").val(),
                     "is_print": $("#payroll_report_check_print").val(),
@@ -478,8 +478,8 @@ var dataPermission = function () {
             permission: [
                 {
                     "name":"lang.tax_reports",
-                    "sub_menu_id":"22",
-                    "menu_id":"25",
+                    "sub_menu_id":"7",
+                    "menu_id":"m7-s3",
                     "url":"reports/tax-report",
                     "is_view": $("#tax_report_check_view").val(),
                     "is_print": $("#tax_report_check_print").val(),
@@ -494,8 +494,8 @@ var dataPermission = function () {
             permission: [
                 {
                     "name":"lang.nssf_reports",
-                    "sub_menu_id":"22",
-                    "menu_id":"26",
+                    "sub_menu_id":"7",
+                    "menu_id":"m7-s4",
                     "url":"reports/nssf-report",
                     "is_view": $("#nssf_report_check_view").val(),
                     "is_print": $("#nssf_report_check_print").val(),
@@ -510,8 +510,8 @@ var dataPermission = function () {
             permission: [
                 {
                     "name":"lang.khm_pchum_reports",
-                    "sub_menu_id":"22",
-                    "menu_id":"27",
+                    "sub_menu_id":"7",
+                    "menu_id":"m7-s5",
                     "url":"reports/benefit-report",
                     "is_view": $("#kmh_pchum_report_check_view").val(),
                     "is_print": $("#kmh_pchum_report_check_print").val(),
@@ -526,8 +526,8 @@ var dataPermission = function () {
             permission: [
                 {
                     "name":"lang.severance_pay_reports",
-                    "sub_menu_id":"22",
-                    "menu_id":"28",
+                    "sub_menu_id":"7",
+                    "menu_id":"m7-s6",
                     "url":"reports/severance-pay-report",
                     "is_view": $("#severance_pay_report_check_view").val(),
                     "is_print": $("#severance_pay_report_check_print").val(),
@@ -542,8 +542,8 @@ var dataPermission = function () {
             permission: [
                 {
                     "name":"lang.seniorities_pay_reports",
-                    "sub_menu_id":"22",
-                    "menu_id":"29",
+                    "sub_menu_id":"7",
+                    "menu_id":"m7-s7",
                     "url":"reports/seniorities-pay",
                     "is_view": $("#seniorities_pay_report_check_view").val(),
                     "is_print": $("#seniorities_pay_report_check_print").val(),
@@ -558,8 +558,8 @@ var dataPermission = function () {
             permission: [
                 {
                     "name":"lang.fringe_benefits_reports",
-                    "sub_menu_id":"22",
-                    "menu_id":"30",
+                    "sub_menu_id":"7",
+                    "menu_id":"m7-s8",
                     "url":"reports/fringe-benefits-report",
                     "is_view": $("#fringe_benefits_report_check_view").val(),
                     "is_print": $("#fringe_benefits_report_check_print").val(),
@@ -574,8 +574,8 @@ var dataPermission = function () {
             permission: [
                 {
                     "name":"lang.bank_transfer_reports",
-                    "sub_menu_id":"22",
-                    "menu_id":"31",
+                    "sub_menu_id":"7",
+                    "menu_id":"m7-s9",
                     "url":"reports/bank-transfer",
                     "is_view": $("#bank_transfer_report_check_view").val(),
                     "is_print": $("#bank_transfer_report_check_print").val(),
@@ -590,8 +590,8 @@ var dataPermission = function () {
             permission: [
                 {
                     "name":"lang.e_filing_reports",
-                    "sub_menu_id":"22",
-                    "menu_id":"32",
+                    "sub_menu_id":"7",
+                    "menu_id":"m7-s10",
                     "url":"reports/e-filing",
                     "is_view": $("#e_filing_report_check_view").val(),
                     "is_print": $("#e_filing_report_check_print").val(),
@@ -606,8 +606,8 @@ var dataPermission = function () {
             permission: [
                 {
                     "name":"lang.e_form_reports",
-                    "sub_menu_id":"22",
-                    "menu_id":"33",
+                    "sub_menu_id":"7",
+                    "menu_id":"m7-s11",
                     "url":"reports/e-form",
                     "is_view": $("#e_form_report_check_view").val(),
                     "is_print": $("#e_form_report_check_print").val(),
@@ -622,8 +622,8 @@ var dataPermission = function () {
             permission: [
                 {
                     "name":"lang.motor_rental_reports",
-                    "sub_menu_id":"22",
-                    "menu_id":"34",
+                    "sub_menu_id":"7",
+                    "menu_id":"m7-s12",
                     "url":"reports/motor-rentel-report",
                     "is_view": $("#motor_rental_reports_check_view").val(),
                     "is_print": $("#motor_rental_reports_check_print").val(),
@@ -638,8 +638,8 @@ var dataPermission = function () {
             permission: [
                 {
                     "name":"lang.new_staff_reports",
-                    "sub_menu_id":"22",
-                    "menu_id":"35",
+                    "sub_menu_id":"7",
+                    "menu_id":"m7-s13",
                     "url":"reports/new_staff-report",
                     "is_view": $("#new_staff_reports_check_view").val(),
                     "is_print": $("#new_staff_reports_check_print").val(),
@@ -654,8 +654,8 @@ var dataPermission = function () {
             permission: [
                 {
                     "name":"lang.staff_resigned_reports",
-                    "sub_menu_id":"22",
-                    "menu_id":"36",
+                    "sub_menu_id":"7",
+                    "menu_id":"m7-s14",
                     "url":"reports/staff-resigned-report",
                     "is_view": $("#staff_resigned_reports_check_view").val(),
                     "is_print": $("#staff_resigned_reports_check_print").val(),
@@ -670,8 +670,8 @@ var dataPermission = function () {
             permission: [
                 {
                     "name":"lang.transferred_staff_reports",
-                    "sub_menu_id":"22",
-                    "menu_id":"37",
+                    "sub_menu_id":"7",
+                    "menu_id":"m7-s15",
                     "url":"reports/transferred-staff-report",
                     "is_view": $("#transferred_staff_report_check_view").val(),
                     "is_print": $("#transferred_staff_report_check_print").val(),
@@ -686,8 +686,8 @@ var dataPermission = function () {
             permission: [
                 {
                     "name":"lang.promoted_staff_reports",
-                    "sub_menu_id":"22",
-                    "menu_id":"38",
+                    "sub_menu_id":"7",
+                    "menu_id":"m7-s16",
                     "url":"reports/promoted-staff-report",
                     "is_view": $("#promoted_staff_report_check_view").val(),
                     "is_print": $("#promoted_staff_report_check_print").val(),
@@ -708,7 +708,7 @@ var dataPermission = function () {
             name: "configuration",
             permission: [
                 {
-                    "menu_id":"39",
+                    "menu_id":"8",
                     "icon":"la la-key",
                     "name":"lang.configuration",
                     "is_all": $("#configuration_check_all").val(),
@@ -722,8 +722,8 @@ var dataPermission = function () {
             permission: [
                 {
                     "name":"lang.tax",
-                    "sub_menu_id":"39",
-                    "menu_id":"40",
+                    "sub_menu_id":"8",
+                    "menu_id":"m8-s1",
                     "url":"taxes",
                     "is_view": $("#taxes_check_view").val(),
                     "is_create": $("#taxes_check_add").val(),
@@ -739,8 +739,8 @@ var dataPermission = function () {
             permission: [
                 {
                     "name":"lang.exchange_rate",
-                    "sub_menu_id":"39",
-                    "menu_id":"41",
+                    "sub_menu_id":"8",
+                    "menu_id":"m8-s2",
                     "url":"exchange-rate/list",
                     "is_view": $("#exchange_rate_check_view").val(),
                     "is_create": $("#exchange_rate_check_add").val(),
@@ -756,8 +756,8 @@ var dataPermission = function () {
             permission: [
                 {
                     "name":"lang.public_holidays",
-                    "sub_menu_id":"39",
-                    "menu_id":"42",
+                    "sub_menu_id":"8",
+                    "menu_id":"m8-s3",
                     "url":"holidays",
                     "is_view": $("#public_holidays_check_view").val(),
                     "is_create": $("#public_holidays_check_add").val(),
@@ -773,8 +773,8 @@ var dataPermission = function () {
             permission: [
                 {
                     "name":"lang.children_allowance",
-                    "sub_menu_id":"39",
-                    "menu_id":"43",
+                    "sub_menu_id":"8",
+                    "menu_id":"m8-s4",
                     "url":"children/allowance",
                     "is_view": $("#children_allowance_check_view").val(),
                     "is_create": $("#children_allowance_check_add").val(),
@@ -797,7 +797,7 @@ var dataPermission = function () {
             name: "setting",
             permission: [
                 {
-                    "menu_id":"44",
+                    "menu_id":"9",
                     "icon":"la la-cog",
                     "name":"lang.setting",
                     "is_all": $("#setting_check_all").val(),
@@ -811,8 +811,8 @@ var dataPermission = function () {
             permission: [
                 {
                     "name":"lang.bank",
-                    "sub_menu_id":"44",
-                    "menu_id":"45",
+                    "sub_menu_id":"9",
+                    "menu_id":"m9-s1",
                     "url":"bank",
                     "is_view": $("#bank_check_view").val(),
                     "is_create": $("#bank_check_add").val(),
@@ -828,8 +828,8 @@ var dataPermission = function () {
             permission: [
                 {
                     "name":"lang.position",
-                    "sub_menu_id":"44",
-                    "menu_id":"46",
+                    "sub_menu_id":"9",
+                    "menu_id":"m9-s2",
                     "url":"position",
                     "is_view": $("#position_check_view").val(),
                     "is_create": $("#position_check_add").val(),
@@ -845,8 +845,8 @@ var dataPermission = function () {
             permission: [
                 {
                     "name":"lang.branch",
-                    "sub_menu_id":"44",
-                    "menu_id":"47",
+                    "sub_menu_id":"9",
+                    "menu_id":"m9-s3",
                     "url":"branch",
                     "is_view": $("#branch_check_view").val(),
                     "is_create": $("#branch_check_add").val(),
@@ -862,8 +862,8 @@ var dataPermission = function () {
             permission: [
                 {
                     "name":"lang.department",
-                    "sub_menu_id":"44",
-                    "menu_id":"48",
+                    "sub_menu_id":"9",
+                    "menu_id":"m9-s4",
                     "url":"department",
                     "is_view": $("#department_check_view").val(),
                     "is_create": $("#department_check_add").val(),
@@ -879,8 +879,8 @@ var dataPermission = function () {
             permission: [
                 {
                     "name":"lang.forgot_password",
-                    "sub_menu_id":"44",
-                    "menu_id":"49",
+                    "sub_menu_id":"9",
+                    "menu_id":"m9-s5",
                     "url":"change/password",
                     "is_view": $("#forgot_password_check_view").val(),
                     "is_create": $("#forgot_password_check_add").val(),

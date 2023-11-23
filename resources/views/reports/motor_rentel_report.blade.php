@@ -27,7 +27,7 @@
             </div>
         </div>
     </div>
-    @if (permissionAccess("34","is_view")->value == "1")
+    @if (permissionAccess("m7-s12","is_view")->value == "1")
         <div class="row">
             <div class="col-sm-6 col-md-2">
                 <div class="form-group">
@@ -84,7 +84,7 @@
                         <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>
                         <span class="btn-text-search">@lang('lang.search')</span>
                     </button>
-                    @if (permissionAccess("34","is_export")->value == "1")
+                    @if (permissionAccess("m7-s12","is_export")->value == "1")
                             <button type="button" class="btn btn-sm btn-outline-secondary btn-export me-2">
                                 <span class="btn-text-excel"><i class="fa fa-file-excel-o" aria-hidden="true"></i> @lang('lang.excel')</span>
                                 <span id="btn-text-loading-excel" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>

@@ -21,16 +21,16 @@
 
                 </div>
                 <div class="col-auto float-end ms-auto">
-                    @if (permissionAccess("5","is_import")->value == "1")
+                    @if (permissionAccess("m2-s1","is_import")->value == "1")
                         <a href="#" class="btn add-btn" data-toggle="modal" id="import_employee"><i class="fa fa-plus"></i>@lang('lang.import')</a>
                     @endif
-                    @if (permissionAccess("5","is_create")->value == "1")
+                    @if (permissionAccess("m2-s1","is_create")->value == "1")
                         <a href="{{url('user/form/create')}}" class="btn add-btn me-2"><i class="fa fa-plus"></i> @lang('lang.add_new')</a>
                     @endif
                 </div>
             </div>
         </div>
-        @if (permissionAccess("5","is_view")->value == "1")
+        @if (permissionAccess("m2-s1","is_view")->value == "1")
             <form class="needs-validation" novalidate>
                 @csrf
                 <div class="row filter-btn">

@@ -26,7 +26,7 @@
                 </div>
             </div>
         </div>
-        @if (permissionAccess("21","is_view")->value == "1" )
+        @if (permissionAccess("m6-s3","is_view")->value == "1" )
             <form  class="needs-validation" novalidate>
                 {{-- @csrf --}}
                 
@@ -82,13 +82,13 @@
                                 <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>
                                 <span class="btn-txt">@lang('lang.search')</span>
                             </button>
-                            @if (permissionAccess("21","is_print")->value == "1" )
+                            @if (permissionAccess("m6-s3","is_print")->value == "1" )
                                 <button type="button" class="btn btn-sm btn-outline-secondary btn_print me-2">
                                     <span class="btn-text-print"><i class="fa fa-print fa-lg"></i> @lang('lang.print')</span>
                                     <span id="btn-text-loading-print" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>
                                 </button>
                             @endif
-                            @if (permissionAccess("21","is_export")->value == "1" )
+                            @if (permissionAccess("m6-s3","is_export")->value == "1" )
                                 <button type="button" class="btn btn-sm btn-outline-secondary btn_excel me-2">
                                     <span class="btn-text-excel"><i class="fa fa-file-excel-o" aria-hidden="true"></i> @lang('lang.excel')</span>
                                     <span id="btn-text-loading-excel" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>

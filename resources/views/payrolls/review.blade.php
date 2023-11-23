@@ -26,13 +26,13 @@
                     </ul>
                 </div>
                 <div class="col-auto float-end ms-auto">
-                    @if (permissionAccess("11","is_create")->value == "1")
+                    @if (permissionAccess("m4-s1","is_create")->value == "1")
                     <a href="#" class="btn add-btn me-2" data-bs-toggle="modal" data-bs-target="#add_salary"><i class="fa fa-plus"></i> @lang('lang.add_new')</a>
                     @endif
                 </div>
             </div>
         </div>
-        @if (permissionAccess("11","is_view")->value == "1")
+        @if (permissionAccess("m4-s1","is_view")->value == "1")
             <form>
                 {{-- @csrf --}}
                 <div class="row filter-btn"> 
@@ -67,7 +67,7 @@
                                 <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading') </span>
                                 <span class="btn-txt">@lang('lang.search')</span>
                             </button>
-                            @if (permissionAccess("11","is_export")->value == "1")
+                            @if (permissionAccess("m4-s1","is_export")->value == "1")
                                 <button type="button" class="btn btn-sm btn-outline-secondary btn_excel me-2">
                                     <span class="btn-text-excel"><i class="fa fa-file-excel-o" aria-hidden="true"></i> @lang('lang.excel')</span>
                                     <span id="btn-text-loading-excel" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>
@@ -83,10 +83,10 @@
                 </div>
             </form>
             {!! Toastr::message() !!}
-            @if (permissionAccess("11","is_delete")->value == "1")
+            @if (permissionAccess("m4-s1","is_delete")->value == "1")
                 <button type="button" class="btn btn-sm btn-outline-secondary delete_all">Delete All</button>
             @endif
-            @if (permissionAccess("11","is_approve")->value == "1")
+            @if (permissionAccess("m4-s1","is_approve")->value == "1")
                 <button type="button" class="btn btn-sm btn-outline-secondary btn_approved" href="#" data-id=""> @lang('lang.approve')</button> 
             @endif
 

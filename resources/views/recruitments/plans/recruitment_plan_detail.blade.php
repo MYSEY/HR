@@ -268,8 +268,8 @@
 
 
     function showDatas(params){
-        let is_update = "{{ Helper::permissionAccess('9','is_update') }}";
-        let is_delete = "{{ Helper::permissionAccess('9','is_delete') }}";
+        let is_update = "{{ Helper::permissionAccess('m3-s2','is_update') }}";
+        let is_delete = "{{ Helper::permissionAccess('m3-s2','is_delete') }}";
         let branch_id = params[0] ? parseInt(params[0]) : null;
         let position_id = params[1] ? parseInt(params[1]) : null;
         let filter_year = params[2] ? parseInt(params[2]) : null;

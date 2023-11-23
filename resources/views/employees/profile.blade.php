@@ -294,14 +294,14 @@
                                                         <td>{{$item->phone_2}}</td>
                                                         <td>{{\Carbon\Carbon::parse($item->created_at)->format('d-M-Y') ?? ''}}</td>
                                                         <td style="text-align: center">
-                                                            @if (permissionAccess("5","is_update")->value == "1" || permissionAccess("5","is_delete")->value == "1")
+                                                            @if (permissionAccess("m2-s1","is_update")->value == "1" || permissionAccess("m2-s1","is_delete")->value == "1")
                                                                 <div class="dropdown dropdown-action">
                                                                     <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i  class="material-icons">more_vert</i></a>
                                                                     <div class="dropdown-menu dropdown-menu-right">
-                                                                        @if (permissionAccess("5","is_update")->value == "1")
+                                                                        @if (permissionAccess("m2-s1","is_update")->value == "1")
                                                                             <a class="dropdown-item contactUpdate" data-id="{{$item->id}}" data-bs-target="#contact_modal"><i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')</a>
                                                                         @endif
-                                                                        @if (permissionAccess("5","is_delete")->value == "1")
+                                                                        @if (permissionAccess("m2-s1","is_delete")->value == "1")
                                                                             <a class="dropdown-item contactDelete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_contact"><i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
                                                                         @endif
                                                                     </div>
@@ -345,14 +345,14 @@
                                                     <td>{{$item->YearsOfChildren}}</td>
                                                     <td>{{\Carbon\Carbon::parse($item->created_at)->format('d-M-Y') ?? ''}}</td>
                                                     <td style="text-align: center">
-                                                        @if (permissionAccess("5","is_update")->value == "1" || permissionAccess("5","is_delete")->value == "1")
+                                                        @if (permissionAccess("m2-s1","is_update")->value == "1" || permissionAccess("m2-s1","is_delete")->value == "1")
                                                             <div class="dropdown dropdown-action">
                                                                 <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i  class="material-icons">more_vert</i></a>
                                                                 <div class="dropdown-menu dropdown-menu-right">
-                                                                    @if (permissionAccess("5","is_update")->value == "1" )
+                                                                    @if (permissionAccess("m2-s1","is_update")->value == "1" )
                                                                     <a class="dropdown-item childrenUpdate" data-id="{{$item->id}}" data-bs-target="#family_edit_info_modal"><i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')</a>
                                                                     @endif
-                                                                    @if (permissionAccess("5","is_delete")->value == "1" )
+                                                                    @if (permissionAccess("m2-s1","is_delete")->value == "1" )
                                                                     <a class="dropdown-item childrenDelete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_children"><i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
                                                                     @endif
                                                                 </div>
@@ -396,14 +396,14 @@
                                                     <td>{{$item->Edcutiondegree}}</td>
                                                     <td>{{\Carbon\Carbon::parse($item->created_at)->format('d-M-Y') ?? ''}}</td>
                                                     <td style="text-align: center">
-                                                        @if (permissionAccess("5","is_update")->value == "1" || permissionAccess("5","is_delete")->value == "1")
+                                                        @if (permissionAccess("m2-s1","is_update")->value == "1" || permissionAccess("m2-s1","is_delete")->value == "1")
                                                             <div class="dropdown dropdown-action">
                                                                 <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i  class="material-icons">more_vert</i></a>
                                                                 <div class="dropdown-menu dropdown-menu-right">
-                                                                    @if (permissionAccess("5","is_update")->value == "1" )
+                                                                    @if (permissionAccess("m2-s1","is_update")->value == "1" )
                                                                     <a class="dropdown-item childrenUpdate" data-id="{{$item->id}}" data-bs-target="#family_edit_info_modal"><i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')</a>
                                                                     @endif
-                                                                    @if (permissionAccess("5","is_delete")->value == "1" )
+                                                                    @if (permissionAccess("m2-s1","is_delete")->value == "1" )
                                                                     <a class="dropdown-item childrenDelete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_children"><i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
                                                                     @endif
                                                                 </div>

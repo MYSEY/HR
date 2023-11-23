@@ -17,13 +17,13 @@
                     </ul>
                 </div>
                 <div class="col-auto float-end ms-auto">
-                    @if (permissionAccess("19","is_create")->value == "1")
+                    @if (permissionAccess("m6-s1","is_create")->value == "1")
                     <a href="#" class="btn add-btn" data-bs-toggle="modal" data-bs-target="#add_trainer"><i class="fa fa-plus"></i> @lang('lang.add_new')</a>
                     @endif
                 </div>
             </div>
         </div>
-        @if (permissionAccess("19","is_view")->value == "1")
+        @if (permissionAccess("m6-s1","is_view")->value == "1")
             <form class="needs-validation" novalidate>
                 @csrf
                 
@@ -119,7 +119,7 @@
                                                             <td>
                                                                 <input type="hidden" class="status" value="{{$item->status}}">
                                                                 <div class="dropdown action-label">
-                                                                    @if (permissionAccess("19","is_update")->value == "1")
+                                                                    @if (permissionAccess("m6-s1","is_update")->value == "1")
                                                                         @if ($item->status=='1')
                                                                             <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
                                                                                 <i class="fa fa-dot-circle-o text-success"></i>
@@ -155,14 +155,14 @@
                                                             </td>
                                                             <td>{{ \Carbon\Carbon::parse($item->created_at)->format('d-M-Y') ?? '' }}</td>
                                                             <td class="text-end">
-                                                                @if (permissionAccess("19","is_update")->value == "1" || permissionAccess("19","is_delete")->value == "1")
+                                                                @if (permissionAccess("m6-s1","is_update")->value == "1" || permissionAccess("m6-s1","is_delete")->value == "1")
                                                                     <div class="dropdown dropdown-action">
                                                                         <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
                                                                         <div class="dropdown-menu dropdown-menu-right">
-                                                                            @if (permissionAccess("19","is_update")->value == "1")
+                                                                            @if (permissionAccess("m6-s1","is_update")->value == "1")
                                                                             <a class="dropdown-item update" data-toggle="modal" data-id="{{$item->id}}" data-target="#edit_trainer"><i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')</a>
                                                                             @endif
-                                                                            @if (permissionAccess("19","is_delete")->value == "1")
+                                                                            @if (permissionAccess("m6-s1","is_delete")->value == "1")
                                                                             <a class="dropdown-item delete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_trainer"><i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
                                                                             @endif
                                                                         </div>
@@ -576,8 +576,8 @@
         });
     });
     function showdatas(params) {
-        let is_update = "{{ Helper::permissionAccess('19','is_update') }}";
-        let is_delete = "{{ Helper::permissionAccess('19','is_delete') }}";
+        let is_update = "{{ Helper::permissionAccess('m6-s1','is_update') }}";
+        let is_delete = "{{ Helper::permissionAccess('m6-s1','is_delete') }}";
         $.ajax({
             type: "post",
             url: "{{ url('trainer/list') }}",

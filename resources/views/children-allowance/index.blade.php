@@ -12,7 +12,7 @@
                 </div>
             </div>
         </div>
-        @if (permissionAccess("43","is_view")->value == "1")
+        @if (permissionAccess("m8-s4","is_view")->value == "1")
             {!! Toastr::message() !!}
             <div class="row">
                 <div class="col-md-12">
@@ -35,7 +35,7 @@
                                             <td><div class="input-group"><span class="input-group-text">៛</span><input type="number" disabled class="form-control" value="{{$item->reduced_burden_children}}"></div></td>
                                             <td><div class="input-group"><span class="input-group-text">៛</span><input type="number" disabled class="form-control" value="{{$item->spouse_allowance}}"></div></td>
                                             <td style="text-align: center;">
-                                                @if (permissionAccess("43","is_update")->value == "1")
+                                                @if (permissionAccess("m8-s4","is_update")->value == "1")
                                                 <a class="btn btn-success update" data-toggle="modal" data-id="{{$item->id}}" data-target="#edit_children_allowance"><i class="fa fa-pencil m-r-5"></i></a>
                                                 @endif
                                                 

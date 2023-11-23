@@ -325,7 +325,7 @@
             </div>
         </div>
         <div class="row">
-            @if (permissionAccess("2","is_dashboard")->is_dashboard["is_employee"] == "1")
+            @if (permissionAccess("m1-s1","is_dashboard")->is_dashboard["is_employee"] == "1")
                 <div class="col-md-12 col-lg-6 col-xl-4 d-flex">
                     <div class="card flex-fill">
                         <div class="card-body">
@@ -370,7 +370,7 @@
                     </div>
                 </div>
             @endif
-            @if (permissionAccess("2","is_dashboard")->is_dashboard["is_age_of_employee"] == "1")
+            @if (permissionAccess("m1-s1","is_dashboard")->is_dashboard["is_age_of_employee"] == "1")
                 <div class="col-md-12 col-lg-12 col-xl-4 d-flex">
                     <div class="card flex-fill dash-statistics">
                         <div class="card-body">
@@ -401,7 +401,7 @@
                     </div>
                 </div>
             @endif
-            @if (permissionAccess("2","is_dashboard")->is_dashboard["is_birthday_reminder"] == "1")
+            @if (permissionAccess("m1-s1","is_dashboard")->is_dashboard["is_birthday_reminder"] == "1")
                 <div class="col-md-12 col-lg-6 col-xl-4 d-flex">
                     <div class="card flex-fill">
                         <div class="card-body">
@@ -537,7 +537,6 @@
             dataType: "JSON",
             success: function(response) {
                 let totalStaff = response.totalStaff;
-                console.log(totalStaff);
                 if (totalStaff.length > 0 ) {
                     let total_female = 0;
                     let total_probatio = 0;
@@ -900,16 +899,20 @@
                     labels: {
                         render: 'percentage',
                         precision: 2,
-                    }
+                    },
+                },
+                tooltip: {
+                    enabled: false
                 },
                 datalabels: {
                     anchor: 'end',
-                    align: 'top',
+                    align: 'end',
+                    offset: -4,
                     font: {
                         weight: 'bold',
                         size: 10
                     },
-                    align: 'center',
+                    
                 },
                 title: {
                     display: true,
@@ -1044,12 +1047,12 @@
                 datalabels: {
                     events: [],
                     anchor: 'end',
-                    align: 'top',
+                    align: 'end',
+                    offset: -4,
                     font: {
                         weight: 'bold',
                         size: 10
                     },
-                    align: 'center',
                     _actives: false,
                     formatter: (value, context) => {
                         if (context.chart.$datalabels._datasets[2]) {
@@ -1145,8 +1148,9 @@
                     rtl: true,
                 },
                 datalabels: {
+                    color: 'white',
                     font: {
-                        size: 10
+                        size: 12
                     },
                     align: 'center',
                     formatter: (value, context) => {
@@ -1256,8 +1260,9 @@
                 //     enabled: false
                 // },
                 datalabels: {
+                    color: 'white',
                     font: {
-                        size: 10
+                        size: 12
                     },
                     align: 'center',
                     formatter: (value, context) => {
@@ -1388,12 +1393,12 @@
                 datalabels: {
                     events: [],
                     anchor: 'end',
-                    align: 'top',
+                    align: 'end',
+                    offset: -4,
                     font: {
                         weight: 'bold',
                         size: 10
                     },
-                    align: 'center',
                     _actives: false,
                     formatter: (value, context) => {
                         return `${parseFloat(value).toFixed(2)}%`;
@@ -1467,12 +1472,12 @@
                 },
                 datalabels: {
                     anchor: 'end',
-                    align: 'top',
+                    align: 'end',
+                    offset: -4,
                     font: {
                         weight: 'bold',
                         size: 10
                     },
-                    align: 'center',
                 },
                 title: {
                     display: true,
@@ -1548,12 +1553,12 @@
                 },
                 datalabels: {
                     anchor: 'end',
-                    align: 'top',
+                    align: 'end',
+                    offset: -4,
                     font: {
                         weight: 'bold',
                         size: 10
                     },
-                    align: 'center',
                 },
                 title: {
                     display: true,

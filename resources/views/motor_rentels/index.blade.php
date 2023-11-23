@@ -22,16 +22,16 @@
                     </ul>
                 </div>
                 <div class="col-auto float-end ms-auto">
-                    @if (permissionAccess("16","is_import")->value == "1")
+                    @if (permissionAccess("m5-s1","is_import")->value == "1")
                         <a href="#" class="btn add-btn" data-toggle="modal" id="import_new_motor_rentel"><i class="fa fa-plus"></i>@lang('lang.import')</a>
                     @endif
-                    @if (permissionAccess("16","is_create")->value == "1")
+                    @if (permissionAccess("m5-s1","is_create")->value == "1")
                         <a href="#" class="btn add-btn me-2" data-toggle="modal" data-toggle="modal" id="add_new"><i class="fa fa-plus"></i>@lang('lang.add_new')</a>
                     @endif
                 </div>
             </div>
         </div>
-        @if (permissionAccess("16","is_view")->value == "1")
+        @if (permissionAccess("m5-s1","is_view")->value == "1")
             <div class="row filter-row-btn">
                 <div class="col-sm-2 col-md-2">
                     <div class="form-group form-focus select-focus">
@@ -177,7 +177,7 @@
                                                             <td>៛ {{ $item->price_taplab_rentel ? number_format($item->price_taplab_rentel) : "0000"}}</td>
                                                             <td>
                                                                 <div class="dropdown action-label">
-                                                                    @if (permissionAccess("16","is_update")->value == "1")
+                                                                    @if (permissionAccess("m5-s1","is_update")->value == "1")
                                                                         @if (!$item->resigned_date)
                                                                             <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
                                                                                 <i class="fa fa-dot-circle-o text-success"></i>
@@ -215,14 +215,14 @@
                                                             <td><span style="font-size: 13px" class="badge bg-inverse-danger">{{ $item->resigned_date ? \Carbon\Carbon::parse($item->resigned_date)->format('d-M-Y') :'' }}</span></td>
                                                             <td>{{ $item->created_at ? \Carbon\Carbon::parse($item->created_at)->format('d-M-Y') : '' }}</td>
                                                             <td class="text-end">
-                                                                @if (permissionAccess("16","is_update")->value == "1" || permissionAccess("16","is_delete")->value == "1")
+                                                                @if (permissionAccess("m5-s1","is_update")->value == "1" || permissionAccess("m5-s1","is_delete")->value == "1")
                                                                     <div class="dropdown dropdown-action">
                                                                         <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
                                                                         <div class="dropdown-menu dropdown-menu-right">
-                                                                            @if (permissionAccess("16","is_update")->value == "1")
+                                                                            @if (permissionAccess("m5-s1","is_update")->value == "1")
                                                                             <a class="dropdown-item update" data-id="{{ $item->id }}"><i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')</a>
                                                                             @endif
-                                                                            @if (permissionAccess("16","is_delete")->value == "1")
+                                                                            @if (permissionAccess("m5-s1","is_delete")->value == "1")
                                                                             <a class="dropdown-item delete" href="#" data-toggle="modal" data-id="{{ $item->id }}" data-target="#delete_motor_rentel"><i
                                                                                 class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
                                                                             @endif
@@ -725,8 +725,8 @@
     });
 
     function showDatas(){
-        let is_update = "{{ Helper::permissionAccess('16','is_update') }}";
-        let is_delete = "{{ Helper::permissionAccess('16','is_delete') }}";
+        let is_update = "{{ Helper::permissionAccess('m5-s1','is_update') }}";
+        let is_delete = "{{ Helper::permissionAccess('m5-s1','is_delete') }}";
         var localeLanguage = '{{ config('app.locale') }}';
         axios.post('{{ URL('motor-rentel/list') }}', {
             'research':true,

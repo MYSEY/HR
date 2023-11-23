@@ -18,8 +18,8 @@
                             <select class="form-control hr-select2-option role_required" id="role_type" name="role_type" required>
                                 <option selected disabled value=""> -- @lang('lang.select') --</option>
                                 <option value="BOD">Board of Director</option>
-                                <option value="CEO">CEO</option>
-                                <option value="HR">Head of HR and Admin</option>
+                                <option value="CEO">Chief Executive Officer</option>
+                                <option value="HR">Head of HR Admin</option>
                                 <option value="HOD">Head of Department</option>
                                 <option value="HOCD">Head of Credit Department</option>
                                 <option value="BM">Branch Manager</option>

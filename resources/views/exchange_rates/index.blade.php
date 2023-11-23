@@ -11,13 +11,13 @@
                     </ul>
                 </div>
                 <div class="col-auto float-end ms-auto">
-                    @if (permissionAccess("41","is_create")->value == "1")
+                    @if (permissionAccess("m8-s2","is_create")->value == "1")
                     <a href="#" class="btn add-btn" data-bs-toggle="modal" data-bs-target="#add_exchange_rate"><i class="fa fa-plus"></i> @lang('lang.add_new')</a>
                     @endif
                 </div>
             </div>
         </div>
-        @if (permissionAccess("41","is_view")->value == "1")
+        @if (permissionAccess("m8-s2","is_view")->value == "1")
             {!! Toastr::message() !!}
             <div class="row">
                 <div class="col-md-12">
@@ -49,14 +49,14 @@
                                                         <td class="amount_riel">{{$item->type}}</td>
                                                         <td>{{ \Carbon\Carbon::parse($item->created_at)->format('d-M-Y') ?? '' }}</td>
                                                         <td class="text-end">
-                                                            @if (permissionAccess("41","is_update")->value == "1" || permissionAccess("41","is_delete")->value == "1")
+                                                            @if (permissionAccess("m8-s2","is_update")->value == "1" || permissionAccess("m8-s2","is_delete")->value == "1")
                                                                 <div class="dropdown dropdown-action">
                                                                     <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
                                                                     <div class="dropdown-menu dropdown-menu-right">
-                                                                        @if (permissionAccess("41","is_update")->value == "1")
+                                                                        @if (permissionAccess("m8-s2","is_update")->value == "1")
                                                                         <a class="dropdown-item update"  data-id="{{$item->id}}"><i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')</a>
                                                                         @endif
-                                                                        @if (permissionAccess("41","is_delete")->value == "1")
+                                                                        @if (permissionAccess("m8-s2","is_delete")->value == "1")
                                                                         <a class="dropdown-item delete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_echange_rate"><i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
                                                                         @endif
                                                                     </div>
