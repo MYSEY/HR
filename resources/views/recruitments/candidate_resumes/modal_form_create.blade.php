@@ -75,7 +75,17 @@
                                 <select class="hr-select2-option requered" required name="position_applied" id="position_applied">
                                     <option selected disabled value=""> -- @lang('lang.select') --</option>
                                     @foreach ($position as $positions )
-                                    <option value="{{ $positions->id }}">{{ Helper::getLang() == 'en' ? $positions->name_english : $positions->name_khmer }}</option>
+                                        <option data-id="{{$positions->position_type_number}}" value="{{ $positions->id }}">{{ Helper::getLang() == 'en' ? $positions->name_english : $positions->name_khmer }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-4" hidden>
+                            <div class="form-group">
+                                <label class="">@lang('lang.position_type')</label>
+                                <select class="form-control select floating" id="position_type" name="position_type" value="{{old('position_type')}}">
+                                    @foreach ($optionPositionType as $item)
+                                        <option data-id="{{$item->name_english}}" value="{{$item->id}}">{{Helper::getLang() == 'en' ? $item->name_english : $item->name_khmer}}</option>
                                     @endforeach
                                 </select>
                             </div>

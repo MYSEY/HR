@@ -77,6 +77,13 @@
                                 </select>
                             </div>
                         </div>
+                        <div class="col-sm-4" hidden>
+                            <div class="form-group">
+                                <label class="">@lang('lang.position_type')</label>
+                                <select class="form-control select floating" id="e_position_type" name="position_type" value="{{old('position_type')}}">
+                                </select>
+                            </div>
+                        </div>
                         <div class="col-sm-6">
                             <div class="form-group hr-form-group-select2">
                                 <label>@lang('lang.location_applied') <span class="text-danger">*</span></label>

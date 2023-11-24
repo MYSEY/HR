@@ -21,6 +21,7 @@ class CreatePositionsTable extends Migration
             $table->string('type')->nullable();
             $table->integer('parent_id')->nullable();
             $table->string('position_type')->nullable();
+            $table->string('position_type_number')->nullable();
             $table->string('position_range')->nullable();
             $table->bigInteger('created_by')->unsigned()->nullable();
             $table->bigInteger('updated_by')->unsigned()->nullable();

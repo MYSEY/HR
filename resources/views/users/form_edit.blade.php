@@ -139,7 +139,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-sm-4">
+                        <div class="col-sm-4" hidden>
                             <div class="form-group">
                                 <label class="">@lang('lang.position_type')</label>
                                 <select class="form-control" id="e_position_type" name="position_type" value="{{old('position_type')}}">
@@ -531,6 +531,22 @@
         var url = window.location.pathname;
         var id = url.substring(url.lastIndexOf('/') + 1);
         showDataEdit(id);
+        $("#e_position").on("change", function() {
+            let position_type = $("#e_position option:checked").attr('data-id');
+            if (position_type == 1) {
+                $('#e_position_type').find('option').each(function(){
+                    if ($(this).attr('data-id') == "Supporting Staff") {
+                        $("#e_position_type").val($(this).val());
+                    }
+                }); 
+            }else{
+                $('#e_position_type').find('option').each(function(){
+                    if ($(this).attr('data-id') == "Field Staff") {
+                        $("#e_position_type").val($(this).val());
+                    }
+                });
+            }
+        });
         // block Current Address
         $("#e_current_province").on("change", function(){
             let id = $("#e_current_province").val() ?? $("#e_current_province").val();
@@ -638,10 +654,12 @@
                         $('#e_position').html('<option selected disabled> --@lang("lang.select") --</option>');
                         $.each(response.position, function(i, item) {
                             $('#e_position').append($('<option>', {
+                                "data-id" : item.position_type_number,
                                 value: item.id,
                                 text: localeLanguage == 'en' ? item.name_english : item.name_khmer,
                                 selected: item.id == response.success.position_id
                             }));
+                            
                         });
                     }
                     
@@ -734,6 +752,7 @@
                     if (response.optionPositionType != '') {
                         $.each(response.optionPositionType, function(i, item) {
                             $('#e_position_type').append($('<option>', {
+                                "data-id" : item.name_english,
                                 value: item.id,
                                 text: localeLanguage == 'en' ? item.name_english : item.name_khmer,
                                 selected: item.id == response.success.position_type

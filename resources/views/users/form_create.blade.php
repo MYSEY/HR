@@ -148,19 +148,19 @@
                                 <select class="form-control hr-select2-option requered @error('position_id') is-invalid @enderror" name="position_id" id="position_id" required>
                                     <option selected disabled value=""> -- @lang('lang.select')--</option>
                                     @foreach ($position as $positions)
-                                        <option value="{{ $positions->id }}">{{Helper::getLang() == 'en' ? $positions->name_english : $positions->name_khmer}}</option>
+                                        <option data-id="{{$positions->position_type_number}}" value="{{ $positions->id }}">{{Helper::getLang() == 'en' ? $positions->name_english : $positions->name_khmer}}</option>
                                     @endforeach
                                 </select>
                             </div>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-sm-4">
+                        <div class="col-sm-4" hidden>
                             <div class="form-group">
                                 <label class="">@lang('lang.position_type')</label>
                                 <select class="form-control select floating" id="position_type" name="position_type" value="{{old('position_type')}}">
                                     @foreach ($optionPositionType as $item)
-                                        <option value="{{$item->id}}">{{Helper::getLang() == 'en' ? $item->name_english : $item->name_khmer}}</option>
+                                        <option data-id="{{$item->name_english}}" value="{{$item->id}}">{{Helper::getLang() == 'en' ? $item->name_english : $item->name_khmer}}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -581,6 +581,22 @@
                     .attr('src', "{{asset('admin/img/defuals/2023-10-12_10-04-19-removebg-preview.png')}}")
                     .width(150);
         }
+        $("#position_id").on("change", function() {
+            let position_type = $("#position_id option:checked").attr('data-id');
+            if (position_type == 1) {
+                $('#position_type').find('option').each(function(){
+                    if ($(this).attr('data-id') == "Supporting Staff") {
+                        $("#position_type").val($(this).val());
+                    }
+                }); 
+            }else{
+                $('#position_type').find('option').each(function(){
+                    if ($(this).attr('data-id') == "Field Staff") {
+                        $("#position_type").val($(this).val());
+                    }
+                });
+            }
+        });
         // block Current Address
         $("#current_province").on("change", function(){
             let id = $("#current_province").val() ?? $("#current_province").val();

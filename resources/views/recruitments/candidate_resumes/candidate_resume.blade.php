@@ -114,6 +114,34 @@
             $("#thanLess").text("");
             $('#import_motor_cv').modal('show');
         });
+        $("#position_applied, #e_position_applied").on("change", function() {
+            let position_type = $("#position_applied option:checked").attr('data-id');
+            let e_position_type = $("#e_position_applied option:checked").attr('data-id');
+            if (position_type == 1 || e_position_type == 1) {
+                $('#position_type').find('option').each(function(){
+                    if ($(this).attr('data-id') == "Supporting Staff") {
+                        $("#position_type").val($(this).val());
+                    }
+                }); 
+                $('#e_position_type').find('option').each(function(){
+                    if ($(this).attr('data-id') == "Supporting Staff") {
+                        $("#e_position_type").val($(this).val());
+                    }
+                }); 
+            }else{
+                $('#position_type').find('option').each(function(){
+                    if ($(this).attr('data-id') == "Field Staff") {
+                        $("#position_type").val($(this).val());
+                    }
+                });
+                $('#e_position_type').find('option').each(function(){
+                    if ($(this).attr('data-id') == "Field Staff") {
+                        $("#e_position_type").val($(this).val());
+                    }
+                });
+            }
+        });
+
         $("#btn_tab_short_list, #btn_not_tab_short_list").on("click", function(){
             let tab_status = $(this).attr('data-tab-id');
             showDatas(tab_status);
@@ -279,6 +307,7 @@
                             $('#e_position_applied').html('');
                             $.each(response.position, function(i, item) {
                                 $('#e_position_applied').append($('<option>', {
+                                    "data-id" : item.position_type_number,
                                     value: item.id,
                                     text: localeLanguage == 'en' ? item.name_english : item.name_khmer,
                                     selected: item.id == response.success.position_applied
@@ -295,6 +324,16 @@
                                 }));
                             });
                         }
+                        if (response.optionPositionType != '') {
+                        $.each(response.optionPositionType, function(i, item) {
+                            $('#e_position_type').append($('<option>', {
+                                "data-id" : item.name_english,
+                                value: item.id,
+                                text: localeLanguage == 'en' ? item.name_english : item.name_khmer,
+                                selected: item.id == response.success.position_type
+                            }));
+                        });
+                    }
                         if (response.gender != '') {
                             $('#e_gender').html('');
                             $.each(response.gender, function(i, item) {

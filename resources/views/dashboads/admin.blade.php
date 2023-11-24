@@ -1345,6 +1345,7 @@
                 }
             }  
         });
+        
         dataTypeStaff.datasets[0].backgroundColor = ["green"];
         dataTypeStaff.datasets[0].stack = 'Stack 0';
         dataTypeStaff.datasets[0].data = [];

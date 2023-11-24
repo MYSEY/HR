@@ -196,9 +196,9 @@ class CandidateResumeController extends Controller
         $position = Position::all();
         $branch = Branchs::all();
         $gender = Option::where('type','gender')->get();
+        $optionPositionType = Option::where('type','position_type')->get();
         if ($request->status =='4') {
             $autoEmpId   = $this->generate_EmployeeId(Carbon::today())['number_employee'];
-            $optionPositionType = Option::where('type','position_type')->get();
             $department = Department::all();
             $data = CandidateResume::where("id", $request->id)
             ->with("branch")->with("position")->with("option")
@@ -233,6 +233,7 @@ class CandidateResumeController extends Controller
                 'success'=>$data,
                 'gender'=>$gender,
                 'position'=>$position,
+                'optionPositionType' => $optionPositionType,
                 'branch'=>$branch,
             ]);
         }
@@ -268,6 +269,7 @@ class CandidateResumeController extends Controller
                 'current_position'      => $request->current_position,
                 'companey_name'         => $request->companey_name,
                 'position_applied'      => $request->position_applied,
+                'position_type'         => $request->position_type,
                 'current_address'       => $request->current_address,
                 'location_applied'      => $request->location_applied,
                 'received_date'         => $request->received_date,
