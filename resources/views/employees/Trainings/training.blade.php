@@ -38,9 +38,9 @@
                                                         @if (permissionAccess("m2-s1","is_update")->value == "1")
                                                             <a class="dropdown-item trainingUpdate" data-id="{{$item->id}}" data-bs-target="#promote_edit"><i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')</a>
                                                         @endif
-                                                        {{-- @if (permissionAccess("m2-s1","is_delte")->value == "1") --}}
+                                                        @if (permissionAccess("m2-s1","is_delete")->value == "1")
                                                             <a class="dropdown-item trainingDelete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_training"><i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
-                                                        {{-- @endif --}}
+                                                        @endif
                                                     </div>
                                                 </div>
                                             @endif
