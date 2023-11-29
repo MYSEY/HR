@@ -177,6 +177,7 @@
         //     window.location = url;
         // });
         $(".btn-search").on("click", function() {
+            var localeLanguage = '{{ config('app.locale') }}';
             $(this).prop('disabled', true);
             $(".btn-text-search").hide();
             $("#btn-text-loading").css('display', 'block');
@@ -194,21 +195,25 @@
                     var tr = "";
                     $(rows).each(function(e, row) {
                         let date_of_commencement = moment(row.date_of_commencement).format('D-MMM-YYYY');
+                        if (localeLanguage == 'en') {
+                            var gender = row.gender == null ? "" : row.gender.name_english;
+                        } else {
+                            var gender = row.gender == null ? "" : row.gender.name_khmer;
+                        }
                         tr += '<tr class="odd">'+
-                                    '<td class="ids">'+(e+1)+'</td>'+
-                                    '<td>' + (row.number_employee) + '</td>'+
-                                    '<td>'+( row.employee_name_kh )+'</td>'+
-                                    '<td>'+( row.employee_name_en )+'</td>'+
-                                    '<td>'+( row.gender == null ? "" : row.gender.name_english )+'</td>'+
-                                    '<td>'+( row.position ? localeLanguage == 'en' ? row.position.name_english : row.position.name_khmer: "" )+'</td>'+
-                                    '<td>'+( row.branch ? localeLanguage == 'en' ? row.branch.branch_name_en : row.branch.branch_name_kh : "" )+'</td>'+
-                                    '<td>'+( date_of_commencement )+'</td>'+
-                                    '<td>'+( row.remark ? row.remark : "" )+'</td>'+
-                                '</tr>';
+                            '<td class="ids">'+(e+1)+'</td>'+
+                            '<td>' + (row.number_employee) + '</td>'+
+                            '<td>'+( row.employee_name_kh )+'</td>'+
+                            '<td>'+( row.employee_name_en )+'</td>'+
+                            '<td>'+( gender )+'</td>'+
+                            '<td>'+( row.position ? localeLanguage == 'en' ? row.position.name_english : row.position.name_khmer: "" )+'</td>'+
+                            '<td>'+( row.branch ? localeLanguage == 'en' ? row.branch.branch_name_en : row.branch.branch_name_kh : "" )+'</td>'+
+                            '<td>'+( date_of_commencement )+'</td>'+
+                            '<td>'+( row.remark ? row.remark : "" )+'</td>'+
+                        '</tr>';
                     });
                 } else {
-                    var tr =
-                        '<tr><td colspan=9 align="center">ពុំមានទិន្នន័យសម្រាប់បង្ហាញ</td></tr>';
+                    var tr = '<tr><td colspan=9 align="center">ពុំមានទិន្នន័យសម្រាប់បង្ហាញ</td></tr>';
                 }
                 $(".tbl-new-staff-report tbody").html(tr);
                 $("#btn-text-loading").hide();

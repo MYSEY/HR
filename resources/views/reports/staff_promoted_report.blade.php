@@ -31,7 +31,7 @@
             <div class="col-sm-6 col-md-2">
                 <div class="form-group">
                     <input type="text" class="form-control" name="employee_name" id="employee_name"
-                        placeholder="Employee Name" value="{{ old('employee_name') }}">
+                        placeholder="@lang('lang.employee_name')" value="{{ old('employee_name') }}">
                 </div>
             </div>
             <div class="col-sm-6 col-md-2">
@@ -89,7 +89,7 @@
                                                 <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
                                                     rowspan="1" colspan="1" aria-sort="ascending"
                                                     aria-label="Employee name: activate to sort column descending"
-                                                    style="width: 178px;">@lang('lang.name')</th>
+                                                    style="width: 178px;">@lang('lang.employee_name')</th>
                                                 <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
                                                     rowspan="1" colspan="1" aria-sort="ascending"
                                                     aria-label="Location: activate to sort column descending"
@@ -157,17 +157,16 @@
                     $(rows).each(function(e, row) {
                         let date = moment(row.date).format('d-MMM-YYYY');
                         tr += '<tr class="odd">'+
-                                    '<td class="ids">'+(e+1)+'</td>'+
-                                    '<td>' + (row.employee.employee_name_en) + '</td>'+
-                                    '<td>'+( row.employee.branch.abbreviations )+'</td>'+
-                                    '<td>'+( row.posit_id )+'</td>'+
-                                    '<td>'+( row.position_promoted_to)+'</td>'+
-                                    '<td>'+( row.date )+'</td>'+
-                                '</tr>';
+                            '<td class="ids">'+(e+1)+'</td>'+
+                            '<td>' + (row.employee.employee_name_en) + '</td>'+
+                            '<td>'+( row.employee.branch.abbreviations )+'</td>'+
+                            '<td>'+( row.posit_id )+'</td>'+
+                            '<td>'+( row.position_promoted_to)+'</td>'+
+                            '<td>'+( row.date )+'</td>'+
+                        '</tr>';
                     });
                 } else {
-                    var tr =
-                        '<tr><td colspan=6 align="center">ពុំមានទិន្នន័យសម្រាប់បង្ហាញ</td></tr>';
+                    var tr = '<tr><td colspan=6 align="center">ពុំមានទិន្នន័យសម្រាប់បង្ហាញ</td></tr>';
                 }
                 $(".staff-promoted-report tbody").html(tr);
                 $("#btn-text-loading").hide();

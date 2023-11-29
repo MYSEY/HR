@@ -338,6 +338,15 @@ class User extends Authenticatable
         }
         return $nationality ?? "";
     }
+    public function getTypeNssfAttribute(){
+        $data = Option::where('type','type_nssf')->get();
+        foreach($data as $item){
+            if($this->type_of_employees_nssf == $item->id){
+                $type_nssf = Helper::getLang() == 'en' ? $item->name_english : $item->name_khmer;
+            }
+        }
+        return $type_nssf ?? "";
+    }
     
     public function getEmployeeBranchAttribute(){
         return (Helper::getLang() == 'en') ? optional($this->branch)->branch_name_en : optional($this->branch)->branch_name_kh;
@@ -400,11 +409,13 @@ class User extends Authenticatable
     public function getFullCurrentAddressAttribute()
     {
         $houseNo = $streetNo = $provice_name = $district_name = $conmmunes_name = $villages_name = '';
+        $house = Helper::getLang() == 'en' ? 'House ' : 'ផ្ទះលេខ';
+        $street = Helper::getLang() == 'en' ? 'Street ' : 'ផ្លូវ';
         if (!empty($this->current_house_no)) {
-            $houseNo = 'House ' . $this->current_house_no . ',' ?? '';
+            $houseNo = $house .' '. $this->current_house_no . ' , ' ?? '';
         }
         if (!empty($this->current_street_no)) {
-            $streetNo = 'Street ' . $this->current_street_no . ',' ?? '';
+            $streetNo = $street . ' ' . $this->current_street_no . ' ,' ?? '';
         }
         $province = Province::all();
         foreach($province as $item){
@@ -449,11 +460,13 @@ class User extends Authenticatable
     public function getFullPermanentAddressAttribute()
     {
         $houseNo = $streetNo = $provice_name = $district_name = $conmmunes_name = $villages_name = '';
+        $house = Helper::getLang() == 'en' ? 'House ' : 'ផ្ទះលេខ';
+        $street = Helper::getLang() == 'en' ? 'Street ' : 'ផ្លូវ';
         if (!empty($this->permanent_house_no)) {
-            $houseNo = 'House ' . $this->permanent_house_no . ',' ?? '';
+            $houseNo = $house .' ' . $this->permanent_house_no . ',' ?? '';
         }
         if (!empty($this->permanent_street_no)) {
-            $streetNo = 'Street ' . $this->permanent_street_no . ',' ?? '';
+            $streetNo = $street. ' ' . $this->permanent_street_no . ',' ?? '';
         }
         $province = Province::all();
         foreach($province as $item){

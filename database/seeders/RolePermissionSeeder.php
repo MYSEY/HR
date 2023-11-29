@@ -468,7 +468,7 @@ class RolePermissionSeeder extends Seeder
                 "is_active"=>1,
             ],
             [
-                "name"=>"lang.promoted_staff_reports",
+                "name"=>"lang.staff_promoted_reports",
                 "sub_menu_id"=>"7",
                 "menu_id"=>"m7-s16",
                 "url"=>"reports/promoted-staff-report",

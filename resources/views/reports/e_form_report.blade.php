@@ -134,13 +134,21 @@
                                                             <td ><a href="#">{{$item->users->first_name_en}}</a></td>
                                                             <td >{{$item->users->EmployeeGender}}</td>
                                                             <td >{{$item->users->DOB}}</td>
-                                                            <td >{{$item->users->EmployeeNationality}}</td>
+                                                            <td >{{$item->users->nationality? $item->nationality : ""}}</td>
                                                             <td >{{$item->users->joinOfDate}}</td>
                                                             <td> </td>
                                                             <td>{{ $item->users == null ? '' : $item->users->position->position_range}}</td>
-                                                            <td>{{ $item->users->type_of_employees_nssf ? $item->users->type_of_employees_nssf == 1 ? 'និវាសនជន' : "អនិវាសនជន" : ""}}</td>
-                                                            <td>{{ $item->users->status_nssf ? $item->users->status_nssf == 1 ? 'Working' : 'Not working' : ""}}</td>
-                                                            <td>${{$item->total_gross}}</td>
+                                                            @if (Helper::getLang() == 'en')
+                                                                <td>{{ $item->users->type_of_employees_nssf ? $item->users->type_of_employees_nssf == 1 ? 'Residents' : "Non-Residents" : ""}}</td>
+                                                            @else
+                                                                <td>{{ $item->users->type_of_employees_nssf ? $item->users->type_of_employees_nssf == 1 ? 'និវាសនជន' : "អនិវាសនជន" : ""}}</td>
+                                                            @endif
+                                                            @if (Helper::getLang() == 'en')
+                                                                <td>{{ $item->users->status_nssf ? $item->users->status_nssf == 1 ? 'Working' : 'Not working' : ""}}</td>
+                                                            @else
+                                                                <td>{{ $item->users->status_nssf ? $item->users->status_nssf == 1 ? 'កំពុងធ្វើការ' : 'មិនធ្វើការ' : ""}}</td>
+                                                            @endif
+                                                            <td>$ {{$item->total_gross}}</td>
                                                             <td>{{ \Carbon\Carbon::parse($item->payment_date)->format('d-M-Y')}}</td>
                                                         </tr>
                                                     @endforeach
@@ -193,6 +201,7 @@
         });
     });
     function showdatas(params) {
+        var localeLanguage = '{{ config('app.locale') }}';
         $.ajax({
             type: "post",
             url: "{{ url('reports/e-form-filter') }}",
@@ -217,6 +226,16 @@
                         let join_date = row.users.date_of_birth ? moment(row.users.date_of_birth).format('D-MMM-YYYY'): "";
                         let date_of_commencement = row.users.date_of_commencement ? moment(row.users.date_of_commencement).format('D-MMM-YYYY'): "";
                         let payment_date = moment(row.payment_date).format('D-MMM-YYYY');
+                        if (localeLanguage == 'en') {
+                            var typeofEmployeesNssf = row.users.type_of_employees_nssf ? row.users.type_of_employees_nssf == 1 ? 'Residents' : "Non-Residents" : "";
+                        } else {
+                            var typeofEmployeesNssf = row.users.type_of_employees_nssf ? row.users.type_of_employees_nssf == 1 ? 'និវាសនជន' : "អនិវាសនជន" : "";
+                        }
+                        if (localeLanguage == 'en') {
+                            var statusNssf = row.users.status_nssf ? row.users.status_nssf == 1 ? 'Working' : 'Not working' : "";
+                        } else {
+                            var statusNssf = row.users.status_nssf ? row.users.status_nssf == 1 ? 'កំពុងធ្វើការ' : 'មិនធ្វើការ' : ""
+                        }
                         tr +='<tr class="odd">'+
                                 '<td >'+(index)+'</td>'+
                                 '<td class=""><a href="#">'+(row.users.number_employee)+'</a></td>'+
@@ -232,9 +251,9 @@
                                 '<td >'+(date_of_commencement)+'</td>'+
                                 '<td> </td>'+
                                 '<td>'+(row.users.position ? row.users.position.name_english : "")+'</td>'+
-                                '<td>'+(row.users.type_of_employees_nssf ? row.users.type_of_employees_nssf == 1 ? 'និវាសនជន' : "អនិវាសនជន" : "")+'</td>'+
-                                '<td>'+(row.users.status_nssf ? row.users.status_nssf == 1 ? 'Working' : 'Not working' : "")+'</td>'+
-                                '<td>៛ '+(row.base_salary_received_riel)+'</td>'+
+                                '<td>'+(typeofEmployeesNssf)+'</td>'+
+                                '<td>'+(statusNssf)+'</td>'+
+                                '<td>$'+(row.total_gross)+'</td>'+
                                 '<td>'+(payment_date)+'</td>'+
                         '</tr>';
                     });

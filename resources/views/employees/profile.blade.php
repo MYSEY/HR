@@ -228,7 +228,7 @@
                                                 <div class="row">
                                                     <div class="col col-md-8">
                                                         <div class="mb-3">
-                                                            <a href="#">@lang('lang.address')</a>
+                                                            <a href="#">@lang('lang.current_address')</a>
                                                             <div class="s-personal">{{$data->FullCurrentAddress ?? ''}}</div>
                                                         </div>
                                                     </div>
