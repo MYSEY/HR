@@ -38,9 +38,13 @@
                         <div class="form-group" id="col-branch">
                             <select class="select form-control" data-select2-id="select2-data-2-c0n2" id="role_type" name="role_type" required>
                                 <option selected disabled value=""> -- @lang('lang.all_type') --</option>
-                                <option value="admin">@lang('lang.admin')</option>
-                                <option value="developer">@lang('lang.developer')</option>
-                                <option value="employee">@lang('lang.employee')</option>
+                                <option value="BOD">Board of Director</option>
+                                <option value="CEO">Chief Executive Officer</option>
+                                <option value="HR">Head of HR Admin</option>
+                                <option value="HOD">Head of Department</option>
+                                <option value="HOCD">Head of Credit Department</option>
+                                <option value="BM">Branch Manager</option>
+                                <option value="employee">Employee</option>
                             </select>
                         </div>
                     </div>

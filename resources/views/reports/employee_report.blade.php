@@ -94,7 +94,7 @@
                                                     <th class="sorting sorting_asc stuck-scroll-3" tabindex="0" aria-controls="DataTables_Table_0"
                                                         rowspan="1" colspan="1" aria-sort="ascending"
                                                         aria-label="Employee Name: activate to sort column descending"
-                                                        style="width: 178px;">@lang('lang.name')</th>
+                                                        style="width: 178px;">@lang('lang.employee_name')</th>
                                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1"
                                                         colspan="1" aria-label="Employee Type: activate to sort column ascending"
                                                         style="width: 108.188px;">@lang('lang.role_name')</th>
@@ -117,7 +117,7 @@
                                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                         rowspan="1" colspan="1"
                                                         aria-label="Martial Status: activate to sort column ascending"
-                                                        style="width: 100.25px;">@lang('lang.maritial_status')</th>
+                                                        style="width: 100.25px;">@lang('lang.marital_status')</th>
                                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                         rowspan="1" colspan="1"
                                                         aria-label="Gender: activate to sort column ascending"
@@ -155,7 +155,7 @@
                                                             </td>
                                                             <td class="stuck-scroll-3"><a href="{{ route('employee.profile', $item->id) }}">{{$item->number_employee}}</td>
                                                             <td class="stuck-scroll-3">
-                                                                <a href="{{ route('employee.profile', $item->id) }}">{{ $item->employee_name_en }}</a>
+                                                                <a href="{{ route('employee.profile', $item->id) }}">{{ Helper::getLang() == 'en' ? $item->employee_name_en : $item->employee_name_kh }}</a>
                                                             </td>
                                                             <td>
                                                                 <a href="{{ route('employee.profile', $item->id) }}">{{ $item->RolePermission }}</a>

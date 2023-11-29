@@ -22,7 +22,7 @@
             <div class="col-md-8">
                 <div class="card tab-box">
                     <div class="row card-body user-tabs">
-                        <div class="col col-lg-12 col-md-12 col-sm-12 line-tabs">
+                        <div class="col-10 col-md-12">
                             <ul class="nav nav-tabs nav-tabs-bottom" role="tablist">
                                 <li class="nav-item" role="presentation"><a href="#emp_profile" data-bs-toggle="tab" class="nav-link active" aria-selected="true" role="tab">@lang('lang.profile')</a></li>
                                 <li class="nav-item" role="presentation"><a href="#document" data-bs-toggle="tab" class="nav-link" aria-selected="false" tabindex="-1" role="tab">@lang('lang.document')</a></li>
@@ -32,7 +32,7 @@
                             </ul>
                         </div>
 
-                        <div class="tab-content col-lg-12 col-md-12 col-sm-12 line-tabs">
+                        <div class="tab-content col-md-12">
                             <div id="emp_profile" class="pro-overview tab-pane fade show active" role="tabpanel">
                                 <div class="row">
                                     <div class="col-md-12 d-flex">
@@ -166,7 +166,7 @@
                                                             <div class="s-personal">{{ \Carbon\Carbon::parse($data->issue_expired_date)->format('d-M-Y') ?? '' }}</div>
                                                         </div>
                                                     </div>
-                                                    <div class="ccol col-md-4">
+                                                    <div class="col col-md-4">
                                                         <div class="mb-3">
                                                             <a href="#">@lang('lang.marital_status')</a>
                                                             <div class="s-personal">{{$data->EmployeeMaritalStatus}}</div>
@@ -488,7 +488,7 @@
                         <div class="row">
                             <div class="col-md-4">
                                 @if ($data->profile != null)
-                                    <img width="100px" alt="profile" src="{{ asset('/uploads/images/' . $data->profile) }}">
+                                    <img alt="profile" src="{{ asset('/uploads/images/' . $data->profile) }}">
                                 @else
                                     <img alt="profile" src="{{ asset('admin/img/defuals/default-user-icon.png') }}">
                                 @endif

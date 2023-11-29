@@ -389,7 +389,6 @@ return[
     "leave_of_absence"=>"Leave of Absence",
     "leaves_employee"=>"Leave Employee",
     "marital_status"=>"Married Status",
-    "maritial_status"=>"Maritial Status",
     "married"=>"Married",
     "mail"=>"Mail",
     "message_title"=>"Message Title",

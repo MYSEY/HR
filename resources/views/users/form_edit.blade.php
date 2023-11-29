@@ -734,9 +734,9 @@
                         $("#e_spouse_nssf").append('<option selected value="2">No</option> <option value="1">Yes</option>');   
                     }
                     if (response.success.status_nssf == 1) {
-                        $("#e_status_nssf").append('<option selected value="1">@lang("lang.working")</option> <option value="2">Not working</option>');
+                        $("#e_status_nssf").append('<option selected value="1">@lang("lang.working")</option> <option value="2">@lang("lang.not_working")</option>');
                     } else {
-                        $("#e_status_nssf").append('<option selected value="2">@lang("lang.not_working")</option> <option value="1">@lang("lang.not_working")</option>');   
+                        $("#e_status_nssf").append('<option selected value="2">@lang("lang.not_working")</option> <option value="1">@lang("lang.working")</option>');   
                     }
                    
                     if (response.optionIdentityType != '') {
