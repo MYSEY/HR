@@ -607,6 +607,8 @@ return[
 	"reduced_burden_children"=>"កាត់បន្ថយបន្ទុកកុមារ",
 	"reduced_burden_spouse"=>"កាត់បន្ថយបន្ទុកប្តីប្រពន្ធ",
 	"requiered"=>"Requiered",
+	"residents"=>"និវាសនជន",
+	"non_resident"=>"អនិវាសនជន",
 	"save"=>"រក្សាទុក",
 	"save_changes"=>"ផ្លាស់ប្តូរការរក្សាទុក",
 	"save_close"=>"រក្សាទុកហើយបិទ",

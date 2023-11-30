@@ -584,6 +584,8 @@ return[
     "reduced_burden_children"=>"Reduced Burden Children",
     "reduced_burden_spouse"=>"Reduced Burden Spouse",
     "requiered"=>"Requiered",
+    "residents"=>"Residents",
+    "non_resident"=>"Non-Resident",
     "save"=>"Save",
     "save_changes"=>"Save changes",
     "save_close"=>"Save Close",

@@ -97,7 +97,7 @@
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label>@lang('lang.date_of_birth') <span class="text-danger">*</span></label>
+                                <label>@lang('lang.date_of_birth')<span class="text-danger">*</span></label>
                                 <div class="cal-icon">
                                     <input class="form-control datetimepicker @error('date_of_birth') is-invalid @enderror" type="text" id="e_date_of_birth" required name="date_of_birth" value="{{old('date_of_birth')}}">
                                 </div>
@@ -105,7 +105,7 @@
                         </div>
                         <div class="col-sm-4">
                             <div class="form-group">
-                                <label class="">@lang('lang.join_date') <span class="text-danger">*</span></label>
+                                <label class="">@lang('lang.join_date')<span class="text-danger">*</span></label>
                                 <div class="cal-icon">
                                     <input class="form-control datetimepicker  @error('date_of_commencement') is-invalid @enderror" id="e_date_of_commencement" required name="date_of_commencement" type="text" value="{{old('date_of_commencement')}}">
                                 </div>
@@ -131,7 +131,7 @@
                         </div>
                         <div class="col-md-4">
                             <div class="form-group hr-form-group-select2">
-                                <label>@lang('lang.position') <span class="text-danger">*</span></label>
+                                <label>@lang('lang.position')<span class="text-danger">*</span></label>
                                 <select class="form-control hr-select2-option @error('position_id') is-invalid @enderror" name="position_id" id="e_position" required>
                                     <option selected disabled value=""> -- @lang('lang.select') --</option>
                                 </select>
@@ -163,7 +163,7 @@
                     <div class="row">
                         <div class="col-sm-4">
                             <div class="form-group">
-                                <label class="">@lang('lang.personal_phone') <span class="text-danger">*</span></label>
+                                <label class="">@lang('lang.personal_phone')<span class="text-danger">*</span></label>
                                 <input class="form-control @error('personal_phone_number') is-invalid @enderror" type="number" id="e_personal_phone_number" required name="personal_phone_number" value="{{old('personal_phone_number')}}">
                             </div>
                         </div>
@@ -175,7 +175,7 @@
                         </div>
                         <div class="col-sm-4">
                             <div class="form-group">
-                                <label class="">@lang('lang.guarantee_letter') (@lang('lang.pdf')) <span class="text-danger">*</span></label>
+                                <label class="">@lang('lang.guarantee_letter') (@lang('lang.pdf'))<span class="text-danger">*</span></label>
                                 <input class="form-control @error('guarantee_letter') is-invalid @enderror" type="file" id="guarantee_letter" name="guarantee_letter" value="{{old('guarantee_letter')}}">
                                 <input type="hidden" name="hidden_file_guarantee" id="e_guarantee_letter" value="">
                             </div>
@@ -184,7 +184,7 @@
                     <div class="row">
                         <div class="col-sm-4">
                             <div class="form-group">
-                                <label class="">@lang('lang.agency_phone') </label>
+                                <label class="">@lang('lang.agency_phone')</label>
                                 <input class="form-control" type="number" id="e_agency_phone_number" name="agency_phone_number" value="{{old('agency_phone_number')}}">
                             </div>
                         </div>
@@ -724,9 +724,9 @@
                         $("#e_is_loan").append('<option selected value="0">No</option> <option value="1">Yes</option>');   
                     }
                     if (response.success.type_of_employees_nssf == 1) {
-                        $("#e_type_of_employees_nssf").append('<option selected value="1">និវាសនជន</option> <option value="2">អនិវាសនជន</option>');
+                        $("#e_type_of_employees_nssf").append('<option selected value="1">@lang("lang.residents")</option> <option value="2">@lang("lang.non_resident")</option>');
                     } else {
-                        $("#e_type_of_employees_nssf").append('<option selected value="2">អនិវាសនជន</option> <option value="1">និវាសនជន</option>');   
+                        $("#e_type_of_employees_nssf").append('<option selected value="2">@lang("lang.non_resident")</option> <option value="1">@lang("lang.residents")</option>');   
                     }
                     if (response.success.spouse_nssf == 1) {
                         $("#e_spouse_nssf").append('<option selected value="1">Yes</option> <option value="2">No</option>');

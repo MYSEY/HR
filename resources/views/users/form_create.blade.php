@@ -201,7 +201,7 @@
                     <div class="row">
                         <div class="col-sm-4">
                             <div class="form-group">
-                                <label class="">@lang('lang.agency_phone') </label>
+                                <label class="">@lang('lang.agency_phone')</label>
                                 <input class="form-control" type="number" id="agency_phone_number" name="agency_phone_number" value="{{old('agency_phone_number')}}">
                             </div>
                         </div>
@@ -406,8 +406,8 @@
                                 <label class="">@lang('lang.type_of_employees')</label>
                                 <select class="form-control select floating" name="type_of_employees_nssf">
                                     <option value="">--@lang('lang.select')--</option>
-                                    <option value="1">និវាសនជន</option>
-                                    <option value="2">អនិវាសនជន</option>
+                                    <option value="1">{{Helper::getLang() == 'en' ? "Residents" : "និវាសនជន"}}</option>
+                                    <option value="2">{{Helper::getLang() == 'en' ? "Non-Resident" : "អនិវាសនជន"}}</option>
                                 </select>
                             </div>
                         </div>
