@@ -122,8 +122,8 @@
                                                 <div class="row">
                                                     <div class="col col-md-4">
                                                         <div class="mb-3">
-                                                            <a href="#">@lang('lang.position_type')</a>
-                                                            <div class="s-personal">{{ $data->EmployeePositionType }}</div>
+                                                            <a href="#">@lang('lang.province')</a>
+                                                            <div class="s-personal">{{ $data->FullNameProvince }}</div>
                                                         </div>
                                                     </div>
                                                     <div class="col col-md-4">

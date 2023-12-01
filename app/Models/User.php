@@ -494,4 +494,15 @@ class User extends Authenticatable
         }
         return $houseNo . $streetNo .$villages_name.', '.$conmmunes_name.', '.$district_name.', '.$provice_name;
     }
+    public function getFullNameProvinceAttribute()
+    {
+        $provice_name = '';
+        $province = Province::all();
+        foreach($province as $item){
+            if($this->permanent_province == $item->code){
+                $provice_name =  Helper::getLang() == 'en' ? $item->name_en : $item->name_km;
+            }
+        }
+        return $provice_name;
+    }
 }
