@@ -16,9 +16,17 @@
                         <div class="form-group hr-form-group-select2">
                             <label class="">@lang('lang.type') <span class="text-danger">*</span></label>
                             <select class="form-control hr-select2-option role_required" id="role_type" name="role_type" required>
-                                <option value="admin" {{ $role->role_type == "admin" ? "selected":""}}>@lang('lang.admin')</option>
+                                {{-- <option value="admin" {{ $role->role_type == "admin" ? "selected":""}}>@lang('lang.admin')</option>
                                 <option value="developer" {{ $role->role_type == "developer" ? "selected":""}}>@lang('lang.developer')</option>
-                                <option value="employee" {{ $role->role_type == "employee" ? "selected":""}}>@lang('lang.employee')</option>
+                                <option value="employee" {{ $role->role_type == "employee" ? "selected":""}}>@lang('lang.employee')</option> --}}
+
+                                <option value="BOD" {{ $role->role_type == "BOD" ? "selected":""}}>Board of Director</option>
+                                <option value="CEO" {{ $role->role_type == "CEO" ? "selected":""}}>Chief Executive Officer</option>
+                                <option value="HR" {{ $role->role_type == "HR" ? "selected":""}}>Head of HR Admin</option>
+                                <option value="HOD" {{ $role->role_type == "HOD" ? "selected":""}}>Head of Department</option>
+                                <option value="HOCD" {{ $role->role_type == "HOCD" ? "selected":""}}>Head of Credit Department</option>
+                                <option value="BM" {{ $role->role_type == "BM" ? "selected":""}}>Branch Manager</option>
+                                <option value="employee" {{ $role->role_type == "employee" ? "selected":""}}>Employee</option>
                             </select>
                         </div>
                     </div>
