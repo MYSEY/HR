@@ -17,7 +17,7 @@
                 </ul>
             </div>
             <div class="col-auto float-end ms-auto">
-                @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer')
+                @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'HR' || Auth::user()->RolePermission == 'developer')
                     <a href="{{url('role/create')}}" class="btn add-btn" ><i class="fa fa-plus"></i> @lang('lang.add_new')</a>
                 @endif
             </div>
@@ -25,7 +25,7 @@
     </div>
     
     <div class="">
-        @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer')
+        @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'HR' || Auth::user()->RolePermission == 'developer')
             <form>
                 {{-- @csrf --}}
                 <div class="row filter-btn">
@@ -34,13 +34,13 @@
                             <input type="text" class="form-control" name="role_name" id="role_name" placeholder="@lang('lang.name')" value="{{old('name')}}">
                         </div>
                     </div>
-                    <div class="col-sm-6 col-md-2 col-lg-2 col-xl-2">
+                    <div class="col-sm-6 col-md-3 col-lg-3 col-xl-3">
                         <div class="form-group" id="col-branch">
                             <select class="select form-control" data-select2-id="select2-data-2-c0n2" id="role_type" name="role_type" required>
                                 <option selected disabled value=""> -- @lang('lang.all_type') --</option>
                                 <option value="BOD">Board of Director</option>
                                 <option value="CEO">Chief Executive Officer</option>
-                                <option value="HR">Head of HR Admin</option>
+                                <option value="HR">Head of HR</option>
                                 <option value="HOD">Head of Department</option>
                                 <option value="HOCD">Head of Credit Department</option>
                                 <option value="BM">Branch Manager</option>
@@ -64,7 +64,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-6 col-md-4">
+                    <div class="col-sm-6 col-md-3">
                         <div style="display: flex" class="float-end">
                             <button type="button" class="btn btn-sm btn-outline-secondary me-2 btn-search">
                                 <span class="loading-icon-search" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading') </span>
@@ -138,7 +138,7 @@
                                                         <td class="text-end">
                                                             <div class="dropdown dropdown-action">
                                                                 <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i  class="material-icons">more_vert</i></a>
-                                                                @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer')
+                                                                @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'HR' || Auth::user()->RolePermission == 'developer')
                                                                     <div class="dropdown-menu dropdown-menu-right">
                                                                         <a class="dropdown-item" href="{{ url('/role/detail', $item->id) }}"><i class="fa fa-eye m-r-5"></i> @lang('lang.view_details')</a>
                                                                         <a class="dropdown-item" href="{{ url('role/edit', $item->id) }}"><i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')</a>

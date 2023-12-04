@@ -1,4 +1,4 @@
-@if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer')
+@if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'HR' || Auth::user()->RolePermission == 'developer')
     <div class="tab-pane active show" id="tbl_candidate_resume" role="tabpanel">
         <div class="row">
             <div class="col-md-12">
@@ -1319,7 +1319,8 @@
 <script src="{{asset('/admin/js/format-date-kh.js')}}"></script>
 <script type="text/javascript">
     $(function(){
-        var tab_status = 1;
+        var ref_this = $("ul.nav-tabs li a.active");
+        var tab_status = ref_this.attr("data-tab-id");
         $("#tab_candidate_resume, #tab_probation, #tab_fdc, #tab_udc, #tab_reason, #tab_cancel").on("click", function() {
             tab_status = $(this).attr('data-tab-id');
         });

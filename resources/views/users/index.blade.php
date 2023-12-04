@@ -76,7 +76,7 @@
                 <div class="page-menu">
                     <div class="row">
                         <div class="col-md-12 col-ms-12 p-0">
-                            @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer')
+                            @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'HR' || Auth::user()->RolePermission == 'developer')
                                 <ul class="nav nav-tabs nav-tabs-bottom" role="tablist">
                                     <li class="nav-item" role="presentation">
                                         <a class="nav-link active" data-bs-toggle="tab" id="tab_candidate_resume" href="#tbl_candidate_resume" aria-selected="true" role="tab" data-tab-id="1">@lang('lang.upcoming_staff')({{count($data)}})</a>

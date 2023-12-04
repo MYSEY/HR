@@ -21,8 +21,37 @@ class FringeBenefitController extends Controller
      */
     public function index()
     {
-        $employees = User::whereIn("emp_status", ["Probation", "1", "2", "10"])->get();
-        $data = FringeBenefit::with('employee')->get();
+        $employees = User::whereIn("emp_status", ["Probation", "1", "2", "10"])
+        ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+            if ($RolePermission == 'Employee') {
+                $query->where("id", Auth::user()->id);
+            }
+            if ($RolePermission == 'HOD') {
+                $query->where("department_id", Auth::user()->department_id);
+            }
+            if ($RolePermission == 'BM') {
+                $query->where("branch_id", Auth::user()->branch_id);
+            }
+        })->get();
+        $data = FringeBenefit::with('employee')
+        ->join('users', 'fringe_benefits.employee_id', '=', 'users.id')
+        ->select(
+            'fringe_benefits.*',
+            'users.branch_id',
+            'users.department_id',
+        )
+        ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+            if ($RolePermission == 'Employee') {
+                $query->where("users.id", Auth::user()->id);
+            }
+            if ($RolePermission == 'HOD') {
+                $query->where("users.department_id", Auth::user()->department_id);
+            }
+            if ($RolePermission == 'BM') {
+                $query->where("users.branch_id", Auth::user()->branch_id);
+            }
+        })
+        ->get();
         return view('fringe_benefits.index', compact('data','employees'));
     }
 
@@ -116,7 +145,18 @@ class FringeBenefitController extends Controller
      */
     public function edit(Request $request)
     {
-        $employees = User::whereIn("emp_status", ["Probation", "1", "2", "10"])->get();
+        $employees = User::whereIn("emp_status", ["Probation", "1", "2", "10"])
+        ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+            if ($RolePermission == 'Employee') {
+                $query->where("id", Auth::user()->id);
+            }
+            if ($RolePermission == 'HOD') {
+                $query->where("department_id", Auth::user()->department_id);
+            }
+            if ($RolePermission == 'BM') {
+                $query->where("branch_id", Auth::user()->branch_id);
+            }
+        })->get();
         $data = FringeBenefit::where('id',$request->id)->first();
         return response()->json(['success'=>$data, 'employees'=>$employees]);
     }

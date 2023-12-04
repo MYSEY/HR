@@ -39,20 +39,32 @@ class MotorRentelController extends Controller
             $to_date = Carbon::createFromDate($request->to_date.' '.'23:59:59')->format('Y-m-d H:i:s'); //2023-05-09 23:59:59
         }
         
-        $data = MotorRentel::with('user')->join('users', 'motor_rentels.employee_id', '=', 'users.id')
+        $data = MotorRentel::with('user')->leftJoin('users', 'motor_rentels.employee_id', '=', 'users.id')
             ->select(
                 'motor_rentels.*',
                 'users.employee_name_en',
                 'users.employee_name_kh',
                 'users.number_employee',
                 'users.branch_id',
+                'users.department_id',
             )
+            ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+                if ($RolePermission == 'Employee') {
+                    $query->where('users.id',Auth::user()->id);
+                }
+                if ($RolePermission == 'HOD') {
+                    $query->where("users.department_id", Auth::user()->department_id);
+                }
+                if ($RolePermission == 'BM') {
+                    $query->where("users.branch_id", Auth::user()->branch_id);
+                }
+            })
             ->when($request->employee_id, function ($query, $employee_id) {
                 $query->where('users.number_employee', 'LIKE', '%'.$employee_id.'%');
             })
             ->when($request->employee_name, function ($query, $employee_name) {
-                $query->orWhere('users.employee_name_en', 'LIKE', '%'.$employee_name.'%');
-                $query->orWhere('users.employee_name_kh', 'LIKE', '%'.$employee_name.'%');
+                $query->where('users.employee_name_en', 'LIKE', '%'.$employee_name.'%');
+                // $query->orWhere('users.employee_name_kh', 'LIKE', '%'.$employee_name.'%');
             })
             ->when($from_date, function ($query, $from_date) {
                 $query->where('motor_rentels.created_at', '>=', $from_date);
@@ -62,8 +74,20 @@ class MotorRentelController extends Controller
             })
             ->orderBy('id', 'desc')
             ->get();
-       
-        $employees = User::whereIn("emp_status", ["Probation", "1", "2", "10"])->get();
+
+        $employees = User::whereIn("emp_status", ["Probation", "1", "2", "10"])
+            ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+                if ($RolePermission == 'Employee') {
+                    $query->where('id',Auth::user()->id);
+                }
+                if ($RolePermission == 'HOD') {
+                    $query->where("department_id", Auth::user()->department_id);
+                }
+                if ($RolePermission == 'BM') {
+                    $query->where("branch_id", Auth::user()->branch_id);
+                }
+            })
+            ->get();
         if ($request->research) {
             return response()->json(['data'=>$data]);
         }else {
@@ -76,8 +100,28 @@ class MotorRentelController extends Controller
         $monthly = Carbon::now()->format('m');
         $currentYear = Carbon::now()->format('Y');
         $data = MotorRentalDetail::with('motorrental')->with('user')
-            ->whereMonth('created_at', $monthly)
-            ->whereYear('created_at', $currentYear)
+            ->leftJoin('users', 'motor_rental_details.employee_id', '=', 'users.id')
+            ->select(
+                'motor_rental_details.*',
+                'users.employee_name_en',
+                'users.employee_name_kh',
+                'users.number_employee',
+                'users.branch_id',
+                'users.department_id',
+            )
+            ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+                if ($RolePermission == 'Employee') {
+                    $query->where('users.id',Auth::user()->id);
+                }
+                if ($RolePermission == 'HOD') {
+                    $query->where("users.department_id", Auth::user()->department_id);
+                }
+                if ($RolePermission == 'BM') {
+                    $query->where("users.branch_id", Auth::user()->branch_id);
+                }
+            })
+            ->whereMonth('motor_rental_details.created_at', $monthly)
+            ->whereYear('motor_rental_details.created_at', $currentYear)
             ->orderBy('id', 'desc')
             ->get();
         return view('motor_rentels.pay_motor_rental',  compact('data'));
@@ -94,7 +138,7 @@ class MotorRentelController extends Controller
         $data = MotorRentalDetail::where("id", $request->id)->first();
         return view('motor_rentels.detail', compact('data'));
     }
-
+ 
     /**
      * Store a newly created resource in storage.
      *

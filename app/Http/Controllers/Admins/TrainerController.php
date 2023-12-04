@@ -27,7 +27,7 @@ class TrainerController extends Controller
     public function filter(Request $request)
     {
         
-        // try {
+        try {
             $from_date = null;
             $to_date = null;
             if ($request->from_date) {
@@ -68,10 +68,10 @@ class TrainerController extends Controller
             return response()->json([
                 'success'=>$data,
             ]);
-        // } catch (\Throwable $exp) {
-        //     DB::rollback();
-        //     Toastr::error('Training created fail.','Error');
-        // }
+        } catch (\Throwable $exp) {
+            DB::rollback();
+            Toastr::error('Training created fail.','Error');
+        }
     }
 
     /**

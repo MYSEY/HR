@@ -173,7 +173,7 @@
             $(this).prop('disabled', true);
             $(".btn-text-reset").hide();
             $("#btn-text-loading").css('display', 'block');
-            window.location.replace("{{ URL('reports/nssf-report') }}");
+            window.location.replace("{{ URL('import-nssf') }}");
         });
         $(".btn-Search").on("click", function(){
             $(".btn-Search").prop('disabled', true);
