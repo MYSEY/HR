@@ -219,6 +219,7 @@ return[
 	"duration_term"=>"រយៈពេល",
 	"deduction"=>"ការកាត់ប្រាក់",
 	"degree"=>"សញ្ញាបត្រ",
+	"download"=>"នាំចូល",
 	"detail_motor_rentel"=>"ព័ត៌មានលម្អិតអំពីម៉ូតូជួល",
 	"do_you_really_want_to_change_status"=>"តើអ្នកពិតជាចង់ផ្លាស់ប្តូរស្ថានភាព",
 	"edit"=>"កែប្រែ",

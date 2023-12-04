@@ -199,6 +199,7 @@ return[
     "duration"=>"duration",
     "duration_term"=>"Duration Term",
 	"degree"=>"Degree",
+	"download"=>"Download",
     "detail_motor_rentel"=>"Detail Motor Rentel",
     "edit"=>"Edit", 
     "edit_roles"=>"Edit Roles", 
