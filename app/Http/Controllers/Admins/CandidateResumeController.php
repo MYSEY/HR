@@ -35,7 +35,7 @@ class CandidateResumeController extends Controller
     
     public function index()
     {
-        
+        // dd(Auth::user()->RolePermission);
         $role = Role::all();
         $autoEmpId   = $this->generate_EmployeeId(Carbon::today())['number_employee'];
         $department = Department::all();
@@ -44,14 +44,50 @@ class CandidateResumeController extends Controller
         $gender = Option::where('type','gender')->get();
         $optionPositionType = Option::where('type','position_type')->get();
         $optionLoan = Option::where('type','loan')->get();
-        $data = CandidateResume::where("status", "1")->get();
-        $dataShortList = CandidateResume::where("short_list", "1")->where('status','2')->count();
-        $dataNon = CandidateResume::where("short_list", "2")->count();
-        $dataResult = CandidateResume::where("status",'3')->whereIn("interviewed_result", [1,3,4])->count();
-        $dataFailed = CandidateResume::where("status",'3')->whereNotIn("interviewed_result", [1,3,4])->orWhere('interviewed_result', '=', null)->where('status', 3)->count();
-        $dataProcessing = CandidateResume::where("status",'4')->count();
-        $dataCancel = CandidateResume::where("status",'Cancel')->count();
         $province = Province::all();
+        $data = CandidateResume::where("status", "1")
+        ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+            if ($RolePermission == 'BM') {
+                $query->where("location_applied", Auth::user()->branch_id);
+            }
+        })
+        ->get();
+        $dataShortList = CandidateResume::where("short_list", "1")->where('status','2')
+        ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+            if ($RolePermission == 'BM') {
+                $query->where("location_applied", Auth::user()->branch_id);
+            }
+        })->count();
+        $dataNon = CandidateResume::where("short_list", "2")
+        ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+            if ($RolePermission == 'BM') {
+                $query->where("location_applied", Auth::user()->branch_id);
+            }
+        })->count();
+        $dataResult = CandidateResume::where("status",'3')->whereIn("interviewed_result", [1,3,4])
+        ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+            if ($RolePermission == 'BM') {
+                $query->where("location_applied", Auth::user()->branch_id);
+            }
+        })->count();
+        $dataFailed = CandidateResume::where("status",'3')->whereNotIn("interviewed_result", [1,3,4])->orWhere('interviewed_result', '=', null)->where('status', 3)
+        ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+            if ($RolePermission == 'BM') {
+                $query->where("location_applied", Auth::user()->branch_id);
+            }
+        })->count();
+        $dataProcessing = CandidateResume::where("status",'4')
+        ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+            if ($RolePermission == 'BM') {
+                $query->where("location_applied", Auth::user()->branch_id);
+            }
+        })->count();
+        $dataCancel = CandidateResume::where("status",'Cancel')
+        ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+            if ($RolePermission == 'BM') {
+                $query->where("location_applied", Auth::user()->branch_id);
+            }
+        })->count();
         return view('recruitments.candidate_resumes.candidate_resume', 
             compact([
                 "position", 
@@ -127,9 +163,20 @@ class CandidateResumeController extends Controller
                     $query->whereIn('interviewed_result', [1,3,4]);
                 }
             })
+            ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+                if ($RolePermission == 'BM') {
+                    $query->where("location_applied", Auth::user()->branch_id);
+                }
+            })
            ->get();
         }else{
-            $datas = CandidateResume::where("status", $request->status)->with("branch")->with("position")->with("option")->get();
+            $datas = CandidateResume::where("status", $request->status)->with("branch")->with("position")->with("option")
+            ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+                if ($RolePermission == 'BM') {
+                    $query->where("location_applied", Auth::user()->branch_id);
+                }
+            })
+            ->get();
         }
         
         return response()->json(['datas'=>$datas]);
@@ -392,13 +439,48 @@ class CandidateResumeController extends Controller
             }
             CandidateResume::where('id',$request->id)->update($dataUpdate);
             DB::commit();
-            $data = CandidateResume::where("status", "1")->count();
-            $dataShortList = CandidateResume::where("short_list", "1")->where('status','2')->count();
-            $dataNon = CandidateResume::where("short_list", "2")->count();
-            $dataResult = CandidateResume::where("status",'3')->whereIn("interviewed_result", [1,3,4])->count();
-            $dataFailed = CandidateResume::where("status",'3')->whereNotIn("interviewed_result", [1,3,4])->orWhere('interviewed_result', '=', null)->where('status', 3)->count();
-            $dataProcessing = CandidateResume::where("status",'4')->count();
-            $dataCancel = CandidateResume::where("status",'Cancel')->count();
+            $data = CandidateResume::where("status", "1")
+            ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+                if ($RolePermission == 'BM') {
+                    $query->where("location_applied", Auth::user()->branch_id);
+                }
+            })->count();
+            $dataShortList = CandidateResume::where("short_list", "1")->where('status','2')
+            ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+                if ($RolePermission == 'BM') {
+                    $query->where("location_applied", Auth::user()->branch_id);
+                }
+            })->count();
+            $dataNon = CandidateResume::where("short_list", "2")
+            ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+                if ($RolePermission == 'BM') {
+                    $query->where("location_applied", Auth::user()->branch_id);
+                }
+            })->count();
+            $dataResult = CandidateResume::where("status",'3')->whereIn("interviewed_result", [1,3,4])
+            ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+                if ($RolePermission == 'BM') {
+                    $query->where("location_applied", Auth::user()->branch_id);
+                }
+            })->count();
+            $dataFailed = CandidateResume::where("status",'3')->whereNotIn("interviewed_result", [1,3,4])->orWhere('interviewed_result', '=', null)->where('status', 3)
+            ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+                if ($RolePermission == 'BM') {
+                    $query->where("location_applied", Auth::user()->branch_id);
+                }
+            })->count();
+            $dataProcessing = CandidateResume::where("status",'4')
+            ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+                if ($RolePermission == 'BM') {
+                    $query->where("location_applied", Auth::user()->branch_id);
+                }
+            })->count();
+            $dataCancel = CandidateResume::where("status",'Cancel')
+            ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+                if ($RolePermission == 'BM') {
+                    $query->where("location_applied", Auth::user()->branch_id);
+                }
+            })->count();
             return response()->json([
                 'message' => 'successfull',
                 "data" => $data,

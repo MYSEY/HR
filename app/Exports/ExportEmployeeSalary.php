@@ -10,6 +10,7 @@ use Maatwebsite\Excel\Events\AfterSheet;
 use Maatwebsite\Excel\Concerns\WithEvents;
 use PhpOffice\PhpSpreadsheet\Style\Border;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithColumnWidths;
@@ -61,7 +62,16 @@ class ExportEmployeeSalary implements FromCollection, WithColumnWidths, WithHead
             'users.employee_name_en',
             'users.employee_name_kh',
             'users.branch_id',
+            'users.department_id',
         )
+        ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+            if ($RolePermission == 'HOD') {
+                $query->where("users.department_id", Auth::user()->department_id);
+            }
+            if ($RolePermission == 'BM') {
+                $query->where("users.branch_id", Auth::user()->branch_id);
+            }
+        })
         ->when($request->employee_id, function ($query, $employee_id) {
             $query->where('users.number_employee', 'LIKE', '%'.$employee_id.'%');
         })

@@ -255,7 +255,7 @@
                                                                 <a href="#" class="action-icon dropdown-toggle"
                                                                     data-bs-toggle="dropdown" aria-expanded="false"><i
                                                                         class="material-icons">more_vert</i></a>
-                                                                @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer')
+                                                                @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'HR' || Auth::user()->RolePermission == 'developer')
                                                                     <div class="dropdown-menu dropdown-menu-right">
                                                                         <a class="dropdown-item motor_detail"
                                                                             data-id="{{ $item->id }}"

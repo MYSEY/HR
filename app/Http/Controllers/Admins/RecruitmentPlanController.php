@@ -23,6 +23,11 @@ class RecruitmentPlanController extends Controller
     public function index()
     {
         $data = RecruitmentPlan::with('position')->with('branch')
+        ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+            if ($RolePermission == 'BM') {
+                $query->where("branch_id", Auth::user()->branch_id);
+            }
+        })
         ->orderBy('id', 'desc')
         ->get();
         $positions = Position::all();
@@ -94,6 +99,11 @@ class RecruitmentPlanController extends Controller
             })
             ->when($by_year, function ($query, $filter_year) {
                 $query->whereYear('plan_date', $filter_year);
+            })
+            ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+                if ($RolePermission == 'BM') {
+                    $query->where("branch_id", Auth::user()->branch_id);
+                }
             })
             ->orderBy('plan_date', 'desc')
             ->get();

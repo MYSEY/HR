@@ -178,6 +178,8 @@ class PayrollReportController extends Controller
             'users.number_employee',
             'users.employee_name_en',
             'users.employee_name_kh',
+            'users.branch_id',
+            'users.department_id',
             'options.name_khmer',
             'options.name_english',
             'options.type',
@@ -186,6 +188,14 @@ class PayrollReportController extends Controller
             'branchs.branch_name_kh as branck_kh',
             'branchs.branch_name_en as branck_en',
         )
+        ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+            if ($RolePermission == 'HOD') {
+                $query->where("users.department_id", Auth::user()->department_id);
+            }
+            if ($RolePermission == 'BM') {
+                $query->where("users.branch_id", Auth::user()->branch_id);
+            }
+        })
         ->when($request->employee_id, function ($query, $employee_id) {
             $query->where('users.number_employee', 'LIKE', '%'.$employee_id.'%');
         })
@@ -372,80 +382,29 @@ class PayrollReportController extends Controller
         return Excel::download(new ExportMotorRentel($data), 'MotorRentel.xlsx');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
-
-
     public function SeverancePay(){
-        if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer') {
-            $branch = Branchs::get();
-            $data = GrossSalaryPay::with('users')->where('type_fdc1','fdc1')->get();
-        } else {
-            $branch = Branchs::get();
+        $branch = Branchs::get();
+        if (Auth::user()->RolePermission == 'Employee') {
             $data = GrossSalaryPay::with('users')->where('type_fdc1','fdc1')->where('employee_id',Auth::user()->id)->where('number_employee',Auth::user()->number_employee)->get();
+            
+        } else {
+            $data = GrossSalaryPay::with('users')
+            ->leftJoin('users', 'gross_salary_pays.employee_id', '=', 'users.id')
+            ->select(
+                'gross_salary_pays.*',
+                'users.number_employee',
+                'users.branch_id',
+                'users.department_id',
+            )
+            ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+                if ($RolePermission == 'HOD') {
+                    $query->where("users.department_id", Auth::user()->department_id);
+                }
+                if ($RolePermission == 'BM') {
+                    $query->where("users.branch_id", Auth::user()->branch_id);
+                }
+            })
+            ->where('type_fdc1','fdc1')->get();
         }
         return view('severance_pays.index',compact('data','branch'));
     }
@@ -466,6 +425,8 @@ class PayrollReportController extends Controller
             'users.number_employee',
             'users.employee_name_en',
             'users.employee_name_kh',
+            'users.branch_id',
+            'users.department_id',
             'positions.name_khmer as position_name_khmer',
             'positions.name_english as position_name_english',
             'branchs.branch_name_kh',
@@ -473,6 +434,14 @@ class PayrollReportController extends Controller
             'departments.name_khmer as depart_name_kh',
             'departments.name_english as depart_name_en',
         )
+        ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+            if ($RolePermission == 'HOD') {
+                $query->where("users.department_id", Auth::user()->department_id);
+            }
+            if ($RolePermission == 'BM') {
+                $query->where("users.branch_id", Auth::user()->branch_id);
+            }
+        })
         ->when($request->employee_id, function ($query, $employee_id) {
             $query->where('users.number_employee', 'LIKE', '%'.$employee_id.'%');
         })
@@ -526,12 +495,26 @@ class PayrollReportController extends Controller
     }
 
     public function ImportIndex(){
-        if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer') {
-            $branch = Branchs::get();
-            $DataNSSF = NationalSocialSecurityFund::get();
-        } else {
-            $branch = Branchs::get();
+        $branch = Branchs::get();
+        if (Auth::user()->RolePermission == 'Employee') {
             $DataNSSF = NationalSocialSecurityFund::where('employee_id',Auth::user()->id)->where('number_employee',Auth::user()->number_employee)->get();
+        } else {
+            $DataNSSF = NationalSocialSecurityFund::
+            join('users', 'national_social_security_funds.employee_id', '=', 'users.id')
+            ->select(
+                'national_social_security_funds.*',
+                'users.branch_id',
+                'users.department_id',
+            )
+            ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+                if ($RolePermission == 'HOD') {
+                    $query->where("users.department_id", Auth::user()->department_id);
+                }
+                if ($RolePermission == 'BM') {
+                    $query->where("users.branch_id", Auth::user()->branch_id);
+                }
+            })
+            ->get();
         }
         return view('NSSFs.index',compact('DataNSSF','branch'));
     }

@@ -34,11 +34,21 @@ class EmployeeRepository extends BaseRepository
     }
 
     public function getAllUsers($request){
-        if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer') {
+        if(Auth::user()->RolePermission == 'Employee') {
+            return User::where('id',Auth::user()->id)
+            ->whereNotIn('emp_status',['1','2','10','Probation'])
+            ->with('role')->with('department')->get();
+        }else{
             if($request->emp_status || $request->employee_id || $request->employee_name){
                 $dataUser = [];
                 $dataUser = User::with('role')->with("gender")->with('department')->with('position')->with('branch')->with('positiontype')
                 ->when($request->emp_status, function ($query, $emp_status) {
+                    if (Auth::user()->RolePermission == 'HOD') {
+                        $query->where("department_id", Auth::user()->department_id);
+                    }
+                    if (Auth::user()->RolePermission == 'BM') {
+                        $query->where("branch_id", Auth::user()->branch_id);
+                    }
                     if ($emp_status == "resign_reason") {
                         $query->with("resignStatus");
                         $query->whereNotIn('emp_status',['1','2','10','Probation','Upcoming','Cancel']); 
@@ -59,13 +69,6 @@ class EmployeeRepository extends BaseRepository
             }else{
                 return User::with('role')->with('department')->where('emp_status','Upcoming')->get();
             }
-        } else {
-            return User::where('role_id',Auth::user()->role_id)
-            ->where('position_id',Auth::user()->position_id)
-            ->where('department_id',Auth::user()->department_id)
-            ->where('branch_id',Auth::user()->branch_id)
-            ->whereNotIn('emp_status',['1','2','10','Probation'])
-            ->with('role')->with('department')->get();
         }
     }
     public function createUsers($request){
