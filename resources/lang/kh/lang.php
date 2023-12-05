@@ -381,7 +381,7 @@ return[
 	"import_new_candidate_cv"=>"នាំចូល CV បេក្ខជនថ្មី",
 	"import_excel_/_XLS_XLSX_or_CSV"=>"នាំចូល Excel / XLS, XLSX ឬ CSV",
     "import_payroll"=>"នាំចូលប្រាក់បៀវត្សរ៍",
-    "import_nssf"=>"នាំចូល ប.ស.ស",
+    "import_nssf"=>"ប.ស.ស",
 	"issue_expired_date"=>"កាលបរិច្ឆេទផុតកំណត់",
 	"included_tax"=>"ពន្ធរួមបញ្ចូល",
 	"join_date"=>"កាលបរិច្ឆេទចូលធ្វើការ",
