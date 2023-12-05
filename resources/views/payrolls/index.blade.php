@@ -64,19 +64,19 @@
                     </div>
                     <div class="col-sm-6 col-md-4">
                         <div style="display: flex" class="float-end">
-                            <button type="button" class="btn btn-sm btn-outline-secondary btn-search me-2" data-dismiss="modal">
-                                <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading') </span>
-                                <span class="btn-txt">@lang('lang.search')</span>
+                            <button type="button" class="btn btn-sm btn-outline-secondary btn-search me-2" id="icon-search-download-reload" data-bs-toggle="tooltip" data-bs-placement="top" title="@lang('lang.search')">
+                                <span class="btn-txt"><i class="fa fa-search"></i></span>
+                                <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
                             </button>
                             @if (permissionAccess("m4-s2","is_export")->value == "1")
-                                <button type="button" class="btn btn-sm btn-outline-secondary btn_excel me-2">
-                                    <span class="btn-text-excel"><i class="fa fa-file-excel-o" aria-hidden="true"></i> @lang('lang.excel')</span>
-                                    <span id="btn-text-loading-excel" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>
+                                <button type="button" class="btn btn-sm btn-outline-secondary btn_excel me-2" id="icon-search-download-reload" data-bs-toggle="tooltip" data-bs-placement="top" title="@lang('lang.download')">
+                                    <span class="btn-text-excel"><i class="fa fa-arrow-circle-down"></i></span>
+                                    <span id="btn-text-loading-excel" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
                                 </button>
                             @endif
-                            <button type="button" class="btn btn-sm btn-outline-secondary reset-btn">
-                                <span class="btn-text-reset">@lang('lang.reload')</span>
-                                <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>
+                            <button type="button" class="btn btn-sm btn-outline-secondary reset-btn" id="icon-search-download-reload" data-bs-toggle="tooltip" data-bs-placement="top" title="@lang('lang.reload')">
+                                <span class="btn-text-reset"><i class="fa fa-undo"></i></span>
+                                <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
                             </button>
                         </div>
                     </div>

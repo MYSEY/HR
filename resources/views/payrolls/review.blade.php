@@ -63,20 +63,20 @@
                     </div>
                     <div class="col-sm-6 col-md-4 ">
                         <div style="display: flex" class="float-end">
-                            <button type="button" class="btn btn-sm btn-outline-secondary btn-search me-2" data-dismiss="modal">
-                                <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading') </span>
-                                <span class="btn-txt">@lang('lang.search')</span>
+                            <button type="button" class="btn btn-sm btn-outline-secondary btn-search me-2" id="icon-search-download-reload"  data-bs-toggle="tooltip" data-bs-placement="top" title="@lang('lang.search')">
+                                <span class="btn-txt"><i class="fa fa-search"></i></span>
+                                <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
                             </button>
                             @if (permissionAccess("m4-s1","is_export")->value == "1")
-                                <button type="button" class="btn btn-sm btn-outline-secondary btn_excel me-2">
-                                    <span class="btn-text-excel"><i class="fa fa-file-excel-o" aria-hidden="true"></i> @lang('lang.excel')</span>
-                                    <span id="btn-text-loading-excel" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>
+                                <button type="button" class="btn btn-sm btn-outline-secondary btn_excel me-2" id="icon-search-download-reload" data-bs-toggle="tooltip" data-bs-placement="top" title="@lang('lang.download')">
+                                    <span class="btn-text-excel"><i class="fa fa-arrow-circle-down"></i></span>
+                                    <span id="btn-text-loading-excel" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
                                 </button>
                             @endif
                            
-                            <button type="button" class="btn btn-sm btn-outline-secondary reset-btn">
-                                <span class="btn-text-reset">@lang('lang.reload')</span>
-                                <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>
+                            <button type="button" class="btn btn-sm btn-outline-secondary reset-btn" id="icon-search-download-reload" data-bs-toggle="tooltip" data-bs-placement="top" title="@lang('lang.reload')">
+                                <span class="btn-text-reset"><i class="fa fa-undo"></i></span>
+                                <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
                             </button>
                         </div>
                     </div>
@@ -84,10 +84,10 @@
             </form>
             {!! Toastr::message() !!}
             @if (permissionAccess("m4-s1","is_delete")->value == "1")
-                <button type="button" class="btn btn-sm btn-outline-secondary delete_all">Delete All</button>
+                <button type="button" class="btn btn-sm btn-danger delete_all">@lang('lang.delete_all')</button>
             @endif
             @if (permissionAccess("m4-s1","is_approve")->value == "1")
-                <button type="button" class="btn btn-sm btn-outline-secondary btn_approved" href="#" data-id=""> @lang('lang.approve')</button> 
+                <button type="button" class="btn btn-sm btn-success btn_approved" href="#" data-id=""> @lang('lang.approve')</button> 
             @endif
 
             <div class="content">
@@ -354,7 +354,8 @@
             {
                 $.alert({
                     title: '@lang("lang.delete")!',
-                    content: 'Please select item befor delete.',
+                    content: '@lang("lang.please_select_item_befor_delete").',
+                    type: 'red',
                 });
             }  else {
                 $.confirm({
@@ -368,7 +369,7 @@
                             btnClass: 'btn-red',
                             action: function(){
                                 var id = this.$content.find('.id').val();
-                                axios.post('{{ URL('payroll/review/delete') }}', {
+                                axios.post('{{ URL("payroll/review/delete") }}', {
                                     ids : join_selected_values
                                 }).then(function(response) {
                                     new Noty({
@@ -518,7 +519,8 @@
             {
                 $.alert({
                     title: '@lang("lang.approve")!',
-                    content: 'Please select item befor approve.',
+                    content: '@lang("lang.please_select_item_befor_approve").',
+                    type: 'blue',
                 });
             }  else {
                 $.confirm({
