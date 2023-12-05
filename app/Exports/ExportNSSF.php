@@ -49,6 +49,9 @@ class ExportNSSF implements FromCollection, WithColumnWidths, WithHeadings, With
             'users.department_id',
         )
         ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+            if ($RolePermission == 'Employee') {
+                $query->where("users.id", Auth::user()->id);
+            }
             if ($RolePermission == 'HOD') {
                 $query->where("users.department_id", Auth::user()->department_id);
             }

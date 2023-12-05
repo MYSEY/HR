@@ -21,6 +21,7 @@ use App\Models\User;
 use App\Repositories\Admin\ReportRepository;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -39,11 +40,34 @@ class ReportsController extends Controller
     }
 
     public function employee(){
-        $users = User::whereNot("emp_status", null)->get();
+        $users = User::whereNot("emp_status", null)
+        ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+            if ($RolePermission == 'Employee') {
+                $query->where('id',Auth::user()->id);
+            }
+            if ($RolePermission == 'HOD') {
+                $query->where("department_id", Auth::user()->department_id);
+            }
+            if ($RolePermission == 'BM') {
+                $query->where("branch_id", Auth::user()->branch_id);
+            }
+        })
+        ->get();
         return view('reports.employee_report',compact('users'));
     }
     public function employeeSearch(Request $request) {
         $users = User::whereNot("emp_status", null)->with("department")->with("position")->with("role")->with("branch")->with("gender")
+        ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+            if ($RolePermission == 'Employee') {
+                $query->where('id',Auth::user()->id);
+            }
+            if ($RolePermission == 'HOD') {
+                $query->where("department_id", Auth::user()->department_id);
+            }
+            if ($RolePermission == 'BM') {
+                $query->where("branch_id", Auth::user()->branch_id);
+            }
+        })
         ->when($request->emp_status, function ($query, $emp_status) {
             $query->where('emp_status', $emp_status);
         })
@@ -72,6 +96,17 @@ class ReportsController extends Controller
             $to_date = Carbon::createFromDate($request->to_date.' '.'23:59:59')->format('Y-m-d H:i:s');
         }
         $employees = User::with("gender")->with('position')->with('branch')
+        ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+            if ($RolePermission == 'Employee') {
+                $query->where("id", Auth::user()->id);
+            }
+            if ($RolePermission == 'HOD') {
+                $query->where("department_id", Auth::user()->department_id);
+            }
+            if ($RolePermission == 'BM') {
+                $query->where("branch_id", Auth::user()->branch_id);
+            }
+        })
         ->where("emp_status",'Probation')
         ->when($from_date, function ($query, $from_date) {
             $query->where('date_of_commencement', '>=', $from_date);
@@ -110,23 +145,34 @@ class ReportsController extends Controller
         }
 
         $employees = User::with("gender")->with('position')->with('branch')
-            ->whereNotIn('emp_status',['Upcoming', 'Cancel', '1','2','10','Probation'])
-            ->when($join_date, function ($query, $join_date) {
-                $query->where('date_of_commencement', '>=', $join_date);
-            })
-            ->when($leave_of_absence, function ($query, $leave_of_absence) {
-                $query->where('resign_date', '>=', $leave_of_absence);
-            })
-            ->when($request->branch_id, function ($query, $branch_id) {
-                $query->where('branch_id', $branch_id);
-            })
-            ->when($request->employee_id, function ($query, $employee_id) {
-                $query->where('number_employee', 'LIKE', '%'.$employee_id.'%');
-            })
-            ->when($request->employee_name, function ($query, $employee_name) {
-                $query->where('employee_name_en', 'LIKE', '%'.$employee_name.'%');
-                $query->orWhere('employee_name_kh', 'LIKE', '%'.$employee_name.'%');
-            })->get();
+        ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+            if ($RolePermission == 'Employee') {
+                $query->where("id", Auth::user()->id);
+            }
+            if ($RolePermission == 'HOD') {
+                $query->where("department_id", Auth::user()->department_id);
+            }
+            if ($RolePermission == 'BM') {
+                $query->where("branch_id", Auth::user()->branch_id);
+            }
+        })
+        ->whereNotIn('emp_status',['Upcoming', 'Cancel', '1','2','10','Probation'])
+        ->when($join_date, function ($query, $join_date) {
+            $query->where('date_of_commencement', '>=', $join_date);
+        })
+        ->when($leave_of_absence, function ($query, $leave_of_absence) {
+            $query->where('resign_date', '>=', $leave_of_absence);
+        })
+        ->when($request->branch_id, function ($query, $branch_id) {
+            $query->where('branch_id', $branch_id);
+        })
+        ->when($request->employee_id, function ($query, $employee_id) {
+            $query->where('number_employee', 'LIKE', '%'.$employee_id.'%');
+        })
+        ->when($request->employee_name, function ($query, $employee_name) {
+            $query->where('employee_name_en', 'LIKE', '%'.$employee_name.'%');
+            $query->orWhere('employee_name_kh', 'LIKE', '%'.$employee_name.'%');
+        })->get();
         $branch = Branchs::all();
         if ($request->research) {
             return response()->json(['employees'=>$employees]);
@@ -152,7 +198,19 @@ class ReportsController extends Controller
                 'users.employee_name_kh',
                 'users.number_employee',
                 'users.branch_id',
+                'users.department_id',
             )
+            ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+                if ($RolePermission == 'Employee') {
+                    $query->where("users.id", Auth::user()->id);
+                }
+                if ($RolePermission == 'HOD') {
+                    $query->where("users.department_id", Auth::user()->department_id);
+                }
+                if ($RolePermission == 'BM') {
+                    $query->where("users.branch_id", Auth::user()->branch_id);
+                }
+            })
             ->when($from_date, function ($query, $from_date) {
                 $query->where('date', '>=', $from_date);
             })
@@ -189,7 +247,20 @@ class ReportsController extends Controller
                 'transferreds.*',
                 'users.employee_name_en',
                 'users.employee_name_kh',
+                'users.branch_id',
+                'users.department_id',
             )
+            ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+                if ($RolePermission == 'Employee') {
+                    $query->where("users.id", Auth::user()->id);
+                }
+                if ($RolePermission == 'HOD') {
+                    $query->where("users.department_id", Auth::user()->department_id);
+                }
+                if ($RolePermission == 'BM') {
+                    $query->where("users.branch_id", Auth::user()->branch_id);
+                }
+            })
             ->when($from_date, function ($query, $from_date) {
                 $query->where('date', '>=', $from_date);
             })
@@ -302,6 +373,24 @@ class ReportsController extends Controller
         $monthly = Carbon::now()->format('m');
         $currentYear = Carbon::now()->format('Y');
         $data = Payroll::with('users')
+        ->leftJoin('users', 'payrolls.employee_id', '=', 'users.id')
+        ->select(
+            'payrolls.*',
+            'users.number_employee',
+            'users.branch_id',
+            'users.department_id',
+        )
+        ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+            if ($RolePermission == 'Employee') {
+                $query->where("users.id", Auth::user()->id);
+            }
+            if ($RolePermission == 'HOD') {
+                $query->where("users.department_id", Auth::user()->department_id);
+            }
+            if ($RolePermission == 'BM') {
+                $query->where("users.branch_id", Auth::user()->branch_id);
+            }
+        })
         ->whereMonth('payment_date', $monthly)
         ->whereYear('payment_date', $currentYear)
         ->orderBy('employee_id')->get();
@@ -312,6 +401,24 @@ class ReportsController extends Controller
         $monthly = Carbon::now()->format('m');
         $currentYear = Carbon::now()->format('Y');
         $data = Payroll::with('users')
+        ->leftJoin('users', 'payrolls.employee_id', '=', 'users.id')
+        ->select(
+            'payrolls.*',
+            'users.number_employee',
+            'users.branch_id',
+            'users.department_id',
+        )
+        ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+            if ($RolePermission == 'Employee') {
+                $query->where("users.id", Auth::user()->id);
+            }
+            if ($RolePermission == 'HOD') {
+                $query->where("users.department_id", Auth::user()->department_id);
+            }
+            if ($RolePermission == 'BM') {
+                $query->where("users.branch_id", Auth::user()->branch_id);
+            }
+        })
         ->whereMonth('payment_date', $monthly)
         ->whereYear('payment_date', $currentYear)
         ->orderBy('employee_id')->get();
@@ -338,7 +445,25 @@ class ReportsController extends Controller
     }
 
     public function eFormSalary(){
-        $payroll = Payroll::with('users')->orderBy('id', 'DESC')->get();
+        $payroll = Payroll::with('users')
+        ->join('users', 'payrolls.employee_id', '=', 'users.id')
+        ->select(
+            'payrolls.*',
+            'users.branch_id',
+            'users.department_id',
+        )
+        ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+            if ($RolePermission == 'Employee') {
+                $query->where("users.id", Auth::user()->id);
+            }
+            if ($RolePermission == 'HOD') {
+                $query->where("users.department_id", Auth::user()->department_id);
+            }
+            if ($RolePermission == 'BM') {
+                $query->where("users.branch_id", Auth::user()->branch_id);
+            }
+        })
+        ->orderBy('id', 'DESC')->get();
         $positions = Position::get();
         return view('reports.e_form_report',compact('payroll','positions'));
     }

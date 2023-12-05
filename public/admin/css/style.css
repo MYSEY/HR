@@ -2314,7 +2314,7 @@ input[type=file].form-control {
   padding: 10px 0;
   background-color: white;
   overflow-x: auto;
-  height: 100vh;
+  height: 95vh;
 }
 .sidebar .sidebar-menu ul,
 .two-col-bar .sidebar-menu ul {

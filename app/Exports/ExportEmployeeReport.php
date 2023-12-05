@@ -4,6 +4,7 @@ namespace App\Exports;
 
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithColumnWidths;
 use Maatwebsite\Excel\Concerns\WithCustomStartCell;
@@ -17,10 +18,21 @@ class ExportEmployeeReport implements FromCollection, WithColumnWidths, WithHead
     public function __construct($request)
     {
         $users = User::whereNot("emp_status", null)
+        ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+            if ($RolePermission == 'Employee') {
+                $query->where('id',Auth::user()->id);
+            }
+            if ($RolePermission == 'HOD') {
+                $query->where("department_id", Auth::user()->department_id);
+            }
+            if ($RolePermission == 'BM') {
+                $query->where("branch_id", Auth::user()->branch_id);
+            }
+        })
         ->when($request->emp_status, function ($query, $emp_status) {
             $query->where('emp_status', $emp_status);
         })
-        ->when($request->employee_id, function ($query, $employee_id) {
+        ->when($request->number_employee, function ($query, $employee_id) {
             $query->where('number_employee', 'LIKE', '%'.$employee_id.'%');
         })
         ->when($request->employee_name, function ($query, $employee_name) {

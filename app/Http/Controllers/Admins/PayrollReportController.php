@@ -41,106 +41,59 @@ class PayrollReportController extends Controller
     }
     public function index()
     {
-        $payroll = Payroll::with('users')->orderBy('id', 'DESC')->get();
+        $payroll = Payroll::with('users')
+        ->leftJoin('users', 'payrolls.employee_id', '=', 'users.id')
+        ->select(
+                    'payrolls.*',
+                    'users.branch_id',
+                    'users.department_id',
+                )
+        ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+            if ($RolePermission == 'Employee') {
+                $query->where("users.id", Auth::user()->id);
+            }
+            if ($RolePermission == 'HOD') {
+                $query->where("users.department_id", Auth::user()->department_id);
+            }
+            if ($RolePermission == 'BM') {
+                $query->where("users.branch_id", Auth::user()->branch_id);
+            }
+        })
+        ->orderBy('id', 'DESC')->get();
         $branchs = Branchs::get();
         return view('reports.payroll_report',compact('payroll','branchs'));
     }
 
-    public function reportNssf(){
-        $dataNSSF = NationalSocialSecurityFund::with('users')->orderBy('id', 'DESC')->get();
-        $branchs = Branchs::get();
-        return view('reports.poyrolls.snnf_report',compact('dataNSSF','branchs'));
-    }
-    public function reportBenefitKNYPCh(){
-        $benefit = Bonus::with("users")->orderBy('employee_id','DESC')->get();
-        $branchs = Branchs::get();
-        return view('reports.poyrolls.benefit_report',compact('benefit','branchs'));
-    }
-    public function reportSeverancePay(){
-        $severancePay = SeverancePay::orderBy('employee_id')->orderBy('id', 'DESC')->get();
-        $branchs = Branchs::get();
-        return view('reports.poyrolls.severance_pay_report',compact('severancePay','branchs'));
-    }
-    public function reportSenorityPay(){
-        $dataSeniority = Seniority::with('users')->orderBy('id', 'DESC')->get();
-        $branchs = Branchs::get();
-        return view('reports.poyrolls.seniority_pay_report',compact('dataSeniority','branchs'));
-    }
-    public function BenefitFilter(Request $request){
+    public function filter(Request $request)
+    {
         $Monthly = null;
         $yearLy = null;
         if ($request->filter_month) {
             $Monthly = Carbon::createFromDate($request->filter_month)->format('m');
             $yearLy = Carbon::createFromDate($request->filter_month)->format('Y');
         }
-        $benefit = Bonus::with("users")
-        ->leftJoin('users', 'bonuses.employee_id', '=', 'users.id')
-        ->leftJoin('options','options.id','=','users.gender')
-        ->leftJoin('positions','positions.id','=','users.position_id')
-        ->leftJoin('branchs','branchs.id','=','users.branch_id')
-        ->select(
-            'bonuses.*',
-            'users.number_employee',
-            'users.employee_name_en',
-            'users.employee_name_kh',
-            'options.name_khmer',
-            'options.name_english',
-            'options.type',
-            'positions.name_khmer as positionNameKhmer',
-            'positions.name_english as positionNameEnglish',
-            'branchs.branch_name_kh as branck_kh',
-            'branchs.branch_name_en as branck_en',
-        )
-        ->when($request->employee_id, function ($query, $employee_id) {
-            $query->where('users.number_employee', 'LIKE', '%'.$employee_id.'%');
-        })
-        ->when($request->employee_name, function ($query, $employee_name) {
-            $query->where('users.employee_name_en', 'LIKE', '%'.$employee_name.'%');
-        })
-        ->when($request->branch_id, function ($query, $branch_id) {
-            $query->where('users.branch_id', $branch_id);
-        })
-        ->when($Monthly, function ($query, $Monthly) {
-            $query->whereMonth('payment_date', $Monthly);
-        })
-        ->when($yearLy, function ($query, $yearLy) {
-            $query->whereYear('payment_date', $yearLy);
-        })->get();
-        return response()->json([
-            'success'=>$benefit,
-        ]);
-    }
-    public function TaxReport(){
-        $payroll = Payroll::with('users')->orderBy('id', 'DESC')->get();
-        $branchs = Branchs::get();
-        return view('reports.poyrolls.tax_report',compact('payroll','branchs'));
-    }
-    public function TaxFilter(Request $request){
-        $Monthly = null;
-        $yearLy = null;
-        if ($request->filter_month) {
-            $Monthly = Carbon::createFromDate($request->filter_month)->format('m');
-            $yearLy = Carbon::createFromDate($request->filter_month)->format('Y');
-        }
-        $taxReport=[];
-        $taxReport = Payroll::with("users")
-        ->leftJoin('users', 'payrolls.employee_id', '=', 'users.id')
-        ->leftJoin('positions','positions.id','=','users.position_id')
-        ->leftJoin('branchs','branchs.id','=','users.branch_id')
-        ->leftJoin('departments','departments.id','=','users.department_id')
+        $payroll=[];
+        $payroll = Payroll::with("users")
+        ->join('users', 'payrolls.employee_id', '=', 'users.id')
         ->select(
             'payrolls.*',
             'users.number_employee',
             'users.employee_name_en',
             'users.employee_name_kh',
             'users.branch_id',
-            'positions.name_khmer as position_name_kh',
-            'positions.name_english as position_name_en',
-            'branchs.branch_name_kh as branck_kh',
-            'branchs.branch_name_en as branck_en',
-            'departments.name_khmer as depart_name_kh',
-            'departments.name_english as depart_name_en',
+            'users.department_id',
         )
+        ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+            if ($RolePermission == 'Employee') {
+                $query->where("users.id", Auth::user()->id);
+            }
+            if ($RolePermission == 'HOD') {
+                $query->where("users.department_id", Auth::user()->department_id);
+            }
+            if ($RolePermission == 'BM') {
+                $query->where("users.branch_id", Auth::user()->branch_id);
+            }
+        })
         ->when($request->employee_id, function ($query, $employee_id) {
             $query->where('users.number_employee', 'LIKE', '%'.$employee_id.'%');
         })
@@ -158,8 +111,35 @@ class PayrollReportController extends Controller
         })->get();
         
         return response()->json([
-            'success'=>$taxReport,
+            'success'=>$payroll,
         ]);
+    }
+    // Export payroll
+    public function payrollExport(Request $request){
+        return Excel::download(new ExportPayroll($request), 'ReportPayroll.xlsx');
+    }
+    public function reportNssf(){
+        $dataNSSF = NationalSocialSecurityFund::with('users')
+        ->join('users', 'national_social_security_funds.employee_id', '=', 'users.id')
+        ->select(
+            'national_social_security_funds.*',
+            'users.branch_id',
+            'users.department_id',
+        )
+        ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+            if ($RolePermission == 'Employee') {
+                $query->where("users.id", Auth::user()->id);
+            }
+            if ($RolePermission == 'HOD') {
+                $query->where("users.department_id", Auth::user()->department_id);
+            }
+            if ($RolePermission == 'BM') {
+                $query->where("users.branch_id", Auth::user()->branch_id);
+            }
+        })
+        ->orderBy('id', 'DESC')->get();
+        $branchs = Branchs::get();
+        return view('reports.poyrolls.snnf_report',compact('dataNSSF','branchs'));
     }
     public function nssfFilter(Request $request){
         $Monthly = null;
@@ -189,6 +169,9 @@ class PayrollReportController extends Controller
             'branchs.branch_name_en as branck_en',
         )
         ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+            if ($RolePermission == 'Employee') {
+                $query->where("users.id", Auth::user()->id);
+            }
             if ($RolePermission == 'HOD') {
                 $query->where("users.department_id", Auth::user()->department_id);
             }
@@ -215,23 +198,54 @@ class PayrollReportController extends Controller
             'success'=>$nssf,
         ]);
     }
-    public function SeverancePayFilter(Request $request){
+    public function nssfExport(Request $request){
+        return Excel::download(new ExportNSSF($request), 'NSSF.xlsx');
+    }
+    public function reportBenefitKNYPCh(){
+        $benefit = Bonus::with("users")
+        ->join('users', 'bonuses.employee_id', '=', 'users.id')
+        ->select(
+            'bonuses.*',
+            'users.branch_id',
+            'users.department_id',
+        )
+        ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+            if ($RolePermission == 'Employee') {
+                $query->where("users.id", Auth::user()->id);
+            }
+            if ($RolePermission == 'HOD') {
+                $query->where("users.department_id", Auth::user()->department_id);
+            }
+            if ($RolePermission == 'BM') {
+                $query->where("users.branch_id", Auth::user()->branch_id);
+            }
+        })
+        ->orderBy('employee_id','DESC')->get();
+        $branchs = Branchs::get();
+        return view('reports.poyrolls.benefit_report',compact('benefit','branchs'));
+    }
+    public function BenefitExport(Request $request){
+        return Excel::download(new ExportBenefit($request), 'benefit.xlsx');
+    }
+    public function BenefitFilter(Request $request){
         $Monthly = null;
         $yearLy = null;
         if ($request->filter_month) {
             $Monthly = Carbon::createFromDate($request->filter_month)->format('m');
             $yearLy = Carbon::createFromDate($request->filter_month)->format('Y');
         }
-        $nssf = SeverancePay::with("users")
-        ->leftJoin('users', 'severance_pays.employee_id', '=', 'users.id')
+        $benefit = Bonus::with("users")
+        ->leftJoin('users', 'bonuses.employee_id', '=', 'users.id')
         ->leftJoin('options','options.id','=','users.gender')
         ->leftJoin('positions','positions.id','=','users.position_id')
         ->leftJoin('branchs','branchs.id','=','users.branch_id')
         ->select(
-            'severance_pays.*',
+            'bonuses.*',
             'users.number_employee',
             'users.employee_name_en',
             'users.employee_name_kh',
+            'users.branch_id',
+            'users.department_id',
             'options.name_khmer',
             'options.name_english',
             'options.type',
@@ -240,6 +254,17 @@ class PayrollReportController extends Controller
             'branchs.branch_name_kh as branck_kh',
             'branchs.branch_name_en as branck_en',
         )
+        ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+            if ($RolePermission == 'Employee') {
+                $query->where("users.id", Auth::user()->id);
+            }
+            if ($RolePermission == 'HOD') {
+                $query->where("users.department_id", Auth::user()->department_id);
+            }
+            if ($RolePermission == 'BM') {
+                $query->where("users.branch_id", Auth::user()->branch_id);
+            }
+        })
         ->when($request->employee_id, function ($query, $employee_id) {
             $query->where('users.number_employee', 'LIKE', '%'.$employee_id.'%');
         })
@@ -256,8 +281,116 @@ class PayrollReportController extends Controller
             $query->whereYear('payment_date', $yearLy);
         })->get();
         return response()->json([
-            'success'=>$nssf,
+            'success'=>$benefit,
         ]);
+    }
+    public function TaxReport(){
+        $payroll = Payroll::with('users')
+        ->leftJoin('users', 'payrolls.employee_id', '=', 'users.id')
+        ->select(
+                    'payrolls.*',
+                    'users.branch_id',
+                    'users.department_id',
+                )
+        ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+            if ($RolePermission == 'Employee') {
+                $query->where("users.id", Auth::user()->id);
+            }
+            if ($RolePermission == 'HOD') {
+                $query->where("users.department_id", Auth::user()->department_id);
+            }
+            if ($RolePermission == 'BM') {
+                $query->where("users.branch_id", Auth::user()->branch_id);
+            }
+        })
+        ->orderBy('id', 'DESC')->get();
+        $branchs = Branchs::get();
+        return view('reports.poyrolls.tax_report',compact('payroll','branchs'));
+    }
+    public function TaxFilter(Request $request){
+        $Monthly = null;
+        $yearLy = null;
+        if ($request->filter_month) {
+            $Monthly = Carbon::createFromDate($request->filter_month)->format('m');
+            $yearLy = Carbon::createFromDate($request->filter_month)->format('Y');
+        }
+        $taxReport=[];
+        $taxReport = Payroll::with("users")
+        ->leftJoin('users', 'payrolls.employee_id', '=', 'users.id')
+        ->leftJoin('positions','positions.id','=','users.position_id')
+        ->leftJoin('branchs','branchs.id','=','users.branch_id')
+        ->leftJoin('departments','departments.id','=','users.department_id')
+        ->select(
+            'payrolls.*',
+            'users.number_employee',
+            'users.employee_name_en',
+            'users.employee_name_kh',
+            'users.branch_id',
+            'users.department_id',
+            'positions.name_khmer as position_name_kh',
+            'positions.name_english as position_name_en',
+            'branchs.branch_name_kh as branck_kh',
+            'branchs.branch_name_en as branck_en',
+            'departments.name_khmer as depart_name_kh',
+            'departments.name_english as depart_name_en',
+        )
+        ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+            if ($RolePermission == 'Employee') {
+                $query->where("users.id", Auth::user()->id);
+            }
+            if ($RolePermission == 'HOD') {
+                $query->where("users.department_id", Auth::user()->department_id);
+            }
+            if ($RolePermission == 'BM') {
+                $query->where("users.branch_id", Auth::user()->branch_id);
+            }
+        })
+        ->when($request->employee_id, function ($query, $employee_id) {
+            $query->where('users.number_employee', 'LIKE', '%'.$employee_id.'%');
+        })
+        ->when($request->employee_name, function ($query, $employee_name) {
+            $query->where('users.employee_name_en', 'LIKE', '%'.$employee_name.'%');
+        })
+        ->when($request->branch_id, function ($query, $branch_id) {
+            $query->where('users.branch_id', $branch_id);
+        })
+        ->when($Monthly, function ($query, $Monthly) {
+            $query->whereMonth('payment_date', $Monthly);
+        })
+        ->when($yearLy, function ($query, $yearLy) {
+            $query->whereYear('payment_date', $yearLy);
+        })->get();
+        
+        return response()->json([
+            'success'=>$taxReport,
+        ]);
+    }
+    public function TaxExport(Request $request){
+        return Excel::download(new ExportTax($request), 'ReportTax.xlsx');
+    }
+    public function reportSenorityPay(){
+        $dataSeniority = Seniority::with('users')
+        ->leftJoin('users', 'seniorities.employee_id', '=', 'users.id')
+            ->select(
+                'seniorities.*',
+                'users.number_employee',
+                'users.branch_id',
+                'users.department_id',
+            )
+            ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+                if ($RolePermission == 'Employee') {
+                    $query->where("users.id", Auth::user()->id);
+                }
+                if ($RolePermission == 'HOD') {
+                    $query->where("users.department_id", Auth::user()->department_id);
+                }
+                if ($RolePermission == 'BM') {
+                    $query->where("users.branch_id", Auth::user()->branch_id);
+                }
+            })
+        ->orderBy('id', 'DESC')->get();
+        $branchs = Branchs::get();
+        return view('reports.poyrolls.seniority_pay_report',compact('dataSeniority','branchs'));
     }
     public function SenorityPayFilter(Request $request){
         $Monthly = null;
@@ -276,6 +409,8 @@ class PayrollReportController extends Controller
             'users.number_employee',
             'users.employee_name_en',
             'users.employee_name_kh',
+            'users.branch_id',
+            'users.department_id',
             'options.name_khmer',
             'options.name_english',
             'options.type',
@@ -284,6 +419,17 @@ class PayrollReportController extends Controller
             'branchs.branch_name_kh as branck_kh',
             'branchs.branch_name_en as branck_en',
         )
+        ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+            if ($RolePermission == 'Employee') {
+                $query->where("users.id", Auth::user()->id);
+            }
+            if ($RolePermission == 'HOD') {
+                $query->where("users.department_id", Auth::user()->department_id);
+            }
+            if ($RolePermission == 'BM') {
+                $query->where("users.branch_id", Auth::user()->branch_id);
+            }
+        })
         ->when($request->employee_id, function ($query, $employee_id) {
             $query->where('users.number_employee', 'LIKE', '%'.$employee_id.'%');
         })
@@ -303,25 +449,88 @@ class PayrollReportController extends Controller
             'success'=>$Seniority,
         ]);
     }
-    
-    public function filter(Request $request)
+    public function SenorityPayExport(Request $request){
+        return Excel::download(new ExportSeniorityPay($request), 'seniority_pay.xlsx');
+    }
+    public function motorrentel(Request $request)
     {
+        $data = $this->dataMotor->getDatas($request);
+        $branchs = Branchs::get();
+        $departments = Department::get();
+        if ($request->research) {
+            return response()->json(['data'=>$data]);
+        }else {
+            return view('reports.motor_rentel_report', compact('data', 'branchs', 'departments'));
+        }
+    }
+    // Export List motor rentel in payroll
+    public function export(Request $request)
+    {
+        $data = $this->dataMotor->getDatas($request);
+        return Excel::download(new ExportMotorRentel($data), 'MotorRentel.xlsx');
+    }
+    public function reportSeverancePay(){
+        $severancePay = SeverancePay::orderBy('employee_id')
+        ->leftJoin('users', 'gross_salary_pays.employee_id', '=', 'users.id')
+            ->select(
+                'gross_salary_pays.*',
+                'users.number_employee',
+                'users.branch_id',
+                'users.department_id',
+            )
+            ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+                if ($RolePermission == 'Employee') {
+                    $query->where("users.id", Auth::user()->id);
+                }
+                if ($RolePermission == 'HOD') {
+                    $query->where("users.department_id", Auth::user()->department_id);
+                }
+                if ($RolePermission == 'BM') {
+                    $query->where("users.branch_id", Auth::user()->branch_id);
+                }
+            })
+        ->orderBy('id', 'DESC')->get();
+        $branchs = Branchs::get();
+        return view('reports.poyrolls.severance_pay_report',compact('severancePay','branchs'));
+    }
+    public function SeverancePayFilter(Request $request){
         $Monthly = null;
         $yearLy = null;
         if ($request->filter_month) {
             $Monthly = Carbon::createFromDate($request->filter_month)->format('m');
             $yearLy = Carbon::createFromDate($request->filter_month)->format('Y');
         }
-        $payroll=[];
-        $payroll = Payroll::with("users")
-        ->join('users', 'payrolls.employee_id', '=', 'users.id')
+        $nssf = SeverancePay::with("users")
+        ->leftJoin('users', 'severance_pays.employee_id', '=', 'users.id')
+        ->leftJoin('options','options.id','=','users.gender')
+        ->leftJoin('positions','positions.id','=','users.position_id')
+        ->leftJoin('branchs','branchs.id','=','users.branch_id')
         ->select(
-            'payrolls.*',
+            'severance_pays.*',
             'users.number_employee',
             'users.employee_name_en',
             'users.employee_name_kh',
             'users.branch_id',
+            'users.department_id',
+            'options.name_khmer',
+            'options.name_english',
+            'options.type',
+            'positions.name_khmer as positionNameKhmer',
+            'positions.name_english as positionNameEnglish',
+            'branchs.branch_name_kh as branck_kh',
+            'branchs.branch_name_en as branck_en',
         )
+        ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+            if ($RolePermission == 'Employee') {
+                $query->where("users.id", Auth::user()->id);
+            }
+            if ($RolePermission == 'HOD') {
+                $query->where("users.department_id", Auth::user()->department_id);
+            }
+            if ($RolePermission == 'BM') {
+                $query->where("users.branch_id", Auth::user()->branch_id);
+            }
+        })
         ->when($request->employee_id, function ($query, $employee_id) {
             $query->where('users.number_employee', 'LIKE', '%'.$employee_id.'%');
         })
@@ -337,51 +546,13 @@ class PayrollReportController extends Controller
         ->when($yearLy, function ($query, $yearLy) {
             $query->whereYear('payment_date', $yearLy);
         })->get();
-        
         return response()->json([
-            'success'=>$payroll,
+            'success'=>$nssf,
         ]);
-    }
-
-    // Export payroll
-    public function payrollExport(Request $request){
-        return Excel::download(new ExportPayroll($request), 'ReportPayroll.xlsx');
-    }
-
-    public function nssfExport(Request $request){
-        return Excel::download(new ExportNSSF($request), 'NSSF.xlsx');
-    }
-    public function BenefitExport(Request $request){
-        return Excel::download(new ExportBenefit($request), 'benefit.xlsx');
     }
     public function SeverancePayExport(Request $request){
         return Excel::download(new ExportSeverancePay($request), 'severance_pay.xlsx');
     }
-    public function SenorityPayExport(Request $request){
-        return Excel::download(new ExportSeniorityPay($request), 'seniority_pay.xlsx');
-    }
-    public function TaxExport(Request $request){
-        return Excel::download(new ExportTax($request), 'ReportTax.xlsx');
-    }
-    public function motorrentel(Request $request)
-    {
-        $data = $this->dataMotor->getDatas($request);
-        $branchs = Branchs::get();
-        $departments = Department::get();
-        if ($request->research) {
-            return response()->json(['data'=>$data]);
-        }else {
-            return view('reports.motor_rentel_report', compact('data', 'branchs', 'departments'));
-        }
-    }
-
-    // Export List motor rentel in payroll
-    public function export(Request $request)
-    {
-        $data = $this->dataMotor->getDatas($request);
-        return Excel::download(new ExportMotorRentel($data), 'MotorRentel.xlsx');
-    }
-
     public function SeverancePay(){
         $branch = Branchs::get();
         if (Auth::user()->RolePermission == 'Employee') {
@@ -397,6 +568,9 @@ class PayrollReportController extends Controller
                 'users.department_id',
             )
             ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+                if ($RolePermission == 'Employee') {
+                    $query->where("users.id", Auth::user()->id);
+                }
                 if ($RolePermission == 'HOD') {
                     $query->where("users.department_id", Auth::user()->department_id);
                 }
@@ -435,6 +609,9 @@ class PayrollReportController extends Controller
             'departments.name_english as depart_name_en',
         )
         ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+            if ($RolePermission == 'Employee') {
+                $query->where("users.id", Auth::user()->id);
+            }
             if ($RolePermission == 'HOD') {
                 $query->where("users.department_id", Auth::user()->department_id);
             }
@@ -493,7 +670,6 @@ class PayrollReportController extends Controller
             return 0;
         }
     }
-
     public function ImportIndex(){
         $branch = Branchs::get();
         if (Auth::user()->RolePermission == 'Employee') {

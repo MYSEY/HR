@@ -7,6 +7,7 @@ use App\Models\Payroll;
 use App\Repositories\BaseRepository;
 use App\Traits\UploadFiles\UploadFIle;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class ReportRepository extends BaseRepository
 {
@@ -46,7 +47,20 @@ class ReportRepository extends BaseRepository
                 'users.employee_name_en',
                 'users.employee_name_kh',
                 'users.position_id',
+                'users.branch_id',
+                'users.department_id',
             )
+            ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+                if ($RolePermission == 'Employee') {
+                    $query->where("users.id", Auth::user()->id);
+                }
+                if ($RolePermission == 'HOD') {
+                    $query->where("users.department_id", Auth::user()->department_id);
+                }
+                if ($RolePermission == 'BM') {
+                    $query->where("users.branch_id", Auth::user()->branch_id);
+                }
+            })
             ->when($request->employee_id, function ($query, $employee_id) {
                 $query->where('users.number_employee', 'LIKE', '%'.$employee_id.'%');
             })
@@ -103,7 +117,20 @@ class ReportRepository extends BaseRepository
                     'users.employee_name_en',
                     'users.employee_name_kh',
                     'users.position_id',
+                    'users.branch_id',
+                    'users.department_id',
                 )
+                ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+                    if ($RolePermission == 'Employee') {
+                        $query->where("users.id", Auth::user()->id);
+                    }
+                    if ($RolePermission == 'HOD') {
+                        $query->where("users.department_id", Auth::user()->department_id);
+                    }
+                    if ($RolePermission == 'BM') {
+                        $query->where("users.branch_id", Auth::user()->branch_id);
+                    }
+                })
                 ->when($request->employee_id, function ($query, $employee_id) {
                     $query->where('users.number_employee', 'LIKE', '%'.$employee_id.'%');
                 })
