@@ -4,6 +4,20 @@
 /***** custom values *****/
 /***** Grid Values *****/
 /** Extends **/
+#icon-search-download-reload{
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-size: 18px;
+  border-radius: 50px;
+  box-shadow: 0px 2px 3px rgb(215, 197, 255);
+  border: 1px solid #e6ebf1;
+  color: #ff9b44;
+  margin: 5px;
+}
 .css-equal-content, .css-equal-heights {
   display: flex;
   display: -webkit-flex;

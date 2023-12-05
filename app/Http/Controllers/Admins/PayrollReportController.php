@@ -676,7 +676,7 @@ class PayrollReportController extends Controller
             $DataNSSF = NationalSocialSecurityFund::where('employee_id',Auth::user()->id)->where('number_employee',Auth::user()->number_employee)->get();
         } else {
             $DataNSSF = NationalSocialSecurityFund::
-            join('users', 'national_social_security_funds.employee_id', '=', 'users.id')
+            leftJoin('users', 'national_social_security_funds.employee_id', '=', 'users.id')
             ->select(
                 'national_social_security_funds.*',
                 'users.branch_id',
@@ -700,7 +700,6 @@ class PayrollReportController extends Controller
         $extension = $request->file->extension();
         $spreadsheet = IOFactory::load($file);
         $AllNSSF =  $spreadsheet->getSheetByName('import nssf')->toArray();
-        // dd($AllNSSF);
         if ($extension == "xlsx" || $extension == "xls" || $extension == "csv") {
             $i = 0;
             $dataArray = [];

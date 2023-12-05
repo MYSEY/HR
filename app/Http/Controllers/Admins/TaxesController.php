@@ -88,7 +88,7 @@ class TaxesController extends Controller
         try{
             Taxes::where('id',$request->id)->update([
                 'tax_rate' => $request->tax_rate,
-                'from' => $request->name,
+                'from' => $request->from,
                 'to' => $request->to,
                 'tax_deduction_amount' => $request->tax_deduction_amount,
                 'updated_by' => Auth::user()->id 

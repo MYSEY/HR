@@ -22,7 +22,7 @@
                 </div>
                 <div class="col-auto float-end ms-auto">
                     @if (permissionAccess("m2-s1","is_import")->value == "1")
-                        <a href="#" class="btn add-btn" data-toggle="modal" id="import_employee"><i class="fa fa-plus"></i>@lang('lang.import')</a>
+                        <a href="#" class="btn add-btn" data-toggle="modal" id="import_employee"><i class="fa fa-arrow-circle-up"  data-bs-toggle="tooltip" aria-label="fa fa-arrow-circle-up" data-bs-original-title="fa fa-arrow-circle-up"></i>@lang('lang.import')</a>
                     @endif
                     @if (permissionAccess("m2-s1","is_create")->value == "1")
                         <a href="{{url('user/form/create')}}" class="btn add-btn me-2"><i class="fa fa-plus"></i> @lang('lang.add_new')</a>
@@ -44,21 +44,28 @@
                             <input type="text" class="form-control" name="employee_name" id="employee_name" placeholder="@lang('lang.employee_name')" value="{{old('employee_name')}}">
                         </div>
                     </div>
+                    
                     <div class="col-md-8 col-sm-8">
                         <div style="display: flex" class="float-end">
-                            <button type="button" class="btn btn-sm btn-outline-secondary btn-search me-2">
-                                <span class="search-loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i>@lang('lang.loading')</span>
-                                <span class="btn-search-txt">@lang('lang.search')</span>
+                            <button type="button" class="btn btn-sm btn-outline-secondary btn-search me-2" id="icon-search-download-reload"  data-bs-toggle="tooltip" data-bs-placement="top" title="@lang('lang.search')">
+                                <span class="search-loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
+                                <span class="btn-search-txt">
+                                    <i class="fa fa-search"></i>
+                                </span>
                             </button>
                             @if (Auth::user()->RolePermission == 'developer')
-                                <button type="button" class="btn btn-sm btn-outline-secondary btn-export me-2">
-                                    <span class="export-loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i>@lang('lang.loading')</span>
-                                    <span class="btn-export-txt">@lang('lang.export')</span>
+                                <button type="button" class="btn btn-sm btn-outline-secondary btn-export me-2" id="icon-search-download-reload" data-bs-toggle="tooltip" data-bs-placement="top" title="@lang('lang.download')">
+                                    <span class="export-loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
+                                    <span class="btn-export-txt">
+                                        <i class="fa fa-arrow-circle-down"></i>
+                                    </span>
                                 </button>
                             @endif
-                            <button type="button" class="btn btn-sm btn-outline-secondary reset-btn">
-                                <span class="btn-text-reset">@lang('lang.reload')</span>
-                                <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i>@lang('lang.loading')</span>
+                            <button type="button" class="btn btn-sm btn-outline-secondary reset-btn" id="icon-search-download-reload" data-bs-toggle="tooltip" data-bs-placement="top" title="@lang('lang.reload')">
+                                <span class="btn-text-reset">
+                                    <i class="fa fa-undo"></i>
+                                </span>
+                                <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
                             </button>
                         </div>
                     </div>
