@@ -35,16 +35,12 @@
             <div class="row filter-row-btn">
                 <div class="col-sm-2 col-md-2">
                     <div class="form-group form-focus select-focus">
-                        <input type="text" class="form-control" name="employee_id" id="employee_id" placeholder="@lang('lang.employee_id')"
-                            value="{{ old('employee_id') }}">
-                        {{-- <label class="focus-label">@lang('lang.filter')</label> --}}
+                        <input type="text" class="form-control" name="employee_id" id="employee_id" placeholder="@lang('lang.employee_id')" value="{{ old('employee_id') }}">
                     </div>
                 </div>
                 <div class="col-sm-2 col-md-2">
                     <div class="form-group form-focus select-focus">
-                        <input type="text" class="form-control" name="employee_name" id="employee_name"
-                            placeholder="@lang('lang.employee_name')" value="{{ old('employee_name') }}">
-                        {{-- <label class="focus-label">@lang('lang.filter')</label> --}}
+                        <input type="text" class="form-control" name="employee_name" id="employee_name" placeholder="@lang('lang.employee_name')" value="{{ old('employee_name') }}">
                     </div>
                 </div>
                 <div class="col-sm-2 col-md-2 col-lg-3 col-xl-2 col-12">
@@ -66,13 +62,13 @@
                
                 <div class="col-sm-4 col-md-4">
                     <div style="display: flex" class="float-end">
-                        <button class="btn btn-sm btn-outline-secondary btn-search me-2" data-dismiss="modal" >
-                            <span class="btn-text-search">@lang('lang.search')</span>
-                            <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>
+                        <button class="btn btn-sm btn-outline-secondary btn-search me-2" data-dismiss="modal" id="icon-search-download-reload" data-bs-toggle="tooltip" data-bs-placement="top" title="@lang('lang.search')">
+                            <span class="btn-text-search"><i class="fa fa-search"></i></span>
+                            <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
                         </button>
-                        <button type="button" class="btn btn-sm btn-outline-secondary reset-btn">
-                            <span class="btn-text-reset">@lang('lang.reload')</span>
-                            <span id="btn-reset-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>
+                        <button type="button" class="btn btn-sm btn-outline-secondary reset-btn" id="icon-search-download-reload" data-bs-toggle="tooltip" data-bs-placement="top" title="@lang('lang.reload')">
+                            <span class="btn-text-reset"><i class="fa fa-undo"></i></span>
+                            <span id="btn-reset-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
                         </button>
                     </div>
                 </div>

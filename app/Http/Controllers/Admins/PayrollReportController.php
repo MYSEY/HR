@@ -44,10 +44,10 @@ class PayrollReportController extends Controller
         $payroll = Payroll::with('users')
         ->leftJoin('users', 'payrolls.employee_id', '=', 'users.id')
         ->select(
-                    'payrolls.*',
-                    'users.branch_id',
-                    'users.department_id',
-                )
+            'payrolls.*',
+            'users.branch_id',
+            'users.department_id',
+        )
         ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
             if ($RolePermission == 'Employee') {
                 $query->where("users.id", Auth::user()->id);
@@ -288,10 +288,10 @@ class PayrollReportController extends Controller
         $payroll = Payroll::with('users')
         ->leftJoin('users', 'payrolls.employee_id', '=', 'users.id')
         ->select(
-                    'payrolls.*',
-                    'users.branch_id',
-                    'users.department_id',
-                )
+            'payrolls.*',
+            'users.branch_id',
+            'users.department_id',
+        )
         ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
             if ($RolePermission == 'Employee') {
                 $query->where("users.id", Auth::user()->id);
@@ -471,9 +471,9 @@ class PayrollReportController extends Controller
     }
     public function reportSeverancePay(){
         $severancePay = SeverancePay::orderBy('employee_id')
-        ->leftJoin('users', 'gross_salary_pays.employee_id', '=', 'users.id')
+        ->leftJoin('users', 'severance_pays.employee_id', '=', 'users.id')
             ->select(
-                'gross_salary_pays.*',
+                'severance_pays.*',
                 'users.number_employee',
                 'users.branch_id',
                 'users.department_id',
