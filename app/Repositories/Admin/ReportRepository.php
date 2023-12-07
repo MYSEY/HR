@@ -55,7 +55,7 @@ class ReportRepository extends BaseRepository
                     $query->where("users.id", Auth::user()->id);
                 }
                 if ($RolePermission == 'HOD') {
-                    $query->where("users.department_id", Auth::user()->department_id);
+                    $query->whereIn("users.department_id", EmployeeRepository::getRoleHOD());
                 }
                 if ($RolePermission == 'BM') {
                     $query->where("users.branch_id", Auth::user()->branch_id);
@@ -125,7 +125,7 @@ class ReportRepository extends BaseRepository
                         $query->where("users.id", Auth::user()->id);
                     }
                     if ($RolePermission == 'HOD') {
-                        $query->where("users.department_id", Auth::user()->department_id);
+                        $query->whereIn("users.department_id", EmployeeRepository::getRoleHOD());
                     }
                     if ($RolePermission == 'BM') {
                         $query->where("users.branch_id", Auth::user()->branch_id);

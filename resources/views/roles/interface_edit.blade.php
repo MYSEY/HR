@@ -27,7 +27,7 @@
                                 {{-- <option value="DHR" {{ $role->role_type == "DHR" ? "selected":""}}>Deputy Head of HR</option> --}}
                                 <option value="HOD" {{ $role->role_type == "HOD" ? "selected":""}}>Head of Department</option>
                                 {{-- <option value="DHOD" {{ $role->role_type == "DHOD" ? "selected":""}}>Deputy Head of Department</option> --}}
-                                <option value="HOCD" {{ $role->role_type == "HOCD" ? "selected":""}}>Head of Credit Department</option>
+                                {{-- <option value="HOCD" {{ $role->role_type == "HOCD" ? "selected":""}}>Head of Credit Department</option> --}}
                                 {{-- <option value="DHOCD" {{ $role->role_type == "DHOCD" ? "selected":""}}>Deputy Head of Credit Department</option> --}}
                                 <option value="BM" {{ $role->role_type == "BM" ? "selected":""}}>Branch Manager</option>
                                 {{-- <option value="DBM" {{ $role->role_type == "DBM" ? "selected":""}}>Deputy Branch Manager</option> --}}

@@ -24,6 +24,7 @@ use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use App\Models\NationalSocialSecurityFund;
+use App\Repositories\Admin\EmployeeRepository;
 use App\Repositories\Admin\MotorRentalRepository;
 
 class PayrollReportController extends Controller
@@ -53,7 +54,7 @@ class PayrollReportController extends Controller
                 $query->where("users.id", Auth::user()->id);
             }
             if ($RolePermission == 'HOD') {
-                $query->where("users.department_id", Auth::user()->department_id);
+                $query->whereIn("users.department_id", EmployeeRepository::getRoleHOD());
             }
             if ($RolePermission == 'BM') {
                 $query->where("users.branch_id", Auth::user()->branch_id);
@@ -88,7 +89,7 @@ class PayrollReportController extends Controller
                 $query->where("users.id", Auth::user()->id);
             }
             if ($RolePermission == 'HOD') {
-                $query->where("users.department_id", Auth::user()->department_id);
+                $query->whereIn("users.department_id", EmployeeRepository::getRoleHOD());
             }
             if ($RolePermission == 'BM') {
                 $query->where("users.branch_id", Auth::user()->branch_id);
@@ -131,7 +132,7 @@ class PayrollReportController extends Controller
                 $query->where("users.id", Auth::user()->id);
             }
             if ($RolePermission == 'HOD') {
-                $query->where("users.department_id", Auth::user()->department_id);
+                $query->whereIn("users.department_id", EmployeeRepository::getRoleHOD());
             }
             if ($RolePermission == 'BM') {
                 $query->where("users.branch_id", Auth::user()->branch_id);
@@ -173,7 +174,7 @@ class PayrollReportController extends Controller
                 $query->where("users.id", Auth::user()->id);
             }
             if ($RolePermission == 'HOD') {
-                $query->where("users.department_id", Auth::user()->department_id);
+                $query->whereIn("users.department_id", EmployeeRepository::getRoleHOD());
             }
             if ($RolePermission == 'BM') {
                 $query->where("users.branch_id", Auth::user()->branch_id);
@@ -214,7 +215,7 @@ class PayrollReportController extends Controller
                 $query->where("users.id", Auth::user()->id);
             }
             if ($RolePermission == 'HOD') {
-                $query->where("users.department_id", Auth::user()->department_id);
+                $query->whereIn("users.department_id", EmployeeRepository::getRoleHOD());
             }
             if ($RolePermission == 'BM') {
                 $query->where("users.branch_id", Auth::user()->branch_id);
@@ -259,7 +260,7 @@ class PayrollReportController extends Controller
                 $query->where("users.id", Auth::user()->id);
             }
             if ($RolePermission == 'HOD') {
-                $query->where("users.department_id", Auth::user()->department_id);
+                $query->whereIn("users.department_id", EmployeeRepository::getRoleHOD());
             }
             if ($RolePermission == 'BM') {
                 $query->where("users.branch_id", Auth::user()->branch_id);
@@ -297,7 +298,7 @@ class PayrollReportController extends Controller
                 $query->where("users.id", Auth::user()->id);
             }
             if ($RolePermission == 'HOD') {
-                $query->where("users.department_id", Auth::user()->department_id);
+                $query->whereIn("users.department_id", EmployeeRepository::getRoleHOD());
             }
             if ($RolePermission == 'BM') {
                 $query->where("users.branch_id", Auth::user()->branch_id);
@@ -339,7 +340,7 @@ class PayrollReportController extends Controller
                 $query->where("users.id", Auth::user()->id);
             }
             if ($RolePermission == 'HOD') {
-                $query->where("users.department_id", Auth::user()->department_id);
+                $query->whereIn("users.department_id", EmployeeRepository::getRoleHOD());
             }
             if ($RolePermission == 'BM') {
                 $query->where("users.branch_id", Auth::user()->branch_id);
@@ -382,7 +383,7 @@ class PayrollReportController extends Controller
                     $query->where("users.id", Auth::user()->id);
                 }
                 if ($RolePermission == 'HOD') {
-                    $query->where("users.department_id", Auth::user()->department_id);
+                    $query->whereIn("users.department_id", EmployeeRepository::getRoleHOD());
                 }
                 if ($RolePermission == 'BM') {
                     $query->where("users.branch_id", Auth::user()->branch_id);
@@ -424,7 +425,7 @@ class PayrollReportController extends Controller
                 $query->where("users.id", Auth::user()->id);
             }
             if ($RolePermission == 'HOD') {
-                $query->where("users.department_id", Auth::user()->department_id);
+                $query->whereIn("users.department_id", EmployeeRepository::getRoleHOD());
             }
             if ($RolePermission == 'BM') {
                 $query->where("users.branch_id", Auth::user()->branch_id);
@@ -483,7 +484,7 @@ class PayrollReportController extends Controller
                     $query->where("users.id", Auth::user()->id);
                 }
                 if ($RolePermission == 'HOD') {
-                    $query->where("users.department_id", Auth::user()->department_id);
+                    $query->whereIn("users.department_id", EmployeeRepository::getRoleHOD());
                 }
                 if ($RolePermission == 'BM') {
                     $query->where("users.branch_id", Auth::user()->branch_id);
@@ -525,7 +526,7 @@ class PayrollReportController extends Controller
                 $query->where("users.id", Auth::user()->id);
             }
             if ($RolePermission == 'HOD') {
-                $query->where("users.department_id", Auth::user()->department_id);
+                $query->whereIn("users.department_id", EmployeeRepository::getRoleHOD());
             }
             if ($RolePermission == 'BM') {
                 $query->where("users.branch_id", Auth::user()->branch_id);
@@ -572,7 +573,7 @@ class PayrollReportController extends Controller
                     $query->where("users.id", Auth::user()->id);
                 }
                 if ($RolePermission == 'HOD') {
-                    $query->where("users.department_id", Auth::user()->department_id);
+                    $query->whereIn("users.department_id", EmployeeRepository::getRoleHOD());
                 }
                 if ($RolePermission == 'BM') {
                     $query->where("users.branch_id", Auth::user()->branch_id);
@@ -613,7 +614,7 @@ class PayrollReportController extends Controller
                 $query->where("users.id", Auth::user()->id);
             }
             if ($RolePermission == 'HOD') {
-                $query->where("users.department_id", Auth::user()->department_id);
+                $query->whereIn("users.department_id", EmployeeRepository::getRoleHOD());
             }
             if ($RolePermission == 'BM') {
                 $query->where("users.branch_id", Auth::user()->branch_id);
@@ -684,7 +685,7 @@ class PayrollReportController extends Controller
             )
             ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
                 if ($RolePermission == 'HOD') {
-                    $query->where("users.department_id", Auth::user()->department_id);
+                    $query->whereIn("users.department_id", EmployeeRepository::getRoleHOD());
                 }
                 if ($RolePermission == 'BM') {
                     $query->where("users.branch_id", Auth::user()->branch_id);

@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use KhmerDateTime\KhmerDateTime;
 use Maatwebsite\Excel\Events\AfterSheet;
 use App\Models\NationalSocialSecurityFund;
+use App\Repositories\Admin\EmployeeRepository;
 use Maatwebsite\Excel\Concerns\WithEvents;
 use PhpOffice\PhpSpreadsheet\Style\Border;
 use Illuminate\Database\Eloquent\Collection;
@@ -53,7 +54,7 @@ class ExportNSSF implements FromCollection, WithColumnWidths, WithHeadings, With
                 $query->where("users.id", Auth::user()->id);
             }
             if ($RolePermission == 'HOD') {
-                $query->where("users.department_id", Auth::user()->department_id);
+                $query->whereIn("users.department_id", EmployeeRepository::getRoleHOD());
             }
             if ($RolePermission == 'BM') {
                 $query->where("users.branch_id", Auth::user()->branch_id);

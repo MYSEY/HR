@@ -42,7 +42,6 @@
                                 <option value="CEO">Chief Executive Officer</option>
                                 <option value="HR">Head of HR</option>
                                 <option value="HOD">Head of Department</option>
-                                <option value="HOCD">Head of Credit Department</option>
                                 <option value="BM">Branch Manager</option>
                                 <option value="employee">Employee</option>
                             </select>

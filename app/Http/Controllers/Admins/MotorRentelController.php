@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\MotorRentalDetail;
 use App\Models\MotorRentel;
 use App\Models\User;
+use App\Repositories\Admin\EmployeeRepository;
 use App\Repositories\Admin\MotorRentalRepository;
 use Brian2694\Toastr\Facades\Toastr;
 use Carbon\Carbon;
@@ -53,7 +54,7 @@ class MotorRentelController extends Controller
                     $query->where('users.id',Auth::user()->id);
                 }
                 if ($RolePermission == 'HOD') {
-                    $query->where("users.department_id", Auth::user()->department_id);
+                    $query->whereIn("users.department_id", EmployeeRepository::getRoleHOD());
                 }
                 if ($RolePermission == 'BM') {
                     $query->where("users.branch_id", Auth::user()->branch_id);
@@ -81,7 +82,7 @@ class MotorRentelController extends Controller
                     $query->where('id',Auth::user()->id);
                 }
                 if ($RolePermission == 'HOD') {
-                    $query->where("department_id", Auth::user()->department_id);
+                    $query->whereIn("department_id", EmployeeRepository::getRoleHOD());
                 }
                 if ($RolePermission == 'BM') {
                     $query->where("branch_id", Auth::user()->branch_id);
@@ -114,7 +115,7 @@ class MotorRentelController extends Controller
                     $query->where('users.id',Auth::user()->id);
                 }
                 if ($RolePermission == 'HOD') {
-                    $query->where("users.department_id", Auth::user()->department_id);
+                    $query->whereIn("users.department_id", EmployeeRepository::getRoleHOD());
                 }
                 if ($RolePermission == 'BM') {
                     $query->where("users.branch_id", Auth::user()->branch_id);
