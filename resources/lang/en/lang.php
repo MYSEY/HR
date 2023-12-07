@@ -626,7 +626,6 @@ return[
     "salary_increase"=>"Salary Increase",
     "seniority_pay"=>"Seniority Pay",
     "senior_personnel_&_recruitement_manager"=>"Senior Personnel & Recruitement Manager",
-    "import_severance_pay"=>"Import Severance Pay",
     "start_date"=>"Start Date",
     "street_no"=>"Street No",
     "staff_taking_leave"=>"Staff Taking Leave",
