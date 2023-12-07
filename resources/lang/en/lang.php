@@ -334,7 +334,7 @@ return[
     "holidays"=>"Holidays",
     "hr_management_system"=>"HR Management System",
     "institution"=>"Institution",
-    "id_card"=>"ID card",
+    "id_card"=>"ID Card",
     "id_card_number"=>"ID Card Number",
     "id_number_nssf"=>"ID number NSSF",
     "import"=>"Import",
