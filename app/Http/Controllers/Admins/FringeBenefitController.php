@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admins;
 use App\Http\Controllers\Controller;
 use App\Models\FringeBenefit;
 use App\Models\User;
+use App\Repositories\Admin\EmployeeRepository;
 use Brian2694\Toastr\Facades\Toastr;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -27,7 +28,7 @@ class FringeBenefitController extends Controller
                 $query->where("id", Auth::user()->id);
             }
             if ($RolePermission == 'HOD') {
-                $query->where("department_id", Auth::user()->department_id);
+                $query->whereIn("department_id", EmployeeRepository::getRoleHOD());
             }
             if ($RolePermission == 'BM') {
                 $query->where("branch_id", Auth::user()->branch_id);
@@ -45,7 +46,7 @@ class FringeBenefitController extends Controller
                 $query->where("users.id", Auth::user()->id);
             }
             if ($RolePermission == 'HOD') {
-                $query->where("users.department_id", Auth::user()->department_id);
+                $query->whereIn("users.department_id", EmployeeRepository::getRoleHOD());
             }
             if ($RolePermission == 'BM') {
                 $query->where("users.branch_id", Auth::user()->branch_id);
@@ -151,7 +152,7 @@ class FringeBenefitController extends Controller
                 $query->where("id", Auth::user()->id);
             }
             if ($RolePermission == 'HOD') {
-                $query->where("department_id", Auth::user()->department_id);
+                $query->whereIn("department_id", EmployeeRepository::getRoleHOD());
             }
             if ($RolePermission == 'BM') {
                 $query->where("branch_id", Auth::user()->branch_id);

@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Admin;
 
+use App\Models\Department;
 use Carbon\Carbon;
 use App\Models\User;
 use App\Models\GenerateIdEmployee;
@@ -17,6 +18,7 @@ class EmployeeRepository extends BaseRepository
      * @var array
      */
     protected $fieldSearchable = [];
+    protected $department_ids = [];
 
     /**
      * Return searchable fields
@@ -33,18 +35,41 @@ class EmployeeRepository extends BaseRepository
         return User::class;
     }
 
+    public static function getRoleHOD(){
+        $child_department = Department::where('parent_id', Auth::user()->department_id)->select( 'departments.id')->get();
+            $child_department_ids = [];
+            foreach ($child_department as $key => $dpm) {
+                $child_department_ids [] = [
+                    $dpm->id
+                ];
+            }
+        $child_department_ids []= [Auth::user()->department_id];
+        return $child_department_ids;
+    }
+
     public function getAllUsers($request){
         if(Auth::user()->RolePermission == 'Employee') {
             return User::where('id',Auth::user()->id)
             ->whereNotIn('emp_status',['1','2','10','Probation'])
             ->with('role')->with('department')->get();
         }else{
+            if (Auth::user()->RolePermission == 'HOD') {
+                $child_department = Department::where('parent_id', Auth::user()->department_id)->select( 'departments.id')->get();
+                    $child_department_ids = [];
+                    foreach ($child_department as $key => $dpm) {
+                        $child_department_ids [] = [
+                            $dpm->id
+                        ];
+                    }
+                $child_department_ids []= [Auth::user()->department_id];
+                $this->department_ids = $child_department_ids;
+            }
             if($request->emp_status || $request->employee_id || $request->employee_name){
                 $dataUser = [];
                 $dataUser = User::with('role')->with("gender")->with('department')->with('position')->with('branch')->with('positiontype')
                 ->when($request->emp_status, function ($query, $emp_status) {
                     if (Auth::user()->RolePermission == 'HOD') {
-                        $query->where("department_id", Auth::user()->department_id);
+                        $query->whereIn("department_id", $this->department_ids);
                     }
                     if (Auth::user()->RolePermission == 'BM') {
                         $query->where("branch_id", Auth::user()->branch_id);
@@ -63,7 +88,7 @@ class EmployeeRepository extends BaseRepository
                 })
                 ->when($request->employee_name, function ($query, $employee_name) {
                     $query->where('employee_name_en', 'LIKE', '%'.$employee_name.'%');
-                    $query->orWhere('employee_name_kh', 'LIKE', '%'.$employee_name.'%');
+                    // $query->orWhere('employee_name_kh', 'LIKE', '%'.$employee_name.'%');
                 });
                 return $dataUser->get();
             }else{

@@ -48,7 +48,6 @@ class UserController extends Controller
     }
     public function index(Request $request)
     {
-        // dd(Auth::user()->RolePermission);
         $data = $this->employeeRepo->getAllUsers($request);
         if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'HR' || Auth::user()->RolePermission == 'developer') {
             $dataProbation = User::with('role')->with('department')->where('emp_status','Probation')->get();
@@ -58,20 +57,21 @@ class UserController extends Controller
             $dataResign = User::with('role')->with('department')->whereIn('emp_status', ['3','4','5','6','7','8','9'])->get();
         }
         if (Auth::user()->RolePermission == 'HOD') {
+            $department_ids = $this->employeeRepo->getRoleHOD();
             $dataProbation = User::with('role')->with('department')
-                ->where("department_id", Auth::user()->department_id)
+                ->whereIn("department_id", $department_ids)
                 ->where('emp_status','Probation')->get();
             $dataFDC = User::with('role')->with('department')
-                ->where("department_id", Auth::user()->department_id)
+                ->whereIn("department_id",  $department_ids)
                 ->whereIn('emp_status',['1','10'])->get();
             $dataUDC = User::with('role')->with('department')
-                ->where("department_id", Auth::user()->department_id)
+                ->whereIn("department_id",  $department_ids)
                 ->where('emp_status','2')->get();
             $dataCanContract = User::with('role')->with('department')
-                ->where("department_id", Auth::user()->department_id)
+                ->whereIn("department_id",  $department_ids)
                 ->where('emp_status','Cancel')->get();
             $dataResign = User::with('role')->with('department')
-                ->where("department_id", Auth::user()->department_id)
+                ->whereIn("department_id",  $department_ids)
                 ->whereIn('emp_status', ['3','4','5','6','7','8','9'])->get();
         }
         if (Auth::user()->RolePermission == 'BM') {

@@ -24,7 +24,7 @@
                                 {{-- <option value="DHR">Deputy Head of HR</option> --}}
                                 <option value="HOD">Head of Department</option>
                                 {{-- <option value="DHOD">Deputy Head of Department</option> --}}
-                                <option value="HOCD">Head of Credit Department</option>
+                                {{-- <option value="HOCD">Head of Credit Department</option> --}}
                                 {{-- <option value="DHOCD">Deputy Head of Credit Department</option> --}}
                                 <option value="BM">Branch Manager</option>
                                 {{-- <option value="DBM">Deputy Branch Manager</option> --}}

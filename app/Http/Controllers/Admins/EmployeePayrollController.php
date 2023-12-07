@@ -31,6 +31,7 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
 use App\Models\NationalSocialSecurityFund;
 use App\Repositories\Admin\PayrollRepository;
 use App\Models\PreviewNationalSocialSecurityFund;
+use App\Repositories\Admin\EmployeeRepository;
 
 class EmployeePayrollController extends Controller
 {
@@ -89,7 +90,7 @@ class EmployeePayrollController extends Controller
                 $query->where('users.id',Auth::user()->id);
             }
             if ($RolePermission == 'HOD') {
-                $query->where("users.department_id", Auth::user()->department_id);
+                $query->whereIn("users.department_id", EmployeeRepository::getRoleHOD());
             }
             if ($RolePermission == 'BM') {
                 $query->where("users.branch_id", Auth::user()->branch_id);

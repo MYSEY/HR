@@ -3,6 +3,7 @@
 namespace App\Exports;
 
 use App\Models\User;
+use App\Repositories\Admin\EmployeeRepository;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Concerns\FromCollection;
@@ -23,7 +24,7 @@ class ExportEmployeeReport implements FromCollection, WithColumnWidths, WithHead
                 $query->where('id',Auth::user()->id);
             }
             if ($RolePermission == 'HOD') {
-                $query->where("department_id", Auth::user()->department_id);
+                $query->whereIn("department_id", EmployeeRepository::getRoleHOD());
             }
             if ($RolePermission == 'BM') {
                 $query->where("branch_id", Auth::user()->branch_id);
