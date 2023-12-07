@@ -99,15 +99,15 @@
                     </div>
                     <div class="col-sm-6 col-md-6">
                         <div style="display: flex" class="float-end">
-                            <button type="button" class="btn btn-sm btn-outline-secondary btn-search me-2" id="icon-search-download-reload"  data-bs-toggle="tooltip" data-bs-placement="top" title="@lang('lang.search')">
-                                <span class="search-loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
+                            <button type="button" class="btn btn-sm btn-outline-secondary btn-search me-2" id="icon-search-download-reload" data-bs-toggle="tooltip" data-bs-placement="top" title="@lang('lang.search')">
                                 <span class="btn-search-txt">
                                     <i class="fa fa-search"></i>
                                 </span>
+                                <span class="search-loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
                             </button>
                             @if (permissionAccess("m3-s2","is_print")->value == "1")
-                                <button type="button" class="btn btn-outline-secondary btn-sm btn_print me-2" id="icon-search-download-reload"  data-bs-toggle="tooltip" data-bs-placement="top" title="@lang('lang.print')">
-                                    <span class="btn-text-print"><i class="fa fa-print fa-lg"></i> </span>
+                                <button type="button" class="btn btn-outline-secondary btn-sm btn_print me-2" id="icon-search-download-reload" data-bs-toggle="tooltip" data-bs-placement="top" title="@lang('lang.print')">
+                                    <span class="btn-text-print"><i class="fa fa-print fa-lg"></i></span>
                                     <span id="btn-text-loading-print" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
                                 </button>
                             @endif
@@ -118,7 +118,7 @@
                                 </button>
                             @endif
                            
-                            <button type="button" class="btn btn-sm btn-outline-secondary reset-btn" id="icon-search-download-reload" data-bs-toggle="tooltip" data-bs-placement="top" title="@lang('lang.download')">
+                            <button type="button" class="btn btn-sm btn-outline-secondary reset-btn" id="icon-search-download-reload" data-bs-toggle="tooltip" data-bs-placement="top" title="@lang('lang.reload')">
                                 <span class="btn-text-reset"><i class="fa fa-undo"></i></span>
                                 <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
                             </button>

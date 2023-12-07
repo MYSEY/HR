@@ -33,9 +33,9 @@
                         </div>
                     </div>
                     <div class="col-sm-2 col-md-2">
-                        <div class="form-group form-focus select-focus">
-                            <select class="select form-control" id="emp_status" data-select2-id="select2-data-2-c0n2" name="emp_status">
-                                <option value="" data-select2-id="select2-data-2-c0n2">@lang('lang.all_status')</option>
+                        <div class="form-group">
+                            <select class="select form-control" id="emp_status" name="emp_status">
+                                <option value="">--@lang('lang.select')--</option>
                                 <option value="Upcoming">@lang('lang.upcoming')</option>
                                 <option value="Probation">@lang('lang.probation')</option>
                                 <option value="1">@lang('lang.fdc')-1</option>
@@ -49,25 +49,24 @@
                                 <option value="8">@lang('lang.suspension')</option>
                                 <option value="Cancel">@lang('lang.cancel')</option>
                             </select>
-                            <label class="focus-label">@lang('lang.filter')</label>
                         </div>
                     </div>
                     {{-- <div class="col-md-6 col-sm-6"></div> --}}
                     <div class="col-sm-6 col-md-6">
                         <div style="display: flex" class="float-end">
-                            <button type="button" class="btn btn-sm btn-outline-secondary me-2 btn-search" data-dismiss="modal">
-                                <span class="loading-icon-search" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading') </span>
-                                <span class="btn-txt-search">@lang('lang.search')</span>
+                            <button type="button" class="btn btn-sm btn-outline-secondary me-2 btn-search" data-dismiss="modal" id="icon-search-download-reload" data-bs-toggle="tooltip" data-bs-placement="top" title="@lang('lang.search')">
+                                <span class="btn-txt-search"><i class="fa fa-search"></i></span>
+                                <span class="loading-icon-search" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
                             </button>
                             @if (permissionAccess("m7-s1","is_export")->value == "1")
-                                <button type="button" class="btn btn-sm btn-outline-secondary btn_excel me-2">
-                                    <span class="btn-text-excel"><i class="fa fa-file-excel-o" aria-hidden="true"></i> @lang('lang.excel')</span>
-                                    <span id="btn-text-loading-excel" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>
+                                <button type="button" class="btn btn-sm btn-outline-secondary btn_excel me-2" id="icon-search-download-reload" data-bs-toggle="tooltip" data-bs-placement="top" title="@lang('lang.download')">
+                                    <span class="btn-text-excel"><i class="fa fa-arrow-circle-down" aria-hidden="true"></i></span>
+                                    <span id="btn-text-loading-excel" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
                                 </button>
                             @endif
-                            <button type="button" class="btn btn-sm btn-outline-secondary reset-btn">
-                                <span class="btn-text-reset">@lang('lang.reload')</span>
-                                <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>
+                            <button type="button" class="btn btn-sm btn-outline-secondary reset-btn" id="icon-search-download-reload" data-bs-toggle="tooltip" data-bs-placement="top" title="@lang('lang.reload')">
+                                <span class="btn-text-reset"><i class="fa fa-undo"></i></span>
+                                <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
                             </button>
                         </div>
                     </div>
@@ -120,10 +119,6 @@
                                                         style="width: 100.25px;">@lang('lang.marital_status')</th>
                                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                         rowspan="1" colspan="1"
-                                                        aria-label="Gender: activate to sort column ascending"
-                                                        style="width: 52.95px;">@lang('lang.gender')</th>
-                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                        rowspan="1" colspan="1"
                                                         aria-label="Salary: activate to sort column ascending"
                                                         style="width: 51.475px;">@lang('lang.basic_salary')</th>
                                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
@@ -172,7 +167,6 @@
                                                             <td>{{ $item->joinOfDate ?? '' }}</td>
                                                             <td>{{ $item->DOB ?? '' }}</td>
                                                             <td>{{ $item->EmployeeMaritalStatus }}</td>
-                                                            <td>{{ $item->EmployeeGender }}</td>
                                                             <td>$<a href="#">{{ $item->basic_salary }}</a></td>
                                                             <td>
                                                                 @if ($item->emp_status== "Upcoming")
@@ -253,6 +247,7 @@
     });
 
     function showDatas(params) {
+        var localeLanguage = '{{ config('app.locale') }}';
         $.ajax({
             type: "post",
             url: "{{ url('reports/employee-search') }}",
@@ -273,6 +268,7 @@
                     data.map((row) => {
                         let join_date = moment(row.date_of_commencement).format('DD-MMM-YYYY')
                         let date_of_birth = moment(row.date_of_birth).format('DD-MMM-YYYY')
+                        let created_at = moment(row.date_of_birth).format('DD-MMM-YYYY')
                         let emp_status = "";
                         if (row.emp_status== "Upcoming"){
                             emp_status = '<span style="font-size: 13px" class="badge bg-inverse-success">@lang("lang.upcoming")</span>';
@@ -312,19 +308,17 @@
                         tr +='<tr class="odd">'+
                             '<td><h2>'+(profile)+'</h2></td>'+
                             '<td><a href="{{url("employee/profile")}}/'+(row.id)+'">'+(row.number_employee)+'</td>'+
-                            '<td><a href="{{url("employee/profile")}}/'+(row.id)+'">'+(row.employee_name_en)+'</a></td>'+
-                            '<td><a href="{{url("employee/profile")}}/'+(row.id)+'">'+(row.role ? row.role.name : "")+'</a></td>'+
-                            '<td><a href="{{url("employee/profile")}}/'+(row.id)+'">'+(row.department ? row.department.name_english : "")+'</a></td>'+
-                            '<td><a href="{{url("employee/profile")}}/'+(row.id)+'">'+(row.position ? row.position.name_english : "")+'</a></td>'+
-                            '<td><a href="{{url("employee/profile")}}/'+(row.id)+'">'+(row.branch.branch_name_en)+'</a></td>'+
+                            '<td><a href="{{url("employee/profile")}}/'+(row.id)+'">'+(localeLanguage == 'en' ? row.employee_name_en : row.employee_name_kh)+'</a></td>'+
+                            '<td><a href="{{url("employee/profile")}}/'+(row.id)+'">'+(row.role ? row.role.role_name : "")+'</a></td>'+
+                            '<td><a href="{{url("employee/profile")}}/'+(row.id)+'">'+(localeLanguage == 'en' ? row.department.name_english : row.department.name_khmer)+'</a></td>'+
+                            '<td><a href="{{url("employee/profile")}}/'+(row.id)+'">'+(localeLanguage == 'en' ? row.position.name_english : row.position.name_khmer)+'</a></td>'+
+                            '<td><a href="{{url("employee/profile")}}/'+(row.id)+'">'+(localeLanguage == 'en' ? row.branch.branch_name_en : row.branch.branch_name_kh)+'</a></td>'+
                             '<td>'+(join_date)+'</td>'+
                             '<td>'+(date_of_birth)+'</td>'+
                             '<td>'+(row.marital_status ? row.marital_status : "" )+'</td>'+
-                            '<td>'+(row.gender ? row.gender.name_english : "")+'</td>'+
-                            '<td>$ <a href="#">'+(row.basic_salary )+'</a></td>'+
-                            '<td>'+
-                                (emp_status)+
-                            '</td>'+
+                            '<td>$<a href="#">'+(row.basic_salary)+'</a></td>'+
+                            '<td>'+(emp_status)+'</td>'+
+                            '<td>'+(created_at)+'</td>'+
                         '</tr>';
                     });
                 }else{

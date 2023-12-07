@@ -66,13 +66,13 @@
                     </div>
                     <div class="col-sm-2 col-md-2">
                         <div style="display: flex" class="float-end">
-                            <button type="button" class="btn btn-sm btn-outline-secondary me-2" id="btn_research">
-                                <span class="loading-icon-research" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>
-                                <span class="btn-txt-research">@lang('lang.search')</span>
+                            <button type="button" class="btn btn-sm btn-outline-secondary btn_research me-2" id="icon-search-download-reload" data-bs-toggle="tooltip" data-bs-placement="top" title="@lang('lang.search')">
+                                <span class="btn-txt-research"><i class="fa fa-search"></i></span>
+                                <span class="loading-icon-research" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
                             </button>
-                            <button type="button" class="btn btn-sm btn-outline-secondary reset-btn">
-                                <span class="btn-text-reset">@lang('lang.reload')</span>
-                                <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>
+                            <button type="button" class="btn btn-sm btn-outline-secondary reset-btn" id="icon-search-download-reload" data-bs-toggle="tooltip" data-bs-placement="top" title="@lang('lang.reload')">
+                                <span class="btn-text-reset"><i class="fa fa-undo"></i></span>
+                                <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
                             </button>
                         </div>
                     </div>
@@ -416,7 +416,7 @@
             $("#btn-text-loading").css('display', 'block');
             window.location.replace("{{ URL('/trainer/list') }}"); 
         });
-        $("#btn_research").on("click", function (){
+        $(".btn_research").on("click", function (){
             $(this).prop('disabled', true);
             $(".btn-txt-research").hide();
             $(".loading-icon-research").css('display', 'block');
@@ -592,7 +592,7 @@
             dataType: "JSON",
             success: function(response) {
                 let data =  response.success;
-                $("#btn_research").prop('disabled', false);
+                $(".btn_research").prop('disabled', false);
                 $(".btn-txt-research").show();
                 $(".loading-icon-research").css('display', 'none');
                 var tr = "";
