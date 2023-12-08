@@ -302,15 +302,7 @@ class User extends Authenticatable
         }
         return $IdentityType ?? "";
     }
-    public function getEmployeePositionTypeAttribute(){
-        $data = Option::where('type','position_type')->get();
-        foreach($data as $item){
-            if($this->position_type == $item->id){
-                $positionType = Helper::getLang() == 'en' ? $item->name_english : $item->name_khmer;
-            }
-        }
-        return $positionType ?? "";
-    }
+   
     public function getEmployeeResignReasonAttribute(){
         $data = Option::where('type','emp_status')->get();
         foreach($data as $item){

@@ -50,56 +50,56 @@ class UserController extends Controller
     {
         $data = $this->employeeRepo->getAllUsers($request);
         if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'HR' || Auth::user()->RolePermission == 'developer') {
-            $dataProbation = User::with('role')->with('department')->where('emp_status','Probation')->get();
-            $dataFDC = User::with('role')->with('department')->whereIn('emp_status',['1','10'])->get();
-            $dataUDC = User::with('role')->with('department')->where('emp_status','2')->get();
-            $dataCanContract = User::with('role')->with('department')->where('emp_status','Cancel')->get();
-            $dataResign = User::with('role')->with('department')->whereIn('emp_status', ['3','4','5','6','7','8','9'])->get();
+            $dataProbation = User::with('role')->with('department')->with('position')->where('emp_status','Probation')->get();
+            $dataFDC = User::with('role')->with('department')->with('position')->whereIn('emp_status',['1','10'])->get();
+            $dataUDC = User::with('role')->with('department')->with('position')->where('emp_status','2')->get();
+            $dataCanContract = User::with('role')->with('department')->with('position')->where('emp_status','Cancel')->get();
+            $dataResign = User::with('role')->with('department')->with('position')->whereIn('emp_status', ['3','4','5','6','7','8','9'])->get();
         }
         if (Auth::user()->RolePermission == 'HOD') {
             $department_ids = $this->employeeRepo->getRoleHOD();
-            $dataProbation = User::with('role')->with('department')
+            $dataProbation = User::with('role')->with('department')->with('position')
                 ->whereIn("department_id", $department_ids)
                 ->where('emp_status','Probation')->get();
-            $dataFDC = User::with('role')->with('department')
+            $dataFDC = User::with('role')->with('department')->with('position')
                 ->whereIn("department_id",  $department_ids)
                 ->whereIn('emp_status',['1','10'])->get();
-            $dataUDC = User::with('role')->with('department')
+            $dataUDC = User::with('role')->with('department')->with('position')
                 ->whereIn("department_id",  $department_ids)
                 ->where('emp_status','2')->get();
-            $dataCanContract = User::with('role')->with('department')
+            $dataCanContract = User::with('role')->with('department')->with('position')
                 ->whereIn("department_id",  $department_ids)
                 ->where('emp_status','Cancel')->get();
-            $dataResign = User::with('role')->with('department')
+            $dataResign = User::with('role')->with('department')->with('position')
                 ->whereIn("department_id",  $department_ids)
                 ->whereIn('emp_status', ['3','4','5','6','7','8','9'])->get();
         }
         if (Auth::user()->RolePermission == 'BM') {
-            $dataProbation = User::with('role')->with('department')
+            $dataProbation = User::with('role')->with('department')->with('position')
                 ->where("branch_id", Auth::user()->branch_id)
                 ->where('emp_status','Probation')->get();
-            $dataFDC = User::with('role')->with('department')
+            $dataFDC = User::with('role')->with('department')->with('position')
                 ->where("branch_id", Auth::user()->branch_id)
                 ->whereIn('emp_status',['1','10'])->get();
-            $dataUDC = User::with('role')->with('department')
+            $dataUDC = User::with('role')->with('department')->with('position')
                 ->where("branch_id", Auth::user()->branch_id)
                 ->where('emp_status','2')->get();
-            $dataCanContract = User::with('role')->with('department')
+            $dataCanContract = User::with('role')->with('department')->with('position')
                 ->where("branch_id", Auth::user()->branch_id)
                 ->where('emp_status','Cancel')->get();
-            $dataResign = User::with('role')->with('department')
+            $dataResign = User::with('role')->with('department')->with('position')
                 ->where("branch_id", Auth::user()->branch_id)
                 ->whereIn('emp_status', ['3','4','5','6','7','8','9'])->get();
         }
         if(Auth::user()->RolePermission == 'Employee'){
-            $dataProbation = User::where('id',Auth::user()->id)
+            $dataProbation = User::with('role')->with('department')->with('position')->where('id',Auth::user()->id)
                 ->where('emp_status','Probation')->get();
-            $dataFDC = User::where('id',Auth::user()->id)
+            $dataFDC = User::with('role')->with('department')->with('position')->where('id',Auth::user()->id)
                 ->whereIn('emp_status',['1','10'])->get();
-            $dataUDC = User::where('id',Auth::user()->id)
+            $dataUDC = User::with('role')->with('department')->with('position')->where('id',Auth::user()->id)
                 ->where('emp_status','2')->get();
-            $dataCanContract = User::where('id',Auth::user()->id)->where('emp_status','Cancel')->with('department')->get();
-            $dataResign = User::where('id',Auth::user()->id)->whereIn('emp_status', ['3','4','5','6','7','8','9'])->with('department')->get();
+            $dataCanContract = User::where('id',Auth::user()->id)->where('emp_status','Cancel')->with('department')->with('position')->get();
+            $dataResign = User::where('id',Auth::user()->id)->whereIn('emp_status', ['3','4','5','6','7','8','9'])->with('department')->with('position')->get();
         }
        
         return view('users.index',compact(

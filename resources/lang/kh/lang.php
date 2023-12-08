@@ -579,7 +579,7 @@ return[
 	"request_date"=>"កាលបរិច្ឆេទស្នើសុំ",
 	"reset_password"=>"កំណត់ពាក្យសម្ងាត់ឡើងវិញ ",
 	"reset_your_password"=>"កំណត់ពាក្យសម្ងាត់របស់អ្នក ",
-	"role_name"=>"ឈ្មោះតួនាទី",
+	"role_name"=>"តួនាទីចូលប្រើ",
 	"role_type"=>"ប្រភេទតួនាទី",
 	"roles"=>"តួនាទី",
 	"role_permission"=>"ការអនុញ្ញាតតួនាទី",

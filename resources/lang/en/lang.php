@@ -560,7 +560,7 @@ return[
     "received_date"=>"Received Date",
     "reset_password"=>"Reset password",
     "reset_your_password"=>"Reset your password",
-    "role_name"=>"Role Name",
+    "role_name"=>"Role Access",
     "role_type"=>"Role Type",
     "roles"=>"Roles",
     "role_permission"=>"Role Permission",
