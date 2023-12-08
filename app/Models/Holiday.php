@@ -16,7 +16,8 @@ class Holiday extends Model
     protected $guarded = ['id'];
 
     protected $fillable = [
-        'title',
+        'title_kh',
+        'title_en',
         'amount_percent',
         'period_month',
         'from',
