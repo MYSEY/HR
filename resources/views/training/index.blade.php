@@ -68,11 +68,11 @@
                     </div>
                     <div class="col-sm-4 col-md-4">
                         <div style="display: flex" class="float-end">
-                            <button type="button" class="btn btn-sm btn-outline-secondary btn_research me-2" id="icon-search-download-reload" data-bs-toggle="tooltip" data-bs-placement="top" title="@lang('lang.search')">
+                            <button type="button" class="btn btn-sm btn-outline-secondary btn_research me-2" id="icon-search-download-reload">
                                 <span class="btn-txt-search"><i class="fa fa-search"></i></span>
                                 <span class="loading-icon-search" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
                             </button>
-                            <button type="button" class="btn btn-sm btn-outline-secondary reset-btn" id="icon-search-download-reload" data-bs-toggle="tooltip" data-bs-placement="top" title="@lang('lang.reload')">
+                            <button type="button" class="btn btn-sm btn-outline-secondary reset-btn" id="icon-search-download-reload">
                                 <span class="btn-text-reset"><i class="fa fa-undo"></i></span>
                                 <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
                             </button>
