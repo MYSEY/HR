@@ -161,13 +161,14 @@ class PayrollReportController extends Controller
             'users.employee_name_kh',
             'users.branch_id',
             'users.department_id',
+            'options.id',
             'options.name_khmer',
             'options.name_english',
             'options.type',
             'positions.name_khmer as positionNameKhmer',
             'positions.name_english as positionNameEnglish',
-            'branchs.branch_name_kh as branck_kh',
-            'branchs.branch_name_en as branck_en',
+            'branchs.branch_name_kh as branch_kh',
+            'branchs.branch_name_en as branch_en',
         )
         ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
             if ($RolePermission == 'Employee') {
