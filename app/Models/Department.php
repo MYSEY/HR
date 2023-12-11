@@ -16,12 +16,22 @@ class Department extends Model
     */
 
     protected $table = 'departments';
-    // protected $primaryKey = 'id';
-    // public $timestamps = false;
     protected $guarded = ['id'];
-    // protected $fillable = [];
-    // protected $hidden = [];
-    // protected $dates = [];
+    
+    protected $fillable = [
+        'name_khmer',
+        'name_english',
+        'parent_id',
+        'head_department',
+        'created_by',
+        'updated_by',
+        'deleted_at',
+     ];
+
+     
+    public function child(){
+        return $this->hasMany(Department::class, 'parent_id','id');
+    }
 
     /*
     |--------------------------------------------------------------------------
