@@ -19,7 +19,8 @@ class DepartmentController extends Controller
      */
     public function index()
     {
-        $data = Department::orderBy('id','DESC')->get();
+        $data = Department::where("parent_id", 0)->orWhere("parent_id", null)->with('child')->orderBy('id','DESC')->get();
+        // dd($data);
         return view('department.index',compact('data'));
     }
 
@@ -43,7 +44,7 @@ class DepartmentController extends Controller
             DB::rollBack();
         }
     }
-
+    
     /**
      * Display the specified resource.
      *
@@ -78,6 +79,7 @@ class DepartmentController extends Controller
     {
         try{
             Department::where('id',$request->id)->update([
+                'parent_id'  => $request->parent_id ? $request->parent_id : null,
                 'name_khmer'  => $request->name_khmer,
                 'name_english'  => $request->name_english,
                 'updated_by'    => Auth::user()->id 

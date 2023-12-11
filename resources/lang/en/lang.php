@@ -454,6 +454,7 @@ return[
     "phone2"=>"Phone Two",
     "phone_number"=>"Phone Number",
     "page"=>"Pages",
+    "parent"=>"Parent",
     "pending"=>"Pending",
     "paid"=>"Paid", 
     "paid_date"=>"Paid Date", 
