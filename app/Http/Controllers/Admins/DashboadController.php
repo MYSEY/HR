@@ -67,12 +67,12 @@ class DashboadController extends Controller
             $query->where('date_of_commencement', '>=', $year);
         })->get();
         
-        $totalStaff =  User::with("gender")->whereIn('emp_status',['1','2','10','Probation'])->get();
+        $totalStaff =  User::with("gender")->with("position")->whereIn('emp_status',['1','2','10','Probation'])->get();
         $staffPromotes = StaffPromoted::all()->count();
         $transferred = Transferred::all()->count();
         $empUpcoming = User::where("emp_status","Upcoming")->get()->count();
         $candidateResumes = CandidateResume::whereNot("status","5")->get()->count();
-        $dataTrainings = Training::whereMonth("created_at", $Monthly)->whereYear("created_at", $yearLy)->get();
+        $dataTrainings = Training::whereYear("created_at", $yearLy)->get();
         // $dataTrainings = Training::get();
         $dataEmployeeTrainings = [];
         foreach ($dataTrainings as $key => $item) {

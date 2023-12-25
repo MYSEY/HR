@@ -35,13 +35,13 @@
                 </div>
                 <div class="col-auto float-end ms-auto">
                     <div class="btn-group">
-                        @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer')
-                        <div class="btn-group btn-group-sm">
-                            <button class="btn btn-white" id="btn_print">
-                                <span class="btn-text-print"><i class="fa fa-print fa-lg"></i> @lang('lang.print')</span>
-                                <span id="btn-print-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>
-                            </button>
-                        </div>
+                        @if (permissionAccess("m5-s2","is_print")->value == "1" || permissionAccess("34","is_print")->value == "1")
+                            <div class="btn-group btn-group-sm">
+                                <button class="btn btn-white" id="btn_print">
+                                    <span class="btn-text-print"><i class="fa fa-print fa-lg"></i> @lang('lang.print')</span>
+                                    <span id="btn-print-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>
+                                </button>
+                            </div>
                         @endif
                     </div>
                 </div>
@@ -103,38 +103,33 @@
                                         </thead>
                                         <tbody>
                                             <tr>
-                                                <td>@lang('lang.gross_motor_rental_fee') ($) :</td>
+                                                <td>@lang('lang.gross_motor_rental_fee') (៛) :</td>
                                                 <td>
-                                                    <span class="float-end">$
-                                                        {{ number_format($data->amount_price_motor_rentel, 2) }}</span>
+                                                    <span class="float-end">​{{ number_format($data->amount_price_motor_rentel) }} ៛</span>
                                                 </td>
                                                 <td>@lang('lang.motor_rental_fee_tax') ({{$data->tax_rate}}%) : </td>
                                                 <td>
-                                                    <span class="float-end">$
-                                                        {{ number_format(($data->amount_price_motor_rentel * $data->tax_rate) / 100, 2) }}</span>
+                                                    <span class="float-end">{{ number_format(($data->amount_price_motor_rentel * $data->tax_rate) / 100) }} ៛</span>
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td>@lang('lang.gross_taplab_fee') ($): </td>
-                                                <td><span class="float-end">$
-                                                    {{ number_format($data->amount_price_taplab_rentel, 2) }}</span></td>
+                                                <td>@lang('lang.gross_taplab_fee') (៛): </td>
+                                                <td><span class="float-end">{{ number_format($data->amount_price_taplab_rentel) }} ៛</span></td>
                                                 <td>@lang('lang.taplab_fee_tax') ({{$data->tax_rate}}%) :</td>
                                                 <td>
-                                                    <span class="float-end">$
-                                                        {{ number_format(($data->amount_price_taplab_rentel * $data->tax_rate) / 100, 2) }}</span>
+                                                    <span class="float-end">{{ number_format(($data->amount_price_taplab_rentel * $data->tax_rate) / 100) }} ៛</span>
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td>@lang('lang.engine_oil') ($):</td>
-                                                <td><span class="float-end">$ {{ $data->amount_price_engine_oil }}</span></td>
+                                                <td>@lang('lang.engine_oil') (៛):</td>
+                                                <td><span class="float-end">{{ number_format($data->amount_price_engine_oil) }} ៛</span></td>
                                                 <td></td>
                                                 <td></td>
                                             </tr>
                                             <tr>
-                                                <td>@lang('lang.gasoline') (@lang('lang.reil'))</td>
+                                                <td>@lang('lang.gasoline') (៛)</td>
                                                 <td>
-                                                    <span class="float-end">៛
-                                                        {{ number_format($data->gasoline_price_per_liter) }} </span>
+                                                    <span class="float-end">{{ number_format($data->gasoline_price_per_liter) }} ៛</span>
                                                 </td>
                                                 <td>@lang('lang.other_deduction'): </td>
                                                 <td>
@@ -142,43 +137,41 @@
                                                 </td>
                                             </tr>
                                             <tr class="tr-background-83">
-                                                <td>@lang('lang.total_earnings') ($): </td>
+                                                <td>@lang('lang.total_earnings') (៛): </td>
                                                 <td>
-                                                    <span class="float-end">$ {{ number_format($data->amount_price_motor_rentel + $data->amount_price_taplab_rentel + $data->amount_price_engine_oil, 2) }}</span>
+                                                    <span class="float-end">{{ number_format(($data->gasoline_price_per_liter) + $data->amount_price_motor_rentel + $data->amount_price_taplab_rentel + $data->amount_price_engine_oil) }} ៛</span>
                                                 </td>
-                                                <td>@lang('lang.total_deductions') ($): </td>
+                                                <td>@lang('lang.total_deductions') (៛): </td>
                                                 <td>
-                                                    <span class="float-end">$
-                                                        {{ number_format((($data->amount_price_taplab_rentel * $data->tax_rate) + ($data->amount_price_motor_rentel * $data->tax_rate)) / 100, 2) }}</span>
+                                                    <span class="float-end">{{ number_format((($data->amount_price_taplab_rentel * $data->tax_rate) + ($data->amount_price_motor_rentel * $data->tax_rate)) / 100) }} ៛</span>
                                                 </td>
                                             </tr>
-                                            <tr class="tr-background-83">
+                                            {{-- <tr class="tr-background-83">
                                                 <td>@lang('lang.total_earnings') (@lang('lang.reil')): </td>
                                                 <td>
-                                                    <span class="float-end">៛
-                                                        {{ number_format($data->gasoline_price_per_liter) }} </span>    
+                                                    <span class="float-end">{{ number_format($data->gasoline_price_per_liter) }} ៛</span>    
                                                 </td>
                                                 <td>@lang('lang.total_deductions') (@lang('lang.reil')): </td>
                                                 <td>
-                                                    <span class="float-end">៛ 0.00</span>
+                                                    <span class="float-end">0000 ៛</span>
                                                 </td>
-                                            </tr>
+                                            </tr> --}}
                                             <tr>
                                                 <td class="td-border"></td>
                                                 <td class="td-border"></td>
-                                                <td class="td-background-cc">@lang('lang.total_net_pay') ($):</td>
+                                                <td class="td-background-cc">@lang('lang.total_net_pay') (៛):</td>
                                                 <td class="td-background-cc">
-                                                    <span class="float-end">$ {{number_format($data->amount_price_engine_oil + ($data->amount_price_motor_rentel - ($data->amount_price_motor_rentel * $data->tax_rate) / 100) + ($data->amount_price_taplab_rentel - ($data->amount_price_taplab_rentel * $data->tax_rate) / 100 ), 2) }} </span>
+                                                    <span class="float-end">{{number_format((($data->total_gasoline * $data->total_work_day) * $data->gasoline_price_per_liter) + $data->amount_price_engine_oil + ($data->amount_price_motor_rentel - ($data->amount_price_motor_rentel * $data->tax_rate) / 100) + ($data->amount_price_taplab_rentel - ($data->amount_price_taplab_rentel * $data->tax_rate) / 100 )) }} ៛</span>
                                                 </td>
                                             </tr>
-                                            <tr>
+                                            {{-- <tr>
                                                 <td class="td-border"> </td>
                                                 <td class="td-border"></td>
                                                 <td class="td-background-cc">@lang('lang.total_net_pay') (@lang('lang.reil')):</td>
                                                 <td class="td-background-cc">
-                                                    <span class="float-end">៛ {{ number_format(($data->total_gasoline * $data->total_work_day) * $data->gasoline_price_per_liter) }}</span>
+                                                    <span class="float-end">{{ number_format(($data->total_gasoline * $data->total_work_day) * $data->gasoline_price_per_liter) }} ៛</span>
                                                 </td>
-                                            </tr>
+                                            </tr> --}}
                                         </tbody>
                                     </table>
                                 </div>

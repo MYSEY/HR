@@ -4,10 +4,6 @@
         min-height: 38px !important;
         padding: 9px !important;
     }
-    .reset-btn{
-        /* background: #ffbc34 !important; */
-        color: #fff !important
-    }
 </style>
 @section('content')
     <div class="">
@@ -21,11 +17,13 @@
                     </ul>
                 </div>
                 <div class="col-auto float-end ms-auto">
+                    @if (permissionAccess("m6-s1","is_create")->value == "1")
                     <a href="#" class="btn add-btn" data-bs-toggle="modal" data-bs-target="#add_trainer"><i class="fa fa-plus"></i> @lang('lang.add_new')</a>
+                    @endif
                 </div>
             </div>
         </div>
-        @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer')
+        @if (permissionAccess("m6-s1","is_view")->value == "1")
             <form class="needs-validation" novalidate>
                 @csrf
                 
@@ -68,70 +66,83 @@
                     </div>
                     <div class="col-sm-2 col-md-2">
                         <div style="display: flex" class="float-end">
-                            <button type="button" class="btn btn-sm btn-success me-2" id="btn_research">
-                                <span class="loading-icon-research" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>
-                                <span class="btn-txt-research">@lang('lang.search')</span>
+                            <button type="button" class="btn btn-sm btn-outline-secondary btn_research me-2" id="icon-search-download-reload">
+                                <span class="btn-txt-research"><i class="fa fa-search"></i></span>
+                                <span class="loading-icon-research" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
                             </button>
-                            <button type="button" class="btn btn-sm btn-warning reset-btn">
-                                <span class="btn-text-reset">@lang('lang.reload')</span>
-                                <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>
+                            <button type="button" class="btn btn-sm btn-outline-secondary reset-btn" id="icon-search-download-reload">
+                                <span class="btn-text-reset"><i class="fa fa-undo"></i></span>
+                                <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
                             </button>
                         </div>
                     </div>
                 </div>
             </form>
-        @endif
-        {!! Toastr::message() !!}
-        <div class="content">
-            <div class="row">
-                <div class="col-md-12 p-0">
-                    <div class="table-responsive">
-                        <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
-                            <div class="row">
-                                <div class="col-sm-12">
-                                    <table class="table table-striped custom-table mb-0 datatable dataTable no-footer btn_trainer"
-                                        id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
-                                        <thead>
-                                            <tr>
-                                                <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="#: activate to sort column descending" style="width: 30px;">#</th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Type: activate to sort column ascending" style="width: 772.237px;">@lang('lang.trainer_type')</th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Company Name: activate to sort column ascending" style="width: 772.237px;">@lang('lang.company_name')</th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Name (KH): activate to sort column ascending" style="width: 772.237px;">@lang('lang.name') (@lang('lang.kh'))</th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Name (EN): activate to sort column ascending" style="width: 772.237px;">@lang('lang.name') (@lang('lang.en'))</th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Phone Numer: activate to sort column ascending" style="width: 772.237px;">@lang('lang.phone_number')</th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending" style="width: 772.237px;">@lang('lang.email')</th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Remark: activate to sort column ascending" style="width: 772.237px;">@lang('lang.remark')</th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Status: activate to sort column ascending" style="width: 772.237px;">@lang('lang.status')</th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Create at: activate to sort column ascending" style="width: 772.237px;">@lang('lang.create')</th>
-                                                <th class="text-end sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Action: activate to sort column ascending" style="width: 300.962px;">@lang('lang.action')</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @if (count($data)>0)
-                                                @foreach ($data as $key=>$item)
-                                                    <tr class="odd">
-                                                        <td class="sorting_1 ids">{{++$key}}</td>
-                                                        <td class="type">{{$item->type == 1 ? "Internal": "External"}}</td>
-                                                        <td class="company_name">{{$item->company_name ? $item->company_name : ""}}</td>
-                                                        <td class="name_kh">{{$item->type == 1 ? $item->EmployeeIn->employee_name_kh : $item->name_kh}}</td>
-                                                        <td class="name_en">{{$item->type == 1 ? $item->EmployeeIn->employee_name_en : $item->name_en}}</td>
-                                                        <td class="number_phone">{{$item->type == 1 ? $item->EmployeeIn->personal_phone_number : $item->number_phone}}</td>
-                                                        <td class="email">{{$item->type == 1 ? $item->EmployeeIn->email : $item->email}}</td>
-                                                        <td >{{$item->type == 1 ? $item->EmployeeIn->remark : $item->remark}}</td>
-                                                        <td>
-                                                            <input type="hidden" class="status" value="{{$item->status}}">
-                                                            <div class="dropdown action-label">
-                                                                @if ($item->status=='1')
-                                                                    <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
-                                                                        <i class="fa fa-dot-circle-o text-success"></i>
-                                                                        <span>@lang('lang.active')</span>
-                                                                    </a>
-                                                                @elseif ($item->status=='0')
-                                                                    <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
-                                                                        <i class="fa fa-dot-circle-o text-danger"></i>
-                                                                        <span>@lang('lang.inactive')</span>
-                                                                    </a>
-                                                                @endif
+       
+            {!! Toastr::message() !!}
+            <div class="content">
+                <div class="row">
+                    <div class="col-md-12 p-0">
+                        <div class="table-responsive">
+                            <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <table class="table table-striped custom-table mb-0 datatable dataTable no-footer btn_trainer"
+                                            id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
+                                            <thead>
+                                                <tr>
+                                                    <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="#: activate to sort column descending" style="width: 30px;">#</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Type: activate to sort column ascending" style="width: 772.237px;">@lang('lang.trainer_type')</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Company Name: activate to sort column ascending" style="width: 772.237px;">@lang('lang.company_name')</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Name (KH): activate to sort column ascending" style="width: 772.237px;">@lang('lang.name') (@lang('lang.kh'))</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Name (EN): activate to sort column ascending" style="width: 772.237px;">@lang('lang.name') (@lang('lang.en'))</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Phone Numer: activate to sort column ascending" style="width: 772.237px;">@lang('lang.phone_number')</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending" style="width: 772.237px;">@lang('lang.email')</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Remark: activate to sort column ascending" style="width: 772.237px;">@lang('lang.remark')</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Status: activate to sort column ascending" style="width: 772.237px;">@lang('lang.status')</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Create at: activate to sort column ascending" style="width: 772.237px;">@lang('lang.create')</th>
+                                                    <th class="text-end sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Action: activate to sort column ascending" style="width: 300.962px;">@lang('lang.action')</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @if (count($data)>0)
+                                                    @foreach ($data as $key=>$item)
+                                                        <tr class="odd">
+                                                            <td class="sorting_1 ids">{{++$key}}</td>
+                                                            <td class="type">{{$item->type == 1 ? "Internal": "External"}}</td>
+                                                            <td class="company_name">{{$item->company_name ? $item->company_name : ""}}</td>
+                                                            <td class="name_kh">{{$item->type == 1 ? $item->EmployeeIn->employee_name_kh : $item->name_kh}}</td>
+                                                            <td class="name_en">{{$item->type == 1 ? $item->EmployeeIn->employee_name_en : $item->name_en}}</td>
+                                                            <td class="number_phone">{{$item->type == 1 ? $item->EmployeeIn->personal_phone_number : $item->number_phone}}</td>
+                                                            <td class="email">{{$item->type == 1 ? $item->EmployeeIn->email : $item->email}}</td>
+                                                            <td >{{$item->type == 1 ? $item->EmployeeIn->remark : $item->remark}}</td>
+                                                            <td>
+                                                                <input type="hidden" class="status" value="{{$item->status}}">
+                                                                <div class="dropdown action-label">
+                                                                    @if (permissionAccess("m6-s1","is_update")->value == "1")
+                                                                        @if ($item->status=='1')
+                                                                            <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
+                                                                                <i class="fa fa-dot-circle-o text-success"></i>
+                                                                                <span>@lang('lang.active')</span>
+                                                                            </a>
+                                                                        @elseif ($item->status=='0')
+                                                                            <a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
+                                                                                <i class="fa fa-dot-circle-o text-danger"></i>
+                                                                                <span>@lang('lang.inactive')</span>
+                                                                            </a>
+                                                                        @endif
+                                                                    @else
+                                                                        @if ($item->status=='1')
+                                                                        <a class="btn btn-white btn-sm btn-rounded" href="#">
+                                                                            <i class="fa fa-dot-circle-o text-success"></i> <span>@lang('lang.active')</span>
+                                                                        </a>
+                                                                        @elseif ($item->status=='0')
+                                                                        <a class="btn btn-white btn-sm btn-rounded" href="#">
+                                                                            <i class="fa fa-dot-circle-o text-danger"></i> <span>@lang('lang.inactive')</span>
+                                                                        </a>
+                                                                        @endif
+                                                                    @endif
+                                                                    
                                                                     <div class="dropdown-menu dropdown-menu-right" id="btn-status">
                                                                         <a class="dropdown-item" data-id="{{$item->id}}" data-name="1" data-status-old="{{$item->status}}" href="#">
                                                                             <i class="fa fa-dot-circle-o text-success"></i> @lang('lang.active')
@@ -140,30 +151,37 @@
                                                                             <i class="fa fa-dot-circle-o text-danger"></i> @lang('lang.inactive')
                                                                         </a>
                                                                     </div>
-                                                            </div>
-                                                        </td>
-                                                        <td>{{ \Carbon\Carbon::parse($item->created_at)->format('d-M-Y') ?? '' }}</td>
-                                                        <td class="text-end">
-                                                            <div class="dropdown dropdown-action">
-                                                                <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
-                                                                <div class="dropdown-menu dropdown-menu-right">
-                                                                    <a class="dropdown-item update" data-toggle="modal" data-id="{{$item->id}}" data-target="#edit_trainer"><i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')</a>
-                                                                    <a class="dropdown-item delete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_trainer"><i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
                                                                 </div>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                @endforeach
-                                            @endif
-                                        </tbody>
-                                    </table>
+                                                            </td>
+                                                            <td>{{ \Carbon\Carbon::parse($item->created_at)->format('d-M-Y') ?? '' }}</td>
+                                                            <td class="text-end">
+                                                                @if (permissionAccess("m6-s1","is_update")->value == "1" || permissionAccess("m6-s1","is_delete")->value == "1")
+                                                                    <div class="dropdown dropdown-action">
+                                                                        <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
+                                                                        <div class="dropdown-menu dropdown-menu-right">
+                                                                            @if (permissionAccess("m6-s1","is_update")->value == "1")
+                                                                            <a class="dropdown-item update" data-toggle="modal" data-id="{{$item->id}}" data-target="#edit_trainer"><i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')</a>
+                                                                            @endif
+                                                                            @if (permissionAccess("m6-s1","is_delete")->value == "1")
+                                                                            <a class="dropdown-item delete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_trainer"><i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
+                                                                            @endif
+                                                                        </div>
+                                                                    </div>
+                                                                @endif
+                                                            </td>
+                                                        </tr>
+                                                    @endforeach
+                                                @endif
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        @endif
         <div id="add_trainer" class="modal custom-modal fade hr-modal-select2" role="dialog">
             <div class="modal-dialog modal-dialog-centered  modal-lg" role="document">
                 <div class="modal-content">
@@ -368,7 +386,7 @@
                                 <div class="row">
                                     <div class="submit-section" style="text-align: center">
                                         <button type="submit" class="btn btn-primary submit-btn me-2">@lang('lang.delete')</button>
-                                        <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-danger">@lang('lang.cancel')</a>
+                                        <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-secondary">@lang('lang.cancel')</a>
                                     </div>
                                 </div>
                             </form>
@@ -398,7 +416,7 @@
             $("#btn-text-loading").css('display', 'block');
             window.location.replace("{{ URL('/trainer/list') }}"); 
         });
-        $("#btn_research").on("click", function (){
+        $(".btn_research").on("click", function (){
             $(this).prop('disabled', true);
             $(".btn-txt-research").hide();
             $(".loading-icon-research").css('display', 'block');
@@ -522,7 +540,7 @@
                 buttons: {
                     confirm: {
                         text: '@lang("lang.submit")',
-                        btnClass: 'btn-blue',
+                        btnClass: 'add-btn-status',
                         action: function() {
                             var trainer_status = this.$content.find('.trainer_status').val();
                             var id = this.$content.find('.id').val();
@@ -551,13 +569,15 @@
                     },
                     cancel: {
                         text: '@lang("lang.cancel")',
-                        btnClass: 'btn-red btn-sm',
+                        btnClass: 'btn-secondary btn-sm',
                     },
                 }
             });
         });
     });
     function showdatas(params) {
+        let is_update = "{{ Helper::permissionAccess('m6-s1','is_update') }}";
+        let is_delete = "{{ Helper::permissionAccess('m6-s1','is_delete') }}";
         $.ajax({
             type: "post",
             url: "{{ url('trainer/list') }}",
@@ -572,7 +592,7 @@
             dataType: "JSON",
             success: function(response) {
                 let data =  response.success;
-                $("#btn_research").prop('disabled', false);
+                $(".btn_research").prop('disabled', false);
                 $(".btn-txt-research").show();
                 $(".loading-icon-research").css('display', 'none');
                 var tr = "";
@@ -589,6 +609,34 @@
                             trainer_status = "@lang('lang.inactive')";
                             
                         }
+                        let dropdown_status = '<a class="btn btn-white btn-sm btn-rounded" href="#">'+
+                                    '<i class="fa fa-dot-circle-o text-'+(status_color)+'"></i>'+
+                                    '<span>'+(trainer_status)+'</span>'+
+                                '</a>';
+                        if (is_update == 1) {
+                            dropdown_status = '<a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">'+
+                                    '<i class="fa fa-dot-circle-o text-'+(status_color)+'"></i>'+
+                                    '<span>'+(trainer_status)+'</span>'+
+                                '</a>';
+                        }
+                        let dropdown_action = "";
+                        let deleted = "";
+                        let updated = "";
+                        if (is_update == 1 || is_delete == 1) {
+                            if (is_update == 1) {
+                                updated = '<a class="dropdown-item update" data-toggle="modal" data-id="'+(row.id)+'" data-target="#edit_trainer"><i class="fa fa-pencil m-r-5"></i> @lang("lang.edit")</a>';
+                            }
+                            if (is_delete ==1 ) {
+                                deleted = '<a class="dropdown-item delete" href="#" data-toggle="modal" data-id="'+(row.id)+'" data-target="#delete_trainer"><i class="fa fa-trash-o m-r-5"></i> @lang("lang.delete")</a>';
+                            }
+                            dropdown_action = '<div class="dropdown dropdown-action">'+
+                                        '<a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>'+
+                                        '<div class="dropdown-menu dropdown-menu-right">'+
+                                            (updated)+
+                                            (deleted)+
+                                        '</div>'+
+                                    '</div>';
+                        }
                         tr += '<tr class="odd">'+
                             '<td class="sorting_1 ids">'+(index+1)+'</td>'+
                             '<td class="type">'+(row.type == 1 ? "@lang('lang.internal')": "@lang('lang.external')")+'</td>'+
@@ -601,10 +649,7 @@
                             '<td>'+
                                 '<input type="hidden" class="status" value="'+(row.status)+'">'+
                                 '<div class="dropdown action-label">'+
-                                    '<a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">'+
-                                        '<i class="fa fa-dot-circle-o text-'+(status_color)+'"></i>'+
-                                        '<span>'+(trainer_status)+'</span>'+
-                                    '</a>'+
+                                   (dropdown_status)+
                                     '<div class="dropdown-menu dropdown-menu-right" id="btn-status">'+
                                         '<a class="dropdown-item" data-id="'+(row.id)+'" data-name="1" data-status-old="'+(row.status)+'" href="#">'+
                                             '<i class="fa fa-dot-circle-o text-success"></i> @lang("lang.active")'+
@@ -619,13 +664,7 @@
                                 (created_at)+
                             '</td>'+
                             '<td class="text-end">'+
-                                '<div class="dropdown dropdown-action">'+
-                                    '<a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>'+
-                                    '<div class="dropdown-menu dropdown-menu-right">'+
-                                        '<a class="dropdown-item update" data-toggle="modal" data-id="'+(row.id)+'" data-target="#edit_trainer"><i class="fa fa-pencil m-r-5"></i> @lang("lang.edit")</a>'+
-                                        '<a class="dropdown-item delete" href="#" data-toggle="modal" data-id="'+(row.id)+'" data-target="#delete_trainer"><i class="fa fa-trash-o m-r-5"></i> @lang("lang.delete")</a>'+
-                                    '</div>'+
-                                '</div>'+
+                                (dropdown_action)+
                             '</td>'+
                         '</tr>';
                     });

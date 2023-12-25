@@ -4,9 +4,6 @@
         min-height: 38px !important;
         padding: 9px !important;
     }
-    .reset-btn {
-        color: #fff !important
-    }
     .ui-datepicker-calendar {
         display: none;
     }
@@ -29,12 +26,11 @@
             </div>
         </div>
     </div>
-    @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer')
+    @if (permissionAccess("m7-s15","is_view")->value == "1")
         <div class="row filter-btn">
             <div class="col-sm-6 col-md-2">
                 <div class="form-group">
-                    <input type="text" class="form-control" name="employee_name" id="employee_name"
-                        placeholder="@lang('lang.employee_name')" value="{{ old('employee_name') }}">
+                    <input type="text" class="form-control" name="employee_name" id="employee_name" placeholder="@lang('lang.employee_name')" value="{{ old('employee_name') }}">
                 </div>
             </div>
             <div class="col-sm-6 col-md-2 col-lg-2 col-xl-2">
@@ -53,83 +49,83 @@
             </div>
             <div class="col-sm-6 col-md-6">
                 <div style="display: flex" class="float-end">
-                    <button type="button" class="btn btn-sm btn-success btn-search me-2" data-dismiss="modal">
-                        <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>
-                        <span class="btn-text-search">@lang('lang.search')</span>
+                    <button type="button" class="btn btn-sm btn-outline-secondary btn-search me-2" data-dismiss="modal" id="icon-search-download-reload">
+                        <span class="btn-text-search"><i class="fa fa-search"></i></span>
+                        <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
                     </button>
-                    <button type="button" class="btn btn-sm btn-warning reset-btn">
-                        <span class="btn-text-reset">@lang('lang.reload')</span>
-                        <span id="btn-reset-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>
+                    <button type="button" class="btn btn-sm btn-outline-secondary reset-btn" id="icon-search-download-reload">
+                        <span class="btn-text-reset"><i class="fa fa-undo"></i></span>
+                        <span id="btn-reset-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
                     </button>
                 </div>
             </div>
         </div>
-    @endif
-    <div class="content">
-        <div class="row">
-            <div class="col-md-12 p-0">
-                <div class="table-responsive">
-                    <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <table class="table table-striped custom-table mb-0 datatable dataTable no-footer staff-transfer-report"
-                                    id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
-                                    <thead>
-                                        <tr>
-                                            <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
-                                                rowspan="2" aria-sort="ascending"
-                                                aria-label="Name: activate to sort column descending"
-                                                style="width: 94.0625px;">@lang('lang.name')</th>
-                                            <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
-                                                colspan="2"
-                                                aria-label="Location: activate to sort column descending"
-                                                style="width: 94.0625px; text-align: center">@lang('lang.location')</th>
-                                            <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
-                                                colspan="2"  aria-sort="ascending"
-                                                aria-label="Position: activate to sort column descending"
-                                                style="width: 94.0625px; text-align: center">@lang('lang.position')</th>
-                                            <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
-                                                rowspan="2" aria-sort="ascending"
-                                                aria-label="Profle: activate to sort column descending"
-                                                style="width: 94.0625px;">@lang('lang.effective_date')</th>
-                                        </tr>
-                                        <tr>
-                                            <th>@lang('lang.previous')</th>
-                                            <th>@lang('lang.current')</th>
-                                            <th>@lang('lang.previous')</th>
-                                            <th>@lang('lang.current')</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @if (count($transferred) > 0)
-                                            @php
-                                                $branch_name = "";
-                                                $position_name = "";
-                                            @endphp
-                                            @foreach ($transferred as $key=>$item)
-                                                <tr>
-                                                    <td>{{ $item->TransferEmp->employee_name_en }}</td>
-                                                    <td>{{ $key == 0 ? $item->TransferEmp->branch->abbreviations: $branch_name }}</td>
-                                                    <td>{{ $item->TransferredBranch->abbreviations }}</td>
-                                                    <td>{{ $key == 0 ? $item->TransferEmp->position->name_english : $position_name}}</td>
-                                                    <td>{{ $item->TransferredPosition->name_english}}</td>
-                                                    <td>{{ \Carbon\Carbon::parse($item->date)->format('d-M-Y') ?? '' }}</td>
-                                                </tr>
+        <div class="content">
+            <div class="row">
+                <div class="col-md-12 p-0">
+                    <div class="table-responsive">
+                        <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <table class="table table-striped custom-table mb-0 datatable dataTable no-footer staff-transfer-report"
+                                        id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
+                                        <thead>
+                                            <tr>
+                                                <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
+                                                    rowspan="2" aria-sort="ascending"
+                                                    aria-label="Name: activate to sort column descending"
+                                                    style="width: 94.0625px;">@lang('lang.name')</th>
+                                                <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
+                                                    colspan="2"
+                                                    aria-label="Location: activate to sort column descending"
+                                                    style="width: 94.0625px; text-align: center">@lang('lang.location')</th>
+                                                <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
+                                                    colspan="2"  aria-sort="ascending"
+                                                    aria-label="Position: activate to sort column descending"
+                                                    style="width: 94.0625px; text-align: center">@lang('lang.position')</th>
+                                                <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
+                                                    rowspan="2" aria-sort="ascending"
+                                                    aria-label="Profle: activate to sort column descending"
+                                                    style="width: 94.0625px;">@lang('lang.effective_date')</th>
+                                            </tr>
+                                            <tr>
+                                                <th>@lang('lang.previous')</th>
+                                                <th>@lang('lang.current')</th>
+                                                <th>@lang('lang.previous')</th>
+                                                <th>@lang('lang.current')</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @if (count($transferred) > 0)
                                                 @php
-                                                    $branch_name = $item->TransferredBranch->abbreviations;
-                                                    $position_name = $item->TransferredPosition->name_english;
+                                                    $branch_name = "";
+                                                    $position_name = "";
                                                 @endphp
-                                            @endforeach
-                                        @endif
-                                    </tbody>
-                                </table>
+                                                @foreach ($transferred as $key=>$item)
+                                                    <tr>
+                                                        <td>{{ $item->TransferEmp->employee_name_en }}</td>
+                                                        <td>{{ $key == 0 ? $item->TransferEmp->branch->abbreviations: $branch_name }}</td>
+                                                        <td>{{ $item->TransferredBranch }}</td>
+                                                        <td>{{ $key == 0 ? $item->TransferEmp->position->name_english : $position_name}}</td>
+                                                        <td>{{ $item->TransferredPosition}}</td>
+                                                        <td>{{ \Carbon\Carbon::parse($item->date)->format('d-M-Y') ?? '' }}</td>
+                                                    </tr>
+                                                    @php
+                                                        $branch_name = $item->TransferredBranch;
+                                                        $position_name = $item->TransferredPosition;
+                                                    @endphp
+                                                @endforeach
+                                            @endif
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    @endif
 @endsection
 
 @include('includs.script')

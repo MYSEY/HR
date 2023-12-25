@@ -17,6 +17,7 @@ class CreateDepartmentsTable extends Migration
             $table->id();
             $table->string('name_khmer');
             $table->string('name_english');
+            $table->integer('parent_id')->nullable();
             $table->integer('head_department')->nullable();
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();

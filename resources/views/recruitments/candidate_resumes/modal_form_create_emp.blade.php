@@ -22,36 +22,19 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="">@lang('lang.name') (@lang('lang.kh')) <span class="text-danger">*</span></label>
-                                <input class="form-control employee_name_kh emp_required" type="text" id="employee_name_kh" name="employee_name_kh" required>
+                                <input class="form-control employee_name_kh emp_required" type="text" id="employee_name_kh" name="employee_name_kh" required disabled>
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="">@lang('lang.name') (@lang('lang.en')) <span class="text-danger">*</span></label>
-                                <input class="form-control employee_name_en emp_required clear_data" type="text" id="employee_name_en" name="employee_name_en" required>
+                                <input class="form-control employee_name_en emp_required clear_data" type="text" id="employee_name_en" name="employee_name_en" required disabled>
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label>@lang('lang.gender') <span class="text-danger">*</span></label>
                                 <select class="form-control form-select emp_required clear_data" name="gender" id="emp_gender">
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <div class="form-group hr-form-group-select2">
-                                <label>@lang('lang.position') <span class="text-danger">*</span></label>
-                                <select class="hr-select2-option emp_required clear_data" name="position_id" id="emp_position" required>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label class="">@lang('lang.position_type') <span class="text-danger">*</span></label>
-                                <select class="form-control emp_required clear_data" id="position_type" name="position_type" required>
-                                    <option value="">@lang('lang.select')</option>
                                 </select>
                             </div>
                         </div>
@@ -74,6 +57,21 @@
                         </div>
                     </div>
                     <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group hr-form-group-select2">
+                                <label>@lang('lang.position') <span class="text-danger">*</span></label>
+                                <select class="hr-select2-option emp_required clear_data" name="position_id" id="emp_position" required>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-6" hidden>
+                            <div class="form-group">
+                                <label class="">@lang('lang.position_type') <span class="text-danger">*</span></label>
+                                <select class="form-control clear_data" id="position_type" name="position_type">
+                                    <option value="">@lang('lang.select')</option>
+                                </select>
+                            </div>
+                        </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>@lang('lang.date_of_birth') <span class="text-danger">*</span></label>
@@ -82,6 +80,8 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="">@lang('lang.join_date') <span class="text-danger">*</span></label>
@@ -90,18 +90,18 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="">@lang('lang.personal_phone') <span class="text-danger">*</span></label>
+                                <input class="form-control personal_phone_number emp_required clear_data" type="number" id="personal_phone_number" name="personal_phone_number" required>
+                            </div>
+                        </div>
                     </div>
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label>@lang('lang.id_card_number') <span class="text-danger">*</span></label>
                                 <input class="form-control emp_required clear_data" type="text" id="id_card_number" name="id_card_number" required>
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label class="">@lang('lang.personal_phone') <span class="text-danger">*</span></label>
-                                <input class="form-control personal_phone_number emp_required clear_data" type="number" id="personal_phone_number" name="personal_phone_number" required>
                             </div>
                         </div>
                     </div>
@@ -273,6 +273,22 @@
 <script src="{{asset('/admin/js/format-date-kh.js')}}"></script>
 <script type="text/javascript">
     $(function(){
+        $("#emp_position").on("change", function() {
+            let position_type = $("#emp_position option:checked").attr('data-id');
+            if (position_type == 1) {
+                $('#position_type').find('option').each(function(){
+                    if ($(this).attr('data-id') == "Supporting Staff") {
+                        $("#position_type").val($(this).val());
+                    }
+                }); 
+            }else{
+                $('#position_type').find('option').each(function(){
+                    if ($(this).attr('data-id') == "Field Staff") {
+                        $("#position_type").val($(this).val());
+                    }
+                });
+            }
+        });
          // block Current Address
          $("#current_province").on("change", function(){
             let id = $("#current_province").val();
@@ -357,6 +373,7 @@
                             $('#emp_position').html('');
                             $.each(response.position, function(i, item) {
                                 $("#emp_position").append($('<option>', {
+                                    "data-id" : item.position_type_number,
                                     value: item.id,
                                     text: localeLanguage == 'en' ? item.name_english : item.name_khmer,
                                     selected: item.id == response.success.position_applied
@@ -387,6 +404,7 @@
                             // $("#position_type").html('');
                             $.each(response.optionPositionType, function(i, item) {
                                 $("#position_type").append($('<option>', {
+                                    "data-id" : item.name_english,
                                     value: item.id,
                                     text: localeLanguage == 'en' ? item.name_english : item.name_khmer,
                                     selected: item.id == response.success.position_type

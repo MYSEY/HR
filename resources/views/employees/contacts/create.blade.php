@@ -13,13 +13,13 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>@lang('lang.name') <span class="text-danger">*</span></label>
+                                <label>@lang('lang.name')<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" value="{{old('name')}}" required>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>@lang('lang.relationship') <span class="text-danger">*</span></label>
+                                <label>@lang('lang.relationship')<span class="text-danger">*</span></label>
                                 <select class="form-control @error('relationship') is-invalid @enderror" id="relationship" name="relationship" value="{{old('relationship')}}" required>
                                     <option selected disabled value=""> -- @lang('lang.select') --</option>
                                     @foreach ($relationship as $item)
@@ -32,13 +32,13 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>@lang('lang.phone') <span class="text-danger">*</span></label>
+                                <label>@lang('lang.phone1')<span class="text-danger">*</span></label>
                                 <input class="form-control @error('phone') is-invalid @enderror" type="number" id="phone" name="phone" value="{{old('phone')}}" required>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>@lang('lang.phone') 2</label>
+                                <label>@lang('lang.phone2')</label>
                                 <input class="form-control" type="number" id="phone_2" name="phone_2">
                             </div>
                         </div>

@@ -7,6 +7,7 @@ use App\Models\MotorRentel;
 use App\Repositories\BaseRepository;
 use App\Traits\UploadFiles\UploadFIle;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class MotorRentalRepository extends BaseRepository
 {
@@ -45,7 +46,7 @@ class MotorRentalRepository extends BaseRepository
             $currentYear =  Carbon::createFromDate(Carbon::now())->format('Y');
         }
         $data = MotorRentalDetail::with('user')
-            ->join('users', 'motor_rental_details.employee_id', '=', 'users.id')
+            ->leftJoin('users', 'motor_rental_details.employee_id', '=', 'users.id')
             ->select(
                 'motor_rental_details.*',
                 'users.employee_name_en',
@@ -54,6 +55,17 @@ class MotorRentalRepository extends BaseRepository
                 'users.branch_id',
                 'users.department_id',
             )
+            ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+                if ($RolePermission == 'Employee') {
+                    $query->where('users.id',Auth::user()->id);
+                }
+                if ($RolePermission == 'HOD') {
+                    $query->whereIn("users.department_id", EmployeeRepository::getRoleHOD());
+                }
+                if ($RolePermission == 'BM') {
+                    $query->where("users.branch_id", Auth::user()->branch_id);
+                }
+            })
             ->when($monthly, function ($query, $monthly) {
                 $query->whereMonth('motor_rental_details.created_at', $monthly);
             })
@@ -65,7 +77,7 @@ class MotorRentalRepository extends BaseRepository
             })
             ->when($request->employee_name, function ($query, $employee_name) {
                 $query->where('users.employee_name_en', 'LIKE', '%'.$employee_name.'%');
-                // $query->orWhere('users.employee_name_kh', 'LIKE', '%'.$employee_name.'%');
+                $query->orWhere('users.employee_name_kh', 'LIKE', '%'.$employee_name.'%');
             })
             ->when($request->employee_name_kh, function ($query, $employee_name_kh) {
                 $query->where('users.employee_name_kh', 'LIKE', '%'.$employee_name_kh.'%');

@@ -17,6 +17,7 @@ return new class extends Migration
         Schema::create('seniorities', function (Blueprint $table) {
             $table->id();
             $table->integer('employee_id');
+            $table->string('number_employee')->nullable();
             $table->decimal('total_average_salary',50,2)->nullable();
             $table->decimal('total_salary_receive',50,2)->nullable();
             $table->decimal('tax_exemption_salary',50,2)->nullable();

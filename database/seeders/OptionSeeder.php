@@ -114,6 +114,12 @@ class OptionSeeder extends Seeder
             'created_by'    => Auth::id(),
         ]);
         Option::firstOrCreate([
+            'name_khmer' => 'ចំណេះដឹង​ទូទៅ',
+            'name_english'=>'General Knowledge',
+            'type' => 'field_of_study',
+            'created_by'    => Auth::id(),
+        ]);
+        Option::firstOrCreate([
             'name_khmer' => 'អនុវិទ្យាល័យ',
             'name_english'=>'Secondary School',
             'type' => 'degree',
@@ -308,6 +314,36 @@ class OptionSeeder extends Seeder
             'type' => 'emp_status',
             'created_by'    => Auth::id(),
         ]);
+        Option::firstOrCreate([
+            'name_khmer' => 'បញ្ចប់',
+            'name_english'=> 'Termination',
+            'type' => 'emp_status',
+            'created_by'    => Auth::id(),
+        ]);
+        Option::firstOrCreate([
+            'name_khmer' => 'Death',
+            'name_english'=> 'Death',
+            'type' => 'emp_status',
+            'created_by'    => Auth::id(),
+        ]);
+        Option::firstOrCreate([
+            'name_khmer' => 'បញ្ឈប់',
+            'name_english'=> 'Lay Off',
+            'type' => 'emp_status',
+            'created_by'    => Auth::id(),
+        ]);
+        Option::firstOrCreate([
+            'name_khmer' => 'No need to input',
+            'name_english'=> 'No need to input',
+            'type' => 'emp_status',
+            'created_by'    => Auth::id(),
+        ]);
+        Option::firstOrCreate([
+            'name_khmer' => 'ការសាកល្បងមិនបានជោគជ័យ',
+            'name_english'=> 'Failed Probation',
+            'type' => 'emp_status',
+            'created_by'    => Auth::id(),
+        ]);
         
         //position type
         Option::firstOrCreate([
@@ -320,6 +356,79 @@ class OptionSeeder extends Seeder
             'name_khmer' => 'បុគ្គលិកចុះតាមតំបន់',
             'name_english'=> 'Field Staff',
             'type' => 'position_type',
+            'created_by'    => Auth::id(),
+        ]);
+        //position range
+        Option::firstOrCreate([
+            'name_khmer' => 'នាយក',
+            'name_english'=> 'Director',
+            'type' => 'position_range',
+            'created_by'    => Auth::id(),
+        ]);
+        Option::firstOrCreate([
+            'name_khmer' => 'អ្នកគ្រប់គ្រង​ទូទៅ',
+            'name_english'=> 'General Manager',
+            'type' => 'position_range',
+            'created_by'    => Auth::id(),
+        ]);
+        Option::firstOrCreate([
+            'name_khmer' => 'អ្នកគ្រប់គ្រង',
+            'name_english'=> 'Manager',
+            'type' => 'position_range',
+            'created_by'    => Auth::id(),
+        ]);
+        Option::firstOrCreate([
+            'name_khmer' => 'នាយក​រង',
+            'name_english'=> 'Deputy Manager',
+            'type' => 'position_range',
+            'created_by'    => Auth::id(),
+        ]);
+        Option::firstOrCreate([
+            'name_khmer' => 'មេការ',
+            'name_english'=> 'Supervisor',
+            'type' => 'position_range',
+            'created_by'    => Auth::id(),
+        ]);
+        Option::firstOrCreate([
+            'name_khmer' => 'មន្ត្រី',
+            'name_english'=> 'Officer',
+            'type' => 'position_range',
+            'created_by'    => Auth::id(),
+        ]);
+        Option::firstOrCreate([
+            'name_khmer' => 'ជំនួយការ',
+            'name_english'=> 'Assistant',
+            'type' => 'position_range',
+            'created_by'    => Auth::id(),
+        ]);
+        Option::firstOrCreate([
+            'name_khmer' => 'ផ្សេងៗ',
+            'name_english'=> 'Others',
+            'type' => 'position_range',
+            'created_by'    => Auth::id(),
+        ]);
+        Option::firstOrCreate([
+            'name_khmer' => 'រៀបការហើយ',
+            'name_english'=> 'Married',
+            'type' => 'marital_status',
+            'created_by'    => Auth::id(),
+        ]);
+        Option::firstOrCreate([
+            'name_khmer' => 'នៅលីវ',
+            'name_english'=> 'Single',
+            'type' => 'marital_status',
+            'created_by'    => Auth::id(),
+        ]);
+        Option::firstOrCreate([
+            'name_khmer' => 'ខ្មែរ',
+            'name_english'=> 'Khmer',
+            'type' => 'nationality',
+            'created_by'    => Auth::id(),
+        ]);
+        Option::firstOrCreate([
+            'name_khmer' => 'ចិន',
+            'name_english'=> 'Chinese',
+            'type' => 'nationality',
             'created_by'    => Auth::id(),
         ]);
     }

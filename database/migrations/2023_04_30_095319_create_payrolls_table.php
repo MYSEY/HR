@@ -17,6 +17,7 @@ return new class extends Migration
         Schema::create('payrolls', function (Blueprint $table) {
             $table->id();
             $table->integer('employee_id');
+            $table->string('number_employee')->nullable();
             $table->decimal('basic_salary',50,2)->default(0);
             $table->decimal('total_gross_salary',50)->default(0);
             $table->date('payment_date')->nullable();
@@ -29,10 +30,10 @@ return new class extends Migration
             $table->decimal('total_pension_fund',50,2)->default(0);
             $table->decimal('seniority_pay_included_tax',50,2)->default(0);
             $table->decimal('base_salary_received_usd',50,2)->default(0);
-            $table->string('base_salary_received_riel',50,2)->default(0);
+            $table->string('base_salary_received_riel')->nullable();
             $table->integer('spouse')->default(0);
             $table->integer('children')->default(0);
-            $table->string('total_charges_reduced',50,2)->default(0);
+            $table->string('total_charges_reduced')->nullable();
             $table->string('total_tax_base_riel',50,2)->default(0);
             $table->integer('total_rate')->default(0);
             $table->decimal('total_salary_tax_usd',50,2)->default(0);
@@ -43,7 +44,7 @@ return new class extends Migration
             $table->decimal('total_severance_pay',50,2)->default(0);
             $table->float('loan_amount',50,2)->nullable();
             $table->float('total_amount_car',50,2)->nullable();
-            $table->decimal('total_salary')->default(0);
+            $table->decimal('total_salary',50,2)->default(0);
             $table->string('exchange_rate')->nullable();
             $table->string('adjustment')->nullable();
             $table->string('leaves')->nullable();

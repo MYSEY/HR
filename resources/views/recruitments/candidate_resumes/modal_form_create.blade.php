@@ -13,21 +13,33 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="">
-                                <label class="">@lang('lang.name') (@lang('lang.kh')) <span class="text-danger">*</span></label>
-                                <input class="form-control @error('name_kh') is-invalid @enderror" type="text" id="name_kh" required name="name_kh" value="{{old('name_kh')}}">
+                                <label class="">@lang('lang.last_name') (@lang('lang.kh')) <span class="text-danger">*</span></label>
+                                <input class="form-control @error('last_name_kh') is-invalid @enderror" type="text" id="last_name_kh" required name="last_name_kh" value="{{old('last_name_kh')}}">
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="">@lang('lang.name') (@lang('lang.en')) <span class="text-danger">*</span></label>
-                                <input class="form-control @error('name_en') is-invalid @enderror" type="text" id="name_en" required name="name_en" value="{{old('name_en')}}">
+                                <label class="">@lang('lang.first_name') (@lang('lang.kh')) <span class="text-danger">*</span></label>
+                                <input class="form-control @error('first_name_kh') is-invalid @enderror" type="text" id="first_name_kh" required name="first_name_kh" value="{{old('first_name_kh')}}">
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="">@lang('lang.last_name') (@lang('lang.en')) <span class="text-danger">*</span></label>
+                                <input class="form-control @error('last_name_en') is-invalid @enderror" type="text" id="last_name_en" required name="last_name_en" value="{{old('last_name_en')}}">
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="">@lang('lang.first_name') (@lang('lang.en')) <span class="text-danger">*</span></label>
+                                <input class="form-control @error('first_name_en') is-invalid @enderror" type="text" id="first_name_en" required name="first_name_en" value="{{old('first_name_en')}}">
                             </div>
                         </div>
 
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="">@lang('lang.gender')</label>
-                                <select class="form-control form-select" name="gender" id="gender">
+                                <select class="form-control select floating" name="gender" id="gender">
                                     @foreach ($gender as $gen )
                                     <option value="{{ $gen->id }}">{{ Helper::getLang() == 'en' ? $gen->name_english : $gen->name_khmer }}</option>
                                     @endforeach
@@ -63,7 +75,17 @@
                                 <select class="hr-select2-option requered" required name="position_applied" id="position_applied">
                                     <option selected disabled value=""> -- @lang('lang.select') --</option>
                                     @foreach ($position as $positions )
-                                    <option value="{{ $positions->id }}">{{ Helper::getLang() == 'en' ? $positions->name_english : $positions->name_khmer }}</option>
+                                        <option data-id="{{$positions->position_type_number}}" value="{{ $positions->id }}">{{ Helper::getLang() == 'en' ? $positions->name_english : $positions->name_khmer }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-4" hidden>
+                            <div class="form-group">
+                                <label class="">@lang('lang.position_type')</label>
+                                <select class="form-control select floating" id="position_type" name="position_type" value="{{old('position_type')}}">
+                                    @foreach ($optionPositionType as $item)
+                                        <option data-id="{{$item->name_english}}" value="{{$item->id}}">{{Helper::getLang() == 'en' ? $item->name_english : $item->name_khmer}}</option>
                                     @endforeach
                                 </select>
                             </div>

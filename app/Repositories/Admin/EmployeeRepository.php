@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Admin;
 
+use App\Models\Department;
 use Carbon\Carbon;
 use App\Models\User;
 use App\Models\GenerateIdEmployee;
@@ -17,6 +18,7 @@ class EmployeeRepository extends BaseRepository
      * @var array
      */
     protected $fieldSearchable = [];
+    protected $department_ids = [];
 
     /**
      * Return searchable fields
@@ -33,15 +35,48 @@ class EmployeeRepository extends BaseRepository
         return User::class;
     }
 
+    public static function getRoleHOD(){
+        $child_department = Department::where('parent_id', Auth::user()->department_id)->select( 'departments.id')->get();
+            $child_department_ids = [];
+            foreach ($child_department as $key => $dpm) {
+                $child_department_ids [] = [
+                    $dpm->id
+                ];
+            }
+        $child_department_ids []= [Auth::user()->department_id];
+        return $child_department_ids;
+    }
+
     public function getAllUsers($request){
-        if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer') {
+        if(Auth::user()->RolePermission == 'Employee') {
+            return User::where('id',Auth::user()->id)
+            ->whereNotIn('emp_status',['1','2','10','Probation'])
+            ->with('role')->with('department')->get();
+        }else{
+            if (Auth::user()->RolePermission == 'HOD') {
+                $child_department = Department::where('parent_id', Auth::user()->department_id)->select( 'departments.id')->get();
+                    $child_department_ids = [];
+                    foreach ($child_department as $key => $dpm) {
+                        $child_department_ids [] = [
+                            $dpm->id
+                        ];
+                    }
+                $child_department_ids []= [Auth::user()->department_id];
+                $this->department_ids = $child_department_ids;
+            }
             if($request->emp_status || $request->employee_id || $request->employee_name){
                 $dataUser = [];
-                $dataUser = User::with('role')->with('department')->with('position')->with('branch')->with('positiontype')
+                $dataUser = User::with('role')->with("gender")->with('department')->with('position')->with('branch')->with('positiontype')
                 ->when($request->emp_status, function ($query, $emp_status) {
+                    if (Auth::user()->RolePermission == 'HOD') {
+                        $query->whereIn("department_id", $this->department_ids);
+                    }
+                    if (Auth::user()->RolePermission == 'BM') {
+                        $query->where("branch_id", Auth::user()->branch_id);
+                    }
                     if ($emp_status == "resign_reason") {
                         $query->with("resignStatus");
-                        $query->whereNotIn('emp_status',['1','2','10','Probation','Upcoming']); 
+                        $query->whereNotIn('emp_status',['1','2','10','Probation','Upcoming','Cancel']); 
                     }else if($emp_status == "FDC"){
                         $query->whereIn('emp_status', ['1','10']);
                     }else{
@@ -53,24 +88,21 @@ class EmployeeRepository extends BaseRepository
                 })
                 ->when($request->employee_name, function ($query, $employee_name) {
                     $query->where('employee_name_en', 'LIKE', '%'.$employee_name.'%');
-                    $query->orWhere('employee_name_kh', 'LIKE', '%'.$employee_name.'%');
+                    // $query->orWhere('employee_name_kh', 'LIKE', '%'.$employee_name.'%');
                 });
                 return $dataUser->get();
             }else{
                 return User::with('role')->with('department')->where('emp_status','Upcoming')->get();
             }
-        } else {
-            return User::where('role_id',Auth::user()->role_id)
-            ->where('position_id',Auth::user()->position_id)
-            ->where('department_id',Auth::user()->department_id)
-            ->where('branch_id',Auth::user()->branch_id)
-            ->whereNotIn('emp_status',['1','2','10','Probation'])
-            ->with('role')->with('department')->get();
         }
     }
     public function createUsers($request){
         $data = $request->all(); 
         $newDateTime = Carbon::parse($data['date_of_commencement'])->addMonths(3);
+        $fullNameKH = $request->last_name_kh.' '.$request->first_name_kh;
+        $fullNameEN = $request->last_name_en.' '.$request->first_name_en;
+        $data['employee_name_kh'] = $fullNameKH;
+        $data['employee_name_en'] = $fullNameEN;
         $data['fdc_date'] = $newDateTime;
         $data['emp_status'] = 'Probation';
         $data['created_by'] = Auth::user()->id;
@@ -107,10 +139,16 @@ class EmployeeRepository extends BaseRepository
         }else{
             $filenameBook = $request->hidden_file_employment_book;
         }
+        $fullNameKH = $request->last_name_kh.' '.$request->first_name_kh;
+        $fullNameEN = $request->last_name_en.' '.$request->first_name_en;
         return User::where('id',$request->id)->update([
             'number_employee'  => $request->number_employee,
-            'employee_name_kh'  => $request->employee_name_kh,
-            'employee_name_en'  => $request->employee_name_en,
+            'last_name_kh'  => $request->last_name_kh,
+            'first_name_kh'  => $request->first_name_kh,
+            'last_name_en'  => $request->last_name_en,
+            'first_name_en'  => $request->first_name_en,
+            'employee_name_kh'  => $fullNameKH,
+            'employee_name_en'  => $fullNameEN,
             'gender'  => $request->gender,
             'role_id'  => $request->role_id,
             'basic_salary'  => $request->basic_salary,
@@ -120,14 +158,19 @@ class EmployeeRepository extends BaseRepository
             'position_type'  => $request->position_type,
             'department_id'  => $request->department_id,
             'date_of_birth'  => $request->date_of_birth,
+            'fdc_date'  => $request->fdc_date,
+            'udc_end_date'  => $request->udc_end_date,
+            'id_number_nssf'  => $request->id_number_nssf,
             'email'  => $request->email,
             'branch_id'  => $request->branch_id,
             'unit'  => $request->unit,
             'level'  => $request->level,
+            'id_card_number'  => $request->id_card_number,
             'date_of_commencement'  => $request->date_of_commencement,
             'fdc_date'  => $fdc_date,
             'marital_status'  => $request->marital_status,
             'nationality'  => $request->nationality,
+            'ethnicity'  => $request->ethnicity,
             'personal_phone_number'  => $request->personal_phone_number,
             'company_phone_number'  => $request->company_phone_number,
             'agency_phone_number'  => $request->agency_phone_number,
@@ -139,6 +182,9 @@ class EmployeeRepository extends BaseRepository
             'identity_number'  => $request->identity_number,
             'issue_date'  => $request->issue_date,
             'issue_expired_date'  => $request->issue_expired_date,
+            'type_of_employees_nssf'  => $request->type_of_employees_nssf,
+            'spouse_nssf'  => $request->spouse_nssf,
+            'status_nssf'  => $request->status_nssf,
             'current_house_no'  => $request->current_house_no,
             'current_street_no'  => $request->current_street_no,
             'current_province'   => $request->current_province,

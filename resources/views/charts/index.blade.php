@@ -9,7 +9,7 @@
 
 </style>
 @section('content')
-    <section style="background-color: #CDC4F9;">
+    <section >
         <div class="container py-4">
             <div class="row">
                 <div class="col-md-12">
@@ -22,15 +22,40 @@
                                     <div class="p-3">
 
                                         <div class="input-group rounded mb-3">
-                                            <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
+                                            <input type="search" class="form-control rounded" id="searchName" onkeyup="myFunction()" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
                                             <span class="input-group-text border-0" id="search-addon">
                                                 <i class='fa fa-search'></i>
                                             </span>
                                         </div>
-
                                         <div class="card-detail" style="position: relative; height: 400px">
-                                            <ul class="list-unstyled mb-0">
-                                                <li class="p-2 border-bottom">
+                                            <ul class="list-unstyled mb-0" id="searchEmployee">
+                                                @if (count($users)>0)
+                                                    @foreach ($users as $key=>$item)
+                                                        <li class="p-2 border-bottom">
+                                                            <a href="#!" class="d-flex justify-content-between">
+                                                                <div class="d-flex flex-row">
+                                                                    <div>
+                                                                        @if ($item->profile != null)
+                                                                            <img alt="" src="{{asset('/uploads/images/'.$item->profile)}}" alt="avatar" class="d-flex align-self-center me-3" width="50" style="border-radius: 50%">
+                                                                        @else
+                                                                            <img alt="" src="{{asset('admin/img/defuals/default-user-icon.png')}}" alt="avatar" class="d-flex align-self-center me-3" width="60">
+                                                                        @endif
+                                                                        <span class="badge bg-success badge-dot"></span>
+                                                                    </div>
+                                                                    <div class="pt-1">
+                                                                        <p class="fw-bold mb-0">{{$item->employee_name_en}}</p>
+                                                                        <p class="small text-muted">{{$item->Message}}</p>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="pt-1">
+                                                                    <p class="small text-muted mb-1">Just now</p>
+                                                                    <span class="badge bg-danger rounded-pill float-end">3</span>
+                                                                </div>
+                                                            </a>
+                                                        </li>
+                                                    @endforeach
+                                                @endif
+                                                {{-- <li class="p-2 border-bottom">
                                                     <a href="#!" class="d-flex justify-content-between">
                                                         <div class="d-flex flex-row">
                                                             <div>
@@ -145,7 +170,7 @@
                                                             <p class="small text-muted mb-1">Yesterday</p>
                                                         </div>
                                                     </a>
-                                                </li>
+                                                </li> --}}
                                             </ul>
                                         </div>
 
@@ -154,9 +179,7 @@
                                 </div>
 
                                 <div class="col-md-6 col-lg-7 col-xl-8">
-
                                     <div class="pe-3" style="position: relative; height: 400px">
-
                                         <div class="chat">
                                             <!-- Header -->
                                             <div class="top">
@@ -240,10 +263,13 @@
 
                                     <div class="text-muted d-flex justify-content-start align-items-center pe-3 pt-3 mt-2">
                                         <div class="input-group mb-3">
-                                            <input type="text" class="form-control" id="message" placeholder="Enter message" aria-label="Enter message" aria-describedby="button-addon2">
+                                            {{-- <input type="text" class="form-control" id="message" placeholder="Enter message" aria-label="Enter message" aria-describedby="button-addon2"> --}}
+                                            <textarea class="form-control emojionearea" id="emojionearea1"></textarea>
                                             {{-- <a class="ms-1 text-muted" href="#!"><i class="fa fa-paperclip"></i> --}}
                                             {{-- <button class="ms-3 text-muted" href="#!" id="button-addon2"><i class="fa fa-smile"></i></button> --}}
-                                            <button type="button" class="btn btn-info btn-chart" id="button-addon2" style="color: #f5f6f7"><i class="fa fa-paper-plane"></i></button>
+                                            <button type="button" class="btn btn-info btn-chart" id="button-addon2" style="color: #f5f6f7">
+                                                <i class="fa fa-paper-plane"></i>
+                                            </button>
                                         </div>
                                         {{-- <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava6-bg.webp"
                                             alt="avatar 3" style="width: 40px; height: 100%;"> --}}
@@ -293,15 +319,25 @@
 
     </div> --}}
 @endsection
-@include('includs.script')
-@push('javascript')
-    <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
-    <link rel="icon" href="https://assets.edlin.app/favicon/favicon.ico" />
+{{-- @include('includs.script') --}}
+<script
+  src="https://code.jquery.com/jquery-1.8.2.min.js"
+  integrity="sha256-9VTS8JJyxvcUR+v+RTLTsd0ZWbzmafmlzMmeZO9RFyk="
+  crossorigin="anonymous"></script>
+  <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
+  <link rel="icon" href="https://assets.edlin.app/favicon/favicon.ico" />
+  <link rel="stylesheet" href="{{asset('/emojionearea/emojionearea.min.css') }}">
+  <script src="{{ asset('/emojionearea/emojionearea.min.js') }}"></script>
+{{-- @push('javascript') --}}
+   
     <!-- CSS -->
     <link rel="stylesheet" href="/style.css">
     <!-- End CSS -->
 
     <script>
+        // $(document).ready(function() {
+        //     $("#emojionearea1").emojioneArea();
+        // });
         const pusher = new Pusher('{{ config('broadcasting.connections.pusher.key') }}', {
             cluster: 'eu'
         });
@@ -338,4 +374,23 @@
                 });
             });
         });
+        function myFunction() {
+            // Declare variables
+            var input, filter, ul, li, a, i, txtValue;
+            input = document.getElementById('searchName');
+            filter = input.value.toUpperCase();
+            ul = document.getElementById("searchEmployee");
+            li = ul.getElementsByTagName('li');
+
+            // Loop through all list items, and hide those who don't match the search query
+            for (i = 0; i < li.length; i++) {
+                a = li[i].getElementsByTagName("a")[0];
+                txtValue = a.textContent || a.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                li[i].style.display = "";
+                } else {
+                li[i].style.display = "none";
+                }
+            }
+        }
     </script>

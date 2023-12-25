@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
     /**
+     * php artisan migrate:refresh --path=database/migrations/2023_09_13_062609_create_employee_status_histories_table.php
      * Run the migrations.
      *
      * @return void

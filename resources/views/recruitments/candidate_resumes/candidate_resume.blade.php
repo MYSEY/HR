@@ -17,11 +17,17 @@
                     </ul>
                 </div>
                 <div class="col-auto float-end ms-auto">
-                    <a href="#" class="btn add-btn" id="add_new" data-bs-toggle="modal" data-bs-target="#add_user"><i class="fa fa-plus"></i> @lang('lang.add_new')</a>
+                    @if (permissionAccess("m3-s1","is_import")->value == "1")
+                    <a href="#" class="btn add-btn" data-toggle="modal" id="import_new_cvs"><i class="fa fa-plus"></i>@lang('lang.import')</a>
+                    @endif
+                    @if (permissionAccess("m3-s1","is_create")->value == "1")
+                    <a href="#" class="btn add-btn me-2" id="add_new" data-bs-toggle="modal" data-bs-target="#add_user"><i class="fa fa-plus"></i> @lang('lang.add_new')</a>
+                    @endif
                 </div>
             </div>
         </div>
         {!! Toastr::message() !!}
+        @if (permissionAccess("m3-s1","is_view")->value == "1")
         <div class="">
             <div class="page-menu">
                 <div class="row">
@@ -33,7 +39,7 @@
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" data-bs-toggle="tab" id="btn_tab_short_list" href="#tab_short_list" aria-selected="false" role="tab" data-tab-id="2"
-                                    tabindex="-1">@lang('lang.shortlisted')(<span id="dataShortList">{{$dataShortList}})</span></a>
+                                    tabindex="-1">@lang('lang.shortlisted')(<span id="dataShortList">{{$dataShortList}}</span>)</a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" data-bs-toggle="tab" id="btn_not_tab_short_list" href="#tab_not_short_list" aria-selected="false" role="tab" data-tab-id="2"
@@ -64,7 +70,7 @@
                 @include('recruitments.candidate_resumes.table_by_tab')
             </div>
         </div>
-
+        @endif
         <!-- Delete training type Modal -->
         <div class="modal custom-modal fade" id="delete_candidate" role="dialog">
             <div class="modal-dialog modal-sm modal-dialog-centered">
@@ -93,7 +99,7 @@
         @include('recruitments.candidate_resumes.modal_form_create')
         @include('recruitments.candidate_resumes.modal_form_edit')
         @include('recruitments.candidate_resumes.modal_form_create_emp')
-        {{-- <input id="example" type="text"> --}}
+        @include('recruitments.candidate_resumes.import')
 
     </div>
 @endsection
@@ -103,6 +109,39 @@
 
 <script type="text/javascript">
     $(function(){
+        $("#import_new_cvs").on("click", function() {
+            $(".thanLess").hide();
+            $("#thanLess").text("");
+            $('#import_motor_cv').modal('show');
+        });
+        $("#position_applied, #e_position_applied").on("change", function() {
+            let position_type = $("#position_applied option:checked").attr('data-id');
+            let e_position_type = $("#e_position_applied option:checked").attr('data-id');
+            if (position_type == 1 || e_position_type == 1) {
+                $('#position_type').find('option').each(function(){
+                    if ($(this).attr('data-id') == "Supporting Staff") {
+                        $("#position_type").val($(this).val());
+                    }
+                }); 
+                $('#e_position_type').find('option').each(function(){
+                    if ($(this).attr('data-id') == "Supporting Staff") {
+                        $("#e_position_type").val($(this).val());
+                    }
+                }); 
+            }else{
+                $('#position_type').find('option').each(function(){
+                    if ($(this).attr('data-id') == "Field Staff") {
+                        $("#position_type").val($(this).val());
+                    }
+                });
+                $('#e_position_type').find('option').each(function(){
+                    if ($(this).attr('data-id') == "Field Staff") {
+                        $("#e_position_type").val($(this).val());
+                    }
+                });
+            }
+        });
+
         $("#btn_tab_short_list, #btn_not_tab_short_list").on("click", function(){
             let tab_status = $(this).attr('data-tab-id');
             showDatas(tab_status);
@@ -121,7 +160,7 @@
             let text_label = "";
             let button_ok = {
                         text: '@lang("lang.ok")',
-                        btnClass: 'btn-blue',
+                        btnClass: 'add-btn-status',
                         action: function () {
                             var id = this.$content.find('.id').val();
                             axios.post('{{ URL('recruitment/candidate-resume/createemp') }}', {
@@ -172,7 +211,7 @@
                     button_ok,
                     cancel: {
                         text: '@lang("lang.cancel")',
-                        btnClass: 'btn-red btn-sm',
+                        btnClass: 'btn-secondary btn-sm',
                     },
                 },
                 onContentReady: function () {
@@ -205,7 +244,7 @@
                 buttons: {
                     formSubmit: {
                         text: '@lang("lang.ok")',
-                        btnClass: 'btn-blue',
+                        btnClass: 'add-btn-status',
                         action: function () {
                             var id = this.$content.find('.id').val();
                             axios.post('{{ URL('recruitment/candidate-resume/status') }}', {
@@ -234,7 +273,7 @@
                     },
                     cancel: {
                         text: '@lang("lang.cancel")',
-                        btnClass: 'btn-red btn-sm',
+                        btnClass: 'btn-secondary btn-sm',
                     },
                 },
                 onContentReady: function () {
@@ -248,9 +287,11 @@
         });
         $('.delete').on('click', function() {
             var _this = $(this).parents('tr');
-            $('.e_id').val(_this.find('.ids').text());
+            let id = $(this).data('id');
+            $('.e_id').val(id);
         });
         $(document).on('click','.update', function(){
+            var localeLanguage = '{{ config('app.locale') }}';
             let id = $(this).data("id");
             $("#e_id").val(id);
             $.ajax({
@@ -266,8 +307,9 @@
                             $('#e_position_applied').html('');
                             $.each(response.position, function(i, item) {
                                 $('#e_position_applied').append($('<option>', {
+                                    "data-id" : item.position_type_number,
                                     value: item.id,
-                                    text: item.name_english,
+                                    text: localeLanguage == 'en' ? item.name_english : item.name_khmer,
                                     selected: item.id == response.success.position_applied
                                 }));
                             });
@@ -277,23 +319,35 @@
                             $.each(response.branch, function(i, item) {
                                 $('#e_location_applied').append($('<option>', {
                                     value: item.id,
-                                    text: item.branch_name_en,
+                                    text: localeLanguage == 'en' ? item.branch_name_en : item.branch_name_kh,
                                     selected: item.id == response.success.location_applied
                                 }));
                             });
                         }
+                        if (response.optionPositionType != '') {
+                        $.each(response.optionPositionType, function(i, item) {
+                            $('#e_position_type').append($('<option>', {
+                                "data-id" : item.name_english,
+                                value: item.id,
+                                text: localeLanguage == 'en' ? item.name_english : item.name_khmer,
+                                selected: item.id == response.success.position_type
+                            }));
+                        });
+                    }
                         if (response.gender != '') {
                             $('#e_gender').html('');
                             $.each(response.gender, function(i, item) {
                                 $('#e_gender').append($('<option>', {
                                     value: item.id,
-                                    text: item.name_english,
+                                    text: localeLanguage == 'en' ? item.name_english : item.name_khmer,
                                     selected: item.id == response.success.gender
                                 }));
                             });
                         }
-                        $('#e_name_kh').val(response.success.name_kh);
-                        $('#e_name_en').val(response.success.name_en);
+                        $('#e_last_name_kh').val(response.success.last_name_kh);
+                        $('#e_first_name_kh').val(response.success.first_name_kh);
+                        $('#e_last_name_en').val(response.success.last_name_en);
+                        $('#e_first_name_en').val(response.success.first_name_en);
                         $('#e_current_position').val(response.success.current_position);
                         $('#e_companey_name').val(response.success.companey_name);
                         $('#e_current_address').val(response.success.current_address);
@@ -372,7 +426,7 @@
                     buttons: {
                         confirm: {
                             text: '@lang("lang.submit")',
-                            btnClass: 'btn-blue',
+                            btnClass: 'add-btn-status',
                             action: function() {
                                 var c_status = this.$content.find('.status').val();
                                 var short_list = this.$content.find('.showtList').val();
@@ -437,7 +491,7 @@
                         },
                         cancel: {
                             text: '@lang("lang.cancel")',
-                            btnClass: 'btn-red btn-sm',
+                            btnClass: 'btn-secondary btn-sm',
                         },
                     }
                 }); 
@@ -533,7 +587,7 @@
                     buttons: {
                         confirm: {
                             text: '@lang("lang.submit")',
-                            btnClass: 'btn-blue',
+                            btnClass: 'add-btn-status',
                             action: function() {
                                 var status = this.$content.find('.status').val();
                                 var joined_interview = this.$content.find('.joined_interview').val();
@@ -592,7 +646,7 @@
                         },
                         cancel: {
                             text: '@lang("lang.cancel")',
-                            btnClass: 'btn-red btn-sm',
+                            btnClass: 'btn-secondary btn-sm',
                         },
                     }
                 }); 
@@ -620,7 +674,7 @@
                     buttons: {
                         confirm: {
                             text: '@lang("lang.submit")',
-                            btnClass: 'btn-blue',
+                            btnClass: 'add-btn-status',
                             action: function() {
                                 var status = this.$content.find('.status').val();
                                 var contract_date = this.$content.find('.contract_date').val();
@@ -666,7 +720,7 @@
                         },
                         cancel: {
                             text: '@lang("lang.cancel")',
-                            btnClass: 'btn-red btn-sm',
+                            btnClass: 'btn-secondary btn-sm',
                         },
                     },
                     onContentReady: function () {
@@ -681,6 +735,11 @@
         });
     });
     function showDatas(btn_tab){
+        let is_update = "{{ Helper::permissionAccess('m3-s1','is_update') }}";
+        let is_delete = "{{ Helper::permissionAccess('m3-s1','is_delete') }}";
+        let is_cancel = "{{ Helper::permissionAccess('m3-s1','is_cancel') }}";
+        let is_print = "{{ Helper::permissionAccess('m3-s1','is_print') }}";
+        let is_approve = "{{ Helper::permissionAccess('m3-s1','is_approve') }}";
         var status_tab = btn_tab;
         $.ajax({
             type: "GET",
@@ -725,11 +784,19 @@
                                         '<a href="{{asset("/uploads/images")}}/'+(staff.cv)+'" target="_blank" class="subdrop"><i class="la la-file-pdf"></i> <span>@lang("lang.preview_cv")</span></a>'+
                                     '</small>'
                             }
+                            let dropdown_menu = '<a class="btn btn-white btn-sm btn-rounded" href="#">'+
+                                                    (tag_i)+ '<span>'+(text_status)+'</span>'+
+                                                '</a>';
+                                if (is_update == 1) {
+                                    dropdown_menu = '<a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">'+
+                                                    (tag_i)+ '<span>'+(text_status)+'</span>'+
+                                                '</a>';
+                                }
                             if (staff.short_list == 1) {
                                 tr += '<tr class="odd">'+
-                                    '<td class="ids">'+(num)+'</td>'+
-                                    '<td >'+(staff.name_kh)+' </td>'+
-                                    '<td >'+(staff.name_en)+'</td>'+
+                                    '<td class="ids stuck-scroll-3">'+(num)+'</td>'+
+                                    '<td class="stuck-scroll-3">'+(staff.name_kh)+' </td>'+
+                                    '<td class="stuck-scroll-3">'+(staff.name_en)+'</td>'+
                                     '<td >'+(staff.option.name_english)+'</td>'+
                                     '<td >'+(staff.position.name_english)+'</td>'+
                                     '<td >'+(staff.branch.branch_name_en)+'</td>'+
@@ -739,13 +806,8 @@
                                     '<td >'+(staff.committee_interview ? staff.committee_interview : "")+'</td>'+
                                     '<td >'+
                                         '<div class="dropdown action-label">'+
-                                            '<a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">'+
-                                                (tag_i)+ '<span>'+(text_status)+'</span>'+
-                                            '</a>'+
+                                           (dropdown_menu)+
                                             '<div class="dropdown-menu dropdown-menu-right" id="btn-status">'+
-                                                // '<a class="dropdown-item" data-emp-id="'+(staff.id)+'"  data-id="2" href="#">'+
-                                                //     '<i class="fa fa-dot-circle-o text-warning"></i> Shortlisted'+
-                                                // '</a>'+
                                                 '<a class="dropdown-item" data-emp-id="'+(staff.id)+'"  data-id="3" data-id-short="shortlist"  href="#">'+
                                                     '<i class="fa fa-dot-circle-o text-info"></i> @lang("lang.interviewed")'+
                                                 '</a>'+
@@ -759,10 +821,11 @@
                                 '</tr>';
                                 num ++;
                             }else if (staff.short_list == 2) {
+                               
                                 tr_not_list += '<tr class="odd">'+
-                                    '<td class="ids">'+(num)+'</td>'+
-                                    '<td >'+(staff.name_kh)+' </td>'+
-                                    '<td >'+(staff.name_en)+'</td>'+
+                                    '<td class="ids stuck-scroll-3">'+(num)+'</td>'+
+                                    '<td class="stuck-scroll-3">'+(staff.name_kh)+' </td>'+
+                                    '<td class="stuck-scroll-3">'+(staff.name_en)+'</td>'+
                                     '<td >'+(staff.option.name_english)+'</td>'+
                                     '<td >'+(staff.position.name_english)+'</td>'+
                                     '<td >'+(staff.branch.branch_name_en)+'</td>'+
@@ -771,15 +834,13 @@
                                     '</td>'+
                                     '<td >'+
                                         '<div class="dropdown action-label">'+
-                                            '<a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">'+
-                                                (tag_i)+ '<span>'+(text_status)+'</span>'+
-                                            '</a>'+
+                                            (dropdown_menu)+
                                             '<div class="dropdown-menu dropdown-menu-right" id="btn-status">'+
                                                 '<a class="dropdown-item" data-emp-id="'+(staff.id)+'"  data-id="2" data-id-short="non-shortlist" href="#">'+
                                                     '<i class="fa fa-dot-circle-o text-warning"></i> @lang("lang.shortlisted")'+
                                                 '</a>'+
                                             '</div>'+
-                                        '</div>'+
+                                        '</div>'
                                     '</td>'+
                                     '<td>'+(staff.remark ? staff.remark: "")+'</td>'+
                                 '</tr>';
@@ -806,10 +867,16 @@
                             let status_show_failed = "";
                             let interviewed_date = staff_result.interviewed_date ? moment(staff_result.interviewed_date).format('MMM-D-YYYY') : "";
                             if (staff_result.interviewed_result == "5") {
+                                let dropdown_menu = '<a class="btn btn-white btn-sm btn-rounded" href="#">'+
+                                                    '<i class="fa fa-dot-circle-o text-info"></i><span>@lang("lang.interviewed")</span>'+
+                                                '</a>';
+                                if (is_update == 1) {
+                                    dropdown_menu =  '<a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">'+
+                                                    '<i class="fa fa-dot-circle-o text-info"></i><span>@lang("lang.interviewed")</span>'+
+                                                '</a>';
+                                }
                                 status_show_failed = '<div class="dropdown action-label">'+
-                                            '<a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">'+
-                                                '<i class="fa fa-dot-circle-o text-info"></i><span>@lang("lang.interviewed")</span>'+
-                                            '</a>'+
+                                           (dropdown_menu)+
                                             '<div class="dropdown-menu dropdown-menu-right" id="btn-status">'+
                                                 '<a class="dropdown-item" data-emp-id="'+(staff_result.id)+'"  data-id="6" data-status="'+(staff_result.status)+'" href="#">'+
                                                     '<i class="fa fa-dot-circle-o text-info"></i> @lang("lang.interviewed")'+
@@ -820,9 +887,9 @@
                                 status_show_failed = interview_result;
                             }
                             tr_failed += '<tr class="odd">'+
-                                '<td class="ids">'+(num)+'</td>'+
-                                '<td >'+(staff_result.name_kh )+'</td>'+
-                                '<td >'+(staff_result.name_en)+'</td>'+
+                                '<td class="ids stuck-scroll-3">'+(num)+'</td>'+
+                                '<td class="stuck-scroll-3">'+(staff_result.name_kh )+'</td>'+
+                                '<td class="stuck-scroll-3">'+(staff_result.name_en)+'</td>'+
                                 '<td >'+(staff_result.option.name_english)+'</td>'+
                                 '<td >'+(staff_result.position.name_english)+'</td>'+
                                 '<td >'+(staff_result.branch.branch_name_en)+'</td>'+
@@ -863,10 +930,16 @@
                                             '<i class="fa fa-dot-circle-o text-success"></i> @lang("lang.complete")'+
                                         '</a>';
                             }
-                            status_show = '<div class="dropdown action-label">'+
-                                            '<a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">'+
+                            let dropdown_menu = '<a class="btn btn-white btn-sm btn-rounded" href="#">'+
+                                                    (tag_i)+ '<span>'+(text_status)+'</span>'+
+                                                '</a>';
+                            if (is_update == 1) {
+                                dropdown_menu = '<a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">'+
                                                 (tag_i)+ '<span>'+ (text_status)+'</span>'+
-                                            '</a>'+
+                                            '</a>';
+                            }
+                            status_show = '<div class="dropdown action-label">'+
+                                            (dropdown_menu)+
                                             '<div class="dropdown-menu dropdown-menu-right" id="btn-status">'+
                                                 '<a class="dropdown-item" data-emp-id="'+(staff_result.id)+'"  data-id="3" data-status="'+(staff_result.status)+'" href="#">'+
                                                     '<i class="fa fa-dot-circle-o text-info"></i> @lang("lang.interviewed")'+
@@ -875,9 +948,9 @@
                                             '</div>'+
                                         '</div>';
                             tr_re += ' <tr class="odd">'+
-                                '<td class="ids">'+(num)+'</td>'+
-                                '<td >'+(staff_result.name_kh )+'</td>'+
-                                '<td >'+(staff_result.name_en)+'</td>'+
+                                '<td class="ids stuck-scroll-3">'+(num)+'</td>'+
+                                '<td class="stuck-scroll-3">'+(staff_result.name_kh )+'</td>'+
+                                '<td class="stuck-scroll-3">'+(staff_result.name_en)+'</td>'+
                                 '<td >'+(staff_result.option.name_english)+'</td>'+
                                 '<td >'+(staff_result.position.name_english)+'</td>'+
                                 '<td >'+(staff_result.branch.branch_name_en)+'</td>'+
@@ -902,9 +975,9 @@
                             if (staff_result.status == "Cancel") {
                                 action = "";
                                 tr_ct_cancel += ' <tr class="odd">'+
-                                    '<td class="ids">'+(num)+'</td>'+
-                                    '<td class="name_kh" >'+(staff_result.name_kh )+'</td>'+
-                                    '<td class="name_en">'+(staff_result.name_en)+'</td>'+
+                                    '<td class="ids stuck-scroll-3">'+(num)+'</td>'+
+                                    '<td class="name_kh stuck-scroll-3" >'+(staff_result.name_kh )+'</td>'+
+                                    '<td class="name_en stuck-scroll-3">'+(staff_result.name_en)+'</td>'+
                                     '<td class="gender_name_english"><input type="text" class="gender_id" data-gender="'+(staff_result.gender)+'" hidden>'+(staff_result.option.name_english)+'</td>'+
                                     '<td class="position" ><input type="text" class="position_id" data-postion="'+(staff_result.position_applied)+'" hidden>'+(staff_result.position.name_english)+'</td>'+
                                     '<td class="branch"><input type="text" class="branch_id" data-branch="'+(staff_result.location_applied)+'" hidden>'+(staff_result.branch.branch_name_en)+'</td>'+
@@ -921,10 +994,42 @@
                                 if (staff_result.id_card_number && staff_result.position_type && staff_result.department_id) {
                                     dataAprove = true;
                                 }
+                                let dropdown_action = "";
+                                let cancel = "";
+                                let approve = "";
+                                let print = "";
+                                if (is_print == 1 || is_approve == 1 || is_cancel == 1) {
+                                    if (is_print == 1 ) {
+                                        print = '<a class="dropdown-item btn_print_signed_contract" href="#" data-print-status="4" data-id="'+(staff_result.id)+'">'+
+                                                    '<i class="fa fa-print fa-lg m-r-5"></i> @lang("lang.print")'+
+                                                '</a>';
+                                    }
+                                    if (is_approve == 1) {
+                                        approve =  '<a class="btn btn-sm dropdown-item btn_approve" href="#" data-id-card="'+(dataAprove)+'" data-id="'+(staff_result.id)+'">'+
+                                                    '<i class="fa fa-dot-circle-o text-success"></i>'+
+                                                    '<span> @lang("lang.approve")</span>'+
+                                                '</a>';
+                                    }
+                                    if (is_cancel) {
+                                        cancel = '<a class="dropdown-item btn_cancel text-danger" href="#" data-id="'+(staff_result.id)+'">'+
+                                                    '  <span aria-hidden="true">&times;</span> @lang("lang.cancel")'+
+                                                '</a>';
+                                    }
+                                    dropdown_action = '<div class="dropdown dropdown-action">'+
+                                            '<a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">'+
+                                                '<i class="material-icons">more_vert</i>'+
+                                            '</a>'+
+                                            '<div class="dropdown-menu dropdown-menu-right">'+
+                                                (print)+
+                                                (approve)+
+                                                (cancel)+
+                                            '</div>'+
+                                        '</div>';
+                                }
                                 tr_ct += ' <tr class="odd">'+
-                                    '<td class="ids">'+(num)+'</td>'+
-                                    '<td class="name_kh" >'+(staff_result.name_kh )+'</td>'+
-                                    '<td class="name_en">'+(staff_result.name_en)+'</td>'+
+                                    '<td class="ids stuck-scroll-3">'+(num)+'</td>'+
+                                    '<td class="name_kh stuck-scroll-3" >'+(staff_result.name_kh )+'</td>'+
+                                    '<td class="name_en stuck-scroll-3">'+(staff_result.name_en)+'</td>'+
                                     '<td class="gender_name_english"><input type="text" class="gender_id" data-gender="'+(staff_result.gender)+'" hidden>'+(staff_result.option.name_english)+'</td>'+
                                     '<td class="position" ><input type="text" class="position_id" data-postion="'+(staff_result.position_applied)+'" hidden>'+(staff_result.position.name_english)+'</td>'+
                                     '<td class="branch"><input type="text" class="branch_id" data-branch="'+(staff_result.location_applied)+'" hidden>'+(staff_result.branch.branch_name_en)+'</td>'+
@@ -934,23 +1039,7 @@
                                     '<td >'+(staff_result.remark ? staff_result.remark: "")+'</td>'+
                                     '<td>'+
                                         '<input type="text" class="phone_number" data-phone-number="'+(staff_result.contact_number)+'" hidden>'+
-                                        '<div class="dropdown dropdown-action">'+
-                                            '<a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">'+
-                                                '<i class="material-icons">more_vert</i>'+
-                                            '</a>'+
-                                            '<div class="dropdown-menu dropdown-menu-right">'+
-                                                '<a class="dropdown-item btn_print_signed_contract" href="#" data-print-status="4" data-id="'+(staff_result.id)+'">'+
-                                                    '<i class="fa fa-print fa-lg m-r-5"></i> @lang("lang.print")'+
-                                                '</a>'+
-                                                '<a class="btn btn-sm dropdown-item btn_approve" href="#" data-id-card="'+(dataAprove)+'" data-id="'+(staff_result.id)+'">'+
-                                                    '<i class="fa fa-dot-circle-o text-success"></i>'+
-                                                    '<span> @lang("lang.approve")</span>'+
-                                                '</a>'+
-                                                '<a class="dropdown-item btn_cancel text-danger" href="#" data-id="'+(staff_result.id)+'">'+
-                                                    '  <span aria-hidden="true">&times;</span> @lang("lang.cancel")'+
-                                                '</a>'+
-                                            '</div>'+
-                                        '</div>'+
+                                        (dropdown_action)+
                                     '</td>'+
                                 '</tr>';
                                 num ++;

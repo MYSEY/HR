@@ -41,7 +41,7 @@ class ExportMotorRentel implements FromCollection, WithColumnWidths, WithHeading
             $this->totaPriceMotor += $value->amount_price_motor_rentel;
             $this->totaPriceTaplab += $value->amount_price_taplab_rentel;
             // $this->totalTaxFee += (($value->amount_price_motor_rentel * $value->tax_rate) / 100);
-            $this->totalAmount += $value->amount_price_engine_oil + ($value->amount_price_motor_rentel - ($value->amount_price_motor_rentel * $value->tax_rate) / 100) + ($value->amount_price_taplab_rentel - ($value->amount_price_taplab_rentel * $value->tax_rate) / 100 );
+            $this->totalAmount += ($value->total_gasoline * $value->total_work_day * $value->gasoline_price_per_liter) + $value->amount_price_engine_oil + ($value->amount_price_motor_rentel - ($value->amount_price_motor_rentel * $value->tax_rate) / 100) + ($value->amount_price_taplab_rentel - ($value->amount_price_taplab_rentel * $value->tax_rate) / 100 );
             $dataExport[] = [
                 "number" => $i,
                 "number_employee" => $value->MotorEmployee->number_employee,
@@ -61,14 +61,13 @@ class ExportMotorRentel implements FromCollection, WithColumnWidths, WithHeading
                 "total_gasoline" => $value->total_gasoline,
                 "total_work_day" => $value->total_work_day,
                 "total_gasoline_liters" => $value->total_gasoline * $value->total_work_day,
-                "price_engine_oil" => number_format($amount_real, 2),
-                "total_price_gasoline" => $value->amount_price_engine_oil,
-                "price_motor_rentel" => $value->amount_price_motor_rentel,
-                // "taplab_rentel" => $value->taplab_rentel,
-                "price_taplab_rentel" => $value->amount_price_taplab_rentel,
+                "price_engine_oil" => number_format($amount_real),
+                "total_price_gasoline" => number_format($value->amount_price_engine_oil),
+                "price_motor_rentel" => number_format($value->amount_price_motor_rentel),
+                "price_taplab_rentel" => number_format($value->amount_price_taplab_rentel),
                 "tax_rate" => $value->tax_rate,
                 // "taxes_on_fees" =>  ($value->amount_price_motor_rentel * $value->tax_rate) / 100,
-                "amount" => $value->amount_price_engine_oil + ($value->amount_price_motor_rentel - ($value->amount_price_motor_rentel * $value->tax_rate) / 100) + ($value->amount_price_taplab_rentel - ($value->amount_price_taplab_rentel * $value->tax_rate) / 100 ),
+                "amount" => ($value->total_gasoline * $value->total_work_day * $value->gasoline_price_per_liter) + $value->amount_price_engine_oil + ($value->amount_price_motor_rentel - ($value->amount_price_motor_rentel * $value->tax_rate) / 100) + ($value->amount_price_taplab_rentel - ($value->amount_price_taplab_rentel * $value->tax_rate) / 100 ),
                 "resigned_date" =>$value->resigned_date,
             ];
         }
@@ -188,37 +187,39 @@ class ExportMotorRentel implements FromCollection, WithColumnWidths, WithHeading
                 $sheet->setCellValue('Q'.$fromMerge, "សរុប");
                 $sheet->getDelegate()->getStyle("Q".$fromMerge.':R'.$toMerge)->getFont()->setName('Khmer OS Muol Light')
                             ->setSize(9);
-
-                $resigned = $this->resignedDate + 6;
-                $event->sheet->getDelegate()->getStyle('A'.$resigned.':Z'.$resigned)
-                            ->getFill()
-                            ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
-                            ->getStartColor()
-                            ->setARGB('fcd5b4');
-
+                
+                if ($this->resignedDate) {
+                    $resigned = $this->resignedDate + 6;
+                    $event->sheet->getDelegate()->getStyle('A'.$resigned.':Z'.$resigned)
+                    ->getFill()
+                    ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+                    ->getStartColor()
+                    ->setARGB('fcd5b4');
+                }
+                
                 $event->sheet->getDelegate()->getStyle("Q".$fromMerge.':R'.$toMerge)
                 ->getAlignment()
                 ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
                 //set value to body
-                $sheet->setCellValue("S".$fromMerge, number_format($this->totalGagolineAmount,2));
+                $sheet->setCellValue("S".$fromMerge, number_format($this->totalGagolineAmount));
                 $sheet->getDelegate()->getStyle("S".$fromMerge)->getFont()->setName('Khmer OS Battambang')
                 ->setSize(9)->setBold("S".$fromMerge);
-                $sheet->setCellValue("T".$fromMerge, number_format($this->totalAmountMotor,2));
+                $sheet->setCellValue("T".$fromMerge, number_format($this->totalAmountMotor));
                 $sheet->getDelegate()->getStyle("T".$fromMerge)->getFont()->setName('Khmer OS Battambang')
                 ->setSize(9)->setBold("T".$fromMerge);
-                $sheet->setCellValue("U".$fromMerge, number_format($this->totaPriceMotor,2));
+                $sheet->setCellValue("U".$fromMerge, number_format($this->totaPriceMotor));
                 $sheet->getDelegate()->getStyle("U".$fromMerge)->getFont()->setName('Khmer OS Battambang')
                 ->setSize(9)->setBold("U".$fromMerge);
 
-                $sheet->setCellValue("V".$fromMerge, number_format( $this->totaPriceTaplab,2));
+                $sheet->setCellValue("V".$fromMerge, number_format( $this->totaPriceTaplab));
                 $sheet->getDelegate()->getStyle("V".$fromMerge)->getFont()->setName('Khmer OS Battambang')
                 ->setSize(9)->setBold("V".$fromMerge);
 
                 // $sheet->setCellValue("V".$fromMerge, number_format($this->totalTaxFee,2));
                 // $sheet->getDelegate()->getStyle("V".$fromMerge)->getFont()->setName('Khmer OS Battambang')
                 // ->setSize(9)->setBold("V".$fromMerge);
-                $sheet->setCellValue("X".$fromMerge, number_format($this->totalAmount,2));
+                $sheet->setCellValue("X".$fromMerge, number_format($this->totalAmount));
                 $sheet->getDelegate()->getStyle("X".$fromMerge)->getFont()->setName('Khmer OS Battambang')
                 ->setSize(9)->setBold("X".$fromMerge);
             },
@@ -247,13 +248,12 @@ class ExportMotorRentel implements FromCollection, WithColumnWidths, WithHeading
                 "ចំនួនថ្ងៃបានធ្វើការ",
                 "ចំនួនលីត្រ",
                 "ចំនួនជារៀល",
-                "ថ្លៃទិញប្រេងម៉ាស៊ីន",
-                "ថ្លៃឈ្នួលម៉ូតូ ដុល្លារ/USD",
-                // "Taplabs",
-                "ថ្លៃឈ្នួល Taplabs ដុល្លារ/USD",
+                "ថ្លៃទិញប្រេងម៉ាស៊ីន រៀល/Kh",
+                "ថ្លៃឈ្នួលម៉ូតូ រៀល/Kh",
+                "ថ្លៃឈ្នួល Taplabs រៀល/Kh",
                 "អត្រាជាប់ពន្ធ (%)",
                 // "ពន្ធលើថ្លៃឈ្នួល",
-                "ប្រាក់ទទួលបានបន្ទាប់ពីដកពន្ធ",
+                "ប្រាក់ទទួលបានបន្ទាប់ពីដកពន្ធ រៀល/Kh",
                 "ថ្ងៃធ្វើការចុងក្រោយ",
                 "សម្គាល់នៃកិច្ចសន្យា",
         ];

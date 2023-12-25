@@ -41,7 +41,9 @@
                     <div class="btn-group btn-group-sm">
                         {{-- <button class="btn btn-white">CSV</button>
                         <button class="btn btn-white">PDF</button> --}}
+                        @if (permissionAccess("m4-s2","is_print")->value == "1")
                         <button class="btn btn-white" target="_blank" id="btn_print_payroll"><i class="fa fa-print fa-lg"></i> @lang('lang.print')</button>
+                        @endif
                     </div>
                 </div>
             </div>

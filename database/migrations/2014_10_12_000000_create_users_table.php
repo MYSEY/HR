@@ -20,12 +20,17 @@ class CreateUsersTable extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('number_employee')->nullable();
+            $table->string('last_name_kh');
+            $table->string('first_name_kh');
+            $table->string('last_name_en');
+            $table->string('first_name_en');
             $table->string('employee_name_kh');
             $table->string('employee_name_en');
             $table->integer('gender')->nullable();
             $table->date('date_of_birth')->nullable();
             $table->integer('spouse')->nullable();
             $table->string('id_card_number')->nullable();
+            $table->string('id_number_nssf')->nullable();
             $table->string('department_id')->nullable();
             $table->string('position_id')->nullable();
             $table->integer('branch_id')->nullable();
@@ -36,8 +41,7 @@ class CreateUsersTable extends Migration
             $table->date('date_of_commencement')->nullable();
             $table->decimal('pre_salary',50,2)->default(0);
             $table->decimal('basic_salary',50,2)->default(0);
-            $table->decimal('salary_increas',50,2)->default(0);
-            $table->decimal('total_current_salary',50,2)->nullable();
+            $table->integer('salary_increas')->nullable();
             $table->date('change_date')->nullable();
             $table->integer('phone_allowance')->nullable();
             $table->string('email_verified_at')->nullable();
@@ -45,12 +49,16 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->string('position_type')->nullable();
             $table->string('nationality')->nullable();
+            $table->string('ethnicity')->nullable();
             $table->longText('guarantee_letter')->nullable();
             $table->longText('employment_book')->nullable();
             $table->string('identity_type')->nullable();
             $table->integer('identity_number')->nullable();
             $table->date('issue_date')->nullable();
             $table->date('issue_expired_date')->nullable();
+            $table->boolean('type_of_employees_nssf')->nullable();
+            $table->boolean('spouse_nssf')->nullable();
+            $table->boolean('status_nssf')->nullable();
             $table->string('current_province')->nullable();
             $table->string('current_district')->nullable();
             $table->string('current_commune')->nullable();
@@ -69,6 +77,7 @@ class CreateUsersTable extends Migration
             $table->string('marital_status')->nullable();
             $table->date('fdc_date')->nullable();
             $table->date('fdc_end')->nullable();
+            $table->date('udc_end_date')->nullable();
             $table->date('resign_date')->nullable();
             $table->string('resign_reason')->nullable();
             $table->string('remark')->nullable();
@@ -78,6 +87,7 @@ class CreateUsersTable extends Migration
             $table->boolean('users_permission')->nullable();
             $table->string('status')->nullable();
             $table->string('emp_status')->nullable();
+            $table->string('p_status')->nullable();
             $table->boolean('is_loan')->nullable();
             $table->string('type')->nullable();
             $table->unsignedBigInteger('created_by')->nullable();
@@ -89,36 +99,36 @@ class CreateUsersTable extends Migration
 
         DB::table('users')->insert(
             [
-                'number_employee'=>'230-0000',
-                'employee_name_kh'=>'Developer',
-                'employee_name_en'=>'Developer',
-                'email'=>'administrator@gmail.com',
-                'password'=>Hash::make('ASDasd12345$$'),
-                'role_id'=>'1',
-                'users_permission'=>1,
-                'status'=> 'Active',
-                'profile'=>'',
-                'created_at'=>now(),
-                'updated_at'=>now(),
-                'created_by'    => Auth::id(),
+                [
+                    'number_employee'=>'000-0000',
+                    'employee_name_kh'=>'Developer',
+                    'employee_name_en'=>'Developer',
+                    'email'=>'administrator@gmail.com',
+                    'password'=>Hash::make('ASDasd12345$$'),
+                    'role_id'=>'2',
+                    'users_permission'=>1,
+                    'status'=> 'Active',
+                    'profile'=>'',
+                    'created_at'=>now(),
+                    'updated_at'=>now(),
+                    'created_by'    => Auth::id(),
+                ],
+                [
+                    'number_employee'=>'230-0000',
+                    'employee_name_kh'=>'Administrator',
+                    'employee_name_en'=>'Administrator',
+                    'email'=>'administrator@gmail.com',
+                    'password'=>Hash::make('Camma@123'),
+                    'role_id'=>'1',
+                    'users_permission'=>1,
+                    'status'=> 'Active',
+                    'profile'=>'',
+                    'created_at'=>now(),
+                    'updated_at'=>now(),
+                    'created_by'    => Auth::id(),
+                ]
             ]
         );
-
-        $tables=DB::select("select * from tables");
-        foreach($tables as $value){
-            for($i=1;$i<=6;$i++){
-                DB::table('permissions')->insert(
-                    [
-                        'table_id'=>$value->id,
-                        'role_id'=>1,
-                        'permission_type_id'=>$i,
-                        'status'=>1,
-                        'created_at'=>now(),
-                        'updated_at'=>now()
-                    ]
-                );
-            }
-        }
     }
 
     /**

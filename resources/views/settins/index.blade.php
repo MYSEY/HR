@@ -42,7 +42,7 @@
                                     <img src="{{asset('/admin/img/logo/aa15d5f1-6051-4731-85c3-9f8e7dbc4b88.jfif')}}" style="width: 30%" alt="Dreamguy&#39;s Technologies">
                                 </div>
                                 <h3 class="account-title">@lang('lang.forgot_password?')</h3>
-                                <p class="account-subtitle" style="font-size: 17px !important">@lang('lang.enter_your_employee_id_to_get_a_password_reset_link')</p>
+                                <p class="account-subtitle" style="font-size: 12px !important">@lang('lang.enter_your_employee_id_to_get_a_password_reset_link')</p>
                                 {!! Toastr::message() !!}
 
                                 <form method="POST" action="{{ url('update/password') }}">
@@ -77,7 +77,9 @@
                                         </div>
                                     </div>
                                     <div class="form-group text-center">
+                                        @if (permissionAccess("m9-s5","is_create")->value == "1")
                                         <button class="btn btn-primary account-btn submit-btn" type="submit">@lang('lang.reset_password')</button>
+                                        @endif
                                     </div>
                                     <div class="account-footer">
                                         <p>@lang('lang.remember_your_password')? <a href="{{url('/')}}">@lang('lang.login')</a></p>

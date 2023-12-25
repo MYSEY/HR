@@ -14,48 +14,65 @@
                         <label class="navbar-brand custom-navbar-brand mb-0" style="width: 100%; background: #dfe6e9; padding: 6px;font-size: 15px;font-weight: normal !important;">@lang('lang.position')</label>
                     </div>
                     
-                    <div class="form-group">
-                        <label>@lang('lang.promoted_from')</label>
-                        @if (count($empPromoted) > 0)
-                            <input class="form-control" type="text" id="e_posit_id" name="posit_id" value="{{$empPromoted[0]->department_promoted_to}}" readonly="">
-                        @else
-                            <input class="form-control" type="text" id="e_posit_id" name="posit_id" value="{{$data->EmployeePosition}}" readonly="">
-                        @endif
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>@lang('lang.promoted_from')</label>
+                                @if (count($empPromoted) > 0)
+                                    <input class="form-control" type="text" id="e_posit_id" name="posit_id" value="{{$empPromoted[0]->department_promoted_to}}" readonly="">
+                                @else
+                                    <input class="form-control" type="text" id="e_posit_id" name="posit_id" value="{{$data->EmployeePosition}}" readonly="">
+                                @endif
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group hr-form-group-select2">
+                                <label>@lang('lang.promoted_to')<span class="text-danger">*</span></label>
+                                <select class="form-control form-select hr-select2-option requered" id="e_position_promoted_to" name="position_promoted_to" required>
+                                    <option value="">-- @lang('lang.select') --</option>
+                                    @if (count($position)>0)
+                                        @foreach ($position as $item)
+                                            <option value="{{Helper::getLang() == 'en' ? $item->name_english :  $item->name_khmer}}">{{Helper::getLang() == 'en' ? $item->name_english : $item->name_khmer}}</option>
+                                        @endforeach
+                                    @endif
+                                </select>
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-group hr-form-group-select2">
-                        <label>@lang('lang.promoted_to') <span class="text-danger">*</span></label>
-                        <select class="form-control form-select hr-select2-option requered" id="e_position_promoted_to" name="position_promoted_to" required>
-                            <option value="">-- @lang('lang.select') --</option>
-                            @if (count($position)>0)
-                                @foreach ($position as $item)
-                                    <option value="{{Helper::getLang() == 'en' ? $item->name_english :  $item->name_khmer}}">{{Helper::getLang() == 'en' ? $item->name_english : $item->name_khmer}}</option>
-                                @endforeach
-                            @endif
-                        </select>
-                    </div>
+                    
 
                     <div class="form-group col-md-12 col-12" element="div" bp-field-wrapper="true" bp-field-name="Identity" bp-field-type="custom_html">
                         <label class="navbar-brand custom-navbar-brand mb-0" style="width: 100%; background: #dfe6e9; padding: 6px;font-size: 15px;font-weight: normal !important;">@lang('lang.department')</label>
                     </div>
-                    <div class="form-group">
-                        <label>@lang('lang.promoted_from')</label>
-                        <input class="form-control" type="text" id="e_depart_id" name="depart_id" value="{{$data->EmployeeDepartment}}" readonly="">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>@lang('lang.promoted_from')</label>
+                                <input class="form-control" type="text" id="e_depart_id" name="depart_id" value="{{$data->EmployeeDepartment}}" readonly="">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group hr-form-group-select2">
+                                <label>@lang('lang.promoted_to')<span class="text-danger">*</span></label>
+                                <select class="form-control form-select hr-select2-option requered" id="e_department_promoted_to" name="department_promoted_to" required>
+                                    <option value="">-- @lang('lang.select')  --</option>
+                                    @if (count($department)>0)
+                                        @foreach ($department as $item)
+                                            <option value="{{Helper::getLang() == 'en' ? $item->name_english: $item->name_khmer}}">{{Helper::getLang() == 'en' ? $item->name_english : $item->name_khmer}}</option>
+                                        @endforeach
+                                    @endif
+                                </select>
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-group hr-form-group-select2">
-                        <label>@lang('lang.promoted_to') <span class="text-danger">*</span></label>
-                        <select class="form-control form-select hr-select2-option requered" id="e_department_promoted_to" name="department_promoted_to" required>
-                            <option value="">-- @lang('lang.select')  --</option>
-                            @if (count($department)>0)
-                                @foreach ($department as $item)
-                                    <option value="{{Helper::getLang() == 'en' ? $item->name_english: $item->name_khmer}}">{{Helper::getLang() == 'en' ? $item->name_english : $item->name_khmer}}</option>
-                                @endforeach
-                            @endif
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>@lang('lang.promoted_date') <span class="text-danger">*</span></label>
-                        <div class="cal-icon">
-                            <input type="text" id="e_promote_date" name="promote_date" class="form-control datetimepicker" required>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>@lang('lang.promoted_date')<span class="text-danger">*</span></label>
+                                <div class="cal-icon">
+                                    <input type="text" id="e_promote_date" name="promote_date" class="form-control datetimepicker" required>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="submit-section">

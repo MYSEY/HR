@@ -4,9 +4,6 @@
         min-height: 38px !important;
         padding: 10px !important;
     }
-    .reset-btn{
-        color: #fff !important
-    }
     .wrapper {
         width: 100%;
         height: auto;
@@ -177,7 +174,7 @@
                                 <div class="row">
                                     <div class="submit-section" style="text-align: center">
                                         <button type="submit" class="btn btn-primary submit-btn me-2">@lang('lang.delete')</button>
-                                        <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-danger">@lang('lang.cancel')</a>
+                                        <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-secondary">@lang('lang.cancel')</a>
                                     </div>
                                 </div>
                             </form>
@@ -271,6 +268,8 @@
 
 
     function showDatas(params){
+        let is_update = "{{ Helper::permissionAccess('m3-s2','is_update') }}";
+        let is_delete = "{{ Helper::permissionAccess('m3-s2','is_delete') }}";
         let branch_id = params[0] ? parseInt(params[0]) : null;
         let position_id = params[1] ? parseInt(params[1]) : null;
         let filter_year = params[2] ? parseInt(params[2]) : null;
@@ -291,6 +290,24 @@
                     data_postion.map((plan) => {
                         let plan_date = moment(plan.plan_date).format('MMM-yyyy');
                         let created_at = moment(plan.created_at).format('d-MMM-yyyy');
+                        let dropdown_action = "";
+                        let deleted = "";
+                        let updated = "";
+                        if (is_update == 1 || is_delete == 1) {
+                            if (is_update == 1) {
+                                updated = '<a class="dropdown-item update" data-toggle="modal" data-id="'+(plan.id)+'" data-target="#edit_plan"><i class="fa fa-pencil m-r-5"></i> @lang("lang.edit")</a>';
+                            }
+                            if (is_delete == 1) {
+                                deleted = '<a class="dropdown-item delete" href="#" data-toggle="modal" data-id="'+(plan.id)+'" data-target="#delete_plan"><i class="fa fa-trash-o m-r-5"></i> @lang("lang.delete")</a>';
+                            }
+                            dropdown_action = '<div class="dropdown dropdown-action">'+
+                                        '<a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>'+
+                                        '<div class="dropdown-menu dropdown-menu-right">'+
+                                            (updated)+
+                                            (deleted)+
+                                        '</div>'+
+                                    '</div>';
+                        }
                         tr +='<tr>'+
                                 '<td class="ids">'+(plan.id)+'</td>'+
                                 '<td>'+(plan.position.name_english)+'</td>'+
@@ -300,13 +317,7 @@
                                 '<td>'+(plan.remark ? plan.remark : "")+'</td>'+
                                 '<td>'+(created_at)+'</td>'+
                                 '<td class="text-end">'+
-                                    '<div class="dropdown dropdown-action">'+
-                                        '<a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>'+
-                                        '<div class="dropdown-menu dropdown-menu-right">'+
-                                            '<a class="dropdown-item update" data-toggle="modal" data-id="'+(plan.id)+'" data-target="#edit_plan"><i class="fa fa-pencil m-r-5"></i> @lang("lang.edit")</a>'+
-                                            '<a class="dropdown-item delete" href="#" data-toggle="modal" data-id="'+(plan.id)+'" data-target="#delete_plan"><i class="fa fa-trash-o m-r-5"></i> @lang("lang.delete")</a>'+
-                                        '</div>'+
-                                    '</div>'+
+                                    (dropdown_action)+
                                 '</td>'+
                             '</tr>';
                     });   

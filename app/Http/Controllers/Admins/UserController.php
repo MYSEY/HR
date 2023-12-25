@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Controllers\Admins;
+
+use App\Exports\ExportEmployee;
 use App\Models\Bank;
 use App\Models\Role;
 use App\Models\User;
@@ -27,6 +29,7 @@ use Illuminate\Support\Facades\Hash;
 use App\Traits\UploadFiles\UploadFIle;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use App\Repositories\Admin\EmployeeRepository;
+use Maatwebsite\Excel\Facades\Excel;
 
 class UserController extends Controller
 {
@@ -46,7 +49,71 @@ class UserController extends Controller
     public function index(Request $request)
     {
         $data = $this->employeeRepo->getAllUsers($request);
-        $role = Role::all();
+        if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'HR' || Auth::user()->RolePermission == 'developer') {
+            $dataProbation = User::with('role')->with('department')->with('position')->where('emp_status','Probation')->get();
+            $dataFDC = User::with('role')->with('department')->with('position')->whereIn('emp_status',['1','10'])->get();
+            $dataUDC = User::with('role')->with('department')->with('position')->where('emp_status','2')->get();
+            $dataCanContract = User::with('role')->with('department')->with('position')->where('emp_status','Cancel')->get();
+            $dataResign = User::with('role')->with('department')->with('position')->whereIn('emp_status', ['3','4','5','6','7','8','9'])->get();
+        }
+        if (Auth::user()->RolePermission == 'HOD') {
+            $department_ids = $this->employeeRepo->getRoleHOD();
+            $dataProbation = User::with('role')->with('department')->with('position')
+                ->whereIn("department_id", $department_ids)
+                ->where('emp_status','Probation')->get();
+            $dataFDC = User::with('role')->with('department')->with('position')
+                ->whereIn("department_id",  $department_ids)
+                ->whereIn('emp_status',['1','10'])->get();
+            $dataUDC = User::with('role')->with('department')->with('position')
+                ->whereIn("department_id",  $department_ids)
+                ->where('emp_status','2')->get();
+            $dataCanContract = User::with('role')->with('department')->with('position')
+                ->whereIn("department_id",  $department_ids)
+                ->where('emp_status','Cancel')->get();
+            $dataResign = User::with('role')->with('department')->with('position')
+                ->whereIn("department_id",  $department_ids)
+                ->whereIn('emp_status', ['3','4','5','6','7','8','9'])->get();
+        }
+        if (Auth::user()->RolePermission == 'BM') {
+            $dataProbation = User::with('role')->with('department')->with('position')
+                ->where("branch_id", Auth::user()->branch_id)
+                ->where('emp_status','Probation')->get();
+            $dataFDC = User::with('role')->with('department')->with('position')
+                ->where("branch_id", Auth::user()->branch_id)
+                ->whereIn('emp_status',['1','10'])->get();
+            $dataUDC = User::with('role')->with('department')->with('position')
+                ->where("branch_id", Auth::user()->branch_id)
+                ->where('emp_status','2')->get();
+            $dataCanContract = User::with('role')->with('department')->with('position')
+                ->where("branch_id", Auth::user()->branch_id)
+                ->where('emp_status','Cancel')->get();
+            $dataResign = User::with('role')->with('department')->with('position')
+                ->where("branch_id", Auth::user()->branch_id)
+                ->whereIn('emp_status', ['3','4','5','6','7','8','9'])->get();
+        }
+        if(Auth::user()->RolePermission == 'Employee'){
+            $dataProbation = User::with('role')->with('department')->with('position')->where('id',Auth::user()->id)
+                ->where('emp_status','Probation')->get();
+            $dataFDC = User::with('role')->with('department')->with('position')->where('id',Auth::user()->id)
+                ->whereIn('emp_status',['1','10'])->get();
+            $dataUDC = User::with('role')->with('department')->with('position')->where('id',Auth::user()->id)
+                ->where('emp_status','2')->get();
+            $dataCanContract = User::where('id',Auth::user()->id)->where('emp_status','Cancel')->with('department')->with('position')->get();
+            $dataResign = User::where('id',Auth::user()->id)->whereIn('emp_status', ['3','4','5','6','7','8','9'])->with('department')->with('position')->get();
+        }
+       
+        return view('users.index',compact(
+            'data',
+            'dataProbation',
+            'dataFDC',
+            'dataUDC',
+            'dataCanContract',
+            'dataResign'
+        ));
+    }
+
+    public function formCreate() {
+        $role = Role::whereNotIn("role_type",['admin', 'developer'])->get();
         $position = Position::all();
         $department = Department::all();
         $optionStatus = Option::where('type','status')->get();
@@ -56,58 +123,31 @@ class UserController extends Controller
         $optionLoan = Option::where('type','loan')->get();
         $optionSpouse = Option::where('type','is_spouse')->get();
         $optionIdentityType = Option::where('type','identity_type')->get();
+        $maritalStatus = Option::where('type','marital_status')->get();
+        $nationality = Option::where('type','nationality')->get();
         $branch = Branchs::all();
         $province = Province::all();
         $bank = Bank::all();
-        if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer') {
-            $dataProbation = User::with('role')->with('department')->where('emp_status','Probation')->get();
-            $dataFDC = User::with('role')->with('department')->whereIn('emp_status',['1','10'])->get();
-            $dataUDC = User::with('role')->with('department')->where('emp_status','2')->get();
-            $dataCanContract = User::with('role')->with('department')->where('emp_status','Cancel')->get();
-            $dataResign = User::with('role')->with('department')->whereIn('emp_status', ['3','4','5','6','7','8','9'])->get();
-        }else{
-            $dataProbation = User::where('role_id',Auth::user()->role_id)
-            ->where('branch_id',Auth::user()->branch_id)
-            ->where('position_id',Auth::user()->position_id)
-            ->where('department_id',Auth::user()->department_id)
-            ->where('branch_id',Auth::user()->branch_id)
-            ->where('emp_status','Probation')->get();
-            $dataFDC = User::where('role_id',Auth::user()->role_id)
-            ->where('branch_id',Auth::user()->branch_id)
-            ->where('position_id',Auth::user()->position_id)
-            ->where('department_id',Auth::user()->department_id)
-            ->where('branch_id',Auth::user()->branch_id)
-            ->whereIn('emp_status',['1','10'])->get();
-            $dataUDC = User::where('role_id',Auth::user()->role_id)
-            ->where('branch_id',Auth::user()->branch_id)
-            ->where('position_id',Auth::user()->position_id)
-            ->where('department_id',Auth::user()->department_id)
-            ->where('branch_id',Auth::user()->branch_id)
-            ->where('emp_status','2')->get();
-            $dataCanContract = User::where('role_id',Auth::user()->role_id)->where('emp_status','Cancel')->with('department')->get();
-            $dataResign = User::where('role_id',Auth::user()->role_id)->whereIn('emp_status', ['3','4','5','6','7','8','9'])->with('department')->get();
-        }
-       
-        return view('users.index',compact('data',
-                                            'role',
-                                            'position',
-                                            'department',
-                                            'optionStatus',
-                                            'autoEmpId',
-                                            'optionGender',
-                                            'branch',
-                                            'optionIdentityType', 
-                                            'province',
-                                            'bank',
-                                            'optionPositionType',
-                                            'optionLoan',
-                                            'optionSpouse',
-                                            'dataProbation',
-                                            'dataFDC',
-                                            'dataUDC',
-                                            'dataCanContract',
-                                            'dataResign'
-                                        ));
+        return view('users.form_create',compact(
+            'role',
+            'position',
+            'department',
+            'optionStatus',
+            'autoEmpId',
+            'optionGender',
+            'branch',
+            'optionIdentityType', 
+            'province',
+            'bank',
+            'optionPositionType',
+            'optionLoan',
+            'optionSpouse',
+            'maritalStatus',
+            'nationality',
+        ));
+    }
+    public function formEdit() {
+        return view('users.form_edit');
     }
 
     public function filter(Request $request){
@@ -141,9 +181,18 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+        try{
+            $this->employeeRepo->createUsers($request);
+            DB::commit();
+            Toastr::success('Create employee successfully.','Success');
+            return redirect('users');
+        }catch(\Exception $e){
+            DB::rollback();
+            Toastr::error('Create employee fail','Error');
+            return redirect()->back();
+        }
     }
 
     /**
@@ -152,7 +201,7 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(UserRequest $request)
+    public function store(Request $request)
     {
         try{
             $this->employeeRepo->createUsers($request);
@@ -165,18 +214,6 @@ class UserController extends Controller
             return redirect()->back();
         }
     }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
     /**
      * Show the form for editing the specified resource.
      *
@@ -185,8 +222,8 @@ class UserController extends Controller
      */
     public function edit(Request $request)
     {
+        $role = Role::whereNotIn("role_type",['admin', 'developer'])->get();
         $data = User::where('id',$request->id)->with('role')->first();
-        $role = Role::all();
         $position = Position::all();
         $department = Department::all();
         $optionGender = Option::where('type','gender')->get();
@@ -195,6 +232,8 @@ class UserController extends Controller
         $optionPositionType = Option::where('type','position_type')->get();
         $optionLoan = Option::where('type','loan')->get();
         $optionSpouse = Option::where('type','is_spouse')->get();
+        $maritalStatus = Option::where('type','marital_status')->get();
+        $nationality = Option::where('type','nationality')->get();
         $bank = Bank::all();
         $province = Province::all();
         $district = District::where('province_id',$data->current_province)->orWhere("province_id",$data->permanent_province )->get();
@@ -215,7 +254,9 @@ class UserController extends Controller
             'villages'=>$villages,
             'optionPositionType'=>$optionPositionType,
             'optionLoan'=>$optionLoan,
-            'optionSpouse'=>$optionSpouse
+            'optionSpouse'=>$optionSpouse,
+            'maritalStatus'=>$maritalStatus,
+            'nationality'=>$nationality,
         ]);
     }
 
@@ -247,37 +288,43 @@ class UserController extends Controller
             $i = 0;
             $dataArray = [];
             foreach ($AllEmployee as $item) {
+                
                 $i++;
                 if ($i != 1) {
+                    
                     $employeeID = GenerateIdEmployee::where('number_employee',$item[0])->get();
                     if (count($employeeID) > 0) {
                         $dataArray[]= $employeeID;
                     }else{
-                        $emp = User::create([
+                        $fullNameKH = $item[1].' '.$item[2];
+                        $fullNameEN = $item[3].' '.$item[4];
+                        $emp = User::firstOrCreate([
                             'number_employee'       => $item[0],
-                            'employee_name_kh'      => $item[1],
-                            'employee_name_en'      => $item[2],
-                            'gender'                => $item[3],
-                            'date_of_birth'         => $item[4] == null ? null : Carbon::createFromDate($item[4])->format('Y-m-d'),
-                            'emp_status'            => $item[5],
-                            'role_id'               => $item[6],
-                            'date_of_commencement'  => $item[7] == null ? null : Carbon::createFromDate($item[7])->format('Y-m-d'),
-                            'fdc_date'              => $item[8] == null ? null :  Carbon::createFromDate($item[8])->format('Y-m-d'),
-                            'fdc_end'               => $item[9] == null ? null : Carbon::createFromDate($item[9])->format('Y-m-d'),
-                            'resign_date'           => $item[10] == null ? null : Carbon::createFromDate($item[10])->format('Y-m-d'),
-                            'resign_reason'         => $item[11],
-                            'branch_id'             => $item[12],
-                            'department_id'         => $item[13],
-                            'position_id'           => $item[14],
-                            'position_type'         => $item[15],
-                            'unit'                  => $item[16],
-                            'level'                 => $item[17],
-                            'nationality'           => $item[18],
-                            'marital_status'        => $item[19],
-                            'basic_salary'          => $item[20],
-                            'phone_allowance'       => $item[21],
-                            'guarantee_letter'      => 'INVITATION_Ingenico & Hengbao_11 Aug 2023_v3.pdf',
-                            'employment_book'       => $item[23],
+                            'employee_name_kh'      => $fullNameKH,
+                            'employee_name_en'      => $fullNameEN,
+                            'last_name_kh'          => $item[1],
+                            'first_name_kh'         => $item[2],
+                            'last_name_en'          => $item[3],
+                            'first_name_en'         => $item[4],
+                            'id_card_number'        => $item[5],
+                            'gender'                => $item[6],
+                            'date_of_birth'         => $item[7] ? Carbon::createFromDate($item[7])->format('Y-m-d') : null,
+                            'emp_status'            => $item[8],
+                            'role_id'               => $item[9],
+                            'date_of_commencement'  => $item[10] ? Carbon::createFromDate($item[10])->format('Y-m-d') : null,
+                            'fdc_date'              => $item[11] ? Carbon::createFromDate($item[11])->format('Y-m-d'): null,
+                            'fdc_end'               => $item[12] ? Carbon::createFromDate($item[12])->format('Y-m-d'): null,
+                            'udc_end_date'          => $item[13] ? Carbon::createFromDate($item[13])->format('Y-m-d'): null,
+                            'resign_date'           => $item[14] ? Carbon::createFromDate($item[14])->format('Y-m-d'): null,
+                            'resign_reason'         => $item[15],
+                            'branch_id'             => $item[16],
+                            'department_id'         => $item[17],
+                            'position_id'           => $item[18],
+                            'unit'                  => $item[19],
+                            'level'                 => $item[20],
+                            'marital_status'        => $item[21],
+                            'basic_salary'          => $item[22],
+                            'phone_allowance'       => $item[23],
                             'personal_phone_number' => $item[24],
                             'company_phone_number'  => $item[25],
                             'agency_phone_number'   => $item[26],
@@ -286,14 +333,14 @@ class UserController extends Controller
                             'is_loan'               => $item[29],
                             'identity_type'         => $item[30],
                             'identity_number'       => $item[31],
-                            'issue_date'            => $item[32] == null ? null : Carbon::createFromDate($item[32])->format('Y-m-d'),
-                            'issue_expired_date'    => $item[33] == null ? null : Carbon::createFromDate($item[33])->format('Y-m-d'),
+                            'issue_date'            => $item[32] ? Carbon::createFromDate($item[32])->format('Y-m-d') : null,
+                            'issue_expired_date'    => $item[33] ? Carbon::createFromDate($item[32])->format('Y-m-d') : null,
                             'password'              => Hash::make($item[34]),
                             'type'                  => 'uploade',
                             'created_by'            => Auth::user()->id,
                         ]);
                         if($emp){
-                            GenerateIdEmployee::create([
+                            GenerateIdEmployee::firstOrCreate([
                                 'employee_id'       => $emp->id,
                                 'number_employee'   => $emp->number_employee,
                                 'created_by'        => Auth::user()->id,
@@ -318,13 +365,14 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(UserUpdated $request)
+    public function update(Request $request)
     {
         try{
             $this->employeeRepo->updatedUsers($request);
             DB::commit();
             Toastr::success('Updated employee successfully.','Success');
-            return redirect()->back();
+            return redirect('users');
+            // return redirect()->back();
         }catch(\Exception $e){
             DB::rollback();
             Toastr::error('Update employee fail','Error');
@@ -342,6 +390,7 @@ class UserController extends Controller
     {
         try{
             User::destroy($request->id);
+            GenerateIdEmployee::where('employee_id',$request->id)->delete();
             if ($request->profile) {
                 unlink('uploads/images/'.$request->profile);
             }
@@ -365,39 +414,17 @@ class UserController extends Controller
     {
         try {
             if ($request->emp_status == '1') {
-                //total day in months
-                $endMonth = Carbon::createFromDate($request->start_date)->format('m');
-                $totalDayInMonth = Carbon::now()->month($endMonth)->daysInMonth;
-                
-                //find start date employee join date
-                $date_of_month = Carbon::createFromDate($request->start_date)->format('Y-m');
-                $currentYear = $date_of_month.'-'.$totalDayInMonth;
-
-                //find total working day in month
-                $startDate = Carbon::parse($request->start_date);
-                $endDate = Carbon::parse($currentYear);
-
-                // new salary and new total days
                 $dataSalary = User::where('id',$request->id)->first();
-                $totalNewDays = $startDate->diffInDays($endDate) + 1;
                 $totalBasicSalary = $dataSalary->basic_salary + $request->total_salary_increase;
-                $totalnewSalary = ($totalBasicSalary / $totalDayInMonth) * $totalNewDays;
-                
-                //old salary and total old days
-                $totalOldDay = $totalDayInMonth - $totalNewDays;
-                $totalOldSalary = 0;
-                if ($totalOldDay) {
-                    $totalOldSalary = ($dataSalary->basic_salary / $totalDayInMonth)  * $totalOldDay;
-                }
-                
-                $totalCurrentSalary = $totalnewSalary + $totalOldSalary;
                 User::where('id',$request->id)->update([
                     'emp_status' => $request->emp_status,
                     'fdc_date' => $request->start_date,
                     'fdc_end' => $request->end_dete,
+                    'udc_end_date' => $request->start_date,
                     'salary_increas' => $request->total_salary_increase,
                     'basic_salary' => $totalBasicSalary,
-                    'total_current_salary' => $totalCurrentSalary,
+                    // 'total_current_salary' => $totalCurrentSalary,
+                    // 'total_severancey_pay' => $totalnewSalary,
                     'pre_salary' => $dataSalary->basic_salary,
                     'resign_reason' => $request->resign_reason
                 ]);
@@ -406,12 +433,14 @@ class UserController extends Controller
                     'emp_status' => $request->emp_status,
                     'fdc_date' => $request->start_date,
                     'fdc_end' => $request->end_dete,
+                    'udc_end_date' => $request->start_date,
                     'resign_reason' => $request->resign_reason
                 ]);
             }else if($request->emp_status == 2){
                 User::where('id',$request->id)->update([
                     'emp_status' => $request->emp_status,
                     'fdc_date' => $request->start_date,
+                    'udc_end_date' => $request->start_date,
                     'resign_reason' => $request->resign_reason
                 ]);
             }else if($request->emp_status == "Probation"){
@@ -426,11 +455,10 @@ class UserController extends Controller
                     'resign_reason' => $request->resign_reason
                 ]);
             }
-            $status_date = Carbon::now();
             EmployeeStatusHistory::create([
                 'employee_id'   =>  $request->id,
                 'status'        =>  $request->emp_status,
-                'status_date'   =>  $status_date,
+                'status_date'   =>  $request->start_date,
                 'created_by'    =>  Auth::user()->id,
             ]);
             DB::commit();
@@ -439,5 +467,11 @@ class UserController extends Controller
             DB::rollBack();
             return response()->json(['message' => $exp->getMessage()], 500);
         }
+    }
+
+    public function export(Request $request){
+        $data = $this->employeeRepo->getAllUsers($request);
+        $export = new ExportEmployee($data);
+        return Excel::download($export, 'Employee.xlsx');
     }
 }

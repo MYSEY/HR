@@ -113,25 +113,31 @@
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="">@lang('lang.price_engine_oil') ($)<span class="text-danger">*</span></label>
-                                <input class="form-control e_emp_required @error('price_engine_oil') is-invalid @enderror" type="number" id="e_price_engine_oil" required name="price_engine_oil" value="{{old('price_engine_oil')}}">
+                                <label class="">@lang('lang.price_engine_oil') <span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <span class="input-group-text">៛</span>
+                                    <input class="form-control e_emp_required @error('price_engine_oil') is-invalid @enderror" type="number" id="e_price_engine_oil" required name="price_engine_oil" value="{{old('price_engine_oil')}}">
+                                </div>
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="">@lang('lang.price_motor_rentel') ($)<span class="text-danger">*</span></label>
-                                <input class="form-control e_emp_required @error('price_motor_rentel') is-invalid @enderror" type="number" id="e_price_motor_rentel" required name="price_motor_rentel" value="{{old('price_motor_rentel')}}">
+                                <label class="">@lang('lang.price_motor_rentel')<span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <span class="input-group-text">៛</span>
+                                    <input class="form-control e_emp_required @error('price_motor_rentel') is-invalid @enderror" type="number" id="e_price_motor_rentel" required name="price_motor_rentel" value="{{old('price_motor_rentel')}}">
+                                </div>
                             </div>
                         </div>
                     </div>
 
                     <div class="form-group col-md-12 col-12" element="div" bp-field-wrapper="true" bp-field-name="Identity" bp-field-type="custom_html">
-                        <label class="navbar-brand custom-navbar-brand mb-0" style="width: 100%; background: #dfe6e9; padding: 6px;font-size: 15px;font-weight: normal !important;">@lang('lang.taplabs')</label>
+                        <label class="navbar-brand custom-navbar-brand mb-0" style="width: 100%; background: #dfe6e9; padding: 6px;font-size: 15px;font-weight: normal !important;">@lang('lang.tablets')</label>
                     </div>
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label>@lang('lang.taplab')</label>
+                                <label>@lang('lang.tablet')</label>
                                 <div class="input-group">
                                     <input type="text" class="form-control" id="e_taplab_rentel" name="taplab_rentel" placeholder="" value="{{old('taplab_rentel')}}">
                                 </div>
@@ -139,9 +145,9 @@
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label>@lang('lang.taplab_price')</label>
+                                <label>@lang('lang.tablet_price')</label>
                                 <div class="input-group">
-                                    <span class="input-group-text">$</span>
+                                    <span class="input-group-text">៛</span>
                                     <input class="form-control" type="number" name="price_taplab_rentel" id="e_price_taplab_rentel" value="{{old('price_taplab_rentel')}}">
                                 </div>
                             </div>

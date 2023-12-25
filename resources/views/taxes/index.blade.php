@@ -11,46 +11,52 @@
                     </ul>
                 </div>
                 <div class="col-auto float-end ms-auto">
+                    @if (permissionAccess("m8-s1","is_create")->value == "1")
                     <a href="#" class="btn add-btn" data-bs-toggle="modal" data-bs-target="#add_taxes"><i class="fa fa-plus"></i> @lang('lang.add_new')</a>
+                    @endif
+                    
                 </div>
             </div>
         </div>
-        {!! Toastr::message() !!}
-        <div class="row">
-            <div class="col-md-12">
-                <div class="table-responsive">
-                    <table class="table table-bordered review-table mb-0">
-                        <thead>
-                            <tr>
-                                <th>@lang('lang.tax_rate')</th>
-                                <th>@lang('lang.from')</th>
-                                <th>@lang('lang.to')</th>
-                                <th>@lang('lang.tax_deduction')</th>
-                                <th style="text-align: center;">@lang('lang.action')</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @if (count($data)>0)
-                                @foreach ($data as $item)
-                                    <tr>
-                                        <td hidden class="ids">{{$item->id}}</td>
-                                        <td><input type="text" class="form-control" value="{{$item->tax_rate}}%"></td>
-                                        <td><div class="input-group"><span class="input-group-text">៛</span><input type="number" class="form-control" value="{{$item->from}}"></div></td>
-                                        <td><div class="input-group"><span class="input-group-text">៛</span><input type="number" class="form-control" width="100px" value="{{$item->to}}"></div></td>
-                                        <td><div class="input-group"><span class="input-group-text">៛</span><input type="number" class="form-control" value="{{$item->tax_deduction_amount}}"></div></td>
-                                        <td style="text-align: center;">
-                                            <a class="btn btn-success update" data-toggle="modal" data-id="{{$item->id}}" data-target="#edit_taxes"><i class="fa fa-pencil m-r-5"></i></a>
-                                            {{-- <a class="btn btn-danger delete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_taxes"><i class="fa fa-trash-o m-r-5"></i></a> --}}
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            @endif
-                        </tbody>
-                    </table>
+        @if (permissionAccess("m8-s1","is_view")->value == "1")
+            {!! Toastr::message() !!}
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="table-responsive">
+                        <table class="table table-bordered review-table mb-0">
+                            <thead>
+                                <tr>
+                                    <th>@lang('lang.tax_rate')</th>
+                                    <th>@lang('lang.from')</th>
+                                    <th>@lang('lang.to')</th>
+                                    <th>@lang('lang.tax_deduction')</th>
+                                    <th style="text-align: center;">@lang('lang.action')</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (count($data)>0)
+                                    @foreach ($data as $item)
+                                        <tr>
+                                            <td hidden class="ids">{{$item->id}}</td>
+                                            <td><input type="text" disabled class="form-control" value="{{$item->tax_rate}}%"></td>
+                                            <td><div class="input-group"><span class="input-group-text">៛</span><input type="number" disabled class="form-control" value="{{$item->from}}"></div></td>
+                                            <td><div class="input-group"><span class="input-group-text">៛</span><input type="number" disabled class="form-control" width="100px" value="{{$item->to}}"></div></td>
+                                            <td><div class="input-group"><span class="input-group-text">៛</span><input type="number" disabled class="form-control" value="{{$item->tax_deduction_amount}}"></div></td>
+                                            <td style="text-align: center;">
+                                                @if (permissionAccess("m8-s1","is_update")->value == "1")
+                                                <a class="btn btn-success update" data-toggle="modal" data-id="{{$item->id}}" data-target="#edit_taxes"><i class="fa fa-pencil m-r-5"></i></a>
+                                                @endif
+                                                {{-- <a class="btn btn-danger delete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_taxes"><i class="fa fa-trash-o m-r-5"></i></a> --}}
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                @endif
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
-        </div>
-
+        @endif
         <div id="add_taxes" class="modal custom-modal fade" role="dialog" data-bs-backdrop="static">
             <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                 <div class="modal-content">

@@ -2,9 +2,11 @@
 
 namespace App\Helpers;
 
+use App\Models\permissions;
 use \Carbon\Carbon;
 use App\Models\User;
 use App\Models\Setting;
+use Illuminate\Support\Facades\Auth;
 use KhmerDateTime\KhmerDateTime;
 
 class Helper
@@ -135,6 +137,29 @@ class Helper
     static function getENMonthsMotorRantal($data){
         $month = Carbon::now()->format('M Y');
         $result = "Monthly Motor Rental Fee".' : '.$month;
+        return $result;
+    }
+
+    static function permissionAccess($menu_id,$name_button){
+        $id=Auth::user()->role_id;
+        $permission = permissions::where('role_id',$id)->get()->toArray();
+        $arrayPermissions = [];
+        foreach ($permission as $row) {
+            $arrayPermissions[$row["menu_id"]] = $row;
+        }
+        return $arrayPermissions[$menu_id][$name_button];
+    }
+
+    static public function getCurrenYear(){
+        if (Helper::getLang() == 'en') {
+            $month = Carbon::now()->format('Y');
+            $result = $month;
+        }else{
+            $month = Carbon::now()->format('Y');
+            $dateTime = KhmerDateTime::parse($month);
+            $year = $dateTime->year();
+            $result = $year;
+        }
         return $result;
     }
 }

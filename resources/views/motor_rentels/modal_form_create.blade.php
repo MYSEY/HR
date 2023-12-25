@@ -122,7 +122,7 @@
                             <div class="form-group">
                                 <label class="">@lang('lang.price_engine_oil')<span class="text-danger">*</span></label>
                                 <div class="input-group">
-                                    <span class="input-group-text">$</span>
+                                    <span class="input-group-text">៛</span>
                                     <input class="form-control emp_required m_clear" type="number" id="price_engine_oil" required name="price_engine_oil" value="{{old('price_engine_oil')}}">
                                 </div>
                             </div>
@@ -131,19 +131,19 @@
                             <div class="form-group">
                                 <label class="">@lang('lang.price_motor_rentel')<span class="text-danger">*</span></label>
                                 <div class="input-group">
-                                    <span class="input-group-text">$</span>
+                                    <span class="input-group-text">៛</span>
                                     <input class="form-control emp_required m_clear" type="number" id="price_motor_rentel" name="price_motor_rentel" value="{{old('price_motor_rentel')}}" required>
                                 </div> 
                             </div>
                         </div>
                     </div>
                     <div class="form-group col-md-12 col-12" element="div" bp-field-wrapper="true" bp-field-name="Identity" bp-field-type="custom_html">
-                        <label class="navbar-brand custom-navbar-brand mb-0" style="width: 100%; background: #dfe6e9; padding: 6px;font-size: 15px;font-weight: normal !important;">@lang('lang.taplabs')</label>
+                        <label class="navbar-brand custom-navbar-brand mb-0" style="width: 100%; background: #dfe6e9; padding: 6px;font-size: 15px;font-weight: normal !important;">@lang('lang.tablets')</label>
                     </div>
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label>@lang('lang.taplab')</label>
+                                <label>@lang('lang.tablet')</label>
                                 <div class="input-group">
                                     <input type="text" class="form-control m_clear" id="taplab_rentel" name="taplab_rentel" placeholder="" value="{{old('taplab_rentel')}}">
                                 </div>
@@ -151,9 +151,9 @@
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label>@lang('lang.taplab_price')</label>
+                                <label>@lang('lang.tablet_price')</label>
                                 <div class="input-group">
-                                    <span class="input-group-text">$</span>
+                                    <span class="input-group-text">៛</span>
                                     <input class="form-control m_clear" type="number" name="price_taplab_rentel" id="price_taplab_rentel" value="{{old('price_taplab_rentel')}}">
                                 </div>
                             </div>
@@ -165,10 +165,12 @@
                             <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading') </span>
                             <span class="btn-txt">@lang('lang.submit')</span>
                         </button>
-                        <button type="button" class="btn btn-primary" data-btn="1" id="save-print">
-                            <span class="btn-text-print">@lang('lang.print')</span>
-                            <span id="btn-print-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>
-                        </button>
+                        @if (permissionAccess("16","is_print")->value == "1")
+                            <button type="button" class="btn btn-primary" data-btn="1" id="save-print">
+                                <span class="btn-text-print">@lang('lang.print')</span>
+                                <span id="btn-print-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading')</span>
+                            </button>
+                        @endif
                         <button type="button" id="btn-cancel" class="btn btn-secondary btn-cancel">@lang('lang.cancel')</button>
                     </div>
                 </form>

@@ -17,6 +17,7 @@ return new class extends Migration
         Schema::create('bonuses', function (Blueprint $table) {
             $table->id();
             $table->integer('employee_id');
+            $table->string('number_employee')->nullable();
             $table->string('number_of_working_days')->nullable();
             $table->decimal('base_salary',50,2)->default(0);
             $table->decimal('base_salary_received',50,2)->default(0);

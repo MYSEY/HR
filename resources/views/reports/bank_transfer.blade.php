@@ -29,17 +29,20 @@
                 </div>
                 <div class="col-auto float-end ms-auto">
                     <div class="btn-group">
-                        @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer')
                             <div class="col-auto float-end ms-auto">
-                                <a href="#" class="btn add-btn" id="btn-export"><i class="fa fa-file-excel-o"></i>@lang('lang.excel')</a>
+                                @if (permissionAccess("m7-s9","is_export")->value == "1")
+                                    <a href="#" class="btn add-btn" id="btn-export"><i class="fa fa-file-excel-o"></i>@lang('lang.excel')</a>
+                                @endif
+                                @if (permissionAccess("m7-s9","is_print")->value == "1")
                                 <a href="#" class="btn add-btn me-2" data-bs-toggle="modal" data-bs-target="#add_bank_transfer"><i class="fa fa-print fa-lg"></i> @lang('lang.print')</a>
+                                @endif
                             </div>
-                        @endif
+                        
                     </div>
                 </div>
             </div>
         </div>
-
+        @if (permissionAccess("m7-s9","is_view")->value == "1")
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
@@ -170,6 +173,7 @@
                 </div>
             </div>
         </div>
+        @endif
     </div>
 
     <div id="add_bank_transfer" class="modal custom-modal fade" style="display: none;" aria-hidden="true" data-bs-backdrop="static">

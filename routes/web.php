@@ -32,6 +32,7 @@ use App\Http\Controllers\Admins\EmployeeProfileController;
 use App\Http\Controllers\Admins\RecruitmentPlanController;
 use App\Http\Controllers\Admins\ChildrenAllowanceController;
 use App\Http\Controllers\Admins\TaskController;
+use App\Http\Controllers\Admins\FringeBenefitController;
 use App\Http\Controllers\LanguageController;
 use App\Models\StaffPromoted;
 use Illuminate\Support\Facades\Lang;
@@ -59,15 +60,23 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('/dashboad/show', [DashboadController::class, 'show']);
 
     Route::get('/employee/profile/{id}', [EmployeeProfileController::class, 'employeeProfile'])->name('employee.profile');
-    Route::post('employee/education', [EmployeeProfileController::class, 'employeeEducation'])->name('employee.education');
-    Route::post('employee/experience', [EmployeeProfileController::class, 'updateOrCreateExperience'])->name('employee.experience');
     Route::post('employee/contact', [EmployeeProfileController::class, 'employeeContact'])->name('employee.contact');
     Route::get('employee/contact/edit', [EmployeeProfileController::class, 'editContact']);
     Route::post('employee/contact/update', [EmployeeProfileController::class, 'updateContact']);
     Route::post('employee/contact/delete', [EmployeeProfileController::class, 'deleteContact']);
+    
+    Route::post('employee/experience', [EmployeeProfileController::class, 'createExperience'])->name('employee.experience');
+    Route::get('employee/experience/edite', [EmployeeProfileController::class, 'editeExperience'])->name('employee.experience.edite');
+    Route::post('employee/experience/update', [EmployeeProfileController::class, 'updateExperience'])->name('employee.experience.update');
+    Route::post('employee/experience/delete', [EmployeeProfileController::class, 'deleteExperience'])->name('employee.experience.delete');
+    //Education
+    Route::post('employee/education', [EmployeeProfileController::class, 'employeeEducation'])->name('employee.education');
+    Route::get('employee/education/edit', [EmployeeProfileController::class, 'educationEdit'])->name('employee.educationEdit');
+    Route::post('employee/education/update', [EmployeeProfileController::class, 'educationUpdate'])->name('employee.educationUpdate');
+    Route::post('employee/education/delete', [EmployeeProfileController::class, 'educationDelete'])->name('employee.educationDelete');
 
     //Training
-    Route::post('employee/training/create', [EmployeeProfileController::class, 'updatedTraining']);
+    Route::post('employee/training/create', [EmployeeProfileController::class, 'createTraining']);
     Route::get('employee/training/edit', [EmployeeProfileController::class, 'editTraining']);
     Route::post('employee/training/update', [EmployeeProfileController::class, 'updateTraining']);
     Route::post('employee/training/delete', [EmployeeProfileController::class, 'deleteTraining']);
@@ -101,9 +110,16 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('/leaves/employee', [LeavesEmployeeController::class,'index']);
 
     Route::get('role', [RoleConroller::class,'index']);
+    Route::post('role/search', [RoleConroller::class,'filter']);
+    Route::get('role/create', [RoleConroller::class,'formCreate']);
+    Route::get('role/edit/{id}', [RoleConroller::class,'edit']);
+    Route::post('role/create', [RoleConroller::class,'create']);
     Route::post('role/store', [RoleConroller::class,'store']);
     Route::post('role/update', [RoleConroller::class,'update']);
+    Route::post('role/update-role', [RoleConroller::class,'updateRole']);
     Route::post('role/delete', [RoleConroller::class,'destroy']);
+    Route::get('role/detail/{id}', [RoleConroller::class,'detail']);
+    Route::post('role/status', [RoleConroller::class,'processing']);
     Route::Resource('permission', PermissionController::class);
 
     Route::get('/department', [DepartmentController::class,'index']);
@@ -113,6 +129,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
 
     Route::get('/position', [PositionController::class,'index']);
     Route::post('/position/store', [PositionController::class,'store']);
+    Route::get('/position/edit', [PositionController::class,'edit']);
     Route::post('/position/update', [PositionController::class,'update']);
     Route::post('/position/delete', [PositionController::class,'destroy']);
 
@@ -124,8 +141,11 @@ Route::middleware(['auth:sanctum'])->group(function(){
 
     // users
     Route::get('users', [UserController::class,'index']);
+    Route::get('user/form/create', [UserController::class,'formCreate']);
+    Route::get('user/form/edit/{id}', [UserController::class,'formEdit']);
     Route::post('users', [UserController::class,'filter']);
     Route::post('users/store', [UserController::class,'store']);
+    Route::post('users/create', [UserController::class,'create']);
     Route::post('users/update', [UserController::class,'update']);
     Route::post('users/delete', [UserController::class,'destroy']);
     Route::get('users/edit', [UserController::class,'edit']);
@@ -134,12 +154,24 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('users/birthday', [UserController::class, 'showDetailBirthday']);
     Route::get('users/print', [UserController::class, 'print']);
     Route::post('import/employee',[UserController::class,'employImport']);
+    Route::get('users/export',[UserController::class,'export']);
 
     //Employee Payroll
     Route::get('payroll',[EmployeePayrollController::class,'index']);
     Route::post('payroll-search',[EmployeePayrollController::class,'search']);
     Route::get('payroll-export',[EmployeePayrollController::class,'export']);
+    Route::post('payroll/create',[EmployeePayrollController::class,'store']);
+    Route::post('payroll/delete',[EmployeePayrollController::class,'destroy']);
+    Route::get('payslip/{employee_id}',[EmployeePayrollController::class,'paySlip']);
+    Route::post('import/payroll',[EmployeePayrollController::class,'importPayroll']);
     
+    Route::get('payroll/review',[EmployeePayrollController::class,'payrollRview']);
+    Route::post('payroll/review/search',[EmployeePayrollController::class,'payrollReviewSearch']);
+    Route::post('payroll/approved',[EmployeePayrollController::class,'payrollApproved']);
+    Route::get('payroll/review/export',[EmployeePayrollController::class,'payrollPreviwExport']);
+    Route::post('payroll/review/delete',[EmployeePayrollController::class,'payrollReviewDelete']);
+
+
     // Motor Rental
     Route::get('motor-rentel/list',[MotorRentelController::class,'index']);
     Route::get('motor-rentel/edit',[MotorRentelController::class,'edit']);
@@ -152,11 +184,6 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('motor-rentel/search',[MotorRentelController::class,'indexPaySearch']);
     Route::post('motor-rentel/create-pay',[MotorRentelController::class,'storePay']);
     Route::post('motor-rentel/status',[MotorRentelController::class,'processing']);
-
-
-    Route::post('payroll/create',[EmployeePayrollController::class,'store']);
-    Route::post('payroll/delete',[EmployeePayrollController::class,'destroy']);
-    Route::get('payslip/{employee_id}',[EmployeePayrollController::class,'paySlip']);
 
     //Payroll Item
     Route::get('payroll/item',[PayrollItemController::class,'index']);
@@ -209,6 +236,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     // route exchange rate
     Route::get('/exchange-rate/list', [ExchangeRateController::class,'index']);
     Route::post('/exchange-rate/store', [ExchangeRateController::class,'store']);
+    Route::post('/exchange-rate/create', [ExchangeRateController::class,'create']);
     Route::post('/exchange-rate/update', [ExchangeRateController::class,'update']);
     Route::get('/exchange-rate/edit', [ExchangeRateController::class,'edit']);
     Route::post('/exchange-rate/delete', [ExchangeRateController::class,'destroy']);
@@ -222,6 +250,33 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('/reports/payroll-report', [PayrollReportController::class,'index']);
     Route::post('/reports/payroll-report', [PayrollReportController::class,'filter']);
     Route::get('/reports/payroll-export', [PayrollReportController::class,'payrollExport']);
+
+    Route::get('/import-nssf', [PayrollReportController::class,'ImportIndex']);
+    Route::post('/import-nssf', [PayrollReportController::class,'ImportNSSF']);
+    //Report nssf
+    Route::get('/reports/nssf-report', [PayrollReportController::class,'reportNssf']);
+    Route::post('/reports/nssf-report', [PayrollReportController::class,'nssfFilter']);
+    Route::get('/reports/nssf-export', [PayrollReportController::class,'nssfExport']);
+    //Report benefit
+    Route::get('/reports/benefit-report', [PayrollReportController::class,'reportBenefitKNYPCh']);
+    Route::post('/reports/benefit-report', [PayrollReportController::class,'BenefitFilter']);
+    Route::get('/reports/benefit-export', [PayrollReportController::class,'BenefitExport']);
+    //Severancey pay
+    Route::get('/severance-pay', [PayrollReportController::class,'SeverancePay']);
+    Route::post('/severance-pay', [PayrollReportController::class,'SeverancePayFil']);
+    Route::post('/import/severance-pay', [PayrollReportController::class,'importSeverancePay']);
+    //Report Severancey pay
+    Route::get('/reports/severance-pay-report', [PayrollReportController::class,'reportSeverancePay']);
+    Route::post('/reports/severance-pay-report', [PayrollReportController::class,'SeverancePayFilter']);
+    Route::get('/reports/severance-pay-export', [PayrollReportController::class,'SeverancePayExport']);
+    //Report Senority pay
+    Route::get('/reports/seniorities-pay', [PayrollReportController::class,'reportSenorityPay']);
+    Route::post('/reports/seniorities-pay', [PayrollReportController::class,'SenorityPayFilter']);
+    Route::get('/reports/seniorities-pay-export', [PayrollReportController::class,'SenorityPayExport']);
+    //Tax Report
+    Route::get('/reports/tax-report', [PayrollReportController::class,'TaxReport']);
+    Route::post('/reports/tax-report', [PayrollReportController::class,'TaxFilter']);
+    Route::get('/reports/tax-report-export', [PayrollReportController::class,'TaxExport']);
 
     Route::get('/reports/motor-rentel-report', [PayrollReportController::class,'motorrentel']);
     Route::post('/reports/motor-rentel-report', [PayrollReportController::class,'motorrentel']);
@@ -245,8 +300,20 @@ Route::middleware(['auth:sanctum'])->group(function(){
 
     Route::get('/reports/bank-transfer', [ReportsController::class,'bankTransfer']);
     Route::get('/reports/bank-transfer-export', [ReportsController::class,'bankTransferExport']);
+
+    Route::get('/reports/e-filing', [ReportsController::class,'eFilingSalary']);
+    Route::post('/reports/e-filing-filter', [ReportsController::class,'eFilingFilter']);
+    Route::get('/reports/e-filing-export', [ReportsController::class,'efilingSalaryExport']);
+
+    Route::get('/reports/e-form', [ReportsController::class,'eFormSalary']);
+    Route::post('/reports/e-form-filter', [ReportsController::class,'eFormFilter']);
+    Route::get('/reports/e-form-export', [ReportsController::class,'eFormSalaryExport']);
+
+    Route::get('/reports/fringe-benefits-report', [ReportsController::class,'fringeBenefit']);
+    Route::post('/reports/fringe-benefits-filter', [ReportsController::class,'fringeBenefitFilter']);
+    Route::get('/reports/fringe-benefits-export', [ReportsController::class,'fringeBenefitExport']);
     
-    // test export excel
+    // export excel
     Route::get('motor-rentel/export',[PayrollReportController::class,'export']);
     Route::post('motor-rentel/import',[MotorRentelController::class,'import']);
 
@@ -274,11 +341,20 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('/recruitment/candidate-resume/delete', [CandidateResumeController::class,'destroy']);
     Route::post('/recruitment/candidate-resume/createemp', [CandidateResumeController::class,'createemp']);
     Route::get('/recruitment/candidate-resume/employee', [CandidateResumeController::class,'showemp']);
+    Route::post('/recruitment/candidate-resume/import', [CandidateResumeController::class,'import']);
 
     Route::get('children/allowance',[ChildrenAllowanceController::class,'index']);
     Route::get('children/edit',[ChildrenAllowanceController::class,'edit']);
     Route::post('children/update',[ChildrenAllowanceController::class,'update']);
     Route::post('children/delete',[ChildrenAllowanceController::class,'destroy']);
+
+    // route fringe benefits
+    Route::get('/fringe-benefit', [FringeBenefitController::class,'index']);
+    Route::post('/fringe-benefit/store', [FringeBenefitController::class,'store']);
+    Route::post('/fringe-benefit/update', [FringeBenefitController::class,'update']);
+    Route::get('/fringe-benefit/edit', [FringeBenefitController::class,'edit']);
+    Route::post('/fringe-benefit/delete', [FringeBenefitController::class,'destroy']);
+    Route::post('/fringe-benefit/import', [FringeBenefitController::class,'import']);
 
     // test send message 
     Route::get('/task', [TaskController::class, 'index']);

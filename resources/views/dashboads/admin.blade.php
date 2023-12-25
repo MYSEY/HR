@@ -271,7 +271,7 @@
         <div class="page-header">
             <div class="row">
                 <div class="col-sm-12">
-                    <h3 class="page-title">@lang("lang.welcome") {{ Auth::user()->employee_name_en }}!</h3>
+                    <h3 class="page-title">@lang("lang.welcome") {{Helper::getLang() == 'en' ? Auth::user()->employee_name_en :  Auth::user()->employee_name_kh}}!</h3>
                     <ul class="breadcrumb">
                         <li class="breadcrumb-item active">@lang('lang.dashboard')</li>
                     </ul>
@@ -325,92 +325,97 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-12 col-lg-6 col-xl-4 d-flex">
-                <div class="card flex-fill">
-                    <div class="card-body">
-                        <h4 class="card-title">@lang('lang.employee')</h4>
-                        <div class="statistics">
-                            <div class="row">
-                                <div class="col-md-6 col-6 text-center">
-                                    <div class="stats-box mb-4">
-                                        <p>@lang('lang.total_employee')</p>
-                                        <h3 id="total-staff"></h3>
+            @if (permissionAccess("m1-s1","is_dashboard")->is_dashboard["is_employee"] == "1")
+                <div class="col-md-12 col-lg-6 col-xl-4 d-flex">
+                    <div class="card flex-fill">
+                        <div class="card-body">
+                            <h4 class="card-title">@lang('lang.employee')</h4>
+                            <div class="statistics">
+                                <div class="row">
+                                    <div class="col-md-6 col-6 text-center">
+                                        <div class="stats-box mb-4">
+                                            <p>@lang('lang.total_employee')</p>
+                                            <h3 id="total-staff"></h3>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-6 text-center">
+                                        <div class="stats-box mb-4">
+                                            <p>@lang('lang.total_female')</p>
+                                            <h3 id="total-female">0</h3>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="col-md-6 col-6 text-center">
-                                    <div class="stats-box mb-4">
-                                        <p>@lang('lang.total_female')</p>
-                                        <h3 id="total-female"></h3>
+                            </div>
+                            <div class="progress mb-4">
+                                <div class="progress-bar bg-purple" role="progressbar" style="width: 30%" aria-valuenow="30"
+                                    aria-valuemin="0" aria-valuemax="100"><span id="percentage-interview"></span></div>
+                                <div class="progress-bar bg-success" role="progressbar" style="width: 22%" aria-valuenow="18"
+                                    aria-valuemin="0" aria-valuemax="100"><span id="percantage-probation"></span></div>
+                                <div class="progress-bar bg-text-info" role="progressbar" style="width: 24%" aria-valuenow="12"
+                                    aria-valuemin="0" aria-valuemax="100"><span id="percantage-fdc"></span></div>
+                                <div class="progress-bar bg-danger" role="progressbar" style="width: 26%" aria-valuenow="14"
+                                    aria-valuemin="0" aria-valuemax="100"><span id="percantage-udc"></span></div>
+                            </div>
+                            <div>
+                                <p><i class="fa fa-dot-circle-o text-purple me-2"></i>@lang('lang.up-coming')<span
+                                        id="total-interview" class="float-end">0</span></p>
+                                <p><i class="fa fa-dot-circle-o text-success me-2"></i>@lang('lang.probation')<span
+                                        id="total-probation" class="float-end">0</span></p>
+                                <p><i class="fa fa-dot-circle-o text-info me-2"></i>@lang('lang.fdc')<span
+                                        id="total-fdc" class="float-end">0</span></p>
+                                <p><i class="fa fa-dot-circle-o text-danger me-2"></i>@lang('lang.udc') <span
+                                        id="total-udc" class="float-end">0</span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endif
+            @if (permissionAccess("m1-s1","is_dashboard")->is_dashboard["is_age_of_employee"] == "1")
+                <div class="col-md-12 col-lg-12 col-xl-4 d-flex">
+                    <div class="card flex-fill dash-statistics">
+                        <div class="card-body">
+                            <h5 class="card-title">@lang('lang.age_of_employee')</h5>
+                            <p><i class="fa fa-dot-circle-o text-info"></i> <span class="me-2">@lang('lang.age')</span></p>
+                            <div class="stats-list">
+                                <div class="stats-info">
+                                    <p>18 - 24 <strong><small id="total-age-18">0</small></strong></p>
+                                    <div class="progress">
+                                        <div class="progress-bar bg-success" role="progressbar" id="progressbar-18" aria-valuemin="0"></div>
+                                    </div>
+                                </div>
+                                <div class="stats-info">
+                                    <p>25 - 44 <strong id="total-age-25">0</strong></p>
+                                    <div class="progress">
+                                        <div class="progress-bar bg-info" role="progressbar" id="progressbar-25" aria-valuemin="0"></div>
+                                    </div>
+                                </div>
+                                <div class="stats-info">
+                                    <p>45 - 60 <strong id="total-age-45">0</strong></p>
+                                    <div class="progress">
+                                        <div class="progress-bar bg-danger" role="progressbar"
+                                        id="progressbar-45" aria-valuemin="0"></div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="progress mb-4">
-                            <div class="progress-bar bg-purple" role="progressbar" style="width: 30%" aria-valuenow="30"
-                                aria-valuemin="0" aria-valuemax="100"><span id="percentage-interview"></span></div>
-                            <div class="progress-bar bg-success" role="progressbar" style="width: 22%" aria-valuenow="18"
-                                aria-valuemin="0" aria-valuemax="100"><span id="percantage-probation"></span></div>
-                            <div class="progress-bar bg-text-info" role="progressbar" style="width: 24%" aria-valuenow="12"
-                                aria-valuemin="0" aria-valuemax="100"><span id="percantage-fdc"></span></div>
-                            <div class="progress-bar bg-danger" role="progressbar" style="width: 26%" aria-valuenow="14"
-                                aria-valuemin="0" aria-valuemax="100"><span id="percantage-udc"></span></div>
-                        </div>
-                        <div>
-                            <p><i class="fa fa-dot-circle-o text-purple me-2"></i>@lang('lang.up-coming')<span
-                                    id="total-interview" class="float-end">0</span></p>
-                            <p><i class="fa fa-dot-circle-o text-success me-2"></i>@lang('lang.probation')<span
-                                    id="total-probation" class="float-end">0</span></p>
-                            <p><i class="fa fa-dot-circle-o text-info me-2"></i>@lang('lang.fdc')<span
-                                    id="total-fdc" class="float-end">0</span></p>
-                            <p><i class="fa fa-dot-circle-o text-danger me-2"></i>@lang('lang.udc') <span
-                                    id="total-udc" class="float-end">0</span></p>
-                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-12 col-lg-12 col-xl-4 d-flex">
-                <div class="card flex-fill dash-statistics">
-                    <div class="card-body">
-                        <h5 class="card-title">@lang('lang.age_of_employee')</h5>
-                        <p><i class="fa fa-dot-circle-o text-info"></i> <span class="me-2">@lang('lang.age')</span></p>
-                        <div class="stats-list">
-                            <div class="stats-info">
-                                <p>18 - 24 <strong><small id="total-age-18"></small></strong></p>
-                                <div class="progress">
-                                    <div class="progress-bar bg-success" role="progressbar" id="progressbar-18" aria-valuemin="0"></div>
-                                </div>
+            @endif
+            @if (permissionAccess("m1-s1","is_dashboard")->is_dashboard["is_birthday_reminder"] == "1")
+                <div class="col-md-12 col-lg-6 col-xl-4 d-flex">
+                    <div class="card flex-fill">
+                        <div class="card-body">
+                            <h4 class="card-title">@lang('lang.birthday_reminder') <span class="bg-inverse-danger ms-2" id="total-date-birthday">0</span></h4>
+                            <div class="card-detail">
+                                <div id="birthday-staff" style="width: -webkit-fill-available"></div>
                             </div>
-                            <div class="stats-info">
-                                <p>25 - 44 <strong id="total-age-25">0</strong></p>
-                                <div class="progress">
-                                    <div class="progress-bar bg-info" role="progressbar" id="progressbar-25" aria-valuemin="0"></div>
-                                </div>
-                            </div>
-                            <div class="stats-info">
-                                <p>45 - 60 <strong id="total-age-45">0</strong></p>
-                                <div class="progress">
-                                    <div class="progress-bar bg-danger" role="progressbar"
-                                    id="progressbar-45" aria-valuemin="0"></div>
-                                </div>
+                            <div class="load-more text-center" id="btn-more">
+                                <a class="text-dark" href="{{ url('/users/birthday') }}">@lang('lang.more')</a>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            
-            <div class="col-md-12 col-lg-6 col-xl-4 d-flex">
-                <div class="card flex-fill">
-                    <div class="card-body">
-                        <h4 class="card-title">@lang('lang.birthday_reminder') <span class="badge bg-inverse-danger ms-2" id="total-date-birthday">0</span></h4>
-                        <div class="card-detail">
-                            <div id="birthday-staff" style="width: -webkit-fill-available"></div>
-                        </div>
-                        <div class="load-more text-center" id="btn-more">
-                            <a class="text-dark" href="{{ url('/users/birthday') }}">@lang('lang.more')</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            @endif
         </div>
         @include('dashboads.chart_board')
         <?php 
@@ -553,7 +558,8 @@
                         } 
                         if (emp.emp_status == "1" || emp.emp_status == "10") {
                             total_fdc++;
-                        } 
+                        }
+                         
                         if (emp.emp_status == "2") {
                             total_udc++;
                         }
@@ -587,11 +593,19 @@
                         let date_of_daymonth = moment(emp.date_of_birth).format("MM-DD");
                         let current_year = moment().format("YYYY");
                         let date_of_birth = moment(date_of_daymonth+'-'+current_year).format("D-MMM-YYYY");
+                        let tag_a = '';
+                        if (emp.profile != null) {
+                            tag_a = '<a href="#" class="avatar">'+
+                                        '<img alt="" src="{{asset("/uploads/images")}}/'+(emp.profile)+'">'+
+                                    '</a>';
+                        }else {
+                            tag_a = '<a href="#" class="avatar">'+
+                                    '<img alt="" src="{{asset("admin/img/defuals/default-user-icon.png")}}">'+
+                                '</a>';
+                        };
                         div += '<div class="leave-info-box">'+
                                     '<div class="media d-flex align-items-center">'+
-                                        '<a href="#" class="avatar">'+
-                                            '<img alt="" id="profile-imge" src="{{asset("/uploads/images")}}/'+(emp.profile)+'">'+
-                                        '</a>'+
+                                        (tag_a)+
                                         '<div class="media-body flex-grow-1">'+
                                             '<div class="text-sm my-0" >'+(emp.employee_name_en)+'</div>'+
                                         '</div>'+
@@ -810,7 +824,9 @@
                 options: option,
                 plugins: [ChartDataLabels]
             }
-            new Chart(db.name, dataChart);
+            if ($("#access_staff_take_leave").val() ==1) {
+                new Chart(db.name, dataChart);
+            }
         });
     }
 
@@ -883,16 +899,20 @@
                     labels: {
                         render: 'percentage',
                         precision: 2,
-                    }
+                    },
+                },
+                tooltip: {
+                    enabled: false
                 },
                 datalabels: {
                     anchor: 'end',
-                    align: 'top',
+                    align: 'end',
+                    offset: -4,
                     font: {
                         weight: 'bold',
                         size: 10
                     },
-                    align: 'center',
+                    
                 },
                 title: {
                     display: true,
@@ -917,10 +937,14 @@
             options: option,
             plugins: [ChartDataLabels]
         }
-        new Chart('HRMS_dashboards', dataChart);
+        if ($("#access_HRMS_dashboards").val() ==1) {
+            new Chart('HRMS_dashboards', dataChart);
+        }
     }
 
     function dashboadAchieveBranch(datas) {
+        var date = new Date();
+        let currenYear = date.getFullYear();
         let dataAchive = {
             datasets: [{
                     label: '@lang("lang.total_staff")',
@@ -931,7 +955,7 @@
                     stack: 'Stack 0',
                 },
                 {
-                    label: '@lang("lang.current") @lang("lang.&") @lang("lang.recruited") 2023',
+                    label: '@lang("lang.current") @lang("lang.&") @lang("lang.recruited") ' + currenYear,
                     data: [],
                     backgroundColor: [
                         "yellow"
@@ -1023,12 +1047,12 @@
                 datalabels: {
                     events: [],
                     anchor: 'end',
-                    align: 'top',
+                    align: 'end',
+                    offset: -4,
                     font: {
                         weight: 'bold',
                         size: 10
                     },
-                    align: 'center',
                     _actives: false,
                     formatter: (value, context) => {
                         if (context.chart.$datalabels._datasets[2]) {
@@ -1058,7 +1082,9 @@
             options: option,
             plugins: [ChartDataLabels]
         }
-        new Chart('achived_by_branches', dataChart);
+        if ($("#access_achived_by_branches").val() ==1) {
+            new Chart('achived_by_branches', dataChart);  
+        }
     }
 
     function dashboardStaffResign(datas) {
@@ -1122,8 +1148,9 @@
                     rtl: true,
                 },
                 datalabels: {
+                    color: 'white',
                     font: {
-                        size: 10
+                        size: 12
                     },
                     align: 'center',
                     formatter: (value, context) => {
@@ -1143,7 +1170,9 @@
             options: option,
             plugins: [ChartDataLabels]
         }
-        new Chart('staff_resignation', dataChart);
+        if ($("#access_staff_resignation").val() == 1) {
+            new Chart('staff_resignation', dataChart);
+        }
     }
 
     function dascboardReasonOffStaff(datas) {
@@ -1181,7 +1210,12 @@
                     }
                 });
             }
-            labelStaffResignation.push(reason.name_english);
+            var localeLanguage = '{{ config('app.locale') }}';
+            if (localeLanguage == 'en') {
+                labelStaffResignation.push(reason.name_english);
+            } else {
+                labelStaffResignation.push(reason.name_khmer);
+            }
             staffResignationData.push((totalValueStaffResignation / datas.totalEmployee) * 100);
         });
         if (totalStaffResign > 0) {
@@ -1209,7 +1243,7 @@
             });
             staffResignationData.push(dataSumTermination, dataSumDeath, dataSumLayoff, dataSumSuspension, dataSumFallProbation);
         }
-        labelStaffResignation.push("Termination","Death","Lay Off", "No need to input", "Failed Probation");
+        // labelStaffResignation.push("Termination","Death","Lay Off", "No need to input", "Failed Probation");
         dataReasonStaffResignation.labels = labelStaffResignation;
         dataReasonStaffResignation.datasets[0].data = staffResignationData;
         let data = dataReasonStaffResignation;
@@ -1226,8 +1260,9 @@
                 //     enabled: false
                 // },
                 datalabels: {
+                    color: 'white',
                     font: {
-                        size: 10
+                        size: 12
                     },
                     align: 'center',
                     formatter: (value, context) => {
@@ -1246,10 +1281,13 @@
             options: option,
             plugins: [ChartDataLabels]
         }
-        new Chart("reasons_staff_resignation", dataChart);
+        if ($("#access_reasons_staff_resignation").val() == 1) {
+            new Chart("reasons_staff_resignation", dataChart);
+        }
     }
 
     function dashboardTypeOfStaff(datas) {
+        var localeLanguage = '{{ config('app.locale') }}';
         let dataTypeStaff = {
             datasets: [
             ]
@@ -1285,16 +1323,29 @@
                     total,
                     name_english: position.name_english
                 });
-                type_labels.push(position.name_english);
+                if (localeLanguage == 'en') {
+                    type_labels.push(position.name_english);
+                } else {
+                    type_labels.push(position.name_khmer);
+                }
             }
             if (position.type ==  "gender") {
-                dataTypeStaff.datasets.push(
-                    {
-                        label: '% '+position.name_english,
-                    },
-                )
+                if (localeLanguage == 'en') {
+                    dataTypeStaff.datasets.push(
+                        {
+                            label: '% '+position.name_english,
+                        },
+                    )
+                } else {
+                    dataTypeStaff.datasets.push(
+                        {
+                            label: '% '+position.name_khmer,
+                        },
+                    )
+                }
             }  
         });
+        
         dataTypeStaff.datasets[0].backgroundColor = ["green"];
         dataTypeStaff.datasets[0].stack = 'Stack 0';
         dataTypeStaff.datasets[0].data = [];
@@ -1302,7 +1353,11 @@
         dataTypeStaff.datasets[1].stack = 'Stack 1';
         dataTypeStaff.datasets[1].data = [];
     
-        type_labels.push('total')
+        if (localeLanguage == 'en') {
+            type_labels.push('total')
+        } else {
+            type_labels.push('សរុប')
+        }
         dataTypeStaff.labels = type_labels;
         dataTypeStaff.datasets[0].data = [
             (data_value[0].male / datas.employee_position_type.length) * 100,
@@ -1339,12 +1394,12 @@
                 datalabels: {
                     events: [],
                     anchor: 'end',
-                    align: 'top',
+                    align: 'end',
+                    offset: -4,
                     font: {
                         weight: 'bold',
                         size: 10
                     },
-                    align: 'center',
                     _actives: false,
                     formatter: (value, context) => {
                         return `${parseFloat(value).toFixed(2)}%`;
@@ -1372,7 +1427,9 @@
             options: option,
             plugins: [ChartDataLabels]
         }
-        new Chart('type_of_staff', dataChart);
+        if ($("#access_type_of_staff").val() == 1) {
+            new Chart('type_of_staff', dataChart);
+        }
     }
 
     function dashboardTrainingInternal(datas){
@@ -1416,17 +1473,21 @@
                 },
                 datalabels: {
                     anchor: 'end',
-                    align: 'top',
+                    align: 'end',
+                    offset: -4,
                     font: {
                         weight: 'bold',
                         size: 10
                     },
-                    align: 'center',
                 },
                 title: {
                     display: true,
-                    text: "@lang('lang.staff_training_by_branch_internal')"
+                    text: "@lang('lang.staff_training_by_branch')"
                 },
+                subtitle: {
+                    display: true,
+                    text: '( @lang("lang.internal") )'
+                }
             },
             responsive: true,
             interaction: {
@@ -1447,7 +1508,9 @@
             options: optionInternal,
             plugins: [ChartDataLabels]
         }
-        new Chart('staff_Training_by_branch_internal', dataChartInternal);
+        if ($("#access_staff_Training_by_branch_internal").val() == 1) {
+            new Chart('staff_Training_by_branch_internal', dataChartInternal);
+        }
     }
 
     function dashboardTrainingExternal(datas){
@@ -1484,23 +1547,28 @@
             dataStaffTraining.datasets[0].data.push(dataTypeExternal.length);
         } 
         let optionExternal = {
+            
             plugins: {
                 legend: {
                     display: false,
                 },
                 datalabels: {
                     anchor: 'end',
-                    align: 'top',
+                    align: 'end',
+                    offset: -4,
                     font: {
                         weight: 'bold',
                         size: 10
                     },
-                    align: 'center',
                 },
                 title: {
                     display: true,
-                    text: "@lang('lang.staff_training_by_branch_external')"
+                    text: "@lang('lang.staff_training_by_branch')"
                 },
+                subtitle: {
+                    display: true,
+                    text: '( @lang("lang.external") )'
+                }
             },
             responsive: true,
             interaction: {
@@ -1522,7 +1590,10 @@
             options: optionExternal,
             plugins: [ChartDataLabels]
         }
-        new Chart('staff_Training_by_branch_external', dataChartExternal);
+        if ($("#access_staff_Training_by_branch_external").val() == 1) {
+            new Chart('staff_Training_by_branch_external', dataChartExternal);
+        }
+       
     }
     function mergeEmployeeArrays(data) {
         let mergedEmployeeArray = [];

@@ -25,6 +25,7 @@ class Payroll extends Model
 
     protected $fillable = [
         'employee_id',
+        'number_employee',
         'basic_salary',
         'total_gross_salary',
         'payment_date',
@@ -64,19 +65,23 @@ class Payroll extends Model
     public function users()
     {
         return $this->belongsTo(User::class ,'employee_id')
-        ->select([
-            'id', 
-            'profile',
-            'employee_name_en',
-            'employee_name_kh',
-            'number_employee',
-            'department_id',
-            'position_id',
-            'branch_id',
-            'account_number',
-            'bank_name',
-            'date_of_commencement'])
-        ->with('department')->with('position')->with('branch')->with('bank');
+        // ->select([
+        //     'id', 
+        //     'profile',
+        //     'employee_name_en',
+        //     'employee_name_kh',
+        //     'number_employee',
+        //     'department_id',
+        //     'position_id',
+        //     'branch_id',
+        //     'gender',
+        //     'account_number',
+        //     'bank_name',
+        //     'date_of_commencement',
+        //     'id_card_number',
+        //     'date_of_commencement',
+        //     ])
+        ->with("gender")->with('department')->with('position')->with("positiontype")->with('branch')->with("totalChild")->with('bank');
     }
     public function NSSF(){
         return $this->belongsTo(NationalSocialSecurityFund::class ,'employee_id','id');

@@ -13,58 +13,75 @@
                     <div class="form-group col-md-12 col-12" element="div" bp-field-wrapper="true" bp-field-name="Identity" bp-field-type="custom_html">
                         <label class="navbar-brand custom-navbar-brand mb-0" style="width: 100%; background: #dfe6e9; padding: 6px;font-size: 15px;font-weight: normal !important;">@lang('lang.branch')</label>
                     </div>
-                    <div class="form-group">
-                        <label>@lang('lang.transferred_from')</label>
-                        @if (count($empTranferend)>0)
-                            <input class="form-control" type="text" id="e_branch_id" name="branch_id" value="{{$empTranferend[0]->tranferend_branch_name}}" readonly="">
-                        @else
-                            <input class="form-control" type="text" id="e_branch_id" name="branch_id" value="{{$data->EmployeeBranch}}" readonly="">
-                        @endif
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>@lang('lang.transferred_from')</label>
+                                @if (count($empTranferend)>0)
+                                    <input class="form-control" type="text" id="e_branch_id" name="branch_id" value="{{$empTranferend[0]->tranferend_branch_name}}" readonly="">
+                                @else
+                                    <input class="form-control" type="text" id="e_branch_id" name="branch_id" value="{{$data->EmployeeBranch}}" readonly="">
+                                @endif
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group hr-form-group-select2">
+                                <label>@lang('lang.transferred_to')<span class="text-danger">*</span></label>
+                                <select class="form-control form-select hr-select2-option requered" id="e_tranferend_branch_name" name="tranferend_branch_name" required>
+                                    <option value="">--@lang('lang.select')--</option>
+                                    @if (count($branch)>0)
+                                        @foreach ($branch as $item)
+                                            <option value="{{Helper::getLang() == 'en' ? $item->branch_name_en : $item->branch_name_kh}}">{{Helper::getLang() == 'en' ? $item->branch_name_en : $item->branch_name_kh}}</option>
+                                        @endforeach
+                                    @endif
+                                </select>
+                            </div>
+                        </div>
                     </div>
-
-                    <div class="form-group hr-form-group-select2">
-                        <label>@lang('lang.transferred_to')<span class="text-danger">*</span></label>
-                        <select class="form-control form-select hr-select2-option requered" id="e_tranferend_branch_name" name="tranferend_branch_name" required>
-                            <option value="">@lang('lang.select')</option>
-                            @if (count($branch)>0)
-                                @foreach ($branch as $item)
-                                    <option value="{{Helper::getLang() == 'en' ? $item->branch_name_en : $item->branch_name_kh}}">{{Helper::getLang() == 'en' ? $item->branch_name_en : $item->branch_name_kh}}</option>
-                                @endforeach
-                            @endif
-                        </select>
-                    </div>
-
+                    
                     <div class="form-group col-md-12 col-12" element="div" bp-field-wrapper="true" bp-field-name="Identity" bp-field-type="custom_html">
                         <label class="navbar-brand custom-navbar-brand mb-0" style="width: 100%; background: #dfe6e9; padding: 6px;font-size: 15px;font-weight: normal !important;">@lang('lang.position')</label>
                     </div>
-                    <div class="form-group">
-                        <label>@lang('lang.transferred_from')</label>
-                        @if (count($empTranferend)>0)
-                            <input class="form-control" type="text" id="e_position_id" name="position_id" value="{{$empTranferend[0]->tranferend_position_name}}" readonly="">
-                        @else
-                            <input class="form-control" type="text" id="e_position_id" name="position_id" value="{{$data->EmployeePosition}}" readonly="">
-                        @endif
-                    </div>
-                    <div class="form-group hr-form-group-select2">
-                        <label>@lang('lang.transferred_to')<span class="text-danger">*</span></label>
-                        <select class="form-control form-select hr-select2-option requered" id="e_tranferend_position_name" name="tranferend_position_name" required>
-                            <option value="">@lang('lang.select')</option>
-                            @if (count($position)>0)
-                                @foreach ($position as $item)
-                                    <option value="{{Helper::getLang() == 'en' ? $item->name_english : $item->name_english}}">{{Helper::getLang() == 'en' ? $item->name_english : $item->name_english}}</option>
-                                @endforeach
-                            @endif
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>@lang('lang.transferred_date')</label>
-                        <div class="cal-icon">
-                            <input type="text" id="e_date" name="date" class="form-control datetimepicker">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>@lang('lang.transferred_from')</label>
+                                @if (count($empTranferend)>0)
+                                    <input class="form-control" type="text" id="e_position_id" name="position_id" value="{{$empTranferend[0]->tranferend_position_name}}" readonly="">
+                                @else
+                                    <input class="form-control" type="text" id="e_position_id" name="position_id" value="{{$data->EmployeePosition}}" readonly="">
+                                @endif
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group hr-form-group-select2">
+                                <label>@lang('lang.transferred_to')<span class="text-danger">*</span></label>
+                                <select class="form-control form-select hr-select2-option requered" id="e_tranferend_position_name" name="tranferend_position_name" required>
+                                    <option value="">--@lang('lang.select')--</option>
+                                    @if (count($position)>0)
+                                        @foreach ($position as $item)
+                                            <option value="{{Helper::getLang() == 'en' ? $item->name_english : $item->name_english}}">{{Helper::getLang() == 'en' ? $item->name_english : $item->name_english}}</option>
+                                        @endforeach
+                                    @endif
+                                </select>
+                            </div>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label>@lang('lang.remark')</label>
-                        <textarea class="form-control" rows="4" spellcheck="false" id="e_descrition" name="descrition" style="position: relative;"></textarea>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>@lang('lang.transferred_date')</label>
+                                <div class="cal-icon">
+                                    <input type="text" id="e_date" name="date" class="form-control datetimepicker">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>@lang('lang.remark')</label>
+                                <textarea class="form-control" rows="2" spellcheck="false" id="e_descrition" name="descrition" style="position: relative;"></textarea>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="submit-section">

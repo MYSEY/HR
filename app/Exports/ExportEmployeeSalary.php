@@ -5,15 +5,18 @@ namespace App\Exports;
 use Carbon\Carbon;
 use App\Helpers\Helper;
 use App\Models\Payroll;
+use App\Repositories\Admin\EmployeeRepository;
 use KhmerDateTime\KhmerDateTime;
 use Maatwebsite\Excel\Events\AfterSheet;
 use Maatwebsite\Excel\Concerns\WithEvents;
 use PhpOffice\PhpSpreadsheet\Style\Border;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithColumnWidths;
 use Maatwebsite\Excel\Concerns\WithCustomStartCell;
+use Nette\Utils\Strings;
 
 class ExportEmployeeSalary implements FromCollection, WithColumnWidths, WithHeadings, WithCustomStartCell, WithEvents
 {
@@ -60,7 +63,16 @@ class ExportEmployeeSalary implements FromCollection, WithColumnWidths, WithHead
             'users.employee_name_en',
             'users.employee_name_kh',
             'users.branch_id',
+            'users.department_id',
         )
+        ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+            if ($RolePermission == 'HOD') {
+                $query->whereIn("users.department_id", EmployeeRepository::getRoleHOD());
+            }
+            if ($RolePermission == 'BM') {
+                $query->where("users.branch_id", Auth::user()->branch_id);
+            }
+        })
         ->when($request->employee_id, function ($query, $employee_id) {
             $query->where('users.number_employee', 'LIKE', '%'.$employee_id.'%');
         })
@@ -77,7 +89,7 @@ class ExportEmployeeSalary implements FromCollection, WithColumnWidths, WithHead
             $query->whereYear('payment_date', $yearLy);
         })->orderBy('employee_id')->get();
         $dataExport = [];
-        $i = 1;
+        $i = 0;
         foreach ($payroll as $value) {
             $i++;
             $this->num = $i;
@@ -106,6 +118,15 @@ class ExportEmployeeSalary implements FromCollection, WithColumnWidths, WithHead
             $this->totalLoanAmount += $value->loan_amount;
             $this->totalAmountCar += $value->total_amount_car;
             $this->totalSalaryNetPay += $value->total_salary;
+
+            if (is_numeric($value->basic_salary)) {
+                $basic_salary = number_format($value->basic_salary, 2);
+            } else {
+                $basic_salary = number_format($value->basic_salary, 2);
+            }
+            
+            $totalSalaryTaxRiel = number_format($value->total_salary_tax_riel, 0);
+            $total_salary = number_format($value->total_salary, 2);
             $dataExport[] = [
                 "no" => $i,
                 "employee_id"       => intval($value->users->number_employee),
@@ -114,7 +135,7 @@ class ExportEmployeeSalary implements FromCollection, WithColumnWidths, WithHead
                 "department"        => $value->users->EmployeeDepartment,
                 "location"          => $value->users->EmployeeBranch,
                 "Join Date"         => $value->users->joinOfDate,
-                "Basic Salary"      => number_format($value->basic_salary, 2),
+                "Basic Salary"      => $basic_salary,
                 "Base Salary Received"          => number_format($value->total_gross_salary, 2),
                 "Child Allowance"               => number_format($value->total_child_allowance),
                 "Phone Allowance"               => number_format($value->phone_allowance, 2),
@@ -132,15 +153,14 @@ class ExportEmployeeSalary implements FromCollection, WithColumnWidths, WithHead
                 "Total Tax Base Riel"           => number_format($value->total_tax_base_riel),
                 "Tax Rate"                      => number_format($value->total_rate, 2),
                 "Personal Tax(USD)"             => number_format($value->total_salary_tax_usd, 2),
-                "Personal Tax(Riels)"           => number_format($value->total_salary_tax_riel,2),
+                "Personal Tax(Riels)"           => $totalSalaryTaxRiel,
                 "Seniority Pay Excluded Tax"    => number_format($value->seniority_pay_excluded_tax, 2),
                 "Seniority Backford"            => number_format($value->seniority_backford, 2),
                 "Severance Pay"                 => number_format($value->total_severance_pay, 2),
                 "Loan Amount"                   => number_format($value->loan_amount, 2),
                 "Total Amount Car"              => number_format($value->total_amount_car, 2),
-                "net_salary"                    => abs($value->total_salary)
+                "net_salary"                    => $total_salary
             ];
-            $i++;
         }
         $this->export_datas = $dataExport;
     }
@@ -328,7 +348,7 @@ class ExportEmployeeSalary implements FromCollection, WithColumnWidths, WithHead
                 $sheet->getDelegate()->getStyle("U".$rows)->getFont()->setName('Khmer OS Battambang')->setSize(9)->setBold("U".$rows);
                 $event->sheet->getDelegate()->getStyle("U".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
                 //total setCellValue V
-                $sheet->setCellValue("V".$rows, number_format($this->totalChargesReduced, 2));
+                $sheet->setCellValue("V".$rows, number_format($this->totalChargesReduced));
                 $sheet->getDelegate()->getStyle("V".$rows)->getFont()->setName('Khmer OS Battambang')->setSize(9)->setBold("V".$rows);
                 $event->sheet->getDelegate()->getStyle("V".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
                 //total setCellValue V

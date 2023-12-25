@@ -21,11 +21,12 @@ class TrainerController extends Controller
     public function index()
     {
         $data = Trainer::with("employee")->get();
-        $employee = User::whereIn("emp_status", ['1','2'])->get();
+        $employee = User::whereIn("emp_status", ['1','2', '10'])->orWhereIn("p_status", ['1','2', '10'])->get();
         return view('trainers.index', compact('data', 'employee'));
     }
     public function filter(Request $request)
     {
+        
         try {
             $from_date = null;
             $to_date = null;
@@ -35,7 +36,7 @@ class TrainerController extends Controller
             if ($request->to_date) {
                 $to_date = Carbon::createFromDate($request->to_date.' '.'23:59:59')->format('Y-m-d H:i:s');
             }
-            $data = Trainer::join('users', 'trainers.employee_id', '=', 'users.id')
+            $data = Trainer::leftJoin('users', 'trainers.employee_id', '=', 'users.id')
             ->select(
                 'trainers.*', 
                 'users.employee_name_kh',
@@ -63,6 +64,7 @@ class TrainerController extends Controller
                 $query->orWhere('employee_name_kh', 'LIKE', '%'.$trainer_name.'%');
             })
             ->get();
+            
             return response()->json([
                 'success'=>$data,
             ]);
