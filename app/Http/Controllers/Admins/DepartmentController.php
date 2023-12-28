@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Auth;
+use Spatie\Activitylog\Models\Activity;
 use App\Http\Requests\DepartmentRequest;
 
 class DepartmentController extends Controller
@@ -20,7 +21,6 @@ class DepartmentController extends Controller
     public function index()
     {
         $data = Department::where("parent_id", 0)->orWhere("parent_id", null)->with('child')->orderBy('id','DESC')->get();
-        // dd($data);
         return view('department.index',compact('data'));
     }
 
@@ -33,6 +33,7 @@ class DepartmentController extends Controller
     public function store(DepartmentRequest $request)
     {
         try {
+            Activity::all()->last();
             $data = $request->all();
             $data['created_by']    = Auth::user()->id;
             $data['head_department']    = Auth::user()->id;

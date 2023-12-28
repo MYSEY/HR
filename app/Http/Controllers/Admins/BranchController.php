@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\BranchsRequest;
+use Spatie\Activitylog\Models\Activity;
 
 class BranchController extends Controller
 {
@@ -32,6 +33,7 @@ class BranchController extends Controller
     public function store(BranchsRequest $request)
     {
         try {
+            Activity::all()->last();
             $data = $request->all();
             $data['created_by']    = Auth::user()->id;
             Branchs::create($data);

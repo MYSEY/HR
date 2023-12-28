@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers\Admins;
 
-use App\Http\Controllers\Controller;
-use App\Models\Trainer;
-use App\Models\User;
-use Brian2694\Toastr\Facades\Toastr;
 use Carbon\Carbon;
+use App\Models\User;
+use App\Models\Trainer;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Brian2694\Toastr\Facades\Toastr;
+use Illuminate\Support\Facades\Auth;
+use Spatie\Activitylog\Models\Activity;
 
 class TrainerController extends Controller
 {
@@ -93,6 +94,7 @@ class TrainerController extends Controller
     public function store(Request $request)
     {
         try {
+            Activity::all()->last();
             $data = $request->all();
             $data['created_by'] = Auth::user()->id;
             Trainer::create($data);

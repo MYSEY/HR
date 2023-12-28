@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers\Admins;
 
-use App\Http\Controllers\Controller;
-use App\Models\FringeBenefit;
-use App\Models\User;
-use App\Repositories\Admin\EmployeeRepository;
-use Brian2694\Toastr\Facades\Toastr;
 use Carbon\Carbon;
+use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use App\Models\FringeBenefit;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Brian2694\Toastr\Facades\Toastr;
+use Illuminate\Support\Facades\Auth;
 use PhpOffice\PhpSpreadsheet\IOFactory;
+use Spatie\Activitylog\Models\Activity;
+use App\Repositories\Admin\EmployeeRepository;
 
 class FringeBenefitController extends Controller
 {
@@ -75,6 +76,7 @@ class FringeBenefitController extends Controller
     public function store(Request $request)
     {
         try {
+            Activity::all()->last();
             $data = $request->all();
             $data['created_by'] = Auth::user()->id;
             FringeBenefit::create($data);

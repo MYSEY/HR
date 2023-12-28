@@ -2,14 +2,18 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Spatie\Activitylog\LogOptions;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class FringeBenefit extends Model
 {
     use HasFactory;
     use SoftDeletes;
+    use LogsActivity;
+
     protected $table = 'fringe_benefits';
     protected $guarded = ['id'];
     protected $fillable = [
@@ -24,6 +28,13 @@ class FringeBenefit extends Model
         'deleted_at',
     ];
 
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+        ->logOnly(['*'])
+        ->logOnlyDirty()
+        ->dontSubmitEmptyLogs();
+    }
     public function employee(){
         return $this->belongsTo(User::class,'employee_id')
         ->select([

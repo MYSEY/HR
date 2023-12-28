@@ -21,8 +21,10 @@ use App\Models\StaffPromoted;
 use App\Models\StaffTraining;
 use Illuminate\Support\Carbon;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\Activitylog\LogOptions;
 use App\Traits\UploadFiles\UploadFIle;
 use Illuminate\Notifications\Notifiable;
+use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -31,7 +33,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, LogsActivity;
     use UploadFIle;
     use SoftDeletes;
 
@@ -129,6 +131,15 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+        ->logOnly(['*'])
+        ->logOnlyDirty()
+        ->dontSubmitEmptyLogs();
+    }
+    
     /**
      * The attributes that should be cast.
      *

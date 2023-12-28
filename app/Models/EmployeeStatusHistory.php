@@ -2,12 +2,16 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Spatie\Activitylog\LogOptions;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class EmployeeStatusHistory extends Model
 {
     use HasFactory;
+    use LogsActivity;
+
     protected $table = 'employee_status_histories';
     protected $guarded = ['id'];
     protected $fillable = [
@@ -17,7 +21,14 @@ class EmployeeStatusHistory extends Model
         'created_by',
         'updated_by',
     ];
-
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+        ->logOnly(['*'])
+        ->logOnlyDirty()
+        ->dontSubmitEmptyLogs();
+    }
+    
     public function createdBy()
     {
         return $this->belongsTo(User::class, 'created_by');

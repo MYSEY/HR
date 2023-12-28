@@ -4,7 +4,9 @@ namespace App\Models;
 
 use App\Models\Branchs;
 use Illuminate\Support\Carbon;
+use Spatie\Activitylog\LogOptions;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -12,6 +14,9 @@ class Transferred extends Model
 {
     use HasFactory;
     use SoftDeletes;
+    use LogsActivity;
+
+    
     protected $table = 'transferreds';
     protected $guarded = ['id'];
     protected $fillable = [
@@ -24,7 +29,13 @@ class Transferred extends Model
         'descrition',
         'updated_by'
     ];
-
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+        ->logOnly(['*'])
+        ->logOnlyDirty()
+        ->dontSubmitEmptyLogs();
+    }
     public function branch()
     {
         return $this->belongsTo(Branchs::class ,'branch_id');

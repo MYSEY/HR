@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Brian2694\Toastr\Facades\Toastr;
+use Spatie\Activitylog\Models\Activity;
 
 class PermissionController extends Controller
 {
@@ -46,6 +47,7 @@ class PermissionController extends Controller
      */
     public function store(Request $request)
     {
+        Activity::all()->last();
         $data=[
             'table_id'              =>$request->table_id,
             'role_id'               =>$request->role_id,

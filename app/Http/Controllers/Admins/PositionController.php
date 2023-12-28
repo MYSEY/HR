@@ -10,6 +10,7 @@ use App\Http\Controllers\Controller;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\PositionRequest;
+use Spatie\Activitylog\Models\Activity;
 
 class PositionController extends Controller
 {
@@ -45,6 +46,7 @@ class PositionController extends Controller
     public function store(PositionRequest $request)
     {
         try {
+            Activity::all()->last();
             $data = $request->all();
             $data['created_by']    = Auth::user()->id;
             Position::create($data);

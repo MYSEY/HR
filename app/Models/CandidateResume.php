@@ -2,17 +2,20 @@
 
 namespace App\Models;
 
-use App\Traits\UploadFiles\UploadFIle;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
+use Spatie\Activitylog\LogOptions;
+use App\Traits\UploadFiles\UploadFIle;
+use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class CandidateResume extends Model
 {
     use HasFactory;
     use UploadFIle;
     use SoftDeletes;
+    use LogsActivity;
 
     protected $table = 'candidate_resumes';
     protected $guarded = ['id'];
@@ -67,6 +70,14 @@ class CandidateResume extends Model
         'created_by',
         'updated_by',
     ];
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+        ->logOnly(['*'])
+        ->logOnlyDirty()
+        ->dontSubmitEmptyLogs();
+    }
+    
     public function option(){
         return $this->belongsTo(Option::class,'gender');
     }

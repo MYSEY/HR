@@ -18,7 +18,8 @@
         "needim/noty": "^3.1",
         "phannaly/php-datetime-khmer": "^1.0",
         "psr/simple-cache": "^2.0",
-        "rsmalc/laravel-noty": "^2.5"
+        "rsmalc/laravel-noty": "^2.5",
+        "spatie/laravel-activitylog": "^4.7"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",

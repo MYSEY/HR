@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\User;
 use App\Helpers\Helper;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -12,6 +13,7 @@ class Bonus extends Model
 {
     use HasFactory;
     use SoftDeletes;
+    use LogsActivity;
 
     protected $table = 'bonuses';
     protected $guarded = ['id'];
@@ -38,5 +40,13 @@ class Bonus extends Model
     }
     public function getFirstNameAttribute(){
         return (Helper::getLang() == 'en') ? optional($this->users)->first_name_en : optional($this->users)->first_name_kh;
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+        ->logOnly(['*'])
+        ->logOnlyDirty()
+        ->dontSubmitEmptyLogs();
     }
 }

@@ -2,27 +2,28 @@
 
 namespace App\Http\Controllers\Admins;
 
-use App\Http\Controllers\Controller;
-use App\Models\Branchs;
-use App\Models\CandidateResume;
-use App\Models\Conmmunes;
-use App\Models\Department;
-use App\Models\District;
-use App\Models\GenerateIdEmployee;
-use App\Models\Option;
-use App\Models\Position;
-use App\Models\Province;
+use Carbon\Carbon;
 use App\Models\Role;
 use App\Models\User;
+use App\Models\Option;
+use App\Models\Branchs;
+use App\Models\District;
+use App\Models\Position;
+use App\Models\Province;
 use App\Models\Villages;
-use App\Traits\GeneratingCode;
-use Brian2694\Toastr\Facades\Toastr;
-use Carbon\Carbon;
+use App\Models\Conmmunes;
+use App\Models\Department;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use App\Traits\GeneratingCode;
+use App\Models\CandidateResume;
+use App\Models\GenerateIdEmployee;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Brian2694\Toastr\Facades\Toastr;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use PhpOffice\PhpSpreadsheet\IOFactory;
+use Spatie\Activitylog\Models\Activity;
 
 class CandidateResumeController extends Controller
 {
@@ -35,7 +36,6 @@ class CandidateResumeController extends Controller
     
     public function index()
     {
-        // dd(Auth::user()->RolePermission);
         $role = Role::all();
         $autoEmpId   = $this->generate_EmployeeId(Carbon::today())['number_employee'];
         $department = Department::all();
@@ -89,24 +89,24 @@ class CandidateResumeController extends Controller
             }
         })->count();
         return view('recruitments.candidate_resumes.candidate_resume', 
-            compact([
-                "position", 
-                "branch", 
-                "gender", 
-                "data", 
-                "autoEmpId", 
-                "role", 
-                "department", 
-                "optionPositionType", 
-                "optionLoan", 
-                "province",
-                "dataShortList",
-                "dataNon",
-                "dataFailed",
-                "dataResult",
-                'dataProcessing',
-                'dataCancel'
-            ]));
+        compact([
+            "position", 
+            "branch", 
+            "gender", 
+            "data", 
+            "autoEmpId", 
+            "role", 
+            "department", 
+            "optionPositionType", 
+            "optionLoan", 
+            "province",
+            "dataShortList",
+            "dataNon",
+            "dataFailed",
+            "dataResult",
+            'dataProcessing',
+            'dataCancel'
+        ]));
     }
 
     /**
@@ -128,6 +128,7 @@ class CandidateResumeController extends Controller
     public function store(Request $request)
     {
         try {
+            Activity::all()->last();
             $data = $request->all();
             $data['created_by'] = Auth::user()->id;
             $data['name_kh'] = $request->last_name_kh.' '.$request->first_name_kh;

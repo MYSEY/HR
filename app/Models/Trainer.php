@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use Spatie\Activitylog\LogOptions;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -10,6 +12,7 @@ class Trainer extends Model
 {
     use HasFactory;
     use SoftDeletes;
+    use LogsActivity;
 
     protected $table = 'trainers';
     protected $guarded = ['id'];
@@ -26,8 +29,14 @@ class Trainer extends Model
         'created_by',
         'updated_by',
         'deleted_at',
-     ];
-
+    ];
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+        ->logOnly(['*'])
+        ->logOnlyDirty()
+        ->dontSubmitEmptyLogs();
+    }
     public function employee(){
         return $this->belongsTo(User::class,'employee_id');
     }

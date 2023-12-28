@@ -2,12 +2,15 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Spatie\Activitylog\LogOptions;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class permissions extends Model
 {
     use HasFactory;
+    use LogsActivity;
     
     protected $table = 'permissions';
     protected $guarded = ['id'];
@@ -41,7 +44,13 @@ class permissions extends Model
         'updated_by',
         'deleted_at',
     ];
-
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+        ->logOnly(['*'])
+        ->logOnlyDirty()
+        ->dontSubmitEmptyLogs();
+    }
     public function createdBy()
     {
         return $this->belongsTo(User::class, 'created_by');

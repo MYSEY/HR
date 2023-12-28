@@ -3,10 +3,15 @@
 namespace App\Models;
 
 use App\Models\User;
+use Spatie\Activitylog\LogOptions;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Branchs extends Model
 {
+
+
+    use LogsActivity;
 
     /*
     |--------------------------------------------------------------------------
@@ -21,7 +26,13 @@ class Branchs extends Model
     | FUNCTIONS
     |--------------------------------------------------------------------------
     */
-
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+        ->logOnly(['*'])
+        ->logOnlyDirty()
+        ->dontSubmitEmptyLogs();
+    }
     /*
     |--------------------------------------------------------------------------
     | RELATIONS

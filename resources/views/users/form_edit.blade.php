@@ -81,7 +81,7 @@
                         <div class="col-md-4">
                             <div class="form-group hr-form-group-select2">
                                 <label>@lang('lang.role_name')<span class="text-danger">*</span></label>
-                                <select class="form-control hr-select2-option requered @error('role_id') is-invalid @enderror" name="role_id" id="e_role_id" required>
+                                <select class="form-control hr-select2-option @error('role_id') is-invalid @enderror" name="role_id" id="e_role_id" required>
                                     <option selected disabled value=""> --@lang('lang.select')--</option>
                                 </select>
                             </div>

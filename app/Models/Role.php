@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use Spatie\Activitylog\LogOptions;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -10,6 +12,8 @@ class Role extends Model
 {
     use HasFactory;
     use SoftDeletes;
+    use LogsActivity;
+
 
     protected $fillable = [
         'id',
@@ -18,6 +22,13 @@ class Role extends Model
         'created_by',
         'updated_by',
     ];
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+        ->logOnly(['*'])
+        ->logOnlyDirty()
+        ->dontSubmitEmptyLogs();
+    }
     public function useruse()
     {
         return $this->hasMany(User::class, 'role_id', 'id');

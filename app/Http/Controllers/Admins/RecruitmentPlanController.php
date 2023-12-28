@@ -2,17 +2,19 @@
 
 namespace App\Http\Controllers\Admins;
 
-use App\Exports\ExportRecruitmentPlan;
-use App\Http\Controllers\Controller;
+use Carbon\Carbon;
 use App\Models\Branchs;
 use App\Models\Position;
-use App\Models\RecruitmentPlan;
-use Brian2694\Toastr\Facades\Toastr;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use App\Models\RecruitmentPlan;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Brian2694\Toastr\Facades\Toastr;
+use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\ExportRecruitmentPlan;
+use Spatie\Activitylog\Models\Activity;
+
 class RecruitmentPlanController extends Controller
 {
     /**
@@ -54,6 +56,7 @@ class RecruitmentPlanController extends Controller
     public function store(Request $request)
     {
         try {
+            Activity::all()->last();
             $currentday = Carbon::createFromDate()->format('d');
             foreach ($request->plan_date as $key => $plan_date) {
                 $data = [
@@ -163,7 +166,6 @@ class RecruitmentPlanController extends Controller
             return response()->json([
                 'success'=>$dataPlan,
             ]);
-            // return redirect()->back();
         }catch(\Exception $e){
             DB::rollback();
             Toastr::error('Recruitment plan updated fail.','Error');

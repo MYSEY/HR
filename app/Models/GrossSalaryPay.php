@@ -3,7 +3,9 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use Spatie\Activitylog\LogOptions;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -11,6 +13,7 @@ class GrossSalaryPay extends Model
 {
     use HasFactory;
     use SoftDeletes;
+    use LogsActivity;
 
     protected $table = 'gross_salary_pays';
     protected $guarded = ['id'];
@@ -30,6 +33,13 @@ class GrossSalaryPay extends Model
         'created_by',
         'updated_by',
     ];
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+        ->logOnly(['*'])
+        ->logOnlyDirty()
+        ->dontSubmitEmptyLogs();
+    }
     public function users()
     {
         return $this->belongsTo(User::class ,'employee_id')->with("gender")->with('department')->with('position')->with("positiontype")->with('branch')->with("totalChild")->with('bank');

@@ -4,7 +4,9 @@ namespace App\Models;
 
 use App\Models\User;
 use Illuminate\Support\Carbon;
+use Spatie\Activitylog\LogOptions;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -12,6 +14,8 @@ class Holiday extends Model
 {
     use HasFactory;
     use SoftDeletes;
+    use LogsActivity;
+
     protected $table = 'holidays';
     protected $guarded = ['id'];
 
@@ -32,7 +36,13 @@ class Holiday extends Model
     | FUNCTIONS
     |--------------------------------------------------------------------------
     */
-
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+        ->logOnly(['*'])
+        ->logOnlyDirty()
+        ->dontSubmitEmptyLogs();
+    }
     /*
     |--------------------------------------------------------------------------
     | RELATIONS

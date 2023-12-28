@@ -6,7 +6,9 @@ use App\Helpers\Helper;
 use App\Models\Position;
 use App\Models\Department;
 use Illuminate\Support\Carbon;
+use Spatie\Activitylog\LogOptions;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -14,6 +16,7 @@ class StaffPromoted extends Model
 {
     use HasFactory;
     use SoftDeletes;
+    use LogsActivity;
 
     protected $table = 'staff_promoteds';
     protected $guarded = ['id'];
@@ -27,7 +30,13 @@ class StaffPromoted extends Model
         'created_by',
         'updated_by'
     ];
-
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+        ->logOnly(['*'])
+        ->logOnlyDirty()
+        ->dontSubmitEmptyLogs();
+    }
     public function position(){
         return $this->belongsTo(Position::class,'posit_id');
     }

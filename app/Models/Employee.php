@@ -15,8 +15,10 @@ use App\Traits\AddressTrait;
 use App\Models\StaffPromoted;
 use App\Models\StaffTraining;
 use Illuminate\Support\Carbon;
+use Spatie\Activitylog\LogOptions;
 use App\Traits\UploadFiles\UploadFIle;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Employee extends Model
@@ -24,6 +26,8 @@ class Employee extends Model
     use UploadFIle;
     use AddressTrait;
     use SoftDeletes;
+    use LogsActivity;
+
 
     /*
     |--------------------------------------------------------------------------
@@ -44,7 +48,13 @@ class Employee extends Model
     | FUNCTIONS
     |--------------------------------------------------------------------------
     */
-    
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+        ->logOnly(['*'])
+        ->logOnlyDirty()
+        ->dontSubmitEmptyLogs();
+    }
     /*
     |--------------------------------------------------------------------------
     | RELATIONS

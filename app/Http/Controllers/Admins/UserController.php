@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Admins;
 
-use App\Exports\ExportEmployee;
 use App\Models\Bank;
 use App\Models\Role;
 use App\Models\User;
@@ -17,19 +16,21 @@ use App\Models\Department;
 use Illuminate\Http\Request;
 use App\Traits\GeneratingCode;
 use Illuminate\Support\Carbon;
+use App\Exports\ExportEmployee;
 use App\Http\Requests\UserRequest;
 use App\Http\Requests\UserUpdated;
 use App\Models\GenerateIdEmployee;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use App\Models\EmployeeStatusHistory;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Models\EmployeeStatusHistory;
 use App\Traits\UploadFiles\UploadFIle;
 use PhpOffice\PhpSpreadsheet\IOFactory;
+use Spatie\Activitylog\Models\Activity;
 use App\Repositories\Admin\EmployeeRepository;
-use Maatwebsite\Excel\Facades\Excel;
 
 class UserController extends Controller
 {
@@ -184,6 +185,7 @@ class UserController extends Controller
     public function create(Request $request)
     {
         try{
+            Activity::all()->last();
             $this->employeeRepo->createUsers($request);
             DB::commit();
             Toastr::success('Create employee successfully.','Success');
@@ -203,16 +205,16 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        try{
-            $this->employeeRepo->createUsers($request);
-            DB::commit();
-            Toastr::success('Create employee successfully.','Success');
-            return redirect()->back();
-        }catch(\Exception $e){
-            DB::rollback();
-            Toastr::error('Create employee fail','Error');
-            return redirect()->back();
-        }
+        // try{
+        //     $this->employeeRepo->createUsers($request);
+        //     DB::commit();
+        //     Toastr::success('Create employee successfully.','Success');
+        //     return redirect()->back();
+        // }catch(\Exception $e){
+        //     DB::rollback();
+        //     Toastr::error('Create employee fail','Error');
+        //     return redirect()->back();
+        // }
     }
     /**
      * Show the form for editing the specified resource.
@@ -372,7 +374,6 @@ class UserController extends Controller
             DB::commit();
             Toastr::success('Updated employee successfully.','Success');
             return redirect('users');
-            // return redirect()->back();
         }catch(\Exception $e){
             DB::rollback();
             Toastr::error('Update employee fail','Error');

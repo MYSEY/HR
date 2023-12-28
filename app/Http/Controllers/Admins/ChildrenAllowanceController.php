@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Auth;
+use Spatie\Activitylog\Models\Activity;
 
 class ChildrenAllowanceController extends Controller
 {
@@ -76,6 +77,7 @@ class ChildrenAllowanceController extends Controller
     public function update(Request $request)
     {
         try{
+            Activity::all()->last();
             ChildrenAllowance::where('id',$request->id)->update([
                 'total_children_allowance' => $request->total_children_allowance,
                 'spouse_allowance' => $request->spouse_allowance,

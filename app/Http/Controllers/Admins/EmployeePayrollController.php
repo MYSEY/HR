@@ -19,19 +19,20 @@ use App\Models\payrollPreview;
 use Illuminate\Support\Carbon;
 use App\Models\ChildrenAllowance;
 use Illuminate\Support\Facades\DB;
+use App\Exports\ExportReviewPayroll;
 use App\Http\Controllers\Controller;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Date;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\ExportEmployeeSalary;
-use App\Exports\ExportReviewPayroll;
 use App\Models\PreviewGrossSalaryPay;
 use PhpOffice\PhpSpreadsheet\IOFactory;
+use Spatie\Activitylog\Models\Activity;
 use App\Models\NationalSocialSecurityFund;
 use App\Repositories\Admin\PayrollRepository;
-use App\Models\PreviewNationalSocialSecurityFund;
 use App\Repositories\Admin\EmployeeRepository;
+use App\Models\PreviewNationalSocialSecurityFund;
 
 class EmployeePayrollController extends Controller
 {
@@ -177,6 +178,7 @@ class EmployeePayrollController extends Controller
     public function store(Request $request)
     {
         try{
+            Activity::all()->last();
             $employee = User::where('date_of_commencement','<=',$request->payment_date)->whereIn('emp_status',['Probation','1','10','2'])->get();
             if (!$employee->isEmpty()) {
                 foreach ($employee as $item) {

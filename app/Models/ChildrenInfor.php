@@ -5,7 +5,9 @@ namespace App\Models;
 use Carbon\Carbon;
 use App\Models\Option;
 use App\Helpers\Helper;
+use Spatie\Activitylog\LogOptions;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -13,6 +15,7 @@ class ChildrenInfor extends Model
 {
     use HasFactory;
     use SoftDeletes;
+    use LogsActivity;
 
     protected $table = 'children_infors';
     protected $guarded = ['id'];
@@ -25,6 +28,13 @@ class ChildrenInfor extends Model
         'created_by',
     ];
 
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+        ->logOnly(['*'])
+        ->logOnlyDirty()
+        ->dontSubmitEmptyLogs();
+    }
     public function getDateofBirthChildrenAttribute(){
         if ($this->date_of_birth) {
             return Carbon::parse($this->date_of_birth)->format('d-M-Y');

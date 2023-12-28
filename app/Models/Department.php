@@ -3,12 +3,16 @@
 namespace App\Models;
 
 use App\Models\User;
+use Spatie\Activitylog\LogOptions;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Department extends Model
 {
     use SoftDeletes;
+    use LogsActivity;
+
     /*
     |--------------------------------------------------------------------------
     | GLOBAL VARIABLES
@@ -26,8 +30,14 @@ class Department extends Model
         'created_by',
         'updated_by',
         'deleted_at',
-     ];
-
+    ];
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+        ->logOnly(['*'])
+        ->logOnlyDirty()
+        ->dontSubmitEmptyLogs();
+    }
      
     public function child(){
         return $this->hasMany(Department::class, 'parent_id','id');

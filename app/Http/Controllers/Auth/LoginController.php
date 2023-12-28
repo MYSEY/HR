@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Support\Facades\Session;
+use Spatie\Activitylog\Models\Activity;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
 class LoginController extends Controller
@@ -54,6 +55,7 @@ class LoginController extends Controller
     // change password
     public function login(Request $request)
     {
+        Activity::all()->last();
         $dataShortList = DB::table('candidate_resumes')->select('candidate_resumes.*')
         ->where(DB::raw("(DATE_FORMAT(candidate_resumes.interviewed_date,'%Y-%m-%d'))"), Carbon::now()->format('Y-m-d'))
         ->where('candidate_resumes.status','2')
@@ -93,24 +95,9 @@ class LoginController extends Controller
             ]);
         }
         
-        $name    = $hashedPassword->employee_name_en;
-        $email    = $hashedPassword->email;
         $number_employee    = $request->number_employee;
-        $password = $change_password ? $change_password : $request->password;
-        
-        $dt         = Carbon::now();
-        $todayDate  = $dt->toDayDateTimeString();
-
-        $activityLog = [
-            'name'        => $name,
-            'email'       => $email,
-            'number_employee'       => $number_employee,
-            'description' => 'has log in',
-            'date_time'   => $todayDate,
-        ];
-        // if (Auth::attempt(['number_employee' => $number_employee, 'password' => $password, 'role_id' => ['1','2']])) {
+        $password           = $change_password ? $change_password : $request->password;
         if (Auth::attempt(['number_employee' => $number_employee, 'password' => $password])) {
-            DB::table('activity_logs')->insert($activityLog);
             return redirect('dashboad/admin')->with([
                 'dataUpComming' =>  $dataUserUpComming,
                 'dataProbation' =>  $dataUserProbation,
@@ -118,10 +105,7 @@ class LoginController extends Controller
                 'dataContract'  =>  $dataContract
             ]);
             Toastr::success('Login successfully.', 'Success');
-            // return redirect('dashboad/admin');
-        // } elseif (Auth::attempt(['number_employee' => $number_employee, 'password' => $password, 'role_id' => '3'])) {
         } elseif (Auth::attempt(['number_employee' => $number_employee, 'password' => $password])) {
-            DB::table('activity_logs')->insert($activityLog);
             Toastr::success('Login successfully.', 'Success');
             return redirect('dashboad/employee');
         } else {
@@ -133,24 +117,7 @@ class LoginController extends Controller
 
     public function logout()
     {
-        $user = Auth::User();
-        Session::put('user', $user);
-        $user = Session::get('user');
-        
-        $name       = $user->name;
-        $email      = $user->email;
-        $number_employee      = $user->number_employee;
-        $dt         = Carbon::now();
-        $todayDate  = $dt->toDayDateTimeString();
-
-        $activityLog = [
-            'name'        => $name,
-            'email'       => $email,
-            'number_employee'       => $number_employee,
-            'description' => 'has logged out',
-            'date_time'   => $todayDate,
-        ];
-        DB::table('activity_logs')->insert($activityLog);
+        Activity::all()->last();
         Auth::logout();
         Toastr::success('Logout successfully', 'Success');
         return redirect('login');

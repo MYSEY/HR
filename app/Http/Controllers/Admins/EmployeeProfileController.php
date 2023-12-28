@@ -20,9 +20,10 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Requests\ChildrenRequest;
-use App\Http\Requests\EmployeeContactRequest;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Requests\ChildrenRequest;
+use Spatie\Activitylog\Models\Activity;
+use App\Http\Requests\EmployeeContactRequest;
 
 class EmployeeProfileController extends Controller
 {
@@ -66,6 +67,7 @@ class EmployeeProfileController extends Controller
     }
     public function employeeEducation(Request $request){
         try{
+            Activity::all()->last();
             $schools = $request->school;
             if (is_array($schools) && count($schools)) {
                 foreach ($schools as $key => $school) :

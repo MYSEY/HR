@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers\Admins;
 
+use Carbon\Carbon;
 use App\Models\Role;
+use App\Models\User;
+use App\Models\permissions;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use App\Models\permissions;
-use App\Models\User;
 use Brian2694\Toastr\Facades\Toastr;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Spatie\Activitylog\Models\Activity;
 
 class RoleConroller extends Controller
 {
@@ -68,6 +69,7 @@ class RoleConroller extends Controller
     public function create(Request $request)
     {
         try{
+            Activity::all()->last();
             $role = Role::create([
                 'role_name'     => $request->role_name,
                 'role_type'     => $request->role_type,

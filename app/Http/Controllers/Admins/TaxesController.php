@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Admins;
 
-use App\Http\Controllers\Controller;
 use App\Models\Taxes;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Brian2694\Toastr\Facades\Toastr;
+use Illuminate\Support\Facades\Auth;
+use Spatie\Activitylog\Models\Activity;
 
 class TaxesController extends Controller
 {
@@ -41,6 +42,7 @@ class TaxesController extends Controller
     public function store(Request $request)
     {
         try {
+            Activity::all()->last();
             $data = $request->all();
             $data['created_by'] = Auth::user()->id;
             Taxes::create($data);
