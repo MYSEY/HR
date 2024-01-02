@@ -620,6 +620,20 @@ class RolePermissionSeeder extends Seeder
                     "parent_id"=>"1",
                     "is_active"=>1,
                 ];
+                $datas[] = [
+                    "icon"=>"la la-bell",
+                    "name"=>"lang.activivy_log",
+                    "url"=>"admin/activity-log",
+                    "is_all"=>"1",
+                    "is_view"=>"1",
+                    "is_create"=>"1",
+                    "is_update"=>"1",
+                    "is_delete"=>"1",
+                    "is_print"=>"1",
+                    "is_export"=>"1",
+                    "parent_id"=>"1",
+                    "is_active"=>1,
+                ];
             }
             foreach ($datas as $key => $item) {
                 $item["role_id"] = $role->id;

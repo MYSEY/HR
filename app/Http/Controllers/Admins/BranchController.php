@@ -81,11 +81,18 @@ class BranchController extends Controller
     public function update(Request $request)
     {
         try{
-            Branchs::where('id',$request->id)->update([
-                'branch_name_kh'  => $request->branch_name_kh,
-                'branch_name_en'  => $request->branch_name_en,
-                'updated_by'    => Auth::user()->id 
-            ]);
+            $data = Branchs::find($request->id);
+            $data['branch_name_kh'] = $request->branch_name_kh;
+            $data['branch_name_en'] = $request->branch_name_en;
+            $data['updated_by'] = Auth::user()->id ;
+            $data->save();
+
+            // Branchs::where('id',$request->id)->update([
+            //     'branch_name_kh'  => $request->branch_name_kh,
+            //     'branch_name_en'  => $request->branch_name_en,
+            //     'updated_by'    => Auth::user()->id 
+            // ]);
+            Activity::all()->last();
             Toastr::success('Branch updated successfully.','Success');
             return redirect()->back();
         }catch(\Exception $e){

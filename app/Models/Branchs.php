@@ -21,6 +21,16 @@ class Branchs extends Model
 
     protected $table = 'branchs';
     protected $guarded = ['id'];
+    protected $fillable = [
+        'branch_name_kh',
+        'branch_name_en',
+        'abbreviations',
+        'address',
+        'address_kh',
+        'created_by',
+        'updated_by',
+        'deleted_at',
+    ];
     /*
     |--------------------------------------------------------------------------
     | FUNCTIONS

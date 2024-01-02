@@ -4,15 +4,12 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use App\Models\User;
-use Spatie\Activitylog\LogOptions;
 use Illuminate\Database\Eloquent\Model;
-use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class PreviewGrossSalaryPay extends Model
 {
     use HasFactory;
-    use LogsActivity;
 
     protected $table = 'preview_gross_salary_pays';
     protected $guarded = ['id'];
@@ -32,13 +29,6 @@ class PreviewGrossSalaryPay extends Model
         'created_by',
         'updated_by',
     ];
-    public function getActivitylogOptions(): LogOptions
-    {
-        return LogOptions::defaults()
-        ->logOnly(['*'])
-        ->logOnlyDirty()
-        ->dontSubmitEmptyLogs();
-    }
     public function users()
     {
         return $this->belongsTo(User::class ,'employee_id')->with("gender")->with('department')->with('position')->with("positiontype")->with('branch')->with("totalChild")->with('bank');

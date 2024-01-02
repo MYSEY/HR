@@ -79,12 +79,19 @@ class DepartmentController extends Controller
     public function update(Request $request)
     {
         try{
-            Department::where('id',$request->id)->update([
-                'parent_id'  => $request->parent_id ? $request->parent_id : null,
-                'name_khmer'  => $request->name_khmer,
-                'name_english'  => $request->name_english,
-                'updated_by'    => Auth::user()->id 
-            ]);
+            $data = Department::find($request->id);
+            $data['parent_id']  = $request->parent_id ? $request->parent_id : null;
+            $data['name_khmer']  = $request->name_khmer;
+            $data['name_english']  = $request->name_english;
+            $data['updated_by']  = Auth::user()->id;
+            $data->save();
+            // Department::where('id',$request->id)->update([
+            //     'parent_id'  => $request->parent_id ? $request->parent_id : null,
+            //     'name_khmer'  => $request->name_khmer,
+            //     'name_english'  => $request->name_english,
+            //     'updated_by'    => Auth::user()->id 
+            // ]);
+            
             Toastr::success('Department Updated successfully.','Success');
             return redirect()->back();
         }catch(\Exception $e){

@@ -8,16 +8,13 @@ use App\Models\SeverancePay;
 use App\Models\ChildrenInfor;
 use App\Models\GrossSalaryPay;
 use Illuminate\Support\Carbon;
-use Spatie\Activitylog\LogOptions;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\NationalSocialSecurityFund;
-use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class payrollPreview extends Model
 {
     use HasFactory;
-    use LogsActivity;
 
     protected $table = 'payroll_previews';
     protected $guarded = ['id'];
@@ -61,13 +58,6 @@ class payrollPreview extends Model
         'updated_by',
     ];
 
-    public function getActivitylogOptions(): LogOptions
-    {
-        return LogOptions::defaults()
-        ->logOnly(['*'])
-        ->logOnlyDirty()
-        ->dontSubmitEmptyLogs();
-    }
     //RelationShip
     public function users()
     {

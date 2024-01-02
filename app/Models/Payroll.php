@@ -9,10 +9,8 @@ use App\Models\SeverancePay;
 use App\Models\ChildrenInfor;
 use App\Models\GrossSalaryPay;
 use Illuminate\Support\Carbon;
-use Spatie\Activitylog\LogOptions;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\NationalSocialSecurityFund;
-use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -20,7 +18,6 @@ class Payroll extends Model
 {
     use HasFactory;
     use SoftDeletes;
-    use LogsActivity;
 
     protected $table = 'payrolls';
     protected $guarded = ['id'];
@@ -64,13 +61,6 @@ class Payroll extends Model
         'updated_by',
     ];
 
-    public function getActivitylogOptions(): LogOptions
-    {
-        return LogOptions::defaults()
-        ->logOnly(['*'])
-        ->logOnlyDirty()
-        ->dontSubmitEmptyLogs();
-    }
     //RelationShip
     public function users()
     {

@@ -481,10 +481,10 @@
                 $('#e_change_type').append('<option selected value="1">@lang("lang.internal")</option> <option value="2">@lang("lang.external")</option>');
                 let _id = id;
                 $.ajax({
-                        type: "GET",
-                        url: "{{url('trainer/edit')}}",
-                        data: {
-                            id : _id
+                    type: "GET",
+                    url: "{{url('trainer/edit')}}",
+                    data: {
+                        id : _id
                     },
                     dataType: "JSON",
                     success: function (response) {

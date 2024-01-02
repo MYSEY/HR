@@ -28,14 +28,13 @@ use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-// use Spatie\Permission\Traits\HasRoles;// <---------------------- and this one
-// use Backpack\CRUD\app\Models\Traits\CrudTrait; // <------------------------------- this one
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, LogsActivity;
+    use HasApiTokens, HasFactory, Notifiable;
     use UploadFIle;
     use SoftDeletes;
+    use LogsActivity;
 
 
     /**

@@ -1,7 +1,10 @@
 <?php
 
+use App\Models\StaffPromoted;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\Admins\RoleConroller;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Admins\BankController;
@@ -18,10 +21,12 @@ use App\Http\Controllers\Admins\ProvinceController;
 use App\Http\Controllers\Admins\TrainingController;
 use App\Http\Controllers\Admins\DepartmentController;
 use App\Http\Controllers\Admins\PermissionController;
+use App\Http\Controllers\Admins\ActivityLogController;
 use App\Http\Controllers\Admins\MotorRentelController;
 use App\Http\Controllers\Admins\PayrollItemController;
 use App\Http\Controllers\Admins\ExchangeRateController;
 use App\Http\Controllers\Admins\TrainingTypeController;
+use App\Http\Controllers\Admins\FringeBenefitController;
 use App\Http\Controllers\Admins\PayrollReportController;
 use App\Http\Controllers\Admins\LeavesEmployeeController;
 use App\Http\Controllers\Admins\CandidateResumeController;
@@ -29,10 +34,6 @@ use App\Http\Controllers\Admins\EmployeePayrollController;
 use App\Http\Controllers\Admins\EmployeeProfileController;
 use App\Http\Controllers\Admins\RecruitmentPlanController;
 use App\Http\Controllers\Admins\ChildrenAllowanceController;
-use App\Http\Controllers\Admins\FringeBenefitController;
-use App\Http\Controllers\LanguageController;
-use App\Models\StaffPromoted;
-use Illuminate\Support\Facades\Lang;
 
 /*
 |--------------------------------------------------------------------------
@@ -51,6 +52,7 @@ Route::get('/', function () {
 Route::post('/login', [LoginController::class, 'login']);
 Auth::routes();
 Route::middleware(['auth:sanctum'])->group(function(){
+    Route::get('admin/activity-log', [ActivityLogController::class,'index']);
     Route::get('/dashboad/employee', [App\Http\Controllers\HomeController::class, 'index'])->name('dashboad.employee');
     Route::get('/dashboad/employee', [DashboadController::class, 'dashboadEmployee']);
     Route::get('/dashboad/admin', [DashboadController::class, 'dashboadAdmin']);

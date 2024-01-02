@@ -131,7 +131,7 @@
                     <div class="modal-body">
                         <form action="{{url('branch/update')}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
                             @csrf
-                            <input type="hidden" name="id" class="e_id" value="">
+                            <input type="hidden" name="id" id="e_id" class="e_id" value="">
                             <div class="form-group">
                                 <label>@lang('lang.name') (@lang('lang.kh')) <span class="text-danger">*</span></label>
                                 <input class="form-control @error('branch_name_kh') is-invalid @enderror" type="text" id="e_branch_name_kh" name="branch_name_kh">
@@ -171,7 +171,7 @@
                         <div class="modal-btn delete-action">
                             <form action="{{url('branch/delete')}}" method="POST">
                                 @csrf
-                                <input type="hidden" name="id" class="e_id" value="">
+                                <input type="hidden" name="id" id="e_id" class="e_id" value="">
                                 <div class="row">
                                     <div class="submit-section" style="text-align: center">
                                         <button type="submit" class="btn btn-primary submit-btn me-2">@lang('lang.delete')</button>

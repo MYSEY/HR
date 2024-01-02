@@ -178,7 +178,6 @@ class EmployeePayrollController extends Controller
     public function store(Request $request)
     {
         try{
-            Activity::all()->last();
             $employee = User::where('date_of_commencement','<=',$request->payment_date)->whereIn('emp_status',['Probation','1','10','2'])->get();
             if (!$employee->isEmpty()) {
                 foreach ($employee as $item) {

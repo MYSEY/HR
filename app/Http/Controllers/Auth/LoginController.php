@@ -109,7 +109,7 @@ class LoginController extends Controller
             Toastr::success('Login successfully.', 'Success');
             return redirect('dashboad/employee');
         } else {
-            Toastr::error('Wrong EmployeeID Or Password', 'Error');
+            Toastr::error('Wrong Employee ID Or Password', 'Error');
             return redirect('login');
         }
     }
