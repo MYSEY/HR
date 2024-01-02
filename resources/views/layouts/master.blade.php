@@ -229,7 +229,7 @@
                             @foreach (RolePermission()->menu as $menu)
                                 @if ($menu["menu_id"] == null && $menu["sub_menu_id"] == null)
                                     <li class="">
-                                        <a href="{{url($menu['url'])}}"><i class="{{$menu["icon"]}}"></i><span>@lang($menu["name"])</span></a>
+                                        <a style="border-bottom: 3px solid #f0f0f0;" href="{{url($menu['url'])}}"><i class="{{$menu["icon"]}}"></i><span>@lang($menu["name"])</span></a>
                                     </li>
                                 @else
                                     <li class="submenu">
