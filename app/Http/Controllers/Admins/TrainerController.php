@@ -144,19 +144,18 @@ class TrainerController extends Controller
     public function update(Request $request)
     {
         try{
-            $dataUpdate =[
-                'type' => $request->type,
-                'company_name' => $request->company_name,
-                'employee_id' => $request->employee_id,
-                'name_en' => $request->name_en,
-                'name_kh' => $request->name_kh,
-                'email' => $request->email,
-                'number_phone' => $request->number_phone,
-                'remark' => $request->remark,
-                'status' => $request->status,
-                'updated_by' => Auth::user()->id 
-            ];
-            Trainer::where('id',$request->id)->update($dataUpdate);
+            $data = Trainer::find($request->id);
+            $data['type'] = $request->type;
+            $data['company_name'] = $request->company_name;
+            $data['employee_id'] = $request->employee_id;
+            $data['name_en'] = $request->name_en;
+            $data['name_kh'] = $request->name_kh;
+            $data['email'] = $request->email;
+            $data['number_phone'] = $request->number_phone;
+            $data['remark'] = $request->remark;
+            $data['status'] = $request->status;
+            $data['updated_by'] = Auth::user()->id;
+            $data->save();
             Toastr::success('Training type Updated successfully.','Success');
             return redirect()->back();
         }catch(\Exception $e){

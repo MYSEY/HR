@@ -112,13 +112,13 @@ class ExchangeRateController extends Controller
     public function update(Request $request)
     {
         try{
-            ExchangeRate::where('id',$request->id)->update([
-                'amount_usd' => $request->amount_usd,
-                'amount_riel' => $request->amount_riel,
-                'change_date' => $request->change_date,
-                'type'        => $request->type,
-                'updated_by' => Auth::user()->id 
-            ]);
+            $data = ExchangeRate::find($request->id);
+            $data['amount_usd'] = $request->amount_usd;
+            $data['amount_riel'] = $request->amount_riel;
+            $data['change_date'] = $request->change_date;
+            $data['type']        = $request->type;
+            $data['updated_by'] = Auth::user()->id;
+            $data->save();
             Toastr::success('Exchange rate successfully.','Success');
             return redirect()->back();
         }catch(\Exception $e){

@@ -87,12 +87,12 @@ class TrainingTypeController extends Controller
     public function update(Request $request)
     {
         try{
-            TrainingType::where('id',$request->id)->update([
-                'type_name' => $request->type_name,
-                'description' => $request->description,
-                'status' => $request->status,
-                'updated_by' => Auth::user()->id 
-            ]);
+            $data = TrainingType::find('id',$request->id);
+            $data['type_name'] = $request->type_name;
+            $data['description'] = $request->description;
+            $data['status'] = $request->status;
+            $data['updated_by'] = Auth::user()->id;
+            $data->save();
             Toastr::success('Training type Updated successfully.','Success');
             return redirect()->back();
         }catch(\Exception $e){

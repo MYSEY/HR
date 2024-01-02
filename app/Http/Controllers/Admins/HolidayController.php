@@ -43,16 +43,16 @@ class HolidayController extends Controller
 
     public function update(Request $request){
         try{
-            Holiday::where('id',$request->id)->update([
-                'title_en'          => $request->title_en,
-                'title_kh'          => $request->title_kh,
-                'amount_percent'    => $request->amount_percent,
-                'period_month'      => $request->period_month,
-                'from'              => $request->from,
-                'to'                => $request->to,
-                'type'              => 'bonus',
-                'updated_by'        => Auth::user()->id
-            ]);
+            $data = Holiday::find($request->id);
+            $data['title_en']          = $request->title_en;
+            $data['title_kh']          = $request->title_kh;
+            $data['amount_percent']    = $request->amount_percent;
+            $data['period_month']      = $request->period_month;
+            $data['from']              = $request->from;
+            $data['to']                = $request->to;
+            $data['type']              = 'bonus';
+            $data['updated_by']        = Auth::user()->id;
+            $data->save();
             DB::commit();
             Toastr::success('Updated holiday successfully','Success');
             return redirect()->back();

@@ -98,13 +98,13 @@ class PositionController extends Controller
     public function update(Request $request)
     {
         try{
-            Position::where('id',$request->id)->update([
-                'name_khmer'  => $request->name_khmer,
-                'name_english'  => $request->name_english,
-                'position_type'  => $request->position_type,
-                'position_range'  => $request->position_range,
-                'updated_by'    => Auth::user()->id 
-            ]);
+            $data = Position::find($request->id);
+            $data['name_khmer']  = $request->name_khmer;
+            $data['name_english']  = $request->name_english;
+            $data['position_type']  = $request->position_type;
+            $data['position_range']  = $request->position_range;
+            $data['updated_by']    = Auth::user()->id;
+            $data->save(); 
             Toastr::success('Position Updated successfully.','Success');
             return redirect()->back();
         }catch(\Exception $e){

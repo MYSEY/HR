@@ -174,15 +174,15 @@ class FringeBenefitController extends Controller
     public function update(Request $request)
     {
         try{
-            FringeBenefit::where('id',$request->id)->update([
-                'employee_id' => $request->employee_id,
-                'amount_usd' => $request->amount_usd,
-                'amount_riel' => $request->amount_riel,
-                'request_date' => $request->request_date,
-                'paid_date' => $request->paid_date,
-                'remark' => $request->remark,
-                'updated_by' => Auth::user()->id 
-            ]);
+            $data = FringeBenefit::find($request->id);
+            $data['employee_id'] = $request->employee_id;
+            $data['amount_usd'] = $request->amount_usd;
+            $data['amount_riel'] = $request->amount_riel;
+            $data['request_date'] = $request->request_date;
+            $data['paid_date'] = $request->paid_date;
+            $data['remark'] = $request->remark;
+            $data['updated_by'] = Auth::user()->id;
+            $data->save();
             Toastr::success('Exchange rate successfully.','Success');
             return redirect()->back();
         }catch(\Exception $e){

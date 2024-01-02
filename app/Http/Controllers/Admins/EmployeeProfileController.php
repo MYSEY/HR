@@ -102,17 +102,16 @@ class EmployeeProfileController extends Controller
     }
     public function educationUpdate(Request $request){
         try{
-            Education::where('id',$request->id)->update([
-                'employee_id'   => $request->employee_id,
-                'school'        => $request->school,
-                'field_of_study'=> $request->field_of_study,
-                'degree'        => $request->degree,
-                'grade'         => $request->grade,
-                'start_date'    => $request->start_date,
-                'end_date'      => $request->end_date,
-                'updated_by'    => Auth::id(),
-            ]);
-
+            $data = Education::find($request->id);
+            $data['employee_id']   = $request->employee_id;
+            $data['school']        = $request->school;
+            $data['field_of_study']= $request->field_of_study;
+            $data['degree']        = $request->degree;
+            $data['grade']         = $request->grade;
+            $data['start_date']    = $request->start_date;
+            $data['end_date']      = $request->end_date;
+            $data['updated_by']    = Auth::id();
+            $data->save();
             DB::commit();
             Toastr::success('Update Education successfully.','Success');
             return redirect()->back();
@@ -206,17 +205,16 @@ class EmployeeProfileController extends Controller
     }
     public function updateExperience(Request $request){
         try{
-            Experience::where('id',$request->id)->update([
-                'employee_id'       => $request->employee_id,
-                'employment_type'   => $request->employment_type,
-                'company_name'      => $request->company_name,
-                'position'          => $request->position,
-                'start_date'        => $request->start_date_experience,
-                'end_date'          => $request->end_date_experience,
-                'location'          => $request->location,
-                'updated_by'        => Auth::id(),
-            ]);
-
+            $data = Experience::find($request->id);
+            $data['employee_id']       = $request->employee_id;
+            $data['employment_type']   = $request->employment_type;
+            $data['company_name']      = $request->company_name;
+            $data['position']          = $request->position;
+            $data['start_date']        = $request->start_date_experience;
+            $data['end_date']          = $request->end_date_experience;
+            $data['location']          = $request->location;
+            $data['updated_by']        = Auth::id();
+            $data->save();
             DB::commit();
             Toastr::success('Update experience successfully.','Success');
             return redirect()->back();
@@ -272,16 +270,15 @@ class EmployeeProfileController extends Controller
     }
     public function updatePromote(Request $request){
         try{
-            StaffPromoted::where('id',$request->id)->update([
-                'employee_id'               => $request->employee_id,
-                'posit_id'                  => $request->posit_id,
-                'position_promoted_to'      => $request->position_promoted_to,
-                'depart_id'                 => $request->depart_id,
-                'department_promoted_to'    => $request->department_promoted_to,
-                'date'                      => $request->promote_date,
-                'created_by'                => Auth::id(),
-            ]);
-
+            $data = StaffPromoted::find();
+            $data['employee_id']               = $request->employee_id;
+            $data['posit_id']                  = $request->posit_id;
+            $data['position_promoted_to']      = $request->position_promoted_to;
+            $data['depart_id']                 = $request->depart_id;
+            $data['department_promoted_to']    = $request->department_promoted_to;
+            $data['date']                      = $request->promote_date;
+            $data['created_by']                = Auth::id();
+            $data->save();
             DB::commit();
             Toastr::success('Update promoted successfully.','Success');
             return redirect()->back();
@@ -333,15 +330,15 @@ class EmployeeProfileController extends Controller
     }
     public function updateTransferend(Request $request){
         try{
-            Transferred::where('id',$request->id)->where('employee_id',$request->employee_id)->update([
-                'branch_id'                 => $request->branch_id,
-                'tranferend_branch_name'    => $request->tranferend_branch_name,
-                'position_id'               => $request->position_id,
-                'tranferend_position_name'  => $request->tranferend_position_name,
-                'date'                      => $request->date,
-                'descrition'                => $request->descrition,
-                'updated_by'                => Auth::id(),
-            ]);
+            $data = Transferred::find($request->id);
+            $data['branch_id']                 = $request->branch_id;
+            $data['tranferend_branch_name']    = $request->tranferend_branch_name;
+            $data['position_id']               = $request->position_id;
+            $data['tranferend_position_name']  = $request->tranferend_position_name;
+            $data['date']                      = $request->date;
+            $data['descrition']                = $request->descrition;
+            $data['updated_by']                = Auth::id();
+            $data->save();
             DB::commit();
             Toastr::success('Update transferred successfully.','Success');
             return redirect()->back();
@@ -391,15 +388,14 @@ class EmployeeProfileController extends Controller
     }
     public function updateTraining(Request $request){
         try{
-            StaffTraining::where('id',$request->id)->update([
-                'employee_id'   => $request->employee_id,
-                'title'         => $request->title,
-                'start_date'    => $request->start_date,
-                'end_date'      => $request->end_date,
-                'descrition'    => $request->descrition,
-                'updated_by'    => Auth::id(),
-            ]);
-
+            $data = StaffTraining::find($request->id);
+            $data['employee_id']   = $request->employee_id;
+            $data['title']         = $request->title;
+            $data['start_date']    = $request->start_date;
+            $data['end_date']      = $request->end_date;
+            $data['descrition']    = $request->descrition;
+            $data['updated_by']    = Auth::id();
+            $data->save();
             DB::commit();
             Toastr::success('Update training successfully.','Success');
             return redirect()->back();
@@ -446,14 +442,14 @@ class EmployeeProfileController extends Controller
     }
     public function updateContact(Request $request){
         try{
-            Contact::where('id',$request->id)->update([
-                'employee_id'   => $request->employee_id,
-                'name'          => $request->name,
-                'relationship'  => $request->relationship,
-                'phone'         => $request->phone,
-                'phone_2'       => $request->phone_2,
-                'updated_by'    => Auth::id(),
-            ]);
+            $data = Contact::find($request->id);
+            $data['employee_id']   = $request->employee_id;
+            $data['name']          = $request->name;
+            $data['relationship']  = $request->relationship;
+            $data['phone']         = $request->phone;
+            $data['phone_2']       = $request->phone_2;
+            $data['updated_by']    = Auth::id();
+            $data->save();
             DB::commit();
             Toastr::success('Update contact successfully.','Success');
             return redirect()->back();
@@ -506,13 +502,13 @@ class EmployeeProfileController extends Controller
     }
     public function childrenUpdate(Request $request){
         try{
-            ChildrenInfor::where('id',$request->id)->where('employee_id',$request->employee_id)->update([
-                'employee_id'       => $request->employee_id,
-                'name'              => $request->name,
-                'date_of_birth'     => $request->date_of_birth,
-                'sex'               => $request->sex,
-                'updated_by'        => Auth::id(),
-            ]);
+            $data = ChildrenInfor::find($request->id);
+            $data['employee_id']       = $request->employee_id;
+            $data['name']              = $request->name;
+            $data['date_of_birth']     = $request->date_of_birth;
+            $data['sex']               = $request->sex;
+            $data['updated_by']        = Auth::id();
+            $data->save();
             DB::commit();
             Toastr::success('Updated Children successfully.','Success');
             return redirect()->back();

@@ -158,11 +158,11 @@ class RoleConroller extends Controller
     public function updateRole(Request $request)
     {
         try{
-            Role::where('id',$request->id)->update([
-                'role_name'     => $request->role_name,
-                'role_type'     => $request->role_type,
-                'updated_by'    => Auth::user()->id
-            ]);
+            $data = Role::find($request->id);
+            $data['role_name']     = $request->role_name;
+            $data['role_type']     = $request->role_type;
+            $data['updated_by']    = Auth::user()->id;
+            $data->save();
             permissions::where('role_id',$request->id)->delete();
             if ($request->role_permission) {
                 foreach ($request->role_permission as $key => $item) {

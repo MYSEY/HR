@@ -393,27 +393,26 @@ class MotorRentelController extends Controller
     public function update(Request $request)
     {
         try {
-            $dataUpdate = [
-                'employee_id' => $request->employee_id,
-                'number_plate' => $request->number_plate,
-                'motorcycle_brand' => $request->motorcycle_brand,
-                'category' => $request->category,
-                'body_number' => $request->body_number,
-                'engine_number' => $request->engine_number,
-                'start_date' => $request->start_date,
-                'end_date' => $request->end_date,
-                'product_year' => $request->product_year,
-                'expired_year' => $request->expired_year,
-                'shelt_life' => $request->shelt_life,
-                'total_gasoline' => $request->total_gasoline,
-                'total_work_day' => $request->total_work_day,
-                'price_engine_oil' => $request->price_engine_oil,
-                'price_motor_rentel' => $request->price_motor_rentel,
-                'taplab_rentel' => $request->taplab_rentel,
-                'price_taplab_rentel' => $request->price_taplab_rentel,
-                'updated_by' => Auth::user()->id
-            ];
-            MotorRentel::where('id', $request->id)->update($dataUpdate);
+            $data = MotorRentel::find($request->id);
+            $data['employee_id']        = $request->employee_id;
+            $data['number_plate']       = $request->number_plate;
+            $data['motorcycle_brand']   = $request->motorcycle_brand;
+            $data['category']           = $request->category;
+            $data['body_number']        = $request->body_number;
+            $data['engine_number']      = $request->engine_number;
+            $data['start_date']         = $request->start_date;
+            $data['end_date']           = $request->end_date;
+            $data['product_year']       = $request->product_year;
+            $data['expired_year']       = $request->expired_year;
+            $data['shelt_life']         = $request->shelt_life;
+            $data['total_gasoline']     = $request->total_gasoline;
+            $data['total_work_day']     = $request->total_work_day;
+            $data['price_engine_oil']   = $request->price_engine_oil;
+            $data['price_motor_rentel'] = $request->price_motor_rentel;
+            $data['taplab_rentel']      = $request->taplab_rentel;
+            $data['price_taplab_rentel'] = $request->price_taplab_rentel;
+            $data['updated_by']         = Auth::user()->id;
+            $data->save();
             Toastr::success('Updated successfully.', 'Success');
             $getData = MotorRentel::with('user')->where("id", $request->id)->first();
             if ($request->status_print) {

@@ -77,13 +77,12 @@ class ChildrenAllowanceController extends Controller
     public function update(Request $request)
     {
         try{
-            Activity::all()->last();
-            ChildrenAllowance::where('id',$request->id)->update([
-                'total_children_allowance' => $request->total_children_allowance,
-                'spouse_allowance' => $request->spouse_allowance,
-                'reduced_burden_children' => $request->reduced_burden_children,
-                'updated_by' => Auth::user()->id 
-            ]);
+            $data = ChildrenAllowance::find($request->id);
+            $data['total_children_allowance']   = $request->total_children_allowance;
+            $data['spouse_allowance']           = $request->spouse_allowance;
+            $data['reduced_burden_children']    = $request->reduced_burden_children;
+            $data['updated_by']                 = Auth::user()->id;
+            $data->save();
             Toastr::success('Children allowance create successfully.','Success');
             return redirect()->back();
         }catch(\Exception $e){

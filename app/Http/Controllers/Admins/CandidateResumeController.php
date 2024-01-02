@@ -306,28 +306,27 @@ class CandidateResumeController extends Controller
             }
             $fullNameKH = $request->last_name_kh.' '.$request->first_name_kh;
             $fullNameEN = $request->last_name_en.' '.$request->first_name_en;
-            $dataUpdate = [
-                'last_name_kh'          => $request->last_name_kh,
-                'first_name_kh'         => $request->first_name_kh,
-                'last_name_en'          => $request->last_name_en,
-                'first_name_en'         => $request->first_name_en,
-                'name_kh'               => $fullNameKH,
-                'name_en'               => $fullNameEN,
-                'gender'                => $request->gender,
-                'current_position'      => $request->current_position,
-                'companey_name'         => $request->companey_name,
-                'position_applied'      => $request->position_applied,
-                'position_type'         => $request->position_type,
-                'current_address'       => $request->current_address,
-                'location_applied'      => $request->location_applied,
-                'received_date'         => $request->received_date,
-                'recruitment_channel'   => $request->recruitment_channel,
-                'contact_number'        => $request->contact_number,
-                'status'                => $request->status,
-                'cv'                    => $filenameGuarant,
-                'updated_by'            => Auth::user()->id,
-            ];
-            CandidateResume::where('id',$request->id)->update($dataUpdate);
+            $data = CandidateResume::find($request->id);
+            $data['last_name_kh']          = $request->last_name_kh;
+            $data['first_name_kh']         = $request->first_name_kh;
+            $data['last_name_en']          = $request->last_name_en;
+            $data['first_name_en']         = $request->first_name_en;
+            $data['name_kh']               = $fullNameKH;
+            $data['name_en']               = $fullNameEN;
+            $data['gender']                = $request->gender;
+            $data['current_position']      = $request->current_position;
+            $data['companey_name']         = $request->companey_name;
+            $data['position_applied']      = $request->position_applied;
+            $data['position_type']         = $request->position_type;
+            $data['current_address']       = $request->current_address;
+            $data['location_applied']      = $request->location_applied;
+            $data['received_date']         = $request->received_date;
+            $data['recruitment_channel']   = $request->recruitment_channel;
+            $data['contact_number']        = $request->contact_number;
+            $data['status']                = $request->status;
+            $data['cv']                    = $filenameGuarant;
+            $data['updated_by']            = Auth::user()->id;
+            $data->save();
             Toastr::success('Candidate resume updated successfully.','Success');
             return redirect()->back();
         }catch(\Exception $e){

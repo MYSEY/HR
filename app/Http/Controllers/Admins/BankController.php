@@ -88,11 +88,11 @@ class BankController extends Controller
     public function update(Request $request)
     {
         try{
-            Bank::where('id',$request->id)->update([
-                'name'  => $request->name,
-                'fee'  => $request->fee,
-                'updated_by'    => Auth::user()->id 
-            ]);
+            $data = Bank::find($request->id);
+            $data['name']  = $request->name;
+            $data['fee']  = $request->fee;
+            $data['updated_by']    = Auth::user()->id;
+            $data->save();
             Toastr::success('Bank Updated successfully.','Success');
             return redirect()->back();
         }catch(\Exception $e){

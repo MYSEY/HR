@@ -88,13 +88,13 @@ class TaxesController extends Controller
     public function update(Request $request)
     {
         try{
-            Taxes::where('id',$request->id)->update([
-                'tax_rate' => $request->tax_rate,
-                'from' => $request->from,
-                'to' => $request->to,
-                'tax_deduction_amount' => $request->tax_deduction_amount,
-                'updated_by' => Auth::user()->id 
-            ]);
+            $data = Taxes::find($request->id);
+            $data['tax_rate'] = $request->tax_rate;
+            $data['from'] = $request->from;
+            $data['to'] = $request->to;
+            $data['tax_deduction_amount'] = $request->tax_deduction_amount;
+            $data['updated_by'] = Auth::user()->id;
+            $data->save();
             Toastr::success('Taxes Updated successfully.','Success');
             return redirect()->back();
         }catch(\Exception $e){

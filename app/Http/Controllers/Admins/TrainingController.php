@@ -146,20 +146,19 @@ class TrainingController extends Controller
     public function update(Request $request)
     {
         try{
-            $dataUpdate = [
-                'training_type' => $request->training_type,
-                'course_name' => $request->course_name,
-                'trainer_id' => $request->trainer_id,
-                'employee_id' => $request->employee_id,
-                'cost_price' => $request->cost_price,
-                'start_date' => $request->start_date,
-                'end_date' => $request->end_date,
-                'duration_month' => $request->duration_month,
-                'remark' => $request->remark,
-                'status' => $request->status,
-                'updated_by' => Auth::user()->id 
-            ];
-            Training::where('id',$request->id)->update($dataUpdate);
+            $data = Training::find($request->id);
+            $data['training_type'] = $request->training_type;
+            $data['course_name'] = $request->course_name;
+            $data['trainer_id'] = $request->trainer_id;
+            $data['employee_id'] = $request->employee_id;
+            $data['cost_price'] = $request->cost_price;
+            $data['start_date'] = $request->start_date;
+            $data['end_date'] = $request->end_date;
+            $data['duration_month'] = $request->duration_month;
+            $data['remark'] = $request->remark;
+            $data['status'] = $request->status;
+            $data['updated_by'] = Auth::user()->id;
+            $data->save();
             Toastr::success('Training Updated successfully.','Success');
             return redirect()->back();
         }catch(\Exception $e){
