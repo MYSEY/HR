@@ -72,8 +72,8 @@ class DashboadController extends Controller
         $transferred = Transferred::all()->count();
         $empUpcoming = User::where("emp_status","Upcoming")->get()->count();
         $candidateResumes = CandidateResume::whereNot("status","5")->get()->count();
-        $dataTrainings = Training::whereYear("created_at", $yearLy)->get();
-        // $dataTrainings = Training::get();
+        // $dataTrainings = Training::whereYear("created_at", $yearLy)->get();
+        $dataTrainings = Training::get();
         $dataEmployeeTrainings = [];
         foreach ($dataTrainings as $key => $item) {
             $users = User::whereIn('id', $item->employee_id)->select("number_employee","employee_name_kh", "employee_name_en", "branch_id")->with('branch')->get();

@@ -104,11 +104,12 @@
                 <div class="login_box">
                     <div class="left">
                         <div class="contact">
+                            {!! Toastr::message() !!}
                             <form method="POST" action="{{ route('login') }}">
                                 @csrf
                                 <h3>Welcome! Please log in</h3>
                                 <div class="form-group">
-                                    <input id="number_employee" type="text" class="form-control" placeholder="Employee ID"  required name="number_employee">
+                                    <input id="number_employee" type="text" class="form-control @error('number_employee') is-invalid @enderror" placeholder="Employee ID"  required name="number_employee">
                                     @error('number_employee')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>

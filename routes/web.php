@@ -34,6 +34,7 @@ use App\Http\Controllers\Admins\EmployeePayrollController;
 use App\Http\Controllers\Admins\EmployeeProfileController;
 use App\Http\Controllers\Admins\RecruitmentPlanController;
 use App\Http\Controllers\Admins\ChildrenAllowanceController;
+use App\Http\Controllers\Admins\LeavesAdminController;
 
 /*
 |--------------------------------------------------------------------------
@@ -105,8 +106,19 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('/holidays/update', [HolidayController::class, 'update']);
     // Route::get('/attendance/admin', [AttendanceAdminController::class, 'index']);
     // Route::get('/attendance/employee', [AttendanceEmployeeController::class, 'index']);
-    // Route::Resource('/leaves/admin', LeavesAdminController::class);
+
+    // Leave management for admin
+    Route::get('/leaves/admin', [LeavesAdminController::class,'index']);
+    Route::post('/leaves/admin/update', [LeavesAdminController::class,'update']);
+    Route::post('/leaves/admin/filter', [LeavesAdminController::class,'filter']);
+
+    // Leave for employees
     Route::get('/leaves/employee', [LeavesEmployeeController::class,'index']);
+    Route::post('/leaves/employee/store', [LeavesEmployeeController::class,'store']);
+    Route::get('/leaves/employee/edit', [LeavesEmployeeController::class,'edit']);
+    Route::post('/leaves/employee/update', [LeavesEmployeeController::class,'update']);
+    Route::post('/leaves/employee/delete', [LeavesEmployeeController::class,'destroy']);
+    
 
     Route::get('role', [RoleConroller::class,'index']);
     Route::post('role/search', [RoleConroller::class,'filter']);
