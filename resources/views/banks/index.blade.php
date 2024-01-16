@@ -25,8 +25,7 @@
                         <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                             <div class="row">
                                 <div class="col-sm-12">
-                                    <table class="table table-striped custom-table mb-0 datatable dataTable no-footer"
-                                        id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
+                                    <table class="table table-striped custom-table mb-0 datatable dataTable no-footer" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
                                         <thead>
                                             <tr>
                                                 <th style="width: 30px;" class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="#: activate to sort column descending">#</th>

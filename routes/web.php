@@ -19,6 +19,7 @@ use App\Http\Controllers\Admins\DashboadController;
 use App\Http\Controllers\Admins\PositionController;
 use App\Http\Controllers\Admins\ProvinceController;
 use App\Http\Controllers\Admins\TrainingController;
+use App\Http\Controllers\Admins\LeaveTypeController;
 use App\Http\Controllers\Admins\DepartmentController;
 use App\Http\Controllers\Admins\PermissionController;
 use App\Http\Controllers\Admins\ActivityLogController;
@@ -46,10 +47,9 @@ use App\Http\Controllers\Admins\ChildrenAllowanceController;
 |
 */
 
-Route::get('/', function () {
-    return view('auth.login');
-});
+Route::get('/', [LoginController::class, 'index']);
 Route::post('/login', [LoginController::class, 'login']);
+Route::post('/user/change/password', [LoginController::class, 'UserChangePassword']);
 Auth::routes();
 Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('admin/activity-log', [ActivityLogController::class,'index']);
@@ -107,6 +107,9 @@ Route::middleware(['auth:sanctum'])->group(function(){
     // Route::get('/attendance/employee', [AttendanceEmployeeController::class, 'index']);
     // Route::Resource('/leaves/admin', LeavesAdminController::class);
     Route::get('/leaves/employee', [LeavesEmployeeController::class,'index']);
+    Route::get('/leaves/type', [LeaveTypeController::class,'index']);
+    Route::get('/leave/type/edit', [LeaveTypeController::class,'edit']);
+    Route::post('/leave/type/update', [LeaveTypeController::class,'update']);
 
     Route::get('role', [RoleConroller::class,'index']);
     Route::post('role/search', [RoleConroller::class,'filter']);

@@ -87,7 +87,7 @@ class CreateUsersTable extends Migration
             $table->boolean('users_permission')->nullable();
             $table->string('status')->nullable();
             $table->string('emp_status')->nullable();
-            $table->string('p_status')->nullable();
+            $table->boolean('p_status')->default(0);
             $table->boolean('is_loan')->nullable();
             $table->string('type')->nullable();
             $table->unsignedBigInteger('created_by')->nullable();
