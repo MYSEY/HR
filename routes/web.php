@@ -19,6 +19,7 @@ use App\Http\Controllers\Admins\DashboadController;
 use App\Http\Controllers\Admins\PositionController;
 use App\Http\Controllers\Admins\ProvinceController;
 use App\Http\Controllers\Admins\TrainingController;
+use App\Http\Controllers\Admins\LeaveTypeController;
 use App\Http\Controllers\Admins\DepartmentController;
 use App\Http\Controllers\Admins\PermissionController;
 use App\Http\Controllers\Admins\ActivityLogController;
@@ -47,10 +48,9 @@ use App\Http\Controllers\Admins\LeavesAdminController;
 |
 */
 
-Route::get('/', function () {
-    return view('auth.login');
-});
+Route::get('/', [LoginController::class, 'index']);
 Route::post('/login', [LoginController::class, 'login']);
+Route::post('/user/change/password', [LoginController::class, 'UserChangePassword']);
 Auth::routes();
 Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('admin/activity-log', [ActivityLogController::class,'index']);
@@ -109,8 +109,11 @@ Route::middleware(['auth:sanctum'])->group(function(){
 
     // Leave management for admin
     Route::get('/leaves/admin', [LeavesAdminController::class,'index']);
+    Route::get('/leave/admin/employee', [LeavesAdminController::class,'employees']);
     Route::post('/leaves/admin/update', [LeavesAdminController::class,'update']);
     Route::post('/leaves/admin/filter', [LeavesAdminController::class,'filter']);
+    Route::post('/leaves/admin/approve', [LeavesAdminController::class,'approve']);
+    Route::post('/leaves/admin/reject', [LeavesAdminController::class,'reject']);
 
     // Leave for employees
     Route::get('/leaves/employee', [LeavesEmployeeController::class,'index']);
@@ -119,6 +122,9 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('/leaves/employee/update', [LeavesEmployeeController::class,'update']);
     Route::post('/leaves/employee/delete', [LeavesEmployeeController::class,'destroy']);
     
+    Route::get('/leaves/type', [LeaveTypeController::class,'index']);
+    Route::get('/leave/type/edit', [LeaveTypeController::class,'edit']);
+    Route::post('/leave/type/update', [LeaveTypeController::class,'update']);
 
     Route::get('role', [RoleConroller::class,'index']);
     Route::post('role/search', [RoleConroller::class,'filter']);

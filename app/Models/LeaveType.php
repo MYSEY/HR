@@ -12,6 +12,15 @@ class LeaveType extends Model
     protected $table = 'leave_types';
     protected $guarded = ['id'];
 
+    protected $fillable = [
+        'id',
+        'name',
+        'type',
+        'default_day',
+        'created_by',
+        'updated_by',
+        'deleted_at',
+    ];
     public function createdBy()
     {
         return $this->belongsTo(User::class, 'created_by');

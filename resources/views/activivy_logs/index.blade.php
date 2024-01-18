@@ -56,3 +56,4 @@
         @endif
     </div>
 @endsection
+@include('includs.script')

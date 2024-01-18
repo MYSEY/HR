@@ -17,6 +17,8 @@ return new class extends Migration
             $table->id();
             $table->integer('employee_id');
             $table->integer('leave_type_id');
+            $table->integer('request_to');
+            $table->integer('handover_staff_id')->nullable();
             $table->date('start_date');
             $table->string('start_half_day')->nullable();
             $table->date('end_date');

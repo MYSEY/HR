@@ -52,6 +52,16 @@ class LoginController extends Controller
         ]);
     }
 
+    public function index(){
+        $dataUser = User::all();
+        foreach ($dataUser as $item) {
+            if ($item->p_status == 0) {
+                return view('auth.change_passwrod');
+            } else {
+                return view('auth.login');
+            }   
+        }
+    }
     // change password
     public function login(Request $request)
     {
@@ -66,37 +76,9 @@ class LoginController extends Controller
         $dataUserProbation = User::where('fdc_date',Carbon::now()->format('Y-m-d'))->where('emp_status','Probation')->get()->count();
         // $dataUserFdc = User::where('fdc_end',Carbon::now()->format('Y-m-d'))->whereIn('emp_status',['1','10'])->get()->count();
         
-        $change_password= "";
-        $hashedPassword = User::select('employee_name_en','number_employee', 'password','email')->where('number_employee', $request->number_employee)->first();
-        if($hashedPassword == null){
-            Toastr::error('Wrong EmployeeID Or Password', 'Error');
-            return redirect('login');
-        }
-        if ($request->new_password && $request->password_confirmation) {
-            if (Hash::check($request->current_password, $hashedPassword->password)) {
-                if ($request->new_password == $request->password_confirmation) {
-                    User::where('number_employee', $request->number_employee)->update([
-                        'password'  =>  Hash::make($request->new_password)
-                    ]);
-                    $change_password = $request->new_password;
-                    Toastr::success('password updated successfully', 'Success');
-                }else {
-                    Toastr::error('new password can not be the old password!', 'Error');
-                    return redirect()->back();
-                }
-            } else {
-                Toastr::error('Wrong EmployeeID Or Current Password', 'Error');
-                return redirect()->back();
-            }
-        }else{
-            $request->validate([
-                'number_employee' => 'required|string|max:255',
-                'password' => 'required|string',
-            ]);
-        }
-        
         $number_employee    = $request->number_employee;
-        $password           = $change_password ? $change_password : $request->password;
+        $password           = $request->password;
+        // dd($password);
         if (Auth::attempt(['number_employee' => $number_employee, 'password' => $password])) {
             return redirect('dashboad/admin')->with([
                 'dataUpComming' =>  $dataUserUpComming,
@@ -114,6 +96,41 @@ class LoginController extends Controller
         }
     }
 
+    public function UserChangePassword(Request $request){
+        try{
+          
+            $this->validate($request, [
+                'number_employee' => 'required',
+                'password' => 'required',
+            ]);
+
+            if ($request->new_password && $request->password_confirmation) {
+                if ($request->new_password == $request->password_confirmation) {
+                    User::where('number_employee', $request->number_employee)->update([
+                        'password'  =>  Hash::make($request->new_password),
+                        'p_status'  => '1'
+                    ]);
+                    $change_password = $request->new_password;
+                    Toastr::success('password updated successfully', 'Success');
+                }else {
+                    Toastr::error('new password can not be the old password!', 'Error');
+                    return redirect()->back();
+                }
+            }else{
+                $request->validate([
+                    'number_employee' => 'required|string|max:255',
+                    'password' => 'required|string',
+                ]);
+            }
+            return redirect('dashboad/admin');
+            DB::commit();
+            return redirect()->back();
+        }catch(\Exception $e){
+            DB::rollback();
+            Toastr::error('Password update fail','Error');
+            return redirect()->back();
+        } 
+    }
 
     public function logout()
     {

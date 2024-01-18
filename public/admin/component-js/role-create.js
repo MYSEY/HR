@@ -44,8 +44,9 @@ var dataPermission = function () {
     // block all employee
     let all_employee_checkbox = $('.all_employee_checkbox').filter(':checked').length;
     let leaves_employee_checkbox = $('.leaves_employee_checkbox').filter(':checked').length;
+    let leaves_admin_checkbox = $('.leaves_admin_checkbox').filter(':checked').length;
     let employee_all = $('#employee_all').filter(':checked').length;
-    if (employee_all || all_employee_checkbox || leaves_employee_checkbox) {
+    if (employee_all || all_employee_checkbox || leaves_admin_checkbox || leaves_employee_checkbox) {
         data.push({
             name: "employee_block",
             permission: [
@@ -75,6 +76,27 @@ var dataPermission = function () {
                     "is_cancel": $("#employee_cancel").val(),
                     "is_print": $("#employee_print").val(),
                     "is_export": $("#employee_export").val(),
+                }
+            ]
+        })
+    }
+    if (leaves_admin_checkbox) {
+        data.push({
+            name: "leaves_admin",
+            permission: [
+                {
+                    "name":"lang.leaves_admin",
+                    "sub_menu_id":"2",
+                    "menu_id":"m2-s3",
+                    "url":"leaves/admin",
+                    "is_view": $("#leaves_admin_view").val(),
+                    "is_create": $("#leaves_admin_add").val(),
+                    "is_approve": $("#leaves_admin_approve").val(),
+                    "is_update": $("#leaves_admin_edit").val(),
+                    "is_delete": $("#leaves_admin_delete").val(),
+                    "is_reject": $("#leaves_admin_reject").val(),
+                    "is_print": $("#leaves_admin_print").val(),
+                    "is_export": $("#leaves_admin_export").val(),
                 }
             ]
         })

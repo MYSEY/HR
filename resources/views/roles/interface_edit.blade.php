@@ -223,8 +223,73 @@
                             </div>
                         </div>
                     </div>
+                     {{-- block leave for admin --}}
+                     <div class="col-md-12 hidden_leaves_admin">
+                        <div class="form-group row">
+                            <div class="col-md-2">
+                                <label class="container-checkbox">@lang('lang.leaves_admin')
+                                    <input type="checkbox" class="employee_checkbox" id="leaves_admin" name="leaves_admin"> <span class="checkmark"></span>
+                                </label>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="container-checkbox">@lang('lang.view')
+                                    <input value="1" checked type="checkbox" class="employee_checkbox leaves_admin_checkbox" id="leaves_admin_view"
+                                    {{SetCheckbox($arrayPermissions,"lang.leaves_admin","is_view")->checkbox}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.leaves_admin","is_view")->value}}"
+                                    > <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.add')
+                                    <input type="checkbox" class="employee_checkbox leaves_admin_checkbox" id="leaves_admin_add" 
+                                    {{SetCheckbox($arrayPermissions,"lang.leaves_admin","is_create")->checkbox}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.leaves_admin","is_create")->value}}"
+                                    > <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.edit')
+                                    <input type="checkbox" class="employee_checkbox leaves_admin_checkbox" id="leaves_admin_edit" 
+                                    {{SetCheckbox($arrayPermissions,"lang.leaves_admin","is_update")->checkbox}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.leaves_admin","is_update")->value}}"
+                                    > <span class="checkmark"></span>
+                                </label>
+                                
+                            </div>
+                            <div class="col-md-3">
+                                <label class="container-checkbox">@lang('lang.delete')
+                                    <input type="checkbox" class="employee_checkbox leaves_admin_checkbox" id="leaves_admin_delete" 
+                                    {{SetCheckbox($arrayPermissions,"lang.leaves_admin","is_delete")->checkbox}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.leaves_admin","is_delete")->value}}"
+                                    > <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.approve')
+                                    <input type="checkbox" class="employee_checkbox leaves_admin_checkbox" id="leaves_admin_approve" 
+                                    {{SetCheckbox($arrayPermissions,"lang.leaves_admin","is_approve")->checkbox}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.leaves_admin","is_approve")->value}}"
+                                    > <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.reject')
+                                    <input type="checkbox" class="employee_checkbox leaves_admin_checkbox" id="leaves_admin_reject" 
+                                    {{SetCheckbox($arrayPermissions,"lang.leaves_admin","is_reject")->checkbox}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.leaves_admin","is_reject")->value}}"
+                                    > <span class="checkmark"></span>
+                                </label>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="container-checkbox">@lang('lang.print')
+                                    <input type="checkbox" class="employee_checkbox leaves_admin_checkbox" id="leaves_admin_print" 
+                                    {{SetCheckbox($arrayPermissions,"lang.leaves_admin","is_print")->checkbox}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.leaves_admin","is_print")->value}}"
+                                    > <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.export')
+                                    <input type="checkbox" class="employee_checkbox leaves_admin_checkbox" id="leaves_admin_export" 
+                                    {{SetCheckbox($arrayPermissions,"lang.leaves_admin","is_export")->checkbox}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.leaves_admin","is_export")->value}}"
+                                    > <span class="checkmark"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
                      {{-- block leave employee --}}
-                    <div class="col-md-12">
+                    <div class="col-md-12 hidden_leaves_employee" style="display: none">
                         <div class="form-group row">
                             <div class="col-md-2">
                                 <label class="container-checkbox">@lang('lang.leaves_employee')

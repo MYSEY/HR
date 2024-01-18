@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\LeaveAllocation;
 use App\Models\LeaveRequest;
 use App\Models\LeaveType;
+use App\Models\User;
+use App\Repositories\Admin\EmployeeRepository;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -20,10 +22,17 @@ class LeavesEmployeeController extends Controller
      */
     public function index()
     {
+        $teamLeader= User::when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+            if ($RolePermission == 'BM') {
+                $query->where("branch_id", Auth::user()->branch_id);
+            }else{
+                $query->whereIn("department_id", EmployeeRepository::getRoleHOD());
+            }
+        })->get();
         $dataLeaveType = LeaveType::get();
         $LeaveAllocation = LeaveAllocation::where("employee_id", Auth::user()->id)->first();
-        $dataLeaveRequest = LeaveRequest::with("employee")->with("leaveType")->where("employee_id", Auth::user()->id)->get();
-        return view('leaves_employee.index', compact('dataLeaveType', 'LeaveAllocation', 'dataLeaveRequest'));
+        $dataLeaveRequest = LeaveRequest::with("leaveType")->where("employee_id", Auth::user()->id)->get();
+        return view('leaves_employee.index', compact('teamLeader', 'dataLeaveType', 'LeaveAllocation', 'dataLeaveRequest'));
     }
 
     public function create(Request $request)
@@ -39,24 +48,32 @@ class LeavesEmployeeController extends Controller
      */
     public function store(Request $request)
     {
+
+        // $data['employee_id'] = 18;
+        // $data['default_annual_leave'] = 18;
+        // $data['default_sick_leave'] = 10;
+        // $data['default_special_leave'] = 22;
+        // $data['default_unpaid_leave'] = 0;
+        // $data['total_annual_leave'] = 18;
+        // $data['total_sick_leave'] = 10;
+        // $data['total_special_leave'] = 22;
+        // $data['total_unpaid_leave'] = 0;
+        // LeaveAllocation::create($data);
+
         try {
             $data = $request->all();
             $LeaveAllocation = LeaveAllocation::where("employee_id", Auth::user()->id)->first();
             $LeaveType = LeaveType::where("id", $request->leave_type_id)->first();
 
-            $annual_leave = $LeaveType->type == "annual_leave" ? $LeaveAllocation->total_annual_leave - $request->number_of_day : $LeaveAllocation->total_annual_leave;
-            $sick_leave = $LeaveType->type == "sick_leave" ? $LeaveAllocation->total_sick_leave - $request->number_of_day : $LeaveAllocation->total_sick_leave;
-            $special_leave = $LeaveType->type == "special_leave" ? $LeaveAllocation->total_special_leave - $request->number_of_day : $LeaveAllocation->total_special_leave;
-            $unpaid_leave = $LeaveType->type == "unpaid_leave" ? $LeaveAllocation->total_unpaid_leave - $request->number_of_day : $LeaveAllocation->total_unpaid_leave;
+            $LeaveAllocation["total_annual_leave"] = $LeaveType->type == "annual_leave" ? $LeaveAllocation->total_annual_leave - $request->number_of_day : $LeaveAllocation->total_annual_leave;
+            $LeaveAllocation["total_sick_leave"] = $LeaveType->type == "sick_leave" ? $LeaveAllocation->total_sick_leave - $request->number_of_day : $LeaveAllocation->total_sick_leave;
+            $LeaveAllocation["total_special_leave"] = $LeaveType->type == "special_leave" ? $LeaveAllocation->total_special_leave - $request->number_of_day : $LeaveAllocation->total_special_leave;
+            $LeaveAllocation["total_unpaid_leave"] = $LeaveType->type == "unpaid_leave" ? $LeaveAllocation->total_unpaid_leave - $request->number_of_day : $LeaveAllocation->total_unpaid_leave;
             
             $data['status'] = "pending";
             $data['employee_id'] = Auth::user()->id;
             $data['created_by'] = Auth::user()->id;
             LeaveRequest::create($data);
-            $LeaveAllocation->total_annual_leave = $annual_leave;
-            $LeaveAllocation->total_sick_leave = $sick_leave;
-            $LeaveAllocation->total_special_leave = $special_leave;
-            $LeaveAllocation->total_unpaid_leave = $unpaid_leave;
             $LeaveAllocation->save();
             Toastr::success('Leave request created successfully.','Success');
             return redirect()->back();
@@ -86,9 +103,17 @@ class LeavesEmployeeController extends Controller
      */
     public function edit(Request $request)
     {
+        $teamLeader= User::when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+            if ($RolePermission == 'BM') {
+                $query->where("branch_id", Auth::user()->branch_id);
+            }else{
+                $query->whereIn("department_id", EmployeeRepository::getRoleHOD());
+            }
+        })->get();
         $dataLeaveType = LeaveType::get();
         $data = LeaveRequest::where("id", $request->id)->first();
         return response()->json([
+            'teamLeader'=>$teamLeader,
             'dataLeaveType'=>$dataLeaveType,
             'success'=>$data,
         ]);
@@ -144,13 +169,14 @@ class LeavesEmployeeController extends Controller
                 $LeaveAllocation->total_unpaid_leave = $LeaveType->type == "unpaid_leave" ? $LeaveAllocation->total_unpaid_leave - $request->number_of_day : $LeaveAllocation->total_unpaid_leave;
                 $LeaveAllocation->save();
             }
+            $data['request_to'] = $request->request_to;
             $data['leave_type_id'] = $request->leave_type_id;
             $data['start_date'] = $request->start_date;
             $data['start_half_day'] = $request->start_half_day;
             $data['end_date'] = $request->end_date;
             $data['end_half_day'] = $request->end_half_day;
             $data['number_of_day'] = $request->number_of_day;
-            $data['remark'] = $request->remark;
+            $data['reason'] = $request->reason;
             $data['updated_by'] = Auth::user()->id;
             $data->save();
 
@@ -172,13 +198,22 @@ class LeavesEmployeeController extends Controller
     public function destroy(Request $request)
     {
         try{
-            $data = LeaveRequest::where("id", $request->id)->first();
+            $data = LeaveRequest::with("leaveType")->where("id", $request->id)->first();
             $LeaveAllocation = LeaveAllocation::where("employee_id", $data->employee_id)->first();
-            $LeaveType = LeaveType::where("id", $data->leave_type_id)->first();
-            $LeaveAllocation->total_annual_leave += $LeaveType->type == "annual_leave" ? $data->number_of_day : 0;
-            $LeaveAllocation->total_sick_leave += $LeaveType->type == "sick_leave" ? $data->number_of_day : 0;
-            $LeaveAllocation->total_special_leave += $LeaveType->type == "special_leave" ? $data->number_of_day : 0;
-            $LeaveAllocation->total_unpaid_leave += $LeaveType->type == "unpaid_leave" ? $data->number_of_day : 0;
+            if ($data->leaveType->type == "annual_leave") {
+                $current_annual_leave = $LeaveAllocation->total_annual_leave + $request->number_of_day;
+                $LeaveAllocation->total_annual_leave =  $current_annual_leave > $LeaveAllocation->default_annual_leave ? $LeaveAllocation->default_annual_leave : $current_annual_leave;
+            }else if($data->leaveType->type == "sick_leave"){
+                $current_sick_leave = $LeaveAllocation->total_sick_leave + $request->number_of_day;
+                $LeaveAllocation->total_sick_leave = $current_sick_leave > $LeaveAllocation->default_sick_leave ? $LeaveAllocation->default_sick_leave : $current_sick_leave;
+            }else if($data->leaveType->type == "special_leave") {
+                $current_special_leave = $LeaveAllocation->total_special_leave + $request->number_of_day;
+                $LeaveAllocation->total_special_leave = $current_special_leave > $LeaveAllocation->default_special_leave ? $LeaveAllocation->default_special_leave : $current_special_leave;
+            }else if($data->leaveType->type == "unpaid_leave"){
+                $current_unpaid_leave = $LeaveAllocation->total_unpaid_leave + $request->number_of_day;
+                $LeaveAllocation->total_unpaid_leave = $current_unpaid_leave > $LeaveAllocation->default_unpaid_leave ? $LeaveAllocation->default_unpaid_leave : $current_unpaid_leave;
+            }
+
             $LeaveAllocation->save();
             LeaveRequest::destroy($request->id);
             Toastr::success('Leave requsest deleted successfully.','Success');

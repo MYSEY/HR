@@ -103,6 +103,10 @@
             if (allEmployees == $('input.all_employee_checkbox').length) {
                 $("#all_employee").prop("checked", true);
             };
+            let leavesAdmin = $('.leaves_admin_checkbox').filter(':checked').length;
+            if (leavesAdmin == $('input.leaves_admin_checkbox').length) {
+                $("#leaves_admin").prop("checked", true);
+            };
             let leavesEmployee = $('.leaves_employee_checkbox').filter(':checked').length;
             if (leavesEmployee == $('input.leaves_employee_checkbox').length) {
                 $("#leaves_employee").prop("checked", true);
@@ -267,6 +271,19 @@
             if (forgot_password_checkbox == $('input.forgot_password_checkbox').length) {
                 $("#forgot_password").prop("checked", true);
             };
+        });
+        $("#role_type").on("change", function () {
+            if ($(this).val() == "Employee") {
+                $('.hidden_leaves_employee').css('display', 'block');
+                $('.hidden_leaves_admin').css('display', 'none');
+                $('.leaves_admin_checkbox').val('');
+                $('.leaves_employee_checkbox').val('');
+            }else{
+                $('.hidden_leaves_employee').css('display', 'none');
+                $('.hidden_leaves_admin').css('display', 'block');
+                $('.leaves_employee_checkbox').val('');
+                $('.leaves_admin_checkbox').val('');
+            }
         });
         $(".btn_edit").on("click", function() {
             $("#btn-save-loading").css('display', 'block');

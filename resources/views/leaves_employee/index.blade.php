@@ -54,10 +54,6 @@
                                     id="DataTables_Table_0" role="grid" aria-describedby="DataTables_Table_0_info">
                                     <thead>
                                         <tr role="row">
-                                            <th class="sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
-                                                rowspan="1" colspan="1" aria-sort="ascending"
-                                                aria-label="Employee: activate to sort column descending"
-                                                style="width: 270.413px;">Employee</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                 rowspan="1" colspan="1"
                                                 aria-label="Leave Type: activate to sort column ascending"
@@ -81,10 +77,6 @@
                                             <th class="text-center sorting" tabindex="0"
                                                 aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
                                                 aria-label="Status: activate to sort column ascending"
-                                                style="width: 109.887px;">Approve By</th>
-                                            <th class="text-center sorting" tabindex="0"
-                                                aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
-                                                aria-label="Status: activate to sort column ascending"
                                                 style="width: 109.887px;">Status</th>
                                             <th class="text-end sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                 rowspan="1" colspan="1"
@@ -96,21 +88,15 @@
                                         @if (count($dataLeaveRequest) > 0)
                                             @foreach ($dataLeaveRequest as $request)
                                             <tr class="odd">
-                                                <td class="sorting_1">
-                                                    <h2 class="table-avatar">
-                                                       {{$request->employee->employee_name_en}}
-                                                    </h2>
-                                                </td>
                                                 <td>{{$request->leaveType->name}}</td>
                                                 <td>{{\Carbon\Carbon::parse($request->start_date)->format('d-M-Y') ?? ''}}</td>
                                                 <td>{{\Carbon\Carbon::parse($request->end_date)->format('d-M-Y') ?? ''}}</td>
                                                 <td>{{$request->number_of_day}} Day</td>
-                                                <td>{{$request->remark}}</td>
-                                                <td></td>
+                                                <td>{{$request->reason}}</td>
                                                 <td>
-                                                    @if ($request->status == "pending")
+                                                    @if ($request->status == "pending" || $request->status == "approved_lm")
                                                         <span class="badge bg-inverse-info" style="font-size: 13px;">Pending</span>
-                                                    @elseif ($request->status == "rejected")
+                                                    @elseif ($request->status == "rejected" || $request->status == "rejected_lm")
                                                         <span class="badge bg-inverse-danger" style="font-size: 13px;">Rejected</span>
                                                     @elseif ($request->status == "approved")
                                                         <span class="badge bg-inverse-success" style="font-size: 13px;">Approved</span>
@@ -154,7 +140,7 @@
                             <div class="col-sm-12">
                                 <div class="form-group">
                                     <label>Leave Type<span class="text-danger">*</span></label>
-                                    <select class="form-control" id="leave_type_id" name="leave_type_id" required>
+                                    <select class="form-control select floating" id="leave_type_id" name="leave_type_id" required>
                                         <option selected value=""> --@lang('lang.select')--</option>
                                         @foreach ($dataLeaveType as $type)
                                             <option value="{{$type->id}}">{{$type->name}}</option>
@@ -210,12 +196,23 @@
                                     <input type="text" class="form-control" name="number_of_day" required>
                                 </div>
                             </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Request To <span class="text-danger">*</span></label>
+                                    <select class="form-control select floating" name="request_to">
+                                        <option value=""> @lang('lang.select') </option>
+                                        @foreach ($teamLeader as $item)
+                                            <option value="{{$item->id}}">{{ Helper::getLang() == 'en' ? $item->employee_name_en : $item->employee_name_kh }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
                         </div>
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label >Leave Reason</label>
-                                    <textarea class="form-control" id="remark" name="remark" placeholder="Write down why you want to relax"></textarea>
+                                    <textarea class="form-control" id="reason" name="reason" placeholder="Write down why you want to relax"></textarea>
                                 </div>
                             </div>
                         </div>
@@ -246,7 +243,7 @@
                             <div class="col-sm-12">
                                 <div class="form-group">
                                     <label>Leave Type<span class="text-danger">*</span></label>
-                                    <select class="form-control" id="e_leave_type_id" name="leave_type_id" required>
+                                    <select class="form-control select floating" id="e_leave_type_id" name="leave_type_id" required>
                                     </select>
                                 </div>
                             </div>
@@ -298,12 +295,23 @@
                                     <input type="text" class="form-control" id="e_number_of_day" name="number_of_day" required>
                                 </div>
                             </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Request To <span class="text-danger">*</span></label>
+                                    <select class="form-control select floating" name="request_to" id="e_request_to">
+                                        {{-- <option value=""> @lang('lang.select') </option>
+                                        @foreach ($teamLeader as $item)
+                                            <option value="{{$item->id}}">{{ Helper::getLang() == 'en' ? $item->employee_name_en : $item->employee_name_kh }}</option>
+                                        @endforeach --}}
+                                    </select>
+                                </div>
+                            </div>
                         </div>
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label >Leave Reason</label>
-                                    <textarea class="form-control" id="e_remark" name="remark" placeholder="Write down why you want to relax"></textarea>
+                                    <textarea class="form-control" id="e_reason" name="reason" placeholder="Write down why you want to relax"></textarea>
                                 </div>
                             </div>
                         </div>
@@ -364,8 +372,18 @@
                     $('#e_start_date').val(success.start_date);
                     $('#e_end_date').val(success.end_date);
                     $('#e_number_of_day').val(success.number_of_day);
-                    $('#e_remark').text(success.remark);
+                    $('#e_reason').text(success.reason);
                     $('#e_leave_type_id').html('<option value=""> -- @lang("lang.select") --</option>');
+                    $('#e_request_to').html('<option value=""> -- @lang("lang.select") --</option>');
+                    if (response.teamLeader != '') {
+                        $.each(response.teamLeader, function(i, item) {
+                            $('#e_request_to').append($('<option>', {
+                                value: item.id,
+                                text: item.employee_name_en,
+                                selected: item.id == response.success.request_to
+                            }));
+                        });
+                    }
                     if (response.dataLeaveType != '') {
                         $.each(response.dataLeaveType, function(i, item) {
                             $('#e_leave_type_id').append($('<option>', {

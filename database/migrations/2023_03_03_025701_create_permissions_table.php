@@ -33,6 +33,7 @@ return new class extends Migration
             $table->boolean('is_cancel')->nullable();
             $table->boolean('is_accept')->nullable();
             $table->boolean('is_approve')->nullable();
+            $table->boolean('is_reject')->nullable();
             $table->boolean('is_print')->nullable();
             $table->boolean('is_import')->nullable();
             $table->boolean('is_export')->nullable();

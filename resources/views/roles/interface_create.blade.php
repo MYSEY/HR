@@ -156,11 +156,51 @@
                             </div>
                         </div>
                     </div>
-                     {{-- block leave employee --}}
-                    <div class="col-md-12">
+                    {{-- block leave for admin --}}
+                    <div class="col-md-12 hidden_leaves_admin">
                         <div class="form-group row">
                             <div class="col-md-2">
-                                {{-- <label >@lang('lang.leaves_employee')</label> --}}
+                                <label class="container-checkbox">@lang('lang.leaves_admin')
+                                    <input type="checkbox" class="employee_checkbox" id="leaves_admin" name="leaves_admin"> <span class="checkmark"></span>
+                                </label>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="container-checkbox">@lang('lang.view')
+                                    <input value="" checked type="checkbox" class="employee_checkbox leaves_admin_checkbox" id="leaves_admin_view" name="leaves_admin_view"> <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.add')
+                                    <input type="checkbox" class="employee_checkbox leaves_admin_checkbox" id="leaves_admin_add" name="leaves_admin_add"> <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.edit')
+                                    <input type="checkbox" class="employee_checkbox leaves_admin_checkbox" id="leaves_admin_edit" name="leaves_admin_edit"> <span class="checkmark"></span>
+                                </label>
+                                
+                            </div>
+                            <div class="col-md-3">
+                                <label class="container-checkbox">@lang('lang.delete')
+                                    <input type="checkbox" class="employee_checkbox leaves_admin_checkbox" id="leaves_admin_delete" name="leaves_admin_delete" > <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.approve')
+                                    <input type="checkbox" class="employee_checkbox leaves_admin_checkbox" id="leaves_admin_approve" name="leaves_admin_approve"> <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.reject')
+                                    <input type="checkbox" class="employee_checkbox leaves_admin_checkbox" id="leaves_admin_reject" name="leaves_admin_reject"> <span class="checkmark"></span>
+                                </label>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="container-checkbox">@lang('lang.print')
+                                    <input type="checkbox" class="employee_checkbox leaves_admin_checkbox" id="leaves_admin_print" name="leaves_admin_print"> <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.export')
+                                    <input type="checkbox" class="employee_checkbox leaves_admin_checkbox" id="leaves_admin_export" name="leaves_admin_export"> <span class="checkmark"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                     {{-- block leave employee --}}
+                    <div class="col-md-12 hidden_leaves_employee" style="display: none">
+                        <div class="form-group row">
+                            <div class="col-md-2">
                                 <label class="container-checkbox">@lang('lang.leaves_employee')
                                     <input type="checkbox" class="employee_checkbox" id="leaves_employee" name="leaves_employee"> <span class="checkmark"></span>
                                 </label>
@@ -172,14 +212,14 @@
                                 <label class="container-checkbox">@lang('lang.add')
                                     <input type="checkbox" class="employee_checkbox leaves_employee_checkbox" id="leaves_employee_add" name="leaves_employee_add"> <span class="checkmark"></span>
                                 </label>
-                                <label class="container-checkbox">@lang('lang.import')
-                                    <input type="checkbox" class="employee_checkbox leaves_employee_checkbox" id="leaves_employee_import" name="leaves_employee_import"> <span class="checkmark"></span>
-                                </label>
-                            </div>
-                            <div class="col-md-3">
                                 <label class="container-checkbox">@lang('lang.edit')
                                     <input type="checkbox" class="employee_checkbox leaves_employee_checkbox" id="leaves_employee_edit" name="leaves_employee_edit"> <span class="checkmark"></span>
                                 </label>
+                                {{-- <label class="container-checkbox">@lang('lang.import')
+                                    <input type="checkbox" class="employee_checkbox leaves_employee_checkbox" id="leaves_employee_import" name="leaves_employee_import"> <span class="checkmark"></span>
+                                </label> --}}
+                            </div>
+                            <div class="col-md-3">
                                 <label class="container-checkbox">@lang('lang.delete')
                                     <input type="checkbox" class="employee_checkbox leaves_employee_checkbox" id="leaves_employee_delete" name="leaves_employee_delete" > <span class="checkmark"></span>
                                 </label>

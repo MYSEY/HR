@@ -72,55 +72,7 @@ $(function(){
             $(this).val(1)
         }
     });
-    // $(".all_employee_checkbox").on("click", function(){
-    //      $(document).ready(function(){
-    //         var allEmployeeSingle = $('.all_employee_checkbox');
-    //         allEmployeeSingle.change(function(){
-    //             var countAllCheckboxes = allEmployeeSingle.filter(':checked').length;
-    //             if (countAllCheckboxes == $('input.all_employee_checkbox').length) {
-    //                 $("#all_employee").prop("checked", true);
-    //             };
-    //         });
-    //     });
-    //     if ($(this).prop("checked")) {
-    //         let permission = {
-    //             name:"All Employee",
-    //             table_id:"3",
-    //         };
-    //         let dataCheckName = $(this).data("name");
 
-    //         alert(dataCheckName);
-
-    //         if (dataCheckName == "is_view") {
-    //             permission.is_view = 1;
-    //         }
-    //         if (dataCheckName == "is_add") {
-    //             permission.is_add = 1;
-    //         }
-    //         if (dataCheckName == "is_import") {
-    //             permission.is_import = 1;
-    //         }
-    //         if (dataCheckName == "is_update") {
-    //             permission.is_update = 1;
-    //         }
-    //         if (dataCheckName == "is_delete") {
-    //             permission.is_delete = 1;
-    //         }
-    //         if (dataCheckName == "is_cancel") {
-    //             permission.is_cancel = 1;
-    //         }
-    //         if (dataCheckName == "is_print") {
-    //             permission.is_print = 1;
-    //         }
-    //         if (dataCheckName == "is_export") {
-    //             permission.is_export = 1;
-    //         }
-    //         data.push({
-    //             permission: [permission]
-    //         });
-    //     };
-       
-    // });
     $("#leaves_employee").on("click", function(){
         if (!$(this).prop("checked")) {
             $(".leaves_employee_checkbox").prop("checked", false);
@@ -131,7 +83,17 @@ $(function(){
             $(this).val(1)
             $(".leaves_employee_checkbox").val(1);
         }
-        
+    });
+    $("#leaves_admin").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(".leaves_admin_checkbox").prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(".leaves_admin_checkbox").prop("checked", true);
+            $(this).val(1)
+            $(".leaves_admin_checkbox").val(1);
+        }
     });
     $(".leaves_employee_checkbox").on("click", function () {
         if (!$(this).prop("checked")) {
@@ -152,6 +114,17 @@ $(function(){
             };
             if (countAllCheckboxes < $('input.all_employee_checkbox').length) {
                 $("#all_employee").prop("checked", false);
+            };
+        });
+
+        let leavesAdmin = $('.leaves_admin_checkbox');
+        leavesAdmin.change(function(){
+            let countleavesAdminCheckboxes = leavesAdmin.filter(':checked').length;
+            if (countleavesAdminCheckboxes == $('input.leaves_admin_checkbox').length) {
+                $("#leaves_admin").prop("checked", true);
+            };
+            if (countleavesAdminCheckboxes < $('input.leaves_admin_checkbox').length) {
+                $("#leaves_admin").prop("checked", false);
             };
         });
 

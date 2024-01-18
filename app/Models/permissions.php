@@ -34,6 +34,7 @@ class permissions extends Model
         'is_cancel',
         'is_accept',
         'is_approve',
+        'is_reject',
         'is_print',
         'is_import',
         'is_export',

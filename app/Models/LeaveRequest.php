@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Helpers\Helper;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -21,6 +22,8 @@ class LeaveRequest extends Model
         'end_date',
         'end_half_day',
         'approved_date',
+        'request_to',
+        'handover_staff_id',
         'approved_by',
         'status',
         'number_of_day',
@@ -28,6 +31,7 @@ class LeaveRequest extends Model
         'total_sick_leave',
         'total_special_leave',
         'total_unpaid_leave',
+        'reason',
         'remark',
         'created_by',
         'updated_by',
@@ -39,8 +43,25 @@ class LeaveRequest extends Model
     public function leaveType(){
         return $this->belongsTo(LeaveType::class,'leave_type_id');
     }
+    public function getApproveAttribute(){
+        $approved_by = explode(',',$this->approved_by);
+        $approve_name = '';
+        $emolyees = User::whereIn("id", $approved_by)
+        ->select([
+            'id', 
+            'employee_name_en',
+            'employee_name_kh',
+            'number_employee',
+        ])->get();
+
+        foreach($emolyees as $key=>$item){
+            $approve_name .= Helper::getLang() == 'en' ? nl2br("- ".$item->employee_name_en."\n"): nl2br("- ".$item->employee_name_kh."\n");
+        }
+        
+        return $approve_name;
+    }
     public function createdBy()
-    {
+    { 
         return $this->belongsTo(User::class, 'created_by');
     }
     public function upldatedBy()

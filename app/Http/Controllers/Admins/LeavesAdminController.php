@@ -6,8 +6,12 @@ use App\Http\Controllers\Controller;
 use App\Models\LeaveAllocation;
 use App\Models\LeaveRequest;
 use App\Models\LeaveType;
+use App\Models\User;
+use App\Repositories\Admin\EmployeeRepository;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class LeavesAdminController extends Controller
 {
@@ -20,8 +24,53 @@ class LeavesAdminController extends Controller
     {
         $dataLeaveType = LeaveType::get();
         $LeaveAllocation = LeaveAllocation::get();
-        $dataLeaveRequest = LeaveRequest::with("employee")->get();
-        return view('leaves_admin.index', compact('dataLeaveType', 'LeaveAllocation', 'dataLeaveRequest'));
+        $dataLeaveRequest = LeaveRequest::with("employee")
+        ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+            if ($RolePermission == 'BM' || $RolePermission == "HOD") {
+                $query->where("request_to", Auth::user()->id);
+            }
+        })->get();
+        $dataApprove = LeaveRequest::
+        when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+            if ($RolePermission == 'BM' || $RolePermission == "HOD") {
+                $query->where("request_to", Auth::user()->id);
+                $query->where("status", "approved_lm");
+            }else{
+                $query->where("status", "approved");
+            }
+        })
+        ->count();
+        $dataReject = LeaveRequest::
+        when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+            if ($RolePermission == 'BM' || $RolePermission == "HOD") {
+                $query->where("request_to", Auth::user()->id);
+                $query->where("status", "rejected_lm");
+            }else{
+                $query->where("status", "rejected");
+            }
+        })
+        ->count();
+        $dataPending = LeaveRequest::where("status", "pending")
+        ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+            if ($RolePermission == 'BM' || $RolePermission == "HOD") {
+                $query->where("request_to", Auth::user()->id);
+            }
+        })
+        ->count();
+        return view('leaves_admin.index', compact('dataLeaveType', 'LeaveAllocation', 'dataLeaveRequest', 'dataApprove', 'dataReject', 'dataPending'));
+    }
+
+    public function employees() {
+        $employees= User::when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+            if ($RolePermission == 'BM') {
+                $query->where("branch_id", Auth::user()->branch_id);
+            }else{
+                $query->whereIn("department_id", EmployeeRepository::getRoleHOD());
+            }
+        })->get();
+        return response()->json([
+            'employees' => $employees
+        ]);
     }
 
     public function filter(Request $request)
@@ -57,6 +106,67 @@ class LeavesAdminController extends Controller
         ]);
     }
 
+    public function approve(Request $request) {
+        try {
+            $data = LeaveRequest::find($request->id);
+            $role = Auth::user()->RolePermission;
+            if ($role == 'BM' || $role == "HOD") {
+                $data['status'] = "approved_lm";
+            }else{
+                $data['status'] = $request->status;
+            }
+            $data['handover_staff_id']=$request->handover_staff_id;
+            $data['approved_date']= Carbon::now();
+            if ($data->approved_by) {
+                $data['approved_by'] = $data->approved_by . ',' . Auth::user()->id; 
+            }else{
+                $data['approved_by'] = Auth::user()->id; 
+            };
+            $data->save();
+            DB::commit();
+            return response()->json([
+                'message' => 'The process has been successfully.'
+            ]);
+        } catch (\Exception $exp) {
+            DB::rollBack();
+            return response()->json(['message' => $exp->getMessage()], 500);
+        }
+    }
+    public function reject(Request $request) {
+        try {
+            $data = LeaveRequest::with("leaveType")->find($request->id);
+            $LeaveAllocation = LeaveAllocation::where("employee_id", $data->employee_id)->first();
+            if ($data->leaveType->type == "annual_leave") {
+                $current_annual_leave = $LeaveAllocation->total_annual_leave + $data->number_of_day;
+                $LeaveAllocation->total_annual_leave =  $current_annual_leave > $LeaveAllocation->default_annual_leave ? $LeaveAllocation->default_annual_leave : $current_annual_leave;
+            }else if($data->leaveType->type == "sick_leave"){
+                $current_sick_leave = $LeaveAllocation->total_sick_leave + $data->number_of_day;
+                $LeaveAllocation->total_sick_leave = $current_sick_leave > $LeaveAllocation->default_sick_leave ? $LeaveAllocation->default_sick_leave : $current_sick_leave;
+            }else if($data->leaveType->type == "special_leave") {
+                $current_special_leave = $LeaveAllocation->total_special_leave + $data->number_of_day;
+                $LeaveAllocation->total_special_leave = $current_special_leave > $LeaveAllocation->default_special_leave ? $LeaveAllocation->default_special_leave : $current_special_leave;
+            }else if($data->leaveType->type == "unpaid_leave"){
+                $current_unpaid_leave = $LeaveAllocation->total_unpaid_leave + $data->number_of_day;
+                $LeaveAllocation->total_unpaid_leave = $current_unpaid_leave > $LeaveAllocation->default_unpaid_leave ? $LeaveAllocation->default_unpaid_leave : $current_unpaid_leave;
+            }
+            $role = Auth::user()->RolePermission;
+            if ($role == 'BM' || $role == "HOD") {
+                $data['status'] = "rejected_lm";
+            }else{
+                $data['status'] = $request->status;
+            }
+            $data['remark']= $request->remark;
+            $data->save();
+            $LeaveAllocation->save();
+            DB::commit();
+            return response()->json([
+                'message' => 'The process has been successfully.'
+            ]);
+        } catch (\Exception $exp) {
+            DB::rollBack();
+            return response()->json(['message' => $exp->getMessage()], 500);
+        }
+    }
     /**
      * Show the form for creating a new resource.
      *

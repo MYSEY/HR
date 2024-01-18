@@ -1,9 +1,16 @@
 @extends('layouts.master')
 <style>
     .jconfirm-buttons-center{
-    float: none !important;
-    text-align: center !important;
-}
+        float: none !important;
+        text-align: center !important;
+    }
+    .text {
+        display: block;
+        width: 100px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
 </style>
 @section('content')
     <div class="">
@@ -21,25 +28,23 @@
                 </div>
             </div>
         </div>
-
-
         <div class="row">
             <div class="col-md-3">
                 <div class="stats-info" style="background-color: #ff9b44;">
                     <h6>Pending Requests</h6>
-                    <h4>0 <span>Today</span></h4>
+                    <h4>{{$dataPending}}</h4>
                 </div>
             </div>
             <div class="col-md-3" >
                 <div class="stats-info" style="background-color: #55ce63;">
                     <h6>Approved Leave</h6>
-                    <h4>0</h4>
+                    <h4>{{$dataApprove}}</h4>
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="stats-info" style="background-color: #f93332d9;">
                     <h6>Reject Leave</h6>
-                    <h4>0</h4>
+                    <h4>{{$dataReject}}</h4>
                 </div>
             </div>
             <div class="col-md-3">
@@ -49,33 +54,7 @@
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-md-3">
-                <div class="stats-info">
-                    <h6>Annual Leave</h6>
-                    <h4>0</h4>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="stats-info">
-                    <h6>Sick Leave</h6>
-                    <h4>0</h4>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="stats-info">
-                    <h6>Special Leave</h6>
-                    <h4>0</h4>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="stats-info">
-                    <h6>Unpaid Leave</h6>
-                    <h4>0</h4>
-                </div>
-            </div>
-        </div>
-
+        
         <div class="row filter-row-btn">
             <div class="col-sm-6 col-md-2">
                 <div class="form-group cls-research">
@@ -160,10 +139,14 @@
                                                 rowspan="1" colspan="1"
                                                 aria-label="Reason: activate to sort column ascending"
                                                 style="width: 117.075px;">Reason</th>
-                                            <th class="text-center sorting" tabindex="0"
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                rowspan="1" colspan="1"
+                                                aria-label="Reason: activate to sort column ascending"
+                                                style="width: 117.075px;">@lang('lang.status')</th>
+                                            {{-- <th class="text-center sorting" tabindex="0"
                                                 aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
                                                 aria-label="Status: activate to sort column ascending"
-                                                style="width: 108.613px;">@lang('lang.approve_by')</th>
+                                                style="width: 108.613px;">@lang('lang.approve_by')</th> --}}
                                             <th class="text-end sorting" tabindex="0"
                                                 aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
                                                 aria-label="Actions: activate to sort column ascending"
@@ -196,12 +179,41 @@
                                                     <td>{{\Carbon\Carbon::parse($request->end_date)->format('d-M-Y') ?? ''}}</td>
                                                     <td>{{$request->number_of_day}} Day</td>
                                                     <td>{{$request->reason}}</td>
-                                                    <td class="text-center">
+                                                    <td>
+                                                        @if (Auth::user()->RolePermission == "BM" || Auth::user()->RolePermission == "HOD" )
+                                                            @if ($request->status == "pending")
+                                                                <span class="badge bg-inverse-info" style="font-size: 13px;">Pending</span>
+                                                            @elseif ($request->status == "rejected_lm")
+                                                                <span class="badge bg-inverse-danger" style="font-size: 13px;">Rejected</span>
+                                                            @elseif ($request->status == "approved_lm")
+                                                                <span class="badge bg-inverse-success" style="font-size: 13px;">Approved</span>
+                                                            @endif
+                                                        @else
+                                                            @if ($request->status == "pending" || $request->status == "approved_lm")
+                                                                <span class="badge bg-inverse-info" style="font-size: 13px;">Pending</span>
+                                                            @elseif ($request->status == "rejected" || $request->status == "rejected_lm")
+                                                                <span class="badge bg-inverse-danger" style="font-size: 13px;">Rejected</span>
+                                                            @elseif ($request->status == "approved")
+                                                                <span class="badge bg-inverse-success" style="font-size: 13px;">Approved</span>
+                                                            @endif
+                                                        @endif
                                                         
                                                     </td>
+                                                    {{-- <td title="{{$request->Approve}}">
+                                                        <span class="text">{{$request->Approve}}</span>
+                                                    </td> --}}
                                                     <td class="text-end">
-                                                        <a class="btn btn-success btn-sm btn-approved" href="#"  data-id="{{$request->id}}">@lang('lang.approved')</a>
-                                                        <a class="btn btn-primary btn-sm btn_cancel" href="#" data-id="{{$request->id}}" >Reject</a>
+                                                        @if (Auth::user()->RolePermission == "BM" || Auth::user()->RolePermission == "HOD" )
+                                                            @if ($request->status == "pending")
+                                                                <button class="btn btn-success btn-sm btn-approved" data-id="{{$request->id}}">@lang('lang.approved')</button>
+                                                                <button class="btn btn-primary btn-sm btn_cancel"  data-id="{{$request->id}}">@lang('lang.reject')</button>
+                                                            @endif
+                                                        @else
+                                                            @if ($request->status == "approved_lm" || $request->status == "pending")
+                                                                <button type="button" class="btn btn-outline-success btn-sm me-1 mb-1 btn-approved" data-id="{{$request->id}}" {{ $request->status == "pending" ? "disabled":""}} >@lang('lang.approved')</button>
+                                                                <button type="button" class="btn btn-outline-danger btn-sm me-1 mb-1 btn_cancel" data-id="{{$request->id}}" {{ $request->status == "pending" ? "disabled":""}}>@lang('lang.reject')</button>
+                                                            @endif 
+                                                        @endif
                                                     </td>
                                                 </tr>
                                             @endforeach
@@ -285,8 +297,10 @@
                 btnClass: 'add-btn-status',
                 action: function () {
                     var id = this.$content.find('.id').val();
-                    axios.post('{{ URL('leaves/admin/status') }}', {
+                    let handover_staff_id = this.$content.find('.handover_staff_id').val();
+                    axios.post('{{ URL('leaves/admin/approve') }}', {
                         'id': id,
+                        'handover_staff_id': handover_staff_id,
                         'status': "approved",
                     }).then(function(response) {
                         new Noty({
@@ -318,10 +332,13 @@
                         '<label>'+(description)+'</label>' +
                         '<input type="hidden" class="form-control id" id="" name="" value="'+id+'">'+
                     '</div>' +
+                    '<div class="form-group">'+
+                        '<label>Handover Staff <span class="text-danger">*</span></label>'+
+                        '<select class="form-control form-select handover_staff_id" id="handover_staff_id">'+
+                           
+                        '</select>'+
+                    '</div>'+
                 '</form>',
-                onOpenBefore: function () {
-                    $(".jconfirm-buttons").addClass("jconfirm-buttons-center");
-                },
                 buttons: {
                     button_ok,
                     cancel: {
@@ -337,6 +354,22 @@
                     });
                 }
             });
+            $(document).ready(function(){
+                    axios.get('{{ URL('leave/admin/employee') }}', {
+                    }).then(function(response) {
+                        if (response.data.employees != '') {
+                            $('#handover_staff_id').html('');
+                            $("#handover_staff_id").append('<option selected value="">--Select--</option>');
+                            $.each(response.data.employees, function(i, item) {
+                                $('#handover_staff_id').append($('<option>', {
+                                    value: item.id,
+                                    text: item.employee_name_en,
+                                    // selected: item.id == response.success.location_applied
+                                }));
+                            });
+                        }
+                    })
+                });
         });
         $(document).on('click','.btn_cancel', function(){
             let id = $(this).data("id");
@@ -365,7 +398,7 @@
                         action: function () {
                             var id = this.$content.find('.id').val();
                             var remark = this.$content.find('.remark').val();
-                            axios.post('{{ URL('leaves/admin/status') }}', {
+                            axios.post('{{ URL('leaves/admin/reject') }}', {
                                 'id': id,
                                 'status': "rejected",
                                 'remark': remark,
