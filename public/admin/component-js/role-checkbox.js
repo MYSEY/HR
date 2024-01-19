@@ -72,7 +72,44 @@ $(function(){
             $(this).val(1)
         }
     });
+    $(document).ready(function(){
+        let allEmployees = $('.all_employee_checkbox');
+        allEmployees.change(function(){
+            let countAllCheckboxes = allEmployees.filter(':checked').length;
+            if (countAllCheckboxes == $('input.all_employee_checkbox').length) {
+                $("#all_employee").prop("checked", true);
+            };
+            if (countAllCheckboxes < $('input.all_employee_checkbox').length) {
+                $("#all_employee").prop("checked", false);
+            };
+        });
 
+        let checkboxes = $('.employee_checkbox');
+        checkboxes.change(function(){
+            let countCheckedCheckboxes = checkboxes.filter(':checked').length;
+            if (countCheckedCheckboxes == $('input.employee_checkbox').length) {
+                $("#employee_all").prop("checked", true);
+                $("#employee_all").val(1)
+            };
+            if (countCheckedCheckboxes < $('input.employee_checkbox').length) {
+                $("#employee_all").prop("checked", false);
+                $("#employee_all").val(0)
+            };
+        });
+    });
+
+    // block leave
+    $("#leave_all").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(".leave_checkbox").prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(".leave_checkbox").prop("checked", true);
+            $(this).val(1)
+            $(".leave_checkbox").val(1);
+        }    
+    });
     $("#leaves_employee").on("click", function(){
         if (!$(this).prop("checked")) {
             $(".leaves_employee_checkbox").prop("checked", false);
@@ -82,6 +119,16 @@ $(function(){
             $(".leaves_employee_checkbox").prop("checked", true);
             $(this).val(1)
             $(".leaves_employee_checkbox").val(1);
+        }
+    });
+    $(".leaves_employee_checkbox").on("click", function () {
+        if (!$(this).prop("checked")) {
+            $(this).prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(this).prop("checked", true);
+            $(this).val(1)
         }
     });
     $("#leaves_admin").on("click", function(){
@@ -95,7 +142,7 @@ $(function(){
             $(".leaves_admin_checkbox").val(1);
         }
     });
-    $(".leaves_employee_checkbox").on("click", function () {
+    $(".leaves_admin_checkbox").on("click", function () {
         if (!$(this).prop("checked")) {
             $(this).prop("checked", false);
             $(this).val(0)
@@ -106,17 +153,6 @@ $(function(){
         }
     });
     $(document).ready(function(){
-        let allEmployees = $('.all_employee_checkbox');
-        allEmployees.change(function(){
-            let countAllCheckboxes = allEmployees.filter(':checked').length;
-            if (countAllCheckboxes == $('input.all_employee_checkbox').length) {
-                $("#all_employee").prop("checked", true);
-            };
-            if (countAllCheckboxes < $('input.all_employee_checkbox').length) {
-                $("#all_employee").prop("checked", false);
-            };
-        });
-
         let leavesAdmin = $('.leaves_admin_checkbox');
         leavesAdmin.change(function(){
             let countleavesAdminCheckboxes = leavesAdmin.filter(':checked').length;
@@ -139,16 +175,16 @@ $(function(){
             };
         });
 
-        let checkboxes = $('.employee_checkbox');
+        let checkboxes = $('.leave_checkbox');
         checkboxes.change(function(){
             let countCheckedCheckboxes = checkboxes.filter(':checked').length;
-            if (countCheckedCheckboxes == $('input.employee_checkbox').length) {
-                $("#employee_all").prop("checked", true);
-                $("#employee_all").val(1)
+            if (countCheckedCheckboxes == $('input.leave_checkbox').length) {
+                $("#leave_all").prop("checked", true);
+                $("#leave_all").val(1)
             };
-            if (countCheckedCheckboxes < $('input.employee_checkbox').length) {
-                $("#employee_all").prop("checked", false);
-                $("#employee_all").val(0)
+            if (countCheckedCheckboxes < $('input.leave_checkbox').length) {
+                $("#leave_all").prop("checked", false);
+                $("#leave_all").val(0)
             };
         });
     });
@@ -1263,6 +1299,27 @@ $(function(){
             $(this).val(1)
         }
     });
+    $("#leave_type").on("click", function() {
+        if (!$(this).prop("checked")) {
+            $(".leave_type_checkbox").prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(".leave_type_checkbox").prop("checked", true);
+            $(this).val(1)
+            $(".leave_type_checkbox").val(1);
+        }
+    });
+    $(".leave_type_checkbox").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(this).prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(this).prop("checked", true);
+            $(this).val(1)
+        }
+    });
     $(document).ready(function(){
         let taxes_checkbox = $('.taxes_checkbox');
         taxes_checkbox.change(function(){
@@ -1302,6 +1359,16 @@ $(function(){
             };
             if (countAllCheckboxes < $('input.children_allowance_checkbox').length) {
                 $("#children_allowance").prop("checked", false);
+            };
+        });
+        let leave_type_checkbox = $('.leave_type_checkbox');
+        leave_type_checkbox.change(function(){
+            let countAllCheckboxes = leave_type_checkbox.filter(':checked').length;
+            if (countAllCheckboxes == $('input.leave_type_checkbox').length) {
+                $("#leave_type").prop("checked", true);
+            };
+            if (countAllCheckboxes < $('input.leave_type_checkbox').length) {
+                $("#leave_type").prop("checked", false);
             };
         });
         let checkboxes = $('.configuration_checkbox');

@@ -12,7 +12,7 @@
                 </div>
                 <div class="col-auto float-end ms-auto">
                     <a href="#" class="btn add-btn" data-bs-toggle="modal" data-bs-target="#add_leave"><i
-                            class="fa fa-plus"></i> Add Leave</a>
+                            class="fa fa-plus"></i> Request Leave</a>
                 </div>
             </div>
         </div>
@@ -21,29 +21,29 @@
             <div class="col-md-3">
                 <div class="stats-info">
                     <h6>Annual Leave</h6>
-                    <h4>{{$LeaveAllocation ? $LeaveAllocation->total_annual_leave : 0}}</h4>
+                    <h4>{{$LeaveAllocation->total_annual_leave ? number_format($LeaveAllocation->total_annual_leave) : 0}}</h4>
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="stats-info">
                     <h6>Sick Leave</h6>
-                    <h4>{{$LeaveAllocation ? $LeaveAllocation->total_sick_leave : 0}}</h4>
+                    <h4>{{$LeaveAllocation->total_sick_leave ? number_format($LeaveAllocation->total_sick_leave) : 0}}</h4>
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="stats-info">
                     <h6>Special Leave</h6>
-                    <h4>{{$LeaveAllocation ? $LeaveAllocation->total_special_leave : 0}}</h4>
+                    <h4>{{$LeaveAllocation->total_special_leave ? number_format($LeaveAllocation->total_special_leave) : 0}}</h4>
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="stats-info">
                     <h6>Unpaid Leave</h6>
-                    <h4>{{$LeaveAllocation ? $LeaveAllocation->total_unpaid_leave : 0}}</h4>
+                    <h4>{{$LeaveAllocation->total_unpaid_leave ? number_format($LeaveAllocation->total_unpaid_leave) : 0}}</h4>
                 </div>
             </div>
         </div>
-
+        {!! Toastr::message() !!}
         <div class="row">
             <div class="col-md-12">
                 <div class="table-responsive">
@@ -95,7 +95,12 @@
                                                 <td>{{$request->reason}}</td>
                                                 <td>
                                                     @if ($request->status == "pending" || $request->status == "approved_lm")
-                                                        <span class="badge bg-inverse-info" style="font-size: 13px;">Pending</span>
+                                                        @if ($request->status == "approved_lm")
+                                                            <span class="badge bg-inverse-info" style="font-size: 13px;">Pending HR to Approved.</span>
+                                                        @else
+                                                            <span class="badge bg-inverse-info" style="font-size: 13px;">Pending personal manager to Approved.</span>
+                                                        @endif
+                                                        
                                                     @elseif ($request->status == "rejected" || $request->status == "rejected_lm")
                                                         <span class="badge bg-inverse-danger" style="font-size: 13px;">Rejected</span>
                                                     @elseif ($request->status == "approved")

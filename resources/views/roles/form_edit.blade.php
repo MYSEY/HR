@@ -272,19 +272,19 @@
                 $("#forgot_password").prop("checked", true);
             };
         });
-        $("#role_type").on("change", function () {
-            if ($(this).val() == "Employee") {
-                $('.hidden_leaves_employee').css('display', 'block');
-                $('.hidden_leaves_admin').css('display', 'none');
-                $('.leaves_admin_checkbox').val('');
-                $('.leaves_employee_checkbox').val('');
-            }else{
-                $('.hidden_leaves_employee').css('display', 'none');
-                $('.hidden_leaves_admin').css('display', 'block');
-                $('.leaves_employee_checkbox').val('');
-                $('.leaves_admin_checkbox').val('');
-            }
-        });
+        // $("#role_type").on("change", function () {
+        //     if ($(this).val() == "Employee") {
+        //         $('.hidden_leaves_employee').css('display', 'block');
+        //         $('.hidden_leaves_admin').css('display', 'none');
+        //         $('.leaves_admin_checkbox').val('');
+        //         $('.leaves_employee_checkbox').val('');
+        //     }else{
+        //         $('.hidden_leaves_employee').css('display', 'none');
+        //         $('.hidden_leaves_admin').css('display', 'block');
+        //         $('.leaves_employee_checkbox').val('');
+        //         $('.leaves_admin_checkbox').val('');
+        //     }
+        // });
         $(".btn_edit").on("click", function() {
             $("#btn-save-loading").css('display', 'block');
             $("#btn_edit").prop('disabled', true);

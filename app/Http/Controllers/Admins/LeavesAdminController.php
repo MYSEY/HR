@@ -8,6 +8,7 @@ use App\Models\LeaveRequest;
 use App\Models\LeaveType;
 use App\Models\User;
 use App\Repositories\Admin\EmployeeRepository;
+use Brian2694\Toastr\Facades\Toastr;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -24,6 +25,7 @@ class LeavesAdminController extends Controller
     {
         $dataLeaveType = LeaveType::get();
         $LeaveAllocation = LeaveAllocation::get();
+        $employees = User::where("emp_status", "1")->get();
         $dataLeaveRequest = LeaveRequest::with("employee")
         ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
             if ($RolePermission == 'BM' || $RolePermission == "HOD") {
@@ -57,7 +59,7 @@ class LeavesAdminController extends Controller
             }
         })
         ->count();
-        return view('leaves_admin.index', compact('dataLeaveType', 'LeaveAllocation', 'dataLeaveRequest', 'dataApprove', 'dataReject', 'dataPending'));
+        return view('leaves_admin.index', compact('employees', 'dataLeaveType', 'LeaveAllocation', 'dataLeaveRequest', 'dataApprove', 'dataReject', 'dataPending'));
     }
 
     public function employees() {
@@ -106,6 +108,62 @@ class LeavesAdminController extends Controller
         ]);
     }
 
+    public function generate(Request $request){
+        try {
+            $employee = User::where("id",$request->employee_id)->first();
+            $leaveType = LeaveType::get();
+            $existsLeave = LeaveAllocation::where("employee_id", $request->employee_id)->first();
+            
+            if ($existsLeave) {
+                Toastr::error('Already exists generate leave for Employee!','Error');
+                return redirect()->back();
+                DB::commit();
+            }
+            //count month for new employee Incomplete year
+            $toDate = Carbon::parse($employee->fdc_date);
+            $yearLy = Carbon::now()->format('Y');
+            $fromDate = $yearLy."-12-31";
+            $months = $toDate->diffInMonths($fromDate);
+            $data['employee_id'] = $employee->id;
+            if ($months < 12) {
+                $total_day = 0;
+                foreach ($leaveType as $key => $lt) {
+                    if ($lt->type == "annual_leave") {
+                        $total_day = (($lt->default_day / 12) * $months);
+                        $data['default_annual_leave'] = $total_day;
+                        $data['total_annual_leave'] = $total_day;
+                    }else if($lt->type == "sick_leave") {
+                        $total_day = (($lt->default_day / 12) * $months);
+                        $data['default_sick_leave'] = $total_day;
+                        $data['total_sick_leave'] = $total_day;
+                    }else if($lt->type == "special_leave"){
+                        $total_day = (($lt->default_day / 12) * $months);
+                        $data['default_special_leave'] = $total_day;
+                        $data['total_special_leave'] = $total_day;
+                    }else{
+                        $data['default_unpaid_leave'] = 0;
+                        $data['total_unpaid_leave'] = 0;
+                    }
+                }
+            }else{
+                $data['default_annual_leave'] = 18;
+                $data['default_sick_leave'] = 10;
+                $data['default_special_leave'] = 22;
+                $data['default_unpaid_leave'] = 0;
+                $data['total_annual_leave'] = 18;
+                $data['total_sick_leave'] = 10;
+                $data['total_special_leave'] = 22;
+                $data['total_unpaid_leave'] = 0;
+            }
+            LeaveAllocation::create($data);
+            Toastr::success('Leave created successfully.','Success');
+            return redirect()->back();
+            DB::commit();
+        } catch (\Throwable $exp) {
+            DB::rollback();
+            Toastr::error('Leave created fail.','Error');
+        }
+    }
     public function approve(Request $request) {
         try {
             $data = LeaveRequest::find($request->id);

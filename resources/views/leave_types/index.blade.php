@@ -17,7 +17,7 @@
                 </div> --}}
             </div>
         </div>
-        @if (permissionAccess("m8-s1","is_view")->value == "1")
+        @if (permissionAccess("m8-s5","is_view")->value == "1")
             {!! Toastr::message() !!}
             <div class="row">
                 <div class="col-md-12">
@@ -38,7 +38,7 @@
                                             <td><input type="text" class="form-control" value="{{$item->name}}"></td>
                                             <td><div class="input-group"><input type="text" class="form-control" value="{{$item->default_day}}"></div></td>
                                             <td style="text-align: center;">
-                                                @if (permissionAccess("m8-s1","is_update")->value == "1")
+                                                @if (permissionAccess("m8-s5","is_update")->value == "1")
                                                     <a class="btn btn-success update" data-toggle="modal" data-id="{{$item->id}}" data-target="#edit_leave_type"><i class="fa fa-edit"></i></a>
                                                 @endif
                                             </td>

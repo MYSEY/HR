@@ -399,6 +399,7 @@ return[
     "leaves_admin"=>"Leave Admin",
     "leaves_employee"=>"Leave Employee",
     "log_name"=>"Log Name",
+    "leave"=>"Leave",
     "leave_type"=>"Leave Type",
     "marital_status"=>"Married Status",
     "married"=>"Married",

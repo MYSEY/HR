@@ -94,19 +94,19 @@
 <script src="{{ asset('/admin/js/noty.js') }}"></script>
 <script>
     $(function(){
-        $("#role_type").on("change", function () {
-            if ($(this).val() == "Employee") {
-                $('.hidden_leaves_employee').css('display', 'block');
-                $('.hidden_leaves_admin').css('display', 'none');
-                $('.leaves_admin_checkbox').val('');
-                $('.leaves_employee_checkbox').val('');
-            }else{
-                $('.hidden_leaves_employee').css('display', 'none');
-                $('.hidden_leaves_admin').css('display', 'block');
-                $('.leaves_admin_checkbox').val('');
-                $('.leaves_employee_checkbox').val('');
-            }
-        });
+        // $("#role_type").on("change", function () {
+        //     if ($(this).val() == "Employee") {
+        //         $('.hidden_leaves_employee').css('display', 'block');
+        //         $('.hidden_leaves_admin').css('display', 'none');
+        //         $('.leaves_admin_checkbox').val('');
+        //         $('.leaves_employee_checkbox').val('');
+        //     }else{
+        //         $('.hidden_leaves_employee').css('display', 'none');
+        //         $('.hidden_leaves_admin').css('display', 'block');
+        //         $('.leaves_admin_checkbox').val('');
+        //         $('.leaves_employee_checkbox').val('');
+        //     }
+        // });
         $(".btn_save").on("click", function() {
             $("#btn-save-loading").css('display', 'block');
             $("#btn_save").prop('disabled', true);

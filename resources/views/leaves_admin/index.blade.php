@@ -24,7 +24,10 @@
                     </ul>
                 </div>
                 <div class="col-auto float-end ms-auto">
-                    <a href="{{url('/leaves/admin/create')}}" class="btn add-btn"><i class="fa fa-plus"></i> Add Leave</a>
+                    @if (Auth::user()->RolePermission == "HR")
+                        <a href="#" class="btn add-btn" data-bs-toggle="modal" data-bs-target="#add_leave"><i class="fa fa-calendar"></i> Generate Leave</a>
+                    @endif
+                    <a href="#" class="btn add-btn me-1" data-bs-toggle="modal" data-bs-target="#request_leave"><i class="fa fa-plus"></i>Request Leave</a>
                 </div>
             </div>
         </div>
@@ -109,120 +112,303 @@
                 </div>
             </div>
         </div>
-
-        <div class="row">
-            <div class="col-md-12">
-                <div class="table-responsive">
-                    <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <table class="table table-striped custom-table mb-0 datatable dataTable no-footer tbl-leave-request" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
-                                    <thead>
-                                        <tr>
-                                            <th class="sorting sorting_asc stuck-scroll-4" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Profle: activate to sort column descending">#</th>
-                                            <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Profile: activate to sort column descending" >@lang('lang.profile')</th>
-                                            <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Employee: activate to sort column descending" >@lang('lang.employee_name')</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                rowspan="1" colspan="1"
-                                                aria-label="Leave Type: activate to sort column ascending">Leave Type</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                rowspan="1" colspan="1"
-                                                aria-label="From: activate to sort column ascending">@lang('lang.start_date')</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                rowspan="1" colspan="1"
-                                                aria-label="To: activate to sort column ascending">@lang('lang.end_date')</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                rowspan="1" colspan="1"
-                                                aria-label="No of Days: activate to sort column ascending"
-                                                style="width: 76.925px;">Number of Days</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                rowspan="1" colspan="1"
-                                                aria-label="Reason: activate to sort column ascending"
-                                                style="width: 117.075px;">Reason</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                rowspan="1" colspan="1"
-                                                aria-label="Reason: activate to sort column ascending"
-                                                style="width: 117.075px;">@lang('lang.status')</th>
-                                            {{-- <th class="text-center sorting" tabindex="0"
-                                                aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
-                                                aria-label="Status: activate to sort column ascending"
-                                                style="width: 108.613px;">@lang('lang.approve_by')</th> --}}
-                                            <th class="text-end sorting" tabindex="0"
-                                                aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
-                                                aria-label="Actions: activate to sort column ascending"
-                                                style="width: 54.6125px;">@lang('lang.actions')</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @if (count($dataLeaveRequest) > 0)
-                                            @foreach ($dataLeaveRequest as $key=>$request)
-                                                <tr class="odd">
-                                                    <td class="ids stuck-scroll-4">{{++$key ?? ""}}</td>
-                                                    <td class="sorting_1 stuck-scroll-4">
-                                                        <h2 class="table-avatar">
-                                                            @if ($request->employee->profile != null)
-                                                                <a href="{{asset('/uploads/images/'.$request->employee->profile)}}"  class="avatar">
-                                                                    <img alt="" src="{{asset('/uploads/images/'.$request->employee->profile)}}">
-                                                                </a>
-                                                            @else
-                                                                <a href="{{asset('admin/img/defuals/default-user-icon.png')}}">
-                                                                    <img alt="" src="{{asset('admin/img/defuals/default-user-icon.png')}}">
-                                                                </a>
+        {!! Toastr::message() !!}
+        <div class="page-menu">
+            <div class="row">
+                <div class="col-md-12 col-ms-12 p-0">
+                    <ul class="nav nav-tabs nav-tabs-bottom" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link active" data-bs-toggle="tab" href="#leave_allocations" aria-selected="true" data-tab-id="1" role="tab" tabindex="-1">Leave allocation</a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link" data-bs-toggle="tab" href="#leave_request" aria-selected="false" role="tab" data-tab-id="2">Leave Requests</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane active show" id="leave_allocations" role="tabpanel">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="table-responsive">
+                                        <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+                                            <div class="row">
+                                                <div class="col-sm-12">
+                                                    <table class="table table-striped custom-table mb-0 datatable dataTable no-footer tbl-leave-request" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
+                                                        <thead>
+                                                            <tr>
+                                                                <th class="sorting sorting_asc stuck-scroll-4" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Profle: activate to sort column descending">#</th>
+                                                                <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Employee: activate to sort column descending" >@lang('lang.employee_name')</th>
+                                                                
+                                                                <th class="text-end sorting" tabindex="0"
+                                                                    aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
+                                                                    aria-label="Actions: activate to sort column ascending"
+                                                                    style="width: 54.6125px;">@lang('lang.actions')</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="leave_request" role="tabpanel">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="table-responsive">
+                                        <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+                                            <div class="row">
+                                                <div class="col-sm-12">
+                                                    <table class="table table-striped custom-table mb-0 datatable dataTable no-footer tbl-leave-request" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
+                                                        <thead>
+                                                            <tr>
+                                                                <th class="sorting sorting_asc stuck-scroll-4" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Profle: activate to sort column descending">#</th>
+                                                                <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Profile: activate to sort column descending" >@lang('lang.profile')</th>
+                                                                <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Employee: activate to sort column descending" >@lang('lang.employee_name')</th>
+                                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                                    rowspan="1" colspan="1"
+                                                                    aria-label="Leave Type: activate to sort column ascending">Leave Type</th>
+                                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                                    rowspan="1" colspan="1"
+                                                                    aria-label="From: activate to sort column ascending">@lang('lang.start_date')</th>
+                                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                                    rowspan="1" colspan="1"
+                                                                    aria-label="To: activate to sort column ascending">@lang('lang.end_date')</th>
+                                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                                    rowspan="1" colspan="1"
+                                                                    aria-label="No of Days: activate to sort column ascending"
+                                                                    style="width: 76.925px;">Number of Days</th>
+                                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                                    rowspan="1" colspan="1"
+                                                                    aria-label="Reason: activate to sort column ascending"
+                                                                    style="width: 117.075px;">Reason</th>
+                                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                                    rowspan="1" colspan="1"
+                                                                    aria-label="Reason: activate to sort column ascending"
+                                                                    style="width: 117.075px;">@lang('lang.status')</th>
+                                                                {{-- <th class="text-center sorting" tabindex="0"
+                                                                    aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
+                                                                    aria-label="Status: activate to sort column ascending"
+                                                                    style="width: 108.613px;">@lang('lang.approve_by')</th> --}}
+                                                                <th class="text-end sorting" tabindex="0"
+                                                                    aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
+                                                                    aria-label="Actions: activate to sort column ascending"
+                                                                    style="width: 54.6125px;">@lang('lang.actions')</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @if (count($dataLeaveRequest) > 0)
+                                                                @foreach ($dataLeaveRequest as $key=>$request)
+                                                                    <tr class="odd">
+                                                                        <td class="ids stuck-scroll-4">{{++$key ?? ""}}</td>
+                                                                        <td class="sorting_1 stuck-scroll-4">
+                                                                            <h2 class="table-avatar">
+                                                                                @if ($request->employee->profile != null)
+                                                                                    <a href="{{asset('/uploads/images/'.$request->employee->profile)}}"  class="avatar">
+                                                                                        <img alt="" src="{{asset('/uploads/images/'.$request->employee->profile)}}">
+                                                                                    </a>
+                                                                                @else
+                                                                                    <a href="{{asset('admin/img/defuals/default-user-icon.png')}}">
+                                                                                        <img alt="" src="{{asset('admin/img/defuals/default-user-icon.png')}}">
+                                                                                    </a>
+                                                                                @endif
+                                                                            </h2>
+                                                                        </td>
+                                                                        <td class="stuck-scroll-4">
+                                                                            {{$request->employee->employee_name_en}}
+                                                                        </td>
+                                                                        <td class="stuck-scroll-4">{{$request->leaveType->name}}</td>
+                                                                        <td>{{\Carbon\Carbon::parse($request->start_date)->format('d-M-Y') ?? ''}}</td>
+                                                                        <td>{{\Carbon\Carbon::parse($request->end_date)->format('d-M-Y') ?? ''}}</td>
+                                                                        <td>{{$request->number_of_day}} Day</td>
+                                                                        <td>{{$request->reason}}</td>
+                                                                        <td>
+                                                                            @if (Auth::user()->RolePermission == "BM" || Auth::user()->RolePermission == "HOD" )
+                                                                                @if ($request->status == "pending")
+                                                                                    <span class="badge bg-inverse-info" style="font-size: 13px;">Pending</span>
+                                                                                @elseif ($request->status == "rejected_lm")
+                                                                                    <span class="badge bg-inverse-danger" style="font-size: 13px;">Rejected</span>
+                                                                                @elseif ($request->status == "approved_lm")
+                                                                                    <span class="badge bg-inverse-success" style="font-size: 13px;">Approved</span>
+                                                                                @endif
+                                                                            @else
+                                                                                @if ($request->status == "pending" || $request->status == "approved_lm")
+                                                                                    <span class="badge bg-inverse-info" style="font-size: 13px;">Pending</span>
+                                                                                @elseif ($request->status == "rejected" || $request->status == "rejected_lm")
+                                                                                    <span class="badge bg-inverse-danger" style="font-size: 13px;">Rejected</span>
+                                                                                @elseif ($request->status == "approved")
+                                                                                    <span class="badge bg-inverse-success" style="font-size: 13px;">Approved</span>
+                                                                                @endif
+                                                                            @endif
+                                                                            
+                                                                        </td>
+                                                                        {{-- <td title="{{$request->Approve}}">
+                                                                            <span class="text">{{$request->Approve}}</span>
+                                                                        </td> --}}
+                                                                        <td class="text-end">
+                                                                            @if (Auth::user()->RolePermission == "BM" || Auth::user()->RolePermission == "HOD" )
+                                                                                @if ($request->status == "pending")
+                                                                                    <button class="btn btn-success btn-sm btn-approved" data-id="{{$request->id}}">@lang('lang.approved')</button>
+                                                                                    <button class="btn btn-primary btn-sm btn_cancel"  data-id="{{$request->id}}">@lang('lang.reject')</button>
+                                                                                @endif
+                                                                            @else
+                                                                                @if ($request->status == "approved_lm" || $request->status == "pending")
+                                                                                    <button type="button" class="btn btn-outline-success btn-sm me-1 mb-1 btn-approved" data-id="{{$request->id}}" {{ $request->status == "pending" ? "disabled":""}} >@lang('lang.approved')</button>
+                                                                                    <button type="button" class="btn btn-outline-danger btn-sm me-1 mb-1 btn_cancel" data-id="{{$request->id}}" {{ $request->status == "pending" ? "disabled":""}}>@lang('lang.reject')</button>
+                                                                                @endif 
+                                                                            @endif
+                                                                        </td>
+                                                                    </tr>
+                                                                @endforeach
                                                             @endif
-                                                        </h2>
-                                                    </td>
-                                                    <td class="stuck-scroll-4">
-                                                        {{$request->employee->employee_name_en}}
-                                                    </td>
-                                                    <td class="stuck-scroll-4">{{$request->leaveType->name}}</td>
-                                                    <td>{{\Carbon\Carbon::parse($request->start_date)->format('d-M-Y') ?? ''}}</td>
-                                                    <td>{{\Carbon\Carbon::parse($request->end_date)->format('d-M-Y') ?? ''}}</td>
-                                                    <td>{{$request->number_of_day}} Day</td>
-                                                    <td>{{$request->reason}}</td>
-                                                    <td>
-                                                        @if (Auth::user()->RolePermission == "BM" || Auth::user()->RolePermission == "HOD" )
-                                                            @if ($request->status == "pending")
-                                                                <span class="badge bg-inverse-info" style="font-size: 13px;">Pending</span>
-                                                            @elseif ($request->status == "rejected_lm")
-                                                                <span class="badge bg-inverse-danger" style="font-size: 13px;">Rejected</span>
-                                                            @elseif ($request->status == "approved_lm")
-                                                                <span class="badge bg-inverse-success" style="font-size: 13px;">Approved</span>
-                                                            @endif
-                                                        @else
-                                                            @if ($request->status == "pending" || $request->status == "approved_lm")
-                                                                <span class="badge bg-inverse-info" style="font-size: 13px;">Pending</span>
-                                                            @elseif ($request->status == "rejected" || $request->status == "rejected_lm")
-                                                                <span class="badge bg-inverse-danger" style="font-size: 13px;">Rejected</span>
-                                                            @elseif ($request->status == "approved")
-                                                                <span class="badge bg-inverse-success" style="font-size: 13px;">Approved</span>
-                                                            @endif
-                                                        @endif
-                                                        
-                                                    </td>
-                                                    {{-- <td title="{{$request->Approve}}">
-                                                        <span class="text">{{$request->Approve}}</span>
-                                                    </td> --}}
-                                                    <td class="text-end">
-                                                        @if (Auth::user()->RolePermission == "BM" || Auth::user()->RolePermission == "HOD" )
-                                                            @if ($request->status == "pending")
-                                                                <button class="btn btn-success btn-sm btn-approved" data-id="{{$request->id}}">@lang('lang.approved')</button>
-                                                                <button class="btn btn-primary btn-sm btn_cancel"  data-id="{{$request->id}}">@lang('lang.reject')</button>
-                                                            @endif
-                                                        @else
-                                                            @if ($request->status == "approved_lm" || $request->status == "pending")
-                                                                <button type="button" class="btn btn-outline-success btn-sm me-1 mb-1 btn-approved" data-id="{{$request->id}}" {{ $request->status == "pending" ? "disabled":""}} >@lang('lang.approved')</button>
-                                                                <button type="button" class="btn btn-outline-danger btn-sm me-1 mb-1 btn_cancel" data-id="{{$request->id}}" {{ $request->status == "pending" ? "disabled":""}}>@lang('lang.reject')</button>
-                                                            @endif 
-                                                        @endif
-                                                    </td>
-                                                </tr>
-                                            @endforeach
-                                        @endif
-                                    </tbody>
-                                </table>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="add_leave" class="modal custom-modal fade" role="dialog">
+        <div class="modal-dialog modal-dialog-centered " role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Generate Leave</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="{{url('leaves/admin/generate')}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
+                        @csrf
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Employee <span class="text-danger">*</span></label>
+                                    <select class="form-control select floating" name="employee_id">
+                                        <option value=""> @lang('lang.select') </option>
+                                        @foreach ($employees as $item)
+                                            <option value="{{$item->id}}">{{$item->employee_name_en}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="submit-section">
+                            <button type="submit" class="btn btn-primary submit-btn">
+                                <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading') </span>
+                                <span class="btn-txt">Generate</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="request_leave" class="modal custom-modal fade" role="dialog">
+        <div class="modal-dialog modal-dialog-centered " role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Add New Leave Request</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="{{url('leaves/employee/store')}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
+                        @csrf
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label>Leave Type<span class="text-danger">*</span></label>
+                                    <select class="form-control select floating" id="leave_type_id" name="leave_type_id" required>
+                                        <option selected value=""> --@lang('lang.select')--</option>
+                                        @foreach ($dataLeaveType as $type)
+                                            <option value="{{$type->id}}">{{$type->name}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-9">
+                                <div class="form-group">
+                                    <label>Start Date <span class="text-danger">*</span></label>
+                                    <div class="cal-icon">
+                                        <input type="text" class="form-control datetimepicker" name="start_date" id="start_date" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Half Day?</label>
+                                    <select class="form-control select floating" name="start_half_day">
+                                        <option value=""> @lang('lang.select') </option>
+                                        <option value="am">AM</option>
+                                        <option value="pm">PM</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-9">
+                                <div class="form-group">
+                                    <label>End Date <span class="text-danger">*</span></label>
+                                    <div class="cal-icon">
+                                        <input type="text" class="form-control datetimepicker" name="end_date" id="end_date"  required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Half Day?</label>
+                                    <select class="form-control select floating" name="end_half_day">
+                                        <option value=""> @lang('lang.select') </option>
+                                        <option value="am">AM</option>
+                                        <option value="pm">PM</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Number of days <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" name="number_of_day" required>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Request To <span class="text-danger">*</span></label>
+                                    <select class="form-control select floating" name="request_to">
+                                        <option value=""> @lang('lang.select') </option>
+                                        {{-- @foreach ($teamLeader as $item)
+                                            <option value="{{$item->id}}">{{ Helper::getLang() == 'en' ? $item->employee_name_en : $item->employee_name_kh }}</option>
+                                        @endforeach --}}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label >Leave Reason</label>
+                                    <textarea class="form-control" id="reason" name="reason" placeholder="Write down why you want to relax"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="submit-section">
+                            <button type="submit" class="btn btn-primary submit-btn">
+                                <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading') </span>
+                                <span class="btn-txt">Apply</span>
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>

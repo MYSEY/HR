@@ -48,18 +48,6 @@ class LeavesEmployeeController extends Controller
      */
     public function store(Request $request)
     {
-
-        // $data['employee_id'] = 18;
-        // $data['default_annual_leave'] = 18;
-        // $data['default_sick_leave'] = 10;
-        // $data['default_special_leave'] = 22;
-        // $data['default_unpaid_leave'] = 0;
-        // $data['total_annual_leave'] = 18;
-        // $data['total_sick_leave'] = 10;
-        // $data['total_special_leave'] = 22;
-        // $data['total_unpaid_leave'] = 0;
-        // LeaveAllocation::create($data);
-
         try {
             $data = $request->all();
             $LeaveAllocation = LeaveAllocation::where("employee_id", Auth::user()->id)->first();

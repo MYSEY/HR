@@ -43,10 +43,8 @@ var dataPermission = function () {
 
     // block all employee
     let all_employee_checkbox = $('.all_employee_checkbox').filter(':checked').length;
-    let leaves_employee_checkbox = $('.leaves_employee_checkbox').filter(':checked').length;
-    let leaves_admin_checkbox = $('.leaves_admin_checkbox').filter(':checked').length;
     let employee_all = $('#employee_all').filter(':checked').length;
-    if (employee_all || all_employee_checkbox || leaves_admin_checkbox || leaves_employee_checkbox) {
+    if (employee_all || all_employee_checkbox) {
         data.push({
             name: "employee_block",
             permission: [
@@ -80,14 +78,33 @@ var dataPermission = function () {
             ]
         })
     }
+  
+
+    // block leave
+    let leave_all = $('#leave_all').filter(':checked').length;
+    let leaves_employee_checkbox = $('.leaves_employee_checkbox').filter(':checked').length;
+    let leaves_admin_checkbox = $('.leaves_admin_checkbox').filter(':checked').length;
+    if (leave_all || leaves_admin_checkbox || leaves_employee_checkbox) {
+        data.push({
+            name: "employee_block",
+            permission: [
+                {
+                    "menu_id":"10",
+                    "icon":"la la-calendar-check-o",
+                    "name":"lang.leave",
+                    "is_all": $("#leave_all").val(),
+                },
+            ]
+        });
+    }
     if (leaves_admin_checkbox) {
         data.push({
             name: "leaves_admin",
             permission: [
                 {
                     "name":"lang.leaves_admin",
-                    "sub_menu_id":"2",
-                    "menu_id":"m2-s3",
+                    "sub_menu_id":"10",
+                    "menu_id":"m10-s1",
                     "url":"leaves/admin",
                     "is_view": $("#leaves_admin_view").val(),
                     "is_create": $("#leaves_admin_add").val(),
@@ -107,8 +124,8 @@ var dataPermission = function () {
             permission: [
                 {
                     "name":"lang.leaves_employee",
-                    "sub_menu_id":"2",
-                    "menu_id":"m2-s2",
+                    "sub_menu_id":"10",
+                    "menu_id":"m10-s2 ",
                     "url":"leaves/employee",
                     "is_view": $("#leaves_employee_view").val(),
                     "is_create": $("#leaves_employee_add").val(),
@@ -122,7 +139,6 @@ var dataPermission = function () {
             ]
         })
     }
-
     // block all recruitment
     let candidate_CVs_checkbox = $('.candidate_CVs_checkbox').filter(':checked').length;
     let recruitment_plans_checkbox = $('.recruitment_plans_checkbox').filter(':checked').length;
@@ -724,6 +740,7 @@ var dataPermission = function () {
     let exchange_rate_checkbox = $('.exchange_rate_checkbox').filter(':checked').length;
     let public_holidays_checkbox = $('.public_holidays_checkbox').filter(':checked').length;
     let children_allowance_checkbox = $('.children_allowance_checkbox').filter(':checked').length;
+    let leave_type_checkbox = $('.leave_type_checkbox').filter(':checked').length;
     let configuration_check_all = $('.configuration_checkbox').filter(':checked').length;
     if (configuration_check_all) {
         data.push({
@@ -802,6 +819,23 @@ var dataPermission = function () {
                     "is_create": $("#children_allowance_check_add").val(),
                     "is_update": $("#children_allowance_check_edit").val(),
                     "is_delete": $("#children_allowance_check_delete").val(),
+                },
+            ]
+        })
+    }
+    if (leave_type_checkbox) {
+        data.push({
+            name: "leave_type",
+            permission: [
+                {
+                    "name":"lang.leave_type",
+                    "sub_menu_id":"8",
+                    "menu_id":"m8-s5",
+                    "url":"leaves/type",
+                    "is_view": $("#leave_type_check_view").val(),
+                    "is_create": $("#leave_type_check_add").val(),
+                    "is_update": $("#leave_type_check_edit").val(),
+                    "is_delete": $("#leave_type_check_delete").val(),
                 },
             ]
         })
