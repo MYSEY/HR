@@ -88,6 +88,11 @@ class CandidateResumeController extends Controller
                 $query->where("location_applied", Auth::user()->branch_id);
             }
         })->count();
+        $lineManager = User::join('roles', 'users.role_id', '=', 'roles.id')
+        ->select(
+            'users.*',
+            'roles.role_type',
+        )->whereNotIn('roles.role_type',['employee','admin','developer'])->get();
         return view('recruitments.candidate_resumes.candidate_resume', 
         compact([
             "position", 
@@ -105,7 +110,8 @@ class CandidateResumeController extends Controller
             "dataFailed",
             "dataResult",
             'dataProcessing',
-            'dataCancel'
+            'dataCancel',
+            'lineManager',
         ]));
     }
 
@@ -517,6 +523,7 @@ class CandidateResumeController extends Controller
                     'basic_salary' => $candidate->basic_salary,
                     'salary_increas' => $candidate->salary_increas,
                     'position_type' => $candidate->position_type,
+                    'line_manager' => $candidate->line_manager,
                     'department_id' => $candidate->department_id,
                     'date_of_commencement' => $candidate->join_date,
                     'fdc_date' => $candidate->fdc_date,
@@ -565,6 +572,7 @@ class CandidateResumeController extends Controller
                     'contact_number' => $request->personal_phone_number,
                     'id_card_number' =>$request->id_card_number,
                     'basic_salary' => $request->basic_salary,
+                    'line_manager' => $candidate->line_manager,
                     'salary_increas' => $request->salary_increas,
                     'position_type' => $request->position_type,
                     'department_id' =>$request->department_id,

@@ -21,6 +21,15 @@
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
+                                <label>@lang('lang.id_card_number') <span class="text-danger">*</span></label>
+                                <input class="form-control emp_required clear_data" type="text" id="id_card_number" name="id_card_number" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
                                 <label class="">@lang('lang.name') (@lang('lang.kh')) <span class="text-danger">*</span></label>
                                 <input class="form-control employee_name_kh emp_required" type="text" id="employee_name_kh" name="employee_name_kh" required disabled>
                             </div>
@@ -31,6 +40,9 @@
                                 <input class="form-control employee_name_en emp_required clear_data" type="text" id="employee_name_en" name="employee_name_en" required disabled>
                             </div>
                         </div>
+                    </div>
+
+                    <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label>@lang('lang.gender') <span class="text-danger">*</span></label>
@@ -38,8 +50,6 @@
                                 </select>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
                         <div class="col-md-6">
                             <div class="form-group hr-form-group-select2">
                                 <label>@lang('lang.location') <span class="text-danger">*</span></label>
@@ -47,16 +57,15 @@
                                 </select>
                             </div>
                         </div>
+                    </div>
+                    <div class="row">
                         <div class="col-md-6">
                             <div class="form-group hr-form-group-select2">
                                 <label>@lang('lang.department') <span class="text-danger">*</span></label>
                                 <select class="hr-select2-option emp_required clear_data" id="department_id" name="department_id"  required>
-                                    {{-- <option selected disabled value="">Please select department</option> --}}
                                 </select>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group hr-form-group-select2">
                                 <label>@lang('lang.position') <span class="text-danger">*</span></label>
@@ -64,6 +73,8 @@
                                 </select>
                             </div>
                         </div>
+                    </div>
+                    <div class="row">
                         <div class="col-sm-6" hidden>
                             <div class="form-group">
                                 <label class="">@lang('lang.position_type') <span class="text-danger">*</span></label>
@@ -80,14 +91,25 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="">@lang('lang.join_date') <span class="text-danger">*</span></label>
                                 <div class="cal-icon">
                                     <input class="form-control clear_data datetimepicker date_of_commencement emp_required" type="text" id="date_of_commencement" name="date_of_commencement" required>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>@lang('lang.line_manager')</label>
+                                <select class="form-control hr-select2-option" id="line_manager" name="line_manager" value="{{old('line_manager')}}">
+                                    <option selected disabled value=""> -- @lang('lang.select')--</option>
+                                    @foreach ($lineManager as $item)
+                                        <option data-id="{{$item->id}}" value="{{$item->id}}">{{Helper::getLang() == 'en' ? $item->employee_name_en : $item->employee_name_kh}}</option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
                         <div class="col-sm-6">
@@ -97,14 +119,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label>@lang('lang.id_card_number') <span class="text-danger">*</span></label>
-                                <input class="form-control emp_required clear_data" type="text" id="id_card_number" name="id_card_number" required>
-                            </div>
-                        </div>
-                    </div>
+                    
                     <div class="form-group col-md-12 col-12" element="div" bp-field-wrapper="true" bp-field-name="Identity" bp-field-type="custom_html">
                         <label class="navbar-brand custom-navbar-brand mb-0" style="width: 100%; background: #dfe6e9; padding: 6px;font-size: 15px;font-weight: normal !important;">@lang('lang.basic_salary')</label>
                     </div>
@@ -564,6 +579,7 @@
                     date_of_birth: $("#date_of_birth").val(),
                     gender: $("#emp_gender").val(),
                     department_id: $("#department_id").val(),
+                    line_manager: $("#line_manager").val(),
                     branch_id: $("#emp_branch").val(),
                     date_of_commencement: $("#date_of_commencement").val(),
                     id_card_number: $("#id_card_number").val(),
