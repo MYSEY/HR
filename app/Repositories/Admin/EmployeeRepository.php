@@ -165,6 +165,7 @@ class EmployeeRepository extends BaseRepository
             'branch_id'  => $request->branch_id,
             'unit'  => $request->unit,
             'level'  => $request->level,
+            'line_manager'  => $request->line_manager,
             'id_card_number'  => $request->id_card_number,
             'date_of_commencement'  => $request->date_of_commencement,
             'fdc_date'  => $fdc_date,

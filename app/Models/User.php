@@ -67,6 +67,7 @@ class User extends Authenticatable
         'profile',
         'unit',
         'level',
+        'line_manager',
         'gender',
         'date_of_birth',
         'id_card_number',

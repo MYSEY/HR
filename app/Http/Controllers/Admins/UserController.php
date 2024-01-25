@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admins;
 use App\Models\Bank;
 use App\Models\Role;
 use App\Models\User;
+use App\Models\Lavel;
 use App\Models\Option;
 use App\Models\Branchs;
 use App\Models\District;
@@ -129,6 +130,12 @@ class UserController extends Controller
         $branch = Branchs::all();
         $province = Province::all();
         $bank = Bank::all();
+        $lavel = Lavel::all();
+        $lineManager = User::join('roles', 'users.role_id', '=', 'roles.id')
+        ->select(
+            'users.*',
+            'roles.role_type',
+        )->whereNotIn('roles.role_type',['employee','admin','developer'])->get();
         return view('users.form_create',compact(
             'role',
             'position',
@@ -145,6 +152,8 @@ class UserController extends Controller
             'optionSpouse',
             'maritalStatus',
             'nationality',
+            'lavel',
+            'lineManager',
         ));
     }
     public function formEdit() {
@@ -237,6 +246,12 @@ class UserController extends Controller
         $maritalStatus = Option::where('type','marital_status')->get();
         $nationality = Option::where('type','nationality')->get();
         $bank = Bank::all();
+        $lavel = Lavel::all();
+        $lineManager = User::join('roles', 'users.role_id', '=', 'roles.id')
+        ->select(
+            'users.*',
+            'roles.role_type',
+        )->whereNotIn('roles.role_type',['employee','admin','developer'])->get();
         $province = Province::all();
         $district = District::where('province_id',$data->current_province)->orWhere("province_id",$data->permanent_province )->get();
         $conmmunes = Conmmunes::where('district_id',$data->current_district)->orWhere('district_id',$data->permanent_district)->get();
@@ -259,6 +274,8 @@ class UserController extends Controller
             'optionSpouse'=>$optionSpouse,
             'maritalStatus'=>$maritalStatus,
             'nationality'=>$nationality,
+            'lavel'=>$lavel,
+            'lineManager'=>$lineManager,
         ]);
     }
 

@@ -38,6 +38,7 @@ class CreateUsersTable extends Migration
             $table->string('role_id')->nullable();
             $table->string('unit')->nullable();
             $table->string('level')->nullable();
+            $table->string('line_manager')->nullable();
             $table->date('date_of_commencement')->nullable();
             $table->decimal('pre_salary',50,2)->default(0);
             $table->decimal('basic_salary',50,2)->default(0);

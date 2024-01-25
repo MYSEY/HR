@@ -174,7 +174,23 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label>@lang('lang.level')</label>
-                                <input type="text" class="form-control" id="level" name="level" value="{{old('level')}}">
+                                <select class="form-control hr-select2-option" id="level" name="level" value="{{old('level')}}">
+                                    <option selected disabled value=""> -- @lang('lang.select')--</option>
+                                    @foreach ($lavel as $item)
+                                        <option data-id="{{$item->name}}" value="{{$item->name}}">{{$item->name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>@lang('lang.line_manager')</label>
+                                <select class="form-control hr-select2-option" id="line_manager" name="line_manager" value="{{old('line_manager')}}">
+                                    <option selected disabled value=""> -- @lang('lang.select')--</option>
+                                    @foreach ($lineManager as $item)
+                                        <option data-id="{{$item->id}}" value="{{$item->id}}">{{Helper::getLang() == 'en' ? $item->employee_name_en : $item->employee_name_kh}}</option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
                     </div>

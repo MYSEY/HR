@@ -304,6 +304,7 @@ return[
 	"e_form_reports"=> "របាយការណ៍ E-Form",
     "event"=> "ព្រឹត្តិការណ៍",
     "edit_leave_type"=> "កែរប្រែការឈប់សម្រាក",
+    "line_manager"=>"អ្នកគ្រប់គ្រងផ្ទាល់",
 	"facebook"=>"ហ្វេសប៊ុក",
 	"first_name" => "នាម​ខ្លួន",
 	"field"=>"វាល",

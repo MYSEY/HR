@@ -401,6 +401,7 @@ return[
     "log_name"=>"Log Name",
     "leave"=>"Leave",
     "leave_type"=>"Leave Type",
+    "line_manager"=>"Line Manager",
     "marital_status"=>"Married Status",
     "married"=>"Married",
     "mail"=>"Mail",

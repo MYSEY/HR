@@ -53,14 +53,16 @@ class LoginController extends Controller
     }
 
     public function index(){
-        $dataUser = User::all();
-        foreach ($dataUser as $item) {
-            if ($item->p_status == 0) {
-                return view('auth.change_passwrod');
-            } else {
-                return view('auth.login');
-            }   
-        }
+        return view('auth.login');
+
+        // $dataUser = User::all();
+        // foreach ($dataUser as $item) {
+        //     if ($item->p_status == 0) {
+        //         return view('auth.change_passwrod');
+        //     } else {
+        //         return view('auth.login');
+        //     }   
+        // }
     }
     // change password
     public function login(Request $request)

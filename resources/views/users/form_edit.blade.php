@@ -156,7 +156,25 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label>@lang('lang.level')</label>
-                                <input type="text" class="form-control" id="e_level" name="level" value="{{old('level')}}">
+                                {{-- <input type="text" class="form-control" id="e_level" name="level" value="{{old('level')}}"> --}}
+                                <select class="form-control hr-select2-option" id="e_level" name="level" value="">
+                                    <option selected value=""> -- @lang('lang.select')--</option>
+                                    {{-- @foreach ($lavel as $item)
+                                        <option data-id="{{$item->name}}" value="{{$item->name}}">{{$item->name}}</option>
+                                    @endforeach --}}
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>@lang('lang.line_manager')</label>
+                                <select class="form-control hr-select2-option" id="e_line_manager" name="line_manager" value="">
+                                    <option selected value=""> -- @lang('lang.select')--</option>
+                                    {{-- @foreach ($lineManager as $item)
+                                        <option data-id="{{$item->id}}" value="{{$item->id}}">{{Helper::getLang() == 'en' ? $item->employee_name_en : $item->employee_name_kh}}</option>
+                                    @endforeach --}}
+                                </select>
                             </div>
                         </div>
                     </div>
@@ -693,6 +711,26 @@
                             }));
                         });
                     }
+                    if (response.lavel != '') {
+                        $('#e_level').html('<option selected disabled> -- @lang("lang.select") --</option>');
+                        $.each(response.lavel, function(i, item) {
+                            $('#e_level').append($('<option>', {
+                                value: item.name,
+                                text: item.name,
+                                selected: item.name == response.success.level
+                            }));
+                        });
+                    }
+                    if (response.lineManager != '') {
+                        $('#e_line_manager').html('<option selected disabled> -- @lang("lang.select") --</option>');
+                        $.each(response.lineManager, function(i, item) {
+                            $('#e_line_manager').append($('<option>', {
+                                value: item.id,
+                                text: localeLanguage == 'en' ? item.employee_name_en : item.employee_name_kh,
+                                selected: item.id == response.success.line_manager
+                            }));
+                        });
+                    }
                     if (response.maritalStatus != '') {
                         $('#e_marital_status').html('<option selected disabled> -- @lang("lang.select") --</option>');
                         $.each(response.maritalStatus, function(i, item) {
@@ -871,7 +909,6 @@
                     $('#e_id_number_nssf').val(response.success.id_number_nssf);
                     $('#e_ethnicity').val(response.success.ethnicity);
                     $('#e_unit').val(response.success.unit);
-                    $('#e_level').val(response.success.level);
                     $('#e_basic_salary').val(response.success.basic_salary);
                     $('#e_salary_increas').val(response.success.salary_increas);
                     $('#e_phone_allowance').val(response.success.phone_allowance);

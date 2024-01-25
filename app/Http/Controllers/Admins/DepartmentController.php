@@ -35,8 +35,8 @@ class DepartmentController extends Controller
         try {
             Activity::all()->last();
             $data = $request->all();
-            $data['created_by']    = Auth::user()->id;
-            $data['head_department']    = Auth::user()->id;
+            $data['created_by'] = Auth::user()->id;
+            $data['head_department'] = Auth::user()->id;
             Department::create($data);
             Toastr::success('Department created successfully.','Success');
             return redirect()->back();
