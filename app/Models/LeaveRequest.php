@@ -43,6 +43,16 @@ class LeaveRequest extends Model
     public function leaveType(){
         return $this->belongsTo(LeaveType::class,'leave_type_id');
     }
+    
+    public function getStatusApprveAttribute(){
+        $status = explode(',',$this->status);
+        $datas = [];
+        foreach($status as $key=>$item){
+            $datas[$item] = $item;
+        }
+        return $datas;
+    }
+
     public function getApproveAttribute(){
         $approved_by = explode(',',$this->approved_by);
         $approve_name = '';

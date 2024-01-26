@@ -24,42 +24,35 @@ class LeavesAdminController extends Controller
     public function index()
     {
         $dataLeaveType = LeaveType::get();
-        $LeaveAllocation = LeaveAllocation::get();
-        $employees = User::where("emp_status", "1")->get();
-        $dataLeaveRequest = LeaveRequest::with("employee")
-        ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
-            if ($RolePermission == 'BM' || $RolePermission == "HOD") {
-                $query->where("request_to", Auth::user()->id);
+        $LeaveAllocation = LeaveAllocation::with("employee")->get();
+        $employees = User::whereIn("emp_status", ["1","10"])->get();
+
+        // $dataLeaveRequest = LeaveRequest::with("employee")
+        // ->leftJoin('users', 'leave_requests.employee_id', '=', 'users.id')
+        // ->select(
+        //     'leave_requests.*',
+        //     'users.line_manager',
+        // )->where("users.line_manager", Auth::user()->id)->get();
+// dd(Auth::user());
+        $dataLeaveRequest = LeaveRequest::with("employee")->leftJoin('users', 'leave_requests.employee_id', '=', 'users.id')
+        ->select(
+            'leave_requests.*',
+            'users.line_manager',
+            'users.department_id',
+            'users.branch_id',
+        )
+        ->when(Auth::user()->line_manager, function ($query, $lm){
+            if (Auth::user()->RolePermission == "HOD") {
+                $query->where("users.department_id", Auth::user()->department_id);
+            }else if(Auth::user()->RolePermission == "HOD"){
+                $query->where("users.line_manager", Auth::user()->id);
+            }else if(Auth::user()->RolePermission == "BM"){
+                $query->where("users.line_manager", Auth::user()->id);
+                // $query->where("users.branch_id", Auth::user()->branch_id);
             }
         })->get();
-        $dataApprove = LeaveRequest::
-        when(Auth::user()->RolePermission, function ($query, $RolePermission) {
-            if ($RolePermission == 'BM' || $RolePermission == "HOD") {
-                $query->where("request_to", Auth::user()->id);
-                $query->where("status", "approved_lm");
-            }else{
-                $query->where("status", "approved");
-            }
-        })
-        ->count();
-        $dataReject = LeaveRequest::
-        when(Auth::user()->RolePermission, function ($query, $RolePermission) {
-            if ($RolePermission == 'BM' || $RolePermission == "HOD") {
-                $query->where("request_to", Auth::user()->id);
-                $query->where("status", "rejected_lm");
-            }else{
-                $query->where("status", "rejected");
-            }
-        })
-        ->count();
-        $dataPending = LeaveRequest::where("status", "pending")
-        ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
-            if ($RolePermission == 'BM' || $RolePermission == "HOD") {
-                $query->where("request_to", Auth::user()->id);
-            }
-        })
-        ->count();
-        return view('leaves_admin.index', compact('employees', 'dataLeaveType', 'LeaveAllocation', 'dataLeaveRequest', 'dataApprove', 'dataReject', 'dataPending'));
+        // dd($dataLeaveRequest);
+        return view('leaves_admin.index', compact('employees', 'dataLeaveType', 'LeaveAllocation', 'dataLeaveRequest'));
     }
 
     public function employees() {
@@ -121,9 +114,13 @@ class LeavesAdminController extends Controller
             }
             //count month for new employee Incomplete year
             $toDate = Carbon::parse($employee->fdc_date);
+            // $toDate = Carbon::parse("15-04-2024");
+            // dd($todate)
             $yearLy = Carbon::now()->format('Y');
             $fromDate = $yearLy."-12-31";
             $months = $toDate->diffInMonths($fromDate);
+            // $toDays 		    = $toDate->diffInWeekdays("30-04-2024");
+            // dd($toDays);
             $data['employee_id'] = $employee->id;
             if ($months < 12) {
                 $total_day = 0;
@@ -165,13 +162,16 @@ class LeavesAdminController extends Controller
         }
     }
     public function approve(Request $request) {
-        try {
+        // try {
             $data = LeaveRequest::find($request->id);
             $role = Auth::user()->RolePermission;
-            if ($role == 'BM' || $role == "HOD") {
-                $data['status'] = "approved_lm";
-            }else{
-                $data['status'] = $request->status;
+            if ($role == 'BM') {
+                $data['status'] = $data->status.','. "approved_bm";
+            }else if($role == "HOD"){
+                $data['status'] = $data->status.','. "approved_lm";
+                
+            }else if($role == 'HR') {
+                $data['status'] = $data->status.','. "approved_hr";
             }
             $data['handover_staff_id']=$request->handover_staff_id;
             $data['approved_date']= Carbon::now();
@@ -185,10 +185,10 @@ class LeavesAdminController extends Controller
             return response()->json([
                 'message' => 'The process has been successfully.'
             ]);
-        } catch (\Exception $exp) {
-            DB::rollBack();
-            return response()->json(['message' => $exp->getMessage()], 500);
-        }
+        // } catch (\Exception $exp) {
+        //     DB::rollBack();
+        //     return response()->json(['message' => $exp->getMessage()], 500);
+        // }
     }
     public function reject(Request $request) {
         try {
@@ -208,10 +208,13 @@ class LeavesAdminController extends Controller
                 $LeaveAllocation->total_unpaid_leave = $current_unpaid_leave > $LeaveAllocation->default_unpaid_leave ? $LeaveAllocation->default_unpaid_leave : $current_unpaid_leave;
             }
             $role = Auth::user()->RolePermission;
-            if ($role == 'BM' || $role == "HOD") {
-                $data['status'] = "rejected_lm";
-            }else{
-                $data['status'] = $request->status;
+            if ($role == 'BM') {
+                $data['status'] = $data->status.','. "rejected_bm";
+            }else if($role == "HOD"){
+                $data['status'] = $data->status.','. "rejected_lm";
+                
+            }else if($role == 'HR') {
+                $data['status'] = $data->status.','. "rejected_hr";
             }
             $data['remark']= $request->remark;
             $data->save();

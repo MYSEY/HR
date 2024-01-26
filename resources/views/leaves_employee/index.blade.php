@@ -4,10 +4,10 @@
         <div class="page-header">
             <div class="row align-items-center">
                 <div class="col">
-                    <h3 class="page-title">Leaves</h3>
+                    <h3 class="page-title">Leaves Employee</h3>
                     <ul class="breadcrumb">
                         <li class="breadcrumb-item"><a href="{{ url('/dashboad/employee') }}">Dashboard</a></li>
-                        <li class="breadcrumb-item active">Leaves</li>
+                        <li class="breadcrumb-item active">Leaves Employee</li>
                     </ul>
                 </div>
                 <div class="col-auto float-end ms-auto">
@@ -21,25 +21,25 @@
             <div class="col-md-3">
                 <div class="stats-info">
                     <h6>Annual Leave</h6>
-                    <h4>{{$LeaveAllocation->total_annual_leave ? number_format($LeaveAllocation->total_annual_leave) : 0}}</h4>
+                    <h4>{{$LeaveAllocation ? $LeaveAllocation->total_annual_leave : 0}}</h4>
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="stats-info">
                     <h6>Sick Leave</h6>
-                    <h4>{{$LeaveAllocation->total_sick_leave ? number_format($LeaveAllocation->total_sick_leave) : 0}}</h4>
+                    <h4>{{$LeaveAllocation ? $LeaveAllocation->total_sick_leave : 0}}</h4>
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="stats-info">
                     <h6>Special Leave</h6>
-                    <h4>{{$LeaveAllocation->total_special_leave ? number_format($LeaveAllocation->total_special_leave) : 0}}</h4>
+                    <h4>{{$LeaveAllocation ? $LeaveAllocation->total_special_leave : 0}}</h4>
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="stats-info">
                     <h6>Unpaid Leave</h6>
-                    <h4>{{$LeaveAllocation->total_unpaid_leave ? number_format($LeaveAllocation->total_unpaid_leave) : 0}}</h4>
+                    <h4>{{$LeaveAllocation ? $LeaveAllocation->total_unpaid_leave : 0}}</h4>
                 </div>
             </div>
         </div>
@@ -50,7 +50,7 @@
                     <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                         <div class="row">
                             <div class="col-sm-12">
-                                <table class="table table-striped custom-table mb-0 datatable dataTable no-footer"
+                                {{-- <table class="table table-striped custom-table mb-0 datatable dataTable no-footer"
                                     id="DataTables_Table_0" role="grid" aria-describedby="DataTables_Table_0_info">
                                     <thead>
                                         <tr role="row">
@@ -122,7 +122,121 @@
                                             @endforeach
                                         @endif
                                     </tbody>
-                                </table>
+                                </table> --}}
+                                <table class="table table-striped custom-table mb-0 datatable dataTable no-footer staff-transfer-report"
+                                id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
+                                <thead>
+                                    <tr>
+                                        <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
+                                            rowspan="2" aria-sort="ascending"
+                                            aria-label="#: activate to sort column descending">#</th>
+                                        <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
+                                            colspan="2" aria-label="Period of Leave: activate to sort column descending"
+                                            style="text-align: center">Period of Leave</th>
+                                        <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
+                                            colspan="2" aria-label="Annual: activate to sort column descending"
+                                            style="text-align: center">Annual Leave</th>
+                                        <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
+                                            colspan="2"  aria-sort="ascending" aria-label="Sick: activate to sort column descending"
+                                            style="text-align: center">Sick Leave</th>
+                                        <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
+                                            colspan="2" aria-sort="ascending" aria-label="Profle: activate to sort column descending"
+                                            style="text-align: center">Special Leave</th>
+                                        <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
+                                            rowspan="2" aria-sort="ascending" aria-label="reason: activate to sort column descending">@lang('lang.reason')</th>
+                                        <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
+                                            rowspan="2" aria-sort="ascending" aria-label="approve_by: activate to sort column descending" style="text-align: center;">Checked by <br> Sub.or line Mgr</th>
+                                        <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
+                                            rowspan="2" aria-sort="ascending" aria-label="approve_by: activate to sort column descending" style="text-align: center;"
+                                            >Approve by <br> BM or Head <br> Dept or CEO</th>
+                                        <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
+                                            rowspan="2" aria-sort="ascending" aria-label="approve_by: activate to sort column descending" style="text-align: center;">Confirmed by <br> HRD</th>
+                                        <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
+                                            rowspan="2" aria-sort="ascending"
+                                            aria-label="actions: activate to sort column descending">@lang('lang.actions')</th>
+                                    </tr>
+                                    <tr>
+                                        <th>From</th>
+                                        <th>To </th>
+                                        <th>Day Taken</th>
+                                        <th>Balance (today) </th>
+                                        <th>Day Taken</th>
+                                        <th>Balance (today) </th>
+                                        <th>Day Taken</th>
+                                        <th>Balance (today) </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (count($dataLeaveRequest) > 0)
+                                        @php
+                                            $total_annual_leave= 0;
+                                            $total_sick_leave= 0;
+                                            $total_spacial_leave= 0;
+                                        @endphp
+                                        @foreach ($dataLeaveRequest as $key=>$request)
+                                            @php
+                                                if ($request->leaveType->type == "annual_leave") {
+                                                    $total_annual_leave += $request->number_of_day;
+                                                }else if ($request->leaveType->type == "sick_leave") {
+                                                    $total_sick_leave += $request->number_of_day;
+                                                }else if ($request->leaveType->type == "special_leave") {
+                                                    $total_spacial_leave += $request->number_of_day;
+                                                }
+                                            @endphp
+                                            <tr class="odd">
+                                                <td>{{$key+1}}</td>
+                                                <td>{{\Carbon\Carbon::parse($request->start_date)->format('d-M-Y') ?? ''}}</td>
+                                                <td>{{\Carbon\Carbon::parse($request->end_date)->format('d-M-Y') ?? ''}}</td>
+                                                <td>{{$request->leaveType->type == "annual_leave"? $request->number_of_day : 0}}</td>
+                                                <td>{{$request->leaveType->type == "annual_leave" ? $LeaveAllocation->default_annual_leave - $total_annual_leave : 0}}</td>
+                                                <td>{{$request->leaveType->type == "sick_leave"? $request->number_of_day : 0}}</td>
+                                                <td>{{$request->leaveType->type == "sick_leave" ? $LeaveAllocation->default_sick_leave - $total_sick_leave : 0}}</td>
+                                                <td>{{$request->leaveType->type == "special_leave"? $request->number_of_day : 0}}</td>
+                                                <td>{{$request->leaveType->type == "special_leave" ? $LeaveAllocation->default_special_leave - $total_spacial_leave : 0}}</td>
+                                                <td>{{$request->reason}}</td>
+                                                <td>
+                                                    @if (isset($request->StatusApprve["rejected_lsm"]))
+                                                        <span class="badge bg-inverse-danger" style="font-size: 13px;">Rejected</span>
+                                                    @elseif (isset($request->StatusApprve["approved_lsm"]))
+                                                        <span class="badge bg-inverse-success" style="font-size: 13px;">Approved</span>
+                                                    @else
+                                                        <span class="badge bg-inverse-info" style="font-size: 13px;">Pending</span>
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    @if ((isset($request->StatusApprve["rejected_lm"])) || isset($request->StatusApprve["rejected_bm"]) || isset($request->StatusApprve["rejected_lsm"]))
+                                                        <span class="badge bg-inverse-danger" style="font-size: 13px;">Rejected</span>
+                                                    @elseif (isset($request->StatusApprve["approved_lm"]) || isset($request->StatusApprve["approved_bm"]))
+                                                        <span class="badge bg-inverse-success" style="font-size: 13px;">Approved</span>
+                                                    @else
+                                                        <span class="badge bg-inverse-info" style="font-size: 13px;">Pending</span>
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    @if (isset($request->StatusApprve["rejected_hr"]) || isset($request->StatusApprve["rejected_bm"]) || isset($request->StatusApprve["rejected_lsm"]))
+                                                        <span class="badge bg-inverse-danger" style="font-size: 13px;">Rejected</span>
+                                                    @elseif (isset($request->StatusApprve["approved_hr"]))
+                                                        <span class="badge bg-inverse-success" style="font-size: 13px;">Approved</span>
+                                                    @else
+                                                        <span class="badge bg-inverse-info" style="font-size: 13px;">Pending</span>
+                                                    @endif
+                                                </td>
+                                                <td class="text-end">
+                                                    @if (isset($request->StatusApprve["pending"]))
+                                                        <div class="dropdown dropdown-action">
+                                                            <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i  class="material-icons">more_vert</i></a>
+                                                            <div class="dropdown-menu dropdown-menu-right">
+                                                                <a class="dropdown-item update" data-toggle="modal" data-id="{{$request->id}}" data-target="#edit_leave_request"><i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')</a>
+                                                                <a class="dropdown-item leaveDelete" href="#" data-toggle="modal" data-id="{{$request->id}}" data-target="#delete_leave"><i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
+                                                            </div>
+                                                        </div>
+                                                    @endif
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    @endif
+                                </tbody>
+                            </table>
                             </div>
                         </div>
                     </div>
@@ -146,7 +260,7 @@
                                 <div class="form-group">
                                     <label>Leave Type<span class="text-danger">*</span></label>
                                     <select class="form-control select floating" id="leave_type_id" name="leave_type_id" required>
-                                        <option selected value=""> --@lang('lang.select')--</option>
+                                        <option selected disabled value=""> --@lang('lang.select')--</option>
                                         @foreach ($dataLeaveType as $type)
                                             <option value="{{$type->id}}">{{$type->name}}</option>
                                         @endforeach
@@ -157,7 +271,7 @@
                         <div class="row">
                             <div class="col-md-9">
                                 <div class="form-group">
-                                    <label>Start Date <span class="text-danger">*</span></label>
+                                    <label>From Date <span class="text-danger">*</span></label>
                                     <div class="cal-icon">
                                         <input type="text" class="form-control datetimepicker" name="start_date" id="start_date" required>
                                     </div>
@@ -177,7 +291,7 @@
                         <div class="row">
                             <div class="col-md-9">
                                 <div class="form-group">
-                                    <label>End Date <span class="text-danger">*</span></label>
+                                    <label>To Date <span class="text-danger">*</span></label>
                                     <div class="cal-icon">
                                         <input type="text" class="form-control datetimepicker" name="end_date" id="end_date"  required>
                                     </div>
@@ -199,17 +313,6 @@
                                 <div class="form-group">
                                     <label>Number of days <span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" name="number_of_day" required>
-                                </div>
-                            </div>
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label>Request To <span class="text-danger">*</span></label>
-                                    <select class="form-control select floating" name="request_to">
-                                        <option value=""> @lang('lang.select') </option>
-                                        @foreach ($teamLeader as $item)
-                                            <option value="{{$item->id}}">{{ Helper::getLang() == 'en' ? $item->employee_name_en : $item->employee_name_kh }}</option>
-                                        @endforeach
-                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -256,7 +359,7 @@
                         <div class="row">
                             <div class="col-md-9">
                                 <div class="form-group">
-                                    <label>Start Date <span class="text-danger">*</span></label>
+                                    <label>From Date <span class="text-danger">*</span></label>
                                     <div class="cal-icon">
                                         <input type="text" class="form-control datetimepicker" name="start_date" id="e_start_date" required>
                                     </div>
@@ -276,7 +379,7 @@
                         <div class="row">
                             <div class="col-md-9">
                                 <div class="form-group">
-                                    <label>End Date <span class="text-danger">*</span></label>
+                                    <label>To Date <span class="text-danger">*</span></label>
                                     <div class="cal-icon">
                                         <input type="text" class="form-control datetimepicker" name="end_date" id="e_end_date"  required>
                                     </div>
@@ -298,17 +401,6 @@
                                 <div class="form-group">
                                     <label>Number of days <span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" id="e_number_of_day" name="number_of_day" required>
-                                </div>
-                            </div>
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label>Request To <span class="text-danger">*</span></label>
-                                    <select class="form-control select floating" name="request_to" id="e_request_to">
-                                        {{-- <option value=""> @lang('lang.select') </option>
-                                        @foreach ($teamLeader as $item)
-                                            <option value="{{$item->id}}">{{ Helper::getLang() == 'en' ? $item->employee_name_en : $item->employee_name_kh }}</option>
-                                        @endforeach --}}
-                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -379,16 +471,6 @@
                     $('#e_number_of_day').val(success.number_of_day);
                     $('#e_reason').text(success.reason);
                     $('#e_leave_type_id').html('<option value=""> -- @lang("lang.select") --</option>');
-                    $('#e_request_to').html('<option value=""> -- @lang("lang.select") --</option>');
-                    if (response.teamLeader != '') {
-                        $.each(response.teamLeader, function(i, item) {
-                            $('#e_request_to').append($('<option>', {
-                                value: item.id,
-                                text: item.employee_name_en,
-                                selected: item.id == response.success.request_to
-                            }));
-                        });
-                    }
                     if (response.dataLeaveType != '') {
                         $.each(response.dataLeaveType, function(i, item) {
                             $('#e_leave_type_id').append($('<option>', {

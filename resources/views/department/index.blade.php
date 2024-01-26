@@ -36,9 +36,10 @@
                                             <tr>
                                                 <th style="width: 30px;" class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="#: activate to sort column descending">#</th>
                                                 <th class="text-end sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Action: activate to sort column ascending"></th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department Name: activate to sort column ascending">@lang('lang.name')(@lang('lang.kh'))</th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department Name: activate to sort column ascending">@lang('lang.name')(@lang('lang.en'))</th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department Name: activate to sort column ascending">@lang('lang.created_at')</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Name kh: activate to sort column ascending">@lang('lang.name')(@lang('lang.kh'))</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Name en: activate to sort column ascending">@lang('lang.name')(@lang('lang.en'))</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Head of Department: activate to sort column ascending">Head of Department</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="created_at: activate to sort column ascending">@lang('lang.created_at')</th>
                                                 <th class="text-end sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Action: activate to sort column ascending">@lang('lang.action')</th>
                                             </tr>
                                         </thead>
@@ -54,6 +55,7 @@
                                                         </td>
                                                         <td class="name_khmer">{{$item->name_khmer}}</td>
                                                         <td class="name_english">{{$item->name_english}}</td>
+                                                        <td> {{$item->headDepartment ? $item->headDepartment->employee_name_en : ""}}</td>
                                                         <td>{{ \Carbon\Carbon::parse($item->created_at)->format('d-M-Y') ?? '' }}</td>
                                                         <td class="text-end">
                                                             @if (permissionAccess("m9-s4","is_update")->value == "1" || permissionAccess("m9-s4","is_delete")->value == "1")
@@ -61,7 +63,7 @@
                                                                 <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
                                                                 <div class="dropdown-menu dropdown-menu-right">
                                                                     @if(permissionAccess("m9-s4","is_update")->value == "1")
-                                                                    <a class="dropdown-item update" data-toggle="modal" data-id="{{$item->id}}" data-target="#edit_department"><i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')</a>
+                                                                    <a class="dropdown-item update" data-toggle="modal" data-id="{{$item->id}}" data-department="{{$item->direct_manager_id}}" data-target="#edit_department"><i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')</a>
                                                                     @endif
                                                                     @if(permissionAccess("m9-s4","is_delete")->value == "1")
                                                                     <a class="dropdown-item delete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_department"><i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
@@ -78,6 +80,7 @@
                                                                 <td ></td>
                                                                 <td class="name_khmer">{{$sub->name_khmer}}</td>
                                                                 <td class="name_english">{{$sub->name_english}}</td>
+                                                                <td ></td>
                                                                 <td>{{ \Carbon\Carbon::parse($sub->created_at)->format('d-M-Y') ?? '' }}</td>
                                                                 <td class="text-end">
                                                                     @if (permissionAccess("m9-s4","is_update")->value == "1" || permissionAccess("m9-s4","is_delete")->value == "1")
@@ -85,10 +88,10 @@
                                                                         <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
                                                                         <div class="dropdown-menu dropdown-menu-right">
                                                                             @if(permissionAccess("m9-s4","is_update")->value == "1")
-                                                                            <a class="dropdown-item update" data-toggle="modal" data-parent={{$sub->parent_id}} data-id="{{$sub->id}}" data-target="#edit_department"><i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')</a>
+                                                                                <a class="dropdown-item update" data-toggle="modal" data-parent={{$sub->parent_id}} data-department="{{$sub->direct_manager_id}}" data-id="{{$sub->id}}" data-target="#edit_department"><i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')</a>
                                                                             @endif
                                                                             @if(permissionAccess("m9-s4","is_delete")->value == "1")
-                                                                            <a class="dropdown-item delete" href="#" data-toggle="modal" data-id="{{$sub->id}}" data-target="#delete_department"><i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
+                                                                                <a class="dropdown-item delete" href="#" data-toggle="modal" data-id="{{$sub->id}}" data-target="#delete_department"><i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
                                                                             @endif
                                                                         </div>
                                                                     </div>
@@ -120,6 +123,15 @@
                     <div class="modal-body">
                         <form action="{{url('department/store')}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
                             @csrf
+                            <div class="form-group hr-form-group-select2">
+                                <label>Head of Department</label>
+                                <select class="form-control hr-select2-option" name="direct_manager_id" id="direct_manager_id">
+                                    <option selected value=""> --@lang('lang.select')--</option>
+                                    @foreach ($employee as $itme )
+                                        <option value="{{ $itme->id }}"> {{ $itme->employee_name_en }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
                             <div class="form-group hr-form-group-select2">
                                 <label>@lang('lang.parent')</label>
                                 <select class="form-control hr-select2-option" name="parent_id" id="parent_id">
@@ -162,6 +174,15 @@
                         <form action="{{url('department/update')}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
                             @csrf
                             <input type="hidden" name="id" class="e_id" value="">
+                            <div class="form-group hr-form-group-select2">
+                                <label>Head of Department</label>
+                                <select class="form-control hr-select2-option" name="direct_manager_id" id="e_direct_manager_id">
+                                    <option selected value=""> --@lang('lang.select')--</option>
+                                    @foreach ($employee as $itme )
+                                        <option value="{{ $itme->id }}"> {{ $itme->employee_name_en }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
                             <div class="form-group hr-form-group-select2">
                                 <label>@lang('lang.parent')</label>
                                 <select class="form-control hr-select2-option" name="parent_id" id="e_sub_parent_id">
@@ -231,6 +252,8 @@
             $('#e_name_khmer').val(_this.find('.name_khmer').text());
             $('#e_name_english').val(_this.find('.name_english').text());
             let parent_id = $(this).data("parent");
+            let directmanager = $(this).data("department");
+            // alert(directmanager);
             if (parent_id) {
                 $('#e_sub_parent_id option').each(function() {
                     if($(this).val() == parent_id) {
@@ -247,6 +270,26 @@
                     if($(this).val() == "") {
                         $(this).remove();
                         $('#e_sub_parent_id').append('<option selected value=""> --@lang("lang.select") --</option>');
+                        
+                    }
+                });
+            }
+            if (directmanager) {
+                $('#e_direct_manager_id option').each(function() {
+                    if($(this).val() == directmanager) {
+                        $('#e_direct_manager_id').append($('<option>', {
+                            value: directmanager,
+                            text: $(this).text(),
+                            selected: true
+                        }));
+                        $(this).remove();
+                    }
+                });
+            }else{
+                $('#e_direct_manager_id option').each(function() {
+                    if($(this).val() == "") {
+                        $(this).remove();
+                        $('#e_direct_manager_id').append('<option selected value=""> --@lang("lang.select") --</option>');
                         
                     }
                 });

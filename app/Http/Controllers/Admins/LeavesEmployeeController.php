@@ -22,17 +22,10 @@ class LeavesEmployeeController extends Controller
      */
     public function index()
     {
-        $teamLeader= User::when(Auth::user()->RolePermission, function ($query, $RolePermission) {
-            if ($RolePermission == 'BM') {
-                $query->where("branch_id", Auth::user()->branch_id);
-            }else{
-                $query->whereIn("department_id", EmployeeRepository::getRoleHOD());
-            }
-        })->get();
         $dataLeaveType = LeaveType::get();
         $LeaveAllocation = LeaveAllocation::where("employee_id", Auth::user()->id)->first();
         $dataLeaveRequest = LeaveRequest::with("leaveType")->where("employee_id", Auth::user()->id)->get();
-        return view('leaves_employee.index', compact('teamLeader', 'dataLeaveType', 'LeaveAllocation', 'dataLeaveRequest'));
+        return view('leaves_employee.index', compact('dataLeaveType', 'LeaveAllocation', 'dataLeaveRequest'));
     }
 
     public function create(Request $request)
@@ -52,17 +45,21 @@ class LeavesEmployeeController extends Controller
             $data = $request->all();
             $LeaveAllocation = LeaveAllocation::where("employee_id", Auth::user()->id)->first();
             $LeaveType = LeaveType::where("id", $request->leave_type_id)->first();
-
+            if (empty($LeaveType->type)) {
+                Toastr::error('Leave type not found','Error');
+                return redirect()->back();
+                DB::commit();
+            }
             $LeaveAllocation["total_annual_leave"] = $LeaveType->type == "annual_leave" ? $LeaveAllocation->total_annual_leave - $request->number_of_day : $LeaveAllocation->total_annual_leave;
             $LeaveAllocation["total_sick_leave"] = $LeaveType->type == "sick_leave" ? $LeaveAllocation->total_sick_leave - $request->number_of_day : $LeaveAllocation->total_sick_leave;
             $LeaveAllocation["total_special_leave"] = $LeaveType->type == "special_leave" ? $LeaveAllocation->total_special_leave - $request->number_of_day : $LeaveAllocation->total_special_leave;
             $LeaveAllocation["total_unpaid_leave"] = $LeaveType->type == "unpaid_leave" ? $LeaveAllocation->total_unpaid_leave - $request->number_of_day : $LeaveAllocation->total_unpaid_leave;
-            
             $data['status'] = "pending";
             $data['employee_id'] = Auth::user()->id;
             $data['created_by'] = Auth::user()->id;
-            LeaveRequest::create($data);
+            
             $LeaveAllocation->save();
+            LeaveRequest::create($data);
             Toastr::success('Leave request created successfully.','Success');
             return redirect()->back();
             DB::commit();
@@ -91,17 +88,9 @@ class LeavesEmployeeController extends Controller
      */
     public function edit(Request $request)
     {
-        $teamLeader= User::when(Auth::user()->RolePermission, function ($query, $RolePermission) {
-            if ($RolePermission == 'BM') {
-                $query->where("branch_id", Auth::user()->branch_id);
-            }else{
-                $query->whereIn("department_id", EmployeeRepository::getRoleHOD());
-            }
-        })->get();
         $dataLeaveType = LeaveType::get();
         $data = LeaveRequest::where("id", $request->id)->first();
         return response()->json([
-            'teamLeader'=>$teamLeader,
             'dataLeaveType'=>$dataLeaveType,
             'success'=>$data,
         ]);
@@ -157,7 +146,6 @@ class LeavesEmployeeController extends Controller
                 $LeaveAllocation->total_unpaid_leave = $LeaveType->type == "unpaid_leave" ? $LeaveAllocation->total_unpaid_leave - $request->number_of_day : $LeaveAllocation->total_unpaid_leave;
                 $LeaveAllocation->save();
             }
-            $data['request_to'] = $request->request_to;
             $data['leave_type_id'] = $request->leave_type_id;
             $data['start_date'] = $request->start_date;
             $data['start_half_day'] = $request->start_half_day;

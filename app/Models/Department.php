@@ -23,6 +23,7 @@ class Department extends Model
     protected $guarded = ['id'];
     
     protected $fillable = [
+        'direct_manager_id',
         'name_khmer',
         'name_english',
         'parent_id',
@@ -39,6 +40,9 @@ class Department extends Model
         ->dontSubmitEmptyLogs();
     }
      
+    public function headDepartment(){
+        return $this->belongsTo(User::class, 'direct_manager_id','id');
+    }
     public function child(){
         return $this->hasMany(Department::class, 'parent_id','id');
     }

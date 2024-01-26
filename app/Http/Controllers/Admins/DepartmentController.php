@@ -10,6 +10,7 @@ use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Auth;
 use Spatie\Activitylog\Models\Activity;
 use App\Http\Requests\DepartmentRequest;
+use App\Models\User;
 
 class DepartmentController extends Controller
 {
@@ -20,8 +21,9 @@ class DepartmentController extends Controller
      */
     public function index()
     {
-        $data = Department::where("parent_id", 0)->orWhere("parent_id", null)->with('child')->orderBy('id','DESC')->get();
-        return view('department.index',compact('data'));
+        $employee = User::whereIn("emp_status", ["1", "2", "10"])->get();
+        $data = Department::where("parent_id", 0)->orWhere("parent_id", null)->with("headDepartment")->with('child')->orderBy('id','DESC')->get();
+        return view('department.index',compact('data', "employee"));
     }
 
     /**
@@ -81,6 +83,7 @@ class DepartmentController extends Controller
         try{
             $data = Department::find($request->id);
             $data['parent_id']  = $request->parent_id ? $request->parent_id : null;
+            $data['direct_manager_id']  = $request->direct_manager_id ? $request->direct_manager_id : null;
             $data['name_khmer']  = $request->name_khmer;
             $data['name_english']  = $request->name_english;
             $data['updated_by']  = Auth::user()->id;

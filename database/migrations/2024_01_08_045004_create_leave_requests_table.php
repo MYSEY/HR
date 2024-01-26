@@ -31,6 +31,7 @@ return new class extends Migration
             $table->string('total_sick_leave')->nullable();
             $table->string('total_special_leave')->nullable();
             $table->string('total_unpaid_leave')->nullable();
+            $table->string('reason')->nullable();
             $table->string('remark')->nullable();
             $table->bigInteger('created_by')->unsigned()->nullable();
             $table->bigInteger('updated_by')->unsigned()->nullable();

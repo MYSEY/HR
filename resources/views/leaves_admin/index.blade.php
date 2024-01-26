@@ -25,7 +25,7 @@
                 </div>
                 <div class="col-auto float-end ms-auto">
                     @if (Auth::user()->RolePermission == "HR")
-                        <a href="#" class="btn add-btn" data-bs-toggle="modal" data-bs-target="#add_leave"><i class="fa fa-calendar"></i> Generate Leave</a>
+                        <a href="#" class="btn add-btn" data-bs-toggle="modal" data-bs-target="#add_leave"><i class="fa fa-plus"></i> Generate Leave</a>
                     @endif
                     <a href="#" class="btn add-btn me-1" data-bs-toggle="modal" data-bs-target="#request_leave"><i class="fa fa-plus"></i>Request Leave</a>
                 </div>
@@ -33,25 +33,25 @@
         </div>
         <div class="row">
             <div class="col-md-3">
-                <div class="stats-info" style="background-color: #ff9b44;">
+                <div class="stats-info">
                     <h6>Pending Requests</h6>
-                    <h4>{{$dataPending}}</h4>
+                    <h4>0</h4>
                 </div>
             </div>
             <div class="col-md-3" >
-                <div class="stats-info" style="background-color: #55ce63;">
+                <div class="stats-info">
                     <h6>Approved Leave</h6>
-                    <h4>{{$dataApprove}}</h4>
+                    <h4>0</h4>
                 </div>
             </div>
             <div class="col-md-3">
-                <div class="stats-info" style="background-color: #f93332d9;">
+                <div class="stats-info">
                     <h6>Reject Leave</h6>
-                    <h4>{{$dataReject}}</h4>
+                    <h4>0</h4>
                 </div>
             </div>
             <div class="col-md-3">
-                <div class="stats-info" style="background-color: #c7c4c4;">
+                <div class="stats-info">
                     <h6>Unplanned Leaves</h6>
                     <h4>0</h4>
                 </div>
@@ -118,14 +118,14 @@
                 <div class="col-md-12 col-ms-12 p-0">
                     <ul class="nav nav-tabs nav-tabs-bottom" role="tablist">
                         <li class="nav-item" role="presentation">
-                            <a class="nav-link active" data-bs-toggle="tab" href="#leave_allocations" aria-selected="true" data-tab-id="1" role="tab" tabindex="-1">Leave allocation</a>
+                            <a class="nav-link active" data-bs-toggle="tab" href="#leave_request" aria-selected="false" role="tab" data-tab-id="1">Leave Requests</a>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <a class="nav-link" data-bs-toggle="tab" href="#leave_request" aria-selected="false" role="tab" data-tab-id="2">Leave Requests</a>
+                            <a class="nav-link" data-bs-toggle="tab" href="#leave_allocations" aria-selected="false" data-tab-id="2" role="tab" tabindex="-1">Leave allocation</a>
                         </li>
                     </ul>
                     <div class="tab-content">
-                        <div class="tab-pane active show" id="leave_allocations" role="tabpanel">
+                        <div class="tab-pane active show" id="leave_request" role="tabpanel">
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="table-responsive">
@@ -136,37 +136,6 @@
                                                         <thead>
                                                             <tr>
                                                                 <th class="sorting sorting_asc stuck-scroll-4" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Profle: activate to sort column descending">#</th>
-                                                                <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Employee: activate to sort column descending" >@lang('lang.employee_name')</th>
-                                                                
-                                                                <th class="text-end sorting" tabindex="0"
-                                                                    aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
-                                                                    aria-label="Actions: activate to sort column ascending"
-                                                                    style="width: 54.6125px;">@lang('lang.actions')</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="tab-pane" id="leave_request" role="tabpanel">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="table-responsive">
-                                        <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
-                                            <div class="row">
-                                                <div class="col-sm-12">
-                                                    <table class="table table-striped custom-table mb-0 datatable dataTable no-footer tbl-leave-request" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
-                                                        <thead>
-                                                            <tr>
-                                                                <th class="sorting sorting_asc stuck-scroll-4" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Profle: activate to sort column descending">#</th>
-                                                                <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Profile: activate to sort column descending" >@lang('lang.profile')</th>
                                                                 <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Employee: activate to sort column descending" >@lang('lang.employee_name')</th>
                                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                                     rowspan="1" colspan="1"
@@ -185,14 +154,13 @@
                                                                     rowspan="1" colspan="1"
                                                                     aria-label="Reason: activate to sort column ascending"
                                                                     style="width: 117.075px;">Reason</th>
-                                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                                    rowspan="1" colspan="1"
-                                                                    aria-label="Reason: activate to sort column ascending"
-                                                                    style="width: 117.075px;">@lang('lang.status')</th>
-                                                                {{-- <th class="text-center sorting" tabindex="0"
-                                                                    aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
-                                                                    aria-label="Status: activate to sort column ascending"
-                                                                    style="width: 108.613px;">@lang('lang.approve_by')</th> --}}
+                                                                <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
+                                                                    rowspan="2" aria-sort="ascending" aria-label="approve_by: activate to sort column descending" style="text-align: center;">Checked by <br> Sub.or line Mgr</th>
+                                                                <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
+                                                                    rowspan="2" aria-sort="ascending" aria-label="approve_by: activate to sort column descending" style="text-align: center;"
+                                                                    >Approve by BM or<br>Head Dept or CEO</th>
+                                                                <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
+                                                                    rowspan="2" aria-sort="ascending" aria-label="approve_by: activate to sort column descending" style="text-align: center;">Confirmed by <br> HRD</th>
                                                                 <th class="text-end sorting" tabindex="0"
                                                                     aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
                                                                     aria-label="Actions: activate to sort column ascending"
@@ -204,19 +172,6 @@
                                                                 @foreach ($dataLeaveRequest as $key=>$request)
                                                                     <tr class="odd">
                                                                         <td class="ids stuck-scroll-4">{{++$key ?? ""}}</td>
-                                                                        <td class="sorting_1 stuck-scroll-4">
-                                                                            <h2 class="table-avatar">
-                                                                                @if ($request->employee->profile != null)
-                                                                                    <a href="{{asset('/uploads/images/'.$request->employee->profile)}}"  class="avatar">
-                                                                                        <img alt="" src="{{asset('/uploads/images/'.$request->employee->profile)}}">
-                                                                                    </a>
-                                                                                @else
-                                                                                    <a href="{{asset('admin/img/defuals/default-user-icon.png')}}">
-                                                                                        <img alt="" src="{{asset('admin/img/defuals/default-user-icon.png')}}">
-                                                                                    </a>
-                                                                                @endif
-                                                                            </h2>
-                                                                        </td>
                                                                         <td class="stuck-scroll-4">
                                                                             {{$request->employee->employee_name_en}}
                                                                         </td>
@@ -226,41 +181,103 @@
                                                                         <td>{{$request->number_of_day}} Day</td>
                                                                         <td>{{$request->reason}}</td>
                                                                         <td>
-                                                                            @if (Auth::user()->RolePermission == "BM" || Auth::user()->RolePermission == "HOD" )
-                                                                                @if ($request->status == "pending")
-                                                                                    <span class="badge bg-inverse-info" style="font-size: 13px;">Pending</span>
-                                                                                @elseif ($request->status == "rejected_lm")
-                                                                                    <span class="badge bg-inverse-danger" style="font-size: 13px;">Rejected</span>
-                                                                                @elseif ($request->status == "approved_lm")
-                                                                                    <span class="badge bg-inverse-success" style="font-size: 13px;">Approved</span>
-                                                                                @endif
+                                                                            @if (isset($request->StatusApprve["rejected_lsm"]))
+                                                                                <span class="badge bg-inverse-danger" style="font-size: 13px;">Rejected</span>
+                                                                            @elseif (isset($request->StatusApprve["approved_lsm"]))
+                                                                                <span class="badge bg-inverse-success" style="font-size: 13px;">Approved</span>
                                                                             @else
-                                                                                @if ($request->status == "pending" || $request->status == "approved_lm")
-                                                                                    <span class="badge bg-inverse-info" style="font-size: 13px;">Pending</span>
-                                                                                @elseif ($request->status == "rejected" || $request->status == "rejected_lm")
-                                                                                    <span class="badge bg-inverse-danger" style="font-size: 13px;">Rejected</span>
-                                                                                @elseif ($request->status == "approved")
-                                                                                    <span class="badge bg-inverse-success" style="font-size: 13px;">Approved</span>
-                                                                                @endif
+                                                                                <span class="badge bg-inverse-info" style="font-size: 13px;">Pending</span>
                                                                             @endif
-                                                                            
                                                                         </td>
-                                                                        {{-- <td title="{{$request->Approve}}">
-                                                                            <span class="text">{{$request->Approve}}</span>
-                                                                        </td> --}}
+                                                                        <td>
+                                                                            @if ((isset($request->StatusApprve["rejected_lm"])) || isset($request->StatusApprve["rejected_bm"]) || isset($request->StatusApprve["rejected_lsm"]))
+                                                                                <span class="badge bg-inverse-danger" style="font-size: 13px;">Rejected</span>
+                                                                            @elseif (isset($request->StatusApprve["approved_lm"]) || isset($request->StatusApprve["approved_bm"]))
+                                                                                <span class="badge bg-inverse-success" style="font-size: 13px;">Approved</span>
+                                                                            @else
+                                                                                <span class="badge bg-inverse-info" style="font-size: 13px;">Pending</span>
+                                                                            @endif
+                                                                        </td>
+                                                                        <td>
+                                                                            @if (isset($request->StatusApprve["rejected_hr"]) || isset($request->StatusApprve["rejected_bm"]) || isset($request->StatusApprve["rejected_lsm"]))
+                                                                                <span class="badge bg-inverse-danger" style="font-size: 13px;">Rejected</span>
+                                                                            @elseif (isset($request->StatusApprve["approved_hr"]))
+                                                                                <span class="badge bg-inverse-success" style="font-size: 13px;">Approved</span>
+                                                                            @else
+                                                                                <span class="badge bg-inverse-info" style="font-size: 13px;">Pending</span>
+                                                                            @endif
+                                                                        </td>
                                                                         <td class="text-end">
-                                                                            @if (Auth::user()->RolePermission == "BM" || Auth::user()->RolePermission == "HOD" )
-                                                                                @if ($request->status == "pending")
+                                                                            {{-- @if (Auth::user()->RolePermission == "BM" || Auth::user()->RolePermission == "HOD" ) --}}
+                                                                                {{-- @if ($request->status == "pending") --}}
                                                                                     <button class="btn btn-success btn-sm btn-approved" data-id="{{$request->id}}">@lang('lang.approved')</button>
                                                                                     <button class="btn btn-primary btn-sm btn_cancel"  data-id="{{$request->id}}">@lang('lang.reject')</button>
-                                                                                @endif
-                                                                            @else
+                                                                                {{-- @endif --}}
+                                                                            {{-- @else
                                                                                 @if ($request->status == "approved_lm" || $request->status == "pending")
                                                                                     <button type="button" class="btn btn-outline-success btn-sm me-1 mb-1 btn-approved" data-id="{{$request->id}}" {{ $request->status == "pending" ? "disabled":""}} >@lang('lang.approved')</button>
                                                                                     <button type="button" class="btn btn-outline-danger btn-sm me-1 mb-1 btn_cancel" data-id="{{$request->id}}" {{ $request->status == "pending" ? "disabled":""}}>@lang('lang.reject')</button>
                                                                                 @endif 
-                                                                            @endif
+                                                                            @endif --}}
                                                                         </td>
+                                                                    </tr>
+                                                                @endforeach
+                                                            @endif
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane show" id="leave_allocations" role="tabpanel">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="table-responsive">
+                                        <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+                                            <div class="row">
+                                                <div class="col-sm-12">
+                                                    <table class="table table-striped custom-table mb-0 datatable dataTable no-footer staff-transfer-report"
+                                                        id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
+                                                        <thead>
+                                                            <tr>
+                                                                <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
+                                                                    rowspan="2" aria-sort="ascending" aria-label="employee_name: activate to sort column descending" >@lang('lang.employee_name')</th>
+                                                                <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
+                                                                    colspan="2"
+                                                                    aria-label="Annual: activate to sort column descending"
+                                                                    style="text-align: center">Annual Leave</th>
+                                                                <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
+                                                                    colspan="2"  aria-sort="ascending"
+                                                                    aria-label="Sick: activate to sort column descending"
+                                                                    style="text-align: center">Sick Leave</th>
+                                                                <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
+                                                                    colspan="2" aria-sort="ascending"
+                                                                    aria-label="Profle: activate to sort column descending"
+                                                                    style="text-align: center">Special Leave</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Day Taken</th>
+                                                                <th>Balance (today) </th>
+                                                                <th>Day Taken</th>
+                                                                <th>Balance (today) </th>
+                                                                <th>Day Taken</th>
+                                                                <th>Balance (today) </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @if (count($LeaveAllocation) > 0)
+                                                                @foreach ($LeaveAllocation as $key=>$leave)
+                                                                    <tr class="odd">
+                                                                        <td>{{$leave->employee->employee_name_en}}</td>
+                                                                        <td>{{$leave->default_annual_leave - $leave->total_annual_leave}}</td>
+                                                                        <td>{{$leave->total_annual_leave}}</td>
+                                                                        <td>{{number_format($leave->default_sick_leave - $leave->total_sick_leave)}}</td>
+                                                                        <td>{{number_format($leave->total_sick_leave)}}</td>
+                                                                        <td>{{number_format($leave->default_special_leave -$leave->total_special_leave)}}</td>
+                                                                        <td>{{number_format($leave->total_special_leave)}}</td>
                                                                     </tr>
                                                                 @endforeach
                                                             @endif

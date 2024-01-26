@@ -12,6 +12,9 @@ class LeaveAllocation extends Model
     protected $table = 'leave_allocations';
     protected $guarded = ['id'];
 
+    public function employee(){
+        return $this->belongsTo(User::class,'employee_id');
+    }
     public function createdBy()
     {
         return $this->belongsTo(User::class, 'created_by');

@@ -17,18 +17,21 @@ class LeaveTypeSeeder extends Seeder
     {
         LeaveType::updateOrCreate([
             'name' => 'Annual Leave',
+            'type' => 'annual_leave',
             'default_day' => '18',
             'created_at'=>now(),
             'updated_at'=>now()
         ]);
         LeaveType::updateOrCreate([
             'name' => 'Sick Leave',
+            'type' => 'sick_leave',
             'default_day' => '10',
             'created_at'=>now(),
             'updated_at'=>now()
         ]);
         LeaveType::updateOrCreate([
             'name' => 'Special Leave',
+            'type' => 'special_leave',
             'default_day' => '22',
             'created_at'=>now(),
             'updated_at'=>now()
