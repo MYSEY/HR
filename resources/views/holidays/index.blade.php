@@ -125,9 +125,9 @@
                                 </div>
                                 <div class="col-sm-6">
                                     <div class="form-group">
-                                        <label>@lang('lang.to')</label>
+                                        <label>@lang('lang.to') <span class="text-danger">*</span></label>
                                         <div class="cal-icon">
-                                            <input class="form-control datetimepicker" type="text" id="to" name="to">
+                                            <input class="form-control datetimepicker" type="text" id="to" name="to" required>
                                         </div>
                                     </div>
                                 </div>
@@ -194,7 +194,7 @@
                                 </div>
                                 <div class="col-sm-6">
                                     <div class="form-group">
-                                        <label>@lang('lang.to')</label>
+                                        <label>@lang('lang.to') <span class="text-danger">*</span></label>
                                         <div class="cal-icon">
                                             <input class="form-control datetimepicker" type="text" id="e_to" name="to">
                                         </div>

@@ -120,7 +120,11 @@ class Holiday extends Model
             }
             return $end_month.' '.$holidays.$end_day;
         }else{
-            return $end_month.' '.'0'.$int;
+            if($int > 9){  
+                return $end_month.' '.$int;
+            }else{
+                return $end_month.' '.'0'.$int;
+            }
         }
     }
     /*
