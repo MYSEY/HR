@@ -115,6 +115,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('/leaves/admin/filter', [LeavesAdminController::class,'filter']);
     Route::post('/leaves/admin/approve', [LeavesAdminController::class,'approve']);
     Route::post('/leaves/admin/reject', [LeavesAdminController::class,'reject']);
+    Route::get('admin/generat/leaves', [LeavesAdminController::class,'GenerateLeave']);
 
     // Leave for employees
     Route::get('/leaves/employee', [LeavesEmployeeController::class,'index']);

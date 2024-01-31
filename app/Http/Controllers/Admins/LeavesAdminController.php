@@ -25,7 +25,7 @@ class LeavesAdminController extends Controller
     {
         $dataLeaveType = LeaveType::get();
         $LeaveAllocation = LeaveAllocation::with("employee")->get();
-        $employees = User::whereIn("emp_status", ["1","10"])->get();
+        $employees = User::whereIn("emp_status", ["1","10",'2'])->get();
 
         // $dataLeaveRequest = LeaveRequest::with("employee")
         // ->leftJoin('users', 'leave_requests.employee_id', '=', 'users.id')
@@ -292,5 +292,59 @@ class LeavesAdminController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function GenerateLeave(){
+        $employee = User::whereIn('emp_status',['1','10','2'])->get();
+        foreach ($employee as $item) {
+            $dbDate = Carbon::parse($item->date_of_commencement);
+            $diffYears = Carbon::now()->diffInYears($dbDate);
+            $defaultDays = 18;
+            $data = LeaveAllocation::where('employee_id',$item->id)->first();
+            $remainingDay = $data->total_annual_leave;
+            // dd($diffYears);
+            if ($diffYears >= 3 && $diffYears < 6) {
+                $totalDays = $defaultDays + 1;
+            } elseif($diffYears >= 6 && $diffYears < 9) {
+                $totalDays = $defaultDays + 2;
+            }elseif($diffYears >= 9){
+                $totalDays = $defaultDays + 3;
+            }
+            dd($totalDays);
+
+
+            if ($diffYears >= 1 && $diffYears <= 3) {
+                if ($remainingDay >= 6) {
+                    $days = 6;
+                } else {
+                    $days = $remainingDay;
+                }
+            } else if($diffYears >= 4 && $diffYears <= 6) {
+                if ($remainingDay >= 7) {
+                    $days = 7;
+                } else {
+                    $days = $remainingDay;
+                }
+            }elseif($diffYears >= 7 && $diffYears <= 9){
+                if ($remainingDay >= 8) {
+                    $days = 8;
+                } else {
+                    $days = $remainingDay;
+                }
+            }else{
+                if ($remainingDay >= 10) {
+                    $days = 10;
+                } else {
+                    $days = $remainingDay;
+                }
+            }
+        
+            dd($days);
+            LeaveAllocation::where('employee_id',$item->id)->update([
+                'default_annual_leave'  => $totalDays,
+                'total_annual_leave'  => $totalDays,
+                'previous_yea_1'  => $days,
+            ]);
+        }
     }
 }

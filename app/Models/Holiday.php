@@ -110,7 +110,7 @@ class Holiday extends Model
         
         $holidays = null;
         $int = (int)$day;
-        if ($int > 1) {
+        if ($diffInDays > 1) {
             for ($i=0; $i < $diffInDays; $i++) { 
                 if ($int > 9) {
                     $holidays .= $int + $i.',';
