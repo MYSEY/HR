@@ -24,8 +24,15 @@ class LeavesEmployeeController extends Controller
     {
         $dataLeaveType = LeaveType::get();
         $LeaveAllocation = LeaveAllocation::where("employee_id", Auth::user()->id)->first();
+        $employees= User::when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+            if ($RolePermission == 'BM') {
+                $query->where("branch_id", Auth::user()->branch_id);
+            }else{
+                $query->where("department_id", Auth::user()->department_id);
+            }
+        })->get();
         $dataLeaveRequest = LeaveRequest::with("leaveType")->where("employee_id", Auth::user()->id)->get();
-        return view('leaves_employee.index', compact('dataLeaveType', 'LeaveAllocation', 'dataLeaveRequest'));
+        return view('leaves_employee.index', compact('dataLeaveType', 'LeaveAllocation', 'employees', 'dataLeaveRequest'));
     }
 
     public function create(Request $request)
@@ -57,12 +64,12 @@ class LeavesEmployeeController extends Controller
             $data['status'] = "pending";
             $data['employee_id'] = Auth::user()->id;
             $data['created_by'] = Auth::user()->id;
-            
             $LeaveAllocation->save();
             LeaveRequest::create($data);
-            Toastr::success('Leave request created successfully.','Success');
-            return redirect()->back();
-            DB::commit();
+            return response()->json([
+                'success'=>'leave_request_created_successfully',
+                'status'=>200,
+            ]);
         } catch (\Throwable $exp) {
             DB::rollback();
             Toastr::error('Leave request created fail.','Error');
@@ -89,9 +96,17 @@ class LeavesEmployeeController extends Controller
     public function edit(Request $request)
     {
         $dataLeaveType = LeaveType::get();
+        $hondover_staff= User::when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+            if ($RolePermission == 'BM') {
+                $query->where("branch_id", Auth::user()->branch_id);
+            }else{
+                $query->where("department_id", Auth::user()->department_id);
+            }
+        })->get();
         $data = LeaveRequest::where("id", $request->id)->first();
         return response()->json([
             'dataLeaveType'=>$dataLeaveType,
+            'hondover_staff'=>$hondover_staff,
             'success'=>$data,
         ]);
     }
@@ -155,7 +170,10 @@ class LeavesEmployeeController extends Controller
             $data['reason'] = $request->reason;
             $data['updated_by'] = Auth::user()->id;
             $data->save();
-
+            return response()->json([
+                'success'=>'leave_request_created_successfully',
+                'status'=>200,
+            ]);
             Toastr::success('Leave requsest updated successfully.','Success');
             return redirect()->back();
         }catch(\Exception $e){
@@ -176,6 +194,7 @@ class LeavesEmployeeController extends Controller
         try{
             $data = LeaveRequest::with("leaveType")->where("id", $request->id)->first();
             $LeaveAllocation = LeaveAllocation::where("employee_id", $data->employee_id)->first();
+            
             if ($data->leaveType->type == "annual_leave") {
                 $current_annual_leave = $LeaveAllocation->total_annual_leave + $request->number_of_day;
                 $LeaveAllocation->total_annual_leave =  $current_annual_leave > $LeaveAllocation->default_annual_leave ? $LeaveAllocation->default_annual_leave : $current_annual_leave;
@@ -189,7 +208,6 @@ class LeavesEmployeeController extends Controller
                 $current_unpaid_leave = $LeaveAllocation->total_unpaid_leave + $request->number_of_day;
                 $LeaveAllocation->total_unpaid_leave = $current_unpaid_leave > $LeaveAllocation->default_unpaid_leave ? $LeaveAllocation->default_unpaid_leave : $current_unpaid_leave;
             }
-
             $LeaveAllocation->save();
             LeaveRequest::destroy($request->id);
             Toastr::success('Leave requsest deleted successfully.','Success');

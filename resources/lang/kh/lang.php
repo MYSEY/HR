@@ -416,6 +416,7 @@ return[
 	"location_applied"=>"ទីតាំងការងារ",
 	"length_of_employment"=>"រយៈពេលនៃការងារ",
 	"leave_of_absence"=>"ការចាកចេញពីអវត្តមាន",
+	"leave_request_created_successfully"=>"បង្កើតដោយជោគជ័យ",
 	"leaves_admin"=>"គ្រប់គ្រងការឈប់សម្រាកបុគ្គលិក",
 	"leaves_employee"=>"ឈប់សម្រាក",
     "log_name"=>"ឈ្មោះកំណត់ហេតុ",

@@ -155,12 +155,7 @@
                                                                     aria-label="Reason: activate to sort column ascending"
                                                                     style="width: 117.075px;">Reason</th>
                                                                 <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
-                                                                    rowspan="2" aria-sort="ascending" aria-label="approve_by: activate to sort column descending" style="text-align: center;">Checked by <br> Sub.or line Mgr</th>
-                                                                <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
-                                                                    rowspan="2" aria-sort="ascending" aria-label="approve_by: activate to sort column descending" style="text-align: center;"
-                                                                    >Approve by BM or<br>Head Dept or CEO</th>
-                                                                <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
-                                                                    rowspan="2" aria-sort="ascending" aria-label="approve_by: activate to sort column descending" style="text-align: center;">Confirmed by <br> HRD</th>
+                                                                    rowspan="2" aria-sort="ascending" aria-label="approve_by: activate to sort column descending" style="text-align: center;">@lang('lang.status')</th>
                                                                 <th class="text-end sorting" tabindex="0"
                                                                     aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
                                                                     aria-label="Actions: activate to sort column ascending"
@@ -184,24 +179,6 @@
                                                                             @if (isset($request->StatusApprve["rejected_lsm"]))
                                                                                 <span class="badge bg-inverse-danger" style="font-size: 13px;">Rejected</span>
                                                                             @elseif (isset($request->StatusApprve["approved_lsm"]))
-                                                                                <span class="badge bg-inverse-success" style="font-size: 13px;">Approved</span>
-                                                                            @else
-                                                                                <span class="badge bg-inverse-info" style="font-size: 13px;">Pending</span>
-                                                                            @endif
-                                                                        </td>
-                                                                        <td>
-                                                                            @if ((isset($request->StatusApprve["rejected_lm"])) || isset($request->StatusApprve["rejected_bm"]) || isset($request->StatusApprve["rejected_lsm"]))
-                                                                                <span class="badge bg-inverse-danger" style="font-size: 13px;">Rejected</span>
-                                                                            @elseif (isset($request->StatusApprve["approved_lm"]) || isset($request->StatusApprve["approved_bm"]))
-                                                                                <span class="badge bg-inverse-success" style="font-size: 13px;">Approved</span>
-                                                                            @else
-                                                                                <span class="badge bg-inverse-info" style="font-size: 13px;">Pending</span>
-                                                                            @endif
-                                                                        </td>
-                                                                        <td>
-                                                                            @if (isset($request->StatusApprve["rejected_hr"]) || isset($request->StatusApprve["rejected_bm"]) || isset($request->StatusApprve["rejected_lsm"]))
-                                                                                <span class="badge bg-inverse-danger" style="font-size: 13px;">Rejected</span>
-                                                                            @elseif (isset($request->StatusApprve["approved_hr"]))
                                                                                 <span class="badge bg-inverse-success" style="font-size: 13px;">Approved</span>
                                                                             @else
                                                                                 <span class="badge bg-inverse-info" style="font-size: 13px;">Pending</span>

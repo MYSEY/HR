@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Brian2694\Toastr\Facades\Toastr;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Spatie\Activitylog\Models\Activity;
 
@@ -15,6 +16,27 @@ class HolidayController extends Controller
     public function index(){
         $data = Holiday::all();
         return view('holidays.index',compact('data'));
+    }
+
+    public function search(Request $request){
+        $from_date = null;
+        $to_date = null;
+        if ($request->from_date) {
+            $from_date = Carbon::createFromDate($request->from_date)->format('Y-m-d');
+        }
+        if ($request->to_date) {
+            $to_date = Carbon::createFromDate($request->to_date)->format('Y-m-d');
+        }
+        $data = Holiday::
+            when($from_date, function ($query, $from_date) {
+                $query->where('from', '>=', $from_date);
+            })
+            ->when($to_date, function ($query, $to_date) {
+                $query->where('to','<=', $to_date);
+            })->get();
+        return response()->json([
+            'datas'=>$data,
+        ]);
     }
 
     public function store(Request $request){

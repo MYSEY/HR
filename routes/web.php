@@ -101,6 +101,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
 
 
     Route::get('/holidays', [HolidayController::class, 'index']);
+    Route::post('/holidays/search', [HolidayController::class, 'search']);
     Route::post('/holidays/create', [HolidayController::class, 'store']);
     Route::get('/holidays/edit', [HolidayController::class, 'edit']);
     Route::post('/holidays/update', [HolidayController::class, 'update']);
