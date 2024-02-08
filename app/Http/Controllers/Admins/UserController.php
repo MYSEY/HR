@@ -51,7 +51,7 @@ class UserController extends Controller
     public function index(Request $request)
     {
         $data = $this->employeeRepo->getAllUsers($request);
-        if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'HR' || Auth::user()->RolePermission == 'developer') {
+        if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'HR' || Auth::user()->RolePermission == 'developer' || Auth::user()->RolePermission == 'BOD' || Auth::user()->RolePermission == 'CEO') {
             $dataProbation = User::with('role')->with('department')->with('position')->where('emp_status','Probation')->get();
             $dataFDC = User::with('role')->with('department')->with('position')->whereIn('emp_status',['1','10'])->get();
             $dataUDC = User::with('role')->with('department')->with('position')->where('emp_status','2')->get();

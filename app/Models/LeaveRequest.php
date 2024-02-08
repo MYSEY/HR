@@ -24,6 +24,7 @@ class LeaveRequest extends Model
         'approved_date',
         'request_to',
         'handover_staff_id',
+        'next_approver',
         'approved_by',
         'status',
         'number_of_day',

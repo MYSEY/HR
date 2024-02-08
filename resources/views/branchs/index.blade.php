@@ -31,6 +31,7 @@
                                                 <th style="width: 30px;" class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="#: activate to sort column descending">#</th>
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department Name: activate to sort column ascending" style="width: 772.237px;">@lang('lang.name') (@lang('lang.kh'))</th>
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department Name: activate to sort column ascending" style="width: 772.237px;">@lang('lang.name') (@lang('lang.en'))</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department Name: activate to sort column ascending" style="width: 772.237px;">Branch holder</th>
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department Name: activate to sort column ascending" style="width: 772.237px;">@lang('lang.location') (@lang('lang.en'))</th>
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department Name: activate to sort column ascending" style="width: 772.237px;">@lang('lang.location') (@lang('lang.kh'))</th>
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department Name: activate to sort column ascending" style="width: 772.237px;">@lang('lang.created_at')</th>
@@ -44,6 +45,7 @@
                                                         <td class="sorting_1 ids">{{++$key}}</td>
                                                         <td>{{$item->branch_name_kh}}</td>
                                                         <td>{{$item->branch_name_en}}</td>
+                                                        <td>{{$item->branchholder ? $item->branchholder->employee_name_en : ""}}</td>
                                                         <td>{{$item->address}}</td>
                                                         <td>{{$item->address_kh}}</td>
                                                         <td>{{ \Carbon\Carbon::parse($item->created_at)->format('d-M-Y') ?? '' }}</td>
@@ -53,7 +55,7 @@
                                                                 <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
                                                                 <div class="dropdown-menu dropdown-menu-right">
                                                                     @if (permissionAccess("m9-s3","is_update")->value == "1")
-                                                                    <a class="dropdown-item update" data-toggle="modal" data-id="{{$item->id}}"><i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')</a>
+                                                                    <a class="dropdown-item update" data-toggle="modal" data-id="{{$item->id}}" data-branch="{{$item->direct_manager_id}}"><i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')</a>
                                                                     @endif
                                                                     @if (permissionAccess("m9-s3","is_delete")->value == "1")
                                                                     <a class="dropdown-item delete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_branch"><i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
@@ -99,6 +101,15 @@
                                 <input class="form-control @error('branch_name_en') is-invalid @enderror" type="text" name="branch_name_en" required>
                             </div>
                             <div class="form-group">
+                                <label>Branch Holder</label>
+                                <select class="form-control hr-select2-option" name="direct_manager_id" id="direct_manager_id">
+                                    <option selected value=""> --@lang('lang.select')--</option>
+                                    @foreach ($employee as $itme )
+                                        <option value="{{ $itme->id }}"> {{ $itme->employee_name_en }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="form-group">
                                 <label>@lang('lang.location') (@lang('lang.en')) <span class="text-danger">*</span></label>
                                 <textarea class="form-control  @error('address') is-invalid @enderror" rows="3" type="text" name="address" required></textarea>
                             </div>
@@ -140,6 +151,17 @@
                                 <label>@lang('lang.name') (@lang('lang.en')) <span class="text-danger">*</span></label>
                                 <input class="form-control @error('branch_name_en') is-invalid @enderror" type="text" id="e_branch_name_en" name="branch_name_en">
                             </div>
+
+                            <div class="form-group hr-form-group-select2">
+                                <label>Branch Holder</label>
+                                <select class="form-control hr-select2-option" name="direct_manager_id" id="e_direct_manager_id">
+                                    <option selected value=""> --@lang('lang.select')--</option>
+                                    @foreach ($employee as $itme )
+                                        <option value="{{ $itme->id }}"> {{ $itme->employee_name_en }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            
                             <div class="form-group">
                                 <label>@lang('lang.location') (@lang('lang.en')) <span class="text-danger">*</span></label>
                                 <textarea class="form-control  @error('address') is-invalid @enderror" rows="3" type="text" id="e_address" name="address" required></textarea>
@@ -193,6 +215,27 @@
     $(function(){
         $('.update').on('click',function(){
             let id = $(this).data("id");
+            let branch = $(this).data("branch");
+            if (branch) {
+                $('#e_direct_manager_id option').each(function() {
+                    if($(this).val() == branch) {
+                        $('#e_direct_manager_id').append($('<option>', {
+                            value: branch,
+                            text: $(this).text(),
+                            selected: true
+                        }));
+                        $(this).remove();
+                    }
+                });
+            }else{
+                $('#e_direct_manager_id option').each(function() {
+                    if($(this).val() == "") {
+                        $(this).remove();
+                        $('#e_direct_manager_id').append('<option selected value=""> --@lang("lang.select") --</option>');
+                    }
+                });
+            }
+
             $.ajax({
                 type: "GET",
                 url: "{{url('branch/edit')}}",

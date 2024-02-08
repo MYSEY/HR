@@ -18,6 +18,7 @@ class CreateBranchsTable extends Migration
             $table->id();
             $table->string('branch_name_kh');
             $table->string('branch_name_en')->nullable();
+            $table->string('direct_manager_id')->nullable();
             $table->string('abbreviations')->nullable();
             $table->string('address')->nullable();
             $table->string('address_kh')->nullable();

@@ -24,6 +24,7 @@ class Branchs extends Model
     protected $fillable = [
         'branch_name_kh',
         'branch_name_en',
+        'direct_manager_id',
         'abbreviations',
         'address',
         'address_kh',
@@ -56,6 +57,11 @@ class Branchs extends Model
     {
         return $this->belongsTo(User::class ,'updated_by');
     }
+
+    public function branchholder(){
+        return $this->belongsTo(User::class, 'direct_manager_id','id');
+    }
+
     /*
     |--------------------------------------------------------------------------
     | SCOPES

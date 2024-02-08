@@ -24,6 +24,7 @@ return new class extends Migration
             $table->date('end_date');
             $table->string('end_half_day')->nullable();
             $table->date('approved_date')->nullable();
+            $table->string('next_approver')->nullable();
             $table->string('approved_by')->nullable();
             $table->string('status');
             $table->string('number_of_day')->nullable();

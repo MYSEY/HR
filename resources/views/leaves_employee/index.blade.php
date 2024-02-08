@@ -145,6 +145,9 @@
                                             <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
                                                 rowspan="2" aria-sort="ascending" aria-label="reason: activate to sort column descending">@lang('lang.reason')</th>
                                             <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
+                                                rowspan="2" aria-sort="ascending" aria-label="remark: activate to sort column descending">@lang('lang.remark')</th>
+                                                
+                                            <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
                                                 rowspan="2" aria-sort="ascending" aria-label="approve_by: activate to sort column descending" style="text-align: center;">@lang('lang.status')</th>
                                             <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
                                                 rowspan="2" aria-sort="ascending"
@@ -189,9 +192,12 @@
                                                     <td>{{$request->leaveType->type == "special_leave"? $request->number_of_day : 0}}</td>
                                                     <td>{{$request->leaveType->type == "special_leave" ? $LeaveAllocation->default_special_leave - $total_spacial_leave : 0}}</td>
                                                     <td>{{$request->reason}}</td>
+                                                    <td>{{$request->remark}}</td>
                                                     <td>
                                                         @if ($request->status == "rejected")
                                                             <span class="badge bg-inverse-danger" style="font-size: 13px;">HR Rejected</span>
+                                                        @elseif($request->status == "cancel")
+                                                            <span class="badge bg-inverse-danger" style="font-size: 13px;">Cancel</span>
                                                         @elseif ($request->status == "rejected_lm")
                                                             <span class="badge bg-inverse-danger" style="font-size: 13px;">Line Manager Rejected</span>
                                                         @elseif ($request->status == "rejected_hod")

@@ -24,13 +24,30 @@ class LeavesEmployeeController extends Controller
     {
         $dataLeaveType = LeaveType::get();
         $LeaveAllocation = LeaveAllocation::where("employee_id", Auth::user()->id)->first();
-        $employees= User::when(Auth::user()->RolePermission, function ($query, $RolePermission) {
-            if ($RolePermission == 'BM') {
-                $query->where("branch_id", Auth::user()->branch_id);
-            }else{
-                $query->where("department_id", Auth::user()->department_id);
-            }
-        })->get();
+        $employees= DB::table('users')->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+                if ($RolePermission == 'BM') {
+                    $query->where("id", Auth::user()->line_manager);
+                    $query->orWhere("branch_id", Auth::user()->branch_id);
+                    $query->whereNot("id", Auth::user()->id);
+                }else if($RolePermission == 'HOD'){
+                    if (Auth::user()->id == Auth::user()->department->direct_manager_id) {
+                        $query->where("department_id", Auth::user()->department_id);
+                        $query->whereNot("id", Auth::user()->id);
+                    }else{
+                        $query->where("id", Auth::user()->line_manager);
+                        $query->orWhere("line_manager", Auth::user()->id);
+                        $query->whereNot("id", Auth::user()->id);
+                    }
+                }else if($RolePermission == 'Employee'){
+                    $query->where("id", Auth::user()->line_manager);
+                    $query->orWhere("line_manager", Auth::user()->line_manager);
+                    $query->whereNot("id", Auth::user()->id);
+                }else if($RolePermission == 'HR'){
+                    $query->where("id", Auth::user()->line_manager);
+                    $query->orWhere("line_manager", Auth::user()->id);
+                    $query->whereNot("id", Auth::user()->id);
+                }
+            })->get();
         $dataLeaveRequest = LeaveRequest::with("leaveType")->where("employee_id", Auth::user()->id)->get();
         return view('leaves_employee.index', compact('dataLeaveType', 'LeaveAllocation', 'employees', 'dataLeaveRequest'));
     }
@@ -48,7 +65,7 @@ class LeavesEmployeeController extends Controller
      */
     public function store(Request $request)
     {
-        try {
+        // try {
             $data = $request->all();
             $LeaveAllocation = LeaveAllocation::where("employee_id", Auth::user()->id)->first();
             $LeaveType = LeaveType::where("id", $request->leave_type_id)->first();
@@ -61,7 +78,19 @@ class LeavesEmployeeController extends Controller
             $LeaveAllocation["total_sick_leave"] = $LeaveType->type == "sick_leave" ? $LeaveAllocation->total_sick_leave - $request->number_of_day : $LeaveAllocation->total_sick_leave;
             $LeaveAllocation["total_special_leave"] = $LeaveType->type == "special_leave" ? $LeaveAllocation->total_special_leave - $request->number_of_day : $LeaveAllocation->total_special_leave;
             $LeaveAllocation["total_unpaid_leave"] = $LeaveType->type == "unpaid_leave" ? $LeaveAllocation->total_unpaid_leave - $request->number_of_day : $LeaveAllocation->total_unpaid_leave;
-            $data['status'] = "pending";
+            $data['next_approver'] = Auth::user()->line_manager;
+            if(Auth::user()->RolePermission == "BOD") {
+                $data['status'] = "approved_hod";
+                $data['next_approver'] = "Null";
+            }else if (Auth::user()->RolePermission == "CEO") {
+                $data['status'] = "approved_lm";
+            }elseif (Auth::user()->RolePermission == "HOD" && Auth::user()->id == Auth::user()->department->direct_manager_id) {
+                $data['status'] = "approved_lm";
+            }else if(Auth::user()->RolePermission == "BM" && Auth::user()->id == Auth::user()->branch->direct_manager_id){
+                $data['status'] = "approved_lm";
+            }else{
+                $data['status'] = "pending";
+            }
             $data['employee_id'] = Auth::user()->id;
             $data['created_by'] = Auth::user()->id;
             $LeaveAllocation->save();
@@ -70,10 +99,10 @@ class LeavesEmployeeController extends Controller
                 'success'=>'leave_request_created_successfully',
                 'status'=>200,
             ]);
-        } catch (\Throwable $exp) {
-            DB::rollback();
-            Toastr::error('Leave request created fail.','Error');
-        }
+        // } catch (\Throwable $exp) {
+        //     DB::rollback();
+        //     Toastr::error('Leave request created fail.','Error');
+        // }
     }
 
     /**

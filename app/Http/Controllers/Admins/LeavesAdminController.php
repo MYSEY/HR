@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admins;
 
 use App\Http\Controllers\Controller;
+use App\Models\Branchs;
+use App\Models\Department;
 use App\Models\LeaveAllocation;
 use App\Models\LeaveRequest;
 use App\Models\LeaveType;
@@ -23,36 +25,57 @@ class LeavesAdminController extends Controller
      */
     public function index()
     {
-        $dataLeaveType = LeaveType::get();
-        $LeaveAllocation = LeaveAllocation::with("employee")->get();
-        $employees = User::whereIn("emp_status", ["1","10",'2'])->get();
-
-        // $dataLeaveRequest = LeaveRequest::with("employee")
-        // ->leftJoin('users', 'leave_requests.employee_id', '=', 'users.id')
-        // ->select(
-        //     'leave_requests.*',
-        //     'users.line_manager',
-        // )->where("users.line_manager", Auth::user()->id)->get();
-// dd(Auth::user());
-        $dataLeaveRequest = LeaveRequest::with("employee")->leftJoin('users', 'leave_requests.employee_id', '=', 'users.id')
+        $location = Branchs::get();
+        $department = Department::get();
+        $LeaveAllocation = LeaveAllocation::with("employee")
+        ->leftJoin('users', 'leave_allocations.employee_id', '=', 'users.id')
         ->select(
-            'leave_requests.*',
+            'leave_allocations.*',
             'users.line_manager',
             'users.department_id',
             'users.branch_id',
         )
-        ->when(Auth::user()->line_manager, function ($query, $lm){
-            if (Auth::user()->RolePermission == "HOD") {
-                $query->where("users.department_id", Auth::user()->department_id);
-            }else if(Auth::user()->RolePermission == "HOD"){
-                $query->where("users.line_manager", Auth::user()->id);
-            }else if(Auth::user()->RolePermission == "BM"){
-                $query->where("users.line_manager", Auth::user()->id);
-                // $query->where("users.branch_id", Auth::user()->branch_id);
+        ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+            if($RolePermission == 'CEO' || $RolePermission == 'BOD'){
+                $query->where("users.id", Auth::user()->id);
+                $query->orWhere("users.line_manager", Auth::user()->id);
+            }else if ($RolePermission == 'BM') {
+                $query->where("users.id", Auth::user()->line_manager);
+                $query->orWhere("users.branch_id", Auth::user()->branch_id);
+            }else if($RolePermission == 'HOD'){
+                if (Auth::user()->id == Auth::user()->department->direct_manager_id) {
+                    $query->where("users.department_id", Auth::user()->department_id);
+                    $query->whereNot("users.id", Auth::user()->id);
+                }else{
+                    $query->where("users.id", Auth::user()->id);
+                    $query->orWhere("users.line_manager", Auth::user()->id);
+                }
+            }else if($RolePermission == 'Employee'){
+                $query->where("users.id", Auth::user()->line_manager);
+                $query->orWhere("users.line_manager", Auth::user()->line_manager);
             }
         })->get();
-        // dd($dataLeaveRequest);
-        return view('leaves_admin.index', compact('employees', 'dataLeaveType', 'LeaveAllocation', 'dataLeaveRequest'));
+
+        $dataLeaveRequest = LeaveRequest::with("employee")->whereIn("status", ["approved_lm","approved_hod","pending"])
+            ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+                if($RolePermission == 'CEO' || $RolePermission == 'BOD' || $RolePermission == 'BM' || $RolePermission == 'HOD'){
+                    $query->where("next_approver", Auth::user()->id);
+                }else if($RolePermission == 'HR'){
+                    $query->whereNot("status", "approved");
+                }
+            })->orderBy('id', 'DESC')->get();
+        $requestCancels = LeaveRequest::with("employee")
+            ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+                if($RolePermission == 'HR'){
+                    $query->where("status", "cancel_hod");
+                }
+            })->orderBy('id', 'DESC')->get();
+        return view('leaves_admin.index', compact('location', 'department', 'LeaveAllocation', 'dataLeaveRequest', 'requestCancels'));
+    }
+
+    public function detail(Request $request) {
+        $leave_requests = LeaveRequest::with("leaveType")->with("employee")->where("employee_id", $request->employee_id)->get();
+        return view('leaves_admin.leave_detail', compact('leave_requests'));
     }
 
     public function employees() {
@@ -162,33 +185,47 @@ class LeavesAdminController extends Controller
         }
     }
     public function approve(Request $request) {
-        // try {
+        try {
             $data = LeaveRequest::find($request->id);
             $role = Auth::user()->RolePermission;
-            if ($role == 'BM') {
-                $data['status'] = $data->status.','. "approved_bm";
-            }else if($role == "HOD"){
-                $data['status'] = $data->status.','. "approved_lm";
-                
+            if($role == "HOD" || $role == "CEO" || $role == 'BOD'){
+                $department = Auth::user()->department;
+                if (Auth::user()->id == $department->direct_manager_id || $role == "CEO" || $role == 'BOD'){
+                    $data['next_approver'] = "Null";
+                    $data['status'] = "approved_hod";
+                }else{
+                    $data['next_approver'] = $department->direct_manager_id;
+                    $data['status'] = "approved_lm";
+                }
+            }else if ($role == 'BM') {
+                $branch = Auth::user()->branch;
+                if ($branch->direct_manager_id == Auth::user()->id ) {
+                    $data['next_approver'] = "Null";
+                    $data['status'] = "approved_hod";
+                }else{
+                    $data['next_approver'] = $branch->direct_manager_id;
+                    $data['status'] = "approved_lm";
+                }
             }else if($role == 'HR') {
-                $data['status'] = $data->status.','. "approved_hr";
+                $data['status'] = "approved";
             }
-            $data['handover_staff_id']=$request->handover_staff_id;
+            $data['remark']= $request->remark;
             $data['approved_date']= Carbon::now();
             if ($data->approved_by) {
                 $data['approved_by'] = $data->approved_by . ',' . Auth::user()->id; 
             }else{
                 $data['approved_by'] = Auth::user()->id; 
             };
+            
             $data->save();
             DB::commit();
             return response()->json([
                 'message' => 'The process has been successfully.'
             ]);
-        // } catch (\Exception $exp) {
-        //     DB::rollBack();
-        //     return response()->json(['message' => $exp->getMessage()], 500);
-        // }
+        } catch (\Exception $exp) {
+            DB::rollBack();
+            return response()->json(['message' => $exp->getMessage()], 500);
+        }
     }
     public function reject(Request $request) {
         try {
@@ -208,14 +245,24 @@ class LeavesAdminController extends Controller
                 $LeaveAllocation->total_unpaid_leave = $current_unpaid_leave > $LeaveAllocation->default_unpaid_leave ? $LeaveAllocation->default_unpaid_leave : $current_unpaid_leave;
             }
             $role = Auth::user()->RolePermission;
-            if ($role == 'BM') {
-                $data['status'] = $data->status.','. "rejected_bm";
-            }else if($role == "HOD"){
-                $data['status'] = $data->status.','. "rejected_lm";
-                
+            $department = Auth::user()->department;
+            if($role == "HOD" || $role == "CEO" || $role == 'BOD'){
+                if (Auth::user()->id == $department->direct_manager_id || $role == "CEO" || $role == 'BOD') {
+                    $data['status'] = $request->status == "cancel_hod" ? "cancel_hod" : "rejected_hod" ;
+                }else{
+                    $data['status'] = "rejected_lm";
+                }
+            }else if ($role == 'BM') {
+                $branch = Auth::user()->branch;
+                if ($branch->direct_manager_id == Auth::user()->id ) {
+                    $data['status'] = $request->status == "cancel_hod" ? "cancel_hod" : "rejected_hod" ;
+                }else{
+                    $data['status'] = "rejected_lm";
+                }
             }else if($role == 'HR') {
-                $data['status'] = $data->status.','. "rejected_hr";
+                $data['status'] = $request->status == "cancel" ? "cancel" : "rejected" ;
             }
+            
             $data['remark']= $request->remark;
             $data->save();
             $LeaveAllocation->save();
