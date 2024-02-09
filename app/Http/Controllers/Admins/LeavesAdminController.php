@@ -93,35 +93,60 @@ class LeavesAdminController extends Controller
 
     public function filter(Request $request)
     {
-        $dataLeaveRequest = LeaveRequest::with("employee")->with("leaveType")
-        ->leftJoin('users', 'leave_requests.employee_id', '=', 'users.id')
-        ->select(
-            'leave_requests.*',
-            'users.number_employee',
-            'users.employee_name_en',
-            'users.employee_name_kh',
-            'users.profile',
-        )
-        ->when($request->leave_type_id, function ($query, $leave_type_id) {
-            $query->where('leave_type_id', $leave_type_id);
-        })
-        ->when($request->employee_id, function ($query, $employee_id) {
-            $query->where('users.number_employee', 'LIKE', '%'.$employee_id.'%');
-        })
-        ->when($request->employee_name, function ($query, $employee_name) {
-            $query->where('users.employee_name_en', 'LIKE', '%'.$employee_name.'%');
-        })
-
-        ->when($request->start_date, function ($query, $start_date) {
-            $query->where('start_date', '>=', $start_date);
-        })
-        ->when($request->end_date, function ($query, $end_date) {
-            $query->where('end_date','<=', $end_date);
-        })
-        ->get();
-        return response()->json([
-            'success'=>$dataLeaveRequest,
-        ]);
+        if ($request->condiction_tab == 3) {
+            $LeaveAllocation = LeaveAllocation::with("employee")
+            ->leftJoin('users', 'leave_allocations.employee_id', '=', 'users.id')
+            ->select(
+                'leave_allocations.*',
+                'users.number_employee',
+                'users.employee_name_en',
+                'users.employee_name_kh',
+                'users.department_id',
+                'users.branch_id',
+            )
+            ->when($request->employee_id, function ($query, $employee_id) {
+                $query->where('users.number_employee', 'LIKE', '%'.$employee_id.'%');
+            })
+            ->when($request->employee_name, function ($query, $employee_name) {
+                $query->where('users.employee_name_en', 'LIKE', '%'.$employee_name.'%');
+            })
+            ->when($request->department_id, function ($query, $department) {
+                $query->where('users.department_id', $department);
+            })
+            ->when($request->branch_id, function ($query, $branch) {
+                $query->where('users.branch_id', $branch);
+            })->orderBy('id', 'DESC')->get();
+            return response()->json([
+                'LeaveAllocations'=>$LeaveAllocation,
+            ]);
+        }else{
+            $dataLeaveRequest = LeaveRequest::with("employee")->with("leaveType")
+            ->leftJoin('users', 'leave_requests.employee_id', '=', 'users.id')
+            ->select(
+                'leave_requests.*',
+                'users.number_employee',
+                'users.employee_name_en',
+                'users.employee_name_kh',
+                'users.profile',
+            )
+            ->when($request->condiction_tab, function ($query, $condiction_tab) {
+                if ($condiction_tab == 1) {
+                    $query->whereIn("leave_requests.status", ["approved_lm","approved_hod","pending"]);
+                }else{
+                    $query->where('leave_requests.status', 'cancel_hod');
+                }
+            })
+            ->when($request->employee_id, function ($query, $employee_id) {
+                $query->where('users.number_employee', 'LIKE', '%'.$employee_id.'%');
+            })
+            ->when($request->employee_name, function ($query, $employee_name) {
+                $query->where('users.employee_name_en', 'LIKE', '%'.$employee_name.'%');
+            })->orderBy('id', 'DESC')->get();
+            return response()->json([
+                'success'=>$dataLeaveRequest,
+            ]);
+        }
+        
     }
 
     public function generate(Request $request){

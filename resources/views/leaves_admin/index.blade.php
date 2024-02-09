@@ -49,7 +49,7 @@
             <div class="col-sm-6 col-md-3 col-lg-3 col-xl-3">
                 @if (Auth::user()->RolePermission == "HR")
                     <div class="form-group leave-disply-search" style="display: none">
-                        <select class="select form-control" id="status" data-select2-id="select2-data-2-c0n2" name="status">
+                        <select class="select form-control" id="branch_id" data-select2-id="select2-data-2-c0n2" name="branch_id">
                             <option value="" data-select2-id="select2-data-2-c0n2">@lang('lang.location')</option>
                             @foreach ($location as $item)
                                 <option value="{{$item->id}}">{{$item->branch_name_en}}</option>
@@ -60,7 +60,7 @@
             </div>
             <div class="col-sm-6 col-md-3 col-lg-3 col-xl-3 col-12">
                 <div style="display: flex" class="float-end">
-                    <button class="btn btn-sm btn-outline-secondary btn-search me-2" data-dismiss="modal" id="icon-search-download-reload">
+                    <button class="btn btn-sm btn-outline-secondary btn-search me-2" data-dismiss="modal" data-condiction="{{Auth::user()->RolePermission}}" id="icon-search-download-reload">
                         <span class="btn-text-search"><i class="fa fa-search"></i></span>
                         <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
                     </button>
@@ -81,7 +81,7 @@
                         </li>
                         @if (Auth::user()->RolePermission == "HR")
                             <li class="nav-item" role="presentation">
-                                <a class="nav-link tab_leave_none" data-bs-toggle="tab" href="#leave_request_cancel" aria-selected="false" role="tab">Requests Cancel ({{count($requestCancels)}})</a>
+                                <a class="nav-link tab_leave_none" data-bs-toggle="tab" href="#leave_request_cancel" aria-selected="false" data-tab-id="2" role="tab">Requests Cancel ({{count($requestCancels)}})</a>
                             </li>
                         @endif
                         <li class="nav-item" role="presentation">
@@ -186,7 +186,7 @@
                                             <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                                                 <div class="row">
                                                     <div class="col-sm-12">
-                                                        <table class="table table-striped custom-table mb-0 datatable dataTable no-footer tbl-leave-request" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
+                                                        <table class="table table-striped custom-table mb-0 datatable dataTable no-footer tbl-leave-cancel" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
                                                             <thead>
                                                                 <tr>
                                                                     <th class="sorting sorting_asc stuck-scroll-3" tabindex="0" aria-controls="DataTables_Table_0" aria-sort="ascending" aria-label="Profle: activate to sort column descending">#</th>
@@ -327,68 +327,131 @@
 @include('includs.script')
 <script>
     $(function() {
+        var condiction_tab = 1;
         $(".reset-btn").on("click", function() {
             $(this).prop('disabled', true);
             $(".btn-text-reset").hide();
             $("#btn-reset-text-loading").css('display', 'block');
             window.location.replace("{{ URL('/leaves/admin') }}"); 
         });
+        $("#tab_leave_allocations").on("click", function () {
+            $(".leave-disply-search").css("display","block");
+            condiction_tab = $(this).data('tab-id');
+        });
+        $(".tab_leave_none").on("click", function () {
+            $(".leave-disply-search").css("display","none");
+            condiction_tab = $(this).data('tab-id');
+        });
         $(".btn-search").on("click", function() {
             $(this).prop('disabled', true);
+            var condistion = $(this).data('condiction');
             $(".btn-text-search").hide();
             $("#btn-text-loading").css('display', 'block');
+
             axios.post('{{ URL('leaves/admin/filter') }}', {
-                'employee_id': $("#employee_id").val(),
+                'condiction_tab': condiction_tab,
                 'employee_name': $("#employee_name").val(),
-                'leave_type_id': $("#leave_type_id").val(),
-                'start_date': $("#start_date").val(),
-                'end_date': $("#end_date").val(),
-                'status': $("#status").val(),
+                'department_id': $("#department_id").val(),
+                'branch_id': $("#branch_id").val(),
             }).then(function(response) {
-                var rows = response.data.success;
-                if (rows.length > 0) {
-                    var tr = "";
-                    $(rows).each(function(e, row) {
-                        let start_date = moment(row.start_date).format('D-MMM-YYYY')
-                        let end_date = moment(row.end_date).format('D-MMM-YYYY')
-                        let profile = '<a href="{{asset("admin/img/defuals/default-user-icon.png")}}">'+
-                                        '<img alt="" src="{{asset("admin/img/defuals/default-user-icon.png")}}">'+
-                                    '</a>';
-                        if (row.employee.profile != null) {
-                            profile ='<a href="{{asset("/uploads/images")}}/'+(row.employee.profile)+'" class="avatar">'+
-                                        '<img alt="" src="{{asset("/uploads/images")}}/'+(row.employee.profile)+'">'+
-                                    '</a>';
-                        };
-                        tr += '<tr class="odd">'+
-                            '<td class="ids">'+(e+1)+'</td>'+
-                            '<td>' + (profile) + '</td>'+
-                            '<td>' + (row.employee.employee_name_en) + '</td>'+
-                            '<td>' + (row.leave_type.name) + '</td>'+
-                            '<td>' + (start_date) + '</td>'+
-                            '<td>' + (end_date) + '</td>'+
-                            '<td>' + (row.number_of_day) + '</td>'+
-                            '<td>' + (row.reason ? row.reason : "") + '</td>'+
-                            '<td>' + (row.approved_by ? row.approved_by : "" ) + '</td>'+
-                            '<td class="text-end">'+
-                                '<a class="btn btn-success btn-sm" href="#">Approved</a>'+
-                               ' <a class="btn btn-primary btn-sm" href="#">Reject</a>'+
-                            '</td>'+
+                if (condiction_tab == 3) {
+                    var Leave_allocations = response.data.LeaveAllocations;
+                    if (Leave_allocations.length > 0) {
+                        var tr_allocation = "";
+                        var td_allocation = "";
+                        $(Leave_allocations).each(function (e, row) {
+                            if (condistion == "HR") {
+                                td_allocation = '<td>'+(row.employee.department.name_english)+'</td><td>'+(row.employee.branch.branch_name_en)+'</td>';             
+                            }
+                            tr_allocation += '<tr class="odd">'+
+                                '<td>'+(row.employee.employee_name_en)+'</td>'+
+                                (td_allocation)+
+                                '<td>'+(row.default_annual_leave - row.total_annual_leave)+'</td>'+
+                                '<td>'+(row.total_annual_leave)+'</td>'+
+                                '<td>'+(row.default_sick_leave - row.total_sick_leave)+'</td>'+
+                                '<td>'+(row.total_sick_leave)+'</td>'+
+                                '<td>'+(row.default_special_leave -row.total_special_leave)+'</td>'+
+                                '<td>'+(row.total_special_leave)+'</td>'+
+                                '<td class="text-end">'+
+                                    '<a class="btn btn-outline-secondary btn-sm" href="{{url("leave-request/detail")}}/'+(row.employee_id)+'">@lang("lang.view_details")</a>'+
+                                '</td>'+
                         '</tr>';
-                    });
-                } else {
-                    var tr = '<tr><td colspan=11 align="center">ពុំមានទិន្នន័យសម្រាប់បង្ហាញ</td></tr>';
+                        });
+
+                    }else{
+                        var tr_allocation = '<tr><td colspan=10 align="center">ពុំមានទិន្នន័យសម្រាប់បង្ហាញ</td></tr>';
+                    }
+                    $("#leave_allocations tbody").html(tr_allocation);
+                }else{
+                    var rows = response.data.success;
+                    if (rows.length > 0) {
+                        var tr = "";
+                        let candistion = "";
+                        let status = "";
+                        $(rows).each(function(e, row) {
+                            let start_date = moment(row.start_date).format('D-MMM-YYYY');
+                            let end_date = moment(row.end_date).format('D-MMM-YYYY');
+                            if (row.status == "pending" || row.status == "approved_lm" || row.status == "approved_hod") {
+                                candistion = '<button class="btn btn-outline-secondary btn-sm btn-approved" data-id="'+(row.id)+'" data-condition="'+(condistion)+'"'+
+                                    'data-status="'+(row.status)+'"'+
+                                    'data-employeename="'+(row.employee.employee_name_en)+'"'+
+                                    'data-startdate="'+(row.start_date)+'"'+
+                                    'data-enddate="'+(row.end_date)+'"'+
+                                    'data-starthalfday="'+(row.start_half_day)+'"'+
+                                    'data-endhalfday="'+(row.end_half_day)+'"'+
+                                    'data-reason="'+(row.reason)+'"'+
+                                '>@lang("lang.approved") / @lang("lang.reject")</button>';
+                            };
+                            if (condiction_tab == 2) {
+                                status = '<span class="badge bg-inverse-danger" style="font-size: 13px;">Heard department cancel</span>';
+                                candistion = '<button class="btn btn-outline-danger btn-sm btn-cancel" data-id="'+(row.id)+'" data-condiction="'+(condistion)+'">@lang("lang.cancel")</button>';
+                            }
+                            if (row.status == "rejected"){
+                                status = '<span class="badge bg-inverse-danger" style="font-size: 13px;">HR rejected</span>';
+                            }else if(row.status == "cancel"){
+                                status = '<span class="badge bg-inverse-danger" style="font-size: 13px;">Cancel</span>';
+                            }else if (row.status == "rejected_lm"){
+                                status = '<span class="badge bg-inverse-danger" style="font-size: 13px;">Line manager rejected</span>';
+                            }else if (row.status == "rejected_hod"){
+                                status = '<span class="badge bg-inverse-danger" style="font-size: 13px;">Head department rejected</span>';
+                            }else if (row.status == "pending"){
+                                status = '<span class="badge bg-inverse-info" style="font-size: 13px;">Pending line manager approved</span>';
+                            }else if (row.status == "approved_lm"){
+                                status = '<span class="badge bg-inverse-info" style="font-size: 13px;">Pending head department approved</span>';
+                            }else if (row.status == "approved_hod"){
+                                status = '<span class="badge bg-inverse-info" style="font-size: 13px;">Pending HR Approved</span>';
+                            }else if(row.status == "approved"){
+                                status = '<span class="badge bg-inverse-success" style="font-size: 13px;">Approved</span>';
+                            };
+                            tr += '<tr class="odd">'+
+                                '<td class="ids">'+(e+1)+'</td>'+
+                                '<td>' + (row.employee.employee_name_en) + '</td>'+
+                                '<td>' + (row.leave_type.name) + '</td>'+
+                                '<td>' + (start_date) + '</td>'+
+                                '<td>' + (end_date) + '</td>'+
+                                '<td>' + (row.number_of_day) + ' Day</td>'+
+                                '<td>' + (row.reason ? row.reason : "") + '</td>'+
+                                '<td>' + (row.remark ? row.remark : "" ) + '</td>'+
+                                '<td>' + (status) + '</td>'+
+                                '<td class="text-end">'+
+                                (candistion)+
+                                '</td>'+
+                            '</tr>';
+                        });
+                    } else {
+                        var tr = '<tr><td colspan=10 align="center">ពុំមានទិន្នន័យសម្រាប់បង្ហាញ</td></tr>';
+                    }
+                    
+                    if (condiction_tab == 1) {
+                        $(".tbl-leave-request tbody").html(tr);
+                    }else {
+                        $(".tbl-leave-cancel tbody").html(tr);
+                    }
                 }
-                $(".tbl-leave-request tbody").html(tr);
                 $("#btn-text-loading").hide();
                 $(".btn-text-search").show();
                 $(".btn-search").prop("disabled",false);
             })
-        });
-        $("#tab_leave_allocations").on("click", function () {
-            $(".leave-disply-search").css("display","block");
-        });
-        $(".tab_leave_none").on("click", function () {
-            $(".leave-disply-search").css("display","none");
         });
         $(document).on('click','.btn-approved', function(){
             let id = $(this).data("id");
