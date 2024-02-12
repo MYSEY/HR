@@ -13,11 +13,13 @@ use App\Models\Position;
 use App\Models\Province;
 use App\Models\Villages;
 use App\Models\Conmmunes;
+use App\Models\LeaveType;
 use App\Models\Department;
 use Illuminate\Http\Request;
 use App\Traits\GeneratingCode;
 use Illuminate\Support\Carbon;
 use App\Exports\ExportEmployee;
+use App\Models\LeaveAllocation;
 use App\Http\Requests\UserRequest;
 use App\Http\Requests\UserUpdated;
 use App\Models\GenerateIdEmployee;
@@ -25,6 +27,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Hash;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Models\EmployeeStatusHistory;
@@ -441,11 +444,71 @@ class UserController extends Controller
                     'udc_end_date' => $request->start_date,
                     'salary_increas' => $request->total_salary_increase,
                     'basic_salary' => $totalBasicSalary,
-                    // 'total_current_salary' => $totalCurrentSalary,
-                    // 'total_severancey_pay' => $totalnewSalary,
                     'pre_salary' => $dataSalary->basic_salary,
                     'resign_reason' => $request->resign_reason
                 ]);
+                //total day in monthsd
+                $startMonth = Carbon::createFromDate($request->start_date)->format('m');
+                $startendMonth = Carbon::createFromDate($request->start_date)->endOfMonth()->format('d');
+                $start_date = Carbon::createFromDate($request->start_date);
+                $endMonth = Carbon::createFromDate($request->start_date)->endOfMonth();
+                
+                $end_date = Date::createFromDate($endMonth);
+                $commencementDate   = Carbon::parse($start_date);
+                $resumptionDate     = Carbon::parse($end_date);
+                $toDays 		    = $resumptionDate->diffInWeekdays($commencementDate) + 1;
+
+                $toDate = Carbon::parse($request->start_date);
+                $yearLy = Carbon::now()->format('Y');
+                $fromDate = $yearLy."-12-31";
+                $months = $toDate->diffInMonths($fromDate);
+                
+                if ($startMonth == 02 && $startendMonth == 28 || $startendMonth == 29) {
+                    if ($toDays == 20 || $toDays == 21) {
+                        $totalDay = 1.5;
+                        $months = $toDate->diffInMonths($fromDate);
+                    } elseif($toDays < 15) {
+                        $totalDay = 0;
+                        $months = $toDate->diffInMonths($fromDate) - 1;
+                    }else{
+                        $totalDay = 1;
+                        $months = $toDate->diffInMonths($fromDate) - 1;
+                    }
+                }else{
+                    if ($toDays < 15) {
+                        $totalDay = 0;
+                        $months = $toDate->diffInMonths($fromDate) -1 ;
+                    } elseif($toDays > 15 && $toDays < 20) {
+                        $totalDay = 1;
+                        $months = $toDate->diffInMonths($fromDate) - 1;
+                    }else{
+                        $totalDay = 1;
+                        $months = $toDate->diffInMonths($fromDate);
+                    }
+                }
+                $leaveType = LeaveType::get();
+                if ($months < 12) {
+                    $total_day = 0;
+                    foreach ($leaveType as $key => $lt) {
+                        if ($lt->type == "annual_leave") {
+                            $total_day = (($lt->default_day / 12) * $months + $totalDay);
+                            $data['default_annual_leave'] = $total_day;
+                            $data['total_annual_leave'] = $total_day;
+                        }else if($lt->type == "sick_leave") {
+                            $total_day = (($lt->default_day / 12) * $months + $totalDay);
+                            $data['default_sick_leave'] = $total_day;
+                            $data['total_sick_leave'] = $total_day;
+                        }else if($lt->type == "special_leave"){
+                            $total_day = (($lt->default_day / 12) * $months + $totalDay);
+                            $data['default_special_leave'] = $total_day;
+                            $data['total_special_leave'] = $total_day;
+                        }else{
+                            $data['default_unpaid_leave'] = 0;
+                            $data['total_unpaid_leave'] = 0;
+                        }
+                    }
+                }
+                LeaveAllocation::create($data);
             }else if($request->emp_status == '10'){
                 User::where('id',$request->id)->update([
                     'emp_status' => $request->emp_status,

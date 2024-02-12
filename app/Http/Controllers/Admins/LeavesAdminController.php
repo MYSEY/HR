@@ -5,16 +5,17 @@ namespace App\Http\Controllers\Admins;
 use App\Http\Controllers\Controller;
 use App\Models\Branchs;
 use App\Models\Department;
-use App\Models\LeaveAllocation;
 use App\Models\LeaveRequest;
-use App\Models\LeaveType;
-use App\Models\User;
-use App\Repositories\Admin\EmployeeRepository;
-use Brian2694\Toastr\Facades\Toastr;
 use Carbon\Carbon;
+use App\Models\User;
+use App\Models\LeaveType;
+use App\Models\Remainning;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use App\Models\LeaveAllocation;
 use Illuminate\Support\Facades\DB;
+use Brian2694\Toastr\Facades\Toastr;
+use Illuminate\Support\Facades\Auth;
+use App\Repositories\Admin\EmployeeRepository;
 
 class LeavesAdminController extends Controller
 {
@@ -367,56 +368,147 @@ class LeavesAdminController extends Controller
     }
 
     public function GenerateLeave(){
-        $employee = User::whereIn('emp_status',['1','10','2'])->get();
-        foreach ($employee as $item) {
-            $dbDate = Carbon::parse($item->date_of_commencement);
-            $diffYears = Carbon::now()->diffInYears($dbDate);
-            $defaultDays = 18;
-            $data = LeaveAllocation::where('employee_id',$item->id)->first();
-            $remainingDay = $data->total_annual_leave;
-            // dd($diffYears);
-            if ($diffYears >= 3 && $diffYears < 6) {
-                $totalDays = $defaultDays + 1;
-            } elseif($diffYears >= 6 && $diffYears < 9) {
-                $totalDays = $defaultDays + 2;
-            }elseif($diffYears >= 9){
-                $totalDays = $defaultDays + 3;
+        $data = LeaveAllocation::all();
+        $AnnualLeave = LeaveType::where('type','annual_leave')->first();
+        $SickLeave = LeaveType::where('type','sick_leave')->first();
+        $SpecialLeave = LeaveType::where('type','special_leave')->first();
+        return view('leaves_admin.generat_leave',compact('AnnualLeave','SickLeave','SpecialLeave','data'));
+    }
+    public function CreateGenerateLeave(Request $request){
+        try {
+            $employee = User::whereIn('emp_status',['1','10','2'])->get();
+            if ($employee) {
+                foreach ($employee as $item) {
+                    $dbDate = Carbon::parse($item->date_of_commencement);
+                    $diffYears = 3;
+                    // $diffYears = Carbon::now()->diffInYears($dbDate);
+                    $data = LeaveAllocation::where('employee_id',$item->id)->first();
+                    $remainingDay = $data->total_annual_leave;
+                    $defaultDays = $request->annual_leave;
+                    $sick_leave = $request->sick_leave;
+                    $special_leave = $request->special_leave;
+                    
+                    if ($diffYears == 1) {
+                        $defaultDays = $remainingDay;
+                        $sick_leave = $sick_leave;
+                        $special_leave = $special_leave;
+                        $remain_year_1 = 0;
+                        $remain_year_2 = 0;
+                        $remain_year_3 = 0;
+                    }elseif($diffYears == 2){
+                        if ($remainingDay >= 6) {
+                            $remianDay = 6;
+                        } else {
+                            $remianDay = $remainingDay;
+                        }
+                        $remain_year_1 = $remianDay;
+                        $remain_year_2 = 0;
+                        $remain_year_3 = 0;
+                        $totalDays = $defaultDays;
+                    }elseif($diffYears == 3){
+                        if ($remainingDay >= 6) {
+                            $remianDay = 6;
+                        } else {
+                            $remianDay = $remainingDay;
+                        }
+                        $remain_year_1 = $data->year_1;
+                        $remain_year_2 = $remianDay;
+                        $remain_year_3 = 0;
+                        $totalDays = $defaultDays;
+                    }elseif($diffYears == 4){
+                        if ($remainingDay >= 6) {
+                            $remianDay = 6;
+                        } else {
+                            $remianDay = $remainingDay;
+                        }
+                        $remain_year_1 = $data->year_1;
+                        $remain_year_2 = $data->year_2;
+                        $remain_year_3 = $remianDay;
+                        $totalDays = $defaultDays + 1;
+                    } elseif($diffYears == 5) {
+                        if ($remainingDay >= 7) {
+                            $remianDay = 7;
+                        } else {
+                            $remianDay = $remainingDay;
+                        }
+                        $remain_year_1 = $remianDay;
+                        $remain_year_2 = $data->year_2;
+                        $remain_year_3 = $data->year_3;
+                        $totalDays = $defaultDays + 1;
+                    }elseif($diffYears == 6){
+                        if ($remainingDay >= 7) {
+                            $remianDay = 7;
+                        } else {
+                            $remianDay = $remainingDay;
+                        }
+                        $remain_year_1 = $data->year_1;
+                        $remain_year_2 = $remianDay;
+                        $remain_year_3 = $data->year_3;
+                        $totalDays = $defaultDays + 1;
+                    }elseif($diffYears == 7){
+                        if ($remainingDay >= 8) {
+                            $remianDay = 8;
+                        } else {
+                            $remianDay = $remainingDay;
+                        }
+                        $remain_year_1 = $data->year_1;
+                        $remain_year_2 = $data->year_3;
+                        $remain_year_3 = $remianDay;
+                        $totalDays = $defaultDays + 2;
+                    }elseif($diffYears == 8){
+                        if ($remainingDay >= 8) {
+                            $remianDay = 8;
+                        } else {
+                            $remianDay = $remainingDay;
+                        }
+                        $remain_year_1 = $remianDay;
+                        $remain_year_2 = $data->year_2;
+                        $remain_year_3 = $data->year_3;
+                        $totalDays = $defaultDays + 2;
+                    }elseif($diffYears == 9){
+                        if ($remainingDay >= 8) {
+                            $remianDay = 8;
+                        } else {
+                            $remianDay = $remainingDay;
+                        }
+                        $remain_year_1 = $data->year_1;
+                        $remain_year_2 = $remianDay;
+                        $remain_year_3 = $data->year_3;
+                        $totalDays = $defaultDays + 2;
+                    }else{
+                        if ($remainingDay >= 10) {
+                            $remianDay = 9;
+                        } else {
+                            $remianDay = $remainingDay;
+                        }
+                        $remain_year_1 = $remianDay;
+                        $remain_year_2 = 0;
+                        $remain_year_3 = 0;
+                        $totalDays = $defaultDays + 3;
+                    }
+                    // dd($remianDay);
+                    // dd($diffYears);
+                    LeaveAllocation::where('employee_id',$item->id)->update([
+                        'default_annual_leave'  => $totalDays,
+                        'default_sick_leave'  => $sick_leave,
+                        'default_special_leave'  => $special_leave,
+                        'default_unpaid_leave'  => 0,
+                        'total_annual_leave'  => $totalDays,
+                        'total_sick_leave'  => $sick_leave,
+                        'total_special_leave'  => $special_leave,
+                        'total_unpaid_leave'  => 0,
+                        'year_1'  => $remain_year_1,
+                        'year_2'  => $remain_year_2,
+                        'year_3'  => $remain_year_3,
+                    ]);
+                }
             }
-            dd($totalDays);
-
-
-            if ($diffYears >= 1 && $diffYears <= 3) {
-                if ($remainingDay >= 6) {
-                    $days = 6;
-                } else {
-                    $days = $remainingDay;
-                }
-            } else if($diffYears >= 4 && $diffYears <= 6) {
-                if ($remainingDay >= 7) {
-                    $days = 7;
-                } else {
-                    $days = $remainingDay;
-                }
-            }elseif($diffYears >= 7 && $diffYears <= 9){
-                if ($remainingDay >= 8) {
-                    $days = 8;
-                } else {
-                    $days = $remainingDay;
-                }
-            }else{
-                if ($remainingDay >= 10) {
-                    $days = 10;
-                } else {
-                    $days = $remainingDay;
-                }
-            }
-        
-            dd($days);
-            LeaveAllocation::where('employee_id',$item->id)->update([
-                'default_annual_leave'  => $totalDays,
-                'total_annual_leave'  => $totalDays,
-                'previous_yea_1'  => $days,
-            ]);
+            Toastr::success('The process has been successfully.','Success');
+            return redirect()->back();
+            DB::commit();
+        } catch (\Exception $exp) {
+            DB::rollBack();
+            return response()->json(['message' => $exp->getMessage()], 500);
         }
     }
 }

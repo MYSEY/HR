@@ -722,7 +722,7 @@
                         });
                     }
                     if (response.lineManager != '') {
-                        $('#e_line_manager').html('<option selected disabled> -- @lang("lang.select") --</option>');
+                        $('#e_line_manager').html('<option selected> -- @lang("lang.select") --</option>');
                         $.each(response.lineManager, function(i, item) {
                             $('#e_line_manager').append($('<option>', {
                                 value: item.id,
