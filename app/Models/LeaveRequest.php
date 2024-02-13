@@ -39,7 +39,28 @@ class LeaveRequest extends Model
         'deleted_at',
     ];
     public function employee(){
-        return $this->belongsTo(User::class,'employee_id');
+        return $this->belongsTo(User::class,'employee_id')
+        ->select([
+            'id', 
+            'employee_name_en',
+            'employee_name_kh',
+            'number_employee',
+            'department_id',
+            'position_id',
+            'branch_id',
+            'gender',
+            'date_of_birth',
+            'current_province',
+            'current_district',
+            'current_commune',
+            'current_village',
+            'current_house_no',
+            'current_street_no',
+        ])
+        ->with('department')
+        ->with('position')
+        ->with('gender')
+        ->with('branch');
     }
     public function leaveType(){
         return $this->belongsTo(LeaveType::class,'leave_type_id');

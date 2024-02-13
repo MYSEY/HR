@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admins;
 
+use App\Exports\ExportLeave;
 use App\Http\Controllers\Controller;
 use App\Models\Branchs;
 use App\Models\Department;
@@ -10,14 +11,22 @@ use App\Models\LeaveRequest;
 use App\Models\LeaveType;
 use App\Models\User;
 use App\Repositories\Admin\EmployeeRepository;
+use App\Repositories\Admin\LeaveRepository;
 use Brian2694\Toastr\Facades\Toastr;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class LeavesAdminController extends Controller
 {
+    private $dataRequests;
+    public function __construct(LeaveRepository $request)
+    {
+        $this->dataRequests = $request;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -418,5 +427,25 @@ class LeavesAdminController extends Controller
                 'previous_yea_1'  => $days,
             ]);
         }
+    }
+
+    public function Report(Request $request) {
+        $location = Branchs::get();
+        $department = Department::get();
+        $leaveType = LeaveType::get();
+        $dataLeaveReport = LeaveRequest::with("employee")->with("leaveType")
+        ->whereIn("status", ["approved","rejected","cancel"])->orderBy('id', 'DESC')->get();
+        return view('leaves_admin.leave_report', compact('dataLeaveReport','leaveType','location','department'));
+    }
+    public function FilterReport(Request $request) {
+        $data = $this->dataRequests->getDatas($request);
+        return response()->json([
+            'success'=>$data,
+        ]);
+    }
+    public function Export(Request $request) {
+        $data = $this->dataRequests->getDatas($request);
+        $export = new ExportLeave($data);
+        return Excel::download($export, 'Leave Request.xlsx');
     }
 }
