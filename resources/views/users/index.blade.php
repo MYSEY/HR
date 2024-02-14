@@ -221,7 +221,7 @@
                             '</div>'+
                             '<div class="form-group">'+
                                 '<div class="form-group">'+
-                                    '<label>@lang("lang.join_dat") <span class="text-danger">*</span></label>'+
+                                    '<label>@lang("lang.join_date") <span class="text-danger">*</span></label>'+
                                     '<input type="date" class="form-control start_date" value="'+join_date+'" disabled>'+
                                     '<input type="hidden" class="form-control emp_status" value="'+status+'">'+
                                     '<input type="hidden" class="form-control id" value="'+id+'">'+

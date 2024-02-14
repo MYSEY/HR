@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Helpers\Helper;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class LeaveAllocation extends Model
 {
@@ -46,4 +47,9 @@ class LeaveAllocation extends Model
         return $this->belongsTo(User::class ,'updated_by');
     }
 
+
+
+    public function getEmployeeNameAttribute(){
+        return Helper::getLang() == 'en' ? optional($this->employee)->employee_name_en : optional($this->employee)->employee_name_kh;
+    }
 }
