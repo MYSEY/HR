@@ -114,10 +114,10 @@
                     </div>
                     <div class="row">
                         <div class="col-md-12">
-                            <div class="form-group hr-form-group-select2">
-                                <label>Handover Staff <span class="text-danger">*</span></label>
-                                <select class="hr-select2-option requered leave_required" name="handover_staff_id" id="handover_staff_id" required>
-                                    <option selected disabled value=""> --@lang('lang.select')--</option>
+                            <div class="form-group">
+                                <label>Handover Staff</label>
+                                <select class="hr-select2-option" name="handover_staff_id" id="handover_staff_id">
+                                    <option selected value=""> --@lang('lang.select')--</option>
                                     @foreach ($employees as $employee)
                                         <option value="{{$employee->id}}">{{$employee->employee_name_en}}</option>
                                     @endforeach

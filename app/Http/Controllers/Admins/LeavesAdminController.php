@@ -17,6 +17,8 @@ use Illuminate\Support\Facades\DB;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Auth;
 use App\Repositories\Admin\EmployeeRepository;
+use App\Repositories\Admin\LeaveRepository;
+use Maatwebsite\Excel\Facades\Excel;
 
 class LeavesAdminController extends Controller
 {
@@ -64,7 +66,7 @@ class LeavesAdminController extends Controller
             }
         })->get();
 
-        $dataLeaveRequest = LeaveRequest::with("employee")->whereIn("status", ["approved_lm","approved_hod","pending"])
+        $dataLeaveRequest = LeaveRequest::with("employee")->with("handover")->whereIn("status", ["approved_lm","approved_hod","pending"])
             ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
                 if($RolePermission == 'CEO' || $RolePermission == 'BOD' || $RolePermission == 'BM' || $RolePermission == 'HOD'){
                     $query->where("next_approver", Auth::user()->id);
@@ -72,7 +74,7 @@ class LeavesAdminController extends Controller
                     $query->whereNot("status", "approved");
                 }
             })->orderBy('id', 'DESC')->get();
-        $requestCancels = LeaveRequest::with("employee")
+        $requestCancels = LeaveRequest::with("employee")->with("handover")
             ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
                 if($RolePermission == 'HR'){
                     $query->where("status", "cancel_hod");
@@ -128,7 +130,7 @@ class LeavesAdminController extends Controller
                 'LeaveAllocations'=>$LeaveAllocation,
             ]);
         }else{
-            $dataLeaveRequest = LeaveRequest::with("employee")->with("leaveType")
+            $dataLeaveRequest = LeaveRequest::with("employee")->with("leaveType")->with("handover")
             ->leftJoin('users', 'leave_requests.employee_id', '=', 'users.id')
             ->select(
                 'leave_requests.*',
@@ -520,12 +522,12 @@ class LeavesAdminController extends Controller
     }
 
     public function Report(Request $request) {
+       
         $location = Branchs::get();
         $department = Department::get();
         $leaveType = LeaveType::get();
-        $dataLeaveReport = LeaveRequest::with("employee")->with("leaveType")
-        ->whereIn("status", ["approved","rejected","cancel"])->orderBy('id', 'DESC')->get();
-        return view('leaves_admin.leave_report', compact('dataLeaveReport','leaveType','location','department'));
+        $LeaveAllocation = $this->dataRequests->getDatas($request);
+        return view('leaves_admin.leave_report', compact('LeaveAllocation','leaveType','location','department'));
     }
     public function FilterReport(Request $request) {
         $data = $this->dataRequests->getDatas($request);

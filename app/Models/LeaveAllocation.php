@@ -25,6 +25,7 @@ class LeaveAllocation extends Model
             'branch_id',
             'gender',
             'date_of_birth',
+            'date_of_commencement',
             'id_card_number',
             'current_province',
             'current_district',

@@ -112,9 +112,9 @@
                     </div>
                     <div class="row">
                         <div class="col-md-12">
-                            <div class="form-group hr-form-group-select2">
-                                <label>Handover Staff <span class="text-danger">*</span></label>
-                                <select class="hr-select2-option requered e_leave_required" id="e_handover_staff_id" required>
+                            <div class="form-group">
+                                <label>Handover Staff </label>
+                                <select class="hr-select2-option " id="e_handover_staff_id">
                                 </select>
                             </div>
                         </div>

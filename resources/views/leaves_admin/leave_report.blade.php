@@ -37,7 +37,7 @@
                         <input type="text" class="form-control" name="employee_name" id="employee_name" placeholder="@lang('lang.employee_name')" value="{{old('employee_name')}}">
                     </div>
                 </div>
-                <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                {{-- <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
                     <div class="form-group leave-disply-search">
                         <select class="select form-control" id="type_id" data-select2-id="select2-data-2-c0n4" name="type_id">
                             <option value="" data-select2-id="select2-data-2-c0n4">@lang('lang.all_type')</option>
@@ -46,7 +46,7 @@
                             @endforeach
                         </select>
                     </div>
-                </div>
+                </div> --}}
                 <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
                     <div class="form-group leave-disply-search">
                         <select class="select form-control" id="department_id" data-select2-id="select2-data-2-c0n3" name="department_id">
@@ -64,32 +64,6 @@
                             @foreach ($location as $item)
                                 <option value="{{$item->id}}">{{$item->branch_name_en}}</option>
                             @endforeach
-                        </select>
-                    </div>
-                </div>
-                
-                <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
-                    <div class="form-group">
-                        <div class="cal-icon">
-                            <input class="form-control floating datetimepicker" type="text" id="start_date" name="start_date"
-                                placeholder="@lang('lang.start_date')">
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
-                    <div class="form-group">
-                        <div class="cal-icon">
-                            <input class="form-control floating datetimepicker" type="text" id="end_date" name="end_date" placeholder="@lang('lang.end_date')">
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
-                    <div class="form-group leave-disply-search">
-                        <select class="select form-control" id="status" data-select2-id="select2-data-2-c0n5" name="status">
-                            <option value="" data-select2-id="select2-data-2-c0n5">@lang('lang.all_status')</option>
-                            <option value="rejected">@lang('lang.reject')</option>
-                            <option value="cancel">@lang('lang.cancel')</option>
-                            <option value="approved">@lang('lang.approved')</option>
                         </select>
                     </div>
                 </div>
@@ -120,47 +94,72 @@
                     <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                         <div class="row">
                             <div class="col-sm-12">
-                                <table class="table table-striped custom-table mb-0 datatable dataTable no-footer tbl-leave-report" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
+                                <table class="table table-striped custom-table mb-0 datatable dataTable no-footer w-100 tbl-leave-report"
+                                    id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
                                     <thead>
                                         <tr>
-                                            <th class="sorting sorting_asc stuck-scroll-3" tabindex="0" aria-controls="DataTables_Table_0" aria-sort="ascending" aria-label="Profle: activate to sort column descending">#</th>
-                                            <th class="sorting sorting_asc stuck-scroll-3" tabindex="0" aria-controls="DataTables_Table_0" aria-sort="ascending" aria-label="Employee: activate to sort column descending" >@lang('lang.employee_name')</th>
-                                            <th class="sorting stuck-scroll-3" tabindex="0" aria-controls="DataTables_Table_0" aria-label="Leave Type: activate to sort column ascending">Leave Type</th>
-                                            <th class="sorting sorting_asc vertical-center" tabindex="0" aria-controls="DataTables_Table_0" aria-sort="ascending"
+                                            <th class="sorting sorting_asc vertical-center" tabindex="0" aria-controls="DataTables_Table_0"
+                                                rowspan="2" aria-sort="ascending"
+                                                aria-label="#: activate to sort column descending">@lang('lang.employee_name')</th>
+                                            <th class="sorting sorting_asc vertical-center" tabindex="0" aria-controls="DataTables_Table_0"
+                                                rowspan="2" aria-sort="ascending"
                                                 aria-label="department: activate to sort column descending">@lang('lang.department')</th>
                                             <th class="sorting sorting_asc vertical-center" tabindex="0" aria-controls="DataTables_Table_0"
-                                                aria-sort="ascending" aria-label="location: activate to sort column descending">@lang('lang.location')</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" aria-label="From: activate to sort column ascending">@lang('lang.start_date')</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" aria-label="To: activate to sort column ascending">@lang('lang.end_date')</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" aria-label="No of Days: activate to sort column ascending">Number of Days</th>
-                                            <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" aria-sort="ascending" aria-label="status: activate to sort column descending">@lang('lang.status')</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" aria-label="Reason: activate to sort column ascending">Reason</th>
-                                            <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" aria-sort="ascending" aria-label="remark: activate to sort column descending">@lang('lang.remark')</th>
+                                                rowspan="2" aria-sort="ascending"
+                                                aria-label="location: activate to sort column descending">@lang('lang.location')</th>
+                                            <th class="sorting sorting_asc vertical-center" tabindex="0" aria-controls="DataTables_Table_0"
+                                                rowspan="2" aria-sort="ascending"
+                                                aria-label="location: activate to sort column descending">@lang('lang.join_date')</th>
+                                            <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
+                                                colspan="2" aria-label="Annual: activate to sort column descending"
+                                                style="text-align: center">Annual Leave</th>
+                                            <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
+                                                colspan="2"  aria-sort="ascending" aria-label="Sick: activate to sort column descending"
+                                                style="text-align: center">Sick Leave</th>
+                                            <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
+                                                colspan="2" aria-sort="ascending" aria-label="Profle: activate to sort column descending"
+                                                style="text-align: center">Special Leave</th>
+                                            <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
+                                                colspan="2" aria-sort="ascending" aria-label="Profle: activate to sort column descending"
+                                                style="text-align: center">Unpaid Leave</th>
+                                            <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
+                                                colspan="3" aria-sort="ascending" aria-label="Profle: activate to sort column descending"
+                                                style="text-align: center">Carried Forward Leave</th>
+                                           
+                                        </tr>
+                                        <tr>
+                                            <th>Day Taken</th>
+                                            <th>Balance</th>
+                                            <th>Day Taken</th>
+                                            <th>Balance</th>
+                                            <th>Day Taken</th>
+                                            <th>Balance</th>
+                                            <th>Day Taken</th>
+                                            <th>Balance</th>
+                                            <th>Year 1</th>
+                                            <th>Year 2</th>
+                                            <th>Year 3</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @if (count($dataLeaveReport) > 0)
-                                            @foreach ($dataLeaveReport as $key=>$leave)
+                                        @if (count($LeaveAllocation) > 0)
+                                            @foreach ($LeaveAllocation as $key=>$leave)
                                                 <tr class="odd">
-                                                    <td class="ids stuck-scroll-3">{{++$key ?? ""}}</td>
-                                                    <td class="stuck-scroll-3 employee_name"> {{$leave->employee->employee_name_en}} </td>
-                                                    <td class="stuck-scroll-3">{{$leave->leaveType->name}}</td>
-                                                    <td >{{$leave->employee->department->name_english}}</td>
-                                                    <td >{{$leave->employee->branch->branch_name_en}}</td>
-                                                    <td >{{\Carbon\Carbon::parse($leave->start_date)->format('d-M-Y') ?? ''}}</td>
-                                                    <td>{{\Carbon\Carbon::parse($leave->end_date)->format('d-M-Y') ?? ''}}</td>
-                                                    <td>{{$leave->number_of_day}} Day</td>
-                                                    <td>
-                                                        @if ($leave->status == "rejected")
-                                                            <span class="badge bg-inverse-danger" style="font-size: 13px;">Rejected</span>
-                                                        @elseif($leave->status == "cancel")
-                                                            <span class="badge bg-inverse-danger" style="font-size: 13px;">Cancel</span>
-                                                        @else
-                                                            <span class="badge bg-inverse-success" style="font-size: 13px;">Approved</span>
-                                                        @endif
-                                                    </td>
-                                                    <td>{{$leave->reason}}</td>
-                                                    <td>{{$leave->remark}}</td>
+                                                    <td>{{$leave->employee->employee_name_en}}</td>
+                                                    <td>{{$leave->employee->department->name_english}}</td>
+                                                    <td>{{$leave->employee->branch->branch_name_en}}</td>
+                                                    <td>{{\Carbon\Carbon::parse($leave->employee->date_of_commencement)->format('d-M-Y') ?? ''}}</td>
+                                                    <td>{{$leave->default_annual_leave - $leave->total_annual_leave}}</td>
+                                                    <td>{{$leave->total_annual_leave}}</td>
+                                                    <td>{{number_format($leave->default_sick_leave - $leave->total_sick_leave)}}</td>
+                                                    <td>{{number_format($leave->total_sick_leave)}}</td>
+                                                    <td>{{number_format($leave->default_special_leave -$leave->total_special_leave)}}</td>
+                                                    <td>{{number_format($leave->total_special_leave)}}</td>
+                                                    <td>{{number_format($leave->default_unpaid_leave - $leave->total_unpaid_leave)}}</td>
+                                                    <td>{{number_format($leave->total_unpaid_leave)}}</td>
+                                                    <td>{{$leave->year_1 ? $leave->year_1 : 0}}</td>
+                                                    <td>{{$leave->year_2 ? $leave->year_2 : 0}}</td>
+                                                    <td>{{$leave->year_3 ? $leave->year_3 : 0}}</td>
                                                 </tr>
                                             @endforeach
                                         @endif
@@ -209,35 +208,32 @@
                 'end_date': $("#end_date").val(),
             }).then(function(response) {
                 var rows = response.data.success;
+                console.log("rows: ",rows);
                 if (rows.length > 0) {
                     var tr = "";
                     let status = "";
                     $(rows).each(function(e, row) {
-                        let start_date = moment(row.start_date).format('D-MMM-YYYY');
-                        let end_date = moment(row.end_date).format('D-MMM-YYYY');
-                        if (row.status == "rejected"){
-                            status = '<span class="badge bg-inverse-danger" style="font-size: 13px;">Rejected</span>';
-                        }else if(row.status == "cancel"){
-                            status = '<span class="badge bg-inverse-danger" style="font-size: 13px;">Cancel</span>';
-                        }else if(row.status == "approved"){
-                            status = '<span class="badge bg-inverse-success" style="font-size: 13px;">Approved</span>';
-                        };
+                        let join_date = moment(row.date_of_commencement).format('D-MMM-YYYY');
                         tr += '<tr class="odd">'+
-                            '<td class="ids">'+(e+1)+'</td>'+
-                            '<td>' + (row.employee.employee_name_en) + '</td>'+
-                            '<td>' + (row.leave_type.name) + '</td>'+
-                            '<td>' + (row.employee.department.name_english) + '</td>'+
-                            '<td>' + (row.employee.branch.branch_name_en) + '</td>'+
-                            '<td>' + (start_date) + '</td>'+
-                            '<td>' + (end_date) + '</td>'+
-                            '<td>' + (row.number_of_day) + ' Day</td>'+
-                            '<td>' + (status) + '</td>'+
-                            '<td>' + (row.reason ? row.reason : "") + '</td>'+
-                            '<td>' + (row.remark ? row.remark : "" ) + '</td>'+
+                            '<td>'+(row.employee.employee_name_en)+'</td>'+
+                            '<td>'+(row.employee.department.name_english)+'</td>'+
+                            '<td>'+(row.employee.branch.branch_name_en)+'</td>'+
+                            '<td>'+(join_date)+'</td>'+
+                            '<td>'+(row.default_annual_leave - row.total_annual_leave)+'</td>'+
+                            '<td>'+(row.total_annual_leave)+'</td>'+
+                            '<td>'+(row.default_sick_leave - row.total_sick_leave)+'</td>'+
+                            '<td>'+(row.total_sick_leave)+'</td>'+
+                            '<td>'+(row.default_special_leave -row.total_special_leave)+'</td>'+
+                            '<td>'+(row.total_special_leave)+'</td>'+
+                            '<td>'+(row.default_unpaid_leave - row.total_unpaid_leave)+'</td>'+
+                            '<td>'+(row.total_unpaid_leave)+'</td>'+
+                            '<td>'+(row.year_1 ? row.year_1 : 0)+'</td>'+
+                            '<td>'+(row.year_2 ? row.year_2 : 0)+'</td>'+
+                            '<td>'+(row.year_3 ? row.year_3 : 0)+'</td>'+
                         '</tr>';
                     });
                 } else {
-                    var tr = '<tr><td colspan=11 align="center">ពុំមានទិន្នន័យសម្រាប់បង្ហាញ</td></tr>';
+                    var tr = '<tr><td colspan=15 align="center">ពុំមានទិន្នន័យសម្រាប់បង្ហាញ</td></tr>';
                 }
                     
                 $(".tbl-leave-report tbody").html(tr);

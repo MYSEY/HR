@@ -62,6 +62,24 @@ class LeaveRequest extends Model
         ->with('gender')
         ->with('branch');
     }
+    public function handover(){
+        return $this->belongsTo(User::class,'handover_staff_id')
+        ->select([
+            'id', 
+            'employee_name_en',
+            'employee_name_kh',
+            'number_employee',
+            'department_id',
+            'position_id',
+            'branch_id',
+            'gender',
+            'date_of_birth',
+        ])
+        ->with('department')
+        ->with('position')
+        ->with('gender')
+        ->with('branch');
+    }
     public function leaveType(){
         return $this->belongsTo(LeaveType::class,'leave_type_id');
     }

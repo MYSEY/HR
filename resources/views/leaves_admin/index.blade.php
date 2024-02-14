@@ -110,6 +110,8 @@
                                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                                     aria-label="No of Days: activate to sort column ascending">Number of Days</th>
                                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                                    aria-label="No of Days: activate to sort column ascending">Handover Staff</th>
+                                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                                     aria-label="Reason: activate to sort column ascending">Reason</th>
                                                                 <th ass="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
                                                                         aria-sort="ascending" aria-label="remark: activate to sort column descending" style="text-align: center;">@lang('lang.remark')</th>     
@@ -125,28 +127,29 @@
                                                                 @foreach ($dataLeaveRequest as $key=>$request)
                                                                     <tr class="odd">
                                                                         <td class="ids stuck-scroll-3">{{++$key ?? ""}}</td>
-                                                                        <td class="stuck-scroll-3 employee_name"> {{$request->employee->employee_name_en}} </td>
+                                                                        <td class="stuck-scroll-3 employee_name"> {{$request->employee ? $request->employee->employee_name_en : ""}} </td>
                                                                         <td class="stuck-scroll-3">{{$request->leaveType->name}}</td>
                                                                         <td >{{\Carbon\Carbon::parse($request->start_date)->format('d-M-Y') ?? ''}}</td>
                                                                         <td>{{\Carbon\Carbon::parse($request->end_date)->format('d-M-Y') ?? ''}}</td>
                                                                         <td>{{$request->number_of_day}} Day</td>
+                                                                        <td>{{ $request->handover ? $request->handover->employee_name_en : ""}}</td>
                                                                         <td>{{$request->reason}}</td>
                                                                         <td>{{$request->remark}}</td>
                                                                         <td>
                                                                             @if ($request->status == "rejected")
-                                                                                <span class="badge bg-inverse-danger" style="font-size: 13px;">HR rejected</span>
+                                                                                <span class="badge bg-inverse-danger" style="font-size: 13px;">HR rejecte</span>
                                                                             @elseif($request->status == "cancel")
                                                                                 <span class="badge bg-inverse-danger" style="font-size: 13px;">Cancel</span>
                                                                             @elseif ($request->status == "rejected_lm")
-                                                                                <span class="badge bg-inverse-danger" style="font-size: 13px;">Line manager rejected</span>
+                                                                                <span class="badge bg-inverse-danger" style="font-size: 13px;">Line manager rejecte</span>
                                                                             @elseif ($request->status == "rejected_hod")
-                                                                                <span class="badge bg-inverse-danger" style="font-size: 13px;">Head department rejected</span>
+                                                                                <span class="badge bg-inverse-danger" style="font-size: 13px;">Head department rejecte</span>
                                                                             @elseif ($request->status == "pending")
-                                                                            <span class="badge bg-inverse-info" style="font-size: 13px;">Pending line manager approved</span>
+                                                                            <span class="badge bg-inverse-info" style="font-size: 13px;">Pending line manager approve</span>
                                                                             @elseif ($request->status == "approved_lm")
-                                                                                <span class="badge bg-inverse-info" style="font-size: 13px;">Pending head department approved</span>
+                                                                                <span class="badge bg-inverse-info" style="font-size: 13px;">Pending head department approve</span>
                                                                             @elseif ($request->status == "approved_hod")
-                                                                                <span class="badge bg-inverse-info" style="font-size: 13px;">Pending HR Approved</span>
+                                                                                <span class="badge bg-inverse-info" style="font-size: 13px;">Pending HR Approve</span>
                                                                             @elseif($request->status == "approved")
                                                                                 <span class="badge bg-inverse-success" style="font-size: 13px;">Approved</span>
                                                                             @endif
@@ -162,6 +165,7 @@
                                                                                         data-enddate="{{$request->end_date}}"
                                                                                         data-starthalfday="{{$request->start_half_day}}"
                                                                                         data-endhalfday="{{$request->end_half_day}}"
+                                                                                        data-handover="{{ $request->handover ? $request->handover->employee_name_en : ''}}"
                                                                                         data-reason="{{$request->reason}}"
                                                                                     >@lang('lang.approved') / @lang('lang.reject')</button>
                                                                             @endif
@@ -199,6 +203,8 @@
                                                                         aria-label="To: activate to sort column ascending">@lang('lang.end_date')</th>
                                                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                                         aria-label="No of Days: activate to sort column ascending">Number of Days</th>
+                                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                                        aria-label="Handover Staff: activate to sort column ascending">Handover Staff</th>
                                                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                                         aria-label="Reason: activate to sort column ascending">Reason</th>
                                                                     <th ass="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
@@ -220,6 +226,7 @@
                                                                             <td >{{\Carbon\Carbon::parse($request->start_date)->format('d-M-Y') ?? ''}}</td>
                                                                             <td>{{\Carbon\Carbon::parse($request->end_date)->format('d-M-Y') ?? ''}}</td>
                                                                             <td>{{$request->number_of_day}} Day</td>
+                                                                            <td>{{ $request->handover ? $request->handover->employee_name_en : ""}}</td>
                                                                             <td>{{$request->reason}}</td>
                                                                             <td>{{$request->remark}}</td>
                                                                             <td>
@@ -304,7 +311,7 @@
                                                                         <td>{{number_format($leave->default_special_leave -$leave->total_special_leave)}}</td>
                                                                         <td>{{number_format($leave->total_special_leave)}}</td>
                                                                         <td class="text-end">
-                                                                            <a class="btn btn-outline-secondary btn-sm" href="{{ url('/leave-request/detail', $leave->employee_id) }}">@lang('lang.view_details')</a>
+                                                                            <a class="btn btn-outline-secondary btn-sm" href="{{ url('/leave-request/detail', $leave->employee_id) }}">@lang('lang.view_request')</a>
                                                                         </td>
                                                                     </tr>
                                                                 @endforeach
@@ -373,7 +380,7 @@
                                 '<td>'+(row.default_special_leave -row.total_special_leave)+'</td>'+
                                 '<td>'+(row.total_special_leave)+'</td>'+
                                 '<td class="text-end">'+
-                                    '<a class="btn btn-outline-secondary btn-sm" href="{{url("leave-request/detail")}}/'+(row.employee_id)+'">@lang("lang.view_details")</a>'+
+                                    '<a class="btn btn-outline-secondary btn-sm" href="{{url("leave-request/detail")}}/'+(row.employee_id)+'">@lang("lang.view_request")</a>'+
                                 '</td>'+
                         '</tr>';
                         });
@@ -407,29 +414,30 @@
                                 candistion = '<button class="btn btn-outline-danger btn-sm btn-cancel" data-id="'+(row.id)+'" data-condiction="'+(condistion)+'">@lang("lang.cancel")</button>';
                             }
                             if (row.status == "rejected"){
-                                status = '<span class="badge bg-inverse-danger" style="font-size: 13px;">HR rejected</span>';
+                                status = '<span class="badge bg-inverse-danger" style="font-size: 13px;">HR rejecte</span>';
                             }else if(row.status == "cancel"){
                                 status = '<span class="badge bg-inverse-danger" style="font-size: 13px;">Cancel</span>';
                             }else if (row.status == "rejected_lm"){
-                                status = '<span class="badge bg-inverse-danger" style="font-size: 13px;">Line manager rejected</span>';
+                                status = '<span class="badge bg-inverse-danger" style="font-size: 13px;">Line manager rejecte</span>';
                             }else if (row.status == "rejected_hod"){
-                                status = '<span class="badge bg-inverse-danger" style="font-size: 13px;">Head department rejected</span>';
+                                status = '<span class="badge bg-inverse-danger" style="font-size: 13px;">Head department rejecte</span>';
                             }else if (row.status == "pending"){
-                                status = '<span class="badge bg-inverse-info" style="font-size: 13px;">Pending line manager approved</span>';
+                                status = '<span class="badge bg-inverse-info" style="font-size: 13px;">Pending line manager approve</span>';
                             }else if (row.status == "approved_lm"){
-                                status = '<span class="badge bg-inverse-info" style="font-size: 13px;">Pending head department approved</span>';
+                                status = '<span class="badge bg-inverse-info" style="font-size: 13px;">Pending head department approve</span>';
                             }else if (row.status == "approved_hod"){
-                                status = '<span class="badge bg-inverse-info" style="font-size: 13px;">Pending HR Approved</span>';
+                                status = '<span class="badge bg-inverse-info" style="font-size: 13px;">Pending HR Approve</span>';
                             }else if(row.status == "approved"){
                                 status = '<span class="badge bg-inverse-success" style="font-size: 13px;">Approved</span>';
                             };
                             tr += '<tr class="odd">'+
                                 '<td class="ids">'+(e+1)+'</td>'+
-                                '<td>' + (row.employee.employee_name_en) + '</td>'+
+                                '<td>' + (row.employee ? row.employee.employee_name_en : "") + '</td>'+
                                 '<td>' + (row.leave_type.name) + '</td>'+
                                 '<td>' + (start_date) + '</td>'+
                                 '<td>' + (end_date) + '</td>'+
                                 '<td>' + (row.number_of_day) + ' Day</td>'+
+                                '<td>' + (row.handover ? row.handover.employee_name_en : "") + '</td>'+
                                 '<td>' + (row.reason ? row.reason : "") + '</td>'+
                                 '<td>' + (row.remark ? row.remark : "" ) + '</td>'+
                                 '<td>' + (status) + '</td>'+
@@ -478,6 +486,7 @@
             let enddate = moment($(this).data("enddate")).format('D-MMM-YYYY');
             let starthalfday = $(this).data("starthalfday") ? '  half day ( '+ $(this).data("starthalfday")+" )" : "";
             let endhalfday = $(this).data("endhalfday") ? '  half day ( '+ $(this).data("endhalfday")+" )" : "";
+            let handover = $(this).data("handover");
             let reason = $(this).data("reason");
             let description = "@lang('lang.are_you_sure_want_to_approve') or rejected?";
             let text_label = "";
@@ -566,6 +575,7 @@
                         '<p>Empployee Name: '+employeename+'</p>'+
                         '<p>From: '+startdate+starthalfday+'</p>'+
                         '<p>To: '+enddate+endhalfday+'</p>'+
+                        '<p>Handover Staff: '+handover+'</p>'+
                         '<label>Reason:</label>'+
                         '<textarea disabled class="form-control">'+reason+'</textarea>'+
                     '</div>'+

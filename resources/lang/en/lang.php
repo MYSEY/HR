@@ -769,6 +769,7 @@ return[
     "valid_date"=>"Valid Date",
     "valid_time"=>"Valid Time",
     "view_details"=>"View Details",
+    "view_request"=>"View Request",
     "write"=>"Write",
     "warning"=>"Note",
     "waiting"=>"Waiting",

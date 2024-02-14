@@ -36,6 +36,8 @@
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                 aria-label="No of Days: activate to sort column ascending">Number of Days</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                aria-label="Handover Staff: activate to sort column ascending">Handover Staff</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                 aria-label="Reason: activate to sort column ascending">Reason</th>
                                             <th ass="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
                                                     aria-sort="ascending" aria-label="remark: activate to sort column descending" style="text-align: center;">@lang('lang.remark')</th>     
@@ -58,25 +60,26 @@
                                                     <td >{{\Carbon\Carbon::parse($request->start_date)->format('d-M-Y') ?? ''}}</td>
                                                     <td>{{\Carbon\Carbon::parse($request->end_date)->format('d-M-Y') ?? ''}}</td>
                                                     <td>{{$request->number_of_day}} Day</td>
+                                                    <td>{{$request->handover ? $request->handover->employee_name_en : ""}}</td>
                                                     <td>{{$request->reason}}</td>
                                                     <td>{{$request->remark}}</td>
                                                     <td>
                                                         @if ($request->status == "rejected")
-                                                            <span class="badge bg-inverse-danger" style="font-size: 13px;">HR rejected</span>
+                                                            <span class="badge bg-inverse-danger" style="font-size: 13px;">HR rejecte</span>
                                                         @elseif ($request->status == "cancel_hod")
                                                             <span class="badge bg-inverse-danger" style="font-size: 13px;">Pending HR approve cancel</span>
                                                         @elseif($request->status == "cancel")
                                                             <span class="badge bg-inverse-danger" style="font-size: 13px;">Cancel</span>
                                                         @elseif ($request->status == "rejected_lm")
-                                                            <span class="badge bg-inverse-danger" style="font-size: 13px;">Line manager rejected</span>
+                                                            <span class="badge bg-inverse-danger" style="font-size: 13px;">Line manager rejecte</span>
                                                         @elseif ($request->status == "rejected_hod")
-                                                            <span class="badge bg-inverse-danger" style="font-size: 13px;">Head department rejected</span>
+                                                            <span class="badge bg-inverse-danger" style="font-size: 13px;">Head department rejecte</span>
                                                         @elseif ($request->status == "pending")
-                                                        <span class="badge bg-inverse-info" style="font-size: 13px;">Pending line manager approved</span>
+                                                        <span class="badge bg-inverse-info" style="font-size: 13px;">Pending line manager approve</span>
                                                         @elseif ($request->status == "approved_lm")
-                                                            <span class="badge bg-inverse-info" style="font-size: 13px;">Pending head department approved</span>
+                                                            <span class="badge bg-inverse-info" style="font-size: 13px;">Pending head department approve</span>
                                                         @elseif ($request->status == "approved_hod")
-                                                            <span class="badge bg-inverse-info" style="font-size: 13px;">Pending HR Approved</span>
+                                                            <span class="badge bg-inverse-info" style="font-size: 13px;">Pending HR Approve</span>
                                                         @elseif($request->status == "approved")
                                                             <span class="badge bg-inverse-success" style="font-size: 13px;">Approved</span>
                                                         @endif
