@@ -42,7 +42,8 @@ $(function(){
     $("#employee_all").on("click", function(){
         if (!$(this).prop("checked")) {
             $(".employee_checkbox").prop("checked", false);
-            $(this).val(0)
+            $(this).val(0);
+            $(".employee_checkbox").val(0);
         }
         if ($(this).prop("checked")) {
             $(".employee_checkbox").prop("checked", true);
@@ -54,6 +55,7 @@ $(function(){
         if (!$(this).prop("checked")) {
             $(".all_employee_checkbox").prop("checked", false);
             $(this).val(0)
+            $(".all_employee_checkbox").val(0);
         }
         if ($(this).prop("checked")) {
             $(".all_employee_checkbox").prop("checked", true);
@@ -152,6 +154,28 @@ $(function(){
             $(this).val(1)
         }
     });
+    $("#leaves_report").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(".leave_report_checkbox").prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(".leave_report_checkbox").prop("checked", true);
+            $(this).val(1)
+            $(".leave_report_checkbox").val(1);
+        }
+    });
+    $(".leave_report_checkbox").on("click", function () {
+        if (!$(this).prop("checked")) {
+            $(this).prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(this).prop("checked", true);
+            $(this).val(1)
+        }
+    });
+
     $(document).ready(function(){
         let leavesAdmin = $('.leaves_admin_checkbox');
         leavesAdmin.change(function(){
@@ -172,6 +196,17 @@ $(function(){
             };
             if (countleavesEmployeeCheckboxes < $('input.leaves_employee_checkbox').length) {
                 $("#leaves_employee").prop("checked", false);
+            };
+        });
+
+        let leavesReport = $('.leave_report_checkbox');
+        leavesReport.change(function(){
+            let countleavesReportCheckboxes = leavesReport.filter(':checked').length;
+            if (countleavesReportCheckboxes == $('input.leave_report_checkbox').length) {
+                $("#leaves_report").prop("checked", true);
+            };
+            if (countleavesReportCheckboxes < $('input.leave_report_checkbox').length) {
+                $("#leaves_report").prop("checked", false);
             };
         });
 

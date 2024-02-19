@@ -4,10 +4,10 @@
         <div class="page-header">
             <div class="row align-items-center">
                 <div class="col">
-                    <h3 class="page-title">Leaves all request</h3>
+                    <h3 class="page-title">@lang('lang.leaves_all_request')</h3>
                     <ul class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="{{ url('/dashboad/employee') }}">Dashboard</a></li>
-                        <li class="breadcrumb-item active">Leaves Employee</li>
+                        <li class="breadcrumb-item"><a href="{{ url('/dashboad/employee') }}">@lang('lang.dashboard')</a></li>
+                        <li class="breadcrumb-item active">@lang('lang.leaves_all_request')</li>
                     </ul>
                 </div>
                 <div class="col-auto float-end ms-auto">
@@ -28,17 +28,17 @@
                                             <th class="sorting sorting_asc stuck-scroll-3" tabindex="0" aria-controls="DataTables_Table_0" aria-sort="ascending" aria-label="Profle: activate to sort column descending">#</th>
                                             <th class="sorting sorting_asc stuck-scroll-3" tabindex="0" aria-controls="DataTables_Table_0" aria-sort="ascending" aria-label="Employee: activate to sort column descending" >@lang('lang.employee_name')</th>
                                             <th class="sorting stuck-scroll-3" tabindex="0" aria-controls="DataTables_Table_0"
-                                                aria-label="Leave Type: activate to sort column ascending">Leave Type</th>
+                                                aria-label="Leave Type: activate to sort column ascending">@lang('lang.leave_type')</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                 aria-label="From: activate to sort column ascending">@lang('lang.start_date')</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                 aria-label="To: activate to sort column ascending">@lang('lang.end_date')</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                aria-label="No of Days: activate to sort column ascending">Number of Days</th>
+                                                aria-label="No of Days: activate to sort column ascending">@lang('lang.number_of_days')</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                aria-label="Handover Staff: activate to sort column ascending">Handover Staff</th>
+                                                aria-label="Handover Staff: activate to sort column ascending">@lang('lang.handover_staff')</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                aria-label="Reason: activate to sort column ascending">Reason</th>
+                                                aria-label="Reason: activate to sort column ascending">@lang('lang.reason')</th>
                                             <th ass="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
                                                     aria-sort="ascending" aria-label="remark: activate to sort column descending" style="text-align: center;">@lang('lang.remark')</th>     
                                             <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
@@ -86,23 +86,29 @@
                                                     </td>
                                                     @if (Auth::user()->RolePermission != "HR" && (Auth::user()->department->direct_manager_id == Auth::user()->id || Auth::user()->branch->direct_manager_id == Auth::user()->id ))
                                                         <td class="text-end">
-                                                            @if ($request->end_date >= \Carbon\Carbon::now()->format('Y-m-d'))
-                                                                @if ($request->status == "approved")
-                                                                    <button class="btn btn-outline-danger btn-sm btn-cancel" 
-                                                                        data-id="{{$request->id}}"
-                                                                        data-condiction="{{Auth::user()->RolePermission}}"
-                                                                    >@lang('lang.cancel')</button>
-                                                                @elseif($request->status == "approved_hod")
-                                                                    <button class="btn btn-outline-secondary btn-sm btn-rejected" 
-                                                                        data-id="{{$request->id}}"
-                                                                        data-status="{{$request->status}}"
-                                                                        data-employeename="{{$request->employee->employee_name_en}}"
-                                                                        data-startdate="{{$request->start_date}}"
-                                                                        data-enddate="{{$request->end_date}}"
-                                                                        data-starthalfday="{{$request->start_half_day}}"
-                                                                        data-endhalfday="{{$request->end_half_day}}"
-                                                                        data-reason="{{$request->reason}}"
-                                                                    >@lang('lang.reject')</button>
+                                                            @if (permissionAccess("m10-s1","is_cancel")->value == "1" || permissionAccess("m10-s1","is_reject")->value == "1")
+                                                                @if ($request->end_date >= \Carbon\Carbon::now()->format('Y-m-d'))
+                                                                    @if ($request->status == "approved")
+                                                                        @if (permissionAccess("m10-s1","is_cancel")->value == "1")
+                                                                            <button class="btn btn-outline-danger btn-sm btn-cancel" 
+                                                                                data-id="{{$request->id}}"
+                                                                                data-condiction="{{Auth::user()->RolePermission}}"
+                                                                            >@lang('lang.cancel')</button>
+                                                                        @endif
+                                                                    @elseif($request->status == "approved_hod")
+                                                                        @if (permissionAccess("m10-s1","is_reject")->value == "1")
+                                                                            <button class="btn btn-outline-secondary btn-sm btn-rejected" 
+                                                                                data-id="{{$request->id}}"
+                                                                                data-status="{{$request->status}}"
+                                                                                data-employeename="{{$request->employee->employee_name_en}}"
+                                                                                data-startdate="{{$request->start_date}}"
+                                                                                data-enddate="{{$request->end_date}}"
+                                                                                data-starthalfday="{{$request->start_half_day}}"
+                                                                                data-endhalfday="{{$request->end_half_day}}"
+                                                                                data-reason="{{$request->reason}}"
+                                                                            >@lang('lang.reject')</button>
+                                                                        @endif
+                                                                    @endif
                                                                 @endif
                                                             @endif
                                                         </td>

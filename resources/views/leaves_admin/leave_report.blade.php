@@ -20,33 +20,21 @@
         <div class="page-header">
             <div class="row align-items-center">
                 <div class="col">
-                    <h3 class="page-title">Leaves Report</h3>
+                    <h3 class="page-title">@lang('lang.leaves_report')</h3>
                     <ul class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="{{ url('/dashboad/employee') }}">Dashboard</a></li>
-                        <li class="breadcrumb-item active">Leaves Report</li>
+                        <li class="breadcrumb-item"><a href="{{ url('/dashboad/employee') }}">@lang('lang.dashboard')</a></li>
+                        <li class="breadcrumb-item active">@lang('lang.leaves_report')</li>
                     </ul>
                 </div>
             </div>
         </div>
         <form  class="needs-validation" novalidate>
-            {{-- @csrf --}}
-            
             <div class="row">
                 <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
                     <div class="form-group cls-research">
                         <input type="text" class="form-control" name="employee_name" id="employee_name" placeholder="@lang('lang.employee_name')" value="{{old('employee_name')}}">
                     </div>
                 </div>
-                {{-- <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
-                    <div class="form-group leave-disply-search">
-                        <select class="select form-control" id="type_id" data-select2-id="select2-data-2-c0n4" name="type_id">
-                            <option value="" data-select2-id="select2-data-2-c0n4">@lang('lang.all_type')</option>
-                            @foreach ($leaveType as $item)
-                                <option value="{{$item->id}}">{{$item->name}}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div> --}}
                 <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
                     <div class="form-group leave-disply-search">
                         <select class="select form-control" id="department_id" data-select2-id="select2-data-2-c0n3" name="department_id">
@@ -73,12 +61,12 @@
                             <span class="btn-text-search"><i class="fa fa-search"></i></span>
                             <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
                         </button>
-                        {{-- @if (permissionAccess("m6-s3","is_export")->value == "1" ) --}}
+                        @if (permissionAccess("m10-s3","is_print")->value == "1") 
                             <button type="button" class="btn btn-sm btn-outline-secondary btn_excel me-2" id="icon-search-download-reload">
                                 <span class="btn-text-excel"><i class="fa fa-arrow-circle-down" aria-hidden="true"></i></span>
                                 <span id="btn-text-loading-excel" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
                             </button>
-                        {{-- @endif --}}
+                        @endif
                         <button type="button" class="btn btn-sm btn-outline-secondary reset-btn" id="icon-search-download-reload">
                             <span class="btn-text-reset"><i class="fa fa-undo"></i></span>
                             <span id="btn-reset-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
@@ -112,33 +100,33 @@
                                                 aria-label="location: activate to sort column descending">@lang('lang.join_date')</th>
                                             <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
                                                 colspan="2" aria-label="Annual: activate to sort column descending"
-                                                style="text-align: center">Annual Leave</th>
+                                                style="text-align: center">@lang('lang.annual_leave')</th>
                                             <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
                                                 colspan="2"  aria-sort="ascending" aria-label="Sick: activate to sort column descending"
-                                                style="text-align: center">Sick Leave</th>
+                                                style="text-align: center">@lang('lang.sick_leave')</th>
                                             <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
                                                 colspan="2" aria-sort="ascending" aria-label="Profle: activate to sort column descending"
-                                                style="text-align: center">Special Leave</th>
+                                                style="text-align: center">@lang('lang.special_leave')</th>
                                             <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
                                                 colspan="2" aria-sort="ascending" aria-label="Profle: activate to sort column descending"
-                                                style="text-align: center">Unpaid Leave</th>
+                                                style="text-align: center">@lang('lang.unpaid_leave')</th>
                                             <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
                                                 colspan="3" aria-sort="ascending" aria-label="Profle: activate to sort column descending"
-                                                style="text-align: center">Carried Forward Leave</th>
+                                                style="text-align: center">@lang('lang.carried_forward_leave')</th>
                                            
                                         </tr>
                                         <tr>
-                                            <th>Day Taken</th>
-                                            <th>Balance</th>
-                                            <th>Day Taken</th>
-                                            <th>Balance</th>
-                                            <th>Day Taken</th>
-                                            <th>Balance</th>
-                                            <th>Day Taken</th>
-                                            <th>Balance</th>
-                                            <th>Year 1</th>
-                                            <th>Year 2</th>
-                                            <th>Year 3</th>
+                                            <th>@lang('lang.day_taken')</th>
+                                            <th>@lang('lang.balance')</th>
+                                            <th>@lang('lang.day_taken')</th>
+                                            <th>@lang('lang.balance')</th>
+                                            <th>@lang('lang.day_taken')</th>
+                                            <th>@lang('lang.balance')</th>
+                                            <th>@lang('lang.day_taken')</th>
+                                            <th>@lang('lang.balance')</th>
+                                            <th>@lang('lang.year') 1</th>
+                                            <th>@lang('lang.year') 2</th>
+                                            <th>@lang('lang.year') 3</th>
                                         </tr>
                                     </thead>
                                     <tbody>

@@ -74,6 +74,7 @@ var dataPermission = function () {
                     "is_cancel": $("#employee_cancel").val(),
                     "is_print": $("#employee_print").val(),
                     "is_export": $("#employee_export").val(),
+                    "is_view_salary": $("#employee_view_salary").val(),
                 }
             ]
         })
@@ -84,7 +85,8 @@ var dataPermission = function () {
     let leave_all = $('#leave_all').filter(':checked').length;
     let leaves_employee_checkbox = $('.leaves_employee_checkbox').filter(':checked').length;
     let leaves_admin_checkbox = $('.leaves_admin_checkbox').filter(':checked').length;
-    if (leave_all || leaves_admin_checkbox || leaves_employee_checkbox) {
+    let leaves_report_checkbox = $('.leave_report_checkbox').filter(':checked').length;
+    if (leave_all || leaves_admin_checkbox || leaves_employee_checkbox || leaves_report_checkbox) {
         data.push({
             name: "employee_block",
             permission: [
@@ -112,6 +114,7 @@ var dataPermission = function () {
                     "is_update": $("#leaves_admin_edit").val(),
                     "is_delete": $("#leaves_admin_delete").val(),
                     "is_reject": $("#leaves_admin_reject").val(),
+                    "is_cancel": $("#leaves_admin_cancel").val(),
                     "is_print": $("#leaves_admin_print").val(),
                     "is_export": $("#leaves_admin_export").val(),
                 }
@@ -135,6 +138,22 @@ var dataPermission = function () {
                     "is_cancel": $("#leaves_employee_cancel").val(),
                     "is_print": $("#leaves_employee_print").val(),
                     "is_export": $("#leaves_employee_export").val(),
+                }
+            ]
+        })
+    }
+    if (leaves_report_checkbox) {
+        data.push({
+            name: "leaves_report",
+            permission: [
+                {
+                    "name":"lang.leaves_report",
+                    "sub_menu_id":"10",
+                    "menu_id":"m10-s3",
+                    "url":"leaves/report",
+                    "is_view": $("#leave_report_view").val(),
+                    "is_print": $("#leave_report_print").val(),
+                    "is_export": $("#leave_report_export").val(),
                 }
             ]
         })

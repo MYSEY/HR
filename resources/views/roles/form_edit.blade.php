@@ -103,6 +103,7 @@
             if (allEmployees == $('input.all_employee_checkbox').length) {
                 $("#all_employee").prop("checked", true);
             };
+            // module leave
             let leavesAdmin = $('.leaves_admin_checkbox').filter(':checked').length;
             if (leavesAdmin == $('input.leaves_admin_checkbox').length) {
                 $("#leaves_admin").prop("checked", true);
@@ -110,6 +111,11 @@
             let leavesEmployee = $('.leaves_employee_checkbox').filter(':checked').length;
             if (leavesEmployee == $('input.leaves_employee_checkbox').length) {
                 $("#leaves_employee").prop("checked", true);
+            };
+
+            let leavesReport = $('.leave_report_checkbox').filter(':checked').length;
+            if (leavesReport == $('input.leave_report_checkbox').length) {
+                $("#leaves_report").prop("checked", true);
             };
             // module recruitment
             let candidate_CVs_checkbox = $('.candidate_CVs_checkbox').filter(':checked').length;

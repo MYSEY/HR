@@ -77,15 +77,14 @@
         <div class="page-header">
             <div class="row align-items-center">
                 <div class="col">
-                    <h3 class="page-title">Leaves Employee</h3>
+                    <h3 class="page-title">@lang('lang.leaves_employee')</h3>
                     <ul class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="{{ url('/dashboad/employee') }}">Dashboard</a></li>
-                        <li class="breadcrumb-item active">Leaves Employee</li>
+                        <li class="breadcrumb-item"><a href="{{ url('/dashboad/employee') }}">@lang('lang.dashboard')</a></li>
+                        <li class="breadcrumb-item active">@lang('lang.leaves_employee')</li>
                     </ul>
                 </div>
                 <div class="col-auto float-end ms-auto">
-                    <a href="#" class="btn add-btn" data-bs-toggle="modal" data-bs-target="#add_leave"><i
-                            class="fa fa-plus"></i> Request Leave</a>
+                    @if (permissionAccess("m10-s2","is_create")->value == "1") <a href="#" class="btn add-btn" data-bs-toggle="modal" data-bs-target="#add_leave"><i class="fa fa-plus"></i>@lang('lang.request_leave')</a>@endif
                 </div>
             </div>
         </div>
@@ -93,25 +92,25 @@
         <div class="row">
             <div class="col-md-3">
                 <div class="stats-info">
-                    <h6>Annual Leave</h6>
+                    <h6>@lang('lang.annual_leave')</h6>
                     <h4>{{$LeaveAllocation ? $LeaveAllocation->total_annual_leave : 0}}</h4>
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="stats-info">
-                    <h6>Sick Leave</h6>
+                    <h6>@lang('lang.sick_leave')</h6>
                     <h4>{{$LeaveAllocation ? $LeaveAllocation->total_sick_leave : 0}}</h4>
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="stats-info">
-                    <h6>Special Leave</h6>
+                    <h6>@lang('lang.special_leave')</h6>
                     <h4>{{$LeaveAllocation ? $LeaveAllocation->total_special_leave : 0}}</h4>
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="stats-info">
-                    <h6>Unpaid Leave</h6>
+                    <h6>@lang('lang.unpaid_leave')</h6>
                     <h4>{{$LeaveAllocation ? $LeaveAllocation->total_unpaid_leave : 0}}</h4>
                 </div>
             </div>
@@ -132,21 +131,20 @@
                                                 aria-label="#: activate to sort column descending">#</th>
                                             <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
                                                 colspan="2" aria-label="Period of Leave: activate to sort column descending"
-                                                style="text-align: center">Period of Leave</th>
+                                                style="text-align: center">@lang('lang.period_of_leave')</th>
                                             <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
                                                 colspan="2" aria-label="Annual: activate to sort column descending"
-                                                style="text-align: center">Annual Leave</th>
+                                                style="text-align: center">@lang('lang.annual_leave')</th>
                                             <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
                                                 colspan="2"  aria-sort="ascending" aria-label="Sick: activate to sort column descending"
-                                                style="text-align: center">Sick Leave</th>
+                                                style="text-align: center">@lang('lang.sick_leave')</th>
                                             <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
                                                 colspan="2" aria-sort="ascending" aria-label="Profle: activate to sort column descending"
-                                                style="text-align: center">Special Leave</th>
+                                                style="text-align: center">@lang('lang.special_leave')</th>
                                             <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
                                                 rowspan="2" aria-sort="ascending" aria-label="reason: activate to sort column descending">@lang('lang.reason')</th>
                                             <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
                                                 rowspan="2" aria-sort="ascending" aria-label="remark: activate to sort column descending">@lang('lang.remark')</th>
-                                                
                                             <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
                                                 rowspan="2" aria-sort="ascending" aria-label="approve_by: activate to sort column descending" style="text-align: center;">@lang('lang.status')</th>
                                             <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
@@ -154,14 +152,14 @@
                                                 aria-label="actions: activate to sort column descending">@lang('lang.actions')</th>
                                         </tr>
                                         <tr>
-                                            <th>From</th>
-                                            <th>To </th>
-                                            <th>Day Taken</th>
-                                            <th>Balance (today) </th>
-                                            <th>Day Taken</th>
-                                            <th>Balance (today) </th>
-                                            <th>Day Taken</th>
-                                            <th>Balance (today) </th>
+                                            <th>@lang('lang.from')</th>
+                                            <th>@lang('lang.to')</th>
+                                            <th>@lang('lang.day_taken')</th>
+                                            <th>@lang('lang.balance')</th>
+                                            <th>@lang('lang.day_taken')</th>
+                                            <th>@lang('lang.balance')</th>
+                                            <th>@lang('lang.day_taken')</th>
+                                            <th>@lang('lang.balance')</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -213,14 +211,20 @@
                                                         @endif
                                                     </td>
                                                     <td class="text-end">
-                                                        @if (isset($request->StatusApprve["pending"]))
-                                                            <div class="dropdown dropdown-action">
-                                                                <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i  class="material-icons">more_vert</i></a>
-                                                                <div class="dropdown-menu dropdown-menu-right">
-                                                                    <a class="dropdown-item update" data-toggle="modal" data-id="{{$request->id}}"><i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')</a>
-                                                                    <a class="dropdown-item leaveDelete" href="#" data-toggle="modal" data-id="{{$request->id}}" data-numberday="{{$request->number_of_day}}" data-target="#delete_leave"><i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
+                                                        @if (permissionAccess("m10-s2","is_update")->value == "1" || permissionAccess("m10-s2","is_delete")->value == "1")
+                                                            @if (isset($request->StatusApprve["pending"]))
+                                                                <div class="dropdown dropdown-action">
+                                                                    <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i  class="material-icons">more_vert</i></a>
+                                                                    <div class="dropdown-menu dropdown-menu-right">
+                                                                        @if (permissionAccess("m10-s2","is_update")->value == "1")
+                                                                            <a class="dropdown-item update" data-toggle="modal" data-id="{{$request->id}}"><i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')</a>
+                                                                        @endif
+                                                                        @if (permissionAccess("m10-s2","is_delete")->value == "1")
+                                                                            <a class="dropdown-item leaveDelete" href="#" data-toggle="modal" data-id="{{$request->id}}" data-numberday="{{$request->number_of_day}}" data-target="#delete_leave"><i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
+                                                                        @endif
+                                                                    </div>
                                                                 </div>
-                                                            </div>
+                                                            @endif
                                                         @endif
                                                     </td>
                                                 </tr>

@@ -29,6 +29,7 @@ class permissions extends Model
         'is_active',
         'is_create',
         'is_view',
+        'is_view_salary',
         'is_update',
         'is_delete',
         'is_cancel',

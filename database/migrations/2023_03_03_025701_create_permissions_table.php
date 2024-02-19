@@ -28,6 +28,7 @@ return new class extends Migration
             $table->boolean('is_active')->nullable();
             $table->boolean('is_create')->nullable();
             $table->boolean('is_view')->nullable();
+            $table->boolean('is_view_salary')->nullable();
             $table->boolean('is_update')->nullable();
             $table->boolean('is_delete')->nullable();
             $table->boolean('is_cancel')->nullable();

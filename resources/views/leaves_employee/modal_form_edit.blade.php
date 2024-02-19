@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Edit Leave Request</h5>
+                <h5 class="modal-title">@lang('lang.edit_leave_request')</h5>
                 <button type="button" class="close btn-close" data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -13,7 +13,7 @@
                     <div class="row">
                         <div class="col-sm-12">
                             <div class="form-group hr-form-group-select2">
-                                <label>Leave Type<span class="text-danger">*</span></label>
+                                <label>@lang('lang.leave_type')<span class="text-danger">*</span></label>
                                 <select class="hr-select2-option requered e_leave_required" id="e_leave_type_id" required>
 
                                 </select>
@@ -24,7 +24,7 @@
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <div class="form-group">
-                                    <label>Start Date <span class="text-danger">*</span></label>
+                                    <label>@lang('lang.start_date') <span class="text-danger">*</span></label>
                                     <div class="cal-icon">
                                         <input type="text" class="form-control datetimepicker e_leave_required" id="e_start_date" required>
                                     </div>
@@ -34,7 +34,7 @@
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <div class="form-group">
-                                    <label>End Date <span class="text-danger">*</span></label>
+                                    <label>@lang('lang.end_date') <span class="text-danger">*</span></label>
                                     <div class="cal-icon">
                                         <input type="text" class="form-control datetimepicker e_leave_required" id="e_end_date" required>
                                     </div>
@@ -47,7 +47,7 @@
                         <div class="col-md-12">
                             <div class="mb-3">
                                 <div class="form-group">
-                                    <label class="container-checkbox">Half day?
+                                    <label class="container-checkbox">@lang('lang.half_day') ?
                                         <input type="checkbox" class="e_check_half_day"> <span class="checkmark"></span>
                                     </label>
                                 </div>
@@ -57,10 +57,10 @@
                     <div class="row e_half_day" style="display: none">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label class="container-checkbox me-4">AM
+                                <label class="container-checkbox me-4">@lang('lang.am')
                                     <input type="checkbox" class="e_half_day_checkbox_am e_half_clear_checkbox"> <span class="checkmark"></span>
                                 </label>
-                                <label class="container-checkbox">PM
+                                <label class="container-checkbox">@lang('lang.pm')
                                     <input type="checkbox" class="e_half_day_checkbox_pm e_half_clear_checkbox"> <span class="checkmark"></span>
                                 </label>
                             </div>
@@ -72,13 +72,13 @@
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <div class="form-group">
-                                        <label>Start day?</label>
+                                        <label>@lang('lang.start_day') ?</label>
                                     </div>
                                     <div class="form-group">
-                                        <label class="container-checkbox me-4">AM
+                                        <label class="container-checkbox me-4">@lang('lang.am')
                                             <input type="checkbox" class="e_half_start_day_checkbox_am e_half_clear_checkbox e_isCheckboxx start_half_check"> <span class="checkmark"></span>
                                         </label>
-                                        <label class="container-checkbox">PM
+                                        <label class="container-checkbox">@lang('lang.pm')
                                             <input type="checkbox" class="e_half_start_day_checkbox_pm e_half_clear_checkbox e_isCheckboxx start_half_check" > <span class="checkmark"></span>
                                         </label>
                                     </div>
@@ -87,13 +87,13 @@
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <div class="form-group">
-                                        <label>End day?</label>
+                                        <label>@lang('lang.end_day') ?</label>
                                     </div>
                                     <div class="form-group">
-                                        <label class="container-checkbox me-4">AM
+                                        <label class="container-checkbox me-4">@lang('lang.am')
                                             <input type="checkbox" class="e_half_end_day_checkbox_am e_half_clear_checkbox e_isCheckboxx end_half_check" > <span class="checkmark"></span>
                                         </label>
-                                        <label class="container-checkbox">PM
+                                        <label class="container-checkbox">@lang('lang.pm')
                                             <input type="checkbox" class="e_half_end_day_checkbox_pm e_half_clear_checkbox e_isCheckboxx end_half_check" > <span class="checkmark"></span>
                                         </label>
                                     </div>
@@ -105,7 +105,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label>Number of days <span class="text-danger">*</span></label>
+                                <label>@lang('lang.number_of_days') <span class="text-danger">*</span></label>
                                 <input type="number" disabled class="form-control" id="e_number_of_day">
                             </div>
                         </div>
@@ -113,7 +113,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label>Handover Staff </label>
+                                <label>@lang('lang.handover_staff') </label>
                                 <select class="hr-select2-option " id="e_handover_staff_id">
                                 </select>
                             </div>
@@ -122,7 +122,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label >Leave Reason <span class="text-danger">*</span></label>
+                                <label >@lang('lang.leave_reason') <span class="text-danger">*</span></label>
                                 <textarea class="form-control requered e_leave_required" id="e_reason" placeholder="Write down why you want to relax" required></textarea>
                             </div>
                         </div>
@@ -130,7 +130,7 @@
                     <div class="submit-section">
                         <button type="submit" class="btn btn-primary submit-btn btn-e-apply">
                             <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading') </span>
-                            <span class="btn-txt">Apply</span>
+                            <span class="btn-txt">@lang('lang.apply')</span>
                         </button>
                     </div>
                 </form>

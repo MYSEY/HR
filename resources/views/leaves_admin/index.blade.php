@@ -20,10 +20,10 @@
         <div class="page-header">
             <div class="row align-items-center">
                 <div class="col">
-                    <h3 class="page-title">Leaves Admin</h3>
+                    <h3 class="page-title">@lang('lang.leaves_admin')</h3>
                     <ul class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="{{ url('/dashboad/employee') }}">Dashboard</a></li>
-                        <li class="breadcrumb-item active">Leaves Admin</li>
+                        <li class="breadcrumb-item"><a href="{{ url('/dashboad/employee') }}">@lang('lang.dashboard')</a></li>
+                        <li class="breadcrumb-item active">@lang('lang.leaves_admin')</li>
                     </ul>
                 </div>
             </div>
@@ -77,15 +77,15 @@
                 <div class="col-md-12 col-ms-12 p-0">
                     <ul class="nav nav-tabs nav-tabs-bottom" role="tablist">
                         <li class="nav-item" role="presentation">
-                            <a class="nav-link active tab_leave_none" data-bs-toggle="tab" href="#leave_request" aria-selected="true" role="tab" data-tab-id="1">Leave Requests ({{count($dataLeaveRequest)}})</a>
+                            <a class="nav-link active tab_leave_none" data-bs-toggle="tab" href="#leave_request" aria-selected="true" role="tab" data-tab-id="1">@lang('lang.leave_requests') ({{count($dataLeaveRequest)}})</a>
                         </li>
                         @if (Auth::user()->RolePermission == "HR")
                             <li class="nav-item" role="presentation">
-                                <a class="nav-link tab_leave_none" data-bs-toggle="tab" href="#leave_request_cancel" aria-selected="false" data-tab-id="2" role="tab">Requests Cancel ({{count($requestCancels)}})</a>
+                                <a class="nav-link tab_leave_none" data-bs-toggle="tab" href="#leave_request_cancel" aria-selected="false" data-tab-id="2" role="tab">@lang('lang.requests_cancel') ({{count($requestCancels)}})</a>
                             </li>
                         @endif
                         <li class="nav-item" role="presentation">
-                            <a class="nav-link" data-bs-toggle="tab" id="tab_leave_allocations" href="#leave_allocations" aria-selected="false" data-tab-id="3" role="tab" tabindex="-1">Leave allocation</a>
+                            <a class="nav-link" data-bs-toggle="tab" id="tab_leave_allocations" href="#leave_allocations" aria-selected="false" data-tab-id="3" role="tab" tabindex="-1">@lang('lang.leave_allocation')</a>
                         </li>
                     </ul>
                     <div class="tab-content">
@@ -102,17 +102,17 @@
                                                                 <th class="sorting sorting_asc stuck-scroll-3" tabindex="0" aria-controls="DataTables_Table_0" aria-sort="ascending" aria-label="Profle: activate to sort column descending">#</th>
                                                                 <th class="sorting sorting_asc stuck-scroll-3" tabindex="0" aria-controls="DataTables_Table_0" aria-sort="ascending" aria-label="Employee: activate to sort column descending" >@lang('lang.employee_name')</th>
                                                                 <th class="sorting stuck-scroll-3" tabindex="0" aria-controls="DataTables_Table_0"
-                                                                    aria-label="Leave Type: activate to sort column ascending">Leave Type</th>
+                                                                    aria-label="Leave Type: activate to sort column ascending">@lang('lang.leave_type')</th>
                                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                                     aria-label="From: activate to sort column ascending">@lang('lang.start_date')</th>
                                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                                     aria-label="To: activate to sort column ascending">@lang('lang.end_date')</th>
                                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                                    aria-label="No of Days: activate to sort column ascending">Number of Days</th>
+                                                                    aria-label="No of Days: activate to sort column ascending">@lang('lang.number_of_days')</th>
                                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                                    aria-label="No of Days: activate to sort column ascending">Handover Staff</th>
+                                                                    aria-label="No of Days: activate to sort column ascending">@lang('lang.handover_staff')</th>
                                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                                    aria-label="Reason: activate to sort column ascending">Reason</th>
+                                                                    aria-label="Reason: activate to sort column ascending">@lang('lang.reason')</th>
                                                                 <th ass="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
                                                                         aria-sort="ascending" aria-label="remark: activate to sort column descending" style="text-align: center;">@lang('lang.remark')</th>     
                                                                 <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
@@ -155,7 +155,8 @@
                                                                             @endif
                                                                         </td>
                                                                         <td class="text-end">
-                                                                            @if ($request->status == "pending" || $request->status == "approved_lm" || $request->status == "approved_hod")
+                                                                            @if (permissionAccess("m10-s1","is_approve")->value == "1" || permissionAccess("m10-s1","is_reject")->value == "1")
+                                                                                @if ($request->status == "pending" || $request->status == "approved_lm" || $request->status == "approved_hod")
                                                                                     <button class="btn btn-outline-secondary btn-sm btn-approved" 
                                                                                         data-id="{{$request->id}}"
                                                                                         data-condition="{{Auth::user()->RolePermission}}"
@@ -167,7 +168,8 @@
                                                                                         data-endhalfday="{{$request->end_half_day}}"
                                                                                         data-handover="{{ $request->handover ? $request->handover->employee_name_en : ''}}"
                                                                                         data-reason="{{$request->reason}}"
-                                                                                    >@lang('lang.approved') / @lang('lang.reject')</button>
+                                                                                    >@if (permissionAccess("m10-s1","is_approve")->value == "1")@lang('lang.approve')@endif @if (permissionAccess("m10-s1","is_reject")->value == "1")/ @lang('lang.reject')@endif</button>
+                                                                                @endif
                                                                             @endif
                                                                         </td>
                                                                     </tr>
@@ -196,17 +198,17 @@
                                                                     <th class="sorting sorting_asc stuck-scroll-3" tabindex="0" aria-controls="DataTables_Table_0" aria-sort="ascending" aria-label="Profle: activate to sort column descending">#</th>
                                                                     <th class="sorting sorting_asc stuck-scroll-3" tabindex="0" aria-controls="DataTables_Table_0" aria-sort="ascending" aria-label="Employee: activate to sort column descending" >@lang('lang.employee_name')</th>
                                                                     <th class="sorting stuck-scroll-3" tabindex="0" aria-controls="DataTables_Table_0"
-                                                                        aria-label="Leave Type: activate to sort column ascending">Leave Type</th>
+                                                                        aria-label="Leave Type: activate to sort column ascending">@lang('lang.leave_type')</th>
                                                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                                         aria-label="From: activate to sort column ascending">@lang('lang.start_date')</th>
                                                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                                         aria-label="To: activate to sort column ascending">@lang('lang.end_date')</th>
                                                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                                        aria-label="No of Days: activate to sort column ascending">Number of Days</th>
+                                                                        aria-label="No of Days: activate to sort column ascending">@lang('lang.number_of_days')</th>
                                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                                        aria-label="Handover Staff: activate to sort column ascending">Handover Staff</th>
+                                                                        aria-label="Handover Staff: activate to sort column ascending">@lang('lang.handover_staff')</th>
                                                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                                        aria-label="Reason: activate to sort column ascending">Reason</th>
+                                                                        aria-label="Reason: activate to sort column ascending">@lang('lang.reason')</th>
                                                                     <th ass="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
                                                                             aria-sort="ascending" aria-label="remark: activate to sort column descending" style="text-align: center;">@lang('lang.remark')</th>     
                                                                     <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
@@ -233,10 +235,12 @@
                                                                                 <span class="badge bg-inverse-danger" style="font-size: 13px;">Heard department cancel</span>
                                                                             </td>
                                                                             <td class="text-end">
-                                                                                <button class="btn btn-outline-danger btn-sm btn-cancel" 
-                                                                                    data-id="{{$request->id}}"
-                                                                                    data-condiction="{{Auth::user()->RolePermission}}"
-                                                                                >@lang('lang.cancel')</button>
+                                                                                @if (permissionAccess("m10-s1","is_cancel")->value == "1")
+                                                                                    <button class="btn btn-outline-danger btn-sm btn-cancel" 
+                                                                                        data-id="{{$request->id}}"
+                                                                                        data-condiction="{{Auth::user()->RolePermission}}"
+                                                                                    >@lang('lang.cancel')</button>
+                                                                                @endif
                                                                             </td>
                                                                         </tr>
                                                                     @endforeach
@@ -275,24 +279,24 @@
                                                                 @endif
                                                                 <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
                                                                     colspan="2" aria-label="Annual: activate to sort column descending"
-                                                                    style="text-align: center">Annual Leave</th>
+                                                                    style="text-align: center">@lang('lang.annual_leave')</th>
                                                                 <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
                                                                     colspan="2"  aria-sort="ascending" aria-label="Sick: activate to sort column descending"
-                                                                    style="text-align: center">Sick Leave</th>
+                                                                    style="text-align: center">@lang('lang.sick_leave')</th>
                                                                 <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
                                                                     colspan="2" aria-sort="ascending" aria-label="Profle: activate to sort column descending"
-                                                                    style="text-align: center">Special Leave</th>
+                                                                    style="text-align: center">@lang('lang.special_leave')</th>
                                                                 <th class="sorting sorting_asc vertical-center" tabindex="0" aria-controls="DataTables_Table_0"
                                                                     rowspan="2" aria-sort="ascending"
                                                                     aria-label="actions: activate to sort column descending" style="text-align: center">@lang('lang.actions')</th>
                                                             </tr>
                                                             <tr>
-                                                                <th>Day Taken</th>
-                                                                <th>Balance</th>
-                                                                <th>Day Taken</th>
-                                                                <th>Balance</th>
-                                                                <th>Day Taken</th>
-                                                                <th>Balance</th>
+                                                                <th>@lang('lang.day_taken')</th>
+                                                                <th>@lang('lang.balance')</th>
+                                                                <th>@lang('lang.day_taken')</th>
+                                                                <th>@lang('lang.balance')</th>
+                                                                <th>@lang('lang.day_taken')</th>
+                                                                <th>@lang('lang.balance')</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
@@ -462,6 +466,8 @@
             })
         });
         $(document).on('click','.btn-approved', function(){
+            let is_approve = "{{ Helper::permissionAccess('m10-s1','is_approve') }}";
+            let is_reject = "{{ Helper::permissionAccess('m10-s1','is_reject') }}";
             let id = $(this).data("id");
             let status = $(this).data("status");
             let condition = $(this).data("condition");
@@ -488,81 +494,88 @@
             let endhalfday = $(this).data("endhalfday") ? '  half day ( '+ $(this).data("endhalfday")+" )" : "";
             let handover = $(this).data("handover");
             let reason = $(this).data("reason");
-            let description = "@lang('lang.are_you_sure_want_to_approve') or rejected?";
+            let description = "@lang('lang.are_you_sure_want_to_approve') or @lang('lang.reject')?";
             let text_label = "";
-            let button_ok = {
-                text: '@lang("lang.approved")',
-                btnClass: 'btn-green btn-sm',
-                action: function () {
-                    var id = this.$content.find('.id').val();
-                    let remark = this.$content.find('.remark').val();
-                    axios.post('{{ URL('leaves/admin/approve') }}', {
-                        'id': id,
-                        'remark': remark,
-                        'status': "approved",
-                    }).then(function(response) {
-                        new Noty({
-                            title: "",
-                            text: "@lang('lang.the_process_has_been_successfully').",
-                            type: "success",
-                            timeout: 3000,
-                            icon: true
-                        }).show();
-                        window.location.replace("{{ URL('/leaves/admin') }}"); 
-                    }).catch(function(error) {
-                        new Noty({
-                            title: "",
-                            text: "@lang('lang.something_went_wrong_please_try_again_later').",
-                            type: "error",
-                            icon: true
-                        }).show();
-                    });
-                }
-            };
-            let danger = {
-                text: '@lang("lang.reject")',
-                btnClass: 'btn-red btn-sm',
-                action: function () {
-                    var id = this.$content.find('.id').val();
-                    var remark = this.$content.find('.remark').val();
-                    if (remark == ""){
-                        $(".remark").css("border","solid 1px red");
-                        new Noty({
-                            title: "",
-                            text: "Please enter infomation in the remark.",
-                            type: "error",
-                            timeout: 3000,
-                            icon: true
-                        }).show();
-                        return false;
+            let button_ok = "";
+            if (is_approve == 1 ) {
+                button_ok =   {
+                    text: '@lang("lang.approve")',
+                    btnClass: 'btn-green btn-sm',
+                    action: function () {
+                        var id = this.$content.find('.id').val();
+                        let remark = this.$content.find('.remark').val();
+                        axios.post('{{ URL('leaves/admin/approve') }}', {
+                            'id': id,
+                            'remark': remark,
+                            'status': "approved",
+                        }).then(function(response) {
+                            new Noty({
+                                title: "",
+                                text: "@lang('lang.the_process_has_been_successfully').",
+                                type: "success",
+                                timeout: 3000,
+                                icon: true
+                            }).show();
+                            window.location.replace("{{ URL('/leaves/admin') }}"); 
+                        }).catch(function(error) {
+                            new Noty({
+                                title: "",
+                                text: "@lang('lang.something_went_wrong_please_try_again_later').",
+                                type: "error",
+                                icon: true
+                            }).show();
+                        });
                     }
+                };
+            }
+            let btn_reject  = "";
+            if (is_reject == 1) {
+                btn_reject = {
+                    text: '@lang("lang.reject")',
+                    btnClass: 'btn-red btn-sm',
+                    action: function () {
+                        var id = this.$content.find('.id').val();
+                        var remark = this.$content.find('.remark').val();
+                        if (remark == ""){
+                            $(".remark").css("border","solid 1px red");
+                            new Noty({
+                                title: "",
+                                text: "Please enter infomation in the remark.",
+                                type: "error",
+                                timeout: 3000,
+                                icon: true
+                            }).show();
+                            return false;
+                        }
 
-                    axios.post('{{ URL('leaves/admin/reject') }}', {
-                        'id': id,
-                        'status': "rejected",
-                        'remark': remark,
-                    }).then(function(response) {
-                        new Noty({
-                            title: "",
-                            text: "@lang('lang.the_process_has_been_successfully').",
-                            type: "success",
-                            timeout: 3000,
-                            icon: true
-                        }).show();
-                        window.location.replace("{{ URL('/leaves/admin') }}"); 
-                    }).catch(function(error) {
-                        new Noty({
-                            title: "",
-                            text: "Som@lang('lang.something_went_wrong_please_try_again_later').",
-                            type: "error",
-                            icon: true
-                        }).show();
-                    });
-                }
-            };
+                        axios.post('{{ URL('leaves/admin/reject') }}', {
+                            'id': id,
+                            'status': "rejected",
+                            'remark': remark,
+                        }).then(function(response) {
+                            new Noty({
+                                title: "",
+                                text: "@lang('lang.the_process_has_been_successfully').",
+                                type: "success",
+                                timeout: 3000,
+                                icon: true
+                            }).show();
+                            window.location.replace("{{ URL('/leaves/admin') }}"); 
+                        }).catch(function(error) {
+                            new Noty({
+                                title: "",
+                                text: "Som@lang('lang.something_went_wrong_please_try_again_later').",
+                                type: "error",
+                                icon: true
+                            }).show();
+                        });
+                    }
+                };
+            }
+          
             $.confirm({
                 icon: 'fa fa-warning',
-                title: 'Employee request leave',
+                title: '@lang("lang.employee_request_leave")',
                 titleClass: 'text-center',
                 type: 'blue',
                 content: '' +
@@ -572,21 +585,21 @@
                         '<input type="hidden" class="form-control id" id="" name="" value="'+id+'">'+
                     '</div>' +
                     '<div class="form-group">'+
-                        '<p>Empployee Name: '+employeename+'</p>'+
-                        '<p>From: '+startdate+starthalfday+'</p>'+
-                        '<p>To: '+enddate+endhalfday+'</p>'+
-                        '<p>Handover Staff: '+handover+'</p>'+
-                        '<label>Reason:</label>'+
+                        '<p>@lang("lang.employee_name"): '+employeename+'</p>'+
+                        '<p>@lang("lang.from"): '+startdate+starthalfday+'</p>'+
+                        '<p>@lang("lang.to"): '+enddate+endhalfday+'</p>'+
+                        '<p>@lang("lang.handover_staff"): '+handover+'</p>'+
+                        '<label>@lang("lang.reason"):</label>'+
                         '<textarea disabled class="form-control">'+reason+'</textarea>'+
                     '</div>'+
                     '<div class="form-group">'+
-                        '<label>Remark</label>'+
+                        '<label>@lang("lang.remark")</label>'+
                         '<textarea class="form-control remark"></textarea>'+
                     '</div>'+
                 '</form>',
                 buttons: {
                     button_ok,
-                    danger,
+                    btn_reject,
                     cancel: {
                         text: '@lang("lang.close")',
                         btnClass: 'btn-secondary btn-sm',
