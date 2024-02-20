@@ -65,7 +65,7 @@ class LeavesEmployeeController extends Controller
      */
     public function store(Request $request)
     {
-        // try {
+        try {
             $data = $request->all();
             $LeaveAllocation = LeaveAllocation::where("employee_id", Auth::user()->id)->first();
             $LeaveType = LeaveType::where("id", $request->leave_type_id)->first();
@@ -74,10 +74,27 @@ class LeavesEmployeeController extends Controller
                 return redirect()->back();
                 DB::commit();
             }
-            $LeaveAllocation["total_annual_leave"] = $LeaveType->type == "annual_leave" ? $LeaveAllocation->total_annual_leave - $request->number_of_day : $LeaveAllocation->total_annual_leave;
-            $LeaveAllocation["total_sick_leave"] = $LeaveType->type == "sick_leave" ? $LeaveAllocation->total_sick_leave - $request->number_of_day : $LeaveAllocation->total_sick_leave;
-            $LeaveAllocation["total_special_leave"] = $LeaveType->type == "special_leave" ? $LeaveAllocation->total_special_leave - $request->number_of_day : $LeaveAllocation->total_special_leave;
-            $LeaveAllocation["total_unpaid_leave"] = $LeaveType->type == "unpaid_leave" ? $LeaveAllocation->total_unpaid_leave - $request->number_of_day : $LeaveAllocation->total_unpaid_leave;
+            if ($LeaveAllocation == null) {
+                LeaveAllocation::create([
+                    'employee_id'  => Auth::user()->id,
+                    'default_annual_leave'  => 0,
+                    'default_sick_leave'  => 0,
+                    'default_special_leave'  => 0,
+                    'default_unpaid_leave'  => 0,
+                    'total_annual_leave'    => $LeaveAllocation['total_annual_leave'] = 0 - $request->number_of_day,
+                    'total_sick_leave'  => 0,
+                    'total_special_leave'  => 0,
+                    'total_unpaid_leave'  => 0,
+                    'created_by'  => Auth::user()->id,
+                ]);
+            }else{
+                $LeaveAllocation["total_annual_leave"] = $LeaveType->type == "annual_leave" ? $LeaveAllocation->total_annual_leave - $request->number_of_day : $LeaveAllocation->total_annual_leave;
+                $LeaveAllocation["total_sick_leave"] = $LeaveType->type == "sick_leave" ? $LeaveAllocation->total_sick_leave - $request->number_of_day : $LeaveAllocation->total_sick_leave;
+                $LeaveAllocation["total_special_leave"] = $LeaveType->type == "special_leave" ? $LeaveAllocation->total_special_leave - $request->number_of_day : $LeaveAllocation->total_special_leave;
+                $LeaveAllocation["total_unpaid_leave"] = $LeaveType->type == "unpaid_leave" ? $LeaveAllocation->total_unpaid_leave - $request->number_of_day : $LeaveAllocation->total_unpaid_leave;
+                $LeaveAllocation->save();
+            }
+            
             $data['next_approver'] = Auth::user()->line_manager;
             if(Auth::user()->RolePermission == "BOD") {
                 $data['status'] = "approved_hod";
@@ -93,16 +110,15 @@ class LeavesEmployeeController extends Controller
             }
             $data['employee_id'] = Auth::user()->id;
             $data['created_by'] = Auth::user()->id;
-            $LeaveAllocation->save();
             LeaveRequest::create($data);
             return response()->json([
                 'success'=>'leave_request_created_successfully',
                 'status'=>200,
             ]);
-        // } catch (\Throwable $exp) {
-        //     DB::rollback();
-        //     Toastr::error('Leave request created fail.','Error');
-        // }
+        } catch (\Throwable $exp) {
+            DB::rollback();
+            Toastr::error('Leave request created fail.','Error');
+        }
     }
 
     /**

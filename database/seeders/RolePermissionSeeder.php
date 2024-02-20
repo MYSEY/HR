@@ -557,6 +557,18 @@ class RolePermissionSeeder extends Seeder
                 "is_active"=>1,
             ],
             [
+                "name"=>"lang.generat_leaves",
+                "sub_menu_id"=>"8",
+                "menu_id"=>"m8-s5",
+                "url"=>"generat/leaves",
+                "is_view"=>"1",
+                "is_create"=>"1",
+                "is_update"=>"1",
+                "is_delete"=>"1",
+                "parent_id"=>"1",
+                "is_active"=>1,
+            ],
+            [
                 "menu_id"=>"9",
                 "icon"=>"la la-cog",
                 "is_all"=>"1",

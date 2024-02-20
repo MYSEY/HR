@@ -2,22 +2,22 @@
 
 namespace App\Http\Controllers\Admins;
 
-use App\Exports\ExportLeave;
-use App\Http\Controllers\Controller;
-use App\Models\Branchs;
-use App\Models\Department;
-use App\Models\LeaveRequest;
 use Carbon\Carbon;
 use App\Models\User;
+use App\Models\Branchs;
 use App\Models\LeaveType;
+use App\Models\Department;
 use App\Models\Remainning;
+use App\Exports\ExportLeave;
+use App\Models\LeaveRequest;
 use Illuminate\Http\Request;
 use App\Models\LeaveAllocation;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Auth;
-use App\Repositories\Admin\EmployeeRepository;
 use App\Repositories\Admin\LeaveRepository;
+use App\Repositories\Admin\EmployeeRepository;
 use Maatwebsite\Excel\Facades\Excel;
 
 class LeavesAdminController extends Controller
@@ -389,8 +389,8 @@ class LeavesAdminController extends Controller
             if ($employee) {
                 foreach ($employee as $item) {
                     $dbDate = Carbon::parse($item->date_of_commencement);
-                    $diffYears = 3;
-                    // $diffYears = Carbon::now()->diffInYears($dbDate);
+                    // $diffYears = 3;
+                    $diffYears = Carbon::now()->diffInYears($dbDate);
                     $data = LeaveAllocation::where('employee_id',$item->id)->first();
                     $remainingDay = $data->total_annual_leave;
                     $defaultDays = $request->annual_leave;
@@ -512,9 +512,9 @@ class LeavesAdminController extends Controller
                     ]);
                 }
             }
+            DB::commit();
             Toastr::success('The process has been successfully.','Success');
             return redirect()->back();
-            DB::commit();
         } catch (\Exception $exp) {
             DB::rollBack();
             return response()->json(['message' => $exp->getMessage()], 500);

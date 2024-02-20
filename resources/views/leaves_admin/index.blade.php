@@ -303,7 +303,7 @@
                                                             @if (count($LeaveAllocation) > 0)
                                                                 @foreach ($LeaveAllocation as $key=>$leave)
                                                                     <tr class="odd">
-                                                                        <td>{{$leave->employee->employee_name_en}}</td>
+                                                                        <td>{{$leave->employee->employee_name_en ?? ""}}</td>
                                                                         @if (Auth::user()->RolePermission == "HR")
                                                                             <td>{{$leave->employee->department->name_english}}</td>
                                                                             <td>{{$leave->employee->branch->branch_name_en}}</td>
