@@ -20,10 +20,10 @@ return new class extends Migration
             $table->string('default_sick_leave')->nullable();
             $table->string('default_special_leave')->nullable();
             $table->string('default_unpaid_leave')->nullable();
-            $table->integer('total_annual_leave')->nullable();
-            $table->integer('total_sick_leave')->nullable();
-            $table->integer('total_special_leave')->nullable();
-            $table->integer('total_unpaid_leave')->nullable();
+            $table->string('total_annual_leave')->nullable();
+            $table->string('total_sick_leave')->nullable();
+            $table->string('total_special_leave')->nullable();
+            $table->string('total_unpaid_leave')->nullable();
             $table->string('year_1')->nullable();
             $table->string('year_2')->nullable();
             $table->string('year_3')->nullable();

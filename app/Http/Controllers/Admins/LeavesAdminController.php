@@ -495,8 +495,6 @@ class LeavesAdminController extends Controller
                         $remain_year_3 = 0;
                         $totalDays = $defaultDays + 3;
                     }
-                    // dd($remianDay);
-                    // dd($diffYears);
                     LeaveAllocation::where('employee_id',$item->id)->update([
                         'default_annual_leave'  => $totalDays,
                         'default_sick_leave'  => $sick_leave,
@@ -512,9 +510,9 @@ class LeavesAdminController extends Controller
                     ]);
                 }
             }
-            DB::commit();
             Toastr::success('The process has been successfully.','Success');
             return redirect()->back();
+            DB::commit();
         } catch (\Exception $exp) {
             DB::rollBack();
             return response()->json(['message' => $exp->getMessage()], 500);

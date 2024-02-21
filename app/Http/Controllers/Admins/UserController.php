@@ -448,63 +448,48 @@ class UserController extends Controller
                 $totalDayInProbation = $monthInProbation * 1.5;
                 // dd($totalDayInProbation);
                 //total day in monthsd
-                $startMonth = Carbon::createFromDate($request->start_date)->format('m');
-                $startendMonth = Carbon::createFromDate($request->start_date)->endOfMonth()->format('d');
                 $start_date = Carbon::createFromDate($request->start_date);
-                $endMonth = Carbon::createFromDate($request->start_date)->endOfMonth();
-                
-                $end_date = Date::createFromDate($endMonth);
+                $end_date = Carbon::createFromDate($request->start_date);
                 $commencementDate   = Carbon::parse($start_date);
                 $resumptionDate     = Carbon::parse($end_date);
                 $toDays 		    = $resumptionDate->diffInWeekdays($commencementDate) + 1;
-                // dd($toDays);
+             
                 $toDate = Carbon::parse($request->start_date);
                 $yearLy = Carbon::now()->format('Y');
                 $fromDate = $yearLy."-12-31";
                 $months = $toDate->diffInMonths($fromDate);
-                if ($startMonth == 02 && $startendMonth == 28 || $startendMonth == 29) {
-                    if ($toDays < 15) {
-                        $totalDay = 0;
-                        $months = $toDate->diffInMonths($fromDate) - 1;
-                    } elseif($toDays > 15 && $toDays < 20) {
-                        $totalDay = 1;
-                        $months = $toDate->diffInMonths($fromDate) - 1;
-                    }else{
-                        $totalDay = 1.5;
-                        $months = $toDate->diffInMonths($fromDate);
-                    }
+                if ($toDays < 15) {
+                    $totalDay = 0;
+                    $EndMonths = $months - 1;
+                } elseif($toDays >= 15 && $toDays <= 20) {
+                    $totalDay = 1;
+                    $EndMonths = $months - 1;
                 }else{
-                    if ($toDays < 15) {
-                        $totalDay = 0;
-                        $months = $toDate->diffInMonths($fromDate) - 1;
-                    } elseif($toDays > 15 && $toDays < 20) {
-                        $totalDay = 1;
-                        $months = $toDate->diffInMonths($fromDate) - 1;
-                    }else{
-                        $totalDay = 1.5;
-                        $months = $toDate->diffInMonths($fromDate);
-                    }
+                    $totalDay = 1.5;
+                    $EndMonths = $months;
                 }
+                
                 $leaveType = LeaveType::get();
-                $total_day = 0;
+                // $total_day = 0;
                 foreach ($leaveType as $key => $lt) {
                     if ($lt->type == "annual_leave") {
-                        $total_day = (($lt->default_day / 12) * $months + $totalDay + $totalDayInProbation);
-                        $data['default_annual_leave'] = $lt->default_day;
-                        $data['total_annual_leave'] = $total_day - abs($totalRequestLeave);
+                        $totalDayAnnualLeave = (($lt->default_day / 12) * $EndMonths + $totalDay + $totalDayInProbation);
+                        $data['default_annual_leave'] = $totalDayAnnualLeave;
+                        $data['total_annual_leave'] = $totalDayAnnualLeave - abs($totalRequestLeave);
                     }else if($lt->type == "sick_leave") {
-                        $total_day = (($lt->default_day / 12) * $months + $totalDay);
-                        $data['default_sick_leave'] = $lt->default_day;
-                        $data['total_sick_leave'] = $total_day;
+                        $totalDaySickLeave = (($lt->default_day / 12) * $EndMonths + $totalDay);
+                        $data['default_sick_leave'] = $totalDaySickLeave;
+                        $data['total_sick_leave'] = $totalDaySickLeave;
                     }else if($lt->type == "special_leave"){
-                        $total_day = (($lt->default_day / 12) * $months + $totalDay);
-                        $data['default_special_leave'] = $lt->default_day;
-                        $data['total_special_leave'] = $total_day;
+                        $totalDaySpecialLeave = (($lt->default_day / 12) * $EndMonths + $totalDay);
+                        $data['default_special_leave'] = $totalDaySpecialLeave;
+                        $data['total_special_leave'] = $totalDaySpecialLeave;
                     }else{
                         $data['default_unpaid_leave'] = 0;
                         $data['total_unpaid_leave'] = 0;
                     }
                 }
+                
                 LeaveAllocation::updateOrCreate(
                     [
                         'employee_id' => $dataSalary->id,
@@ -516,6 +501,8 @@ class UserController extends Controller
                         'total_sick_leave' => $data['total_sick_leave'],
                         'default_special_leave' => $data['default_special_leave'],
                         'total_special_leave' => $data['total_special_leave'],
+                        'default_unpaid_leave' => 0,
+                        'total_unpaid_leave' => 0,
                         'created_by'    =>  Auth::user()->id,
                     ]
                 );

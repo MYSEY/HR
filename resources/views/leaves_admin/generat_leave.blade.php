@@ -4,10 +4,10 @@
         <div class="page-header">
             <div class="row align-items-center">
                 <div class="col">
-                    <h3 class="page-title">Generate Leave All Employee</h3>
+                    <h3 class="page-title">@lang('lang.generate_leave_all_employee')</h3>
                     <ul class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="{{ url('/dashboad/employee') }}">Dashboard</a></li>
-                        <li class="breadcrumb-item active">Generate Leave All Employee</li>
+                        <li class="breadcrumb-item"><a href="{{ url('/dashboad/employee') }}">@lang('lang.dashboard')</a></li>
+                        <li class="breadcrumb-item active">@lang('lang.generate_leave_all_employee')</li>
                     </ul>
                 </div>
             </div>
@@ -22,13 +22,13 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label>Annual Leave <span class="text-danger">*</span></label>
+                                        <label>@lang('lang.annual_leave') <span class="text-danger">*</span></label>
                                         <input class="form-control" type="number" name="annual_leave" value="{{$AnnualLeave->default_day}}">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label>Sick Leave <span class="text-danger">*</span></label>
+                                        <label>@lang('lang.sick_leave') <span class="text-danger">*</span></label>
                                         <input class="form-control" type="number" name="sick_leave" value="{{$SickLeave->default_day}}">
                                     </div>
                                 </div>
@@ -36,13 +36,13 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label>Special Leave <span class="text-danger">*</span></label>
+                                        <label>@lang('lang.special_leave') <span class="text-danger">*</span></label>
                                         <input class="form-control" type="number" name="special_leave" value="{{$SpecialLeave->default_day}}">
                                     </div>
                                 </div>
                             </div>
                             <div class="submit-section">
-                                <button class="btn btn-primary submit-btn">Submit</button>
+                                <button class="btn btn-primary submit-btn">@lang('lang.submit')</button>
                             </div>
                         </form>
                     </div>
@@ -51,3 +51,4 @@
         </div>
     </div>
 @endsection
+@include('includs.script')

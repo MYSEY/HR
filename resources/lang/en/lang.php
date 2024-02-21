@@ -340,6 +340,8 @@ return[
     "gross_taplab_fee"=>"Gross Taplab Fee",
     "guarantee_letter"=>"Guarantee letter",
     "generate_payroll"=>"Generate Payroll",
+    "generat_leaves"=>"Generat Leaves",
+    "generate_leave_all_employee"=>"Generate Leave All Employee",
     "hello"=>"Hello",
     "health_care"=>"Health Care",
     "head_of_hr_and_admin_department"=>"Head of HR and Admin Department",

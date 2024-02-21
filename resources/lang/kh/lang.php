@@ -356,6 +356,8 @@ return[
 	"gross_taplab_fee"=>"ថ្លៃសេវា Taplab សរុប",
 	"guarantee_letter"=>"លិខិតធានា",
     "generate_payroll"=>"បង្កើតប្រាក់ខែ",
+	"generat_leaves"=>"បង្កើតការឈប់សម្រាក",
+    "generate_leave_all_employee"=>"បង្កើតការឈប់សម្រាករបស់បុគ្គលិកទាំងអស់",
 	"hello"=>"សួស្តី",
 	"health_care"=>"ថែទាំសុខភាព",
 	"head_of_hr_and_admin_department"=>"ប្រធានផ្នែកធនធានមនុស្ស និងរដ្ឋបាល",

@@ -99,13 +99,13 @@
             <div class="col-md-3">
                 <div class="stats-info">
                     <h6>@lang('lang.sick_leave')</h6>
-                    <h4>{{$LeaveAllocation ? $LeaveAllocation->total_sick_leave : 0}}</h4>
+                    <h4>{{$LeaveAllocation ? number_format($LeaveAllocation->total_sick_leave) : 0}}</h4>
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="stats-info">
                     <h6>@lang('lang.special_leave')</h6>
-                    <h4>{{$LeaveAllocation ? $LeaveAllocation->total_special_leave : 0}}</h4>
+                    <h4>{{$LeaveAllocation ? number_format($LeaveAllocation->total_special_leave) : 0}}</h4>
                 </div>
             </div>
             <div class="col-md-3">
