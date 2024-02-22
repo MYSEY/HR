@@ -426,8 +426,14 @@ class UserController extends Controller
 
     public function reasonOption(Request $request){
         $options = Option::where("type", "emp_status")->get();
+        $line_manager = User::where("line_manager", '=', $request->line_manager_id)->count();
+        $dataEmployee = [];
+        if ($line_manager > 0 ) {
+            $dataEmployee =  User::whereIn("emp_status", ["Probation", "1", "2", "10"])->get();
+        }
         return response()->json([
-            'options' => $options
+            'options' => $options,
+            'dataEmployee'=> $dataEmployee
         ]);
     }
 
@@ -540,6 +546,12 @@ class UserController extends Controller
                     'resign_reason' => $request->resign_reason
                 ]);
             }else{
+                if($request->line_manager){
+                    User::where('line_manager',$request->id)->update([
+                        "line_manager"=> $request->line_manager
+                    ]);
+                };
+
                 User::where('id',$request->id)->update([
                     'emp_status' => $request->emp_status,
                     'resign_date' => $request->resign_date,
@@ -564,5 +576,16 @@ class UserController extends Controller
         $data = $this->employeeRepo->getAllUsers($request);
         $export = new ExportEmployee($data);
         return Excel::download($export, 'Employee.xlsx');
+    }
+
+    public function lineManagere(Request $request) {
+        $line_manager = User::where("line_manager", '=', $request->line_manager_id)->count();
+        $dataEmployee = [];
+        if ($line_manager > 0 ) {
+            $dataEmployee =  User::whereIn("emp_status", ["Probation", "1", "2", "10"])->get();
+        }
+        return response()->json([
+            'datas' => $dataEmployee
+        ]);
     }
 }

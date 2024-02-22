@@ -76,6 +76,7 @@ return[
     "allowance"=>"Allowance",
 	"achived_by_branches"=>"Achived by Branches",
 	"activivy_log"=>"Activivy Log",
+	"assign_new_line_manager"=>"Assign new line manager",
     "bank"=>"Bank",
     "banks"=>"Banks",
     "balance"=>"Balance",

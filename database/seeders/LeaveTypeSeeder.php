@@ -36,5 +36,12 @@ class LeaveTypeSeeder extends Seeder
             'created_at'=>now(),
             'updated_at'=>now()
         ]);
+        LeaveType::updateOrCreate([
+            'name' => 'Unpaid Leave',
+            'type' => 'unpaid_leave',
+            'default_day' => '0',
+            'created_at'=>now(),
+            'updated_at'=>now()
+        ]);
     }
 }

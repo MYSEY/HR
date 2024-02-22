@@ -89,6 +89,7 @@ return[
 	"allowance"=>"ប្រាក់ឧបត្ថម្ភ",
 	"achived_by_branches"=>"សម្រេចបានដោយសាខា",
 	"activivy_log"=>"កំណត់ហេតុ​សកម្មភាព",
+	"assign_line_manager"=>"ចាត់តាំងអ្នកគ្រប់គ្រងបន្ទាត់ថ្មី",
 	"bank"=>"ធនាគារ",
 	"banks"=>"ធនាគារ",
 	"balance"=>"ចំនួនថ្ងៃនៅសល់",

@@ -52,11 +52,6 @@ class LeavesEmployeeController extends Controller
         return view('leaves_employee.index', compact('dataLeaveType', 'LeaveAllocation', 'employees', 'dataLeaveRequest'));
     }
 
-    public function create(Request $request)
-    {
-        
-    }
-
     /**
      * Store a newly created resource in storage.
      *

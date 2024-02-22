@@ -180,6 +180,7 @@
         $('body').on('click', '#btn-emp-status a', function() {
             let id = $(this).attr('data-emp-id');
             let status = $(this).data('id');
+           
             if (status == '1') {
                 var emp_status = '@lang("lang.fixed_duration_contract")';
             } else if(status == '10') {
@@ -520,18 +521,7 @@
                     }
                 }); 
             }else if(status == 3){
-                var selectOption = '<select class="select form-control resign_reason" name="department_id"></select>';
-                axios.get('{{ URL('users/reasonoption') }}', {
-                }).then(function(response) {
-                    var options = response.data.options
-                    $.each(options, function(i, item) {
-                        let option = {
-                            value: item.id,
-                            text: item.name_english,
-                        }
-                        $('.resign_reason').append($('<option>', option));
-                    });
-                });
+                var selectOption = '<select class="form-control select floating resign_reason" name="department_id"></select>';
                 $.confirm({
                     title: '@lang("lang.employee_status")',
                     contentClass: 'text-center',
@@ -548,6 +538,12 @@
                                     '<input type="hidden" class="form-control emp_status" id="" name="" value="'+status+'">'+
                                     '<input type="hidden" class="form-control id" id="" name="" value="'+id+'">'+
                                 '</div>'+
+                                '<div class="form-group assign_line_manager" style="display:none">'+
+                                    '<label>@lang("lang.assign_new_line_manager")</label>'+
+                                    '<select class="form-control hr-select2-option-emp form-select line_manager" id="line_manager" name="line_manager" >'+
+                                    
+                                    '</select>'+
+                                '</div>'+
                                 '<div class="form-group">'+
                                     '<label>@lang("lang.reason")</label>'+
                                     selectOption+
@@ -563,20 +559,20 @@
                                 var id = this.$content.find('.id').val();
                                 var resign_date = this.$content.find('.resign_date').val();
                                 var resign_reason = this.$content.find('.resign_reason').val();
-
+                                var line_manager = this.$content.find('.line_manager').val();
                                 if (!resign_date) {
                                     $.alert({
                                         title: '@lang("lang.requiered")',
                                         content: '@lang("lang.please_input_start_date")',
                                     });
                                     return false;
-                                }
-                                
+                                }                               
                                 axios.post('{{ URL('employee/status') }}', {
                                         'id': id,
                                         'emp_status': emp_status,
                                         'resign_date': resign_date,
-                                        'resign_reason': resign_reason
+                                        'resign_reason': resign_reason,
+                                        'line_manager': line_manager
                                     }).then(function(response) {
                                     new Noty({
                                         title: "",
@@ -602,6 +598,43 @@
                         },
                     }
                 });
+                $(document).ready(function(){
+                    $('.hr-select2-option-emp').each(function() {
+                        $(this).select2({
+                            width: '100%',
+                            dropdownParent: $(this).parent(),
+                        })
+                    });
+                    $.ajax({
+                        type: "GET",
+                        url: "{{ url('users/reasonoption') }}",
+                        data: {
+                            'line_manager_id': id,
+                        },
+                        dataType: "JSON",
+                        success: function(response) {
+                            let dataEmployee = response.dataEmployee;
+                            $('#line_manager').html('<option selected > -- @lang("lang.select") --</option>');
+                            if (dataEmployee != '') {
+                                $(".assign_line_manager").css("display","block");
+                                $.each(dataEmployee, function(i, item) {
+                                    $('#line_manager').append($('<option>', {
+                                        value: item.id,
+                                        text: item.employee_name_en,
+                                    }));
+                                });
+                            }
+                            var options = response.options
+                            $.each(options, function(i, item) {
+                                let option = {
+                                    value: item.id,
+                                    text: item.name_english,
+                                }
+                                $('.resign_reason').append($('<option>', option));
+                            });
+                        }
+                    });
+                });
             }else {
                 $.confirm({
                     title: '@lang("lang.employee_status")',
@@ -619,6 +652,12 @@
                                     '<input type="hidden" class="form-control emp_status" id="" name="" value="'+status+'">'+
                                     '<input type="hidden" class="form-control id" id="" name="" value="'+id+'">'+
                                 '</div>'+
+                                '<div class="form-group assign_line_manager" style="display:none">'+
+                                    '<label>@lang("lang.assign_new_line_manager")</label>'+
+                                    '<select class="form-control hr-select2-option-emp form-select line_manager" id="line_manager" name="line_manager" >'+
+                                    
+                                    '</select>'+
+                                '</div>'+
                                 '<label>@lang("lang.reason")</label>'+
                                 '<textarea class="form-control resign_reason"></textarea>'+
                             '</div>'+
@@ -632,6 +671,7 @@
                                 var id = this.$content.find('.id').val();
                                 var resign_date = this.$content.find('.resign_date').val();
                                 var resign_reason = this.$content.find('.resign_reason').val();
+                                var line_manager = this.$content.find('.line_manager').val();
 
                                 if (!resign_date) {
                                     $.alert({
@@ -645,7 +685,8 @@
                                         'id': id,
                                         'emp_status': emp_status,
                                         'resign_date': resign_date,
-                                        'resign_reason': resign_reason
+                                        'resign_reason': resign_reason,
+                                        'line_manager': line_manager
                                     }).then(function(response) {
                                     new Noty({
                                         title: "",
@@ -679,6 +720,35 @@
                             jc.$$formSubmit.trigger('click'); // reference the button and click it
                         });
                     }
+                });
+                $(document).ready(function(){
+                    $('.hr-select2-option-emp').each(function() {
+                        $(this).select2({
+                            width: '100%',
+                            dropdownParent: $(this).parent(),
+                        })
+                    });
+                    $.ajax({
+                        type: "GET",
+                        url: "{{ url('users/line-manager') }}",
+                        data: {
+                            'line_manager_id': id,
+                        },
+                        dataType: "JSON",
+                        success: function(response) {
+                            let dataEmployee = response.datas;
+                            $('#line_manager').html('<option selected > -- @lang("lang.select") --</option>');
+                            if (dataEmployee != '') {
+                                $(".assign_line_manager").css("display","block");
+                                $.each(dataEmployee, function(i, item) {
+                                    $('#line_manager').append($('<option>', {
+                                        value: item.id,
+                                        text: item.employee_name_en,
+                                    }));
+                                });
+                            }
+                        }
+                    });
                 });
             }
         });
