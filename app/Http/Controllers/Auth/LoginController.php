@@ -80,19 +80,26 @@ class LoginController extends Controller
         
         $number_employee    = $request->number_employee;
         $password           = $request->password;
-        // dd($password);
         if (Auth::attempt(['number_employee' => $number_employee, 'password' => $password])) {
-            return redirect('dashboad/admin')->with([
-                'dataUpComming' =>  $dataUserUpComming,
-                'dataProbation' =>  $dataUserProbation,
-                'dataShortList' =>  $dataShortList,
-                'dataContract'  =>  $dataContract
-            ]);
-            Toastr::success('Login successfully.', 'Success');
-        } elseif (Auth::attempt(['number_employee' => $number_employee, 'password' => $password])) {
-            Toastr::success('Login successfully.', 'Success');
-            return redirect('dashboad/employee');
-        } else {
+            if (Auth::user()->status == 'Active') {
+                if (Auth::user()->RolePermission == "Employee") {
+                    return redirect('dashboad/employee');
+                }else{
+                    return redirect('dashboad/admin')->with([
+                        'dataUpComming' =>  $dataUserUpComming,
+                        'dataProbation' =>  $dataUserProbation,
+                        'dataShortList' =>  $dataShortList,
+                        'dataContract'  =>  $dataContract
+                    ]);
+                }
+                Toastr::success('Login successfully.', 'Success');
+            } else {
+                // User status is not active
+                Auth::logout();
+                Toastr::error('Your account is not active. Please contact support.', 'Error');
+                return redirect('login');
+            }
+        }else {
             Toastr::error('Wrong Employee ID Or Password', 'Error');
             return redirect('login');
         }
