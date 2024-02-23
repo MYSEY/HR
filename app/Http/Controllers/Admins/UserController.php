@@ -555,6 +555,7 @@ class UserController extends Controller
                 User::where('id',$request->id)->update([
                     'emp_status' => $request->emp_status,
                     'resign_date' => $request->resign_date,
+                    'status' => 'Unactive',
                     'resign_reason' => $request->resign_reason
                 ]);
             }
