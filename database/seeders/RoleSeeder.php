@@ -30,14 +30,7 @@ class RoleSeeder extends Seeder
                     'status'=>1,
                     'created_at'=>now(),
                     'updated_at'=>now()
-                ],
-                [
-                    'role_name'=>'Employee',
-                    'role_type'=>'employee',
-                    'status'=>1,
-                    'created_at'=>now(),
-                    'updated_at'=>now()
-                ],
+                ]
             ]
         );
     }
