@@ -363,6 +363,7 @@ class UserController extends Controller
                             'password'              => Hash::make($item[34]),
                             'type'                  => 'uploade',
                             'created_by'            => Auth::user()->id,
+                            'status'                => 'Active',
                         ]);
                         if($emp){
                             GenerateIdEmployee::firstOrCreate([
