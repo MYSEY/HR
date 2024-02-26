@@ -14,7 +14,7 @@ use Spatie\Activitylog\Models\Activity;
 class HolidayController extends Controller
 {
     public function index(){
-        $data = Holiday::all();
+        $data = Holiday::orderBy('from', 'asc')->get();
         return view('holidays.index',compact('data'));
     }
 

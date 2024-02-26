@@ -187,6 +187,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('import/employee',[UserController::class,'employImport']);
     Route::get('users/export',[UserController::class,'export']);
     Route::get('users/line-manager',[UserController::class,'lineManagere']);
+    Route::post('users/update/line-manager',[UserController::class,'updateLineManager']);
 
     //Employee Payroll
     Route::get('payroll',[EmployeePayrollController::class,'index']);
