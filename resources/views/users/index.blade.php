@@ -4,6 +4,9 @@
         min-height: 38px !important;
         padding: 10px !important;
     }
+    .multiple_required:invalid {
+        border-color: red !important;
+    }
 </style>
 <link rel="stylesheet" href="{{ asset('admin/css/loarding-table.css') }}">
 @section('content')
@@ -23,6 +26,11 @@
                 <div class="col-auto float-end ms-auto">
                     @if (permissionAccess("m2-s1","is_import")->value == "1")
                         <a href="#" class="btn add-btn" data-toggle="modal" id="import_employee"><i class="fa fa-arrow-circle-up"  data-bs-toggle="tooltip" aria-label="fa fa-arrow-circle-up" data-bs-original-title="fa fa-arrow-circle-up"></i>@lang('lang.import')</a>
+                    @endif
+                    @if (Auth::user()->RolePermission == "HR")
+                        @if (permissionAccess("m2-s1","is_update")->value == "1")
+                            <a href="#" class="btn add-btn me-2" data-bs-toggle="modal" data-bs-target="#change_line_manager"><i class="fa fa-plus"></i> @lang('lang.line_manager')</a>
+                        @endif
                     @endif
                     @if (permissionAccess("m2-s1","is_create")->value == "1")
                         <a href="{{url('user/form/create')}}" class="btn add-btn me-2"><i class="fa fa-plus"></i> @lang('lang.add_new')</a>
@@ -121,6 +129,54 @@
         {{-- @include('users.persenal_infor_employee') --}}
 
         @include('users.import')
+
+        <div id="change_line_manager" class="modal custom-modal fade hr-modal-select2" role="dialog">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">@lang('lang.change_line_manager')</h5>
+                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="{{url('users/update/line-manager')}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
+                            @csrf
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="form-group hr-form-group-select2">
+                                        <label>@lang('lang.new_line_manager') <span class="text-danger">*</span></label>
+                                        <select class="select form-control hr-select2-option requered" id="line_manager" name="line_manager" required>
+                                            <option value="">@lang('lang.select') ...</option>
+                                            @foreach ($dataEmployees as $item)
+                                                <option value="{{$item->id}}">{{$item->employee_name_en}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 trainer-internal">
+                                    <div class="form-group">
+                                        <label class="">@lang('lang.employee') <span class="text-danger">*</span></label>
+                                        <select class="form-control select floating multiple_required" multiple="" name="employee_ids[]" id="employee_ids" required>
+                                            <option value="">@lang('lang.select') ...</option>
+                                            @foreach ($dataEmployees as $item)
+                                                <option value="{{$item->id}}">{{$item->employee_name_en}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="submit-section">
+                                <button type="submit" class="btn btn-primary submit-btn">
+                                    <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading') </span>
+                                    <span class="btn-txt">@lang('lang.submit')</span>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
        
         <!-- Delete User Modal -->
         <div class="modal custom-modal fade" id="delete_user" role="dialog">
@@ -170,7 +226,6 @@
             $("#btn-text-loading").css('display', 'block');
             window.location.replace("{{ URL('users') }}"); 
         });
-
         $('.userDelete').on('click',function(){
             let id = $(this).data("id");
             $('.e_id').val(id);

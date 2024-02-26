@@ -54,12 +54,15 @@ class UserController extends Controller
     public function index(Request $request)
     {
         $data = $this->employeeRepo->getAllUsers($request);
+        $dataResign =[];
+        $dataEmployees = [];
         if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'HR' || Auth::user()->RolePermission == 'developer' || Auth::user()->RolePermission == 'BOD' || Auth::user()->RolePermission == 'CEO') {
             $dataProbation = User::with('role')->with('department')->with('position')->where('emp_status','Probation')->get();
             $dataFDC = User::with('role')->with('department')->with('position')->whereIn('emp_status',['1','10'])->get();
             $dataUDC = User::with('role')->with('department')->with('position')->where('emp_status','2')->get();
             $dataCanContract = User::with('role')->with('department')->with('position')->where('emp_status','Cancel')->get();
             $dataResign = User::with('role')->with('department')->with('position')->whereIn('emp_status', ['3','4','5','6','7','8','9'])->get();
+            $dataEmployees = User::whereIn('emp_status', ['Probation','1','2','10',])->get();
         }
         if (Auth::user()->RolePermission == 'HOD') {
             $department_ids = $this->employeeRepo->getRoleHOD();
@@ -106,14 +109,14 @@ class UserController extends Controller
             $dataCanContract = User::where('id',Auth::user()->id)->where('emp_status','Cancel')->with('department')->with('position')->get();
             $dataResign = User::where('id',Auth::user()->id)->whereIn('emp_status', ['3','4','5','6','7','8','9'])->with('department')->with('position')->get();
         }
-       
         return view('users.index',compact(
             'data',
             'dataProbation',
             'dataFDC',
             'dataUDC',
             'dataCanContract',
-            'dataResign'
+            'dataResign',
+            'dataEmployees',
         ));
     }
 
@@ -588,5 +591,18 @@ class UserController extends Controller
         return response()->json([
             'datas' => $dataEmployee
         ]);
+    }
+    public function updateLineManager(Request $request){
+        try {
+            User::whereIn('id',$request->employee_ids)->update([
+                "line_manager"=> $request->line_manager
+            ]);
+            DB::commit();
+            Toastr::success('Update line manager successfull.','Success');
+            return redirect()->back();
+        } catch (\Exception $exp) {
+            DB::rollBack();
+            return response()->json(['message' => $exp->getMessage()], 500);
+        }
     }
 }
