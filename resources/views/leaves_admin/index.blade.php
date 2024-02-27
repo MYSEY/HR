@@ -159,7 +159,8 @@
                                                                                 @if ($request->status == "pending" || $request->status == "approved_lm" || $request->status == "approved_hod")
                                                                                     <button class="btn btn-outline-secondary btn-sm btn-approved" 
                                                                                         data-id="{{$request->id}}"
-                                                                                        data-condition="{{Auth::user()->RolePermission}}"
+                                                                                        data-condition="{{Auth::user()}}"
+                                                                                        data-linemanager="{{$request->employee->line_manager}}"
                                                                                         data-status="{{$request->status}}"
                                                                                         data-employeename="{{$request->employee->employee_name_en}}"
                                                                                         data-startdate="{{$request->start_date}}"
@@ -471,12 +472,13 @@
             let id = $(this).data("id");
             let status = $(this).data("status");
             let condition = $(this).data("condition");
-            if (condition == "HR" && (status != "approved_hod" || status == "approved_lm")) {
+            let linemanager = $(this).data("linemanager");
+            if ((condition.role.role_type == "HR" && linemanager != condition.id ) && (status != "approved_hod" || status == "approved_lm")) {
                 let text_message = "";
                 if (status == "approved_lm") {
-                    text_message = "Pending head department approved";
+                    text_message = "Pending manager head department approve";
                 }else{
-                    text_message = "Pending line manager approved";
+                    text_message = "Pending line manager approve";
                 }
                 new Noty({
                     title: "",

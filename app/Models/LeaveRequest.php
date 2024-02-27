@@ -48,6 +48,7 @@ class LeaveRequest extends Model
             'department_id',
             'position_id',
             'branch_id',
+            'line_manager',
             'gender',
             'date_of_birth',
             'current_province',
