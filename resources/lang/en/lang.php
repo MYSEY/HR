@@ -812,6 +812,9 @@ return[
     "withholding_tax_rate"=>"Withholding Tax Rate",
     "year"=>"Year",
     "yes"=>"Yes",
+    "year_1"=>"Year 1",
+    "year_2"=>"Year 2",
+    "year_3"=>"Year 3",
     "year_of_manufature"=>"Year Of Manufature",
     "you_cannot_aprove"=>"You cannot aprove",
     // monthly

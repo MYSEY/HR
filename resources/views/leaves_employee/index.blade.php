@@ -89,11 +89,11 @@
             </div>
         </div>
         <div class="form-group">
-            <h4>Carried Forward Leave</h4>
+            <h4>@lang('lang.carried_forward_leave')</h4>
             <ul class="breadcrumb">
-                <li class="breadcrumb-item">Year 1 = <span>{{$LeaveAllocation ? $LeaveAllocation->year_1 : 0}}</span> Days</li>
-                <li class="breadcrumb-item">Year 2 = <span>{{$LeaveAllocation ? $LeaveAllocation->year_2 : 0}}</span> Days</li>
-                <li class="breadcrumb-item">Year 3 = <span>{{$LeaveAllocation ? $LeaveAllocation->year_3 : 0}}</span> Days</li>
+                <li class="breadcrumb-item">@lang('lang.year_1') = <span>{{$LeaveAllocation ? $LeaveAllocation->year_1 : 0}}</span> @lang('lang.days')</li>
+                <li class="breadcrumb-item">@lang('lang.year_2') = <span>{{$LeaveAllocation ? $LeaveAllocation->year_2 : 0}}</span> @lang('lang.days')</li>
+                <li class="breadcrumb-item">@lang('lang.year_3') = <span>{{$LeaveAllocation ? $LeaveAllocation->year_3 : 0}}</span> @lang('lang.days')</li>
             </ul>
         </div>
         
