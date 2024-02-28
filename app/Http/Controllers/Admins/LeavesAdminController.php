@@ -396,7 +396,11 @@ class LeavesAdminController extends Controller
                     $defaultDays = $request->annual_leave;
                     $sick_leave = $request->sick_leave;
                     $special_leave = $request->special_leave;
-                    
+                    $remain_year_1 = $data->year_1;
+                    $remain_year_2 = $data->year_2;
+                    $remain_year_3 = $data->year_3;
+                    $totalDays = $defaultDays;
+                    $remianDay = $remainingDay;
                     if ($diffYears == 1) {
                         $defaultDays = $remainingDay;
                         $sick_leave = $sick_leave;
@@ -484,7 +488,7 @@ class LeavesAdminController extends Controller
                         $remain_year_2 = $remianDay;
                         $remain_year_3 = $data->year_3;
                         $totalDays = $defaultDays + 2;
-                    }else{
+                    }else if($diffYears > 10){
                         if ($remainingDay >= 10) {
                             $remianDay = 9;
                         } else {
@@ -495,6 +499,7 @@ class LeavesAdminController extends Controller
                         $remain_year_3 = 0;
                         $totalDays = $defaultDays + 3;
                     }
+                    
                     LeaveAllocation::where('employee_id',$item->id)->update([
                         'default_annual_leave'  => $totalDays,
                         'default_sick_leave'  => $sick_leave,

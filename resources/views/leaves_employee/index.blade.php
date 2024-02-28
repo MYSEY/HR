@@ -88,7 +88,15 @@
                 </div>
             </div>
         </div>
-
+        <div class="form-group">
+            <h4>Carried Forward Leave</h4>
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item">Year 1 = <span>{{$LeaveAllocation ? $LeaveAllocation->year_1 : 0}}</span> Days</li>
+                <li class="breadcrumb-item">Year 2 = <span>{{$LeaveAllocation ? $LeaveAllocation->year_2 : 0}}</span> Days</li>
+                <li class="breadcrumb-item">Year 3 = <span>{{$LeaveAllocation ? $LeaveAllocation->year_3 : 0}}</span> Days</li>
+            </ul>
+        </div>
+        
         <div class="row">
             <div class="col-md-3">
                 <div class="stats-info">

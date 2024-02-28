@@ -443,7 +443,7 @@ class UserController extends Controller
 
     public function processing(Request $request)
     {
-        try {
+        // try {
             if ($request->emp_status == '1') {
                 $dataSalary = User::where('id',$request->id)->first();
                 $leaveRequest = LeaveAllocation::where('employee_id',$dataSalary->id)->first();
@@ -453,17 +453,29 @@ class UserController extends Controller
                 }
                 
                 $toJoinDate  = Carbon::parse($dataSalary->date_of_commencement);
+                $yearLy = Carbon::now()->format('Y');
+                $toJoinDateYear = Carbon::createFromDate($toJoinDate)->format('Y');
+                $startFormYear = Carbon::parse($yearLy."-01-01");
+                
                 $endJoinDate = Carbon::parse($dataSalary->fdc_date);
-                $monthInProbation = $toJoinDate->diffInMonths($endJoinDate);
+                $monthInProbation = $startFormYear->diffInMonths($endJoinDate);
                 $totalDayInProbation = $monthInProbation * 1.5;
+                $year_1 = 0;
+                if ($yearLy != $toJoinDateYear) {
+                    $endDate = $toJoinDateYear."-12-31";
+                    $monthBefor = $toJoinDate->diffInMonths($endDate);
+                    $year_1 = $monthBefor * 1.5;
+                }
+                
                 // dd($totalDayInProbation);
                 //total day in monthsd
                 $start_date = Carbon::createFromDate($request->start_date);
-                $end_date = Carbon::createFromDate($request->start_date);
+                $endMonth = Carbon::createFromDate($request->start_date)->endOfMonth();
+                $end_date = Date::createFromDate($endMonth);
                 $commencementDate   = Carbon::parse($start_date);
                 $resumptionDate     = Carbon::parse($end_date);
                 $toDays 		    = $resumptionDate->diffInWeekdays($commencementDate) + 1;
-             
+                
                 $toDate = Carbon::parse($request->start_date);
                 $yearLy = Carbon::now()->format('Y');
                 $fromDate = $yearLy."-12-31";
@@ -513,6 +525,7 @@ class UserController extends Controller
                         'total_special_leave' => $data['total_special_leave'],
                         'default_unpaid_leave' => 0,
                         'total_unpaid_leave' => 0,
+                        'year_1' => $year_1,
                         'created_by'    =>  Auth::user()->id,
                     ]
                 );
@@ -571,10 +584,10 @@ class UserController extends Controller
             ]);
             DB::commit();
             return ['message' => 'successfull'];
-        } catch (\Exception $exp) {
-            DB::rollBack();
-            return response()->json(['message' => $exp->getMessage()], 500);
-        }
+        // } catch (\Exception $exp) {
+        //     DB::rollBack();
+        //     return response()->json(['message' => $exp->getMessage()], 500);
+        // }
     }
 
     public function export(Request $request){
