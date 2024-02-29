@@ -32,8 +32,10 @@
                                                     <th>#</th>
                                                     <th>@lang('lang.date')</th>
                                                     <th>@lang('lang.title')</th>
-                                                    <th>@lang('lang.amount_percent')(%)</th>
-                                                    <th>@lang('lang.period_month')</th>
+                                                    @if (Auth::user()->RolePermission == "HR")
+                                                        <th>@lang('lang.amount_percent')(%)</th>
+                                                        <th>@lang('lang.period_month')</th>
+                                                    @endif
                                                     <th>@lang('lang.created_at')</th>
                                                     <th class="text-end">@lang('lang.action')</th>
                                                 </tr>
@@ -45,8 +47,10 @@
                                                             <td class="ids">{{++$key}}</td>
                                                             <td class="title">{{$item->Day}}</td>
                                                             <td class="title">{{Helper::getLang() == 'en' ? $item->title_en  :$item->title_kh}}</td>
-                                                            <td style="text-align: center;" class="amount_percent"><a href="#">{{$item->amount_percent}}</a></td>
-                                                            <td class="period_month">{{$item->PeriodPayment}}</td>
+                                                            @if (Auth::user()->RolePermission == "HR")
+                                                                <td style="text-align: center;" class="amount_percent"><a href="#">{{$item->amount_percent}}</a></td>
+                                                                <td class="period_month">{{$item->PeriodPayment}}</td>
+                                                            @endif
                                                             <td>{{Carbon\Carbon::parse($item->created_at)->format('d-M-Y') }}</td>
                                                             <td class="text-end">
                                                                 @if (permissionAccess("m8-s3","is_update")->value == "1")
