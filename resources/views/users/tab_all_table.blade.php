@@ -1499,6 +1499,7 @@
                 var tr = '';
                 if (data) {
                     let index = 0;
+                    let btn_edit = '';
                     data.map((emp) => {
                         index++;
                         let tag_a = '';
@@ -1525,7 +1526,7 @@
                         let emp_status = "";
                         let status_color = "";
                         let td = "";
-                        let btn_edit = '';
+                       
                         let resign_status_td ='<td>'+(emp.resign_status ? emp.resign_status.name_english : emp.resign_reason)+'</td>';
                         all_status = '<div class="dropdown-menu dropdown-menu-right btn-emp-status" id="btn-emp-status">'+
                                 '<a class="dropdown-item" data-emp-id="'+(emp.id)+'" data-start-date="'+(emp.fdc_date)+'" data-end-date="'+(emp.fdc_end)+'" data-Salary-Increase="'+(emp.salary_increas)+'" data-id="1" href="#">'+
@@ -1574,14 +1575,14 @@
                                 '</a>'+
                             '</div>';
                             if (is_update == 1) {
-                                btn_edit = '<a class="dropdown-item userUpdate" data-id="'+(emp.id)+'"><i class="fa fa-pencil m-r-5"></i> @lang("lang.edit")</a>';
+                                btn_edit = '<a class="dropdown-item userUpdate" href="{{url("user/form/edit")}}/'+(emp.id)+'" data-id="'+(emp.id)+'"><i class="fa fa-pencil m-r-5"></i> @lang("lang.edit")</a>';
                             }
                         }else if (emp.emp_status == "Probation") {
                             emp_status = "Probation";
                             status_color = "text-success";
                             resign_status_td ="";
                             if (is_update == 1) {
-                                btn_edit = '<a class="dropdown-item userUpdate" data-id="'+(emp.id)+'"><i class="fa fa-pencil m-r-5"></i> @lang("lang.edit")</a>';
+                                btn_edit = '<a class="dropdown-item userUpdate" href="{{url("user/form/edit")}}/'+(emp.id)+'" data-id="'+(emp.id)+'"><i class="fa fa-pencil m-r-5"></i> @lang("lang.edit")</a>';
                             }
                         }else if(emp.emp_status == '1'){
                             emp_status = "FDC-1";
@@ -1589,7 +1590,7 @@
                             td = '<td>'+(fdc_end)+'</td>';
                             resign_status_td ="";
                             if (is_update == 1) {
-                                btn_edit = '<a class="dropdown-item userUpdate" data-id="'+(emp.id)+'"><i class="fa fa-pencil m-r-5"></i> @lang("lang.edit")</a>';
+                                btn_edit = '<a class="dropdown-item userUpdate" href="{{url("user/form/edit")}}/'+(emp.id)+'" data-id="'+(emp.id)+'"><i class="fa fa-pencil m-r-5"></i> @lang("lang.edit")</a>';
                             }
                         }else if(emp.emp_status == '10'){
                             emp_status = "FDC-2";
@@ -1597,7 +1598,7 @@
                             td = '<td>'+(fdc_end)+'</td>';
                             resign_status_td ="";
                             if (is_update == 1) {
-                                btn_edit = '<a class="dropdown-item userUpdate" data-id="'+(emp.id)+'"><i class="fa fa-pencil m-r-5"></i> @lang("lang.edit")</a>';
+                                btn_edit = '<a class="dropdown-item userUpdate" href="{{url("user/form/edit")}}/'+(emp.id)+'" data-id="'+(emp.id)+'"><i class="fa fa-pencil m-r-5"></i> @lang("lang.edit")</a>';
                             }
                         }else if(emp.emp_status == '2'){
                             emp_status = "UDC";
@@ -1627,7 +1628,7 @@
                                 '</a>'+
                             '</div>';
                             if (is_update == 1) {
-                                btn_edit = '<a class="dropdown-item userUpdate" data-id="'+(emp.id)+'"><i class="fa fa-pencil m-r-5"></i> @lang("lang.edit")</a>';
+                                btn_edit = '<a class="dropdown-item userUpdate" href="{{url("user/form/edit")}}/'+(emp.id)+'" data-id="'+(emp.id)+'"><i class="fa fa-pencil m-r-5"></i> @lang("lang.edit")</a>';
                             }
                         }else if(emp.emp_status == '3'){
                             emp_status = "Resignation";
