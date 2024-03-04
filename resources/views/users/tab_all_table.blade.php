@@ -1466,6 +1466,7 @@
     function showDatabytab(tab, filter){
         let is_update = "{{ Helper::permissionAccess('m2-s1','is_update') }}";
         let is_delete = "{{ Helper::permissionAccess('m2-s1','is_delete') }}";
+        let is_view_salary = "{{ Helper::permissionAccess('m2-s1','is_view_salary') }}";
         var localeLanguage = '{{ config('app.locale') }}';
         let data = {
             "_token": "{{ csrf_token() }}",
@@ -1694,6 +1695,14 @@
                                 '</div>'+
                             '</div>';
                         }
+                        let basic_salary = "";
+                        let salary_increas = "";
+                        let phone_allowance = "";
+                        if (is_view_salary == 1) {
+                            basic_salary =    '<td>$ <a href="#">'+(emp.basic_salary)+'</a></td>';
+                            salary_increas =  '<td>$ <a href="#">'+(emp.salary_increas)+'</a></td>';
+                            phone_allowance = '<td>$ <a href="#">'+(emp.phone_allowance == null ? '0.00' : emp.phone_allowance)+'</a></td>';
+                        }
                         tr +='<tr class="odd">'+
                                 '<td class="ids stuck-scroll-4">'+(index)+'</td>'+
                                 '<td class="sorting_1 stuck-scroll-4">'+
@@ -1714,9 +1723,9 @@
                                 '<td>'+
                                     '<span class="badge bg-inverse-success">'+(emp.role == null ? "" : emp.role.role_name )+'</span>'+
                                 '</td>'+
-                                '<td>$ <a href="#">'+(emp.basic_salary)+'</a></td>'+
-                                '<td>$ <a href="#">'+(emp.salary_increas)+'</a></td>'+
-                                '<td>$ <a href="#">'+(emp.phone_allowance == null ? '0.00' : emp.phone_allowance)+'</a></td>'+
+                                (basic_salary)+
+                                (salary_increas)+
+                                (phone_allowance)+
                                 '<td>'+(joinOfDate)+'</td>'+
                                 '<td>'+(PassDate)+'</td>'+
                                 (td)+
