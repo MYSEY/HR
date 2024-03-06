@@ -141,7 +141,7 @@ class UserController extends Controller
         ->select(
             'users.*',
             'roles.role_type',
-        )->whereNotIn('roles.role_type',['employee','admin','developer'])->get();
+        )->whereNotIn('roles.role_type',['Employee','admin','developer'])->get();
         return view('users.form_create',compact(
             'role',
             'position',
@@ -443,7 +443,7 @@ class UserController extends Controller
 
     public function processing(Request $request)
     {
-        // try {
+        try {
             if ($request->emp_status == '1') {
                 $dataSalary = User::where('id',$request->id)->first();
                 $leaveRequest = LeaveAllocation::where('employee_id',$dataSalary->id)->first();
@@ -584,10 +584,10 @@ class UserController extends Controller
             ]);
             DB::commit();
             return ['message' => 'successfull'];
-        // } catch (\Exception $exp) {
-        //     DB::rollBack();
-        //     return response()->json(['message' => $exp->getMessage()], 500);
-        // }
+        } catch (\Exception $exp) {
+            DB::rollBack();
+            return response()->json(['message' => $exp->getMessage()], 500);
+        }
     }
 
     public function export(Request $request){

@@ -48,7 +48,7 @@
                 {{-- Block dashboad --}}
                 <div class="row">
                     <div class="col-md-2">
-                        <label style="font-weight: normal !important;">@lang('lang.dashboard')</label>
+                        <label style="font-weight: normal !important;">@lang('lang.admin_dashboard')</label>
                     </div>
                    <div class="col-md-4">
                         <div class="form-group row">

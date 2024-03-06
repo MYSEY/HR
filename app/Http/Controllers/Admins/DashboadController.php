@@ -2,25 +2,30 @@
 
 namespace App\Http\Controllers\Admins;
 
-use App\Http\Controllers\Controller;
-use App\Models\Branchs;
-use App\Models\CandidateResume;
-use App\Models\LeaveRequest;
+use Carbon\Carbon;
+use App\Models\User;
 use App\Models\Option;
-use App\Models\RecruitmentPlan;
-use App\Models\StaffPromoted;
+use App\Models\Branchs;
+use App\Models\Holiday;
 use App\Models\Training;
 use App\Models\Transferred;
-use App\Models\User;
-use App\Repositories\Admin\EmployeeRepository;
-use Carbon\Carbon;
+use App\Models\LeaveRequest;
 use Illuminate\Http\Request;
+use App\Models\StaffPromoted;
+use App\Models\CandidateResume;
+use App\Models\LeaveAllocation;
+use App\Models\RecruitmentPlan;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
 class DashboadController extends Controller
 {
     public function dashboadEmployee(){
-        return view('dashboads.employee');
+        // dd(Carbon::now()->addDays(1));
+        $holiday = Holiday::where('from','>=',Carbon::now()->addDays(2))->get(['title_kh','from']);
+        dd($holiday);
+        $data = LeaveAllocation::where('employee_id',Auth::user()->id)->first();
+        return view('dashboads.employee',compact('data','holiday'));
     }
     public function dashboadAdmin(){
         return view('dashboads.admin');

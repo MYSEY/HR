@@ -170,7 +170,7 @@
                             <div class="form-group">
                                 <label>@lang('lang.line_manager')</label>
                                 <select class="form-control hr-select2-option" id="e_line_manager" name="line_manager" value="">
-                                    <option selected value=""> -- @lang('lang.select')--</option>
+                                    {{-- <option selected value=""> -- @lang('lang.select')--</option> --}}
                                     {{-- @foreach ($lineManager as $item)
                                         <option data-id="{{$item->id}}" value="{{$item->id}}">{{Helper::getLang() == 'en' ? $item->employee_name_en : $item->employee_name_kh}}</option>
                                     @endforeach --}}
@@ -264,7 +264,7 @@
                                 <label>@lang('lang.basic_salary')<span class="text-danger">*</span></label>
                                 <div class="input-group">
                                     <span class="input-group-text">$</span>
-                                    <input type="number" class="form-control" id="e_basic_salary" name="basic_salary" placeholder="" value="" required>
+                                    <input type="text" class="form-control" id="e_basic_salary" name="basic_salary" placeholder="" value="" required>
                                 </div>
                             </div>
                         </div>
@@ -722,7 +722,7 @@
                         });
                     }
                     if (response.lineManager != '') {
-                        $('#e_line_manager').html('<option selected> -- @lang("lang.select") --</option>');
+                        $('#e_line_manager').html('<option value="" selected> -- @lang("lang.select") --</option>');
                         $.each(response.lineManager, function(i, item) {
                             $('#e_line_manager').append($('<option>', {
                                 value: item.id,
