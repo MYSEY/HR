@@ -5,14 +5,17 @@ namespace App\Http\Controllers\Admins;
 use App\Http\Controllers\Controller;
 use App\Models\Branchs;
 use App\Models\CandidateResume;
+use App\Models\LeaveRequest;
 use App\Models\Option;
 use App\Models\RecruitmentPlan;
 use App\Models\StaffPromoted;
 use App\Models\Training;
 use App\Models\Transferred;
 use App\Models\User;
+use App\Repositories\Admin\EmployeeRepository;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class DashboadController extends Controller
 {
@@ -50,6 +53,13 @@ class DashboadController extends Controller
         // $year = Carbon::createFromDate('01-01-'.$currentYear)->format('Y-m-d');
         $year = null;
         $staffResignations = User::whereNotIn('emp_status',['1','2','10','Probation','Upcoming', 'Cancel'])
+        ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+            if($RolePermission == 'BM'){
+                $query->where("branch_id", Auth::user()->branch_id);
+            }else if($RolePermission == 'HOD'){
+                $query->whereIn("department_id",  EmployeeRepository::getRoleHOD());
+            }
+        })
         ->when($year, function ($query, $year) {
             $query->where('resign_date', '>=', $year);
         })->orderBy('id', 'desc')->get();
@@ -67,22 +77,95 @@ class DashboadController extends Controller
             $query->where('date_of_commencement', '>=', $year);
         })->get();
         
+        $leavePending = LeaveRequest::when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+            if($RolePermission == 'CEO' || $RolePermission == 'BOD' || $RolePermission == 'BM' || $RolePermission == 'HOD'){
+                $query->where("next_approver", Auth::user()->id);
+                $query->whereIn("status", ["approved_hod", "approved_lm", "pending"]);
+            }else{
+                $query->whereIn("status", ["pending","approved_hod", "approved_lm"]);
+            }
+        })->count();
+        $leaveApproval = LeaveRequest::when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+            if($RolePermission == 'CEO' || $RolePermission == 'BOD' || $RolePermission == 'BM' || $RolePermission == 'HOD'){
+                $query->whereJsonContains("approved_by", Auth::user()->id);
+            }else{
+                $query->where("status", ["approved"]);
+            }
+        })->count();
+        $leaveReject = LeaveRequest::when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+            if($RolePermission == 'CEO' || $RolePermission == 'BOD' || $RolePermission == 'BM' || $RolePermission == 'HOD'){
+                $query->where("next_approver", Auth::user()->id);
+                $query->whereIn("status", ["rejected_hod","rejected_lm"]);
+            }else{
+                $query->whereIn("status", ["rejected","rejected_hod","rejected_lm"]);
+            }
+        })->count();
+        $leaveCancel = LeaveRequest::where("status","cancel")
+        ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+            if($RolePermission == 'CEO' || $RolePermission == 'BOD' || $RolePermission == 'BM' || $RolePermission == 'HOD'){
+                $query->whereJsonContains("approved_by", Auth::user()->id);
+                $query->where("status", "cancel");
+            }else if($RolePermission == 'HR'){
+                $query->where("status", "cancel");
+            }
+        })->count();
+
         $totalStaff =  User::with("gender")->with("position")->whereIn('emp_status',['1','2','10','Probation'])->get();
-        $staffPromotes = StaffPromoted::all()->count();
-        $transferred = Transferred::all()->count();
-        $empUpcoming = User::where("emp_status","Upcoming")->get()->count();
-        $candidateResumes = CandidateResume::whereNot("status","5")->get()->count();
-        // $dataTrainings = Training::whereYear("created_at", $yearLy)->get();
-        $dataTrainings = Training::get();
-        $dataEmployeeTrainings = [];
-        foreach ($dataTrainings as $key => $item) {
-            $users = User::whereIn('id', $item->employee_id)->select("number_employee","employee_name_kh", "employee_name_en", "branch_id")->with('branch')->get();
-            $dataEmployeeTrainings[] = [
-                "training_type"=> $item->training_type,
-                "employee"=> $users,
-            ];
-        }
-        
+        $staffPromotes = StaffPromoted::with("employee")->join('users', 'staff_promoteds.employee_id', '=', 'users.id')
+            ->select(
+                'staff_promoteds.*',
+                'users.employee_name_en',
+                'users.employee_name_kh',
+                'users.number_employee',
+                'users.branch_id',
+                'users.department_id',
+            )
+            ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+                if ($RolePermission == 'Employee') {
+                    $query->where("users.id", Auth::user()->id);
+                }
+                if ($RolePermission == 'HOD') {
+                    $query->whereIn("users.department_id", EmployeeRepository::getRoleHOD());
+                }
+                if ($RolePermission == 'BM') {
+                    $query->where("users.branch_id", Auth::user()->branch_id);
+                }
+            })->count();
+        $transferred = Transferred::with("employee")->with("branch")->with("position")->join('users', 'transferreds.employee_id', '=', 'users.id')
+            ->select(
+                'transferreds.*',
+                'users.employee_name_en',
+                'users.employee_name_kh',
+                'users.branch_id',
+                'users.department_id',
+            )
+            ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+                if ($RolePermission == 'Employee') {
+                    $query->where("users.id", Auth::user()->id);
+                }
+                if ($RolePermission == 'HOD') {
+                    $query->whereIn("users.department_id", EmployeeRepository::getRoleHOD());
+                }
+                if ($RolePermission == 'BM') {
+                    $query->where("users.branch_id", Auth::user()->branch_id);
+                }
+        })->count();
+
+         // $dataTrainings = Training::whereYear("created_at", $yearLy)->get();
+         $dataTrainings = Training::get();
+         $dataEmployeeTrainings = [];
+         foreach ($dataTrainings as $key => $item) {
+             $users = User::whereIn('id', $item->employee_id)->select("number_employee","employee_name_kh", "employee_name_en", "branch_id")->with('branch')->get();
+             $dataEmployeeTrainings[] = [
+                 "training_type"=> $item->training_type,
+                 "employee"=> $users,
+             ];
+         }
+
+        $empUpcoming = User::where("emp_status","Upcoming")->count();
+
+        $candidateResumes = CandidateResume::whereNot("status","5")->count();
+
         return response()->json([
             'options'=>$options,
             'position_type'=>$position_type,
@@ -98,6 +181,10 @@ class DashboadController extends Controller
             "candidateResumes"=>$candidateResumes,
             "empUpcoming"=>$empUpcoming,
             'dataEmployeeTrainings'=> $dataEmployeeTrainings,
+            'leavePending'      => $leavePending,
+            'leaveApproval'     => $leaveApproval,
+            'leaveReject'       => $leaveReject,
+            'leaveCancel'       => $leaveCancel,
         ]);
     }
 }

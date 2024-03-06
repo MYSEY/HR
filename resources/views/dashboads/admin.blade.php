@@ -266,6 +266,8 @@
         }
     }
 </style>
+{{-- style_dashboard.css --}}
+<link href="{{ asset('admin/css/style_dashboard.css') }}" rel="stylesheet" type="text/css">
 @section('content')
     <div class="">
         <div class="page-header">
@@ -278,52 +280,116 @@
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
-                <div class="card dash-widget">
+        
+        {{-- <div class="row"> --}}
+            {{-- <div class="col-md-12 col-lg-6 col-xl-4 d-flex">
+                <div class="card flex-fill">
                     <div class="card-body">
-                        <span class="dash-widget-icon"><i class="fa fa-user"></i></span>
-                        <div class="dash-widget-info">
-                            <h3 id="total-resigned-staff"></h3>
-                           <a href="{{ url('/reports/staff-resigned-report') }}"> <span>@lang('lang.resigned_staff')</span></a>
+                        <div class="statistic-header">
+                            <h4>Attendance &amp; Leaves</h4>
+                            <div class="dropdown statistic-dropdown">
+                                <a class="dropdown-toggle" data-bs-toggle="dropdown" href="javascript:void(0);">
+                                    2024
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-end">
+                                    <a href="javascript:void(0);" class="dropdown-item">
+                                        2025
+                                    </a>
+                                    <a href="javascript:void(0);" class="dropdown-item">
+                                        2026
+                                    </a>
+                                    <a href="javascript:void(0);" class="dropdown-item">
+                                        2027
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="attendance-list">
+                            <div class="row">
+                                
+                                <div class="col-md-3">
+                                    <div class="attendance-details">
+                                        <h4 class="text-info leavePending"></h4>
+                                        <p>Pending</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="attendance-details">
+                                        <h4 class="text-success leaveApproval"></h4>
+                                        <p>Approval</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="attendance-details">
+                                        <h4 class="text-danger leaveReject"></h4>
+                                        <p>@lang('lang.reject')</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="attendance-details">
+                                        <h4 class="text-danger leaveCancel"></h4>
+                                        <p>@lang('lang.cancel')</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="view-attendance">
+                            <a href="{{ url('/leaves/admin') }}">
+                                Apply Leave <i class="fe fe-arrow-right-circle"></i>
+                            </a>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
-                <div class="card dash-widget">
-                    <div class="card-body">
-                        <span class="dash-widget-icon"><i class="fa fa-user"></i></span>
-                        <div class="dash-widget-info">
-                            <h3 id="total-promoted-staff"></h3>
-                            <a href="{{ url('/reports/promoted-staff-report') }}"><span>@lang('lang.promoted_staff')</span></a>
+            </div> --}}
+            {{-- <div class="col-md-12 col-lg-12 col-xl-12 d-flex"> --}}
+                <div class="row">
+                    <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
+                        <div class="card dash-widget">
+                            <div class="card-body">
+                                <span class="dash-widget-icon"><i class="fa fa-user"></i></span>
+                                <div class="dash-widget-info">
+                                    <h3 id="total-resigned-staff"></h3>
+                                   <a href="{{ url('/reports/staff-resigned-report') }}"> <span>@lang('lang.resigned_staff')</span></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
+                        <div class="card dash-widget">
+                            <div class="card-body">
+                                <span class="dash-widget-icon"><i class="fa fa-user"></i></span>
+                                <div class="dash-widget-info">
+                                    <h3 id="total-promoted-staff"></h3>
+                                    <a href="{{ url('/reports/promoted-staff-report') }}"><span>@lang('lang.promoted_staff')</span></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
+                        <div class="card dash-widget">
+                            <div class="card-body">
+                                <span class="dash-widget-icon"><i class="fa fa-user"></i></span>
+                                <div class="dash-widget-info">
+                                    <h3 id="total-transferred-staff"></h3>
+                                    <a href="{{ url('/reports/transferred-staff-report') }}"> <span>@lang('lang.transferred_staff')</span></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
+                        <div class="card dash-widget">
+                            <div class="card-body">
+                                <span class="dash-widget-icon"><i class="la la-edit"></i></span>
+                                <div class="dash-widget-info">
+                                    <h3 id="total-training"></h3>
+                                    <a href="{{ url('/training/list') }}"><span>@lang('lang.training')</span></a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
-                <div class="card dash-widget">
-                    <div class="card-body">
-                        <span class="dash-widget-icon"><i class="fa fa-user"></i></span>
-                        <div class="dash-widget-info">
-                            <h3 id="total-transferred-staff"></h3>
-                            <a href="{{ url('/reports/transferred-staff-report') }}"> <span>@lang('lang.transferred_staff')</span></a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
-                <div class="card dash-widget">
-                    <div class="card-body">
-                        <span class="dash-widget-icon"><i class="la la-edit"></i></span>
-                        <div class="dash-widget-info">
-                            <h3 id="total-training"></h3>
-                            <a href="{{ url('/training/list') }}"><span>@lang('lang.training')</span></a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+            {{-- </div> --}}
+        {{-- </div> --}}
         <div class="row">
             @if (permissionAccess("m1-s1","is_dashboard")->is_dashboard["is_employee"] == "1")
                 <div class="col-md-12 col-lg-6 col-xl-4 d-flex">
@@ -386,7 +452,7 @@
                                 <div class="stats-info">
                                     <p>25 - 44 <strong id="total-age-25">0</strong></p>
                                     <div class="progress">
-                                        <div class="progress-bar bg-info" role="progressbar" id="progressbar-25" aria-valuemin="0"></div>
+                                        <div class="progress-bar bg-info" role="progressbar" id="progressbar-25" aria-valuemax="100"></div>
                                     </div>
                                 </div>
                                 <div class="stats-info">
@@ -642,16 +708,19 @@
                     $("#percantage-fdc").text(Math.round((total_fdc / totalStaff.length)*100)+"%");
                     $("#percantage-udc").text(Math.round((total_udc / totalStaff.length)*100)+"%");
 
-                    $("#total-age-18").text(total_age_18);
-                    $('#progressbar-18').attr('aria-valuenow', total_age_18).css('width', total_age_18+'%');
+                    $("#total-age-18").text(total_age_18+" / "+ totalStaff.length);
+                    let colorage18 = (total_age_18 / totalStaff.length) *100;
+                    $('#progressbar-18').attr('aria-valuenow', total_age_18).css('width', colorage18+'%');
                     $('#progressbar-18').attr('aria-valuemax', totalStaff.length);
 
-                    $("#total-age-25").text(total_age_25);
-                    $('#progressbar-25').attr('aria-valuenow', total_age_25).css('width', total_age_25+'%');
+                    $("#total-age-25").text(total_age_25+" / "+totalStaff.length);
+                    let colorage25 = (total_age_25 / totalStaff.length) *100;
+                    $('#progressbar-25').attr('aria-valuenow', total_age_25).css('width', colorage25+'%');
                     $('#progressbar-25').attr('aria-valuemax', totalStaff.length);
 
-                    $("#total-age-45").text(total_age_45);
-                    $('#progressbar-45').attr('aria-valuenow', total_age_45).css('width', total_age_45+'%');
+                    $("#total-age-45").text(total_age_45+ " / "+ totalStaff.length);
+                    let colorage45 = (total_age_45 / totalStaff.length) *100;
+                    $('#progressbar-45').attr('aria-valuenow', total_age_45).css('width', colorage45+'%');
                     $('#progressbar-45').attr('aria-valuemax', totalStaff.length);
 
                     $('#total-date-birthday').text(total_date_birthday);
@@ -663,6 +732,11 @@
                 $("#total-transferred-staff").text(response.transferred);
                 $("#total-staff-working").text(response.totalStaff.length);
                 $("#total-resign-staff-resume").text(response.staffResignations.length);
+
+                $(".leavePending").text(response.leavePending);
+                $(".leaveApproval").text(response.leaveApproval);
+                $(".leaveReject").text(response.leaveReject);
+                $(".leaveCancel").text(response.leaveCancel);
                 
                 $("#total-training").text(response.dataTrainings.length);
                 
