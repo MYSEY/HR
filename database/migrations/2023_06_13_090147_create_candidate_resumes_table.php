@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string('name_kh');
             $table->string('name_en')->nullable();
             $table->string('gender')->nullable();
+            $table->integer('line_manager')->nullable();
             $table->string('current_position')->nullable();
             $table->string('companey_name')->nullable();
             $table->string('position_applied')->nullable();
