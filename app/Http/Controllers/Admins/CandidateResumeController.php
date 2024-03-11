@@ -24,6 +24,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use Spatie\Activitylog\Models\Activity;
+use Illuminate\Support\Str;
 
 class CandidateResumeController extends Controller
 {
@@ -205,30 +206,78 @@ class CandidateResumeController extends Controller
             $userID = Auth::user()->id;
             $i = 0;
             $re = 1;
+            $arr = [];
+            $status = "1";
+            $short_list = "";
+            $joined_interview = "";
+            $shortlistSpaces = "";
+            $received_date = null;
+            $interviewed_date = null;
+            $contract_date = null;
+            $join_date = null;
             foreach ($allDataInSheet as $csv) {
                 $i++;
-                if ($i != 1) {
+                if ($i > 2) {
                     $fulNameKH = $csv[0].' '.$csv[1];
                     $fulNameEN = $csv[2].' '.$csv[3];
+                    $shortlist = Str::lower($csv[13]);
+                    $shortlistSpaces = str_replace(' ', '', $shortlist);
+                    $received_date = $csv[10] ? Carbon::createFromDate($csv[10])->format('Y-m-d') : null;
+                    $interviewed_date = $csv[14] ? Carbon::createFromDate($csv[14])->format('Y-m-d H:i:s') : null;
+                    $contract_date = $csv[20] ? Carbon::createFromDate($csv[20])->format('Y-m-d') : null;
+                    $join_date = $csv[21] ? Carbon::createFromDate($csv[21])->format('Y-m-d') : null;
+                    $joined_inter = Str::lower($csv[18]);
+                    $joined_interview_spaces = str_replace(' ', '', $joined_inter);
+                    if ($shortlistSpaces == "yes") {
+                        if ($csv[19]) {
+                            $status = 3;
+                        }else{
+                            $status = 2;
+                        }
+                        if ($joined_interview_spaces == "yes") {
+                            $joined_interview = 1;
+                        }else if ($joined_interview_spaces == "no") {
+                            $status = 3;
+                            $joined_interview = "";
+                        }else{
+                            $joined_interview = 3;
+                        }
+                        if ($csv[19] == 1 && $contract_date && $join_date) {
+                            $status = 4;
+                        }
+                        $short_list = 1;
+                    }else if($shortlistSpaces == "no"){
+                        $short_list = 2;   
+                        $status = 2;
+                    }
                     $arr = [
-                        'name_kh'               => $fulNameKH,
-                        'name_en'               => $fulNameEN,
-                        'last_name_kh'          => $csv[0],
-                        'first_name_kh'         => $csv[1],
-                        'last_name_en'          => $csv[2],
-                        'first_name_en'         => $csv[3],
-                        'gender'                => $csv[4],
-                        'current_position'      => $csv[5],
-                        'companey_name'         => $csv[6],
-                        'current_address'       => $csv[7],
-                        'position_applied'      => $csv[8],
-                        'location_applied'      => $csv[9],
-                        'received_date'         => $csv[10],
-                        'recruitment_channel'   => $csv[11],
-                        'contact_number'        => $csv[12],
-                        'status'                => "1",
-                        'updated_by'            => $userID,
-                        'created_at'            => Carbon::now(),
+                        'name_kh'                => $fulNameKH,
+                        'name_en'                => $fulNameEN,
+                        'last_name_kh'           => $csv[0],
+                        'first_name_kh'          => $csv[1],
+                        'last_name_en'           => $csv[2],
+                        'first_name_en'          => $csv[3],
+                        'gender'                 => $csv[4],
+                        'current_position'       => $csv[5],
+                        'companey_name'          => $csv[6],
+                        'current_address'        => $csv[7],
+                        'position_applied'       => $csv[8],
+                        'location_applied'       => $csv[9],
+                        'received_date'          => $received_date,
+                        'recruitment_channel'    => $csv[11],
+                        'contact_number'         => $csv[12],
+                        'short_list'             => $short_list,
+                        'interviewed_date'       => $interviewed_date,
+                        'interviewed_channel'    => $csv[15],
+                        'committee_interview'    => $csv[16],
+                        'remark'                 => $csv[17],
+                        'status'                 => $status,
+                        'joined_interview'       => $joined_interview,
+                        'interviewed_result'     => $csv[19],
+                        'contract_date'          => $contract_date,
+                        'join_date'              => $join_date,
+                        'updated_by'             => $userID,
+                        'created_at'             => Carbon::now(),
                     ];
                     DB::table('candidate_resumes')->insert($arr);
                 }
