@@ -22,10 +22,11 @@ class DashboadController extends Controller
 {
     public function dashboadEmployee(){
         // dd(Carbon::now()->addDays(1));
-        $holiday = Holiday::where('from','>=',Carbon::now()->addDays(2))->get(['title_kh','from']);
+        $holiday = Holiday::where('from','<=',Carbon::now()->addDays(2))->get(['title_kh','from']);
         dd($holiday);
+        $LeaveRequest = LeaveRequest::where('employee_id',Auth::user()->id)->first();
         $data = LeaveAllocation::where('employee_id',Auth::user()->id)->first();
-        return view('dashboads.employee',compact('data','holiday'));
+        return view('dashboads.employee',compact('data','holiday','LeaveRequest'));
     }
     public function dashboadAdmin(){
         return view('dashboads.admin');
@@ -115,7 +116,14 @@ class DashboadController extends Controller
             }
         })->count();
 
-        $totalStaff =  User::with("gender")->with("position")->whereIn('emp_status',['1','2','10','Probation'])->get();
+        $totalStaff =  User::with("gender")->with("position")->whereIn('emp_status',['1','2','10','Probation'])
+        ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+            if($RolePermission == 'BM'){
+                $query->where("branch_id", Auth::user()->branch_id);
+            }else if($RolePermission == 'HOD'){
+                $query->whereIn("department_id",  EmployeeRepository::getRoleHOD());
+            }
+        })->get();
         $staffPromotes = StaffPromoted::with("employee")->join('users', 'staff_promoteds.employee_id', '=', 'users.id')
             ->select(
                 'staff_promoteds.*',
@@ -157,17 +165,32 @@ class DashboadController extends Controller
         })->count();
 
          // $dataTrainings = Training::whereYear("created_at", $yearLy)->get();
-         $dataTrainings = Training::get();
-         $dataEmployeeTrainings = [];
-         foreach ($dataTrainings as $key => $item) {
-             $users = User::whereIn('id', $item->employee_id)->select("number_employee","employee_name_kh", "employee_name_en", "branch_id")->with('branch')->get();
-             $dataEmployeeTrainings[] = [
-                 "training_type"=> $item->training_type,
-                 "employee"=> $users,
-             ];
-         }
-
-        $empUpcoming = User::where("emp_status","Upcoming")->count();
+      
+        $dataTrainings = Training::get();
+        $dataEmployeeTrainings = [];
+        foreach ($dataTrainings as $key => $item) {
+                $users = User::whereIn('id', $item->employee_id)
+                ->select("number_employee","employee_name_kh", "employee_name_en", "branch_id")
+                ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+                    if($RolePermission == 'BM'){
+                        $query->where("branch_id", Auth::user()->branch_id);
+                    }else if($RolePermission == 'HOD'){
+                        $query->where("department_id",  EmployeeRepository::getRoleHOD());
+                    }
+                })->with('branch')->get();
+            $dataEmployeeTrainings[] = [
+                "training_type"=> $item->training_type,
+                "employee"=> $users,
+            ];
+        }
+        $empUpcoming = User::where("emp_status","Upcoming")
+        ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+            if($RolePermission == 'BM'){
+                $query->where("branch_id", Auth::user()->branch_id);
+            }else if($RolePermission == 'HOD'){
+                $query->whereIn("department_id",  EmployeeRepository::getRoleHOD());
+            }
+        })->count();
 
         $candidateResumes = CandidateResume::whereNot("status","5")->count();
 

@@ -28,6 +28,7 @@ class CandidateResume extends Model
         'name_kh',
         'name_en',
         'gender',
+        'line_manager',
         'current_position',
         'companey_name',
         'position_applied',

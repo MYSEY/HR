@@ -13,7 +13,8 @@ trait GeneratingCode
     {
         $count = 0;
         $employeeDate = Carbon::parse($date);
-        $lastInId = GenerateIdEmployee::whereYear('created_by', $employeeDate->format('y'))->orderBy('number_employee', 'asc')->get();
+        $lastInId = GenerateIdEmployee::orderBy('number_employee', 'DESC')->get();
+        // $lastInId = GenerateIdEmployee::whereYear('created_by', $employeeDate->format('y'))->orderBy('number_employee', 'DESC')->get();
         if (!empty($lastInId)) {
             for ($i = 0; $i < count($lastInId); $i++) {
                 $current = (int) substr(strrchr($lastInId[$i]->number_employee, "-"), 1);
@@ -28,7 +29,7 @@ trait GeneratingCode
                 }
             }
         }
-
+        
         do {
             $eployeeId =  $employeeDate->format('y').'0' . '-' . str_pad(($count + 1), 4, "0", STR_PAD_LEFT);
             $alreadyExist = GenerateIdEmployee::select('number_employee')->where('number_employee', $eployeeId)->first()->number_employee ?? null;

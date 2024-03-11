@@ -104,7 +104,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>@lang('lang.line_manager')</label>
-                                <select class="form-control hr-select2-option" id="line_manager" name="line_manager" value="{{old('line_manager')}}">
+                                <select class="hr-select2-option emp_required clear_data" id="line_manager" name="line_manager">
                                     <option selected disabled value=""> -- @lang('lang.select')--</option>
                                     @foreach ($lineManager as $item)
                                         <option data-id="{{$item->id}}" value="{{$item->id}}">{{Helper::getLang() == 'en' ? $item->employee_name_en : $item->employee_name_kh}}</option>
@@ -652,7 +652,7 @@
                         $("#pr_employee_id").text(data.number_employee);
                         $("#pr_basic_salary").text(data.basic_salary);
                         $("#pr_salary_increase").text($("#salary_to_increase").val());
-                        if (data.positiontype.name_english == "Field Staff") {
+                        if (data.position.position_type == "Field Staff") {
                             $("#pr_supporting_or_field_staff").text("ដោយធៀបនិងភាគរយការងារសម្រេចបានសម្រាប់បុគ្គលិកឥណទាន (គិតតាម Pro-Rate) ដោយការបង់ពន្ធជូនរាជរដ្ឋាភិបាលជាបន្ទុករបស់និយោជិត");
                         }
                         if (btn_action == 1) {

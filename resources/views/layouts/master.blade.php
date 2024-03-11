@@ -118,12 +118,11 @@
     <link rel="stylesheet" href="{{ asset('admin/css/daterangepicker/daterangepicker.css') }}">
 
     {{-- <link rel="stylesheet" href="{{ asset('admin/css/summernote-bs4.css') }}"> --}}
+    <link href="{{ asset('admin/css/style_dashboard.css') }}" rel="stylesheet" type="text/css">
 
     <link href="{{ asset('admin/css/morris.css') }}" rel="stylesheet" type="text/css">
 
     <link href="{{ asset('admin/css/fullcalendar.min.css') }}" rel="stylesheet" type="text/css">
-    {{-- style_dashboard.css --}}
-    <link href="{{ asset('admin/css/style_dashboard.css') }}" rel="stylesheet" type="text/css">
 
     <link rel="stylesheet" href="{{ asset('admin/css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('admin/css/noty.css') }}">

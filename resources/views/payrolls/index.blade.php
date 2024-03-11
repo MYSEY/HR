@@ -25,12 +25,13 @@
                         <li class="breadcrumb-item active">@lang('lang.salary')</li>
                     </ul>
                 </div>
-                <div class="col-auto float-end ms-auto">
-                    @if (permissionAccess("m4-s2","is_import")->value == "1")
-                        <a href="#" class="btn add-btn" data-toggle="modal" id="importPayroll"><i class="fa fa-plus"></i>@lang('lang.import')</a>
-                        {{-- <a href="#" class="btn add-btn me-2" data-bs-toggle="modal" data-bs-target="#add_salary"><i class="fa fa-plus"></i> @lang('lang.add_new')</a> --}}
-                    @endif
-                </div>
+                @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'HR' || Auth::user()->RolePermission == 'developer')
+                    <div class="col-auto float-end ms-auto">
+                        @if (permissionAccess("m4-s2","is_import")->value == "1")
+                            <a href="#" class="btn add-btn" data-toggle="modal" id="importPayroll"><i class="fa fa-plus"></i>@lang('lang.import')</a>
+                        @endif
+                    </div>
+                @endif
             </div>
         </div>
         @if (permissionAccess("m4-s2","is_view")->value == "1")

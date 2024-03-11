@@ -89,19 +89,21 @@
                 </div>
             </div>
         </div> --}}
-        <div class="row">
-            <div class="col-md-12">
-                <div class="employee-alert-box">
-                    <div class="alert alert-outline-success alert-dismissible fade show">
-                        <div class="employee-alert-request">
-                            <i class="far fa-circle-question"></i>Your Leave Request on <span>“24th April 2024”</span> has been Approved!!!
+        @if ($LeaveRequest)
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="employee-alert-box">
+                        <div class="alert alert-outline-success alert-dismissible fade show">
+                            <div class="employee-alert-request">
+                                <i class="far fa-circle-question"></i>Your Leave Request on <span>“{{ Carbon\Carbon::parse($LeaveRequest->created_at)->format('F d M Y') }}”</span> has been {{$LeaveRequest->status}}!!!
+                            </div>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"><i class="fas fa-xmark"></i></button>
                         </div>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"><i class="fas fa-xmark"></i></button>
                     </div>
                 </div>
             </div>
-        </div>
-
+        @endif
+        
         <div class="row">
             <div class="col-xxl-12 col-lg-12 col-md-12">
                 <div class="row">
@@ -110,7 +112,7 @@
                             <div class="card-body">
                                 <div class="welcome-info">
                                     <div class="welcome-content">
-                                        <h4>@lang('lang.welcome'), {{ Auth::user()->employee_name_en }}</h4>
+                                        <h4>@lang('lang.welcome'), {{ Helper::getLang() == 'en' ? Auth::user()->employee_name_en : Auth::user()->employee_name_kh }}</h4>
                                         <p>@lang('lang.join_date') <span>{{ Carbon\Carbon::parse(Auth::user()->date_of_commencement)->format('d M Y') }}</span></p>
                                     </div>
                                     <div class="welcome-img">
@@ -122,27 +124,28 @@
                                     </div>
                                 </div>
                                 <div class="welcome-btn">
-                                    <a href="{{route('employee.profile',$data->employee_id)}}" class="btn">View Profile</a>
+                                    <a href="{{route('employee.profile',$data->employee_id)}}" class="btn">@lang('lang.view_profile')</a>
                                 </div>
                             </div>
                         </div>
                         
                         <div class="card info-card flex-fill">
                             <div class="card-body">
-                                <h4>Upcoming Holidays</h4>
+                                <h4>@lang('lang.upcoming_holiday')</h4>
                                 <div class="holiday-details">
                                     <div class="holiday-calendar">
                                         <div class="holiday-calendar-icon">
-                                            <img src="https://smarthr.dreamstechnologies.com/laravel/template/public/assets/img/icons/holiday-calendar.svg"
-                                                alt="Icon">
+                                            <img src="https://smarthr.dreamstechnologies.com/laravel/template/public/assets/img/icons/holiday-calendar.svg" alt="Icon">
                                         </div>
                                         <div class="holiday-calendar-content">
-                                            <h6>Ramzan</h6>
-                                            <p>Mon 20 May 2024</p>
+                                            @foreach ($holiday as $item)
+                                                <h6>{{Helper::getLang() == 'en' ? $item->title_en : $item->title_kh}}</h6>
+                                                <p>{{ Carbon\Carbon::parse($item->from)->format('d M Y') }}</p>
+                                            @endforeach
                                         </div>
                                     </div>
                                     <div class="holiday-btn">
-                                        <a href="{{url('holidays')}}" class="btn">View All</a>
+                                        <a href="{{url('holidays')}}" class="btn">@lang('lang.view_all')</a>
                                     </div>
                                 </div>
                             </div>
@@ -175,26 +178,20 @@
                                     <div class="row">
                                         <div class="col-md-3">
                                             <div class="dash-widget-info">
-                                                <h3>{{ number_format($data->total_annual_leave ?? 0) }}</h3>
+                                                <h3 class="text-purple">{{ number_format($data->total_annual_leave ?? 0) }}</h3>
                                                 <span>@lang('lang.annual_leave')</span>
                                             </div>
                                         </div>
                                         <div class="col-md-3">
-                                            {{-- <div class="attendance-details">
-                                                <h4 class="text-pink">5.5</h4>
-                                                <p>Leaves Taken</p>
-                                            </div> --}}
                                             <div class="dash-widget-info">
-                                                <h3>{{ number_format($data->total_sick_leave ?? 0) }}</h3>
+                                                <h3 class="text-primary">{{ number_format($data->total_sick_leave ?? 0) }}</h3>
                                                 <span>@lang('lang.sick_leave')</span>
                                             </div>
                                         </div>
                                         <div class="col-md-3">
                                             <div class="attendance-details">
-                                                {{-- <h4 class="text-purple">0</h4>
-                                                <p>Pending Approval</p> --}}
                                                 <div class="dash-widget-info">
-                                                    <h3>{{ number_format($data->total_special_leave ?? 0) }}</h3>
+                                                    <h3 class="text-success">{{ number_format($data->total_special_leave ?? 0) }}</h3>
                                                     <span>@lang('lang.special_leave')</span>
                                                 </div>
                                             </div>
@@ -202,7 +199,7 @@
                                         <div class="col-md-3">
                                             <div class="attendance-details">
                                                 <div class="dash-widget-info">
-                                                    <h3>{{ $data->total_unpaid_leave ?? 0 }}</h3>
+                                                    <h3 class="text-info">{{ $data->total_unpaid_leave ?? 0 }}</h3>
                                                     <span>@lang('lang.unpaid_leave')</span>
                                                 </div>
                                             </div>
@@ -210,11 +207,7 @@
                                     </div>
                                 </div>
                                 <div class="view-attendance">
-                                    <a class="btn btn-primary" href="{{ url('leaves/employee') }}">Apply Leave</a>
-                                    {{-- <a
-                                        href="https://smarthr.dreamstechnologies.com/laravel/template/public/leaves-employee">
-                                        Apply Leave <i class="fe fe-arrow-right-circle"></i>
-                                    </a> --}}
+                                    <a class="btn btn-primary" href="{{ url('leaves/employee') }}">@lang('lang.apply_leave')</a>
                                 </div>
                             </div>
                         </div>

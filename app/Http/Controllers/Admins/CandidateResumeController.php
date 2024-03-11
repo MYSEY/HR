@@ -523,7 +523,7 @@ class CandidateResumeController extends Controller
                     'basic_salary' => $candidate->basic_salary,
                     'salary_increas' => $candidate->salary_increas,
                     'position_type' => $candidate->position_type,
-                    'line_manager' => $candidate->line_manager,
+                    'line_manager' => $request->line_manager,
                     'department_id' => $candidate->department_id,
                     'date_of_commencement' => $candidate->join_date,
                     'fdc_date' => $candidate->fdc_date,
@@ -548,12 +548,12 @@ class CandidateResumeController extends Controller
                     'created_by' => Auth::user()->id,
                 ];
                 $userData = User::create($emp_data);
-                CandidateResume::where('id',$candidate->id)->update([ 'status' => 5]);
+                CandidateResume::where('id',$candidate->id)->update([ 'status' => 5, 'line_manager' => $request->line_manager]);
                 DB::commit();
                 $dataProcessing = CandidateResume::where("status",'4')->count();
                 return response()->json(['message' => 'successfull', "dataProcessing"=>$dataProcessing]);
             }else{
-                $generateID = GenerateIdEmployee::where("number_employee",$request->number_employee )->first();
+                $generateID = GenerateIdEmployee::where("number_employee",$request->number_employee)->first();
                 if (!$generateID) {
                     GenerateIdEmployee::create([
                         'candidate_resumes_id'   => $request->candidate_id,
@@ -572,7 +572,7 @@ class CandidateResumeController extends Controller
                     'contact_number' => $request->personal_phone_number,
                     'id_card_number' =>$request->id_card_number,
                     'basic_salary' => $request->basic_salary,
-                    'line_manager' => $candidate->line_manager,
+                    'line_manager' => $request->line_manager,
                     'salary_increas' => $request->salary_increas,
                     'position_type' => $request->position_type,
                     'department_id' =>$request->department_id,
