@@ -21,10 +21,9 @@ use Illuminate\Support\Facades\Auth;
 class DashboadController extends Controller
 {
     public function dashboadEmployee(){
-        // dd(Carbon::now()->addDays(1));
         $holiday = Holiday::where('from','=',Carbon::now()->addDays(2))->get(['title_kh','from']);
-        // dd($holiday);
         $LeaveRequest = LeaveRequest::where('employee_id',Auth::user()->id)->orderBy('id', 'DESC')->first();
+        // dd($LeaveRequest);
         $data = LeaveAllocation::where('employee_id',Auth::user()->id)->first();
         return view('dashboads.employee',compact('data','holiday','LeaveRequest'));
     }

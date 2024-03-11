@@ -125,11 +125,33 @@
                                 </div>
                                 <div class="welcome-btn">
                                     <a href="{{route('employee.profile',$data->employee_id)}}" class="btn">@lang('lang.view_profile')</a>
-                                    <a class="btn" href="{{ url('leaves/employee') }}">@lang('lang.apply_leave')</a>
                                 </div>
                             </div>
                         </div>
-                        
+                        <div class="">
+                            <div class="dash-sidebar">
+                                <section>
+                                    <h5 class="dash-title">Your Leave</h5>
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="time-list">
+                                                <div class="dash-stats-list">
+                                                    <h4>4.5</h4>
+                                                    <p>Leave Taken</p>
+                                                </div>
+                                                <div class="dash-stats-list">
+                                                    <h4>12</h4>
+                                                    <p>Remaining</p>
+                                                </div>
+                                            </div>
+                                            <div class="request-btn">
+                                                <a class="btn btn-primary" href="{{ url('leaves/employee') }}">Apply Leave</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                            </div>
+                        </div>
                         <div class="card info-card flex-fill">
                             <div class="card-body">
                                 <h4>@lang('lang.upcoming_holiday')</h4>
@@ -154,10 +176,9 @@
                     </div>
                     <div class="col-lg-8 col-md-12">
                         <div class="row">
-                            <div class="col-md-4 col-sm-4 col-lg-4 col-xl-4">
+                            <div class="col-md-6 col-sm-6 col-lg-6 col-xl-6">
                                 <div class="card dash-widget">
                                     <div class="card-body">
-                                        
                                         <div class="dash-widget-info">
                                             <h3>{{ number_format($data->total_annual_leave ?? 0) }}</h3>
                                             <span>@lang('lang.annual_leave')</span>
@@ -165,7 +186,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-4 col-sm-4 col-lg-4 col-xl-4">
+                            <div class="col-md-6 col-sm-6 col-lg-6 col-xl-6">
                                 <div class="card dash-widget">
                                     <div class="card-body">
                                         <div class="dash-widget-info">
@@ -175,7 +196,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-4 col-sm-4 col-lg-4 col-xl-4">
+                            <div class="col-md-6 col-sm-6 col-lg-6 col-xl-6">
                                 <div class="card dash-widget">
                                     <div class="card-body">
                                         <div class="dash-widget-info">
@@ -185,7 +206,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-4 col-sm-4 col-lg-4 col-xl-4">
+                            <div class="col-md-6 col-sm-6 col-lg-6 col-xl-6">
                                 <div class="card dash-widget">
                                     <div class="card-body">
                                         <div class="dash-widget-info">
