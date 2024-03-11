@@ -90,12 +90,12 @@
                                                                     </a>
                                                                 @endif
                                                                 <div class="dropdown-menu dropdown-menu-right btn-emp-status" id="btn-emp-status">
-                                                                    <input type="text" name="" class="join_date" value="{{$item == null ? "" : $item->date_of_commencement}}" hidden>
-                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-id="Probation" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-success"></i>@lang('lang.probation')
+                                                                    {{-- <input type="text" name="" class="join_date" value="{{$item == null ? "" : $item->date_of_commencement}}" hidden> --}}
+                                                                    <a class="dropdown-item" data-emp-id="{{$item->id}}" data-join-date={{$item->date_of_commencement}} data-start-date="{{$item->fdc_date}}" data-id="Probation" href="#">
+                                                                        <i class="fa fa-dot-circle-o text-success"></i> @lang('lang.probation')
                                                                     </a>
                                                                     <a class="dropdown-item" data-emp-id="{{$item->id}}" data-id="Cancel" href="#">
-                                                                        <i class="fa fa-dot-circle-o text-danger"></i>@lang('lang.cancel')
+                                                                        <i class="fa fa-dot-circle-o text-danger"></i> @lang('lang.cancel')
                                                                     </a>
                                                                 </div>
                                                             </div>

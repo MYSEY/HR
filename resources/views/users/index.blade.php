@@ -261,8 +261,8 @@
             }else{
                 var emp_status = '@lang("lang.cancel_signed_contract")';
             }
-
-            let join_date = $(".join_date").val();
+            
+            let join_date = $(this).attr('data-join-date');
             let start_date = $(this).attr('data-start-date');
             let end_date = $(this).attr('data-end-date');
             if (status == "Probation") {
