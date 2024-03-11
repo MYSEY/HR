@@ -22,9 +22,9 @@ class DashboadController extends Controller
 {
     public function dashboadEmployee(){
         // dd(Carbon::now()->addDays(1));
-        $holiday = Holiday::where('from','<=',Carbon::now()->addDays(2))->get(['title_kh','from']);
-        dd($holiday);
-        $LeaveRequest = LeaveRequest::where('employee_id',Auth::user()->id)->first();
+        $holiday = Holiday::where('from','=',Carbon::now()->addDays(2))->get(['title_kh','from']);
+        // dd($holiday);
+        $LeaveRequest = LeaveRequest::where('employee_id',Auth::user()->id)->orderBy('id', 'DESC')->first();
         $data = LeaveAllocation::where('employee_id',Auth::user()->id)->first();
         return view('dashboads.employee',compact('data','holiday','LeaveRequest'));
     }

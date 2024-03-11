@@ -125,6 +125,7 @@
                                 </div>
                                 <div class="welcome-btn">
                                     <a href="{{route('employee.profile',$data->employee_id)}}" class="btn">@lang('lang.view_profile')</a>
+                                    <a class="btn" href="{{ url('leaves/employee') }}">@lang('lang.apply_leave')</a>
                                 </div>
                             </div>
                         </div>
@@ -152,7 +153,51 @@
                         </div>
                     </div>
                     <div class="col-lg-8 col-md-12">
-                        <div class="card flex-fill">
+                        <div class="row">
+                            <div class="col-md-4 col-sm-4 col-lg-4 col-xl-4">
+                                <div class="card dash-widget">
+                                    <div class="card-body">
+                                        
+                                        <div class="dash-widget-info">
+                                            <h3>{{ number_format($data->total_annual_leave ?? 0) }}</h3>
+                                            <span>@lang('lang.annual_leave')</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-sm-4 col-lg-4 col-xl-4">
+                                <div class="card dash-widget">
+                                    <div class="card-body">
+                                        <div class="dash-widget-info">
+                                            <h3>{{ number_format($data->total_sick_leave ?? 0) }}</h3>
+                                            <span>@lang('lang.sick_leave')</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-sm-4 col-lg-4 col-xl-4">
+                                <div class="card dash-widget">
+                                    <div class="card-body">
+                                        <div class="dash-widget-info">
+                                            <h3>{{ number_format($data->total_special_leave ?? 0) }}</h3>
+                                            <span>@lang('lang.special_leave')</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-sm-4 col-lg-4 col-xl-4">
+                                <div class="card dash-widget">
+                                    <div class="card-body">
+                                        <div class="dash-widget-info">
+                                            <h3>{{ $data->total_unpaid_leave ?? 0 }}</h3>
+                                            <span>@lang('lang.unpaid_leave')</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                       
+                        {{-- <div class="card flex-fill">
                             <div class="card-body">
                                 <div class="statistic-header">
                                     <h4>@lang('lang.leave')</h4>
@@ -174,7 +219,8 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="attendance-list">
+                                
+                                <div class="">
                                     <div class="row">
                                         <div class="col-md-3">
                                             <div class="dash-widget-info">
@@ -210,7 +256,7 @@
                                     <a class="btn btn-primary" href="{{ url('leaves/employee') }}">@lang('lang.apply_leave')</a>
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
             </div>
