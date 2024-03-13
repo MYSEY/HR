@@ -24,7 +24,6 @@ class DashboadController extends Controller
     public function dashboadEmployee(){
         $holiday = Holiday::where('from','=',Carbon::now()->addDays(2))->get(['title_kh','from']);
         $LeaveRequest = LeaveRequest::where('employee_id',Auth::user()->id)->orderBy('id', 'DESC')->first();
-        // dd($LeaveRequest);
         $data = LeaveAllocation::where('employee_id',Auth::user()->id)->first();
         return view('dashboads.employee',compact('data','holiday','LeaveRequest'));
     }

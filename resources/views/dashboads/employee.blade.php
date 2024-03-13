@@ -125,10 +125,11 @@
                                 </div>
                                 <div class="welcome-btn">
                                     <a href="{{route('employee.profile',$data->employee_id)}}" class="btn">@lang('lang.view_profile')</a>
+                                    <a class="btn" href="{{ url('leaves/employee') }}">Apply Leave</a>
                                 </div>
                             </div>
                         </div>
-                        <div class="">
+                        {{-- <div class="">
                             <div class="dash-sidebar">
                                 <section>
                                     <h5 class="dash-title">Your Leave</h5>
@@ -151,7 +152,7 @@
                                     </div>
                                 </section>
                             </div>
-                        </div>
+                        </div> --}}
                         <div class="card info-card flex-fill">
                             <div class="card-body">
                                 <h4>@lang('lang.upcoming_holiday')</h4>
