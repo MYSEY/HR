@@ -821,7 +821,6 @@
                                 '</tr>';
                                 num ++;
                             }else if (staff.short_list == 2) {
-                               
                                 tr_not_list += '<tr class="odd">'+
                                     '<td class="ids stuck-scroll-3">'+(num)+'</td>'+
                                     '<td class="stuck-scroll-3">'+(staff.name_kh)+' </td>'+
@@ -829,9 +828,7 @@
                                     '<td >'+(staff.option.name_english)+'</td>'+
                                     '<td >'+(staff.position.name_english)+'</td>'+
                                     '<td >'+(staff.branch.branch_name_en)+'</td>'+
-                                    '<td >'+
-                                        cv+
-                                    '</td>'+
+                                    '<td >'+(cv)+'</td>'+
                                     '<td >'+
                                         '<div class="dropdown action-label">'+
                                             (dropdown_menu)+
@@ -840,9 +837,9 @@
                                                     '<i class="fa fa-dot-circle-o text-warning"></i> @lang("lang.shortlisted")'+
                                                 '</a>'+
                                             '</div>'+
-                                        '</div>'
+                                        '</div>'+
                                     '</td>'+
-                                    '<td>'+(staff.remark ? staff.remark: "")+'</td>'+
+                                    '<td >'+(staff.remark ? staff.remark : "")+'</td>'+
                                 '</tr>';
                                 num ++;
                             }

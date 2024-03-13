@@ -179,16 +179,10 @@ class UserController extends Controller
         }
     }
     public function showDetailBirthday (Request $request){
-        $from_date = Carbon::now()->format('d');
-        $to_date = Carbon::now()->addDays(14)->format('d');
         $month = Carbon::now()->format('m');
         $monthAdd = Carbon::now()->addDays(14)->format('m');
-        $data =  User::whereIn('emp_status',['1','2','10','Probation'])
-        ->whereDay('date_of_birth', '>=', $from_date)
-        ->whereMonth('date_of_birth', $month)
-        ->orWhereMonth('date_of_birth', $monthAdd)
-        ->whereDay('date_of_birth', '<=', $to_date)
-        ->orderBy('date_of_birth', 'desc')->get();
+        $data = User::whereIn('emp_status',['1','2','10','Probation'])
+        ->whereRaw('MONTH(date_of_birth) IN ('.$month.','.$monthAdd.')')->get();
         return view('users.user_list_birthday',compact('data'));
     }
 

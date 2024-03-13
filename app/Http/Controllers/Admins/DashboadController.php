@@ -16,6 +16,7 @@ use App\Models\CandidateResume;
 use App\Models\LeaveAllocation;
 use App\Models\RecruitmentPlan;
 use App\Http\Controllers\Controller;
+use App\Repositories\Admin\EmployeeRepository;
 use Illuminate\Support\Facades\Auth;
 
 class DashboadController extends Controller
