@@ -18,6 +18,7 @@ use App\Models\RecruitmentPlan;
 use App\Http\Controllers\Controller;
 use App\Repositories\Admin\EmployeeRepository;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class DashboadController extends Controller
 {
@@ -28,7 +29,20 @@ class DashboadController extends Controller
         return view('dashboads.employee',compact('data','holiday','LeaveRequest'));
     }
     public function dashboadAdmin(){
-        return view('dashboads.admin');
+
+        $dataShortList = DB::table('candidate_resumes')->select('candidate_resumes.*')
+        ->where(DB::raw("(DATE_FORMAT(candidate_resumes.interviewed_date,'%Y-%m-%d'))"), Carbon::now()->format('Y-m-d'))
+        ->where('candidate_resumes.status','2')->get()->count();
+        $dataContract = CandidateResume::where('contract_date',Carbon::now()->format('Y-m-d'))->where('status','4')->get()->count();
+        $dataUpComming = User::where('date_of_commencement',Carbon::now()->format('Y-m-d'))->where('emp_status','Upcoming')->get()->count();
+        $dataProbation = User::where('fdc_date',Carbon::now()->format('Y-m-d'))->where('emp_status','Probation')->get()->count();
+         return view('dashboads.admin',compact(
+                    'dataUpComming',
+                    'dataProbation',
+                    'dataShortList',
+                    'dataContract'
+                ));
+        // return view('dashboads.admin');
     }
 
     public function show(Request $request){

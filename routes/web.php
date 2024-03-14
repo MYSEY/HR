@@ -50,6 +50,7 @@ use App\Http\Controllers\Admins\LeavesAdminController;
 
 Route::get('/', [LoginController::class, 'index']);
 Route::post('/login', [LoginController::class, 'login']);
+Route::post('/login/change/password', [LoginController::class, 'changePassword']);
 Route::post('/user/change/password', [LoginController::class, 'UserChangePassword']);
 Auth::routes();
 Route::middleware(['auth:sanctum'])->group(function(){

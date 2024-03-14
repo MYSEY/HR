@@ -50,10 +50,9 @@
                 overflow: hidden;
             }
             .login_box .left{
-            width: 100%;
-            height: 100%;
-            padding: 25px 25px;
-            
+                width: 100%;
+                height: 100%;
+                padding: 25px 25px;
             }           
             .left .contact{
                 display: flex;
@@ -96,61 +95,34 @@
                 -moz-box-shadow: 0px 9px 15px -11px rgba(88,54,114,1);
                 box-shadow: 0px 9px 15px -11px rgba(88,54,114,1);
             }
+
+            .modal {
+                display: none;
+            }
+            .animate {
+                -webkit-animation: animatezoom 0.6s;
+                animation: animatezoom 0.6s
+            }
+            @-webkit-keyframes animatezoom {
+                from {-webkit-transform: scale(0)} 
+                to {-webkit-transform: scale(1)}
+            }
         </style>
     </head>
     <body class="account-page">
         <div class="main-wrapper">
+            {!! Toastr::message() !!}
             <section class="login">
-                <div class="login_box">
-                    <div class="left">
-                        <div class="contact">
-                            {!! Toastr::message() !!}
-                            <form method="POST" action="{{ route('login') }}">
-                                @csrf
-                                <h3>Welcome! Please log in</h3>
-                                <div class="form-group">
-                                    <input id="number_employee" type="text" class="form-control @error('number_employee') is-invalid @enderror" placeholder="Employee ID"  required name="number_employee">
-                                    @error('number_employee')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
-                                <div class="form-group Password-icon">
-                                    <div style="display: flex;" class="position-relative" id="old_password">
-                                        <input id="password" type="password" class="form-control pass-input " name="password" required placeholder="Password" autocomplete="current-password">
-                                        <span class="fa fa-eye-slash toggle-password"></span>
-                                        @error('password')
-                                            <span class="invalid-feedback" role="alert">
-                                                <strong>{{ $message }}</strong>
-                                            </span>
-                                        @enderror
-                                    </div>
-                                </div>
-                                <button class="submit">Click here to login</button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        </div>
-        
-        {{-- <div class="main-wrapper">
-            <div class="main-wrapper">
-                <div class="account-content">
-                    <div class="container">
-                        <div class="account-box" style="width: 366px;">
-                            <div class="account-wrapper">
-                                <div class="account-logo">
-                                    <img src="{{asset('/admin/img/logo/aa15d5f1-6051-4731-85c3-9f8e7dbc4b88.jfif')}}" style="width: 50%" alt="Dreamguy&#39;s Technologies">
-                                </div>
-                                {!! Toastr::message() !!}
-    
-                                <form method="POST" action="{{ route('login') }}">
+                <div id="form-login">
+                    <div class="login_box">
+                        <div class="left">
+                            <div class="contact">
+                                <form>
+                                {{-- <form method="POST" action="{{ route('login') }}"> --}}
                                     @csrf
+                                    <h3>Welcome! Please log in</h3>
                                     <div class="form-group">
-                                        <label>Employee ID <span class="text-danger">*</span></label>
-                                        <input id="number_employee" type="text" class="form-control @error('number_employee') is-invalid @enderror" required name="number_employee" value="{{ old('number_employee') }}">
+                                        <input id="number_employee" type="text" class="form-control @error('number_employee') is-invalid @enderror" placeholder="Employee ID"  required name="number_employee">
                                         @error('number_employee')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
@@ -158,13 +130,8 @@
                                         @enderror
                                     </div>
                                     <div class="form-group Password-icon">
-                                        <div class="row">
-                                            <div class="col">
-                                                <label style="display: flex;" class="old_password">Password <span class="text-danger">*</span></label>
-                                            </div>
-                                        </div>
                                         <div style="display: flex;" class="position-relative" id="old_password">
-                                            <input id="password" type="password" class="form-control pass-input " name="password" autocomplete="current-password">
+                                            <input id="password" type="password" class="form-control pass-input " name="password" required placeholder="Password" autocomplete="current-password">
                                             <span class="fa fa-eye-slash toggle-password"></span>
                                             @error('password')
                                                 <span class="invalid-feedback" role="alert">
@@ -173,15 +140,131 @@
                                             @enderror
                                         </div>
                                     </div>
-                                    <div class="text-center">
-                                        <button class="btn btn-primary account-btn" type="submit">Login</button>
-                                    </div>
+                                    <button type="button" class="submit" id="btn-login">Click here to login</button>
                                 </form>
                             </div>
                         </div>
                     </div>
                 </div>
+            </section>
+            <div class="modal" id="id01">
+                <div class="animate">
+                    <section class="login">
+                        <div class="login_box">
+                            <div class="left">
+                                <div class="contact">
+                                    <form  id="btn-change-pass" method="POST" action="{{ url('login/change/password') }}">
+                                        {{-- {!! Toastr::message() !!} --}}
+                                        @csrf
+                                        <h3>Please change password!</h3>
+                                        <input id="cha_number_employee" type="text" name="number_employee" hidden>
+                                        <div class="form-group Password-icon">
+                                            <div style="display: flex;" class="position-relative">
+                                                <input id="new_password" type="password" class="form-control pass-input " name="new_password" required placeholder="New password" autocomplete="new-password">
+                                                <span class="fa fa-eye-slash toggle-password"></span>
+                                                @error('new_password')
+                                                    <span class="invalid-feedback" role="alert">
+                                                        <strong>{{ $message }}</strong>
+                                                    </span>
+                                                @enderror
+                                            </div>
+                                        </div>
+                                        <div class="form-group Password-icon">
+                                            <div style="display: flex;" class="position-relative" id="old_password">
+                                                <input id="confirm_password" type="password" class="form-control pass-input " name="confirm_password" required placeholder="Confirm password" autocomplete="current-password">
+                                                <span class="fa fa-eye-slash toggle-password"></span>
+                                                @error('confirm_password')
+                                                    <span class="invalid-feedback" role="alert">
+                                                        <strong>{{ $message }}</strong>
+                                                    </span>
+                                                @enderror
+                                            </div>
+                                        </div>
+                                        <button type="submit" class="submit">Click change password</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
             </div>
-        </div> --}}
+            <div id="errorMessage"></div>
+        </div>
+        <script>
+            $(function(){
+                $("#btn-login").on("click", function() {
+                    $("#cha_number_employee").val($("#number_employee").val());
+                    $.ajax({
+                        type: "post",
+                        url: "{{ url('/login') }}",
+                        data: {
+                            "_token": "{{ csrf_token() }}",
+                            number_employee: $("#number_employee").val(),
+                            password: $("#password").val(),
+                        },
+                        dataType: "JSON",
+                        success: function(response) {
+                            let data =  response;
+                            if (data.status == "success" && data.role == null) {
+                                $("#form-login").css("display", "none");
+                                $("#id01").css("display", "block");
+                                return false;
+                            }
+                            if (data.status == "error") {
+                                toastr.error(data.message);
+                                return false;
+                            }
+                            if (data.status == "success" && data.role == "Employee") {
+                                toastr.success(data.message);
+                                window.location.replace("{{ URL('dashboad/employee') }}"); 
+                            }else{
+                                toastr.success(data.message);
+                                window.location.replace("{{ URL('dashboad/admin') }}"); 
+                            }
+                        }
+                    });
+                });
+
+                $(document).ready(function() {
+                    $('#btn-change-pass').submit(function(event) {
+                        event.preventDefault();
+                        var formData = $(this).serialize();
+                        $.ajax({
+                            type: "post",
+                            url: $(this).attr('action'),
+                            data: formData,
+                            dataType: "JSON",
+                            success: function(response) {
+                                let data =  response;
+                                if (data.status == "error") {
+                                    toastr.error(data.message);
+                                    return false;
+                                }
+                                var errors = response.errors;
+                                if (errors) {
+                                    $.each(errors, function(field, messages) {
+                                        if (field === 'new_password') {
+                                            toastr.error(messages[0]);
+                                        } else {
+                                            $.each(messages, function(index, message) {
+                                                toastr.error(messages);
+                                            });
+                                        }
+                                    });
+                                    return false;
+                                }
+                                if (data.role == "Employee") {
+                                    toastr.success('Login successfully.');
+                                    window.location.replace("{{ URL('dashboad/employee') }}"); 
+                                }else{
+                                    toastr.success('Login successfully.');
+                                    window.location.replace("{{ URL('dashboad/admin') }}"); 
+                                }
+                            },
+                        });
+                    });
+                });
+            });
+        </script>
     </body>
 </html>

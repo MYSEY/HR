@@ -15,6 +15,7 @@ use App\Providers\RouteServiceProvider;
 use Illuminate\Support\Facades\Session;
 use Spatie\Activitylog\Models\Activity;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Validation\ValidationException;
 
 class LoginController extends Controller
 {
@@ -67,43 +68,109 @@ class LoginController extends Controller
     // change password
     public function login(Request $request)
     {
-        Activity::all()->last();
-        $dataShortList = DB::table('candidate_resumes')->select('candidate_resumes.*')
-        ->where(DB::raw("(DATE_FORMAT(candidate_resumes.interviewed_date,'%Y-%m-%d'))"), Carbon::now()->format('Y-m-d'))
-        ->where('candidate_resumes.status','2')
-        ->get()->count();
-        $dataContract = CandidateResume::where('contract_date',Carbon::now()->format('Y-m-d'))->where('status','4')->get()->count();
-
-        $dataUserUpComming = User::where('date_of_commencement',Carbon::now()->format('Y-m-d'))->where('emp_status','Upcoming')->get()->count();
-        $dataUserProbation = User::where('fdc_date',Carbon::now()->format('Y-m-d'))->where('emp_status','Probation')->get()->count();
-        // $dataUserFdc = User::where('fdc_end',Carbon::now()->format('Y-m-d'))->whereIn('emp_status',['1','10'])->get()->count();
-        
-        $number_employee    = $request->number_employee;
-        $password           = $request->password;
-        if (Auth::attempt(['number_employee' => $number_employee, 'password' => $password])) {
-            if (Auth::user()->status == 'Active') {
-                if (Auth::user()->RolePermission == "Employee") {
-                    return redirect('dashboad/employee');
+        $user = User::where("number_employee",$request->number_employee)->first();
+        if($user->status == "Active"){
+            if ($user->p_status == 0) {
+                if (!Hash::check($request->password, $user->password)) {
+                    return response()->json([
+                        'message' => "Wrong employee ID or password",
+                        'status'=>"error"
+                    ]);
                 }else{
-                    return redirect('dashboad/admin')->with([
-                        'dataUpComming' =>  $dataUserUpComming,
-                        'dataProbation' =>  $dataUserProbation,
-                        'dataShortList' =>  $dataShortList,
-                        'dataContract'  =>  $dataContract
+                    return response()->json([
+                        'message' => "Login successfully",
+                        'status'=>"success",
+                        'role' => null
                     ]);
                 }
-                Toastr::success('Login successfully.', 'Success');
-            } else {
-                // User status is not active
-                Auth::logout();
-                Toastr::error('Your account is not active. Please contact support.', 'Error');
-                return redirect('login');
+            }else{
+                Activity::all()->last();
+                $number_employee    = $request->number_employee;
+                $password           = $request->password;
+                if (Auth::attempt(['number_employee' => $number_employee, 'password' => $password])) {
+                    if (Auth::user()->status == 'Active') {
+                        return response()->json([
+                            'message' => "Login successfully",
+                            'status'=>"success",
+                            'role' => Auth::user()->RolePermission
+                        ]);
+                        // if (Auth::user()->RolePermission == "Employee") {
+                        //     return redirect('dashboad/employee');
+                        // }else{
+                        //     return redirect('dashboad/admin')->with([
+                        //         'dataUpComming' =>  $dataUserUpComming,
+                        //         'dataProbation' =>  $dataUserProbation,
+                        //         'dataShortList' =>  $dataShortList,
+                        //         'dataContract'  =>  $dataContract
+                        //     ]);
+                        // }
+                        // Toastr::success('Login successfully.', 'Success');
+                    } else {
+                        // User status is not active
+                        Auth::logout();
+                        return response()->json([
+                            'message' => "Your account is not active. Please contact support",
+                            'status'=>"error"
+                        ]);
+                        // Toastr::error('Your account is not active. Please contact support.', 'Error');
+                        // return redirect('login');
+                    }
+                }else {
+                    return response()->json([
+                        'message' => "Wrong Employee ID Or Password",
+                        'status'=>"error"
+                    ]);
+                    // Toastr::error('Wrong Employee ID Or Password', 'Error');
+                    // return redirect('login');
+                }
             }
-        }else {
-            Toastr::error('Wrong Employee ID Or Password', 'Error');
-            return redirect('login');
+        }else{
+            return response()->json([
+                'message' => "Your account is not active. Please contact support",
+                'status'=>"error"
+            ]);
+            // Toastr::error('Your account is not active. Please contact support.', 'Error');
+            // return redirect('login');
+        }
+        
+    }
+
+    public function changePassword(Request $request)
+    {
+        try {
+            $request->validate(
+                [
+                    'number_employee' => 'required',
+                    'confirm_password' => 'required',
+                    'new_password' => 'required|min:8',
+                ],
+                [
+                    'new_password.required' => 'The new password field is required.',
+                    'new_password.min' => 'The new password must be at least :min characters.',
+                ]
+            );
+            if ($request->confirm_password != $request->new_password) {
+                return response()->json([
+                    'message' => "New password is invalid with password confirmation!",
+                    'status'=>"error"
+                ]);
+            }else{
+                $user = User::where("number_employee",$request->number_employee)->first();
+                $user->password = Hash::make($request->new_password);
+                $user->p_status = 1;
+                $user->save();
+                if (Auth::attempt(['number_employee' => $request->number_employee, 'password' => $request->new_password])) {
+                    return response()->json([
+                        'role' => Auth::user()->RolePermission
+                    ]);
+                    // Toastr::success('Login successfully.', 'Success');
+                }
+            }
+        } catch (ValidationException $e) {
+            return response()->json(['errors' => $e->validator->errors()]);
         }
     }
+
 
     public function UserChangePassword(Request $request){
         try{
