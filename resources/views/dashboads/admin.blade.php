@@ -282,111 +282,121 @@
         </div>
         
         <div class="row">
-            <div class="col-md-12 col-lg-6 col-xl-4 d-flex">
-                <div class="card flex-fill">
-                    <div class="card-body">
-                        <div class="statistic-header">
-                            <h4>Attendance &amp; Leaves</h4>
-                            <div class="dropdown statistic-dropdown">
-                                <a class="dropdown-toggle" data-bs-toggle="dropdown" href="javascript:void(0);">
-                                    <label id="current_year_leave"></label>
+            @if (permissionAccess("m1-s1","is_dashboard")->is_dashboard["is_leave"] == "1")
+                <div class="col-md-12 col-lg-6 col-xl-4 d-flex">
+                    <div class="card flex-fill">
+                        <div class="card-body">
+                            <div class="statistic-header">
+                                <h4>Attendance &amp; Leaves</h4>
+                                <div class="dropdown statistic-dropdown">
+                                    <a class="dropdown-toggle" data-bs-toggle="dropdown" href="javascript:void(0);">
+                                        <label id="current_year_leave"></label>
+                                    </a>
+                                    {{-- <div class="dropdown-menu dropdown-menu-end">
+                                        <a href="javascript:void(0);" class="dropdown-item">
+                                            2025
+                                        </a>
+                                        <a href="javascript:void(0);" class="dropdown-item">
+                                            2026
+                                        </a>
+                                        <a href="javascript:void(0);" class="dropdown-item">
+                                            2027
+                                        </a>
+                                    </div> --}}
+                                </div>
+                            </div>
+                            <div class="attendance-list">
+                                <div class="row">
+                                    
+                                    <div class="col-md-3">
+                                        <div class="attendance-details">
+                                            <h4 class="text-info leavePending"></h4>
+                                            <p>@lang('lang.pending')</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="attendance-details">
+                                            <h4 class="text-success leaveApproval"></h4>
+                                            <p>@lang('lang.approval')</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="attendance-details">
+                                            <h4 class="text-danger leaveReject"></h4>
+                                            <p>@lang('lang.reject')</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="attendance-details">
+                                            <h4 class="text-danger leaveCancel"></h4>
+                                            <p>@lang('lang.cancel')</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="view-attendance">
+                                <a href="{{ url('/leaves/admin') }}">
+                                    @lang('lang.apply_leave') <i class="fe fe-arrow-right-circle"></i>
                                 </a>
-                                {{-- <div class="dropdown-menu dropdown-menu-end">
-                                    <a href="javascript:void(0);" class="dropdown-item">
-                                        2025
-                                    </a>
-                                    <a href="javascript:void(0);" class="dropdown-item">
-                                        2026
-                                    </a>
-                                    <a href="javascript:void(0);" class="dropdown-item">
-                                        2027
-                                    </a>
-                                </div> --}}
                             </div>
-                        </div>
-                        <div class="attendance-list">
-                            <div class="row">
-                                
-                                <div class="col-md-3">
-                                    <div class="attendance-details">
-                                        <h4 class="text-info leavePending"></h4>
-                                        <p>@lang('lang.pending')</p>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="attendance-details">
-                                        <h4 class="text-success leaveApproval"></h4>
-                                        <p>@lang('lang.approval')</p>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="attendance-details">
-                                        <h4 class="text-danger leaveReject"></h4>
-                                        <p>@lang('lang.reject')</p>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="attendance-details">
-                                        <h4 class="text-danger leaveCancel"></h4>
-                                        <p>@lang('lang.cancel')</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="view-attendance">
-                            <a href="{{ url('/leaves/admin') }}">
-                                @lang('lang.apply_leave') <i class="fe fe-arrow-right-circle"></i>
-                            </a>
                         </div>
                     </div>
                 </div>
-            </div>
+            @endif
             <div class="col-md-12 col-lg-6 col-xl-8 d-flex">
                 <div class="row">
-                    <div class="col-md-6 col-sm-6 col-lg-6 col-xl-6">
-                        <div class="card dash-widget">
-                            <div class="card-body">
-                                <span class="dash-widget-icon"><i class="fa fa-user"></i></span>
-                                <div class="dash-widget-info">
-                                    <h3 id="total-resigned-staff"></h3>
-                                   <a href="{{ url('/reports/staff-resigned-report') }}"> <span>@lang('lang.resigned_staff')</span></a>
+                    @if (permissionAccess("m1-s1","is_dashboard")->is_dashboard["is_total_resigned_staff"] == "1")
+                        <div class="col-md-6 col-sm-6 col-lg-6 col-xl-6">
+                            <div class="card dash-widget">
+                                <div class="card-body">
+                                    <span class="dash-widget-icon"><i class="fa fa-user"></i></span>
+                                    <div class="dash-widget-info">
+                                        <h3 id="total-resigned-staff"></h3>
+                                    <a href="{{ url('/reports/staff-resigned-report') }}"> <span>@lang('lang.resigned_staff')</span></a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-md-6 col-sm-6 col-lg-6 col-xl-6">
-                        <div class="card dash-widget">
-                            <div class="card-body">
-                                <span class="dash-widget-icon"><i class="fa fa-user"></i></span>
-                                <div class="dash-widget-info">
-                                    <h3 id="total-promoted-staff"></h3>
-                                    <a href="{{ url('/reports/promoted-staff-report') }}"><span>@lang('lang.promoted_staff')</span></a>
+                    @endif
+                    @if (permissionAccess("m1-s1","is_dashboard")->is_dashboard["is_promoted_staff"] == "1")
+                        <div class="col-md-6 col-sm-6 col-lg-6 col-xl-6">
+                            <div class="card dash-widget">
+                                <div class="card-body">
+                                    <span class="dash-widget-icon"><i class="fa fa-user"></i></span>
+                                    <div class="dash-widget-info">
+                                        <h3 id="total-promoted-staff"></h3>
+                                        <a href="{{ url('/reports/promoted-staff-report') }}"><span>@lang('lang.promoted_staff')</span></a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-md-6 col-sm-6 col-lg-6 col-xl-6">
-                        <div class="card dash-widget">
-                            <div class="card-body">
-                                <span class="dash-widget-icon"><i class="fa fa-user"></i></span>
-                                <div class="dash-widget-info">
-                                    <h3 id="total-transferred-staff"></h3>
-                                    <a href="{{ url('/reports/transferred-staff-report') }}"> <span>@lang('lang.transferred_staff')</span></a>
+                    @endif
+                    @if (permissionAccess("m1-s1","is_dashboard")->is_dashboard["is_transferred_staff"] == "1")
+                        <div class="col-md-6 col-sm-6 col-lg-6 col-xl-6">
+                            <div class="card dash-widget">
+                                <div class="card-body">
+                                    <span class="dash-widget-icon"><i class="fa fa-user"></i></span>
+                                    <div class="dash-widget-info">
+                                        <h3 id="total-transferred-staff"></h3>
+                                        <a href="{{ url('/reports/transferred-staff-report') }}"> <span>@lang('lang.transferred_staff')</span></a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-md-6 col-sm-6 col-lg-6 col-xl-6">
-                        <div class="card dash-widget">
-                            <div class="card-body">
-                                <span class="dash-widget-icon"><i class="la la-edit"></i></span>
-                                <div class="dash-widget-info">
-                                    <h3 id="total-training"></h3>
-                                    <a href="{{ url('/training/list') }}"><span>@lang('lang.training')</span></a>
+                    @endif
+                    @if (permissionAccess("m1-s1","is_dashboard")->is_dashboard["is_training"] == "1")
+                        <div class="col-md-6 col-sm-6 col-lg-6 col-xl-6">
+                            <div class="card dash-widget">
+                                <div class="card-body">
+                                    <span class="dash-widget-icon"><i class="la la-edit"></i></span>
+                                    <div class="dash-widget-info">
+                                        <h3 id="total-training"></h3>
+                                        <a href="{{ url('/training/list') }}"><span>@lang('lang.training')</span></a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    @endif
                 </div>
             </div>
         </div>

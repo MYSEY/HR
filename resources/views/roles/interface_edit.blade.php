@@ -52,9 +52,9 @@
                 {{-- Block dashboad --}}
                 <div class="row">
                     <div class="col-md-2">
-                        <label style="font-weight: normal !important;">@lang('lang.dashboard')</label>
+                        <label style="font-weight: normal !important;">@lang('lang.admin_dashboard')</label>
                     </div>
-                   <div class="col-md-4">
+                    <div class="col-md-4">
                         <div class="form-group row">
                             <div class="col-md-12">
                                 <label class="container-checkbox">@lang('lang.all')
@@ -63,6 +63,42 @@
                                     value="{{SetCheckbox($arrayPermissions,"lang.dashboards","is_all")->value}}"
                                     > <span class="checkmark"></span>
                                 </label>
+                                <label class="container-checkbox">Attendance & Leaves
+                                    <input type="checkbox" class="dashboad_checkbox" id="dashboad_leave"
+                                    {{SetCheckbox($arrayPermissions,"lang.admin_dashboard","is_dashboard")->is_dashboard["is_leave"] == "1" ? "checked": ""}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.admin_dashboard","is_dashboard")->is_dashboard["is_leave"]}}"
+                                    > <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.resigned_staff')
+                                    <input type="checkbox" class="dashboad_checkbox" id="dashboad_total_resigned_staff"
+                                    {{SetCheckbox($arrayPermissions,"lang.admin_dashboard","is_dashboard")->is_dashboard["is_total_resigned_staff"] == "1" ? "checked": ""}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.admin_dashboard","is_dashboard")->is_dashboard["is_total_resigned_staff"]}}"
+                                    > <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.promoted_staff')
+                                    <input type="checkbox" class="dashboad_checkbox" id="dashboad_promoted_staff"
+                                    {{SetCheckbox($arrayPermissions,"lang.admin_dashboard","is_dashboard")->is_dashboard["is_promoted_staff"] == "1" ? "checked": ""}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.admin_dashboard","is_dashboard")->is_dashboard["is_promoted_staff"]}}"
+                                    > <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.transferred_staff')
+                                    <input type="checkbox" class="dashboad_checkbox" id="dashboad_transferred_staff"
+                                    {{SetCheckbox($arrayPermissions,"lang.admin_dashboard","is_dashboard")->is_dashboard["is_transferred_staff"] == "1" ? "checked": ""}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.admin_dashboard","is_dashboard")->is_dashboard["is_transferred_staff"]}}"
+                                    > <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.training')
+                                    <input type="checkbox" class="dashboad_checkbox" id="dashboad_training"
+                                    {{SetCheckbox($arrayPermissions,"lang.admin_dashboard","is_dashboard")->is_dashboard["is_training"] == "1" ? "checked": ""}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.admin_dashboard","is_dashboard")->is_dashboard["is_training"]}}"
+                                    > <span class="checkmark"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                   <div class="col-md-3">
+                        <div class="form-group row">
+                            <div class="col-md-12">
                                 <label class="container-checkbox">@lang('lang.employee')
                                     <input type="checkbox" class="dashboad_checkbox" id="dashboad_employee"
                                     {{SetCheckbox($arrayPermissions,"lang.admin_dashboard","is_dashboard")->is_dashboard["is_employee"] == "1" ? "checked": ""}}
@@ -81,12 +117,6 @@
                                     value="{{SetCheckbox($arrayPermissions,"lang.admin_dashboard","is_dashboard")->is_dashboard["is_birthday_reminder"]}}"
                                     > <span class="checkmark"></span>
                                 </label>
-                            </div>
-                        </div>
-                   </div>
-                   <div class="col-md-3">
-                        <div class="form-group row">
-                            <div class="col-md-12">
                                 <label class="container-checkbox">@lang('lang.total_number_of_staff')
                                     <input type="checkbox" class="dashboad_checkbox" id="dashboad_total_number_of_staff"
                                     {{SetCheckbox($arrayPermissions,"lang.admin_dashboard","is_dashboard")->is_dashboard["is_total_number_of_staff"] == "1" ? "checked": ""}}
@@ -105,18 +135,18 @@
                                     value="{{SetCheckbox($arrayPermissions,"lang.admin_dashboard","is_dashboard")->is_dashboard["is_resigned_staff"]}}"
                                     > <span class="checkmark"></span>
                                 </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group row">
+                            <div class="col-md-12">
                                 <label class="container-checkbox">% @lang("lang.reasons_of_staff’s_exit")
                                     <input type="checkbox" class="dashboad_checkbox" id="dashboad_reasons_of_staff’s_exit"
                                     {{SetCheckbox($arrayPermissions,"lang.admin_dashboard","is_dashboard")->is_dashboard["is_reasons_of_staff"] == "1" ? "checked": ""}}
                                     value="{{SetCheckbox($arrayPermissions,"lang.admin_dashboard","is_dashboard")->is_dashboard["is_reasons_of_staff"]}}"
                                     > <span class="checkmark"></span>
                                 </label>
-                            </div>
-                        </div>
-                    </div>
-                   <div class="col-md-3">
-                        <div class="form-group row">
-                            <div class="col-md-12">
                                 <label class="container-checkbox">% @lang('lang.staff_ratio')
                                     <input type="checkbox" class="dashboad_checkbox" id="dashboad_staff_ratio"
                                     {{SetCheckbox($arrayPermissions,"lang.admin_dashboard","is_dashboard")->is_dashboard["is_staff_ratio"] == "1" ? "checked": ""}}
@@ -143,6 +173,18 @@
                                 </label>
                             </div>
                         </div>
+                    </div>
+                    <div class="col-md-2">
+                        <label>@lang('lang.employee_dashboard')</label>
+                    </div>
+                    {{-- @dd(SetCheckbox($arrayPermissions,"lang.employee_dashboard","is_view")) --}}
+                    <div class="col-md-10">
+                        <label class="container-checkbox">@lang('lang.view')
+                            <input type="checkbox" id="employee_dashboard"
+                            {{SetCheckbox($arrayPermissions,"lang.employee_dashboard","is_view")->checkbox}}
+                            value="{{SetCheckbox($arrayPermissions,"lang.employee_dashboard","is_view")->value}}"
+                            > <span class="checkmark"></span>
+                        </label>
                     </div>
                 </div>
                 <hr>

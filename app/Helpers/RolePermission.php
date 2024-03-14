@@ -40,6 +40,11 @@ function permissionAccess($menu_id,$name_button){
         }
     } else{
         $dataJson = [
+            "is_leave"=>"0",
+            "is_total_resigned_staff"=>"0",
+            "is_promoted_staff"=>"0",
+            "is_transferred_staff"=>"0",
+            "is_training"=>"0",
             "is_employee"=>"0",
             "is_age_of_employee"=>"0",
             "is_birthday_reminder"=>"0",
@@ -69,6 +74,11 @@ function SetCheckbox($datas,$permission_name,$permission_checkbox){
         }
     } else{
         $dataJson = [
+            "is_leave"=>"0",
+            "is_total_resigned_staff"=>"0",
+            "is_promoted_staff"=>"0",
+            "is_transferred_staff"=>"0",
+            "is_training"=>"0",
             "is_employee"=>"0",
             "is_age_of_employee"=>"0",
             "is_birthday_reminder"=>"0",

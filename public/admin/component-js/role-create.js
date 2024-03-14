@@ -3,7 +3,8 @@ var dataPermission = function () {
     // block dashboard
     let dashboad_checkbox = $('.dashboad_checkbox').filter(':checked').length;
     let dashboad_all = $('#dashboad_all').filter(':checked').length;
-    if (dashboad_all || dashboad_checkbox) {
+    let employee_dashboard = $('#employee_dashboard').filter(':checked').length;
+    if (dashboad_all || dashboad_checkbox || employee_dashboard) {
         data.push({
             name: "Dashboards",
             permission: [
@@ -25,6 +26,11 @@ var dataPermission = function () {
                     "sub_menu_id":"1",
                     "menu_id":"m1-s1",
                     "url":"dashboad/admin",
+                    "is_leave": $("#dashboad_leave").val(),
+                    "is_total_resigned_staff": $("#dashboad_total_resigned_staff").val(),
+                    "is_promoted_staff": $("#dashboad_promoted_staff").val(),
+                    "is_transferred_staff": $("#dashboad_transferred_staff").val(),
+                    "is_training": $("#dashboad_training").val(),
                     "is_employee": $("#dashboad_employee").val(),
                     "is_age_of_employee": $("#dashboad_age_of_employee").val(),
                     "is_birthday_reminder": $("#dashboad_birthday_reminder").val(),
@@ -36,6 +42,20 @@ var dataPermission = function () {
                     "is_staff_taking_leave": $("#dashboad_staff_taking_leave").val(),
                     "is_staff_training_internal": $("#dashboad_staff_training_by_branch_internal").val(),
                     "is_staff_training_external": $("#dashboad_staff_training_by_branch_external").val(),
+                }
+            ]
+        })
+    }
+    if (employee_dashboard) {
+        data.push({
+            name: "Employee Dashboard",
+            permission: [
+                {
+                    "name":"lang.employee_dashboard",
+                    "sub_menu_id":"1",
+                    "menu_id":"m1-s2",
+                    "url":"dashboad/employee",
+                    "is_view": $("#employee_dashboard").val(),
                 }
             ]
         })
