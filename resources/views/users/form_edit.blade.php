@@ -81,8 +81,8 @@
                         <div class="col-md-4">
                             <div class="form-group hr-form-group-select2">
                                 <label>@lang('lang.role_name')<span class="text-danger">*</span></label>
-                                <select class="form-control hr-select2-option @error('role_id') is-invalid @enderror" name="role_id" id="e_role_id" required>
-                                    <option selected disabled value=""> --@lang('lang.select')--</option>
+                                <select class="form-control hr-select2-option @error('role_id') is-invalid @enderror" name="role_id" id="e_role_id">
+                                    {{-- <option selected disabled value=""> --@lang('lang.select')--</option> --}}
                                 </select>
                             </div>
                         </div>
@@ -249,7 +249,7 @@
                         </div>
                         <div class="col-sm-4">
                             <div class="form-group">
-                                <label>@lang('lang.contract_deadline')</label>
+                                <label>@lang('lang.contract_deadline') <span class="text-danger">*</span></label>
                                 <input class="form-control datetimepicker  @error('udc_end_date') is-invalid @enderror" id="e_udc_end_date" required name="udc_end_date" type="text" value="{{old('udc_end_date')}}">
                             </div>   
                         </div>
@@ -658,7 +658,7 @@
                     }
 
                     if (response.role != '') {
-                        $('#e_role_id').html('<option selected disabled value=""> --@lang("lang.select") --</option>');
+                        // $('#e_role_id').html('<option selected disabled value=""> --@lang("lang.select") --</option>');
                         $.each(response.role, function(i, item) {
                             $('#e_role_id').append($('<option>', {
                                 value: item.id,
