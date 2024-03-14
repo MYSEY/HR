@@ -55,7 +55,7 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label class="">@lang('lang.employee_id')</label>
-                                <input type="text" class="form-control" id="e_number_employee" name="number_employee" value="">
+                                <input type="text" class="form-control" id="e_number_employee" name="number_employee" value="" disabled>
                             </div>
                         </div>
                     </div>

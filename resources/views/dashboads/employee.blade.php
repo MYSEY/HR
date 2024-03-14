@@ -124,7 +124,7 @@
                                     </div>
                                 </div>
                                 <div class="welcome-btn">
-                                    <a href="{{route('employee.profile',$data->employee_id)}}" class="btn">@lang('lang.view_profile')</a>
+                                    <a href="{{route('employee.profile',Auth::user()->id)}}" class="btn">@lang('lang.view_profile')</a>
                                     <a class="btn" href="{{ url('leaves/employee') }}">Apply Leave</a>
                                 </div>
                             </div>
