@@ -1,6 +1,6 @@
 
 $(function(){
-    // block dahboard
+    // block dahboard admin
     $("#dashboad_all").on("click", function(){
         if (!$(this).prop("checked")) {
             $(".dashboad_checkbox").prop("checked", false);
@@ -37,6 +37,16 @@ $(function(){
             };
         });
     });
+    // blcok dahboard employee
+    $("#employee_dashboard").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(this).val(0);
+        }
+        if ($(this).prop("checked")) {
+            $(this).val(1)
+        }    
+    });
+
 
     // blcok employee
     $("#employee_all").on("click", function(){

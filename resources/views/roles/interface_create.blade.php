@@ -50,12 +50,33 @@
                     <div class="col-md-2">
                         <label style="font-weight: normal !important;">@lang('lang.admin_dashboard')</label>
                     </div>
-                   <div class="col-md-4">
+                    <div class="col-md-4">
                         <div class="form-group row">
                             <div class="col-md-12">
                                 <label class="container-checkbox">@lang('lang.all')
                                     <input type="checkbox" id="dashboad_all" name="dashboad_all"> <span class="checkmark"></span>
                                 </label>
+                                <label class="container-checkbox">Attendance & Leaves
+                                    <input type="checkbox" class="dashboad_checkbox" id="dashboad_leave" value="0"> <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.resigned_staff')
+                                    <input type="checkbox" class="dashboad_checkbox" id="dashboad_total_resigned_staff" value="0"> <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.promoted_staff')
+                                    <input type="checkbox" class="dashboad_checkbox" id="dashboad_promoted_staff" value="0"> <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.transferred_staff')
+                                    <input type="checkbox" class="dashboad_checkbox" id="dashboad_transferred_staff" value="0"> <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.training')
+                                    <input type="checkbox" class="dashboad_checkbox" id="dashboad_training" value="0"> <span class="checkmark"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group row">
+                            <div class="col-md-12">
                                 <label class="container-checkbox">@lang('lang.employee')
                                     <input type="checkbox" class="dashboad_checkbox" id="dashboad_employee" value="0"> <span class="checkmark"></span>
                                 </label>
@@ -65,12 +86,6 @@
                                 <label class="container-checkbox">@lang('lang.birthday_reminder')
                                     <input type="checkbox" class="dashboad_checkbox" id="dashboad_birthday_reminder" value="0"> <span class="checkmark"></span>
                                 </label>
-                            </div>
-                        </div>
-                   </div>
-                   <div class="col-md-3">
-                        <div class="form-group row">
-                            <div class="col-md-12">
                                 <label class="container-checkbox">@lang('lang.total_number_of_staff')
                                     <input type="checkbox" class="dashboad_checkbox" id="dashboad_total_number_of_staff" value="0"> <span class="checkmark"></span>
                                 </label>
@@ -80,15 +95,15 @@
                                 <label class="container-checkbox">% @lang('lang.resigned_staff')
                                     <input type="checkbox" class="dashboad_checkbox" id="dashboad_resigned_staff" value="0"> <span class="checkmark"></span>
                                 </label>
-                                <label class="container-checkbox">% @lang("lang.reasons_of_staff’s_exit")
-                                    <input type="checkbox" class="dashboad_checkbox" id="dashboad_reasons_of_staff’s_exit" value="0"> <span class="checkmark"></span>
-                                </label>
                             </div>
                         </div>
                     </div>
-                   <div class="col-md-3">
+                    <div class="col-md-3">
                         <div class="form-group row">
                             <div class="col-md-12">
+                                <label class="container-checkbox">% @lang("lang.reasons_of_staff’s_exit")
+                                    <input type="checkbox" class="dashboad_checkbox" id="dashboad_reasons_of_staff’s_exit" value="0"> <span class="checkmark"></span>
+                                </label>
                                 <label class="container-checkbox">% @lang('lang.staff_ratio')
                                     <input type="checkbox" class="dashboad_checkbox" id="dashboad_staff_ratio" value="0"> <span class="checkmark"></span>
                                 </label>
@@ -103,6 +118,14 @@
                                 </label>
                             </div>
                         </div>
+                    </div>
+                    <div class="col-md-2">
+                        <label>@lang('lang.employee_dashboard')</label>
+                    </div>
+                    <div class="col-md-10">
+                        <label class="container-checkbox">@lang('lang.view')
+                            <input type="checkbox" id="employee_dashboard" > <span class="checkmark"></span>
+                        </label>
                     </div>
                 </div>
                 <hr>
