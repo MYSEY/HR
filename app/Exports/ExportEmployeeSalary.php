@@ -129,7 +129,7 @@ class ExportEmployeeSalary implements FromCollection, WithColumnWidths, WithHead
             $total_salary = number_format($value->total_salary, 2);
             $dataExport[] = [
                 "no" => $i,
-                "employee_id"       => intval($value->users->number_employee),
+                "employee_id"       => $value->users->number_employee,
                 "name"              => Helper::getLang() == 'en' ? $value->users->employee_name_en : $value->users->employee_name_kh,
                 "position"          => $value->users->EmployeePosition,
                 "department"        => $value->users->EmployeeDepartment,
