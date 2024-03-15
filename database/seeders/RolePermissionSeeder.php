@@ -18,6 +18,11 @@ class RolePermissionSeeder extends Seeder
     public function run()
     {
         $dataJson = [
+            "is_leave"=>"1",
+            "is_total_resigned_staff"=>"1",
+            "is_promoted_staff"=>"1",
+            "is_transferred_staff"=>"1",
+            "is_training"=>"1",
             "is_employee"=>"1",
             "is_age_of_employee"=>"1",
             "is_birthday_reminder"=>"1",

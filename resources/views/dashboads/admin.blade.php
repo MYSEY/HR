@@ -558,7 +558,7 @@
                                                                     <i class="fa fa-user-plus"></i>
                                                                 </div>
                                                                 <div class="dash-card-content">
-                                                                    <p>{{$userUpComming}} People will be change to pass probation <a href="{{url('users')}}" target="_blank">link>></a></p>
+                                                                    <p>{{$userUpComming}} People will be change upcoming to probation <a href="{{url('users')}}" target="_blank">link>></a></p>
                                                                 </div>
                                                             </div>
                                                         </div>
