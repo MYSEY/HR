@@ -110,7 +110,7 @@ return[
     "cancel"=>"Cancel",
     "cancel_date"=>"Cancel Date",
     "cancel_signed_contract"=>"Cancel signed contract",
-    "cancel_processing_contract"=>"Cancel processing",
+    "cancel_processing_contract"=>"Cancel Processing",
     "category"=>"Category",
     "cashier's_signature"=>"Cashier's Signature",
     "close"=>"Close",

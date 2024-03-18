@@ -241,7 +241,7 @@
                                 '<td class="sorting sorting_asc stuck"><a href="#">'+(localeLanguage == 'en' ? row.users.employee_name_en : row.users.employee_name_kh )+'</a></td>'+
                                 '<td><a href="#">'+(localeLanguage == 'en' ? row.name_english  : row.name_khmer )+'</a></td>'+
                                 '<td><a href="#">'+(localeLanguage == 'en' ? row.positionNameEnglish  : row.positionNameKhmer )+'</a></td>'+
-                                '<td><a href="#">'+(localeLanguage == 'en' ? row.branck_en  : row.branck_kh )+'</a></td>'+
+                                '<td><a href="#">'+(localeLanguage == 'en' ? row.branch_en  : row.branch_kh )+'</a></td>'+
                                 '<td>'+(join_date)+'</td>'+
                                 '<td>$'+(row.total_pre_tax_salary_usd )+'</td>'+
                                 '<td><span>៛</span>'+(formatCurrencyKH(row.total_pre_tax_salary_riel) )+'</td>'+

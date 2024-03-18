@@ -76,7 +76,7 @@ class ExportReviewPayroll implements FromCollection, WithColumnWidths, WithHeadi
         })
         ->when($yearLy, function ($query, $yearLy) {
             $query->whereYear('payment_date', $yearLy);
-        })->orderBy('employee_id')->get();
+        })->orderBy('employee_id','DESC')->get();
         $dataExport = [];
         $i = 0;
         foreach ($PreviewPayroll as $key=>$value) {

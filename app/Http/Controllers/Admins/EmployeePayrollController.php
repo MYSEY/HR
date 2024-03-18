@@ -111,7 +111,7 @@ class EmployeePayrollController extends Controller
         })
         ->when($yearLy, function ($query, $yearLy) {
             $query->whereYear('payment_date', $yearLy);
-        })->orderBy('id','DESC')->get();
+        })->orderBy('employee_id','DESC')->get();
         return response()->json([
             'success'=>$payroll,
         ]);
