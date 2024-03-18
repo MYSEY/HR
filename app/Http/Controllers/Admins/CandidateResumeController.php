@@ -94,6 +94,7 @@ class CandidateResumeController extends Controller
             'users.*',
             'roles.role_type',
         )->whereNotIn('roles.role_type',['employee','admin','developer'])->get();
+        $totalUpcomings = User::where('emp_status','Upcoming')->count();
         return view('recruitments.candidate_resumes.candidate_resume', 
         compact([
             "position", 
@@ -113,6 +114,7 @@ class CandidateResumeController extends Controller
             'dataProcessing',
             'dataCancel',
             'lineManager',
+            'totalUpcomings',
         ]));
     }
 
@@ -159,6 +161,8 @@ class CandidateResumeController extends Controller
      */
     public function show(Request $request)
     {
+        $dataUpcomings =[];
+        $datas =[];
         if ($request->status == 3 || $request->status == 6) {
             $datas = CandidateResume::with("branch")->with("position")->with("option")
             ->when($request->status, function ($query, $status) {
@@ -177,6 +181,8 @@ class CandidateResumeController extends Controller
                 }
             })
            ->get();
+        }else if($request->status == 7){
+            $dataUpcomings = User::with('branch')->with('department')->with("position")->with("gender")->where('emp_status','Upcoming')->get();
         }else{
             $datas = CandidateResume::where("status", $request->status)->with("branch")->with("position")->with("option")
             ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
@@ -186,8 +192,7 @@ class CandidateResumeController extends Controller
             })
             ->get();
         }
-        
-        return response()->json(['datas'=>$datas]);
+        return response()->json(['datas'=>$datas,"dataUpcomings"=>$dataUpcomings]);
     }
 
     public function showemp(){
@@ -201,7 +206,8 @@ class CandidateResumeController extends Controller
         $filesize = filesize($file);
         $extension = $request->file->extension();
         $spreadsheet = IOFactory::load($file);
-        $allDataInSheet = $spreadsheet->getActiveSheet()->toArray();
+        // $allDataInSheet = $spreadsheet->getActiveSheet()->toArray();
+        $allDataInSheet =  $spreadsheet->getSheetByName('candidate_resumes')->toArray();
         if ($extension == "xlsx" || $extension == "xls" || $extension == "csv") {
             $userID = Auth::user()->id;
             $i = 0;
@@ -600,7 +606,8 @@ class CandidateResumeController extends Controller
                 CandidateResume::where('id',$candidate->id)->update([ 'status' => 5, 'line_manager' => $request->line_manager]);
                 DB::commit();
                 $dataProcessing = CandidateResume::where("status",'4')->count();
-                return response()->json(['message' => 'successfull', "dataProcessing"=>$dataProcessing]);
+                $totalUpcomings = User::where('emp_status','Upcoming')->count();
+                return response()->json(['message' => 'successfull', "dataProcessing"=>$dataProcessing, "totalUpcomings"=>$totalUpcomings]);
             }else{
                 $generateID = GenerateIdEmployee::where("number_employee",$request->number_employee)->first();
                 if (!$generateID) {

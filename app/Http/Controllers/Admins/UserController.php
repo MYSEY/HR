@@ -53,7 +53,8 @@ class UserController extends Controller
     }
     public function index(Request $request)
     {
-        $data = $this->employeeRepo->getAllUsers($request);
+        // $data = $this->employeeRepo->getAllUsers($request);
+        // dd($data);
         $dataResign =[];
         $dataEmployees = [];
         if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'HR' || Auth::user()->RolePermission == 'developer' || Auth::user()->RolePermission == 'BOD' || Auth::user()->RolePermission == 'CEO') {
@@ -110,7 +111,7 @@ class UserController extends Controller
             $dataResign = User::where('id',Auth::user()->id)->whereIn('emp_status', ['3','4','5','6','7','8','9'])->with('department')->with('position')->get();
         }
         return view('users.index',compact(
-            'data',
+            // 'data',
             'dataProbation',
             'dataFDC',
             'dataUDC',
@@ -438,6 +439,7 @@ class UserController extends Controller
     public function processing(Request $request)
     {
         try {
+            $totalUpcomings = 0;
             if ($request->emp_status == '1') {
                 $dataSalary = User::where('id',$request->id)->first();
                 $leaveRequest = LeaveAllocation::where('employee_id',$dataSalary->id)->first();
@@ -556,6 +558,7 @@ class UserController extends Controller
                     'emp_status' => $request->emp_status,
                     'resign_reason' => $request->resign_reason
                 ]);
+                $totalUpcomings = User::where('emp_status','Upcoming')->count();
             }else{
                 if($request->line_manager){
                     User::where('line_manager',$request->id)->update([
@@ -577,7 +580,7 @@ class UserController extends Controller
                 'created_by'    =>  Auth::user()->id,
             ]);
             DB::commit();
-            return ['message' => 'successfull'];
+            return ['message' => 'successfull', "totalUpcomings"=>$totalUpcomings];
         } catch (\Exception $exp) {
             DB::rollBack();
             return response()->json(['message' => $exp->getMessage()], 500);

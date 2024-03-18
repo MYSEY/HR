@@ -584,7 +584,7 @@
                     date_of_commencement: $("#date_of_commencement").val(),
                     id_card_number: $("#id_card_number").val(),
                     personal_phone_number: $("#personal_phone_number").val(),
-                    position_type: $("#position_type").val(),
+                    position_type: $("#emp_position option:checked").attr('data-id'),
                     basic_salary: $("#basic_salary").val(),
                     salary_increas: $("#salary_to_increase").val(),
                     current_province: $("#current_province").val(),

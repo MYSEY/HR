@@ -59,7 +59,11 @@
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" data-bs-toggle="tab" id="btn_tab_signed_contract_cancel" href="#tab_signed_contract_cancel" aria-selected="false" data-tab-id="5"
-                                    role="tab" tabindex="-1">@lang('lang.canceled_contract')(<span id="dataCancel">{{$dataCancel}}</span>)</a>
+                                    role="tab" tabindex="-1">@lang('lang.cancel_processing_contract')(<span id="dataCancel">{{$dataCancel}}</span>)</a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link" data-bs-toggle="tab" id="btn_tab_upcoming" href="#tab_upcoming" aria-selected="false" data-tab-id="7"
+                                    role="tab" tabindex="-1">@lang('lang.upcoming_staff')(<span id="dataUpcoming">{{$totalUpcomings}}</span>)</a>
                             </li>
                         </ul>
                     </div>
@@ -100,12 +104,12 @@
         @include('recruitments.candidate_resumes.modal_form_edit')
         @include('recruitments.candidate_resumes.modal_form_create_emp')
         @include('recruitments.candidate_resumes.import')
-
     </div>
 @endsection
-
+@include('components.loading-modal')
 @include('includs.script')
 <script src="{{asset('/admin/js/validation-field.js')}}"></script>
+<script type="text/javascript" src="{{ asset('/admin/js/printThis.js') }}"></script>
 
 <script type="text/javascript">
     $(function(){
@@ -146,7 +150,7 @@
             let tab_status = $(this).attr('data-tab-id');
             showDatas(tab_status);
         });
-        $("#btn_tab_interviewed_failed, #btn_tab_interviewed_result, #btn_tab_signed_contract, #btn_tab_signed_contract_cancel").on("click", function(){
+        $("#btn_tab_interviewed_failed, #btn_tab_interviewed_result, #btn_tab_signed_contract, #btn_tab_signed_contract_cancel, #btn_tab_upcoming").on("click", function(){
             let tab_status = $(this).attr('data-tab-id');
             if (tab_status ==  5) {
                 tab_status ="Cancel"
@@ -176,6 +180,7 @@
                                 }).show(); 
                                 showDatas("4");
                                 $("#dataProcessing").text(response.data.dataProcessing);
+                                $("#dataUpcoming").text(response.data.totalUpcomings);
                             }).catch(function(error) {
                                 new Noty({
                                     title: "",
@@ -733,6 +738,242 @@
                 }); 
             }
         });
+        $(document).on('click','.btn_print', function(){
+            $('#modal-loading').modal('show');
+            let id = $(this).data("id");
+            $.ajax({
+                type: "GET",
+                url: "{{url('users/print')}}",
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    id : id
+                },
+                dataType: "JSON",
+                success: function (response) {
+                    var data = response.success;
+                    var date_of_birth = new Date(data.date_of_birth);
+                    var date_of_commencement = new Date(data.date_of_commencement);
+                    var fdc_date = new Date(data.fdc_date);
+                    let day = formatDate( date_of_birth, 'km', format_date={day: true});
+                    let month = formatDate( date_of_birth, 'km', format_date={month: true});
+                    let year = formatDate( date_of_birth, 'km', format_date={year: true});
+                    let join_day = formatDate( date_of_commencement, 'km', format_date={day: true});
+                    let join_month = formatDate( date_of_commencement, 'km', format_date={month: true});
+                    let join_year = formatDate( date_of_commencement, 'km', format_date={year: true});
+                    let end_day = formatDate( fdc_date, 'km', format_date={day: true});
+                    let end_month = formatDate( fdc_date, 'km', format_date={month: true});
+                    let end_year = formatDate( fdc_date, 'km', format_date={year: true});
+                    if (data) {
+                        if (data.gender.name_english == "Female") {
+                            $("#pr_mr_or_mrs").text("អ្នកស្រី ");
+                            $("#pr_gender").text("ស្រី ");
+                        }else{
+                            $("#pr_mr_or_mrs").text("លោក ");
+                            $("#pr_gender").text("ប្រុស ");
+                        }
+                        $("#pr_name").text(data.employee_name_kh +" ");
+                        $("#pr_born_on").text(day+" ខែ "+month+" ឆ្នាំ "+ year);
+                        $("#pr_permanent_province").text(data.permanentprovince.name_km + " ");
+                        $("#pr_permanent_province").text(data.permanentprovince.name_km + " ");
+                        $("#pr_id_card_number").text(data.id_card_number+ "");
+
+                        let number_home = "";
+                        let number_street = "";
+                        if (data.current_house_no) {
+                            number_home = "ផ្ទះលេខ "+ data.current_house_no;
+                        }
+                        if (data.current_street_no) {
+                            number_street = " ផ្លូវលេខ "+data.current_street_no;
+                        }
+                        let location = number_home + number_street + " ភូមិ "+data.currentvillage.name_km + " ឃុំ/សង្កាត់ " + data.currentcommune.name_km + " ស្រុក/ខណ្ឌ " + data.currentdistrict.name_km+ " ខេត្ត/ក្រុង "+data.currentprovince.name_km;
+
+                        $("#pr_current_location").text(location);
+
+                        $("#pr_personal_phone_number").text(data.personal_phone_number);
+                        $(".pr_join_day").text(join_day);
+                        $(".pr_join_month").text(join_month);
+                        $(".pr_join_year").text(join_year);
+                        $("#pr_end_day").text(end_day);
+                        $("#pr_end_month").text(end_month);
+                        $("#pr_end_year").text(end_year);
+                        $("#pr_position").text(data.position.name_khmer);
+                        $("#pr_branch").text(data.branch.branch_name_kh);
+                        $("#pr_employee_id").text(data.number_employee);
+                        $("#pr_basic_salary").text(data.basic_salary);
+                        $("#pr_salary_increase").text(data.salary_increas);
+                        if (data.position.position_type == "Field Staff") {
+                            $("#pr_supporting_or_field_staff").text("ដោយធៀបនិងភាគរយការងារសម្រេចបានសម្រាប់បុគ្គលិកឥណទាន (គិតតាម Pro-Rate) ដោយការបង់ពន្ធជូនរាជរដ្ឋាភិបាលជាបន្ទុករបស់និយោជិត");
+                        }
+                        print_pdf();
+                        window.setTimeout(function() {
+                            $('#modal-loading').modal('hide');
+                        }, 2000);
+                    }
+                }
+            });
+        });
+        $('body').on('click', '#btn-emp-status a', function() {
+            let id = $(this).attr('data-emp-id');
+            let status = $(this).data('id');
+            var emp_status = status;
+            let join_date = $(this).attr('data-join-date');
+            let start_date = $(this).attr('data-start-date');
+            let end_date = $(this).attr('data-end-date');
+            if (status == "Probation") {
+                $.confirm({
+                    title: '@lang("lang.employee_status")',
+                    contentClass: 'text-center',
+                    // backgroundDismiss: 'cancel',
+                    content: ''+
+                        '<form method="post">'+
+                            '<div class="form-group">'+
+                                '<label><a href="#">'+emp_status+'</a></label>'+
+                            '</div>'+
+                            '<div class="form-group">'+
+                                '<div class="form-group">'+
+                                    '<label>@lang("lang.join_date") <span class="text-danger">*</span></label>'+
+                                    '<input type="date" class="form-control start_date" value="'+join_date+'" disabled>'+
+                                    '<input type="hidden" class="form-control emp_status" value="'+status+'">'+
+                                    '<input type="hidden" class="form-control id" value="'+id+'">'+
+                                '</div>'+
+                                '<div class="form-group">'+
+                                    '<label>@lang("lang.pass_date") <span class="text-danger">*</span></label>'+
+                                    '<input type="date" class="form-control end_dete" value="'+start_date+'" disabled>'+
+                                '</div>'+
+                                '<label>@lang("lang.reason")</label>'+
+                                '<textarea class="form-control resign_reason"></textarea>'+
+                            '</div>'+
+                        '</form>',
+                    buttons: {
+                        confirm: {
+                            text: 'Submit',
+                            btnClass: 'add-btn-status',
+                            action: function() {
+                                var emp_status = this.$content.find('.emp_status').val();
+                                var id = this.$content.find('.id').val();
+                                var resign_reason = this.$content.find('.resign_reason').val();
+                                axios.post('{{ URL('employee/status') }}', {
+                                        'id': id,
+                                        'emp_status': emp_status,
+                                        'resign_reason': resign_reason
+                                    }).then(function(response) {
+                                    new Noty({
+                                        title: "",
+                                        text: '@lang("lang.the_process_has_been_successfully")',
+                                        type: "success",
+                                        timeout: 3000,
+                                        icon: true
+                                    }).show();
+                                    $('.card-footer').remove();
+                                    $("#dataUpcoming").text(response.data.totalUpcomings);
+                                    showDatas("7");
+                                    // window.location.replace("{{ URL('recruitment/candidate-resume/list') }}");
+                                }).catch(function(error) {
+                                    new Noty({
+                                        title: "",
+                                        text: '@lang("lang.something_went_wrong_please_try_again_later")',
+                                        type: "error",
+                                        icon: true
+                                    }).show();
+                                });
+                            }
+                        },
+                        cancel: {
+                            text: 'Cancel',
+                            btnClass: 'btn-secondary btn-sm',
+                        },
+                    }
+                });
+            }else{
+                emp_status = '@lang("lang.cancel_signed_contract")';
+                $.confirm({
+                    title: '@lang("lang.employee_status")',
+                    contentClass: 'text-center',
+                    // backgroundDismiss: 'cancel',
+                    content: ''+
+                        '<form method="post">'+
+                            '<div class="form-group">'+
+                                '<label><a href="#">'+emp_status+'</a></label>'+
+                            '</div>'+
+                            '<div class="form-group">'+
+                                '<div class="form-group">'+
+                                    '<label>@lang("lang.date") <span class="text-danger">*</span></label>'+
+                                    '<input type="date" class="form-control resign_date">'+
+                                    '<input type="hidden" class="form-control emp_status" id="" name="" value="'+status+'">'+
+                                    '<input type="hidden" class="form-control id" id="" name="" value="'+id+'">'+
+                                '</div>'+
+                                '<div class="form-group assign_line_manager" style="display:none">'+
+                                    '<label>@lang("lang.assign_new_line_manager")</label>'+
+                                    '<select class="form-control hr-select2-option-emp form-select line_manager" id="line_manager" name="line_manager" >'+
+                                    
+                                    '</select>'+
+                                '</div>'+
+                                '<label>@lang("lang.reason")</label>'+
+                                '<textarea class="form-control resign_reason"></textarea>'+
+                            '</div>'+
+                        '</form>',
+                    buttons: {
+                        confirm: {
+                            text: 'Submit',
+                            btnClass: 'add-btn-status',
+                            action: function() {
+                                var emp_status = this.$content.find('.emp_status').val();
+                                var id = this.$content.find('.id').val();
+                                var resign_date = this.$content.find('.resign_date').val();
+                                var resign_reason = this.$content.find('.resign_reason').val();
+                                var line_manager = this.$content.find('.line_manager').val();
+
+                                if (!resign_date) {
+                                    $.alert({
+                                        title: '<span class="text-danger">@lang("lang.requiered")</span>',
+                                        content: 'Please input date.',
+                                    });
+                                    return false;
+                                }
+                                
+                                axios.post('{{ URL('employee/status') }}', {
+                                        'id': id,
+                                        'emp_status': emp_status,
+                                        'resign_date': resign_date,
+                                        'resign_reason': resign_reason,
+                                        'line_manager': line_manager
+                                    }).then(function(response) {
+                                    new Noty({
+                                        title: "",
+                                        text: '@lang("lang.the_process_has_been_successfully")',
+                                        type: "success",
+                                        timeout: 3000,
+                                        icon: true
+                                    }).show();
+                                    $('.card-footer').remove();
+                                    window.location.replace("{{ URL('recruitment/candidate-resume/list') }}");
+                                }).catch(function(error) {
+                                    new Noty({
+                                        title: "",
+                                        text: '@lang("lang.something_went_wrong_please_try_again_later")',
+                                        type: "error",
+                                        icon: true
+                                    }).show();
+                                });
+                            }
+                        },
+                        cancel: {
+                            text: 'Cancel',
+                            btnClass: 'btn-secondary btn-sm',
+                        },
+                    },
+                    onContentReady: function() {
+                        // bind to events
+                        var jc = this;
+                        this.$content.find('form').on('submit', function(e) {
+                            // if the user submits the form by pressing enter in the field.
+                            e.preventDefault();
+                            jc.$$formSubmit.trigger('click'); // reference the button and click it
+                        });
+                    }
+                });
+            }
+        }); 
     });
     function showDatas(btn_tab){
         let is_update = "{{ Helper::permissionAccess('m3-s1','is_update') }}";
@@ -740,6 +981,7 @@
         let is_cancel = "{{ Helper::permissionAccess('m3-s1','is_cancel') }}";
         let is_print = "{{ Helper::permissionAccess('m3-s1','is_print') }}";
         let is_approve = "{{ Helper::permissionAccess('m3-s1','is_approve') }}";
+        let is_view_salary = "{{ Helper::permissionAccess('m2-s1','is_view_salary') }}";
         var status_tab = btn_tab;
         $.ajax({
             type: "GET",
@@ -750,6 +992,7 @@
             dataType: "JSON",
             success: function(response) {
                 let datas = response.datas;
+                let dataUpcomings = response.dataUpcomings;
                 if (datas.length > 0) {
                     var tr_re = "";
                     var tr_failed = "";
@@ -958,7 +1201,7 @@
                             '</tr>';
                             num ++;
                         })
-                    };
+                    }
                     if (btn_tab == 4 || btn_tab == "Cancel") {
                         let num  =1;
                         datas.map((staff_result) => {
@@ -1049,14 +1292,112 @@
                     var tr_failed = '<tr><td colspan=10 align="center">@lang("lang.no_record_to_display")</td></tr>';
                     var tr_re = '<tr><td colspan=10 align="center">@lang("lang.no_record_to_display")</td></tr>';
                     var tr_ct = '<tr><td colspan=11 align="center">@lang("lang.no_record_to_display")</td></tr>';
+                   
+                }
+                var tr_upcoming = "";
+                if (btn_tab == 7) {
+                    if (dataUpcomings.length > 0) {
+                        let index = 0;
+                        dataUpcomings.map((emp) => {
+                            index++;
+                            let tag_a = '';
+                            if (emp.profile != null) {
+                                tag_a = '<a href="{{asset("/uploads/images")}}/'+(emp.profile)+'" class="avatar">'+
+                                            '<img alt="" src="{{asset("/uploads/images")}}/'+(emp.profile)+'">'+
+                                        '</a>';
+                            }else {
+                                tag_a = '<a href="{{asset("admin/img/defuals/default-user-icon.png")}}">'+
+                                        '<img alt="" src="{{asset("admin/img/defuals/default-user-icon.png")}}">'+
+                                    '</a>';
+                            };
+                            let td = "";
+                            let DOB = moment(emp.date_of_birth).format('D-MMM-YYYY')
+                            let joinOfDate = moment(emp.date_of_commencement).format('D-MMM-YYYY')
+                            let PassDate = moment(emp.fdc_date).format('D-MMM-YYYY')
+                            let fdc_end = moment(emp.fdc_end).format('D-MMM-YYYY')
+                            let basic_salary = "";
+                            let salary_increas = "";
+                            if (is_view_salary == 1) {
+                                basic_salary =    '<td>$ <a href="#">'+(emp.basic_salary)+'</a></td>';
+                                salary_increas =  '<td>$ <a href="#">'+(emp.salary_increas)+'</a></td>';
+                            }
+                            tr_upcoming +='<tr class="odd">'+
+                                    '<td class="ids stuck-scroll-4">'+(index)+'</td>'+
+                                    '<td class="sorting_1 stuck-scroll-4">'+
+                                        '<h2 class="table-avatar">'+
+                                            (tag_a)+
+                                        '</h2>'+
+                                    '</td>'+
+                                    '<td class="stuck-scroll-4"><a href="{{url("employee/profile")}}/'+(emp.id)+'">'+(emp.number_employee)+'</a></td>'+
+                                    '<td class="stuck-scroll-4"><a href="{{url("employee/profile")}}/'+(emp.id)+'">'+(emp.employee_name_kh)+'</a></td>'+
+                                    '<td><a href="{{url("employee/profile")}}/'+(emp.id)+'">'+(emp.employee_name_en)+'</a></td>'+
+                                    '<td>'+(emp.gender ? localeLanguage == 'en'?  emp.gender.name_english : emp.gender.name_khmer : "")+'</td>'+
+                                    '<td>'+(DOB)+'</td>'+
+                                    '<td>'+(emp.branch ? localeLanguage == 'en' ? emp.branch.branch_name_en : emp.branch.branch_name_kh : "")+'</td>'+
+                                    '<td>'+(emp.department ? localeLanguage == 'en' ? emp.department.name_english :  emp.department.name_khmer : "")+'</td>'+
+                                    '<td>'+(emp.position ? localeLanguage == 'en' ? emp.position.name_english : emp.position.name_khmer : "")+'</td>'+
+                                    '<td>'+(emp.position ? emp.position.position_type : "")+'</td>'+
+                                    '<td>'+(emp.personal_phone_number)+'</td>'+
+                                    (basic_salary)+
+                                    (salary_increas)+
+                                    '<td>'+(joinOfDate)+'</td>'+
+                                    '<td>'+(PassDate)+'</td>'+
+                                    '<td>'+
+                                        '<div class="dropdown action-label">'+
+                                            '<a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">'+
+                                                '<i class="fa fa-dot-circle-o text-success"></i>'+
+                                                '<span>'+(emp.emp_status)+'</span>'+
+                                            '</a>'+
+                                            '<div class="dropdown-menu dropdown-menu-right btn-emp-status" id="btn-emp-status">'+
+                                                '<input type="text" name="" class="join_date" value="" hidden>'+
+                                                '<a class="dropdown-item" data-emp-id="'+(emp.id)+'" data-start-date="'+(emp.fdc_date)+'" data-join-date="'+(emp.date_of_commencement)+'" data-id="Probation" href="#">'+
+                                                    '<i class="fa fa-dot-circle-o text-success"></i> @lang("lang.probation")'+
+                                                '</a>'+
+                                                '<a class="dropdown-item" data-emp-id="'+(emp.id)+'" data-id="Cancel" href="#">'+
+                                                    '<i class="fa fa-dot-circle-o text-danger"></i> @lang("lang.cancel")'+
+                                                '</a>'+
+                                            '</div>'+
+                                        '</div>'+
+                                    '</td>'+
+                                    '<td class="text-end">'+
+                                        '<div class="dropdown dropdown-action">'+
+                                            '<a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">'+
+                                            '<i  class="material-icons">more_vert</i>'+
+                                            '</a>'+
+                                            '<div class="dropdown-menu dropdown-menu-right">'+
+                                                '<a class="dropdown-item userUpdate" href="{{url("user/form/edit")}}/'+(emp.id)+'" data-id="'+(emp.id)+'"><i class="fa fa-pencil m-r-5"></i> @lang("lang.edit")</a>'+
+                                                '<a class="dropdown-item btn_print" data-id="'+(emp.id)+'"><i class="fa fa-print fa-lg m-r-5"></i> @lang("lang.print")</a>'+
+                                                '<a class="dropdown-item userDelete" href="#" data-toggle="modal" data-id="'+(emp.id)+'" data-target="#delete_user"><i class="fa fa-trash-o m-r-5"></i> @lang("lang.delete")</a>'+
+                                            '</div>'+
+                                        '</div>'+
+                                    '</td>'+
+                            '</tr>';
+                        });
+                    }else{
+                        tr_upcoming = '<tr><td colspan=19 align="center">@lang("lang.no_record_to_display")</td></tr>';
+                    }
                 }
                 $(".tbl-short-list tbody").html(tr);
                 $(".tbl-not-short-list tbody").html(tr_not_list);
                 $(".tbl-failed tbody").html(tr_failed);
                 $(".tbl-result tbody").html(tr_re);
                 $(".tbl-signed-contract tbody").html(tr_ct);
+                $(".tbl-upcoming tbody").html(tr_upcoming);
                 $(".tbl-signed-contract_cancel tbody").html(tr_ct_cancel);
             }
+        });
+    }
+    function print_pdf() {
+        $("#print_purchase").show();
+        $("#print_purchase").printThis({
+            importCSS: false,
+            importStyle: true,
+            loadCSS: "{{asset('/admin/css/style_table.css')}}",
+            header: "",
+            printDelay: 1000,
+            formValues: false,
+            canvas: false,
+            doctypeString: "",
         });
     }
 </script>
