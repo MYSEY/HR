@@ -134,7 +134,7 @@
             </div>
         </div>
     </div> --}}
-    <div class="tab-pane active show" id="tbl_cancel" role="tabpanel">
+    {{-- <div class="tab-pane active show" id="tbl_cancel" role="tabpanel">
         <div class="row">
             <div class="col-md-12">
                 <div class="table-responsive">
@@ -245,7 +245,6 @@
                                                             <div class="dropdown dropdown-action">
                                                                 <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i  class="material-icons">more_vert</i></a>
                                                                 <div class="dropdown-menu dropdown-menu-right">
-                                                                    {{-- <a class="dropdown-item userUpdate" data-id="{{$item->id}}"><i class="fa fa-pencil m-r-5"></i> Edit</a> --}}
                                                                     <a class="dropdown-item userDelete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_user"><i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
                                                                 </div>
                                                             </div>
@@ -262,8 +261,8 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div class="tab-pane show" id="tbl_probations" role="tabpanel">
+    </div> --}}
+    <div class="tab-pane active show" id="tbl_probations" role="tabpanel">
         <div class="row">
             <div class="col-md-12">
                 <div class="table-responsive">

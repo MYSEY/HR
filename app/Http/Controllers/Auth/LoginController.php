@@ -69,70 +69,76 @@ class LoginController extends Controller
     public function login(Request $request)
     {
         $user = User::where("number_employee",$request->number_employee)->first();
-        if($user->status == "Active"){
-            if ($user->p_status == 0) {
-                if (!Hash::check($request->password, $user->password)) {
-                    return response()->json([
-                        'message' => "Wrong employee ID or password",
-                        'status'=>"error"
-                    ]);
-                }else{
-                    return response()->json([
-                        'message' => "Login successfully",
-                        'status'=>"success",
-                        'role' => null
-                    ]);
-                }
-            }else{
-                Activity::all()->last();
-                $number_employee    = $request->number_employee;
-                $password           = $request->password;
-                if (Auth::attempt(['number_employee' => $number_employee, 'password' => $password])) {
-                    if (Auth::user()->status == 'Active') {
+        if ($user) {
+            if($user->status == "Active"){
+                if ($user->p_status == 0) {
+                    if (!Hash::check($request->password, $user->password)) {
+                        return response()->json([
+                            'message' => "Wrong employee ID or password",
+                            'status'=>"error"
+                        ]);
+                    }else{
                         return response()->json([
                             'message' => "Login successfully",
                             'status'=>"success",
-                            'role' => Auth::user()->RolePermission
+                            'role' => null
                         ]);
-                        // if (Auth::user()->RolePermission == "Employee") {
-                        //     return redirect('dashboad/employee');
-                        // }else{
-                        //     return redirect('dashboad/admin')->with([
-                        //         'dataUpComming' =>  $dataUserUpComming,
-                        //         'dataProbation' =>  $dataUserProbation,
-                        //         'dataShortList' =>  $dataShortList,
-                        //         'dataContract'  =>  $dataContract
-                        //     ]);
-                        // }
-                        // Toastr::success('Login successfully.', 'Success');
-                    } else {
-                        // User status is not active
-                        Auth::logout();
+                    }
+                }else{
+                    Activity::all()->last();
+                    $number_employee    = $request->number_employee;
+                    $password           = $request->password;
+                    if (Auth::attempt(['number_employee' => $number_employee, 'password' => $password])) {
+                        if (Auth::user()->status == 'Active') {
+                            return response()->json([
+                                'message' => "Login successfully",
+                                'status'=>"success",
+                                'role' => Auth::user()->RolePermission
+                            ]);
+                            // if (Auth::user()->RolePermission == "Employee") {
+                            //     return redirect('dashboad/employee');
+                            // }else{
+                            //     return redirect('dashboad/admin')->with([
+                            //         'dataUpComming' =>  $dataUserUpComming,
+                            //         'dataProbation' =>  $dataUserProbation,
+                            //         'dataShortList' =>  $dataShortList,
+                            //         'dataContract'  =>  $dataContract
+                            //     ]);
+                            // }
+                            // Toastr::success('Login successfully.', 'Success');
+                        } else {
+                            // User status is not active
+                            Auth::logout();
+                            return response()->json([
+                                'message' => "Your account is not active. Please contact support",
+                                'status'=>"error"
+                            ]);
+                            // Toastr::error('Your account is not active. Please contact support.', 'Error');
+                            // return redirect('login');
+                        }
+                    }else {
                         return response()->json([
-                            'message' => "Your account is not active. Please contact support",
+                            'message' => "Wrong Employee ID Or Password",
                             'status'=>"error"
                         ]);
-                        // Toastr::error('Your account is not active. Please contact support.', 'Error');
+                        // Toastr::error('Wrong Employee ID Or Password', 'Error');
                         // return redirect('login');
                     }
-                }else {
-                    return response()->json([
-                        'message' => "Wrong Employee ID Or Password",
-                        'status'=>"error"
-                    ]);
-                    // Toastr::error('Wrong Employee ID Or Password', 'Error');
-                    // return redirect('login');
                 }
+            }else{
+                return response()->json([
+                    'message' => "Your account is not active. Please contact support",
+                    'status'=>"error"
+                ]);
+                // Toastr::error('Your account is not active. Please contact support.', 'Error');
+                // return redirect('login');
             }
-        }else{
+        }else {
             return response()->json([
-                'message' => "Your account is not active. Please contact support",
+                'message' => "Wrong employee ID or password. Please contact support",
                 'status'=>"error"
             ]);
-            // Toastr::error('Your account is not active. Please contact support.', 'Error');
-            // return redirect('login');
         }
-        
     }
 
     public function changePassword(Request $request)

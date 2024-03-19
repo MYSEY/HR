@@ -95,6 +95,7 @@ class CandidateResumeController extends Controller
             'roles.role_type',
         )->whereNotIn('roles.role_type',['employee','admin','developer'])->get();
         $totalUpcomings = User::where('emp_status','Upcoming')->count();
+        $totalUpcomingtotalCancel = User::where('emp_status','Cancel')->count();
         return view('recruitments.candidate_resumes.candidate_resume', 
         compact([
             "position", 
@@ -115,6 +116,7 @@ class CandidateResumeController extends Controller
             'dataCancel',
             'lineManager',
             'totalUpcomings',
+            'totalUpcomingtotalCancel',
         ]));
     }
 
@@ -162,6 +164,7 @@ class CandidateResumeController extends Controller
     public function show(Request $request)
     {
         $dataUpcomings =[];
+        $dataUpcomingCancels =[];
         $datas =[];
         if ($request->status == 3 || $request->status == 6) {
             $datas = CandidateResume::with("branch")->with("position")->with("option")
@@ -183,6 +186,8 @@ class CandidateResumeController extends Controller
            ->get();
         }else if($request->status == 7){
             $dataUpcomings = User::with('branch')->with('department')->with("position")->with("gender")->where('emp_status','Upcoming')->get();
+        }else if($request->status == 8){
+            $dataUpcomingCancels = User::with('branch')->with('department')->with("position")->with("gender")->where('emp_status','Cancel')->get();
         }else{
             $datas = CandidateResume::where("status", $request->status)->with("branch")->with("position")->with("option")
             ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
@@ -192,7 +197,7 @@ class CandidateResumeController extends Controller
             })
             ->get();
         }
-        return response()->json(['datas'=>$datas,"dataUpcomings"=>$dataUpcomings]);
+        return response()->json(['datas'=>$datas,"dataUpcomings"=>$dataUpcomings, "dataUpcomingCancels"=>$dataUpcomingCancels]);
     }
 
     public function showemp(){

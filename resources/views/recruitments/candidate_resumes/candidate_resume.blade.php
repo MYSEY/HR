@@ -65,6 +65,10 @@
                                 <a class="nav-link" data-bs-toggle="tab" id="btn_tab_upcoming" href="#tab_upcoming" aria-selected="false" data-tab-id="7"
                                     role="tab" tabindex="-1">@lang('lang.upcoming_staff')(<span id="dataUpcoming">{{$totalUpcomings}}</span>)</a>
                             </li>
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link" data-bs-toggle="tab" id="tab_cancel" href="#tab_upcoming_cancel" aria-selected="false" data-tab-id="8"
+                                    role="tab" tabindex="-1">@lang('lang.canceled_contract')(<span id="dataUpcoming">{{$totalUpcomingtotalCancel}}</span>)</a>
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -75,7 +79,7 @@
             </div>
         </div>
         @endif
-        <!-- Delete training type Modal -->
+        <!-- Delete Modal -->
         <div class="modal custom-modal fade" id="delete_candidate" role="dialog">
             <div class="modal-dialog modal-sm modal-dialog-centered">
                 <div class="modal-content">
@@ -100,6 +104,34 @@
                 </div>
             </div>
         </div>
+
+        <!-- Delete User Modal -->
+        <div class="modal custom-modal fade" id="delete_user" role="dialog">
+            <div class="modal-dialog modal-sm modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <div class="form-header">
+                            <h3>@lang('lang.deleted')!</h3>
+                            <p>@lang('lang.are_you_sure_want_to_delete')?</p>
+                        </div>
+                        <div class="modal-btn delete-action">
+                            <form action="{{url('users/delete')}}" method="POST">
+                                @csrf
+                                <input type="hidden" name="id" class="d_id">
+                                <input type="hidden" name="hidden_image" id="e_profile">
+                                <div class="row">
+                                    <div class="submit-section" style="text-align: center">
+                                        <button type="submit" class="btn btn-primary submit-btn me-2">@lang('lang.delete')</button>
+                                        <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-secondary">@lang('lang.cancel')</a>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /Delete User Modal -->
         @include('recruitments.candidate_resumes.modal_form_create')
         @include('recruitments.candidate_resumes.modal_form_edit')
         @include('recruitments.candidate_resumes.modal_form_create_emp')
@@ -117,6 +149,10 @@
             $(".thanLess").hide();
             $("#thanLess").text("");
             $('#import_motor_cv').modal('show');
+        });
+        $(document).on('click','.upcomingDelete', function(){
+            let id = $(this).data("id");
+            $('.d_id').val(id);
         });
         $("#position_applied, #e_position_applied").on("change", function() {
             let position_type = $("#position_applied option:checked").attr('data-id');
@@ -150,7 +186,7 @@
             let tab_status = $(this).attr('data-tab-id');
             showDatas(tab_status);
         });
-        $("#btn_tab_interviewed_failed, #btn_tab_interviewed_result, #btn_tab_signed_contract, #btn_tab_signed_contract_cancel, #btn_tab_upcoming").on("click", function(){
+        $("#btn_tab_interviewed_failed, #btn_tab_interviewed_result, #btn_tab_signed_contract, #btn_tab_signed_contract_cancel, #btn_tab_upcoming, #tab_cancel").on("click", function(){
             let tab_status = $(this).attr('data-tab-id');
             if (tab_status ==  5) {
                 tab_status ="Cancel"
@@ -992,6 +1028,7 @@
             success: function(response) {
                 let datas = response.datas;
                 let dataUpcomings = response.dataUpcomings;
+                let dataUpcomingCancels = response.dataUpcomingCancels;
                 if (datas.length > 0) {
                     var tr_re = "";
                     var tr_failed = "";
@@ -1366,7 +1403,7 @@
                                             '<div class="dropdown-menu dropdown-menu-right">'+
                                                 '<a class="dropdown-item userUpdate" href="{{url("user/form/edit")}}/'+(emp.id)+'" data-id="'+(emp.id)+'"><i class="fa fa-pencil m-r-5"></i> @lang("lang.edit")</a>'+
                                                 '<a class="dropdown-item btn_print" data-id="'+(emp.id)+'"><i class="fa fa-print fa-lg m-r-5"></i> @lang("lang.print")</a>'+
-                                                '<a class="dropdown-item userDelete" href="#" data-toggle="modal" data-id="'+(emp.id)+'" data-target="#delete_user"><i class="fa fa-trash-o m-r-5"></i> @lang("lang.delete")</a>'+
+                                                '<a class="dropdown-item upcomingDelete" href="#" data-toggle="modal" data-id="'+(emp.id)+'" data-target="#delete_user"><i class="fa fa-trash-o m-r-5"></i> @lang("lang.delete")</a>'+
                                             '</div>'+
                                         '</div>'+
                                     '</td>'+
@@ -1376,13 +1413,72 @@
                         tr_upcoming = '<tr><td colspan=19 align="center">@lang("lang.no_record_to_display")</td></tr>';
                     }
                 }
+                var tr_upcoming_cancel = "";
+                if (btn_tab == 8) {
+                    if (dataUpcomingCancels.length > 0) {
+                        let index = 0;
+                        dataUpcomingCancels.map((emp) => {
+                            index++;
+                            let tag_a = '';
+                            if (emp.profile != null) {
+                                tag_a = '<a href="{{asset("/uploads/images")}}/'+(emp.profile)+'" class="avatar">'+
+                                            '<img alt="" src="{{asset("/uploads/images")}}/'+(emp.profile)+'">'+
+                                        '</a>';
+                            }else {
+                                tag_a = '<a href="{{asset("admin/img/defuals/default-user-icon.png")}}">'+
+                                        '<img alt="" src="{{asset("admin/img/defuals/default-user-icon.png")}}">'+
+                                    '</a>';
+                            };
+                            let td = "";
+                            let DOB = moment(emp.date_of_birth).format('D-MMM-YYYY')
+                            let joinOfDate = moment(emp.date_of_commencement).format('D-MMM-YYYY')
+                            let PassDate = moment(emp.fdc_date).format('D-MMM-YYYY')
+                            tr_upcoming_cancel += '<tr class="odd">'+
+                                                    '<td class="ids stuck-scroll-4">'+(index)+'</td>'+
+                                                    '<td class="sorting_1 stuck-scroll-4">'+
+                                                        '<h2 class="table-avatar">'+
+                                                            (tag_a)+
+                                                        '</h2>'+
+                                                    '</td>'+
+                                                    '<td class="stuck-scroll-4"><a href="{{url("employee/profile")}}/'+(emp.id)+'">'+(emp.number_employee)+'</a></td>'+
+                                                    '<td class="stuck-scroll-4"><a href="{{url("employee/profile")}}/'+(emp.id)+'">'+(emp.employee_name_kh)+'</a></td>'+
+                                                    '<td><a href="{{url("employee/profile")}}/'+(emp.id)+'">'+(emp.employee_name_en)+'</a></td>'+
+                                                    '<td>'+(emp.gender ? localeLanguage == 'en'?  emp.gender.name_english : emp.gender.name_khmer : "")+'</td>'+
+                                                    '<td>'+(DOB)+'</td>'+
+                                                    '<td>'+(emp.branch ? localeLanguage == 'en' ? emp.branch.branch_name_en : emp.branch.branch_name_kh : "")+'</td>'+
+                                                    '<td>'+(emp.department ? localeLanguage == 'en' ? emp.department.name_english :  emp.department.name_khmer : "")+'</td>'+
+                                                    '<td>'+(emp.position ? localeLanguage == 'en' ? emp.position.name_english : emp.position.name_khmer : "")+'</td>'+
+                                                    '<td>'+(emp.position ? emp.position.position_type : "")+'</td>'+
+                                                    '<td>'+(emp.personal_phone_number)+'</td>'+
+                                                    '<td>'+(joinOfDate)+'</td>'+
+                                                    '<td>'+(PassDate)+'</td>'+
+                                                    '<td>'+
+                                                        '<span style="font-size: 13px" class="badge bg-inverse-danger">Cancel</span>'+
+                                                    '</td>'+
+                                                    '<td class="text-end">'+
+                                                        '<div class="dropdown dropdown-action">'+
+                                                            '<a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">'+
+                                                            '<i  class="material-icons">more_vert</i>'+
+                                                            '</a>'+
+                                                            '<div class="dropdown-menu dropdown-menu-right">'+
+                                                                '<a class="dropdown-item upcomingDelete" href="#" data-toggle="modal" data-id="'+(emp.id)+'" data-target="#delete_user"><i class="fa fa-trash-o m-r-5"></i> @lang("lang.delete")</a>'+
+                                                            '</div>'+
+                                                        '</div>'+
+                                                    '</td>'+
+                                                '</tr>';
+                        });
+                    }else{
+                        tr_upcoming_cancel = '<tr><td colspan=16 align="center">@lang("lang.no_record_to_display")</td></tr>';
+                    }
+                }
                 $(".tbl-short-list tbody").html(tr);
                 $(".tbl-not-short-list tbody").html(tr_not_list);
                 $(".tbl-failed tbody").html(tr_failed);
                 $(".tbl-result tbody").html(tr_re);
                 $(".tbl-signed-contract tbody").html(tr_ct);
-                $(".tbl-upcoming tbody").html(tr_upcoming);
                 $(".tbl-signed-contract_cancel tbody").html(tr_ct_cancel);
+                $(".tbl-upcoming tbody").html(tr_upcoming);
+                $(".tbl-upcoming_cancel tbody").html(tr_upcoming_cancel);
             }
         });
     }

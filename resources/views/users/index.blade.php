@@ -89,11 +89,11 @@
                                     {{-- <li class="nav-item" role="presentation">
                                         <a class="nav-link active" data-bs-toggle="tab" id="tab_candidate_resume" href="#tbl_candidate_resume" aria-selected="true" role="tab" data-tab-id="1">@lang('lang.upcoming_staff')({{count($data)}})</a>
                                     </li> --}}
-                                    <li class="nav-item" role="presentation">
+                                    {{-- <li class="nav-item" role="presentation">
                                         <a class="nav-link active" data-bs-toggle="tab" id="tab_cancel" href="#tbl_cancel" aria-selected="true" data-tab-id="6" role="tab" tabindex="1">@lang('lang.canceled_contract')({{count($dataCanContract)}})</a>
-                                    </li>
+                                    </li> --}}
                                     <li class="nav-item" role="presentation">
-                                        <a class="nav-link" data-bs-toggle="tab" id="tab_probation" href="#tbl_probations" aria-selected="false" role="tab" data-tab-id="2" tabindex="-1">@lang('lang.probation')({{count($dataProbation)}})</a>
+                                        <a class="nav-link active" data-bs-toggle="tab" id="tab_probation" href="#tbl_probations" aria-selected="false" role="tab" data-tab-id="2" tabindex="1">@lang('lang.probation')({{count($dataProbation)}})</a>
                                     </li>
                                     <li class="nav-item" role="presentation">
                                         <a class="nav-link" data-bs-toggle="tab" id="tab_fdc" href="#tbl_fdc" aria-selected="false" role="tab" data-tab-id="3" tabindex="-1">@lang('lang.fdc')({{count($dataFDC)}})</a>
