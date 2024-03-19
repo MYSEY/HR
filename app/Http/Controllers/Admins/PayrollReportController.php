@@ -644,7 +644,8 @@ class PayrollReportController extends Controller
         $filesize = filesize($file);
         $extension = $request->file->extension();
         $spreadsheet = IOFactory::load($file);
-        $AllSeverancePay =  $spreadsheet->getSheetByName('Severance Pay')->toArray();
+        // $AllSeverancePay =  $spreadsheet->getSheetByName('Severance Pay')->toArray();
+        $AllSeverancePay = $spreadsheet->getActiveSheet()->toArray();
         if ($extension == "xlsx" || $extension == "xls" || $extension == "csv") {
             $i = 0;
             $dataArray = [];
@@ -652,11 +653,12 @@ class PayrollReportController extends Controller
                 $i++;
                 if ($i != 1) {
                     $employee = User::where("number_employee", $item[0])->first();
+                    $payroll = Payroll::where("number_employee", $item[0])->first();
                     GrossSalaryPay::firstOrCreate([
                         'employee_id'                   => $employee->id,
                         'number_employee'               => $item[0],
-                        'basic_salary'                  => $item[2],
-                        'total_gross_salary'            => $item[3],
+                        'basic_salary'                  => $payroll->basic_salary,
+                        'total_gross_salary'            => $payroll->base_salary_received_usd,
                         'total_fdc1'                    => $item[4],
                         'type_fdc1'                     => $item[5],
                         'payment_date'                  => $item[6],

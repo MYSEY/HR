@@ -30,7 +30,7 @@ trait GeneratingCode
         }
         
         do {
-            $eployeeId =  $employeeDate->format('y') . '-' . str_pad(($count + 1), 3, "0", STR_PAD_LEFT);
+            $eployeeId =  $employeeDate->format('y') .'0'. '-' . str_pad(($count + 1), 3, "0", STR_PAD_LEFT);
             $alreadyExist = GenerateIdEmployee::select('number_employee')->where('number_employee', $eployeeId)->first()->number_employee ?? null;
             $count++;
         } while ($alreadyExist);
