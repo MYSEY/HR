@@ -981,7 +981,6 @@
         let is_cancel = "{{ Helper::permissionAccess('m3-s1','is_cancel') }}";
         let is_print = "{{ Helper::permissionAccess('m3-s1','is_print') }}";
         let is_approve = "{{ Helper::permissionAccess('m3-s1','is_approve') }}";
-        let is_view_salary = "{{ Helper::permissionAccess('m2-s1','is_view_salary') }}";
         var status_tab = btn_tab;
         $.ajax({
             type: "GET",
@@ -1317,10 +1316,10 @@
                             let fdc_end = moment(emp.fdc_end).format('D-MMM-YYYY')
                             let basic_salary = "";
                             let salary_increas = "";
-                            if (is_view_salary == 1) {
-                                basic_salary =    '<td>$ <a href="#">'+(emp.basic_salary)+'</a></td>';
-                                salary_increas =  '<td>$ <a href="#">'+(emp.salary_increas)+'</a></td>';
-                            }
+                            // if (is_view_salary == 1) {
+                            //     basic_salary =    '<td>$ <a href="#">'+(emp.basic_salary)+'</a></td>';
+                            //     salary_increas =  '<td>$ <a href="#">'+(emp.salary_increas)+'</a></td>';
+                            // }
                             tr_upcoming +='<tr class="odd">'+
                                     '<td class="ids stuck-scroll-4">'+(index)+'</td>'+
                                     '<td class="sorting_1 stuck-scroll-4">'+
@@ -1338,8 +1337,8 @@
                                     '<td>'+(emp.position ? localeLanguage == 'en' ? emp.position.name_english : emp.position.name_khmer : "")+'</td>'+
                                     '<td>'+(emp.position ? emp.position.position_type : "")+'</td>'+
                                     '<td>'+(emp.personal_phone_number)+'</td>'+
-                                    (basic_salary)+
-                                    (salary_increas)+
+                                    // (basic_salary)+
+                                    // (salary_increas)+
                                     '<td>'+(joinOfDate)+'</td>'+
                                     '<td>'+(PassDate)+'</td>'+
                                     '<td>'+
