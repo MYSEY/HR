@@ -502,6 +502,7 @@ return[
 	"number_of_days"=>"ចំនួនថ្ងៃ",
 	"number_of_working_days"=>"ចំនួនថ្ងៃធ្វើការ",
 	"non-shortlisted"=>"មិនស្ថិតក្នុងតារាងបេក្ខជន",
+	"non_black_list"=>"បញ្ជីខ្មៅ",
 	"non_taxable_salary"=>"ប្រាក់បៀវត្សមិនជាប់ពន្ធ",
     "nssf_report"=>"របាយការណ៍​ ប.ស.ស",
     "nssf_reports"=>"របាយការណ៍​ ប.ស.ស",

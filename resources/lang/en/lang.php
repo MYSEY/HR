@@ -480,6 +480,7 @@ return[
     "number_of_working_days"=>"Number of working days",
     "nationality"=>"Nationality",
     "non-shortlisted"=>"Non-Shortlisted",
+    "non_black_list"=>"Non black list",
     "non_taxable_salary"=>"Non Taxable Salary",
     "nssf_report"=>"NSSF Report",
     "nssf_reports"=>"NSSF Report",

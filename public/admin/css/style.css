@@ -2999,12 +2999,12 @@ input[type=file].form-control {
 }
 .nav-tabs.nav-tabs-top li a.active {
   border-top-color: #9f2e32;
-  border-width: 2px 0 0 0;
+  border-width: 3px 0 0 0;
   border-radius: 0;
 }
 .nav-tabs.nav-tabs-bottom li a.active {
   border-bottom-color: #9f2e32;
-  border-width: 0 0 2px 0;
+  border-width: 0 0 3px 0;
   background: transparent;
   border-radius: 0;
 }

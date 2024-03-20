@@ -59,7 +59,7 @@ class CandidateResumeController extends Controller
                 $query->where("location_applied", Auth::user()->branch_id);
             }
         })->count();
-        $dataNon = CandidateResume::where("short_list", "2")
+        $dataNon = CandidateResume::whereIn("short_list", ["2","7"])
         ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
             if ($RolePermission == 'BM') {
                 $query->where("location_applied", Auth::user()->branch_id);
@@ -483,7 +483,7 @@ class CandidateResumeController extends Controller
                     $dataUpdate = [
                         'status' => 3,
                         'joined_interview' => $request->joined_interview,
-                        'interviewed_result' =>null,
+                        'interviewed_result' =>$request->interviewed_result,
                         'remark' =>$request->remark,
                         'updated_by' => Auth::user()->id,
                     ]; 
@@ -517,7 +517,7 @@ class CandidateResumeController extends Controller
                     $query->where("location_applied", Auth::user()->branch_id);
                 }
             })->count();
-            $dataNon = CandidateResume::where("short_list", "2")
+            $dataNon = CandidateResume::whereIn("short_list", ["2", "7"])
             ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
                 if ($RolePermission == 'BM') {
                     $query->where("location_applied", Auth::user()->branch_id);

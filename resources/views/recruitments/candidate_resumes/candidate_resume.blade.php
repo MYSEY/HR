@@ -35,39 +35,39 @@
                         <ul class="nav nav-tabs nav-tabs-bottom" role="tablist">
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link active" data-bs-toggle="tab" href="#tab_candidate_resume" aria-selected="true"
-                                    role="tab">@lang('lang.cvs')(<span id="data_cv">{{count($data)}}</span>)</a>
+                                    role="tab">@lang('lang.cvs')<span id="data_cv" class="badge bg-secondary ms-1 rounded-pill">{{count($data)}}</span></a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" data-bs-toggle="tab" id="btn_tab_short_list" href="#tab_short_list" aria-selected="false" role="tab" data-tab-id="2"
-                                    tabindex="-1">@lang('lang.shortlisted')(<span id="dataShortList">{{$dataShortList}}</span>)</a>
+                                    tabindex="-1">@lang('lang.shortlisted')<span id="dataShortList" class="badge bg-secondary ms-1 rounded-pill">{{$dataShortList}}</span></a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" data-bs-toggle="tab" id="btn_not_tab_short_list" href="#tab_not_short_list" aria-selected="false" role="tab" data-tab-id="2"
-                                    tabindex="-1">@lang('lang.non-shortlisted')(<span id="dataNon">{{$dataNon}}</span>)</a>
+                                    tabindex="-1">@lang('lang.non-shortlisted')<span id="dataNon" class="badge bg-secondary ms-1 rounded-pill">{{$dataNon}}</span></a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" data-bs-toggle="tab" id="btn_tab_interviewed_failed" href="#tab_interviewed_failed" aria-selected="false" data-tab-id="6"
-                                    role="tab" tabindex="-1">@lang('lang.inter-failed')(<span id="dataFailed">{{$dataFailed}}</span>)</a>
+                                    role="tab" tabindex="-1">@lang('lang.inter-failed')<span id="dataFailed" class="badge bg-secondary ms-1 rounded-pill">{{$dataFailed}}</span></a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" data-bs-toggle="tab" id="btn_tab_interviewed_result" href="#tab_interviewed_result" aria-selected="false" data-tab-id="3"
-                                    role="tab" tabindex="-1">@lang('lang.inter-result')(<span id="dataResult">{{$dataResult}}</span>)</a>
+                                    role="tab" tabindex="-1">@lang('lang.inter-result')<span id="dataResult" class="badge bg-secondary ms-1 rounded-pill">{{$dataResult}}</span></a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" data-bs-toggle="tab" id="btn_tab_signed_contract" href="#tab_signed_contract" aria-selected="false" data-tab-id="4"
-                                    role="tab" tabindex="-1">@lang('lang.processing_contract')(<span id="dataProcessing">{{$dataProcessing}}</span>)</a>
+                                    role="tab" tabindex="-1">@lang('lang.processing_contract')<span id="dataProcessing" class="badge bg-secondary ms-1 rounded-pill">{{$dataProcessing}}</span></a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" data-bs-toggle="tab" id="btn_tab_signed_contract_cancel" href="#tab_signed_contract_cancel" aria-selected="false" data-tab-id="5"
-                                    role="tab" tabindex="-1">@lang('lang.cancel_processing_contract')(<span id="dataCancel">{{$dataCancel}}</span>)</a>
+                                    role="tab" tabindex="-1">@lang('lang.cancel_processing_contract')<span id="dataCancel" class="badge bg-secondary ms-1 rounded-pill">{{$dataCancel}}</span></a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" data-bs-toggle="tab" id="btn_tab_upcoming" href="#tab_upcoming" aria-selected="false" data-tab-id="7"
-                                    role="tab" tabindex="-1">@lang('lang.upcoming_staff')(<span id="dataUpcoming">{{$totalUpcomings}}</span>)</a>
+                                    role="tab" tabindex="-1">@lang('lang.upcoming_staff')<span id="dataUpcoming" class="badge bg-secondary ms-1 rounded-pill">{{$totalUpcomings}}</span></a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" data-bs-toggle="tab" id="tab_cancel" href="#tab_upcoming_cancel" aria-selected="false" data-tab-id="8"
-                                    role="tab" tabindex="-1">@lang('lang.canceled_contract')(<span id="dataUpcoming">{{$totalUpcomingtotalCancel}}</span>)</a>
+                                    role="tab" tabindex="-1">@lang('lang.canceled_contract')<span class="badge bg-secondary ms-1 rounded-pill">{{$totalUpcomingtotalCancel}}</span></a>
                             </li>
                         </ul>
                     </div>
@@ -425,6 +425,7 @@
                                 '<select class="form-control form-select showtList" name="short_list">'+
                                     '<option selected value="1"> @lang("lang.yes")</option>'+
                                     '<option value="2"> @lang("lang.no")</option>'+
+                                    '<option value="7"> @lang("lang.black_list")</option>'+
                                 '</select>'+
                             '</div>'+
                             '<div class="form-group interviewed_date">'+
@@ -443,7 +444,6 @@
                                 '<select class="form-control hr-select2-option-emp form-select committee_interview" id="committeeinterview" name="states[]" multiple >'+
                                    
                                 '</select>'+
-                                // '<input type="text" id="committeeinterview" class="form-control committee_interview">'+
                             '</div>'+
                             '<div class="form-group">'+
                                 '<label>@lang("lang.remark")</label>'+
@@ -453,7 +453,7 @@
                     onOpen: function(){
                             this.$content.find('.showtList').change(function(){
                                 let value = $('.showtList').val();
-                                if (value == "2") {
+                                if (value == "2" || value == "7") {
                                     $(".interviewed_date").hide();
                                     $(".interview_channel").hide();
                                     $(".committee_interviewed").hide();
@@ -602,6 +602,13 @@
                                     '<option value="7">@lang("lang.black_list")</option>'+
                                 '</select>'+
                             '</div>'+
+                            '<div class="form-group interviewed_results_non" style="display:none">'+
+                                '<label>@lang("lang.interviewed_result")</label>'+
+                                '<select class="form-control form-select non_interviewed_result" >'+
+                                    '<option selected value="8"> @lang("lang.non_black_list")</option>'+
+                                    '<option value="7">@lang("lang.black_list")</option>'+
+                                '</select>'+
+                            '</div>'+
                             '<div class="form-group">'+
                                 '<label>@lang("lang.remark")</label>'+
                                 '<textarea type="text" rows="3" class="form-control remark"></textarea>'+
@@ -612,12 +619,15 @@
                                 let value = $('.joined_interview').val();
                                 if (value == "2") {
                                     $(".interviewed_results").hide();
+                                    $(".interviewed_results_non").show();
                                     $(".interviewed_date").hide();
                                     $(".interviewed_dates").val("");
                                 }else if(value == 3){
                                     $(".interviewed_date").show();
                                     $(".interviewed_results").hide();
+                                    $(".interviewed_results_non").hide();
                                 }else{
+                                    $(".interviewed_results_non").hide();
                                     $(".interviewed_results").show();
                                     $(".interviewed_date").hide();
                                     $(".interviewed_dates").val("");
@@ -632,7 +642,7 @@
                             action: function() {
                                 var status = this.$content.find('.status').val();
                                 var joined_interview = this.$content.find('.joined_interview').val();
-                                var interviewed_result = this.$content.find('.interviewed_result').val();
+                                var interviewed_result = "";
                                 var id = this.$content.find('.id').val();
                                 var interviewed_dates = this.$content.find('.interviewed_dates').val();
                                 var remark = this.$content.find('.remark').val();
@@ -641,13 +651,19 @@
                                         $(".interviewed_result").css("border","solid 1px red");
                                         return false;
                                     }
+                                    interviewed_result = this.$content.find('.interviewed_result').val();
+                                }else if(joined_interview == "2"){
+                                    if ($(".non_interviewed_result").val() ==""){
+                                        $(".non_interviewed_result").css("border","solid 1px red");
+                                        return false;
+                                    }
+                                    interviewed_result = this.$content.find('.non_interviewed_result').val();
                                 }else if (joined_interview == 3) {
                                     if ($(".interviewed_dates").val() ==""){
                                         $(".interviewed_dates").css("border","solid 1px red");
                                         return false;
                                     }
                                 }
-
                                 axios.post('{{ URL('recruitment/candidate-resume/status') }}', {
                                         'id': id,
                                         'status': status,
@@ -1099,7 +1115,18 @@
                                     '<td>'+(staff.remark ? staff.remark: "")+'</td>'+
                                 '</tr>';
                                 num ++;
-                            }else if (staff.short_list == 2) {
+                            }else if (staff.short_list == 2 || staff.short_list == 7) {
+                                let status_black_list = '<div class="dropdown action-label">'+
+                                            (dropdown_menu)+
+                                            '<div class="dropdown-menu dropdown-menu-right" id="btn-status">'+
+                                                '<a class="dropdown-item" data-emp-id="'+(staff.id)+'"  data-id="2" data-id-short="non-shortlist" href="#">'+
+                                                    '<i class="fa fa-dot-circle-o text-warning"></i> @lang("lang.shortlisted")'+
+                                                '</a>'+
+                                            '</div>'+
+                                        '</div>';
+                                if (staff.short_list == 7) {
+                                    status_black_list = '<span style="font-size: 13px" class="badge bg-inverse-danger">Black List</span>';
+                                }
                                 tr_not_list += '<tr class="odd">'+
                                     '<td class="ids stuck-scroll-3">'+(num)+'</td>'+
                                     '<td class="stuck-scroll-3">'+(staff.name_kh)+' </td>'+
@@ -1109,14 +1136,7 @@
                                     '<td >'+(staff.branch.branch_name_en)+'</td>'+
                                     '<td >'+(cv)+'</td>'+
                                     '<td >'+
-                                        '<div class="dropdown action-label">'+
-                                            (dropdown_menu)+
-                                            '<div class="dropdown-menu dropdown-menu-right" id="btn-status">'+
-                                                '<a class="dropdown-item" data-emp-id="'+(staff.id)+'"  data-id="2" data-id-short="non-shortlist" href="#">'+
-                                                    '<i class="fa fa-dot-circle-o text-warning"></i> @lang("lang.shortlisted")'+
-                                                '</a>'+
-                                            '</div>'+
-                                        '</div>'+
+                                        status_black_list+
                                     '</td>'+
                                     '<td >'+(staff.remark ? staff.remark : "")+'</td>'+
                                 '</tr>';
@@ -1137,6 +1157,8 @@
                                 interview_result = "@lang('lang.rejected_offered')";
                             }else if(staff_result.interviewed_result == "7"){
                                 interview_result = '<span class="badge bg-inverse-danger">@lang("lang.black_list")</snap>'
+                            }else if(staff_result.interviewed_result == "8") {
+                                interview_result = '<span class="badge bg-inverse-danger">@lang("lang.non_black_list")</snap>'
                             }else{
                                 interview_result = "No";
                             };
@@ -1160,7 +1182,14 @@
                                             '</div>'+
                                         '</div>';
                             }else {
-                                status_show_failed = interview_result;
+                                if (staff_result.joined_interview == "1") {
+                                    status_show_failed = '<span class="badge bg-inverse-success">@lang("lang.yes")</snap>'
+                                }else if (staff_result.joined_interview == "2") {
+                                    status_show_failed = '<span class="badge bg-inverse-danger">@lang("lang.no")</snap>'
+                                }else{
+                                    status_show_failed = interview_result;
+                                }
+                                
                             }
                             tr_failed += '<tr class="odd">'+
                                 '<td class="ids stuck-scroll-3">'+(num)+'</td>'+
@@ -1170,8 +1199,8 @@
                                 '<td >'+(staff_result.position.name_english)+'</td>'+
                                 '<td >'+(staff_result.branch.branch_name_en)+'</td>'+
                                 '<td >'+(interviewed_date)+'</td>'+
-                                '<td >'+(interview_result)+'</td>'+
                                 '<td >'+(status_show_failed)+'</td>'+
+                                '<td >'+(interview_result)+'</td>'+
                                 '<td >'+(staff_result.remark ? staff_result.remark: "")+'</td>'+
                             '</tr>';
                             num ++;
