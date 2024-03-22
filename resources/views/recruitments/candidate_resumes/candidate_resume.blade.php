@@ -495,39 +495,89 @@
                                         return false;
                                     }
                                 }
-
-                                axios.post('{{ URL('recruitment/candidate-resume/status') }}', {
-                                        'id': id,
-                                        'status': c_status,
-                                        'short_list': short_list,
-                                        'interviewed_date': interviewed_date,
-                                        'interviewed_channel': interviewed_channel,
-                                        'committee_interview': committee_interview.toString(),
-                                        'remark': remark,
-                                    }).then(function(response) {
+                                if (short_list == "7") {
+                                    $.confirm({
+                                        title: '@lang("lang.candidate_resume_status")!',
+                                        content: 'Are you sure you want to change to <span class="text-danger">@lang("lang.black_list")</span>?',
+                                        icon: 'fa fa-warning',
+                                        animation: 'scale',
+                                        closeAnimation: 'zoom',
+                                        buttons: {
+                                            confirm: {
+                                                text: 'Yes, sure!',
+                                                btnClass: 'add-btn-status',
+                                                action: function(){
+                                                    axios.post('{{ URL('recruitment/candidate-resume/status') }}', {
+                                                            'id': id,
+                                                            'status': c_status,
+                                                            'short_list': short_list,
+                                                            'interviewed_date': interviewed_date,
+                                                            'interviewed_channel': interviewed_channel,
+                                                            'committee_interview': committee_interview.toString(),
+                                                            'remark': remark,
+                                                        }).then(function(response) {
+                                                            new Noty({
+                                                                title: "",
+                                                                text: "@lang('lang.the_process_has_been_successfully').",
+                                                                type: "success",
+                                                                timeout: 3000,
+                                                                icon: true
+                                                            }).show();
+                                                            if (nonShort == "non-shortlist") {
+                                                                showDatas("2");
+                                                                $("#data_cv").text(response.data.data);
+                                                                $("#dataNon").text(response.data.dataNon);
+                                                                $("#dataShortList").text(response.data.dataShortList);
+                                                            }else{
+                                                                window.location.replace("{{ URL('recruitment/candidate-resume/list') }}");
+                                                            }
+                                                    }).catch(function(error) {
+                                                        new Noty({
+                                                            title: "",
+                                                            text: "@lang('lang.something_went_wrong_please_try_again_later').",
+                                                            type: "error",
+                                                            icon: true
+                                                        }).show();
+                                                    });
+                                                }
+                                            },
+                                            cancel: function(){}
+                                        }
+                                    });
+                                }else{
+                                    axios.post('{{ URL('recruitment/candidate-resume/status') }}', {
+                                            'id': id,
+                                            'status': c_status,
+                                            'short_list': short_list,
+                                            'interviewed_date': interviewed_date,
+                                            'interviewed_channel': interviewed_channel,
+                                            'committee_interview': committee_interview.toString(),
+                                            'remark': remark,
+                                        }).then(function(response) {
+                                            new Noty({
+                                                title: "",
+                                                text: "@lang('lang.the_process_has_been_successfully').",
+                                                type: "success",
+                                                timeout: 3000,
+                                                icon: true
+                                            }).show();
+                                            if (nonShort == "non-shortlist") {
+                                                showDatas("2");
+                                                $("#data_cv").text(response.data.data);
+                                                $("#dataNon").text(response.data.dataNon);
+                                                $("#dataShortList").text(response.data.dataShortList);
+                                            }else{
+                                                window.location.replace("{{ URL('recruitment/candidate-resume/list') }}");
+                                            }
+                                    }).catch(function(error) {
                                         new Noty({
                                             title: "",
-                                            text: "@lang('lang.the_process_has_been_successfully').",
-                                            type: "success",
-                                            timeout: 3000,
+                                            text: "@lang('lang.something_went_wrong_please_try_again_later').",
+                                            type: "error",
                                             icon: true
                                         }).show();
-                                        if (nonShort == "non-shortlist") {
-                                            showDatas("2");
-                                            $("#data_cv").text(response.data.data);
-                                            $("#dataNon").text(response.data.dataNon);
-                                            $("#dataShortList").text(response.data.dataShortList);
-                                        }else{
-                                            window.location.replace("{{ URL('recruitment/candidate-resume/list') }}");
-                                        }
-                                }).catch(function(error) {
-                                    new Noty({
-                                        title: "",
-                                        text: "@lang('lang.something_went_wrong_please_try_again_later').",
-                                        type: "error",
-                                        icon: true
-                                    }).show();
-                                });
+                                    });
+                                }
                             }
                         },
                         cancel: {
@@ -663,42 +713,100 @@
                                         $(".interviewed_dates").css("border","solid 1px red");
                                         return false;
                                     }
-                                }
-                                axios.post('{{ URL('recruitment/candidate-resume/status') }}', {
-                                        'id': id,
-                                        'status': status,
-                                        'joined_interview': joined_interview,
-                                        'interviewed_result': interviewed_result,
-                                        'interviewed_date': interviewed_dates,
-                                        'remark': remark,
-                                    }).then(function(response) {
-                                        if (status == 6) {
-                                            showDatas("6");
-                                        };
-                                        if(status == 3) {
-                                            showDatas("3");
-                                        } ;
-                                        if(nonShort == "shortlist") {
-                                            showDatas("2");
-                                        };
-                                        $("#dataFailed").text(response.data.dataFailed);
-                                        $("#dataResult").text(response.data.dataResult);
-                                        $("#dataShortList").text(response.data.dataShortList);
+                                };
+                                if (interviewed_result == "7" || interviewed_result == "8") {
+                                    let content_text = 'Are you sure you want to change to <span class="text-danger">@lang("lang.black_list")</span>?';
+                                    if (interviewed_result == "8") {
+                                        content_text = 'Are you sure you want to change to <span class="text-danger">@lang("lang.non_black_list")</span>?';
+                                    }
+                                    $.confirm({
+                                        title: '@lang("lang.candidate_resume_status")!',
+                                        content: content_text,
+                                        icon: 'fa fa-warning',
+                                        animation: 'scale',
+                                        closeAnimation: 'zoom',
+                                        buttons: {
+                                            confirm: {
+                                                text: 'Yes, sure!',
+                                                btnClass: 'add-btn-status',
+                                                action: function(){
+                                                     axios.post('{{ URL('recruitment/candidate-resume/status') }}', {
+                                                            'id': id,
+                                                            'status': status,
+                                                            'joined_interview': joined_interview,
+                                                            'interviewed_result': interviewed_result,
+                                                            'interviewed_date': interviewed_dates,
+                                                            'remark': remark,
+                                                        }).then(function(response) {
+                                                            if (status == 6) {
+                                                                showDatas("6");
+                                                            };
+                                                            if(status == 3) {
+                                                                showDatas("3");
+                                                            } ;
+                                                            if(nonShort == "shortlist") {
+                                                                showDatas("2");
+                                                            };
+                                                            $("#dataFailed").text(response.data.dataFailed);
+                                                            $("#dataResult").text(response.data.dataResult);
+                                                            $("#dataShortList").text(response.data.dataShortList);
+                                                            new Noty({
+                                                                title: "",
+                                                                text: "@lang('lang.the_process_has_been_successfully').",
+                                                                type: "success",
+                                                                timeout: 3000,
+                                                                icon: true
+                                                            }).show();
+                                                    }).catch(function(error) {
+                                                        new Noty({
+                                                            title: "",
+                                                            text: "@lang('lang.something_went_wrong_please_try_again_later').",
+                                                            type: "error",
+                                                            icon: true
+                                                        }).show();
+                                                    });
+                                                }
+                                            },
+                                            cancel: function(){}
+                                        }
+                                    });
+                                }else{
+                                    axios.post('{{ URL('recruitment/candidate-resume/status') }}', {
+                                            'id': id,
+                                            'status': status,
+                                            'joined_interview': joined_interview,
+                                            'interviewed_result': interviewed_result,
+                                            'interviewed_date': interviewed_dates,
+                                            'remark': remark,
+                                        }).then(function(response) {
+                                            if (status == 6) {
+                                                showDatas("6");
+                                            };
+                                            if(status == 3) {
+                                                showDatas("3");
+                                            } ;
+                                            if(nonShort == "shortlist") {
+                                                showDatas("2");
+                                            };
+                                            $("#dataFailed").text(response.data.dataFailed);
+                                            $("#dataResult").text(response.data.dataResult);
+                                            $("#dataShortList").text(response.data.dataShortList);
+                                            new Noty({
+                                                title: "",
+                                                text: "@lang('lang.the_process_has_been_successfully').",
+                                                type: "success",
+                                                timeout: 3000,
+                                                icon: true
+                                            }).show();
+                                    }).catch(function(error) {
                                         new Noty({
                                             title: "",
-                                            text: "@lang('lang.the_process_has_been_successfully').",
-                                            type: "success",
-                                            timeout: 3000,
+                                            text: "@lang('lang.something_went_wrong_please_try_again_later').",
+                                            type: "error",
                                             icon: true
                                         }).show();
-                                }).catch(function(error) {
-                                    new Noty({
-                                        title: "",
-                                        text: "@lang('lang.something_went_wrong_please_try_again_later').",
-                                        type: "error",
-                                        icon: true
-                                    }).show();
-                                });
+                                    });
+                                }
                             }
                         },
                         cancel: {
@@ -1156,15 +1264,15 @@
                             if (staff_result.interviewed_result == "6") {
                                 interview_result = "@lang('lang.rejected_offered')";
                             }else if(staff_result.interviewed_result == "7"){
-                                interview_result = '<span class="badge bg-inverse-danger">@lang("lang.black_list")</snap>'
+                                interview_result = '<span class="badge bg-inverse-danger">@lang("lang.black_list")</snap>';
                             }else if(staff_result.interviewed_result == "8") {
-                                interview_result = '<span class="badge bg-inverse-danger">@lang("lang.non_black_list")</snap>'
+                                interview_result = "@lang('lang.non_black_list')";
                             }else{
                                 interview_result = "No";
                             };
                             let status_show_failed = "";
                             let interviewed_date = staff_result.interviewed_date ? moment(staff_result.interviewed_date).format('MMM-D-YYYY') : "";
-                            if (staff_result.interviewed_result == "5") {
+                            if (staff_result.interviewed_result != "7") {
                                 let dropdown_menu = '<a class="btn btn-white btn-sm btn-rounded" href="#">'+
                                                     '<i class="fa fa-dot-circle-o text-info"></i><span>@lang("lang.interviewed")</span>'+
                                                 '</a>';
@@ -1176,6 +1284,9 @@
                                 status_show_failed = '<div class="dropdown action-label">'+
                                            (dropdown_menu)+
                                             '<div class="dropdown-menu dropdown-menu-right" id="btn-status">'+
+                                                '<a class="dropdown-item" data-emp-id="'+(staff_result.id)+'"  data-id="2" href="#">'+
+                                                    '<i class="fa fa-dot-circle-o text-warning"></i> @lang("lang.shortlisted")'+
+                                                '</a>'+
                                                 '<a class="dropdown-item" data-emp-id="'+(staff_result.id)+'"  data-id="6" data-status="'+(staff_result.status)+'" href="#">'+
                                                     '<i class="fa fa-dot-circle-o text-info"></i> @lang("lang.interviewed")'+
                                                 '</a>'+

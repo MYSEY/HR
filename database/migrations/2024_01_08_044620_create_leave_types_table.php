@@ -8,7 +8,7 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
-     *
+     * php artisan migrate:refresh --path=database/migrations/2024_01_08_044620_create_leave_types_table.php
      * @return void
      */
     public function up()

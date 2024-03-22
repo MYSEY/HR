@@ -77,11 +77,15 @@
                 <div class="col-md-12 col-ms-12 p-0">
                     <ul class="nav nav-tabs nav-tabs-bottom" role="tablist">
                         <li class="nav-item" role="presentation">
-                            <a class="nav-link active tab_leave_none" data-bs-toggle="tab" href="#leave_request" aria-selected="true" role="tab" data-tab-id="1">@lang('lang.leave_requests') ({{count($dataLeaveRequest)}})</a>
+                            <a class="nav-link active tab_leave_none" data-bs-toggle="tab" href="#leave_request" aria-selected="true" role="tab" data-tab-id="1">@lang('lang.leave_requests')
+                                <span id="dataShortList" class="badge bg-secondary ms-1 rounded-pill">{{count($dataLeaveRequest)}}</span> 
+                            </a>
                         </li>
                         @if (Auth::user()->RolePermission == "HR")
                             <li class="nav-item" role="presentation">
-                                <a class="nav-link tab_leave_none" data-bs-toggle="tab" href="#leave_request_cancel" aria-selected="false" data-tab-id="2" role="tab">@lang('lang.requests_cancel') ({{count($requestCancels)}})</a>
+                                <a class="nav-link tab_leave_none" data-bs-toggle="tab" href="#leave_request_cancel" aria-selected="false" data-tab-id="2" role="tab">@lang('lang.requests_cancel') 
+                                    <span id="dataShortList" class="badge bg-secondary ms-1 rounded-pill">{{count($requestCancels)}}</span>
+                                </a>
                             </li>
                         @endif
                         <li class="nav-item" role="presentation">

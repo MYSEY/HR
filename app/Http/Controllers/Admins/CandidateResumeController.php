@@ -447,6 +447,8 @@ class CandidateResumeController extends Controller
                         'interviewed_channel' => $request->interviewed_channel,
                         'committee_interview' => $request->committee_interview,
                         'remark' => $request->remark,
+                        'interviewed_result' => null,
+                        'joined_interview' => null,
                         'updated_by' => Auth::user()->id,
                     ];
                 }else{

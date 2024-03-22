@@ -8,7 +8,7 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
-     *
+     * php artisan migrate:refresh --path=database/migrations/2024_01_08_045111_create_leave_allocations_table.php
      * @return void
      */
     public function up()

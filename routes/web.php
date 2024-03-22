@@ -54,6 +54,9 @@ Route::post('/login/change/password', [LoginController::class, 'changePassword']
 Route::post('/user/change/password', [LoginController::class, 'UserChangePassword']);
 Auth::routes();
 Route::middleware(['auth:sanctum'])->group(function(){
+    Route::get('/page/not-found', function() {
+        return view('upgrade.feature_not_available');
+    });
     Route::get('admin/activity-log', [ActivityLogController::class,'index']);
     Route::get('/dashboad/employee', [App\Http\Controllers\HomeController::class, 'index'])->name('dashboad.employee');
     Route::get('/dashboad/employee', [DashboadController::class, 'dashboadEmployee']);
