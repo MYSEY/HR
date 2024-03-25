@@ -412,6 +412,7 @@ return[
 	"import_excel_/_XLS_XLSX_or_CSV"=>"នាំចូល Excel / XLS, XLSX ឬ CSV",
     "import_payroll"=>"នាំចូលប្រាក់បៀវត្សរ៍",
     "import_nssf"=>"ប.ស.ស",
+    "import_leaves"=>"Import Leaves",
 	"issue_expired_date"=>"កាលបរិច្ឆេទផុតកំណត់",
 	"included_tax"=>"ពន្ធរួមបញ្ចូល",
 	"join_date"=>"កាលបរិច្ឆេទចូលធ្វើការ",

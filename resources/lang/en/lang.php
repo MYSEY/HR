@@ -393,6 +393,7 @@ return[
     "import_excel_/_XLS_XLSX_or_CSV"=>"Import Excel / XLS, XLSX or CSV",
     "import_payroll"=>"Import Payroll",
     "import_nssf"=>"National Social Security Fund",
+    "import_leaves"=>"Import Leaves",
     "join_date"=>"Join Date",
     "joined_interview"=>"Joined Interview",
     "job_position"=>"Job Position",

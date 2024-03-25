@@ -26,6 +26,13 @@
                         <li class="breadcrumb-item active">@lang('lang.leaves_admin')</li>
                     </ul>
                 </div>
+                @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'HR' || Auth::user()->RolePermission == 'developer')
+                    <div class="col-auto float-end ms-auto">
+                        @if (permissionAccess("m4-s2","is_import")->value == "1")
+                            <a href="#" class="btn add-btn" data-toggle="modal" id="importPayroll"><i class="fa fa-plus"></i>@lang('lang.import')</a>
+                        @endif
+                    </div>
+                @endif
             </div>
         </div>
         <div class="row filter-row-btn">
@@ -271,9 +278,8 @@
                                                         id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
                                                         <thead>
                                                             <tr>
-                                                                <th class="sorting sorting_asc vertical-center" tabindex="0" aria-controls="DataTables_Table_0"
-                                                                    rowspan="2" aria-sort="ascending"
-                                                                    aria-label="#: activate to sort column descending">@lang('lang.employee_name')</th>
+                                                                <th class="sorting sorting_asc vertical-center" tabindex="0" aria-controls="DataTables_Table_0" rowspan="2" aria-sort="ascending" aria-label="#: activate to sort column descending">@lang('lang.employee_id')</th>
+                                                                <th class="sorting sorting_asc vertical-center" tabindex="0" aria-controls="DataTables_Table_0" rowspan="2" aria-sort="ascending" aria-label="#: activate to sort column descending">@lang('lang.employee_name')</th>
                                                                 @if (Auth::user()->RolePermission == "HR")
                                                                     <th class="sorting sorting_asc vertical-center" tabindex="0" aria-controls="DataTables_Table_0"
                                                                         rowspan="2" aria-sort="ascending"
@@ -308,6 +314,7 @@
                                                             @if (count($LeaveAllocation) > 0)
                                                                 @foreach ($LeaveAllocation as $key=>$leave)
                                                                     <tr class="odd">
+                                                                        <td>{{$leave->employee->number_employee ?? ""}}</td>
                                                                         <td>{{$leave->employee->employee_name_en ?? ""}}</td>
                                                                         @if (Auth::user()->RolePermission == "HR")
                                                                             <td>{{$leave->employee->department->name_english}}</td>
@@ -339,10 +346,16 @@
             </div>
         </div>
     </div>
+    @include('leaves_admin.import_leaves')
 @endsection
 @include('includs.script')
 <script>
     $(function() {
+        $("#importPayroll").on("click", function() {
+            $(".thanLess").hide();
+            $("#thanLess").text("");
+            $('#importLeaves').modal('show');
+        });
         var condiction_tab = 1;
         $(".reset-btn").on("click", function() {
             $(this).prop('disabled', true);

@@ -12,7 +12,7 @@
         <meta name="robots" content="noindex, nofollow">
         <title>HRMS Admin</title>
 
-        <link rel="shortcut icon" type="image/x-icon" href="{{ asset('/admin/img/logo/logo.png') }}">
+        <link rel="shortcut icon" type="image/x-icon" href="{{ asset('/admin/img/logo/favicon.ico') }}">
 
         <link rel="stylesheet" href="{{asset('/admin/css/bootstrap.min.css')}}">
 

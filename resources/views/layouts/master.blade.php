@@ -97,7 +97,7 @@
     <meta name="robots" content="noindex, nofollow">
     <title>Camma Microfinance Limited</title>
 
-    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('/admin/img/logo/logo.png') }}">
+    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('/admin/img/logo/favicon.ico') }}">
     {{-- <link rel="shortcut icon" type="image/x-icon" href="https://smarthr.dreamguystech.com/laravel/template/public/assets/img/favicon.png"> --}}
 
     <link rel="stylesheet" href="{{ asset('admin/css/bootstrap.min.css') }}">
