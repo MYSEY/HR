@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class GenerateIdEmployee extends Model
 {
     use HasFactory;
-    use SoftDeletes;
+    // use SoftDeletes;
     use LogsActivity;
 
     protected $table = 'generate_id_employees';

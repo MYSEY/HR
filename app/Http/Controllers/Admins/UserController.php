@@ -564,13 +564,29 @@ class UserController extends Controller
                         "line_manager"=> $request->line_manager
                     ]);
                 };
-
-                User::where('id',$request->id)->update([
-                    'emp_status' => $request->emp_status,
-                    'resign_date' => $request->resign_date,
-                    'status' => 'Unactive',
-                    'resign_reason' => $request->resign_reason
-                ]);
+                if ($request->emp_status == "Cancel") {
+                    $users = User::where('id',$request->id)->first();
+                    GenerateIdEmployee::where("number_employee",$users->number_employee)->delete();
+                    $users->number_employee = "CC-".$users->number_employee;
+                    $users->emp_status = $request->emp_status;
+                    $users->resign_date = $request->resign_date;
+                    $users->resign_reason = $request->resign_reason;
+                    $users->status = 'Unactive';
+                    $users->save();
+                    // User::where('id',$request->id)->update([
+                    //     'emp_status' => $request->emp_status,
+                    //     'resign_date' => $request->resign_date,
+                    //     'status' => 'Unactive',
+                    //     'resign_reason' => $request->resign_reason
+                    // ]);
+                }else{
+                    User::where('id',$request->id)->update([
+                        'emp_status' => $request->emp_status,
+                        'resign_date' => $request->resign_date,
+                        'status' => 'Unactive',
+                        'resign_reason' => $request->resign_reason
+                    ]);
+                }
             }
             EmployeeStatusHistory::create([
                 'employee_id'   =>  $request->id,
@@ -610,6 +626,20 @@ class UserController extends Controller
             DB::commit();
             Toastr::success('Update line manager successfull.','Success');
             return redirect()->back();
+        } catch (\Exception $exp) {
+            DB::rollBack();
+            return response()->json(['message' => $exp->getMessage()], 500);
+        }
+    }
+    public function duplicateEmployeeId(Request $request){
+        try {
+            $duplicate_employee_id = GenerateIdEmployee::where("number_employee",$request->number_employee)->first();
+            DB::commit();
+            if ($duplicate_employee_id) {
+                return ['message' => 'Employee ID already exists', "data"=>1];
+            }else{
+                return ['message' => 'Employee ID does not exist', "data"=>0];
+            }
         } catch (\Exception $exp) {
             DB::rollBack();
             return response()->json(['message' => $exp->getMessage()], 500);

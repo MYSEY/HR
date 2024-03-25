@@ -15,8 +15,8 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="">@lang('lang.employee_id')</label>
-                                <input type="text" class="form-control number_employee clear_data" disabled>
-                                <input type="text" class="form-control number_employee clear_data" id="number_employee" name="number_employee" hidden>
+                                <input type="text" class="form-control number_employee_edit clear_data" hidden>
+                                <input type="text" class="form-control number_employee clear_data" id="number_employee" name="number_employee">
                             </div>
                         </div>
                         <div class="col-sm-6">
@@ -288,6 +288,7 @@
 <script src="{{asset('/admin/js/format-date-kh.js')}}"></script>
 <script type="text/javascript">
     $(function(){
+        var munber_employee_id = 0;
         $("#emp_position").on("change", function() {
             let position_type = $("#emp_position option:checked").attr('data-id');
             if (position_type == 1) {
@@ -505,6 +506,7 @@
                             });
                         }
                         $("#candidate_id").val(id);
+                        $(".number_employee_edit").val(response.success.number_employee);
                         $(".number_employee").val(response.success.number_employee ? response.success.number_employee : response.autoEmpId);
                         $(".employee_name_kh").val(response.success.name_kh);
                         $(".employee_name_en").val(response.success.name_en);
@@ -549,7 +551,6 @@
                 $(".btn-text-save").css("display", "none");
             }
            
-            
             $(".emp_required").each(function(){
                 if($(this).val()==""){ num_miss++;}
             });
@@ -567,120 +568,154 @@
                         $(".btn-text-save").css("display", 'block');
                     }, 500);
                 }
-               
                 return false;
             }else{
-                axios.post('{{ URL('recruitment/candidate-resume/createemp') }}', {
-                    candidate_id: $("#candidate_id").val(),
-                    number_employee: $("#number_employee").val(),
-                    employee_name_kh: $("#employee_name_kh").val(),
-                    employee_name_en: $("#employee_name_en").val(),
-                    position_id: $("#emp_position").val(),
-                    date_of_birth: $("#date_of_birth").val(),
-                    gender: $("#emp_gender").val(),
-                    department_id: $("#department_id").val(),
-                    line_manager: $("#line_manager").val(),
-                    branch_id: $("#emp_branch").val(),
-                    date_of_commencement: $("#date_of_commencement").val(),
-                    id_card_number: $("#id_card_number").val(),
-                    personal_phone_number: $("#personal_phone_number").val(),
-                    position_type: $("#emp_position option:checked").attr('data-id'),
-                    basic_salary: $("#basic_salary").val(),
-                    salary_increas: $("#salary_to_increase").val(),
-                    current_province: $("#current_province").val(),
-                    current_district: $("#current_district").val(),
-                    current_commune: $("#current_commune").val(),
-                    current_village: $("#current_village").val(),
-                    current_house_no: $("#current_house_no").val(),
-                    current_street_no: $("#current_street_no").val(),
-                    permanent_province: $("#permanent_province").val(),
-                    permanent_district: $("#permanent_district").val(),
-                    permanent_commune: $("#permanent_commune").val(),
-                    permanent_village: $("#permanent_village").val(),
-                    permanent_house_no: $("#permanent_house_no").val(),
-                    permanent_street_no: $("#permanent_street_no").val(),
-                    remark: $("#remark").val(),
-                }).then(function(response) {
-                    var data = response.data.dataEmployee;
-                    var date_of_birth = new Date(data.date_of_birth);
-                    var date_of_commencement = new Date(data.join_date);
-                    var fdc_date = new Date(data.fdc_date);
-                    let day = formatDate( date_of_birth, 'km', format_date={day: true});
-                    let month = formatDate( date_of_birth, 'km', format_date={month: true});
-                    let year = formatDate( date_of_birth, 'km', format_date={year: true});
-                    let join_day = formatDate( date_of_commencement, 'km', format_date={day: true});
-                    let join_month = formatDate( date_of_commencement, 'km', format_date={month: true});
-                    let join_year = formatDate( date_of_commencement, 'km', format_date={year: true});
-                    let end_day = formatDate( fdc_date, 'km', format_date={day: true});
-                    let end_month = formatDate( fdc_date, 'km', format_date={month: true});
-                    let end_year = formatDate( fdc_date, 'km', format_date={year: true});
-                    if (data) {
-                        if (data.option.name_english == "Female") {
-                            $("#pr_mr_or_mrs").text("អ្នកស្រី ");
-                            $("#pr_gender").text("ស្រី ");
+                $.ajax({
+                    type: "POST",
+                    url: "/users/duplicate",
+                    data: {
+                        "_token": "{{ csrf_token() }}",
+                        number_employee: $("#number_employee").val(),
+                    },
+                    dataType: "JSON",
+                    success: function (response) {
+                        var data = response.data;
+                        if ($("#number_employee").val() == $(".number_employee_edit").val()) {
+                            data = 0;
+                        }
+                        if (data > 0) {
+                            new Noty({
+                                title: "",
+                                text: "Employee ID already exists.",
+                                type: "error",
+                                timeout: 3000,
+                                icon: true
+                            }).show();
+                            $("#number_employee").css("border-color", "red");
+
+                            $("#btn_save").attr('disabled',false);
+                            $("#btn-save-loading").css('display', 'none');
+                            $(".btn-text-save").css("display", 'block');
+                            $("#btn_save_print").prop('disabled', false);
+                            $(".btn-text-print").show();
+                            $("#btn-print-loading").css('display', 'none');
+                            return false;
                         }else{
-                            $("#pr_mr_or_mrs").text("លោក ");
-                            $("#pr_gender").text("ប្រុស ");
-                        }
-                        $("#pr_name").text(data.name_kh +" ");
-                        $("#pr_born_on").text(day+" ខែ "+month+" ឆ្នាំ "+ year);
-                        $("#pr_permanent_province").text(data.permanentprovince.name_km + " ");
-                        $("#pr_permanent_province").text(data.permanentprovince.name_km + " ");
-                        $("#pr_id_card_number").text($("#id_card_number").val()+ "");
+                            axios.post('{{ URL('recruitment/candidate-resume/createemp') }}', {
+                                candidate_id: $("#candidate_id").val(),
+                                number_employee: $("#number_employee").val(),
+                                employee_name_kh: $("#employee_name_kh").val(),
+                                employee_name_en: $("#employee_name_en").val(),
+                                position_id: $("#emp_position").val(),
+                                date_of_birth: $("#date_of_birth").val(),
+                                gender: $("#emp_gender").val(),
+                                department_id: $("#department_id").val(),
+                                line_manager: $("#line_manager").val(),
+                                branch_id: $("#emp_branch").val(),
+                                date_of_commencement: $("#date_of_commencement").val(),
+                                id_card_number: $("#id_card_number").val(),
+                                personal_phone_number: $("#personal_phone_number").val(),
+                                position_type: $("#emp_position option:checked").attr('data-id'),
+                                basic_salary: $("#basic_salary").val(),
+                                salary_increas: $("#salary_to_increase").val(),
+                                current_province: $("#current_province").val(),
+                                current_district: $("#current_district").val(),
+                                current_commune: $("#current_commune").val(),
+                                current_village: $("#current_village").val(),
+                                current_house_no: $("#current_house_no").val(),
+                                current_street_no: $("#current_street_no").val(),
+                                permanent_province: $("#permanent_province").val(),
+                                permanent_district: $("#permanent_district").val(),
+                                permanent_commune: $("#permanent_commune").val(),
+                                permanent_village: $("#permanent_village").val(),
+                                permanent_house_no: $("#permanent_house_no").val(),
+                                permanent_street_no: $("#permanent_street_no").val(),
+                                remark: $("#remark").val(),
+                            }).then(function(response) {
+                                var data = response.data.dataEmployee;
+                                var date_of_birth = new Date(data.date_of_birth);
+                                var date_of_commencement = new Date(data.join_date);
+                                var fdc_date = new Date(data.fdc_date);
+                                let day = formatDate( date_of_birth, 'km', format_date={day: true});
+                                let month = formatDate( date_of_birth, 'km', format_date={month: true});
+                                let year = formatDate( date_of_birth, 'km', format_date={year: true});
+                                let join_day = formatDate( date_of_commencement, 'km', format_date={day: true});
+                                let join_month = formatDate( date_of_commencement, 'km', format_date={month: true});
+                                let join_year = formatDate( date_of_commencement, 'km', format_date={year: true});
+                                let end_day = formatDate( fdc_date, 'km', format_date={day: true});
+                                let end_month = formatDate( fdc_date, 'km', format_date={month: true});
+                                let end_year = formatDate( fdc_date, 'km', format_date={year: true});
+                                if (data) {
+                                    if (data.option.name_english == "Female") {
+                                        $("#pr_mr_or_mrs").text("អ្នកស្រី ");
+                                        $("#pr_gender").text("ស្រី ");
+                                    }else{
+                                        $("#pr_mr_or_mrs").text("លោក ");
+                                        $("#pr_gender").text("ប្រុស ");
+                                    }
+                                    $("#pr_name").text(data.name_kh +" ");
+                                    $("#pr_born_on").text(day+" ខែ "+month+" ឆ្នាំ "+ year);
+                                    $("#pr_permanent_province").text(data.permanentprovince.name_km + " ");
+                                    $("#pr_permanent_province").text(data.permanentprovince.name_km + " ");
+                                    $("#pr_id_card_number").text($("#id_card_number").val()+ "");
 
-                        let number_home = "";
-                        let number_street = "";
-                        if (data.current_house_no) {
-                            number_home = "ផ្ទះលេខ "+ data.current_house_no;
-                        }
-                        if (data.current_street_no) {
-                            number_street = " ផ្លូវលេខ "+data.current_street_no;
-                        }
-                        let location = number_home + number_street + " ភូមិ "+data.currentvillage.name_km + " ឃុំ/សង្កាត់ " + data.currentcommune.name_km + " ស្រុក/ខណ្ឌ " + data.currentdistrict.name_km+ " ខេត្ត/ក្រុង "+data.currentprovince.name_km;
+                                    let number_home = "";
+                                    let number_street = "";
+                                    if (data.current_house_no) {
+                                        number_home = "ផ្ទះលេខ "+ data.current_house_no;
+                                    }
+                                    if (data.current_street_no) {
+                                        number_street = " ផ្លូវលេខ "+data.current_street_no;
+                                    }
+                                    let location = number_home + number_street + " ភូមិ "+data.currentvillage.name_km + " ឃុំ/សង្កាត់ " + data.currentcommune.name_km + " ស្រុក/ខណ្ឌ " + data.currentdistrict.name_km+ " ខេត្ត/ក្រុង "+data.currentprovince.name_km;
 
-                        $("#pr_current_location").text(location);
+                                    $("#pr_current_location").text(location);
 
-                        $("#pr_personal_phone_number").text(data.contact_number);
-                        $(".pr_join_day").text(join_day);
-                        $(".pr_join_month").text(join_month);
-                        $(".pr_join_year").text(join_year);
-                        $("#pr_end_day").text(end_day);
-                        $("#pr_end_month").text(end_month);
-                        $("#pr_end_year").text(end_year);
-                        $("#pr_position").text(data.position.name_khmer);
-                        $("#pr_branch").text(data.branch.branch_name_kh);
-                        $("#pr_employee_id").text(data.number_employee);
-                        $("#pr_basic_salary").text(data.basic_salary);
-                        $("#pr_salary_increase").text($("#salary_to_increase").val());
-                        if (data.position.position_type == "Field Staff") {
-                            $("#pr_supporting_or_field_staff").text("ដោយធៀបនិងភាគរយការងារសម្រេចបានសម្រាប់បុគ្គលិកឥណទាន (គិតតាម Pro-Rate) ដោយការបង់ពន្ធជូនរាជរដ្ឋាភិបាលជាបន្ទុករបស់និយោជិត");
-                        }
-                        if (btn_action == 1) {
-                            print_pdf();
+                                    $("#pr_personal_phone_number").text(data.contact_number);
+                                    $(".pr_join_day").text(join_day);
+                                    $(".pr_join_month").text(join_month);
+                                    $(".pr_join_year").text(join_year);
+                                    $("#pr_end_day").text(end_day);
+                                    $("#pr_end_month").text(end_month);
+                                    $("#pr_end_year").text(end_year);
+                                    $("#pr_position").text(data.position.name_khmer);
+                                    $("#pr_branch").text(data.branch.branch_name_kh);
+                                    $("#pr_employee_id").text(data.number_employee);
+                                    $("#pr_basic_salary").text(data.basic_salary);
+                                    $("#pr_salary_increase").text($("#salary_to_increase").val());
+                                    if (data.position.position_type == "Field Staff") {
+                                        $("#pr_supporting_or_field_staff").text("ដោយធៀបនិងភាគរយការងារសម្រេចបានសម្រាប់បុគ្គលិកឥណទាន (គិតតាម Pro-Rate) ដោយការបង់ពន្ធជូនរាជរដ្ឋាភិបាលជាបន្ទុករបស់និយោជិត");
+                                    }
+                                    if (btn_action == 1) {
+                                        print_pdf();
+                                    }
+                                }
+                                new Noty({
+                                    title: "",
+                                    text: "The process has been successfully.",
+                                    type: "success",
+                                    timeout: 3000,
+                                    icon: true
+                                }).show();
+                                showDatas(4);
+                                $("#btn_save").attr('disabled',false);
+                                $("#btn-save-loading").css('display', 'none');
+                                $(".btn-text-save").css("display", 'block');
+                                if (btn_action == 2) {
+                                    $("#add_emp").modal("hide");
+                                }
+                            }).catch(function(error) {
+                                new Noty({
+                                    title: "",
+                                    text: "Something went wrong please try again later.",
+                                    type: "error",
+                                    timeout: 3000,
+                                    icon: true
+                                }).show();
+                            });
+                            $("#number_employee").css("border-color", "#198754");
                         }
                     }
-                    new Noty({
-                        title: "",
-                        text: "The process has been successfully.",
-                        type: "success",
-                        timeout: 3000,
-                        icon: true
-                    }).show();
-                    showDatas(4);
-                    $("#btn_save").attr('disabled',false);
-                    $("#btn-save-loading").css('display', 'none');
-                    $(".btn-text-save").css("display", 'block');
-                    if (btn_action == 2) {
-                        $("#add_emp").modal("hide");
-                    }
-                }).catch(function(error) {
-                    new Noty({
-                        title: "",
-                        text: "Something went wrong please try again later.",
-                        type: "error",
-                        timeout: 3000,
-                        icon: true
-                    }).show();
                 });
             }
             

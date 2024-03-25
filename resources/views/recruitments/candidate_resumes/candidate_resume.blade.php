@@ -137,8 +137,8 @@
         @include('recruitments.candidate_resumes.modal_form_create_emp')
         @include('recruitments.candidate_resumes.import')
     </div>
+    @include('components.loading-modal')
 @endsection
-@include('components.loading-modal')
 @include('includs.script')
 <script src="{{asset('/admin/js/validation-field.js')}}"></script>
 <script type="text/javascript" src="{{ asset('/admin/js/printThis.js') }}"></script>
