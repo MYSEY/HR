@@ -507,7 +507,8 @@
                         }
                         $("#candidate_id").val(id);
                         $(".number_employee_edit").val(response.success.number_employee);
-                        $(".number_employee").val(response.success.number_employee ? response.success.number_employee : response.autoEmpId);
+                        $(".number_employee").val(response.autoEmpId);
+                        // $(".number_employee").val(response.success.number_employee ? response.success.number_employee : response.autoEmpId);
                         $(".employee_name_kh").val(response.success.name_kh);
                         $(".employee_name_en").val(response.success.name_en);
                         $("#date_of_birth").val(response.success.date_of_birth);
