@@ -558,7 +558,7 @@ class PayrollReportController extends Controller
     public function SeverancePay(){
         $branch = Branchs::get();
         if (Auth::user()->RolePermission == 'Employee') {
-            $data = GrossSalaryPay::with('users')->where('type_fdc1','fdc1')->where('employee_id',Auth::user()->id)->where('number_employee',Auth::user()->number_employee)->get();
+            $data = GrossSalaryPay::with('users')->where('type_fdc1','FDC-1')->where('type_fdc1','FDC-2')->where('employee_id',Auth::user()->id)->where('number_employee',Auth::user()->number_employee)->get();
             
         } else {
             $data = GrossSalaryPay::with('users')
@@ -580,7 +580,8 @@ class PayrollReportController extends Controller
                     $query->where("users.branch_id", Auth::user()->branch_id);
                 }
             })
-            ->where('type_fdc1','fdc1')->get();
+            ->where('type_fdc1','FDC-1')
+            ->where('type_fdc1','FDC-2')->get();
         }
         return view('severance_pays.index',compact('data','branch'));
     }
@@ -591,7 +592,8 @@ class PayrollReportController extends Controller
             $Monthly = Carbon::createFromDate($request->filter_month)->format('m');
             $yearLy = Carbon::createFromDate($request->filter_month)->format('Y');
         }
-        $nssf = GrossSalaryPay::with("users")->where('type_fdc1','fdc1')
+        $nssf = GrossSalaryPay::with("users")->where('type_fdc1','FDC-1')
+        ->where('type_fdc1','FDC-2')
         ->leftJoin('users', 'gross_salary_pays.employee_id', '=', 'users.id')
         ->leftJoin('positions','positions.id','=','users.position_id')
         ->leftJoin('branchs','branchs.id','=','users.branch_id')
