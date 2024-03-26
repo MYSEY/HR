@@ -572,7 +572,7 @@
             }else{
                 $.ajax({
                     type: "POST",
-                    url: "/users/duplicate",
+                    url: "{{url('users/duplicate')}}",
                     data: {
                         "_token": "{{ csrf_token() }}",
                         number_employee: $("#number_employee").val(),
