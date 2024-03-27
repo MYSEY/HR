@@ -87,7 +87,7 @@
                             <div class="form-group">
                                 <label>@lang('lang.date_of_birth') <span class="text-danger">*</span></label>
                                 <div class="cal-icon">
-                                    <input class="form-control clear_data datetimepicker @error('date_of_birth') is-invalid @enderror emp_required" type="text" required id="date_of_birth" name="date_of_birth" required>
+                                    <input class="form-control clear_data datetimepicker @error('date_of_birth') is-invalid @enderror emp_required" type="text" id="date_of_birth" name="date_of_birth" required>
                                 </div>
                             </div>
                         </div>

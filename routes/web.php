@@ -381,6 +381,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('/recruitment/candidate-resume/createemp', [CandidateResumeController::class,'createemp']);
     Route::get('/recruitment/candidate-resume/employee', [CandidateResumeController::class,'showemp']);
     Route::post('/recruitment/candidate-resume/import', [CandidateResumeController::class,'import']);
+    Route::post('/recruitment/candidate-resume/duplicate', [CandidateResumeController::class,'duplicate']);
 
     Route::get('children/allowance',[ChildrenAllowanceController::class,'index']);
     Route::get('children/edit',[ChildrenAllowanceController::class,'edit']);

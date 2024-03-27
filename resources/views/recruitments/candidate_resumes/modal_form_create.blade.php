@@ -10,40 +10,61 @@
             <div class="modal-body">
                 <form action="{{url('recruitment/candidate-resume/store')}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
                     @csrf
+                    <div class="row" id="message-duplicate" style="display: none">
+                        <div class="col-sm-12 bg-inverse-danger">
+                            <p class="card-text ">
+                                Please review the name in the recruitment list or staff list. Because the name already exists.
+                            </p>
+                        </div>
+                    </div><br>
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="">
                                 <label class="">@lang('lang.last_name') (@lang('lang.kh')) <span class="text-danger">*</span></label>
-                                <input class="form-control @error('last_name_kh') is-invalid @enderror" type="text" id="last_name_kh" required name="last_name_kh" value="{{old('last_name_kh')}}">
+                                <input class="form-control @error('last_name_kh') is-invalid @enderror duplicate" type="text" id="last_name_kh" required name="last_name_kh" value="{{old('last_name_kh')}}">
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="">@lang('lang.first_name') (@lang('lang.kh')) <span class="text-danger">*</span></label>
-                                <input class="form-control @error('first_name_kh') is-invalid @enderror" type="text" id="first_name_kh" required name="first_name_kh" value="{{old('first_name_kh')}}">
+                                <input class="form-control @error('first_name_kh') is-invalid @enderror duplicate" type="text" id="first_name_kh" required name="first_name_kh" value="{{old('first_name_kh')}}">
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="">@lang('lang.last_name') (@lang('lang.en')) <span class="text-danger">*</span></label>
-                                <input class="form-control @error('last_name_en') is-invalid @enderror" type="text" id="last_name_en" required name="last_name_en" value="{{old('last_name_en')}}">
+                                <input class="form-control @error('last_name_en') is-invalid @enderror duplicate" type="text" id="last_name_en" required name="last_name_en" value="{{old('last_name_en')}}">
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="">@lang('lang.first_name') (@lang('lang.en')) <span class="text-danger">*</span></label>
-                                <input class="form-control @error('first_name_en') is-invalid @enderror" type="text" id="first_name_en" required name="first_name_en" value="{{old('first_name_en')}}">
+                                <input class="form-control @error('first_name_en') is-invalid @enderror duplicate" type="text" id="first_name_en" required name="first_name_en" value="{{old('first_name_en')}}">
                             </div>
                         </div>
 
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="">@lang('lang.gender')</label>
+                                <label class="">@lang('lang.gender') <span class="text-danger">*</span></label>
                                 <select class="form-control select floating" name="gender" id="gender">
                                     @foreach ($gender as $gen )
                                     <option value="{{ $gen->id }}">{{ Helper::getLang() == 'en' ? $gen->name_english : $gen->name_khmer }}</option>
                                     @endforeach
                                 </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>@lang('lang.date_of_birth') <span class="text-danger">*</span></label>
+                                <div class="cal-icon">
+                                    <input class="form-control clear_data datetimepicker @error('date_of_birth') is-invalid @enderror duplicate" type="text" required id="cv_date_of_birth" name="date_of_birth" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>@lang('lang.contact_number') <span class="text-danger">*</span></label>
+                                <input class="form-control @error('contact_number') is-invalid @enderror" type="number" id="contact_number" required name="contact_number" value="{{old('contact_number')}}">
                             </div>
                         </div>
                         <div class="col-sm-6">
@@ -101,24 +122,18 @@
                                 </select>
                             </div>
                         </div>
-
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label>@lang('lang.received_date') <span class="text-danger">*</span></label>
-                                <input class="form-control datetimepicker" id="received_date" required name="received_date">
+                                <div class="cal-icon">
+                                    <input class="form-control datetimepicker" id="received_date" required name="received_date">
+                                </div>
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label>@lang('lang.recruitment_channel')</label>
                                 <input class="form-control @error('recruitment_channel') is-invalid @enderror" type="text" id="recruitment_channel" name="recruitment_channel" value="{{old('recruitment_channel')}}">
-                            </div>
-                        </div>
-
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label>@lang('lang.contact_number') <span class="text-danger">*</span></label>
-                                <input class="form-control @error('contact_number') is-invalid @enderror" type="number" id="contact_number" required name="contact_number" value="{{old('contact_number')}}">
                             </div>
                         </div>
                         <div class="col-sm-6">
@@ -140,3 +155,44 @@
         </div>
     </div>
 </div>
+
+<script type="text/javascript">
+    $(function(){
+        $(".duplicate").on("focusout", function() {
+            if ($("#last_name_kh").val() && $("#first_name_kh").val() && $("#last_name_en").val() && $("#first_name_en").val() && $("#cv_date_of_birth").val()) {
+                duplicate()
+            }
+        });
+        function duplicate(){
+            $.ajax({
+                type: "POST",
+                url: "{{url('/recruitment/candidate-resume/duplicate')}}",
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    last_name_kh    : $("#last_name_kh").val(),
+                    first_name_kh   : $("#first_name_kh").val(),
+                    last_name_en    : $("#last_name_en").val(),
+                    first_name_en   : $("#first_name_en").val(),
+                    date_of_birth   : $("#cv_date_of_birth").val(),
+                },
+                dataType: "JSON",
+                success: function (response) {
+                    var candidate = response.candidate;
+                    var employee = response.employee;
+                    if (candidate || employee) {
+                        $("#message-duplicate").css("display", "block");
+                        new Noty({
+                            title: "",
+                            text: " Please review the name in the recruitment list or staff list. Because the name already exists.",
+                            type: "error",
+                            timeout: 3000,
+                            icon: true
+                        }).show();
+                    }else{
+                        $("#message-duplicate").css("display", "none");
+                    }
+                }
+            });
+        }
+    });
+</script>

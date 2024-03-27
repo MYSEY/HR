@@ -672,4 +672,54 @@ class CandidateResumeController extends Controller
             return response()->json(['message' => $exp->getMessage()], 500);
         }
     }
+
+    public function duplicate(Request $request){
+
+        
+        try {
+            $date_of_birth = Carbon::createFromDate($request->date_of_birth)->format('Y-m-d');
+            $candidate = CandidateResume::where([
+                    ["last_name_kh", '=', $request->last_name_kh],
+                    ["first_name_kh", '=', $request->first_name_kh],
+                    ["last_name_en", '=', $request->last_name_en],
+                    ["first_name_en", '=', $request->first_name_en],
+                    ["date_of_birth", '=', $date_of_birth],
+                ])
+                ->select([
+                    'last_name_kh',
+                    'first_name_kh',
+                    'last_name_en',
+                    'first_name_en',
+                    'date_of_birth',
+                    'status',
+                    'interviewed_result',
+                ])->whereNot("status",5)->first();
+            $employee = User::where([
+                    ["last_name_kh", '=', $request->last_name_kh],
+                    ["first_name_kh", '=', $request->first_name_kh],
+                    ["last_name_en", '=', $request->last_name_en],
+                    ["first_name_en", '=', $request->first_name_en],
+                    ["date_of_birth", '=', $request->date_of_birth],
+                ])->select([
+                        'number_employee',
+                        'employee_name_en',
+                        'employee_name_kh',
+                        'last_name_kh',
+                        'first_name_kh',
+                        'last_name_en',
+                        'first_name_en',
+                        'emp_status',
+                        'date_of_birth',
+                ])->first();
+            DB::commit();
+            if ($candidate || $employee) {
+                return ['message' => 'Employee ID already exists', "candidate"=>$candidate, "employee"=>$employee];
+            }else{
+                return ['message' => 'Employee ID does not exist', "data"=>0];
+            }
+        } catch (\Exception $exp) {
+            DB::rollBack();
+            return response()->json(['message' => $exp->getMessage()], 500);
+        }
+    }
 }
