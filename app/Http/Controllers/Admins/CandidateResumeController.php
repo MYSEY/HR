@@ -616,6 +616,9 @@ class CandidateResumeController extends Controller
                 $totalUpcomings = User::where('emp_status','Upcoming')->count();
                 return response()->json(['message' => 'successfull', "dataProcessing"=>$dataProcessing, "totalUpcomings"=>$totalUpcomings]);
             }else{
+                if ($request->number_employee_old) {
+                    GenerateIdEmployee::where("number_employee",$request->number_employee_old)->delete();
+                }
                 $generateID = GenerateIdEmployee::where("number_employee",$request->number_employee)->first();
                 if (!$generateID) {
                     GenerateIdEmployee::create([
