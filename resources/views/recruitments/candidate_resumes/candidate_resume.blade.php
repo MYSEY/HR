@@ -4,6 +4,73 @@
     float: none !important;
     text-align: center !important;
 }
+.container-checkbox {
+        display: block;
+        position: relative;
+        padding-left: 30px;
+        /* margin-bottom: 5px; */
+        cursor: pointer;
+        font-size: 15px;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+
+    /* Hide the browser's default checkbox */
+    .container-checkbox input {
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+        height: 0;
+        width: 0;
+    }
+
+    /* Create a custom checkbox */
+    .checkmark {
+        position: absolute;
+        top: 1;
+        left: 0;
+        height: 20px;
+        width: 20px;
+        border: solid 1px #ccc;
+        background-color: #fff;
+    }
+
+    /* On mouse-over, add a grey background color */
+    .container-checkbox:hover input~.checkmark {
+        background-color: #ccc;
+    }
+
+    /* When the checkbox is checked, add a blue background */
+    .container-checkbox input:checked~.checkmark {
+        background-color: #2196F3;
+    }
+
+    /* Create the checkmark/indicator (hidden when not checked) */
+    .checkmark:after {
+        content: "";
+        position: absolute;
+        display: none;
+    }
+
+    /* Show the checkmark when checked */
+    .container-checkbox input:checked~.checkmark:after {
+        display: block;
+    }
+
+    /* Style the checkmark/indicator */
+    .container-checkbox .checkmark:after {
+        left: 7px;
+        top: 4px;
+        width: 5px;
+        height: 10px;
+        border: solid white;
+        border-width: 0 3px 3px 0;
+        -webkit-transform: rotate(45deg);
+        -ms-transform: rotate(45deg);
+        transform: rotate(45deg);
+    }
 </style>
 @section('content')
     <div class="">
@@ -962,7 +1029,7 @@
                         $("#pr_basic_salary").text(data.basic_salary);
                         $("#pr_salary_increase").text(data.salary_increas);
                         if (data.position.position_type == "Field Staff") {
-                            $("#pr_supporting_or_field_staff").text("ដោយធៀបនិងភាគរយការងារសម្រេចបានសម្រាប់បុគ្គលិកឥណទាន (គិតតាម Pro-Rate) ដោយការបង់ពន្ធជូនរាជរដ្ឋាភិបាលជាបន្ទុករបស់និយោជិត");
+                            $("#pr_supporting_or_field_staff").text("ដោយធៀបនិងភាគរយការងារសម្រេចបានសម្រាប់បុគ្គលិកឥណទាន (គិតតាម Pro-Rate)");
                         }
                         print_pdf();
                         window.setTimeout(function() {

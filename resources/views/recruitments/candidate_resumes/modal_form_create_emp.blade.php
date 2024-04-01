@@ -73,6 +73,14 @@
                                 </select>
                             </div>
                         </div>
+                        <div class="form-group col-md-12 col-12" element="div" bp-field-wrapper="true" bp-field-name="Identity" bp-field-type="custom_html">
+                            <label class="navbar-brand custom-navbar-brand mb-0" style="width: 100%; background: #dfe6e9; padding: 6px;">
+                                <label class="container-checkbox">
+                                    <input type="checkbox" id="Pro-Rate" > <span class="checkmark"></span>
+                                    Pro-Rate
+                                </label>
+                            </label>
+                        </div>
                     </div>
                     <div class="row">
                         <div class="col-sm-6" hidden>
@@ -371,6 +379,8 @@
 
             $("#position_type").html('<option selected value="">--@lang("lang.select") --</option>');
             $("#department_id").html('<option selected disabled value="">--@lang("lang.select") --</option>');
+            $("#pr_supporting_or_field_staff").text("");
+            $("#Pro-Rate").prop("checked", false);
             $(".clear_data").val("");
             $("#remark").text("");
             let id = $(this).data("id");
@@ -685,8 +695,8 @@
                                     $("#pr_employee_id").text(data.number_employee);
                                     $("#pr_basic_salary").text(data.basic_salary);
                                     $("#pr_salary_increase").text($("#salary_to_increase").val());
-                                    if (data.position.position_type == "Field Staff") {
-                                        $("#pr_supporting_or_field_staff").text("ដោយធៀបនិងភាគរយការងារសម្រេចបានសម្រាប់បុគ្គលិកឥណទាន (គិតតាម Pro-Rate) ដោយការបង់ពន្ធជូនរាជរដ្ឋាភិបាលជាបន្ទុករបស់និយោជិត");
+                                    if ($("#Pro-Rate").prop("checked") == true) {
+                                        $("#pr_supporting_or_field_staff").text("ដោយធៀបនិងភាគរយការងារសម្រេចបានសម្រាប់បុគ្គលិកឥណទាន (គិតតាម Pro-Rate)");
                                     }
                                     if (btn_action == 1) {
                                         print_pdf();
