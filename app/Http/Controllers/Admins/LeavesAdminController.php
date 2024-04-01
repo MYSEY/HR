@@ -519,7 +519,7 @@ class LeavesAdminController extends Controller
                 }
             }
             Toastr::success('The process has been successfully.','Success');
-            return redirect()->back();
+            return redirect('leaves/admin');
             DB::commit();
         } catch (\Exception $exp) {
             DB::rollBack();
