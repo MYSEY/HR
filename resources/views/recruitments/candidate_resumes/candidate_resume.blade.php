@@ -1462,7 +1462,7 @@
                                     '<td class="name_kh stuck-scroll-3" >'+(staff_result.name_kh )+'</td>'+
                                     '<td class="name_en stuck-scroll-3">'+(staff_result.name_en)+'</td>'+
                                     '<td class="gender_name_english"><input type="text" class="gender_id" data-gender="'+(staff_result.gender)+'" hidden>'+(staff_result.option.name_english)+'</td>'+
-                                    '<td class="position" ><input type="text" class="position_id" data-postion="'+(staff_result.position_applied)+'" hidden>'+(staff_result.position.name_english)+'</td>'+
+                                    '<td class="position" ><input type="text" class="position_id" data-postion="'+(staff_result.position_applied)+'" hidden>'+(staff_result.position ? staff_result.position.name_english : "")+'</td>'+
                                     '<td class="branch"><input type="text" class="branch_id" data-branch="'+(staff_result.location_applied)+'" hidden>'+(staff_result.branch.branch_name_en)+'</td>'+
                                     '<td >'+(contract_date)+'</td>'+
                                     '<td ><input type="date" class="join_date" data-join-date="'+(staff_result.join_date)+'" hidden>'+(join_date)+'</td>'+
@@ -1514,7 +1514,7 @@
                                     '<td class="name_kh stuck-scroll-3" >'+(staff_result.name_kh )+'</td>'+
                                     '<td class="name_en stuck-scroll-3">'+(staff_result.name_en)+'</td>'+
                                     '<td class="gender_name_english"><input type="text" class="gender_id" data-gender="'+(staff_result.gender)+'" hidden>'+(staff_result.option.name_english)+'</td>'+
-                                    '<td class="position" ><input type="text" class="position_id" data-postion="'+(staff_result.position_applied)+'" hidden>'+(staff_result.position.name_english)+'</td>'+
+                                    '<td class="position" ><input type="text" class="position_id" data-postion="'+(staff_result.position_applied)+'" hidden>'+(staff_result.position ? staff_result.position.name_english : "")+'</td>'+
                                     '<td class="branch"><input type="text" class="branch_id" data-branch="'+(staff_result.location_applied)+'" hidden>'+(staff_result.branch.branch_name_en)+'</td>'+
                                     '<td >'+(contract_date)+'</td>'+
                                     '<td ><input type="date" class="join_date" data-join-date="'+(staff_result.join_date)+'" hidden>'+(join_date)+'</td>'+

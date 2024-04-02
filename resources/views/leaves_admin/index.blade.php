@@ -118,8 +118,7 @@
                                                                     aria-label="From: activate to sort column ascending">@lang('lang.start_date')</th>
                                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                                     aria-label="To: activate to sort column ascending">@lang('lang.end_date')</th>
-                                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                                    aria-label="No of Days: activate to sort column ascending">@lang('lang.number_of_days')</th>
+                                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" aria-label="No of Days: activate to sort column ascending">@lang('lang.number_of_days')</th>
                                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                                     aria-label="No of Days: activate to sort column ascending">@lang('lang.handover_staff')</th>
                                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
@@ -297,6 +296,9 @@
                                                                 <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
                                                                     colspan="2" aria-sort="ascending" aria-label="Profle: activate to sort column descending"
                                                                     style="text-align: center">@lang('lang.special_leave')</th>
+                                                                <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
+                                                                    colspan="3" aria-sort="ascending" aria-label="Profle: activate to sort column descending"
+                                                                    style="text-align: center">@lang('lang.carried_forward_leave')</th>
                                                                 <th class="sorting sorting_asc vertical-center" tabindex="0" aria-controls="DataTables_Table_0"
                                                                     rowspan="2" aria-sort="ascending"
                                                                     aria-label="actions: activate to sort column descending" style="text-align: center">@lang('lang.actions')</th>
@@ -308,6 +310,9 @@
                                                                 <th>@lang('lang.balance')</th>
                                                                 <th>@lang('lang.day_taken')</th>
                                                                 <th>@lang('lang.balance')</th>
+                                                                <th>@lang('lang.year_1')</th>
+                                                                <th>@lang('lang.year_2')</th>
+                                                                <th>@lang('lang.year_3')</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
@@ -326,6 +331,9 @@
                                                                         <td>{{number_format($leave->total_sick_leave)}}</td>
                                                                         <td>{{number_format($leave->default_special_leave -$leave->total_special_leave)}}</td>
                                                                         <td>{{number_format($leave->total_special_leave)}}</td>
+                                                                        <td>{{$leave->year_1}}</td>
+                                                                        <td>{{$leave->year_2}}</td>
+                                                                        <td>{{$leave->year_3}}</td>
                                                                         <td class="text-end">
                                                                             <a class="btn btn-outline-secondary btn-sm" href="{{ url('/leave-request/detail', $leave->employee_id) }}">@lang('lang.view_request')</a>
                                                                         </td>
@@ -393,6 +401,7 @@
                                 td_allocation = '<td>'+(row.employee.department.name_english)+'</td><td>'+(row.employee.branch.branch_name_en)+'</td>';             
                             }
                             tr_allocation += '<tr class="odd">'+
+                                '<td>'+(row.employee.number_employee)+'</td>'+
                                 '<td>'+(row.employee.employee_name_en)+'</td>'+
                                 (td_allocation)+
                                 '<td>'+(row.default_annual_leave - row.total_annual_leave)+'</td>'+
@@ -401,6 +410,9 @@
                                 '<td>'+(row.total_sick_leave)+'</td>'+
                                 '<td>'+(row.default_special_leave -row.total_special_leave)+'</td>'+
                                 '<td>'+(row.total_special_leave)+'</td>'+
+                                '<td>'+(row.year_1)+'</td>'+
+                                '<td>'+(row.year_2)+'</td>'+
+                                '<td>'+(row.year_3)+'</td>'+
                                 '<td class="text-end">'+
                                     '<a class="btn btn-outline-secondary btn-sm" href="{{url("leave-request/detail")}}/'+(row.employee_id)+'">@lang("lang.view_request")</a>'+
                                 '</td>'+
