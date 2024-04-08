@@ -112,24 +112,15 @@
                                                             <tr>
                                                                 <th class="sorting sorting_asc stuck-scroll-3" tabindex="0" aria-controls="DataTables_Table_0" aria-sort="ascending" aria-label="Profle: activate to sort column descending">#</th>
                                                                 <th class="sorting sorting_asc stuck-scroll-3" tabindex="0" aria-controls="DataTables_Table_0" aria-sort="ascending" aria-label="Employee: activate to sort column descending" >@lang('lang.employee_name')</th>
-                                                                <th class="sorting stuck-scroll-3" tabindex="0" aria-controls="DataTables_Table_0"
-                                                                    aria-label="Leave Type: activate to sort column ascending">@lang('lang.leave_type')</th>
-                                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                                    aria-label="From: activate to sort column ascending">@lang('lang.start_date')</th>
-                                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                                    aria-label="To: activate to sort column ascending">@lang('lang.end_date')</th>
+                                                                <th class="sorting stuck-scroll-3" tabindex="0" aria-controls="DataTables_Table_0" aria-label="Leave Type: activate to sort column ascending">@lang('lang.leave_type')</th>
+                                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" aria-label="Reason: activate to sort column ascending">@lang('lang.reason')</th>
                                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" aria-label="No of Days: activate to sort column ascending">@lang('lang.number_of_days')</th>
-                                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                                    aria-label="No of Days: activate to sort column ascending">@lang('lang.handover_staff')</th>
-                                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                                    aria-label="Reason: activate to sort column ascending">@lang('lang.reason')</th>
-                                                                <th ass="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
-                                                                        aria-sort="ascending" aria-label="remark: activate to sort column descending" style="text-align: center;">@lang('lang.remark')</th>     
-                                                                <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
-                                                                    aria-sort="ascending" aria-label="status: activate to sort column descending" style="text-align: center;">@lang('lang.status')</th>
-                                                                <th class="text-end sorting" tabindex="0"
-                                                                    aria-controls="DataTables_Table_0"
-                                                                    aria-label="Actions: activate to sort column ascending">@lang('lang.actions')</th>
+                                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" aria-label="From: activate to sort column ascending">@lang('lang.start_date')</th>
+                                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" aria-label="To: activate to sort column ascending">@lang('lang.end_date')</th>
+                                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" aria-label="No of Days: activate to sort column ascending">@lang('lang.handover_staff')</th>
+                                                                <th ass="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" aria-sort="ascending" aria-label="remark: activate to sort column descending" style="text-align: center;">@lang('lang.remark')</th>     
+                                                                <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" aria-sort="ascending" aria-label="status: activate to sort column descending" style="text-align: center;">@lang('lang.status')</th>
+                                                                <th class="text-end sorting" tabindex="0" aria-controls="DataTables_Table_0" aria-label="Actions: activate to sort column ascending">@lang('lang.actions')</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
@@ -139,11 +130,11 @@
                                                                         <td class="ids stuck-scroll-3">{{++$key ?? ""}}</td>
                                                                         <td class="stuck-scroll-3 employee_name"> {{$request->employee ? $request->employee->employee_name_en : ""}} </td>
                                                                         <td class="stuck-scroll-3">{{$request->leaveType->name}}</td>
+                                                                        <td><a href="#">{{$request->reason}}</a></td>
+                                                                        <td>{{$request->number_of_day}} Day</td>
                                                                         <td >{{\Carbon\Carbon::parse($request->start_date)->format('d-M-Y') ?? ''}}</td>
                                                                         <td>{{\Carbon\Carbon::parse($request->end_date)->format('d-M-Y') ?? ''}}</td>
-                                                                        <td>{{$request->number_of_day}} Day</td>
                                                                         <td>{{ $request->handover ? $request->handover->employee_name_en : ""}}</td>
-                                                                        <td>{{$request->reason}}</td>
                                                                         <td>{{$request->remark}}</td>
                                                                         <td>
                                                                             @if ($request->status == "rejected")

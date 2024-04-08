@@ -416,8 +416,8 @@ class LeavesAdminController extends Controller
                             } else {
                                 $remianDay = $remainingDay;
                             }
-                            $remain_year_1 = $remianDay;
-                            $remain_year_2 = 0;
+                            $remain_year_1 = $data->year_1;
+                            $remain_year_2 = $remianDay;
                             $remain_year_3 = 0;
                             $totalDays = $defaultDays;
                         }elseif($diffYears == 3){
@@ -437,8 +437,8 @@ class LeavesAdminController extends Controller
                                 $remianDay = $remainingDay;
                             }
                             $remain_year_1 = $data->year_1;
-                            $remain_year_2 = $data->year_2;
-                            $remain_year_3 = $remianDay;
+                            $remain_year_2 = $remianDay;
+                            $remain_year_3 = 0;
                             $totalDays = $defaultDays + 1;
                         } elseif($diffYears == 5) {
                             if ($remainingDay >= 7) {
@@ -446,9 +446,9 @@ class LeavesAdminController extends Controller
                             } else {
                                 $remianDay = $remainingDay;
                             }
-                            $remain_year_1 = $remianDay;
-                            $remain_year_2 = $data->year_2;
-                            $remain_year_3 = $data->year_3;
+                            $remain_year_1 = $data->year_1;
+                            $remain_year_2 = $remianDay;
+                            $remain_year_3 = 0;
                             $totalDays = $defaultDays + 1;
                         }elseif($diffYears == 6){
                             if ($remainingDay >= 7) {
@@ -458,7 +458,7 @@ class LeavesAdminController extends Controller
                             }
                             $remain_year_1 = $data->year_1;
                             $remain_year_2 = $remianDay;
-                            $remain_year_3 = $data->year_3;
+                            $remain_year_3 = 0;
                             $totalDays = $defaultDays + 1;
                         }elseif($diffYears == 7){
                             if ($remainingDay >= 8) {
@@ -467,8 +467,8 @@ class LeavesAdminController extends Controller
                                 $remianDay = $remainingDay;
                             }
                             $remain_year_1 = $data->year_1;
-                            $remain_year_2 = $data->year_3;
-                            $remain_year_3 = $remianDay;
+                            $remain_year_2 = $remianDay;
+                            $remain_year_3 = 0;
                             $totalDays = $defaultDays + 2;
                         }elseif($diffYears == 8){
                             if ($remainingDay >= 8) {
@@ -476,9 +476,9 @@ class LeavesAdminController extends Controller
                             } else {
                                 $remianDay = $remainingDay;
                             }
-                            $remain_year_1 = $remianDay;
-                            $remain_year_2 = $data->year_2;
-                            $remain_year_3 = $data->year_3;
+                            $remain_year_1 = $data->year_1;
+                            $remain_year_2 = $remianDay;
+                            $remain_year_3 = 0;
                             $totalDays = $defaultDays + 2;
                         }elseif($diffYears == 9){
                             if ($remainingDay >= 8) {
@@ -488,7 +488,7 @@ class LeavesAdminController extends Controller
                             }
                             $remain_year_1 = $data->year_1;
                             $remain_year_2 = $remianDay;
-                            $remain_year_3 = $data->year_3;
+                            $remain_year_3 = 0;
                             $totalDays = $defaultDays + 2;
                         }else if($diffYears > 10){
                             if ($remainingDay >= 10) {
@@ -496,8 +496,8 @@ class LeavesAdminController extends Controller
                             } else {
                                 $remianDay = $remainingDay;
                             }
-                            $remain_year_1 = $remianDay;
-                            $remain_year_2 = 0;
+                            $remain_year_1 = $data->year_1;
+                            $remain_year_2 = $remianDay;
                             $remain_year_3 = 0;
                             $totalDays = $defaultDays + 3;
                         }
