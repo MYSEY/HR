@@ -54,6 +54,7 @@ class LeavesEmployeeController extends Controller
         return view('leaves_employee.index', compact('dataLeaveType', 'LeaveAllocation', 'employees', 'dataLeaveRequest'));
     }
 
+    
     /**
      * Store a newly created resource in storage.
      *
