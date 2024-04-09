@@ -153,7 +153,7 @@
                                 </section>
                             </div>
                         </div> --}}
-                        <div class="card info-card flex-fill">
+                        {{-- <div class="card info-card flex-fill">
                             <div class="card-body">
                                 <h4>@lang('lang.upcoming_holiday')</h4>
                                 <div class="holiday-details">
@@ -173,7 +173,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
                     <div class="col-lg-8 col-md-12">
                         <div class="row">
