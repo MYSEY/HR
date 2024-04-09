@@ -117,9 +117,9 @@
                     <div class="login_box">
                         <div class="left">
                             <div class="contact">
-                                <form>
+                                <form id="form-login">
                                 {{-- <form method="POST" action="{{ route('login') }}"> --}}
-                                    @csrf
+                                    {{-- @csrf --}}
                                     <h3>Welcome! Please log in</h3>
                                     <div class="form-group">
                                         <input id="number_employee" type="text" class="form-control @error('number_employee') is-invalid @enderror" placeholder="Employee ID"  required name="number_employee">
@@ -140,7 +140,7 @@
                                             @enderror
                                         </div>
                                     </div>
-                                    <button type="button" class="submit" id="btn-login">Click here to login</button>
+                                    <button type="button" class="submit" onclick="submitForm()" id="btn-login">Click here to login</button>
                                 </form>
                             </div>
                         </div>
@@ -191,40 +191,19 @@
             <div id="errorMessage"></div>
         </div>
         <script>
+            document.getElementById("password").addEventListener("keyup", function(event) {
+                if (event.key === "Enter") {
+                    event.preventDefault();
+                    submitForm();
+                }
+            });
+            document.getElementById("number_employee").addEventListener("keyup", function(event) {
+                if (event.key === "Enter") {
+                    event.preventDefault();
+                    submitForm();
+                }
+            });
             $(function(){
-                $("#btn-login").on("click", function() {
-                    $("#cha_number_employee").val($("#number_employee").val());
-                    $.ajax({
-                        type: "post",
-                        url: "{{ url('/login') }}",
-                        data: {
-                            "_token": "{{ csrf_token() }}",
-                            number_employee: $("#number_employee").val(),
-                            password: $("#password").val(),
-                        },
-                        dataType: "JSON",
-                        success: function(response) {
-                            let data =  response;
-                            if (data.status == "success" && data.role == null) {
-                                $("#form-login").css("display", "none");
-                                $("#id01").css("display", "block");
-                                return false;
-                            }
-                            if (data.status == "error") {
-                                toastr.error(data.message);
-                                return false;
-                            }
-                            if (data.status == "success" && data.role == "Employee") {
-                                toastr.success(data.message);
-                                window.location.replace("{{ URL('dashboad/employee') }}"); 
-                            }else{
-                                toastr.success(data.message);
-                                window.location.replace("{{ URL('dashboad/admin') }}"); 
-                            }
-                        }
-                    });
-                });
-
                 $(document).ready(function() {
                     $('#btn-change-pass').submit(function(event) {
                         event.preventDefault();
@@ -265,6 +244,38 @@
                     });
                 });
             });
+            function submitForm() {
+                $("#cha_number_employee").val($("#number_employee").val());
+                $.ajax({
+                    type: "post",
+                    url: "{{ url('/login') }}",
+                    data: {
+                        "_token": "{{ csrf_token() }}",
+                        number_employee: $("#number_employee").val(),
+                        password: $("#password").val(),
+                    },
+                    dataType: "JSON",
+                    success: function(response) {
+                        let data =  response;
+                        if (data.status == "success" && data.role == null) {
+                            $("#form-login").css("display", "none");
+                            $("#id01").css("display", "block");
+                            return false;
+                        }
+                        if (data.status == "error") {
+                            toastr.error(data.message);
+                            return false;
+                        }
+                        if (data.status == "success" && data.role == "Employee") {
+                            toastr.success(data.message);
+                            window.location.replace("{{ URL('dashboad/employee') }}"); 
+                        }else{
+                            toastr.success(data.message);
+                            window.location.replace("{{ URL('dashboad/admin') }}"); 
+                        }
+                    }
+                });
+            }
         </script>
     </body>
 </html>
