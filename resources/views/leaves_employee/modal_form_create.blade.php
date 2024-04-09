@@ -366,6 +366,7 @@
                             timeout: 3000,
                             icon: true
                         }).show();
+                        window.location.replace("{{ URL('leaves/employee') }}");
                     }
                 });
             }

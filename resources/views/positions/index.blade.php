@@ -47,7 +47,7 @@
                                             @if (count($data)>0)
                                                 @foreach ($data as $key=>$item)
                                                     <tr class="odd">
-                                                        <td class="sorting_1 ids">{{++$key}}</td>
+                                                        <td class="sorting_1 ids">{{$item->id}}</td>
                                                         <td class="name_khmer">{{$item->name_khmer}}</td>
                                                         <td class="name_english">{{$item->name_english}}</td>
                                                         <td class="position_range">{{$item->position_range}}</td>

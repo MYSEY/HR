@@ -42,7 +42,7 @@
                                             @if (count($data)>0)
                                                 @foreach ($data as $key=>$item)
                                                     <tr class="odd">
-                                                        <td class="sorting_1 ids">{{++$key}}</td>
+                                                        <td class="sorting_1 ids">{{$item->id}}</td>
                                                         <td>{{$item->branch_name_kh}}</td>
                                                         <td>{{$item->branch_name_en}}</td>
                                                         <td>{{$item->branchholder ? $item->branchholder->employee_name_en : ""}}</td>

@@ -47,7 +47,7 @@
                                             @if (count($data)>0)
                                                 @foreach ($data as $key=>$item)
                                                     <tr class="odd clickable <?php if (count($item->child) > 0 ){echo "tr-cursor";}?>" data-toggle="collapse" data-target="#group-of-rows-{{$item->id}}" aria-expanded="false" aria-controls="group-of-rows-2">
-                                                        <td class="sorting_1 ids">{{++$key}}</td>
+                                                        <td class="sorting_1 ids">{{$item->id}}</td>
                                                         <td>
                                                             @if (count($item->child) > 0)
                                                                 <i class="fa fa-plus" aria-hidden="true"></i>
