@@ -141,6 +141,10 @@
                                                         </th>
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                             rowspan="1" colspan="1"
+                                                            aria-label="Join Date: activate to sort column ascending">@lang('lang.incentive')
+                                                        </th>
+                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                            rowspan="1" colspan="1"
                                                             aria-label="Join Date: activate to sort column ascending">@lang('lang.seniority_pay') (@lang('lang.included_tax'))
                                                         </th>
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
@@ -215,6 +219,7 @@
                                                                 <td>$<a href="#">{{ $item->total_child_allowance }}</a></td>
                                                                 <td>$<a href="#">{{ $item->phone_allowance == null ? '0.00' : $item->phone_allowance}}</a></td>
                                                                 <td>$<a href="#">{{ $item->total_kny_phcumben}}</a></td>
+                                                                <td>$<a href="#">{{ $item->annual_incentive_bonus}}</a></td>
                                                                 <td>$<a href="#">{{ $item->seniority_pay_included_tax}}</a></td>
                                                                 <td>$<a href="#">{{ $item->total_pension_fund}}</a></td>
                                                                 <td>$<a href="#">{{ $item->base_salary_received_usd}}</a></td>
@@ -323,13 +328,9 @@
                             </div>
     
                             <div class="submit-section">
-                                {{-- <button type="submit" class="btn btn-primary submit-btn" id="btn-payroll">
-                                    <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i>
-                                        @lang('lang.loading') </span>
-                                    <span class="btn-txt">@lang('lang.submit')</span>
-                                </button> --}}
-
-                                <button type="button" class="btn btn-primary submit-btn" id="btn-payroll">@lang('lang.submit')</button>
+                                <button type="button" class="btn btn-primary submit-btn" id="btn-payroll">
+                                    <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>@lang('lang.submit')
+                                </button>
                             </div>
                         </form>
                     </div>
@@ -584,6 +585,7 @@
                     text: '@lang("lang.pay")',
                     btnClass: 'add-btn-status',
                     action: function () {
+                        $(".loading-icon").css('display', 'block');
                         axios.post('{{ URL('payroll/create') }}', {
                             'exchange_rate': exchange_rate_salary,
                             'payment_date': $("#payment_date").val(),
@@ -608,7 +610,7 @@
                         });
                     }
                 };
-                    
+               
                 $.confirm({
                     // icon: 'fa fa-warning',
                     title: '@lang("lang.are_you_sure_you_want_to_pay")',
@@ -634,6 +636,7 @@
                         },
                         button_ok,
                     },
+
                     onContentReady: function () {
                         var jc = this;
                         this.$content.find('form').on('submit', function (e) {
@@ -682,6 +685,7 @@
                             '<td>$<a href="#">'+(row.total_child_allowance )+'</a></td>'+
                             '<td>$<a href="#">'+(row.phone_allowance == null ? '0.00' : row.phone_allowance)+'</a></td>'+
                             '<td>$<a href="#">'+(row.total_kny_phcumben)+'</a></td>'+
+                            '<td>$<a href="#">'+(row.annual_incentive_bonus)+'</a></td>'+
                             '<td>$<a href="#">'+(row.seniority_pay_included_tax)+'</a></td>'+
                             '<td>$<a href="#">'+(row.total_pension_fund)+'</a></td>'+
                             '<td>$<a href="#">'+(row.base_salary_received_usd)+'</a></td>'+

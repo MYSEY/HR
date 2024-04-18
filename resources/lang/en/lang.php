@@ -372,7 +372,7 @@ return[
     "identity_type"=>"Identity Type",
     "identity_number"=>"Identity Number",
     "increasment"=>"Increasment",
-    "incentive"=>"Incentive",
+    "incentive"=>"Annual Incentive Bonus",
     "in_used"=>"In Used",
     "inactive"=>"Inactive",
     "internal"=>"Internal",
