@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\User;
 use App\Helpers\Helper;
+use Spatie\Activitylog\LogOptions;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\SoftDeletes;

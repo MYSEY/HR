@@ -323,6 +323,12 @@
                             </div>
     
                             <div class="submit-section">
+                                {{-- <button type="submit" class="btn btn-primary submit-btn" id="btn-payroll">
+                                    <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i>
+                                        @lang('lang.loading') </span>
+                                    <span class="btn-txt">@lang('lang.submit')</span>
+                                </button> --}}
+
                                 <button type="button" class="btn btn-primary submit-btn" id="btn-payroll">@lang('lang.submit')</button>
                             </div>
                         </form>
@@ -330,7 +336,6 @@
                 </div>
             </div>
         </div>
-       
     </div>
 @endsection
 @include('includs.script')
