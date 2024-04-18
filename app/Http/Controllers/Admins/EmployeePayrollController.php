@@ -556,8 +556,20 @@ class EmployeePayrollController extends Controller
                     $children = $number_of_children;
                     // អត្រា ពន្ធ(%)
                     if ($number_of_children == 0 && $item->spouse == 0) {
-                        $taxRate = Taxes::where('from', '<=' ,$totalExchangeRiel)->where('to','>=',$totalExchangeRiel)->first();
-                        $totalTax = $taxRate->tax_rate;
+                        // $taxRate = Taxes::where('from', '<=' ,$totalExchangeRiel)->where('to','>=',$totalExchangeRiel)->first();
+                        $taxRate = Taxes::first();
+                        if ($totalExchangeRiel > $taxRate->from && $totalExchangeRiel <= $taxRate->to) {
+                            $totalTax = 0;
+                        }elseif($totalExchangeRiel > $taxRate->from && $totalExchangeRiel <= $taxRate->to){
+                            $totalTax = 5;
+                        }elseif($totalExchangeRiel > $taxRate->from && $totalExchangeRiel <= $taxRate->to){
+                            $totalTax = 10;
+                        }elseif($totalExchangeRiel > $taxRate->from && $totalExchangeRiel <= $taxRate->to){
+                            $totalTax = 15;
+                        }else{
+                            $totalTax = 20;
+                        }
+                        
                         if($totalExchangeRiel >= $taxRate->to){
                             $totalSalaryTaxRiel = 0;
                         }elseif($totalExchangeRiel > $taxRate->from && $totalExchangeRiel <= $taxRate->to){
@@ -575,8 +587,21 @@ class EmployeePayrollController extends Controller
                         //ពន្ធលើប្រាក់បៀវត្ស ដុល្លារ/USD
                         $totalSalaryAfterTax = $baseSalaryReceivedUsd - round($totalSalaryTaxUsd,2);
                     } else if($number_of_children == 1 && $item->spouse == 0) {
-                        $taxRate = Taxes::where('from', '<=' ,$totalTtaxBbaseRiel)->where('to','>=',$totalTtaxBbaseRiel)->first();
-                        $totalTax = $taxRate->tax_rate;
+                        // $taxRate = Taxes::where('from', '<=' ,$totalTtaxBbaseRiel)->where('to','>=',$totalTtaxBbaseRiel)->first();
+                        // $totalTax = $taxRate->tax_rate;
+
+                        $taxRate = Taxes::first();
+                        if ($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to) {
+                            $totalTax = 0;
+                        }elseif($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to){
+                            $totalTax = 5;
+                        }elseif($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to){
+                            $totalTax = 10;
+                        }elseif($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to){
+                            $totalTax = 15;
+                        }else{
+                            $totalTax = 20;
+                        }
                         if($totalTtaxBbaseRiel >= $taxRate->to){
                             $totalSalaryTaxRiel = 0;
                         }elseif($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to){
@@ -595,9 +620,21 @@ class EmployeePayrollController extends Controller
                         //ពន្ធលើប្រាក់បៀវត្ស ដុល្លារ/USD
                         $totalSalaryAfterTax = $baseSalaryReceivedUsd - round($totalSalaryTaxUsd,2);
                     }else if($number_of_children == 0 && $item->spouse == 1) {
-                        
-                        $taxRate = Taxes::where('from', '<=' ,$totalTtaxBbaseRiel)->where('to','>=',$totalTtaxBbaseRiel)->first();
-                        $totalTax = $taxRate->tax_rate;
+                        // $taxRate = Taxes::where('from', '<=' ,$totalTtaxBbaseRiel)->where('to','>=',$totalTtaxBbaseRiel)->first();
+                        // $totalTax = $taxRate->tax_rate;
+
+                        $taxRate = Taxes::first();
+                        if ($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to) {
+                            $totalTax = 0;
+                        }elseif($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to){
+                            $totalTax = 5;
+                        }elseif($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to){
+                            $totalTax = 10;
+                        }elseif($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to){
+                            $totalTax = 15;
+                        }else{
+                            $totalTax = 20;
+                        }
                         if($totalTtaxBbaseRiel >= $taxRate->to){
                             $totalSalaryTaxRiel = 0;
                         }elseif($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to){
@@ -617,8 +654,21 @@ class EmployeePayrollController extends Controller
                         $totalSalaryAfterTax = $baseSalaryReceivedUsd - round($totalSalaryTaxUsd,2);
                     }else if($number_of_children == 1 && $item->spouse == 1) {
                         //​cululate salaray Taxable
-                        $taxRate = Taxes::where('from', '<=' ,$totalTtaxBbaseRiel)->where('to','>=',$totalTtaxBbaseRiel)->first();
-                        $totalTax = $taxRate->tax_rate;
+                        // $taxRate = Taxes::where('from', '<=' ,$totalTtaxBbaseRiel)->where('to','>=',$totalTtaxBbaseRiel)->first();
+                        // $totalTax = $taxRate->tax_rate;
+
+                        $taxRate = Taxes::first();
+                        if ($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to) {
+                            $totalTax = 0;
+                        }elseif($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to){
+                            $totalTax = 5;
+                        }elseif($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to){
+                            $totalTax = 10;
+                        }elseif($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to){
+                            $totalTax = 15;
+                        }else{
+                            $totalTax = 20;
+                        }
                         if($totalTtaxBbaseRiel >= $taxRate->to){
                             $totalSalaryTaxRiel = 0;
                         }elseif($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to){
@@ -637,8 +687,21 @@ class EmployeePayrollController extends Controller
                         $totalSalaryAfterTax = $baseSalaryReceivedUsd - round($totalSalaryTaxUsd,2);
                     }else if($number_of_children == 2 && $item->spouse == 0){
                         //​cululate salaray Taxable
-                        $taxRate = Taxes::where('from', '<=' ,$totalTtaxBbaseRiel)->where('to','>=',$totalTtaxBbaseRiel)->first();
-                        $totalTax = $taxRate->tax_rate;
+                        // $taxRate = Taxes::where('from', '<=' ,$totalTtaxBbaseRiel)->where('to','>=',$totalTtaxBbaseRiel)->first();
+                        // $totalTax = $taxRate->tax_rate;
+
+                        $taxRate = Taxes::first();
+                        if ($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to) {
+                            $totalTax = 0;
+                        }elseif($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to){
+                            $totalTax = 5;
+                        }elseif($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to){
+                            $totalTax = 10;
+                        }elseif($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to){
+                            $totalTax = 15;
+                        }else{
+                            $totalTax = 20;
+                        }
                         if($totalTtaxBbaseRiel >= $taxRate->to){
                             $totalSalaryTaxRiel = 0;
                         }elseif($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to){
@@ -657,8 +720,21 @@ class EmployeePayrollController extends Controller
                         $totalSalaryAfterTax = $baseSalaryReceivedUsd - round($totalSalaryTaxUsd,2);
                     }else if($number_of_children == 2 && $item->spouse == 1){
                         //​cululate salaray Taxable
-                        $taxRate = Taxes::where('from', '<=' ,$totalTtaxBbaseRiel)->where('to','>=',$totalTtaxBbaseRiel)->first();
-                        $totalTax = $taxRate->tax_rate;
+                        // $taxRate = Taxes::where('from', '<=' ,$totalTtaxBbaseRiel)->where('to','>=',$totalTtaxBbaseRiel)->first();
+                        // $totalTax = $taxRate->tax_rate;
+
+                        $taxRate = Taxes::first();
+                        if ($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to) {
+                            $totalTax = 0;
+                        }elseif($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to){
+                            $totalTax = 5;
+                        }elseif($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to){
+                            $totalTax = 10;
+                        }elseif($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to){
+                            $totalTax = 15;
+                        }else{
+                            $totalTax = 20;
+                        }
                         if($totalTtaxBbaseRiel >= $taxRate->to){
                             $totalSalaryTaxRiel = 0;
                         }elseif($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to){
@@ -677,8 +753,21 @@ class EmployeePayrollController extends Controller
                         $totalSalaryAfterTax = $baseSalaryReceivedUsd - round($totalSalaryTaxUsd,2);
                     }else if($number_of_children == 3 && $item->spouse == 0){
                         //​cululate salaray Taxable
-                        $taxRate = Taxes::where('from', '<=' ,$totalTtaxBbaseRiel)->where('to','>=',$totalTtaxBbaseRiel)->first();
-                        $totalTax = $taxRate->tax_rate;
+                        // $taxRate = Taxes::where('from', '<=' ,$totalTtaxBbaseRiel)->where('to','>=',$totalTtaxBbaseRiel)->first();
+                        // $totalTax = $taxRate->tax_rate;
+
+                        $taxRate = Taxes::first();
+                        if ($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to) {
+                            $totalTax = 0;
+                        }elseif($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to){
+                            $totalTax = 5;
+                        }elseif($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to){
+                            $totalTax = 10;
+                        }elseif($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to){
+                            $totalTax = 15;
+                        }else{
+                            $totalTax = 20;
+                        }
                         if($totalTtaxBbaseRiel >= $taxRate->to){
                             $totalSalaryTaxRiel = 0;
                         }elseif($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to){
@@ -697,8 +786,21 @@ class EmployeePayrollController extends Controller
                         $totalSalaryAfterTax = $baseSalaryReceivedUsd - round($totalSalaryTaxUsd,2);
                     }else if($number_of_children == 3 && $item->spouse == 1){
                         //​cululate salaray Taxable
-                        $taxRate = Taxes::where('from', '<=' ,$totalTtaxBbaseRiel)->where('to','>=',$totalTtaxBbaseRiel)->first();
-                        $totalTax = $taxRate->tax_rate;
+                        // $taxRate = Taxes::where('from', '<=' ,$totalTtaxBbaseRiel)->where('to','>=',$totalTtaxBbaseRiel)->first();
+                        // $totalTax = $taxRate->tax_rate;
+
+                        $taxRate = Taxes::first();
+                        if ($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to) {
+                            $totalTax = 0;
+                        }elseif($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to){
+                            $totalTax = 5;
+                        }elseif($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to){
+                            $totalTax = 10;
+                        }elseif($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to){
+                            $totalTax = 15;
+                        }else{
+                            $totalTax = 20;
+                        }
                         if($totalTtaxBbaseRiel >= $taxRate->to){
                             $totalSalaryTaxRiel = 0;
                         }elseif($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to){
@@ -717,8 +819,21 @@ class EmployeePayrollController extends Controller
                         $totalSalaryAfterTax = $baseSalaryReceivedUsd - round($totalSalaryTaxUsd,2);
                     }else if($number_of_children == 4 && $item->spouse == 0){
                         //​cululate salaray Taxable
-                        $taxRate = Taxes::where('from', '<=' ,$totalTtaxBbaseRiel)->where('to','>=',$totalTtaxBbaseRiel)->first();
-                        $totalTax = $taxRate->tax_rate;
+                        // $taxRate = Taxes::where('from', '<=' ,$totalTtaxBbaseRiel)->where('to','>=',$totalTtaxBbaseRiel)->first();
+                        // $totalTax = $taxRate->tax_rate;
+
+                        $taxRate = Taxes::first();
+                        if ($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to) {
+                            $totalTax = 0;
+                        }elseif($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to){
+                            $totalTax = 5;
+                        }elseif($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to){
+                            $totalTax = 10;
+                        }elseif($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to){
+                            $totalTax = 15;
+                        }else{
+                            $totalTax = 20;
+                        }
                         if($totalTtaxBbaseRiel >= $taxRate->to){
                             $totalSalaryTaxRiel = 0;
                         }elseif($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to){
@@ -737,8 +852,21 @@ class EmployeePayrollController extends Controller
                         $totalSalaryAfterTax = $baseSalaryReceivedUsd - round($totalSalaryTaxUsd,2);
                     }else if($number_of_children == 4 && $item->spouse == 1){
                         //​cululate salaray Taxable
-                        $taxRate = Taxes::where('from', '<=' ,$totalTtaxBbaseRiel)->where('to','>=',$totalTtaxBbaseRiel)->first();
-                        $totalTax = $taxRate->tax_rate;
+                        // $taxRate = Taxes::where('from', '<=' ,$totalTtaxBbaseRiel)->where('to','>=',$totalTtaxBbaseRiel)->first();
+                        // $totalTax = $taxRate->tax_rate;
+
+                        $taxRate = Taxes::first();
+                        if ($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to) {
+                            $totalTax = 0;
+                        }elseif($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to){
+                            $totalTax = 5;
+                        }elseif($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to){
+                            $totalTax = 10;
+                        }elseif($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to){
+                            $totalTax = 15;
+                        }else{
+                            $totalTax = 20;
+                        }
                         if($totalTtaxBbaseRiel >= $taxRate->to){
                             $totalSalaryTaxRiel = 0;
                         }elseif($totalTtaxBbaseRiel > $taxRate->from && $totalTtaxBbaseRiel <= $taxRate->to){
