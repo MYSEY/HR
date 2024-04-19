@@ -579,8 +579,7 @@ class PayrollReportController extends Controller
                 if ($RolePermission == 'BM') {
                     $query->where("users.branch_id", Auth::user()->branch_id);
                 }
-            })
-            ->where('type_fdc1','FDC-2')->get();
+            })->where('type_fdc1','FDC-1')->Orwhere('type_fdc2','FDC-2')->get();
         }
         return view('severance_pays.index',compact('data','branch'));
     }
@@ -592,7 +591,7 @@ class PayrollReportController extends Controller
             $yearLy = Carbon::createFromDate($request->filter_month)->format('Y');
         }
         $nssf = GrossSalaryPay::with("users")->where('type_fdc1','FDC-1')
-        ->where('type_fdc1','FDC-2')
+        ->Orwhere('type_fdc2','FDC-2')
         ->leftJoin('users', 'gross_salary_pays.employee_id', '=', 'users.id')
         ->leftJoin('positions','positions.id','=','users.position_id')
         ->leftJoin('branchs','branchs.id','=','users.branch_id')
@@ -654,17 +653,18 @@ class PayrollReportController extends Controller
                 $i++;
                 if ($i != 1) {
                     $employee = User::where("number_employee", $item[0])->first();
-                    $payroll = Payroll::where("number_employee", $item[0])->first();
-                    GrossSalaryPay::firstOrCreate([
-                        'employee_id'                   => $employee->id,
-                        'number_employee'               => $item[0],
-                        'basic_salary'                  => $payroll->basic_salary,
-                        'total_gross_salary'            => $payroll->base_salary_received_usd,
-                        'total_fdc1'                    => $item[4],
-                        'type_fdc1'                     => $item[5],
-                        'payment_date'                  => $item[6],
-                        'created_by'                    => Auth::user()->id,
-                    ]);
+                    if($employee){
+                        GrossSalaryPay::firstOrCreate([
+                            'employee_id'                   => $employee->id,
+                            'number_employee'               => $item[0],
+                            'basic_salary'                  => $item[2],
+                            'total_gross_salary'            => $item[3],
+                            'total_fdc1'                    => $item[4],
+                            'type_fdc1'                     => $item[5],
+                            'payment_date'                  => $item[6],
+                            'created_by'                    => Auth::user()->id,
+                        ]);
+                    }
                 }
             }
             if($dataArray){
