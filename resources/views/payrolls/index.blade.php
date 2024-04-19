@@ -259,7 +259,7 @@
                                                                 <td>$<a href="#">{{ $item->total_salary }}</a></td>
                                                                 <td>{{ $item->PayrollPaymentDate }}</td>
                                                                 <td>{{ $item->Created }}</td>
-                                                                <td><a class="btn btn-sm btn-primary" href="{{ url('payslip', $item->employee_id) }}">@lang('lang.generate_payslip')</a></td>
+                                                                <td><a class="btn btn-sm btn-primary" href="{{ url('payslip', $item->id) }}">@lang('lang.generate_payslip')</a></td>
                                                             </tr>
                                                         @endforeach
                                                     @endif
@@ -635,7 +635,7 @@
                             '<td>$<a href="#">'+(row.total_salary )+'</a></td>'+
                             '<td>'+(payment_date)+'</td>'+
                             '<td>'+(created_at)+'</td>'+
-                            '<td><a class="btn btn-sm btn-primary" href="{{url("payslip")}}/'+(row.employee_id)+'">@lang("lang.generate_payslip")</a></td>'+
+                            '<td><a class="btn btn-sm btn-primary" href="{{url("payslip")}}/'+(row.id)+'">@lang("lang.generate_payslip")</a></td>'+
                         '</tr>';
                     });
                 }else{

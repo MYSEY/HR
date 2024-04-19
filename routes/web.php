@@ -201,7 +201,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('payroll-export',[EmployeePayrollController::class,'export']);
     Route::post('payroll/create',[EmployeePayrollController::class,'store']);
     Route::post('payroll/delete',[EmployeePayrollController::class,'destroy']);
-    Route::get('payslip/{employee_id}',[EmployeePayrollController::class,'paySlip']);
+    Route::get('payslip/{id}',[EmployeePayrollController::class,'paySlip']);
     Route::post('import/payroll',[EmployeePayrollController::class,'importPayroll']);
     
     Route::get('payroll/review',[EmployeePayrollController::class,'payrollRview']);

@@ -1121,7 +1121,7 @@ class EmployeePayrollController extends Controller
     }
 
     public function paySlip(Request $request){
-        $payslip = Payroll::with('users')->where('employee_id',$request->employee_id)->orderBy('id','desc')->first();
+        $payslip = Payroll::with('users')->where('id',$request->id)->first();
         return view('payrolls.payslip',compact('payslip'));
     }
 

@@ -63,7 +63,7 @@
                             </div>
                             <div class="col-md-4">
                                 <h4 class="payslip-title">@lang('lang.employee_payslip')</h4>
-                                <h5 class="payslip-title">{{Helper::getLang() == 'en' ? Helper::geENMonths($payslip->payment_date)  : Helper::getKhmerMonths($payslip->payment_date)}}</h5>
+                                <h5 class="payslip-title">{{ $payslip->MonthlyPayslip}}</h5>
                             </div>
                         </div>
                         <div class="row">

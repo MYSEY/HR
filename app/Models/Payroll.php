@@ -112,4 +112,11 @@ class Payroll extends Model
             return Carbon::parse($this->payment_date)->format('d-M-Y');
         }
     }
+
+    public function getMonthlyPayslipAttribute(){
+        $month = Carbon::parse($this->payment_date)->format('M Y');
+        $result = "Employee Payslip".' : '.$month;
+        return $result;
+    }
+    // Helper::getLang() == 'en' ? Helper::geENMonths($payslip->payment_date)  : Helper::getKhmerMonths($payslip->payment_date)
 }

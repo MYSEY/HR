@@ -53,11 +53,10 @@ class PayrollRepository extends BaseRepository
                 if ($RolePermission == 'BM') {
                     $query->where("users.branch_id", Auth::user()->branch_id);
                 }
-            })
-            ->orderBy('payment_date','DESC')->get();
+            })->orderBy('payment_date','DESC')->get();
         }
     }
     public function getAllPayrollPreview(){
-        return payrollPreview::with("users")->orderBy('id','DESC')->get();
+        return payrollPreview::with("users")->get();
     }
 }
