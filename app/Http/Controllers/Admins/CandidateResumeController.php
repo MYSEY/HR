@@ -261,6 +261,12 @@ class CandidateResumeController extends Controller
                         $short_list = 2;   
                         $status = 2;
                     }
+                    if ($csv[22] == 5) {
+                        $status = $csv[22];
+                    }
+                    if ($csv[22] == "cancel" || $csv[22] == "Cancel") {
+                        $status = "Cancel";
+                    }
                     $arr = [
                         'name_kh'                => $fulNameKH,
                         'name_en'                => $fulNameEN,
