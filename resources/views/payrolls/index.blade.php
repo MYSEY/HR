@@ -206,6 +206,10 @@
                                                         </th>
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                             rowspan="1" colspan="1"
+                                                            aria-label="Salary: activate to sort column ascending">@lang('lang.loan_amount')
+                                                        </th>
+                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                            rowspan="1" colspan="1"
                                                             aria-label="Salary: activate to sort column ascending">@lang('lang.net_salary')
                                                         </th>
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
@@ -266,6 +270,7 @@
                                                                 <td>$<a href="#">{{ $item->seniority_pay_excluded_tax}}</a></td>
                                                                 <td>$<a href="#">{{ $item->seniority_backford}}</a></td>
                                                                 <td>$<a href="#">{{ $item->total_severance_pay}}</a></td>
+                                                                <td>$<a href="#">{{ $item->loan_amount == null ? "0.00" : $item->loan_amount}}</a></td>
                                                                 <td>$<a href="#">{{ $item->total_salary }}</a></td>
                                                                 <td>{{ $item->PayrollPaymentDate }}</td>
                                                                 <td>{{ $item->Created }}</td>
@@ -644,6 +649,7 @@
                             '<td>$<a href="#">'+(row.seniority_pay_excluded_tax)+'</a></td>'+
                             '<td>$<a href="#">'+(row.seniority_backford)+'</a></td>'+
                             '<td>$<a href="#">'+(row.total_severance_pay)+'</a></td>'+
+                            '<td>$<a href="#">'+(row.loan_amount == null ? "0.00" : row.loan_amount)+'</a></td>'+
                             '<td>$<a href="#">'+(row.total_salary )+'</a></td>'+
                             '<td>'+(payment_date)+'</td>'+
                             '<td>'+(created_at)+'</td>'+

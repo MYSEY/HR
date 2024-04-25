@@ -245,7 +245,7 @@
                                                                 <td><span>៛</span><a href="#">{{ number_format($item->total_salary_tax_riel)}}</a></td>
                                                                 <td>$<a href="#">{{ $item->seniority_pay_excluded_tax}}</a></td>
                                                                 <td>$<a href="#">{{ $item->total_severance_pay}}</a></td>
-                                                                <td>$<a href="#">{{ $item->loan_amount == null ? "0.0" : $item->loan_amount}}</a></td>
+                                                                <td>$<a href="#">{{ $item->loan_amount == null ? "0.00" : $item->loan_amount}}</a></td>
                                                                 <td>$<a href="#">{{ $item->total_salary }}</a></td>
                                                                 <td>{{ $item->PayrollPaymentDate }}</td>
                                                                 <td>{{ $item->Created }}</td>
@@ -592,7 +592,7 @@
                                     icon: true
                                 }).show();
                                 $('.card-footer').remove();
-                                window.location.replace("{{ URL('payroll') }}");
+                                window.location.replace("{{ URL('payroll/review') }}");
                                 }).catch(function(error) {
                                     new Noty({
                                         title: "",
@@ -747,7 +747,7 @@
                             '<td><span>៛</span><a href="#">'+(formatCurrencyKH(row.total_salary_tax_riel))+'</a></td>'+
                             '<td>$<a href="#">'+(row.seniority_pay_excluded_tax)+'</a></td>'+
                             '<td>$<a href="#">'+(row.total_severance_pay)+'</a></td>'+
-                            '<td>$<a href="#">'+(row.loan_amount == null ? "0.0" : row.loan_amount)+'</a></td>'+
+                            '<td>$<a href="#">'+(row.loan_amount == null ? "0.00" : row.loan_amount)+'</a></td>'+
                             '<td>$<a href="#">'+(row.total_salary )+'</a></td>'+
                             '<td>'+(payment_date)+'</td>'+
                             '<td>'+(created_at)+'</td>'+
