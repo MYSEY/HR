@@ -39,8 +39,7 @@ class PayrollRepository extends BaseRepository
             return Payroll::with("users")->where('employee_id',Auth::user()->id)->orderBy('id','DESC')->get();
         } else {
            // return Payroll::with('users')->whereMonth('payment_date','<=',$Monthly)->whereYear('payment_date','>=',$yearLy)->get();
-            return Payroll::with('users')
-            ->join('users', 'payrolls.employee_id', '=', 'users.id')
+            return Payroll::leftJoin('users', 'payrolls.employee_id', '=', 'users.id')
             ->select(
                 'payrolls.*',
                 'users.branch_id',

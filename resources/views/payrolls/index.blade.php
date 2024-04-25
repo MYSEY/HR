@@ -142,11 +142,19 @@
                                                         </th>
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                             rowspan="1" colspan="1"
+                                                            aria-label="Join Date: activate to sort column ascending">@lang('lang.incentive')
+                                                        </th>
+                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                            rowspan="1" colspan="1"
                                                             aria-label="Join Date: activate to sort column ascending">@lang('lang.KNY_/_pchum_ben')
                                                         </th>
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                             rowspan="1" colspan="1"
-                                                            aria-label="Join Date: activate to sort column ascending">@lang('lang.incentive')
+                                                            aria-label="Join Date: activate to sort column ascending">@lang('lang.annual_bonus')
+                                                        </th>
+                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                            rowspan="1" colspan="1"
+                                                            aria-label="Join Date: activate to sort column ascending">@lang('lang.other_benefits')
                                                         </th>
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                             rowspan="1" colspan="1"
@@ -242,8 +250,10 @@
                                                                 <td>$<a href="#">{{ $item->total_gross_salary }}</a></td>
                                                                 <td>$<a href="#">{{ $item->total_child_allowance }}</a></td>
                                                                 <td>$<a href="#">{{ $item->phone_allowance == null ? '0.00' : $item->phone_allowance}}</a></td>
+                                                                <td>$<a href="#">{{ $item->monthly_quarterly_bonuses}}</a></td>
                                                                 <td>$<a href="#">{{ $item->total_kny_phcumben}}</a></td>
                                                                 <td>$<a href="#">{{ $item->annual_incentive_bonus}}</a></td>
+                                                                <td>$<a href="#">{{ $item->other_benefits}}</a></td>
                                                                 <td>$<a href="#">{{ $item->seniority_pay_included_tax}}</a></td>
                                                                 <td>$<a href="#">{{ $item->total_pension_fund}}</a></td>
                                                                 <td>$<a href="#">{{ $item->base_salary_received_usd}}</a></td>
@@ -618,8 +628,10 @@
                             '<td>$<a href="#">'+(row.total_gross_salary )+'</a></td>'+
                             '<td>$<a href="#">'+(row.total_child_allowance )+'</a></td>'+
                             '<td>$<a href="#">'+(row.phone_allowance == null ? '0.00' : row.phone_allowance)+'</a></td>'+
+                            '<td>$<a href="#">'+(row.monthly_quarterly_bonuses)+'</a></td>'+
                             '<td>$<a href="#">'+(row.total_kny_phcumben)+'</a></td>'+
                             '<td>$<a href="#">'+(row.annual_incentive_bonus)+'</a></td>'+
+                            '<td>$<a href="#">'+(row.other_benefits)+'</a></td>'+
                             '<td>$<a href="#">'+(row.seniority_pay_included_tax)+'</a></td>'+
                             '<td>$<a href="#">'+(row.total_pension_fund)+'</a></td>'+
                             '<td>$<a href="#">'+(row.base_salary_received_usd)+'</a></td>'+

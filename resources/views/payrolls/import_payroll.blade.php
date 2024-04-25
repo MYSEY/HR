@@ -69,7 +69,6 @@
                     cache: false,
                     processData: false,
                     success: function(data) {
-                        console.log(data);
                         if (data == 1) {
                             $("#importPayrollModal").modal("hide");
                             toastr.success('Data has been save success');
@@ -86,11 +85,6 @@
                             $("#thanLess").text("@lang('lang.please_select_a_xls,_xlsx_and_csv_file_and_size_less_then_1_MB')").css("color", "red");
                             $(".thanLess").show();
                         }
-                        // if (data == 3) {
-                        //     $("#importPayrollModal").modal("hide");
-                        //     toastr.error('Data has been already this months');
-                        //     window.location.replace("{{ URL('payroll') }}");
-                        // }
                     }
                 });
             }else{

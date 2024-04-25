@@ -137,11 +137,19 @@
                                                         </th>
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                             rowspan="1" colspan="1"
+                                                            aria-label="Join Date: activate to sort column ascending">@lang('lang.incentive')
+                                                        </th>
+                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                            rowspan="1" colspan="1"
                                                             aria-label="Join Date: activate to sort column ascending">@lang('lang.KNY_/_pchum_ben')
                                                         </th>
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                             rowspan="1" colspan="1"
-                                                            aria-label="Join Date: activate to sort column ascending">@lang('lang.incentive')
+                                                            aria-label="Join Date: activate to sort column ascending">@lang('lang.annual_bonus')
+                                                        </th>
+                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                            rowspan="1" colspan="1"
+                                                            aria-label="Join Date: activate to sort column ascending">@lang('lang.other_benefits')
                                                         </th>
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                             rowspan="1" colspan="1"
@@ -189,6 +197,10 @@
                                                         </th>
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                             rowspan="1" colspan="1"
+                                                            aria-label="Salary: activate to sort column ascending">@lang('lang.loan_amount')
+                                                        </th>
+                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                            rowspan="1" colspan="1"
                                                             aria-label="Salary: activate to sort column ascending">@lang('lang.net_salary')
                                                         </th>
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
@@ -218,8 +230,10 @@
                                                                 <td>$<a href="#">{{ $item->total_gross_salary }}</a></td>
                                                                 <td>$<a href="#">{{ $item->total_child_allowance }}</a></td>
                                                                 <td>$<a href="#">{{ $item->phone_allowance == null ? '0.00' : $item->phone_allowance}}</a></td>
+                                                                <td>$<a href="#">{{ $item->monthly_quarterly_bonuses}}</a></td>
                                                                 <td>$<a href="#">{{ $item->total_kny_phcumben}}</a></td>
                                                                 <td>$<a href="#">{{ $item->annual_incentive_bonus}}</a></td>
+                                                                <td>$<a href="#">{{ $item->other_benefits}}</a></td>
                                                                 <td>$<a href="#">{{ $item->seniority_pay_included_tax}}</a></td>
                                                                 <td>$<a href="#">{{ $item->total_pension_fund}}</a></td>
                                                                 <td>$<a href="#">{{ $item->base_salary_received_usd}}</a></td>
@@ -231,6 +245,7 @@
                                                                 <td><span>៛</span><a href="#">{{ number_format($item->total_salary_tax_riel)}}</a></td>
                                                                 <td>$<a href="#">{{ $item->seniority_pay_excluded_tax}}</a></td>
                                                                 <td>$<a href="#">{{ $item->total_severance_pay}}</a></td>
+                                                                <td>$<a href="#">{{ $item->loan_amount == null ? "0.0" : $item->loan_amount}}</a></td>
                                                                 <td>$<a href="#">{{ $item->total_salary }}</a></td>
                                                                 <td>{{ $item->PayrollPaymentDate }}</td>
                                                                 <td>{{ $item->Created }}</td>
@@ -325,6 +340,34 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>@lang('lang.incentive')</label>
+                                        <input class="form-control" type="file" id="incentive_bonus" name="incentive_bonus">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>@lang('lang.other_benefits')</label>
+                                        <input class="form-control" type="file" id="other_benefits" name="other_benefits">
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>@lang('lang.annual_bonus')</label>
+                                        <input class="form-control" type="file" id="annual_bonus" name="annual_bonus">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>@lang('lang.loan')</label>
+                                        <input class="form-control" type="file" id="loan" name="loan">
+                                    </div>
+                                </div>
                             </div>
     
                             <div class="submit-section">
@@ -402,7 +445,7 @@
                 }); 
             } 
         });
-
+        
         $(document).ready(function(){
             $("#btn-edix-nssf").click(function(){
                 $("#btn-save-nssf").toggle();
@@ -567,8 +610,6 @@
             }
         });
         $("#btn-payroll").on("click",function() {
-            let exchange_rate_salary = $("#exchange_rate_preview").val();
-            let exchange_rate_nssf = $("#exchange_rate_nssf_preview").val();
             let num_miss = 0;
             $(".pay_required").each(function(){
                 if($(this).val()=="0.00" || $(this).val()==""){
@@ -581,32 +622,39 @@
             if (num_miss>0) {
                 return false;
             }else{
+                let exchange_rate_salary = $("#exchange_rate_preview").val();
+                let exchange_rate_nssf = $("#exchange_rate_nssf_preview").val();
+                var file_incentive = $('#incentive_bonus').prop('files')[0];
+                var other_benefits = $('#other_benefits').prop('files')[0];
+                var annual_bonus = $('#annual_bonus').prop('files')[0];
+                var file_loan = $('#loan').prop('files')[0];
+                var form_data = new FormData();
+
+                form_data.append('file_incentive', file_incentive);
+                form_data.append('other_benefits', other_benefits);
+                form_data.append('annual_bonus', annual_bonus);
+                form_data.append('file_loan', file_loan);
+                form_data.append('exchange_rate', exchange_rate_salary);
+                form_data.append('payment_date', $("#payment_date").val());
+                form_data.append('_token', "{{ csrf_token() }}");
+                
+                
                 let button_ok = {
                     text: '@lang("lang.pay")',
                     btnClass: 'add-btn-status',
                     action: function () {
                         $(".loading-icon").css('display', 'block');
-                        axios.post('{{ URL('payroll/create') }}', {
-                            'exchange_rate': exchange_rate_salary,
-                            'payment_date': $("#payment_date").val(),
-                        }).then(function(response) {
-                            new Noty({
-                                title: "",
-                                text: "Created payroll successfully",
-                                type: "success",
-                                timeout: 3000,
-                                icon: true
-                            }).show();
-                            window.location.replace("{{ URL('payroll/review') }}");
-                        }).catch(function(error) {
-                            console.log(error);
-                            new Noty({
-                                title: "",
-                                text: "@lang('lang.something_went_wrong_please_try_again_later').",
-                                type: "error",
-                                timeout: 3000,
-                                icon: true
-                            }).show();
+                        $.ajax({
+                            type: 'POST',
+                            url: "{{ url('payroll/create') }}",
+                            data: form_data,
+                            contentType: false,
+                            cache: false,
+                            processData: false,
+                            success: function(data) {
+                                toastr.success('Data has been save success');
+                                window.location.replace("{{ URL('payroll/review') }}");
+                            }
                         });
                     }
                 };
@@ -684,8 +732,10 @@
                             '<td>$<a href="#">'+(row.total_gross_salary )+'</a></td>'+
                             '<td>$<a href="#">'+(row.total_child_allowance )+'</a></td>'+
                             '<td>$<a href="#">'+(row.phone_allowance == null ? '0.00' : row.phone_allowance)+'</a></td>'+
+                            '<td>$<a href="#">'+(row.monthly_quarterly_bonuses)+'</a></td>'+
                             '<td>$<a href="#">'+(row.total_kny_phcumben)+'</a></td>'+
                             '<td>$<a href="#">'+(row.annual_incentive_bonus)+'</a></td>'+
+                            '<td>$<a href="#">'+(row.other_benefits)+'</a></td>'+
                             '<td>$<a href="#">'+(row.seniority_pay_included_tax)+'</a></td>'+
                             '<td>$<a href="#">'+(row.total_pension_fund)+'</a></td>'+
                             '<td>$<a href="#">'+(row.base_salary_received_usd)+'</a></td>'+
@@ -697,6 +747,7 @@
                             '<td><span>៛</span><a href="#">'+(formatCurrencyKH(row.total_salary_tax_riel))+'</a></td>'+
                             '<td>$<a href="#">'+(row.seniority_pay_excluded_tax)+'</a></td>'+
                             '<td>$<a href="#">'+(row.total_severance_pay)+'</a></td>'+
+                            '<td>$<a href="#">'+(row.loan_amount == null ? "0.0" : row.loan_amount)+'</a></td>'+
                             '<td>$<a href="#">'+(row.total_salary )+'</a></td>'+
                             '<td>'+(payment_date)+'</td>'+
                             '<td>'+(created_at)+'</td>'+

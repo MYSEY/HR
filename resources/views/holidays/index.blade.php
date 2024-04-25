@@ -32,7 +32,7 @@
                                                     <th>#</th>
                                                     <th>@lang('lang.date')</th>
                                                     <th>@lang('lang.title')</th>
-                                                    @if (Auth::user()->RolePermission == "HR")
+                                                    @if (Auth::user()->RolePermission == "HR" || Auth::user()->RolePermission == "developer")
                                                         <th>@lang('lang.amount_percent')(%)</th>
                                                         <th>@lang('lang.period_month')</th>
                                                     @endif
@@ -47,7 +47,7 @@
                                                             <td class="ids">{{++$key}}</td>
                                                             <td class="title">{{$item->Day}}</td>
                                                             <td class="title">{{Helper::getLang() == 'en' ? $item->title_en  :$item->title_kh}}</td>
-                                                            @if (Auth::user()->RolePermission == "HR")
+                                                            @if (Auth::user()->RolePermission == "HR" || Auth::user()->RolePermission == "developer")
                                                                 <td style="text-align: center;" class="amount_percent"><a href="#">{{$item->amount_percent}}</a></td>
                                                                 <td class="period_month">{{$item->PeriodPayment}}</td>
                                                             @endif
