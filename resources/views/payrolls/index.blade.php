@@ -625,9 +625,9 @@
                             '</td>'+
                             '<td class="stuck-scroll-3"><a href="#">'+(row.users == null ? '' : row.users.number_employee )+'</a></td>'+
                             '<td class="stuck-scroll-3"> <a href="#">'+(row.users == null ? '' : localeLanguage == 'en' ? row.users.employee_name_en : row.users.employee_name_kh )+'</span></a></td>'+
-                            '<td><a href="#">'+(row.users == null ? '' : localeLanguage == 'en' ? row.users.position.name_english :row.users.position.name_khmer )+'</a></td>'+
-                            '<td><a href="#">'+(row.users == null ? '' : localeLanguage == 'en' ? row.users.department.name_english : row.users.department.name_khmer )+'</a></td>'+
-                            '<td><a href="#">'+(row.users == null ? '' : localeLanguage == 'en' ? row.users.branch.branch_name_en : row.users.branch.branch_name_kh)+'</a></td>'+
+                            '<td><a href="#">'+(row.users.position == null ? '' : localeLanguage == 'en' ? row.users.position.name_english :row.users.position.name_khmer )+'</a></td>'+
+                            '<td><a href="#">'+(row.users.department == null ? '' : localeLanguage == 'en' ? row.users.department.name_english : row.users.department.name_khmer )+'</a></td>'+
+                            '<td><a href="#">'+(row.users.branch == null ? '' : localeLanguage == 'en' ? row.users.branch.branch_name_en : row.users.branch.branch_name_kh)+'</a></td>'+
                             '<td>'+(join_date)+'</td>'+
                             '<td>$<a href="#">'+(row.basic_salary )+'</a></td>'+
                             '<td>$<a href="#">'+(row.total_gross_salary )+'</a></td>'+
@@ -657,7 +657,7 @@
                         '</tr>';
                     });
                 }else{
-                    var tr = '<tr><td colspan=27 align="center">@lang("lang.no_record_to_display")</td></tr>';
+                    var tr = '<tr><td colspan=35 align="center">@lang("lang.no_record_to_display")</td></tr>';
                 }
                 $(".tbl_payment_salary tbody").html(tr);
             }
