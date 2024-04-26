@@ -226,7 +226,11 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('motor-rentel/status',[MotorRentelController::class,'processing']);
 
     //Payroll Item
-    Route::get('payroll/item',[PayrollItemController::class,'index']);
+    Route::get('payroll/adjustment',[PayrollItemController::class,'index']);
+    Route::post('payroll/adjustment/store',[PayrollItemController::class,'store']);
+    Route::get('payroll/adjustment/edit',[PayrollItemController::class,'edit']);
+    Route::post('payroll/adjustment/update',[PayrollItemController::class,'update']);
+    Route::post('payroll/adjustment/delete',[PayrollItemController::class,'destroy']);
     // route province
     Route::get('province', [ProvinceController::class,'index']);
     Route::post('district', [ProvinceController::class,'showDistrict']);

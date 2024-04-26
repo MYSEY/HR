@@ -146,8 +146,8 @@ class PositionController extends Controller
                 $i++;
                 if ($i != 1) {
                     Position::firstOrCreate([
-                        'name_khmer'   => $item[0],
-                        'name_english'   => $item[1],
+                        'name_english'   => $item[0],
+                        'name_khmer'   => $item[1],
                         'position_range'   => $item[2],
                         'position_type'   => $item[3],
                         'position_type_number'   => $item[4],

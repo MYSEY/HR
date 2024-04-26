@@ -195,7 +195,7 @@ class PayrollReportController extends Controller
         })
         ->when($yearLy, function ($query, $yearLy) {
             $query->whereYear('payment_date', $yearLy);
-        })->get();
+        })->orderBy('payment_date','DESC')->get();
         return response()->json([
             'success'=>$nssf,
         ]);
@@ -490,8 +490,7 @@ class PayrollReportController extends Controller
                 if ($RolePermission == 'BM') {
                     $query->where("users.branch_id", Auth::user()->branch_id);
                 }
-            })
-        ->orderBy('id', 'DESC')->get();
+            })->orderBy('id', 'DESC')->get();
         $branchs = Branchs::get();
         return view('reports.poyrolls.severance_pay_report',compact('severancePay','branchs'));
     }
@@ -680,22 +679,19 @@ class PayrollReportController extends Controller
         if (Auth::user()->RolePermission == 'Employee') {
             $DataNSSF = NationalSocialSecurityFund::where('employee_id',Auth::user()->id)->where('number_employee',Auth::user()->number_employee)->get();
         } else {
-            $DataNSSF = NationalSocialSecurityFund::
-            leftJoin('users', 'national_social_security_funds.employee_id', '=', 'users.id')
+            $DataNSSF = NationalSocialSecurityFund::leftJoin('users', 'national_social_security_funds.employee_id', '=', 'users.id')
             ->select(
                 'national_social_security_funds.*',
                 'users.branch_id',
                 'users.department_id',
-            )
-            ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+            )->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
                 if ($RolePermission == 'HOD') {
                     $query->whereIn("users.department_id", EmployeeRepository::getRoleHOD());
                 }
                 if ($RolePermission == 'BM') {
                     $query->where("users.branch_id", Auth::user()->branch_id);
                 }
-            })
-            ->get();
+            })->orderBy('national_social_security_funds.payment_date','DESC')->get();
         }
         return view('NSSFs.index',compact('DataNSSF','branch'));
     }

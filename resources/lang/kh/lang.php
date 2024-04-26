@@ -93,6 +93,7 @@ return[
 	"activivy_log"=>"កំណត់ហេតុ​សកម្មភាព",
 	"assign_line_manager"=>"ចាត់តាំងអ្នកគ្រប់គ្រងបន្ទាត់ថ្មី",
 	"annual_bonus"=>"ប្រាក់លើកទឹកចិត្តប្រចាំឆ្នាំ",
+	"payroll_adjustment"=>"Payroll Adjustment",
 	"bank"=>"ធនាគារ",
 	"banks"=>"ធនាគារ",
 	"balance"=>"ចំនួនថ្ងៃនៅសល់",

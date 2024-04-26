@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers\Admins;
 
-use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Models\PayrollAdjustment;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Brian2694\Toastr\Facades\Toastr;
+use Illuminate\Support\Facades\Auth;
 
 class PayrollItemController extends Controller
 {
@@ -16,7 +20,8 @@ class PayrollItemController extends Controller
     public function index()
     {
         $employee = User::whereIn('emp_status',['Probation','1','2','10'])->get();
-        return view('payroll_item.index',compact('employee'));
+        $data = PayrollAdjustment::all();
+        return view('payroll_item.index',compact('employee','data'));
     }
 
     /**
@@ -37,7 +42,17 @@ class PayrollItemController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+            $data = $request->all();
+            $data['created_by']    = Auth::user()->id;
+            PayrollAdjustment::create($data);
+            DB::commit();
+            Toastr::success('Payroll Adjustments created successfully.','Success');
+            return redirect()->back();
+        } catch (\Throwable $exp) {
+            DB::rollback();
+            Toastr::error('Payroll Adjustments created fail.','Error');
+        }
     }
 
     /**
@@ -57,9 +72,14 @@ class PayrollItemController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request)
     {
-        //
+        $employee = User::whereIn('emp_status',['Probation','1','2','10'])->get();
+        $data = PayrollAdjustment::where('id',$request->id)->first();
+        return response()->json([
+            'success'=>$data,
+            'employee'=>$employee
+        ]);
     }
 
     /**
@@ -69,9 +89,23 @@ class PayrollItemController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        try {
+            PayrollAdjustment::where('id',$request->id)->update([
+                'employee_id'    => $request->employee_id,
+                'amount'    => $request->amount,
+                'adjustment_date'    => $request->adjustment_date,
+                'description'    => $request->description,
+                'updated_by'    => Auth::user()->id,
+            ]);
+            DB::commit();
+            Toastr::success('Payroll Adjustments updated successfully.','Success');
+            return redirect()->back();
+        } catch (\Throwable $exp) {
+            DB::rollback();
+            Toastr::error('Payroll Adjustments updated fail.','Error');
+        }
     }
 
     /**
@@ -80,8 +114,16 @@ class PayrollItemController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+        try{
+            PayrollAdjustment::destroy($request->id);
+            Toastr::success('Payroll Adjustments deleted successfully.','Success');
+            return redirect()->back();
+        }catch(\Exception $e){
+            DB::rollback();
+            Toastr::error('Payroll Adjustments delete fail.','Error');
+            return redirect()->back();
+        }
     }
 }

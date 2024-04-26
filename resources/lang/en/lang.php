@@ -80,6 +80,7 @@ return[
 	"activivy_log"=>"Activivy Log",
 	"assign_new_line_manager"=>"Assign new line manager",
 	"annual_bonus"=>"Annual Bonus",
+	"payroll_adjustment"=>"Payroll Adjustment",
     "bank"=>"Bank",
     "banks"=>"Banks",
     "balance"=>"Balance",

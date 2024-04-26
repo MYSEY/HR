@@ -229,7 +229,6 @@
                 dataType: "JSON",
                 success: function (response) {
                     if (response.success) {
-                        console.log(response.success.id);
                         if (response.positionType != '') {
                             $.each(response.positionType, function(i, item) {
                                 $('#e_position_type').append($('<option>', {
