@@ -121,11 +121,11 @@
                                             <tr>
                                                 <td>@lang('lang.incentive')</td>
                                                 <td>
-                                                    <span class="float-end">$0.00</span>
+                                                    <span class="float-end">${{$payslip->monthly_quarterly_bonuses}}</span>
                                                 </td>
                                                 <td>@lang('lang.staff_loan')</td>
                                                 <td>
-                                                    <span class="float-end">$0.00</span>
+                                                    <span class="float-end">${{$payslip->loan_amount}}</span>
                                                 </td>
                                             </tr>
                                             <tr>
