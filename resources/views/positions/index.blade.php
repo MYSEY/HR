@@ -17,13 +17,14 @@
                 </div>
                 <div class="col-auto float-end ms-auto">
                     @if (permissionAccess("m9-s2","is_create")->value == "1")
-                    <a href="#" class="btn add-btn" data-bs-toggle="modal" data-bs-target="#add_postion"><i class="fa fa-plus"></i> @lang('lang.add_new')</a>
+                        <a href="#" class="btn add-btn me-2" data-bs-toggle="modal" data-bs-target="#add_postion"><i class="fa fa-plus"></i> @lang('lang.add_new')</a>
+                        <a href="#" class="btn add-btn me-2" data-toggle="modal" id="btnImport"><i class="fa fa-plus"></i>@lang('lang.import')</a>
                     @endif
                 </div>
             </div>
         </div>
         @if (permissionAccess("m9-s2","is_view")->value == "1")
-        {!! Toastr::message() !!}
+            {!! Toastr::message() !!}
             <div class="row">
                 <div class="col-md-12">
                     <div class="table-responsive">
@@ -204,12 +205,18 @@
         </div>
         <!-- /Delete Department Modal -->
     {{-- </div> --}}
+    @include('positions.import')
 @endsection
 
 @include('includs.script')
 <script src="{{asset('/admin/js/validation-field.js')}}"></script>
 <script>
     $(function(){
+        $("#btnImport").on("click", function() {
+            $(".thanLess").hide();
+            $("#thanLess").text("");
+            $('#importPosition').modal('show');
+        });
         $('.update').on('click',function(){
             var localeLanguage = '{{ config('app.locale') }}';
             let id = $(this).data("id");

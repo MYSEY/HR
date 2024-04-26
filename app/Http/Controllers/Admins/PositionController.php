@@ -10,6 +10,7 @@ use App\Http\Controllers\Controller;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\PositionRequest;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 use Spatie\Activitylog\Models\Activity;
 
 class PositionController extends Controller
@@ -130,6 +131,36 @@ class PositionController extends Controller
             DB::rollback();
             Toastr::error('Position delete fail.','Error');
             return redirect()->back();
+        }
+    }
+    public function ImpotPosition(Request $request){
+        $file = $request->file;
+        $filesize = filesize($file);
+        $extension = $request->file->extension();
+        $spreadsheet = IOFactory::load($file);
+        $AllPosition = $spreadsheet->getActiveSheet()->toArray();
+        if ($extension == "xlsx" || $extension == "xls" || $extension == "csv") {
+            $i = 0;
+            $dataArray = [];
+            foreach ($AllPosition as $item) {
+                $i++;
+                if ($i != 1) {
+                    Position::firstOrCreate([
+                        'name_khmer'   => $item[0],
+                        'name_english'   => $item[1],
+                        'position_range'   => $item[2],
+                        'position_type'   => $item[3],
+                        'position_type_number'   => $item[4],
+                        'created_by'    => Auth::user()->id,
+                    ]);
+                }
+            }
+            if($dataArray){
+                return response()->json(['error'=>$dataArray]);
+            }
+            return 1;
+        } else {
+            return 0;
         }
     }
 }

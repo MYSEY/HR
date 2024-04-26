@@ -333,7 +333,7 @@ class PositionSeeder extends Seeder
             ],
             [
                 'name_khmer'            => 'ប្រធានជាន់ខ្ពស់ផ្នែកគណនេយ្យ និងហិរញ្ញវត្ថុ',
-                'name_english'          => 'Senior Manager of Accounting and Finance',
+                'name_english'          => 'Senior Manager, Accounting and Finance',
                 'position_type'         => 'Supporting Staff',
                 'position_type_number'  => '1',
                 'position_range'        => 'Supervisor'
@@ -641,7 +641,7 @@ class PositionSeeder extends Seeder
             ],
             [
                 'name_khmer'            => 'ប្រធានផ្នែកលក់ឥណទានឌីជីថល',
-                'name_english'          => 'Digital Lending Unit Manager',
+                'name_english'          => 'Relationship Unit Manager, Digital Lending',
                 'position_type'         => 'Field Staff',
                 'position_type_number'  => '2',
                 'position_range'        => 'Supervisor'
@@ -668,8 +668,8 @@ class PositionSeeder extends Seeder
                 'position_range'        => 'Supervisor'
             ],
             [
-                'name_khmer'            => 'ប្រធានផ្នែកផលប័ត្រឥណទាន',
-                'name_english'          => 'Credit Portfolio Unit Manager',
+                'name_khmer'            => 'ប្រធានផ្នែកផលប័ត្រឥណទាន និងគាំទ្រការលក់',
+                'name_english'          => 'Credit Portfolio and Sale support Unit Manager',
                 'position_type'         => 'Supporting Staff',
                 'position_type_number'  => '1',
                 'position_range'        => 'Supervisor'
@@ -710,8 +710,8 @@ class PositionSeeder extends Seeder
                 'position_range'        => 'Supervisor'
             ],
             [
-                'name_khmer'            => 'បុគ្គលិកលក់ឥណទានឌីជីថលជាន់ខ្ពស់',
-                'name_english'          => 'Senior Digital Lending Officer',
+                'name_khmer'            => 'បុគ្គលិកគាំទ្រផ្នែកលក់ឥណទានឌីជីថលជាន់ខ្ពស់',
+                'name_english'          => 'Senior Officer, Digital Lending Support',
                 'position_type'         => 'Field Staff',
                 'position_type_number'  => '2',
                 'position_range'        => 'Officer'
@@ -731,8 +731,8 @@ class PositionSeeder extends Seeder
                 'position_range'        => 'Officer'
             ],
             [
-                'name_khmer'            => 'បុគ្គលិកឥណទានយានយន្តជាន់ខ្ពស់',
-                'name_english'          => 'Senior Auto Loan Officer',
+                'name_khmer'            => 'បុគ្គលិកផ្នែកលក់ឥណទានឌីជីថលជាន់ខ្ពស់',
+                'name_english'          => 'Senior Relationship Officer, Digital Lending',
                 'position_type'         => 'Field Staff',
                 'position_type_number'  => '2',
                 'position_range'        => 'Officer'
@@ -780,8 +780,8 @@ class PositionSeeder extends Seeder
                 'position_range'        => 'Officer'
             ],
             [
-                'name_khmer'            => 'បុគ្គលិកផ្នែកលក់ឥណទានឌីជីថល',
-                'name_english'          => 'Digital Lending Officer',
+                'name_khmer'            => 'បុគ្គលិកគាំទ្រផ្នែកលក់ឥណទានឌីជីថល',
+                'name_english'          => 'Officer, Digital Lending Support',
                 'position_type'         => 'Field Staff',
                 'position_type_number'  => '2',
                 'position_range'        => 'Officer'
@@ -794,8 +794,8 @@ class PositionSeeder extends Seeder
                 'position_range'        => 'Officer'
             ],
             [
-                'name_khmer'            => 'បុគ្គលិកឥណទានយានយន្ត',
-                'name_english'          => 'Auto Loan Officer',
+                'name_khmer'            => 'បុគ្គលិកផ្នែកលក់ឥណទានឌីជីថលជាន់ខ្ពស់',
+                'name_english'          => 'Senior Relationship Officer, Digital Lending',
                 'position_type'         => 'Field Staff',
                 'position_type_number'  => '2',
                 'position_range'        => 'Officer'
@@ -836,8 +836,8 @@ class PositionSeeder extends Seeder
                 'position_range'        => 'Officer'
             ],
             [
-                'name_khmer'            => 'បុគ្គលិកឥណទានយានយន្តថ្មី',
-                'name_english'          => 'Junior Auto Loan Officer',
+                'name_khmer'            => 'បុគ្គលិកផ្នែកលក់ឥណទានឌីជីថលថ្មី',
+                'name_english'          => 'Junior Relationship Officer, Digital Lending ',
                 'position_type'         => 'Field Staff',
                 'position_type_number'  => '2',
                 'position_range'        => 'Officer'
@@ -899,8 +899,8 @@ class PositionSeeder extends Seeder
                 'position_range'        => 'Supervisor'
             ],
             [
-                'name_khmer'            => 'អនុប្រធានផ្នែករចនាក្រាហ្វិក',
-                'name_english'          => 'Deputy Creative Design Unit Manager',
+                'name_khmer'            => 'អនុប្រធានផ្នែកទីផ្សារ',
+                'name_english'          => 'Deputy Marketing Unit Manager',
                 'position_type'         => 'Supporting Staff',
                 'position_type_number'  => '1',
                 'position_range'        => 'Supervisor'
