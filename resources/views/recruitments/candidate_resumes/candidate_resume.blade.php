@@ -1002,8 +1002,8 @@
                         }
                         $("#pr_name").text(data.employee_name_kh +" ");
                         $("#pr_born_on").text(day+" ខែ "+month+" ឆ្នាំ "+ year);
-                        $("#pr_permanent_province").text(data.permanentprovince ? data.permanentprovince.name_km : ""  + " ");
-                        $("#pr_permanent_province").text(data.permanentprovince ? data.permanentprovince.name_km : "" + " ");
+                        $("#pr_permanent_province").text(data.permanentprovince.name_km + " ");
+                        $("#pr_permanent_province").text(data.permanentprovince.name_km + " ");
                         $("#pr_id_card_number").text(data.id_card_number+ "");
 
                         let number_home = "";
@@ -1014,7 +1014,7 @@
                         if (data.current_street_no) {
                             number_street = " ផ្លូវលេខ "+data.current_street_no;
                         }
-                        let location = number_home + number_street + " ភូមិ "+ " ឃុំ/សង្កាត់ " + " ស្រុក/ខណ្ឌ " + " ខេត្ត/ក្រុង ";
+                        let location = number_home + number_street + " ភូមិ "+data.currentvillage.name_km + " ឃុំ/សង្កាត់ " + data.currentcommune.name_km + " ស្រុក/ខណ្ឌ " + data.currentdistrict.name_km+ " ខេត្ត/ក្រុង "+data.currentprovince.name_km;
 
                         $("#pr_current_location").text(location);
 
