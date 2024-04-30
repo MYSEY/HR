@@ -36,7 +36,7 @@ class PayrollRepository extends BaseRepository
         $Monthly= Carbon::now()->format('m');
         $yearLy = Carbon::now()->format('Y');
         if (Auth::user()->RolePermission == 'Employee') {
-            return Payroll::with("users")->where('employee_id',Auth::user()->id)->orderBy('id','DESC')->get();
+            return Payroll::with("users")->where('employee_id',Auth::user()->id)->orderBy('payment_date','DESC')->get();
         } else {
            // return Payroll::with('users')->whereMonth('payment_date','<=',$Monthly)->whereYear('payment_date','>=',$yearLy)->get();
             return Payroll::leftJoin('users', 'payrolls.employee_id', '=', 'users.id')
@@ -52,7 +52,7 @@ class PayrollRepository extends BaseRepository
                 if ($RolePermission == 'BM') {
                     $query->where("users.branch_id", Auth::user()->branch_id);
                 }
-            })->whereMonth('payment_date','<=',$Monthly)->whereYear('payment_date','>=',$yearLy)->orderBy('id','DESC')->get();
+            })->whereMonth('payment_date','<=',$Monthly)->whereYear('payment_date','>=',$yearLy)->get();
         }
     }
     public function getAllPayrollPreview(){

@@ -557,7 +557,7 @@ class PayrollReportController extends Controller
     public function SeverancePay(){
         $branch = Branchs::get();
         if (Auth::user()->RolePermission == 'Employee') {
-            $data = GrossSalaryPay::with('users')->where('type_fdc1','FDC-2')->where('employee_id',Auth::user()->id)->where('number_employee',Auth::user()->number_employee)->get();
+            $data = GrossSalaryPay::with('users')->where('type_fdc1','FDC-1')->where('employee_id',Auth::user()->id)->where('number_employee',Auth::user()->number_employee)->get();
             
         } else {
             $data = GrossSalaryPay::with('users')
@@ -580,6 +580,7 @@ class PayrollReportController extends Controller
                 }
             })->where('type_fdc1','FDC-1')->Orwhere('type_fdc2','FDC-2')->get();
         }
+        
         return view('severance_pays.index',compact('data','branch'));
     }
     public function SeverancePayFil(Request $request){
@@ -674,8 +675,14 @@ class PayrollReportController extends Controller
             return 0;
         }
     }
-    public function ImportIndex(){
+    public function ImportIndex(Request $request){
         $branch = Branchs::get();
+        $Monthly = null;
+        $yearLy = null;
+        if ($request->filter_month) {
+            $Monthly = Carbon::createFromDate($request->filter_month)->format('m');
+            $yearLy = Carbon::createFromDate($request->filter_month)->format('Y');
+        }
         if (Auth::user()->RolePermission == 'Employee') {
             $DataNSSF = NationalSocialSecurityFund::where('employee_id',Auth::user()->id)->where('number_employee',Auth::user()->number_employee)->get();
         } else {
@@ -691,7 +698,11 @@ class PayrollReportController extends Controller
                 if ($RolePermission == 'BM') {
                     $query->where("users.branch_id", Auth::user()->branch_id);
                 }
-            })->orderBy('national_social_security_funds.payment_date','DESC')->get();
+            })->when($Monthly, function ($query, $Monthly) {
+                $query->whereMonth('payment_date', $Monthly);
+            })->when($yearLy, function ($query, $yearLy) {
+                $query->whereYear('payment_date', $yearLy);
+            })->get();
         }
         return view('NSSFs.index',compact('DataNSSF','branch'));
     }
