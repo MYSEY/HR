@@ -18,6 +18,7 @@ use App\Models\GrossSalaryPay;
 use App\Models\payrollPreview;
 use Illuminate\Support\Carbon;
 use App\Models\ChildrenAllowance;
+use App\Models\PayrollAdjustment;
 use Illuminate\Support\Facades\DB;
 use App\Exports\ExportReviewPayroll;
 use App\Http\Controllers\Controller;
@@ -360,6 +361,15 @@ class EmployeePayrollController extends Controller
                        $LoanAmount = 0;
                     }
                     
+                    $dataPayrollAdjustment = PayrollAdjustment::where('employee_id',$item->id)->get();
+                    $adjustmentAmount = 0;
+                    foreach ($dataPayrollAdjustment as $valueAdjust) {
+                        $adjustmentDate = Carbon::createFromDate($valueAdjust->adjustment_date)->format('m-y');
+                        if ($adjustmentDate == $paymentDate) {
+                            $adjustmentAmount = $valueAdjust->amount;
+                        }
+                    }
+
                     //calculated khmer_new_year and pchumBen_bonus
                     $totalBunus = 0;
                     if ($item->emp_status == 1 || $item->emp_status == 10 || $item->emp_status == 2) {
@@ -441,10 +451,10 @@ class EmployeePayrollController extends Controller
                     $type_udc = null;
 
                     $totalSeverancyPaySalary = $totalBaseSalaryRecived != null ? $totalBaseSalaryRecived : $totalBasicSalary;
-                    $totalSalarySeverancyPay = $totalSeverancyPaySalary + $monthlyQuarterlyIncentive + $otherBenefit + $annualBonus + $totalBunus + $item->phone_allowance + $totalChildAllowance;
+                    $totalSalarySeverancyPay = $totalSeverancyPaySalary + $monthlyQuarterlyIncentive + $adjustmentAmount + $otherBenefit + $annualBonus + $totalBunus + $item->phone_allowance + $totalChildAllowance;
 
                     $totalSeverancePay = $totalFirstSeverancPay != null ? $totalFirstSeverancPay : $totalBasicSalary;
-                    $totalOtherBenefit = $totalSeverancePay + $monthlyQuarterlyIncentive + $annualBonus + $otherBenefit + $totalBunus + $item->phone_allowance + $totalChildAllowance;
+                    $totalOtherBenefit = $totalSeverancePay + $monthlyQuarterlyIncentive + $adjustmentAmount + $annualBonus + $otherBenefit + $totalBunus + $item->phone_allowance + $totalChildAllowance;
 
                     $endContractDeadline= Carbon::createFromDate($item->fdc_end)->format('Y-m');
                     $paymentDate = Carbon::createFromDate($request->payment_date)->format('Y-m');
@@ -472,7 +482,7 @@ class EmployeePayrollController extends Controller
                     $totalSeverancePay2 = $SeverancePay2;
                     $totalBasicSalary = $totalBaseSalaryRecived != null ? $totalBaseSalaryRecived : $totalBasicSalary;
                     $dataTotalSeverancePay2 = $SeverancePay2 != null ? $SeverancePay2 : $totalOtherBenefit;
-                    $totalSalaryNetPay = round($totalSeverancyPaySalary,2) + $monthlyQuarterlyIncentive + $otherBenefit + $annualBonus + $totalBunus + $item->phone_allowance + $totalChildAllowance;
+                    $totalSalaryNetPay = round($totalSeverancyPaySalary,2) + $monthlyQuarterlyIncentive + $adjustmentAmount + $otherBenefit + $annualBonus + $totalBunus + $item->phone_allowance + $totalChildAllowance;
                     if ($item->emp_status == 'Probation') {
                         $type_fdc1 = null;
                         $totalSeverancePay1 = null;
@@ -1012,6 +1022,7 @@ class EmployeePayrollController extends Controller
                     $data['total_salary_tax_riel']          = round($totalSalaryTaxRiel,3);
                     $data['total_salary_tax_usd']           = $totalSalaryTaxUsd;
                     $data['loan_amount']                    = $LoanAmount;
+                    $data['adjustment']                     = $adjustmentAmount;
                     $data['total_salary']                   = $totalNetSalary;
                     $data['exchange_rate']                  = $request->exchange_rate;
                     $data['created_by']                     = Auth::user()->id;
@@ -1083,7 +1094,6 @@ class EmployeePayrollController extends Controller
                     'type_fdc2'             => $item->type_fdc2,
                     'type_udc'              => $item->type_udc,
                     'total_seniority'       => $item->total_seniority,
-                    'payment_date'          => $item->payment_date,
                     'payment_date'          => $item->payment_date,
                     'created_by'            => $item->created_by,
                 ]);

@@ -4,14 +4,14 @@
         <div class="page-header">
             <div class="row align-items-center">
                 <div class="col">
-                    <h3 class="page-title">Payroll Adjustment</h3>
+                    <h3 class="page-title">@lang('lang.payroll_adjustment')</h3>
                     <ul class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="{{ url('/dashboad/employee') }}">Dashboard</a></li>
-                        <li class="breadcrumb-item active">Payroll Adjustment</li>
+                        <li class="breadcrumb-item"><a href="{{ url('/dashboad/employee') }}">@lang('lang.dashboard')</a></li>
+                        <li class="breadcrumb-item active">@lang('lang.payroll_adjustment')</li>
                     </ul>
                 </div>
                 <div class="col-auto float-end ms-auto">
-                    <a href="#" class="btn add-btn" data-bs-toggle="modal" data-bs-target="#Add_Adjustment"><i class="fa fa-plus"></i> Add New</a>
+                    <a href="#" class="btn add-btn" data-bs-toggle="modal" data-bs-target="#Add_Adjustment"><i class="fa fa-plus"></i> @lang('lang.add_new')</a>
                 </div>
             </div>
         </div>
@@ -27,12 +27,12 @@
                                     <thead>
                                         <tr>
                                             <th style="width: 30px;" class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="#: activate to sort column descending">#</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department Name: activate to sort column ascending" style="width: 772.237px;">Name</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department Name: activate to sort column ascending" style="width: 772.237px;">Amount</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department Name: activate to sort column ascending" style="width: 772.237px;">Adjustment Date</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department Name: activate to sort column ascending" style="width: 772.237px;">Description</th>
-                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department Name: activate to sort column ascending" style="width: 772.237px;">Created At</th>
-                                            <th class="text-end sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Action: activate to sort column ascending" style="width: 300.962px;">Action</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department Name: activate to sort column ascending" style="width: 772.237px;">@lang('lang.name')</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department Name: activate to sort column ascending" style="width: 772.237px;">@lang('lang.amount')</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department Name: activate to sort column ascending" style="width: 772.237px;">@lang('lang.adjustment_date')</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department Name: activate to sort column ascending" style="width: 772.237px;">@lang('lang.remark')</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department Name: activate to sort column ascending" style="width: 772.237px;">@lang('lang.created_at')</th>
+                                            <th class="text-end sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Action: activate to sort column ascending" style="width: 300.962px;">@lang('lang.action')</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -76,7 +76,7 @@
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Add Adjustment</h5>
+                        <h5 class="modal-title">@lang('lang.add_adjustment')</h5>
                         <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">×</span>
                         </button>
@@ -85,35 +85,35 @@
                         <form action="{{ url('payroll/adjustment/store') }}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
                             @csrf
                             <div class="form-group">
-                                <label>Assignee <span class="text-danger">*</span></label>
-                                <select class="form-control hr-select2-option" name="employee_id" id="employee_id">
-                                    <option selected disabled> -- Select --</option>
+                                <label>@lang('lang.adjustment_to')<span class="text-danger">*</span></label>
+                                <select class="form-control hr-select2-option" name="employee_id" id="employee_id" required>
+                                    <option selected disabled> -- @lang('lang.select') --</option>
                                     @foreach ($employee as $item)
                                         <option value="{{$item->id}}">{{$item->employee_name_en}}</option>
                                     @endforeach
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label>Amount <span class="text-danger">*</span></label>
+                                <label>@lang('lang.amount')<span class="text-danger">*</span></label>
                                 <div class="input-group">
                                     <span class="input-group-text">$</span>
-                                    <input type="number" class="form-control" name="amount" id="amount">
+                                    <input type="number" class="form-control" name="amount" id="amount" required>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label>Adjustment Date <span class="text-danger">*</span></label>
+                                <label>@lang('lang.adjustment_date')<span class="text-danger">*</span></label>
                                 <div class="cal-icon">
                                     <input class="form-control datetimepicker" type="text" required id="adjustment_date" name="adjustment_date" value="">
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label>Description</label>
+                                <label>@lang('lang.remark')</label>
                                 <textarea class="form-control" type="text" name="description" id="description"></textarea>
                             </div>
                             <div class="submit-section">
                                 <button type="submit" class="btn btn-primary submit-btn">
-                                    <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i>Loading</span>
-                                    <span class="btn-txt">{{ __('Submit') }}</span>
+                                    <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i>@lang('lang.loading')</span>
+                                    <span class="btn-txt">@lang('lang.submit')</span>
                                 </button>
                             </div>
                         </form>
@@ -126,7 +126,7 @@
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Add edit</h5>
+                        <h5 class="modal-title">@lang('lang.edit_adjustment')</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">×</span>
                         </button>
@@ -135,36 +135,36 @@
                         <form action="{{ url('payroll/adjustment/update') }}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
                             @csrf
                             <div class="form-group">
-                                <label>Assignee <span class="text-danger">*</span></label>
-                                <select class="form-control hr-select2-option" name="employee_id" id="e_employee_id">
-                                    <option selected disabled> -- Select --</option>
+                                <label>@lang('lang.adjustment_to')<span class="text-danger">*</span></label>
+                                <select class="form-control hr-select2-option" name="employee_id" id="e_employee_id" required>
+                                    <option selected disabled> -- @lang('lang.select') --</option>
                                     @foreach ($employee as $item)
                                         <option value="{{$item->id}}">{{$item->employee_name_en}}</option>
                                     @endforeach
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label>Amount <span class="text-danger">*</span></label>
+                                <label>@lang('lang.amount')<span class="text-danger">*</span></label>
                                 <div class="input-group">
                                     <span class="input-group-text">$</span>
-                                    <input type="number" class="form-control" name="amount" id="e_amount">
+                                    <input type="number" class="form-control" name="amount" id="e_amount" required>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label>Adjustment Date <span class="text-danger">*</span></label>
+                                <label>@lang('lang.adjustment_date') <span class="text-danger">*</span></label>
                                 <div class="cal-icon">
                                     <input class="form-control datetimepicker" type="text" required id="e_adjustment_date" name="adjustment_date" value="">
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label>Description</label>
+                                <label>@lang('lang.remark')</label>
                                 <textarea class="form-control" type="text" name="description" id="e_description"></textarea>
                             </div>
                             <div class="submit-section">
                                 <input type="hidden" name="id" id="e_id">
                                 <button type="submit" class="btn btn-primary submit-btn">
-                                    <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i>Loading</span>
-                                    <span class="btn-txt">{{ __('Submit') }}</span>
+                                    <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i>@lang('lang.loading')</span>
+                                    <span class="btn-txt">@lang('lang.submit')</span>
                                 </button>
                             </div>
                         </form>

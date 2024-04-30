@@ -27,7 +27,7 @@
                 </div>
                 <div class="col-auto float-end ms-auto">
                     @if (permissionAccess("m4-s1","is_create")->value == "1")
-                    <a href="#" class="btn add-btn me-2" data-bs-toggle="modal" data-bs-target="#add_salary"><i class="fa fa-plus"></i> @lang('lang.add_new')</a>
+                        <a href="#" class="btn add-btn me-2" data-bs-toggle="modal" data-bs-target="#add_salary"><i class="fa fa-plus"></i> @lang('lang.add_new')</a>
                     @endif
                 </div>
             </div>
@@ -439,7 +439,7 @@
                                 });
                             }
                         },
-                        close: function () {
+                            close: function () {
                         }
                     }
                 }); 
@@ -524,7 +524,6 @@
                         $("#btn-edix-salary").text("Edit");
                         $("#exchange_rate_preview").val(response.success.amount_riel)
                     }
-                   
                 }
             });
         });
@@ -572,6 +571,7 @@
                     type: 'blue',
                 });
             }  else {
+                $(".loading-icon").css('display', 'block')
                 $.confirm({
                     title: '@lang("lang.approve")',
                     content: "@lang('lang.are_you_sure_want_to_approve')?",
@@ -643,6 +643,7 @@
                     text: '@lang("lang.pay")',
                     btnClass: 'add-btn-status',
                     action: function () {
+                        $(".btn-search").prop('disabled', false);
                         $(".loading-icon").css('display', 'block');
                         $.ajax({
                             type: 'POST',
