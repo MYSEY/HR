@@ -29,6 +29,7 @@
                                             <th style="width: 30px;" class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="#: activate to sort column descending">#</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department Name: activate to sort column ascending" style="width: 772.237px;">@lang('lang.name')</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department Name: activate to sort column ascending" style="width: 772.237px;">@lang('lang.amount')</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department Name: activate to sort column ascending" style="width: 772.237px;">@lang('lang.adjustment_type')</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department Name: activate to sort column ascending" style="width: 772.237px;">@lang('lang.adjustment_date')</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department Name: activate to sort column ascending" style="width: 772.237px;">@lang('lang.remark')</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Department Name: activate to sort column ascending" style="width: 772.237px;">@lang('lang.created_at')</th>
@@ -42,6 +43,7 @@
                                                     <td class="sorting_1 ids">{{$item->id}}</td>
                                                     <td class="name_khmer">{{$item->EmployeeName}}</td>
                                                     <td class="name_english">{{$item->amount}}</td>
+                                                    <td class="name_english">{{$item->adjustment_type == 'include_taxe' ? 'Include Taxe' : 'Exclued Taxe'}}</td>
                                                     <td class="position_type">{{ \Carbon\Carbon::parse($item->adjustment_date)->format('d-M-Y') ?? '' }}</td>
                                                     <td class="position_range">{{$item->description}}</td>
                                                     <td>{{ \Carbon\Carbon::parse($item->created_at)->format('d-M-Y') ?? '' }}</td>
@@ -107,6 +109,14 @@
                                 </div>
                             </div>
                             <div class="form-group">
+                                <label>@lang('lang.adjustment_type')<span class="text-danger">*</span></label>
+                                <select class="form-control hr-select2-option @error('adjustment_type') is-invalid @enderror" name="adjustment_type" id="adjustment_type" required>
+                                    <option selected disabled> -- @lang('lang.select') --</option>
+                                    <option value="include_taxe">Include Taxe</option>
+                                    <option value="exclued_taxe">Exclued Taxe</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
                                 <label>@lang('lang.remark')</label>
                                 <textarea class="form-control" type="text" name="description" id="description"></textarea>
                             </div>
@@ -155,6 +165,14 @@
                                 <div class="cal-icon">
                                     <input class="form-control datetimepicker" type="text" required id="e_adjustment_date" name="adjustment_date" value="">
                                 </div>
+                            </div>
+                            <div class="form-group">
+                                <label>@lang('lang.adjustment_type')<span class="text-danger">*</span></label>
+                                <select class="form-control hr-select2-option @error('adjustment_type') is-invalid @enderror" name="adjustment_type" id="e_adjustment_type" required>
+                                    <option selected disabled> -- @lang('lang.select') --</option>
+                                    {{-- <option value="include_taxe">Include Taxe</option>
+                                    <option value="exclued_taxe">Exclued Taxe</option> --}}
+                                </select>
                             </div>
                             <div class="form-group">
                                 <label>@lang('lang.remark')</label>
@@ -226,6 +244,13 @@
                                 }));
                             });
                         }
+                        
+                        if (response.success.adjustment_type == 'include_taxe') {
+                            $("#e_adjustment_type").append('<option selected value="include_taxe">Include Taxe</option> <option value="exclued_taxe">Exclued Taxe</option>');
+                        } else {
+                            $("#e_adjustment_type").append('<option selected value="exclued_taxe">Exclued Taxe</option> <option value="include_taxe">Include Taxe</option>');   
+                        }
+                        
                         $('#e_id').val(response.success.id);
                         $('#e_amount').val(response.success.amount);
                         $('#e_adjustment_date').val(response.success.adjustment_date);

@@ -32,7 +32,7 @@
                     <h3 class="page-title">@lang('lang.payslip')</h3>
                     <ul class="breadcrumb">
                         <li class="breadcrumb-item"><a href="#">@lang('lang.dashboard')</a></li>
-                        <li class="breadcrumb-item active">@lang('lang.payslip') / <a href="{{url('payroll')}}">@lang('lang.back_to_list')</a></li>
+                        <li class="breadcrumb-item active">@lang('lang.payslip')</li>
                     </ul>
                 </div>
                 <div class="col-auto float-end ms-auto">
@@ -42,7 +42,8 @@
                         {{-- <button class="btn btn-white">CSV</button>
                         <button class="btn btn-white">PDF</button> --}}
                         @if (permissionAccess("m4-s2","is_print")->value == "1")
-                        <button class="btn btn-white" target="_blank" id="btn_print_payroll"><i class="fa fa-print fa-lg"></i> @lang('lang.print')</button>
+                            <a class="btn btn-white m-1" href="{{url('payroll')}}">@lang('lang.back_to_list')</a>
+                            <button class="btn btn-white m-1" target="_blank" id="btn_print_payroll"><i class="fa fa-print fa-lg"></i> @lang('lang.print')</button>
                         @endif
                     </div>
                 </div>
@@ -152,13 +153,13 @@
                                                     <span class="float-end">${{$payslip->total_severance_pay}}</span>
                                                 </td>
                                             </tr>
-                                            {{-- <tr>
+                                            <tr>
                                                 <td>Adjustment(+/-)</td>
                                                 <td>
-                                                    <span class="float-end">$ 0.00</span>
+                                                    <span class="float-end">$ {{$payslip->adjustment == null ? '0.00' : $payslip->adjustment}}</span>
                                                 </td>
                                             </tr>
-                                            <tr>
+                                            {{-- <tr>
                                                 <td>Leaves  (+/-)</td>
                                                 <td>
                                                     <span class="float-end">$ 0.00</span>
@@ -183,7 +184,7 @@
                                                 $TotalDeductions = $payslip->total_salary_tax_usd + $payslip->total_pension_fund;
                                             @endphp
                                             @php
-                                                $totalNetPay = $TotalEarnings - $TotalDeductions;
+                                                $totalNetPay = $TotalEarnings - $TotalDeductions - $payslip->loan_amount;
                                             @endphp
                                             {{-- @dd($numbersToWords->convertNumbers2Words($TotalDeductions, 1)) --}}
                                             <tr style="background-color: #d2dbdb;">

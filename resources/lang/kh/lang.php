@@ -621,6 +621,7 @@ return[
 	"adjustment_date"=>"កាលបរិច្ឆេទ",
 	"add_adjustment"=>"Add Adjustment",
 	"adjustment_to"=>"Adjustment To",
+	"adjustment_type"=>"Adjustment Type",
 	"qty"=>"បរិមាណ",
 	"quantity"=>"បរិមាណ",
 	"retired"=>"ចូលនិវត្តន៍",

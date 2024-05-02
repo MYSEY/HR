@@ -17,6 +17,7 @@ class PayrollAdjustment extends Model
         'employee_id',
         'amount',
         'adjustment_date',
+        'adjustment_type',
         'description',
         'created_by',
     ];

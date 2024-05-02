@@ -274,7 +274,7 @@
                                                                 <td>$<a href="#">{{ $item->total_salary }}</a></td>
                                                                 <td>{{ $item->PayrollPaymentDate }}</td>
                                                                 <td>{{ $item->Created }}</td>
-                                                                <td><a class="btn btn-sm btn-primary" href="{{ url('payslip', $item->id) }}">@lang('lang.generate_payslip')</a></td>
+                                                                <td><a class="btn btn-sm btn-primary" target="_blank" href="{{ url('payslip', $item->id) }}">@lang('lang.generate_payslip')</a></td>
                                                             </tr>
                                                         @endforeach
                                                     @endif

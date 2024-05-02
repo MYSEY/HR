@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\AdjustmentRequest;
 
 class PayrollItemController extends Controller
 {
@@ -40,7 +41,7 @@ class PayrollItemController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(AdjustmentRequest $request)
     {
         try {
             $data = $request->all();
@@ -96,6 +97,7 @@ class PayrollItemController extends Controller
                 'employee_id'    => $request->employee_id,
                 'amount'    => $request->amount,
                 'adjustment_date'    => $request->adjustment_date,
+                'adjustment_type'    => $request->adjustment_type,
                 'description'    => $request->description,
                 'updated_by'    => Auth::user()->id,
             ]);

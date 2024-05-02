@@ -84,6 +84,7 @@ return[
 	"adjustment_date"=>"Adjustment Date",
 	"add_adjustment"=>"Add Adjustment",
 	"adjustment_to"=>"Adjustment To",
+	"adjustment_type"=>"Adjustment Type",
     "bank"=>"Bank",
     "banks"=>"Banks",
     "balance"=>"Balance",

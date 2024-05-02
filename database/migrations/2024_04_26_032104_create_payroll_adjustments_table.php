@@ -18,6 +18,7 @@ return new class extends Migration
             $table->integer('employee_id');
             $table->decimal('amount',50,2)->default(0);
             $table->date('adjustment_date');
+            $table->string('adjustment_type')->nullable();
             $table->string('description')->nullable();
             $table->bigInteger('created_by')->unsigned()->nullable();
             $table->bigInteger('updated_by')->unsigned()->nullable();
