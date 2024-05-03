@@ -54,6 +54,7 @@ class payrollPreview extends Model
         'total_salary',
         'exchange_rate',
         'adjustment',
+        'adjustment_include_taxe',
         'leaves',
         'created_by',
         'updated_by',

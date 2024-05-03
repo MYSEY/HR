@@ -558,7 +558,6 @@ class PayrollReportController extends Controller
         $branch = Branchs::get();
         if (Auth::user()->RolePermission == 'Employee') {
             $data = GrossSalaryPay::with('users')->where('type_fdc1','FDC-1')->where('employee_id',Auth::user()->id)->where('number_employee',Auth::user()->number_employee)->get();
-            
         } else {
             $data = GrossSalaryPay::with('users')
             ->leftJoin('users', 'gross_salary_pays.employee_id', '=', 'users.id')
@@ -567,8 +566,7 @@ class PayrollReportController extends Controller
                 'users.number_employee',
                 'users.branch_id',
                 'users.department_id',
-            )
-            ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+            )->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
                 if ($RolePermission == 'Employee') {
                     $query->where("users.id", Auth::user()->id);
                 }
@@ -578,9 +576,8 @@ class PayrollReportController extends Controller
                 if ($RolePermission == 'BM') {
                     $query->where("users.branch_id", Auth::user()->branch_id);
                 }
-            })->where('type_fdc1','FDC-1')->Orwhere('type_fdc2','FDC-2')->get();
+            })->where('type_fdc1','FDC-1')->get();
         }
-        
         return view('severance_pays.index',compact('data','branch'));
     }
     public function SeverancePayFil(Request $request){
@@ -590,8 +587,7 @@ class PayrollReportController extends Controller
             $Monthly = Carbon::createFromDate($request->filter_month)->format('m');
             $yearLy = Carbon::createFromDate($request->filter_month)->format('Y');
         }
-        $nssf = GrossSalaryPay::with("users")->where('type_fdc1','FDC-1')
-        ->Orwhere('type_fdc2','FDC-2')
+        $data = GrossSalaryPay::with("users")->where('type_fdc1','FDC-1')
         ->leftJoin('users', 'gross_salary_pays.employee_id', '=', 'users.id')
         ->leftJoin('positions','positions.id','=','users.position_id')
         ->leftJoin('branchs','branchs.id','=','users.branch_id')
@@ -636,7 +632,7 @@ class PayrollReportController extends Controller
             $query->whereYear('payment_date', $yearLy);
         })->get();
         return response()->json([
-            'success'=>$nssf,
+            'success'=>$data,
         ]);
     }
     public function importSeverancePay(Request $request){
