@@ -99,7 +99,7 @@
                                 <label>@lang('lang.amount')<span class="text-danger">*</span></label>
                                 <div class="input-group">
                                     <span class="input-group-text">$</span>
-                                    <input type="number" class="form-control" name="amount" id="amount" required>
+                                    <input type="text" class="form-control" name="amount" id="amount" required>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -157,7 +157,7 @@
                                 <label>@lang('lang.amount')<span class="text-danger">*</span></label>
                                 <div class="input-group">
                                     <span class="input-group-text">$</span>
-                                    <input type="number" class="form-control" name="amount" id="e_amount" required>
+                                    <input type="text" class="form-control" name="amount" id="e_amount" required>
                                 </div>
                             </div>
                             <div class="form-group">

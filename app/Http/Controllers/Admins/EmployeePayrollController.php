@@ -1136,6 +1136,7 @@ class EmployeePayrollController extends Controller
                     'total_salary'              => $item->total_salary,
                     'exchange_rate'             => $item->exchange_rate,
                     'adjustment'                => $item->adjustment,
+                    'adjustment_include_taxe'   => $item->adjustment_include_taxe,
                     'leaves'                    => $item->leaves,
                     'created_by'                => $item->created_by,
                 ]);

@@ -195,7 +195,7 @@ class PayrollReportController extends Controller
         })
         ->when($yearLy, function ($query, $yearLy) {
             $query->whereYear('payment_date', $yearLy);
-        })->orderBy('payment_date','DESC')->get();
+        })->get();
         return response()->json([
             'success'=>$nssf,
         ]);

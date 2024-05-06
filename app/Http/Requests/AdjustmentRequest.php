@@ -25,7 +25,7 @@ class AdjustmentRequest extends FormRequest
     {
         return [
             'employee_id' => 'required',
-            'amount' => 'required',
+            'amount' => 'required|between:0,99.99',
             'adjustment_date' => 'required',
             'adjustment_type' => 'required',
         ];
