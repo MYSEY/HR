@@ -476,7 +476,7 @@ class EmployeePayrollController extends Controller
                         $SeverancePay1 = ($totalSalarySeverancyPay / $totalDayInMonth) * $totalOldDay;
 
                         $type_fdc2 = 'FDC-2';
-                        $type_udc = 'seniority';
+                        $type_udc = 'UDC';
                         $totalSeniority = $totalSalarySeverancyPay;
                     }
                     
