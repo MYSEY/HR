@@ -1031,7 +1031,6 @@ class EmployeePayrollController extends Controller
                     $data['exchange_rate']                  = $request->exchange_rate;
                     $data['created_by']                     = Auth::user()->id;
                     payrollPreview::create($data);
-                    
                 }
                 Toastr::success('Created payroll successfully.','Success');
                 return redirect()->back();
