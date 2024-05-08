@@ -155,6 +155,9 @@
                                             <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
                                                 colspan="2" aria-sort="ascending" aria-label="Profle: activate to sort column descending"
                                                 style="text-align: center">@lang('lang.special_leave')</th>
+                                                <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
+                                                colspan="2"  aria-sort="ascending" aria-label="unpaid_leave: activate to sort column descending"
+                                                style="text-align: center">@lang('lang.unpaid_leave')</th>
                                             <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
                                                 rowspan="2" aria-sort="ascending" aria-label="reason: activate to sort column descending">@lang('lang.reason')</th>
                                             <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
@@ -174,6 +177,8 @@
                                             <th>@lang('lang.balance')</th>
                                             <th>@lang('lang.day_taken')</th>
                                             <th>@lang('lang.balance')</th>
+                                            <th>@lang('lang.day_taken')</th>
+                                            <th>@lang('lang.balance')</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -185,24 +190,29 @@
                                             @endphp
                                             @foreach ($dataLeaveRequest as $key=>$request)
                                                 @php
-                                                    if ($request->leaveType->type == "annual_leave") {
-                                                        $total_annual_leave += $request->number_of_day;
-                                                    }else if ($request->leaveType->type == "sick_leave") {
-                                                        $total_sick_leave += $request->number_of_day;
-                                                    }else if ($request->leaveType->type == "special_leave") {
-                                                        $total_spacial_leave += $request->number_of_day;
+                                                    if ($request->status != "rejected" && $request->status != "rejected_lm" && $request->status != "rejected_hod") {
+                                                        if ($request->leaveType->type == "annual_leave") {
+                                                            $total_annual_leave += $request->number_of_day;
+                                                        }else if ($request->leaveType->type == "sick_leave") {
+                                                            $total_sick_leave += $request->number_of_day;
+                                                        }else if ($request->leaveType->type == "special_leave") {
+                                                            $total_spacial_leave += $request->number_of_day;
+                                                        }
                                                     }
+                                                    
                                                 @endphp
                                                 <tr class="odd">
                                                     <td>{{$key+1}}</td>
                                                     <td>{{\Carbon\Carbon::parse($request->start_date)->format('d-M-Y') ?? ''}}</td>
                                                     <td>{{\Carbon\Carbon::parse($request->end_date)->format('d-M-Y') ?? ''}}</td>
                                                     <td>{{$request->leaveType->type == "annual_leave"? $request->number_of_day : 0}}</td>
-                                                    <td>{{$request->leaveType->type == "annual_leave" ? $LeaveAllocation->default_annual_leave - $total_annual_leave : 0}}</td>
+                                                    <td>{{$request->status != "rejected" && $request->status != "rejected_lm" && $request->status != "rejected_hod" ? $request->leaveType->type == "annual_leave" ? $LeaveAllocation->default_annual_leave - $total_annual_leave : 0 : 0}}</td>
                                                     <td>{{$request->leaveType->type == "sick_leave"? $request->number_of_day : 0}}</td>
-                                                    <td>{{$request->leaveType->type == "sick_leave" ? $LeaveAllocation->default_sick_leave - $total_sick_leave : 0}}</td>
+                                                    <td>{{$request->status != "rejected" && $request->status != "rejected_lm" && $request->status != "rejected_hod" ? $request->leaveType->type == "sick_leave" ? $LeaveAllocation->default_sick_leave - $total_sick_leave : 0 : 0}}</td>
                                                     <td>{{$request->leaveType->type == "special_leave"? $request->number_of_day : 0}}</td>
-                                                    <td>{{$request->leaveType->type == "special_leave" ? $LeaveAllocation->default_special_leave - $total_spacial_leave : 0}}</td>
+                                                    <td>{{$request->status != "rejected" && $request->status != "rejected_lm" && $request->status != "rejected_hod" ? $request->leaveType->type == "special_leave" ? $LeaveAllocation->default_special_leave - $total_spacial_leave : 0 : 0}}</td>
+                                                    <td>{{$request->leaveType->type == "unpaid_leave" ? "-".$request->number_of_day : 0}}</td>
+                                                    <td>0</td>
                                                     <td>{{$request->reason}}</td>
                                                     <td>{{$request->remark}}</td>
                                                     <td>
