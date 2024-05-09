@@ -1273,11 +1273,11 @@ class EmployeePayrollController extends Controller
 
     public function payrollReviewDelete(Request $request){
         try{
-            $ids = $request->ids;
-            payrollPreview::whereIn('id',explode(",",$ids))->delete();
-            PreviewNationalSocialSecurityFund::whereIn('id',explode(",",$ids))->delete();
-            PreviewGrossSalaryPay::whereIn('id',explode(",",$ids))->delete();
-            PreviewBonus::whereIn('id',explode(",",$ids))->delete();
+            $number_employee = $request->number_employee;
+            payrollPreview::whereIn('number_employee',explode(",",$number_employee))->delete();
+            PreviewNationalSocialSecurityFund::whereIn('number_employee',explode(",",$number_employee))->delete();
+            PreviewGrossSalaryPay::whereIn('number_employee',explode(",",$number_employee))->delete();
+            PreviewBonus::whereIn('number_employee',explode(",",$number_employee))->delete();
             Toastr::success('Payroll deleted successfully.','Success');
             return redirect()->back();
         }catch(\Exception $e){
