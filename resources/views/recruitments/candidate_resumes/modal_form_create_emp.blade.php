@@ -515,6 +515,9 @@
                                 }
                             });
                         }
+                        if (response.success.pro_rate == "1") {
+                            $("#Pro-Rate").prop("checked", true);
+                        };
                         $("#candidate_id").val(id);
                         $(".number_employee_edit").val(response.success.number_employee);
                         // $(".number_employee").val(response.autoEmpId);
@@ -612,6 +615,10 @@
                             $("#btn-print-loading").css('display', 'none');
                             return false;
                         }else{
+                            let pro_rate = "0";
+                            if ($("#Pro-Rate").prop("checked") == true) {
+                                pro_rate = "1";
+                            }
                             axios.post('{{ URL('recruitment/candidate-resume/createemp') }}', {
                                 candidate_id: $("#candidate_id").val(),
                                 number_employee: $("#number_employee").val(),
@@ -628,6 +635,7 @@
                                 id_card_number: $("#id_card_number").val(),
                                 personal_phone_number: $("#personal_phone_number").val(),
                                 position_type: $("#emp_position option:checked").attr('data-id'),
+                                pro_rate: pro_rate,
                                 basic_salary: $("#basic_salary").val(),
                                 salary_increas: $("#salary_to_increase").val(),
                                 current_province: $("#current_province").val(),
@@ -648,6 +656,8 @@
                                 var date_of_birth = new Date(data.date_of_birth);
                                 var date_of_commencement = new Date(data.join_date);
                                 var fdc_date = new Date(data.fdc_date);
+                                fdc_date.setDate(fdc_date.getDate() - 1);
+                                fdc_date = new Date(fdc_date);
                                 let day = formatDate( date_of_birth, 'km', format_date={day: true});
                                 let month = formatDate( date_of_birth, 'km', format_date={month: true});
                                 let year = formatDate( date_of_birth, 'km', format_date={year: true});

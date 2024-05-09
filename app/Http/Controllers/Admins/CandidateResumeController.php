@@ -647,6 +647,7 @@ class CandidateResumeController extends Controller
                     'line_manager' => $request->line_manager,
                     'salary_increas' => $request->salary_increas,
                     'position_type' => $request->position_type,
+                    'pro_rate' => $request->pro_rate,
                     'department_id' =>$request->department_id,
                     'join_date' => $request->date_of_commencement,
                     'fdc_date' => $newDateTime,
