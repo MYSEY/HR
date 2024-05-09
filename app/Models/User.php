@@ -15,6 +15,7 @@ use App\Models\Conmmunes;
 use App\Models\Education;
 use App\Models\Department;
 use App\Models\Experience;
+use App\Models\CandidateResume;
 use App\Models\Transferred;
 use Illuminate\Support\Str;
 use App\Models\StaffPromoted;
@@ -179,6 +180,12 @@ class User extends Authenticatable
     }
     public function resignStatus(){
         return $this->belongsTo(Option::class,'resign_reason', 'id');
+    }
+    public function recruitment(){
+        return $this->belongsTo(CandidateResume::class,'number_employee', 'number_employee')->select(
+            'number_employee',
+            'pro_rate'
+        );
     }
 
     public function educations()

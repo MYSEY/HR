@@ -291,6 +291,7 @@ class UserController extends Controller
         ->with("currentdistrict")
         ->with("currentcommune")
         ->with("currentvillage")
+        ->with("recruitment")
         ->first();
         return response()->json([
             'success'=>$data,

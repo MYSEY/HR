@@ -54,6 +54,7 @@ class CandidateResume extends Model
         'basic_salary',
         'salary_increas',
         'position_type',
+        'pro_rate',
         'department_id',
         'date_of_birth',
         'current_province',

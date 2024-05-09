@@ -1030,8 +1030,10 @@
                         $("#pr_employee_id").text(data.number_employee);
                         $("#pr_basic_salary").text(data.basic_salary);
                         $("#pr_salary_increase").text(data.salary_increas);
-                        if (data.position.position_type == "Field Staff") {
+                        if (data.recruitment && data.recruitment.pro_rate == "1") {
                             $("#pr_supporting_or_field_staff").text("ដោយធៀបនិងភាគរយការងារសម្រេចបានសម្រាប់បុគ្គលិកឥណទាន (គិតតាម Pro-Rate)");
+                        }else{
+                            $("#pr_supporting_or_field_staff").text("");
                         }
                         print_pdf();
                         window.setTimeout(function() {
