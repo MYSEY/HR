@@ -218,7 +218,7 @@
                                                         @foreach ($data as $item)
                                                             <tr class="odd">
                                                                 <td>
-                                                                    <input type="checkbox" class="sub_chk" data-id="{{$item->id}}">
+                                                                    <input type="checkbox" class="sub_chk" data-id="{{$item->number_employee}}">
                                                                 </td>
                                                                 <td class="stuck-scroll-3"><a href="#">{{ $item->users == null ? '' : $item->users->number_employee }}</a></td>
                                                                 <td class="stuck-scroll-3"><a href="#">{{ $item->users == null ? '' : $item->users->EmployeeName }}</span></a></td>
@@ -398,7 +398,7 @@
             $(".sub_chk:checked").each(function() {  
                 allVals.push($(this).attr('data-id'));
             });
-            var join_selected_values = allVals.join(",");
+            var number_employee = allVals.join(",");
             if(allVals.length <=0)  
             {
                 $.alert({
@@ -419,7 +419,7 @@
                             action: function(){
                                 var id = this.$content.find('.id').val();
                                 axios.post('{{ URL("payroll/review/delete") }}', {
-                                    ids : join_selected_values
+                                    number_employee : number_employee
                                 }).then(function(response) {
                                     new Noty({
                                         title: "",
@@ -562,7 +562,7 @@
             $(".sub_chk:checked").each(function() {  
                 allVals.push($(this).attr('data-id'));
             });
-            var join_selected_values = allVals.join(",");
+            var number_employee = allVals.join(",");
             if(allVals.length <=0)  
             {
                 $.alert({
@@ -583,7 +583,7 @@
                             btnClass: 'btn-blue',
                             action: function(){
                             axios.post('{{ URL('payroll/approved') }}',{
-                                'ids': join_selected_values,
+                                'ids': number_employee,
                             }).then(function(response) {
                                 new Noty({
                                     title: "",
