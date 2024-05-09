@@ -134,9 +134,9 @@
                         </div>
                     </div>
                     <div class="submit-section">
-                        <button type="submit" class="btn btn-primary submit-btn btn-apply">
-                            <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading') </span>
-                            <span class="btn-txt">@lang('lang.apply')</span>
+                        <button type="button" class="btn btn-primary btn-apply" id="btn_save">
+                            <span class="btn-text-save">@lang('lang.apply')</span>
+                            <span id="btn-save-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading') </span>
                         </button>
                     </div>
                 </form>
@@ -308,9 +308,33 @@
         
         $(".btn-apply").on("click", function() {
             var num_miss = 0;
+            $(".btn-apply").attr('disabled',true);
+            $("#btn-save-loading").css('display', 'block');
+            $(".btn-text-save").css("display", 'none');
+            if ($("#leave_type_id").val() ==null || $("#leave_type_id").val() =="") {
+                num_miss++;
+                new Noty({
+                    title: "",
+                    text: "Please check input leave type required",
+                    type: "error",
+                    timeout: 3000,
+                    icon: true
+                }).show();
+                $(".btn-apply").attr('disabled',false);
+                $("#btn-save-loading").css('display', 'none');
+                $(".btn-text-save").css("display", 'block');
+            }
             $(".leave_required").each(function(){
                 if($(this).val()==""){ 
                     num_miss++;
+                    $(this).addClass("is-invalid");
+                    $(this).removeClass("is-valid");
+                    $(".btn-apply").attr('disabled',false);
+                    $("#btn-save-loading").css('display', 'none');
+                    $(".btn-text-save").css("display", 'block');
+                }else{
+                    $(this).removeClass("is-invalid");
+                    $(this).addClass("is-valid");
                 }
             });
             if (num_miss>0 || $("#number_of_day").val() == 0) {
