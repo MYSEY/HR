@@ -583,7 +583,7 @@
                             btnClass: 'btn-blue',
                             action: function(){
                             axios.post('{{ URL('payroll/approved') }}',{
-                                'ids': number_employee,
+                                'number_employee': number_employee,
                             }).then(function(response) {
                                 new Noty({
                                     title: "",

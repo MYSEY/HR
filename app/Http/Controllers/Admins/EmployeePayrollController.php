@@ -1049,11 +1049,11 @@ class EmployeePayrollController extends Controller
 
     public function payrollApproved(Request $request){
         try{
-            $ids = $request->ids;
-            $dataPayroll = payrollPreview::whereIn('id',explode(",",$ids))->get();
-            $dataNssf = PreviewNationalSocialSecurityFund::whereIn('id',explode(",",$ids))->get();
-            $dataGrossSalaryPay = PreviewGrossSalaryPay::whereIn('id',explode(",",$ids))->get();
-            $dataBonus = PreviewBonus::whereIn('id',explode(",",$ids))->get();
+            $number_employee = $request->number_employee;
+            $dataPayroll = payrollPreview::whereIn('number_employee',explode(",",$number_employee))->get();
+            $dataNssf = PreviewNationalSocialSecurityFund::whereIn('number_employee',explode(",",$number_employee))->get();
+            $dataGrossSalaryPay = PreviewGrossSalaryPay::whereIn('number_employee',explode(",",$number_employee))->get();
+            $dataBonus = PreviewBonus::whereIn('number_employee',explode(",",$number_employee))->get();
             foreach ($dataBonus as $item) {
                 Bonus::firstOrCreate([
                     'employee_id'             => $item->employee_id,
