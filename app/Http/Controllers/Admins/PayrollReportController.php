@@ -22,6 +22,7 @@ use App\Exports\ExportSeverancePay;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Models\PreviewGrossSalaryPay;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use App\Models\NationalSocialSecurityFund;
 use App\Repositories\Admin\EmployeeRepository;
@@ -657,7 +658,25 @@ class PayrollReportController extends Controller
                             'total_gross_salary'            => $item[3],
                             'total_fdc1'                    => $item[4],
                             'type_fdc1'                     => $item[5],
-                            'payment_date'                  => $item[6],
+                            'total_fdc2'                     => $item[6],
+                            'type_fdc2'                     => $item[7],
+                            'total_seniority'               => $item[8],
+                            'type_udc'                      => $item[9],
+                            'payment_date'                  => $item[10],
+                            'created_by'                    => Auth::user()->id,
+                        ]);
+                        PreviewGrossSalaryPay::firstOrCreate([
+                            'employee_id'                   => $employee->id,
+                            'number_employee'               => $item[0],
+                            'basic_salary'                  => $item[2],
+                            'total_gross_salary'            => $item[3],
+                            'total_fdc1'                    => $item[4],
+                            'type_fdc1'                     => $item[5],
+                            'total_fdc2'                     => $item[6],
+                            'type_fdc2'                     => $item[7],
+                            'total_seniority'               => $item[8],
+                            'type_udc'                      => $item[9],
+                            'payment_date'                  => $item[10],
                             'created_by'                    => Auth::user()->id,
                         ]);
                     }

@@ -459,15 +459,15 @@ class EmployeePayrollController extends Controller
                     $totalSeverancePay = $totalFirstSeverancPay != null ? $totalFirstSeverancPay : $totalBasicSalary;
                     $totalOtherBenefit = $totalSeverancePay + $monthlyQuarterlyIncentive + $adjustmentIncludeTaxe + $annualBonus + $otherBenefit + $totalBunus + $item->phone_allowance + $totalChildAllowance;
 
-                    $endContractDeadline= Carbon::createFromDate($item->fdc_end)->format('Y-m');
+                    $endContractDeadline= Carbon::createFromDate($item->fdc_date)->format('Y-m');
                     $paymentDate = Carbon::createFromDate($request->payment_date)->format('Y-m');
                     if($endContractDeadline == $paymentDate){
-                        $endMonth = Carbon::createFromDate($item->fdc_end)->format('m');
+                        $endMonth = Carbon::createFromDate($item->fdc_date)->format('m');
                         $totalDayInMonth = Carbon::now()->month($endMonth)->daysInMonth;
-                        $contract_deadline = Carbon::createFromDate($item->fdc_end)->format('Y-m');
+                        $contract_deadline = Carbon::createFromDate($item->fdc_date)->format('Y-m');
                         $currentYear = $contract_deadline.'-'.$totalDayInMonth;
                         // new salary and new total days
-                        $startDate = Carbon::parse($item->fdc_end);
+                        $startDate = Carbon::parse($item->fdc_date);
                         $endDate = Carbon::parse($currentYear);
                         $totalNewDays = $startDate->diffInDays($endDate);
                         $SeverancePay2 = ($totalSalarySeverancyPay / $totalDayInMonth) * $totalNewDays;
@@ -507,7 +507,7 @@ class EmployeePayrollController extends Controller
                     }
                     
                     //sum salary and sum other benefit befor tax free
-                    $dataGrossSalary = PreviewGrossSalaryPay::create([
+                    $dataGrossSalary = GrossSalaryPay::create([
                         'employee_id'               => $item->id,
                         'number_employee'           => $item->number_employee,
                         'basic_salary'              => $item->basic_salary,
@@ -969,8 +969,8 @@ class EmployeePayrollController extends Controller
                     $paymentDate = Carbon::createFromDate($request->payment_date)->format('Y-m');
                     if($item->emp_status == 1){
                         if($monthEndDate == $paymentDate){
-                            $dataSeveranc = GrossSalaryPay::where('employee_id', $item->id)->whereNotNull('type_fdc1')->sum('total_fdc1');
-                            $totalContractSeverancePay = $dataSeveranc * 0.05;
+                            $dataFDC1 = GrossSalaryPay::where('employee_id',$item->id)->whereNotNull('type_fdc1')->sum('total_fdc1');
+                            $totalContractSeverancePay = $dataFDC1 * 0.05;
                             $dataSeverance = SeverancePay::create([
                                 'employee_id'                   => $item->id,
                                 'number_employee'               => $item->number_employee,
@@ -985,8 +985,8 @@ class EmployeePayrollController extends Controller
 
                     if($item->emp_status == 10){
                         if($monthEndDate == $paymentDate){
-                            $dataSeveranc = GrossSalaryPay::where('employee_id', $item->id)->whereNotNull('type_fdc1')->sum('total_fdc1');
-                            $totalContractSeverancePay = $dataSeveranc * 0.05;
+                            $dataFDC2 = GrossSalaryPay::where('employee_id', $item->id)->whereNotNull('type_fdc2')->sum('total_fdc2');
+                            $totalContractSeverancePay = $dataFDC2 * 0.05;
                             $dataSeverance = SeverancePay::create([
                                 'employee_id'                   => $item->id,
                                 'number_employee'               => $item->number_employee,

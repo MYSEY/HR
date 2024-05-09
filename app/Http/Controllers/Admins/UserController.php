@@ -580,6 +580,29 @@ class UserController extends Controller
                     //     'resign_reason' => $request->resign_reason
                     // ]);
                 }else{
+                    $totalSalary = 0;
+                    if ($request->emp_status == 3 || $request->emp_status == 4 || $request->emp_status == 5 || $request->emp_status == 6 || $request->emp_status == 7) {
+                        //function find days in end month
+                        $endMonth = Carbon::createFromDate($request->resign_date)->format('m');
+                        $totalDayInMonth = Carbon::now()->month($endMonth)->daysInMonth;
+                        
+                        //find start date employee join date
+                        $date_of_month = Carbon::createFromDate($request->resign_date)->format('Y-m');
+                        $currentYear = $date_of_month.'-'.$totalDayInMonth;
+                        
+                        //find total working day in month
+                        $startDate = Carbon::parse($request->resign_date);
+                        $endDate = Carbon::parse($currentYear);
+                        
+                        // find total days in month
+                        $totalNewDays = $startDate->diffInDays($endDate) + 1;
+                        $totalOldDay = $totalDayInMonth - $totalNewDays;
+                        $employee = User::where('id',$request->id)->first();
+                        dd($employee->basic_salary);
+                        $totalSalary = ($employee->basic_salary / 22) * $totalOldDay;
+                    }
+                    dd($totalSalary);
+
                     User::where('id',$request->id)->update([
                         'emp_status' => $request->emp_status,
                         'resign_date' => $request->resign_date,
