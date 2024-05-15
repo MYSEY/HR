@@ -426,6 +426,14 @@
                                     <input type="checkbox" class="c_and_b_checkbox g_checkbox" id="g_delete" > <span class="checkmark"></span>
                                 </label>
                             </div>
+                            <div class="col-md-3">
+                                {{-- <label class="container-checkbox">@lang('lang.print')
+                                    <input type="checkbox" class="c_and_b_checkbox g_checkbox" id="g_print"> <span class="checkmark"></span>
+                                </label> --}}
+                                <label class="container-checkbox">@lang('lang.export')
+                                    <input type="checkbox" class="c_and_b_checkbox g_checkbox" id="g_export"> <span class="checkmark"></span>
+                                </label>
+                            </div>
                         </div>
                     </div>
                     <div class="col-md-12">

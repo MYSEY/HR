@@ -271,6 +271,7 @@ var dataPermission = function () {
                     "is_create": $("#g_add").val(),
                     "is_approve": $("#g_approve").val(),
                     "is_delete": $("#g_delete").val(),
+                    "is_export": $("#g_export").val(),
                 }
             ]
         })
