@@ -187,6 +187,7 @@
                                                 $total_annual_leave= 0;
                                                 $total_sick_leave= 0;
                                                 $total_spacial_leave= 0;
+                                                $total_unpaid_leave= 0;
                                             @endphp
                                             @foreach ($dataLeaveRequest as $key=>$request)
                                                 @php
@@ -197,6 +198,8 @@
                                                             $total_sick_leave += $request->number_of_day;
                                                         }else if ($request->leaveType->type == "special_leave") {
                                                             $total_spacial_leave += $request->number_of_day;
+                                                        }else if ($request->leaveType->type == "unpaid_leave") {
+                                                            $total_unpaid_leave += $request->number_of_day;
                                                         }
                                                     }
                                                     
@@ -211,8 +214,8 @@
                                                     <td>{{$request->status != "rejected" && $request->status != "rejected_lm" && $request->status != "rejected_hod" ? $request->leaveType->type == "sick_leave" ? $LeaveAllocation->default_sick_leave - $total_sick_leave : 0 : 0}}</td>
                                                     <td>{{$request->leaveType->type == "special_leave"? $request->number_of_day : 0}}</td>
                                                     <td>{{$request->status != "rejected" && $request->status != "rejected_lm" && $request->status != "rejected_hod" ? $request->leaveType->type == "special_leave" ? $LeaveAllocation->default_special_leave - $total_spacial_leave : 0 : 0}}</td>
-                                                    <td>{{$request->leaveType->type == "unpaid_leave" ? "-".$request->number_of_day : 0}}</td>
-                                                    <td>0</td>
+                                                    <td>{{$request->leaveType->type == "unpaid_leave" ? $request->number_of_day : 0}}</td>
+                                                    <td>{{$request->leaveType->type == "unpaid_leave"? $total_unpaid_leave : 0}}</td>
                                                     <td>{{$request->reason}}</td>
                                                     <td>{{$request->remark}}</td>
                                                     <td>
