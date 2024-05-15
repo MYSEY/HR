@@ -144,11 +144,11 @@
                                                                             @elseif ($request->status == "rejected_lm")
                                                                                 <span class="badge bg-inverse-danger" style="font-size: 13px;">Line manager rejecte</span>
                                                                             @elseif ($request->status == "rejected_hod")
-                                                                                <span class="badge bg-inverse-danger" style="font-size: 13px;">Head department rejecte</span>
+                                                                                <span class="badge bg-inverse-danger" style="font-size: 13px;">Rejecte</span>
                                                                             @elseif ($request->status == "pending")
                                                                             <span class="badge bg-inverse-info" style="font-size: 13px;">Pending line manager approve</span>
                                                                             @elseif ($request->status == "approved_lm")
-                                                                                <span class="badge bg-inverse-info" style="font-size: 13px;">Pending head department approve</span>
+                                                                                <span class="badge bg-inverse-info" style="font-size: 13px;">Waiting for final approve</span>
                                                                             @elseif ($request->status == "approved_hod")
                                                                                 <span class="badge bg-inverse-info" style="font-size: 13px;">Pending HR Approve</span>
                                                                             @elseif($request->status == "approved")
