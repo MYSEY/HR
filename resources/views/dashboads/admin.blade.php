@@ -343,7 +343,7 @@
                     </div>
                 </div>
             @endif
-            <div class="col-md-12 col-lg-6 col-xl-8 d-flex">
+            <div class="col-md-12 col-lg-6 col-xl-8">
                 <div class="row">
                     @if (permissionAccess("m1-s1","is_dashboard")->is_dashboard["is_total_resigned_staff"] == "1")
                         <div class="col-md-6 col-sm-6 col-lg-6 col-xl-6">
