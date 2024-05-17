@@ -233,20 +233,22 @@
                                         <a style="border-bottom: 3px solid #f0f0f0;" href="{{url($menu['url'])}}"><i class="{{$menu["icon"]}}"></i><span>@lang($menu["name"])</span></a>
                                     </li>
                                 @else
-                                    <li class="submenu">
-                                        <a href="javascript:void(0);" style="border-bottom: 3px solid #f0f0f0;">
-                                            <i class="{{$menu["icon"]}}"></i><span>@lang($menu["name"])</span><span class="menu-arrow"></span>
-                                        </a>
-                                        <ul>
-                                            @foreach (RolePermission()->subMenu as $sub_menu)
-                                                @if ($sub_menu["sub_menu_id"] == $menu["menu_id"])
-                                                    <li>
-                                                        <a class="" href="{{url($sub_menu['url'])}}">@lang($sub_menu["name"])</a>
-                                                    </li>
-                                                @endif
-                                            @endforeach
-                                        </ul>
-                                    </li>
+                                    @if ($menu["name"] !="lang.employee" || Auth::user()->RolePermission !="Employee")
+                                        <li class="submenu">
+                                            <a href="javascript:void(0);" style="border-bottom: 3px solid #f0f0f0;">
+                                                <i class="{{$menu["icon"]}}"></i><span>@lang($menu["name"])</span><span class="menu-arrow"></span>
+                                            </a>
+                                            <ul>
+                                                @foreach (RolePermission()->subMenu as $sub_menu)
+                                                    @if ($sub_menu["sub_menu_id"] == $menu["menu_id"])
+                                                        <li>
+                                                            <a class="" href="{{url($sub_menu['url'])}}">@lang($sub_menu["name"])</a>
+                                                        </li>
+                                                    @endif
+                                                @endforeach
+                                            </ul>
+                                        </li>
+                                    @endif
                                 @endif
                             @endforeach
                         </ul>

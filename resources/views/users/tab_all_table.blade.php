@@ -6,7 +6,7 @@
                     <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                         <div class="row">
                             <div class="col-sm-12">
-                                <table class="table table-striped custom-table datatable dataTable no-footer tbl_probation"
+                                <table class="table table-striped no-footer tbl_probation"
                                     id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
                                     <thead>
                                         <tr>
@@ -36,7 +36,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @if (count($dataProbation)>0)
+                                        {{-- @if (count($dataProbation)>0)
                                             @foreach ($dataProbation as $key=>$item)
                                                 <tr class="odd">
                                                     <td class="ids stuck-scroll-4">{{++$key ?? ''}}</td>
@@ -145,7 +145,7 @@
                                                     </td>
                                                 </tr>
                                             @endforeach
-                                        @endif
+                                        @endif --}}
                                     </tbody>
                                 </table>
                             </div>
@@ -162,7 +162,7 @@
                     <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                         <div class="row">
                             <div class="col-sm-12">
-                                <table class="table table-striped custom-table datatable dataTable no-footer tbl_fdc"
+                                <table class="table table-striped no-footer tbl_fdc"
                                     id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
                                     <thead>
                                         <tr>
@@ -193,7 +193,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @if (count($dataFDC)>0)
+                                        {{-- @if (count($dataFDC)>0)
                                             @foreach ($dataFDC as $key=>$item)
                                                 <tr class="odd">
                                                     <td class="ids stuck-scroll-4">{{++$key ?? ""}}</td>
@@ -317,7 +317,7 @@
                                                     </td>
                                                 </tr>
                                             @endforeach
-                                        @endif
+                                        @endif --}}
                                     </tbody>
                                 </table>
                             </div>
@@ -334,7 +334,7 @@
                     <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                         <div class="row">
                             <div class="col-sm-12">
-                                <table class="table table-striped custom-table datatable dataTable no-footer tbl-udc "
+                                <table class="table table-striped no-footer tbl-udc "
                                     id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
                                     <thead>
                                         <tr>
@@ -364,7 +364,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @if (count($dataUDC)>0)
+                                        {{-- @if (count($dataUDC)>0)
                                             @foreach ($dataUDC as $key=>$item)
                                                 <tr class="odd">
                                                     <td class="ids stuck-scroll-4">{{++$key ?? ""}}</td>
@@ -465,7 +465,7 @@
                                                     </td>
                                                 </tr>
                                             @endforeach
-                                        @endif
+                                        @endif --}}
                                     </tbody>
                                 </table>
                             </div>
@@ -483,7 +483,7 @@
                         <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                             <div class="row">
                                 <div class="col-sm-12">
-                                    <table class="table table-striped custom-table datatable dataTable no-footer tbl_reason"
+                                    <table class="table table-striped no-footer tbl_reason"
                                         id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
                                         <thead>
                                             <tr>
@@ -514,7 +514,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @if (count($dataResign)>0)
+                                            {{-- @if (count($dataResign)>0)
                                                 @foreach ($dataResign as $key=>$item)
                                                     <tr class="odd">
                                                         <td class="ids stuck-scroll-4">{{++$key ?? ""}}</td>
@@ -587,15 +587,14 @@
                                                                 <div class="dropdown dropdown-action">
                                                                     <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i  class="material-icons">more_vert</i></a>
                                                                     <div class="dropdown-menu dropdown-menu-right">
-                                                                        {{-- <a class="dropdown-item userUpdate" data-id="{{$item->id}}"><i class="fa fa-pencil m-r-5"></i> Edit</a> --}}
-                                                                        <a class="dropdown-item userDelete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_user"><i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
+                                                                       <a class="dropdown-item userDelete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_user"><i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
                                                                     </div>
                                                                 </div>
                                                             @endif
                                                         </td>
                                                     </tr>
                                                 @endforeach
-                                            @endif
+                                            @endif --}}
                                         </tbody>
                                     </table>
                                 </div>
@@ -612,10 +611,13 @@
 <script src="{{asset('/admin/js/format-date-kh.js')}}"></script>
 <script type="text/javascript">
     $(function(){
+        showDatabytab(2, {})
         var ref_this = $("ul.nav-tabs li a.active");
         var tab_status = ref_this.attr("data-tab-id");
         $("#tab_candidate_resume, #tab_probation, #tab_fdc, #tab_udc, #tab_reason, #tab_cancel").on("click", function() {
+            // $(".clear-data-search").val("");
             tab_status = $(this).attr('data-tab-id');
+            showDatabytab(tab_status, {})
         });
         $(".btn-search").on("click", function(){
             $(this).prop('disabled', true);

@@ -44,12 +44,12 @@
                 <div class="row filter-btn">
                     <div class="col-sm-2 col-md-2"> 
                         <div class="form-group">
-                            <input type="text" class="form-control" name="employee_id" id="number_employee" placeholder="@lang('lang.employee_id')" value="{{old('number_employee')}}">
+                            <input type="text" class="form-control clear-data-search" name="employee_id" id="number_employee" placeholder="@lang('lang.employee_id')" value="{{old('number_employee')}}">
                         </div>
                     </div>
                     <div class="col-sm-2 col-md-2"> 
                         <div class="form-group">
-                            <input type="text" class="form-control" name="employee_name" id="employee_name" placeholder="@lang('lang.employee_name')" value="{{old('employee_name')}}">
+                            <input type="text" class="form-control clear-data-search" name="employee_name" id="employee_name" placeholder="@lang('lang.employee_name')" value="{{old('employee_name')}}">
                         </div>
                     </div>
                     
