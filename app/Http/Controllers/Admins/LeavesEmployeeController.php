@@ -3,15 +3,18 @@
 namespace App\Http\Controllers\Admins;
 
 use App\Http\Controllers\Controller;
+use App\Mail\SendEmail;
 use App\Models\LeaveAllocation;
 use App\Models\LeaveRequest;
 use App\Models\LeaveType;
+use App\Models\mail as ModelsMail;
 use App\Models\User;
 use App\Repositories\Admin\EmployeeRepository;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 
 class LeavesEmployeeController extends Controller
 {
@@ -72,6 +75,7 @@ class LeavesEmployeeController extends Controller
                 return redirect()->back();
                 DB::commit();
             }
+
             if ($LeaveAllocation == null) {
                 LeaveAllocation::create([
                     'employee_id'  => Auth::user()->id,
@@ -109,6 +113,15 @@ class LeavesEmployeeController extends Controller
             $data['employee_id'] = Auth::user()->id;
             $data['created_by'] = Auth::user()->id;
             LeaveRequest::create($data);
+            
+            // for send email
+            $line_manager = User::where("id", Auth::user()->line_manager)->first();
+            $mail_message = ModelsMail::first();
+            if ($line_manager && $mail_message) {
+                if ($line_manager->email) {
+                    Mail::to($line_manager->email)->send(new SendEmail($mail_message));
+                }
+            }
             return response()->json([
                 'success'=>'leave_request_created_successfully',
                 'status'=>200,

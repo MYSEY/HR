@@ -36,6 +36,7 @@ use App\Http\Controllers\Admins\EmployeeProfileController;
 use App\Http\Controllers\Admins\RecruitmentPlanController;
 use App\Http\Controllers\Admins\ChildrenAllowanceController;
 use App\Http\Controllers\Admins\LeavesAdminController;
+use App\Http\Controllers\SendEmailController;
 
 /*
 |--------------------------------------------------------------------------
@@ -120,6 +121,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('/leaves/admin/update', [LeavesAdminController::class,'update']);
     Route::post('/leaves/admin/filter', [LeavesAdminController::class,'filter']);
     Route::post('/leaves/admin/approve', [LeavesAdminController::class,'approve']);
+    Route::post('/leaves/admin/approveds', [LeavesAdminController::class,'approveds']);
     Route::post('/leaves/admin/cancel', [LeavesAdminController::class,'reject']);
     Route::post('/leaves/admin/reject', [LeavesAdminController::class,'reject']);
     Route::get('admin/generat/leaves', [LeavesAdminController::class,'GenerateLeave']);
@@ -400,5 +402,11 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('/fringe-benefit/edit', [FringeBenefitController::class,'edit']);
     Route::post('/fringe-benefit/delete', [FringeBenefitController::class,'destroy']);
     Route::post('/fringe-benefit/import', [FringeBenefitController::class,'import']);
+
+    // for test send email
+    Route::get('/email', [SendEmailController::class,'index']);
+    Route::post('/email/store', [SendEmailController::class,'store']);
+    Route::get('/email/create/{id}', [SendEmailController::class,'formCreate']);
+    Route::post('/email-send', [SendEmailController::class,'send'])->name('send');
 });
 Route::get('lang/{locale}', [LanguageController::class, "lang"]);

@@ -14,6 +14,9 @@ use Illuminate\Http\Request;
 use App\Models\LeaveAllocation;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Mail\SendEmail;
+use App\Models\mail as ModelsMail;
+use Illuminate\Support\Facades\Mail;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
@@ -224,6 +227,7 @@ class LeavesAdminController extends Controller
         try {
             $data = LeaveRequest::find($request->id);
             $role = Auth::user()->RolePermission;
+            
             if($role == "HOD" || $role == "CEO" || $role == 'BOD'){
                 $department = Auth::user()->department;
                 if (Auth::user()->id == $department->direct_manager_id || $role == "CEO" || $role == 'BOD'){
@@ -232,6 +236,14 @@ class LeavesAdminController extends Controller
                 }else{
                     $data['next_approver'] = $department->direct_manager_id;
                     $data['status'] = "approved_lm";
+                    $email_send = User::where("id", $department->direct_manager_id)->first();
+                    // for send email
+                    $mail_message = ModelsMail::first();
+                    if ($email_send && $mail_message) {
+                        if ($email_send->email) {
+                            Mail::to($email_send->email)->send(new SendEmail($mail_message));
+                        }
+                    }
                 }
             }else if ($role == 'BM') {
                 $branch = Auth::user()->branch;
@@ -241,6 +253,14 @@ class LeavesAdminController extends Controller
                 }else{
                     $data['next_approver'] = $branch->direct_manager_id;
                     $data['status'] = "approved_lm";
+                    $email_send = User::where("id", $branch->direct_manager_id)->first();
+                    // for send email
+                    $mail_message = ModelsMail::first();
+                    if ($email_send && $mail_message) {
+                        if ($email_send->email) {
+                            Mail::to($email_send->email)->send(new SendEmail($mail_message));
+                        }
+                    }
                 }
             }else if($role == 'HR') {
                 $data['status'] = "approved";
@@ -252,8 +272,28 @@ class LeavesAdminController extends Controller
             }else{
                 $data['approved_by'] = Auth::user()->id; 
             };
-            
+
             $data->save();
+            DB::commit();
+
+            return response()->json([
+                'message' => 'The process has been successfully.'
+            ]);
+        } catch (\Exception $exp) {
+            DB::rollBack();
+            return response()->json(['message' => $exp->getMessage()], 500);
+        }
+    }
+
+    public function approveds(Request $request){
+        try {
+            $updated = DB::table('leave_requests')
+                ->whereIn('id', $request->ids)
+                ->update([
+                    'status'        => "approved",
+                    'approved_date' => Carbon::now(),
+                    'approved_by'   => Auth::user()->id,
+            ]);
             DB::commit();
             return response()->json([
                 'message' => 'The process has been successfully.'

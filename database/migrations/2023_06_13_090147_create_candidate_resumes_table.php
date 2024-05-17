@@ -47,6 +47,7 @@ return new class extends Migration
             $table->string('interviewed_channel')->nullable();
             $table->string('department_id')->nullable();
             $table->string('position_type')->nullable();
+            $table->enum('pro_rate', ['0', '1'])->default('0');
             $table->date('date_of_birth')->nullable();
             $table->decimal('basic_salary',50,2)->default(0);
             $table->decimal('salary_increas')->default(0);
