@@ -99,6 +99,15 @@
                             <a class="nav-link" data-bs-toggle="tab" id="tab_leave_allocations" href="#leave_allocations" aria-selected="false" data-tab-id="3" role="tab" tabindex="-1">@lang('lang.leave_allocation')</a>
                         </li>
                     </ul>
+                    @if (Auth::user()->RolePermission == "HR")
+                    {{-- @if (permissionAccess("m4-s1","is_delete")->value == "1") --}}
+                        {{-- <button type="button" class="btn btn-sm btn-danger reject_all mt-3">@lang('lang.reject')</button> --}}
+                    {{-- @endif --}}
+                    
+                        @if (permissionAccess("m10-s1","is_approve")->value == "1")
+                            <button type="button" class="btn btn-sm btn-success btn_approved_all mt-3" href="#" data-id=""> @lang('lang.approve')</button> 
+                        @endif
+                    @endif
                     <div class="tab-content">
                         <div class="tab-pane active show" id="leave_request" role="tabpanel">
                             <div class="row">
@@ -110,9 +119,12 @@
                                                     <table class="table table-striped custom-table mb-0 datatable dataTable no-footer tbl-leave-request" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
                                                         <thead>
                                                             <tr>
-                                                                <th class="sorting sorting_asc stuck-scroll-3" tabindex="0" aria-controls="DataTables_Table_0" aria-sort="ascending" aria-label="Profle: activate to sort column descending">#</th>
+                                                                @if (Auth::user()->RolePermission == "HR")
+                                                                    <th class="stuck-scroll-3"><input type="checkbox" id="checkAll"></th>
+                                                                @endif
+                                                                <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" aria-sort="ascending" aria-label="Profle: activate to sort column descending">#</th>
                                                                 <th class="sorting sorting_asc stuck-scroll-3" tabindex="0" aria-controls="DataTables_Table_0" aria-sort="ascending" aria-label="Employee: activate to sort column descending" >@lang('lang.employee_name')</th>
-                                                                <th class="sorting stuck-scroll-3" tabindex="0" aria-controls="DataTables_Table_0" aria-label="Leave Type: activate to sort column ascending">@lang('lang.leave_type')</th>
+                                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" aria-label="Leave Type: activate to sort column ascending">@lang('lang.leave_type')</th>
                                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" aria-label="Reason: activate to sort column ascending">@lang('lang.reason')</th>
                                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" aria-label="No of Days: activate to sort column ascending">@lang('lang.number_of_days')</th>
                                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" aria-label="From: activate to sort column ascending">@lang('lang.start_date')</th>
@@ -127,9 +139,14 @@
                                                             @if (count($dataLeaveRequest) > 0)
                                                                 @foreach ($dataLeaveRequest as $key=>$request)
                                                                     <tr class="odd">
-                                                                        <td class="ids stuck-scroll-3">{{++$key ?? ""}}</td>
+                                                                        @if (Auth::user()->RolePermission == "HR")
+                                                                            <td class="stuck-scroll-3">
+                                                                                <input type="checkbox" class="sub_chk" data-id="{{$request->id}}" data-status="{{$request->status}}">
+                                                                            </td>
+                                                                        @endif
+                                                                        <td class="ids">{{++$key ?? ""}}</td>
                                                                         <td class="stuck-scroll-3 employee_name"> {{$request->employee ? $request->employee->employee_name_en : ""}} </td>
-                                                                        <td class="stuck-scroll-3">{{$request->leaveType->name}}</td>
+                                                                        <td class="">{{$request->leaveType->name}}</td>
                                                                         <td><a href="#">{{$request->reason}}</a></td>
                                                                         <td>{{$request->number_of_day}} Day</td>
                                                                         <td >{{\Carbon\Carbon::parse($request->start_date)->format('d-M-Y') ?? ''}}</td>
@@ -370,6 +387,134 @@
             $(".leave-disply-search").css("display","none");
             condiction_tab = $(this).data('tab-id');
         });
+
+        $('#checkAll').on('click', function(e) {
+            if($(this).is(':checked',true)){
+                $(".sub_chk").each(function() {
+                    if ($(this).data('status') == "approved_hod") {
+                        $(this).prop('checked', true);
+                    }
+                });
+            } else {  
+                $(".sub_chk").prop('checked',false);
+            }  
+        });
+        $('body').on('click','.btn_approved_all',function(){
+            var allVals = [];  
+            $(".sub_chk:checked").each(function() {
+                if ($(this).data('status') == "approved_hod") {
+                    allVals.push($(this).attr('data-id'));
+                }
+            });
+            // var ids = allVals.join(",");
+            if(allVals.length <=0)  
+            {
+                new Noty({
+                    title: "",
+                    text: '@lang("lang.please_select_item_befor_approve")',
+                    timeout: 3000,
+                    type: "error",
+                    icon: true
+                }).show();
+            }  else {
+                $(".loading-icon").css('display', 'block')
+                $.confirm({
+                    title: '@lang("lang.approve")',
+                    content: ""+
+                                "<p>There are "+allVals.length+" approachable leave.</p>"+
+                                "<label>@lang('lang.are_you_sure_want_to_approve')?</label>",
+                    type: 'blue',
+                    typeAnimated: true,
+                    buttons: {
+                        tryAgain: {
+                            text: 'ok',
+                            btnClass: 'btn-blue',
+                            action: function(){
+                            axios.post('{{ URL('leaves/admin/approveds') }}',{
+                                'ids': allVals,
+                            }).then(function(response) {
+                                new Noty({
+                                    title: "",
+                                    text: '@lang("lang.the_process_has_been_successfully")',
+                                    type: "success",
+                                    icon: true
+                                }).show();
+                                window.location.replace("{{ URL('leaves/admin') }}");
+                                }).catch(function(error) {
+                                    new Noty({
+                                        title: "",
+                                        text: '@lang("lang.something_went_wrong_please_try_again_later")',
+                                        type: "error",
+                                        icon: true
+                                    }).show();
+                                });
+                            }
+                        },
+                            close: function () {
+                        }
+                    }
+                });
+            }
+        });
+        // $('.reject_all').on('click', function(e) {
+        //     var allVals = [];  
+        //     $(".sub_chk:checked").each(function() {  
+        //         if ($(this).data('status') == "approved_hod") {
+        //             allVals.push($(this).attr('data-id'));
+        //         }
+        //     });
+        //     var ids = allVals.join(",");
+        //     if(allVals.length <=0)  
+        //     {
+        //         new Noty({
+        //             title: "",
+        //             text: '@lang("lang.please_select_item_befor_reject")',
+        //             timeout: 3000,
+        //             type: "error",
+        //             icon: true
+        //         }).show();
+        //     }  else {
+        //         $.confirm({
+        //             title: '@lang("lang.reject")!',
+        //             content: ""+
+        //                     "<p>There are "+allVals.length+" reject leave.</p>"+
+        //                     "<label>@lang('lang.are_you_sure_want_to_reject')?</label>",
+        //             type: 'red',
+        //             typeAnimated: true,
+        //             buttons: {
+        //                 tryAgain: {
+        //                     text: 'ok',
+        //                     btnClass: 'btn-red',
+        //                     action: function(){
+        //                         var id = this.$content.find('.id').val();
+        //                         axios.post('{{ URL("leaves/reject") }}', {
+        //                             ids : ids
+        //                         }).then(function(response) {
+        //                             new Noty({
+        //                                 title: "",
+        //                                 text: "@lang('lang.the_process_has_been_successfully').",
+        //                                 type: "success",
+        //                                 timeout: 3000,
+        //                                 icon: true
+        //                             }).show();
+        //                             window.location.replace("{{ URL('leaves/admin') }}");
+        //                         }).catch(function(error) {
+        //                             new Noty({
+        //                                 title: "",
+        //                                 text: "@lang('lang.something_went_wrong_please_try_again_later').",
+        //                                 type: "error",
+        //                                 icon: true
+        //                             }).show();
+        //                         });
+        //                     }
+        //                 },
+        //                     close: function () {
+        //                 }
+        //             }
+        //         }); 
+        //     } 
+        // });
+
         $(".btn-search").on("click", function() {
             $(this).prop('disabled', true);
             var condistion = $(this).data('condiction');
