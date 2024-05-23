@@ -731,6 +731,7 @@ return[
     "seniorities_pay_reports"=>"របាយការណ៍ប្រាក់បំណាច់អតីតភាព",
     "supporting_staff"=>"បុគ្គលិកគាំទ្រ",
     "subject_type"=>"ប្រភេទប្រធានបទ",
+    "payroll_staff_resign"=>"Payroll Staff Resign",
 	"select"=>"ជ្រើសរើស",
 	"self_enterprise"=>"អត្ត.នៅសហគ្រាស",
 	"select_field_of_study"=>"ជ្រើសរើសមុខវិជ្ជាសិក្សា",

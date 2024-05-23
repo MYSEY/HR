@@ -714,6 +714,7 @@ return[
     "seniorities_pay_reports"=>"Seniorities Pay Report",
     "supporting_staff"=>"Supporting Staff",
     "subject_type"=>"Subject Type",
+    "payroll_staff_resign"=>"Payroll Staff Resign",
     "to"=>"To",
     "to_"=>"To",
     "time"=>"Time",

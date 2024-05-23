@@ -162,6 +162,10 @@
                                                         </th>
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                             rowspan="1" colspan="1"
+                                                            aria-label="Join Date: activate to sort column ascending">@lang('lang.gross_salary')
+                                                        </th>
+                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                            rowspan="1" colspan="1"
                                                             aria-label="Join Date: activate to sort column ascending">@lang('lang.pension_fund')
                                                         </th>
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
@@ -259,6 +263,7 @@
                                                                 <td>$<a href="#">{{ $item->annual_incentive_bonus}}</a></td>
                                                                 <td>$<a href="#">{{ $item->other_benefits}}</a></td>
                                                                 <td>$<a href="#">{{ $item->seniority_pay_included_tax}}</a></td>
+                                                                <td>$<a href="#">{{ $item->total_gross}}</a></td>
                                                                 <td>$<a href="#">{{ $item->total_pension_fund}}</a></td>
                                                                 <td>$<a href="#">{{ $item->base_salary_received_usd}}</a></td>
                                                                 <td><span>៛</span><a href="#">{{ number_format($item->base_salary_received_riel) }}</a></td>

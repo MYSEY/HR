@@ -19,15 +19,15 @@
         <div class="page-header">
             <div class="row align-items-center">
                 <div class="col">
-                    <h3 class="page-title">@lang('lang.payroll_review')</h3>
+                    <h3 class="page-title">@lang('lang.payroll_staff_resign')</h3>
                     <ul class="breadcrumb">
                         <li class="breadcrumb-item"><a href="#">@lang('lang.dashboard')</a></li>
-                        <li class="breadcrumb-item active">@lang('lang.payroll_review')</li>
+                        <li class="breadcrumb-item active">@lang('lang.payroll_staff_resign')</li>
                     </ul>
                 </div>
                 <div class="col-auto float-end ms-auto">
                     @if (permissionAccess("m4-s1","is_create")->value == "1")
-                        <a href="#" class="btn add-btn me-2" data-bs-toggle="modal" data-bs-target="#add_salary"><i class="fa fa-plus"></i> @lang('lang.add_new')</a>
+                        <a href="#" class="btn add-btn me-2" data-bs-toggle="modal" data-bs-target="#add_payroll_staff_resign"><i class="fa fa-plus"></i> @lang('lang.add_new')</a>
                     @endif
                 </div>
             </div>
@@ -67,12 +67,6 @@
                                 <span class="btn-txt"><i class="fa fa-search"></i></span>
                                 <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
                             </button>
-                            @if (permissionAccess("m4-s1","is_export")->value == "1")
-                                <button type="button" class="btn btn-sm btn-outline-secondary btn_excel me-2" id="icon-search-download-reload">
-                                    <span class="btn-text-excel"><i class="fa fa-arrow-circle-down"></i></span>
-                                    <span id="btn-text-loading-excel" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
-                                </button>
-                            @endif
                            
                             <button type="button" class="btn btn-sm btn-outline-secondary reset-btn" id="icon-search-download-reload">
                                 <span class="btn-text-reset"><i class="fa fa-undo"></i></span>
@@ -82,14 +76,6 @@
                     </div>
                 </div>
             </form>
-            {!! Toastr::message() !!}
-            @if (permissionAccess("m4-s1","is_delete")->value == "1")
-                <button type="button" class="btn btn-sm btn-danger delete_all">@lang('lang.delete_all')</button>
-            @endif
-            @if (permissionAccess("m4-s1","is_approve")->value == "1")
-                <button type="button" class="btn btn-sm btn-success btn_approved" href="#" data-id=""> @lang('lang.approve')</button> 
-            @endif
-
             <div class="content">
                 <div class="page-menu">
                     <div class="row">
@@ -102,7 +88,6 @@
                                                 id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info"  cellspacing="0">
                                                 <thead>
                                                     <tr>
-                                                        <th><input type="checkbox" id="checkAll"></th>
                                                         <th class="sorting stuck-scroll-3" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1">@lang('lang.employee_id')</th>
                                                         <th class=" stuck-scroll-3" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending">@lang('lang.employee_name')</th>
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
@@ -221,9 +206,6 @@
                                                     @if (count($data) > 0)
                                                         @foreach ($data as $item)
                                                             <tr class="odd">
-                                                                <td>
-                                                                    <input type="checkbox" class="sub_chk" data-id="{{$item->number_employee}}">
-                                                                </td>
                                                                 <td class="stuck-scroll-3"><a href="#">{{ $item->users == null ? '' : $item->users->number_employee }}</a></td>
                                                                 <td class="stuck-scroll-3"><a href="#">{{ $item->users == null ? '' : $item->users->EmployeeName }}</span></a></td>
                                                                 <td><a href="#">{{ $item->users == null ? '' : $item->users->EmployeePosition }}</a></td>
@@ -268,11 +250,11 @@
                 </div>
             </div>
         @endif
-        <div id="add_salary" class="modal custom-modal fade" style="display: none;" aria-hidden="true" data-bs-backdrop="static">
+        <div id="add_payroll_staff_resign" class="modal custom-modal fade" style="display: none;" aria-hidden="true" data-bs-backdrop="static">
             <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">@lang('lang.add_staff_salary')</h5>
+                        <h5 class="modal-title">@lang('lang.payroll_staff_resign')</h5>
                         <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">×</span>
                         </button>
@@ -345,38 +327,10 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <label>@lang('lang.incentive')</label>
-                                        <input class="form-control" type="file" id="incentive_bonus" name="incentive_bonus">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <label>@lang('lang.other_benefits')</label>
-                                        <input class="form-control" type="file" id="other_benefits" name="other_benefits">
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <label>@lang('lang.annual_bonus')</label>
-                                        <input class="form-control" type="file" id="annual_bonus" name="annual_bonus">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <label>@lang('lang.loan')</label>
-                                        <input class="form-control" type="file" id="loan" name="loan">
-                                    </div>
-                                </div>
                             </div>
     
                             <div class="submit-section">
-                                <button type="button" class="btn btn-primary submit-btn" id="btn-payroll">
+                                <button type="button" class="btn btn-primary submit-btn" id="btnPayrollStaffResign">
                                     <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>@lang('lang.submit')
                                 </button>
                             </div>
@@ -391,66 +345,6 @@
 <script src="{{asset('/admin/js/validation-field.js')}}"></script>
 <script>
     $(function(){
-        $('#checkAll').on('click', function(e) {
-            if($(this).is(':checked',true)){
-                $(".sub_chk").prop('checked', true);
-            } else {  
-                $(".sub_chk").prop('checked',false);
-            }  
-        });
-        $('.delete_all').on('click', function(e) {
-            var allVals = [];  
-            $(".sub_chk:checked").each(function() {  
-                allVals.push($(this).attr('data-id'));
-            });
-            var number_employee = allVals.join(",");
-            if(allVals.length <=0)  
-            {
-                $.alert({
-                    title: '@lang("lang.delete")!',
-                    content: '@lang("lang.please_select_item_befor_delete").',
-                    type: 'red',
-                });
-            }  else {
-                $.confirm({
-                    title: '@lang("lang.delete")!',
-                    content: "@lang('lang.are_you_sure_want_to_delete')?",
-                    type: 'red',
-                    typeAnimated: true,
-                    buttons: {
-                        tryAgain: {
-                            text: 'ok',
-                            btnClass: 'btn-red',
-                            action: function(){
-                                var id = this.$content.find('.id').val();
-                                axios.post('{{ URL("payroll/review/delete") }}', {
-                                    number_employee : number_employee
-                                }).then(function(response) {
-                                    new Noty({
-                                        title: "",
-                                        text: "@lang('lang.the_process_has_been_successfully').",
-                                        type: "success",
-                                        timeout: 3000,
-                                        icon: true
-                                    }).show();
-                                    window.location.replace("{{ URL('payroll/review') }}");
-                                }).catch(function(error) {
-                                    new Noty({
-                                        title: "",
-                                        text: "@lang('lang.something_went_wrong_please_try_again_later').",
-                                        type: "error",
-                                        icon: true
-                                    }).show();
-                                });
-                            }
-                        },
-                            close: function () {
-                        }
-                    }
-                }); 
-            } 
-        });
-        
         $(document).ready(function(){
             $("#btn-edix-nssf").click(function(){
                 $("#btn-save-nssf").toggle();
@@ -562,59 +456,8 @@
             window.location = url;
         });
 
-        $('body').on('click','.btn_approved',function(){
-            var allVals = [];  
-            $(".sub_chk:checked").each(function() {  
-                allVals.push($(this).attr('data-id'));
-            });
-            var number_employee = allVals.join(",");
-            if(allVals.length <=0)  
-            {
-                $.alert({
-                    title: '@lang("lang.approve")!',
-                    content: '@lang("lang.please_select_item_befor_approve").',
-                    type: 'blue',
-                });
-            }  else {
-                $(".loading-icon").css('display', 'block')
-                $.confirm({
-                    title: '@lang("lang.approve")',
-                    content: "@lang('lang.are_you_sure_want_to_approve')?",
-                    type: 'blue',
-                    typeAnimated: true,
-                    buttons: {
-                        tryAgain: {
-                            text: 'ok',
-                            btnClass: 'btn-blue',
-                            action: function(){
-                            axios.post('{{ URL('payroll/approved') }}',{
-                                'number_employee': number_employee,
-                            }).then(function(response) {
-                                new Noty({
-                                    title: "",
-                                    text: '@lang("lang.the_process_has_been_successfully")',
-                                    type: "success",
-                                    icon: true
-                                }).show();
-                                $('.card-footer').remove();
-                                window.location.replace("{{ URL('payroll/review') }}");
-                                }).catch(function(error) {
-                                    new Noty({
-                                        title: "",
-                                        text: '@lang("lang.something_went_wrong_please_try_again_later")',
-                                        type: "error",
-                                        icon: true
-                                    }).show();
-                                });
-                            }
-                        },
-                            close: function () {
-                        }
-                    }
-                });
-            }
-        });
-        $("#btn-payroll").on("click",function() {
+       
+        $("#btnPayrollStaffResign").on("click",function() {
             let num_miss = 0;
             $(".pay_required").each(function(){
                 if($(this).val()=="0.00" || $(this).val()==""){
@@ -629,16 +472,7 @@
             }else{
                 let exchange_rate_salary = $("#exchange_rate_preview").val();
                 let exchange_rate_nssf = $("#exchange_rate_nssf_preview").val();
-                var file_incentive = $('#incentive_bonus').prop('files')[0];
-                var other_benefits = $('#other_benefits').prop('files')[0];
-                var annual_bonus = $('#annual_bonus').prop('files')[0];
-                var file_loan = $('#loan').prop('files')[0];
                 var form_data = new FormData();
-
-                form_data.append('file_incentive', file_incentive);
-                form_data.append('other_benefits', other_benefits);
-                form_data.append('annual_bonus', annual_bonus);
-                form_data.append('file_loan', file_loan);
                 form_data.append('exchange_rate', exchange_rate_salary);
                 form_data.append('payment_date', $("#payment_date").val());
                 form_data.append('_token', "{{ csrf_token() }}");
@@ -652,14 +486,14 @@
                         $(".loading-icon").css('display', 'block');
                         $.ajax({
                             type: 'POST',
-                            url: "{{ url('payroll/create') }}",
+                            url: "{{ url('payroll/staff/risign/create') }}",
                             data: form_data,
                             contentType: false,
                             cache: false,
                             processData: false,
                             success: function(data) {
                                 toastr.success('Data has been save success');
-                                window.location.replace("{{ URL('payroll/review') }}");
+                                window.location.replace("{{ URL('payroll/staff/resign') }}");
                             }
                         });
                     }
@@ -706,7 +540,7 @@
         var localeLanguage = '{{ config('app.locale') }}';
         $.ajax({
             type: "post",
-            url: "{{ url('payroll/review/search') }}",
+            url: "{{ url('payroll/staff/risign/search') }}",
             data: {
                 "_token": "{{ csrf_token() }}",
                 branch_id: params.branch_id ? params.branch_id : null,
@@ -727,10 +561,9 @@
                         let payment_date = moment(row.payment_date).format('D-MMM-YYYY');
                         let created_at = moment(row.created_at).format('D-MMM-YYYY');
                         tr +='<tr class="odd">'+
-                            '<td class="stuck-scroll-3"><input type="checkbox" class="sub_chk"></a></td>'+
                             '<td class="stuck-scroll-3"><a href="#">'+(row.users == null ? '' : row.users.number_employee )+'</a></td>'+
                             '<td class="stuck-scroll-3"><a href="#">'+(row.users == null ? '' : localeLanguage == 'en' ? row.users.employee_name_en : row.users.employee_name_kh )+'</span></a></td>'+
-                            '<td><a href="#">'+(row.users == null ? '' : localeLanguage == 'en' ? row.users.position.name_english :row.users.position.name_khmer )+'</a></td>'+
+                            '<td><a href="#">'+(row.users.position == null ? '' : row.users.position.name_english)+'</a></td>'+
                             '<td><a href="#">'+(row.users == null ? '' : localeLanguage == 'en' ? row.users.department.name_english : row.users.department.name_khmer )+'</a></td>'+
                             '<td><a href="#">'+(row.users == null ? '' : localeLanguage == 'en' ? row.users.branch.branch_name_en : row.users.branch.branch_name_kh)+'</a></td>'+
                             '<td>'+(join_date)+'</td>'+

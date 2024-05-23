@@ -652,6 +652,29 @@
                     <div class="col-md-12">
                         <div class="form-group row">
                             <div class="col-md-2">
+                                <label class="container-checkbox">@lang('lang.payroll_staff_resign')
+                                    <input type="checkbox" class="c_and_b_checkbox" id="payroll_staff_resign" name="payroll_staff_resign"> <span class="checkmark"></span>
+                                </label>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="container-checkbox">@lang('lang.view')
+                                    <input type="checkbox" class="c_and_b_checkbox payroll_staff_resign_checkbox" id="staff_resign_view" 
+                                    {{SetCheckbox($arrayPermissions,"lang.payroll_staff_resign","is_view")->checkbox}}  
+                                    value="{{SetCheckbox($arrayPermissions,"lang.payroll_staff_resign","is_view")->value}}"
+                                    > <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.add')
+                                    <input type="checkbox" class="c_and_b_checkbox payroll_staff_resign_checkbox" id="staff_resign_add"  
+                                    {{SetCheckbox($arrayPermissions,"lang.payroll_staff_resign","is_view")->checkbox}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.payroll_staff_resign","is_create")->value}}"
+                                    > <span class="checkmark"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group row">
+                            <div class="col-md-2">
                                 {{-- <label >@lang('lang.employee_salary')</label> --}}
                                 <label class="container-checkbox">@lang('lang.employee_salary')
                                     <input type="checkbox" class="c_and_b_checkbox" id="employee_salary" name="employee_salary"> <span class="checkmark"></span>

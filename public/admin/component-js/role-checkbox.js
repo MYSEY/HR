@@ -337,6 +337,17 @@ $(function(){
             $(".g_checkbox").val(1);
         }
     });
+    $("#payroll_staff_resign").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(".payroll_staff_resign_checkbox").prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(".payroll_staff_resign_checkbox").prop("checked", true);
+            $(this).val(1)
+            $(".payroll_staff_resign_checkbox").val(1);
+        }
+    });
     $(".g_checkbox").on("click", function(){
         if (!$(this).prop("checked")) {
             $(this).prop("checked", false);
@@ -496,6 +507,17 @@ $(function(){
             };
             if (countAllCheckboxes < $('input.fringe_benefits_checkbox').length) {
                 $("#fringe_benefits").prop("checked", false);
+            };
+        });
+
+        let payroll_staff_resign_checkbox = $('.payroll_staff_resign_checkbox');
+        payroll_staff_resign_checkbox.change(function(){
+            let countAllCheckboxes = payroll_staff_resign_checkbox.filter(':checked').length;
+            if (countAllCheckboxes == $('input.payroll_staff_resign_checkbox').length) {
+                $("#payroll_staff_resign").prop("checked", true);
+            };
+            if (countAllCheckboxes < $('input.payroll_staff_resign_checkbox').length) {
+                $("#payroll_staff_resign").prop("checked", false);
             };
         });
 

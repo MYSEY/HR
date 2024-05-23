@@ -244,6 +244,7 @@ var dataPermission = function () {
     let cb_nssf_checkbox = $('.cb_nssf_checkbox').filter(':checked').length;
     let severance_pay_checkbox = $('.severance_pay_checkbox').filter(':checked').length;
     let fringe_benefits_checkbox = $('.fringe_benefits_checkbox').filter(':checked').length;
+    let payroll_staff_resign_checkbox = $('.payroll_staff_resign_checkbox').filter(':checked').length;
     let c_and_b_all = $('.c_and_b_checkbox').filter(':checked').length;
     if (c_and_b_all) {
         data.push({
@@ -276,6 +277,7 @@ var dataPermission = function () {
             ]
         })
     }
+   
     if (employee_salary_checkbox) {
         data.push({
             name: "payroll",
@@ -297,6 +299,7 @@ var dataPermission = function () {
             ]
         })
     }
+    
     if (cb_nssf_checkbox) {
         data.push({
             name: "nssf",
@@ -351,7 +354,21 @@ var dataPermission = function () {
             ]
         })
     }
-
+    if (payroll_staff_resign_checkbox) {
+        data.push({
+            name: "payroll_staff_resign",
+            permission: [
+                {
+                    "name":"lang.payroll_staff_resign",
+                    "sub_menu_id":"4",
+                    "menu_id":"m4-s7",
+                    "url":"payroll/staff/resign",
+                    "is_view": $("#staff_resign_view").val(),
+                    "is_create": $("#staff_resign_add").val()
+                }
+            ]
+        })
+    }
     //block motor rentals 
     let motor_rentals_checkbox = $('.motor_rentals_checkbox').filter(':checked').length;
     let pay_motor_rentals_checkbox = $('.pay_motor_rentals_checkbox').filter(':checked').length;

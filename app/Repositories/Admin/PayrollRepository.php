@@ -5,6 +5,7 @@ namespace App\Repositories\Admin;
 use App\Models\Payroll;
 use App\Models\payrollPreview;
 use Illuminate\Support\Carbon;
+use App\Models\ParyllStaffResign;
 use App\Repositories\BaseRepository;
 use Illuminate\Support\Facades\Auth;
 use App\Traits\UploadFiles\UploadFIle;
@@ -57,5 +58,8 @@ class PayrollRepository extends BaseRepository
     }
     public function getAllPayrollPreview(){
         return payrollPreview::with("users")->get();
+    }
+    public function getAllPayrollStaffResign(){
+        return ParyllStaffResign::with("users")->get();
     }
 }

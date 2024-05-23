@@ -147,6 +147,10 @@
             if (fringe_benefits_checkbox == $('input.fringe_benefits_checkbox').length) {
                 $("#fringe_benefits").prop("checked", true);
             };
+            let payroll_staff_resign_checkbox = $('.payroll_staff_resign_checkbox').filter(':checked').length;
+            if (payroll_staff_resign_checkbox == $('input.payroll_staff_resign_checkbox').length) {
+                $("#payroll_staff_resign").prop("checked", true);
+            };
 
             // module motor rental
             let motor_rentals_checkbox = $('.motor_rentals_checkbox').filter(':checked').length;

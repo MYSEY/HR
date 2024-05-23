@@ -18,6 +18,7 @@ use App\Models\GrossSalaryPay;
 use App\Models\payrollPreview;
 use Illuminate\Support\Carbon;
 use App\Models\ChildrenAllowance;
+use App\Models\ParyllStaffResign;
 use App\Models\PayrollAdjustment;
 use Illuminate\Support\Facades\DB;
 use App\Exports\ExportReviewPayroll;
@@ -88,6 +89,53 @@ class EmployeePayrollController extends Controller
             'users.department_id',
         )
         ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+            if ($RolePermission == 'Employee') {
+                $query->where('users.id',Auth::user()->id);
+            }
+            if ($RolePermission == 'HOD') {
+                $query->whereIn("users.department_id", EmployeeRepository::getRoleHOD());
+            }
+            if ($RolePermission == 'BM') {
+                $query->where("users.branch_id", Auth::user()->branch_id);
+            }
+        })
+        ->when($request->employee_id, function ($query, $employee_id) {
+            $query->where('users.number_employee', 'LIKE', '%'.$employee_id.'%');
+        })
+        ->when($request->employee_name, function ($query, $employee_name) {
+            $query->where('users.employee_name_en', 'LIKE', '%'.$employee_name.'%');
+        })
+        ->when($request->branch_id, function ($query, $branch_id) {
+            $query->where('users.branch_id', $branch_id);
+        })
+        ->when($Monthly, function ($query, $Monthly) {
+            $query->whereMonth('payment_date', $Monthly);
+        })
+        ->when($yearLy, function ($query, $yearLy) {
+            $query->whereYear('payment_date', $yearLy);
+        })->get();
+        return response()->json([
+            'success'=>$payroll,
+        ]);
+    }
+
+    public function payrollStaffResignSearch(Request $request){
+        $Monthly = null;
+        $yearLy = null;
+        if ($request->filter_month) {
+            $Monthly = Carbon::createFromDate($request->filter_month)->format('m');
+            $yearLy = Carbon::createFromDate($request->filter_month)->format('Y');
+        }
+        $payroll = ParyllStaffResign::with("users")
+        ->leftJoin('users', 'paryll_staff_resigns.employee_id', '=', 'users.id')
+        ->select(
+            'paryll_staff_resigns.*',
+            'users.number_employee',
+            'users.employee_name_en',
+            'users.employee_name_kh',
+            'users.branch_id',
+            'users.department_id',
+        )->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
             if ($RolePermission == 'Employee') {
                 $query->where('users.id',Auth::user()->id);
             }
@@ -1046,7 +1094,611 @@ class EmployeePayrollController extends Controller
             return redirect()->back();
         }
     }
+    public function payrollStaffResign(Request $request){
+        $data = $this->payrollRepo->getAllPayrollStaffResign($request);
+        $user = User::all();
+        $branch = Branchs::all();
+        $exChangeRateSalary= ExchangeRate::where('type','Salary')->orderBy('id','desc')->first();
+        $exChangeRateNSSF= ExchangeRate::where('type','NSSF')->orderBy('id','desc')->first();
+        return view('payrolls.payroll_staff_resign',compact('data','user','branch','exChangeRateSalary','exChangeRateNSSF'));
+    }
+    public function payrollStaffResignCreate(Request $request){
+        try{
+            // function import Loan
+            $dadaArrayLoan = [];
+            if (file_exists($request->file_loan)) {
+                $fileLoan = $request->file_loan;
+                $spreadsheet = IOFactory::load($fileLoan);
+                $staffLoan =  $spreadsheet->getSheetByName('Loan')->toArray();
+                $iIn = 0;
+                foreach ($staffLoan as $itemLoan) {
+                    $iIn++;
+                    if ($iIn != 1) {
+                        $employeeIncentive = User::where("number_employee", $itemLoan[0])->first();
+                        if($employeeIncentive){
+                            $dadaArrayLoan[$employeeIncentive->number_employee] = [
+                                'laon_amount' => $itemLoan[2]
+                            ];
+                        }
+                    }
+                }
+            }
+            
+            $employee = User::where('resign_date','>=',$request->payment_date)->whereIn('emp_status',['3','4','5','6','7'])->get();
+            
+            if (!$employee->isEmpty()) {
+                foreach ($employee as $item) {
+                    //fuction check laon amount
+                    if (array_key_exists($item->number_employee, $dadaArrayLoan)) {
+                        $LoanAmount = $dadaArrayLoan[$item->number_employee]['laon_amount'];
+                    } else {
+                       $LoanAmount = 0;
+                    }
 
+                    //calculated khmer_new_year and pchumBen_bonus
+                    $totalBunus = 0;
+                    // if ($item->resign_date >= $request->payment_date) {
+                    //     $dataHolidayBunuse = Holiday::where('type','bonus')->get();
+                    //     foreach ($dataHolidayBunuse as $value) {
+                    //         $userJoinDate = $item->date_of_commencement;
+                    //         $startDate = Carbon::parse()->diffInDays($userJoinDate) + 1;
+                    //         $dayOfYear = 365;
+                    //         $fromDate = Carbon::parse($item->date_of_commencement);
+                    //         $toDate = Carbon::parse($value->from);
+                    //         $totalStartDays = $fromDate->diffInDays($toDate);
+
+                    //         $hildayMonth = Carbon::createFromDate($value->period_month)->format('Y-m');
+                    //         $hildayDays = Carbon::createFromDate($value->period_month)->format('d');
+                    //         $payMonth = Carbon::createFromDate($request->payment_date)->format('Y-m');
+                    //         $payDays = Carbon::createFromDate($request->payment_date)->format('d');
+                    //         $bounsType = $value->title;
+                    //         if($hildayMonth == $payMonth && $hildayDays >= $payDays){
+                    //             if ($totalStartDays > $dayOfYear) {
+                    //                 $percent = $value->amount_percent / 100;
+                    //                 $totalAllowanceBunus = ($item->basic_salary * $percent);
+                    //             } else {
+                    //                 $totalPercent = ($item->basic_salary * $value->amount_percent) / 100;
+                    //                 $percentSalary = $totalPercent * $totalStartDays;
+                    //                 $totalAllowanceBunus = $percentSalary / $dayOfYear;
+                    //             }
+                    //         }
+                    //         $totalBunus = $totalAllowanceBunus ?? 0;
+                    //     }
+                    // }
+                    
+                    // function sum benefit age children <= 18
+                    $dataDateOfBirth = [];
+                    $dataChildren = ChildrenInfor::where('employee_id',$item->id)->get();
+                    foreach ($dataChildren as $value) {
+                        $yearsOfChild = Carbon::parse($value->date_of_birth)->age;
+                        if ($yearsOfChild <= 18) {
+                            $dataDateOfBirth[] = $value;
+                        }
+                    }
+                    
+                    //function children allowance
+                    $number_of_children = count($dataDateOfBirth);
+                    $childrenAllowance = ChildrenAllowance::first();
+                    $totalChildAllowance = 0;
+                    if ($item->emp_status == 1 || $item->emp_status == 10 || $item->emp_status == 2) {
+                        if ($number_of_children) {
+                            if ($number_of_children == 0) {
+                                $totalChildAllowance = 0;
+                            } else if($number_of_children == 1) {
+                                $totalChildAllowance = $childrenAllowance->total_children_allowance * 1;
+                            }else if($number_of_children == 2){
+                                $totalChildAllowance = $childrenAllowance->total_children_allowance * 2;
+                            }else if($number_of_children == 3){
+                                $totalChildAllowance = $childrenAllowance->total_children_allowance * 3;
+                            }else if($number_of_children == 4){
+                                $totalChildAllowance = $childrenAllowance->total_children_allowance * 4;
+                            }
+                        }
+                    }
+
+                    $totalGrossSalary = $item->basic_salary;
+                    
+                    //National Social Security Fund (NSSF) Formula
+                    $exchangNSSF = ExchangeRate::where('type','NSSF')->orderBy('id','desc')->first();
+                    if ($exchangNSSF) {
+                        $totalExchangeRielPreTax =  $exchangNSSF->amount_riel * round($totalGrossSalary,2);
+                        if ($totalExchangeRielPreTax) {
+                            if ($totalExchangeRielPreTax >= 1200000) {
+                                $averageWage    = 1200000;
+                            }else if($totalExchangeRielPreTax >= 400000){
+                                $averageWage    = $totalExchangeRielPreTax;
+                            }else{
+                                $averageWage = 400000;
+                            }
+                        }else{
+                            $averageWage = 0;
+                        }
+                        $occupationalRisk = (0.008 * $averageWage);
+                        $healthCare = (0.026 * $averageWage);
+                        $workerContributionUsd = ($averageWage * 0.02);
+                        $workerContributionRiel = round($workerContributionUsd,-2) / $exchangNSSF->amount_riel;
+                    }
+                    $pension_contribution = $workerContributionRiel;
+
+                    //function Seniority pay
+                    $seniorityPayableTax = 0;
+                    $taxExemptionSalary = 0;
+                    if ($item->emp_status == 2) {
+                        $currentDate = Carbon::createFromDate($request->payment_date)->format('m');
+                        $PaymentOfMonth = Carbon::parse($request->payment_date)->format('M-Y');
+                        if ($currentDate == 6 || $currentDate == 12) {
+                            $nextYear = Carbon::parse($item->udc_end_date)->format('Y');
+                            $currentYear = null;
+                            $currentMonth = null;
+                            $preYear = Carbon::createFromDate($item->udc_end_date)->format('Y');
+                            if($currentDate == 6){  
+                                if ($preYear == $nextYear) {
+                                    $currentYear = $item->udc_end_date;
+                                }else{
+                                    $currentYear = Carbon::createFromDate($nextYear.'-01-01')->format('Y-m-d');
+                                }
+                            }
+                            if ($currentDate == 12) {
+                                $currentMonth = Carbon::createFromDate($nextYear.'-07-01')->format('Y-m-d');
+                            }
+                            $totalSalary = GrossSalaryPay::where('employee_id', $item->id)->where('type_udc','UDC')->when($currentYear ,function ($query, $udc_end_date) {
+                                $query->where('payment_date', '>=',$udc_end_date);
+                            })->when($currentMonth, function($query, $currentMonth){
+                                $query->where('payment_date', '>=',$currentMonth);
+                            })->pluck('total_fdc1')->avg();
+                            
+                            $totalSalaryReceive = ($totalSalary / 22) * 7.5;
+                            $totalGrossExchange = 2000000 / $request->exchange_rate;
+                            if ($totalSalaryReceive > $totalGrossExchange) {
+                                $taxExemptionSalary = $totalGrossExchange;
+                            } else {
+                                $taxExemptionSalary = $totalSalaryReceive;
+                            }
+    
+                            if ($totalSalaryReceive > $totalGrossExchange) {
+                                $totaltaxableSalary = $totalSalaryReceive - $totalGrossExchange;
+                            } else {
+                                $totaltaxableSalary = 0;
+                            }
+                            $paymentOfMonth = $PaymentOfMonth;
+                            $seniority = Seniority::create([
+                                'employee_id'           => $item->id,
+                                'number_employee'       => $item->number_employee,
+                                'total_average_salary'  => $totalSalary,
+                                'total_salary_receive'  => number_format($totalSalaryReceive, 2),
+                                'tax_exemption_salary'  => number_format($taxExemptionSalary, 2),
+                                'taxable_salary'        => number_format($totaltaxableSalary, 2),
+                                'payment_of_month'      => $paymentOfMonth,
+                                'payment_date'          => $request->payment_date,
+                                'created_by'            => Auth::user()->id,
+                            ]);
+                            $seniorityPayableTax = $seniority->taxable_salary ?? 0;
+                            $taxExemptionSalary = $seniority->tax_exemption_salary ?? 0;
+                        }
+                    }
+                    
+                    //function ដក​ pensin fund
+                    $baseSalaryReceivedUsd = $totalGrossSalary + $seniorityPayableTax - $pension_contribution;
+                    // functin exchange riel rate gross salary after tax
+                    $totalExchangeRiel = round($baseSalaryReceivedUsd, 2) * $request->exchange_rate;
+                    //total that បូកបន្ថែមលើបន្ទុកកូននិងប្រពន្ធ
+                    $totalChargesReducedChild = $childrenAllowance->reduced_burden_children;
+                    $totalChargesReducedSpouse = $childrenAllowance->spouse_allowance;
+                    //not have child and sposes child 1
+                    if($number_of_children == 0 && $item->spouse == 0){
+                        $totalChargesReduced = 0;
+                    }else if($number_of_children == 0 && $item->spouse == 0){
+                        $totalChargesReduced = $totalChargesReducedSpouse;
+                    }else if($number_of_children == 1 && $item->spouse == 0){
+                        $totalChargesReduced = $totalChargesReducedChild;
+                    }else if($number_of_children == 0 && $item->spouse == 1){
+                        $totalChargesReduced = $totalChargesReducedSpouse;
+                    }else if($number_of_children == 1 && $item->spouse == 1){
+                        $totalChargesReduced = ($number_of_children * $totalChargesReducedChild) + $totalChargesReducedSpouse;
+                    }else if($number_of_children == 2 && $item->spouse == 0){
+                        $totalChargesReduced = $number_of_children * $totalChargesReducedChild;
+                    }else if($number_of_children == 2 && $item->spouse == 1){
+                        $totalChargesReduced = ($number_of_children * $totalChargesReducedChild) + $totalChargesReducedSpouse;
+                    }else if($number_of_children == 3 && $item->spouse == 0){
+                        $totalChargesReduced = $number_of_children * $totalChargesReducedChild;
+                    }else if($number_of_children == 3 && $item->spouse == 1){
+                        $totalChargesReduced = ($number_of_children * $totalChargesReducedChild) + $totalChargesReducedSpouse;
+                    }else if($number_of_children == 4 && $item->spouse == 0){
+                        $totalChargesReduced = $number_of_children * $totalChargesReducedChild;
+                    }else if($number_of_children == 4 && $item->spouse == 1){
+                        $totalChargesReduced = ($number_of_children * $totalChargesReducedChild) + $totalChargesReducedSpouse;
+                    }
+                    
+                    //កាត់មូលដ្ឋានគិតពន្ធ
+                    if ($number_of_children == 0 && $item->spouse == 0) {
+                        $totalTtaxBbaseRiel = $totalExchangeRiel;
+                    } else if($number_of_children == 1 && $item->spouse == 0) {
+                        $totalTtaxBbaseRiel = $totalExchangeRiel - $totalChargesReduced;
+                    }else if($number_of_children == 0 && $item->spouse == 1) {
+                        $totalTtaxBbaseRiel = $totalExchangeRiel - $totalChargesReduced;
+                    }else if($number_of_children == 1 && $item->spouse == 1) {
+                        $totalTtaxBbaseRiel = $totalExchangeRiel - $totalChargesReduced;
+                    }else if($number_of_children == 2 &&  $item->spouse == 0){
+                        $totalTtaxBbaseRiel = $totalExchangeRiel - $totalChargesReduced;
+                    }else if($number_of_children == 2 &&  $item->spouse == 1){
+                        $totalTtaxBbaseRiel = $totalExchangeRiel - $totalChargesReduced;
+                    }else if($number_of_children == 3 &&  $item->spouse == 0){
+                        $totalTtaxBbaseRiel = $totalExchangeRiel - $totalChargesReduced;
+                    }else if($number_of_children == 3 &&  $item->spouse == 1){
+                        $totalTtaxBbaseRiel = $totalExchangeRiel - $totalChargesReduced;
+                    }else if($number_of_children == 4 &&  $item->spouse == 0){
+                        $totalTtaxBbaseRiel = $totalExchangeRiel - $totalChargesReduced;
+                    }else if($number_of_children == 4 &&  $item->spouse == 1){
+                        $totalTtaxBbaseRiel = $totalExchangeRiel - $totalChargesReduced;
+                    }
+                    
+                    $children = $number_of_children;
+                    // អត្រា ពន្ធ(%)
+                    if ($number_of_children == 0 && $item->spouse == 0) {
+                        if($totalExchangeRiel > 0 && $totalExchangeRiel <= 1500000){
+                            $totalTax = 0;
+                        }elseif($totalExchangeRiel > 1500001 && $totalExchangeRiel <= 2000000){
+                            $totalTax = 5;
+                        }elseif($totalExchangeRiel > 2000001 && $totalExchangeRiel <= 8500000){
+                            $totalTax = 10;
+                        }elseif($totalExchangeRiel > 8500001 && $totalExchangeRiel <= 12500000){
+                            $totalTax = 15;
+                        }else{
+                            $totalTax = 20;
+                        }
+                        
+                        if($totalExchangeRiel <= 1500000){
+                            $totalSalaryTaxRiel = 0;
+                        }elseif($totalExchangeRiel > 1500001 && $totalExchangeRiel <= 2000000){
+                            $totalSalaryTaxRiel = ($totalExchangeRiel * $totalTax) / 100 - 75000;
+                        }elseif($totalExchangeRiel > 2000001 && $totalExchangeRiel <= 8500000){
+                            $totalSalaryTaxRiel = ($totalExchangeRiel * $totalTax) / 100 - 175000;
+                        }elseif($totalExchangeRiel > 8500001 && $totalExchangeRiel <= 12500000){
+                            $totalSalaryTaxRiel = ($totalExchangeRiel * $totalTax) / 100 - 600000;
+                        }else{
+                            $totalSalaryTaxRiel = ($totalExchangeRiel * $totalTax) / 100 - 1225000;
+                        }
+                        //ពន្ធលើប្រាក់បៀវត្ស រៀល/Riel
+                        $totalSalaryTaxUsd = round($totalSalaryTaxRiel,2) / $request->exchange_rate;
+
+                        //ពន្ធលើប្រាក់បៀវត្ស ដុល្លារ/USD
+                        $totalSalaryAfterTax = $baseSalaryReceivedUsd - round($totalSalaryTaxUsd,2);
+                    } else if($number_of_children == 1 && $item->spouse == 0) {
+                        if($totalTtaxBbaseRiel > 0 && $totalTtaxBbaseRiel <= 1500000){
+                            $totalTax = 0;
+                        }elseif($totalTtaxBbaseRiel > 1500001 && $totalTtaxBbaseRiel <= 2000000){
+                            $totalTax = 5;
+                        }elseif($totalTtaxBbaseRiel > 2000001 && $totalTtaxBbaseRiel <= 8500000){
+                            $totalTax = 10;
+                        }elseif($totalTtaxBbaseRiel > 8500001 && $totalTtaxBbaseRiel <= 12500000){
+                            $totalTax = 15;
+                        }else{
+                            $totalTax = 20;
+                        }
+                        
+                        if($totalTtaxBbaseRiel <= 1500000){
+                            $totalSalaryTaxRiel = 0;
+                        }elseif($totalTtaxBbaseRiel > 1500001 && $totalTtaxBbaseRiel <= 2000000){
+                            $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 75000;
+                        }elseif($totalTtaxBbaseRiel > 2000001 && $totalTtaxBbaseRiel <= 8500000){
+                            $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 175000;
+                        }elseif($totalTtaxBbaseRiel > 8500001 && $totalTtaxBbaseRiel <= 12500000){
+                            $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 600000;
+                        }else{
+                            $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 1225000;
+                        }
+
+                        //ពន្ធលើប្រាក់បៀវត្ស រៀល/Riel
+                        $totalSalaryTaxUsd = round($totalSalaryTaxRiel,2) / $request->exchange_rate;
+    
+                        //ពន្ធលើប្រាក់បៀវត្ស ដុល្លារ/USD
+                        $totalSalaryAfterTax = $baseSalaryReceivedUsd - round($totalSalaryTaxUsd,2);
+                    }else if($number_of_children == 0 && $item->spouse == 1) {
+                        if($totalTtaxBbaseRiel > 0 && $totalTtaxBbaseRiel <= 1500000){
+                            $totalTax = 0;
+                        }elseif($totalTtaxBbaseRiel > 1500001 && $totalTtaxBbaseRiel <= 2000000){
+                            $totalTax = 5;
+                        }elseif($totalTtaxBbaseRiel > 2000001 && $totalTtaxBbaseRiel <= 8500000){
+                            $totalTax = 10;
+                        }elseif($totalTtaxBbaseRiel > 8500001 && $totalTtaxBbaseRiel <= 12500000){
+                            $totalTax = 15;
+                        }else{
+                            $totalTax = 20;
+                        }
+                        
+                        if($totalTtaxBbaseRiel <= 1500000){
+                            $totalSalaryTaxRiel = 0;
+                        }elseif($totalTtaxBbaseRiel > 1500001 && $totalTtaxBbaseRiel <= 2000000){
+                            $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 75000;
+                        }elseif($totalTtaxBbaseRiel > 2000001 && $totalTtaxBbaseRiel <= 8500000){
+                            $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 175000;
+                        }elseif($totalTtaxBbaseRiel > 8500001 && $totalTtaxBbaseRiel <= 12500000){
+                            $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 600000;
+                        }else{
+                            $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 1225000;
+                        }
+                        //ពន្ធលើប្រាក់បៀវត្ស រៀល/Riel
+                        $totalSalaryTaxUsd = round($totalSalaryTaxRiel,2) / $request->exchange_rate;
+    
+                        //ពន្ធលើប្រាក់បៀវត្ស ដុល្លារ/USD
+                        $totalSalaryAfterTax = $baseSalaryReceivedUsd - round($totalSalaryTaxUsd,2);
+                    }else if($number_of_children == 1 && $item->spouse == 1) {
+                        if($totalTtaxBbaseRiel > 0 && $totalTtaxBbaseRiel <= 1500000){
+                            $totalTax = 0;
+                        }elseif($totalTtaxBbaseRiel > 1500001 && $totalTtaxBbaseRiel <= 2000000){
+                            $totalTax = 5;
+                        }elseif($totalTtaxBbaseRiel > 2000001 && $totalTtaxBbaseRiel <= 8500000){
+                            $totalTax = 10;
+                        }elseif($totalTtaxBbaseRiel > 8500001 && $totalTtaxBbaseRiel <= 12500000){
+                            $totalTax = 15;
+                        }else{
+                            $totalTax = 20;
+                        }
+                        
+                        if($totalTtaxBbaseRiel <= 1500000){
+                            $totalSalaryTaxRiel = 0;
+                        }elseif($totalTtaxBbaseRiel > 1500001 && $totalTtaxBbaseRiel <= 2000000){
+                            $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 75000;
+                        }elseif($totalTtaxBbaseRiel > 2000001 && $totalTtaxBbaseRiel <= 8500000){
+                            $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 175000;
+                        }elseif($totalTtaxBbaseRiel > 8500001 && $totalTtaxBbaseRiel <= 12500000){
+                            $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 600000;
+                        }else{
+                            $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 1225000;
+                        }
+                        //ពន្ធលើប្រាក់បៀវត្ស រៀល/Riel
+                        $totalSalaryTaxUsd = round($totalSalaryTaxRiel,2) / $request->exchange_rate;
+                        //ពន្ធលើប្រាក់បៀវត្ស ដុល្លារ/USD
+                        $totalSalaryAfterTax = $baseSalaryReceivedUsd - round($totalSalaryTaxUsd,2);
+                    }else if($number_of_children == 2 && $item->spouse == 0){
+                        if($totalTtaxBbaseRiel > 0 && $totalTtaxBbaseRiel <= 1500000){
+                            $totalTax = 0;
+                        }elseif($totalTtaxBbaseRiel > 1500001 && $totalTtaxBbaseRiel <= 2000000){
+                            $totalTax = 5;
+                        }elseif($totalTtaxBbaseRiel > 2000001 && $totalTtaxBbaseRiel <= 8500000){
+                            $totalTax = 10;
+                        }elseif($totalTtaxBbaseRiel > 8500001 && $totalTtaxBbaseRiel <= 12500000){
+                            $totalTax = 15;
+                        }else{
+                            $totalTax = 20;
+                        }
+                        
+                        if($totalTtaxBbaseRiel <= 1500000){
+                            $totalSalaryTaxRiel = 0;
+                        }elseif($totalTtaxBbaseRiel > 1500001 && $totalTtaxBbaseRiel <= 2000000){
+                            $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 75000;
+                        }elseif($totalTtaxBbaseRiel > 2000001 && $totalTtaxBbaseRiel <= 8500000){
+                            $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 175000;
+                        }elseif($totalTtaxBbaseRiel > 8500001 && $totalTtaxBbaseRiel <= 12500000){
+                            $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 600000;
+                        }else{
+                            $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 1225000;
+                        }
+                        //ពន្ធលើប្រាក់បៀវត្ស រៀល/Riel
+                        $totalSalaryTaxUsd = round($totalSalaryTaxRiel,2) / $request->exchange_rate;
+                        //ពន្ធលើប្រាក់បៀវត្ស ដុល្លារ/USD
+                        $totalSalaryAfterTax = $baseSalaryReceivedUsd - round($totalSalaryTaxUsd,2);
+                    }else if($number_of_children == 2 && $item->spouse == 1){
+                        if($totalTtaxBbaseRiel > 0 && $totalTtaxBbaseRiel <= 1500000){
+                            $totalTax = 0;
+                        }elseif($totalTtaxBbaseRiel > 1500001 && $totalTtaxBbaseRiel <= 2000000){
+                            $totalTax = 5;
+                        }elseif($totalTtaxBbaseRiel > 2000001 && $totalTtaxBbaseRiel <= 8500000){
+                            $totalTax = 10;
+                        }elseif($totalTtaxBbaseRiel > 8500001 && $totalTtaxBbaseRiel <= 12500000){
+                            $totalTax = 15;
+                        }else{
+                            $totalTax = 20;
+                        }
+                        
+                        if($totalTtaxBbaseRiel <= 1500000){
+                            $totalSalaryTaxRiel = 0;
+                        }elseif($totalTtaxBbaseRiel > 1500001 && $totalTtaxBbaseRiel <= 2000000){
+                            $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 75000;
+                        }elseif($totalTtaxBbaseRiel > 2000001 && $totalTtaxBbaseRiel <= 8500000){
+                            $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 175000;
+                        }elseif($totalTtaxBbaseRiel > 8500001 && $totalTtaxBbaseRiel <= 12500000){
+                            $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 600000;
+                        }else{
+                            $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 1225000;
+                        }
+                        //ពន្ធលើប្រាក់បៀវត្ស រៀល/Riel
+                        $totalSalaryTaxUsd = round($totalSalaryTaxRiel,2) / $request->exchange_rate;
+                        //ពន្ធលើប្រាក់បៀវត្ស ដុល្លារ/USD
+                        $totalSalaryAfterTax = $baseSalaryReceivedUsd - round($totalSalaryTaxUsd,2);
+                    }else if($number_of_children == 3 && $item->spouse == 0){
+                        if($totalTtaxBbaseRiel > 0 && $totalTtaxBbaseRiel <= 1500000){
+                            $totalTax = 0;
+                        }elseif($totalTtaxBbaseRiel > 1500001 && $totalTtaxBbaseRiel <= 2000000){
+                            $totalTax = 5;
+                        }elseif($totalTtaxBbaseRiel > 2000001 && $totalTtaxBbaseRiel <= 8500000){
+                            $totalTax = 10;
+                        }elseif($totalTtaxBbaseRiel > 8500001 && $totalTtaxBbaseRiel <= 12500000){
+                            $totalTax = 15;
+                        }else{
+                            $totalTax = 20;
+                        }
+                        
+                        if($totalTtaxBbaseRiel <= 1500000){
+                            $totalSalaryTaxRiel = 0;
+                        }elseif($totalTtaxBbaseRiel > 1500001 && $totalTtaxBbaseRiel <= 2000000){
+                            $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 75000;
+                        }elseif($totalTtaxBbaseRiel > 2000001 && $totalTtaxBbaseRiel <= 8500000){
+                            $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 175000;
+                        }elseif($totalTtaxBbaseRiel > 8500001 && $totalTtaxBbaseRiel <= 12500000){
+                            $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 600000;
+                        }else{
+                            $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 1225000;
+                        }
+
+                        //ពន្ធលើប្រាក់បៀវត្ស រៀល/Riel
+                        $totalSalaryTaxUsd = round($totalSalaryTaxRiel,2) / $request->exchange_rate;
+                        //ពន្ធលើប្រាក់បៀវត្ស ដុល្លារ/USD
+                        $totalSalaryAfterTax = $baseSalaryReceivedUsd - round($totalSalaryTaxUsd,2);
+                    }else if($number_of_children == 3 && $item->spouse == 1){
+                        if($totalTtaxBbaseRiel > 0 && $totalTtaxBbaseRiel <= 1500000){
+                            $totalTax = 0;
+                        }elseif($totalTtaxBbaseRiel > 1500001 && $totalTtaxBbaseRiel <= 2000000){
+                            $totalTax = 5;
+                        }elseif($totalTtaxBbaseRiel > 2000001 && $totalTtaxBbaseRiel <= 8500000){
+                            $totalTax = 10;
+                        }elseif($totalTtaxBbaseRiel > 8500001 && $totalTtaxBbaseRiel <= 12500000){
+                            $totalTax = 15;
+                        }else{
+                            $totalTax = 20;
+                        }
+                        
+                        if($totalTtaxBbaseRiel <= 1500000){
+                            $totalSalaryTaxRiel = 0;
+                        }elseif($totalTtaxBbaseRiel > 1500001 && $totalTtaxBbaseRiel <= 2000000){
+                            $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 75000;
+                        }elseif($totalTtaxBbaseRiel > 2000001 && $totalTtaxBbaseRiel <= 8500000){
+                            $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 175000;
+                        }elseif($totalTtaxBbaseRiel > 8500001 && $totalTtaxBbaseRiel <= 12500000){
+                            $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 600000;
+                        }else{
+                            $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 1225000;
+                        }
+                        //ពន្ធលើប្រាក់បៀវត្ស រៀល/Riel
+                        $totalSalaryTaxUsd = round($totalSalaryTaxRiel,2) / $request->exchange_rate;
+                        //ពន្ធលើប្រាក់បៀវត្ស ដុល្លារ/USD
+                        $totalSalaryAfterTax = $baseSalaryReceivedUsd - round($totalSalaryTaxUsd,2);
+                    }else if($number_of_children == 4 && $item->spouse == 0){
+                        if($totalTtaxBbaseRiel > 0 && $totalTtaxBbaseRiel <= 1500000){
+                            $totalTax = 0;
+                        }elseif($totalTtaxBbaseRiel > 1500001 && $totalTtaxBbaseRiel <= 2000000){
+                            $totalTax = 5;
+                        }elseif($totalTtaxBbaseRiel > 2000001 && $totalTtaxBbaseRiel <= 8500000){
+                            $totalTax = 10;
+                        }elseif($totalTtaxBbaseRiel > 8500001 && $totalTtaxBbaseRiel <= 12500000){
+                            $totalTax = 15;
+                        }else{
+                            $totalTax = 20;
+                        }
+                        
+                        if($totalTtaxBbaseRiel <= 1500000){
+                            $totalSalaryTaxRiel = 0;
+                        }elseif($totalTtaxBbaseRiel > 1500001 && $totalTtaxBbaseRiel <= 2000000){
+                            $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 75000;
+                        }elseif($totalTtaxBbaseRiel > 2000001 && $totalTtaxBbaseRiel <= 8500000){
+                            $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 175000;
+                        }elseif($totalTtaxBbaseRiel > 8500001 && $totalTtaxBbaseRiel <= 12500000){
+                            $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 600000;
+                        }else{
+                            $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 1225000;
+                        }
+                        //ពន្ធលើប្រាក់បៀវត្ស រៀល/Riel
+                        $totalSalaryTaxUsd = round($totalSalaryTaxRiel,2) / $request->exchange_rate;
+                        //ពន្ធលើប្រាក់បៀវត្ស ដុល្លារ/USD
+                        $totalSalaryAfterTax = $baseSalaryReceivedUsd - round($totalSalaryTaxUsd,2);
+                    }else if($number_of_children == 4 && $item->spouse == 1){
+                        if($totalTtaxBbaseRiel > 0 && $totalTtaxBbaseRiel <= 1500000){
+                            $totalTax = 0;
+                        }elseif($totalTtaxBbaseRiel > 1500001 && $totalTtaxBbaseRiel <= 2000000){
+                            $totalTax = 5;
+                        }elseif($totalTtaxBbaseRiel > 2000001 && $totalTtaxBbaseRiel <= 8500000){
+                            $totalTax = 10;
+                        }elseif($totalTtaxBbaseRiel > 8500001 && $totalTtaxBbaseRiel <= 12500000){
+                            $totalTax = 15;
+                        }else{
+                            $totalTax = 20;
+                        }
+                        
+                        if($totalTtaxBbaseRiel <= 1500000){
+                            $totalSalaryTaxRiel = 0;
+                        }elseif($totalTtaxBbaseRiel > 1500001 && $totalTtaxBbaseRiel <= 2000000){
+                            $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 75000;
+                        }elseif($totalTtaxBbaseRiel > 2000001 && $totalTtaxBbaseRiel <= 8500000){
+                            $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 175000;
+                        }elseif($totalTtaxBbaseRiel > 8500001 && $totalTtaxBbaseRiel <= 12500000){
+                            $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 600000;
+                        }else{
+                            $totalSalaryTaxRiel = ($totalTtaxBbaseRiel * $totalTax) / 100 - 1225000;
+                        }
+                        //ពន្ធលើប្រាក់បៀវត្ស រៀល/Riel
+                        $totalSalaryTaxUsd = round($totalSalaryTaxRiel,2) / $request->exchange_rate;
+                        //ពន្ធលើប្រាក់បៀវត្ស ដុល្លារ/USD
+                        $totalSalaryAfterTax = $baseSalaryReceivedUsd - round($totalSalaryTaxUsd,2);
+                    }
+                    //function Severance Pay ti 1
+                    $totalSeverancePay = 0;
+                    $monthEndDate = Carbon::createFromDate($item->fdc_end)->format('Y-m');
+                    $paymentDate = Carbon::createFromDate($request->payment_date)->format('Y-m');
+                    if($item->emp_status == 1){
+                        if($monthEndDate == $paymentDate){
+                            $dataSeveranc = GrossSalaryPay::where('employee_id', $item->id)->whereNotNull('type_fdc1')->sum('total_fdc1');
+                            $totalContractSeverancePay = $dataSeveranc * 0.05;
+                            $dataSeverance = SeverancePay::create([
+                                'employee_id'                   => $item->id,
+                                'number_employee'               => $item->number_employee,
+                                'total_severanec_pay'           => round($dataSeveranc,2),
+                                'total_contract_severance_pay'  => round($totalContractSeverancePay,2),
+                                'payment_date'                  => $request->payment_date,
+                                'created_by'                    => Auth::user()->id,
+                            ]);
+                            $totalSeverancePay = $dataSeverance->total_contract_severance_pay;
+                        }
+                    }
+
+                    if($item->emp_status == 10){
+                        if($monthEndDate == $paymentDate){
+                            $dataSeveranc = GrossSalaryPay::where('employee_id', $item->id)->whereNotNull('type_fdc1')->sum('total_fdc1');
+                            $totalContractSeverancePay = $dataSeveranc * 0.05;
+                            $dataSeverance = SeverancePay::create([
+                                'employee_id'                   => $item->id,
+                                'number_employee'               => $item->number_employee,
+                                'total_severanec_pay'           => $dataSeveranc,
+                                'total_contract_severance_pay'  => $totalContractSeverancePay,
+                                'payment_date'                  => $request->payment_date,
+                                'created_by'                    => Auth::user()->id,
+                            ]);
+                            $totalSeverancePay = $dataSeverance->total_contract_severance_pay;
+                        }
+                    }
+
+                    $totalNetSalary = $totalSalaryAfterTax + $totalSeverancePay  + $taxExemptionSalary;
+                    $data   = $request->all();
+                    $data['employee_id']                    = $item->id;
+                    $data['number_employee']                = $item->number_employee;
+                    $data['basic_salary']                   = $item->basic_salary;
+                    $data['spouse']                         = $item->spouse;
+                    $data['children']                       = $children;
+                    $data['total_gross_salary']             = $totalGrossSalary;
+                    $data['total_child_allowance']          = $totalChildAllowance;
+                    $data['phone_allowance']                = $item->phone_allowance;
+                    $data['total_kny_phcumben']             = $totalBunus;
+                    $data['total_severance_pay']            = round($totalSeverancePay,3);
+                    $data['seniority_pay_included_tax']     = $seniorityPayableTax;
+                    $data['total_gross']                    = $totalGrossSalary;
+                    $data['total_pension_fund']             = $pension_contribution;
+                    $data['base_salary_received_usd']       = $baseSalaryReceivedUsd;
+                    $data['base_salary_received_riel']      = round($totalExchangeRiel, 3);
+                    $data['total_tax_base_riel']            = round($totalTtaxBbaseRiel, 3);
+                    $data['total_charges_reduced']          = $totalChargesReduced;
+                    $data['total_rate']                     = $totalTax;
+                    $data['seniority_pay_excluded_tax']     = $taxExemptionSalary;
+                    $data['total_salary_tax_riel']          = round($totalSalaryTaxRiel,3);
+                    $data['total_salary_tax_usd']           = $totalSalaryTaxUsd;
+                    $data['loan_amount']                    = $LoanAmount;
+                    $data['total_salary']                   = $totalNetSalary;
+                    $data['exchange_rate']                  = $request->exchange_rate;
+                    $data['created_by']                     = Auth::user()->id;
+                    ParyllStaffResign::create($data);
+                }
+                Toastr::success('Created payroll successfully.','Success');
+                return redirect()->back();
+                DB::commit();
+            } else {
+                DB::rollback();
+                Toastr::error('Can not employee payroll','Error');
+                return redirect()->back();
+            }
+        }catch(\Exception $e){
+            DB::rollback();
+            Toastr::error('Payroll created fail','Error');
+            return redirect()->back();
+        }
+    }
     public function payrollApproved(Request $request){
         try{
             $number_employee = $request->number_employee;
