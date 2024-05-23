@@ -555,7 +555,7 @@ class EmployeePayrollController extends Controller
                     }
                     
                     //sum salary and sum other benefit befor tax free
-                    $dataGrossSalary = PreviewGrossSalaryPay::create([
+                    $dataGrossSalary = GrossSalaryPay::create([
                         'employee_id'               => $item->id,
                         'number_employee'           => $item->number_employee,
                         'basic_salary'              => $item->basic_salary,
@@ -636,7 +636,7 @@ class EmployeePayrollController extends Controller
                                 $query->where('payment_date', '>=',$udc_end_date);
                             })->when($currentMonth, function($query, $currentMonth){
                                 $query->where('payment_date', '>=',$currentMonth);
-                            })->pluck('total_fdc1')->avg();
+                            })->pluck('total_seniority')->avg();
                             
                             $totalSalaryReceive = ($totalSalary / 22) * 7.5;
                             $totalGrossExchange = 2000000 / $request->exchange_rate;
@@ -1125,7 +1125,6 @@ class EmployeePayrollController extends Controller
             }
             
             $employee = User::where('resign_date','>=',$request->payment_date)->whereIn('emp_status',['3','4','5','6','7'])->get();
-            
             if (!$employee->isEmpty()) {
                 foreach ($employee as $item) {
                     //fuction check laon amount
@@ -1656,7 +1655,7 @@ class EmployeePayrollController extends Controller
                         }
                     }
 
-                    $totalNetSalary = $totalSalaryAfterTax + $totalSeverancePay  + $taxExemptionSalary;
+                    $totalNetSalary = $totalSalaryAfterTax + $totalSeverancePay + $taxExemptionSalary - $LoanAmount;
                     $data   = $request->all();
                     $data['employee_id']                    = $item->id;
                     $data['number_employee']                = $item->number_employee;
@@ -1706,94 +1705,103 @@ class EmployeePayrollController extends Controller
             $dataNssf = PreviewNationalSocialSecurityFund::whereIn('number_employee',explode(",",$number_employee))->get();
             $dataGrossSalaryPay = PreviewGrossSalaryPay::whereIn('number_employee',explode(",",$number_employee))->get();
             $dataBonus = PreviewBonus::whereIn('number_employee',explode(",",$number_employee))->get();
-            foreach ($dataBonus as $item) {
-                Bonus::firstOrCreate([
-                    'employee_id'             => $item->employee_id,
-                    'number_employee'         => $item->number_employee,
-                    'number_of_working_days'  => $item->number_of_working_days,
-                    'base_salary'             => $item->base_salary,
-                    'base_salary_received'    => $item->base_salary_received,
-                    'total_allowance'         => $item->total_allowance,
-                    'payment_date'            => $item->payment_date,
-                    'bouns_type'              => $item->bouns_type,
-                    'created_by'              => $item->created_by,
-                ]);
-                PreviewBonus::whereIn('id',explode(",",$ids))->delete();
+            if ($dataBonus) {
+                foreach ($dataBonus as $item) {
+                    Bonus::firstOrCreate([
+                        'employee_id'             => $item->employee_id,
+                        'number_employee'         => $item->number_employee,
+                        'number_of_working_days'  => $item->number_of_working_days,
+                        'base_salary'             => $item->base_salary,
+                        'base_salary_received'    => $item->base_salary_received,
+                        'total_allowance'         => $item->total_allowance,
+                        'payment_date'            => $item->payment_date,
+                        'bouns_type'              => $item->bouns_type,
+                        'created_by'              => $item->created_by,
+                    ]);
+                    PreviewBonus::whereIn('number_employee',explode(",",$number_employee))->delete();
+                }
             }
-            foreach ($dataNssf as $item) {
-                NationalSocialSecurityFund::firstOrCreate([
-                    'employee_id'               => $item->employee_id,
-                    'number_employee'           => $item->number_employee,
-                    'total_pre_tax_salary_usd'  => $item->total_pre_tax_salary_usd,
-                    'total_pre_tax_salary_riel' => $item->total_pre_tax_salary_riel,
-                    'total_average_wage'        => $item->total_average_wage,
-                    'total_occupational_risk'   => $item->total_occupational_risk,
-                    'total_health_care'         => $item->total_health_care,
-                    'pension_contribution_usd'  => $item->pension_contribution_usd,
-                    'pension_contribution_riel' => $item->pension_contribution_riel,
-                    'corporate_contribution'    => $item->corporate_contribution,
-                    'exchange_rate'             => $item->exchange_rate,
-                    'payment_date'              => $item->payment_date,
-                    'created_by'                => $item->created_by,
-                ]);
-                PreviewNationalSocialSecurityFund::whereIn('id',explode(",",$ids))->delete();
+            if ($dataNssf) {
+                foreach ($dataNssf as $item) {
+                    NationalSocialSecurityFund::firstOrCreate([
+                        'employee_id'               => $item->employee_id,
+                        'number_employee'           => $item->number_employee,
+                        'total_pre_tax_salary_usd'  => $item->total_pre_tax_salary_usd,
+                        'total_pre_tax_salary_riel' => $item->total_pre_tax_salary_riel,
+                        'total_average_wage'        => $item->total_average_wage,
+                        'total_occupational_risk'   => $item->total_occupational_risk,
+                        'total_health_care'         => $item->total_health_care,
+                        'pension_contribution_usd'  => $item->pension_contribution_usd,
+                        'pension_contribution_riel' => $item->pension_contribution_riel,
+                        'corporate_contribution'    => $item->corporate_contribution,
+                        'exchange_rate'             => $item->exchange_rate,
+                        'payment_date'              => $item->payment_date,
+                        'created_by'                => $item->created_by,
+                    ]);
+                    PreviewNationalSocialSecurityFund::whereIn('number_employee',explode(",",$number_employee))->delete();
+                }
             }
-            foreach ($dataGrossSalaryPay as $item) {
-                GrossSalaryPay::firstOrCreate([
-                    'employee_id'           => $item->employee_id,
-                    'number_employee'       => $item->number_employee,
-                    'basic_salary'          => $item->basic_salary,
-                    'total_gross_salary'    => $item->total_gross_salary,
-                    'total_fdc1'            => $item->total_fdc1,
-                    'type_fdc1'             => $item->type_fdc1,
-                    'total_fdc2'            => $item->total_fdc2,
-                    'type_fdc2'             => $item->type_fdc2,
-                    'type_udc'              => $item->type_udc,
-                    'total_seniority'       => $item->total_seniority,
-                    'payment_date'          => $item->payment_date,
-                    'created_by'            => $item->created_by,
-                ]);
-                PreviewGrossSalaryPay::whereIn('id',explode(",",$ids))->delete();
+            if ($dataGrossSalaryPay) {
+                foreach ($dataGrossSalaryPay as $item) {
+                    GrossSalaryPay::firstOrCreate([
+                        'employee_id'           => $item->employee_id,
+                        'number_employee'       => $item->number_employee,
+                        'basic_salary'          => $item->basic_salary,
+                        'total_gross_salary'    => $item->total_gross_salary,
+                        'total_fdc1'            => $item->total_fdc1,
+                        'type_fdc1'             => $item->type_fdc1,
+                        'total_fdc2'            => $item->total_fdc2,
+                        'type_fdc2'             => $item->type_fdc2,
+                        'type_udc'              => $item->type_udc,
+                        'total_seniority'       => $item->total_seniority,
+                        'payment_date'          => $item->payment_date,
+                        'created_by'            => $item->created_by,
+                    ]);
+                    PreviewGrossSalaryPay::whereIn('number_employee',explode(",",$number_employee))->delete();
+                }
             }
-            foreach ($dataPayroll as $item) {
-                Payroll::firstOrCreate([
-                    'employee_id'               => $item->employee_id,
-                    'number_employee'           => $item->number_employee,
-                    'basic_salary'              => $item->basic_salary,
-                    'total_gross_salary'        => $item->total_gross_salary,
-                    'payment_date'              => $item->payment_date,
-                    'total_child_allowance'     => $item->total_child_allowance,
-                    'phone_allowance'           => $item->phone_allowance,
-                    'monthly_quarterly_bonuses' => $item->monthly_quarterly_bonuses,
-                    'total_kny_phcumben'        => $item->total_kny_phcumben,
-                    'annual_incentive_bonus'    => $item->annual_incentive_bonus,
-                    'total_gross'               => $item->total_gross,
-                    'total_pension_fund'        => $item->total_pension_fund,
-                    'seniority_pay_included_tax'=> $item->seniority_pay_included_tax,
-                    'base_salary_received_usd'  => $item->base_salary_received_usd,
-                    'base_salary_received_riel' => $item->base_salary_received_riel,
-                    'spouse'                    => $item->spouse,
-                    'children'                  => $item->children,
-                    'total_charges_reduced'     => $item->total_charges_reduced,
-                    'total_tax_base_riel'       => $item->total_tax_base_riel,
-                    'total_rate'                => $item->total_rate,
-                    'total_salary_tax_usd'      => $item->total_salary_tax_usd,
-                    'total_salary_tax_riel'     => $item->total_salary_tax_riel,
-                    'total_amount_reduced'      => $item->total_amount_reduced,
-                    'seniority_pay_excluded_tax'=> $item->seniority_pay_excluded_tax,
-                    'seniority_backford'        => $item->seniority_backford,
-                    'total_severance_pay'       => $item->total_severance_pay,
-                    'loan_amount'               => $item->loan_amount,
-                    'total_amount_car'          => $item->total_amount_car,
-                    'total_salary'              => $item->total_salary,
-                    'exchange_rate'             => $item->exchange_rate,
-                    'adjustment'                => $item->adjustment,
-                    'adjustment_include_taxe'   => $item->adjustment_include_taxe,
-                    'leaves'                    => $item->leaves,
-                    'created_by'                => $item->created_by,
-                ]);
-                payrollPreview::whereIn('id',explode(",",$ids))->delete();
+            if ($dataPayroll) {
+                foreach ($dataPayroll as $item) {
+                    Payroll::firstOrCreate([
+                        'employee_id'               => $item->employee_id,
+                        'number_employee'           => $item->number_employee,
+                        'basic_salary'              => $item->basic_salary,
+                        'total_gross_salary'        => $item->total_gross_salary,
+                        'payment_date'              => $item->payment_date,
+                        'total_child_allowance'     => $item->total_child_allowance,
+                        'phone_allowance'           => $item->phone_allowance,
+                        'monthly_quarterly_bonuses' => $item->monthly_quarterly_bonuses,
+                        'total_kny_phcumben'        => $item->total_kny_phcumben,
+                        'annual_incentive_bonus'    => $item->annual_incentive_bonus,
+                        'total_gross'               => $item->total_gross,
+                        'total_pension_fund'        => $item->total_pension_fund,
+                        'seniority_pay_included_tax'=> $item->seniority_pay_included_tax,
+                        'base_salary_received_usd'  => $item->base_salary_received_usd,
+                        'base_salary_received_riel' => $item->base_salary_received_riel,
+                        'spouse'                    => $item->spouse,
+                        'children'                  => $item->children,
+                        'total_charges_reduced'     => $item->total_charges_reduced,
+                        'total_tax_base_riel'       => $item->total_tax_base_riel,
+                        'total_rate'                => $item->total_rate,
+                        'total_salary_tax_usd'      => $item->total_salary_tax_usd,
+                        'total_salary_tax_riel'     => $item->total_salary_tax_riel,
+                        'total_amount_reduced'      => $item->total_amount_reduced,
+                        'seniority_pay_excluded_tax'=> $item->seniority_pay_excluded_tax,
+                        'seniority_backford'        => $item->seniority_backford,
+                        'total_severance_pay'       => $item->total_severance_pay,
+                        'loan_amount'               => $item->loan_amount,
+                        'total_amount_car'          => $item->total_amount_car,
+                        'total_salary'              => $item->total_salary,
+                        'exchange_rate'             => $item->exchange_rate,
+                        'adjustment'                => $item->adjustment,
+                        'adjustment_include_taxe'   => $item->adjustment_include_taxe,
+                        'leaves'                    => $item->leaves,
+                        'created_by'                => $item->created_by,
+                    ]);
+                    payrollPreview::whereIn('number_employee',explode(",",$number_employee))->delete();
+                }
             }
+            
             Toastr::success('Approved payroll successfully.','Success');
             return redirect()->back();
             DB::commit();

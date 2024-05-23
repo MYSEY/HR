@@ -643,6 +643,7 @@
                             '<td>$<a href="#">'+(row.annual_incentive_bonus)+'</a></td>'+
                             '<td>$<a href="#">'+(row.other_benefits)+'</a></td>'+
                             '<td>$<a href="#">'+(row.seniority_pay_included_tax)+'</a></td>'+
+                            '<td>$<a href="#">'+(row.total_gross)+'</a></td>'+
                             '<td>$<a href="#">'+(row.total_pension_fund)+'</a></td>'+
                             '<td>$<a href="#">'+(row.base_salary_received_usd)+'</a></td>'+
                             '<td><span>៛</span><a href="#">'+(formatCurrencyKH(row.base_salary_received_riel))+'</a></td>'+

@@ -587,27 +587,27 @@
                             text: 'ok',
                             btnClass: 'btn-blue',
                             action: function(){
-                            axios.post('{{ URL('payroll/approved') }}',{
-                                'number_employee': number_employee,
-                            }).then(function(response) {
-                                new Noty({
-                                    title: "",
-                                    text: '@lang("lang.the_process_has_been_successfully")',
-                                    type: "success",
-                                    icon: true
-                                }).show();
-                                $('.card-footer').remove();
-                                window.location.replace("{{ URL('payroll/review') }}");
-                                }).catch(function(error) {
+                                axios.post('{{ URL('payroll/approved') }}',{
+                                    'number_employee': number_employee,
+                                }).then(function(response) {
                                     new Noty({
                                         title: "",
-                                        text: '@lang("lang.something_went_wrong_please_try_again_later")',
-                                        type: "error",
+                                        text: '@lang("lang.the_process_has_been_successfully")',
+                                        type: "success",
                                         icon: true
                                     }).show();
-                                });
-                            }
-                        },
+                                        $('.card-footer').remove();
+                                        window.location.replace("{{ URL('payroll/review') }}");
+                                    }).catch(function(error) {
+                                        new Noty({
+                                            title: "",
+                                            text: '@lang("lang.something_went_wrong_please_try_again_later")',
+                                            type: "error",
+                                            icon: true
+                                        }).show();
+                                    });
+                                }
+                            },
                             close: function () {
                         }
                     }

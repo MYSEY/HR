@@ -219,7 +219,7 @@
                                                                 <td>$<a href="#">{{ $item->monthly_quarterly_bonuses}}</a></td>
                                                                 <td>$<a href="#">{{ $item->total_kny_phcumben}}</a></td>
                                                                 <td>$<a href="#">{{ $item->annual_incentive_bonus}}</a></td>
-                                                                <td>$<a href="#">{{ $item->other_benefits}}</a></td>
+                                                                <td>$<a href="#">{{ $item->other_benefits == null ? "0.00" : $item->other_benefits}}</a></td>
                                                                 <td>$<a href="#">{{ $item->seniority_pay_included_tax}}</a></td>
                                                                 <td>$<a href="#">{{ $item->total_gross}}</a></td>
                                                                 <td>$<a href="#">{{ $item->total_pension_fund}}</a></td>
@@ -325,6 +325,12 @@
                                         <div class="cal-icon">
                                             <input class="form-control datetimepicker pay_required" type="text" id="payment_date" name="payment_date" required>
                                         </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>@lang('lang.loan')</label>
+                                        <input class="form-control" type="file" id="loan" name="loan">
                                     </div>
                                 </div>
                             </div>
@@ -472,9 +478,12 @@
             }else{
                 let exchange_rate_salary = $("#exchange_rate_preview").val();
                 let exchange_rate_nssf = $("#exchange_rate_nssf_preview").val();
+                var file_loan = $('#loan').prop('files')[0];
+
                 var form_data = new FormData();
                 form_data.append('exchange_rate', exchange_rate_salary);
                 form_data.append('payment_date', $("#payment_date").val());
+                form_data.append('file_loan', file_loan);
                 form_data.append('_token', "{{ csrf_token() }}");
                 
                 
@@ -574,7 +583,7 @@
                             '<td>$<a href="#">'+(row.monthly_quarterly_bonuses)+'</a></td>'+
                             '<td>$<a href="#">'+(row.total_kny_phcumben)+'</a></td>'+
                             '<td>$<a href="#">'+(row.annual_incentive_bonus)+'</a></td>'+
-                            '<td>$<a href="#">'+(row.other_benefits)+'</a></td>'+
+                            '<td>$<a href="#">'+(row.other_benefits == null ? "0.00" : row.other_benefits)+'</a></td>'+
                             '<td>$<a href="#">'+(row.seniority_pay_included_tax)+'</a></td>'+
                             '<td>$<a href="#">'+(row.total_gross)+'</a></td>'+
                             '<td>$<a href="#">'+(row.total_pension_fund)+'</a></td>'+
