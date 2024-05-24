@@ -203,6 +203,7 @@
                                                             rowspan="1" colspan="1"
                                                             aria-label="Join Date: activate to sort column ascending">@lang('lang.adjustment_excluded_tax')
                                                         </th>
+                                                        
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                             rowspan="1" colspan="1"
                                                             aria-label="Join Date: activate to sort column ascending">@lang('lang.severance_pay')
