@@ -427,12 +427,10 @@ class EmployeePayrollController extends Controller
                         $dataHolidayBunuse = Holiday::where('type','bonus')->get();
                         foreach ($dataHolidayBunuse as $value) {
                             $userJoinDate = $item->date_of_commencement;
-                            $startDate = Carbon::parse()->diffInDays($userJoinDate) + 1;
                             $dayOfYear = 365;
                             $fromDate = Carbon::parse($item->date_of_commencement);
                             $toDate = Carbon::parse($value->from);
-                            $totalStartDays = $fromDate->diffInDays($toDate);
-
+                            $totalStartDays = $fromDate->diffInDays($toDate) + 1;
                             $hildayMonth = Carbon::createFromDate($value->period_month)->format('Y-m');
                             $hildayDays = Carbon::createFromDate($value->period_month)->format('d');
                             $payMonth = Carbon::createFromDate($request->payment_date)->format('Y-m');
