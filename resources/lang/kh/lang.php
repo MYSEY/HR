@@ -622,6 +622,7 @@ return[
 	"add_adjustment"=>"Add Adjustment",
 	"adjustment_to"=>"Adjustment To",
 	"adjustment_type"=>"Adjustment Type",
+	"adjustment_include_taxe"=>"Adjustment(Include Tax)",
 	"qty"=>"បរិមាណ",
 	"quantity"=>"បរិមាណ",
 	"retired"=>"ចូលនិវត្តន៍",

@@ -335,8 +335,9 @@ class EmployeePayrollController extends Controller
                         $end_date = Date::createFromDate($endMonth);
                         $commencementDate   = Carbon::parse($start_date);
                         $resumptionDate     = Carbon::parse($end_date);
-                        $toDays 		    = $resumptionDate->diffInWeekdays($commencementDate) + 1;
-                        if ($toDays==0) {
+                        $toDays 		    = $resumptionDate->diffInWeekdays($commencementDate);
+                        $joinDate = Carbon::createFromDate($item->date_of_commencement)->format('d');
+                        if ($joinDate==1) {
                             $totalBasicSalary = $item->basic_salary;
                         } else {
                             if ($startMonth == 02 && $startendMonth == 28 || $startendMonth == 29) {
@@ -420,7 +421,6 @@ class EmployeePayrollController extends Controller
                             $adjustmentExcludeTaxe = $valueAdjust->amount;
                         }
                     }
-
                     //calculated khmer_new_year and pchumBen_bonus
                     $totalBunus = 0;
                     if ($item->emp_status == 1 || $item->emp_status == 10 || $item->emp_status == 2) {

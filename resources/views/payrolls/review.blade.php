@@ -149,6 +149,10 @@
                                                         </th>
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                             rowspan="1" colspan="1"
+                                                            aria-label="Join Date: activate to sort column ascending">@lang('lang.adjustment_include_taxe')
+                                                        </th>
+                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                            rowspan="1" colspan="1"
                                                             aria-label="Join Date: activate to sort column ascending">@lang('lang.other_benefits')
                                                         </th>
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
@@ -197,6 +201,10 @@
                                                         </th>
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                             rowspan="1" colspan="1"
+                                                            aria-label="Join Date: activate to sort column ascending">@lang('lang.adjustment_excluded_tax')
+                                                        </th>
+                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                            rowspan="1" colspan="1"
                                                             aria-label="Join Date: activate to sort column ascending">@lang('lang.severance_pay')
                                                         </th>
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
@@ -237,6 +245,7 @@
                                                                 <td>$<a href="#">{{ $item->monthly_quarterly_bonuses}}</a></td>
                                                                 <td>$<a href="#">{{ $item->total_kny_phcumben}}</a></td>
                                                                 <td>$<a href="#">{{ $item->annual_incentive_bonus}}</a></td>
+                                                                <td>$<a href="#">{{ $item->adjustment_include_taxe}}</a></td>
                                                                 <td>$<a href="#">{{ $item->other_benefits}}</a></td>
                                                                 <td>$<a href="#">{{ $item->seniority_pay_included_tax}}</a></td>
                                                                 <td>$<a href="#">{{ $item->total_gross}}</a></td>
@@ -249,6 +258,7 @@
                                                                 <td>$<a href="#">{{ $item->total_salary_tax_usd}}</a></td>
                                                                 <td><span>៛</span><a href="#">{{ number_format($item->total_salary_tax_riel)}}</a></td>
                                                                 <td>$<a href="#">{{ $item->seniority_pay_excluded_tax}}</a></td>
+                                                                <td>$<a href="#">{{ $item->adjustment}}</a></td>
                                                                 <td>$<a href="#">{{ $item->total_severance_pay}}</a></td>
                                                                 <td>$<a href="#">{{ $item->loan_amount == null ? "0.00" : $item->loan_amount}}</a></td>
                                                                 <td>$<a href="#">{{ $item->total_salary }}</a></td>
@@ -741,6 +751,7 @@
                             '<td>$<a href="#">'+(row.monthly_quarterly_bonuses)+'</a></td>'+
                             '<td>$<a href="#">'+(row.total_kny_phcumben)+'</a></td>'+
                             '<td>$<a href="#">'+(row.annual_incentive_bonus)+'</a></td>'+
+                            '<td>$<a href="#">'+(row.adjustment_include_taxe)+'</a></td>'+
                             '<td>$<a href="#">'+(row.other_benefits)+'</a></td>'+
                             '<td>$<a href="#">'+(row.seniority_pay_included_tax)+'</a></td>'+
                             '<td>$<a href="#">'+(row.total_gross)+'</a></td>'+
@@ -753,6 +764,7 @@
                             '<td>$<a href="#">'+(row.total_salary_tax_usd)+'</a></td>'+
                             '<td><span>៛</span><a href="#">'+(formatCurrencyKH(row.total_salary_tax_riel))+'</a></td>'+
                             '<td>$<a href="#">'+(row.seniority_pay_excluded_tax)+'</a></td>'+
+                            '<td>$<a href="#">'+(row.adjustment)+'</a></td>'+
                             '<td>$<a href="#">'+(row.total_severance_pay)+'</a></td>'+
                             '<td>$<a href="#">'+(row.loan_amount == null ? "0.00" : row.loan_amount)+'</a></td>'+
                             '<td>$<a href="#">'+(row.total_salary )+'</a></td>'+
