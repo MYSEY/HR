@@ -242,7 +242,7 @@ class EmployeePayrollController extends Controller
                             $dataAnnualBonus = User::where("number_employee", $rowOther[0])->first();
                             if($dataAnnualBonus){
                                 $dadaArrayAnnualBonus[$dataAnnualBonus->number_employee] = [
-                                    'annual_bonus' => (int)$rowOther[2]
+                                    'annual_bonus' => $rowOther[2]
                                 ];
                             }
                         }
@@ -265,7 +265,7 @@ class EmployeePayrollController extends Controller
                         $otherBenefitEmployee = User::where("number_employee", $rowOther[0])->first();
                         if($otherBenefitEmployee){
                             $dadaArrayOtherBenefit[$otherBenefitEmployee->number_employee] = [
-                                'other_benefit' => (int)$rowOther[2]
+                                'other_benefit' => $rowOther[2]
                             ];
                         }
                     }
@@ -285,7 +285,7 @@ class EmployeePayrollController extends Controller
                         $employeeIncentive = User::where("number_employee", $itemIncen[0])->first();
                         if($employeeIncentive){
                             $dadaArrayIncentive[$employeeIncentive->number_employee] = [
-                                'incentive' => (int)$itemIncen[2]
+                                'incentive' => $itemIncen[2]
                             ];
                         }
                     }
