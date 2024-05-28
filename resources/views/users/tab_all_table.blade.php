@@ -960,7 +960,7 @@
                         let phone_allowance = "";
                         if (is_view_salary == 1) {
                             basic_salary =    '<td>$ <a href="#">'+(emp.basic_salary)+'</a></td>';
-                            salary_increas =  '<td>$ <a href="#">'+(emp.salary_increas)+'</a></td>';
+                            salary_increas =  '<td>$ <a href="#">'+(emp.salary_increas == null ? '0.00' : emp.salary_increas)+'</a></td>';
                             phone_allowance = '<td>$ <a href="#">'+(emp.phone_allowance == null ? '0.00' : emp.phone_allowance)+'</a></td>';
                         }
                         tr +='<tr class="odd">'+
