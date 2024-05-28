@@ -381,6 +381,8 @@ class EmployeePayrollController extends Controller
                                 }
                                 $totalBaseSalaryRecived = $totalSeverancePayLast + $totalSeverancePayFirst;
                                 $totalFirstSeverancPay = round($totalSeverancePayLast,2);
+                            }else{
+                                $totalBasicSalary = $item->basic_salary;
                             }
                         }else{
                             $totalBasicSalary = $item->basic_salary;
