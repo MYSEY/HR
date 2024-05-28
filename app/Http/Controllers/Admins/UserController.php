@@ -655,7 +655,6 @@ class UserController extends Controller
                         //function calu staff resign in probotion
                         $endMonth = Carbon::createFromDate($request->resign_date)->format('m');
                         $totalDayInMonth = Carbon::now()->month($endMonth)->daysInMonth;
-                        dd($totalDayInMonth);
                         $contract_deadline = Carbon::createFromDate($request->resign_date)->format('Y-m');
                         $currentYear = $contract_deadline.'-'.$totalDayInMonth;
                         $startDate = Carbon::parse($request->resign_date);
@@ -663,7 +662,6 @@ class UserController extends Controller
                         $totalDays = $startDate->diffInDays($endDate);
                         $toDays = $totalDayInMonth - $totalDays;
 
-                        dd($toDays);
                         if ($toDays < 15) {
                             $totalDay = 0;
                         } elseif($toDays >= 15 && $toDays <= 20) {
@@ -676,7 +674,7 @@ class UserController extends Controller
                             $unpaidLeaveProbation = ($employee->basic_salary * $totalDay) / 22;
                         }
                     }
-                    dd(99);
+                    
                     $netSalary = $totalSallaryAL + $totalSalaryStaffResign;
                     User::where('id',$request->id)->update([
                         'emp_status' => $request->emp_status,

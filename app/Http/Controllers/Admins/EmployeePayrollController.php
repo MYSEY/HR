@@ -325,6 +325,20 @@ class EmployeePayrollController extends Controller
                     $monthlyQuarterlyIncentive = 0;
                     $joinDate = Carbon::createFromDate($item->date_of_commencement)->format('m-y');
                     $paymentDate = Carbon::createFromDate($request->payment_date)->format('m-y');
+
+                    //function ajustment
+                    $dataPayrollAdjustment = PayrollAdjustment::where('employee_id',$item->id)->get();
+                    $adjustmentIncludeTaxe = 0;
+                    $adjustmentExcludeTaxe = 0;
+                    foreach ($dataPayrollAdjustment as $valueAdjust) {
+                        $adjustmentDate = Carbon::createFromDate($valueAdjust->adjustment_date)->format('m-y');
+                        if ($adjustmentDate == $paymentDate && $valueAdjust->adjustment_type == 'include_taxe') {
+                            $adjustmentIncludeTaxe = $valueAdjust->amount;
+                        }else{
+                            $adjustmentExcludeTaxe = $valueAdjust->amount;
+                        }
+                    }
+                    
                     if ($joinDate == $paymentDate) {
                         //total day in monthsd
                         $startMonth = Carbon::createFromDate($item->date_of_commencement)->format('m');
@@ -379,13 +393,13 @@ class EmployeePayrollController extends Controller
                                 if ($totalOldDay) {
                                     $totalSeverancePayFirst = ($item->pre_salary / $totalDayInMonth)  * $totalOldDay;
                                 }
-                                $totalBaseSalaryRecived = $totalSeverancePayLast + $totalSeverancePayFirst;
+                                $totalBaseSalaryRecived = ($totalSeverancePayLast + $totalSeverancePayFirst) + $adjustmentIncludeTaxe;
                                 $totalFirstSeverancPay = round($totalSeverancePayLast,2);
                             }else{
-                                $totalBasicSalary = $item->basic_salary;
+                                $totalBasicSalary = $item->basic_salary + $adjustmentIncludeTaxe;
                             }
                         }else{
-                            $totalBasicSalary = $item->basic_salary;
+                            $totalBasicSalary = $item->basic_salary + $adjustmentIncludeTaxe;
                         }
                     }
                     
@@ -414,17 +428,7 @@ class EmployeePayrollController extends Controller
                        $LoanAmount = 0;
                     }
                     
-                    $dataPayrollAdjustment = PayrollAdjustment::where('employee_id',$item->id)->get();
-                    $adjustmentIncludeTaxe = 0;
-                    $adjustmentExcludeTaxe = 0;
-                    foreach ($dataPayrollAdjustment as $valueAdjust) {
-                        $adjustmentDate = Carbon::createFromDate($valueAdjust->adjustment_date)->format('m-y');
-                        if ($adjustmentDate == $paymentDate && $valueAdjust->adjustment_type == 'include_taxe') {
-                            $adjustmentIncludeTaxe = $valueAdjust->amount;
-                        }else{
-                            $adjustmentExcludeTaxe = $valueAdjust->amount;
-                        }
-                    }
+                    
                     //calculated khmer_new_year and pchumBen_bonus
                     $totalBunus = 0;
                     if ($item->emp_status == 1 || $item->emp_status == 10 || $item->emp_status == 2) {
@@ -504,10 +508,10 @@ class EmployeePayrollController extends Controller
                     $type_udc = null;
                     
                     $totalSeverancyPaySalary = $totalBaseSalaryRecived != 0 ? $totalBaseSalaryRecived : $totalBasicSalary;
-                    $totalSalarySeverancyPay = $totalSeverancyPaySalary + $monthlyQuarterlyIncentive + $adjustmentIncludeTaxe + $otherBenefit + $annualBonus + $totalBunus + $item->phone_allowance + $totalChildAllowance;
+                    $totalSalarySeverancyPay = $totalSeverancyPaySalary + $monthlyQuarterlyIncentive + $otherBenefit + $annualBonus + $totalBunus + $item->phone_allowance + $totalChildAllowance;
                     
                     $totalSeverancePay = $totalFirstSeverancPay != 0 ? $totalFirstSeverancPay : $totalBasicSalary;
-                    $totalOtherBenefit = $totalSeverancePay + $monthlyQuarterlyIncentive + $adjustmentIncludeTaxe + $annualBonus + $otherBenefit + $totalBunus + $item->phone_allowance + $totalChildAllowance;
+                    $totalOtherBenefit = $totalSeverancePay + $monthlyQuarterlyIncentive + $annualBonus + $otherBenefit + $totalBunus + $item->phone_allowance + $totalChildAllowance;
 
                     $endContractDeadline= Carbon::createFromDate($item->fdc_end)->format('Y-m');
                     $paymentDate = Carbon::createFromDate($request->payment_date)->format('Y-m');
@@ -529,13 +533,14 @@ class EmployeePayrollController extends Controller
                         $type_udc = 'UDC';
                         $totalSeniority = $totalSalarySeverancyPay;
                     }
-                    
+                   
                     $dataTotalSeverancePay1 = $SeverancePay1 != null ? $SeverancePay1 : $totalOtherBenefit;
                     $totalSeverancePay1 =  $dataTotalSeverancePay1 != null ? $dataTotalSeverancePay1 : $totalSalarySeverancyPay;
                     $totalSeverancePay2 = $SeverancePay2;
                     $totalBasicSalary = $totalBaseSalaryRecived != null ? $totalBaseSalaryRecived : $totalBasicSalary;
                     $dataTotalSeverancePay2 = $SeverancePay2 != null ? $SeverancePay2 : $totalOtherBenefit;
-                    $totalSalaryNetPay = round($totalSeverancyPaySalary,2) + $monthlyQuarterlyIncentive + $adjustmentIncludeTaxe + $otherBenefit + $annualBonus + $totalBunus + $item->phone_allowance + $totalChildAllowance;
+                    $totalSalaryNetPay = (round($totalSeverancyPaySalary,2) + $monthlyQuarterlyIncentive + $otherBenefit + $annualBonus + $totalBunus + $item->phone_allowance + $totalChildAllowance);
+                    
                     if ($item->emp_status == 'Probation') {
                         $type_fdc1 = null;
                         $totalSeverancePay1 = null;
@@ -1048,7 +1053,7 @@ class EmployeePayrollController extends Controller
                             $totalSeverancePay = $dataSeverance->total_contract_severance_pay;
                         }
                     }
-
+                    
                     $totalNetSalary = $totalSalaryAfterTax + $totalSeverancePay + $adjustmentExcludeTaxe + $taxExemptionSalary - $LoanAmount;
                     $data   = $request->all();
                     $data['employee_id']                    = $item->id;
