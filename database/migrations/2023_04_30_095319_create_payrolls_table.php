@@ -47,6 +47,7 @@ return new class extends Migration
             $table->decimal('total_salary',50,2)->default(0);
             $table->string('exchange_rate')->nullable();
             $table->string('adjustment')->nullable();
+            $table->string('adjustment_include_taxe')->nullable();
             $table->string('leaves')->nullable();
             $table->bigInteger('created_by')->unsigned()->nullable();
             $table->bigInteger('updated_by')->unsigned()->nullable();

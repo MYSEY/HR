@@ -27,6 +27,7 @@ class ExportReviewPayroll implements FromCollection, WithColumnWidths, WithHeadi
     protected $totalMonthlyQuarterlyBonuses;
     protected $totalKnyPhcumben;
     protected $totalAnnualIncentiveBonus;
+    protected $totalOtherBenefits;
     protected $totalSeniorityPayIncludedTax;
     protected $totalGrossIncludeTax;
     protected $totalPensionFund;
@@ -89,6 +90,7 @@ class ExportReviewPayroll implements FromCollection, WithColumnWidths, WithHeadi
             $this->totalMonthlyQuarterlyBonuses += $value->monthly_quarterly_bonuses;
             $this->totalKnyPhcumben += $value->total_kny_phcumben;
             $this->totalAnnualIncentiveBonus += $value->annual_incentive_bonus;
+            $this->totalOtherBenefits += $value->other_benefits;
             $this->totalSeniorityPayIncludedTax += $value->seniority_pay_included_tax;
             $this->totalGrossIncludeTax += $value->total_gross;
             $this->totalPensionFund += $value->total_pension_fund;
@@ -108,14 +110,14 @@ class ExportReviewPayroll implements FromCollection, WithColumnWidths, WithHeadi
             $this->totalAmountCar += $value->total_amount_car;
             $this->totalSalaryNetPay += $value->total_salary;
 
-            if (is_numeric($value->basic_salary)) {
-                $basic_salary = number_format($value->basic_salary, 2);
-            } else {
-                $basic_salary = number_format($value->basic_salary, 2);
-            }
+            // if (is_numeric($value->basic_salary)) {
+            //     $basic_salary = number_format($value->basic_salary, 2);
+            // } else {
+            //     $basic_salary = number_format($value->basic_salary, 2);
+            // }
             
-            $totalSalaryTaxRiel = number_format($value->total_salary_tax_riel, 0);
-            $total_salary = number_format($value->total_salary, 2);
+            $totalSalaryTaxRiel = $value->total_salary_tax_riel;
+            $total_salary = $value->total_salary;
             $dataExport[] = [
                 "no" => $i,
                 "employee_id"       => $value->users->number_employee,
@@ -124,30 +126,31 @@ class ExportReviewPayroll implements FromCollection, WithColumnWidths, WithHeadi
                 "department"        => $value->users->EmployeeDepartment,
                 "location"          => $value->users->EmployeeBranch,
                 "Join Date"         => $value->users->joinOfDate,
-                "Basic Salary"      => $basic_salary,
-                "Base Salary Received"          => number_format($value->total_gross_salary, 2),
-                "Child Allowance"               => number_format($value->total_child_allowance),
-                "Phone Allowance"               => number_format($value->phone_allowance, 2),
-                "Monthly Quarterly Bonuses"     => number_format($value->monthly_quarterly_bonuses, 2),
-                "KNY_/_pchum_ben"               => number_format($value->total_kny_phcumben, 2),
-                "Annual Incentive Bonus"        => number_format($value->annual_incentive_bonus, 2),
-                "Seniority Pay Included Tax"    => number_format($value->seniority_pay_included_tax, 2),
-                "Total Gross"                   => number_format($value->total_gross, 2),
-                "Pension Fund"                  => number_format($value->total_pension_fund, 2),
-                "Base Salary Received USD"      => number_format($value->base_salary_received_usd, 2),
-                "Base Salary Received Reil"     => number_format($value->base_salary_received_riel),
-                "Spouse"                        => number_format($value->spouse, 2),
-                "Dependent Child"               => number_format($value->children, 2),
-                "Charges To Be Reduced"         => number_format($value->total_charges_reduced),
-                "Total Tax Base Riel"           => number_format($value->total_tax_base_riel),
-                "Tax Rate"                      => number_format($value->total_rate, 2),
-                "Personal Tax(USD)"             => number_format($value->total_salary_tax_usd, 2),
+                "Basic Salary"      => $value->basic_salary,
+                "Base Salary Received"          => $value->total_gross_salary,
+                "Child Allowance"               => $value->total_child_allowa,
+                "Phone Allowance"               => $value->phone_allowance,
+                "Monthly Quarterly Bonuses"     => $value->monthly_quarterly_bonuses,
+                "KNY_/_pchum_ben"               => $value->total_kny_phcumben,
+                "Annual Incentive Bonus"        => $value->annual_incentive_bonus,
+                "other benefits"               => $value->other_benefits,
+                "Seniority Pay Included Tax"    => $value->seniority_pay_included_tax,
+                "Total Gross"                   => $value->total_gross,
+                "Pension Fund"                  => $value->total_pension_fund,
+                "Base Salary Received USD"      => $value->base_salary_received_usd,
+                "Base Salary Received Reil"     => $value->base_salary_received_r,
+                "Spouse"                        => $value->spouse,
+                "Dependent Child"               => $value->children,
+                "Charges To Be Reduced"         => $value->total_charges_redu,
+                "Total Tax Base Riel"           => $value->total_tax_base_r,
+                "Tax Rate"                      => $value->total_rate,
+                "Personal Tax(USD)"             => $value->total_salary_tax_usd,
                 "Personal Tax(Riels)"           => $totalSalaryTaxRiel,
-                "Seniority Pay Excluded Tax"    => number_format($value->seniority_pay_excluded_tax, 2),
-                "Seniority Backford"            => number_format($value->seniority_backford, 2),
-                "Severance Pay"                 => number_format($value->total_severance_pay, 2),
-                "Loan Amount"                   => number_format($value->loan_amount, 2),
-                "Total Amount Car"              => number_format($value->total_amount_car, 2),
+                "Seniority Pay Excluded Tax"    => $value->seniority_pay_excluded_tax,
+                "Seniority Backford"            => $value->seniority_backford,
+                "Severance Pay"                 => $value->total_severance_pay,
+                "Loan Amount"                   => $value->loan_amount,
+                "Total Amount Car"              => $value->total_amount_car,
                 "net_salary"                    => $total_salary
             ];
         }
@@ -187,21 +190,22 @@ class ExportReviewPayroll implements FromCollection, WithColumnWidths, WithHeadi
             'O' => 20,
             'P' => 20,
             'Q' => 20,
-            'R' => 25,
+            'R' => 20,
             'S' => 25,
-            'T' => 7,
-            'U' => 13,
-            'V' => 24,
-            'W' => 20,
-            'X' => 14,
-            'Y' => 20,
+            'T' => 25,
+            'U' => 7,
+            'V' => 13,
+            'W' => 24,
+            'X' => 20,
+            'Y' => 14,
             'Z' => 20,
             'AA' => 20,
             'AB' => 20,
             'AC' => 20,
-            'AD' => 18,
-            'AE' => 20,
-            'AF' => 15,
+            'AD' => 20,
+            'AE' => 18,
+            'AF' => 20,
+            'AG' => 15,
         ];
     }
     public function registerEvents(): array {
@@ -215,7 +219,7 @@ class ExportReviewPayroll implements FromCollection, WithColumnWidths, WithHeadi
                 $event->sheet->getDelegate()->getStyle('A3')->getFont()->getColor()->setARGB('0000CC');
                 $event->sheet->getDelegate()->getStyle('A4')->getFont()->getColor()->setARGB('3923A9');
                 
-                $event->sheet->getStyle('A5:AF5')->applyFromArray([
+                $event->sheet->getStyle('A5:AG5')->applyFromArray([
                     'borders' => [
                         'allBorders' => [
                             'borderStyle' => Border::BORDER_THIN,
@@ -227,7 +231,7 @@ class ExportReviewPayroll implements FromCollection, WithColumnWidths, WithHeadi
                 if ($this->num > 0) {
                     foreach ($this->export_datas as $key=>$value) {
                         $n++;
-                        $event->sheet->getStyle('A'.$n.':AF'.$n)->applyFromArray([
+                        $event->sheet->getStyle('A'.$n.':AG'.$n)->applyFromArray([
                             'borders' => [
                                 'allBorders' => [
                                     'borderStyle' => Border::BORDER_THIN,
@@ -238,7 +242,7 @@ class ExportReviewPayroll implements FromCollection, WithColumnWidths, WithHeadi
                     }
                 }
 
-                $event->sheet->getStyle('A'.$rows.':AF'.$rows)->applyFromArray([
+                $event->sheet->getStyle('A'.$rows.':AG'.$rows)->applyFromArray([
                     'borders' => [
                         'allBorders' => [
                             'borderStyle' => Border::BORDER_THIN,
@@ -246,9 +250,9 @@ class ExportReviewPayroll implements FromCollection, WithColumnWidths, WithHeadi
                         ],
                     ],
                 ]);
-                $sheet->getDelegate()->getStyle('A5:AF5')->getFont()->getColor()->setARGB('3923A9');
-                $sheet->getDelegate()->getStyle('A5:AF5')->getFont()->setSize(9)->setName('Khmer OS Battambang')->setSize(9);
-                $event->sheet->getDelegate()->getStyle('A5:AF5')->getAlignment()
+                $sheet->getDelegate()->getStyle('A5:AG5')->getFont()->getColor()->setARGB('3923A9');
+                $sheet->getDelegate()->getStyle('A5:AG5')->getFont()->setSize(9)->setName('Khmer OS Battambang')->setSize(9);
+                $event->sheet->getDelegate()->getStyle('A5:AG5')->getAlignment()
                 ->setWrapText(true)
                 ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
@@ -308,78 +312,84 @@ class ExportReviewPayroll implements FromCollection, WithColumnWidths, WithHeadi
                 $sheet->setCellValue("N".$rows, number_format($this->totalAnnualIncentiveBonus, 2));
                 $sheet->getDelegate()->getStyle("N".$rows)->getFont()->setName('Khmer OS Battambang')->setSize(9)->setBold("N".$rows);
                 $event->sheet->getDelegate()->getStyle("N".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+
                 //total setCellValue O
-                $sheet->setCellValue("O".$rows, number_format($this->totalSeniorityPayIncludedTax, 2));
+                $sheet->setCellValue("O".$rows, number_format($this->totalOtherBenefits, 2));
                 $sheet->getDelegate()->getStyle("O".$rows)->getFont()->setName('Khmer OS Battambang')->setSize(9)->setBold("O".$rows);
                 $event->sheet->getDelegate()->getStyle("O".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+
                 //total setCellValue P
-                $sheet->setCellValue("P".$rows, number_format($this->totalGrossIncludeTax, 2));
+                $sheet->setCellValue("P".$rows, number_format($this->totalSeniorityPayIncludedTax, 2));
                 $sheet->getDelegate()->getStyle("P".$rows)->getFont()->setName('Khmer OS Battambang')->setSize(9)->setBold("P".$rows);
                 $event->sheet->getDelegate()->getStyle("P".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
                 //total setCellValue Q
-                $sheet->setCellValue("Q".$rows, number_format($this->totalPensionFund, 2));
+                $sheet->setCellValue("Q".$rows, number_format($this->totalGrossIncludeTax, 2));
                 $sheet->getDelegate()->getStyle("Q".$rows)->getFont()->setName('Khmer OS Battambang')->setSize(9)->setBold("Q".$rows);
                 $event->sheet->getDelegate()->getStyle("Q".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
                 //total setCellValue R
-                $sheet->setCellValue("R".$rows, number_format($this->TotalBaseSalaryReceivedUsd, 2));
+                $sheet->setCellValue("R".$rows, number_format($this->totalPensionFund, 2));
                 $sheet->getDelegate()->getStyle("R".$rows)->getFont()->setName('Khmer OS Battambang')->setSize(9)->setBold("R".$rows);
                 $event->sheet->getDelegate()->getStyle("R".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
                 //total setCellValue S
-                $sheet->setCellValue("S".$rows, number_format($this->totalBaseSalaryReceivedRiel));
+                $sheet->setCellValue("S".$rows, number_format($this->TotalBaseSalaryReceivedUsd, 2));
                 $sheet->getDelegate()->getStyle("S".$rows)->getFont()->setName('Khmer OS Battambang')->setSize(9)->setBold("S".$rows);
                 $event->sheet->getDelegate()->getStyle("S".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
                 //total setCellValue T
-                $sheet->setCellValue("T".$rows, number_format($this->totalSpouse, 2));
+                $sheet->setCellValue("T".$rows, number_format($this->totalBaseSalaryReceivedRiel));
                 $sheet->getDelegate()->getStyle("T".$rows)->getFont()->setName('Khmer OS Battambang')->setSize(9)->setBold("T".$rows);
                 $event->sheet->getDelegate()->getStyle("T".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
                 //total setCellValue U
-                $sheet->setCellValue("U".$rows, number_format($this->totalChildren, 2));
+                $sheet->setCellValue("U".$rows, number_format($this->totalSpouse, 2));
                 $sheet->getDelegate()->getStyle("U".$rows)->getFont()->setName('Khmer OS Battambang')->setSize(9)->setBold("U".$rows);
                 $event->sheet->getDelegate()->getStyle("U".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
                 //total setCellValue V
-                $sheet->setCellValue("V".$rows, number_format($this->totalChargesReduced));
+                $sheet->setCellValue("V".$rows, number_format($this->totalChildren, 2));
                 $sheet->getDelegate()->getStyle("V".$rows)->getFont()->setName('Khmer OS Battambang')->setSize(9)->setBold("V".$rows);
                 $event->sheet->getDelegate()->getStyle("V".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
-                //total setCellValue V
-                $sheet->setCellValue("W".$rows, number_format($this->totalTaxBaseRiel));
+                //total setCellValue W
+                $sheet->setCellValue("W".$rows, number_format($this->totalChargesReduced));
                 $sheet->getDelegate()->getStyle("W".$rows)->getFont()->setName('Khmer OS Battambang')->setSize(9)->setBold("W".$rows);
                 $event->sheet->getDelegate()->getStyle("W".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
                 //total setCellValue X
-                $sheet->setCellValue("X".$rows, number_format($this->totalRate, 2));
+                $sheet->setCellValue("X".$rows, number_format($this->totalTaxBaseRiel));
                 $sheet->getDelegate()->getStyle("X".$rows)->getFont()->setName('Khmer OS Battambang')->setSize(9)->setBold("X".$rows);
                 $event->sheet->getDelegate()->getStyle("X".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
                 //total setCellValue Y
-                $sheet->setCellValue("Y".$rows, number_format($this->totalSalaryTaxUsd, 2));
+                $sheet->setCellValue("Y".$rows, number_format($this->totalRate, 2));
                 $sheet->getDelegate()->getStyle("Y".$rows)->getFont()->setName('Khmer OS Battambang')->setSize(9)->setBold("Y".$rows);
                 $event->sheet->getDelegate()->getStyle("Y".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
                 //total setCellValue Z
-                $sheet->setCellValue("Z".$rows, number_format($this->totalSalaryTaxRiel));
+                $sheet->setCellValue("Z".$rows, number_format($this->totalSalaryTaxUsd, 2));
                 $sheet->getDelegate()->getStyle("Z".$rows)->getFont()->setName('Khmer OS Battambang')->setSize(9)->setBold("Z".$rows);
                 $event->sheet->getDelegate()->getStyle("Z".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
                 //total setCellValue AA
-                $sheet->setCellValue("AA".$rows, number_format($this->totalSeniorityPayExcludedTax, 2));
+                $sheet->setCellValue("AA".$rows, number_format($this->totalSalaryTaxRiel));
                 $sheet->getDelegate()->getStyle("AA".$rows)->getFont()->setName('Khmer OS Battambang')->setSize(9)->setBold("AA".$rows);
                 $event->sheet->getDelegate()->getStyle("AA".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
                 //total setCellValue AB
-                $sheet->setCellValue("AB".$rows, number_format($this->totalSeniorityBackford, 2));
+                $sheet->setCellValue("AB".$rows, number_format($this->totalSeniorityPayExcludedTax, 2));
                 $sheet->getDelegate()->getStyle("AB".$rows)->getFont()->setName('Khmer OS Battambang')->setSize(9)->setBold("AB".$rows);
                 $event->sheet->getDelegate()->getStyle("AB".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
                 //total setCellValue AC
-                $sheet->setCellValue("AC".$rows, number_format($this->totalSeverancePay, 2));
-                $sheet->getDelegate()->getStyle("AC".$rows)->getFont()->setName('Khmer OS Battambang')->setSize(9)->setBold("AB".$rows);
+                $sheet->setCellValue("AC".$rows, number_format($this->totalSeniorityBackford, 2));
+                $sheet->getDelegate()->getStyle("AC".$rows)->getFont()->setName('Khmer OS Battambang')->setSize(9)->setBold("AC".$rows);
                 $event->sheet->getDelegate()->getStyle("AC".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
                 //total setCellValue AD
-                $sheet->setCellValue("AD".$rows, number_format($this->totalLoanAmount, 2));
+                $sheet->setCellValue("AD".$rows, number_format($this->totalSeverancePay, 2));
                 $sheet->getDelegate()->getStyle("AD".$rows)->getFont()->setName('Khmer OS Battambang')->setSize(9)->setBold("AD".$rows);
                 $event->sheet->getDelegate()->getStyle("AD".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
                 //total setCellValue AE
-                $sheet->setCellValue("AE".$rows, number_format($this->totalAmountCar, 2));
+                $sheet->setCellValue("AE".$rows, number_format($this->totalLoanAmount, 2));
                 $sheet->getDelegate()->getStyle("AE".$rows)->getFont()->setName('Khmer OS Battambang')->setSize(9)->setBold("AE".$rows);
                 $event->sheet->getDelegate()->getStyle("AE".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
                 //total setCellValue AF
-                $sheet->setCellValue("AF".$rows, number_format(abs($this->totalSalaryNetPay), 2));
+                $sheet->setCellValue("AF".$rows, number_format($this->totalAmountCar, 2));
                 $sheet->getDelegate()->getStyle("AF".$rows)->getFont()->setName('Khmer OS Battambang')->setSize(9)->setBold("AF".$rows);
                 $event->sheet->getDelegate()->getStyle("AF".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+                //total setCellValue AG
+                $sheet->setCellValue("AG".$rows, number_format(abs($this->totalSalaryNetPay), 2));
+                $sheet->getDelegate()->getStyle("AG".$rows)->getFont()->setName('Khmer OS Battambang')->setSize(9)->setBold("AG".$rows);
+                $event->sheet->getDelegate()->getStyle("AG".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
             },
         ];
     }
@@ -410,6 +420,7 @@ class ExportReviewPayroll implements FromCollection, WithColumnWidths, WithHeadi
             "ប្រាក់រង្វាន់លើកទឹកចិត្តប្រចាំខែនិងប្រចាំត្រីមាស",
             "ប្រាកឧបត្ថម្ភចូលឆ្នាំ &ភ្ជុំបិណ្ឌ",
             "ប្រាក់រង្វាន់លើកទឹកចិត្តប្រចាំឆ្នាំ",
+            "អត្ថប្រយោជន៍ផ្សេងៗ",
             "ប្រាក់ជាប់ពន្ធលើប្រាក់បំណាច់អតីតភាពការងារ",
             "បៀវត្ស​គោលទទួលបាន($)",
             "ភាគទានសោធនពីបុគ្គលិក2%",
