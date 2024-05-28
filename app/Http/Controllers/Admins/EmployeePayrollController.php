@@ -1131,9 +1131,9 @@ class EmployeePayrollController extends Controller
                 }
             }
             
-            $employee = User::where('resign_date','>=',$request->payment_date)->whereIn('emp_status',['3','4','5','6','7'])->get();
-            if (!$employee->isEmpty()) {
-                foreach ($employee as $item) {
+            $staffResign = User::where('resign_date','>=',$request->payment_date)->whereIn('emp_status',['3','4','5','6','7'])->get();
+            if (!$staffResign->isEmpty()) {
+                foreach ($staffResign as $item) {
                     //fuction check laon amount
                     if (array_key_exists($item->number_employee, $dadaArrayLoan)) {
                         $LoanAmount = $dadaArrayLoan[$item->number_employee]['laon_amount'];
@@ -1143,34 +1143,34 @@ class EmployeePayrollController extends Controller
 
                     //calculated khmer_new_year and pchumBen_bonus
                     $totalBunus = 0;
-                    // if ($item->resign_date >= $request->payment_date) {
-                    //     $dataHolidayBunuse = Holiday::where('type','bonus')->get();
-                    //     foreach ($dataHolidayBunuse as $value) {
-                    //         $userJoinDate = $item->date_of_commencement;
-                    //         $startDate = Carbon::parse()->diffInDays($userJoinDate) + 1;
-                    //         $dayOfYear = 365;
-                    //         $fromDate = Carbon::parse($item->date_of_commencement);
-                    //         $toDate = Carbon::parse($value->from);
-                    //         $totalStartDays = $fromDate->diffInDays($toDate);
+                    if ($item->resign_date >= $request->payment_date) {
+                        $dataHolidayBunuse = Holiday::where('type','bonus')->get();
+                        foreach ($dataHolidayBunuse as $value) {
+                            $userJoinDate = $item->date_of_commencement;
+                            $startDate = Carbon::parse()->diffInDays($userJoinDate) + 1;
+                            $dayOfYear = 365;
+                            $fromDate = Carbon::parse($item->date_of_commencement);
+                            $toDate = Carbon::parse($value->from);
+                            $totalStartDays = $fromDate->diffInDays($toDate);
 
-                    //         $hildayMonth = Carbon::createFromDate($value->period_month)->format('Y-m');
-                    //         $hildayDays = Carbon::createFromDate($value->period_month)->format('d');
-                    //         $payMonth = Carbon::createFromDate($request->payment_date)->format('Y-m');
-                    //         $payDays = Carbon::createFromDate($request->payment_date)->format('d');
-                    //         $bounsType = $value->title;
-                    //         if($hildayMonth == $payMonth && $hildayDays >= $payDays){
-                    //             if ($totalStartDays > $dayOfYear) {
-                    //                 $percent = $value->amount_percent / 100;
-                    //                 $totalAllowanceBunus = ($item->basic_salary * $percent);
-                    //             } else {
-                    //                 $totalPercent = ($item->basic_salary * $value->amount_percent) / 100;
-                    //                 $percentSalary = $totalPercent * $totalStartDays;
-                    //                 $totalAllowanceBunus = $percentSalary / $dayOfYear;
-                    //             }
-                    //         }
-                    //         $totalBunus = $totalAllowanceBunus ?? 0;
-                    //     }
-                    // }
+                            $hildayMonth = Carbon::createFromDate($value->period_month)->format('Y-m');
+                            $hildayDays = Carbon::createFromDate($value->period_month)->format('d');
+                            $payMonth = Carbon::createFromDate($request->payment_date)->format('Y-m');
+                            $payDays = Carbon::createFromDate($request->payment_date)->format('d');
+                            $bounsType = $value->title;
+                            if($hildayMonth == $payMonth && $hildayDays >= $payDays){
+                                if ($totalStartDays > $dayOfYear) {
+                                    $percent = $value->amount_percent / 100;
+                                    $totalAllowanceBunus = ($item->basic_salary * $percent);
+                                } else {
+                                    $totalPercent = ($item->basic_salary * $value->amount_percent) / 100;
+                                    $percentSalary = $totalPercent * $totalStartDays;
+                                    $totalAllowanceBunus = $percentSalary / $dayOfYear;
+                                }
+                            }
+                            $totalBunus = $totalAllowanceBunus ?? 0;
+                        }
+                    }
                     
                     // function sum benefit age children <= 18
                     $dataDateOfBirth = [];
