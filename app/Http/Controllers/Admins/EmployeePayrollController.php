@@ -314,6 +314,7 @@ class EmployeePayrollController extends Controller
             $employee = User::where('date_of_commencement','<=',$request->payment_date)->whereIn('emp_status',['Probation','1','10','2'])->get();
             if (!$employee->isEmpty()) {
                 foreach ($employee as $item) {
+                    // dd($item->number_employee);
                     payrollPreview::where('employee_id',$item->id)->delete();
                     PreviewNationalSocialSecurityFund::where('employee_id',$item->id)->delete();
                     PreviewGrossSalaryPay::where('employee_id',$item->id)->delete();
@@ -581,6 +582,7 @@ class EmployeePayrollController extends Controller
                     }else{
                         $totalGrossSalary = $dataGrossSalary->total_gross_salary;
                     }
+                    
                     //National Social Security Fund (NSSF) Formula
                     $exchangNSSF = ExchangeRate::where('type','NSSF')->orderBy('id','desc')->first();
                     if ($exchangNSSF) {
@@ -599,24 +601,25 @@ class EmployeePayrollController extends Controller
                         $occupationalRisk = (0.008 * $averageWage);
                         $healthCare = (0.026 * $averageWage);
                         $workerContributionUsd = ($averageWage * 0.02);
-                        $workerContributionRiel = round($workerContributionUsd,-2) / $exchangNSSF->amount_riel;
+                        $workerContributionRiel = $workerContributionUsd / $exchangNSSF->amount_riel;
+                        
                         $dataNSSF = PreviewNationalSocialSecurityFund::create([
                             'employee_id'                   => $item->id,
                             'number_employee'               => $item->number_employee,
-                            'total_pre_tax_salary_usd'      => $totalGrossSalary,
+                            'total_pre_tax_salary_usd'      => round($totalGrossSalary,2),
                             'total_pre_tax_salary_riel'     => $totalExchangeRielPreTax,
                             'total_average_wage'            => $averageWage,
                             'total_occupational_risk'       => round($occupationalRisk,-2),
                             'total_health_care'             => $healthCare,
                             'pension_contribution_usd'      => round($workerContributionUsd, -2),
-                            'pension_contribution_riel'     => round($workerContributionRiel, 2),
+                            'pension_contribution_riel'     => $workerContributionRiel,
                             'corporate_contribution'        => round($workerContributionUsd, -2),
                             'exchange_rate'                 => $exchangNSSF->amount_riel,
                             'payment_date'                  => $request->payment_date,
                             'created_by'                    => Auth::user()->id,
                         ]);
                     }
-                    $pension_contribution = $dataNSSF->pension_contribution_riel;
+                    $pension_contribution = round($dataNSSF->pension_contribution_riel,2);
 
                     //function Seniority pay
                     $seniorityPayableTax = 0;
