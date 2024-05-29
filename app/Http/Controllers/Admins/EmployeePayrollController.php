@@ -507,7 +507,7 @@ class EmployeePayrollController extends Controller
                     $type_fdc1 = null;
                     $type_fdc2 = null;
                     $type_udc = null;
-                    
+                    $totalBasicSalaryFrist = null;
                     $totalSeverancyPaySalary = $totalBaseSalaryRecived != 0 ? $totalBaseSalaryRecived : $totalBasicSalary;
                     $totalSalarySeverancyPay = $totalSeverancyPaySalary + $monthlyQuarterlyIncentive + $otherBenefit + $annualBonus + $totalBunus + $item->phone_allowance + $totalChildAllowance;
                     
@@ -525,36 +525,40 @@ class EmployeePayrollController extends Controller
                         $startDate = Carbon::parse($item->fdc_end);
                         $endDate = Carbon::parse($currentYear);
                         $totalNewDays = $startDate->diffInDays($endDate);
-                        $SeverancePay2 = ($totalSalarySeverancyPay / $totalDayInMonth) * $totalNewDays;
+                        $SeverancePay2 = ($item->basic_salary / $totalDayInMonth) * $totalNewDays;
                         //old salary and total old days
                         $totalOldDay = $totalDayInMonth - $totalNewDays;
-                        $SeverancePay1 = ($totalSalarySeverancyPay / $totalDayInMonth) * $totalOldDay;
-
+                        $SeverancePay1 = ($item->basic_salary / $totalDayInMonth) * $totalOldDay;
                         $type_fdc2 = 'FDC-2';
+                        $type_fdc1 = 'FDC-1';
                         $type_udc = 'UDC';
                         $totalSeniority = $totalSalarySeverancyPay;
+                        $totalBaseSalaryRecived =  $SeverancePay1 + $SeverancePay2;
                     }
-                   
+                    
                     $dataTotalSeverancePay1 = $SeverancePay1 != null ? $SeverancePay1 : $totalOtherBenefit;
                     $totalSeverancePay1 =  $dataTotalSeverancePay1 != null ? $dataTotalSeverancePay1 : $totalSalarySeverancyPay;
                     $totalSeverancePay2 = $SeverancePay2;
-                    $totalBasicSalary = $totalBaseSalaryRecived != null ? $totalBaseSalaryRecived : $totalBasicSalary;
+                    $totalBasicSalaryLast = $totalBaseSalaryRecived != null ? $totalBaseSalaryRecived : $totalBasicSalary;
                     $dataTotalSeverancePay2 = $SeverancePay2 != null ? $SeverancePay2 : $totalOtherBenefit;
                     $totalSalaryNetPay = (round($totalSeverancyPaySalary,2) + $monthlyQuarterlyIncentive + $otherBenefit + $annualBonus + $totalBunus + $item->phone_allowance + $totalChildAllowance);
                     
                     if ($item->emp_status == 'Probation') {
                         $type_fdc1 = null;
                         $totalSeverancePay1 = null;
-                    } elseif($item->emp_status == 1) {
+                    } 
+                    if($item->emp_status == 1) {
                         $type_fdc1 = 'FDC-1';
-                    }elseif($item->emp_status == 10){
+                    }
+                    if($item->emp_status == 10){
                         $type_fdc1 = null;
                         $totalSeniority = null;
                         $type_fdc1 = 'FDC-2';
                         $totalSeverancePay1 = null;
                         $totalSeverancePay2 = null;
                         $totalSeverancePay2 = $dataTotalSeverancePay2 != null ? $dataTotalSeverancePay2 : $totalSalarySeverancyPay;
-                    }elseif($item->emp_status == 2){
+                    }
+                    if($item->emp_status == 2){
                         $type_udc = 'UDC';
                         $totalSeverancePay1 = $totalSeverancePay1;
                         $totalSeverancePay2 = null;
@@ -1063,7 +1067,7 @@ class EmployeePayrollController extends Controller
                     $data['basic_salary']                   = $item->basic_salary;
                     $data['spouse']                         = $item->spouse;
                     $data['children']                       = $children;
-                    $data['total_gross_salary']             = $totalBasicSalary;
+                    $data['total_gross_salary']             = $totalBasicSalaryLast;
                     $data['total_child_allowance']          = $totalChildAllowance;
                     $data['phone_allowance']                = $item->phone_allowance;
                     $data['total_kny_phcumben']             = $totalBunus;

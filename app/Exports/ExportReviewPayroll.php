@@ -141,7 +141,7 @@ class ExportReviewPayroll implements FromCollection, WithColumnWidths, WithHeadi
                 "Base Salary Received Reil"     => $value->base_salary_received_riel,
                 "Spouse"                        => $value->spouse,
                 "Dependent Child"               => $value->children,
-                "Charges To Be Reduced"         => $value->total_charges_redu,
+                "Charges To Be Reduced"         => $value->total_charges_reduced,
                 "Total Tax Base Riel"           => $value->total_tax_base_riel,
                 "Tax Rate"                      => $value->total_rate,
                 "Personal Tax(USD)"             => $value->total_salary_tax_usd,
