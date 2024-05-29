@@ -602,7 +602,6 @@ class EmployeePayrollController extends Controller
                         $healthCare = (0.026 * $averageWage);
                         $workerContributionUsd = ($averageWage * 0.02);
                         $workerContributionRiel = $workerContributionUsd / $exchangNSSF->amount_riel;
-                        
                         $dataNSSF = PreviewNationalSocialSecurityFund::create([
                             'employee_id'                   => $item->id,
                             'number_employee'               => $item->number_employee,
