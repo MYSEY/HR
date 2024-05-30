@@ -318,7 +318,7 @@ class EmployeePayrollController extends Controller
                     payrollPreview::where('employee_id',$item->id)->delete();
                     PreviewNationalSocialSecurityFund::where('employee_id',$item->id)->delete();
                     GrossSalaryPay::where('number_employee',$item->number_employee)->where('payment_date',$request->payment_date)->delete();
-                    GrossSalaryPay::where('number_employee',$item->number_employee)->where('payment_date',$request->payment_date)->delete();
+                    SeverancePay::where('number_employee',$item->number_employee)->where('payment_date',$request->payment_date)->delete();
                     PreviewBonus::where('employee_id',$item->id)->delete();
                     //function first month join work
                     $totalFirstSeverancPay = 0;
@@ -1956,8 +1956,8 @@ class EmployeePayrollController extends Controller
             payrollPreview::whereIn('number_employee',explode(",",$number_employee))->whereIn('payment_date',explode(",",$payment_date))->delete();
             PreviewNationalSocialSecurityFund::whereIn('number_employee',explode(",",$number_employee))->whereIn('payment_date',explode(",",$payment_date))->delete();
             GrossSalaryPay::whereIn('number_employee',explode(",",$number_employee))->whereIn('payment_date',explode(",",$payment_date))->delete();
+            SeverancePay::whereIn('number_employee',explode(",",$number_employee))->whereIn('payment_date',explode(",",$payment_date))->delete();
             PreviewBonus::whereIn('number_employee',explode(",",$number_employee))->whereIn('payment_date',explode(",",$payment_date))->delete();
-            GrossSalaryPay::whereIn('number_employee',explode(",",$number_employee))->whereIn('payment_date',explode(",",$payment_date))->delete();
             Toastr::success('Payroll deleted successfully.','Success');
             return redirect()->back();
         }catch(\Exception $e){
