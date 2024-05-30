@@ -585,7 +585,6 @@ class EmployeePayrollController extends Controller
                     }else{
                         $totalGrossSalary = $dataGrossSalary->total_gross_salary;
                     }
-                    
                     //National Social Security Fund (NSSF) Formula
                     $exchangNSSF = ExchangeRate::where('type','NSSF')->orderBy('id','desc')->first();
                     if ($exchangNSSF) {
