@@ -500,6 +500,7 @@ class EmployeePayrollController extends Controller
                         }
                     }
                     
+                        
                     //calcute last severance pay 1
                     $SeverancePay1 = null;
                     $SeverancePay2 = null;
@@ -515,6 +516,7 @@ class EmployeePayrollController extends Controller
                     
                     $totalSeverancePay = $totalFirstSeverancPay != 0 ? $totalFirstSeverancPay : $totalBasicSalary;
                     $totalOtherBenefit = $totalSeverancePay + $monthlyQuarterlyIncentive + $annualBonus + $otherBenefit + $totalBunus + $item->phone_allowance + $totalChildAllowance;
+                    
                     
                     $endContractDeadline= Carbon::createFromDate($item->fdc_end)->format('Y-m');
                     $paymentDate = Carbon::createFromDate($request->payment_date)->format('Y-m');
@@ -591,6 +593,7 @@ class EmployeePayrollController extends Controller
                     }else{
                         $totalGrossSalary = $dataGrossSalary->total_gross_salary;
                     }
+                    
                     //National Social Security Fund (NSSF) Formula
                     $exchangNSSF = ExchangeRate::where('type','NSSF')->orderBy('id','desc')->first();
                     if ($exchangNSSF) {
