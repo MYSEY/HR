@@ -504,6 +504,8 @@ class EmployeePayrollController extends Controller
                     $SeverancePay1 = null;
                     $SeverancePay2 = null;
                     $totalSeniority = 0;
+                    $basic1 = 0;
+                    $basic2 = 0;
                     $type_fdc1 = null;
                     $type_fdc2 = null;
                     $type_udc = null;
@@ -525,20 +527,24 @@ class EmployeePayrollController extends Controller
                         $startDate = Carbon::parse($item->fdc_end);
                         $endDate = Carbon::parse($currentYear);
                         $totalNewDays = $startDate->diffInDays($endDate);
-                        $SeverancePay2 = ($totalOtherBenefit / $totalDayInMonth) * $totalNewDays;
+                        $SeverancePay2 = ($totalSalarySeverancyPay / $totalDayInMonth) * $totalNewDays;
                         //old salary and total old days
                         $totalOldDay = $totalDayInMonth - $totalNewDays;
-                        $SeverancePay1 = ($totalOtherBenefit / $totalDayInMonth) * $totalOldDay;
+                        $SeverancePay1 = ($totalSalarySeverancyPay / $totalDayInMonth) * $totalOldDay;
                         $type_fdc2 = 'FDC-2';
                         $type_fdc1 = 'FDC-1';
                         $type_udc = 'UDC';
                         $totalSeniority = $totalSalarySeverancyPay;
-                        $totalBaseSalaryRecived =  $SeverancePay1 + $SeverancePay2;
+
+                        $basic1 = ($item->basic_salary / $totalDayInMonth) * $totalOldDay;
+                        $basic2 = ($item->basic_salary / $totalDayInMonth) * $totalNewDays;
+                        $totalBaseSalaryRecived =  $basic1 + $basic2;
                     }
                     
                     $dataTotalSeverancePay1 = $SeverancePay1 != null ? $SeverancePay1 : $totalOtherBenefit;
                     $totalSeverancePay1 =  $dataTotalSeverancePay1 != null ? $dataTotalSeverancePay1 : $totalSalarySeverancyPay;
                     $totalSeverancePay2 = $SeverancePay2;
+                    
                     $totalBasicSalaryLast = $totalBaseSalaryRecived != null ? $totalBaseSalaryRecived : $totalBasicSalary;
                     $dataTotalSeverancePay2 = $SeverancePay2 != null ? $SeverancePay2 : $totalOtherBenefit;
                     $totalSalaryNetPay = (round($totalSeverancyPaySalary,2) + $monthlyQuarterlyIncentive + $otherBenefit + $annualBonus + $totalBunus + $item->phone_allowance + $totalChildAllowance);
