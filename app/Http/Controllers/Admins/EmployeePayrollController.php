@@ -513,7 +513,7 @@ class EmployeePayrollController extends Controller
                     
                     $totalSeverancePay = $totalFirstSeverancPay != 0 ? $totalFirstSeverancPay : $totalBasicSalary;
                     $totalOtherBenefit = $totalSeverancePay + $monthlyQuarterlyIncentive + $annualBonus + $otherBenefit + $totalBunus + $item->phone_allowance + $totalChildAllowance;
-
+                    
                     $endContractDeadline= Carbon::createFromDate($item->fdc_end)->format('Y-m');
                     $paymentDate = Carbon::createFromDate($request->payment_date)->format('Y-m');
                     if($endContractDeadline == $paymentDate){
@@ -525,10 +525,10 @@ class EmployeePayrollController extends Controller
                         $startDate = Carbon::parse($item->fdc_end);
                         $endDate = Carbon::parse($currentYear);
                         $totalNewDays = $startDate->diffInDays($endDate);
-                        $SeverancePay2 = ($item->basic_salary / $totalDayInMonth) * $totalNewDays;
+                        $SeverancePay2 = ($totalOtherBenefit / $totalDayInMonth) * $totalNewDays;
                         //old salary and total old days
                         $totalOldDay = $totalDayInMonth - $totalNewDays;
-                        $SeverancePay1 = ($item->basic_salary / $totalDayInMonth) * $totalOldDay;
+                        $SeverancePay1 = ($totalOtherBenefit / $totalDayInMonth) * $totalOldDay;
                         $type_fdc2 = 'FDC-2';
                         $type_fdc1 = 'FDC-1';
                         $type_udc = 'UDC';
