@@ -231,7 +231,7 @@
                                                         @foreach ($data as $item)
                                                             <tr class="odd">
                                                                 <td>
-                                                                    <input type="checkbox" class="sub_chk" data-id="{{$item->number_employee}}">
+                                                                    <input type="checkbox" class="sub_chk" data-id="{{$item->number_employee}}" data-date="{{$item->payment_date}}">
                                                                 </td>
                                                                 <td class="stuck-scroll-3"><a href="#">{{ $item->users == null ? '' : $item->users->number_employee }}</a></td>
                                                                 <td class="stuck-scroll-3"><a href="#">{{ $item->users == null ? '' : $item->users->EmployeeName }}</span></a></td>
@@ -410,12 +410,15 @@
             }  
         });
         $('.delete_all').on('click', function(e) {
-            var allVals = [];  
+            var allValNumberemployee = [];  
+            var allValPaymentDate = [];  
             $(".sub_chk:checked").each(function() {  
-                allVals.push($(this).attr('data-id'));
+                allValNumberemployee.push($(this).attr('data-id'));
+                allValPaymentDate.push($(this).attr('data-date'));
             });
-            var number_employee = allVals.join(",");
-            if(allVals.length <=0)  
+            var number_employee = allValNumberemployee.join(",");
+            var payment_date = allValPaymentDate.join(",");
+            if(allValNumberemployee.length <=0)  
             {
                 $.alert({
                     title: '@lang("lang.delete")!',
@@ -435,7 +438,8 @@
                             action: function(){
                                 var id = this.$content.find('.id').val();
                                 axios.post('{{ URL("payroll/review/delete") }}', {
-                                    number_employee : number_employee
+                                    number_employee : number_employee,
+                                    payment_date : payment_date
                                 }).then(function(response) {
                                     new Noty({
                                         title: "",

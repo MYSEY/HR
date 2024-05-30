@@ -317,7 +317,7 @@ class EmployeePayrollController extends Controller
                     // dd($item->number_employee);
                     payrollPreview::where('employee_id',$item->id)->delete();
                     PreviewNationalSocialSecurityFund::where('employee_id',$item->id)->delete();
-                    PreviewGrossSalaryPay::where('employee_id',$item->id)->delete();
+                    GrossSalaryPay::where('number_employee',$item->number_employee)->where('payment_date',$request->payment_date)->delete();
                     PreviewBonus::where('employee_id',$item->id)->delete();
                     //function first month join work
                     $totalFirstSeverancPay = 0;
@@ -545,23 +545,22 @@ class EmployeePayrollController extends Controller
                     
                     if ($item->emp_status == 'Probation') {
                         $type_fdc1 = null;
-                        $totalSeverancePay1 = null;
+                        $totalSeverancePay1 = 0;
                     } 
                     if($item->emp_status == 1) {
                         $type_fdc1 = 'FDC-1';
                     }
                     if($item->emp_status == 10){
                         $type_fdc1 = null;
-                        $totalSeniority = null;
+                        $totalSeniority = 0;
                         $type_fdc1 = 'FDC-2';
-                        $totalSeverancePay1 = null;
-                        $totalSeverancePay2 = null;
+                        $totalSeverancePay1 = 0;
                         $totalSeverancePay2 = $dataTotalSeverancePay2 != null ? $dataTotalSeverancePay2 : $totalSalarySeverancyPay;
                     }
                     if($item->emp_status == 2){
                         $type_udc = 'UDC';
                         $totalSeverancePay1 = $totalSeverancePay1;
-                        $totalSeverancePay2 = null;
+                        $totalSeverancePay2 = 0;
                         $dataTotalSeverancePay1 = $SeverancePay1 != null ? $SeverancePay1 : $totalOtherBenefit;
                         $totalSeniority = $dataTotalSeverancePay1 != null ? $dataTotalSeverancePay1 : $totalSalarySeverancyPay;
                     }
@@ -1947,10 +1946,11 @@ class EmployeePayrollController extends Controller
     public function payrollReviewDelete(Request $request){
         try{
             $number_employee = $request->number_employee;
-            payrollPreview::whereIn('number_employee',explode(",",$number_employee))->delete();
-            PreviewNationalSocialSecurityFund::whereIn('number_employee',explode(",",$number_employee))->delete();
-            PreviewGrossSalaryPay::whereIn('number_employee',explode(",",$number_employee))->delete();
-            PreviewBonus::whereIn('number_employee',explode(",",$number_employee))->delete();
+            $payment_date = $request->payment_date;
+            payrollPreview::whereIn('number_employee',explode(",",$number_employee))->whereIn('payment_date',explode(",",$payment_date))->delete();
+            PreviewNationalSocialSecurityFund::whereIn('number_employee',explode(",",$number_employee))->whereIn('payment_date',explode(",",$payment_date))->delete();
+            GrossSalaryPay::whereIn('number_employee',explode(",",$number_employee))->whereIn('payment_date',explode(",",$payment_date))->delete();
+            PreviewBonus::whereIn('number_employee',explode(",",$number_employee))->whereIn('payment_date',explode(",",$payment_date))->delete();
             Toastr::success('Payroll deleted successfully.','Success');
             return redirect()->back();
         }catch(\Exception $e){
