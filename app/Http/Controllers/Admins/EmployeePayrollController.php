@@ -318,6 +318,7 @@ class EmployeePayrollController extends Controller
                     payrollPreview::where('employee_id',$item->id)->delete();
                     PreviewNationalSocialSecurityFund::where('employee_id',$item->id)->delete();
                     GrossSalaryPay::where('number_employee',$item->number_employee)->where('payment_date',$request->payment_date)->delete();
+                    GrossSalaryPay::where('number_employee',$item->number_employee)->where('payment_date',$request->payment_date)->delete();
                     PreviewBonus::where('employee_id',$item->id)->delete();
                     //function first month join work
                     $totalFirstSeverancPay = 0;
@@ -500,7 +501,6 @@ class EmployeePayrollController extends Controller
                         }
                     }
                     
-                        
                     //calcute last severance pay 1
                     $SeverancePay1 = null;
                     $SeverancePay2 = null;
@@ -516,7 +516,6 @@ class EmployeePayrollController extends Controller
                     
                     $totalSeverancePay = $totalFirstSeverancPay != 0 ? $totalFirstSeverancPay : $totalBasicSalary;
                     $totalOtherBenefit = $totalSeverancePay + $monthlyQuarterlyIncentive + $annualBonus + $otherBenefit + $totalBunus + $item->phone_allowance + $totalChildAllowance;
-                    
                     
                     $endContractDeadline= Carbon::createFromDate($item->fdc_end)->format('Y-m');
                     $paymentDate = Carbon::createFromDate($request->payment_date)->format('Y-m');
@@ -593,7 +592,6 @@ class EmployeePayrollController extends Controller
                     }else{
                         $totalGrossSalary = $dataGrossSalary->total_gross_salary;
                     }
-                    
                     //National Social Security Fund (NSSF) Formula
                     $exchangNSSF = ExchangeRate::where('type','NSSF')->orderBy('id','desc')->first();
                     if ($exchangNSSF) {
@@ -1959,6 +1957,7 @@ class EmployeePayrollController extends Controller
             PreviewNationalSocialSecurityFund::whereIn('number_employee',explode(",",$number_employee))->whereIn('payment_date',explode(",",$payment_date))->delete();
             GrossSalaryPay::whereIn('number_employee',explode(",",$number_employee))->whereIn('payment_date',explode(",",$payment_date))->delete();
             PreviewBonus::whereIn('number_employee',explode(",",$number_employee))->whereIn('payment_date',explode(",",$payment_date))->delete();
+            GrossSalaryPay::whereIn('number_employee',explode(",",$number_employee))->whereIn('payment_date',explode(",",$payment_date))->delete();
             Toastr::success('Payroll deleted successfully.','Success');
             return redirect()->back();
         }catch(\Exception $e){
