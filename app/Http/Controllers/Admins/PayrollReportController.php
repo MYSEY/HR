@@ -22,6 +22,7 @@ use App\Exports\ExportSeverancePay;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\ExportGrossSalaryPay;
 use App\Models\PreviewGrossSalaryPay;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use App\Models\NationalSocialSecurityFund;
@@ -472,6 +473,9 @@ class PayrollReportController extends Controller
         $data = $this->dataMotor->getDatas($request);
         return Excel::download(new ExportMotorRentel($data), 'MotorRentel.xlsx');
     }
+    public function grossSalaryPayExport(Request $request){
+        return Excel::download(new ExportGrossSalaryPay($request), 'Gross Salary.xlsx');
+    }
     public function reportSeverancePay(){
         $severancePay = SeverancePay::orderBy('employee_id')
         ->leftJoin('users', 'severance_pays.employee_id', '=', 'users.id')
@@ -560,7 +564,7 @@ class PayrollReportController extends Controller
         if (Auth::user()->RolePermission == 'Employee') {
             $data = GrossSalaryPay::with('users')->where('type_fdc1','FDC-1')->where('employee_id',Auth::user()->id)->where('number_employee',Auth::user()->number_employee)->get();
         } else {
-            $data = GrossSalaryPay::with('users')
+            $data = GrossSalaryPay::with('users')->where('type_fdc1','FDC-1')
             ->leftJoin('users', 'gross_salary_pays.employee_id', '=', 'users.id')
             ->select(
                 'gross_salary_pays.*',
@@ -577,7 +581,7 @@ class PayrollReportController extends Controller
                 if ($RolePermission == 'BM') {
                     $query->where("users.branch_id", Auth::user()->branch_id);
                 }
-            })->where('type_fdc1','FDC-1')->get();
+            })->get();
         }
         return view('severance_pays.index',compact('data','branch'));
     }

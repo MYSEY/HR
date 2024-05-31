@@ -95,20 +95,20 @@
                                     <table class="table table-striped custom-table datatable dataTable no-footer table_severance_pay" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
                                         <thead>
                                             <tr>
-                                                <th class="sorting stuck-scroll-3" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1">@lang('lang.employee_id')</th>
-                                                <th class="sorting sorting_asc stuck-scroll-3" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Employee: activate to sort column descending">@lang('lang.employee_name')</th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending">@lang('lang.position')</th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending">@lang('lang.department')</th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending">@lang('lang.location')</th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">@lang('lang.join_date')</th>
-                                                <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending" style="width: 87.1125px;">@lang('lang.fdc_start_date')</th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">@lang('lang.basic_salary')</th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">@lang('lang.total_gross_salary')</th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">@lang('lang.total_fdc1')</th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">@lang('lang.type_fdc1')</th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">@lang('lang.total_fdc2')</th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">@lang('lang.type_fdc2')</th>
-                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">@lang('lang.payment_date')</th>
+                                                <th class="sorting stuck-scroll-3">@lang('lang.employee_id')</th>
+                                                <th class="sorting sorting_asc stuck-scroll-3">@lang('lang.employee_name')</th>
+                                                <th class="sorting">@lang('lang.position')</th>
+                                                <th class="sorting">@lang('lang.department')</th>
+                                                <th class="sorting">@lang('lang.location')</th>
+                                                <th class="sorting">@lang('lang.join_date')</th>
+                                                <th class="sorting" style="width: 87.1125px;">@lang('lang.fdc_start_date')</th>
+                                                <th class="sorting">@lang('lang.basic_salary')</th>
+                                                <th class="sorting">@lang('lang.total_gross_salary')</th>
+                                                <th class="sorting">@lang('lang.total_fdc1')</th>
+                                                <th class="sorting">@lang('lang.type_fdc1')</th>
+                                                <th class="sorting">@lang('lang.total_fdc2')</th>
+                                                <th class="sorting">@lang('lang.type_fdc2')</th>
+                                                <th class="sorting">@lang('lang.payment_date')</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -158,6 +158,16 @@
             $(".btn-text-reset").hide();
             $("#btn-text-loading").css('display', 'block');
             window.location.replace("{{ URL('severance-pay') }}");
+        });
+        $(".btn_excel").on("click", function() {
+            let query = {
+                branch_id: $("#branch_id").val(),
+                employee_id: $("#employee_id").val(),
+                employee_name: $("#employee_name").val(),
+                filter_month: $("#filter_month").val(),
+            };
+            var url = "{{URL::to('gross-salary-pay-export')}}?" + $.param(query)
+            window.location = url;
         });
         $(".btn-search").on("click", function(){
             $(".btn-search").prop('disabled', true);
