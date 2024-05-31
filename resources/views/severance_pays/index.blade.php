@@ -104,6 +104,10 @@
                                                 <th class="text-nowrap sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending" style="width: 87.1125px;">@lang('lang.fdc_start_date')</th>
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">@lang('lang.basic_salary')</th>
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">@lang('lang.total_gross_salary')</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">@lang('lang.total_fdc1')</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">@lang('lang.type_fdc1')</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">@lang('lang.total_fdc2')</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">@lang('lang.type_fdc2')</th>
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">@lang('lang.payment_date')</th>
                                             </tr>
                                         </thead>
@@ -119,7 +123,11 @@
                                                         <td>{{ $item->users == null ? '' : $item->users->joinOfDate}}</td>
                                                         <td>{{ $item->users == null ? '' : $item->users->UDCStartDate}}</td>
                                                         <td>${{$item->basic_salary}}</td>
+                                                        <td>${{$item->total_gross_salary}}</td>
                                                         <td>${{$item->total_fdc1}}</td>
+                                                        <td><a href="#">{{$item->type_fdc1}}</a></td>
+                                                        <td>${{$item->total_fdc2}}</td>
+                                                        <td><a href="#">{{$item->type_fdc2}}</a></td>
                                                         <td>{{$item->PayrollPaymentDate}}</td>
                                                     </tr>
                                                 @endforeach
@@ -198,7 +206,11 @@
                             '<td>'+(row.users == null ? '' : join_date)+'</td>'+
                             '<td>'+(row.users == null ? '' : contract_deadline)+'</td>'+
                             '<td>'+(row.basic_salary)+'</td>'+
+                            '<td>$'+(row.total_gross_salary)+'</td>'+
                             '<td>$'+(row.total_fdc1)+'</td>'+
+                            '<td>'+(row.type_fdc1 == null ? "" : row.type_fdc1)+'</td>'+
+                            '<td>$'+(row.total_fdc2)+'</td>'+
+                            '<td>'+(row.type_fdc2 == null ? "" : row.type_fdc2)+'</td>'+
                             '<td>'+(payment_date)+'</td>'+
                         '</tr>';
                     });

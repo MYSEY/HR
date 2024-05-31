@@ -547,8 +547,15 @@ class EmployeePayrollController extends Controller
                     $totalSeverancePay2 = $SeverancePay2;
                     
                     $totalBasicSalaryLast = $totalBaseSalaryRecived != null ? $totalBaseSalaryRecived : $totalBasicSalary;
-                    $dataTotalSeverancePay2 = $SeverancePay2 != null ? $SeverancePay2 : $totalOtherBenefit;
                     $totalSalaryNetPay = (round($totalSeverancyPaySalary,2) + $monthlyQuarterlyIncentive + $otherBenefit + $annualBonus + $totalBunus + $item->phone_allowance + $totalChildAllowance);
+                    
+                    //function check severanc pay
+                    if($item->emp_status == 1){
+                        $dataTotalSeverancePay2 = $SeverancePay2 != null ? $SeverancePay2 : $totalOtherBenefit;
+                    }
+                    if($item->emp_status == 10){
+                        $dataTotalSeverancePay2 = $SeverancePay1 != null ? $SeverancePay1 : $totalOtherBenefit;
+                    }
                     
                     if ($item->emp_status == 'Probation') {
                         $type_fdc1 = null;
@@ -559,8 +566,8 @@ class EmployeePayrollController extends Controller
                     }
                     if($item->emp_status == 10){
                         $type_fdc1 = null;
-                        $totalSeniority = 0;
-                        $type_fdc1 = 'FDC-2';
+                        $totalSeniority = $totalSalarySeverancyPay;
+                        $type_fdc2 = 'FDC-2';
                         $totalSeverancePay1 = 0;
                         $totalSeverancePay2 = $dataTotalSeverancePay2 != null ? $dataTotalSeverancePay2 : $totalSalarySeverancyPay;
                     }
@@ -1051,7 +1058,7 @@ class EmployeePayrollController extends Controller
 
                     if($item->emp_status == 10){
                         if($monthEndDate == $paymentDate){
-                            $dataSeveranc = GrossSalaryPay::where('employee_id', $item->id)->whereNotNull('type_fdc1')->sum('total_fdc1');
+                            $dataSeveranc = GrossSalaryPay::where('employee_id', $item->id)->where('number_employee',$item->number_employee)->whereNotNull('type_fdc2')->sum('total_fdc2');
                             $totalContractSeverancePay = $dataSeveranc * 0.05;
                             $dataSeverance = SeverancePay::create([
                                 'employee_id'                   => $item->id,

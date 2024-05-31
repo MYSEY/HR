@@ -588,7 +588,7 @@ class PayrollReportController extends Controller
             $Monthly = Carbon::createFromDate($request->filter_month)->format('m');
             $yearLy = Carbon::createFromDate($request->filter_month)->format('Y');
         }
-        $data = GrossSalaryPay::with("users")->where('type_fdc1','FDC-1')
+        $data = GrossSalaryPay::with("users")
         ->leftJoin('users', 'gross_salary_pays.employee_id', '=', 'users.id')
         ->leftJoin('positions','positions.id','=','users.position_id')
         ->leftJoin('branchs','branchs.id','=','users.branch_id')
