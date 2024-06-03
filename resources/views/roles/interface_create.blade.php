@@ -436,6 +436,7 @@
                             </div>
                         </div>
                     </div>
+                    {{-- payroll_staff_resign --}}
                     <div class="col-md-12">
                         <div class="form-group row">
                             <div class="col-md-2">
@@ -449,6 +450,14 @@
                                 </label>
                                 <label class="container-checkbox">@lang('lang.add')
                                     <input type="checkbox" class="c_and_b_checkbox payroll_staff_resign_checkbox" id="staff_resign_add"> <span class="checkmark"></span>
+                                </label>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="container-checkbox">@lang('lang.edit')
+                                    <input type="checkbox" class="c_and_b_checkbox payroll_staff_resign_checkbox" id="staff_resign_edit"> <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.delete')
+                                    <input type="checkbox" class="c_and_b_checkbox payroll_staff_resign_checkbox" id="staff_resign_delete" > <span class="checkmark"></span>
                                 </label>
                             </div>
                         </div>
@@ -579,6 +588,32 @@
                                 </label>
                                 <label class="container-checkbox">@lang('lang.export')
                                     <input type="checkbox" class="c_and_b_checkbox fringe_benefits_checkbox" id="fringe_benefits_export"> <span class="checkmark"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    {{-- payroll_adjustment --}}
+                    <div class="col-md-12">
+                        <div class="form-group row">
+                            <div class="col-md-2">
+                                <label class="container-checkbox">@lang('lang.payroll_adjustment')
+                                    <input type="checkbox" class="c_and_b_checkbox" id="payroll_adjustment" name="payroll_adjustment"> <span class="checkmark"></span>
+                                </label>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="container-checkbox">@lang('lang.view')
+                                    <input type="checkbox" class="c_and_b_checkbox payroll_adjustment_checkbox" id="payroll_adjustment_view"> <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.add')
+                                    <input type="checkbox" class="c_and_b_checkbox payroll_adjustment_checkbox" id="payroll_adjustment_add"> <span class="checkmark"></span>
+                                </label>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="container-checkbox">@lang('lang.edit')
+                                    <input type="checkbox" class="c_and_b_checkbox payroll_adjustment_checkbox" id="payroll_adjustment_edit"> <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.delete')
+                                    <input type="checkbox" class="c_and_b_checkbox payroll_adjustment_checkbox" id="payroll_adjustment_delete"> <span class="checkmark"></span>
                                 </label>
                             </div>
                         </div>

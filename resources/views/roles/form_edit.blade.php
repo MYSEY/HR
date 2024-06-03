@@ -151,6 +151,10 @@
             if (payroll_staff_resign_checkbox == $('input.payroll_staff_resign_checkbox').length) {
                 $("#payroll_staff_resign").prop("checked", true);
             };
+            let payroll_adjustment_checkbox = $('.payroll_adjustment_checkbox').filter(':checked').length;
+            if (payroll_adjustment_checkbox == $('input.payroll_adjustment_checkbox').length) {
+                $("#payroll_adjustment").prop("checked", true);
+            };
 
             // module motor rental
             let motor_rentals_checkbox = $('.motor_rentals_checkbox').filter(':checked').length;

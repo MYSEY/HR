@@ -665,8 +665,22 @@
                                 </label>
                                 <label class="container-checkbox">@lang('lang.add')
                                     <input type="checkbox" class="c_and_b_checkbox payroll_staff_resign_checkbox" id="staff_resign_add"  
-                                    {{SetCheckbox($arrayPermissions,"lang.payroll_staff_resign","is_view")->checkbox}}
+                                    {{SetCheckbox($arrayPermissions,"lang.payroll_staff_resign","is_create")->checkbox}}
                                     value="{{SetCheckbox($arrayPermissions,"lang.payroll_staff_resign","is_create")->value}}"
+                                    > <span class="checkmark"></span>
+                                </label>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="container-checkbox">@lang('lang.edit')
+                                    <input type="checkbox" class="c_and_b_checkbox payroll_staff_resign_checkbox" id="staff_resign_edit"
+                                    {{SetCheckbox($arrayPermissions,"lang.payroll_staff_resign","is_update")->checkbox}} 
+                                    value="{{SetCheckbox($arrayPermissions,"lang.payroll_staff_resign","is_update")->value}}"
+                                    > <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.delete')
+                                    <input type="checkbox" class="c_and_b_checkbox payroll_staff_resign_checkbox" id="staff_resign_delete"
+                                    {{SetCheckbox($arrayPermissions,"lang.payroll_staff_resign","is_delete")->checkbox}} 
+                                    value="{{SetCheckbox($arrayPermissions,"lang.payroll_staff_resign","is_delete")->value}}"
                                     > <span class="checkmark"></span>
                                 </label>
                             </div>
@@ -865,6 +879,45 @@
                                     <input type="checkbox" class="c_and_b_checkbox fringe_benefits_checkbox" id="fringe_benefits_export"
                                     {{array_key_exists("lang.fringe_benefits",$arrayPermissions) ? $arrayPermissions["lang.fringe_benefits"]["is_export"] ? 'checked' :'': '' }}
                                     value="{{array_key_exists("lang.fringe_benefits",$arrayPermissions) ? $arrayPermissions["lang.fringe_benefits"]["is_export"] ? '1' :'0': '0' }}"
+                                    > <span class="checkmark"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- payroll_adjustment --}}
+                    <div class="col-md-12">
+                        <div class="form-group row">
+                            <div class="col-md-2">
+                                <label class="container-checkbox">@lang('lang.payroll_adjustment')
+                                    <input type="checkbox" class="c_and_b_checkbox" id="payroll_adjustment" name="payroll_adjustment"> <span class="checkmark"></span>
+                                </label>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="container-checkbox">@lang('lang.view')
+                                    <input type="checkbox" class="c_and_b_checkbox payroll_adjustment_checkbox" id="payroll_adjustment_view"
+                                    {{SetCheckbox($arrayPermissions,"lang.payroll_adjustment","is_view")->checkbox}} 
+                                    value="{{SetCheckbox($arrayPermissions,"lang.payroll_adjustment","is_view")->value}}"
+                                    > <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.add')
+                                    <input type="checkbox" class="c_and_b_checkbox payroll_adjustment_checkbox" id="payroll_adjustment_add"
+                                    {{SetCheckbox($arrayPermissions,"lang.payroll_adjustment","is_create")->checkbox}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.payroll_adjustment","is_create")->value}}"
+                                    > <span class="checkmark"></span>
+                                </label>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="container-checkbox">@lang('lang.edit')
+                                    <input type="checkbox" class="c_and_b_checkbox payroll_adjustment_checkbox" id="payroll_adjustment_edit"
+                                    {{SetCheckbox($arrayPermissions,"lang.payroll_adjustment","is_update")->checkbox}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.payroll_adjustment","is_update")->value}}"
+                                    > <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.delete')
+                                    <input type="checkbox" class="c_and_b_checkbox payroll_adjustment_checkbox" id="payroll_adjustment_delete" 
+                                    {{SetCheckbox($arrayPermissions,"lang.payroll_adjustment","is_delete")->checkbox}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.payroll_adjustment","is_delete")->value}}"
                                     > <span class="checkmark"></span>
                                 </label>
                             </div>

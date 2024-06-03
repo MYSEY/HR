@@ -348,6 +348,29 @@ $(function(){
             $(".payroll_staff_resign_checkbox").val(1);
         }
     });
+    //function check parent for payment adjustment
+    $("#payroll_adjustment").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(".payroll_adjustment_checkbox").prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(".payroll_adjustment_checkbox").prop("checked", true);
+            $(this).val(1)
+            $(".payroll_adjustment_checkbox").val(1);
+        }
+    });
+    //function check child for payment adjustment
+    $(".payroll_adjustment_checkbox").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(this).prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(this).prop("checked", true);
+            $(this).val(1)
+        }
+    });
     $(".g_checkbox").on("click", function(){
         if (!$(this).prop("checked")) {
             $(this).prop("checked", false);
@@ -518,6 +541,17 @@ $(function(){
             };
             if (countAllCheckboxes < $('input.payroll_staff_resign_checkbox').length) {
                 $("#payroll_staff_resign").prop("checked", false);
+            };
+        });
+        
+        let payroll_adjustment_checkbox = $('.payroll_adjustment_checkbox');
+        payroll_adjustment_checkbox.change(function(){
+            let countAllCheckboxes = payroll_adjustment_checkbox.filter(':checked').length;
+            if (countAllCheckboxes == $('input.payroll_adjustment_checkbox').length) {
+                $("#payroll_adjustment").prop("checked", true);
+            };
+            if (countAllCheckboxes < $('input.payroll_adjustment_checkbox').length) {
+                $("#payroll_adjustment").prop("checked", false);
             };
         });
 

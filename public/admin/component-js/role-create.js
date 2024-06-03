@@ -245,6 +245,7 @@ var dataPermission = function () {
     let severance_pay_checkbox = $('.severance_pay_checkbox').filter(':checked').length;
     let fringe_benefits_checkbox = $('.fringe_benefits_checkbox').filter(':checked').length;
     let payroll_staff_resign_checkbox = $('.payroll_staff_resign_checkbox').filter(':checked').length;
+    let payroll_adjustment_checkbox = $('.payroll_adjustment_checkbox').filter(':checked').length;
     let c_and_b_all = $('.c_and_b_checkbox').filter(':checked').length;
     if (c_and_b_all) {
         data.push({
@@ -354,6 +355,23 @@ var dataPermission = function () {
             ]
         })
     }
+    if (payroll_adjustment_checkbox) {
+        data.push({
+            name: "payroll_adjustment",
+            permission: [
+                {
+                    "name":"lang.payroll_adjustment",
+                    "sub_menu_id":"4",
+                    "menu_id":"m4-s6",
+                    "url":"payroll/adjustment",
+                    "is_view": $("#payroll_adjustment_view").val(),
+                    "is_create": $("#payroll_adjustment_add").val(),
+                    "is_update": $("#payroll_adjustment_edit").val(),
+                    "is_delete": $("#payroll_adjustment_delete").val(),
+                }
+            ]
+        })
+    }
     if (payroll_staff_resign_checkbox) {
         data.push({
             name: "payroll_staff_resign",
@@ -364,11 +382,14 @@ var dataPermission = function () {
                     "menu_id":"m4-s7",
                     "url":"payroll/staff/resign",
                     "is_view": $("#staff_resign_view").val(),
-                    "is_create": $("#staff_resign_add").val()
+                    "is_create": $("#staff_resign_add").val(),
+                    "is_update": $("#staff_resign_edit").val(),
+                    "is_delete": $("#staff_resign_delete").val(),
                 }
             ]
         })
     }
+   
     //block motor rentals 
     let motor_rentals_checkbox = $('.motor_rentals_checkbox').filter(':checked').length;
     let pay_motor_rentals_checkbox = $('.pay_motor_rentals_checkbox').filter(':checked').length;

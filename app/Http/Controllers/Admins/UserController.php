@@ -682,18 +682,19 @@ class UserController extends Controller
                             //function calu Carried forward AL
                             $dataLeave = LeaveAllocation::where('employee_id',$request->id)->first();
                             // dd(abs($dataLeave->total_annual_leave));
-                            $year1 = $dataLeave->year_1;
-                            $year2 = $dataLeave->year_2;
-                            $year3 = $dataLeave->year_3;
- 
-                            if ($dataLeave->total_annual_leave < 0) {
-                                $Carriedforward = $year1 + $year2 + $year3 - abs($dataLeave->total_annual_leave);
-                                $totalSallaryAL = ($employee->basic_salary * $Carriedforward) / 22;
-                                $netSalary = $totalSalaryStaffResign + $totalSallaryAL;
-                            } else {
-                                $Carriedforward = $year1 + $year2 + $year3 + $dataLeave->total_annual_leave;
-                                $totalSallaryAL = ($employee->basic_salary * $Carriedforward) / 22;
-                                $netSalary = $totalSallaryAL + $totalSalaryStaffResign;
+                            if ($dataLeave) {
+                                $year1 = $dataLeave->year_1;
+                                $year2 = $dataLeave->year_2;
+                                $year3 = $dataLeave->year_3;
+                                if ($dataLeave->total_annual_leave < 0) {
+                                    $Carriedforward = $year1 + $year2 + $year3 - abs($dataLeave->total_annual_leave);
+                                    $totalSallaryAL = ($employee->basic_salary * $Carriedforward) / 22;
+                                    $netSalary = $totalSalaryStaffResign + $totalSallaryAL;
+                                } else {
+                                    $Carriedforward = $year1 + $year2 + $year3 + $dataLeave->total_annual_leave;
+                                    $totalSallaryAL = ($employee->basic_salary * $Carriedforward) / 22;
+                                    $netSalary = $totalSallaryAL + $totalSalaryStaffResign;
+                                }
                             }
                         }
                     }
