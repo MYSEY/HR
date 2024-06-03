@@ -978,7 +978,7 @@
                                 '<td>'+(emp.branch ? localeLanguage == 'en' ? emp.branch.branch_name_en : emp.branch.branch_name_kh : "")+'</td>'+
                                 '<td>'+(emp.department ? localeLanguage == 'en' ? emp.department.name_english :  emp.department.name_khmer : "")+'</td>'+
                                 '<td>'+(emp.position ? localeLanguage == 'en' ? emp.position.name_english : emp.position.name_khmer : "")+'</td>'+
-                                '<td>'+(emp.positiontype ? emp.positiontype.name_english : "")+'</td>'+
+                                '<td>'+(emp.position.position_type)+'</td>'+
                                 '<td>'+(emp.personal_phone_number)+'</td>'+
                                 '<td>'+
                                     '<span class="badge bg-inverse-success">'+(emp.role == null ? "" : emp.role.role_name )+'</span>'+

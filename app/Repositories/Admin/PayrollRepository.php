@@ -57,7 +57,7 @@ class PayrollRepository extends BaseRepository
         }
     }
     public function getAllPayrollPreview(){
-        return payrollPreview::with("users")->get();
+        return payrollPreview::with("users")->orderBy('number_employee','asc')->get();
     }
     public function getAllPayrollStaffResign(){
         return ParyllStaffResign::with("users")->get();
