@@ -185,6 +185,7 @@ class EmployeeRepository extends BaseRepository
             'issue_expired_date'  => $request->issue_expired_date,
             'type_of_employees_nssf'  => $request->type_of_employees_nssf,
             'spouse_nssf'  => $request->spouse_nssf,
+            'spouse'  => $request->spouse,
             'status_nssf'  => $request->status_nssf,
             'current_house_no'  => $request->current_house_no,
             'current_street_no'  => $request->current_street_no,

@@ -351,7 +351,7 @@ class EmployeePayrollController extends Controller
                         $end_date = Date::createFromDate($endMonth);
                         $commencementDate   = Carbon::parse($start_date);
                         $resumptionDate     = Carbon::parse($end_date);
-                        $toDays 		    = $resumptionDate->diffInWeekdays($commencementDate);
+                        $toDays 		    = $resumptionDate->diffInWeekdays($commencementDate) + 1;
                         $joinDate = Carbon::createFromDate($item->date_of_commencement)->format('d');
                         if ($joinDate==1) {
                             $totalBasicSalary = $item->basic_salary;
@@ -372,21 +372,21 @@ class EmployeePayrollController extends Controller
                         }
                     } else {
                         if ($item->emp_status == 'Probation' || $item->emp_status == 1) {
-                            $monthToPay = Carbon::createFromDate($item->fdc_end)->format('Y-m');
+                            $monthToPay = Carbon::createFromDate($item->fdc_date)->format('Y-m');
                             $currentMonthToPay = Carbon::createFromDate($request->payment_date)->format('Y-m');
                             if($monthToPay == $currentMonthToPay){
                                 //function get first severance pay
-                                $endMonth = Carbon::createFromDate($item->fdc_end)->format('m');
+                                $endMonth = Carbon::createFromDate($item->fdc_date)->format('m');
                                 $totalDayInMonth = Carbon::now()->month($endMonth)->daysInMonth;
                                 //find start date employee join date
-                                $date_of_month = Carbon::createFromDate($item->fdc_end)->format('Y-m');
+                                $date_of_month = Carbon::createFromDate($item->fdc_date)->format('Y-m');
                                 $currentYear = $date_of_month.'-'.$totalDayInMonth;
                                 //find total working day in month
-                                $startDate = Carbon::parse($item->fdc_end);
+                                $startDate = Carbon::parse($item->fdc_date);
                                 $endDate = Carbon::parse($currentYear);
 
                                 //total day in  passt probation and total salary passt probation days
-                                $totalNewDays = $startDate->diffInDays($endDate) + 1;
+                                $totalNewDays = $startDate->diffInDays($endDate) - 1;
                                 $totalSeverancePayLast = ($item->basic_salary / $totalDayInMonth) * $totalNewDays;
                                 
                                 //total day in  probation and total salary in probation days
@@ -404,7 +404,6 @@ class EmployeePayrollController extends Controller
                             $totalBasicSalary = $item->basic_salary + $adjustmentIncludeTaxe;
                         }
                     }
-                    
                     //fuction check Monthly/Quarterly Incentive
                     if (array_key_exists($item->number_employee, $dadaArrayIncentive)) {
                         $monthlyQuarterlyIncentive = $dadaArrayIncentive[$item->number_employee]['incentive'];
