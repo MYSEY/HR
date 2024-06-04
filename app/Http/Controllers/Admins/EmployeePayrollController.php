@@ -372,17 +372,17 @@ class EmployeePayrollController extends Controller
                         }
                     } else {
                         if ($item->emp_status == 'Probation' || $item->emp_status == 1) {
-                            $monthToPay = Carbon::createFromDate($item->fdc_date)->format('Y-m');
+                            $monthToPay = Carbon::createFromDate($item->fdc_end)->format('Y-m');
                             $currentMonthToPay = Carbon::createFromDate($request->payment_date)->format('Y-m');
                             if($monthToPay == $currentMonthToPay){
                                 //function get first severance pay
-                                $endMonth = Carbon::createFromDate($item->fdc_date)->format('m');
+                                $endMonth = Carbon::createFromDate($item->fdc_end)->format('m');
                                 $totalDayInMonth = Carbon::now()->month($endMonth)->daysInMonth;
                                 //find start date employee join date
-                                $date_of_month = Carbon::createFromDate($item->fdc_date)->format('Y-m');
+                                $date_of_month = Carbon::createFromDate($item->fdc_end)->format('Y-m');
                                 $currentYear = $date_of_month.'-'.$totalDayInMonth;
                                 //find total working day in month
-                                $startDate = Carbon::parse($item->fdc_date);
+                                $startDate = Carbon::parse($item->fdc_end);
                                 $endDate = Carbon::parse($currentYear);
 
                                 //total day in  passt probation and total salary passt probation days
