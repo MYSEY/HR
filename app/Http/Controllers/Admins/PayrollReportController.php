@@ -703,7 +703,7 @@ class PayrollReportController extends Controller
             $yearLy = Carbon::createFromDate($request->filter_month)->format('Y');
         }
         if (Auth::user()->RolePermission == 'Employee') {
-            $DataNSSF = NationalSocialSecurityFund::where('employee_id',Auth::user()->id)->where('number_employee',Auth::user()->number_employee)->get();
+            $DataNSSF = NationalSocialSecurityFund::where('employee_id',Auth::user()->id)->where('number_employee',Auth::user()->number_employee)->orderBy('number_employee','asc')->get();
         } else {
             $DataNSSF = NationalSocialSecurityFund::leftJoin('users', 'national_social_security_funds.employee_id', '=', 'users.id')
             ->select(
@@ -721,7 +721,7 @@ class PayrollReportController extends Controller
                 $query->whereMonth('payment_date', $Monthly);
             })->when($yearLy, function ($query, $yearLy) {
                 $query->whereYear('payment_date', $yearLy);
-            })->get();
+            })->orderBy('number_employee','asc')->get();
         }
         return view('NSSFs.index',compact('DataNSSF','branch'));
     }

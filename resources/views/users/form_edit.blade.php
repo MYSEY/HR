@@ -250,7 +250,7 @@
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <label>@lang('lang.contract_deadline') <span class="text-danger">*</span></label>
-                                <input class="form-control datetimepicker  @error('udc_end_date') is-invalid @enderror" id="e_udc_end_date" required name="udc_end_date" type="text" value="{{old('udc_end_date')}}">
+                                <input class="form-control datetimepicker  @error('fdc_end') is-invalid @enderror" id="e_fdc_end" required name="fdc_end" type="text" value="{{old('fdc_end')}}">
                             </div>   
                         </div>
                     </div>
@@ -904,7 +904,7 @@
                     $('#e_first_name_kh').val(response.success.first_name_kh);
                     $('#e_date_of_birth').val(response.success.date_of_birth);
                     $('#e_fdc_date').val(response.success.fdc_date);
-                    $('#e_udc_end_date').val(response.success.udc_end_date);
+                    $('#e_fdc_end').val(response.success.fdc_end);
                     $('#e_id_card_number').val(response.success.id_card_number);
                     $('#e_id_number_nssf').val(response.success.id_number_nssf);
                     $('#e_ethnicity').val(response.success.ethnicity);
