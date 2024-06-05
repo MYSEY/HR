@@ -387,13 +387,13 @@ class EmployeePayrollController extends Controller
 
                                 //total day in  passt probation and total salary passt probation days
                                 $totalNewDays = $startDate->diffInDays($endDate) - 1;
-                                $totalSeverancePayLast = ($item->basic_salary / $totalDayInMonth) * $totalNewDays;
+                                $totalSeverancePayLast = ($item->pre_salary / $totalDayInMonth) * $totalNewDays;
                                 
                                 //total day in  probation and total salary in probation days
                                 $totalOldDay = $totalDayInMonth - $totalNewDays;
                                 $totalSeverancePayFirst = 0;
                                 if ($totalOldDay) {
-                                    $totalSeverancePayFirst = ($item->pre_salary / $totalDayInMonth)  * $totalOldDay;
+                                    $totalSeverancePayFirst = ($item->basic_salary / $totalDayInMonth)  * $totalOldDay;
                                 }
                                 $totalBaseSalaryRecived = ($totalSeverancePayLast + $totalSeverancePayFirst) + $adjustmentIncludeTaxe;
                                 $totalFirstSeverancPay = round($totalSeverancePayLast,2);
