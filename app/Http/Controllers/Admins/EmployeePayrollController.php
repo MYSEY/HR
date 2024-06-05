@@ -371,7 +371,7 @@ class EmployeePayrollController extends Controller
                             }
                         }
                     } else {
-                        if ($item->emp_status == 'Probation' || $item->emp_status == 1) {
+                        if ($item->emp_status == 1) {
                             $monthToPay = Carbon::createFromDate($item->fdc_date)->format('Y-m');
                             $currentMonthToPay = Carbon::createFromDate($request->payment_date)->format('Y-m');
                             if($monthToPay == $currentMonthToPay){
@@ -598,6 +598,7 @@ class EmployeePayrollController extends Controller
                     }else{
                         $totalGrossSalary = $dataGrossSalary->total_gross_salary;
                     }
+                    
                     //National Social Security Fund (NSSF) Formula
                     $exchangNSSF = ExchangeRate::where('type','NSSF')->orderBy('id','desc')->first();
                     if ($exchangNSSF) {
@@ -691,7 +692,7 @@ class EmployeePayrollController extends Controller
                             $taxExemptionSalary = $seniority->tax_exemption_salary ?? 0;
                         }
                     }
-                    
+                    // dd($totalGrossSalary);
                     //function ដក​ pensin fund
                     $baseSalaryReceivedUsd = $totalGrossSalary + $seniorityPayableTax - $pension_contribution;
                     // functin exchange riel rate gross salary after tax
