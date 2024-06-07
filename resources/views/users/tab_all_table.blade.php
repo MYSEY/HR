@@ -773,7 +773,9 @@
                         };
                         let DOB = moment(emp.date_of_birth).format('D-MMM-YYYY')
                         let joinOfDate = moment(emp.date_of_commencement).format('D-MMM-YYYY')
+                        
                         let PassDate = moment(emp.fdc_date).format('D-MMM-YYYY')
+
                         let fdc_end = moment(emp.fdc_end).format('D-MMM-YYYY')
                         let is_loan = '';
                         if (emp.is_loan == 1) {
@@ -860,6 +862,7 @@
                                 btn_edit = '<a class="dropdown-item userUpdate" href="{{url("user/form/edit")}}/'+(emp.id)+'" data-id="'+(emp.id)+'"><i class="fa fa-pencil m-r-5"></i> @lang("lang.edit")</a>';
                             }
                         }else if(emp.emp_status == '2'){
+                            PassDate = moment(emp.udc_end_date).format('D-MMM-YYYY')
                             emp_status = "UDC";
                             status_color = "text-danger";
                             resign_status_td ="";
@@ -893,30 +896,37 @@
                             emp_status = "Resignation";
                             status_color = "text-danger";
                             all_status = "";
+                            PassDate = moment(emp.resign_date).format('D-MMM-YYYY');
                         }else if(emp.emp_status == '4'){
                             emp_status = "Termination";
                             status_color = "text-danger";
                             all_status = "";
+                            PassDate = moment(emp.resign_date).format('D-MMM-YYYY');
                         }else if(emp.emp_status == '5'){
                             emp_status = "Death";
                             status_color = "text-danger";
                             all_status = "";
+                            PassDate = moment(emp.resign_date).format('D-MMM-YYYY');
                         }else if(emp.emp_status == '6'){
                             emp_status = "Retired";
                             status_color = "text-danger";
                             status_color = "text-danger";
                             all_status = "";
+                            PassDate = moment(emp.resign_date).format('D-MMM-YYYY');
                         }else if(emp.emp_status == '7'){
                             emp_status = "Lay off";
                             status_color = "text-danger";
+                            PassDate = moment(emp.resign_date).format('D-MMM-YYYY');
                         }else if(emp.emp_status == '8'){
                             emp_status = "Suspension";
                             status_color = "text-danger";
                             all_status = "";
+                            PassDate = moment(emp.resign_date).format('D-MMM-YYYY');
                         }else if(emp.emp_status == '9'){
                             emp_status = "Fall Probation";
                             status_color = "text-danger";
                             all_status = "";
+                            PassDate = moment(emp.resign_date).format('D-MMM-YYYY');
                         }else if(emp.emp_status == 'Cancel'){
                             emp_status = "Cancel";
                             status_color = "text-danger";
