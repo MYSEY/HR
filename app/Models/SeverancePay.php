@@ -23,6 +23,7 @@ class SeverancePay extends Model
         'total_contract_severance_pay',
         'status',
         'payment_date',
+        'type',
         'created_by',
         'updated_by',
     ];

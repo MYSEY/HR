@@ -160,6 +160,7 @@ class EmployeeRepository extends BaseRepository
             'date_of_birth'  => $request->date_of_birth,
             'fdc_date'  => $request->fdc_date,
             'fdc_end'  => $udc_end_date,
+            'fdc_end'  => $request->fdc_end,
             'udc_end_date'  => $udc_end_date,
             'id_number_nssf'  => $request->id_number_nssf,
             'email'  => $request->email,
