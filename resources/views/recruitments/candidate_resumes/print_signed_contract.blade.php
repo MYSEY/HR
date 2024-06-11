@@ -30,7 +30,7 @@
                 </div>
                 <table style="width:100%">
                     <tr><td class="table_tr">
-                        <span id="pr_mr_or_mrs"></span><strong id="pr_name"></strong>ភេទ <strong id="pr_gender"></strong>កើតនៅថ្ងៃទី​ <strong id="pr_born_on"></strong> ទីកន្លែងកំណើត <strong id="pr_permanent_province"></strong> កាន់អត្តសញ្ញាណប័ណ្ណលេខ <strong id="pr_id_card_number"></strong> សញ្ជាតិខ្មែរ។ អាស័យដ្ឋាន <span id="pr_current_location"></span> ទូរស័ព្ទលេខ <strong id="pr_personal_phone_number"></strong> ដែលតទៅនេះហៅថា <strong>«និយោជិត»។</strong>
+                        <span id="pr_mr_or_mrs"></span><strong class="pr_name"></strong>ភេទ <strong id="pr_gender"></strong>កើតនៅថ្ងៃទី​ <strong id="pr_born_on"></strong> ទីកន្លែងកំណើត <strong id="pr_permanent_province"></strong> កាន់អត្តសញ្ញាណប័ណ្ណលេខ <strong id="pr_id_card_number"></strong> សញ្ជាតិខ្មែរ។ អាស័យដ្ឋាន <span id="pr_current_location"></span> ទូរស័ព្ទលេខ <strong id="pr_personal_phone_number"></strong> ដែលតទៅនេះហៅថា <strong>«និយោជិត»។</strong>
                     </td></tr>
                 </table>
                 <div style="text-align: center;">
@@ -589,7 +589,7 @@
         <div style="display: flex">
             <div class="payslip-title-center" style="margin-left: 5%">
                 <label class="label-subs" style="margin-left: 25"><strong>និយោជិត</strong></label><br><br><br><br><br>
-                <label>......................................</label>
+                <label>..... <span class="set-font pr_name" style="font-size: 14px !important"></span> .....</label>
             </div>
             <div class="payslip-title-center" style="margin-left: 30%">
                 <label class="label-subs"><strong>និយោជក/នាយក នាយកដ្ឋានធនធានមនុស្ស និងរដ្ឋបាល</strong></label><br><br><br><br><br>
