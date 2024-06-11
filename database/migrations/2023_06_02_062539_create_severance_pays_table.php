@@ -21,6 +21,7 @@ return new class extends Migration
             $table->decimal('total_severanec_pay',50,2)->nullable();
             $table->decimal('total_contract_severance_pay',50,2)->nullable();
             $table->date('payment_date')->nullable();
+            $table->string('type')->nullable();
             $table->bigInteger('created_by')->unsigned()->nullable();
             $table->bigInteger('updated_by')->unsigned()->nullable();
             $table->dateTime('deleted_at')->nullable();

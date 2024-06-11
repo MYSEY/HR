@@ -26,53 +26,14 @@ class ExportSeverancePay implements FromCollection, WithColumnWidths, WithHeadin
 
     public function __construct($request)
     {
-        $Monthly = null;
-        $yearLy = null;
-        if ($request->filter_month) {
-            $Monthly = Carbon::createFromDate($request->filter_month)->format('m');
-            $yearLy = Carbon::createFromDate($request->filter_month)->format('Y');
-        }
-        $severance_pay=[];
-        $datas = SeverancePay::with("users")
-        ->join('users', 'severance_pays.employee_id', '=', 'users.id')
-        ->select(
-            'severance_pays.*',
-            'users.number_employee',
-            'users.employee_name_en',
-            'users.employee_name_kh',
-            'users.branch_id',
-            'users.department_id',
-        )
-        ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
-            if ($RolePermission == 'Employee') {
-                $query->where("users.id", Auth::user()->id);
-            }
-            if ($RolePermission == 'HOD') {
-                $query->whereIn("users.department_id", EmployeeRepository::getRoleHOD());
-            }
-            if ($RolePermission == 'BM') {
-                $query->where("users.branch_id", Auth::user()->branch_id);
-            }
-        })
-        ->when($request->employee_id, function ($query, $employee_id) {
-            $query->where('users.number_employee', 'LIKE', '%'.$employee_id.'%');
-        })
-        ->when($request->employee_name, function ($query, $employee_name) {
-            $query->where('users.employee_name_en', 'LIKE', '%'.$employee_name.'%');
-        })
-        ->when($Monthly, function ($query, $Monthly) {
-            $query->whereMonth('severance_pays.payment_date', $Monthly);
-        })
-        ->when($yearLy, function ($query, $yearLy) {
-            $query->whereYear('severance_pays.payment_date', $yearLy);
-        })->get();
         $i = 0;
-        foreach ($datas as $key => $value) {
+        foreach ($request as $key => $value) {
+           
             $i++;
             $this->num = $i;
             $this->totalSeveranecPay += $value->total_severanec_pay;
             $this->totalContractSeverancePay += $value->total_contract_severance_pay;
-            $severance_pay[]=[
+            $severance_pay=[
                 $i,
                 $value->users == null ? '' : $value->users->number_employee,
                 $value->users == null ? '' : $value->users->employee_name_en,
@@ -81,11 +42,37 @@ class ExportSeverancePay implements FromCollection, WithColumnWidths, WithHeadin
                 $value->users == null ? '' : $value->users->EmployeeBranchAbbreviations,
                 $value->users == null ? '' : $value->users->joinOfDate,
                 $value->users == null ? '' : Carbon::parse($value->users->fdc_end)->format('d-M-Y'),
+                // $value->total_severanec_pay,
+                // $value->total_contract_severance_pay
+            ];
+            $totalGross =[
                 $value->total_severanec_pay,
                 $value->total_contract_severance_pay
             ];
+            if ($value->severan_type == "FDC-1") {
+                $gross1 = [];
+                foreach ($value->gruse_salary_1 as $key => $gruse_salary) {
+                    $gross1[] = $gruse_salary->total_fdc1;
+                }
+                if (count($gross1) < 13) {
+                    array_push($gross1, 0.00);
+                }
+                $result []= array_merge($severance_pay, $gross1, $totalGross);
+            }
+           
+            if ($value->severan_type == "FDC-2") {
+                $gross2 = [];
+                foreach ($value->gruse_salary_2 as $key => $gruse_salary) {
+                    $gross2[] = $gruse_salary->total_fdc2;
+                }
+                if (count($gross2) < 13) {
+                    array_push($gross2, 0.00);
+                }
+                $result []= array_merge($severance_pay, $gross2, $totalGross);
+            }
+
         }
-        $this->export_datas = $severance_pay;
+        $this->export_datas = $result;
     }
 
     /**
@@ -113,7 +100,7 @@ class ExportSeverancePay implements FromCollection, WithColumnWidths, WithHeadin
                 $event->sheet->getDelegate()->getStyle('A2')->getFont()->getColor()->setARGB('DD4B39');
                 $event->sheet->getDelegate()->getStyle('A3')->getFont()->getColor()->setARGB('0000CC');
                 $event->sheet->getDelegate()->getStyle('A4')->getFont()->getColor()->setARGB('3923A9');
-                $event->sheet->getStyle('A5:J5')->applyFromArray([
+                $event->sheet->getStyle('A5:W5')->applyFromArray([
                     'borders' => [
                         'allBorders' => [
                             'borderStyle' => Border::BORDER_THIN,
@@ -125,7 +112,7 @@ class ExportSeverancePay implements FromCollection, WithColumnWidths, WithHeadin
                 if ($this->num > 0) {
                     foreach ($this->export_datas as $key=>$value) {
                         $n++;
-                        $event->sheet->getStyle('A'.$n.':J'.$n)->applyFromArray([
+                        $event->sheet->getStyle('A'.$n.':W'.$n)->applyFromArray([
                             'borders' => [
                                 'allBorders' => [
                                     'borderStyle' => Border::BORDER_THIN,
@@ -135,7 +122,7 @@ class ExportSeverancePay implements FromCollection, WithColumnWidths, WithHeadin
                         ]);
                     }
                 }
-                $event->sheet->getStyle('A'.$rows.':J'.$rows)->applyFromArray([
+                $event->sheet->getStyle('A'.$rows.':W'.$rows)->applyFromArray([
                     'borders' => [
                         'allBorders' => [
                             'borderStyle' => Border::BORDER_THIN,
@@ -143,47 +130,47 @@ class ExportSeverancePay implements FromCollection, WithColumnWidths, WithHeadin
                         ],
                     ],
                 ]);
-                $sheet->getDelegate()->getStyle('A5:J5')->getFont()->getColor()->setARGB('3923A9');
-                $sheet->getDelegate()->getStyle('A5:J5')->getFont()->setSize(9)->setName('Khmer OS Battambang')->setSize(9);
-                $event->sheet->getDelegate()->getStyle('A5:J5')->getAlignment()
+                $sheet->getDelegate()->getStyle('A5:W5')->getFont()->getColor()->setARGB('3923A9');
+                $sheet->getDelegate()->getStyle('A5:W5')->getFont()->setSize(9)->setName('Khmer OS Battambang')->setSize(9);
+                $event->sheet->getDelegate()->getStyle('A5:W5')->getAlignment()
                 ->setWrapText(true)
                 ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
                 // block merge cells 
-                $sheet->mergeCells('A2:K2');
+                $sheet->mergeCells('A2:W2');
                 $sheet->setCellValue('A2', "ខេមា​ មីក្រូហិរញ្ញវត្ថុ លីមីតធីត");
-                $sheet->getDelegate()->getStyle('A2:J2')->getFont()->setSize(18)->setName('Khmer OS Muol Pali')->setUnderline('A2:J2');
-                $event->sheet->getDelegate()->getStyle('A2:J2')->getAlignment()
+                $sheet->getDelegate()->getStyle('A2:W2')->getFont()->setSize(18)->setName('Khmer OS Muol Pali')->setUnderline('A2:W2');
+                $event->sheet->getDelegate()->getStyle('A2:W2')->getAlignment()
                 ->setWrapText(true)
                 ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
-                $sheet->mergeCells('A3:J3');
+                $sheet->mergeCells('A3:W3');
                 $sheet->setCellValue('A3', "តារាងលំអិតអំពីការទូទាត់ប្រាក់បំណាច់កិច្ចសន្យាការងាររបស់បុគ្គលិក");
-                $sheet->getDelegate()->getStyle('A3:J3')->getFont()->setName('Khmer OS Muol Light')->setSize(12)->setUnderline('A3:J3');
-                $event->sheet->getDelegate()->getStyle('A3:J3')->getAlignment()
+                $sheet->getDelegate()->getStyle('A3:W3')->getFont()->setName('Khmer OS Muol Light')->setSize(12)->setUnderline('A3:W3');
+                $event->sheet->getDelegate()->getStyle('A3:W3')->getAlignment()
                 ->setWrapText(true)
                 ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
-                $sheet->mergeCells('A4:J4');
+                $sheet->mergeCells('A4:W4');
                 $sheet->setCellValue('A4',$this->getKhmerMonths());
-                $sheet->getDelegate()->getStyle('A4:J4')->getFont()->setSize(9)->setName('Khmer OS Fasthand')->setSize(10);
-                $event->sheet->getDelegate()->getStyle('A4:J4')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+                $sheet->getDelegate()->getStyle('A4:W4')->getFont()->setSize(9)->setName('Khmer OS Fasthand')->setSize(10);
+                $event->sheet->getDelegate()->getStyle('A4:W4')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
                 //footer
-                $sheet->mergeCells('A'.$rows.':H'.$rows);
+                $sheet->mergeCells('A'.$rows.':U'.$rows);
                 $sheet->setCellValue('A'.$rows, "សរុប");
-                $sheet->getDelegate()->getStyle("A".$rows.':H'.$rows)->getFont()->setName('Khmer OS Muol Light')->setSize(9);
-                $event->sheet->getDelegate()->getStyle("A".$rows.':H'.$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+                $sheet->getDelegate()->getStyle("A".$rows.':U'.$rows)->getFont()->setName('Khmer OS Muol Light')->setSize(9);
+                $event->sheet->getDelegate()->getStyle("A".$rows.':U'.$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 
                 //total setCellValue I
-                $sheet->setCellValue("I".$rows, number_format($this->totalSeveranecPay, 2));
-                $sheet->getDelegate()->getStyle("I".$rows)->getFont()->setName('KGmer OS Battambang')->setSize(9)->setBold("I".$rows);
-                $event->sheet->getDelegate()->getStyle("I".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+                $sheet->setCellValue("V".$rows, number_format($this->totalSeveranecPay, 2));
+                $sheet->getDelegate()->getStyle("V".$rows)->getFont()->setName('KGmer OS Battambang')->setSize(9)->setBold("V".$rows);
+                $event->sheet->getDelegate()->getStyle("V".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 
-                //total setCellValue J
-                $sheet->setCellValue("J".$rows, number_format($this->totalContractSeverancePay, 2));
-                $sheet->getDelegate()->getStyle("J".$rows)->getFont()->setName('KGmer OS Battambang')->setSize(9)->setBold("J".$rows);
-                $event->sheet->getDelegate()->getStyle("J".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+                //total setCellValue W
+                $sheet->setCellValue("W".$rows, number_format($this->totalContractSeverancePay, 2));
+                $sheet->getDelegate()->getStyle("W".$rows)->getFont()->setName('KGmer OS Battambang')->setSize(9)->setBold("W".$rows);
+                $event->sheet->getDelegate()->getStyle("W".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 
             },
         ];
@@ -209,7 +196,27 @@ class ExportSeverancePay implements FromCollection, WithColumnWidths, WithHeadin
             'G' => 15,
             'H' => 20,
             'I' => 18,
-            'J' => 20
+            'J' => 20,
+            'K' => 20,
+            'O' => 20,
+            'P' => 20,
+            'Q' => 20,
+            'R' => 20,
+            'S' => 20,
+            'T' => 20,
+            'U' => 20,
+            'V' => 20,
+            'W' => 20,
+            'X' => 20,
+            'Y' => 20,
+            'AA' => 20,
+            'AB' => 20,
+            'AC' => 20,
+            'AD' => 20,
+            'AE' => 20,
+            'AF' => 20,
+            'AG' => 20,
+            'AH' => 20,
         ];
     }
     public function headings(): array
@@ -223,6 +230,19 @@ class ExportSeverancePay implements FromCollection, WithColumnWidths, WithHeadin
             "ទីតាំងការងារ",
             "ថ្ងៃចូលធ្វើការ",
             "ថ្ងៃចុងគ្រានៃកិច្ចសន្យា",
+            "ខែទី១",
+            "ខែទី២",
+            "ខែទី៣",
+            "ខែទី៤",
+            "ខែទី៥",
+            "ខែទី៦",
+            "ខែទី៧",
+            "ខែទី៨",
+            "ខែទី៨",
+            "ខែទី១០",
+            "ខែទី១១",
+            "ខែទី១២",
+            "ខែទី១៣",
             "ប្រាក់បំណាច់សរុប",
             "ប្រាក់បំណាច់កិច្ចសន្យាសរុប"
         ];

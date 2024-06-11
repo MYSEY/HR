@@ -4,6 +4,7 @@ namespace App\Repositories\Admin;
 
 use App\Models\MotorRentalDetail;
 use App\Models\MotorRentel;
+use App\Models\SeverancePay;
 use App\Repositories\BaseRepository;
 use App\Traits\UploadFiles\UploadFIle;
 use Carbon\Carbon;
@@ -97,5 +98,68 @@ class MotorRentalRepository extends BaseRepository
             ->orderBy('id', 'desc')
             ->get();
         return $data;
+    }
+
+
+    public function getDataSeverancePay($request){
+
+        $Monthly = null;
+        $yearLy = null;
+        if ($request->filter_month) {
+            $Monthly = Carbon::createFromDate($request->filter_month)->format('m');
+            $yearLy = Carbon::createFromDate($request->filter_month)->format('Y');
+        }
+
+        $severancePay = SeverancePay::
+        leftJoin('users', 'severance_pays.employee_id', '=', 'users.id')
+        ->leftJoin('options','options.id','=','users.gender')
+        ->leftJoin('positions','positions.id','=','users.position_id')
+        ->leftJoin('branchs','branchs.id','=','users.branch_id')
+        ->select(
+            'severance_pays.*',
+            'severance_pays.type as severan_type',
+            'users.number_employee',
+            'users.employee_name_en',
+            'users.employee_name_kh',
+            'users.branch_id',
+            'users.department_id',
+            'options.name_khmer',
+            'options.name_english',
+            'options.type',
+            'positions.name_khmer as positionNameKhmer',
+            'positions.name_english as positionNameEnglish',
+            'branchs.branch_name_kh as branck_kh',
+            'branchs.branch_name_en as branck_en',
+        )
+        ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+            if ($RolePermission == 'Employee') {
+                $query->where("users.id", Auth::user()->id);
+            }
+            if ($RolePermission == 'HOD') {
+                $query->whereIn("users.department_id", EmployeeRepository::getRoleHOD());
+            }
+            if ($RolePermission == 'BM') {
+                $query->where("users.branch_id", Auth::user()->branch_id);
+            }
+        })
+        ->when($request->employee_id, function ($query, $employee_id) {
+            $query->where('users.number_employee', 'LIKE', '%'.$employee_id.'%');
+        })
+        ->when($request->employee_name, function ($query, $employee_name) {
+            $query->where('users.employee_name_en', 'LIKE', '%'.$employee_name.'%');
+        })
+        ->when($request->branch_id, function ($query, $branch_id) {
+            $query->where('users.branch_id', $branch_id);
+        })
+        ->when($Monthly, function ($query, $Monthly) {
+            $query->whereMonth('payment_date', $Monthly);
+        })
+        ->when($yearLy, function ($query, $yearLy) {
+            $query->whereYear('payment_date', $yearLy);
+        });
+        $severancePay_1 = (clone $severancePay)->with("users")->with("gruse_salary_1")->where('severance_pays.type', 'FDC-1')->get();
+        $severancePay_2 = (clone $severancePay)->with("users")->with("gruse_salary_2")->where('severance_pays.type', 'FDC-2')->get();
+        $nssf = $severancePay_1->merge($severancePay_2);
+        return $nssf;
     }
 }

@@ -96,6 +96,9 @@
                                 <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                                     <div class="row">
                                         <div class="col-sm-12">
+                                            <p>
+                                                <input type="checkbox" name="13st_month"> Show gross salary by 13st month
+                                            </p>
                                             <table class="table table-striped custom-table datatable dataTable no-footer table_banefit" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
                                                 <thead>
                                                     <tr>
@@ -106,13 +109,28 @@
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending">@lang('lang.location')</th>
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">@lang('lang.join_date')</th>
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">@lang('lang.contract_deadline')</th>
+
+                                                        <th class="sorting 13st_month" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="1st month: activate to sort column ascending">1st month</th>
+                                                        <th class="sorting 13st_month" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="2st month: activate to sort column ascending">2st month</th>
+                                                        <th class="sorting 13st_month" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="3st month: activate to sort column ascending">3st month</th>
+                                                        <th class="sorting 13st_month" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="4st month: activate to sort column ascending">4st month</th>
+                                                        <th class="sorting 13st_month" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="5st month: activate to sort column ascending">5st month</th>
+                                                        <th class="sorting 13st_month" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="6st month: activate to sort column ascending">6st month</th>
+                                                        <th class="sorting 13st_month" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="7st month: activate to sort column ascending">7st month</th>
+                                                        <th class="sorting 13st_month" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="8st month: activate to sort column ascending">8st month</th>
+                                                        <th class="sorting 13st_month" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="9st month: activate to sort column ascending">9st month</th>
+                                                        <th class="sorting 13st_month" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="10st month: activate to sort column ascending">10st month</th>
+                                                        <th class="sorting 13st_month" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="11st month: activate to sort column ascending">11st month</th>
+                                                        <th class="sorting 13st_month" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="12st month: activate to sort column ascending">12st month</th>
+                                                        <th class="sorting 13st_month" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="13st month: activate to sort column ascending">13st month</th>
+
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Payslip: activate to sort column ascending">@lang('lang.total_severanec_pay')</th>
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Payslip: activate to sort column ascending">@lang('lang.total_contract_severance_pay')</th>
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Salary: activate to sort column ascending">@lang('lang.created_at')</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    @if (count($severancePay) > 0)
+                                                     {{-- @if (count($severancePay) > 0)
                                                         @foreach ($severancePay as $item)
                                                             <tr class="odd">
                                                                 <td><a href="#">{{ $item->users == null ? '' : $item->users->number_employee }}</a></td>
@@ -122,12 +140,28 @@
                                                                 <td><a href="#">{{ $item->users->EmployeeBranch }}</a></td>
                                                                 <td>{{ $item->users == null ? '' : $item->users->joinOfDate }}</td>
                                                                 <td>{{ $item->users == null ? '' : Carbon\Carbon::parse($item->users->fdc_end)->format('d-M-Y') }}</td>
+                                                                
+                                                                <th class="13st_month">Email</th>
+                                                                <th class="13st_month">Email</th>
+                                                                <th class="13st_month">Email</th>
+                                                                <th class="13st_month">Email</th>
+                                                                <th class="13st_month">Email</th>
+                                                                <th class="13st_month">Email</th>
+                                                                <th class="13st_month">Email</th>
+                                                                <th class="13st_month">Email</th>
+                                                                <th class="13st_month">Email</th>
+                                                                <th class="13st_month">Email</th>
+                                                                <th class="13st_month">Email</th>
+                                                                <th class="13st_month">Email</th>
+                                                                <th class="13st_month">Email</th>
+                                                                        
                                                                 <td>${{ $item->total_severanec_pay }}</td>
                                                                 <td>${{ $item->total_contract_severance_pay }}</td>
                                                                 <td>{{ Carbon\Carbon::parse($item->created_at)->format('d-M-Y') }}</td>
                                                             </tr>
                                                         @endforeach
-                                                    @endif
+                                                    @endif --}}
+                                                   
                                                 </tbody>
                                             </table>
                                         </div>
@@ -148,6 +182,18 @@
 <script src="{{ asset('/admin/js/date-range-bicker.js') }}"></script>
 <script>
     $(function() {
+        $("input:checkbox:not(:checked)").each(function() {
+            var column = "table ." + $(this).attr("name");
+            $(column).hide();
+        });
+
+        $("input:checkbox").click(function(){
+            var column = "table ." + $(this).attr("name");
+            $(column).toggle();
+        });
+
+        let params = {};
+        showdatas(params)
         $(".reset-btn").on("click", function() {
             $(this).prop('disabled', true);
             $(".btn-text-reset").hide();
@@ -197,6 +243,41 @@
                 var tr = "";
                 if (data.length > 0) {
                     data.map((row) => {
+                        let td = "";
+                        if (row.gruse_salary_1 && row.gruse_salary_1.length > 0) {
+                            // row.gruse_salary_1.sort(function(a, b) {
+                            //     return a.payment_date.localeCompare(b.payment_date);
+                            // });
+                           
+                            if (row.gruse_salary_1.length ==12) {
+                                row.gruse_salary_1.map((gross) =>{
+                                    td +='<td style="display: none" class="13st_month">'+(gross.total_fdc1)+'</td>';
+                                });
+                                td +='<td style="display: none" class="13st_month">0.00</td>';
+                            }else{
+                                row.gruse_salary_1.map((gross) =>{
+                                    td +='<td style="display: none" class="13st_month">'+(gross.total_fdc1)+'</td>';
+                                });
+                            }
+                        }
+                        
+                        if (row.gruse_salary_2 && row.gruse_salary_2.length > 0) {
+                            // row.gruse_salary_2.sort(function(a, b) {
+                            //     return a.payment_date.localeCompare(b.payment_date);
+                            // });
+                           
+                            if (row.gruse_salary_2.length ==12) {
+                                row.gruse_salary_2.map((gross) =>{
+                                    td +='<td style="display: none" class="13st_month">'+(gross.total_fdc2)+'</td>';
+                                });
+                                td +='<td style="display: none" class="13st_month">0.00</td>';
+                            }else{
+                                row.gruse_salary_2.map((gross) =>{
+                                    td +='<td style="display: none" class="13st_month">'+(gross.total_fdc2)+'</td>';
+                                });
+                            }
+                        }
+                     
                         let join_date = moment(row.users.date_of_commencement).format('D-MMM-YYYY')
                         let contract_deadline = moment(row.users.fdc_end).format('D-MMM-YYYY')
                         let created_at = moment(row.created_at).format('D-MMM-YYYY')
@@ -208,6 +289,7 @@
                             '<td><a href="#">'+(localeLanguage == 'en' ? row.branck_en  : row.branck_kh )+'</a></td>'+
                             '<td>'+(row.users == null ? '' : join_date)+'</td>'+
                             '<td>'+(row.users == null ? '' : contract_deadline)+'</td>'+
+                            td+
                             '<td>'+(row.total_severanec_pay)+'</td>'+
                             '<td>$'+(row.total_contract_severance_pay)+'</td>'+
                             '<td>'+(created_at)+'</td>'+

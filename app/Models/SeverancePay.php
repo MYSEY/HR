@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class SeverancePay extends Model
 {
     use HasFactory;
-    // use SoftDeletes;
+    use SoftDeletes;
 
     protected $table = 'severance_pays';
     protected $guarded = ['id'];
@@ -33,6 +33,16 @@ class SeverancePay extends Model
     {
         return $this->belongsTo(User::class ,'employee_id');
     }
+
+    public function gruse_salary_1()
+    {
+        return $this->hasMany(GrossSalaryPay::class, 'employee_id', 'employee_id')->where("type_fdc1","FDC-1")->orderBy('payment_date', 'asc');
+    }
+    public function gruse_salary_2()
+    {
+        return $this->hasMany(GrossSalaryPay::class, 'employee_id', 'employee_id')->where("type_fdc2","FDC-2")->orderBy('payment_date', 'asc');
+    }
+    
     public function getLastNameAttribute(){
         return (Helper::getLang() == 'en') ? optional($this->users)->last_name_en : optional($this->users)->last_name_kh;
     }
