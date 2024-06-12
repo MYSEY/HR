@@ -682,13 +682,58 @@ class PayrollReportController extends Controller
             $yearLy = Carbon::createFromDate($request->filter_month)->format('Y');
         }
         if (Auth::user()->RolePermission == 'Employee') {
-            $DataNSSF = NationalSocialSecurityFund::where('employee_id',Auth::user()->id)->where('number_employee',Auth::user()->number_employee)->orderBy('number_employee','asc')->get();
-        } else {
-            $DataNSSF = NationalSocialSecurityFund::leftJoin('users', 'national_social_security_funds.employee_id', '=', 'users.id')
+            $DataNSSF = DB::table('national_social_security_funds')
+            ->leftJoin('users','national_social_security_funds.employee_id', '=', 'users.id')
+            ->leftJoin('positions','positions.id','=','users.position_id')
+            ->leftJoin('branchs','branchs.id','=','users.branch_id')
+            ->leftJoin('departments','departments.id','=','users.department_id')
+            ->leftJoin('options','options.id','=','users.gender')
             ->select(
                 'national_social_security_funds.*',
                 'users.branch_id',
                 'users.department_id',
+                'users.number_employee',
+                'users.employee_name_en',
+                'users.employee_name_kh',
+                'users.date_of_commencement',
+                'users.branch_id',
+                'users.department_id',
+                'users.gender',
+                'options.name_khmer',
+                'options.name_english',
+                'positions.name_khmer as position_name_khmer',
+                'positions.name_english as position_name_english',
+                'branchs.branch_name_kh',
+                'branchs.branch_name_en',
+                'departments.name_khmer as depart_name_kh',
+                'departments.name_english as depart_name_en'
+            )->where('national_social_security_funds.employee_id',Auth::user()->id)->where('national_social_security_funds.number_employee',Auth::user()->number_employee)->get();
+        } else {
+            $DataNSSF = DB::table('national_social_security_funds')
+            ->leftJoin('users','national_social_security_funds.employee_id', '=', 'users.id')
+            ->leftJoin('positions','positions.id','=','users.position_id')
+            ->leftJoin('branchs','branchs.id','=','users.branch_id')
+            ->leftJoin('departments','departments.id','=','users.department_id')
+            ->leftJoin('options','options.id','=','users.gender')
+            ->select(
+                'national_social_security_funds.*',
+                'users.branch_id',
+                'users.department_id',
+                'users.number_employee',
+                'users.employee_name_en',
+                'users.employee_name_kh',
+                'users.date_of_commencement',
+                'users.branch_id',
+                'users.department_id',
+                'users.gender',
+                'options.name_khmer',
+                'options.name_english',
+                'positions.name_khmer as position_name_khmer',
+                'positions.name_english as position_name_english',
+                'branchs.branch_name_kh',
+                'branchs.branch_name_en',
+                'departments.name_khmer as depart_name_kh',
+                'departments.name_english as depart_name_en',
             )->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
                 if ($RolePermission == 'HOD') {
                     $query->whereIn("users.department_id", EmployeeRepository::getRoleHOD());
@@ -697,10 +742,10 @@ class PayrollReportController extends Controller
                     $query->where("users.branch_id", Auth::user()->branch_id);
                 }
             })->when($Monthly, function ($query, $Monthly) {
-                $query->whereMonth('payment_date', $Monthly);
+                $query->whereMonth('national_social_security_funds.payment_date', $Monthly);
             })->when($yearLy, function ($query, $yearLy) {
-                $query->whereYear('payment_date', $yearLy);
-            })->orderBy('number_employee','asc')->get();
+                $query->whereYear('national_social_security_funds.payment_date', $yearLy);
+            })->get();
         }
         return view('NSSFs.index',compact('DataNSSF','branch'));
     }

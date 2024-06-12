@@ -36,7 +36,7 @@ class EmployeeRepository extends BaseRepository
     }
 
     public static function getRoleHOD(){
-        $child_department = Department::where('parent_id', Auth::user()->department_id)->select( 'departments.id')->get();
+        $child_department = Department::where('parent_id', Auth::user()->department_id)->select('departments.id')->get();
             $child_department_ids = [];
             foreach ($child_department as $key => $dpm) {
                 $child_department_ids [] = [
@@ -54,7 +54,7 @@ class EmployeeRepository extends BaseRepository
             ->with('role')->with('department')->get();
         }else{
             if (Auth::user()->RolePermission == 'HOD') {
-                $child_department = Department::where('parent_id', Auth::user()->department_id)->select( 'departments.id')->get();
+                $child_department = Department::where('parent_id', Auth::user()->department_id)->select('departments.id')->get();
                     $child_department_ids = [];
                     foreach ($child_department as $key => $dpm) {
                         $child_department_ids [] = [

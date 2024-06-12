@@ -245,9 +245,9 @@
                                                             <tr class="odd">
                                                                 <td class="sorting_1 stuck-scroll-3">
                                                                     <h2 class="table-avatar">
-                                                                        @if ($item->users->profile !=null)
-                                                                            <a href="{{asset('/uploads/images/'.$item->users->profile)}}"  class="avatar">
-                                                                                <img alt="" src="{{asset('/uploads/images/'.$item->users->profile)}}">
+                                                                        @if ($item->profile !=null)
+                                                                            <a href="{{asset('/uploads/images/'.$item->profile)}}"  class="avatar">
+                                                                                <img alt="" src="{{asset('/uploads/images/'.$item->profile)}}">
                                                                             </a>
                                                                         @else
                                                                             <a href="{{asset('admin/img/defuals/default-user-icon.png')}}">
@@ -256,12 +256,12 @@
                                                                         @endif
                                                                     </h2>
                                                                 </td>
-                                                                <td class="stuck-scroll-3"><a href="#">{{ $item->users == null ? '' : $item->users->number_employee }}</a></td>
-                                                                <td class="stuck-scroll-3"><a href="#">{{ $item->users == null ? '' : $item->users->EmployeeName }}</span></a></td>
-                                                                <td><a href="#">{{ $item->users == null ? '' : $item->users->EmployeePosition }}</a></td>
-                                                                <td><a href="#">{{ $item->users == null ? '' : $item->users->EmployeeDepartment }}</a></td>
-                                                                <td><a href="#">{{ $item->users == null ? '' : $item->users->EmployeeBranch }}</a></td>
-                                                                <td>{{ $item->users == null ? '' : $item->users->joinOfDate }}</td>
+                                                                <td class="stuck-scroll-3"><a href="#">{{ $item->number_employee }}</a></td>
+                                                                <td class="stuck-scroll-3"><a href="#">{{ Helper::getLang() == 'en' ? $item->employee_name_en : $item->employee_name_kh }}</span></a></td>
+                                                                <td><a href="#">{{ Helper::getLang() == 'en' ? $item->position_name_english : $item->position_name_khmer }}</a></td>
+                                                                <td><a href="#">{{ Helper::getLang() == 'en' ? $item->depart_name_en : $item->depart_name_kh }}</a></td>
+                                                                <td><a href="#">{{ Helper::getLang() == 'en' ? $item->branch_name_en : $item->branch_name_kh }}</a></td>
+                                                                <td>{{ Carbon\Carbon::parse($item->date_of_commencement)->format('d-M-Y') }}</td>
                                                                 <td>$<a href="#">{{ $item->basic_salary }}</a></td>
                                                                 <td>$<a href="#">{{ $item->total_gross_salary }}</a></td>
                                                                 <td>$<a href="#">{{ $item->total_child_allowance }}</a></td>
@@ -287,8 +287,8 @@
                                                                 <td>$<a href="#">{{ $item->total_severance_pay}}</a></td>
                                                                 <td>$<a href="#">{{ $item->loan_amount == null ? "0.00" : $item->loan_amount}}</a></td>
                                                                 <td>$<a href="#">{{ $item->total_salary }}</a></td>
-                                                                <td>{{ $item->PayrollPaymentDate }}</td>
-                                                                <td>{{ $item->Created }}</td>
+                                                                <td>{{ Carbon\Carbon::parse($item->payment_date)->format('d-M-Y') }}</td>
+                                                                <td>{{ Carbon\Carbon::parse($item->created_at)->format('d-M-Y') }}</td>
                                                                 <td><a class="btn btn-sm btn-primary" target="_blank" href="{{ url('payslip', $item->id) }}">@lang('lang.generate_payslip')</a></td>
                                                             </tr>
                                                         @endforeach
