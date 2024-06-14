@@ -407,6 +407,7 @@ return[
     "joined_interview"=>"Joined Interview",
     "job_position"=>"Job Position",
     "included_tax"=>"Included Tax",
+    "import_severance_pay"=>"Import Severance Pay",
     "joining_date"=>"Joining Date",
     "khmer"=>"Khmer",
     "khm_pchum_reports"=>"KHY / Pchum Ben Report",

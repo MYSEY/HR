@@ -418,6 +418,7 @@ return[
     "import_leaves"=>"Import Leaves",
 	"issue_expired_date"=>"កាលបរិច្ឆេទផុតកំណត់",
 	"included_tax"=>"ពន្ធរួមបញ្ចូល",
+    "import_severance_pay"=>"Import Severance Pay",
 	"join_date"=>"កាលបរិច្ឆេទចូលធ្វើការ",
 	"joined_interview"=>"បានចូលរួមសម្ភាសន៍",
 	"job_position"=>"តួនាទីការងារ",

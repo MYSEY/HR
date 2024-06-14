@@ -238,7 +238,7 @@ class ExportSeverancePay implements FromCollection, WithColumnWidths, WithHeadin
             "ខែទី៦",
             "ខែទី៧",
             "ខែទី៨",
-            "ខែទី៨",
+            "ខែទី៩",
             "ខែទី១០",
             "ខែទី១១",
             "ខែទី១២",

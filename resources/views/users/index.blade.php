@@ -61,7 +61,7 @@
                                     <i class="fa fa-search"></i>
                                 </span>
                             </button>
-                            @if (Auth::user()->RolePermission == 'developer')
+                            @if (Auth::user()->RolePermission == 'developer' || Auth::user()->RolePermission == 'admin')
                                 <button type="button" class="btn btn-sm btn-outline-secondary btn-export me-2" id="icon-search-download-reload">
                                     <span class="export-loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
                                     <span class="btn-export-txt">

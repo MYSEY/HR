@@ -603,45 +603,46 @@ class EmployeePayrollController extends Controller
                     }
                     
                     // function get age employee <= 60 National Social Security Fund (NSSF) Formula
-                    $pension_contribution = 0;
-                    $yearsOfEmployee = Carbon::parse($item->date_of_birth)->age;
-                    if($yearsOfEmployee <= 60){
-                        $exchangNSSF = ExchangeRate::where('type','NSSF')->orderBy('id','desc')->first();
-                        if ($exchangNSSF) {
-                            $totalExchangeRielPreTax =  $exchangNSSF->amount_riel * round($totalGrossSalary,2);
-                            if ($totalExchangeRielPreTax) {
-                                if ($totalExchangeRielPreTax >= 1200000) {
-                                    $averageWage    = 1200000;
-                                }else if($totalExchangeRielPreTax >= 400000){
-                                    $averageWage    = $totalExchangeRielPreTax;
-                                }else{
-                                    $averageWage = 400000;
-                                }
+                    $exchangNSSF = ExchangeRate::where('type','NSSF')->orderBy('id','desc')->first();
+                    if ($exchangNSSF) {
+                        $totalExchangeRielPreTax =  $exchangNSSF->amount_riel * round($totalGrossSalary,2);
+                        if ($totalExchangeRielPreTax) {
+                            if ($totalExchangeRielPreTax >= 1200000) {
+                                $averageWage    = 1200000;
+                            }else if($totalExchangeRielPreTax >= 400000){
+                                $averageWage    = $totalExchangeRielPreTax;
                             }else{
-                                $averageWage = 0;
+                                $averageWage = 400000;
                             }
-                            $occupationalRisk = (0.008 * $averageWage);
-                            $healthCare = (0.026 * $averageWage);
-                            $workerContributionUsd = ($averageWage * 0.02);
-                            $workerContributionRiel = $workerContributionUsd / $exchangNSSF->amount_riel;
-                            $dataNSSF = PreviewNationalSocialSecurityFund::create([
-                                'employee_id'                   => $item->id,
-                                'number_employee'               => $item->number_employee,
-                                'total_pre_tax_salary_usd'      => round($totalGrossSalary,2),
-                                'total_pre_tax_salary_riel'     => $totalExchangeRielPreTax,
-                                'total_average_wage'            => $averageWage,
-                                'total_occupational_risk'       => round($occupationalRisk,-2),
-                                'total_health_care'             => $healthCare,
-                                'pension_contribution_usd'      => round($workerContributionUsd, -2),
-                                'pension_contribution_riel'     => $workerContributionRiel,
-                                'corporate_contribution'        => round($workerContributionUsd, -2),
-                                'exchange_rate'                 => $exchangNSSF->amount_riel,
-                                'payment_date'                  => $request->payment_date,
-                                'created_by'                    => Auth::user()->id,
-                            ]);
+                        }else{
+                            $averageWage = 0;
                         }
-                        $pension_contribution = round($dataNSSF->pension_contribution_riel,2);
+                        $occupationalRisk = (0.008 * $averageWage);
+                        $healthCare = (0.026 * $averageWage);
+                        $workerContributionUsd = ($averageWage * 0.02);
+                        $pension_contribution = 0;
+                        $workerContributionRiel = 0;
+                        $yearsOfEmployee = Carbon::parse($item->date_of_birth)->age;
+                        if($yearsOfEmployee <= 60){
+                            $workerContributionRiel = $workerContributionUsd / $exchangNSSF->amount_riel;
+                        }
+                        $dataNSSF = PreviewNationalSocialSecurityFund::create([
+                            'employee_id'                   => $item->id,
+                            'number_employee'               => $item->number_employee,
+                            'total_pre_tax_salary_usd'      => round($totalGrossSalary,2),
+                            'total_pre_tax_salary_riel'     => $totalExchangeRielPreTax,
+                            'total_average_wage'            => $averageWage,
+                            'total_occupational_risk'       => round($occupationalRisk,-2),
+                            'total_health_care'             => $healthCare,
+                            'pension_contribution_usd'      => round($workerContributionUsd, -2),
+                            'pension_contribution_riel'     => $workerContributionRiel,
+                            'corporate_contribution'        => round($workerContributionUsd, -2),
+                            'exchange_rate'                 => $exchangNSSF->amount_riel,
+                            'payment_date'                  => $request->payment_date,
+                            'created_by'                    => Auth::user()->id,
+                        ]);
                     }
+                    $pension_contribution = round($dataNSSF->pension_contribution_riel,2);
                     
                     //function Seniority pay
                     $seniorityPayableTax = 0;
@@ -1909,7 +1910,6 @@ class EmployeePayrollController extends Controller
         $extension = $request->file->extension();
         $spreadsheet = IOFactory::load($file);
         $AllPayroll =  $spreadsheet->getSheetByName('payroll')->toArray();
-        // dd($AllPayroll);
         if ($extension == "xlsx" || $extension == "xls" || $extension == "csv") {
             $i = 0;
             $dataArray = [];
@@ -1921,34 +1921,35 @@ class EmployeePayrollController extends Controller
                     if($employee){
                         Payroll::firstOrCreate([
                             'employee_id'                   => $employee->id,
-                            'number_employee'               => $item[0] == "" ? 0 : $item[0],
-                            'basic_salary'                  => $item[2] == "" ? 0 : $item[2],
-                            'total_gross_salary'            => $item[3] == "" ? 0 : $item[3],
-                            'total_child_allowance'         => $item[4] == "" ? 0 : $item[4],
-                            'phone_allowance'               => $item[5] == "" ? 0 : $item[5],
-                            'monthly_quarterly_bonuses'     => $item[6] == "" ? 0 : $item[6],
-                            'total_kny_phcumben'            => $item[7] == "" ? 0 : $item[7],
-                            'annual_incentive_bonus'        => $item[8] == "" ? 0 : $item[8],
-                            'seniority_pay_included_tax'    => $item[9] == "" ? 0 : $item[9],
-                            'total_gross'                   => $item[10] == "" ? 0 : $item[10],
-                            'total_pension_fund'            => $item[11] == "" ? 0 : $item[11],
-                            'base_salary_received_usd'      => $item[12] == "" ? 0 : $item[12],
-                            'base_salary_received_riel'     => $item[13] == "" ? 0 : $item[13],
-                            'spouse'                        => $item[14] == "" ? 0 : $item[14],
-                            'children'                      => $item[15] == "" ? 0 : $item[15],
-                            'total_charges_reduced'         => $item[16] == "" ? 0 : $item[16],
-                            'total_tax_base_riel'           => $item[17] == "" ? 0 : $item[17],
-                            'total_rate'                    => $item[18] == "" ? 0 : $item[18],
-                            'total_salary_tax_usd'          => $item[19] == "" ? 0 : $item[19],
-                            'total_salary_tax_riel'         => $item[20] == "" ? 0 : $item[20],
-                            'seniority_pay_excluded_tax'    => $item[21] == "" ? 0 : $item[21],
-                            'seniority_backford'            => $item[22] == "" ? 0 : $item[22],
-                            'total_severance_pay'           => $item[23] == "" ? 0 : $item[23],
-                            'loan_amount'                   => $item[24] == "" ? 0 : $item[24],
-                            'total_amount_car'              => $item[25] == "" ? 0 : $item[25],
-                            'total_salary'                  => $item[26] == "" ? 0 : $item[26],
-                            'payment_date'                  => $item[27] == "" ? 0 : $item[27],
-                            'exchange_rate'                 => $item[28] == "" ? 0 : $item[28],
+                            'number_employee'               => $item[0] == null ? 0 : $item[0],
+                            'basic_salary'                  => $item[2] == null ? 0 : $item[2],
+                            'total_gross_salary'            => $item[3] == null ? 0 : $item[3],
+                            'total_child_allowance'         => $item[4] == null ? 0 : $item[4],
+                            'phone_allowance'               => $item[5] == null ? 0 : $item[5],
+                            'monthly_quarterly_bonuses'     => $item[6] == null ? 0 : $item[6],
+                            'total_kny_phcumben'            => $item[7] == null ? 0 : $item[7],
+                            'annual_incentive_bonus'        => $item[8] == null ? 0 : $item[8],
+                            'seniority_pay_included_tax'    => $item[9] == null ? 0 : $item[9],
+                            'seniority_pay_included_tax'    => $item[10] == null ? 0 : $item[10],
+                            'total_gross'                   => $item[11] == null ? 0 : $item[11],
+                            'total_pension_fund'            => $item[12] == null ? 0 : $item[12],
+                            'base_salary_received_usd'      => $item[13] == null ? 0 : $item[13],
+                            'base_salary_received_riel'     => $item[14] == null ? 0 : $item[14],
+                            'spouse'                        => $item[15] == null ? 0 : $item[15],
+                            'children'                      => $item[16] == null ? 0 : $item[16],
+                            'total_charges_reduced'         => $item[17] == null ? 0 : $item[17],
+                            'total_tax_base_riel'           => $item[18] == null ? 0 : $item[18],
+                            'total_rate'                    => $item[19] == null ? 0 : $item[19],
+                            'total_salary_tax_usd'          => $item[20] == null ? 0 : $item[20],
+                            'total_salary_tax_riel'         => $item[21] == null ? 0 : $item[21],
+                            'seniority_pay_excluded_tax'    => $item[22] == null ? 0 : $item[22],
+                            'seniority_backford'            => $item[23] == null ? 0 : $item[23],
+                            'total_severance_pay'           => $item[24] == null ? 0 : $item[24],
+                            'loan_amount'                   => $item[25] == null ? 0 : $item[25],
+                            'total_amount_car'              => $item[26] == null ? 0 : $item[26],
+                            'total_salary'                  => $item[27] == null ? 0 : $item[27],
+                            'payment_date'                  => $item[28] == null ? 0 : $item[28],
+                            'exchange_rate'                 => $item[29] == null ? 0 : $item[29],
                             'created_by'                    => Auth::user()->id,
                         ]);
                     }else{
