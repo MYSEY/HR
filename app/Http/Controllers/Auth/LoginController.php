@@ -68,61 +68,67 @@ class LoginController extends Controller
     // change password
     public function login(Request $request)
     {
-        $dataShortList = DB::table('candidate_resumes')->select('candidate_resumes.*')
-        ->where(DB::raw("(DATE_FORMAT(candidate_resumes.interviewed_date,'%Y-%m-%d'))"), Carbon::now()->format('Y-m-d'))
-        ->where('candidate_resumes.status','2')
-        ->get()->count();
-        $dataContract = CandidateResume::where('contract_date',Carbon::now()->format('Y-m-d'))->where('status','4')->get()->count();
+        try {
+            $dataShortList = DB::table('candidate_resumes')->select('candidate_resumes.*')
+            ->where(DB::raw("(DATE_FORMAT(candidate_resumes.interviewed_date,'%Y-%m-%d'))"), Carbon::now()->format('Y-m-d'))
+            ->where('candidate_resumes.status','2')
+            ->get()->count();
+            $dataContract = CandidateResume::where('contract_date',Carbon::now()->format('Y-m-d'))->where('status','4')->get()->count();
 
-        $dataUserUpComming = User::where('date_of_commencement',Carbon::now()->format('Y-m-d'))->where('emp_status','Upcoming')->get()->count();
-        $dataUserProbation = User::where('fdc_date',Carbon::now()->format('Y-m-d'))->where('emp_status','Probation')->get()->count();
-        // $dataUserFdc = User::where('fdc_end',Carbon::now()->format('Y-m-d'))->whereIn('emp_status',['1','10'])->get()->count();
-        
-
-        $user = User::where("number_employee",$request->number_employee)->first();
-        if ($user) {
-            if($user->status == "Active"){
-                $number_employee    = $request->number_employee;
-                $password           = $request->password;
-                if (Auth::attempt(['number_employee' => $number_employee, 'password' => $password])) {
-                    // return response()->json([
-                    //     'message' => "Login successfully",
-                    //     'status'=>"success",
-                    //     'role' => Auth::user()->RolePermission
-                    // ]);
-                    if (Auth::user()->RolePermission == "Employee") {
-                        return redirect('dashboad/employee');
+            $dataUserUpComming = User::where('date_of_commencement',Carbon::now()->format('Y-m-d'))->where('emp_status','Upcoming')->get()->count();
+            $dataUserProbation = User::where('fdc_date',Carbon::now()->format('Y-m-d'))->where('emp_status','Probation')->get()->count();
+            // $dataUserFdc = User::where('fdc_end',Carbon::now()->format('Y-m-d'))->whereIn('emp_status',['1','10'])->get()->count();
+            
+            Activity::all()->last();
+            $user = User::where("number_employee",$request->number_employee)->first();
+            if ($user) {
+                if($user->status == "Active"){
+                    if ($user->p_status == 0) {
+                        // return response()->json([
+                        //     'message' => "Login successfully",
+                        //     'status'=>"success",
+                        //     'role' => null
+                        // ]);
+                        return view('auth.change_passwrod');
+                        // return view('auth.login',compact('role'));
+                        // return redirect('login')->with([
+                        //     'role' =>  $role,
+                        // ]);
                     }else{
-                        return redirect('dashboad/admin')->with([
-                            'dataUpComming' =>  $dataUserUpComming,
-                            'dataProbation' =>  $dataUserProbation,
-                            'dataShortList' =>  $dataShortList,
-                            'dataContract'  =>  $dataContract
-                        ]);
+                        $number_employee    = $request->number_employee;
+                        $password           = $request->password;
+                        if (Auth::attempt(['number_employee' => $number_employee, 'password' => $password])) {
+                            if (Auth::user()->RolePermission == "Employee") {
+                                return redirect('dashboad/employee');
+                            }else{
+                                return redirect('dashboad/admin')->with([
+                                    'dataUpComming' =>  $dataUserUpComming,
+                                    'dataProbation' =>  $dataUserProbation,
+                                    'dataShortList' =>  $dataShortList,
+                                    'dataContract'  =>  $dataContract
+                                ]);
+                            }
+                        }else {
+                            Auth::logout();
+                            Toastr::error('Wrong Employee ID Or Password', 'Error');
+                            return redirect('login');
+                        }
                     }
-                    Toastr::success('Login successfully.', 'Success');
-                }else {
-                    // return response()->json([
-                    //     'message' => "Wrong Employee ID Or Password",
-                    //     'status'=>"error"
-                    // ]);
-                    Auth::logout();
-                    Toastr::error('Wrong Employee ID Or Password', 'Error');
+                }else{
+                    Toastr::error('Your account is not active. Please contact support.', 'Error');
                     return redirect('login');
                 }
-            }else{
-                // return response()->json([
-                //     'message' => "Your account is not active. Please contact support",
-                //     'status'=>"error"
-                // ]);
-                Toastr::error('Your account is not active. Please contact support.', 'Error');
+            }else {
+                Toastr::error('Wrong employee ID or password. Please contact support.', 'Error');
                 return redirect('login');
             }
-        }else {
-            return response()->json([
-                'message' => "Wrong employee ID or password. Please contact support",
-                'status'=>"error"
-            ]);
+
+            Toastr::success('Login successfully.', 'Success');
+            return redirect()->back();
+            DB::commit();
+        } catch (\Throwable $exp) {
+            DB::rollback();
+            Toastr::error('Fringe Benefit created fail.','Error');
         }
     }
 
@@ -201,9 +207,15 @@ class LoginController extends Controller
 
     public function logout()
     {
-        Activity::all()->last();
-        Auth::logout();
-        Toastr::success('Logout successfully', 'Success');
-        return redirect('login');
+        try{
+            Activity::all()->last();
+            Auth::logout();
+            Toastr::success('Logout successfully', 'Success');
+            return redirect('login');
+        }catch(\Exception $e){
+            DB::rollback();
+            Toastr::error('Logout fail.','Error');
+            return redirect()->back();
+        }
     }
 }
