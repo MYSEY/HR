@@ -550,7 +550,7 @@
 
                                             @if ($userUpComming)
                                                 <div class="form-group">
-                                                    <label for="" class="text-danger">Pleas change status upComing to probation</label>
+                                                    <label for="" class="text-danger">Pleas change status Upcoming to probation</label>
                                                     <div class="dash-info-list">
                                                         <div class="dash-card">
                                                             <div class="dash-card-container">
