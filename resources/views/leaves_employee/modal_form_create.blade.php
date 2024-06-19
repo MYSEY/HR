@@ -125,6 +125,21 @@
                             </div>
                         </div>
                     </div>
+                    @if (Auth::user()->RolePermission != "Employee")
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>@lang('lang.delegate')</label>
+                                    <select class="hr-select2-option" name="delegate_id" id="delegate_id">
+                                        <option selected value=""> --@lang('lang.select')--</option>
+                                        @foreach ($employees as $employee)
+                                            <option value="{{$employee->id}}">{{$employee->employee_name_en}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
@@ -379,6 +394,7 @@
                         "end_half_day": end_half_day,
                         "number_of_day": $("#number_of_day").val(),
                         "handover_staff_id": $("#handover_staff_id").val(),
+                        "delegate_id": $("#delegate_id").val(),
                         "reason": $("#reason").val(),
                     },
                     dataType: "JSON",

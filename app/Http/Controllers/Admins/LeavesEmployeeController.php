@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admins;
 
 use App\Http\Controllers\Controller;
 use App\Mail\SendEmail;
+use App\Models\DelegateLeave;
 use App\Models\LeaveAllocation;
 use App\Models\LeaveRequest;
 use App\Models\LeaveType;
@@ -11,6 +12,7 @@ use App\Models\mail as ModelsMail;
 use App\Models\User;
 use App\Repositories\Admin\EmployeeRepository;
 use Brian2694\Toastr\Facades\Toastr;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -66,10 +68,61 @@ class LeavesEmployeeController extends Controller
      */
     public function store(Request $request)
     {
-        try {
+        // try {
             $data = $request->all();
             $LeaveAllocation = LeaveAllocation::where("employee_id", Auth::user()->id)->first();
             $LeaveType = LeaveType::where("id", $request->leave_type_id)->first();
+
+            $request_date = Carbon::now()->format('Y-m-d');
+            $delegateLeave = DelegateLeave::where("requester_id", Auth::user()->line_manager)
+            ->where('start_date', '<=', $request_date)
+            ->where('end_date', '>=', $request_date)->first();
+           
+            if(Auth::user()->RolePermission == "BOD") {
+                $data['status'] = "approved_hod";
+                $data['next_approver'] = "Null";
+            }else if (Auth::user()->RolePermission == "CEO") {
+                $data['status'] = "approved_lm";
+            }elseif (Auth::user()->RolePermission == "HOD" && Auth::user()->id == Auth::user()->department->direct_manager_id) {
+                $data['status'] = "approved_lm";
+            }else if(Auth::user()->RolePermission == "BM" && Auth::user()->id == Auth::user()->branch->direct_manager_id){
+                $data['status'] = "approved_lm";
+            }else{
+                $data['status'] = "pending";
+            }
+           
+            $data['next_approver'] = Auth::user()->line_manager;
+            if ($delegateLeave) {
+                $data['next_approver'] = $delegateLeave->delegate_id;
+                if ($delegateLeave->delegate_id  == Auth::user()->id) {
+                    $line =  User::where("id", $delegateLeave->requester_id)->first();
+                    $lineLeave = DelegateLeave::where("requester_id",  $line->line_manager)
+                    ->where('start_date', '<=', $request_date)
+                    ->where('end_date', '>=', $request_date)->first();
+                    if ($lineLeave) {
+                        if ($lineLeave->number_of_day < $delegateLeave->number_of_day) {
+                            $data['next_approver'] = $line->line_manager;
+                        }
+                    }else{
+                        if ($line->line_manager) {
+                            $data['next_approver'] = $line->line_manager;
+                        }
+                    }
+                }
+            }        
+
+            if ($request->delegate_id) {
+                DelegateLeave::create(
+                    [
+                        "requester_id"      => Auth::user()->id,
+                        "delegate_id"       => $request->delegate_id,
+                        "number_of_day"     => $request->number_of_day,
+                        "start_date"        => $request->start_date,
+                        "end_date"          => $request->end_date,
+                    ]
+                );
+            }
+
             if (empty($LeaveType->type)) {
                 Toastr::error('Leave type not found','Error');
                 return redirect()->back();
@@ -96,26 +149,14 @@ class LeavesEmployeeController extends Controller
                 $LeaveAllocation["total_unpaid_leave"] = $LeaveType->type == "unpaid_leave" ? $LeaveAllocation->total_unpaid_leave - $request->number_of_day : $LeaveAllocation->total_unpaid_leave;
                 $LeaveAllocation->save();
             }
-            
-            $data['next_approver'] = Auth::user()->line_manager;
-            if(Auth::user()->RolePermission == "BOD") {
-                $data['status'] = "approved_hod";
-                $data['next_approver'] = "Null";
-            }else if (Auth::user()->RolePermission == "CEO") {
-                $data['status'] = "approved_lm";
-            }elseif (Auth::user()->RolePermission == "HOD" && Auth::user()->id == Auth::user()->department->direct_manager_id) {
-                $data['status'] = "approved_lm";
-            }else if(Auth::user()->RolePermission == "BM" && Auth::user()->id == Auth::user()->branch->direct_manager_id){
-                $data['status'] = "approved_lm";
-            }else{
-                $data['status'] = "pending";
-            }
+
             $data['employee_id'] = Auth::user()->id;
             $data['created_by'] = Auth::user()->id;
+            
             LeaveRequest::create($data);
             
             // for send email
-            $line_manager = User::where("id", Auth::user()->line_manager)->first();
+            $line_manager = User::where("id", $data['next_approver'])->first();
             $mail_message = ModelsMail::first();
             if ($line_manager && $mail_message) {
                 if ($line_manager->email) {
@@ -126,10 +167,10 @@ class LeavesEmployeeController extends Controller
                 'success'=>'leave_request_created_successfully',
                 'status'=>200,
             ]);
-        } catch (\Throwable $exp) {
-            DB::rollback();
-            Toastr::error('Leave request created fail.','Error');
-        }
+        // } catch (\Throwable $exp) {
+        //     DB::rollback();
+        //     Toastr::error('Leave request created fail.','Error');
+        // }
     }
 
     /**

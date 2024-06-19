@@ -15,6 +15,7 @@ use App\Models\LeaveAllocation;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Mail\SendEmail;
+use App\Models\DelegateLeave;
 use App\Models\mail as ModelsMail;
 use Illuminate\Support\Facades\Mail;
 use Brian2694\Toastr\Facades\Toastr;
@@ -224,41 +225,112 @@ class LeavesAdminController extends Controller
         }
     }
     public function approve(Request $request) {
-        try {
-            $data = LeaveRequest::find($request->id);
+        // try {
+            $data = LeaveRequest::with("employee")->find($request->id);
+
+            $dataDepartment = Department::where("id", $data->employee->department_id)->first();
+            $dataBranch = Branchs::where("id", $data->employee->branch_id)->first();
             $role = Auth::user()->RolePermission;
-            
+            $request_date = Carbon::createFromDate($data->created_at)->format('Y-m-d');
+            $delegateLeave = DelegateLeave::
+            where("delegate_id", $data->next_approver)
+            ->where('start_date', '<=',  $request_date)
+            ->where('end_date', '>=',  $request_date);
+            $delegateLeave_branch = (clone $delegateLeave)->where('requester_id',  $dataBranch->direct_manager_id)->first();
+            $delegateLeave_department = (clone $delegateLeave)->where('requester_id',  $dataDepartment->direct_manager_id)->first();
+
             if($role == "HOD" || $role == "CEO" || $role == 'BOD'){
                 $department = Auth::user()->department;
-                if (Auth::user()->id == $department->direct_manager_id || $role == "CEO" || $role == 'BOD'){
+                if ($delegateLeave_department) {
                     $data['next_approver'] = "Null";
                     $data['status'] = "approved_hod";
                 }else{
-                    $data['next_approver'] = $department->direct_manager_id;
-                    $data['status'] = "approved_lm";
-                    $email_send = User::where("id", $department->direct_manager_id)->first();
-                    // for send email
-                    $mail_message = ModelsMail::first();
-                    if ($email_send && $mail_message) {
-                        if ($email_send->email) {
-                            Mail::to($email_send->email)->send(new SendEmail($mail_message));
+                    if (Auth::user()->id == $department->direct_manager_id || $role == "CEO" || $role == 'BOD'){
+                        $data['next_approver'] = "Null";
+                        $data['status'] = "approved_hod";
+                    }else{
+                            $leaveDepartment = DelegateLeave::where("requester_id",  $dataDepartment->direct_manager_id)
+                            ->where('start_date', '<=', $request_date)
+                            ->where('end_date', '>=', $request_date)->first();
+                            $data['status'] = "approved_lm";
+
+                            if ($leaveDepartment) {
+                                $delegate = DelegateLeave::where("requester_id",  $leaveDepartment->delegate_id)
+                                ->where('start_date', '<=', $request_date)
+                                ->where('end_date', '>=', $request_date)->first();
+
+                                /** Compare leave head dept with delegate */
+                                if ($delegate) {
+                                    if ($leaveDepartment->number_of_day < $delegate->number_of_day) {
+                                        $data['next_approver'] = $delegate->requester_id;
+                                    }else{
+                                        $data['next_approver'] = $leaveDepartment->delegate_id;
+                                    }
+                                }else{
+                                    $data['next_approver'] = $leaveDepartment->delegate_id;
+                                }
+
+                            }else{
+                                $data['next_approver'] = $department->direct_manager_id;
+                            }
+
+                        $email_send = User::where("id", $data['next_approver'])->first();
+                        // for send email
+                        $mail_message = ModelsMail::first();
+                        if ($email_send && $mail_message) {
+                            if ($email_send->email) {
+                                Mail::to($email_send->email)->send(new SendEmail($mail_message));
+                            }
                         }
                     }
                 }
             }else if ($role == 'BM') {
                 $branch = Auth::user()->branch;
-                if ($branch->direct_manager_id == Auth::user()->id ) {
+                if ($delegateLeave_branch) {
                     $data['next_approver'] = "Null";
                     $data['status'] = "approved_hod";
                 }else{
-                    $data['next_approver'] = $branch->direct_manager_id;
-                    $data['status'] = "approved_lm";
-                    $email_send = User::where("id", $branch->direct_manager_id)->first();
-                    // for send email
-                    $mail_message = ModelsMail::first();
-                    if ($email_send && $mail_message) {
-                        if ($email_send->email) {
-                            Mail::to($email_send->email)->send(new SendEmail($mail_message));
+
+                    if ($branch->direct_manager_id == Auth::user()->id ) {
+                        $data['next_approver'] = "Null";
+                        $data['status'] = "approved_hod";
+                    }else{
+
+                        $leaveBranch = DelegateLeave::where("requester_id",  $dataBranch->direct_manager_id)
+                        ->where('start_date', '<=', $request_date)
+                        ->where('end_date', '>=', $request_date)->first();
+                        $data['status'] = "approved_lm";
+
+                        if ($leaveBranch) {
+                            $delegate = DelegateLeave::where("requester_id",  $leaveBranch->delegate_id)
+                            ->where('start_date', '<=', $request_date)
+                            ->where('end_date', '>=', $request_date)->first();
+
+                            /** Compare leave head dept with delegate */
+                            if ($delegate) {
+                                if ($leaveBranch->number_of_day < $delegate->number_of_day) {
+                                    $data['next_approver'] = $delegate->requester_id;
+                                }else{
+                                    $data['next_approver'] = $leaveBranch->delegate_id;
+                                }
+                            }else{
+                                $data['next_approver'] = $leaveBranch->delegate_id;
+                            }
+
+                        }else{
+                            $data['next_approver'] = $branch->direct_manager_id;
+                        }
+
+
+                        // $data['next_approver'] = $branch->direct_manager_id;
+
+                        $email_send = User::where("id", $data['next_approver'])->first();
+                        // for send email
+                        $mail_message = ModelsMail::first();
+                        if ($email_send && $mail_message) {
+                            if ($email_send->email) {
+                                Mail::to($email_send->email)->send(new SendEmail($mail_message));
+                            }
                         }
                     }
                 }
@@ -279,10 +351,10 @@ class LeavesAdminController extends Controller
             return response()->json([
                 'message' => 'The process has been successfully.'
             ]);
-        } catch (\Exception $exp) {
-            DB::rollBack();
-            return response()->json(['message' => $exp->getMessage()], 500);
-        }
+        // } catch (\Exception $exp) {
+        //     DB::rollBack();
+        //     return response()->json(['message' => $exp->getMessage()], 500);
+        // }
     }
 
     public function approveds(Request $request){
@@ -338,7 +410,9 @@ class LeavesAdminController extends Controller
             }else if($role == 'HR') {
                 $data['status'] = $request->status == "cancel" ? "cancel" : "rejected" ;
             }
-            
+
+            DelegateLeave::where('requester_id', $data->employee_id)->where("start_date",$data->start_date)->where("end_date",$data->end_date)->delete();
+
             $data['remark']= $request->remark;
             $data->save();
             $LeaveAllocation->save();
