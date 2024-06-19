@@ -273,7 +273,7 @@
                                 <label>@lang('lang.salary_increase')</label>
                                 <div class="input-group">
                                     <span class="input-group-text">$</span>
-                                    <input type="number" class="form-control" id="e_salary_increas" name="salary_increas" placeholder="" value="{{old('salary_increas')}}">
+                                    <input type="number" step="any" class="form-control" id="e_salary_increas" name="salary_increas" placeholder="" value="{{old('salary_increas')}}">
                                 </div>
                             </div>
                         </div>

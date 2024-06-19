@@ -222,7 +222,7 @@
             $("#btn-text-loading").css('display', 'block');
             window.location.replace("{{ URL('users') }}"); 
         });
-        $('.userDelete').on('click',function(){
+        $(document).on('click','.userDelete', function(){
             let id = $(this).data("id");
             $('.e_id').val(id);
             $('.e_profile').val(_this.find('.image').text());

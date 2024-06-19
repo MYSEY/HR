@@ -446,7 +446,7 @@ class UserController extends Controller
      */
     public function destroy(Request $request)
     {
-        try{
+        // try{
             User::destroy($request->id);
             GenerateIdEmployee::where('employee_id',$request->id)->delete();
             if ($request->profile) {
@@ -454,11 +454,11 @@ class UserController extends Controller
             }
             Toastr::success('User deleted successfully.','Success');
             return redirect()->back();
-        }catch(\Exception $e){
-            DB::rollback();
-            Toastr::error('User delete fail','Error');
-            return redirect()->back();
-        }
+        // }catch(\Exception $e){
+        //     DB::rollback();
+        //     Toastr::error('User delete fail','Error');
+        //     return redirect()->back();
+        // }
     }
 
     public function reasonOption(Request $request){
