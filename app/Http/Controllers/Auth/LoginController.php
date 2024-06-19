@@ -83,36 +83,23 @@ class LoginController extends Controller
             $user = User::where("number_employee",$request->number_employee)->first();
             if ($user) {
                 if($user->status == "Active"){
-                    if ($user->p_status == 0) {
-                        // return response()->json([
-                        //     'message' => "Login successfully",
-                        //     'status'=>"success",
-                        //     'role' => null
-                        // ]);
-                        return view('auth.change_passwrod');
-                        // return view('auth.login',compact('role'));
-                        // return redirect('login')->with([
-                        //     'role' =>  $role,
-                        // ]);
-                    }else{
-                        $number_employee    = $request->number_employee;
-                        $password           = $request->password;
-                        if (Auth::attempt(['number_employee' => $number_employee, 'password' => $password])) {
-                            if (Auth::user()->RolePermission == "Employee") {
-                                return redirect('dashboad/employee');
-                            }else{
-                                return redirect('dashboad/admin')->with([
-                                    'dataUpComming' =>  $dataUserUpComming,
-                                    'dataProbation' =>  $dataUserProbation,
-                                    'dataShortList' =>  $dataShortList,
-                                    'dataContract'  =>  $dataContract
-                                ]);
-                            }
-                        }else {
-                            Auth::logout();
-                            Toastr::error('Wrong Employee ID Or Password', 'Error');
-                            return redirect('login');
+                    $number_employee    = $request->number_employee;
+                    $password           = $request->password;
+                    if (Auth::attempt(['number_employee' => $number_employee, 'password' => $password])) {
+                        if (Auth::user()->RolePermission == "Employee") {
+                            return redirect('dashboad/employee');
+                        }else{
+                            return redirect('dashboad/admin')->with([
+                                'dataUpComming' =>  $dataUserUpComming,
+                                'dataProbation' =>  $dataUserProbation,
+                                'dataShortList' =>  $dataShortList,
+                                'dataContract'  =>  $dataContract
+                            ]);
                         }
+                    }else {
+                        Auth::logout();
+                        Toastr::error('Wrong Employee ID Or Password', 'Error');
+                        return redirect('login');
                     }
                 }else{
                     Toastr::error('Your account is not active. Please contact support.', 'Error');
