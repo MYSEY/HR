@@ -61,14 +61,12 @@
                                     <i class="fa fa-search"></i>
                                 </span>
                             </button>
-                            @if (Auth::user()->RolePermission == 'developer' || Auth::user()->RolePermission == 'admin')
-                                <button type="button" class="btn btn-sm btn-outline-secondary btn-export me-2" id="icon-search-download-reload">
-                                    <span class="export-loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
-                                    <span class="btn-export-txt">
-                                        <i class="fa fa-arrow-circle-down"></i>
-                                    </span>
-                                </button>
-                            @endif
+                            <button type="button" class="btn btn-sm btn-outline-secondary btn-export me-2" id="icon-search-download-reload">
+                                <span class="export-loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
+                                <span class="btn-export-txt">
+                                    <i class="fa fa-arrow-circle-down"></i>
+                                </span>
+                            </button>
                             <button type="button" class="btn btn-sm btn-outline-secondary reset-btn" id="icon-search-download-reload">
                                 <span class="btn-text-reset">
                                     <i class="fa fa-undo"></i>
@@ -222,7 +220,7 @@
             $("#btn-text-loading").css('display', 'block');
             window.location.replace("{{ URL('users') }}"); 
         });
-        $(document).on('click','.userDelete', function(){
+        $('.userDelete').on('click',function(){
             let id = $(this).data("id");
             $('.e_id').val(id);
             $('.e_profile').val(_this.find('.image').text());
