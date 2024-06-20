@@ -179,6 +179,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('/branch/update', [BranchController::class,'update']);
 
     // users
+    Route::get('admins/user/autocomplet', [UserController::class,'autocomplet']);
     Route::get('users', [UserController::class,'index']);
     Route::get('user/form/create', [UserController::class,'formCreate']);
     Route::get('user/form/edit/{id}', [UserController::class,'formEdit']);

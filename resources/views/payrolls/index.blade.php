@@ -40,7 +40,11 @@
                 <div class="row filter-btn"> 
                     <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2"> 
                         <div class="form-group">
-                            <input type="text" class="form-control" name="employee_id" id="employee_id" placeholder="@lang('lang.employee_id')" value="{{old('number_employee')}}">
+                            <div class="search">
+                                <i class="uil uil-search"></i>
+                                <input spellcheck="false" id="employee_id" class="form-control" type="text" placeholder="Search">
+                            </div>
+                            {{-- <input type="text" class="form-control" name="employee_id" id="employee_id" placeholder="@lang('lang.employee_id')" value="{{old('number_employee')}}"> --}}
                         </div>
                     </div>
                     <div class="col-sm-6 col-md-2 col-lg-2 col-xl-2">
@@ -399,6 +403,16 @@
 <script src="{{asset('/admin/js/validation-field.js')}}"></script>
 <script>
     $(function(){
+        var path = "{{ url('admins/user/autocomplet') }}";
+        $('#employee_id').typeahead({
+            source: function (query, process) {
+                return $.get(path, {
+                    query: query
+                }, function (response) {
+                    return process(response);
+                });
+            }
+        });
         $("#importPayroll").on("click", function() {
             $(".thanLess").hide();
             $("#thanLess").text("");

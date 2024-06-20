@@ -8,37 +8,38 @@ use App\Models\User;
 use App\Models\Lavel;
 use App\Models\Option;
 use App\Models\Branchs;
+use App\Models\Contact;
 use App\Models\District;
 use App\Models\Position;
 use App\Models\Province;
 use App\Models\Villages;
 use App\Models\Conmmunes;
+use App\Models\Education;
 use App\Models\LeaveType;
 use App\Models\Department;
+use App\Models\Experience;
+use App\Models\Transferred;
 use App\Models\LeaveRequest;
 use Illuminate\Http\Request;
+use App\Models\ChildrenInfor;
+use App\Models\StaffPromoted;
+use App\Models\StaffTraining;
 use App\Traits\GeneratingCode;
 use Illuminate\Support\Carbon;
 use App\Exports\ExportEmployee;
 use App\Models\LeaveAllocation;
+use Illuminate\Http\JsonResponse;
 use App\Http\Requests\UserRequest;
 use App\Http\Requests\UserUpdated;
 use App\Models\GenerateIdEmployee;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use App\Models\ChildrenInfor;
-use App\Models\Contact;
-use App\Models\Education;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Hash;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Models\EmployeeStatusHistory;
-use App\Models\Experience;
-use App\Models\StaffPromoted;
-use App\Models\StaffTraining;
-use App\Models\Transferred;
 use App\Traits\UploadFiles\UploadFIle;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use Spatie\Activitylog\Models\Activity;
@@ -763,6 +764,15 @@ class UserController extends Controller
         } catch (\Exception $exp) {
             DB::rollBack();
             return response()->json(['message' => $exp->getMessage()], 500);
+        }
+    }
+    public function autocomplet(Request $request) : JsonResponse{
+        try{
+            $search = $request->search;
+            $data = DB::table("users")->select("id","number_employee")->where('number_employee','LIKE',"%$search%")->pluck('number_employee');
+            return response()->json($data);
+        }catch(\Exception $e){
+            return response()->json(['error'=>$e->getMessage()]);
         }
     }
 }
