@@ -494,13 +494,7 @@
             @endif
         </div>
         @include('dashboads.chart_board')
-        <?php 
-            $userUpComming = Session::get('dataUpComming');
-            $userProbation = Session::get('dataProbation');
-            $ShortList = Session::get('dataShortList');
-            $SignContract = Session::get('dataContract');
-        ?>
-        @if ($userUpComming || $userProbation || $ShortList || $SignContract)
+        @if ($dataUpComming || $dataProbation || $dataShortList || $dataContract)
             <div id="showNotyfication" class="modal custom-modal fade" style="display: none;" aria-hidden="true" data-bs-backdrop="static">
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
@@ -513,7 +507,7 @@
                                     <section class="dash-section">
                                         <h1 class="dash-sec-title">TASK FOR TODAY</h1>
                                         <div class="dash-sec-content">
-                                            @if ($ShortList)
+                                            @if ($dataShortList)
                                                 <div class="form-group">
                                                     <label for="" class="text-danger">Candidate CVs</label>
                                                     <div class="dash-info-list">
@@ -523,14 +517,14 @@
                                                                     <i class="fa fa-user-plus"></i>
                                                                 </div>
                                                                 <div class="dash-card-content">
-                                                                    <p>{{$ShortList}} People will be check short list <a href="{{url('/recruitment/candidate-resume/list')}}" target="_blank">link>></a></p>
+                                                                    <p>{{$dataShortList}} People will be check short list <a href="{{url('/recruitment/candidate-resume/list')}}" target="_blank">link>></a></p>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             @endif
-                                            @if ($SignContract)
+                                            @if ($dataContract)
                                                 <div class="form-group">
                                                     <label for="" class="text-danger">Signature Contract</label>
                                                     <div class="dash-info-list">
@@ -540,7 +534,7 @@
                                                                     <i class="fa fa-user-plus"></i>
                                                                 </div>
                                                                 <div class="dash-card-content">
-                                                                    <p>{{$SignContract}} People will be signature contract today <a href="{{url('/recruitment/candidate-resume/list')}}" target="_blank">link>></a></p>
+                                                                    <p>{{$dataContract}} People will be signature contract today <a href="{{url('/recruitment/candidate-resume/list')}}" target="_blank">link>></a></p>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -548,7 +542,7 @@
                                                 </div>
                                             @endif
 
-                                            @if ($userUpComming)
+                                            @if ($dataUpComming)
                                                 <div class="form-group">
                                                     <label for="" class="text-danger">Pleas change status Upcoming to probation</label>
                                                     <div class="dash-info-list">
@@ -558,14 +552,14 @@
                                                                     <i class="fa fa-user-plus"></i>
                                                                 </div>
                                                                 <div class="dash-card-content">
-                                                                    <p>{{$userUpComming}} People will be change upcoming to probation <a href="{{url('users')}}" target="_blank">link>></a></p>
+                                                                    <p>{{$dataUpComming}} People will be change upcoming to probation <a href="{{url('users')}}" target="_blank">link>></a></p>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             @endif
-                                            @if ($userProbation)
+                                            @if ($dataProbation)
                                                <div class="form-group">
                                                     <label for="" class="text-danger">Pleas change status probation to fdc</label>
                                                     <div class="dash-info-list">
@@ -575,7 +569,7 @@
                                                                     <i class="fa fa-user-plus"></i>
                                                                 </div>
                                                                 <div class="dash-card-content">
-                                                                    <p>{{$userProbation}} People will be change to employee <a href="{{url('users')}}" target="_blank">link>></a></p>
+                                                                    <p>{{$dataProbation}} People will be change to employee <a href="{{url('users')}}" target="_blank">link>></a></p>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -586,8 +580,8 @@
                                     </section>
                                 </div>
                             </div>
-                            <input type="hidden" id="" class="hidden" value="{{$userUpComming}}">
-                            <input type="hidden" id="" class="hidden" value="{{$userProbation}}">
+                            <input type="hidden" id="" class="hidden" value="{{$dataUpComming}}">
+                            <input type="hidden" id="" class="hidden" value="{{$dataProbation}}">
                         </div>
                     </div>
                 </div>

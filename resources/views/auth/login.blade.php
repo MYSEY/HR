@@ -117,9 +117,9 @@
                     <div class="login_box">
                         <div class="left">
                             <div class="contact">
-                                {{-- <form id="form-login"> --}}
-                                <form method="POST" action="{{ route('login') }}">
-                                    @csrf
+                                <form id="form-login">
+                                {{-- <form method="POST" action="{{ route('login') }}"> --}}
+                                    {{-- @csrf --}}
                                     <h3>Welcome! Please log in</h3>
                                     <div class="form-group">
                                         <input id="number_employee" type="text" class="form-control @error('number_employee') is-invalid @enderror" placeholder="Employee ID"  required name="number_employee">
@@ -140,8 +140,7 @@
                                             @enderror
                                         </div>
                                     </div>
-                                    <button type="submit" class="submit" id="btn-login">Click here to login</button>
-                                    {{-- <button type="button" class="submit" onclick="submitForm()" id="btn-login">Click here to login</button> --}}
+                                    <button type="button" class="submit" onclick="submitForm()" id="btn-login">Click here to login</button>
                                 </form>
                             </div>
                         </div>
