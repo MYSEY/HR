@@ -673,46 +673,46 @@ class LeavesAdminController extends Controller
                 $i++;
                 if ($i != 1) {
                     $employee = User::where("number_employee", $item[0])->first();
-                    if ($employee) {
-                        $dbDate = Carbon::parse($employee->date_of_commencement);
-                        $diffYears = Carbon::now()->diffInYears($dbDate);
-                        $defaultDays = $item[2];
-                        if ($diffYears == 1) {
-                            $totalDays = $defaultDays;
-                        }elseif($diffYears == 2){
-                            $totalDays = $defaultDays;
-                        }elseif($diffYears == 3){
-                            $totalDays = $defaultDays;
-                        }elseif($diffYears == 4){
-                            $totalDays = $defaultDays + 1;
-                        } elseif($diffYears == 5) {
-                            $totalDays = $defaultDays + 1;
-                        }elseif($diffYears == 6){
-                            $totalDays = $defaultDays + 1;
-                        }elseif($diffYears == 7){
-                        }elseif($diffYears == 8){
-                            $totalDays = $defaultDays + 2;
-                        }elseif($diffYears == 9){
-                        }else if($diffYears > 10){
-                            $totalDays = $defaultDays + 3;
-                        }
-                        
-                        LeaveAllocation::firstOrCreate([
-                            'employee_id'   => $employee->id,
-                            'default_annual_leave'   => $totalDays,
-                            'default_sick_leave'   => 10,
-                            'default_special_leave'   => 22,
-                            'default_unpaid_leave'   => '0',
-                            'total_annual_leave'   => $totalDays,
-                            'total_sick_leave'   => 10,
-                            'total_special_leave'   => 22,
-                            'total_unpaid_leave'   => '0',
-                            'year_1'   => $item[3],
-                            'year_2'   => $item[4],
-                            'year_3'   => $item[5],
-                            'created_by'    => Auth::user()->id,
-                        ]);
-                    }
+                    LeaveAllocation::firstOrCreate([
+                        'employee_id'   => $employee->id,
+                        'default_annual_leave'   => $item[2],
+                        'total_annual_leave'   => $item[2],
+                        'default_sick_leave'   => $item[3],
+                        'total_sick_leave'   => $item[3],
+                        'default_special_leave'   => $item[4],
+                        'total_special_leave'   => $item[4],
+                        'default_unpaid_leave'   => '0',
+                        'total_unpaid_leave'   => '0',
+                        'year_1'   => $item[5],
+                        'year_2'   => $item[6],
+                        'year_3'   => $item[7],
+                        'created_by'    => Auth::user()->id,
+                    ]);
+
+                    // if ($employee) {
+                    //     $dbDate = Carbon::parse($employee->date_of_commencement);
+                    //     $diffYears = Carbon::now()->diffInYears($dbDate);
+                    //     $defaultDays = $item[2];
+                    //     if ($diffYears == 1) {
+                    //         $totalDays = $defaultDays;
+                    //     }elseif($diffYears == 2){
+                    //         $totalDays = $defaultDays;
+                    //     }elseif($diffYears == 3){
+                    //         $totalDays = $defaultDays;
+                    //     }elseif($diffYears == 4){
+                    //         $totalDays = $defaultDays + 1;
+                    //     } elseif($diffYears == 5) {
+                    //         $totalDays = $defaultDays + 1;
+                    //     }elseif($diffYears == 6){
+                    //         $totalDays = $defaultDays + 1;
+                    //     }elseif($diffYears == 7){
+                    //     }elseif($diffYears == 8){
+                    //         $totalDays = $defaultDays + 2;
+                    //     }elseif($diffYears == 9){
+                    //     }else if($diffYears > 10){
+                    //         $totalDays = $defaultDays + 3;
+                    //     }
+                    // }
                 }
             }
             if($dataArray){
