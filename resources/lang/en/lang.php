@@ -201,6 +201,7 @@ return[
     "discount_fee"=>"Discount Fee",
     "delete"=>"Delete",
     "deleted"=>"Deleted",
+    "delegate"=>"Delegate",
     "delete_all"=>"Delete All",
     "delete_details"=>"Delete Details",
     "delete_success"=>"Delete success",

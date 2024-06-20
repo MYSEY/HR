@@ -68,7 +68,7 @@ class LeavesEmployeeController extends Controller
      */
     public function store(Request $request)
     {
-        // try {
+        try {
             $data = $request->all();
             $LeaveAllocation = LeaveAllocation::where("employee_id", Auth::user()->id)->first();
             $LeaveType = LeaveType::where("id", $request->leave_type_id)->first();
@@ -167,10 +167,10 @@ class LeavesEmployeeController extends Controller
                 'success'=>'leave_request_created_successfully',
                 'status'=>200,
             ]);
-        // } catch (\Throwable $exp) {
-        //     DB::rollback();
-        //     Toastr::error('Leave request created fail.','Error');
-        // }
+        } catch (\Throwable $exp) {
+            DB::rollback();
+            Toastr::error('Leave request created fail.','Error');
+        }
     }
 
     /**
@@ -221,6 +221,7 @@ class LeavesEmployeeController extends Controller
             $LeaveAllocation = LeaveAllocation::where("employee_id", Auth::user()->id)->first();
             $LeaveType = LeaveType::where("id", $request->leave_type_id)->first();
             $data = LeaveRequest::with("leaveType")->where("id", $request->id)->first();
+            $delegateLeave = DelegateLeave::where("requester_id", $data->employee_id)->where("start_date", $data->start_date)->where("end_date",$data->end_date)->first();
 
             if ($LeaveType->type == $data->leaveType->type) {
                 $number_day = 0;
@@ -258,6 +259,29 @@ class LeavesEmployeeController extends Controller
                 $LeaveAllocation->total_unpaid_leave = $LeaveType->type == "unpaid_leave" ? $LeaveAllocation->total_unpaid_leave - $request->number_of_day : $LeaveAllocation->total_unpaid_leave;
                 $LeaveAllocation->save();
             }
+
+            if ($delegateLeave) {
+                if ($request->delegate_id) {
+                    $delegateLeave['delegate_id'] = $request->delegate_id;
+                }
+                $delegateLeave['start_date'] = $request->start_date;
+                $delegateLeave['end_date'] = $request->end_date;
+                $delegateLeave['number_of_day'] = $request->number_of_day;
+                $delegateLeave->save();
+            }else{
+                if ($request->delegate_id) {
+                    DelegateLeave::create(
+                        [
+                            "requester_id"      => Auth::user()->id,
+                            "delegate_id"       => $request->delegate_id,
+                            "number_of_day"     => $request->number_of_day,
+                            "start_date"        => $request->start_date,
+                            "end_date"          => $request->end_date,
+                        ]
+                    );
+                }
+            }
+
             $data['leave_type_id'] = $request->leave_type_id;
             $data['start_date'] = $request->start_date;
             $data['start_half_day'] = $request->start_half_day;
@@ -266,6 +290,7 @@ class LeavesEmployeeController extends Controller
             $data['number_of_day'] = $request->number_of_day;
             $data['reason'] = $request->reason;
             $data['updated_by'] = Auth::user()->id;
+
             $data->save();
             return response()->json([
                 'success'=>'leave_request_created_successfully',
@@ -306,7 +331,11 @@ class LeavesEmployeeController extends Controller
                 $LeaveAllocation->total_unpaid_leave = $current_unpaid_leave > $LeaveAllocation->default_unpaid_leave ? $LeaveAllocation->default_unpaid_leave : $current_unpaid_leave;
             }
             $LeaveAllocation->save();
+
+            DelegateLeave::where('requester_id', $data->employee_id)->where("start_date",$data->start_date)->where("end_date",$data->end_date)->delete();
+
             LeaveRequest::destroy($request->id);
+           
             Toastr::success('Leave requsest deleted successfully.','Success');
             return redirect()->back();
         }catch(\Exception $e){

@@ -214,6 +214,7 @@ return[
 	"discount_fee"=>"បញ្ចុះតម្លៃ",
 	"delete"=>"លុបទិន្នន័យ",
 	"deleted"=>"លុបទិន្នន័យ",
+	"delegate"=>"ផ្ទេរសិទ្ធិ",
     "delete_all"=>"លុបទាំងអស់",
 	"delete_details"=>"លុបទិន្នន័យ",
 	"delete_it"=>"លុប",

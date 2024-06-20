@@ -119,6 +119,21 @@
                             </div>
                         </div>
                     </div>
+                    @if (Auth::user()->RolePermission != "Employee")
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>@lang('lang.delegate')</label>
+                                    <select class="hr-select2-option" name="e_delegate_id" id="e_delegate_id">
+                                        <option selected value=""> --@lang('lang.select')--</option>
+                                        @foreach ($employees as $employee)
+                                            <option value="{{$employee->id}}">{{$employee->employee_name_en}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
@@ -202,6 +217,7 @@
                     $('#e_reason').text(success.reason);
                     $('#e_leave_type_id').html('<option value=""> -- @lang("lang.select") --</option>');
                     $('#e_handover_staff_id').html('<option value=""> -- @lang("lang.select") --</option>');
+                    // $('#e_delegate_id').html('<option value=""> -- @lang("lang.select") --</option>');
                     if (response.dataLeaveType != '') {
                         $.each(response.dataLeaveType, function(i, item) {
                             $('#e_leave_type_id').append($('<option>', {
@@ -487,6 +503,7 @@
                         "start_half_day": start_half_day,
                         "end_half_day": end_half_day,
                         "number_of_day": $("#e_number_of_day").val(),
+                        "delegate_id": $("#e_delegate_id").val(),
                         "handover_staff_id": $("#e_handover_staff_id").val(),
                         "reason": $("#e_reason").val(),
                     },
