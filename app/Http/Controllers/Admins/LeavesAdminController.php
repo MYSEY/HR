@@ -681,11 +681,11 @@ class LeavesAdminController extends Controller
                         'total_sick_leave'   => $item[3],
                         'default_special_leave'   => $item[4],
                         'total_special_leave'   => $item[4],
-                        'default_unpaid_leave'   => '0',
-                        'total_unpaid_leave'   => '0',
-                        'year_1'   => $item[5],
-                        'year_2'   => $item[6],
-                        'year_3'   => $item[7],
+                        'default_unpaid_leave'   => $item[5],
+                        'total_unpaid_leave'   => $item[5],
+                        'year_1'   => $item[6],
+                        'year_2'   => $item[7],
+                        'year_3'   => $item[8],
                         'created_by'    => Auth::user()->id,
                     ]);
 
