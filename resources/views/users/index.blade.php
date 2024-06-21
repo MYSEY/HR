@@ -46,7 +46,7 @@
                         <div class="form-group">
                             <div class="search">
                                 <i class="uil uil-search"></i>
-                                <input spellcheck="false" id="number_employee" class="form-control" type="text" placeholder="Search">
+                                <input spellcheck="false" id="number_employee" class="form-control" type="text" placeholder="@lang('lang.employee_id')">
                             </div>
                             {{-- <input type="text" class="form-control clear-data-search" name="employee_id" id="number_employee" placeholder="@lang('lang.employee_id')" value="{{old('number_employee')}}"> --}}
                         </div>
