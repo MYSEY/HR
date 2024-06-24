@@ -4,6 +4,7 @@ namespace App\Repositories\Admin;
 
 use App\Models\MotorRentalDetail;
 use App\Models\MotorRentel;
+use App\Models\Seniority;
 use App\Models\SeverancePay;
 use App\Repositories\BaseRepository;
 use App\Traits\UploadFiles\UploadFIle;
@@ -161,5 +162,77 @@ class MotorRentalRepository extends BaseRepository
         $severancePay_2 = (clone $severancePay)->with("users")->with("gruse_salary_2")->where('severance_pays.type', 'FDC-2')->get();
         $nssf = $severancePay_1->merge($severancePay_2);
         return $nssf;
+    }
+
+    public function getDataSenorityPay($request){
+
+        $Monthly = null;
+        $yearLy = null;
+        $start_early = null;
+        $end_early = null;
+        if ($request->filter_month) {
+            $Monthly = Carbon::createFromDate($request->filter_month)->format('m');
+            $yearLy = Carbon::createFromDate($request->filter_month)->format('Y');
+        }else{
+            $currentYear =  Carbon::now()->format('Y');
+            $start_early = Carbon::createFromDate($currentYear.'-01-01')->format('Y-m-d');
+            $end_early = Carbon::createFromDate($currentYear.'-12-30')->format('Y-m-d');
+
+        }
+        $Seniority = Seniority::with("users")
+        ->with("gross_seniority_1")->with("gross_seniority_2")
+        ->leftJoin('users', 'seniorities.employee_id', '=', 'users.id')
+        ->leftJoin('options','options.id','=','users.gender')
+        ->leftJoin('positions','positions.id','=','users.position_id')
+        ->leftJoin('branchs','branchs.id','=','users.branch_id')
+        ->select(
+            'seniorities.*',
+            'users.number_employee',
+            'users.employee_name_en',
+            'users.employee_name_kh',
+            'users.branch_id',
+            'users.department_id',
+            'options.name_khmer',
+            'options.name_english',
+            'options.type',
+            'positions.name_khmer as positionNameKhmer',
+            'positions.name_english as positionNameEnglish',
+            'branchs.branch_name_kh as branck_kh',
+            'branchs.branch_name_en as branck_en',
+        )
+        ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+            if ($RolePermission == 'Employee') {
+                $query->where("users.id", Auth::user()->id);
+            }
+            if ($RolePermission == 'HOD') {
+                $query->whereIn("users.department_id", EmployeeRepository::getRoleHOD());
+            }
+            if ($RolePermission == 'BM') {
+                $query->where("users.branch_id", Auth::user()->branch_id);
+            }
+        })
+        ->when($request->employee_id, function ($query, $employee_id) {
+            $query->where('users.number_employee', 'LIKE', '%'.$employee_id.'%');
+        })
+        ->when($request->employee_name, function ($query, $employee_name) {
+            $query->where('users.employee_name_en', 'LIKE', '%'.$employee_name.'%');
+        })
+        ->when($request->branch_id, function ($query, $branch_id) {
+            $query->where('users.branch_id', $branch_id);
+        })
+        ->when($start_early, function ($query, $startEarly) {
+            $query->where('payment_date', '>=',$startEarly);
+        })
+        ->when($end_early, function ($query, $endEarly) {
+            $query->where('payment_date', '<=',$endEarly);
+        })
+
+        ->when($Monthly, function ($query, $Monthly) {
+            $query->whereMonth('payment_date', $Monthly);
+        })
+        ->when($yearLy, function ($query, $yearLy) {
+            $query->whereYear('payment_date', $yearLy);
+        })->get();
+        return $Seniority;
     }
 }

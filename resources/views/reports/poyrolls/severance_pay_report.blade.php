@@ -97,12 +97,12 @@
                                     <div class="row">
                                         <div class="col-sm-12">
                                             <p>
-                                                <input type="checkbox" name="13st_month"> Show gross salary by 13st month
+                                                <input type="checkbox" name="13st_month"> Show gross salary by 13st month, Total {{$totalSeverancePay}} records
                                             </p>
-                                            <table class="table table-striped custom-table datatable dataTable no-footer table_banefit" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
+                                            <table class="table table-striped custom-table no-footer table_banefit" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
                                                 <thead>
                                                     <tr>
-                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1">@lang('lang.employee_id')</th>
+                                                        <th class="sorting stuck" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1">@lang('lang.employee_id')</th>
                                                         <th class="sorting sorting_asc stuck" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Employee: activate to sort column descending">@lang('lang.employee_name')</th>
                                                         <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Employee: activate to sort column descending">@lang('lang.gender')</th>
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending">@lang('lang.position')</th>
@@ -130,38 +130,6 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                     {{-- @if (count($severancePay) > 0)
-                                                        @foreach ($severancePay as $item)
-                                                            <tr class="odd">
-                                                                <td><a href="#">{{ $item->users == null ? '' : $item->users->number_employee }}</a></td>
-                                                                <td class="stuck"><a href="#">{{ $item->users == null ? '' : $item->users->EmployeeName }}</a></td>
-                                                                <td><a href="#">{{ $item->users->EmployeeGender }}</a></td>
-                                                                <td><a href="#">{{ $item->users->EmployeePosition }}</a></td>
-                                                                <td><a href="#">{{ $item->users->EmployeeBranch }}</a></td>
-                                                                <td>{{ $item->users == null ? '' : $item->users->joinOfDate }}</td>
-                                                                <td>{{ $item->users == null ? '' : Carbon\Carbon::parse($item->users->fdc_end)->format('d-M-Y') }}</td>
-                                                                
-                                                                <th class="13st_month">Email</th>
-                                                                <th class="13st_month">Email</th>
-                                                                <th class="13st_month">Email</th>
-                                                                <th class="13st_month">Email</th>
-                                                                <th class="13st_month">Email</th>
-                                                                <th class="13st_month">Email</th>
-                                                                <th class="13st_month">Email</th>
-                                                                <th class="13st_month">Email</th>
-                                                                <th class="13st_month">Email</th>
-                                                                <th class="13st_month">Email</th>
-                                                                <th class="13st_month">Email</th>
-                                                                <th class="13st_month">Email</th>
-                                                                <th class="13st_month">Email</th>
-                                                                        
-                                                                <td>${{ $item->total_severanec_pay }}</td>
-                                                                <td>${{ $item->total_contract_severance_pay }}</td>
-                                                                <td>{{ Carbon\Carbon::parse($item->created_at)->format('d-M-Y') }}</td>
-                                                            </tr>
-                                                        @endforeach
-                                                    @endif --}}
-                                                   
                                                 </tbody>
                                             </table>
                                         </div>
@@ -217,6 +185,7 @@
                 employee_id: $("#employee_id").val(),
                 employee_name: $("#employee_name").val(),
                 filter_month: $("#filter_month").val()
+                branch_id: $("#branch_id").val(),
             };
             var url = "{{URL::to('reports/severance-pay-export')}}?" + $.param(query)
             window.location = url;
@@ -282,8 +251,8 @@
                         let contract_deadline = moment(row.users.fdc_end).format('D-MMM-YYYY')
                         let created_at = moment(row.created_at).format('D-MMM-YYYY')
                         tr +='<tr class="odd">'+
-                            '<td><a href="#">'+(row.users == null ? '' : row.users.number_employee)+'</a></td>'+
-                            '<td><a href="#">'+(localeLanguage == 'en' ? row.users.employee_name_en : row.users.employee_name_kh )+'</a></td>'+
+                            '<td class="stuck"><a href="#">'+(row.users == null ? '' : row.users.number_employee)+'</a></td>'+
+                            '<td class="stuck"><a href="#">'+(localeLanguage == 'en' ? row.users.employee_name_en : row.users.employee_name_kh )+'</a></td>'+
                             '<td><a href="#">'+(localeLanguage == 'en' ? row.name_english  : row.name_khmer )+'</a></td>'+
                             '<td><a href="#">'+(localeLanguage == 'en' ? row.positionNameEnglish  : row.positionNameKhmer )+'</a></td>'+
                             '<td><a href="#">'+(localeLanguage == 'en' ? row.branck_en  : row.branck_kh )+'</a></td>'+

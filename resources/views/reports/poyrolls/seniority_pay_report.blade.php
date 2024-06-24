@@ -53,11 +53,6 @@
                         </div>
                     </div>
                     <div class="col-sm-6 col-md-2 col-lg-2 col-xl-2">
-                        <div class="form-group cls-research">
-                            <input class="form-control" type="month" id="filter_month">
-                        </div>
-                    </div>
-                    <div class="col-sm-6 col-md-2 col-lg-2 col-xl-2">
                         <div class="form-group" id="col-branch">
                             <select class="select form-control" id="branch_id" data-select2-id="select2-data-2-c0n2" name="branch_id">
                                 <option value="" data-select2-id="select2-data-2-c0n2">@lang('lang.all_location')</option>
@@ -65,6 +60,11 @@
                                     <option value="{{$item->id}}">{{ Helper::getLang() == 'en' ? $item->branch_name_en : $item->branch_name_kh }}</option>
                                 @endforeach
                             </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-2 col-lg-2 col-xl-2">
+                        <div class="form-group cls-research">
+                            <input class="form-control" type="month" id="filter_month">
                         </div>
                     </div>
                    
@@ -96,8 +96,11 @@
                                 <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                                     <div class="row">
                                         <div class="col-sm-12">
-                                            <table class="table table-striped custom-table datatable dataTable no-footer tbl_seniority_pay"
-                                                id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
+                                            <p>
+                                                <input type="checkbox" name="6st_month"> Show gross salary by 6st month,  Total <span class="total_record">{{$totalDates}}</span> records
+                                            </p>
+                                            
+                                            <table class="table table-striped custom-table no-footer tbl_seniority_pay" aria-describedby="DataTables_Table_0_info">
                                                 <thead>
                                                     <tr>
                                                         <th class="sorting stuck" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1">@lang('lang.employee_id')</th>
@@ -110,7 +113,15 @@
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending">@lang('lang.position')</th>
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending">@lang('lang.location')</th>
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">@lang('lang.join_date')</th>
-                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Join Date: activate to sort column ascending">@lang('lang.month')</th>
+                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="month: activate to sort column ascending">@lang('lang.month')</th>
+
+                                                        <th class="sorting 6st_month" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="jan/jul: activate to sort column ascending">@lang('lang.jan/jul')</th>
+                                                        <th class="sorting 6st_month" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="feb/aug: activate to sort column ascending">@lang('lang.feb/aug')</th>
+                                                        <th class="sorting 6st_month" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="mar/sep: activate to sort column ascending">@lang('lang.mar/sep')</th>
+                                                        <th class="sorting 6st_month" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="apr/oct: activate to sort column ascending">@lang('lang.apr/oct')</th>
+                                                        <th class="sorting 6st_month" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="may/nov: activate to sort column ascending">@lang('lang.may/nov')</th>
+                                                        <th class="sorting 6st_month" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="jun/dec: activate to sort column ascending">@lang('lang.jun/dec')</th>
+
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Payslip: activate to sort column ascending">@lang('lang.total_average_salary')</th>
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Payslip: activate to sort column ascending">@lang('lang.total_salary_receive')</th>
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Payslip: activate to sort column ascending">@lang('lang.tax_exemption_salary')</th>
@@ -119,24 +130,6 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    @if (count($dataSeniority) > 0)
-                                                        @foreach ($dataSeniority as $item)
-                                                            <tr class="odd">
-                                                                <td><a href="#">{{ $item->users == null ? '' : $item->users->number_employee }}</a></td>
-                                                                <td class="stuck"><a href="#">{{ $item->users == null ? '' : $item->users->EmployeeName }}</a></td>
-                                                                <td>{{ $item->users == null ? '' : $item->users->EmployeeGender }}</td>
-                                                                <td>{{ $item->users == null ? '' : $item->users->EmployeePosition }}</td>
-                                                                <td><a href="#">{{ $item->users->EmployeeBranch }}</a></td>
-                                                                <td>{{ $item->users == null ? '' : $item->users->joinOfDate }}</td>
-                                                                <td>{{ $item->payment_of_month }}</td>
-                                                                <td>${{ $item->total_average_salary }}</td>
-                                                                <td>${{ $item->total_salary_receive }}</td>
-                                                                <td>${{ $item->tax_exemption_salary }}</td>
-                                                                <td>${{ $item->taxable_salary }}</td>
-                                                                <td>{{ Carbon\Carbon::parse($item->created_at)->format('d-M-Y') }}</td>
-                                                            </tr>
-                                                        @endforeach
-                                                    @endif
                                                 </tbody>
                                             </table>
                                         </div>
@@ -157,6 +150,16 @@
 <script src="{{ asset('/admin/js/date-range-bicker.js') }}"></script>
 <script>
     $(function() {
+        showdatas({});
+        $("input:checkbox:not(:checked)").each(function() {
+            var column = "table ." + $(this).attr("name");
+            $(column).hide();
+        });
+
+        $("input:checkbox").click(function(){
+            var column = "table ." + $(this).attr("name");
+            $(column).toggle();
+        });
         $(".reset-btn").on("click", function() {
             $(this).prop('disabled', true);
             $(".btn-text-reset").hide();
@@ -179,7 +182,8 @@
             let query = {
                 employee_id: $("#employee_id").val(),
                 employee_name: $("#employee_name").val(),
-                filter_month: $("#filter_month").val()
+                filter_month: $("#filter_month").val(),
+                branch_id: $("#branch_id").val(),
             };
             var url = "{{URL::to('reports/seniorities-pay-export')}}?" + $.param(query)
             window.location = url;
@@ -200,25 +204,85 @@
             dataType: "JSON",
             success: function(response) {
                 let data =  response.success;
+                $(".total_record").text(data.length);
                 $(".btn-search").prop('disabled', false);
                 $(".btn-txt").show();
                 $(".loading-icon").css('display', 'none')
                 var tr = "";
                 if (data.length > 0) {
-                    data.map((row) => {
+                    $.each(data, function(index, row) {
                         let join_date = moment(row.users.date_of_commencement).format('D-MMM-YYYY')
                         let contract_deadline = moment(row.users.fdc_end).format('D-MMM-YYYY')
                         let created_at = moment(row.created_at).format('D-MMM-YYYY')
+                        let td = "";
+                        let month = 0;
+                        //** Show data for  gross seniority 1 **//
+                        if (row.gross_seniority_1 && row.gross_seniority_1.length > 0) {
+                            if (row.gross_seniority_1.length == 6) {
+                                $.each(row.gross_seniority_1, function(index, gross) {
+                                    td += "<td style='display: none' class='6st_month'>"+(gross.total_seniority)+"</td>";
+                                });
+                            }else{
+                                //** Loop through data in chunks of 6 **//
+                                for (var i = 1; i <= 6; i ++) {
+                                    let current_year = moment().format('YYYY');
+                                    let date = '0'+i+'-05-'+current_year;
+                                    let month_1 = moment(date).format('MM');
+                                    var newArray = row.gross_seniority_1.filter(function (el) {
+                                                        let month = moment(el.payment_date).format('MM')
+                                                        return month == month_1  
+                                                    });
+                                    if (newArray.length > 0) {
+                                        td += "<td style='display: none' class='6st_month'>"+(newArray[0].total_seniority)+"</td>";
+                                    }else{
+                                        td += "<td style='display: none' class='6st_month'>0.00</td>";
+                                    }
+                                }
+                            }
+                        }
+
+                        //** Show data for  gross seniority 2 **//
+                        if (row.gross_seniority_2 && row.gross_seniority_2.length > 0) {
+                            if (row.gross_seniority_2.length == 6) {
+                                $.each(row.gross_seniority_2, function(index, gross) {
+                                    td += "<td style='display: none' class='6st_month'>"+(gross.total_seniority)+"</td>";
+                                });
+                            }else{
+                                //** Loop through data in chunks of 6 **//
+                                for (var i = 1; i <= 6; i ++) {
+                                    let date_seniority_2 = 6+i;
+                                    if (date_seniority_2 < 10) {
+                                        date_seniority_2 = '0'+date_seniority_2;
+                                    }
+                                    let current_year = moment().format('YYYY');
+                                    let date = date_seniority_2+'-01-'+current_year;
+                                    let month_1 = moment(date).format('MM');
+                                    var newArray = row.gross_seniority_2.filter(function (el) {
+                                                        let month = moment(el.payment_date).format('MM')
+                                                        return month == month_1  
+                                                    });
+                                    if (newArray.length > 0) {
+                                        td += "<td style='display: none' class='6st_month'>"+(newArray[0].total_seniority)+"</td>";
+                                    }else{
+                                        td += "<td style='display: none' class='6st_month'>0.00</td>";
+                                    }
+                                }
+                            }
+                        }
+
                         tr +='<tr class="odd">'+
-                            '<td><a href="#">'+(row.users == null ? '' : row.users.number_employee)+'</a></td>'+
-                            '<td><a href="#">'+(localeLanguage == 'en' ? row.users.employee_name_en : row.users.employee_name_kh )+'</a></td>'+
+                            '<td class="stuck"><a href="#">'+(row.users == null ? '' : row.users.number_employee)+'</a></td>'+
+                            '<td class="stuck"><a href="#">'+(localeLanguage == 'en' ? row.users.employee_name_en : row.users.employee_name_kh )+'</a></td>'+
                             '<td><a href="#">'+(localeLanguage == 'en' ? row.name_english  : row.name_khmer )+'</a></td>'+
                             '<td><a href="#">'+(localeLanguage == 'en' ? row.positionNameEnglish  : row.positionNameKhmer )+'</a></td>'+
                             '<td><a href="#">'+(localeLanguage == 'en' ? row.branck_en  : row.branck_kh )+'</a></td>'+
                             '<td>'+(row.users == null ? '' : join_date)+'</td>'+
                             '<td>'+(row.users == null ? '' : contract_deadline)+'</td>'+
-                            '<td>'+(row.total_severanec_pay)+'</td>'+
-                            '<td>$'+(row.total_contract_severance_pay)+'</td>'+
+                            (td)+
+                            '<td>'+row.total_average_salary+'</td>'+
+                            '<td>'+row.total_salary_receive+'</td>'+
+                            '<td>'+row.tax_exemption_salary+'</td>'+
+                            '<td>'+row.taxable_salary+'</td>'+
                             '<td>'+(created_at)+'</td>'+
                         '</tr>';
                     });
