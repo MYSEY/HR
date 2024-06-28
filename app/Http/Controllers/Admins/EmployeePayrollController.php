@@ -348,7 +348,7 @@ class EmployeePayrollController extends Controller
                         $end_date = Date::createFromDate($endMonth);
                         $commencementDate   = Carbon::parse($start_date);
                         $resumptionDate     = Carbon::parse($end_date);
-                        $toDays 		    = $resumptionDate->diffInWeekdays($commencementDate) + 1;
+                        $toDays 		    = $resumptionDate->diffInWeekdays($commencementDate);
                         $joinDate = Carbon::createFromDate($item->date_of_commencement)->format('d');
                         if ($joinDate==1) {
                             $totalBasicSalary = $item->basic_salary;
