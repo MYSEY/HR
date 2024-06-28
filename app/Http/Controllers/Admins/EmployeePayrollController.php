@@ -519,30 +519,33 @@ class EmployeePayrollController extends Controller
                     $totalSeverancePay = $totalFirstSeverancPay != 0 ? $totalFirstSeverancPay : $totalBasicSalary;
                     $totalOtherBenefit = $totalSeverancePay + $monthlyQuarterlyIncentive + $annualBonus + $otherBenefit + $totalBunus + $item->phone_allowance + $totalChildAllowance;
                     
-                    $endContractDeadline= Carbon::createFromDate($item->fdc_end)->format('Y-m');
-                    $paymentDate = Carbon::createFromDate($request->payment_date)->format('Y-m');
-                    if($endContractDeadline == $paymentDate){
-                        $endMonth = Carbon::createFromDate($item->fdc_end)->format('m');
-                        $totalDayInMonth = Carbon::now()->month($endMonth)->daysInMonth;
-                        $contract_deadline = Carbon::createFromDate($item->fdc_end)->format('Y-m');
-                        $currentYear = $contract_deadline.'-'.$totalDayInMonth;
-                        // new salary and new total days
-                        $startDate = Carbon::parse($item->fdc_end);
-                        $endDate = Carbon::parse($currentYear);
-                        $totalNewDays = $startDate->diffInDays($endDate);
-                        $SeverancePay2 = ($totalSalarySeverancyPay / $totalDayInMonth) * $totalNewDays;
-                        //old salary and total old days
-                        $totalOldDay = $totalDayInMonth - $totalNewDays;
-                        $SeverancePay1 = ($totalSalarySeverancyPay / $totalDayInMonth) * $totalOldDay;
-                        $type_fdc2 = 'FDC-2';
-                        $type_fdc1 = 'FDC-1';
-                        $type_udc = 'UDC';
-                        $totalSeniority = $totalSalarySeverancyPay;
-
-                        $basic1 = ($item->basic_salary / $totalDayInMonth) * $totalOldDay;
-                        $basic2 = ($item->basic_salary / $totalDayInMonth) * $totalNewDays;
-                        $totalBaseSalaryRecived =  $basic1 + $basic2;
+                    if ($item->fdc_end) {
+                        $endContractDeadline= Carbon::createFromDate($item->fdc_end)->format('Y-m');
+                        $paymentDate = Carbon::createFromDate($request->payment_date)->format('Y-m');
+                        if($endContractDeadline == $paymentDate){
+                            $endMonth = Carbon::createFromDate($item->fdc_end)->format('m');
+                            $totalDayInMonth = Carbon::now()->month($endMonth)->daysInMonth;
+                            $contract_deadline = Carbon::createFromDate($item->fdc_end)->format('Y-m');
+                            $currentYear = $contract_deadline.'-'.$totalDayInMonth;
+                            // new salary and new total days
+                            $startDate = Carbon::parse($item->fdc_end);
+                            $endDate = Carbon::parse($currentYear);
+                            $totalNewDays = $startDate->diffInDays($endDate);
+                            $SeverancePay2 = ($totalSalarySeverancyPay / $totalDayInMonth) * $totalNewDays;
+                            //old salary and total old days
+                            $totalOldDay = $totalDayInMonth - $totalNewDays;
+                            $SeverancePay1 = ($totalSalarySeverancyPay / $totalDayInMonth) * $totalOldDay;
+                            $type_fdc2 = 'FDC-2';
+                            $type_fdc1 = 'FDC-1';
+                            $type_udc = 'UDC';
+                            $totalSeniority = $totalSalarySeverancyPay;
+    
+                            $basic1 = ($item->basic_salary / $totalDayInMonth) * $totalOldDay;
+                            $basic2 = ($item->basic_salary / $totalDayInMonth) * $totalNewDays;
+                            $totalBaseSalaryRecived =  $basic1 + $basic2;
+                        }
                     }
+                    
                     
                     $dataTotalSeverancePay1 = $SeverancePay1 != null ? $SeverancePay1 : $totalOtherBenefit;
                     $totalSeverancePay1 =  $dataTotalSeverancePay1 != null ? $dataTotalSeverancePay1 : $totalSalarySeverancyPay;
