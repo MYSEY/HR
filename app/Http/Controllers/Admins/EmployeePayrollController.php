@@ -599,12 +599,8 @@ class EmployeePayrollController extends Controller
                         'type_udc'                  => $type_udc,
                         'created_by'                => Auth::user()->id
                     ]);
-                    if (count(Payroll::where('employee_id',$item->id)->get()) == 0) {
-                        $totalGrossSalary = $totalSalaryNetPay;
-                    }else{
-                        $totalGrossSalary = $dataGrossSalary->total_gross_salary;
-                    }
-                    
+
+
                     //function Seniority pay
                     $seniorityPayableTax = 0;
                     $taxExemptionSalary = 0;
@@ -664,10 +660,19 @@ class EmployeePayrollController extends Controller
                             $taxExemptionSalary = $seniority->tax_exemption_salary ?? 0;
                         }
                     }
+
+
+                    if (count(Payroll::where('employee_id',$item->id)->get()) == 0) {
+                        $totalGrossSalary = $totalSalaryNetPay + $totaltaxableSalary;
+                    }else{
+                        $totalGrossSalary = $dataGrossSalary->total_gross_salary + $totaltaxableSalary;
+                    }
+                    
+                    
                     // function get age employee <= 60 National Social Security Fund (NSSF) Formula
                     $exchangNSSF = ExchangeRate::where('type','NSSF')->orderBy('id','desc')->first();
                     if ($exchangNSSF) {
-                        $totalExchangeRielPreTax =  $exchangNSSF->amount_riel * round($totalGrossSalary + $seniorityPayableTax,2);
+                        $totalExchangeRielPreTax =  $exchangNSSF->amount_riel * round($totalGrossSalary,2);
                         if ($totalExchangeRielPreTax) {
                             if ($totalExchangeRielPreTax >= 1200000) {
                                 $averageWage    = 1200000;
