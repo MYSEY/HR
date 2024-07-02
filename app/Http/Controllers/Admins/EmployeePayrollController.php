@@ -654,16 +654,18 @@ class EmployeePayrollController extends Controller
                         $currentDate = Carbon::createFromDate($request->payment_date)->format('m');
                         $PaymentOfMonth = Carbon::parse($request->payment_date)->format('M-Y');
                         if ($currentDate == 6 || $currentDate == 12) {
-                            $nextYear = Carbon::parse($item->udc_end_date)->format('Y');
+                            $nextYear = Carbon::parse()->format('Y');
+                            // $nextYear = Carbon::parse($item->udc_end_date)->format('Y');
                             $currentYear = null;
                             $currentMonth = null;
-                            $preYear = Carbon::createFromDate($item->udc_end_date)->format('Y');
+                            // $preYear = Carbon::createFromDate($item->udc_end_date)->format('Y');
                             if($currentDate == 6){  
-                                if ($preYear == $nextYear) {
-                                    $currentYear = $item->udc_end_date;
-                                }else{
-                                    $currentYear =  Carbon::createFromDate($nextYear.'-01-01')->format('Y-m-d');
-                                }
+                                $currentYear =  Carbon::createFromDate($nextYear.'-01-01')->format('Y-m-d');
+                                // if ($preYear == $nextYear) {
+                                //     $currentYear = $item->udc_end_date;
+                                // }else{
+                                //     $currentYear =  Carbon::createFromDate($nextYear.'-01-01')->format('Y-m-d');
+                                // }
                             }
                             if ($currentDate == 12) {
                                 $currentMonth = Carbon::createFromDate($nextYear.'-07-01')->format('Y-m-d');
@@ -673,17 +675,18 @@ class EmployeePayrollController extends Controller
                             })->when($currentMonth, function($query, $currentMonth){
                                 $query->where('payment_date', '>=',$currentMonth);
                             })->pluck('total_seniority')->avg();
-                            
                             $totalSalaryReceive = ($totalSalary / 22) * 7.5;
                             $totalGrossExchange = 2000000 / $request->exchange_rate;
-                            if ($totalSalaryReceive > $totalGrossExchange) {
-                                $taxExemptionSalary = $totalGrossExchange;
+                            
+                            $totalGrossInclucTax = round($totalGrossExchange,2);
+                            if ($totalSalaryReceive > $totalGrossInclucTax) {
+                                $taxExemptionSalary = $totalGrossInclucTax;
                             } else {
                                 $taxExemptionSalary = $totalSalaryReceive;
                             }
     
-                            if ($totalSalaryReceive > $totalGrossExchange) {
-                                $totaltaxableSalary = $totalSalaryReceive - $totalGrossExchange;
+                            if ($totalSalaryReceive > $totalGrossInclucTax) {
+                                $totaltaxableSalary = $totalSalaryReceive - $totalGrossInclucTax;
                             } else {
                                 $totaltaxableSalary = 0;
                             }

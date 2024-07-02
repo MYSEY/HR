@@ -209,20 +209,20 @@ class ExportSeniorityPay implements FromCollection, WithColumnWidths, WithHeadin
                 $event->sheet->getDelegate()->getStyle("A".$rows.':N'.$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 
                 //total setCellValue I
-                $sheet->setCellValue("O".$rows, number_format($this->totalAverageSalary, 2));
+                $sheet->setCellValue("O".$rows, $this->totalAverageSalary);
                 $sheet->getDelegate()->getStyle("O".$rows)->getFont()->setName('KGmer OS Battambang')->setSize(9)->setBold("O".$rows);
                 $event->sheet->getDelegate()->getStyle("O".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 
                 //total setCellValue J
-                $sheet->setCellValue("P".$rows, number_format($this->totalSalaryReceive, 2));
+                $sheet->setCellValue("P".$rows, $this->totalSalaryReceive);
                 $sheet->getDelegate()->getStyle("P".$rows)->getFont()->setName('KGmer OS Battambang')->setSize(9)->setBold("P".$rows);
                 $event->sheet->getDelegate()->getStyle("P".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
                 //total setCellValue J
-                $sheet->setCellValue("Q".$rows, number_format($this->totalTaxExemptionSalary, 2));
+                $sheet->setCellValue("Q".$rows, $this->totalTaxExemptionSalary);
                 $sheet->getDelegate()->getStyle("Q".$rows)->getFont()->setName('KGmer OS Battambang')->setSize(9)->setBold("Q".$rows);
                 $event->sheet->getDelegate()->getStyle("Q".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
                 //total setCellValue J
-                $sheet->setCellValue("R".$rows, number_format($this->totalTaxableSalary, 2));
+                $sheet->setCellValue("R".$rows, $this->totalTaxableSalary);
                 $sheet->getDelegate()->getStyle("R".$rows)->getFont()->setName('KGmer OS Battambang')->setSize(9)->setBold("R".$rows);
                 $event->sheet->getDelegate()->getStyle("R".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 
