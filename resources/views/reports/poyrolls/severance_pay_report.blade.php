@@ -184,7 +184,7 @@
             let query = {
                 employee_id: $("#employee_id").val(),
                 employee_name: $("#employee_name").val(),
-                filter_month: $("#filter_month").val()
+                filter_month: $("#filter_month").val(),
                 branch_id: $("#branch_id").val(),
             };
             var url = "{{URL::to('reports/severance-pay-export')}}?" + $.param(query)
