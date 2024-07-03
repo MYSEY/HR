@@ -84,6 +84,7 @@ class User extends Authenticatable
         'type_of_employees_nssf',
         'spouse_nssf',
         'status_nssf',
+        'is_type_nssf',
         'current_province',
         'current_district',
         'current_commune',

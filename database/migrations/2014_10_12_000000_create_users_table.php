@@ -60,6 +60,7 @@ class CreateUsersTable extends Migration
             $table->boolean('type_of_employees_nssf')->nullable();
             $table->boolean('spouse_nssf')->nullable();
             $table->boolean('status_nssf')->nullable();
+            $table->integer('type_nssf')->nullable();
             $table->string('current_province')->nullable();
             $table->string('current_district')->nullable();
             $table->string('current_commune')->nullable();
