@@ -609,17 +609,10 @@ class EmployeePayrollController extends Controller
                         $PaymentOfMonth = Carbon::parse($request->payment_date)->format('M-Y');
                         if ($currentDate == 6 || $currentDate == 12) {
                             $nextYear = Carbon::parse()->format('Y');
-                            // $nextYear = Carbon::parse($item->udc_end_date)->format('Y');
                             $currentYear = null;
                             $currentMonth = null;
-                            // $preYear = Carbon::createFromDate($item->udc_end_date)->format('Y');
                             if($currentDate == 6){  
                                 $currentYear =  Carbon::createFromDate($nextYear.'-01-01')->format('Y-m-d');
-                                // if ($preYear == $nextYear) {
-                                //     $currentYear = $item->udc_end_date;
-                                // }else{
-                                //     $currentYear =  Carbon::createFromDate($nextYear.'-01-01')->format('Y-m-d');
-                                // }
                             }
                             if ($currentDate == 12) {
                                 $currentMonth = Carbon::createFromDate($nextYear.'-07-01')->format('Y-m-d');
@@ -629,7 +622,8 @@ class EmployeePayrollController extends Controller
                             })->when($currentMonth, function($query, $currentMonth){
                                 $query->where('payment_date', '>=',$currentMonth);
                             })->pluck('total_seniority')->avg();
-                            $totalSalaryReceive = ($totalSalary / 22) * 7.5;
+                            $totalAVG = ($totalSalary * 7.5) / 22;
+                            $totalSalaryReceive = ceil($totalAVG);
                             $totalGrossExchange = 2000000 / $request->exchange_rate;
                             
                             $totalGrossInclucTax = round($totalGrossExchange,2);
