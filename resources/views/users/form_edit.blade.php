@@ -255,38 +255,41 @@
                         </div>
                     </div>
                     {{-- basic salary infor --}}
-                    <div class="form-group col-md-12 col-12" element="div" bp-field-wrapper="true" bp-field-name="Identity" bp-field-type="custom_html">
-                        <label class="navbar-brand custom-navbar-brand mb-0" style="width: 100%; background: #dfe6e9; padding: 6px;font-size: 20px;font-weight: normal !important;">@lang('lang.basic_salary')</label>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <label>@lang('lang.basic_salary')<span class="text-danger">*</span></label>
-                                <div class="input-group">
-                                    <span class="input-group-text">$</span>
-                                    <input type="text" class="form-control" id="e_basic_salary" name="basic_salary" placeholder="" value="" required>
+                    @if (permissionAccess("m2-s1","is_view_salary")->value == "1")
+                        <div class="form-group col-md-12 col-12" element="div" bp-field-wrapper="true" bp-field-name="Identity" bp-field-type="custom_html">
+                            <label class="navbar-brand custom-navbar-brand mb-0" style="width: 100%; background: #dfe6e9; padding: 6px;font-size: 20px;font-weight: normal !important;">@lang('lang.basic_salary')</label>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label>@lang('lang.basic_salary')<span class="text-danger">*</span></label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">$</span>
+                                        <input type="text" class="form-control" id="e_basic_salary" name="basic_salary" placeholder="" value="" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label>@lang('lang.salary_increase')</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">$</span>
+                                        <input type="number" step="any" class="form-control" id="e_salary_increas" name="salary_increas" placeholder="" value="{{old('salary_increas')}}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label>@lang('lang.phone_allowance')</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">$</span>
+                                        <input class="form-control" type="number" name="phone_allowance" id="e_phone_allowance" value="">
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <label>@lang('lang.salary_increase')</label>
-                                <div class="input-group">
-                                    <span class="input-group-text">$</span>
-                                    <input type="number" step="any" class="form-control" id="e_salary_increas" name="salary_increas" placeholder="" value="{{old('salary_increas')}}">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <label>@lang('lang.phone_allowance')</label>
-                                <div class="input-group">
-                                    <span class="input-group-text">$</span>
-                                    <input class="form-control" type="number" name="phone_allowance" id="e_phone_allowance" value="">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    @endif
+                    
 
                     {{-- Bank Infor --}}
                     <div class="form-group col-md-12 col-12" element="div" bp-field-wrapper="true" bp-field-name="Identity" bp-field-type="custom_html">
