@@ -623,7 +623,8 @@ class EmployeePayrollController extends Controller
                                 $query->where('payment_date', '>=',$currentMonth);
                             })->pluck('total_seniority')->avg();
                             $totalAVG = ($totalSalary * 7.5) / 22;
-                            $totalSalaryReceive = ceil($totalAVG);
+                            $totalSalaryReceive = $totalAVG;
+                            // $totalSalaryReceive = ceil($totalAVG);
                             $totalGrossExchange = 2000000 / $request->exchange_rate;
                             
                             $totalGrossInclucTax = round($totalGrossExchange,2);

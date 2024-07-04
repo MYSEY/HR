@@ -274,40 +274,40 @@
 
 
 
-    <script src="{{ asset('/admin/js/jquery.min.js.download') }}"></script>
+    <script src="{{ asset('/admin/js/jquery.min.js') }}"></script>
 
     <script type="text/javascript" src="{{ asset('/admin/js/printThis.js') }}"></script>
 
-    <script src="{{ asset('/admin/js/bootstrap.bundle.min.js.download') }}"></script>
+    <script src="{{ asset('/admin/js/bootstrap.bundle.min.js') }}"></script>
 
-    <script src="{{ asset('/admin/js/jquery.slimscroll.min.js.download') }}"></script>
-    <script src="{{ asset('/admin/js/moment.min.js.download') }}"></script>
-    <script src="{{ asset('/admin/js/jquery-ui.min.js.download') }}"></script>
+    <script src="{{ asset('/admin/js/jquery.slimscroll.min.js') }}"></script>
+    <script src="{{ asset('/admin/js/moment.min.js') }}"></script>
+    <script src="{{ asset('/admin/js/jquery-ui.min.js') }}"></script>
 
     <script src="{{ asset('/admin/js/select2.min.js') }}"></script>
 
     <script src="{{ asset('/admin/js/jquery.dataTables.min.js') }}"></script>
-    <script src="{{ asset('/admin/js/dataTables.bootstrap4.min.js.download') }}"></script>
+    <script src="{{ asset('/admin/js/dataTables.bootstrap4.min.js') }}"></script>
 
-    <script src="{{ asset('/admin/js/bootstrap-datetimepicker.min.js.download') }}"></script>
-    <script src="{{ asset('/admin/js/daterangepicker.js.download') }}"></script>
+    <script src="{{ asset('/admin/js/bootstrap-datetimepicker.min.js') }}"></script>
+    <script src="{{ asset('/admin/js/daterangepicker.js') }}"></script>
 
-    <script src="{{ asset('/admin/js/bootstrap-tagsinput.min.js.download') }}"></script>
+    <script src="{{ asset('/admin/js/bootstrap-tagsinput.min.js') }}"></script>
 
-    <script src="{{ asset('/admin/js/sticky-kit.min.js.download') }}"></script>
+    <script src="{{ asset('/admin/js/sticky-kit.min.js') }}"></script>
 
-    <script src="{{ asset('/admin/js/summernote-bs4.js.download') }}"></script>
+    <script src="{{ asset('/admin/js/summernote-bs4.js') }}"></script>
 
-    <script src="{{ asset('/admin/js/fullcalendar.min.js.download') }}"></script>
-    <script src="{{ asset('/admin/js/jquery.fullcalendar.js.download') }}"></script>
+    <script src="{{ asset('/admin/js/fullcalendar.min.js') }}"></script>
+    <script src="{{ asset('/admin/js/jquery.fullcalendar.js') }}"></script>
 
-    <script src="{{ asset('/admin/js/jquery.maskedinput.js.download') }}"></script>
+    <script src="{{ asset('/admin/js/jquery.maskedinput.js') }}"></script>
 
-    <script src="{{ asset('/admin/js/task.js.download') }}"></script>
+    <script src="{{ asset('/admin/js/task.js') }}"></script>
 
-    <script src="{{ asset('/admin/js/layout.js.download') }}"></script>
-    <script src="{{ asset('/admin/js/theme-settings.js.download') }}"></script>
-    <script src="{{ asset('/admin/js/greedynav.js.download') }}"></script>
+    <script src="{{ asset('/admin/js/layout.js') }}"></script>
+    <script src="{{ asset('/admin/js/theme-settings.js') }}"></script>
+    <script src="{{ asset('/admin/js/greedynav.js') }}"></script>
 
     <script src="{{ asset('/admin/js/bootstrap.min.js') }}"></script>
     <script src="{{ asset('/admin/js/app.js') }}"></script>
