@@ -156,7 +156,7 @@
                                             <tr>
                                                 <td>Adjustment(+/-)</td>
                                                 <td>
-                                                    <span class="float-end">$ {{$payslip->adjustment == null ? '0.00' : $payslip->adjustment}}</span>
+                                                    <span class="float-end">${{$payslip->adjustment == null ? '0.00' : $payslip->adjustment}}</span>
                                                 </td>
                                             </tr>
                                             {{-- <tr>

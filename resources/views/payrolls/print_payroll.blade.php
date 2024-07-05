@@ -86,17 +86,17 @@
                         
                         <tr>
                             <td class="border-0 text-nowrap">@lang('lang.increasment')</td>
-                            <td class="border-0 fw-bolder"><span class="float-end">${{$payslip->salary_increas ?? '0'}}</span></td>
+                            <td class="border-0 fw-bolder"><span class="float-end">${{$payslip->salary_increas ?? '0.00'}}</span></td>
                             <td class="border-0 text-nowrap">@lang('lang.pension_fund')</td>
                             <td class="border-0 fw-bolder"><span class="float-end">${{$payslip->total_pension_fund}}</span></td>
                         </tr>
                         <tr>
                             <td class="border-0 text-nowrap">@lang('lang.incentive')</td>
                             <td class="border-0 fw-bolder">
-                                <span class="float-end">$0.00</span>
+                                <span class="float-end">${{$payslip->monthly_quarterly_bonuses}}</span>
                             </td>
                             <td class="border-0 text-nowrap">@lang('lang.staff_loan')</td>
-                            <td><span class="float-end">$0.00</span></td>
+                            <td><span class="float-end">${{$payslip->loan_amount}}</span></td>
                         </tr>
                         <tr>
                             <td class="border-0 text-nowrap">@lang('lang.allowance')(@lang('lang.annual/PB/KNY'))</td>
@@ -120,11 +120,11 @@
                                 <span class="float-end">${{$payslip->total_severance_pay}}</span>
                             </td>
                         </tr>
-                        {{-- <tr>
-                            <td class="border-0 text-nowrap">Adjustment(+/-)</td>
-                            <td class="border-0 fw-bolder"><span class="float-end">$ 0.00</span></td>
-                        </tr>
                         <tr>
+                            <td class="border-0 text-nowrap">Adjustment(+/-)</td>
+                            <td class="border-0 fw-bolder"><span class="float-end">${{$payslip->adjustment == null ? '0.00' : $payslip->adjustment}}</span></td>
+                        </tr>
+                        {{-- <tr>
                             <td class="border-0 text-nowrap">Leaves  (+/-)</td>
                             <td class="border-0 fw-bolder"><span class="float-end">$ 0.00</span></td>
                         </tr> --}}
