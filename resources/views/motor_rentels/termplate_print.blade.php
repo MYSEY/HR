@@ -140,8 +140,12 @@
                             <td class="td-border"></td>
                             <td class="td-border"></td>
                             <td class="td-background-cc">@lang('lang.total_net_pay') (៛):</td>
+                            @php
+                                $totalAmount = (($data->total_gasoline * $data->total_work_day) * $data->gasoline_price_per_liter) + $data->amount_price_engine_oil + ($data->amount_price_motor_rentel - ($data->amount_price_motor_rentel * $data->tax_rate) / 100) + ($data->amount_price_taplab_rentel - ($data->amount_price_taplab_rentel * $data->tax_rate) / 100 );
+                                $total = round($totalAmount,-2)
+                            @endphp
                             <td class="td-background-cc">
-                                <span class="float-end">{{number_format((($data->total_gasoline * $data->total_work_day) * $data->gasoline_price_per_liter) + $data->amount_price_engine_oil + ($data->amount_price_motor_rentel - ($data->amount_price_motor_rentel * $data->tax_rate) / 100) + ($data->amount_price_taplab_rentel - ($data->amount_price_taplab_rentel * $data->tax_rate) / 100 )) }} ៛</span>
+                                <span class="float-end">{{number_format($total) }} ៛</span>
                             </td>
                         </tr>
                         {{-- <tr>

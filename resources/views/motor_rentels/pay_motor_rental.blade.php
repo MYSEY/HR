@@ -200,8 +200,11 @@
                                                             <td class="price_motor_rentel">{{ number_format($item->amount_price_motor_rentel) }} ៛</td>
                                                             <td >{{ $item->amount_price_taplab_rentel ? number_format($item->amount_price_taplab_rentel) : "0000" }} ៛</td>
                                                             <td class="tax_rate">{{ $item->tax_rate }}%</td>
-                                                            <td>{{ ($item->total_gasoline * $item->total_work_day * $item->gasoline_price_per_liter) + ($item->amount_price_engine_oil + ($item->amount_price_motor_rentel - ($item->amount_price_motor_rentel * $item->tax_rate) / 100) + ($item->amount_price_taplab_rentel - ($item->amount_price_taplab_rentel * $item->tax_rate) / 100 )) }} ៛
-                                                            </td>
+                                                            @php
+                                                                $totalAmount = ($item->total_gasoline * $item->total_work_day * $item->gasoline_price_per_liter) + ($item->amount_price_engine_oil + ($item->amount_price_motor_rentel - ($item->amount_price_motor_rentel * $item->tax_rate) / 100) + ($item->amount_price_taplab_rentel - ($item->amount_price_taplab_rentel * $item->tax_rate) / 100 )) ;
+                                                                $total = round($totalAmount,-2)
+                                                            @endphp
+                                                            <td>{{ number_format($total)}} ៛</td>
                                                             <td><span style="font-size: 13px" class="badge bg-inverse-danger">{{ $item->resigned_date ? \Carbon\Carbon::parse($item->resigned_date)->format('d-M-Y') :'' }}</span></td>
                                                             <td>{{ $item->created_at ? \Carbon\Carbon::parse($item->created_at)->format('d-M-Y') : '' }}</td>
                                                             <td><a class="btn btn-sm btn-primary" href="{{ url('/motor-rentel/detail', $item->id) }}">@lang('lang.generate_payslip')</a></td>
