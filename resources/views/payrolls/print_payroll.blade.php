@@ -47,7 +47,8 @@
         
                 <div style="margin-top:-85px; text-align: center">
                     <h3 class="payslip-title-center">@lang('lang.employee_payslip')</h3>
-                    <p class="payslip-title-center">{{ Helper::getLang() == 'en' ? Helper::geENMonths($payslip->payment_date)  : Helper::getKhmerMonths($payslip->payment_date)}}</p>
+                    <p class="payslip-title-center">{{ $payslip->MonthlyPayslip}}</p>
+                    {{-- <p class="payslip-title-center">{{ Helper::getLang() == 'en' ? Helper::geENMonths($payslip->MonthlyPayslip)  : Helper::getKhmerMonths($payslip->MonthlyPayslip)}}</p> --}}
                 </div>
                 <div style="width: 40%">
                     <label>@lang('lang.camma_microfinance_limited')</label><br>
@@ -145,7 +146,7 @@
                             $TotalDeductions = $payslip->total_salary_tax_usd + $payslip->total_pension_fund;
                         @endphp
                         @php
-                            $totalNetPay = $TotalEarnings - $TotalDeductions;
+                            $totalNetPay = $TotalEarnings - $TotalDeductions - $payslip->loan_amount;
                         @endphp
                         <tr style="background-color: #d2dbdb;">
                             <td><strong>@lang('lang.total_earnings') :</strong></td>
