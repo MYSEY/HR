@@ -4,9 +4,11 @@ namespace App\Helpers;
 
 use App\Models\permissions;
 use \Carbon\Carbon;
+use Carbon\CarbonPeriod;
 use App\Models\User;
 use App\Models\Setting;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Date;
 use KhmerDateTime\KhmerDateTime;
 
 class Helper
@@ -161,5 +163,25 @@ class Helper
             $result = $year;
         }
         return $result;
+    }
+
+    //function  count daty remove Saturday and Sunday
+
+    static public function countWeekdays($startDate, $endDate)
+    {
+        // Create Carbon instances for the start and end dates
+        $start = Carbon::parse($startDate);
+        $end = Carbon::parse($endDate);
+
+        // Generate the period between the dates
+        $period = CarbonPeriod::create($start, $end);
+
+        // Filter out Saturdays and Sundays
+        $weekdays = $period->filter(function (Carbon $date) {
+            return !$date->isWeekend();
+        });
+
+        // Return the count of weekdays
+        return $weekdays->count();
     }
 }

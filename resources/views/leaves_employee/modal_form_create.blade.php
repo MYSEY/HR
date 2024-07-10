@@ -132,7 +132,7 @@
                                     <label>@lang('lang.delegate')</label>
                                     <select class="hr-select2-option" name="delegate_id" id="delegate_id">
                                         <option selected value=""> --@lang('lang.select')--</option>
-                                        @foreach ($employees as $employee)
+                                        @foreach ($delegateEmployees as $employee)
                                             <option value="{{$employee->id}}">{{$employee->employee_name_en}}</option>
                                         @endforeach
                                     </select>

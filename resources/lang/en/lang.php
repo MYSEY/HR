@@ -48,6 +48,7 @@ return[
     "amounts"=>"Amount",
     "amount_percent"=>"Amount Percent",
     "approve"=>"Approve",
+    "approver"=>"Approver",
     "approval"=>"Approval",
     "approved"=>"Approved",
     "approved_by"=>"Approved By",

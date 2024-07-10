@@ -55,6 +55,7 @@ return[
 	"amounts"=>"ចំនួនទឹកប្រាក់",
 	"amount_percent"=>"ចំនួនភាគរយ",
 	"approve"=>"អនុម័ត",
+	"approver"=>"អ្នកអនុម័ត",
 	"approval"=>"អនុម័ត",
 	"approve_&_add_new"=>"អនុម័ត & បង្កើតថ្មី",
 	"approve_and_add_new"=>"អនុម័ត និង បង្កើតថ្មី",

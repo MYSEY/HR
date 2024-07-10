@@ -129,6 +129,9 @@
                                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" aria-label="No of Days: activate to sort column ascending">@lang('lang.number_of_days')</th>
                                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" aria-label="From: activate to sort column ascending">@lang('lang.start_date')</th>
                                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" aria-label="To: activate to sort column ascending">@lang('lang.end_date')</th>
+                                                                @if (Auth::user()->RolePermission == "HR")
+                                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" aria-label="approver: activate to sort column ascending">@lang('lang.approver')</th>
+                                                                @endif
                                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" aria-label="No of Days: activate to sort column ascending">@lang('lang.handover_staff')</th>
                                                                 <th ass="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" aria-sort="ascending" aria-label="remark: activate to sort column descending" style="text-align: center;">@lang('lang.remark')</th>     
                                                                 <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" aria-sort="ascending" aria-label="status: activate to sort column descending" style="text-align: center;">@lang('lang.status')</th>
@@ -151,6 +154,9 @@
                                                                         <td>{{$request->number_of_day}} Day</td>
                                                                         <td >{{\Carbon\Carbon::parse($request->start_date)->format('d-M-Y') ?? ''}}</td>
                                                                         <td>{{\Carbon\Carbon::parse($request->end_date)->format('d-M-Y') ?? ''}}</td>
+                                                                        @if (Auth::user()->RolePermission == "HR")
+                                                                            <td>{{ $request->Approve ? $request->Approve : ""}}</td>
+                                                                        @endif
                                                                         <td>{{ $request->handover ? $request->handover->employee_name_en : ""}}</td>
                                                                         <td>{{$request->remark}}</td>
                                                                         <td>

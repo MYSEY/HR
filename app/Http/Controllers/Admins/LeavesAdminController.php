@@ -225,7 +225,7 @@ class LeavesAdminController extends Controller
         }
     }
     public function approve(Request $request) {
-        // try {
+        try {
             $data = LeaveRequest::with("employee")->find($request->id);
 
             $dataDepartment = Department::where("id", $data->employee->department_id)->first();
@@ -261,11 +261,14 @@ class LeavesAdminController extends Controller
 
                                 /** Compare leave head dept with delegate */
                                 if ($delegate) {
+
                                     if ($leaveDepartment->number_of_day < $delegate->number_of_day) {
                                         $data['next_approver'] = $delegate->requester_id;
                                     }else{
                                         $data['next_approver'] = $leaveDepartment->delegate_id;
                                     }
+
+
                                 }else{
                                     $data['next_approver'] = $leaveDepartment->delegate_id;
                                 }
@@ -273,7 +276,6 @@ class LeavesAdminController extends Controller
                             }else{
                                 $data['next_approver'] = $department->direct_manager_id;
                             }
-
                         $email_send = User::where("id", $data['next_approver'])->first();
                         // for send email
                         $mail_message = ModelsMail::first();
@@ -351,10 +353,10 @@ class LeavesAdminController extends Controller
             return response()->json([
                 'message' => 'The process has been successfully.'
             ]);
-        // } catch (\Exception $exp) {
-        //     DB::rollBack();
-        //     return response()->json(['message' => $exp->getMessage()], 500);
-        // }
+        } catch (\Exception $exp) {
+            DB::rollBack();
+            return response()->json(['message' => $exp->getMessage()], 500);
+        }
     }
 
     public function approveds(Request $request){

@@ -95,7 +95,7 @@ class LeaveRequest extends Model
     }
 
     public function getApproveAttribute(){
-        $approved_by = explode(',',$this->approved_by);
+        $approved_by = explode(',',$this->next_approver);
         $approve_name = '';
         $emolyees = User::whereIn("id", $approved_by)
         ->select([
@@ -104,9 +104,10 @@ class LeaveRequest extends Model
             'employee_name_kh',
             'number_employee',
         ])->get();
-
-        foreach($emolyees as $key=>$item){
-            $approve_name .= Helper::getLang() == 'en' ? nl2br("- ".$item->employee_name_en."\n"): nl2br("- ".$item->employee_name_kh."\n");
+        if ($emolyees) {
+            foreach($emolyees as $key=>$item){
+                $approve_name .= Helper::getLang() == 'en' ? nl2br("".$item->employee_name_en): nl2br("".$item->employee_name_kh);
+            }
         }
         
         return $approve_name;
