@@ -66,13 +66,48 @@ class UserController extends Controller
         // dd($data);
         $dataResign =[];
         $dataEmployees = [];
-        if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'HR' || Auth::user()->RolePermission == 'developer' || Auth::user()->RolePermission == 'BOD' || Auth::user()->RolePermission == 'CEO') {
+        if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'HRAdmin' || Auth::user()->RolePermission == 'developer' || Auth::user()->RolePermission == 'BOD' || Auth::user()->RolePermission == 'CEO') {
             $dataProbation = User::with('role')->with('department')->with('position')->where('emp_status','Probation')->get();
             $dataFDC = User::with('role')->with('department')->with('position')->whereIn('emp_status',['1','10'])->get();
             $dataUDC = User::with('role')->with('department')->with('position')->where('emp_status','2')->get();
             // $dataCanContract = User::with('role')->with('department')->with('position')->where('emp_status','Cancel')->get();
             $dataResign = User::with('role')->with('department')->with('position')->whereIn('emp_status', ['3','4','5','6','7','8','9'])->get();
             $dataEmployees = User::whereIn('emp_status', ['Probation','1','2','10',])->get();
+        }
+        if (Auth::user()->RolePermission == 'HR') {
+            $department_ids = $this->employeeRepo->getRoleHOD();
+            $dataProbation = User::with('role')->with('department')->with('position')
+                ->where("line_manager", Auth::user()->id)
+                ->when(Auth::user()->emp_status, function ($query, $emp_status) {
+                    if ($emp_status == "Probation") {
+                        $query->orWhere("id", Auth::user()->id);
+                    }
+                })
+                ->where('emp_status','Probation')->get();
+
+            $dataFDC = User::with('role')->with('department')->with('position')
+                ->where("line_manager", Auth::user()->id)
+                ->when(Auth::user()->emp_status, function ($query, $emp_status) {
+                    if ($emp_status == "1" || $emp_status == "10") {
+                        $query->orWhere("id", Auth::user()->id);
+                    }
+                })
+                ->whereIn('emp_status',['1','10'])->get();
+
+            $dataUDC = User::with('role')->with('department')->with('position')
+                ->where("line_manager", Auth::user()->id)
+                ->where('emp_status','2')
+                ->when(Auth::user()->emp_status, function ($query, $emp_status) {
+                    if ($emp_status == "2") {
+                        $query->orWhere("id", Auth::user()->id);
+                    }
+                })->get();
+
+            $dataResign = User::with('role')->with('department')->with('position')
+                ->where("line_manager", Auth::user()->id)
+                ->whereIn('emp_status', ['3','4','5','6','7','8','9'])->get();
+
+
         }
         if (Auth::user()->RolePermission == 'HOD') {
             $department_ids = $this->employeeRepo->getRoleHOD();

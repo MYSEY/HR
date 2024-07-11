@@ -27,7 +27,7 @@
                     @if (permissionAccess("m2-s1","is_import")->value == "1")
                         <a href="#" class="btn add-btn" data-toggle="modal" id="import_employee"><i class="fa fa-arrow-circle-up"  data-bs-toggle="tooltip" aria-label="fa fa-arrow-circle-up" data-bs-original-title="fa fa-arrow-circle-up"></i>@lang('lang.import')</a>
                     @endif
-                    @if (Auth::user()->RolePermission == "HR" || Auth::user()->RolePermission == "Developer" || Auth::user()->RolePermission == "admin")
+                    @if (Auth::user()->RolePermission == "HR" || Auth::user()->RolePermission == 'HRAdmin' || Auth::user()->RolePermission == "Developer" || Auth::user()->RolePermission == "admin")
                         @if (permissionAccess("m2-s1","is_update")->value == "1")
                             <a href="#" class="btn add-btn me-2" data-bs-toggle="modal" data-bs-target="#change_line_manager"><i class="fa fa-plus"></i> @lang('lang.line_manager')</a>
                         @endif
@@ -108,7 +108,7 @@
                                         <span id="dataShortList" class="badge bg-secondary ms-1 rounded-pill">{{count($dataUDC)}}</span>
                                     </a>
                                 </li>
-                                @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'HR' || Auth::user()->RolePermission == 'developer')
+                                @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'HR' || Auth::user()->RolePermission == 'HRAdmin' || Auth::user()->RolePermission == 'developer')
                                     <li class="nav-item" role="presentation">
                                         <a class="nav-link" data-bs-toggle="tab" id="tab_reason" href="#tbl_reject" aria-selected="false" data-tab-id="5" role="tab" tabindex="-1">@lang('lang.resigned_staff')
                                             <span id="dataShortList" class="badge bg-secondary ms-1 rounded-pill">{{count($dataResign)}}</span>

@@ -33,7 +33,7 @@ class DashboadController extends Controller
         $dataUpComming = '';
         $dataProbation = '';
         $dataShortList = '';
-        if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'HR' || Auth::user()->RolePermission == 'developer' || Auth::user()->RolePermission == 'BOD' || Auth::user()->RolePermission == 'CEO') {
+        if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'HR' || Auth::user()->RolePermission == 'HRAdmin' || Auth::user()->RolePermission == 'developer' || Auth::user()->RolePermission == 'BOD' || Auth::user()->RolePermission == 'CEO') {
             $dataShortList = DB::table('candidate_resumes')->select('candidate_resumes.*')
             ->where(DB::raw("(DATE_FORMAT(candidate_resumes.interviewed_date,'%Y-%m-%d'))"), Carbon::now()->format('Y-m-d'))
             ->where('candidate_resumes.status','2')->get()->count();
@@ -129,7 +129,7 @@ class DashboadController extends Controller
             if($RolePermission == 'CEO' || $RolePermission == 'BOD' || $RolePermission == 'BM' || $RolePermission == 'HOD'){
                 $query->whereJsonContains("approved_by", Auth::user()->id);
                 $query->where("status", "cancel");
-            }else if($RolePermission == 'HR'){
+            }else if($RolePermission == 'HR' || $RolePermission =="HRAdmin"){
                 $query->where("status", "cancel");
             }
         })->count();

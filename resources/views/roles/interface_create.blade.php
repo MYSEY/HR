@@ -20,7 +20,8 @@
                                 <option value="BOD">Board of Director</option>
                                 <option value="CEO">Chief Executive Officer</option>
                                 {{-- <option value="DCEO">Deputy Chief Executive Officer</option> --}}
-                                <option value="HR">Head of HR</option>
+                                <option value="HRAdmin">HR Admin</option>
+                                <option value="HR">HR</option>
                                 {{-- <option value="DHR">Deputy Head of HR</option> --}}
                                 <option value="HOD">Head of Department</option>
                                 {{-- <option value="DHOD">Deputy Head of Department</option> --}}

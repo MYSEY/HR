@@ -34,7 +34,7 @@
                     <li class="breadcrumb-item active">@lang('lang.import_nssf')</li>
                 </ul>
             </div>
-            @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'HR' || Auth::user()->RolePermission == 'developer')
+            @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'HR' || Auth::user()->RolePermission == 'HRAdmin' || Auth::user()->RolePermission == 'developer')
                 <div class="col-auto float-end ms-auto">
                     @if (permissionAccess("m4-s3","is_import")->value == "1")
                         <a href="#" class="btn add-btn" data-toggle="modal" id="importNSSF"><i class="fa fa-plus"></i>@lang('lang.import')</a>

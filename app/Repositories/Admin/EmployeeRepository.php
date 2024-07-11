@@ -70,18 +70,61 @@ class EmployeeRepository extends BaseRepository
                 ->when($request->emp_status, function ($query, $emp_status) {
                     if (Auth::user()->RolePermission == 'HOD') {
                         $query->whereIn("department_id", $this->department_ids);
+                        if ($emp_status == "resign_reason") {
+                            $query->with("resignStatus");
+                            $query->whereNotIn('emp_status',['1','2','10','Probation','Upcoming','Cancel']); 
+                        }else if($emp_status == "FDC"){
+                            $query->whereIn('emp_status', ['1','10']);
+                        }else{
+                            $query->where('emp_status', $emp_status);
+                        }
                     }
                     if (Auth::user()->RolePermission == 'BM') {
                         $query->where("branch_id", Auth::user()->branch_id);
+                        if ($emp_status == "resign_reason") {
+                            $query->with("resignStatus");
+                            $query->whereNotIn('emp_status',['1','2','10','Probation','Upcoming','Cancel']); 
+                        }else if($emp_status == "FDC"){
+                            $query->whereIn('emp_status', ['1','10']);
+                        }else{
+                            $query->where('emp_status', $emp_status);
+                        }
                     }
-                    if ($emp_status == "resign_reason") {
-                        $query->with("resignStatus");
-                        $query->whereNotIn('emp_status',['1','2','10','Probation','Upcoming','Cancel']); 
-                    }else if($emp_status == "FDC"){
-                        $query->whereIn('emp_status', ['1','10']);
-                    }else{
-                        $query->where('emp_status', $emp_status);
+                    if (Auth::user()->RolePermission == 'HR') {
+                        if ($emp_status == "resign_reason") {
+                            $query->where("line_manager", Auth::user()->id);
+                            $query->with("resignStatus");
+                            $query->whereNotIn('emp_status',['1','2','10','Probation','Upcoming','Cancel']); 
+                        }else if($emp_status == "FDC"){
+                            $query->where("line_manager", Auth::user()->id);
+                            if (Auth::user()->emp_status == "1" || Auth::user()->emp_status == "10") {
+                                $query->orWhere("id", Auth::user()->id);
+                            }
+                            $query->whereIn('emp_status', ['1','10']);
+                        }else{
+                            if (Auth::user()->emp_status == $emp_status) {
+                                $query->where("line_manager", Auth::user()->id);
+                                $query->where('emp_status', $emp_status);
+                                $query->orWhere("id", Auth::user()->id);
+                            }else{
+                                $query->where("line_manager", Auth::user()->id);
+                                $query->where('emp_status', $emp_status);
+                            }
+                            
+                            
+                        }
                     }
+                    if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'HRAdmin' || Auth::user()->RolePermission == 'developer' || Auth::user()->RolePermission == 'BOD' || Auth::user()->RolePermission == 'CEO') {
+                        if ($emp_status == "resign_reason") {
+                            $query->with("resignStatus");
+                            $query->whereNotIn('emp_status',['1','2','10','Probation','Upcoming','Cancel']); 
+                        }else if($emp_status == "FDC"){
+                            $query->whereIn('emp_status', ['1','10']);
+                        }else{
+                            $query->where('emp_status', $emp_status);
+                        }
+                    }
+                    
                 })
                 ->when($request->employee_id, function ($query, $employee_id) {
                     $query->where('number_employee', 'LIKE', '%'.$employee_id.'%');

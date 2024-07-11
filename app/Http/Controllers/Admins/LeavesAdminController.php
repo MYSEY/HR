@@ -75,13 +75,13 @@ class LeavesAdminController extends Controller
             ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
                 if($RolePermission == 'CEO' || $RolePermission == 'BOD' || $RolePermission == 'BM' || $RolePermission == 'HOD'){
                     $query->where("next_approver", Auth::user()->id);
-                }else if($RolePermission == 'HR'){
+                }else if($RolePermission == 'HR' || $RolePermission =="HRAdmin"){
                     $query->whereNot("status", "approved");
                 }
             })->orderBy('id', 'DESC')->get();
         $requestCancels = LeaveRequest::with("employee")->with("handover")
             ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
-                if($RolePermission == 'HR'){
+                if($RolePermission == 'HR' || $RolePermission =="HRAdmin"){
                     $query->where("status", "cancel_hod");
                 }
             })->orderBy('id', 'DESC')->get();
@@ -336,7 +336,7 @@ class LeavesAdminController extends Controller
                         }
                     }
                 }
-            }else if($role == 'HR') {
+            }else if($role == 'HR' || $role =="HRAdmin") {
                 $data['status'] = "approved";
             }
             $data['remark']= $request->remark;
@@ -409,7 +409,7 @@ class LeavesAdminController extends Controller
                 }else{
                     $data['status'] = "rejected_lm";
                 }
-            }else if($role == 'HR') {
+            }else if($role == 'HR' || $role =="HRAdmin") {
                 $data['status'] = $request->status == "cancel" ? "cancel" : "rejected" ;
             }
 

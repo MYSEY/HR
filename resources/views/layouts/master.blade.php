@@ -233,7 +233,7 @@
                                         <a style="border-bottom: 3px solid #f0f0f0;" href="{{url($menu['url'])}}"><i class="{{$menu["icon"]}}"></i><span>@lang($menu["name"])</span></a>
                                     </li>
                                 @else
-                                    @if ($menu["name"] !="lang.employee" || Auth::user()->RolePermission !="Employee")
+                                    {{-- @if ($menu["name"] !="lang.employee" || Auth::user()->RolePermission !="Employee") --}}
                                         <li class="submenu">
                                             <a href="javascript:void(0);" style="border-bottom: 3px solid #f0f0f0;">
                                                 <i class="{{$menu["icon"]}}"></i><span>@lang($menu["name"])</span><span class="menu-arrow"></span>
@@ -248,7 +248,7 @@
                                                 @endforeach
                                             </ul>
                                         </li>
-                                    @endif
+                                    {{-- @endif --}}
                                 @endif
                             @endforeach
                         </ul>

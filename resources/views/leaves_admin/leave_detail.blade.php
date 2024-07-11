@@ -43,7 +43,7 @@
                                                     aria-sort="ascending" aria-label="remark: activate to sort column descending" style="text-align: center;">@lang('lang.remark')</th>     
                                             <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
                                                 aria-sort="ascending" aria-label="status: activate to sort column descending" style="text-align: center;">@lang('lang.status')</th>
-                                            @if (Auth::user()->RolePermission != "HR" && (Auth::user()->department->direct_manager_id == Auth::user()->id || Auth::user()->branch->direct_manager_id == Auth::user()->id ))
+                                            @if (Auth::user()->RolePermission != "HR" || Auth::user()->RolePermission != "HRAdmin" && (Auth::user()->department->direct_manager_id == Auth::user()->id || Auth::user()->branch->direct_manager_id == Auth::user()->id ))
                                                 <th class="text-end sorting" tabindex="0"
                                                 aria-controls="DataTables_Table_0"
                                                 aria-label="Actions: activate to sort column ascending">@lang('lang.actions')</th>
@@ -84,7 +84,7 @@
                                                             <span class="badge bg-inverse-success" style="font-size: 13px;">Approved</span>
                                                         @endif
                                                     </td>
-                                                    @if (Auth::user()->RolePermission != "HR" && (Auth::user()->department->direct_manager_id == Auth::user()->id || Auth::user()->branch->direct_manager_id == Auth::user()->id ))
+                                                    @if (Auth::user()->RolePermission != "HR"  || Auth::user()->RolePermission != "HRAdmin"&& (Auth::user()->department->direct_manager_id == Auth::user()->id || Auth::user()->branch->direct_manager_id == Auth::user()->id ))
                                                         <td class="text-end">
                                                             @if (permissionAccess("m10-s1","is_cancel")->value == "1" || permissionAccess("m10-s1","is_reject")->value == "1")
                                                                 @if ($request->end_date >= \Carbon\Carbon::now()->format('Y-m-d'))
@@ -208,7 +208,7 @@
             let id = $(this).data("id");
             let status = $(this).data("status");
             let condition = $(this).data("condition");
-            if (condition == "HR" && (status != "approved_hod" || status == "approved_lm")) {
+            if (condition == "HR" || condition == "HRAdmin" && (status != "approved_hod" || status == "approved_lm")) {
                 let text_message = "";
                 if (status == "approved_lm") {
                     text_message = "Pending head department approved";

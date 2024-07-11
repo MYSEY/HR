@@ -17,7 +17,7 @@
                 </ul>
             </div>
             <div class="col-auto float-end ms-auto">
-                @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'HR' || Auth::user()->RolePermission == 'developer')
+                @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'HR' || Auth::user()->RolePermission == 'HRAdmin' || Auth::user()->RolePermission == 'developer')
                     <a href="{{url('role/create')}}" class="btn add-btn" ><i class="fa fa-plus"></i> @lang('lang.add_new')</a>
                 @endif
             </div>
@@ -25,7 +25,7 @@
     </div>
     
     <div class="">
-        @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'HR' || Auth::user()->RolePermission == 'developer')
+        @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'HR' || Auth::user()->RolePermission == 'HRAdmin' || Auth::user()->RolePermission == 'developer')
             <form>
                 {{-- @csrf --}}
                 <div class="row filter-btn">

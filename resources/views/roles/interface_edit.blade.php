@@ -23,7 +23,8 @@
                                 <option value="BOD" {{ $role->role_type == "BOD" ? "selected":""}}>Board of Director</option>
                                 <option value="CEO" {{ $role->role_type == "CEO" ? "selected":""}}>Chief Executive Officer</option>
                                 {{-- <option value="DCEO" {{ $role->role_type == "DCEO" ? "selected":""}}>Deputy Chief Executive Officer</option> --}}
-                                <option value="HR" {{ $role->role_type == "HR" ? "selected":""}}>Head of HR</option>
+                                <option value="HRAdmin" {{ $role->role_type == "HRAdmin" ? "selected":""}}>HR Admin</option>
+                                <option value="HR" {{ $role->role_type == "HR" ? "selected":""}}>HR</option>
                                 {{-- <option value="DHR" {{ $role->role_type == "DHR" ? "selected":""}}>Deputy Head of HR</option> --}}
                                 <option value="HOD" {{ $role->role_type == "HOD" ? "selected":""}}>Head of Department</option>
                                 {{-- <option value="DHOD" {{ $role->role_type == "DHOD" ? "selected":""}}>Deputy Head of Department</option> --}}

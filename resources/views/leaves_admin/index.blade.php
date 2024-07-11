@@ -26,7 +26,7 @@
                         <li class="breadcrumb-item active">@lang('lang.leaves_admin')</li>
                     </ul>
                 </div>
-                @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'HR' || Auth::user()->RolePermission == 'developer')
+                @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'HR' || Auth::user()->RolePermission == 'HRAdmin' || Auth::user()->RolePermission == 'developer')
                     <div class="col-auto float-end ms-auto">
                         @if (permissionAccess("m4-s2","is_import")->value == "1")
                             <a href="#" class="btn add-btn" data-toggle="modal" id="importPayroll"><i class="fa fa-plus"></i>@lang('lang.import')</a>
@@ -42,7 +42,7 @@
                 </div>
             </div>
             <div class="col-sm-6 col-md-3 col-lg-3 col-xl-3">
-                @if (Auth::user()->RolePermission == "HR")
+                @if (Auth::user()->RolePermission == "HR" || Auth::user()->RolePermission == 'HRAdmin')
                     <div class="form-group leave-disply-search" style="display: none">
                         <select class="select form-control" id="department_id" data-select2-id="select2-data-2-c0n3" name="department_id">
                             <option value="" data-select2-id="select2-data-2-c0n3">@lang('lang.department')</option>
@@ -54,7 +54,7 @@
                 @endif
             </div>
             <div class="col-sm-6 col-md-3 col-lg-3 col-xl-3">
-                @if (Auth::user()->RolePermission == "HR")
+                @if (Auth::user()->RolePermission == "HR" || Auth::user()->RolePermission == 'HRAdmin')
                     <div class="form-group leave-disply-search" style="display: none">
                         <select class="select form-control" id="branch_id" data-select2-id="select2-data-2-c0n2" name="branch_id">
                             <option value="" data-select2-id="select2-data-2-c0n2">@lang('lang.location')</option>
@@ -88,7 +88,7 @@
                                 <span id="dataShortList" class="badge bg-secondary ms-1 rounded-pill">{{count($dataLeaveRequest)}}</span> 
                             </a>
                         </li>
-                        @if (Auth::user()->RolePermission == "HR")
+                        @if (Auth::user()->RolePermission == "HR" || Auth::user()->RolePermission == 'HRAdmin')
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link tab_leave_none" data-bs-toggle="tab" href="#leave_request_cancel" aria-selected="false" data-tab-id="2" role="tab">@lang('lang.requests_cancel') 
                                     <span id="dataShortList" class="badge bg-secondary ms-1 rounded-pill">{{count($requestCancels)}}</span>
@@ -99,7 +99,7 @@
                             <a class="nav-link" data-bs-toggle="tab" id="tab_leave_allocations" href="#leave_allocations" aria-selected="false" data-tab-id="3" role="tab" tabindex="-1">@lang('lang.leave_allocation')</a>
                         </li>
                     </ul>
-                    @if (Auth::user()->RolePermission == "HR")
+                    @if (Auth::user()->RolePermission == "HR" || Auth::user()->RolePermission == 'HRAdmin')
                     {{-- @if (permissionAccess("m4-s1","is_delete")->value == "1") --}}
                         {{-- <button type="button" class="btn btn-sm btn-danger reject_all mt-3">@lang('lang.reject')</button> --}}
                     {{-- @endif --}}
@@ -119,7 +119,7 @@
                                                     <table class="table table-striped custom-table mb-0 datatable dataTable no-footer tbl-leave-request" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
                                                         <thead>
                                                             <tr>
-                                                                @if (Auth::user()->RolePermission == "HR")
+                                                                @if (Auth::user()->RolePermission == "HR" || Auth::user()->RolePermission == 'HRAdmin')
                                                                     <th class="stuck-scroll-3"><input type="checkbox" id="checkAll"></th>
                                                                 @endif
                                                                 <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" aria-sort="ascending" aria-label="Profle: activate to sort column descending">#</th>
@@ -129,7 +129,7 @@
                                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" aria-label="No of Days: activate to sort column ascending">@lang('lang.number_of_days')</th>
                                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" aria-label="From: activate to sort column ascending">@lang('lang.start_date')</th>
                                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" aria-label="To: activate to sort column ascending">@lang('lang.end_date')</th>
-                                                                @if (Auth::user()->RolePermission == "HR")
+                                                                @if (Auth::user()->RolePermission == "HR" || Auth::user()->RolePermission == 'HRAdmin')
                                                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" aria-label="approver: activate to sort column ascending">@lang('lang.approver')</th>
                                                                 @endif
                                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" aria-label="No of Days: activate to sort column ascending">@lang('lang.handover_staff')</th>
@@ -142,7 +142,7 @@
                                                             @if (count($dataLeaveRequest) > 0)
                                                                 @foreach ($dataLeaveRequest as $key=>$request)
                                                                     <tr class="odd">
-                                                                        @if (Auth::user()->RolePermission == "HR")
+                                                                        @if (Auth::user()->RolePermission == "HR" || Auth::user()->RolePermission == 'HRAdmin')
                                                                             <td class="stuck-scroll-3">
                                                                                 <input type="checkbox" class="sub_chk" data-id="{{$request->id}}" data-status="{{$request->status}}">
                                                                             </td>
@@ -154,7 +154,7 @@
                                                                         <td>{{$request->number_of_day}} Day</td>
                                                                         <td >{{\Carbon\Carbon::parse($request->start_date)->format('d-M-Y') ?? ''}}</td>
                                                                         <td>{{\Carbon\Carbon::parse($request->end_date)->format('d-M-Y') ?? ''}}</td>
-                                                                        @if (Auth::user()->RolePermission == "HR")
+                                                                        @if (Auth::user()->RolePermission == "HR" || Auth::user()->RolePermission == 'HRAdmin')
                                                                             <td>{{ $request->Approve ? $request->Approve : ""}}</td>
                                                                         @endif
                                                                         <td>{{ $request->handover ? $request->handover->employee_name_en : ""}}</td>
@@ -209,7 +209,7 @@
                                 </div>
                             </div>
                         </div>
-                        @if (Auth::user()->RolePermission == "HR")
+                        @if (Auth::user()->RolePermission == "HR" || Auth::user()->RolePermission == 'HRAdmin')
                             <div class="tab-pane show" id="leave_request_cancel" role="tabpanel">
                                 <div class="row">
                                     <div class="col-md-12">
@@ -293,7 +293,7 @@
                                                             <tr>
                                                                 <th class="sorting sorting_asc vertical-center" tabindex="0" aria-controls="DataTables_Table_0" rowspan="2" aria-sort="ascending" aria-label="#: activate to sort column descending">@lang('lang.employee_id')</th>
                                                                 <th class="sorting sorting_asc vertical-center" tabindex="0" aria-controls="DataTables_Table_0" rowspan="2" aria-sort="ascending" aria-label="#: activate to sort column descending">@lang('lang.employee_name')</th>
-                                                                @if (Auth::user()->RolePermission == "HR")
+                                                                @if (Auth::user()->RolePermission == "HR" || Auth::user()->RolePermission == 'HRAdmin')
                                                                     <th class="sorting sorting_asc vertical-center" tabindex="0" aria-controls="DataTables_Table_0"
                                                                         rowspan="2" aria-sort="ascending"
                                                                         aria-label="department: activate to sort column descending">@lang('lang.department')</th>
@@ -335,7 +335,7 @@
                                                                     <tr class="odd">
                                                                         <td>{{$leave->employee->number_employee ?? ""}}</td>
                                                                         <td>{{$leave->employee->employee_name_en ?? ""}}</td>
-                                                                        @if (Auth::user()->RolePermission == "HR")
+                                                                        @if (Auth::user()->RolePermission == "HR" || Auth::user()->RolePermission == 'HRAdmin')
                                                                             <td>{{$leave->employee->department->name_english}}</td>
                                                                             <td>{{$leave->employee->branch->branch_name_en}}</td>
                                                                         @endif
@@ -539,7 +539,7 @@
                         var tr_allocation = "";
                         var td_allocation = "";
                         $(Leave_allocations).each(function (e, row) {
-                            if (condistion == "HR") {
+                            if (condistion == "HR" || condistion == "HRAdmin") {
                                 td_allocation = '<td>'+(row.employee.department.name_english)+'</td><td>'+(row.employee.branch.branch_name_en)+'</td>';             
                             }
                             tr_allocation += '<tr class="odd">'+
@@ -644,7 +644,7 @@
             let status = $(this).data("status");
             let condition = $(this).data("condition");
             let linemanager = $(this).data("linemanager");
-            if ((condition.role.role_type == "HR" && linemanager != condition.id ) && (status != "approved_hod" || status == "approved_lm")) {
+            if (((condition.role.role_type == "HR" || condition.role.role_type == "HRAdmin") && linemanager != condition.id ) && (status != "approved_hod" || status == "approved_lm")) {
                 let text_message = "";
                 if (status == "approved_lm") {
                     text_message = "Pending manager head department approve";

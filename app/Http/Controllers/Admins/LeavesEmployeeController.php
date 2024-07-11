@@ -53,7 +53,7 @@ class LeavesEmployeeController extends Controller
                     $query->where("department_id", Auth::user()->department_id);
                     $query->where("branch_id", Auth::user()->branch_id);
                     $query->whereNot("id", Auth::user()->id);
-                }else if($RolePermission == 'HR'){
+                }else if($RolePermission == 'HR' || $RolePermission =="HRAdmin"){
                     $query->where("id", Auth::user()->line_manager);
                     $query->orWhere("line_manager", Auth::user()->id);
                     $query->whereNot("id", Auth::user()->id);
@@ -70,7 +70,7 @@ class LeavesEmployeeController extends Controller
                 }else if($RolePermission == 'HOD'){
                     $query->where("users.department_id", Auth::user()->department_id);
                     $query->whereNot("users.id", Auth::user()->id);
-                }else if($RolePermission == 'HR'){
+                }else if($RolePermission == 'HR' || $RolePermission =="HRAdmin"){
                     $query->orWhere("users.line_manager", Auth::user()->id);
                     $query->whereNot("users.id", Auth::user()->id);
                 }
