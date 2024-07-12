@@ -113,7 +113,7 @@
                                                 <th class="sorting">@lang('lang.total_fdc2')</th>
                                                 <th class="sorting">@lang('lang.type_fdc2')</th>
                                                 <th class="sorting">@lang('lang.payment_date')</th>
-                                                {{-- <th class="text-end sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Action: activate to sort column ascending" style="width: 300.962px;">@lang('lang.action')</th> --}}
+                                                <th class="text-end sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Action: activate to sort column ascending" style="width: 300.962px;">@lang('lang.action')</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -134,16 +134,16 @@
                                                         <td>${{$item->total_fdc2}}</td>
                                                         <td><a href="#">{{$item->type_fdc2}}</a></td>
                                                         <td>{{$item->PayrollPaymentDate}}</td>
-                                                        {{-- <td class="text-end">
+                                                        <td class="text-end">
                                                             <div class="dropdown dropdown-action">
                                                                 <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
                                                                 <div class="dropdown-menu dropdown-menu-right">
                                                                     @if (permissionAccess("m9-s2","is_update")->value == "1")
-                                                                        <a href="#" class="dropdown-item" data-id="{{$item->id}}"><i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')</a>
+                                                                        <a href="{{url('severance/create',$item->id)}}" class="dropdown-item" data-id="{{$item->id}}"><i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')</a>
                                                                     @endif
                                                                 </div>
                                                             </div>
-                                                        </td> --}}
+                                                        </td>
                                                     </tr>
                                                 @endforeach
                                             @endif

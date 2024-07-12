@@ -326,6 +326,7 @@ return[
     "edit_leave_type"=> "កែរប្រែការឈប់សម្រាក",
     "edit_leave_request"=> "កែសម្រួល​សំណើ​ឈប់​សម្រាក",
     "edit_adjustment"=> "Edit Adjustment",
+    "edit_severance_pay"=> "Edit Severance Pay",
     "line_manager"=>"អ្នកគ្រប់គ្រងផ្ទាល់",
 	"facebook"=>"ហ្វេសប៊ុក",
 	"first_name" => "នាម​ខ្លួន",

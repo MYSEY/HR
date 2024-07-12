@@ -314,6 +314,8 @@ Route::middleware(['auth:sanctum'])->group(function(){
     //Severancey pay
     Route::get('/severance-pay', [PayrollReportController::class,'SeverancePay']);
     Route::post('/severance-pay', [PayrollReportController::class,'SeverancePayFil']);
+    Route::get('/severance/create/{id}', [PayrollReportController::class,'SeveranceCreate']);
+    Route::post('/severance/update', [PayrollReportController::class,'SeveranceUpdate']);
     Route::post('/import/severance-pay', [PayrollReportController::class,'importSeverancePay']);
     Route::get('/gross-salary-pay-export', [PayrollReportController::class,'grossSalaryPayExport']);
     //Report Severancey pay

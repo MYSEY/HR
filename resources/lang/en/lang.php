@@ -313,6 +313,7 @@ return[
     "edit_leave_type"=> "Edit lLeave Type",
     "edit_leave_request"=> "Edit leave request",
     "edit_adjustment"=> "Edit Adjustment",
+    "edit_severance_pay"=> "Edit Severance Pay",
     "facebook"=>"Facebook",
     "field"=>"Field",
     "first_name" => "First Name",

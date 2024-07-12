@@ -17,9 +17,11 @@ use App\Exports\ExportBenefit;
 use App\Exports\ExportPayroll;
 use App\Models\GrossSalaryPay;
 use App\Exports\ExportMotorRentel;
+use Illuminate\Support\Facades\DB;
 use App\Exports\ExportSeniorityPay;
 use App\Exports\ExportSeverancePay;
 use App\Http\Controllers\Controller;
+use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\ExportGrossSalaryPay;
@@ -29,7 +31,6 @@ use App\Models\NationalSocialSecurityFund;
 use App\Repositories\Admin\EmployeeRepository;
 use App\Repositories\Admin\MotorRentalRepository;
 use App\Repositories\Admin\SeverancePayRepository;
-use Illuminate\Support\Facades\DB;
 
 class PayrollReportController extends Controller
 {
@@ -543,6 +544,46 @@ class PayrollReportController extends Controller
         return response()->json([
             'success'=>$data,
         ]);
+    }
+    public function SeveranceCreate(Request $request){
+        $data = DB::table('gross_salary_pays')
+        ->leftJoin('users','gross_salary_pays.employee_id', '=', 'users.id')
+        ->leftJoin('positions','positions.id','=','users.position_id')
+        ->leftJoin('branchs','branchs.id','=','users.branch_id')
+        ->leftJoin('departments','departments.id','=','users.department_id')
+        ->select(
+            'gross_salary_pays.*',
+            'users.number_employee',
+            'users.employee_name_en',
+            'users.employee_name_kh',
+            'positions.name_khmer as position_name_khmer',
+            'positions.name_english as position_name_english',
+            'branchs.branch_name_kh',
+            'branchs.branch_name_en',
+            'departments.name_khmer as depart_name_kh',
+            'departments.name_english as depart_name_en'
+        )->where('gross_salary_pays.id',$request->id)->first();
+        return view('severance_pays.update',compact('data'));
+    }
+    public function SeveranceUpdate(Request $request){
+        try{
+            GrossSalaryPay::where('id',$request->id)->update([
+                'employee_id'   => $request->employee_id,
+                'number_employee'   => $request->number_employee,
+                'basic_salary'   => $request->basic_salary,
+                'total_gross_salary'   => $request->total_gross_salary,
+                'total_fdc1'   => $request->total_fdc1,
+                'type_fdc1'   => $request->type_fdc1,
+                'total_fdc2'   => $request->total_fdc2,
+                'type_fdc2'   => $request->type_fdc2,
+            ]);
+            Toastr::success('Updated gross salary successfully.','Success');
+            return redirect('severance-pay');
+        }catch(\Exception $e){
+            DB::rollback();
+            Toastr::error('Update gross salary fail','Error');
+            return redirect()->back();
+        }
     }
     public function importSeverancePay(Request $request){
         $file = $request->file;
