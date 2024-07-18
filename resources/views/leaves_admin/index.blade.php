@@ -119,7 +119,7 @@
                                                     <table class="table table-striped custom-table mb-0 datatable dataTable no-footer tbl-leave-request" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
                                                         <thead>
                                                             <tr>
-                                                                @if (Auth::user()->RolePermission == "HR" || Auth::user()->RolePermission == 'HRAdmin')
+                                                                @if (Auth::user()->RolePermission == 'HRAdmin')
                                                                     <th class="stuck-scroll-3"><input type="checkbox" id="checkAll"></th>
                                                                 @endif
                                                                 <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" aria-sort="ascending" aria-label="Profle: activate to sort column descending">#</th>
@@ -129,7 +129,7 @@
                                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" aria-label="No of Days: activate to sort column ascending">@lang('lang.number_of_days')</th>
                                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" aria-label="From: activate to sort column ascending">@lang('lang.start_date')</th>
                                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" aria-label="To: activate to sort column ascending">@lang('lang.end_date')</th>
-                                                                @if (Auth::user()->RolePermission == "HR" || Auth::user()->RolePermission == 'HRAdmin')
+                                                                @if (Auth::user()->RolePermission == 'HRAdmin')
                                                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" aria-label="approver: activate to sort column ascending">@lang('lang.approver')</th>
                                                                 @endif
                                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" aria-label="No of Days: activate to sort column ascending">@lang('lang.handover_staff')</th>
@@ -142,7 +142,7 @@
                                                             @if (count($dataLeaveRequest) > 0)
                                                                 @foreach ($dataLeaveRequest as $key=>$request)
                                                                     <tr class="odd">
-                                                                        @if (Auth::user()->RolePermission == "HR" || Auth::user()->RolePermission == 'HRAdmin')
+                                                                        @if (Auth::user()->RolePermission == 'HRAdmin')
                                                                             <td class="stuck-scroll-3">
                                                                                 <input type="checkbox" class="sub_chk" data-id="{{$request->id}}" data-status="{{$request->status}}">
                                                                             </td>

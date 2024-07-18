@@ -44,6 +44,7 @@ use App\Traits\UploadFiles\UploadFIle;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use Spatie\Activitylog\Models\Activity;
 use App\Repositories\Admin\EmployeeRepository;
+use Illuminate\Support\Str;
 
 class UserController extends Controller
 {
@@ -810,4 +811,177 @@ class UserController extends Controller
             return response()->json(['error'=>$e->getMessage()]);
         }
     }
+
+
+    public function str_replace($text)
+    {
+        $shortlist = Str::lower($text);
+        $shortlistSpaces = str_replace(' ', '', $shortlist);
+        return $shortlistSpaces;
+    }
+
+    public function importUpdateEmployee(Request $request){
+        $file = $request->file;
+        $filesize = filesize($file);
+        $extension = $request->file->extension();
+        $spreadsheet = IOFactory::load($file);
+        
+        if ($extension == "xlsx" || $extension == "xls" || $extension == "csv") {
+            $allSheetNames = $spreadsheet->getSheetNames();
+            foreach ($allSheetNames as $sheetName) {
+                // $employees =  $spreadsheet->getSheetByName('Employee')->toArray();
+                if ($sheetName == "Employee") {
+                    $i = 0;
+                    $employees =  $spreadsheet->getSheetByName($sheetName)->toArray();
+                    foreach ($employees as $item) {
+                        $i++;
+                        if ($i > 2) {
+                            
+                            $dataUpdateEmployee = user::where('number_employee',$item[0])->first();
+                            $spouse = $this->str_replace($item[9]) == "yes" ? 1 : 0;
+                            $type_of_employees_nssf = $this->str_replace($item[15]) == "residents" ? 1 : 2;
+                            $spouse_nssf = $this->str_replace($item[16]) == "yes" ? 1 : 2;
+                            $status_nssf = $this->str_replace($item[17]) == "working" ? 1 : 2;
+                            if ($dataUpdateEmployee) {
+                                    /** block Bank Infor */
+                                    $dataUpdateEmployee['bank_name']                = $item[1];
+                                    $dataUpdateEmployee['account_name']             = $item[2];
+                                    $dataUpdateEmployee['account_number']           = $item[3];
+                                    /** block Profile */
+                                    $dataUpdateEmployee['agency_phone_number']      = $item[4];
+                                    /** block Personal Informations */
+                                    $dataUpdateEmployee['nationality']              = $item[5];
+                                    $dataUpdateEmployee['ethnicity']                = $item[6];
+                                    $dataUpdateEmployee['marital_status']           = $item[7];
+                                    $dataUpdateEmployee['id_card_number']           = $item[8];
+                                    $dataUpdateEmployee['spouse']                   = $spouse;
+                                    $dataUpdateEmployee['identity_type']            = $item[10];
+                                    $dataUpdateEmployee['identity_number']          = $item[11];
+                                    $dataUpdateEmployee['issue_date']               = $item[12] ? Carbon::createFromDate($item[32])->format('Y-m-d') : null;
+                                    $dataUpdateEmployee['issue_expired_date']       = $item[13] ? Carbon::createFromDate($item[32])->format('Y-m-d') : null;
+                                    /** block Information NSSF */
+                                    $dataUpdateEmployee['id_number_nssf']           = $item[14];
+                                    $dataUpdateEmployee['type_of_employees_nssf']   = $type_of_employees_nssf;
+                                    $dataUpdateEmployee['spouse_nssf']              = $spouse_nssf;
+                                    $dataUpdateEmployee['status_nssf']              = $status_nssf;
+        
+                                    /** block Current Address */
+                                    $dataUpdateEmployee['current_province']         = $item[18];
+                                    $dataUpdateEmployee['current_district']         = $item[19];
+                                    $dataUpdateEmployee['current_commune']          = $item[20];
+                                    $dataUpdateEmployee['current_village']          = $item[21];
+                                    $dataUpdateEmployee['current_street_no']        = $item[22];
+                                    $dataUpdateEmployee['current_house_no']         = $item[23];
+        
+                                    /** block Permanent Address */
+                                    $dataUpdateEmployee['permanent_province']       = $item[24];
+                                    $dataUpdateEmployee['permanent_district']       = $item[25];
+                                    $dataUpdateEmployee['permanent_commune']        = $item[26];
+                                    $dataUpdateEmployee['permanent_village']        = $item[27];
+                                    $dataUpdateEmployee['permanent_street_no']      = $item[28];
+                                    $dataUpdateEmployee['permanent_house_no']       = $item[29];
+        
+                                    /** block account for login to system */
+                                    $dataUpdateEmployee['password']              = Hash::make($item[30]);
+                                    $dataUpdateEmployee['type']                  = 'uploade';
+                                    $dataUpdateEmployee['updated_by']            = Auth::user()->id;
+                                    $dataUpdateEmployee['status' ]               = 'Active';
+                                    $dataUpdateEmployee['p_status']              = '0';
+                                    $dataUpdateEmployee->save();
+                            }
+                        }
+                    }
+                }
+                // $Children_Informations =  $spreadsheet->getSheetByName('Children_Informations')->toArray();
+                if ($sheetName == "Children_Informations") {
+                    $i = 0;
+                    $Children_Informations = $spreadsheet->getSheetByName($sheetName)->toArray();
+                    foreach ($Children_Informations as $item) {
+                        $i++;
+                        if ($i > 2) {    
+                            $dataUpdateEmployee = user::where('number_employee',$item[0])->first();
+                            if ($dataUpdateEmployee) {
+                                $child = ChildrenInfor::firstOrCreate([
+                                    'employee_id'           => $dataUpdateEmployee->id,
+                                    'name'                  => $item[1],
+                                    'date_of_birth'         => $item[2] ? Carbon::createFromDate($item[2])->format('Y-m-d') : null,
+                                    'sex'                   => $item[3],
+                                    'created_by'            => Auth::user()->id
+                                ]);
+                            }
+                        }
+                    }
+                }
+                // $Emergency_Contact =  $spreadsheet->getSheetByName('Emergency_Contact')->toArray();
+                if ($sheetName == "Emergency_Contact") {
+                    $Emergency_Contact = $spreadsheet->getSheetByName($sheetName)->toArray();
+                    foreach ($Emergency_Contact as $item) {
+                        $i++;
+                        if ($i > 2) {    
+                            $dataUpdateEmployee = user::where('number_employee',$item[0])->first();
+                            if ($dataUpdateEmployee) {
+                                $contact = Contact::firstOrCreate([
+                                    'employee_id'           => $dataUpdateEmployee->id,
+                                    'name'                  => $item[1],
+                                    'relationship'          => $item[2],
+                                    'phone'                 => $item[3],
+                                    'phone_2'               => $item[4],
+                                    'updated_by'            => Auth::user()->id
+                                ]);
+                            }
+                        }
+                    }
+                }
+                // $Education_Informations =  $spreadsheet->getSheetByName('Education_Informations')->toArray();
+                if ($sheetName == "Education_Informations") {
+                    $Education_Informations = $spreadsheet->getSheetByName($sheetName)->toArray();
+                    foreach ($Education_Informations as $item) {
+                        $i++;
+                        if ($i > 2) {    
+                            $dataUpdateEmployee = user::where('number_employee',$item[0])->first();
+                            if ($dataUpdateEmployee) {
+                                $education = Education::firstOrCreate([
+                                    'employee_id'           => $dataUpdateEmployee->id,
+                                    'school'                => $item[1],
+                                    'field_of_study'        => $item[2],
+                                    'degree'                => $item[3],
+                                    'grade'                 => $item[4],
+                                    'start_date'            => $item[5] ? Carbon::createFromDate($item[5])->format('Y-m-d') : null,
+                                    'end_date'              => $item[6] ? Carbon::createFromDate($item[6])->format('Y-m-d') : null,
+                                    'created_by'            => Auth::user()->id
+                                ]);
+                            }
+                        }
+                    }
+                }
+                // $Experience_Informations =  $spreadsheet->getSheetByName('Experience_Informations')->toArray();
+                if ($sheetName == "Experience_Informations") {
+                    $Experience_Informations = $spreadsheet->getSheetByName($sheetName)->toArray();
+
+                    foreach ($Experience_Informations as $item) {
+                        $i++;
+                        if ($i > 2) {    
+                            $dataUpdateEmployee = user::where('number_employee',$item[0])->first();
+                            if ($dataUpdateEmployee) {
+                                $experience = Experience::firstOrCreate([
+                                    'employee_id'           => $dataUpdateEmployee->id,
+                                    'company_name'          => $item[1],
+                                    'employment_type'       => $item[2],
+                                    'position'              => $item[3],
+                                    'start_date'            => $item[4] ? Carbon::createFromDate($item[4])->format('Y-m-d') : null,
+                                    'end_date'              => $item[5] ? Carbon::createFromDate($item[5])->format('Y-m-d') : null,
+                                    'location'              => $item[6],
+                                    'updated_by'            => Auth::user()->id
+                                ]);
+                            }
+                        }
+                    }
+                }
+            }
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
 }
