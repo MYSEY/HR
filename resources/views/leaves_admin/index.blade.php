@@ -99,7 +99,7 @@
                             <a class="nav-link" data-bs-toggle="tab" id="tab_leave_allocations" href="#leave_allocations" aria-selected="false" data-tab-id="3" role="tab" tabindex="-1">@lang('lang.leave_allocation')</a>
                         </li>
                     </ul>
-                    @if (Auth::user()->RolePermission == "HR" || Auth::user()->RolePermission == 'HRAdmin')
+                    @if (Auth::user()->RolePermission == 'HRAdmin')
                     {{-- @if (permissionAccess("m4-s1","is_delete")->value == "1") --}}
                         {{-- <button type="button" class="btn btn-sm btn-danger reject_all mt-3">@lang('lang.reject')</button> --}}
                     {{-- @endif --}}
