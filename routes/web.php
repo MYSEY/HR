@@ -235,6 +235,10 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('motor-rentel/create-pay',[MotorRentelController::class,'storePay']);
     Route::post('motor-rentel/status',[MotorRentelController::class,'processing']);
 
+    Route::get('motor-rentel/pay-review',[MotorRentelController::class,'indexReviewPay']);
+    Route::post('motor-rentel/approved',[MotorRentelController::class,'payApproved']);
+    Route::post('motor-rentel/review/delete',[MotorRentelController::class,'deletePay']);
+
     //Payroll Item
     Route::get('payroll/adjustment',[PayrollItemController::class,'index']);
     Route::post('payroll/adjustment/store',[PayrollItemController::class,'store']);

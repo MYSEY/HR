@@ -602,6 +602,28 @@ $(function(){
             $(this).val(1)
         }
     });
+    $("#generate_pay_motor_rentals").on("click", function() {
+        if (!$(this).prop("checked")) {
+            $(".generate_pay_motor_rentals_checkbox").prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(".generate_pay_motor_rentals_checkbox").prop("checked", true);
+            $(this).val(1)
+            $(".generate_pay_motor_rentals_checkbox").val(1);
+        }
+    });
+    $(".generate_pay_motor_rentals_checkbox").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(this).prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(this).prop("checked", true);
+            $(this).val(1)
+        }
+    });
+    
     $("#pay_motor_rentals").on("click", function() {
         if (!$(this).prop("checked")) {
             $(".pay_motor_rentals_checkbox").prop("checked", false);

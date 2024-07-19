@@ -64,7 +64,7 @@ class MotorRentalRepository extends BaseRepository
                 if ($RolePermission == 'HOD') {
                     $query->whereIn("users.department_id", EmployeeRepository::getRoleHOD());
                 }
-                if ($RolePermission == 'BM') {
+                if ($RolePermission == 'BM' || $RolePermission == 'HR') {
                     $query->where("users.branch_id", Auth::user()->branch_id);
                 }
             })

@@ -161,6 +161,10 @@
             if (motor_rentals_checkbox == $('input.motor_rentals_checkbox').length) {
                 $("#motor_rentals").prop("checked", true);
             };
+            let generate_pay_motor_rentals_checkbox = $('.generate_pay_motor_rentals_checkbox').filter(':checked').length;
+            if (generate_pay_motor_rentals_checkbox == $('input.generate_pay_motor_rentals_checkbox').length) {
+                $("#generate_pay_motor_rentals").prop("checked", true);
+            };
             let pay_motor_rentals_checkbox = $('.pay_motor_rentals_checkbox').filter(':checked').length;
             if (pay_motor_rentals_checkbox == $('input.pay_motor_rentals_checkbox').length) {
                 $("#pay_motor_rentals").prop("checked", true);

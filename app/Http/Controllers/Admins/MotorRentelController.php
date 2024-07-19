@@ -40,7 +40,6 @@ class MotorRentelController extends Controller
             $from_date = Carbon::createFromDate($request->from_date)->format('Y-m-d H:i:s'); //2023-05-09 00:00:00
             $to_date = Carbon::createFromDate($request->to_date.' '.'23:59:59')->format('Y-m-d H:i:s'); //2023-05-09 23:59:59
         }
-        
         $data = MotorRentel::with('user')->leftJoin('users', 'motor_rentels.employee_id', '=', 'users.id')
             ->select(
                 'motor_rentels.*',
@@ -57,7 +56,7 @@ class MotorRentelController extends Controller
                 if ($RolePermission == 'HOD') {
                     $query->whereIn("users.department_id", EmployeeRepository::getRoleHOD());
                 }
-                if ($RolePermission == 'BM') {
+                if ($RolePermission == 'BM' || $RolePermission == 'HR') {
                     $query->where("users.branch_id", Auth::user()->branch_id);
                 }
             })
@@ -85,6 +84,9 @@ class MotorRentelController extends Controller
                 if ($RolePermission == 'HOD') {
                     $query->whereIn("department_id", EmployeeRepository::getRoleHOD());
                 }
+                if ($RolePermission == 'HR') {
+                    $query->where("branch_id", Auth::user()->branch_id);
+                }
                 if ($RolePermission == 'BM') {
                     $query->where("branch_id", Auth::user()->branch_id);
                 }
@@ -95,6 +97,39 @@ class MotorRentelController extends Controller
         }else {
             return view('motor_rentels.index', compact('data', 'employees'));
         }
+    }
+
+    public function indexReviewPay(Request $request)
+    {
+        $monthly = Carbon::now()->format('m');
+        $currentYear = Carbon::now()->format('Y');
+        $data = MotorRentalDetail::with('motorrental')->with('user')
+            ->leftJoin('users', 'motor_rental_details.employee_id', '=', 'users.id')
+            ->select(
+                'motor_rental_details.*',
+                'users.employee_name_en',
+                'users.employee_name_kh',
+                'users.number_employee',
+                'users.branch_id',
+                'users.department_id',
+            )
+            ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+                if ($RolePermission == 'Employee') {
+                    $query->where('users.id',Auth::user()->id);
+                }
+                if ($RolePermission == 'HOD') {
+                    $query->whereIn("users.department_id", EmployeeRepository::getRoleHOD());
+                }
+                if ($RolePermission == 'BM' || $RolePermission == 'HR') {
+                    $query->where("users.branch_id", Auth::user()->branch_id);
+                }
+            })
+            ->where("motor_rental_details.status", null)
+            ->whereMonth('motor_rental_details.created_at', $monthly)
+            ->whereYear('motor_rental_details.created_at', $currentYear)
+            ->orderBy('id', 'desc')
+            ->get();
+        return view('motor_rentels.review',  compact('data'));
     }
 
     public function indexPay(Request $request)
@@ -118,16 +153,35 @@ class MotorRentelController extends Controller
                 if ($RolePermission == 'HOD') {
                     $query->whereIn("users.department_id", EmployeeRepository::getRoleHOD());
                 }
-                if ($RolePermission == 'BM') {
+                if ($RolePermission == 'BM' || $RolePermission == 'HR') {
                     $query->where("users.branch_id", Auth::user()->branch_id);
                 }
             })
+            ->where("motor_rental_details.status", "approve")
             ->whereMonth('motor_rental_details.created_at', $monthly)
             ->whereYear('motor_rental_details.created_at', $currentYear)
             ->orderBy('id', 'desc')
             ->get();
         return view('motor_rentels.pay_motor_rental',  compact('data'));
     }
+
+    public function payApproved(Request $request){
+        try{
+            $dataPay = MotorRentalDetail::whereIn('id',explode(",",$request->id))->update(['status' => 'approve']);
+            if ($dataPay) {
+                Toastr::success('Approved successfully.','Success');
+            } else {
+                Toastr::error('Approved fail','Error');
+            }
+            return redirect()->back();
+            DB::commit();
+        }catch(\Exception $e){
+            DB::rollback();
+            Toastr::error('Approved fail','Error');
+            return redirect()->back();
+        }
+    }
+
     public function indexPaySearch(Request $request)
     {
         $request["monthly"] = true;
@@ -181,9 +235,31 @@ class MotorRentelController extends Controller
             $first_day_of_month = Carbon::create($year, $month, 1)->startOfMonth();
             $last_day_of_month = Carbon::now()->lastOfMonth()->format('Y-m-d');
 
+            MotorRentalDetail::where('status',null)->delete();
+
             // count current last day of the month
             $totalLastDayofMonth = Carbon::now()->daysInMonth;
-            $motorRentals = MotorRentel::get();
+            $motorRentals = MotorRentel::leftJoin('users', 'motor_rentels.employee_id', '=', 'users.id')
+                            ->select(
+                                'motor_rentels.*',
+                                'users.employee_name_en',
+                                'users.employee_name_kh',
+                                'users.number_employee',
+                                'users.branch_id',
+                                'users.department_id',
+                            )
+                            ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+                                if ($RolePermission == 'Employee') {
+                                    $query->where('users.id',Auth::user()->id);
+                                }
+                                if ($RolePermission == 'HOD') {
+                                    $query->whereIn("users.department_id", EmployeeRepository::getRoleHOD());
+                                }
+                                if ($RolePermission == 'BM' || $RolePermission == 'HR') {
+                                    $query->where("users.branch_id", Auth::user()->branch_id);
+                                }
+                            })
+                            ->get();
             foreach ($motorRentals as $key => $motor) {
                 // logic pay by start date
                 $currentMonth1 = Carbon::create($motor->start_date)->format('Y-m');
@@ -455,6 +531,18 @@ class MotorRentelController extends Controller
     {
         try {
             MotorRentel::destroy($request->id);
+            Toastr::success('Deleted successfully.', 'Success');
+            return redirect()->back();
+        } catch (\Exception $e) {
+            DB::rollback();
+            Toastr::error('Delete fail.', 'Error');
+            return redirect()->back();
+        }
+    }
+    public function deletePay(Request $request)
+    {
+        try {
+            MotorRentalDetail::whereIn('id',explode(",",$request->id))->delete();
             Toastr::success('Deleted successfully.', 'Success');
             return redirect()->back();
         } catch (\Exception $e) {

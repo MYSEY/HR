@@ -109,7 +109,8 @@
                         <tr>
                             <td>@lang('lang.gasoline') (៛)</td>
                             <td>
-                                <span class="float-end">{{ number_format($data->gasoline_price_per_liter) }} ៛</span>
+                                <span class="float-end">{{ number_format($data->total_gasoline * $data->total_work_day * $data->gasoline_price_per_liter) }} ៛</span>
+                                {{-- <span class="float-end">{{ number_format($data->gasoline_price_per_liter) }} ៛</span> --}}
                             </td>
                             <td>@lang('lang.other_deduction'): </td>
                             <td>
@@ -119,7 +120,7 @@
                         <tr class="tr-background-83">
                             <td>@lang('lang.total_earnings') (៛): </td>
                             <td>
-                                <span class="float-end">{{ number_format(($data->gasoline_price_per_liter)+ $data->amount_price_motor_rentel + $data->amount_price_taplab_rentel + $data->amount_price_engine_oil) }} ៛</span>
+                                <span class="float-end">{{ number_format(($data->total_gasoline * $data->total_work_day * $data->gasoline_price_per_liter)+ $data->amount_price_motor_rentel + $data->amount_price_taplab_rentel + $data->amount_price_engine_oil) }} ៛</span>
                             </td>
                             <td>@lang('lang.total_deductions') (៛): </td>
                             <td>

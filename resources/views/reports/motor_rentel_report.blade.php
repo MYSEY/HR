@@ -39,26 +39,28 @@
                     <input type="text" class="form-control" name="employee_name" id="employee_name" placeholder="@lang('lang.employee_name')" value="{{ old('employee_name') }}">
                 </div>
             </div>
-            <div class="col-sm-6 col-md-2">
-                <div class="form-group">
-                    <select class="select form-control" id="branch_id" name="branch_id" value="{{old('branch_id')}}">
-                        <option value="">@lang('lang.location')</option>
-                        @foreach ($branchs as $item)
-                            <option value="{{$item->id}}">{{Helper::getLang() == 'en' ? $item->branch_name_en : $item->branch_name_kh}}</option>
-                        @endforeach
-                    </select>
+            {{-- @if (Auth::user()->RolePermission == "Developer" || Auth::user()->RolePermission == "admin" || Auth::user()->RolePermission == "HRAdmin")
+                <div class="col-sm-6 col-md-2">
+                    <div class="form-group">
+                        <select class="select form-control" id="branch_id" name="branch_id" value="{{old('branch_id')}}">
+                            <option value="">@lang('lang.location')</option>
+                            @foreach ($branchs as $item)
+                                <option value="{{$item->id}}">{{Helper::getLang() == 'en' ? $item->branch_name_en : $item->branch_name_kh}}</option>
+                            @endforeach
+                        </select>
+                    </div>
                 </div>
-            </div>
-            <div class="col-sm-6 col-md-2">
-                <div class="form-group">
-                    <select class="select form-control" id="department_id" name="department_id" value="{{old('department_id')}}">
-                        <option value="">@lang('lang.department')</option>
-                        @foreach ($departments as $item)
-                            <option value="{{$item->id}}">{{ Helper::getLang() == 'en' ? $item->name_english : $item->name_khmer}}</option>
-                        @endforeach
-                    </select>
+                <div class="col-sm-6 col-md-2">
+                    <div class="form-group">
+                        <select class="select form-control" id="department_id" name="department_id" value="{{old('department_id')}}">
+                            <option value="">@lang('lang.department')</option>
+                            @foreach ($departments as $item)
+                                <option value="{{$item->id}}">{{ Helper::getLang() == 'en' ? $item->name_english : $item->name_khmer}}</option>
+                            @endforeach
+                        </select>
+                    </div>
                 </div>
-            </div>
+            @endif --}}
             <div class="col-sm-6 col-md-2 col-lg-2 col-xl-2 col-12">
                 <div class="form-group">
                     <div class="cal-icon">
@@ -73,8 +75,27 @@
                     </div>
                 </div>
             </div>
+
+            <div class="col-sm-6 col-md-4 col-lg-4 col-xl-4 col-12">
+                <div style="display: flex" class="float-end">
+                    <button type="button" class="btn btn-sm btn-outline-secondary btn-search me-2" data-dismiss="modal" id="icon-search-download-reload">
+                        <span class="btn-text-search"><i class="fa fa-search"></i></span>
+                        <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
+                    </button>
+                    @if (permissionAccess("m7-s12","is_export")->value == "1")
+                        <button type="button" class="btn btn-sm btn-outline-secondary btn-export me-2" id="icon-search-download-reload">
+                            <span class="btn-text-excel"><i class="fa fa-arrow-circle-down" aria-hidden="true"></i></span>
+                            <span id="btn-text-loading-excel" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
+                        </button>
+                    @endif
+                    <button type="button" class="btn btn-sm btn-outline-secondary reset-btn" id="icon-search-download-reload">
+                        <span class="btn-text-reset"><i class="fa fa-undo"></i></span>
+                        <span id="btn-reset-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
+                    </button>
+                </div>
+            </div>
         </div>
-        <div class="row filter-btn">
+        {{-- <div class="row filter-btn">
             <div class="col-md-6"></div>
             <div class="col-sm-6 col-md-6">
                 <div style="display: flex" class="float-end">
@@ -94,7 +115,7 @@
                     </button>
                 </div>
             </div>
-        </div>
+        </div> --}}
         <div class="content">
             <div class="row">
                 <div class="col-md-12 p-0">

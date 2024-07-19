@@ -495,6 +495,7 @@ return[
 	"mr._chhor_oudam"=>"លោក ឈ ឧត្តម",
 	"motorcycle_brand"=>"ម៉ាកម៉ូតូ",
 	"motor_rental_reports"=>"របាយការណ៍ជួលម៉ូតូ",
+	"motor_rental_review"=>"ការពិនិត្យមើលការជួលម៉ូតូ",
 	"motor_rental_fee_tax"=>"ពន្ធលើថ្លៃជួលម៉ូតូ",
 	"monthly_payroll"=>"ប្រាក់បៀវត្សរ៍ប្រចាំខែ",
 	"monthly_motor_rental_fee"=>"ថ្លៃជួលម៉ូតូប្រចាំខែ",

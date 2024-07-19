@@ -40,6 +40,7 @@ return new class extends Migration
             $table->decimal('amount_price_engine_oil')->nullable();
             $table->decimal('amount_price_taplab_rentel')->nullable();
             $table->integer('tax_rate')->nullable();
+            $table->string('status')->nullable();
             $table->bigInteger('created_by')->unsigned()->nullable();
             $table->bigInteger('updated_by')->unsigned()->nullable();
             $table->dateTime('deleted_at')->nullable();

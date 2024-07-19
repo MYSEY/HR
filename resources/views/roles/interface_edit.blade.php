@@ -997,6 +997,57 @@
                             </div>
                         </div>
                     </div>
+                    {{-- block generate pay motor rental --}}
+                    <div class="col-md-12">
+                        <div class="form-group row">
+                            <div class="col-md-2">
+                                <label class="container-checkbox">@lang('lang.generate_pay_motor_rentals')
+                                    <input type="checkbox" class="motor_rental_checkbox" id="generate_pay_motor_rentals"> <span class="checkmark"></span>
+                                </label>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="container-checkbox">@lang('lang.view')
+                                    <input value="1" checked type="checkbox" class="motor_rental_checkbox generate_pay_motor_rentals_checkbox" id="generate_pay_motor_rental_view"
+                                    {{SetCheckbox($arrayPermissions,"lang.generate_pay_motor","is_view")->checkbox}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.generate_pay_motor","is_view")->value}}"> <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.add')
+                                    <input type="checkbox" class="motor_rental_checkbox generate_pay_motor_rentals_checkbox" id="generate_pay_motor_rental_add"
+                                    {{SetCheckbox($arrayPermissions,"lang.generate_pay_motor","is_create")->checkbox}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.generate_pay_motor","is_create")->value}}"> <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.approve')
+                                    <input type="checkbox" class="motor_rental_checkbox generate_pay_motor_rentals_checkbox" id="generate_pay_motor_rental_approve"
+                                    {{SetCheckbox($arrayPermissions,"lang.generate_pay_motor","is_approve")->checkbox}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.generate_pay_motor","is_approve")->value}}"> <span class="checkmark"></span>
+                                </label>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="container-checkbox">@lang('lang.edit')
+                                    <input type="checkbox" class="motor_rental_checkbox generate_pay_motor_rentals_checkbox" id="generate_pay_motor_rental_edit"
+                                    {{SetCheckbox($arrayPermissions,"lang.generate_pay_motor","is_update")->checkbox}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.generate_pay_motor","is_update")->value}}"> <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.delete')
+                                    <input type="checkbox" class="motor_rental_checkbox generate_pay_motor_rentals_checkbox" id="generate_pay_motor_rental_delete" 
+                                    {{SetCheckbox($arrayPermissions,"lang.generate_pay_motor","is_delete")->checkbox}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.generate_pay_motor","is_delete")->value}}"> <span class="checkmark"></span>
+                                </label>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="container-checkbox">@lang('lang.print')
+                                    <input type="checkbox" class="motor_rental_checkbox generate_pay_motor_rentals_checkbox" id="generate_pay_motor_rental_print"
+                                    {{SetCheckbox($arrayPermissions,"lang.generate_pay_motor","is_print")->checkbox}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.generate_pay_motor","is_print")->value}}"> <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.export')
+                                    <input type="checkbox" class="motor_rental_checkbox generate_pay_motor_rentals_checkbox" id="generate_pay_motor_rental_export"
+                                    {{SetCheckbox($arrayPermissions,"lang.generate_pay_motor","is_export")->checkbox}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.generate_pay_motor","is_export")->value}}"> <span class="checkmark"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
                     {{-- block Pay Motor Rental --}}
                     <div class="col-md-12">
                         <div class="form-group row">

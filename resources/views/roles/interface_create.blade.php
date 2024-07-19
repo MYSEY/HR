@@ -669,6 +669,46 @@
                             </div>
                         </div>
                     </div>
+                    
+                    {{-- block generate pay motor rental --}}
+                    <div class="col-md-12">
+                        <div class="form-group row">
+                            <div class="col-md-2">
+                                {{-- <label >@lang('lang.pay_motor_rentals')</label> --}}
+                                <label class="container-checkbox">@lang('lang.generate_pay_motor_rentals')
+                                    <input type="checkbox" class="motor_rental_checkbox" id="generate_pay_motor_rentals"> <span class="checkmark"></span>
+                                </label>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="container-checkbox">@lang('lang.view')
+                                    <input value="1" checked type="checkbox" class="motor_rental_checkbox generate_pay_motor_rentals_checkbox" id="generate_pay_motor_rental_view"> <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.add')
+                                    <input type="checkbox" class="motor_rental_checkbox generate_pay_motor_rentals_checkbox" id="generate_pay_motor_rental_add"> <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.approve')
+                                    <input type="checkbox" class="motor_rental_checkbox generate_pay_motor_rentals_checkbox" id="generate_pay_motor_rental_approve"> <span class="checkmark"></span>
+                                </label>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="container-checkbox">@lang('lang.edit')
+                                    <input type="checkbox" class="motor_rental_checkbox generate_pay_motor_rentals_checkbox" id="generate_pay_motor_rental_edit"> <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.delete')
+                                    <input type="checkbox" class="motor_rental_checkbox generate_pay_motor_rentals_checkbox" id="generate_pay_motor_rental_delete" > <span class="checkmark"></span>
+                                </label>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="container-checkbox">@lang('lang.print')
+                                    <input type="checkbox" class="motor_rental_checkbox generate_pay_motor_rentals_checkbox" id="generate_pay_motor_rental_print"> <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.export')
+                                    <input type="checkbox" class="motor_rental_checkbox generate_pay_motor_rentals_checkbox" id="generate_pay_motor_rental_export"> <span class="checkmark"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
                     {{-- block Pay Motor Rental --}}
                     <div class="col-md-12">
                         <div class="form-group row">

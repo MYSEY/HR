@@ -21,13 +21,13 @@
                     </ul>
                 </div>
     
-                <div class="col-auto float-end ms-auto">
+                {{-- <div class="col-auto float-end ms-auto">
                     @if (permissionAccess("m5-s2","is_create")->value == "1")
                         <a href="#" class="btn add-btn" data-bs-toggle="modal" data-bs-target="#add_pay_motor_rentel" id="add_new"><i
                                 class="fa fa-plus"></i>
                             @lang('lang.add_new')</a>
                     @endif
-                </div>
+                </div> --}}
             </div>
         </div>
         @if (permissionAccess("m5-s2","is_view")->value == "1")

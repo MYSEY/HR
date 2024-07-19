@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class MotorRentalDetail extends Model
 {
     use HasFactory;
-    use SoftDeletes;
+    // use SoftDeletes;
     use LogsActivity;
 
     protected $table = 'motor_rental_details';
@@ -43,6 +43,7 @@ class MotorRentalDetail extends Model
         'amount_price_engine_oil',
         'amount_price_taplab_rentel',
         'tax_rate',
+        'status',
         'created_by',
         'updated_by',
     ];

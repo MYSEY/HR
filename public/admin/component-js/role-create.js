@@ -392,9 +392,10 @@ var dataPermission = function () {
    
     //block motor rentals 
     let motor_rentals_checkbox = $('.motor_rentals_checkbox').filter(':checked').length;
+    let generate_pay_motor_rentals_checkbox = $('.generate_pay_motor_rentals_checkbox').filter(':checked').length;
     let pay_motor_rentals_checkbox = $('.pay_motor_rentals_checkbox').filter(':checked').length;
     let motor_rental_check_all = $('#motor_rental_check_all').filter(':checked').length;
-    if (motor_rental_check_all || motor_rentals_checkbox || pay_motor_rentals_checkbox) {
+    if (motor_rental_check_all || motor_rentals_checkbox || pay_motor_rentals_checkbox || generate_pay_motor_rentals_checkbox) {
         data.push({
             name: "Motor Rentals",
             permission: [
@@ -424,6 +425,26 @@ var dataPermission = function () {
                     "is_delete": $("#motor_rental_delete").val(),
                     "is_print": $("#motor_rental_print").val(),
                     "is_export": $("#motor_rental_export").val(),
+                },
+            ]
+        })
+    }
+    if (generate_pay_motor_rentals_checkbox) {
+        data.push({
+            name: "generate_pay_motor",
+            permission: [
+                {
+                    "name":"lang.generate_pay_motor",
+                    "sub_menu_id":"5",
+                    "menu_id":"m5-s3",
+                    "url":"motor-rentel/pay-review",
+                    "is_view": $("#generate_pay_motor_rental_view").val(),
+                    "is_create": $("#generate_pay_motor_rental_add").val(),
+                    "is_approve": $("#generate_pay_motor_rental_approve").val(),
+                    "is_update": $("#generate_pay_motor_rental_edit").val(),
+                    "is_delete": $("#generate_pay_motor_rental_delete").val(),
+                    "is_print": $("#generate_pay_motor_rental_print").val(),
+                    "is_export": $("#generate_pay_motor_rental_export").val(),
                 },
             ]
         })
