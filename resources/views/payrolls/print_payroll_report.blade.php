@@ -40,12 +40,12 @@
                     @if (count($payroll)>0)
                         @foreach ($payroll as $item)
                             <tr class="odd">
-                                <td>{{ $item->users == null ? '' : $item->users->number_employee }}</td>
-                                <td>{{ $item->users == null ? '' : $item->users->employee_name_en }}</td>
-                                <td>{{$item->users == null ? '' : $item->users->EmployeeDepartment}}</td>
-                                <td>{{ $item->users == null ? '' : $item->users->EmployeePosition}}</td>
-                                <td>{{ $item->users == null ? '' : $item->users->EmployeeBranch}}</td>
-                                <td>{{ $item->users == null ? '' : $item->users->joinOfDate}}</td>
+                                <td>{{ $item->number_employee}}</td>
+                                <td>{{ Helper::getLang() == 'en' ? $item->employee_name_en : $item->employee_name_kh }}</td>
+                                <td>{{Helper::getLang() == 'en' ? $item->depart_name_en : $item->depart_name_kh}}</td>
+                                <td>{{Helper::getLang() == 'en' ? $item->position_name_english : $item->position_name_khmer}}</td>
+                                <td>{{ Helper::getLang() == 'en' ? $item->branch_name_en : $item->branch_name_kh}}</td>
+                                <td>{{ Carbon\Carbon::parse($item->date_of_commencement)->format('d-M-Y')}}</td>
                                 <td>{{ $item->basic_salary }}</td>
                                 <td>{{ $item->total_child_allowance }}</td>
                                 <td>{{ $item->phone_allowance == null ? '0.00' : $item->phone_allowance}}</td>

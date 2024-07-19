@@ -47,14 +47,31 @@ class PayrollReportController extends Controller
     }
     public function index()
     {
-        $payroll = Payroll::with('users')
-        ->leftJoin('users', 'payrolls.employee_id', '=', 'users.id')
+        $Monthly= Carbon::now()->format('m');
+        $yearLy = Carbon::now()->format('Y');
+        $payroll = DB::table('payrolls')
+        ->leftJoin('users','payrolls.employee_id','=','users.id')
+        ->leftJoin('positions','positions.id','=','users.position_id')
+        ->leftJoin('branchs','branchs.id','=','users.branch_id')
+        ->leftJoin('departments','departments.id','=','users.department_id')
         ->select(
             'payrolls.*',
+            'users.profile',
+            'users.number_employee',
             'users.branch_id',
             'users.department_id',
-        )
-        ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+            'users.branch_id',
+            'users.employee_name_en',
+            'users.employee_name_kh',
+            'users.date_of_commencement',
+            'users.branch_id',
+            'positions.name_khmer as position_name_khmer',
+            'positions.name_english as position_name_english',
+            'branchs.branch_name_kh',
+            'branchs.branch_name_en',
+            'departments.name_khmer as depart_name_kh',
+            'departments.name_english as depart_name_en',
+        )->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
             if ($RolePermission == 'Employee') {
                 $query->where("users.id", Auth::user()->id);
             }
@@ -64,8 +81,25 @@ class PayrollReportController extends Controller
             if ($RolePermission == 'BM') {
                 $query->where("users.branch_id", Auth::user()->branch_id);
             }
-        })
-        ->orderBy('id', 'DESC')->get();
+        })->whereMonth('payrolls.payment_date','<=',$Monthly)->whereYear('payrolls.payment_date','>=',$yearLy)->get();
+        // dd($payroll);
+        // $payroll = Payroll::with('users')
+        // ->leftJoin('users', 'payrolls.employee_id', '=', 'users.id')
+        // ->select(
+        //     'payrolls.*',
+        //     'users.branch_id',
+        //     'users.department_id',
+        // )->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+        //     if ($RolePermission == 'Employee') {
+        //         $query->where("users.id", Auth::user()->id);
+        //     }
+        //     if ($RolePermission == 'HOD') {
+        //         $query->whereIn("users.department_id", EmployeeRepository::getRoleHOD());
+        //     }
+        //     if ($RolePermission == 'BM') {
+        //         $query->where("users.branch_id", Auth::user()->branch_id);
+        //     }
+        // })->orderBy('payrolls.id', 'DESC')->get();
         $branchs = Branchs::get();
         return view('reports.payroll_report',compact('payroll','branchs'));
     }

@@ -222,7 +222,7 @@ class EmployeePayrollController extends Controller
      */
     public function store(Request $request)
     {
-        // try{
+        try{
             //function import annual_bonus
             $dadaArrayAnnualBonus = [];
             if (file_exists($request->annual_bonus)) {
@@ -1132,11 +1132,11 @@ class EmployeePayrollController extends Controller
                 Toastr::error('Can not employee payroll','Error');
                 return redirect()->back();
             }
-        // }catch(\Exception $e){
-        //     DB::rollback();
-        //     Toastr::error('Payroll created fail','Error');
-        //     return redirect()->back();
-        // }
+        }catch(\Exception $e){
+            DB::rollback();
+            Toastr::error('Payroll created fail','Error');
+            return redirect()->back();
+        }
     }
     public function payrollStaffResign(Request $request){
         $data = $this->payrollRepo->getAllPayrollStaffResign($request);

@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LanguageController;
+use App\Http\Controllers\SendEmailController;
 use App\Http\Controllers\Admins\RoleConroller;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Admins\BankController;
@@ -23,6 +24,7 @@ use App\Http\Controllers\Admins\LeaveTypeController;
 use App\Http\Controllers\Admins\DepartmentController;
 use App\Http\Controllers\Admins\PermissionController;
 use App\Http\Controllers\Admins\ActivityLogController;
+use App\Http\Controllers\Admins\LeavesAdminController;
 use App\Http\Controllers\Admins\MotorRentelController;
 use App\Http\Controllers\Admins\PayrollItemController;
 use App\Http\Controllers\Admins\ExchangeRateController;
@@ -31,12 +33,13 @@ use App\Http\Controllers\Admins\FringeBenefitController;
 use App\Http\Controllers\Admins\PayrollReportController;
 use App\Http\Controllers\Admins\LeavesEmployeeController;
 use App\Http\Controllers\Admins\CandidateResumeController;
+use App\Http\Controllers\Admins\ConmmuneAddressController;
 use App\Http\Controllers\Admins\EmployeePayrollController;
 use App\Http\Controllers\Admins\EmployeeProfileController;
+use App\Http\Controllers\Admins\ProvinceAddressController;
 use App\Http\Controllers\Admins\RecruitmentPlanController;
+use App\Http\Controllers\Admins\DistrictsAddressController;
 use App\Http\Controllers\Admins\ChildrenAllowanceController;
-use App\Http\Controllers\Admins\LeavesAdminController;
-use App\Http\Controllers\SendEmailController;
 
 /*
 |--------------------------------------------------------------------------
@@ -416,5 +419,12 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('/email/store', [SendEmailController::class,'store']);
     Route::get('/email/create/{id}', [SendEmailController::class,'formCreate']);
     Route::post('/email-send', [SendEmailController::class,'send'])->name('send');
+
+    Route::Resource('province', ProvinceAddressController::class);
+    Route::post('import/province', [ProvinceAddressController::class,'ImportProvince']);
+    Route::Resource('district', DistrictsAddressController::class);
+    Route::post('import/district', [DistrictsAddressController::class,'ImportDistrict']);
+    Route::Resource('commune', ConmmuneAddressController::class);
+    Route::post('import/commune', [ConmmuneAddressController::class,'ImportCommune']);
 });
 Route::get('lang/{locale}', [LanguageController::class, "lang"]);
