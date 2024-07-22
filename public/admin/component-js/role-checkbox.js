@@ -1689,7 +1689,162 @@ $(function(){
             };
         });
     });
+  
 
+    // blcok address
+    $("#address_check_all").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(".address_checkbox").prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(".address_checkbox").prop("checked", true);
+            $(this).val(1)
+            $(".address_checkbox").val(1);
+        }
+    });
+    // province
+    $("#province").on("click", function() {
+        if (!$(this).prop("checked")) {
+            $(".province_checkbox").prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(".province_checkbox").prop("checked", true);
+            $(this).val(1)
+            $(".province_checkbox").val(1);
+        }
+    });
+    $(".province_checkbox").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(this).prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(this).prop("checked", true);
+            $(this).val(1)
+        }
+    });
+    // district
+    $("#district").on("click", function() {
+        if (!$(this).prop("checked")) {
+            $(".district_checkbox").prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(".district_checkbox").prop("checked", true);
+            $(this).val(1)
+            $(".district_checkbox").val(1);
+        }
+    });
+    $(".district_checkbox").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(this).prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(this).prop("checked", true);
+            $(this).val(1)
+        }
+    });
+    //commune
+    $("#commune").on("click", function() {
+        if (!$(this).prop("checked")) {
+            $(".commune_checkbox").prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(".commune_checkbox").prop("checked", true);
+            $(this).val(1)
+            $(".commune_checkbox").val(1);
+        }
+    });
+    $(".commune_checkbox").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(this).prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(this).prop("checked", true);
+            $(this).val(1)
+        }
+    });
+    //village
+    $("#village").on("click", function() {
+        if (!$(this).prop("checked")) {
+            $(".village_checkbox").prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(".village_checkbox").prop("checked", true);
+            $(this).val(1)
+            $(".village_checkbox").val(1);
+        }
+    });
+    $(".village_checkbox").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(this).prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(this).prop("checked", true);
+            $(this).val(1)
+        }
+    });
+    $(document).ready(function(){
+        let province_checkbox = $('.province_checkbox');
+        province_checkbox.change(function(){
+            let countAllCheckboxes = province_checkbox.filter(':checked').length;
+            if (countAllCheckboxes == $('input.province_checkbox').length) {
+                $("#province").prop("checked", true);
+            };
+            if (countAllCheckboxes < $('input.province_checkbox').length) {
+                $("#province").prop("checked", false);
+            };
+        });
+        let district_checkbox = $('.district_checkbox');
+        district_checkbox.change(function(){
+            let countAllCheckboxes = district_checkbox.filter(':checked').length;
+            if (countAllCheckboxes == $('input.district_checkbox').length) {
+                $("#district").prop("checked", true);
+            };
+            if (countAllCheckboxes < $('input.district_checkbox').length) {
+                $("#district").prop("checked", false);
+            };
+        });
+        let commune_checkbox = $('.commune_checkbox');
+        commune_checkbox.change(function(){
+            let countAllCheckboxes = commune_checkbox.filter(':checked').length;
+            if (countAllCheckboxes == $('input.commune_checkbox').length) {
+                $("#commune").prop("checked", true);
+            };
+            if (countAllCheckboxes < $('input.commune_checkbox').length) {
+                $("#commune").prop("checked", false);
+            };
+        });
+        let village_checkbox = $('.village_checkbox');
+        village_checkbox.change(function(){
+            let countAllCheckboxes = village_checkbox.filter(':checked').length;
+            if (countAllCheckboxes == $('input.village_checkbox').length) {
+                $("#village").prop("checked", true);
+            };
+            if (countAllCheckboxes < $('input.village_checkbox').length) {
+                $("#village").prop("checked", false);
+            };
+        });
+        let checkboxes = $('.address_checkbox');
+        checkboxes.change(function(){
+            let countCheckedCheckboxes = checkboxes.filter(':checked').length;
+            if (countCheckedCheckboxes == $('input.address_checkbox').length) {
+                $("#address_check_all").prop("checked", true);
+                $("#address_check_all").val(1);
+            };
+            if (countCheckedCheckboxes < $('input.address_checkbox').length) {
+                $("#address_check_all").prop("checked", false);
+                $("#address_check_all").val(0);
+            };
+        });
+    });
     // blcok role
     $("#role_check_all").on("click", function(){
         if (!$(this).prop("checked")) {

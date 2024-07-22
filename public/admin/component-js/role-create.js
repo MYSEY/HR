@@ -392,10 +392,9 @@ var dataPermission = function () {
    
     //block motor rentals 
     let motor_rentals_checkbox = $('.motor_rentals_checkbox').filter(':checked').length;
-    let generate_pay_motor_rentals_checkbox = $('.generate_pay_motor_rentals_checkbox').filter(':checked').length;
     let pay_motor_rentals_checkbox = $('.pay_motor_rentals_checkbox').filter(':checked').length;
     let motor_rental_check_all = $('#motor_rental_check_all').filter(':checked').length;
-    if (motor_rental_check_all || motor_rentals_checkbox || pay_motor_rentals_checkbox || generate_pay_motor_rentals_checkbox) {
+    if (motor_rental_check_all || motor_rentals_checkbox || pay_motor_rentals_checkbox) {
         data.push({
             name: "Motor Rentals",
             permission: [
@@ -425,26 +424,6 @@ var dataPermission = function () {
                     "is_delete": $("#motor_rental_delete").val(),
                     "is_print": $("#motor_rental_print").val(),
                     "is_export": $("#motor_rental_export").val(),
-                },
-            ]
-        })
-    }
-    if (generate_pay_motor_rentals_checkbox) {
-        data.push({
-            name: "generate_pay_motor",
-            permission: [
-                {
-                    "name":"lang.generate_pay_motor",
-                    "sub_menu_id":"5",
-                    "menu_id":"m5-s3",
-                    "url":"motor-rentel/pay-review",
-                    "is_view": $("#generate_pay_motor_rental_view").val(),
-                    "is_create": $("#generate_pay_motor_rental_add").val(),
-                    "is_approve": $("#generate_pay_motor_rental_approve").val(),
-                    "is_update": $("#generate_pay_motor_rental_edit").val(),
-                    "is_delete": $("#generate_pay_motor_rental_delete").val(),
-                    "is_print": $("#generate_pay_motor_rental_print").val(),
-                    "is_export": $("#generate_pay_motor_rental_export").val(),
                 },
             ]
         })
@@ -1046,6 +1025,95 @@ var dataPermission = function () {
         })
     }
    
+    // block address
+    let address_check = $('.address_checkbox').filter(':checked').length;
+    let province_checkbox = $('.province_checkbox').filter(':checked').length;
+    let district_checkbox = $('.district_checkbox').filter(':checked').length;
+    let commune_checkbox = $('.commune_checkbox').filter(':checked').length;
+    let village_checkbox = $('.village_checkbox').filter(':checked').length;
+
+    if (address_check) {
+        data.push({
+            name: "address",
+            permission: [
+                {
+                    "menu_id":"11",
+                    "icon":"la la-map-pin",
+                    "name":"lang.address",
+                    "is_all": $("#address_check_all").val(),
+                },
+            ]
+        });
+    }
+    if (province_checkbox) {
+        data.push({
+            name: "Province",
+            permission: [
+                {
+                    "name":"lang.province",
+                    "sub_menu_id":"11",
+                    "menu_id":"m11-s1",
+                    "url":"province",
+                    "is_view": $("#province_check_view").val(),
+                    "is_create": $("#province_check_add").val(),
+                    "is_update": $("#province_check_edit").val(),
+                    "is_import": $("#province_check_import").val(),
+                },
+            ]
+        })
+    }
+    if (district_checkbox) {
+        data.push({
+            name: "District",
+            permission: [
+                {
+                    "name":"lang.districts",
+                    "sub_menu_id":"11",
+                    "menu_id":"m11-s2",
+                    "url":"district",
+                    "is_view": $("#district_check_view").val(),
+                    "is_create": $("#district_check_add").val(),
+                    "is_update": $("#district_check_edit").val(),
+                    "is_import": $("#district_check_import").val(),
+                },
+            ]
+        })
+    }
+    if (commune_checkbox) {
+        data.push({
+            name: "Commune",
+            permission: [
+                {
+                    "name":"lang.commune",
+                    "sub_menu_id":"11",
+                    "menu_id":"m11-s2",
+                    "url":"commune",
+                    "is_view": $("#commune_check_view").val(),
+                    "is_create": $("#commune_check_add").val(),
+                    "is_update": $("#commune_check_edit").val(),
+                    "is_import": $("#commune_check_import").val(),
+                },
+            ]
+        })
+    }
+    if (village_checkbox) {
+        data.push({
+            name: "Village",
+            permission: [
+                {
+                    "name":"lang.village",
+                    "sub_menu_id":"11",
+                    "menu_id":"m11-s2",
+                    "url":"village",
+                    "is_view": $("#village_check_view").val(),
+                    "is_create": $("#village_check_add").val(),
+                    "is_update": $("#village_check_edit").val(),
+                    "is_import": $("#village_check_import").val(),
+                },
+            ]
+        })
+    }
+
     // block roles
     let role_checkbox = $('.role_checkbox').filter(':checked').length;
     if (role_checkbox) {

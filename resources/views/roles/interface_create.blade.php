@@ -1290,8 +1290,8 @@
                     </div>
                 </div>
                 <hr>
-                 {{-- block Setting --}}
-                 <div class="row">
+                {{-- block Setting --}}
+                <div class="row">
                     <div class="col-md-2">
                         <label style="font-weight: bold;">@lang('lang.setting')</label>
                     </div>
@@ -1416,6 +1416,106 @@
                     </div>
                 </div>
                 <hr>
+
+                {{-- block address --}}
+                <div class="row">
+                    <div class="col-md-2">
+                        <label style="font-weight: bold;">@lang('lang.address')</label>
+                    </div>
+                    <div class="col-md-10">
+                        <label class="container-checkbox">@lang('lang.all')
+                            <input type="checkbox" id="address_check_all" name="address_check_all"> <span class="checkmark"></span>
+                        </label>
+                    </div>
+
+                    <div class="col-md-12">
+                        <div class="form-group row">
+                            {{-- block province --}}
+                            <div class="col-md-2">
+                                <label class="container-checkbox">@lang('lang.province')
+                                    <input type="checkbox" class="address_checkbox" id="province" name="province"> <span class="checkmark"></span>
+                                </label>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="container-checkbox">@lang('lang.view')
+                                    <input type="checkbox" class="address_checkbox province_checkbox" id="province_check_view" name="province_check_view"> <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.add')
+                                    <input type="checkbox" class="address_checkbox province_checkbox" id="province_check_add" name="province_check_add"> <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.edit')  
+                                    <input type="checkbox" class="address_checkbox province_checkbox" id="province_check_edit" name="province_check_edit"> <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.import')
+                                    <input type="checkbox" class="address_checkbox province_checkbox" id="province_check_import" name="province_check_import" > <span class="checkmark"></span>
+                                </label>
+                            </div>
+                            {{-- block district --}}
+                            <div class="col-md-2">
+                                <label class="container-checkbox">@lang('lang.districts')
+                                    <input type="checkbox" class="address_checkbox" id="district" name="district"> <span class="checkmark"></span>
+                                </label>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="container-checkbox">@lang('lang.view')
+                                    <input type="checkbox" class="address_checkbox district_checkbox" id="district_check_view" name="district_check_view"> <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.add')
+                                    <input type="checkbox" class="address_checkbox district_checkbox" id="district_check_add" name="district_check_add"> <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.edit')  
+                                    <input type="checkbox" class="address_checkbox district_checkbox" id="district_check_edit" name="district_check_edit"> <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.import')
+                                    <input type="checkbox" class="address_checkbox district_checkbox" id="district_check_import" name="district_check_import" > <span class="checkmark"></span>
+                                </label>
+                            </div>
+                            {{-- block commune --}}
+                            <div class="col-md-2">
+                                <label class="container-checkbox">@lang('lang.commune')
+                                    <input type="checkbox" class="address_checkbox" id="commune" name="commune"> <span class="checkmark"></span>
+                                </label>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="container-checkbox">@lang('lang.view')
+                                    <input type="checkbox" class="address_checkbox commune_checkbox" id="commune_check_view" name="commune_check_view"> <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.add')
+                                    <input type="checkbox" class="address_checkbox commune_checkbox" id="commune_check_add" name="commune_check_add"> <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.edit')  
+                                    <input type="checkbox" class="address_checkbox commune_checkbox" id="commune_check_edit" name="commune_check_edit"> <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.import')
+                                    <input type="checkbox" class="address_checkbox commune_checkbox" id="commune_check_import" name="commune_check_import" > <span class="checkmark"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            {{-- block village --}}
+                            <div class="col-md-2">
+                                <label class="container-checkbox">@lang('lang.village')
+                                    <input type="checkbox" class="address_checkbox" id="village" name="village"> <span class="checkmark"></span>
+                                </label>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="container-checkbox">@lang('lang.view')
+                                    <input type="checkbox" class="address_checkbox village_checkbox" id="village_check_view" name="village_check_view"> <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.add')
+                                    <input type="checkbox" class="address_checkbox village_checkbox" id="village_check_add" name="village_check_add"> <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.edit')  
+                                    <input type="checkbox" class="address_checkbox village_checkbox" id="village_check_edit" name="village_check_edit"> <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.import')
+                                    <input type="checkbox" class="address_checkbox village_checkbox" id="village_check_import" name="village_check_import" > <span class="checkmark"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr>
                 {{-- block Role --}}
                 <div class="row">
                     <div class="col-md-2">
@@ -1426,7 +1526,7 @@
                             <input type="checkbox" id="role_check_all" name="role_check_all"> <span class="checkmark"></span>
                         </label>
                     </div>
-                     {{-- block Permission --}}
+                    {{-- block Permission --}}
                    <div class="col-md-12">
                         <div class="form-group row">
                             <div class="col-md-2">

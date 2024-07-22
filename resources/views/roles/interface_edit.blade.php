@@ -2096,6 +2096,157 @@
                     </div>
                 </div>
                 <hr>
+                {{-- block address --}}
+                <div class="row">
+                    <div class="col-md-2">
+                        <label style="font-weight: bold;">@lang('lang.address')</label>
+                    </div>
+                    <div class="col-md-10">
+                        <label class="container-checkbox">@lang('lang.all')
+                            <input type="checkbox" id="address_check_all" name="address_check_all"
+                            {{SetCheckbox($arrayPermissions,"lang.address","is_all")->checkbox}}
+                            value="{{SetCheckbox($arrayPermissions,"lang.address","is_all")->value}}"
+                            > <span class="checkmark"></span>
+                        </label>
+                    </div>
+
+                    <div class="col-md-12">
+                        <div class="form-group row">
+                            {{-- block province --}}
+                            <div class="col-md-2">
+                                <label class="container-checkbox">@lang('lang.province')
+                                    <input type="checkbox" class="address_checkbox" id="province" name="province"> <span class="checkmark"></span>
+                                </label>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="container-checkbox">@lang('lang.view')
+                                    <input type="checkbox" class="address_checkbox province_checkbox" id="province_check_view" name="province_check_view"
+                                    {{SetCheckbox($arrayPermissions,"lang.province","is_view")->checkbox}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.province","is_view")->value}}"
+                                    > <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.add')
+                                    <input type="checkbox" class="address_checkbox province_checkbox" id="province_check_add" name="province_check_add"
+                                    {{SetCheckbox($arrayPermissions,"lang.province","is_create")->checkbox}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.province","is_view")->value}}"
+                                    > <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.edit')  
+                                    <input type="checkbox" class="address_checkbox province_checkbox" id="province_check_edit" name="province_check_edit"
+                                    {{SetCheckbox($arrayPermissions,"lang.province","is_update")->checkbox}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.province","is_update")->value}}"
+                                    > <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.import')
+                                    <input type="checkbox" class="address_checkbox province_checkbox" id="province_check_import" 
+                                    {{SetCheckbox($arrayPermissions,"lang.province","is_import")->checkbox}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.province","is_import")->value}}"
+                                    > <span class="checkmark"></span>
+                                </label>
+                            </div>
+                            {{-- block district --}}
+                            <div class="col-md-2">
+                                <label class="container-checkbox">@lang('lang.districts')
+                                    <input type="checkbox" class="address_checkbox" id="district" name="district"> <span class="checkmark"></span>
+                                </label>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="container-checkbox">@lang('lang.view')
+                                    <input type="checkbox" class="address_checkbox district_checkbox" id="district_check_view" name="district_check_view"
+                                    {{SetCheckbox($arrayPermissions,"lang.districts","is_view")->checkbox}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.districts","is_view")->value}}"
+                                    > <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.add')
+                                    <input type="checkbox" class="address_checkbox district_checkbox" id="district_check_add" name="district_check_add"
+                                    {{SetCheckbox($arrayPermissions,"lang.districts","is_create")->checkbox}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.districts","is_view")->value}}"
+                                    > <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.edit')  
+                                    <input type="checkbox" class="address_checkbox district_checkbox" id="district_check_edit" name="district_check_edit"
+                                    {{SetCheckbox($arrayPermissions,"lang.districts","is_update")->checkbox}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.districts","is_update")->value}}"
+                                    > <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.import')
+                                    <input type="checkbox" class="address_checkbox district_checkbox" id="district_check_import" name="district_check_import" 
+                                    {{SetCheckbox($arrayPermissions,"lang.districts","is_import")->checkbox}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.districts","is_import")->value}}"
+                                    > <span class="checkmark"></span>
+                                </label>
+                            </div>
+                            {{-- block commune --}}
+                            <div class="col-md-2">
+                                <label class="container-checkbox">@lang('lang.commune')
+                                    <input type="checkbox" class="address_checkbox" id="commune" name="commune"> <span class="checkmark"></span>
+                                </label>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="container-checkbox">@lang('lang.view')
+                                    <input type="checkbox" class="address_checkbox commune_checkbox" id="commune_check_view" name="commune_check_view"
+                                    {{SetCheckbox($arrayPermissions,"lang.commune","is_view")->checkbox}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.commune","is_view")->value}}"
+                                    > <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.add')
+                                    <input type="checkbox" class="address_checkbox commune_checkbox" id="commune_check_add" name="commune_check_add"
+                                    {{SetCheckbox($arrayPermissions,"lang.commune","is_create")->checkbox}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.commune","is_view")->value}}"
+                                    > <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.edit')  
+                                    <input type="checkbox" class="address_checkbox commune_checkbox" id="commune_check_edit" name="commune_check_edit"
+                                    {{SetCheckbox($arrayPermissions,"lang.commune","is_update")->checkbox}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.commune","is_update")->value}}"
+                                    > <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.import')
+                                    <input type="checkbox" class="address_checkbox commune_checkbox" id="commune_check_import" name="commune_check_import" 
+                                    {{SetCheckbox($arrayPermissions,"lang.commune","is_import")->checkbox}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.commune","is_import")->value}}"
+                                    > <span class="checkmark"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            {{-- block village --}}
+                            <div class="col-md-2">
+                                <label class="container-checkbox">@lang('lang.village')
+                                    <input type="checkbox" class="address_checkbox" id="village" name="village"> <span class="checkmark"></span>
+                                </label>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="container-checkbox">@lang('lang.view')
+                                    <input type="checkbox" class="address_checkbox village_checkbox" id="village_check_view" name="village_check_view"
+                                    {{SetCheckbox($arrayPermissions,"lang.village","is_view")->checkbox}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.village","is_view")->value}}"
+                                    > <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.add')
+                                    <input type="checkbox" class="address_checkbox village_checkbox" id="village_check_add" name="village_check_add"
+                                    {{SetCheckbox($arrayPermissions,"lang.village","is_create")->checkbox}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.village","is_view")->value}}"
+                                    > <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.edit')  
+                                    <input type="checkbox" class="address_checkbox village_checkbox" id="village_check_edit" name="village_check_edit"
+                                    {{SetCheckbox($arrayPermissions,"lang.village","is_update")->checkbox}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.village","is_update")->value}}"
+                                    > <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.import')
+                                    <input type="checkbox" class="address_checkbox village_checkbox" id="village_check_import" name="village_check_import" 
+                                    {{SetCheckbox($arrayPermissions,"lang.village","is_import")->checkbox}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.village","is_import")->value}}"
+                                    > <span class="checkmark"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+
                 {{-- block Role --}}
                 <div class="row">
                     <div class="col-md-2">
@@ -2109,7 +2260,7 @@
                             > <span class="checkmark"></span>
                         </label>
                     </div>
-                     {{-- block Permission --}}
+                    {{-- block Permission --}}
                    <div class="col-md-12">
                         <div class="form-group row">
                             <div class="col-md-2">
