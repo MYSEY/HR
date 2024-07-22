@@ -17,9 +17,9 @@
                     </ul>
                 </div>
                 <div class="col-auto float-end ms-auto">
-                    @if (permissionAccess("m6-s1","is_create")->value == "1")
+                    {{-- @if (permissionAccess("m6-s1","is_create")->value == "1")
                         <a href="#" class="btn add-btn" data-bs-toggle="modal" data-bs-target="#add_trainer"><i class="fa fa-plus"></i> @lang('lang.add_new')</a>
-                    @endif
+                    @endif --}}
                     @if (permissionAccess("m4-s2","is_import")->value == "1")
                         <a href="#" class="btn add-btn me-2" data-toggle="modal" id="importProvince"><i class="fa fa-plus"></i>@lang('lang.import')</a>
                     @endif
