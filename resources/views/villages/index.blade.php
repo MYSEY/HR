@@ -10,10 +10,10 @@
         <div class="page-header">
             <div class="row align-items-center">
                 <div class="col">
-                    <h3 class="page-title">@lang('lang.commune')</h3>
+                    <h3 class="page-title">@lang('lang.village')</h3>
                     <ul class="breadcrumb">
                         <li class="breadcrumb-item"><a href="{{url('/dashboad/employee')}}">@lang('lang.dashboard')</a></li>
-                        <li class="breadcrumb-item active">@lang('lang.commune')</li>
+                        <li class="breadcrumb-item active">@lang('lang.village')</li>
                     </ul>
                 </div>
                 <div class="col-auto float-end ms-auto">
@@ -21,7 +21,7 @@
                         <a href="#" class="btn add-btn" data-bs-toggle="modal" data-bs-target="#add_trainer"><i class="fa fa-plus"></i> @lang('lang.add_new')</a>
                     @endif
                     @if (permissionAccess("m4-s2","is_import")->value == "1")
-                        <a href="#" class="btn add-btn me-2" data-toggle="modal" id="importCommune"><i class="fa fa-plus"></i>@lang('lang.import')</a>
+                        <a href="#" class="btn add-btn me-2" data-toggle="modal" id="importVillage"><i class="fa fa-plus"></i>@lang('lang.import')</a>
                     @endif
                 </div>
             </div>
@@ -40,15 +40,16 @@
                                                 <tr>
                                                     <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="#: activate to sort column descending" style="width: 30px;">#</th>
                                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Type: activate to sort column ascending" style="width: 772.237px;">@lang('lang.code')</th>
-                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Company Name: activate to sort column ascending" style="width: 772.237px;">@lang('lang.khum_name_km')</th>
-                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Name (KH): activate to sort column ascending" style="width: 772.237px;">@lang('lang.khum_name_latin')</th>
-                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Name (EN): activate to sort column ascending" style="width: 772.237px;">@lang('lang.khum_name_en')</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Company Name: activate to sort column ascending" style="width: 772.237px;">@lang('lang.phum_name_km')</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Name (KH): activate to sort column ascending" style="width: 772.237px;">@lang('lang.phum_name_latin')</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Name (EN): activate to sort column ascending" style="width: 772.237px;">@lang('lang.phum_name_en')</th>
                                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Phone Numer: activate to sort column ascending" style="width: 772.237px;">@lang('lang.name_kh')</th>
                                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending" style="width: 772.237px;">@lang('lang.name_latin')</th>
                                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Remark: activate to sort column ascending" style="width: 772.237px;">@lang('lang.name_en')</th>
                                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Status: activate to sort column ascending" style="width: 772.237px;">@lang('lang.full_name_km')</th>
                                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Create at: activate to sort column ascending" style="width: 772.237px;">@lang('lang.full_name_latin')</th>
                                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Create at: activate to sort column ascending" style="width: 772.237px;">@lang('lang.full_name_en')</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Create at: activate to sort column ascending" style="width: 772.237px;">@lang('lang.commune')</th>
                                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Create at: activate to sort column ascending" style="width: 772.237px;">@lang('lang.districts')</th>
                                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Create at: activate to sort column ascending" style="width: 772.237px;">@lang('lang.province')</th>
                                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Create at: activate to sort column ascending" style="width: 772.237px;">@lang('lang.address_km')</th>
@@ -63,15 +64,16 @@
                                                         <tr class="odd">
                                                             <td class="sorting_1">{{++$key}}</td>
                                                             <td>{{$item->code}}</td>
-                                                            <td>{{$item->khum_name_km}}</td>
-                                                            <td>{{$item->khum_name_latin}}</td>
-                                                            <td>{{$item->khum_name_en}}</td>
+                                                            <td>{{$item->phum_name_km}}</td>
+                                                            <td>{{$item->phum_name_latin}}</td>
+                                                            <td>{{$item->phum_name_en}}</td>
                                                             <td>{{$item->name_km}}</td>
                                                             <td>{{$item->name_latin}}</td>
                                                             <td>{{$item->name_en}}</td>
                                                             <td>{{$item->full_name_km}}</td>
                                                             <td>{{$item->full_name_latin}}</td>
                                                             <td>{{$item->full_name_en}}</td>
+                                                            <td>{{$item->conmmune_name}}</td>
                                                             <td>{{$item->districts_name_en}}</td>
                                                             <td>{{$item->province_name_en}}</td>
                                                             <td>{{$item->address_km}}</td>
@@ -108,16 +110,16 @@
             </div>
         @endif
     </div>
-    @include('conmmune.import')
+    @include('villages.import')
 @endsection
 @include('includs.script')
 
 <script>
     $(function(){
-        $("#importCommune").on("click", function() {
+        $("#importVillage").on("click", function() {
             $(".thanLess").hide();
             $("#thanLess").text("");
-            $('#importCommuneModal').modal('show');
+            $('#importVillageModal').modal('show');
         });
     });
 </script>

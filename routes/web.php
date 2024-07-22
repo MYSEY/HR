@@ -32,6 +32,7 @@ use App\Http\Controllers\Admins\TrainingTypeController;
 use App\Http\Controllers\Admins\FringeBenefitController;
 use App\Http\Controllers\Admins\PayrollReportController;
 use App\Http\Controllers\Admins\LeavesEmployeeController;
+use App\Http\Controllers\Admins\VillageAddressController;
 use App\Http\Controllers\Admins\CandidateResumeController;
 use App\Http\Controllers\Admins\ConmmuneAddressController;
 use App\Http\Controllers\Admins\EmployeePayrollController;
@@ -430,5 +431,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('import/district', [DistrictsAddressController::class,'ImportDistrict']);
     Route::Resource('commune', ConmmuneAddressController::class);
     Route::post('import/commune', [ConmmuneAddressController::class,'ImportCommune']);
+    Route::Resource('village', VillageAddressController::class);
+    Route::post('import/village', [VillageAddressController::class,'ImportVillage']);
 });
 Route::get('lang/{locale}', [LanguageController::class, "lang"]);

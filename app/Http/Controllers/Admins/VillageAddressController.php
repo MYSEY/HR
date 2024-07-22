@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Admins;
 
-use App\Models\Conmmunes;
+use App\Models\Villages;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 
-class ConmmuneAddressController extends Controller
+class VillageAddressController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,15 +17,17 @@ class ConmmuneAddressController extends Controller
      */
     public function index()
     {
-        $data = DB::table('conmmunes')
-        ->leftJoin('provinces','provinces.code','=','conmmunes.province_id')
-        ->leftJoin('districts','districts.code','=','conmmunes.district_id')
+        $data = DB::table('villages')
+        ->leftJoin('provinces','villages.province_id','=','provinces.code')
+        ->leftJoin('districts','villages.district_id','=','districts.code')
+        ->leftJoin('conmmunes','villages.commune_id','=','conmmunes.code')
         ->select(
-            'conmmunes.*',
+            'villages.*',
             'provinces.full_name_en as province_name_en',
             'districts.full_name_en as districts_name_en',
+            'conmmunes.full_name_en as conmmune_name',
         )->paginate(15);
-        return view('conmmune.index',compact('data'));
+        return view('villages.index',compact('data'));
     }
 
     /**
@@ -93,34 +95,36 @@ class ConmmuneAddressController extends Controller
     {
         //
     }
-    public function ImportCommune(Request $request){
+
+    public function ImportVillage(Request $request){
         $file = $request->file;
         $filesize = filesize($file);
         $extension = $request->file->extension();
         $spreadsheet = IOFactory::load($file);
-        $Commune =  $spreadsheet->getSheetByName('Commune')->toArray();
+        $Village =  $spreadsheet->getSheetByName('Village')->toArray();
         if ($extension == "xlsx" || $extension == "xls" || $extension == "csv") {
             $i = 0;
             $dataArray = [];
-            foreach ($Commune as $item) {
+            foreach ($Village as $item) {
                 $i++;
                 if ($i != 1) {
-                    Conmmunes::firstOrCreate([
+                    Villages::firstOrCreate([
                         'code'=> $item[0],
                         'name_km'=> $item[1],
                         'name_en'=> $item[2],
                         'name_latin'=> $item[2],
-                        'khum_name_km'=> 'ឃុំ',
-                        'khum_name_latin'=> 'Khum',
-                        'khum_name_en'=> 'Commune',
-                        'full_name_km'=> 'ឃុំ'.''.$item[1],
-                        'full_name_latin'=> 'Khum'.' '.$item[2],
-                        'full_name_en'=> $item[2].' '.'Commune',
-                        'district_id'=> $item[3],
-                        'province_id'=> $item[6],
-                        'address_km'=> 'ឃុំ'.$item[1].'ស្រុក'.$item[4].'ខេត្ដ'.$item[7],
-                        'address_latin'=> 'Khum'.' '.$item[2].', '.'Srok'.' '.$item[5].' '.'Khaet'.' '.$item[8],
-                        'address_en'=> $item[2].' '.'Commune'.', '.$item[5].' '.'District'.', '.$item[8].' '.'Conmmunes',
+                        'phum_name_km'=> 'ភូមិ',
+                        'phum_name_latin'=> 'Phum',
+                        'phum_name_en'=> 'Village',
+                        'full_name_km'=> 'ភូមិ'.$item[1],
+                        'full_name_latin'=> 'Phum'.' '.$item[2],
+                        'full_name_en'=> $item[2].' '.'Village',
+                        'commune_id'=> $item[3],
+                        'district_id'=> $item[6],
+                        'province_id'=> $item[9],
+                        'address_km'=> 'ភូមិ'.$item[1].'ឃុំ'.$item[4].'ស្រុក'.$item[7].'ខេត្ដ'.$item[10],
+                        'address_latin'=> 'Phum'.' '.$item[2].', '.'Khum'.' '.$item[5].', '.'srok'.' '.$item[8].', '.'Khaet'.' '.$item[11],
+                        'address_en'=> $item[2].' '.'Village'.', '.$item[5].' '.'Commune'.', '.$item[8].' '.'District'.', '.$item[11].' '.'Villages',
                     ]);
                 }
             }
