@@ -604,6 +604,7 @@ class EmployeePayrollController extends Controller
                     //function Seniority pay
                     $seniorityPayableTax = 0;
                     $taxExemptionSalary = 0;
+                    $totaltaxableSalary = 0;
                     if ($item->emp_status == 2) {
                         $currentDate = Carbon::createFromDate($request->payment_date)->format('m');
                         $PaymentOfMonth = Carbon::parse($request->payment_date)->format('M-Y');
@@ -633,7 +634,6 @@ class EmployeePayrollController extends Controller
                             } else {
                                 $taxExemptionSalary = $totalSalaryReceive;
                             }
-    
                             if ($totalSalaryReceive > $totalGrossInclucTax) {
                                 $totaltaxableSalary = $totalSalaryReceive - $totalGrossInclucTax;
                             } else {
