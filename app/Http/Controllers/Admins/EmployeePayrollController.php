@@ -477,7 +477,14 @@ class EmployeePayrollController extends Controller
                     $dataDateOfBirth = [];
                     $dataChildren = ChildrenInfor::where('employee_id',$item->id)->get();
                     foreach ($dataChildren as $value) {
-                        $yearsOfChild = Carbon::parse($value->date_of_birth)->age;
+                        // $yearsOfChild = Carbon::parse($value->date_of_birth)->age;
+                        $birth_date = $value->date_of_birth;
+                        $current_date = date('Y-m-d');
+                        $birth_timestamp = strtotime($birth_date);
+                        $current_timestamp = strtotime($current_date);
+                        $diff_seconds = $current_timestamp - $birth_timestamp;
+                        $age_years = $diff_seconds / (60 * 60 * 24 * 365.25);
+                        $yearsOfChild = round($age_years);
                         if ($yearsOfChild <= 18) {
                             $dataDateOfBirth[] = $value;
                         }
