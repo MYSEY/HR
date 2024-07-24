@@ -857,8 +857,9 @@ class UserController extends Controller
                                     $dataUpdateEmployee['spouse']                   = $spouse;
                                     $dataUpdateEmployee['identity_type']            = $item[10];
                                     $dataUpdateEmployee['identity_number']          = $item[11];
-                                    $dataUpdateEmployee['issue_date']               = $item[12] ? Carbon::createFromDate($item[32])->format('Y-m-d') : null;
-                                    $dataUpdateEmployee['issue_expired_date']       = $item[13] ? Carbon::createFromDate($item[32])->format('Y-m-d') : null;
+                                    $dataUpdateEmployee['issue_date']               = $item[12] ? Carbon::createFromDate($item[12])->format('Y-m-d') : null;
+                                    $dataUpdateEmployee['issue_expired_date']       = $item[13] ? Carbon::createFromDate($item[13])->format('Y-m-d') : null;
+                                    
                                     /** block Information NSSF */
                                     $dataUpdateEmployee['id_number_nssf']           = $item[14];
                                     $dataUpdateEmployee['type_of_employees_nssf']   = $type_of_employees_nssf;
