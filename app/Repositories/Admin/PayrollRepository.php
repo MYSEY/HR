@@ -38,7 +38,29 @@ class PayrollRepository extends BaseRepository
         $Monthly= Carbon::now()->format('m');
         $yearLy = Carbon::now()->format('Y');
         if (Auth::user()->RolePermission == 'Employee') {
-            return Payroll::with("users")->where('employee_id',Auth::user()->id)->orderBy('payment_date','DESC')->get();
+            return DB::table('payrolls')
+            ->leftJoin('users','payrolls.employee_id','=','users.id')
+            ->leftJoin('positions','positions.id','=','users.position_id')
+            ->leftJoin('branchs','branchs.id','=','users.branch_id')
+            ->leftJoin('departments','departments.id','=','users.department_id')
+            ->select(
+                'payrolls.*',
+                'users.profile',
+                'users.number_employee',
+                'users.branch_id',
+                'users.department_id',
+                'users.branch_id',
+                'users.employee_name_en',
+                'users.employee_name_kh',
+                'users.date_of_commencement',
+                'users.branch_id',
+                'positions.name_khmer as position_name_khmer',
+                'positions.name_english as position_name_english',
+                'branchs.branch_name_kh',
+                'branchs.branch_name_en',
+                'departments.name_khmer as depart_name_kh',
+                'departments.name_english as depart_name_en',
+            )->where('payrolls.employee_id',Auth::user()->id)->get();
         } else {
             return DB::table('payrolls')
             ->leftJoin('users','payrolls.employee_id','=','users.id')

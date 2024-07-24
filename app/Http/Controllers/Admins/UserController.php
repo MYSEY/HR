@@ -836,7 +836,8 @@ class UserController extends Controller
                     foreach ($employees as $item) {
                         $i++;
                         if ($i > 2) {
-                            $dataUpdateEmployee = User::where('number_employee',$item[0])->first();
+                            
+                            $dataUpdateEmployee = user::where('number_employee',$item[0])->first();
                             $spouse = $this->str_replace($item[9]) == "yes" ? 1 : 0;
                             $type_of_employees_nssf = $this->str_replace($item[15]) == "residents" ? 1 : 2;
                             $spouse_nssf = $this->str_replace($item[16]) == "yes" ? 1 : 2;
@@ -856,8 +857,8 @@ class UserController extends Controller
                                     $dataUpdateEmployee['spouse']                   = $spouse;
                                     $dataUpdateEmployee['identity_type']            = $item[10];
                                     $dataUpdateEmployee['identity_number']          = $item[11];
-                                    $dataUpdateEmployee['issue_date']               = $item[12] ? Carbon::createFromDate($item[12])->format('Y-m-d') : null;
-                                    $dataUpdateEmployee['issue_expired_date']       = $item[13] ? Carbon::createFromDate($item[13])->format('Y-m-d') : null;
+                                    $dataUpdateEmployee['issue_date']               = $item[12] ? Carbon::createFromDate($item[32])->format('Y-m-d') : null;
+                                    $dataUpdateEmployee['issue_expired_date']       = $item[13] ? Carbon::createFromDate($item[32])->format('Y-m-d') : null;
                                     /** block Information NSSF */
                                     $dataUpdateEmployee['id_number_nssf']           = $item[14];
                                     $dataUpdateEmployee['type_of_employees_nssf']   = $type_of_employees_nssf;
@@ -886,7 +887,6 @@ class UserController extends Controller
                                     $dataUpdateEmployee['updated_by']            = Auth::user()->id;
                                     $dataUpdateEmployee['status' ]               = 'Active';
                                     $dataUpdateEmployee['p_status']              = '0';
-                                    // dd($dataUpdateEmployee);
                                     $dataUpdateEmployee->save();
                             }
                         }

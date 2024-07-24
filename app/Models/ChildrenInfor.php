@@ -45,7 +45,7 @@ class ChildrenInfor extends Model
         $years = Carbon::now()->diffInYears($this->date_of_birth);
         $month = Carbon::now()->diffInMonths($this->date_of_birth);
         if ($this->date_of_birth) {
-            $yearLang = Helper::getLang() == 'en' ? 'Year' : 'ឆ្នាំ';
+            $yearLang = Helper::getLang() == 'en' ? 'Year Old' : 'ឆ្នាំ';
             return $years.' '.$yearLang;
         }
     }
