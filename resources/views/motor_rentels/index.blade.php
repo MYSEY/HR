@@ -168,9 +168,9 @@
                                                             <td>{{ $item->end_date ? \Carbon\Carbon::parse($item->end_date)->format('d-M-Y') : '' }}</td>
                                                             <td>{{ $item->total_gasoline }}</td>
                                                             <td>{{ $item->total_work_day }}</td>
-                                                            <td>៛ {{ number_format($item->price_engine_oil) }}</td>
-                                                            <td>៛ {{ number_format($item->price_motor_rentel)}}</td>
-                                                            <td>៛ {{ $item->price_taplab_rentel ? number_format($item->price_taplab_rentel) : "0000"}}</td>
+                                                            <td>{{ round($item->price_engine_oil,2)}} $</td>
+                                                            <td>{{ round($item->price_motor_rentel, 2)}} $</td>
+                                                            <td>{{ $item->price_taplab_rentel ? round($item->price_taplab_rentel,2) : "0.00"}} $</td>
                                                             <td>
                                                                 <div class="dropdown action-label">
                                                                     @if (permissionAccess("m5-s1","is_update")->value == "1")
@@ -303,16 +303,16 @@
             // block Price motor rentel
             let newYearExpireted = 0;
             if (ageMotorrentel >= 0 && ageMotorrentel <= 5) {
-                $("#price_motor_rentel").val(120000);
-                $('#e_price_motor_rentel').val(120000);
+                $("#price_motor_rentel").val(30);
+                $('#e_price_motor_rentel').val(30);
                 newYearExpireted = 5
             } else if (ageMotorrentel > 5 && ageMotorrentel <= 7) {
-                $("#price_motor_rentel").val(100000);
-                $('#e_price_motor_rentel').val(100000);
+                $("#price_motor_rentel").val(25);
+                $('#e_price_motor_rentel').val(25);
                 newYearExpireted = 7
             } else if (ageMotorrentel > 7 && ageMotorrentel <= 10) {
-                $("#price_motor_rentel").val(80000);
-                $('#e_price_motor_rentel').val(80000);
+                $("#price_motor_rentel").val(20);
+                $('#e_price_motor_rentel').val(20);
                 newYearExpireted = 10;
             } else {
                 $("#price_motor_rentel").val(0);

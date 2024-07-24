@@ -57,6 +57,7 @@ class MotorRentalRepository extends BaseRepository
                 'users.branch_id',
                 'users.department_id',
             )
+            ->where("motor_rental_details.status", "approve")
             ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
                 if ($RolePermission == 'Employee') {
                     $query->where('users.id',Auth::user()->id);

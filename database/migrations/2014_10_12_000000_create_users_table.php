@@ -54,7 +54,7 @@ class CreateUsersTable extends Migration
             $table->longText('guarantee_letter')->nullable();
             $table->longText('employment_book')->nullable();
             $table->string('identity_type')->nullable();
-            $table->integer('identity_number')->nullable();
+            $table->string('identity_number')->nullable();
             $table->date('issue_date')->nullable();
             $table->date('issue_expired_date')->nullable();
             $table->boolean('type_of_employees_nssf')->nullable();

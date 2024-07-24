@@ -122,7 +122,7 @@
                             <div class="form-group">
                                 <label class="">@lang('lang.price_engine_oil')<span class="text-danger">*</span></label>
                                 <div class="input-group">
-                                    <span class="input-group-text">៛</span>
+                                    <span class="input-group-text">$</span>
                                     <input class="form-control emp_required m_clear" type="number" id="price_engine_oil" required name="price_engine_oil" value="{{old('price_engine_oil')}}">
                                 </div>
                             </div>
@@ -131,7 +131,7 @@
                             <div class="form-group">
                                 <label class="">@lang('lang.price_motor_rentel')<span class="text-danger">*</span></label>
                                 <div class="input-group">
-                                    <span class="input-group-text">៛</span>
+                                    <span class="input-group-text">$</span>
                                     <input class="form-control emp_required m_clear" type="number" id="price_motor_rentel" name="price_motor_rentel" value="{{old('price_motor_rentel')}}" required>
                                 </div> 
                             </div>
@@ -153,7 +153,7 @@
                             <div class="form-group">
                                 <label>@lang('lang.tablet_price')</label>
                                 <div class="input-group">
-                                    <span class="input-group-text">៛</span>
+                                    <span class="input-group-text">$</span>
                                     <input class="form-control m_clear" type="number" name="price_taplab_rentel" id="price_taplab_rentel" value="{{old('price_taplab_rentel')}}">
                                 </div>
                             </div>

@@ -203,7 +203,7 @@
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <label class="">@lang('lang.agency_phone')</label>
-                                <input class="form-control" type="number" id="e_agency_phone_number" name="agency_phone_number" value="{{old('agency_phone_number')}}">
+                                <input class="form-control" type="text" id="e_agency_phone_number" name="agency_phone_number" value="{{old('agency_phone_number')}}">
                             </div>
                         </div>
                         <div class="col-sm-4">
@@ -396,7 +396,7 @@
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <label class="">@lang('lang.id_number_nssf') </label>
-                                <input class="form-control" type="number" id="e_id_number_nssf" name="id_number_nssf" value="{{old('id_number_nssf')}}">
+                                <input class="form-control" type="text" id="e_id_number_nssf" name="id_number_nssf" value="{{old('id_number_nssf')}}">
                             </div>
                         </div>
                         <div class="col-sm-4">

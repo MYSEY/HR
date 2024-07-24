@@ -214,10 +214,14 @@
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                     rowspan="1" colspan="1"
                                                     aria-label="Amount: activate to sort column ascending"
-                                                    style="width: 51.475px;">@lang('lang.amount')</th>
+                                                    style="width: 51.475px;">@lang('lang.amount') (@lang('lang.riel'))</th>
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                     rowspan="1" colspan="1"
                                                     aria-label="Amount: activate to sort column ascending"
+                                                    style="width: 51.475px;">@lang('lang.amount') (@lang('lang.usd'))</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                    rowspan="1" colspan="1"
+                                                    aria-label="last_working_day: activate to sort column ascending"
                                                     style="width: 51.475px;">@lang('lang.last_working_day')</th>
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                     rowspan="1" colspan="1"
@@ -257,16 +261,22 @@
                                                         <td class="total_gasoline">{{ $item->total_gasoline }} (L)</td>
                                                         <td class="total_work_day">{{ $item->total_work_day }}</td>
 
+                                                        @php
+                                                            $total_riels = ($item->total_gasoline * $item->total_work_day * $item->gasoline_price_per_liter);
+                                                            $amount_riels = round($total_riels,-2);
+                                                            $totalAmount = ($item->amount_price_engine_oil + ($item->amount_price_motor_rentel - ($item->amount_price_motor_rentel * $item->tax_rate) / 100) + ($item->amount_price_taplab_rentel - ($item->amount_price_taplab_rentel * $item->tax_rate) / 100 ));
+                                                        @endphp
+
                                                         <td>{{ $item->total_gasoline * $item->total_work_day }}</td>
-                                                        <td>{{ number_format($item->total_gasoline * $item->total_work_day * $item->gasoline_price_per_liter) }}៛
-                                                        </td>
-                                                        <td class="price_engine_oil">{{ number_format($item->amount_price_engine_oil) }} ៛</td>
-                                                        <td class="price_motor_rentel">{{ number_format($item->amount_price_motor_rentel) }} ៛</td>
+                                                        <td>{{ number_format($amount_riels) }} ៛</td>
+                                                        <td class="price_engine_oil">{{ number_format($item->amount_price_engine_oil) }} $</td>
+                                                        <td class="price_motor_rentel">{{ number_format($item->amount_price_motor_rentel) }} $</td>
                                                         <td >{{ $item->taplab_rentel }}</td>
-                                                        <td >{{ $item->amount_price_taplab_rentel ? number_format($item->amount_price_taplab_rentel) : "0000" }} ៛</td>
+                                                        <td >{{ $item->amount_price_taplab_rentel ? number_format($item->amount_price_taplab_rentel) : "0" }} $</td>
                                                         <td class="tax_rate">{{ $item->tax_rate }}%</td>
-                                                        <td>{{ ($item->total_gasoline * $item->total_work_day * $item->gasoline_price_per_liter) + ($item->amount_price_engine_oil + ($item->amount_price_motor_rentel - ($item->amount_price_motor_rentel * $item->tax_rate) / 100) + ($item->amount_price_taplab_rentel - ($item->amount_price_taplab_rentel * $item->tax_rate) / 100 ))  }} ៛
-                                                        </td>
+                                                        <td>{{ number_format($amount_riels) }} ៛</td>
+                                                        <td>{{ round($totalAmount,2)}} $</td>
+
                                                         <td><span style="font-size: 13px" class="badge bg-inverse-danger">{{ $item->resigned_date ? \Carbon\Carbon::parse($item->resigned_date)->format('d-M-Y') :'' }}</span></td>
                                                         <td>{{ $item->created_at ? \Carbon\Carbon::parse($item->created_at)->format('d-M-Y') : '' }}</td>
                                                         <td>
@@ -344,6 +354,7 @@
                         let start_date = moment(row.start_date).format('D-MMM-YYYY')
                         let end_date = moment(row.end_date).format('D-MMM-YYYY')
                         let resigned_date = row.resigned_date ? moment(row.resigned_date).format('D-MMM-YYYY') : '';
+                        let amount_usd = (row.amount_price_motor_rentel - (row.amount_price_motor_rentel * row.tax_rate) / 100 ) + (row.amount_price_taplab_rentel - (row.amount_price_taplab_rentel * row.tax_rate) / 100 ) + Number(row.amount_price_engine_oil);
                         let resigned ="";
                         if (row.resigned_date) {
                             resigned = "bg-inverse-danger"
@@ -366,12 +377,13 @@
                                     '<td class="total_work_day">'+( row.total_work_day )+'</td>'+
                                     '<td>'+( row.total_gasoline * row.total_work_day )+'</td>'+
                                     '<td>'+( (row.total_gasoline * row.total_work_day * row.gasoline_price_per_liter))+' ៛</td>'+
-                                    '<td class="price_engine_oil">'+ (Number(row.amount_price_engine_oil) )+' ៛</td>'+
-                                    '<td class="price_motor_rentel">'+ (Number(row.amount_price_motor_rentel))+' ៛</td>'+
+                                    '<td class="price_engine_oil">'+ (Number(row.amount_price_engine_oil) )+' $</td>'+
+                                    '<td class="price_motor_rentel">'+ (Number(row.amount_price_motor_rentel))+' $</td>'+
                                     '<td >'+ ( row.taplab_rentel ? row.taplab_rentel : '' )+'</td>'+
-                                    '<td >'+ ( row.amount_price_taplab_rentel ? Number(row.amount_price_taplab_rentel) : "0000" )+' ៛</td>'+
+                                    '<td >'+ ( row.amount_price_taplab_rentel ? Number(row.amount_price_taplab_rentel) : "0" )+' $</td>'+
                                     '<td class="tax_rate">'+( row.tax_rate )+'%</td>'+
-                                    '<td>'+((row.total_gasoline * row.total_work_day * row.gasoline_price_per_liter) + (row.amount_price_motor_rentel - (row.amount_price_motor_rentel * row.tax_rate) / 100 ) + (row.amount_price_taplab_rentel - (row.amount_price_taplab_rentel * row.tax_rate) / 100 ) + Number(row.amount_price_engine_oil))+' ៛</td>'+
+                                    '<td>'+((row.total_gasoline * row.total_work_day * row.gasoline_price_per_liter))+' ៛</td>'+
+                                    '<td>'+(parseFloat(amount_usd.toFixed(2)))+' $</td>'+
                                     '<td><span style="font-size: 13px" class="badge bg-inverse-danger">'+(resigned_date)+'</span></td>'+
                                     '<td>'+( created_at )+'</td>'+
                                     '<td>'+
