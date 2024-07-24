@@ -222,6 +222,14 @@ class EmployeePayrollController extends Controller
      */
     public function store(Request $request)
     {
+        $birth_date = '2005-11-20';
+        $current_date = date('Y-m-d');
+        $birth_timestamp = strtotime($birth_date);
+        $current_timestamp = strtotime($current_date);
+        $diff_seconds = $current_timestamp - $birth_timestamp;
+        $age_years = $diff_seconds / (60 * 60 * 24 * 365.25);
+        $age_years = round($age_years);
+        dd($age_years);
         try{
             //function import annual_bonus
             $dadaArrayAnnualBonus = [];

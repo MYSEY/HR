@@ -122,7 +122,7 @@
                                                 <div class="row">
                                                     <div class="col col-md-4">
                                                         <div class="mb-3">
-                                                            <a href="#">@lang('lang.province')</a>
+                                                            <a href="#">@lang('lang.province/city')</a>
                                                             <div class="s-personal">{{ $data->FullNameProvince }}</div>
                                                         </div>
                                                     </div>

@@ -421,6 +421,9 @@ class User extends Authenticatable
         $houseNo = $streetNo = $provice_name = $district_name = $conmmunes_name = $villages_name = '';
         $house = Helper::getLang() == 'en' ? 'House ' : 'ផ្ទះលេខ';
         $street = Helper::getLang() == 'en' ? 'Street ' : 'ផ្លូវ';
+        $Sangkat = Helper::getLang() == 'en' ? 'Commune/Sangkat' : 'ឃុំ/សង្កាត់';
+        $Khan = Helper::getLang() == 'en' ? 'District/Khan' : 'ស្រុក/ខណ្ឌ';
+        $City = Helper::getLang() == 'en' ? 'Phnom Penh City/Province' : 'រាជធានី/ខេត្ដ';
         if (!empty($this->current_house_no)) {
             $houseNo = $house .' '. $this->current_house_no . ' , ' ?? '';
         }
@@ -430,28 +433,28 @@ class User extends Authenticatable
         $province = Province::all();
         foreach($province as $item){
             if($this->current_province == $item->code){
-                $provice_name = Helper::getLang() == 'en' ? $item->address_en : $item->address_km;
+                $provice_name = Helper::getLang() == 'en' ? $item->name_en : $item->name_km;
             }
         }
         $district = District::where('province_id',$this->current_province)->get();
         foreach($district as $item){
             if($this->current_district == $item->code){
-                $district_name = Helper::getLang() == 'en' ? $item->full_name_en : $item->full_name_km;
+                $district_name = Helper::getLang() == 'en' ? $item->name_en : $item->name_km;
             }
         }
         $Conmmunes = Conmmunes::where('district_id',$this->current_district)->get();
         foreach($Conmmunes as $item){
             if($this->current_commune == $item->code){
-                $conmmunes_name = Helper::getLang() == 'en' ? $item->full_name_en : $item->full_name_km;
+                $conmmunes_name = Helper::getLang() == 'en' ? $item->name_en : $item->name_km;
             }
         }
         $villages = Villages::all();
         foreach($villages as $item){
             if($this->current_village == $item->code){
-                $villages_name = Helper::getLang() == 'en' ? $item->full_name_en : $item->full_name_km;
+                $villages_name = Helper::getLang() == 'en' ? $item->name_en : $item->name_km;
             }
         }
-        return $houseNo . $streetNo .$villages_name.', '.$conmmunes_name.', '.$district_name.', '.$provice_name;
+        return $houseNo . $streetNo .$villages_name.', '.$Sangkat.' '.$conmmunes_name.', '.$Khan.' '.$district_name.', '.$City.' '.$provice_name;
     }
 
     public function getSeniorityYearsOfEmployeeAttribute(){
@@ -509,7 +512,7 @@ class User extends Authenticatable
         $provice_name = '';
         $province = Province::all();
         foreach($province as $item){
-            if($this->permanent_province == $item->code){
+            if($this->current_province == $item->code){
                 $provice_name =  Helper::getLang() == 'en' ? $item->name_en : $item->name_km;
             }
         }
