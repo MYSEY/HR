@@ -501,9 +501,9 @@ class PayrollReportController extends Controller
     public function SeverancePay(){
         $branch = Branchs::get();
         if (Auth::user()->RolePermission == 'Employee') {
-            $data = GrossSalaryPay::with('users')->where('type_fdc1','FDC-1')->where('employee_id',Auth::user()->id)->where('number_employee',Auth::user()->number_employee)->get();
+            $data = GrossSalaryPay::with('users')->where('employee_id',Auth::user()->id)->where('number_employee',Auth::user()->number_employee)->get();
         } else {
-            $data = GrossSalaryPay::with('users')->where('type_fdc1','FDC-1')
+            $data = GrossSalaryPay::with('users')
             ->leftJoin('users', 'gross_salary_pays.employee_id', '=', 'users.id')
             ->select(
                 'gross_salary_pays.*',
