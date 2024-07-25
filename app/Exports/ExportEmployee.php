@@ -59,7 +59,14 @@ class ExportEmployee implements FromCollection, WithColumnWidths, WithHeadings, 
                 "identity_number" => $users->identity_number,
                 "issue_date" => $users->issue_date ? Carbon::createFromDate($users->issue_date)->format('d-m-Y') : "",
                 "issue_expired_date" => $users->issue_expired_date ? Carbon::createFromDate($users->issue_expired_date)->format('d-m-Y') : "",
-                "password" => "",
+                "current_province"  =>  $users->current_province,
+                "current_district"  =>  $users->current_district,
+                "current_commune"   =>  $users->current_commune,
+                "current_village"   =>  $users->current_village,
+                "permanent_province"=>  $users->permanent_province,
+                "permanent_district"=>  $users->permanent_district,
+                "permanent_commune" =>  $users->permanent_commune,
+                "permanent_village" =>  $users->permanent_village,
             ];
         }
         $this->export_datas = $dataExport;
@@ -118,8 +125,16 @@ class ExportEmployee implements FromCollection, WithColumnWidths, WithHeadings, 
             'AH' => 15,
             'AI' => 15,
             'AJ' => 15,
-            'AJ' => 15,
+            'AK' => 15,
             'AL' => 15,
+            'AM' => 15,
+            'AN' => 15,
+            'AO' => 15,
+            'AP' => 15,
+            'AQ' => 15,
+            'AR' => 15,
+            'AS' => 15,
+            'AT' => 15,
         ];
     }
     public function registerEvents(): array {
@@ -127,8 +142,8 @@ class ExportEmployee implements FromCollection, WithColumnWidths, WithHeadings, 
             AfterSheet::class => function(AfterSheet $event) {
                 /** @var Sheet $sheet */
                 $sheet = $event->sheet;
-                $sheet->getDelegate()->getStyle('A1:AK1')->getFont()->setName('Khmer OS Battambang')
-                ->setSize(9)->setBold('A1:AK1');
+                $sheet->getDelegate()->getStyle('A1:AT1')->getFont()->setName('Khmer OS Battambang')
+                ->setSize(9)->setBold('A1:AT1');
             },
         ];
     }
@@ -177,7 +192,14 @@ class ExportEmployee implements FromCollection, WithColumnWidths, WithHeadings, 
             "Identity Number",
             "Issue Date",
             "Issue Expired Date",
-            "Password",
+            "Current Province",
+            "Current District",
+            "Current Commune",
+            "Current Village",
+            "Permanent Province",
+            "Permanent District",
+            "Permanent Commune",
+            "Permanent Village",
         ];
     }
 }
