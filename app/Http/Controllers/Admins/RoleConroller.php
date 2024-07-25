@@ -22,7 +22,7 @@ class RoleConroller extends Controller
      */
     public function index(Request $request)
     {
-        $role=Role::with("useruse")->where("created_by", Auth::user()->id)->get();
+        $role=Role::with("useruse")->get();
         return view('roles.role_index', compact('role'));
     }
     public function filter(Request $request) {

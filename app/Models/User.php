@@ -421,9 +421,10 @@ class User extends Authenticatable
         $houseNo = $streetNo = $provice_name = $district_name = $conmmunes_name = $villages_name = '';
         $house = Helper::getLang() == 'en' ? 'House ' : 'ផ្ទះលេខ';
         $street = Helper::getLang() == 'en' ? 'Street ' : 'ផ្លូវ';
-        $Sangkat = Helper::getLang() == 'en' ? 'Commune/Sangkat' : 'ឃុំ/សង្កាត់';
-        $Khan = Helper::getLang() == 'en' ? 'District/Khan' : 'ស្រុក/ខណ្ឌ';
-        $City = Helper::getLang() == 'en' ? 'Phnom Penh City/Province' : 'រាជធានី/ខេត្ដ';
+        $Village = Helper::getLang() == 'en' ? 'Village' : 'ភូមិ';
+        $Sangkat = Helper::getLang() == 'en' ? 'Sangkat/Commune' : 'ឃុំ/សង្កាត់';
+        $Khan = Helper::getLang() == 'en' ? 'Khan/District' : 'ស្រុក/ខណ្ឌ';
+        $City = Helper::getLang() == 'en' ? 'City/Province' : 'រាជធានី/ខេត្ដ';
         if (!empty($this->current_house_no)) {
             $houseNo = $house .' '. $this->current_house_no . ' , ' ?? '';
         }
@@ -454,7 +455,10 @@ class User extends Authenticatable
                 $villages_name = Helper::getLang() == 'en' ? $item->name_en : $item->name_km;
             }
         }
-        return $houseNo . $streetNo .$villages_name.', '.$Sangkat.' '.$conmmunes_name.', '.$Khan.' '.$district_name.', '.$City.' '.$provice_name;
+        $FullAddressEN = $houseNo . $streetNo .$villages_name.' '.$Village.', '.$Sangkat.' '.$conmmunes_name.', '.$Khan.' '.$district_name.', '.$City.' '.$provice_name;
+        $FullAddressKhmer = $houseNo . $streetNo .$Village.' '.$villages_name.', '.$Sangkat.' '.$conmmunes_name.', '.$Khan.' '.$district_name.', '.$City.' '.$provice_name;
+
+        return Helper::getLang() == 'en' ? $FullAddressEN : $FullAddressKhmer;
     }
 
     public function getSeniorityYearsOfEmployeeAttribute(){

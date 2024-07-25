@@ -98,23 +98,23 @@
                                 </li> --}}
                                 <li class="nav-item" role="presentation">
                                     <a class="nav-link active" data-bs-toggle="tab" id="tab_probation" href="#tbl_probations" aria-selected="false" role="tab" data-tab-id="2" tabindex="1">@lang('lang.probation')
-                                        <span id="dataShortList" class="badge bg-secondary ms-1 rounded-pill">{{count($dataProbation)}}</span>
+                                        <span id="dataShortList" class="badge bg-secondary ms-1 rounded-pill">{{$dataProbationCount}}</span>
                                     </a>
                                 </li>
                                 <li class="nav-item" role="presentation">
                                     <a class="nav-link" data-bs-toggle="tab" id="tab_fdc" href="#tbl_fdc" aria-selected="false" role="tab" data-tab-id="3" tabindex="-1">@lang('lang.fdc')
-                                        <span id="dataShortList" class="badge bg-secondary ms-1 rounded-pill">{{count($dataFDC)}}</span>
+                                        <span id="dataShortList" class="badge bg-secondary ms-1 rounded-pill">{{$dataFDCCount}}</span>
                                     </a>
                                 </li>
                                 <li class="nav-item" role="presentation">
                                     <a class="nav-link" data-bs-toggle="tab" id="tab_udc" href="#tbl_udc" aria-selected="false" data-tab-id="4" role="tab" tabindex="-1">@lang('lang.udc')
-                                        <span id="dataShortList" class="badge bg-secondary ms-1 rounded-pill">{{count($dataUDC)}}</span>
+                                        <span id="dataShortList" class="badge bg-secondary ms-1 rounded-pill">{{$dataUDCCount}}</span>
                                     </a>
                                 </li>
                                 @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'HR' || Auth::user()->RolePermission == 'HRAdmin' || Auth::user()->RolePermission == 'developer')
                                     <li class="nav-item" role="presentation">
                                         <a class="nav-link" data-bs-toggle="tab" id="tab_reason" href="#tbl_reject" aria-selected="false" data-tab-id="5" role="tab" tabindex="-1">@lang('lang.resigned_staff')
-                                            <span id="dataShortList" class="badge bg-secondary ms-1 rounded-pill">{{count($dataResign)}}</span>
+                                            <span id="dataShortList" class="badge bg-secondary ms-1 rounded-pill">{{$dataResignCount}}</span>
                                         </a>
                                     </li>
                                 @endif
