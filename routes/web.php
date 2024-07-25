@@ -425,13 +425,13 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('/email/create/{id}', [SendEmailController::class,'formCreate']);
     Route::post('/email-send', [SendEmailController::class,'send'])->name('send');
 
-    Route::Resource('province', ProvinceAddressController::class);
+    Route::Resource('address/province', ProvinceAddressController::class);
     Route::post('import/province', [ProvinceAddressController::class,'ImportProvince']);
-    Route::Resource('district', DistrictsAddressController::class);
+    Route::Resource('address/district', DistrictsAddressController::class);
     Route::post('import/district', [DistrictsAddressController::class,'ImportDistrict']);
-    Route::Resource('commune', ConmmuneAddressController::class);
+    Route::Resource('address/commune', ConmmuneAddressController::class);
     Route::post('import/commune', [ConmmuneAddressController::class,'ImportCommune']);
-    Route::Resource('village', VillageAddressController::class);
+    Route::Resource('address/village', VillageAddressController::class);
     Route::post('import/village', [VillageAddressController::class,'ImportVillage']);
 });
 Route::get('lang/{locale}', [LanguageController::class, "lang"]);
