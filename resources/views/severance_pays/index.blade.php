@@ -93,10 +93,10 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="table-responsive">
-                        <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+                        <div id="" class="dataTables_wrapper dt-bootstrap4 no-footer">
                             <div class="row">
                                 <div class="col-sm-12">
-                                    <table class="table table-striped custom-table datatable dataTable no-footer table_severance_pay" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
+                                    <table class="table table-striped custom-table  no-footer table_severance_pay" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
                                         <thead>
                                             <tr>
                                                 <th class="sorting stuck-scroll-3">@lang('lang.employee_id')</th>
@@ -149,6 +149,7 @@
                                             @endif
                                         </tbody>
                                     </table>
+                                    {!! $data->withQueryString()->links('pagination::bootstrap-5') !!}
                                 </div>
                             </div>
                         </div>
@@ -247,6 +248,18 @@
                             '<td>$'+(row.total_fdc2)+'</td>'+
                             '<td>'+(row.type_fdc2 == null ? "" : row.type_fdc2)+'</td>'+
                             '<td>'+(payment_date)+'</td>'+
+                            '<td class="text-end">'+
+                                '<div class="dropdown dropdown-action">'+
+                                    '<a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>'+
+                                    '<div class="dropdown-menu dropdown-menu-right">'+
+                                        '@if (permissionAccess("m9-s2", "is_update")->value == "1")' +
+                                            '<a href="{{ url('severance/create', $item->id) }}" class="dropdown-item" data-id="{{ $item->id }}">' +
+                                                '<i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')' +
+                                            '</a>' +
+                                        '@endif' +
+                                    '</div>'+
+                                '</div>'+
+                            '</td>'+
                         '</tr>';
                     });
                 }else {

@@ -498,7 +498,7 @@ class PayrollReportController extends Controller
 
         return Excel::download(new ExportSeverancePay($data), 'severance_pay.xlsx');
     }
-    public function SeverancePay(){
+    public function SeverancePay(Request $request){
         $branch = Branchs::get();
         if (Auth::user()->RolePermission == 'Employee') {
             $data = GrossSalaryPay::with('users')->where('employee_id',Auth::user()->id)->where('number_employee',Auth::user()->number_employee)->get();
@@ -520,7 +520,7 @@ class PayrollReportController extends Controller
                 if ($RolePermission == 'BM') {
                     $query->where("users.branch_id", Auth::user()->branch_id);
                 }
-            })->get();
+            })->paginate(10);
         }
         return view('severance_pays.index',compact('data','branch'));
     }
