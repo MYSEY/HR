@@ -306,7 +306,30 @@ class EmployeePayrollController extends Controller
                     }
                 }
             }
-            
+
+            //function upload staff book amount
+            $dadaArrayStaffBook = [];
+            if (file_exists($request->staff_book)) {
+                $file_staff_book = $request->staff_book;
+                $extension = $request->staff_book->extension();
+                $spreadsheet_staff_book = IOFactory::load($file_staff_book);
+                $dataImportStaffBook =  $spreadsheet_staff_book->getSheetByName('Staff Book')->toArray();
+                if ($extension == "xlsx" || $extension == "xls" || $extension == "csv") {
+                    $index = 0;
+                    foreach ($dataImportStaffBook as $itemStaffBook) {
+                        $index++;
+                        if ($index != 1) {
+                            $dataStaffBook = User::where("number_employee", $itemStaffBook[0])->first();
+                            if($dataStaffBook){
+                                $dadaArrayStaffBook[$dataStaffBook->number_employee] = [
+                                    'total_staff_book' => $itemStaffBook[2]
+                                ];
+                            }
+                        }
+                    }
+                }
+            }
+
             $employee = User::where('date_of_commencement','<=',$request->payment_date)->whereIn('emp_status',['Probation','1','10','2'])->get();
             if (!$employee->isEmpty()) {
                 foreach ($employee as $item) {
@@ -430,6 +453,12 @@ class EmployeePayrollController extends Controller
                         $LoanAmount = $dadaArrayLoan[$item->number_employee]['laon_amount'];
                     } else {
                        $LoanAmount = 0;
+                    }
+                    //fuction check staff book
+                    if (array_key_exists($item->number_employee, $dadaArrayStaffBook)) {
+                        $totalStaffBook = $dadaArrayStaffBook[$item->number_employee]['total_staff_book'];
+                    } else {
+                       $totalStaffBook = 0;
                     }
                     
                     
@@ -1097,8 +1126,8 @@ class EmployeePayrollController extends Controller
                             $totalSeverancePay = $dataSeverance->total_contract_severance_pay;
                         }
                     }
-                    
-                    $totalNetSalary = $totalSalaryAfterTax + $totalSeverancePay + $adjustmentExcludeTaxe + $taxExemptionSalary - $LoanAmount;
+                    $totalSalaryBeforPension = $totalSalaryAfterTax + $totalSeverancePay + $adjustmentExcludeTaxe + $taxExemptionSalary;
+                    $totalNetSalary = $totalSalaryBeforPension - $LoanAmount - $totalStaffBook;
                     $data   = $request->all();
                     $data['employee_id']                    = $item->id;
                     $data['number_employee']                = $item->number_employee;
@@ -1124,6 +1153,7 @@ class EmployeePayrollController extends Controller
                     $data['total_salary_tax_riel']          = round($totalSalaryTaxRiel,3);
                     $data['total_salary_tax_usd']           = $totalSalaryTaxUsd;
                     $data['loan_amount']                    = $LoanAmount;
+                    $data['total_staff_book']               = $totalStaffBook;
                     $data['adjustment']                     = $adjustmentExcludeTaxe;
                     $data['adjustment_include_taxe']        = $adjustmentIncludeTaxe;
                     $data['total_salary']                   = $totalNetSalary;

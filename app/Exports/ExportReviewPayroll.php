@@ -44,6 +44,7 @@ class ExportReviewPayroll implements FromCollection, WithColumnWidths, WithHeadi
     protected $totalSeniorityBackford;
     protected $totalSeverancePay;
     protected $totalLoanAmount;
+    protected $totalStaffBook;
     protected $totalAmountCar;
     protected $totalSalaryNetPay;
     public function __construct($request)
@@ -107,6 +108,7 @@ class ExportReviewPayroll implements FromCollection, WithColumnWidths, WithHeadi
             $this->totalSeniorityBackford += $value->seniority_backford;
             $this->totalSeverancePay += $value->total_severance_pay;
             $this->totalLoanAmount += $value->loan_amount;
+            $this->totalStaffBook += $value->total_staff_book;
             $this->totalAmountCar += $value->total_amount_car;
             $this->totalSalaryNetPay += $value->total_salary;
 
@@ -150,6 +152,7 @@ class ExportReviewPayroll implements FromCollection, WithColumnWidths, WithHeadi
                 "Seniority Backford"            => $value->seniority_backford,
                 "Severance Pay"                 => $value->total_severance_pay,
                 "Loan Amount"                   => $value->loan_amount,
+                "total_staff_book"              => $value->total_staff_book,
                 "Total Amount Car"              => $value->total_amount_car,
                 "net_salary"                    => $total_salary
             ];
@@ -203,9 +206,10 @@ class ExportReviewPayroll implements FromCollection, WithColumnWidths, WithHeadi
             'AB' => 20,
             'AC' => 20,
             'AD' => 20,
-            'AE' => 18,
-            'AF' => 20,
-            'AG' => 15,
+            'AE' => 20,
+            'AF' => 18,
+            'AG' => 20,
+            'AH' => 15,
         ];
     }
     public function registerEvents(): array {
@@ -219,7 +223,7 @@ class ExportReviewPayroll implements FromCollection, WithColumnWidths, WithHeadi
                 $event->sheet->getDelegate()->getStyle('A3')->getFont()->getColor()->setARGB('0000CC');
                 $event->sheet->getDelegate()->getStyle('A4')->getFont()->getColor()->setARGB('3923A9');
                 
-                $event->sheet->getStyle('A5:AG5')->applyFromArray([
+                $event->sheet->getStyle('A5:AH5')->applyFromArray([
                     'borders' => [
                         'allBorders' => [
                             'borderStyle' => Border::BORDER_THIN,
@@ -231,7 +235,7 @@ class ExportReviewPayroll implements FromCollection, WithColumnWidths, WithHeadi
                 if ($this->num > 0) {
                     foreach ($this->export_datas as $key=>$value) {
                         $n++;
-                        $event->sheet->getStyle('A'.$n.':AG'.$n)->applyFromArray([
+                        $event->sheet->getStyle('A'.$n.':AH'.$n)->applyFromArray([
                             'borders' => [
                                 'allBorders' => [
                                     'borderStyle' => Border::BORDER_THIN,
@@ -242,7 +246,7 @@ class ExportReviewPayroll implements FromCollection, WithColumnWidths, WithHeadi
                     }
                 }
 
-                $event->sheet->getStyle('A'.$rows.':AG'.$rows)->applyFromArray([
+                $event->sheet->getStyle('A'.$rows.':AH'.$rows)->applyFromArray([
                     'borders' => [
                         'allBorders' => [
                             'borderStyle' => Border::BORDER_THIN,
@@ -250,9 +254,9 @@ class ExportReviewPayroll implements FromCollection, WithColumnWidths, WithHeadi
                         ],
                     ],
                 ]);
-                $sheet->getDelegate()->getStyle('A5:AG5')->getFont()->getColor()->setARGB('3923A9');
-                $sheet->getDelegate()->getStyle('A5:AG5')->getFont()->setSize(9)->setName('Khmer OS Battambang')->setSize(9);
-                $event->sheet->getDelegate()->getStyle('A5:AG5')->getAlignment()
+                $sheet->getDelegate()->getStyle('A5:AH5')->getFont()->getColor()->setARGB('3923A9');
+                $sheet->getDelegate()->getStyle('A5:AH5')->getFont()->setSize(9)->setName('Khmer OS Battambang')->setSize(9);
+                $event->sheet->getDelegate()->getStyle('A5:AH5')->getAlignment()
                 ->setWrapText(true)
                 ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
@@ -382,14 +386,18 @@ class ExportReviewPayroll implements FromCollection, WithColumnWidths, WithHeadi
                 $sheet->setCellValue("AE".$rows, number_format($this->totalLoanAmount, 2));
                 $sheet->getDelegate()->getStyle("AE".$rows)->getFont()->setName('Khmer OS Battambang')->setSize(9)->setBold("AE".$rows);
                 $event->sheet->getDelegate()->getStyle("AE".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+                 //total setCellValue AE
+                 $sheet->setCellValue("AF".$rows, number_format($this->totalLoanAmount, 2));
+                 $sheet->getDelegate()->getStyle("AF".$rows)->getFont()->setName('Khmer OS Battambang')->setSize(9)->setBold("AF".$rows);
+                 $event->sheet->getDelegate()->getStyle("AF".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
                 //total setCellValue AF
-                $sheet->setCellValue("AF".$rows, number_format($this->totalAmountCar, 2));
-                $sheet->getDelegate()->getStyle("AF".$rows)->getFont()->setName('Khmer OS Battambang')->setSize(9)->setBold("AF".$rows);
-                $event->sheet->getDelegate()->getStyle("AF".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
-                //total setCellValue AG
-                $sheet->setCellValue("AG".$rows, number_format(abs($this->totalSalaryNetPay), 2));
+                $sheet->setCellValue("AG".$rows, number_format($this->totalAmountCar, 2));
                 $sheet->getDelegate()->getStyle("AG".$rows)->getFont()->setName('Khmer OS Battambang')->setSize(9)->setBold("AG".$rows);
                 $event->sheet->getDelegate()->getStyle("AG".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+                //total setCellValue AG
+                $sheet->setCellValue("AH".$rows, number_format(abs($this->totalSalaryNetPay), 2));
+                $sheet->getDelegate()->getStyle("AH".$rows)->getFont()->setName('Khmer OS Battambang')->setSize(9)->setBold("AH".$rows);
+                $event->sheet->getDelegate()->getStyle("AH".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
             },
         ];
     }
@@ -437,6 +445,7 @@ class ExportReviewPayroll implements FromCollection, WithColumnWidths, WithHeadi
             "ប្រាក់រំលឹកអតីតភាពការងារ",
             "ប្រាក់បំណាច់កិច្ចសន្យា",
             "ចំនួនប្រាក់កម្ចី",
+            "សៀវភៅបុគ្គលិកសរុប",
             "ប្រាកឧបត្ថម្ភថ្លៃផ្ញើរឡាន",
             "បៀវត្ស​ត្រូវទទួល បានបន្ទាប់ពីដកពន្ធ($)"
         ];
