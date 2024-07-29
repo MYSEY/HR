@@ -252,8 +252,8 @@
                                 '<div class="dropdown dropdown-action">'+
                                     '<a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>'+
                                     '<div class="dropdown-menu dropdown-menu-right">'+
-                                        '@if (permissionAccess("m9-s2", "is_update")->value == "1")' +
-                                            '<a href="{{ url('severance/create', $item->id) }}" class="dropdown-item" data-id="{{ $item->id }}">' +
+                                        '@if (permissionAccess("m9-s2", "is_update")->value == "1")'+
+                                            '<a href="{{url("severance/create")}}/'+(row.id)+'" class="dropdown-item" data-id="{{ $item->id }}">' +
                                                 '<i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')' +
                                             '</a>' +
                                         '@endif' +
