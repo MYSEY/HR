@@ -220,19 +220,19 @@
                                                     <td>{{$request->remark}}</td>
                                                     <td>
                                                         @if ($request->status == "rejected")
-                                                            <span class="badge bg-inverse-danger" style="font-size: 13px;">HR Rejecte</span>
+                                                            <span class="badge bg-inverse-danger" style="font-size: 13px;">Rejected by HR</span>
                                                         @elseif($request->status == "cancel")
                                                             <span class="badge bg-inverse-danger" style="font-size: 13px;">Cancel</span>
                                                         @elseif ($request->status == "rejected_lm")
-                                                            <span class="badge bg-inverse-danger" style="font-size: 13px;">Line Manager Rejecte</span>
+                                                            <span class="badge bg-inverse-danger" style="font-size: 13px;">Rejected by Line Manager</span>
                                                         @elseif ($request->status == "rejected_hod")
-                                                            <span class="badge bg-inverse-danger" style="font-size: 13px;">Rejecte</span>
+                                                            <span class="badge bg-inverse-danger" style="font-size: 13px;">Rejected by ACEO/Head/BM</span>
                                                         @elseif ($request->status == "pending")
-                                                            <span class="badge bg-inverse-info" style="font-size: 13px;">Pending Line Manager Approve</span>
+                                                            <span class="badge bg-inverse-info" style="font-size: 13px;">Waiting Approve by Line Manager</span>
                                                         @elseif ($request->status == "approved_lm")
-                                                            <span class="badge bg-inverse-info" style="font-size: 13px;">Waiting for final approve</span>
+                                                            <span class="badge bg-inverse-info" style="font-size: 13px;">Waiting Approve by ACEO/Head/BM</span>
                                                         @elseif ($request->status == "approved_hod")
-                                                            <span class="badge bg-inverse-info" style="font-size: 13px;">Pending HR Approve</span>
+                                                            <span class="badge bg-inverse-info" style="font-size: 13px;">Waiting Verify by HR</span>
                                                         @elseif($request->status == "approved")
                                                             <span class="badge bg-inverse-success" style="font-size: 13px;">Approved</span>
                                                         @endif
