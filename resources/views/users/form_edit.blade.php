@@ -265,7 +265,7 @@
                                     <label>@lang('lang.basic_salary')<span class="text-danger">*</span></label>
                                     <div class="input-group">
                                         <span class="input-group-text">$</span>
-                                        <input type="text" class="form-control" id="e_basic_salary" name="basic_salary" placeholder="" value="" required>
+                                        <input type="text" class="form-control" id="e_basic_salary" name="" placeholder="" value="" required>
                                     </div>
                                 </div>
                             </div>
@@ -536,6 +536,7 @@
                                 @lang('lang.loading') </span>
                             <span class="btn-txt">@lang('lang.submit')</span>
                         </button>
+                        <input type="hidden" class="form-control" id="hidden_basic_salary" name="basic_salary">
                         <a href="{{ url('users') }}" class="btn btn-secondary btn-cancel">@lang('lang.cancel')</a>
                     </div>
                 </form>
@@ -913,6 +914,7 @@
                     $('#e_ethnicity').val(response.success.ethnicity);
                     $('#e_unit').val(response.success.unit);
                     $('#e_basic_salary').val(response.success.basic_salary);
+                    $('#hidden_basic_salary').val(response.success.basic_salary);
                     $('#e_salary_increas').val(response.success.salary_increas);
                     $('#e_phone_allowance').val(response.success.phone_allowance);
                     $('#e_date_of_commencement').val(response.success.date_of_commencement);
