@@ -749,6 +749,7 @@ return[
     "srok_name_latin"=>"Srok Name Latin",
     "srok_name_en"=>"Srok Name EN",
     "payroll_staff_resign"=>"Payroll Staff Resign",
+    "staff_book"=>"Staff Book",
     "to"=>"To",
     "to_"=>"To",
     "time"=>"Time",

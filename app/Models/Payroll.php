@@ -53,6 +53,7 @@ class Payroll extends Model
         'seniority_backford',
         'total_severance_pay',
         'loan_amount',
+        'total_staff_book',
         'total_amount_car',
         'total_salary',
         'exchange_rate',

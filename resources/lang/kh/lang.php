@@ -764,6 +764,7 @@ return[
     "srok_name_latin"=>"Srok Name Latin",
     "srok_name_en"=>"Srok Name EN",
     "payroll_staff_resign"=>"Payroll Staff Resign",
+    "staff_book"=>"Staff Book",
 	"select"=>"ជ្រើសរើស",
 	"self_enterprise"=>"អត្ត.នៅសហគ្រាស",
 	"select_field_of_study"=>"ជ្រើសរើសមុខវិជ្ជាសិក្សា",

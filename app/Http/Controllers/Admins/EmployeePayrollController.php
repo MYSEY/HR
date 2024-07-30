@@ -1871,6 +1871,7 @@ class EmployeePayrollController extends Controller
                         'seniority_backford'        => $item->seniority_backford,
                         'total_severance_pay'       => $item->total_severance_pay,
                         'loan_amount'               => $item->loan_amount,
+                        'total_staff_book'          => $item->total_staff_book,
                         'total_amount_car'          => $item->total_amount_car,
                         'total_salary'              => $item->total_salary,
                         'exchange_rate'             => $item->exchange_rate,
