@@ -815,13 +815,13 @@
             $(".btn-text-print").show();
             $("#btn-print-loading").css('display', 'none');
             $("#add_emp").modal("hide")
-        }, 2000);
+        }, 2500);
         $("#print_purchase").printThis({
             importCSS: false,
             importStyle: true,
             loadCSS: "{{asset('/admin/css/style_table.css')}}",
             header: "",
-            printDelay: 1000,
+            printDelay: 2500,
             formValues: false,
             canvas: false,
             doctypeString: "",
