@@ -274,7 +274,7 @@
                                     <label>@lang('lang.salary_increase')</label>
                                     <div class="input-group">
                                         <span class="input-group-text">$</span>
-                                        <input type="number" step="any" class="form-control" id="e_salary_increas" name="salary_increas" placeholder="" value="{{old('salary_increas')}}">
+                                        <input type="number" step="any" class="form-control" id="e_salary_increas" name="" placeholder="" value="{{old('salary_increas')}}">
                                     </div>
                                 </div>
                             </div>
@@ -283,7 +283,7 @@
                                     <label>@lang('lang.phone_allowance')</label>
                                     <div class="input-group">
                                         <span class="input-group-text">$</span>
-                                        <input class="form-control" type="number" name="phone_allowance" id="e_phone_allowance" value="">
+                                        <input class="form-control" type="number" name="" id="e_phone_allowance" value="">
                                     </div>
                                 </div>
                             </div>
@@ -537,6 +537,8 @@
                             <span class="btn-txt">@lang('lang.submit')</span>
                         </button>
                         <input type="hidden" class="form-control" id="hidden_basic_salary" name="basic_salary">
+                        <input class="form-control" type="hidden" name="phone_allowance" id="hidden_phone_allowance">
+                        <input type="hidden" step="any" class="form-control" id="hidden_salary_increas" name="salary_increas">
                         <a href="{{ url('users') }}" class="btn btn-secondary btn-cancel">@lang('lang.cancel')</a>
                     </div>
                 </form>
@@ -916,7 +918,9 @@
                     $('#e_basic_salary').val(response.success.basic_salary);
                     $('#hidden_basic_salary').val(response.success.basic_salary);
                     $('#e_salary_increas').val(response.success.salary_increas);
+                    $('#hidden_salary_increas').val(response.success.salary_increas);
                     $('#e_phone_allowance').val(response.success.phone_allowance);
+                    $('#hidden_phone_allowance').val(response.success.phone_allowance);
                     $('#e_date_of_commencement').val(response.success.date_of_commencement);
                     $('#e_number_of_children').val(response.success.number_of_children);
                     $('#e_personal_phone_number').val(response.success.personal_phone_number);
