@@ -408,19 +408,19 @@ class EmployeePayrollController extends Controller
                                     //find total working day in month
                                     $startDate = Carbon::parse($item->fdc_date);
                                     $endDate = Carbon::parse($currentYear);
-
                                     //total day in  passt probation and total salary passt probation days
                                     $totalNewDays = $startDate->diffInDays($endDate) + 1;
-                                    $totalSeverancePayLast = ($item->pre_salary / $totalDayInMonth) * $totalNewDays;
-                                    
                                     //total day in  probation and total salary in probation days
                                     $totalOldDay = $totalDayInMonth - $totalNewDays;
-                                    $totalSeverancePayFirst = 0;
+                                    //old salary
+                                    $oldSalary = ($item->pre_salary * $totalOldDay) / $totalDayInMonth;
+                                    $newSalary = 0;
                                     if ($totalOldDay) {
-                                        $totalSeverancePayFirst = ($item->basic_salary / $totalDayInMonth)  * $totalOldDay;
+                                        $newSalary = ($item->basic_salary * $totalNewDays) / $totalDayInMonth;
                                     }
-                                    $totalBaseSalaryRecived = ($totalSeverancePayLast + $totalSeverancePayFirst) + $adjustmentIncludeTaxe;
-                                    $totalFirstSeverancPay = round($totalSeverancePayLast,2);
+                                    // dd($oldSalary);
+                                    $totalBaseSalaryRecived = $oldSalary + $newSalary + $adjustmentIncludeTaxe;
+                                    $totalFirstSeverancPay = round($oldSalary,2);
                                 }else{
                                     $totalBasicSalary = $item->basic_salary + $adjustmentIncludeTaxe;
                                 }
