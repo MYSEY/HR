@@ -102,6 +102,8 @@
                         <tr>
                             <td class="border-0 text-nowrap">@lang('lang.allowance')(@lang('lang.annual/PB/KNY'))</td>
                             <td class="border-0 fw-bolder"><span class="float-end">${{$payslip->total_kny_phcumben}}</span></td>
+                            <td class="border-0 text-nowrap">@lang('lang.other_deduction')</td>
+                            <td><span class="float-end">${{$payslip->total_staff_book}}</span></td>
                         </tr>
                         <tr>
                             <td>@lang('lang.seniority_pay') (@lang('lang.included_tax'))</td>
@@ -146,7 +148,7 @@
                             $TotalDeductions = $payslip->total_salary_tax_usd + $payslip->total_pension_fund;
                         @endphp
                         @php
-                            $totalNetPay = $TotalEarnings - $TotalDeductions - $payslip->loan_amount;
+                            $totalNetPay = $TotalEarnings - $TotalDeductions - $payslip->loan_amount - $payslip->total_staff_book;
                         @endphp
                         <tr style="background-color: #d2dbdb;">
                             <td><strong>@lang('lang.total_earnings') :</strong></td>

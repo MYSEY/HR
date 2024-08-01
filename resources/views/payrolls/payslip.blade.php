@@ -134,6 +134,10 @@
                                                 <td>
                                                     <span class="float-end">${{$payslip->total_kny_phcumben}}</span>
                                                 </td>
+                                                <td>@lang('lang.other_deduction')</td>
+                                                <td>
+                                                    <span class="float-end">${{$payslip->total_staff_book}}</span>
+                                                </td>
                                             </tr>
                                             <tr>
                                                 <td>@lang('lang.seniority_pay') (@lang('lang.included_tax'))</td>
@@ -190,7 +194,7 @@
                                                 $TotalDeductions = $payslip->total_salary_tax_usd + $payslip->total_pension_fund;
                                             @endphp
                                             @php
-                                                $totalNetPay = $TotalEarnings - $TotalDeductions - $payslip->loan_amount;
+                                                $totalNetPay = $TotalEarnings - $TotalDeductions - $payslip->loan_amount - $payslip->total_staff_book;
                                             @endphp
                                             {{-- @dd($numbersToWords->convertNumbers2Words($TotalDeductions, 1)) --}}
                                             <tr style="background-color: #d2dbdb;">
