@@ -255,7 +255,7 @@
                         </div>
                     </div>
                     {{-- basic salary infor --}}
-                    @if (permissionAccess("m2-s1","is_view_salary")->value == "1")
+                    {{-- @if (permissionAccess("m2-s1","is_view_salary")->value == "1") --}}
                         <div class="form-group col-md-12 col-12" element="div" bp-field-wrapper="true" bp-field-name="Identity" bp-field-type="custom_html">
                             <label class="navbar-brand custom-navbar-brand mb-0" style="width: 100%; background: #dfe6e9; padding: 6px;font-size: 20px;font-weight: normal !important;">@lang('lang.basic_salary')</label>
                         </div>
@@ -265,7 +265,7 @@
                                     <label>@lang('lang.basic_salary')<span class="text-danger">*</span></label>
                                     <div class="input-group">
                                         <span class="input-group-text">$</span>
-                                        <input type="text" class="form-control" id="e_basic_salary" name="" placeholder="" value="" required>
+                                        <input type="text" class="form-control" id="e_basic_salary" name="basic_salary" placeholder="" value="" required>
                                     </div>
                                 </div>
                             </div>
@@ -274,7 +274,7 @@
                                     <label>@lang('lang.salary_increase')</label>
                                     <div class="input-group">
                                         <span class="input-group-text">$</span>
-                                        <input type="number" step="any" class="form-control" id="e_salary_increas" name="" placeholder="" value="{{old('salary_increas')}}">
+                                        <input type="number" step="any" class="form-control" id="e_salary_increas" name="salary_increas" placeholder="" value="{{old('salary_increas')}}">
                                     </div>
                                 </div>
                             </div>
@@ -283,12 +283,12 @@
                                     <label>@lang('lang.phone_allowance')</label>
                                     <div class="input-group">
                                         <span class="input-group-text">$</span>
-                                        <input class="form-control" type="number" name="" id="e_phone_allowance" value="">
+                                        <input class="form-control" type="number" name="" id="e_phone_allowance" value="phone_allowance">
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    @endif
+                    {{-- @endif --}}
                     
 
                     {{-- Bank Infor --}}
@@ -530,15 +530,15 @@
                         </div>
                     </div>
                     <input type="hidden" name="id" id="e_id">
+                    {{-- <input type="hidden" class="form-control" id="e_basic_salary" name="basic_salary"> --}}
+                    {{-- <input class="form-control" type="hidden" name="phone_allowance" id="e_phone_allowance"> --}}
+                    {{-- <input type="hidden" step="any" class="form-control" id="e_salary_increas" name="salary_increas"> --}}
                     <div class="submit-section">
                         <button type="submit" class="btn btn-primary submit-btn">
                             <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i>
                                 @lang('lang.loading') </span>
                             <span class="btn-txt">@lang('lang.submit')</span>
                         </button>
-                        <input type="hidden" class="form-control" id="e_basic_salary" name="basic_salary">
-                        <input class="form-control" type="hidden" name="phone_allowance" id="e_phone_allowance">
-                        <input type="hidden" step="any" class="form-control" id="e_salary_increas" name="salary_increas">
                         <a href="{{ url('users') }}" class="btn btn-secondary btn-cancel">@lang('lang.cancel')</a>
                     </div>
                 </form>
