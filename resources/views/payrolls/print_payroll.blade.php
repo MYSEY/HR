@@ -141,11 +141,12 @@
                                 <span class="float-end">${{$payslip->total_child_allowance}}</span>
                             </td>
                         </tr>
+
                         @php
                             $TotalEarnings = $payslip->total_gross
                         @endphp
                         @php
-                            $TotalDeductions = $payslip->total_salary_tax_usd + $payslip->total_pension_fund;
+                            $TotalDeductions = $payslip->total_salary_tax_usd + $payslip->total_pension_fund + $payslip->loan_amount + $payslip->total_staff_book;
                         @endphp
                         @php
                             $totalNetPay = $TotalEarnings - $TotalDeductions - $payslip->loan_amount - $payslip->total_staff_book;
@@ -162,7 +163,7 @@
                             <td></td>
                             <td></td>
                             <td><p><strong>@lang('lang.total_net_pay') :</strong></p></td>
-                            <td><span class="float-end"><strong>${{number_format($totalNetPay, 2)}}</strong></span></td>
+                            <td><span class="float-end"><strong>${{number_format($payslip->total_salary, 2)}}</strong></span></td>
                         </tr>
                     </tbody>
                 </table>
