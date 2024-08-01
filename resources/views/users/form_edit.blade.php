@@ -536,9 +536,9 @@
                                 @lang('lang.loading') </span>
                             <span class="btn-txt">@lang('lang.submit')</span>
                         </button>
-                        <input type="hidden" class="form-control" id="hidden_basic_salary" name="basic_salary">
-                        <input class="form-control" type="hidden" name="phone_allowance" id="hidden_phone_allowance">
-                        <input type="hidden" step="any" class="form-control" id="hidden_salary_increas" name="salary_increas">
+                        <input type="hidden" class="form-control" id="e_basic_salary" name="basic_salary">
+                        <input class="form-control" type="hidden" name="phone_allowance" id="e_phone_allowance">
+                        <input type="hidden" step="any" class="form-control" id="e_salary_increas" name="salary_increas">
                         <a href="{{ url('users') }}" class="btn btn-secondary btn-cancel">@lang('lang.cancel')</a>
                     </div>
                 </form>
@@ -916,11 +916,8 @@
                     $('#e_ethnicity').val(response.success.ethnicity);
                     $('#e_unit').val(response.success.unit);
                     $('#e_basic_salary').val(response.success.basic_salary);
-                    $('#hidden_basic_salary').val(response.success.basic_salary);
                     $('#e_salary_increas').val(response.success.salary_increas);
-                    $('#hidden_salary_increas').val(response.success.salary_increas);
                     $('#e_phone_allowance').val(response.success.phone_allowance);
-                    $('#hidden_phone_allowance').val(response.success.phone_allowance);
                     $('#e_date_of_commencement').val(response.success.date_of_commencement);
                     $('#e_number_of_children').val(response.success.number_of_children);
                     $('#e_personal_phone_number').val(response.success.personal_phone_number);
