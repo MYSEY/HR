@@ -410,7 +410,7 @@ class EmployeePayrollController extends Controller
                                     $endDate = Carbon::parse($currentYear);
 
                                     //total day in  passt probation and total salary passt probation days
-                                    $totalNewDays = $startDate->diffInDays($endDate) - 1;
+                                    $totalNewDays = $startDate->diffInDays($endDate) + 1;
                                     $totalSeverancePayLast = ($item->pre_salary / $totalDayInMonth) * $totalNewDays;
                                     
                                     //total day in  probation and total salary in probation days
@@ -1184,7 +1184,7 @@ class EmployeePayrollController extends Controller
         return view('payrolls.payroll_staff_resign',compact('data','user','branch','exChangeRateSalary','exChangeRateNSSF'));
     }
     public function payrollStaffResignCreate(Request $request){
-        try{
+        // try{
             // function import Loan
             $dadaArrayLoan = [];
             if (file_exists($request->file_loan)) {
@@ -1205,7 +1205,7 @@ class EmployeePayrollController extends Controller
                 }
             }
             
-            $staffResign = User::where('resign_date','>=',$request->payment_date)->whereIn('emp_status',['3','4','5','6','7'])->get();
+            $staffResign = User::where('resign_date','<=',$request->payment_date)->whereIn('emp_status',['3','4','5','6','7'])->get();
             if (!$staffResign->isEmpty()) {
                 foreach ($staffResign as $item) {
                     //fuction check laon amount
@@ -1773,11 +1773,11 @@ class EmployeePayrollController extends Controller
                 Toastr::error('Can not employee payroll','Error');
                 return redirect()->back();
             }
-        }catch(\Exception $e){
-            DB::rollback();
-            Toastr::error('Payroll created fail','Error');
-            return redirect()->back();
-        }
+        // }catch(\Exception $e){
+        //     DB::rollback();
+        //     Toastr::error('Payroll created fail','Error');
+        //     return redirect()->back();
+        // }
     }
     public function payrollApproved(Request $request){
         try{
