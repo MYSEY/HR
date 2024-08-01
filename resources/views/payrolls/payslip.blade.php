@@ -188,7 +188,7 @@
                                                 </td>
                                             </tr>
                                             @php
-                                                $TotalEarnings = $payslip->total_gross_salary + $payslip->phone_allowance + $payslip->monthly_quarterly_bonuses + $payslip->total_child_allowance + $payslip->total_severance_pay + $payslip->seniority_pay_excluded_tax + $payslip->seniority_pay_included_tax + $payslip->total_kny_phcumben
+                                                $TotalEarnings = $payslip->total_gross
                                             @endphp
                                             {{-- @dd($TotalEarnings) --}}
                                             @php
