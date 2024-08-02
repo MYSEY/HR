@@ -60,6 +60,7 @@ return[
     "age_of_employee"=>"Age of Employee",
     "age"=>"Age",
     "active"=>"Active",
+    "abbreviations"=>"Abbreviations",
     "achivement"=>"Achivement",
     "are_you_sure_want_to_delete"=>"Are you sure want to delete",
     "are_you_sure_want_to_approve"=>"Are you sure want to approve",

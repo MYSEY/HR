@@ -97,6 +97,7 @@ return[
 	"address_km"=>"Address KM",
 	"address_latin"=>"Address Latin",
 	"address_en"=>"Address EN",
+	"abbreviations"=>"ពាក្យកាត់",
 	"payroll_adjustment"=>"Payroll Adjustment",
 	"bank"=>"ធនាគារ",
 	"banks"=>"ធនាគារ",

@@ -657,6 +657,18 @@ $(function(){
             };
         });
 
+        let generate_pay_motor_rentals_checkbox = $('.generate_pay_motor_rentals_checkbox');
+        generate_pay_motor_rentals_checkbox.change(function(){
+            let countAllCheckboxes = generate_pay_motor_rentals_checkbox.filter(':checked').length;
+            if (countAllCheckboxes == $('input.generate_pay_motor_rentals_checkbox').length) {
+                $("#generate_pay_motor_rentals").prop("checked", true);
+            };
+            if (countAllCheckboxes < $('input.generate_pay_motor_rentals_checkbox').length) {
+                $("#generate_pay_motor_rentals").prop("checked", false);
+            };
+        });
+
+
         let pay_motor_rentals_checkbox = $('.pay_motor_rentals_checkbox');
         pay_motor_rentals_checkbox.change(function(){
             let countAllCheckboxes = pay_motor_rentals_checkbox.filter(':checked').length;
