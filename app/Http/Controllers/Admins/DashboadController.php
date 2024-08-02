@@ -60,7 +60,7 @@ class DashboadController extends Controller
         $Monthly= Carbon::now()->format('m');
         $yearLy = Carbon::now()->format('Y');
 
-        $branches = Branchs::all();
+        $branches = Branchs::orderBy('no', 'asc')->get();
         $options = Option::where("type", "emp_status")->get();
         $position_type = Option::whereIn("type", ["position_type", "gender"])->get();
 

@@ -86,6 +86,7 @@ class BranchController extends Controller
             $data = Branchs::find($request->id);
             $data['branch_name_kh'] = $request->branch_name_kh;
             $data['branch_name_en'] = $request->branch_name_en;
+            $data['abbreviations'] = $request->abbreviations;
             $data['direct_manager_id'] = $request->direct_manager_id;
             $data['address'] = $request->address;
             $data['address_kh'] = $request->address_kh;

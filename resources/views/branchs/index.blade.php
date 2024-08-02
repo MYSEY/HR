@@ -101,6 +101,10 @@
                                 <input class="form-control @error('branch_name_en') is-invalid @enderror" type="text" name="branch_name_en" required>
                             </div>
                             <div class="form-group">
+                                <label>@lang('lang.abbreviations') (@lang('lang.en')) <span class="text-danger">*</span></label>
+                                <input class="form-control @error('abbreviations') is-invalid @enderror" type="text" name="abbreviations" required>
+                            </div>
+                            <div class="form-group">
                                 <label>Branch Holder</label>
                                 <select class="form-control hr-select2-option" name="direct_manager_id" id="direct_manager_id">
                                     <option selected value=""> --@lang('lang.select')--</option>
@@ -150,6 +154,10 @@
                             <div class="form-group">
                                 <label>@lang('lang.name') (@lang('lang.en')) <span class="text-danger">*</span></label>
                                 <input class="form-control @error('branch_name_en') is-invalid @enderror" type="text" id="e_branch_name_en" name="branch_name_en">
+                            </div>
+                            <div class="form-group">
+                                <label>@lang('lang.abbreviations') (@lang('lang.en')) <span class="text-danger">*</span></label>
+                                <input class="form-control @error('abbreviations') is-invalid @enderror" type="text" id="e_abbreviations" name="abbreviations">
                             </div>
 
                             <div class="form-group hr-form-group-select2">
