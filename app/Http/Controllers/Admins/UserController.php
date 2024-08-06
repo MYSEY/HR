@@ -660,89 +660,9 @@ class UserController extends Controller
                     //     'resign_reason' => $request->resign_reason
                     // ]);
                 }else{
-                    //function check staff resignation
-                    $totalSalaryStaffResign = 0;
-                    $totalSallaryAL = 0;
-                    $unpaidLeaveProbation = 0;
-                    $netSalary = 0;
-                    if ($request->emp_status == 3 || $request->emp_status == 4 || $request->emp_status == 5 || $request->emp_status == 6 || $request->emp_status == 7) {
-                        $employee = User::where('id',$request->id)->first();
-
-                        //function find days in end month
-                        $endMonth = Carbon::createFromDate($request->resign_date)->format('m');
-                        $totalDayInMonth = Carbon::now()->month($endMonth)->daysInMonth;
-                        //find start date employee join date
-                        $date_of_month = Carbon::createFromDate($request->resign_date)->format('Y-m');
-                        $currentYear = $date_of_month.'-'.$totalDayInMonth;
-                        //find total working day in month
-                        $startDate = Carbon::parse($request->resign_date);
-                        $endDate = Carbon::parse($currentYear);
-                        // find total days in month
-                        $totalNewDays = $startDate->diffInDays($endDate) + 1;
-                        $totalDayStaffResign = $totalDayInMonth - $totalNewDays;
-                        
-                        //function calu staff resign
-                        if ($totalDayStaffResign == 0) {
-                            $totalSalaryStaffResign = $employee->basic_salary;
-                        } else {
-                            $totalSalaryStaffResign = ($employee->basic_salary * $totalDayStaffResign) / 22;
-                        }
-                         
-                        if ($employee->emp_status == 'Probation') {
- 
-                            $yearLy = Carbon::createFromDate($request->resign_date)->format('Y-m');
-                            $fromDate = $yearLy."-01";
-                            $staffResignDate = Carbon::createFromDate($fromDate);
-                            $startDateResign   = Carbon::parse($staffResignDate);
-                            $endDateStaffResign = Date::createFromDate($request->resign_date);
-                            $endDateResign     = Carbon::parse($endDateStaffResign);
-                            $totalDaysStaffResign   = $endDateResign->diffInWeekdays($startDateResign) + 1;
-
-                            $months = 4.5;
-                            if ($totalDaysStaffResign < 15) {
-                                $totalDay = 0;
-                                $EndMonths = $months - 1;
-                            } elseif($totalDaysStaffResign >= 15 && $totalDaysStaffResign <= 20) {
-                                $totalDay = 1;
-                                $EndMonths = $months - 1;
-                            }else{
-                                $totalDay = 1.5;
-                                $EndMonths = $months;
-                            }
-                             
-                            $numberOfDay = LeaveRequest::where('employee_id',$request->id)->sum('number_of_day');
-                            $totalDayResignProbation = $EndMonths - $numberOfDay;
-                            if ($numberOfDay) {
-                                $totalSallaryStaffResign = ($employee->basic_salary * $totalDayResignProbation) / 22;
-                                $netSalary = $totalSalaryStaffResign - $totalSallaryStaffResign;
-                            }else{
-                                $totalSallaryStaffResign = ($employee->basic_salary * $totalDayResignProbation) / 22;
-                                $netSalary = $totalSalaryStaffResign + $totalSallaryStaffResign;
-                            }
-                         } else {
-                            //function calu Carried forward AL
-                            $dataLeave = LeaveAllocation::where('employee_id',$request->id)->first();
-                            // dd(abs($dataLeave->total_annual_leave));
-                            if ($dataLeave) {
-                                $year1 = $dataLeave->year_1;
-                                $year2 = $dataLeave->year_2;
-                                $year3 = $dataLeave->year_3;
-                                if ($dataLeave->total_annual_leave < 0) {
-                                    $Carriedforward = $year1 + $year2 + $year3 - abs($dataLeave->total_annual_leave);
-                                    $totalSallaryAL = ($employee->basic_salary * $Carriedforward) / 22;
-                                    $netSalary = $totalSalaryStaffResign + $totalSallaryAL;
-                                } else {
-                                    $Carriedforward = $year1 + $year2 + $year3 + $dataLeave->total_annual_leave;
-                                    $totalSallaryAL = ($employee->basic_salary * $Carriedforward) / 22;
-                                    $netSalary = $totalSallaryAL + $totalSalaryStaffResign;
-                                }
-                            }
-                        }
-                    }
-                     
+                   
                     User::where('id',$request->id)->update([
                         'emp_status' => $request->emp_status,
-                        'basic_salary' => $netSalary,
                         'resign_date' => $request->resign_date,
                         'status' => 'Unactive',
                         'resign_reason' => $request->resign_reason

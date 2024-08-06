@@ -530,9 +530,9 @@
                         </div>
                     </div>
                     <input type="hidden" name="id" id="e_id">
-                    {{-- <input type="hidden" class="form-control" id="e_basic_salary" name="basic_salary"> --}}
-                    {{-- <input class="form-control" type="hidden" name="phone_allowance" id="e_phone_allowance"> --}}
-                    {{-- <input type="hidden" step="any" class="form-control" id="e_salary_increas" name="salary_increas"> --}}
+                    <input type="hidden" class="form-control" id="e_basic_salary" name="old_basic_salary">
+                    <input class="form-control" type="hidden" name="old_phone_allowance" id="e_phone_allowance">
+                    <input type="hidden" step="any" class="form-control" id="e_salary_increas" name="old_salary_increas">
                     <div class="submit-section">
                         <button type="submit" class="btn btn-primary submit-btn">
                             <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i>

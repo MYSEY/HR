@@ -263,10 +263,23 @@
                     <div class="modal-body">
                         <form class="needs-validation" novalidate>
                             @csrf
-                            <div class="content-title">@lang('lang.exchange_rate') @lang('lang.nssf')</div>
-                            
                             <div class="row">
-                                <div class="col-sm-4">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>@lang('lang.employee') <span class="text-danger">*</span></label>
+                                        <select class="select form-control hr-select2-option pay_required" id="number_employee" name="number_employee">
+                                            <option value="">@lang('lang.select')</option>
+                                            @foreach ($staffResign as $item)
+                                                <option value="{{$item->number_employee}}">{{ Helper::getLang() == 'en' ? $item->employee_name_en : $item->employee_name_kh }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="content-title">@lang('lang.exchange_rate') @lang('lang.nssf')</div>
+                            <div class="row">
+                                <div class="col-sm-6">
                                     <div class="form-group">
                                         <label>@lang('lang.us_dollar')</label>
                                         <div class="input-group">
@@ -275,7 +288,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-sm-5">
+                                <div class="col-sm-6">
                                     <div class="form-group">
                                         <label>@lang('lang.rile')</label>
                                         <div class="input-group">
@@ -285,15 +298,11 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-sm-3 align-center">
-                                    <button type="button" id="btn-edix-nssf" class="btn btn-white me-2">Edit</button>
-                                    <button type="button" class="btn btn-primary" id="btn-save-nssf" data-id="1" data-exchange="{{ $exChangeRateNSSF == null ? "" : $exChangeRateNSSF->id }}" style="display: none">Save</button>
-                                </div>
                             </div>
 
                             <div class="content-title">@lang('lang.exchange_rate') @lang('lang.salary')</div>
                             <div class="row">
-                                <div class="col-sm-4">
+                                <div class="col-sm-6">
                                     <div class="form-group">
                                         <label>@lang('lang.us_dollar')</label>
                                         <div class="input-group">
@@ -302,7 +311,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-sm-5">
+                                <div class="col-sm-6">
                                     <div class="form-group">
                                         <label>@lang('lang.rile')</label>
                                         <div class="input-group">
@@ -312,10 +321,6 @@
                                             <input type="hidden" class="form-control" id="exchange_rate_salary_id" value="{{ $exChangeRateSalary == null ? "" : $exChangeRateSalary->id }}">
                                         </div>
                                     </div>
-                                </div>
-                                <div class="col-sm-3 align-center">
-                                    <button type="button" id="btn-edix-salary" class="btn btn-white me-2">Edit</button>
-                                    <button type="button" class="btn btn-primary" id="btn-save-salary" data-id="2" data-exchange="{{ $exChangeRateSalary == null ? "" : $exChangeRateSalary->id }}" style="display: none">Save</button>
                                 </div>
                             </div>
                             <div class="row">
@@ -351,87 +356,6 @@
 <script src="{{asset('/admin/js/validation-field.js')}}"></script>
 <script>
     $(function(){
-        $(document).ready(function(){
-            $("#btn-edix-nssf").click(function(){
-                $("#btn-save-nssf").toggle();
-                if ($(this).text() == "Edit") { 
-                    $('#exchange_rate_nssf').prop('disabled', false);
-                    $(this).text("Cancel"); 
-                } else { 
-                    $(this).text("Edit");
-                    $('#exchange_rate_nssf').prop('disabled', true);
-                }; 
-            });
-        });
-
-        $(document).ready(function(){
-            $("#btn-edix-salary").click(function(){
-                $("#btn-save-salary").toggle();
-                if ($(this).text() == "Edit") { 
-                    $('#exchange_rate').prop('disabled', false);
-                    $(this).text("Cancel"); 
-                } else { 
-                    $(this).text("Edit"); 
-                    $('#exchange_rate').prop('disabled', true);
-                }; 
-            });
-        });
-
-        $("#btn-save-nssf, #btn-save-salary").on("click", function(){
-            let condiction_btn = $(this).data('id');
-            let id = $(this).data('exchange');
-            let change_date  = moment().format('YYYY-MM-D');
-            let data = {
-                "_token": "{{ csrf_token() }}",
-                'change_date': change_date,
-                "id": id,
-            };
-            if (condiction_btn == 1) {
-                if (!$("#exchange_rate_nssf").val()) {
-                    $("#exchange_rate_nssf").css("border","solid 1px red");
-                    return false;
-                }
-                data.amount_usd = $("#exchange_rate_nssf_usd").val();
-                data.amount_riel = $("#exchange_rate_nssf").val();
-                data.type = "NSSF";
-            }
-            if (condiction_btn == 2) {
-                if (!$("#exchange_rate").val()) {
-                    $("#exchange_rate").css("border","solid 1px red");
-                    return false;
-                }
-                data.amount_usd = $("#exchange_rate_salary_en").val();
-                data.amount_riel = $("#exchange_rate").val();
-                data.type = "Salary";
-            }
-            $.ajax({
-                type: "post",
-                url: "{{ url('exchange-rate/create') }}",
-                data,
-                dataType: "JSON",
-                success: function(response) {
-                    new Noty({
-                        title: "",
-                        text: "@lang('lang.exchange_rate_created_successfully').",
-                        type: "success",
-                        timeout: 3000,
-                        icon: true
-                    }).show();
-                    if (condiction_btn == 1) {
-                        $('#exchange_rate_nssf').prop('disabled', true);
-                        $("#btn-save-nssf").toggle();
-                        $("#btn-edix-nssf").text("Edit");
-                        $("#exchange_rate_nssf_preview").val(response.success.amount_riel)
-                    };
-                    if (condiction_btn == 2) {
-                        $('#exchange_rate').prop('disabled', true);
-                        $("#btn-save-salary").toggle();
-                        $("#btn-edix-salary").text("Edit");
-                        $("#exchange_rate_preview").val(response.success.amount_riel)
-                    }
-                }
-            });
-        });
 
         $(".reset-btn").on("click", function() {
             $(this).prop('disabled', true);
@@ -441,8 +365,8 @@
         });
         $(".btn-search").on("click", function(){
             $(".btn-search").prop('disabled', true);
-                $(".btn-txt").hide();
-                $(".loading-icon").css('display', 'block')
+            $(".btn-txt").hide();
+            $(".loading-icon").css('display', 'block')
             let params = {
                 branch_id: $("#branch_id").val(),
                 employee_id: $("#employee_id").val(),
@@ -476,16 +400,17 @@
             if (num_miss>0) {
                 return false;
             }else{
+                let number_employee = $("#number_employee").val();
                 let exchange_rate_salary = $("#exchange_rate_preview").val();
                 let exchange_rate_nssf = $("#exchange_rate_nssf_preview").val();
                 var file_loan = $('#loan').prop('files')[0];
 
                 var form_data = new FormData();
+                form_data.append('number_employee', number_employee);
                 form_data.append('exchange_rate', exchange_rate_salary);
                 form_data.append('payment_date', $("#payment_date").val());
                 form_data.append('file_loan', file_loan);
                 form_data.append('_token', "{{ csrf_token() }}");
-                
                 
                 let button_ok = {
                     text: '@lang("lang.pay")',
