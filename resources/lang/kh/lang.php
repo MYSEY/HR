@@ -265,6 +265,7 @@ return[
 	"edit_holiday"=>"កែសម្រួលថ្ងៃឈប់សម្រាក",
 	"edit_department"=>"កែសម្រួលនាយកដ្ឋាន",
 	"edit_fringe_benefit"=>"កែសម្រួលអត្ថប្រយោជន៍",
+    "edit_staff_upcoming"=>"Edit Staff UpComing",
 	"email"=>"អុីម៉ែល",
 	"earning"=>"ប្រាក់ថ្លៃឈ្នួល",
 	"earnings_after_tax"=>"ប្រាក់ដែលទទួលបានបន្ទាប់់ពីកាត់ពន្ធ",

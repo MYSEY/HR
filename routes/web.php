@@ -406,6 +406,9 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('/recruitment/candidate-resume/import', [CandidateResumeController::class,'import']);
     Route::post('/recruitment/candidate-resume/duplicate', [CandidateResumeController::class,'duplicate']);
 
+    Route::get('/recruitment/candidate-resume/upcoming/edit/{id}', [CandidateResumeController::class,'staffUpcoming']);
+    Route::post('recruitment/candidate-resume/staff/upcoming/update', [CandidateResumeController::class,'staffUpcomingUpdated']);
+
     Route::get('children/allowance',[ChildrenAllowanceController::class,'index']);
     Route::get('children/edit',[ChildrenAllowanceController::class,'edit']);
     Route::post('children/update',[ChildrenAllowanceController::class,'update']);

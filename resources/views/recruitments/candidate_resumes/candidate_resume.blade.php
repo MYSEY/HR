@@ -1612,7 +1612,7 @@
                                             '<i  class="material-icons">more_vert</i>'+
                                             '</a>'+
                                             '<div class="dropdown-menu dropdown-menu-right">'+
-                                                '<a class="dropdown-item userUpdate" href="{{url("user/form/edit")}}/'+(emp.id)+'" data-id="'+(emp.id)+'"><i class="fa fa-pencil m-r-5"></i> @lang("lang.edit")</a>'+
+                                                '<a class="dropdown-item userUpdate" href="{{url("/recruitment/candidate-resume/upcoming/edit")}}/'+(emp.id)+'" data-id="'+(emp.id)+'"><i class="fa fa-pencil m-r-5"></i> @lang("lang.edit")</a>'+
                                                 '<a class="dropdown-item btn_print" data-id="'+(emp.id)+'"><i class="fa fa-print fa-lg m-r-5"></i> @lang("lang.print")</a>'+
                                                 '<a class="dropdown-item upcomingDelete" href="#" data-toggle="modal" data-id="'+(emp.id)+'" data-target="#delete_user"><i class="fa fa-trash-o m-r-5"></i> @lang("lang.delete")</a>'+
                                             '</div>'+

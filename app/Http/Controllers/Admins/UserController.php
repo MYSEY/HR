@@ -653,14 +653,7 @@ class UserController extends Controller
                     $users->resign_reason = $request->resign_reason;
                     $users->status = 'Unactive';
                     $users->save();
-                    // User::where('id',$request->id)->update([
-                    //     'emp_status' => $request->emp_status,
-                    //     'resign_date' => $request->resign_date,
-                    //     'status' => 'Unactive',
-                    //     'resign_reason' => $request->resign_reason
-                    // ]);
                 }else{
-                   
                     User::where('id',$request->id)->update([
                         'emp_status' => $request->emp_status,
                         'resign_date' => $request->resign_date,

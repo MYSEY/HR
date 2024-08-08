@@ -732,4 +732,137 @@ class CandidateResumeController extends Controller
             return response()->json(['message' => $exp->getMessage()], 500);
         }
     }
+    public function staffUpcoming(Request $request){
+        $dataUpcomings = User::where('id',$request->id)->where('emp_status','Upcoming')->first();
+        $role = DB::table('roles')->get();
+        $branch = DB::table('branchs')->get();
+        $department = DB::table('departments')->get();
+        $positions = DB::table('positions')->get();
+        $level = DB::table('lavels')->get();
+        $nationality = Option::where('type','nationality')->get();
+        $optionGender = Option::where('type','gender')->get();
+        $maritalStatus = Option::where('type','marital_status')->get();
+        $province = Province::all();
+        $optionIdentityType = Option::where('type','identity_type')->get();
+        $lineManager = User::join('roles', 'users.role_id', '=', 'roles.id')
+        ->select(
+            'users.*',
+            'roles.role_type',
+        )->whereNotIn('roles.role_type',['Employee','admin','developer'])->get();
+        return view('recruitments.candidate_resumes.edit_candidate',compact(
+            'dataUpcomings',
+            'role',
+            'optionGender',
+            'branch',
+            'department',
+            'positions',
+            'level',
+            'lineManager',
+            'nationality',
+            'maritalStatus',
+            'optionIdentityType',
+            'province',
+        ));
+    }
+    public function staffUpcomingUpdated(Request $request){
+        try{
+            $udc_end_date = Carbon::parse($request['fdc_end'])->addMonths(3);
+            if($request->hasFile('profile')) {
+                $image = $request->file('profile');
+                $filename = time().'.'.$image->getClientOriginalName();
+                $image->move(public_path('uploads/images'), $filename);
+            }else{
+                $filename = $request->hidden_image;
+            }
+            if ($request->hasFile('guarantee_letter')) {
+                $file = $request->file('guarantee_letter');
+                $filenameGuarant = time().'.'.$file->getClientOriginalName();
+                $file->move(public_path('uploads/images'), $filenameGuarant);
+            }else{
+                $filenameGuarant = $request->hidden_file_guarantee;
+            }
+            if ($request->hasFile('employment_book')) {
+                $file = $request->file('employment_book');
+                $filenameBook = time().'.'.$file->getClientOriginalName();
+                $file->move(public_path('uploads/images'), $filenameBook);
+            }else{
+                $filenameBook = $request->hidden_file_employment_book;
+            }
+            $fullNameKH = $request->last_name_kh.' '.$request->first_name_kh;
+            $fullNameEN = $request->last_name_en.' '.$request->first_name_en;
+            User::where('id',$request->id)->update([
+                'emp_status'  => 'Probation',
+                'number_employee'  => $request->number_employee,
+                'last_name_kh'  => $request->last_name_kh,
+                'first_name_kh'  => $request->first_name_kh,
+                'last_name_en'  => $request->last_name_en,
+                'first_name_en'  => $request->first_name_en,
+                'employee_name_kh'  => $fullNameKH,
+                'employee_name_en'  => $fullNameEN,
+                'gender'  => $request->gender,
+                'role_id'  => $request->role_id,
+                'basic_salary'  => $request->basic_salary,
+                'salary_increas'  => $request->salary_increas,
+                'phone_allowance'  => $request->phone_allowance,
+                'position_id'  => $request->position_id,
+                'position_type'  => $request->position_type,
+                'department_id'  => $request->department_id,
+                'date_of_birth'  => $request->date_of_birth,
+                'fdc_date'  => $request->fdc_date,
+                'fdc_end'  => $udc_end_date,
+                'fdc_end'  => $request->fdc_end,
+                'udc_end_date'  => $udc_end_date,
+                'id_number_nssf'  => $request->id_number_nssf,
+                'email'  => $request->email,
+                'branch_id'  => $request->branch_id,
+                'unit'  => $request->unit,
+                'level'  => $request->level,
+                'line_manager'  => $request->line_manager,
+                'id_card_number'  => $request->id_card_number,
+                'date_of_commencement'  => $request->date_of_commencement,
+                'marital_status'  => $request->marital_status,
+                'nationality'  => $request->nationality,
+                'ethnicity'  => $request->ethnicity,
+                'personal_phone_number'  => $request->personal_phone_number,
+                'company_phone_number'  => $request->company_phone_number,
+                'agency_phone_number'  => $request->agency_phone_number,
+                'remark'  => $request->remark,
+                'bank_name'  => $request->bank_name,
+                'account_name'  => $request->account_name,
+                'account_number'  => $request->account_number,
+                'identity_type'  => $request->identity_type,
+                'identity_number'  => $request->identity_number,
+                'issue_date'  => $request->issue_date,
+                'issue_expired_date'  => $request->issue_expired_date,
+                'type_of_employees_nssf'  => $request->type_of_employees_nssf,
+                'spouse_nssf'  => $request->spouse_nssf,
+                'spouse'  => $request->spouse,
+                'status_nssf'  => $request->status_nssf,
+                'current_house_no'  => $request->current_house_no,
+                'current_street_no'  => $request->current_street_no,
+                'current_province'   => $request->current_province,
+                'current_district'   => $request->current_district,
+                'current_commune'   => $request->current_commune,
+                'current_village'   => $request->current_village,
+                'permanent_province' => $request->permanent_province,
+                'permanent_district' => $request->permanent_district,
+                'permanent_commune' => $request->permanent_commune,
+                'permanent_village' => $request->permanent_village,
+                'permanent_house_no'  => $request->permanent_house_no,
+                'permanent_street_no'  => $request->permanent_street_no,
+                'profile'  => $filename,
+                'guarantee_letter'  => $filenameGuarant,
+                'employment_book'  => $filenameBook,
+                'updated_by'  => Auth::user()->id,
+                'is_loan'  => $request->is_loan
+            ]);
+            DB::commit();
+            Toastr::success('Updated employee successfully.','Success');
+            return redirect('recruitment/candidate-resume/list');
+        }catch(\Exception $e){
+            DB::rollback();
+            Toastr::error('Update employee fail','Error');
+            return redirect()->back();
+        }
+    }
 }

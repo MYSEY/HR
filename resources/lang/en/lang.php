@@ -251,6 +251,7 @@ return[
     "edit_bank"=>"Edit Bank",
     "edit_bank"=>"Edit Branch",
     "edit_fringe_benefit"=>"Edit Fringe Benefit",
+    "edit_staff_upcoming"=>"Edit Staff UpComing",
     "email"=>"Email",
     "earning"=>"Earning",
     "earnings_after_tax"=>"Earnings After Tax",
