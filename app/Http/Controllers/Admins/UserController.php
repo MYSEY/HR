@@ -77,7 +77,7 @@ class UserController extends Controller
             $dataFDC = User::with('role')->with('department')->with('position')->whereIn('emp_status',['1','10'])->paginate(10);
             $dataUDC = User::with('role')->with('department')->with('position')->where('emp_status','2')->paginate(10);
             $dataResign = User::with('role')->with('department')->with('position')->whereIn('emp_status', ['3','4','5','6','7','8','9'])->paginate(10);
-            $dataEmployees = User::whereIn('emp_status', ['Probation','1','2','10',])->get();
+            $dataEmployees = User::whereIn('emp_status', ['Probation','1','2','10',])->orderBy('id', 'DESC')->get();
         }
         if (Auth::user()->RolePermission == 'HR') {
             $dataProbationCount = User::where('emp_status','Probation')->where("line_manager", Auth::user()->id) ->when(Auth::user()->emp_status, function ($query, $emp_status) {

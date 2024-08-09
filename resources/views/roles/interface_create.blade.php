@@ -17,18 +17,14 @@
                             <label class="">@lang('lang.type') <span class="text-danger">*</span></label>
                             <select class="form-control hr-select2-option role_required" id="role_type" name="role_type" required>
                                 <option selected disabled value=""> -- @lang('lang.select') --</option>
+                                <option value="admin">Admin</option>
+                                <option value="developer">Developer</option>
                                 <option value="BOD">Board of Director</option>
                                 <option value="CEO">Chief Executive Officer</option>
-                                {{-- <option value="DCEO">Deputy Chief Executive Officer</option> --}}
                                 <option value="HRAdmin">HR Admin</option>
                                 <option value="HR">HR</option>
-                                {{-- <option value="DHR">Deputy Head of HR</option> --}}
                                 <option value="HOD">Head of Department</option>
-                                {{-- <option value="DHOD">Deputy Head of Department</option> --}}
-                                {{-- <option value="HOCD">Head of Credit Department</option> --}}
-                                {{-- <option value="DHOCD">Deputy Head of Credit Department</option> --}}
                                 <option value="BM">Branch Manager</option>
-                                {{-- <option value="DBM">Deputy Branch Manager</option> --}}
                                 <option value="Employee">Employee</option>
                             </select>
                         </div>

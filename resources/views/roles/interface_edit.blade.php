@@ -16,22 +16,15 @@
                         <div class="form-group hr-form-group-select2">
                             <label class="">@lang('lang.type') <span class="text-danger">*</span></label>
                             <select class="form-control hr-select2-option role_required" id="role_type" name="role_type" required>
-                                {{-- <option value="admin" {{ $role->role_type == "admin" ? "selected":""}}>@lang('lang.admin')</option>
+                                <option value="admin" {{ $role->role_type == "admin" ? "selected":""}}>@lang('lang.admin')</option>
                                 <option value="developer" {{ $role->role_type == "developer" ? "selected":""}}>@lang('lang.developer')</option>
-                                <option value="employee" {{ $role->role_type == "employee" ? "selected":""}}>@lang('lang.employee')</option> --}}
 
                                 <option value="BOD" {{ $role->role_type == "BOD" ? "selected":""}}>Board of Director</option>
                                 <option value="CEO" {{ $role->role_type == "CEO" ? "selected":""}}>Chief Executive Officer</option>
-                                {{-- <option value="DCEO" {{ $role->role_type == "DCEO" ? "selected":""}}>Deputy Chief Executive Officer</option> --}}
                                 <option value="HRAdmin" {{ $role->role_type == "HRAdmin" ? "selected":""}}>HR Admin</option>
                                 <option value="HR" {{ $role->role_type == "HR" ? "selected":""}}>HR</option>
-                                {{-- <option value="DHR" {{ $role->role_type == "DHR" ? "selected":""}}>Deputy Head of HR</option> --}}
                                 <option value="HOD" {{ $role->role_type == "HOD" ? "selected":""}}>Head of Department</option>
-                                {{-- <option value="DHOD" {{ $role->role_type == "DHOD" ? "selected":""}}>Deputy Head of Department</option> --}}
-                                {{-- <option value="HOCD" {{ $role->role_type == "HOCD" ? "selected":""}}>Head of Credit Department</option> --}}
-                                {{-- <option value="DHOCD" {{ $role->role_type == "DHOCD" ? "selected":""}}>Deputy Head of Credit Department</option> --}}
                                 <option value="BM" {{ $role->role_type == "BM" ? "selected":""}}>Branch Manager</option>
-                                {{-- <option value="DBM" {{ $role->role_type == "DBM" ? "selected":""}}>Deputy Branch Manager</option> --}}
                                 <option value="Employee" {{ $role->role_type == "Employee" ? "selected":""}}>Employee</option>
 
                             </select>
