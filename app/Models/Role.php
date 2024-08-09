@@ -31,7 +31,7 @@ class Role extends Model
     }
     public function useruse()
     {
-        return $this->hasMany(User::class, 'role_id', 'id');
+        return $this->hasMany(User::class, 'role_id', 'id')->whereIn("emp_status",['Probation','1','2','10']);
     }
     public function createdBy()
     {

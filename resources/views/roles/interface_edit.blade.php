@@ -18,7 +18,6 @@
                             <select class="form-control hr-select2-option role_required" id="role_type" name="role_type" required>
                                 <option value="admin" {{ $role->role_type == "admin" ? "selected":""}}>@lang('lang.admin')</option>
                                 <option value="developer" {{ $role->role_type == "developer" ? "selected":""}}>@lang('lang.developer')</option>
-
                                 <option value="BOD" {{ $role->role_type == "BOD" ? "selected":""}}>Board of Director</option>
                                 <option value="CEO" {{ $role->role_type == "CEO" ? "selected":""}}>Chief Executive Officer</option>
                                 <option value="HRAdmin" {{ $role->role_type == "HRAdmin" ? "selected":""}}>HR Admin</option>

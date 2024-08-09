@@ -68,6 +68,7 @@ class RoleConroller extends Controller
      */
     public function create(Request $request)
     {
+        DB::beginTransaction();
         try{
             Activity::all()->last();
             $role = Role::create([
@@ -89,6 +90,7 @@ class RoleConroller extends Controller
                     }
                 }
             }
+            DB::commit();
             return response()->json([
                 'message'=>"successfully",
                 'status'=>200
@@ -157,6 +159,7 @@ class RoleConroller extends Controller
 
     public function updateRole(Request $request)
     {
+        DB::beginTransaction();
         try{
             $data = Role::find($request->id);
             $data['role_name']     = $request->role_name;
@@ -178,6 +181,7 @@ class RoleConroller extends Controller
                     }
                 }
             }
+            DB::commit();
             return response()->json([
                 'message'=>"Update role successfully",
                 'status'=>200
@@ -213,6 +217,7 @@ class RoleConroller extends Controller
     }
     public function processing(Request $request)
     {
+        DB::beginTransaction();
         try {
             Role::where('id',$request->id)->update([
                 'status' => $request->role_status,
