@@ -791,7 +791,6 @@ class CandidateResumeController extends Controller
             $fullNameKH = $request->last_name_kh.' '.$request->first_name_kh;
             $fullNameEN = $request->last_name_en.' '.$request->first_name_en;
             User::where('id',$request->id)->update([
-                'emp_status'  => 'Probation',
                 'number_employee'  => $request->number_employee,
                 'last_name_kh'  => $request->last_name_kh,
                 'first_name_kh'  => $request->first_name_kh,
