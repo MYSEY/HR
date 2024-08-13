@@ -112,6 +112,7 @@
                                                 <th class="sorting">@lang('lang.type_fdc1')</th>
                                                 <th class="sorting">@lang('lang.total_fdc2')</th>
                                                 <th class="sorting">@lang('lang.type_fdc2')</th>
+                                                <th class="sorting">@lang('lang.type_udc')</th>
                                                 <th class="sorting">@lang('lang.payment_date')</th>
                                                 <th class="text-end sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Action: activate to sort column ascending" style="width: 300.962px;">@lang('lang.action')</th>
                                             </tr>
@@ -133,6 +134,7 @@
                                                         <td><a href="#">{{$item->type_fdc1}}</a></td>
                                                         <td>${{$item->total_fdc2}}</td>
                                                         <td><a href="#">{{$item->type_fdc2}}</a></td>
+                                                        <td><a href="#">{{$item->type_udc}}</a></td>
                                                         <td>{{$item->PayrollPaymentDate}}</td>
                                                         <td class="text-end">
                                                             <div class="dropdown dropdown-action">
@@ -247,6 +249,7 @@
                             '<td>'+(row.type_fdc1 == null ? "" : row.type_fdc1)+'</td>'+
                             '<td>$'+(row.total_fdc2)+'</td>'+
                             '<td>'+(row.type_fdc2 == null ? "" : row.type_fdc2)+'</td>'+
+                            '<td>'+(row.type_udc == null ? "" : row.type_udc)+'</td>'+
                             '<td>'+(payment_date)+'</td>'+
                             '<td class="text-end">'+
                                 '<div class="dropdown dropdown-action">'+

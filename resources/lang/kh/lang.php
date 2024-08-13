@@ -854,6 +854,7 @@ return[
     "total_fdc2"=>'Total FDC-2',
     "type_fdc1"=>'Type FDC-1',
     "type_fdc2"=>'Type FDC-2',
+    "type_udc"=>'Type UDC',
     "apply_leave"=>'អនុវត្តការចាកចេញ',
 	"unactive"=>"មិនដំណើរការ",
 	"update"=>"កែប្រែ",
