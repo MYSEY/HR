@@ -1557,6 +1557,52 @@
                                         '<img alt="" src="{{asset("admin/img/defuals/default-user-icon.png")}}">'+
                                     '</a>';
                             };
+
+                            let dropdown_action = "";
+                            let dropdown_status = '<a class="btn btn-white btn-sm btn-rounded" href="#">'+
+                                            '<i class="fa fa-dot-circle-o text-info"></i>'+
+                                            '<span>'+(emp.emp_status)+'</span>'+
+                                        '</a>';
+                            let btn_delete = "";
+                            let btn_edit = "";
+                            let print = "";
+                            if (is_print == 1 || is_delete == 1 || is_update == 1) {
+                                if (is_print == 1 ) {
+                                    print = '<a class="dropdown-item btn_print" data-id="'+(emp.id)+'"><i class="fa fa-print fa-lg m-r-5"></i> @lang("lang.print")</a>';
+                                }
+                                if (is_update == 1) {
+                                    edit =  '<a class="dropdown-item userUpdate" href="{{url("/recruitment/candidate-resume/upcoming/edit")}}/'+(emp.id)+'" data-id="'+(emp.id)+'"><i class="fa fa-pencil m-r-5"></i> @lang("lang.edit")</a>';
+                                    dropdown_status ='<div class="dropdown action-label">'+
+                                            '<a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">'+
+                                                '<i class="fa fa-dot-circle-o text-success"></i>'+
+                                                '<span>'+(emp.emp_status)+'</span>'+
+                                            '</a>'+
+                                            '<div class="dropdown-menu dropdown-menu-right btn-emp-status" id="btn-emp-status">'+
+                                                '<input type="text" name="" class="join_date" value="" hidden>'+
+                                                '<a class="dropdown-item" data-emp-id="'+(emp.id)+'" data-start-date="'+(emp.fdc_date)+'" data-join-date="'+(emp.date_of_commencement)+'" data-id="Probation" href="#">'+
+                                                    '<i class="fa fa-dot-circle-o text-success"></i> @lang("lang.probation")'+
+                                                '</a>'+
+                                                '<a class="dropdown-item" data-emp-id="'+(emp.id)+'" data-id="Cancel" href="#">'+
+                                                    '<i class="fa fa-dot-circle-o text-danger"></i> @lang("lang.cancel")'+
+                                                '</a>'+
+                                            '</div>'+
+                                        '</div>';
+                                }
+                                if (is_delete) {
+                                    btn_delete = '<a class="dropdown-item upcomingDelete" href="#" data-toggle="modal" data-id="'+(emp.id)+'" data-target="#delete_user"><i class="fa fa-trash-o m-r-5"></i> @lang("lang.delete")</a>';
+                                }
+                                dropdown_action = '<div class="dropdown dropdown-action">'+
+                                        '<a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">'+
+                                            '<i class="material-icons">more_vert</i>'+
+                                        '</a>'+
+                                        '<div class="dropdown-menu dropdown-menu-right">'+
+                                            (btn_edit)+
+                                            (print)+
+                                            (btn_delete)+
+                                        '</div>'+
+                                    '</div>';
+                            }
+
                             let td = "";
                             let DOB = moment(emp.date_of_birth).format('D-MMM-YYYY')
                             let joinOfDate = moment(emp.date_of_commencement).format('D-MMM-YYYY')
@@ -1590,33 +1636,20 @@
                                     '<td>'+(joinOfDate)+'</td>'+
                                     '<td>'+(PassDate)+'</td>'+
                                     '<td>'+
-                                        '<div class="dropdown action-label">'+
-                                            '<a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">'+
-                                                '<i class="fa fa-dot-circle-o text-success"></i>'+
-                                                '<span>'+(emp.emp_status)+'</span>'+
-                                            '</a>'+
-                                            '<div class="dropdown-menu dropdown-menu-right btn-emp-status" id="btn-emp-status">'+
-                                                '<input type="text" name="" class="join_date" value="" hidden>'+
-                                                '<a class="dropdown-item" data-emp-id="'+(emp.id)+'" data-start-date="'+(emp.fdc_date)+'" data-join-date="'+(emp.date_of_commencement)+'" data-id="Probation" href="#">'+
-                                                    '<i class="fa fa-dot-circle-o text-success"></i> @lang("lang.probation")'+
-                                                '</a>'+
-                                                '<a class="dropdown-item" data-emp-id="'+(emp.id)+'" data-id="Cancel" href="#">'+
-                                                    '<i class="fa fa-dot-circle-o text-danger"></i> @lang("lang.cancel")'+
-                                                '</a>'+
-                                            '</div>'+
-                                        '</div>'+
+                                        (dropdown_status)
                                     '</td>'+
                                     '<td class="text-end">'+
-                                        '<div class="dropdown dropdown-action">'+
-                                            '<a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">'+
-                                            '<i  class="material-icons">more_vert</i>'+
-                                            '</a>'+
-                                            '<div class="dropdown-menu dropdown-menu-right">'+
-                                                '<a class="dropdown-item userUpdate" href="{{url("/recruitment/candidate-resume/upcoming/edit")}}/'+(emp.id)+'" data-id="'+(emp.id)+'"><i class="fa fa-pencil m-r-5"></i> @lang("lang.edit")</a>'+
-                                                '<a class="dropdown-item btn_print" data-id="'+(emp.id)+'"><i class="fa fa-print fa-lg m-r-5"></i> @lang("lang.print")</a>'+
-                                                '<a class="dropdown-item upcomingDelete" href="#" data-toggle="modal" data-id="'+(emp.id)+'" data-target="#delete_user"><i class="fa fa-trash-o m-r-5"></i> @lang("lang.delete")</a>'+
-                                            '</div>'+
-                                        '</div>'+
+                                        (dropdown_action)+
+                                        // '<div class="dropdown dropdown-action">'+
+                                        //     '<a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">'+
+                                        //     '<i  class="material-icons">more_vert</i>'+
+                                        //     '</a>'+
+                                        //     '<div class="dropdown-menu dropdown-menu-right">'+
+                                        //         '<a class="dropdown-item userUpdate" href="{{url("/recruitment/candidate-resume/upcoming/edit")}}/'+(emp.id)+'" data-id="'+(emp.id)+'"><i class="fa fa-pencil m-r-5"></i> @lang("lang.edit")</a>'+
+                                        //         '<a class="dropdown-item btn_print" data-id="'+(emp.id)+'"><i class="fa fa-print fa-lg m-r-5"></i> @lang("lang.print")</a>'+
+                                        //         '<a class="dropdown-item upcomingDelete" href="#" data-toggle="modal" data-id="'+(emp.id)+'" data-target="#delete_user"><i class="fa fa-trash-o m-r-5"></i> @lang("lang.delete")</a>'+
+                                        //     '</div>'+
+                                        // '</div>'+
                                     '</td>'+
                             '</tr>';
                         });
@@ -1640,6 +1673,18 @@
                                         '<img alt="" src="{{asset("admin/img/defuals/default-user-icon.png")}}">'+
                                     '</a>';
                             };
+                            let btn_delete = "";
+                            if (is_delete == 1) {
+                                btn_delete = '<div class="dropdown dropdown-action">'+
+                                                            '<a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">'+
+                                                            '<i  class="material-icons">more_vert</i>'+
+                                                            '</a>'+
+                                                            '<div class="dropdown-menu dropdown-menu-right">'+
+                                                                '<a class="dropdown-item upcomingDelete" href="#" data-toggle="modal" data-id="'+(emp.id)+'" data-target="#delete_user"><i class="fa fa-trash-o m-r-5"></i> @lang("lang.delete")</a>'+
+                                                            '</div>'+
+                                                        '</div>';
+                            }
+
                             let td = "";
                             let DOB = moment(emp.date_of_birth).format('D-MMM-YYYY')
                             let joinOfDate = moment(emp.date_of_commencement).format('D-MMM-YYYY')
@@ -1667,14 +1712,7 @@
                                                         '<span style="font-size: 13px" class="badge bg-inverse-danger">Cancel</span>'+
                                                     '</td>'+
                                                     '<td class="text-end">'+
-                                                        '<div class="dropdown dropdown-action">'+
-                                                            '<a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">'+
-                                                            '<i  class="material-icons">more_vert</i>'+
-                                                            '</a>'+
-                                                            '<div class="dropdown-menu dropdown-menu-right">'+
-                                                                '<a class="dropdown-item upcomingDelete" href="#" data-toggle="modal" data-id="'+(emp.id)+'" data-target="#delete_user"><i class="fa fa-trash-o m-r-5"></i> @lang("lang.delete")</a>'+
-                                                            '</div>'+
-                                                        '</div>'+
+                                                        (btn_delete)+
                                                     '</td>'+
                                                 '</tr>';
                         });

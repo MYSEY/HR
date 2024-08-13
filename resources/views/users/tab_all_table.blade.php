@@ -478,7 +478,7 @@
         </div>
     </div>
 </div>
-@if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'HR' || Auth::user()->RolePermission == 'HRAdmin' || Auth::user()->RolePermission == 'developer')
+@if (Auth::user()->RolePermission == 'BOD' || Auth::user()->RolePermission == 'CEO' || Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'HR' || Auth::user()->RolePermission == 'HRAdmin' || Auth::user()->RolePermission == 'developer')
     <div class="tab-pane show" id="tbl_reject" role="tabpanel">
         <div class="row">
             <div class="col-md-12">

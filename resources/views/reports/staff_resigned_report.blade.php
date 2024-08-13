@@ -115,11 +115,15 @@
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                     rowspan="1" colspan="1"
                                                     aria-label="Join Date: activate to sort column ascending"
-                                                    style="width: 125.15px;">@lang('lang.join_date')</th>
+                                                    style="width: 125.15px;">@lang('lang.joined_date')</th>
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                     rowspan="1" colspan="1"
                                                     aria-label="Join Date: activate to sort column ascending"
-                                                    style="width: 125.15px;">@lang('lang.leave_of_absence')</th>
+                                                    style="width: 125.15px;">@lang('lang.resigned_date')</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                    rowspan="1" colspan="1"
+                                                    aria-label="Remark: activate to sort column ascending"
+                                                    style="width: 125.15px;">@lang('lang.reason_of_resign')</th>
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                     rowspan="1" colspan="1"
                                                     aria-label="Remark: activate to sort column ascending"
@@ -143,6 +147,9 @@
                                                         <td>{{ $item->EmployeeBranch}}</td>
                                                         <td>{{ \Carbon\Carbon::parse($item->date_of_commencement)->format('d-M-Y') ?? '' }}</td>
                                                         <td>{{ \Carbon\Carbon::parse($item->resign_date)->format('d-M-Y') ?? '' }}</td>
+                                                        <td>
+                                                            {{$item->EmployeeResignReason == null ? $item->resign_reason : $item->EmployeeResignReason}}
+                                                        </td>
                                                         <td>{{ $item->remark }}</td>
                                                     </tr>
                                                 @endforeach

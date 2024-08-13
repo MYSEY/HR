@@ -10,9 +10,11 @@
                         <li class="breadcrumb-item active">@lang('lang.payroll_adjustment')</li>
                     </ul>
                 </div>
-                <div class="col-auto float-end ms-auto">
-                    <a href="#" class="btn add-btn" data-bs-toggle="modal" data-bs-target="#Add_Adjustment"><i class="fa fa-plus"></i> @lang('lang.add_new')</a>
-                </div>
+                @if (permissionAccess("m9-s2","is_create")->value == "1")
+                    <div class="col-auto float-end ms-auto">
+                        <a href="#" class="btn add-btn" data-bs-toggle="modal" data-bs-target="#Add_Adjustment"><i class="fa fa-plus"></i> @lang('lang.add_new')</a>
+                    </div>
+                @endif
             </div>
         </div>
         {!! Toastr::message() !!}
