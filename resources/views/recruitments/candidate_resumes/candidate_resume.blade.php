@@ -1571,7 +1571,7 @@
                                     print = '<a class="dropdown-item btn_print" data-id="'+(emp.id)+'"><i class="fa fa-print fa-lg m-r-5"></i> @lang("lang.print")</a>';
                                 }
                                 if (is_update == 1) {
-                                    edit =  '<a class="dropdown-item userUpdate" href="{{url("/recruitment/candidate-resume/upcoming/edit")}}/'+(emp.id)+'" data-id="'+(emp.id)+'"><i class="fa fa-pencil m-r-5"></i> @lang("lang.edit")</a>';
+                                    btn_edit =  '<a class="dropdown-item userUpdate" href="{{url("/recruitment/candidate-resume/upcoming/edit")}}/'+(emp.id)+'" data-id="'+(emp.id)+'"><i class="fa fa-pencil m-r-5"></i> @lang("lang.edit")</a>';
                                     dropdown_status ='<div class="dropdown action-label">'+
                                             '<a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">'+
                                                 '<i class="fa fa-dot-circle-o text-success"></i>'+
@@ -1592,15 +1592,15 @@
                                     btn_delete = '<a class="dropdown-item upcomingDelete" href="#" data-toggle="modal" data-id="'+(emp.id)+'" data-target="#delete_user"><i class="fa fa-trash-o m-r-5"></i> @lang("lang.delete")</a>';
                                 }
                                 dropdown_action = '<div class="dropdown dropdown-action">'+
-                                        '<a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">'+
-                                            '<i class="material-icons">more_vert</i>'+
-                                        '</a>'+
-                                        '<div class="dropdown-menu dropdown-menu-right">'+
-                                            (btn_edit)+
-                                            (print)+
-                                            (btn_delete)+
-                                        '</div>'+
-                                    '</div>';
+                                                    '<a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">'+
+                                                        '<i class="material-icons">more_vert</i>'+
+                                                    '</a>'+
+                                                    '<div class="dropdown-menu dropdown-menu-right">'+
+                                                        (btn_edit)+
+                                                        (print)+
+                                                        (btn_delete)+
+                                                    '</div>'+
+                                                '</div>';
                             }
 
                             let td = "";
@@ -1636,20 +1636,10 @@
                                     '<td>'+(joinOfDate)+'</td>'+
                                     '<td>'+(PassDate)+'</td>'+
                                     '<td>'+
-                                        (dropdown_status)
+                                        (dropdown_status)+
                                     '</td>'+
                                     '<td class="text-end">'+
                                         (dropdown_action)+
-                                        // '<div class="dropdown dropdown-action">'+
-                                        //     '<a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">'+
-                                        //     '<i  class="material-icons">more_vert</i>'+
-                                        //     '</a>'+
-                                        //     '<div class="dropdown-menu dropdown-menu-right">'+
-                                        //         '<a class="dropdown-item userUpdate" href="{{url("/recruitment/candidate-resume/upcoming/edit")}}/'+(emp.id)+'" data-id="'+(emp.id)+'"><i class="fa fa-pencil m-r-5"></i> @lang("lang.edit")</a>'+
-                                        //         '<a class="dropdown-item btn_print" data-id="'+(emp.id)+'"><i class="fa fa-print fa-lg m-r-5"></i> @lang("lang.print")</a>'+
-                                        //         '<a class="dropdown-item upcomingDelete" href="#" data-toggle="modal" data-id="'+(emp.id)+'" data-target="#delete_user"><i class="fa fa-trash-o m-r-5"></i> @lang("lang.delete")</a>'+
-                                        //     '</div>'+
-                                        // '</div>'+
                                     '</td>'+
                             '</tr>';
                         });

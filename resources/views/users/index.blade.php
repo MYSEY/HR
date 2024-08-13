@@ -42,48 +42,53 @@
             </div>
         </div>
         @if (permissionAccess("m2-s1","is_view")->value == "1")
-            <form class="needs-validation" novalidate>
-                @csrf
-                <div class="row filter-btn">
-                    <div class="col-sm-2 col-md-2"> 
-                        <div class="form-group">
-                            <div class="search">
-                                <i class="uil uil-search"></i>
-                                <input spellcheck="false" id="number_employee" class="form-control" type="text" placeholder="@lang('lang.employee_id')">
+            @if (Auth::user()->RolePermission != 'Employee')
+                <form class="needs-validation" novalidate>
+                    @csrf
+                    <div class="row filter-btn">
+                        <div class="col-sm-2 col-md-2"> 
+                            <div class="form-group">
+                                <div class="search">
+                                    <i class="uil uil-search"></i>
+                                    <input spellcheck="false" id="number_employee" class="form-control" type="text" placeholder="@lang('lang.employee_id')">
+                                </div>
+                                {{-- <input type="text" class="form-control clear-data-search" name="employee_id" id="number_employee" placeholder="@lang('lang.employee_id')" value="{{old('number_employee')}}"> --}}
                             </div>
-                            {{-- <input type="text" class="form-control clear-data-search" name="employee_id" id="number_employee" placeholder="@lang('lang.employee_id')" value="{{old('number_employee')}}"> --}}
+                        </div>
+                        <div class="col-sm-2 col-md-2"> 
+                            <div class="form-group">
+                                <input type="text" class="form-control clear-data-search" name="employee_name" id="employee_name" placeholder="@lang('lang.employee_name')" value="{{old('employee_name')}}">
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-8 col-sm-8">
+                            <div style="display: flex" class="float-end">
+                                <button type="button" class="btn btn-sm btn-outline-secondary btn-search me-2" id="icon-search-download-reload">
+                                    <span class="search-loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
+                                    <span class="btn-search-txt">
+                                        <i class="fa fa-search"></i>
+                                    </span>
+                                </button>
+                                @if (permissionAccess("m2-s1","is_export")->value == "1")
+                                    <button type="button" class="btn btn-sm btn-outline-secondary btn-export me-2" id="icon-search-download-reload">
+                                        <span class="export-loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
+                                        <span class="btn-export-txt">
+                                            <i class="fa fa-arrow-circle-down"></i>
+                                        </span>
+                                    </button>
+                                @endif
+                                <button type="button" class="btn btn-sm btn-outline-secondary reset-btn" id="icon-search-download-reload">
+                                    <span class="btn-text-reset">
+                                        <i class="fa fa-undo"></i>
+                                    </span>
+                                    <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
+                                </button>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-sm-2 col-md-2"> 
-                        <div class="form-group">
-                            <input type="text" class="form-control clear-data-search" name="employee_name" id="employee_name" placeholder="@lang('lang.employee_name')" value="{{old('employee_name')}}">
-                        </div>
-                    </div>
-                    
-                    <div class="col-md-8 col-sm-8">
-                        <div style="display: flex" class="float-end">
-                            <button type="button" class="btn btn-sm btn-outline-secondary btn-search me-2" id="icon-search-download-reload">
-                                <span class="search-loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
-                                <span class="btn-search-txt">
-                                    <i class="fa fa-search"></i>
-                                </span>
-                            </button>
-                            <button type="button" class="btn btn-sm btn-outline-secondary btn-export me-2" id="icon-search-download-reload">
-                                <span class="export-loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
-                                <span class="btn-export-txt">
-                                    <i class="fa fa-arrow-circle-down"></i>
-                                </span>
-                            </button>
-                            <button type="button" class="btn btn-sm btn-outline-secondary reset-btn" id="icon-search-download-reload">
-                                <span class="btn-text-reset">
-                                    <i class="fa fa-undo"></i>
-                                </span>
-                                <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </form>
+                </form>
+            @endif
+          
             {!! Toastr::message() !!}
             <div class="content">
                 <div class="page-menu">

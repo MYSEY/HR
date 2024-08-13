@@ -148,55 +148,66 @@ class UserController extends Controller
             $dataResign = User::with('role')->with('department')->with('position')->where("branch_id", Auth::user()->branch_id)->whereIn('emp_status', ['3','4','5','6','7','8','9'])->paginate(10);
         }
         if(Auth::user()->RolePermission == 'Employee'){
-            $data = User::with(['educations','experiences','banks','staffPromoted'])->where('id',Auth::user()->id)->first();
-            $optionOfStudy = Option::where('type','field_of_study')->get();
-            $optionDegree = Option::where('type','degree')->get();
-            $relationship = Option::where('type','relationship')->get();
-            $optionGender = Option::where('type','gender')->get();
-            $EmploymentType = Option::where('type','experience')->get();
-            $department = Department::all();
-            $position = Position::all();
-            $branch = Branchs::all();
-            $transferred = Transferred::where('employee_id',Auth::user()->id)->get();
-            $educations = Education::where('employee_id',Auth::user()->id)->get();
-            $experiences = Experience::where('employee_id',Auth::user()->id)->get();
-            $training = StaffTraining::where('employee_id',Auth::user()->id)->get();
-            $contact = Contact::where('employee_id',Auth::user()->id)->get();
-            $childrenInfor = ChildrenInfor::where('employee_id',Auth::user()->id)->get();
-            $empPromoted = StaffPromoted::where('employee_id',Auth::user()->id)->orderBy('id', 'DESC')->get();
-            $empTranferend = Transferred::where('employee_id',Auth::user()->id)->orderBy('id', 'DESC')->get();
-            return view('employees.profile',
-                compact('data',
-                'optionOfStudy',
-                'optionDegree',
-                'department',
-                'position',
-                'empPromoted',
-                'branch',
-                'transferred',
-                'training',
-                'relationship',
-                'contact',
-                'educations',
-                'experiences',
-                'childrenInfor',
-                'optionGender',
-                'empTranferend',
-                'EmploymentType'
-            ));
-        }else{
-            return view('users.index',compact(
-                'dataProbationCount',
-                'dataProbation',
-                'dataFDCCount',
-                'dataFDC',
-                'dataUDC',
-                'dataUDCCount',
-                'dataResign',
-                'dataResignCount',
-                'dataEmployees',
-            ));
+
+            $dataProbationCount = User::where('emp_status','Probation')->where('id',Auth::user()->id)->count();
+            $dataFDCCount = User::whereIn('emp_status',['1','10'])->where('id',Auth::user()->id)->count();
+            $dataUDCCount = User::where('emp_status','2')->where('id',Auth::user()->id)->count();
+            $dataResignCount = User::whereIn('emp_status', ['3','4','5','6','7','8','9'])->where('id',Auth::user()->id)->count();
+
+            $dataProbation = User::with('role')->with('department')->with('position')->where('emp_status','Probation')->where('id',Auth::user()->id)->paginate(10);
+            $dataFDC = User::with('role')->with('department')->with('position')->whereIn('emp_status',['1','10'])->where('id',Auth::user()->id)->paginate(10);
+            $dataUDC = User::with('role')->with('department')->with('position')->where('emp_status','2')->where('id',Auth::user()->id)->paginate(10);
+            $dataResign = User::with('role')->with('department')->with('position')->whereIn('emp_status', ['3','4','5','6','7','8','9'])->where('id',Auth::user()->id)->paginate(10);
+
+            // $data = User::with(['educations','experiences','banks','staffPromoted'])->where('id',Auth::user()->id)->first();
+            // $optionOfStudy = Option::where('type','field_of_study')->get();
+            // $optionDegree = Option::where('type','degree')->get();
+            // $relationship = Option::where('type','relationship')->get();
+            // $optionGender = Option::where('type','gender')->get();
+            // $EmploymentType = Option::where('type','experience')->get();
+            // $department = Department::all();
+            // $position = Position::all();
+            // $branch = Branchs::all();
+            // $transferred = Transferred::where('employee_id',Auth::user()->id)->get();
+            // $educations = Education::where('employee_id',Auth::user()->id)->get();
+            // $experiences = Experience::where('employee_id',Auth::user()->id)->get();
+            // $training = StaffTraining::where('employee_id',Auth::user()->id)->get();
+            // $contact = Contact::where('employee_id',Auth::user()->id)->get();
+            // $childrenInfor = ChildrenInfor::where('employee_id',Auth::user()->id)->get();
+            // $empPromoted = StaffPromoted::where('employee_id',Auth::user()->id)->orderBy('id', 'DESC')->get();
+            // $empTranferend = Transferred::where('employee_id',Auth::user()->id)->orderBy('id', 'DESC')->get();
+            // return view('employees.profile',
+            //     compact('data',
+            //     'optionOfStudy',
+            //     'optionDegree',
+            //     'department',
+            //     'position',
+            //     'empPromoted',
+            //     'branch',
+            //     'transferred',
+            //     'training',
+            //     'relationship',
+            //     'contact',
+            //     'educations',
+            //     'experiences',
+            //     'childrenInfor',
+            //     'optionGender',
+            //     'empTranferend',
+            //     'EmploymentType'
+            // ));
         }
+
+        return view('users.index',compact(
+            'dataProbationCount',
+            'dataProbation',
+            'dataFDCCount',
+            'dataFDC',
+            'dataUDC',
+            'dataUDCCount',
+            'dataResign',
+            'dataResignCount',
+            'dataEmployees',
+        ));
     }
 
     public function formCreate() {
