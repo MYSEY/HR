@@ -742,7 +742,10 @@ class CandidateResumeController extends Controller
         $nationality = Option::where('type','nationality')->get();
         $optionGender = Option::where('type','gender')->get();
         $maritalStatus = Option::where('type','marital_status')->get();
-        $province = Province::all();
+        $province = DB::table('provinces')->select('code','name_km','name_en')->get();
+        $district = DB::table('districts')->select('code','name_km','name_en')->get();
+        $conmmunes = DB::table('conmmunes')->select('code','name_km','name_en')->get();
+        $villages = DB::table('villages')->select('code','name_km','name_en')->get();
         $optionIdentityType = Option::where('type','identity_type')->get();
         $lineManager = User::join('roles', 'users.role_id', '=', 'roles.id')
         ->select(
@@ -762,6 +765,9 @@ class CandidateResumeController extends Controller
             'maritalStatus',
             'optionIdentityType',
             'province',
+            'district',
+            'conmmunes',
+            'villages',
         ));
     }
     public function staffUpcomingUpdated(Request $request){

@@ -431,6 +431,7 @@
                         <label class="navbar-brand custom-navbar-brand mb-0" style="width: 100%; background: #dfe6e9; padding: 6px;font-size: 20px;font-weight: normal !important;">@lang('lang.current_address')</label>
                     </div>
                     {{-- CurrentAddress --}}
+                    {{-- @dd($dataUpcomings) --}}
                     <div id="CurrentAddress">
                         <div class="row">
                             <div class="col-md-4">
@@ -440,7 +441,7 @@
                                         <option selected disabled> -- @lang('lang.select') --</option>
                                         @if (count($province)>0)
                                             @foreach ($province as $item)
-                                                <option value="{{$item->code}}">{{ Helper::getLang() == 'en' ? $item->name_en : $item->name_km}}</option>
+                                                <option value="{{$item->code}}" {{$dataUpcomings->current_province == $item->code ? 'selected' : ''}}>{{ Helper::getLang() == 'en' ? $item->name_en : $item->name_km}}</option>
                                             @endforeach
                                         @endif
                                     </select>
@@ -450,6 +451,11 @@
                                 <div class="form-group hr-form-group-select2">
                                     <label>@lang('lang.district/khan')</label>
                                     <select class="form-control hr-select2-option" id="current_district" name="current_district" value="{{old('current_district')}}">
+                                        @if (count($district)>0)
+                                            @foreach ($district as $item)
+                                                <option value="{{$item->code}}" {{$dataUpcomings->current_commune == $item->code ? 'selected' : ''}}>{{ Helper::getLang() == 'en' ? $item->name_en : $item->name_km}}</option>
+                                            @endforeach
+                                        @endif
                                     </select>
                                 </div>
                             </div>
@@ -466,6 +472,11 @@
                             <div class="form-group hr-form-group-select2">
                                 <label class="no-error-label">@lang('lang.commune/sangkat')</label>
                                 <select class="form-control hr-select2-option no-error-border" id="current_commune" name="current_commune" value="{{old('current_commune')}}">
+                                    @if (count($conmmunes)>0)
+                                        @foreach ($conmmunes as $item)
+                                            <option value="{{$item->code}}" {{$dataUpcomings->current_district == $item->code ? 'selected' : ''}}>{{ Helper::getLang() == 'en' ? $item->name_en : $item->name_km}}</option>
+                                        @endforeach
+                                    @endif
                                 </select>
                             </div>
                         </div>
@@ -473,6 +484,11 @@
                             <div class="form-group hr-form-group-select2">
                                 <label class="no-error-label">@lang('lang.village')</label>
                                 <select class="form-control hr-select2-option no-error-border" id="current_village" name="current_village" value="{{old('current_village')}}">
+                                    @if (count($villages)>0)
+                                        @foreach ($villages as $item)
+                                            <option value="{{$item->code}}" {{$dataUpcomings->current_village == $item->code ? 'selected' : ''}}>{{ Helper::getLang() == 'en' ? $item->name_en : $item->name_km}}</option>
+                                        @endforeach
+                                    @endif
                                 </select>
                             </div>
                         </div>
@@ -498,7 +514,7 @@
                                         <option selected disabled> -- @lang('lang.select') --</option>
                                         @if (count($province)>0)
                                             @foreach ($province as $item)
-                                                <option value="{{$item->code}}">{{ Helper::getLang() == 'en' ? $item->name_en : $item->name_km}}</option>
+                                                <option value="{{$item->code}}" {{$dataUpcomings->permanent_province == $item->code ? 'selected' : ''}}>{{ Helper::getLang() == 'en' ? $item->name_en : $item->name_km}}</option>
                                             @endforeach
                                         @endif
                                     </select>
@@ -507,7 +523,13 @@
                             <div class="col-md-4">
                                 <div class="form-group hr-form-group-select2">
                                     <label>@lang('lang.district/khan')</label>
-                                    <select class="form-control hr-select2-option" id="permanent_district" name="permanent_district" value="{{old('distric')}}"></select>
+                                    <select class="form-control hr-select2-option" id="permanent_district" name="permanent_district" value="{{old('distric')}}">
+                                        @if (count($district)>0)
+                                            @foreach ($district as $item)
+                                                <option value="{{$item->code}}" {{$dataUpcomings->permanent_district == $item->code ? 'selected' : ''}}>{{ Helper::getLang() == 'en' ? $item->name_en : $item->name_km}}</option>
+                                            @endforeach
+                                        @endif
+                                    </select>
                                 </div>
                             </div>
                             <div class="col-md-4">
@@ -522,13 +544,25 @@
                         <div class="col-md-4">
                             <div class="form-group hr-form-group-select2 ">
                                 <label class="no-error-label">@lang('lang.commune/sangkat')</label>
-                                <select class="form-control hr-select2-option no-error-border" id="e_permanent_commune" name="permanent_commune" value="{{old('commune')}}"></select>
+                                <select class="form-control hr-select2-option no-error-border" id="e_permanent_commune" name="permanent_commune" value="{{old('commune')}}">
+                                    @if (count($conmmunes)>0)
+                                        @foreach ($conmmunes as $item)
+                                            <option value="{{$item->code}}" {{$dataUpcomings->permanent_commune == $item->code ? 'selected' : ''}}>{{ Helper::getLang() == 'en' ? $item->name_en : $item->name_km}}</option>
+                                        @endforeach
+                                    @endif
+                                </select>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group hr-form-group-select2">
                                 <label class="no-error-label">@lang('lang.village')</label>
-                                <select class="form-control hr-select2-option no-error-border" id="e_permanent_village" name="permanent_village" value="{{old('village')}}"></select>
+                                <select class="form-control hr-select2-option no-error-border" id="e_permanent_village" name="permanent_village" value="{{old('village')}}">
+                                    @if (count($villages)>0)
+                                        @foreach ($villages as $item)
+                                            <option value="{{$item->code}}" {{$dataUpcomings->permanent_village == $item->code ? 'selected' : ''}}>{{ Helper::getLang() == 'en' ? $item->name_en : $item->name_km}}</option>
+                                        @endforeach
+                                    @endif
+                                </select>
                             </div>
                         </div>
                         <div class="col-md-4">
