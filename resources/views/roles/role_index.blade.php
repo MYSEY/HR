@@ -17,7 +17,7 @@
                 </ul>
             </div>
             <div class="col-auto float-end ms-auto">
-                @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'HR' || Auth::user()->RolePermission == 'HRAdmin' || Auth::user()->RolePermission == 'developer')
+                @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer')
                     <a href="{{url('role/create')}}" class="btn add-btn" ><i class="fa fa-plus"></i> @lang('lang.add_new')</a>
                 @endif
             </div>
@@ -141,7 +141,9 @@
                                                                     <div class="dropdown-menu dropdown-menu-right">
                                                                         <a class="dropdown-item" href="{{ url('/role/detail', $item->id) }}"><i class="fa fa-eye m-r-5"></i> @lang('lang.view_details')</a>
                                                                         <a class="dropdown-item" href="{{ url('role/edit', $item->id) }}"><i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')</a>
-                                                                        <a class="dropdown-item roleDelete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_role"><i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
+                                                                        @if (Auth::user()->RolePermission == "admin" || Auth::user()->RolePermission == "developer")
+                                                                            <a class="dropdown-item roleDelete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_role"><i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
+                                                                        @endif
                                                                     </div>
                                                                 @endif
                                                             </div>
@@ -184,6 +186,7 @@
         </div>
     </div>
 </div>
+<input type="text" name="" id="role_permission" value="{{Auth::user()->RolePermission}}">
 @endsection
 @include('includs.script')
 <script>
@@ -304,6 +307,18 @@
                             status_color = "danger";
                             role_status = "@lang('lang.inactive')";
                         }
+                       
+                        let btn_edit = "";
+                        let btn_delete = "";
+                        if ($("#role_permission").val() =="admin" || $("#role_permission").val() =="developer") {
+                            btn_edit = '<a class="dropdown-item" href="{{url("role/edit")}}/'+(row.id)+'"><i class="fa fa-pencil m-r-5"></i> @lang("lang.edit")</a>';
+                            btn_delete = '<a class="dropdown-item roleDelete" href="#" data-id="'+(row.id)+'" ><i class="fa fa-trash-o m-r-5"></i> @lang("lang.delete")</a>';
+                        }
+                        let btn_dropdown =  '<div class="dropdown-menu dropdown-menu-right">'+
+                                        '<a class="dropdown-item" href="{{url("role/detail")}}/'+(row.id)+'"><i class="fa fa-pencil m-r-5"></i> @lang("lang.view_details")</a>'+
+                                        (btn_edit)+
+                                        (btn_delete)+
+                                    '</div>';
                         tr +='<tr class="odd">'+
                             '<td>'+(index)+'</td>'+
                             '<td>'+(row.role_name)+'</td>'+
@@ -331,13 +346,9 @@
                             '<td class="text-end">'+
                                 '<div class="dropdown dropdown-action">'+
                                     '<a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">'+
-                                    '<i  class="material-icons">more_vert</i>'+
+                                        '<i  class="material-icons">more_vert</i>'+
                                     '</a>'+
-                                    '<div class="dropdown-menu dropdown-menu-right">'+
-                                        '<a class="dropdown-item" href="{{url("role/detail")}}/'+(row.id)+'"><i class="fa fa-pencil m-r-5"></i> @lang("lang.view_details")</a>'+
-                                        '<a class="dropdown-item" href="{{url("role/edit")}}/'+(row.id)+'"><i class="fa fa-pencil m-r-5"></i> @lang("lang.edit")</a>'+
-                                        '<a class="dropdown-item roleDelete" href="#" data-id="'+(row.id)+'" ><i class="fa fa-trash-o m-r-5"></i> @lang("lang.delete")</a>'+
-                                    '</div>'+
+                                   (btn_dropdown)+
                                 '</div>'+
                             '</td>'+
                         '</tr>';

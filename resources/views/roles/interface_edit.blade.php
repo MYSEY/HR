@@ -2305,10 +2305,12 @@
                 </div>
                 <hr>
                 <div class="submit-section">
-                    <button type="button" class="btn btn-primary btn_edit" id="btn_edit">
-                        <span class="btn-text-save">@lang('lang.submit')</span>
-                        <span id="btn-save-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading') </span>
-                    </button>
+                    @if (Auth::user()->RolePermission == "admin" || Auth::user()->RolePermission == "developer")
+                        <button type="button" class="btn btn-primary btn_edit" id="btn_edit">
+                            <span class="btn-text-save">@lang('lang.submit')</span>
+                            <span id="btn-save-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i> @lang('lang.loading') </span>
+                        </button>
+                    @endif
                     <a href="{{ url('role') }}" class="btn btn-secondary btn-cancel">@lang('lang.cancel')</a>
                 </div>
             </form>
