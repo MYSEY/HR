@@ -35,7 +35,7 @@ class RoleConroller extends Controller
             $to_date = Carbon::createFromDate($request->to_date.' '.'23:59:59')->format('Y-m-d H:i:s');
         }
         $role=Role::with("useruse")
-        ->where("created_by", Auth::user()->id)
+        // ->where("created_by", Auth::user()->id)
         ->when($request->role_name, function ($query, $role_name) {
             $query->where('role_name', 'LIKE', '%'.$role_name.'%');
         })
@@ -49,6 +49,7 @@ class RoleConroller extends Controller
             $query->where('created_at','<=', $to_date);
         })
         ->get();
+        
         return response()->json(['role'=>$role]);
     }
     public function formCreate() {

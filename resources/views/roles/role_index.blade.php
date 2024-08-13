@@ -40,6 +40,7 @@
                                 <option selected disabled value=""> -- @lang('lang.all_type') --</option>
                                 <option value="BOD">Board of Director</option>
                                 <option value="CEO">Chief Executive Officer</option>
+                                <option value="HRAdmin">HR Admin</option>
                                 <option value="HR">Head of HR</option>
                                 <option value="HOD">Head of Department</option>
                                 <option value="BM">Branch Manager</option>
@@ -186,7 +187,7 @@
         </div>
     </div>
 </div>
-<input type="text" name="" id="role_permission" value="{{Auth::user()->RolePermission}}">
+<input type="hidden" name="" id="role_permission" value="{{Auth::user()->RolePermission}}">
 @endsection
 @include('includs.script')
 <script>
@@ -276,6 +277,8 @@
         });
     })
     function showDatas(params) {
+        console.log("params: ", params);
+        
         $.ajax({
             type: "post",
             url: "{{ url('role/search') }}",
@@ -289,6 +292,8 @@
             dataType: "JSON",
             success: function(response) {
                 let data =  response.role;
+                console.log("data: ", data);
+                
                 $(".btn-search").prop('disabled', false);
                 $(".btn-txt-search").show();
                 $(".loading-icon-search").css('display', 'none');
