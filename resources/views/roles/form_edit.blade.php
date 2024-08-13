@@ -289,20 +289,28 @@
             if (forgot_password_checkbox == $('input.forgot_password_checkbox').length) {
                 $("#forgot_password").prop("checked", true);
             };
+
+            // block province 
+            let province_checkbox = $('.province_checkbox').filter(':checked').length;
+            if (province_checkbox == $('input.province_checkbox').length) {
+                $("#province").prop("checked", true);
+            };
+            // block district 
+            let district_checkbox = $('.district_checkbox').filter(':checked').length;
+            if (district_checkbox == $('input.district_checkbox').length) {
+                $("#district").prop("checked", true);
+            };
+            // block commune 
+            let commune_checkbox = $('.commune_checkbox').filter(':checked').length;
+            if (commune_checkbox == $('input.commune_checkbox').length) {
+                $("#commune").prop("checked", true);
+            };
+            // block village 
+            let village_checkbox = $('.village_checkbox').filter(':checked').length;
+            if (village_checkbox == $('input.village_checkbox').length) {
+                $("#village").prop("checked", true);
+            };
         });
-        // $("#role_type").on("change", function () {
-        //     if ($(this).val() == "Employee") {
-        //         $('.hidden_leaves_employee').css('display', 'block');
-        //         $('.hidden_leaves_admin').css('display', 'none');
-        //         $('.leaves_admin_checkbox').val('');
-        //         $('.leaves_employee_checkbox').val('');
-        //     }else{
-        //         $('.hidden_leaves_employee').css('display', 'none');
-        //         $('.hidden_leaves_admin').css('display', 'block');
-        //         $('.leaves_employee_checkbox').val('');
-        //         $('.leaves_admin_checkbox').val('');
-        //     }
-        // });
         $(".btn_edit").on("click", function() {
             $("#btn-save-loading").css('display', 'block');
             $("#btn_edit").prop('disabled', true);

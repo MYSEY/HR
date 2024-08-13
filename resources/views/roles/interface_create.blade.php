@@ -146,7 +146,7 @@
                             </div>
                             <div class="col-md-4">
                                 <label class="container-checkbox">@lang('lang.view')
-                                    <input value="1" checked type="checkbox" class="employee_checkbox all_employee_checkbox" id="employee_view" data-name="is_view" name="employee_view"> <span class="checkmark"></span>
+                                    <input value="" type="checkbox" class="employee_checkbox all_employee_checkbox" id="employee_view" data-name="is_view" name="employee_view"> <span class="checkmark"></span>
                                 </label>
                                 <label class="container-checkbox">@lang('lang.add')
                                     <input type="checkbox" class="employee_checkbox all_employee_checkbox" id="employee_add" data-name="is_add" name="employee_add"> <span class="checkmark"></span>
@@ -201,7 +201,7 @@
                             </div>
                             <div class="col-md-4">
                                 <label class="container-checkbox">@lang('lang.view')
-                                    <input value="" checked type="checkbox" class="leave_checkbox leaves_admin_checkbox" id="leaves_admin_view" name="leaves_admin_view"> <span class="checkmark"></span>
+                                    <input value="" type="checkbox" class="leave_checkbox leaves_admin_checkbox" id="leaves_admin_view" name="leaves_admin_view"> <span class="checkmark"></span>
                                 </label>
                                 <label class="container-checkbox">@lang('lang.add')
                                     <input type="checkbox" class="leave_checkbox leaves_admin_checkbox" id="leaves_admin_add" name="leaves_admin_add"> <span class="checkmark"></span>
@@ -245,7 +245,7 @@
                             </div>
                             <div class="col-md-4">
                                 <label class="container-checkbox">@lang('lang.view')
-                                    <input value="1" checked type="checkbox" class="leave_checkbox leaves_employee_checkbox" id="leaves_employee_view" name="leaves_employee_view"> <span class="checkmark"></span>
+                                    <input value="" type="checkbox" class="leave_checkbox leaves_employee_checkbox" id="leaves_employee_view" name="leaves_employee_view"> <span class="checkmark"></span>
                                 </label>
                                 <label class="container-checkbox">@lang('lang.add')
                                     <input type="checkbox" class="leave_checkbox leaves_employee_checkbox" id="leaves_employee_add" name="leaves_employee_add"> <span class="checkmark"></span>
@@ -319,7 +319,7 @@
                             </div>
                             <div class="col-md-4">
                                 <label class="container-checkbox">@lang('lang.view')
-                                    <input value="1" checked type="checkbox" class="recruitment_checkbox candidate_CVs_checkbox" id="candidate_cv_view" name="candidate_cv_view"> <span class="checkmark"></span>
+                                    <input value="" type="checkbox" class="recruitment_checkbox candidate_CVs_checkbox" id="candidate_cv_view" name="candidate_cv_view"> <span class="checkmark"></span>
                                 </label>
                                 <label class="container-checkbox">@lang('lang.add')
                                     <input type="checkbox" class="recruitment_checkbox candidate_CVs_checkbox" id="candidate_cv_add" name="candidate_cv_add"> <span class="checkmark"></span>
@@ -363,7 +363,7 @@
                             </div>
                             <div class="col-md-4">
                                 <label class="container-checkbox">@lang('lang.view')
-                                    <input value="1" checked type="checkbox" class="recruitment_checkbox recruitment_plans_checkbox" id="recruitment_plan_view" name="recruitment_plan_view"> <span class="checkmark"></span>
+                                    <input value="" type="checkbox" class="recruitment_checkbox recruitment_plans_checkbox" id="recruitment_plan_view" name="recruitment_plan_view"> <span class="checkmark"></span>
                                 </label>
                                 <label class="container-checkbox">@lang('lang.add')
                                     <input type="checkbox" class="recruitment_checkbox recruitment_plans_checkbox" id="recruitment_plan_add" name="recruitment_plan_add"> <span class="checkmark"></span>
@@ -470,7 +470,7 @@
                             </div>
                             <div class="col-md-4">
                                 <label class="container-checkbox">@lang('lang.view')
-                                    <input value="1" checked type="checkbox" class="c_and_b_checkbox employee_salary_checkbox" id="c_and_b_view"> <span class="checkmark"></span>
+                                    <input value="" type="checkbox" class="c_and_b_checkbox employee_salary_checkbox" id="c_and_b_view"> <span class="checkmark"></span>
                                 </label>
                                 <label class="container-checkbox">@lang('lang.add')
                                     <input type="checkbox" class="c_and_b_checkbox employee_salary_checkbox" id="c_and_b_add"> <span class="checkmark"></span>
@@ -510,7 +510,7 @@
                             </div>
                             <div class="col-md-4">
                                 <label class="container-checkbox">@lang('lang.view')
-                                    <input value="1" checked type="checkbox" class="c_and_b_checkbox cb_nssf_checkbox" id="cb_nssf_view"> <span class="checkmark"></span>
+                                    <input value="" type="checkbox" class="c_and_b_checkbox cb_nssf_checkbox" id="cb_nssf_view"> <span class="checkmark"></span>
                                 </label>
                                 <label class="container-checkbox">@lang('lang.import')
                                     <input type="checkbox" class="c_and_b_checkbox cb_nssf_checkbox" id="cb_nssf_import"> <span class="checkmark"></span>
@@ -536,7 +536,7 @@
                             </div>
                             <div class="col-md-4">
                                 <label class="container-checkbox">@lang('lang.view')
-                                    <input value="1" checked type="checkbox" class="c_and_b_checkbox severance_pay_checkbox" id="severance_pay_view"> <span class="checkmark"></span>
+                                    <input value="" type="checkbox" class="c_and_b_checkbox severance_pay_checkbox" id="severance_pay_view"> <span class="checkmark"></span>
                                 </label>
                                 <label class="container-checkbox">@lang('lang.import')
                                     <input type="checkbox" class="c_and_b_checkbox severance_pay_checkbox" id="severance_pay_import"> <span class="checkmark"></span>
@@ -562,7 +562,7 @@
                             </div>
                             <div class="col-md-4">
                                 <label class="container-checkbox">@lang('lang.view')
-                                    <input value="1" checked type="checkbox" class="c_and_b_checkbox fringe_benefits_checkbox" id="fringe_benefits_view"> <span class="checkmark"></span>
+                                    <input value="" type="checkbox" class="c_and_b_checkbox fringe_benefits_checkbox" id="fringe_benefits_view"> <span class="checkmark"></span>
                                 </label>
                                 <label class="container-checkbox">@lang('lang.add')
                                     <input type="checkbox" class="c_and_b_checkbox fringe_benefits_checkbox" id="fringe_benefits_add"> <span class="checkmark"></span>
@@ -638,7 +638,7 @@
                             </div>
                             <div class="col-md-4">
                                 <label class="container-checkbox">@lang('lang.view')
-                                    <input value="1" checked type="checkbox" class="motor_rental_checkbox motor_rentals_checkbox" id="motor_rental_view" name="motor_rental_view"> <span class="checkmark"></span>
+                                    <input value="" type="checkbox" class="motor_rental_checkbox motor_rentals_checkbox" id="motor_rental_view" name="motor_rental_view"> <span class="checkmark"></span>
                                 </label>
                                 <label class="container-checkbox">@lang('lang.add')
                                     <input type="checkbox" class="motor_rental_checkbox motor_rentals_checkbox" id="motor_rental_add" name="motor_rental_add"> <span class="checkmark"></span>
@@ -677,7 +677,7 @@
                             </div>
                             <div class="col-md-4">
                                 <label class="container-checkbox">@lang('lang.view')
-                                    <input value="1" checked type="checkbox" class="motor_rental_checkbox generate_pay_motor_rentals_checkbox" id="generate_pay_motor_rental_view"> <span class="checkmark"></span>
+                                    <input value="" type="checkbox" class="motor_rental_checkbox generate_pay_motor_rentals_checkbox" id="generate_pay_motor_rental_view"> <span class="checkmark"></span>
                                 </label>
                                 <label class="container-checkbox">@lang('lang.add')
                                     <input type="checkbox" class="motor_rental_checkbox generate_pay_motor_rentals_checkbox" id="generate_pay_motor_rental_add"> <span class="checkmark"></span>
@@ -716,7 +716,7 @@
                             </div>
                             <div class="col-md-4">
                                 <label class="container-checkbox">@lang('lang.view')
-                                    <input value="1" checked type="checkbox" class="motor_rental_checkbox pay_motor_rentals_checkbox" id="Pay_motor_rental_view" name="Pay_motor_rental_view"> <span class="checkmark"></span>
+                                    <input value="" type="checkbox" class="motor_rental_checkbox pay_motor_rentals_checkbox" id="Pay_motor_rental_view" name="Pay_motor_rental_view"> <span class="checkmark"></span>
                                 </label>
                                 <label class="container-checkbox">@lang('lang.add')
                                     <input type="checkbox" class="motor_rental_checkbox pay_motor_rentals_checkbox" id="Pay_motor_rental_add" name="Pay_motor_rental_add"> <span class="checkmark"></span>
@@ -766,7 +766,7 @@
                             </div>
                             <div class="col-md-4">
                                 <label class="container-checkbox">@lang('lang.view')
-                                    <input value="1" checked type="checkbox" class="training_checkbox trainer_checkbox" id="trainer_check_view" name="trainer_check_view"> <span class="checkmark"></span>
+                                    <input value="" type="checkbox" class="training_checkbox trainer_checkbox" id="trainer_check_view" name="trainer_check_view"> <span class="checkmark"></span>
                                 </label>
                                 <label class="container-checkbox">@lang('lang.add')
                                     <input type="checkbox" class="training_checkbox trainer_checkbox" id="trainer_check_add" name="trainer_check_add"> <span class="checkmark"></span>
@@ -801,7 +801,7 @@
                             </div>
                             <div class="col-md-4">
                                 <label class="container-checkbox">@lang('lang.view')
-                                    <input value="1" checked type="checkbox" class="training_checkbox training_checkbox_block" id="training_check_view" name="training_check_view"> <span class="checkmark"></span>
+                                    <input value="" type="checkbox" class="training_checkbox training_checkbox_block" id="training_check_view" name="training_check_view"> <span class="checkmark"></span>
                                 </label>
                                 <label class="container-checkbox">@lang('lang.add')
                                     <input type="checkbox" class="training_checkbox training_checkbox_block" id="training_check_add" name="training_check_add"> <span class="checkmark"></span>
@@ -836,7 +836,7 @@
                             </div>
                             <div class="col-md-4">
                                 <label class="container-checkbox">@lang('lang.view')
-                                    <input value="1" checked type="checkbox" class="training_checkbox training_reports_checkbox" id="report_training_check_view" name="report_training_check_view"> <span class="checkmark"></span>
+                                    <input value="" type="checkbox" class="training_checkbox training_reports_checkbox" id="report_training_check_view" name="report_training_check_view"> <span class="checkmark"></span>
                                 </label>
                                 <label class="container-checkbox">@lang('lang.print')
                                     <input type="checkbox" class="training_checkbox training_reports_checkbox" id="report_training_check_print" name="report_training_check_print" > <span class="checkmark"></span>

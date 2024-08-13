@@ -999,7 +999,7 @@
                             </div>
                             <div class="col-md-4">
                                 <label class="container-checkbox">@lang('lang.view')
-                                    <input value="1" checked type="checkbox" class="motor_rental_checkbox generate_pay_motor_rentals_checkbox" id="generate_pay_motor_rental_view"
+                                    <input type="checkbox" class="motor_rental_checkbox generate_pay_motor_rentals_checkbox" id="generate_pay_motor_rental_view"
                                     {{SetCheckbox($arrayPermissions,"lang.generate_pay_motor","is_view")->checkbox}}
                                     value="{{SetCheckbox($arrayPermissions,"lang.generate_pay_motor","is_view")->value}}"> <span class="checkmark"></span>
                                 </label>
@@ -2120,7 +2120,7 @@
                                 <label class="container-checkbox">@lang('lang.add')
                                     <input type="checkbox" class="address_checkbox province_checkbox" id="province_check_add" name="province_check_add"
                                     {{SetCheckbox($arrayPermissions,"lang.province","is_create")->checkbox}}
-                                    value="{{SetCheckbox($arrayPermissions,"lang.province","is_view")->value}}"
+                                    value="{{SetCheckbox($arrayPermissions,"lang.province","is_create")->value}}"
                                     > <span class="checkmark"></span>
                                 </label>
                                 <label class="container-checkbox">@lang('lang.edit')  
@@ -2152,7 +2152,7 @@
                                 <label class="container-checkbox">@lang('lang.add')
                                     <input type="checkbox" class="address_checkbox district_checkbox" id="district_check_add" name="district_check_add"
                                     {{SetCheckbox($arrayPermissions,"lang.districts","is_create")->checkbox}}
-                                    value="{{SetCheckbox($arrayPermissions,"lang.districts","is_view")->value}}"
+                                    value="{{SetCheckbox($arrayPermissions,"lang.districts","is_create")->value}}"
                                     > <span class="checkmark"></span>
                                 </label>
                                 <label class="container-checkbox">@lang('lang.edit')  
@@ -2184,7 +2184,7 @@
                                 <label class="container-checkbox">@lang('lang.add')
                                     <input type="checkbox" class="address_checkbox commune_checkbox" id="commune_check_add" name="commune_check_add"
                                     {{SetCheckbox($arrayPermissions,"lang.commune","is_create")->checkbox}}
-                                    value="{{SetCheckbox($arrayPermissions,"lang.commune","is_view")->value}}"
+                                    value="{{SetCheckbox($arrayPermissions,"lang.commune","is_create")->value}}"
                                     > <span class="checkmark"></span>
                                 </label>
                                 <label class="container-checkbox">@lang('lang.edit')  
@@ -2218,7 +2218,7 @@
                                 <label class="container-checkbox">@lang('lang.add')
                                     <input type="checkbox" class="address_checkbox village_checkbox" id="village_check_add" name="village_check_add"
                                     {{SetCheckbox($arrayPermissions,"lang.village","is_create")->checkbox}}
-                                    value="{{SetCheckbox($arrayPermissions,"lang.village","is_view")->value}}"
+                                    value="{{SetCheckbox($arrayPermissions,"lang.village","is_create")->value}}"
                                     > <span class="checkmark"></span>
                                 </label>
                                 <label class="container-checkbox">@lang('lang.edit')  
