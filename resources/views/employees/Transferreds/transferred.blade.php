@@ -3,7 +3,7 @@
         <div class="card profile-box flex-fill">
             <div class="card-body">
                 <h3 class="card-title">@lang('lang.transferred') 
-                    @if (permissionAccess("m2-s1","is_update")->value == "1")
+                    @if (permissionAccess("m2-s1","is_create")->value == "1")
                     <a href="#" class="edit-icon" data-bs-toggle="modal" data-bs-target="#TransferrendModal"><i class="fa fa-pencil"></i></a>
                     @endif
                 </h3>

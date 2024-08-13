@@ -19,7 +19,7 @@
         </div>
         
         <div class="row">
-            <div class="{{ Auth::user()->RolePermission == 'HR' || Auth::user()->RolePermission == 'HRAdmin' || Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer' ? 'col-md-8' : 'col-md-12'  }} ">
+            <div class="{{ permissionAccess("m2-s1","is_create")->value == "1" ? 'col-md-8' : 'col-md-12' }} ">
                 <div class="card tab-box">
                     <div class="row card-body user-tabs">
                         <div class="col-10 col-md-12">
@@ -482,8 +482,8 @@
                     </div>
                 </div>
             </div>
-            @if (Auth::user()->RolePermission == 'HR' || Auth::user()->RolePermission == 'HRAdmin' || Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'developer' &&  permissionAccess("m2-s1","is_create")->value == "1")
-                <div class="col-md-4">
+            <div class="{{ permissionAccess("m2-s1","is_create")->value == "1" ? 'col-md-4' : '' }}">
+                @if (permissionAccess("m2-s1","is_create")->value == "1")
                     <div class="card">
                         <div class="card-body">
                             <div class="row">
@@ -525,8 +525,8 @@
                             <a href="#" class="btn btn-success" style="background-color: #99000a" id="btn-change-password">@lang('lang.change_password')</a>
                         </div>
                     </div> 
-                </div>
-            @endif
+                @endif
+            </div>
         </div>
         {!! Toastr::message() !!}
     </div>
