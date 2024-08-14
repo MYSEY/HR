@@ -581,6 +581,7 @@ return[
     "print_pdf"=>"Print FPD",
     "promoted_staff"=>"Promoted Staff",
     "probation"=>"Probation",
+    "profile_employee"=>"Profile Employee",
     "profile"=>"Profile",
     "position"=>"Position",
     "positions"=>"Positions",

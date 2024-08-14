@@ -242,7 +242,11 @@
                                                 @foreach (RolePermission()->subMenu as $sub_menu)
                                                     @if ($sub_menu["sub_menu_id"] == $menu["menu_id"])
                                                         <li>
-                                                            <a class="" href="{{url($sub_menu['url'])}}">@lang($sub_menu["name"])</a>
+                                                            @if (Auth::user()->RolePermission =="Employee" && $sub_menu["name"] =="lang.all_employee")
+                                                                <a class="" href="{{url($sub_menu['url'])}}">@lang("lang.profile_employee")</a>
+                                                            @else
+                                                                <a class="" href="{{url($sub_menu['url'])}}">@lang($sub_menu["name"])</a>
+                                                            @endif
                                                         </li>
                                                     @endif
                                                 @endforeach
