@@ -1178,7 +1178,7 @@ class EmployeePayrollController extends Controller
     }
     public function payrollStaffResign(Request $request){
         $data = $this->payrollRepo->getAllPayrollStaffResign($request);
-        $staffResign = User::whereIn('emp_status',['3','4','5','6','7'])->get();
+        $staffResign = User::whereIn('emp_status',['3','4','5','6','7','8','9'])->get();
         $branch = Branchs::all();
         $exChangeRateSalary= ExchangeRate::where('type','Salary')->orderBy('id','desc')->first();
         $exChangeRateNSSF= ExchangeRate::where('type','NSSF')->orderBy('id','desc')->first();

@@ -91,13 +91,13 @@ class ExportNSSF implements FromCollection, WithColumnWidths, WithHeadings, With
                 $value->users == null ? '' : $value->users->EmployeeGender,
                 $value->users == null ? '' : $value->users->EmployeePosition,
                 $value->users == null ? '' : $value->users->joinOfDate,
-                number_format($value->total_pre_tax_salary_usd,2),
+                $value->total_pre_tax_salary_usd,
                 number_format($value->total_pre_tax_salary_riel),
                 number_format($value->total_average_wage),
                 number_format($value->total_occupational_risk),
                 number_format($value->total_health_care),
                 number_format($value->pension_contribution_usd),
-                $value->pension_contribution_riel,
+                number_format($value->pension_contribution_riel,2),
                 number_format($value->corporate_contribution)
             ];
         }

@@ -144,7 +144,7 @@
                                                     <td><span>៛</span>{{ number_format($item->total_occupational_risk)}}</td>
                                                     <td>{{ number_format($item->total_health_care) }}</td>
                                                     <td><span>៛</span>{{ number_format($item->pension_contribution_usd) }}</td>
-                                                    <td>${{ $item->pension_contribution_riel }}</td>
+                                                    <td>${{ number_format($item->pension_contribution_riel,2) }}</td>
                                                     <td><span>៛</span>{{ number_format($item->corporate_contribution) }}</td>
                                                     <td>{{ Carbon\Carbon::parse($item->payment_date)->format('d-M-Y') }}</td>
                                                     <td>{{ Carbon\Carbon::parse($item->created_at)->format('d-M-Y') }}</td>
@@ -263,7 +263,7 @@
                                 '<td>'+(formatCurrencyKH(row.total_occupational_risk) )+'</td>'+
                                 '<td>'+(formatCurrencyKH(row.total_health_care) )+'</td>'+
                                 '<td><span>៛</span>'+(formatCurrencyKH(row.pension_contribution_usd) )+'</td>'+
-                                '<td>$'+(row.pension_contribution_riel )+'</td>'+
+                                '<td>$'+(formatCurrencyUSD(row.pension_contribution_riel))+'</td>'+
                                 '<td><span>៛</span>'+(formatCurrencyKH(row.corporate_contribution) )+'</td>'+
                                 '<td>'+(payment_date)+'</td>'+
                                 '<td>'+(created_at)+'</td>'+
@@ -282,6 +282,9 @@
     }
     function formatCurrencyKH(currency) {
         return parseInt(currency).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+    function formatCurrencyUSD(currency) {
+        return parseFloat(currency).toFixed(2);
     }
     function print_pdf(type) {
         $("#print_purchase").show();
