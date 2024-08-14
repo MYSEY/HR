@@ -235,7 +235,7 @@
 
                                 <div class="col-sm-6">
                                     <div class="form-group trainer-external">
-                                        <label>@lang('lang.phone') </label>
+                                        <label>@lang('lang.phone_number') </label>
                                         <input class="form-control trainer_required @error('number_phone') is-invalid @enderror" type="number" name="number_phone">
                                     </div>
                                 </div>
@@ -329,7 +329,7 @@
                                 </div>
                                 <div class="col-sm-6">
                                     <div class="form-group e-trainer-external">
-                                        <label>@lang('lang.phone') </label>
+                                        <label>@lang('lang.phone_number') </label>
                                         <input class="form-control data-clear e_trainer_required @error('number_phone') is-invalid @enderror" type="number" id="e_number_phone" name="number_phone">
                                     </div>
                                 </div>

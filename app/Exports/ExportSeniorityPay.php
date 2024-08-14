@@ -279,7 +279,7 @@ class ExportSeniorityPay implements FromCollection, WithColumnWidths, WithHeadin
             "ខែទី ៥/១១",
             "ខែទី ៦/១២",
             "ប្រាក់បំណាច់សរុប",
-            "ប្រាក់បំណាច់កិច្ចសន្យាសរុប",
+            "ប្រាក់បំណាច់អតីតភាពការងារ",
             "ប្រាក់ខែលើកលែងពន្ធ",
             "ប្រាក់ខែជាប់ពន្ធ",
         ];
