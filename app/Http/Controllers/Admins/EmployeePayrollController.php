@@ -1205,7 +1205,7 @@ class EmployeePayrollController extends Controller
                     }
                 }
             }
-            $staffResign = User::where('number_employee',$request->number_employee)->whereIn('emp_status',['3','4','5','6','7'])->get();
+            $staffResign = User::where('number_employee',$request->number_employee)->whereIn('emp_status',['3','4','5','6','7','8','9'])->get();
             if (!$staffResign->isEmpty()) {
                 foreach ($staffResign as $item) {
                     //fuction check laon amount
@@ -1350,29 +1350,53 @@ class EmployeePayrollController extends Controller
                         }
                     }
 
-                    $totalGrossSalary = $item->basic_salary + $totalSalaryAL;
+                    $totalGrossSalary = $totalSalaryStaffResign + $totalSalaryAL;
                     
-                    //National Social Security Fund (NSSF) Formula
-                    $exchangNSSF = ExchangeRate::where('type','NSSF')->orderBy('id','desc')->first();
-                    if ($exchangNSSF) {
-                        $totalExchangeRielPreTax =  $exchangNSSF->amount_riel * round($totalGrossSalary,2);
-                        if ($totalExchangeRielPreTax) {
-                            if ($totalExchangeRielPreTax >= 1200000) {
-                                $averageWage    = 1200000;
-                            }else if($totalExchangeRielPreTax >= 400000){
-                                $averageWage    = $totalExchangeRielPreTax;
+                    // function get age employee <= 60 National Social Security Fund (NSSF) Formula
+                    $pension_contribution = 0;
+                    if($item->is_type_nssf != 1){
+                        $exchangNSSF = ExchangeRate::where('type','NSSF')->orderBy('id','desc')->first();
+                        if ($exchangNSSF) {
+                            $totalExchangeRielPreTax =  $exchangNSSF->amount_riel * round($totalGrossSalary,2);
+                            if ($totalExchangeRielPreTax) {
+                                if ($totalExchangeRielPreTax >= 1200000) {
+                                    $averageWage    = 1200000;
+                                }else if($totalExchangeRielPreTax >= 400000){
+                                    $averageWage    = $totalExchangeRielPreTax;
+                                }else{
+                                    $averageWage = 400000;
+                                }
                             }else{
-                                $averageWage = 400000;
+                                $averageWage = 0;
                             }
-                        }else{
-                            $averageWage = 0;
+                            $occupationalRisk = (0.008 * $averageWage);
+                            $healthCare = (0.026 * $averageWage);
+                            $workerContributionUsd = ($averageWage * 0.02);
+
+                            $workerContributionRiel = 0;
+                            $age = Carbon::createFromDate($item->date_of_birth)->format('Y-m-d');
+                            $yearsOfEmployee = Carbon::parse($age)->age;
+                            if($yearsOfEmployee < 60){
+                                $workerContributionRiel = $workerContributionUsd / $exchangNSSF->amount_riel;
+                            }
+                            $dataNSSF = PreviewNationalSocialSecurityFund::create([
+                                'employee_id'                   => $item->id,
+                                'number_employee'               => $item->number_employee,
+                                'total_pre_tax_salary_usd'      => round($totalGrossSalary,2),
+                                'total_pre_tax_salary_riel'     => $totalExchangeRielPreTax,
+                                'total_average_wage'            => $averageWage,
+                                'total_occupational_risk'       => round($occupationalRisk,-2),
+                                'total_health_care'             => $healthCare,
+                                'pension_contribution_usd'      => round($workerContributionUsd, -2),
+                                'pension_contribution_riel'     => $workerContributionRiel,
+                                'corporate_contribution'        => round($workerContributionUsd, -2),
+                                'exchange_rate'                 => $exchangNSSF->amount_riel,
+                                'payment_date'                  => $request->payment_date,
+                                'created_by'                    => Auth::user()->id,
+                            ]);
                         }
-                        $occupationalRisk = (0.008 * $averageWage);
-                        $healthCare = (0.026 * $averageWage);
-                        $workerContributionUsd = ($averageWage * 0.02);
-                        $workerContributionRiel = round($workerContributionUsd,-2) / $exchangNSSF->amount_riel;
+                        $pension_contribution = round($dataNSSF->pension_contribution_riel,2);
                     }
-                    $pension_contribution = $workerContributionRiel;
 
                     //function Seniority pay
                     $seniorityPayableTax = 0;
