@@ -397,6 +397,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
 
     // route block recruitment candidate resume
     Route::get('/recruitment/candidate-resume/list', [CandidateResumeController::class,'index']);
+    Route::get('/recruitment/candidate-resume/preview/{id}', [CandidateResumeController::class,'preview']);
     Route::get('/recruitment/candidate-resume/show', [CandidateResumeController::class,'show']);
     Route::post('/recruitment/candidate-resume/store', [CandidateResumeController::class,'store']);
     Route::get('/recruitment/candidate-resume/edit', [CandidateResumeController::class,'edit']);
