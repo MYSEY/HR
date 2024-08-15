@@ -29,7 +29,7 @@ return new class extends Migration
             $table->string('body_number')->nullable();
             $table->string('engine_number')->nullable();
             $table->integer('total_gasoline')->nullable();
-            $table->integer('total_work_day')->nullable();
+            $table->decimal('total_work_day',50,1)->nullable();
             $table->decimal('price_engine_oil')->nullable();
             $table->decimal('price_motor_rentel')->nullable();
             $table->string('taplab_rentel')->nullable();
