@@ -163,6 +163,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('role/detail/{id}', [RoleConroller::class,'detail']);
     Route::post('role/status', [RoleConroller::class,'processing']);
     Route::Resource('permission', PermissionController::class);
+    Route::get('role/show', [RoleConroller::class,'show']);
 
     Route::get('/department', [DepartmentController::class,'index']);
     Route::post('/department/store', [DepartmentController::class,'store']);
@@ -203,6 +204,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('users/update/line-manager',[UserController::class,'updateLineManager']);
     Route::post('users/duplicate', [UserController::class, 'duplicateEmployeeId']);
     Route::post('users/import/update/employee', [UserController::class, 'importUpdateEmployee']);
+    Route::post('users/update/role', [UserController::class, 'updateRole']);
 
     //Employee Payroll
     Route::get('payroll',[EmployeePayrollController::class,'index']);

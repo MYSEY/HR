@@ -255,6 +255,103 @@
             $('.e_profile').val(_this.find('.image').text());
         });
 
+        $('body').on('click', '.btn-emp-role', function() {
+            var em_id = $(this).data("emid");
+            var em_role_id = $(this).data("roleid");
+            $.confirm({
+                title: '@lang("lang.change_role_permission")',
+                contentClass: 'text-center',
+                // backgroundDismiss: 'cancel',
+                content: ''+
+                    '<form id="add-style" style="height: 200;">'+
+                        '<div class="form-group">'+
+                            '<label>@lang("lang.role_permission")</label>'+
+                            '<select class="form-control hr-select2-option-emp-role form-select role_id" id="role_id">'+
+                            
+                            '</select>'+
+                        '</div>'+
+                    '</form>',
+                buttons: {
+                    confirm: {
+                        text: 'Submit',
+                        btnClass: 'add-btn-status',
+                        action: function() {
+                            var role_id = this.$content.find('.role_id').val();
+
+                            if (!role_id) {
+                                $.alert({
+                                    title: '<span class="text-danger">@lang("lang.requiered")</span>',
+                                    content: 'Please select role permission',
+                                });
+                                return false;
+                            }
+                            
+                            axios.post('{{ URL('users/update/role') }}', {
+                                'id': em_id,
+                                'role_id': role_id
+                            }).then(function(response) {
+                            new Noty({
+                                title: "",
+                                text: '@lang("lang.the_process_has_been_successfully")',
+                                type: "success",
+                                icon: true
+                            }).show();
+                            window.location.replace("{{ URL('users') }}");
+                            }).catch(function(error) {
+                                new Noty({
+                                    title: "",
+                                    text: '@lang("lang.something_went_wrong_please_try_again_later")',
+                                    type: "error",
+                                    icon: true
+                                }).show();
+                            });
+                        }
+                    },
+                    cancel: {
+                        text: 'Cancel',
+                        btnClass: 'btn-secondary btn-sm',
+                    },
+                },
+                onContentReady: function() {
+                    // bind to events
+                    var jc = this;
+                    this.$content.find('form').on('submit', function(e) {
+                        // if the user submits the form by pressing enter in the field.
+                        e.preventDefault();
+                        jc.$$formSubmit.trigger('click'); // reference the button and click it
+                    });
+                }
+            });
+            $(document).ready(function(){
+                $('.hr-select2-option-emp-role').each(function() {
+                    $(this).select2({
+                        width: '100%',
+                        dropdownParent: $(this).parent(),
+                    })
+                });
+                $.ajax({
+                    type: "GET",
+                    url: "{{ url('role/show') }}",
+                    data: {},
+                    dataType: "JSON",
+                    success: function(response) {
+                        let dataRole = response.data;
+                        
+                        $('#role_id').html('<option selected > -- @lang("lang.select") --</option>');
+                        if (dataRole != '') {
+                            $.each(dataRole, function(i, item) {
+                                $('#role_id').append($('<option>', {
+                                    value: item.id,
+                                    text: item.role_name,
+                                    selected: item.id == em_role_id
+                                }));
+                            });
+                        }
+                    }
+                });
+            });
+        });
+
         $('body').on('click', '#btn-emp-status a', function() {
             let id = $(this).attr('data-emp-id');
             let status = $(this).data('id');

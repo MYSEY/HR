@@ -136,9 +136,13 @@ class RoleConroller extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show()
     {
-        //
+        $dataRoles = Role::get();
+        return response()->json([
+            'data'=>$dataRoles,
+            'status'=>200
+        ]);
     }
 
     /**

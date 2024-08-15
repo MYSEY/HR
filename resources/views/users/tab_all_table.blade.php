@@ -64,7 +64,16 @@
                                                     <td>{{$item->position == "" ? "" : $item->position->position_type}}</td>
                                                     <td>{{$item->personal_phone_number}}</td>
                                                     <td>
-                                                        <span class="badge bg-inverse-success">{{ $item->role == null ? "" : $item->role->role_name }}</span>
+                                                        @if (permissionAccess("m2-s1","is_update")->value == "1")
+                                                            <a class="btn btn-white btn-sm btn-rounded btn-emp-role" data-emid="{{$item->id}}" data-roleid="{{$item->role_id}}" href="#" aria-expanded="false">
+                                                                <i class="fa fa-dot-circle-o text-success"></i>
+                                                                <span >{{ $item->role == null ? "" : $item->role->role_name }}</span>
+                                                            </a>
+                                                        @else
+                                                            <a class="btn btn-white btn-sm btn-rounded" href="#">
+                                                                <i class="fa fa-dot-circle-o text-success"></i> <span>{{ $item->role == null ? "" : $item->role->role_name }}</span>
+                                                            </a>
+                                                        @endif
                                                     </td>
                                                     @if (permissionAccess("m2-s1","is_view_salary")->value == "1")
                                                         <td>$<a href="#">{{$item->basic_salary}}</a></td>
@@ -222,7 +231,17 @@
                                                     <td>{{$item->position == "" ? "" : $item->position->position_type}}</td>
                                                     <td>{{$item->personal_phone_number}}</td>
                                                     <td>
-                                                        <span class="badge bg-inverse-success">{{ $item->role == null ? "" : $item->role->role_name }}</span>
+                                                        @if (permissionAccess("m2-s1","is_update")->value == "1")
+                                                            <a class="btn btn-white btn-sm btn-rounded btn-emp-role" data-emid="{{$item->id}}" data-roleid="{{$item->role_id}}" href="#" aria-expanded="false">
+                                                                <i class="fa fa-dot-circle-o text-success"></i>
+                                                                <span >{{ $item->role == null ? "" : $item->role->role_name }}</span>
+                                                            </a>
+                                                        @else
+                                                            <a class="btn btn-white btn-sm btn-rounded" href="#">
+                                                                <i class="fa fa-dot-circle-o text-success"></i> <span>{{ $item->role == null ? "" : $item->role->role_name }}</span>
+                                                            </a>
+                                                        @endif
+                                                        {{-- <span class="badge bg-inverse-success">{{ $item->role == null ? "" : $item->role->role_name }}</span> --}}
                                                     </td>
                                                     @if (permissionAccess("m2-s1","is_view_salary")->value == "1")
                                                         <td>$<a href="#">{{$item->basic_salary}}</a></td>
@@ -393,7 +412,17 @@
                                                     <td>{{$item->position == "" ? "" : $item->position->position_type}}</td>
                                                     <td>{{$item->personal_phone_number}}</td>
                                                     <td>
-                                                        <span class="badge bg-inverse-success">{{ $item->role == null ? "" : $item->role->role_name }}</span>
+                                                        @if (permissionAccess("m2-s1","is_update")->value == "1")
+                                                            <a class="btn btn-white btn-sm btn-rounded btn-emp-role" data-emid="{{$item->id}}" data-roleid="{{$item->role_id}}" href="#" aria-expanded="false">
+                                                                <i class="fa fa-dot-circle-o text-success"></i>
+                                                                <span >{{ $item->role == null ? "" : $item->role->role_name }}</span>
+                                                            </a>
+                                                        @else
+                                                            <a class="btn btn-white btn-sm btn-rounded" href="#">
+                                                                <i class="fa fa-dot-circle-o text-success"></i> <span>{{ $item->role == null ? "" : $item->role->role_name }}</span>
+                                                            </a>
+                                                        @endif
+                                                        {{-- <span class="badge bg-inverse-success">{{ $item->role == null ? "" : $item->role->role_name }}</span> --}}
                                                     </td>
                                                     @if (permissionAccess("m2-s1","is_view_salary")->value == "1")
                                                         <td>$<a href="#">{{$item->basic_salary}}</a></td>

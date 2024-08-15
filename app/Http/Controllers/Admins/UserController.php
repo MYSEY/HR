@@ -490,6 +490,21 @@ class UserController extends Controller
         }
     }
 
+    public function updateRole(Request $request){
+        try{
+            User::where('id',$request->id)->update([
+                "role_id"=> $request->role_id
+            ]);
+            DB::commit();
+            Toastr::success('Updated role successfully.','Success');
+            return redirect('users');
+        }catch(\Exception $e){
+            DB::rollback();
+            Toastr::error('Update role fail','Error');
+            return redirect()->back();
+        }
+    }
+
     /**
      * Remove the specified resource from storage.
      *
