@@ -1565,6 +1565,7 @@
                                         '</a>';
                             let btn_delete = "";
                             let btn_edit = "";
+                            let btn_preview = "";
                             let print = "";
                             if (is_print == 1 || is_delete == 1 || is_update == 1) {
                                 if (is_print == 1 ) {
@@ -1572,6 +1573,7 @@
                                 }
                                 if (is_update == 1) {
                                     btn_edit =  '<a class="dropdown-item userUpdate" href="{{url("/recruitment/candidate-resume/upcoming/edit")}}/'+(emp.id)+'" data-id="'+(emp.id)+'"><i class="fa fa-pencil m-r-5"></i> @lang("lang.edit")</a>';
+                                    btn_preview =  '<a class="dropdown-item" href="{{url("/recruitment/candidate-resume/preview")}}/'+(emp.id)+'"><i class="fa fa-pencil m-r-5"></i> @lang("lang.preview")</a>';
                                     dropdown_status ='<div class="dropdown action-label">'+
                                             '<a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">'+
                                                 '<i class="fa fa-dot-circle-o text-success"></i>'+
@@ -1597,6 +1599,7 @@
                                                     '</a>'+
                                                     '<div class="dropdown-menu dropdown-menu-right">'+
                                                         (btn_edit)+
+                                                        (btn_preview)+
                                                         (print)+
                                                         (btn_delete)+
                                                     '</div>'+
