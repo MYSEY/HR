@@ -870,4 +870,8 @@ class CandidateResumeController extends Controller
             return redirect()->back();
         }
     }
+    public function preview(Request $request){
+        $data = User::where('id',$request->id)->first();
+        return view('recruitments.candidate_resumes.preview',compact('data'));
+    }
 }
