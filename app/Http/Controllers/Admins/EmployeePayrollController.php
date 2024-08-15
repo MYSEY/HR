@@ -1208,6 +1208,7 @@ class EmployeePayrollController extends Controller
             $staffResign = User::where('number_employee',$request->number_employee)->whereIn('emp_status',['3','4','5','6','7','8','9'])->get();
             if (!$staffResign->isEmpty()) {
                 foreach ($staffResign as $item) {
+                    PreviewNationalSocialSecurityFund::where('employee_id',$item->id)->delete();
                     //fuction check laon amount
                     if (array_key_exists($item->number_employee, $dadaArrayLoan)) {
                         $LoanAmount = $dadaArrayLoan[$item->number_employee]['laon_amount'];

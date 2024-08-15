@@ -148,22 +148,22 @@ class ReportRepository extends BaseRepository
                         $amount_riel = (($fri->amount_usd ? $fri->amount_usd : 0) * $item->exchange_rate) + ($fri->amount_riel ? $fri->amount_riel : 0);
                         $tax_deduction_usd = $fri->amount_usd ? $fri->amount_usd / 2 : 0;
                         $amount_usd = ($fri->amount_usd ? $fri->amount_usd / 2: 0);
-                        $tax_deduction_riel = ($fri->amount_riel ? $fri->amount_riel/2: 0) + (round($amount_usd,2) * $item->exchange_rate);
-                        $withholding_tax_rate_usd = $tax_deduction_usd ? ($tax_deduction_usd * 20) / 100 : 0;
-                        $withholding_tax_rate_riel = $withholding_tax_rate_usd ? (round($withholding_tax_rate_usd,2) * $item->exchange_rate) : ($tax_deduction_riel ? ($tax_deduction_riel * 20 / 100): 0);
+                        $tax_deduction_riel = round($amount_usd,2) * $item->exchange_rate;
+                        $withholding_tax_rate_usd = ($amount_usd * 20) / 100 ;
+                        $withholding_tax_rate_riel =  ($tax_deduction_riel * 20 / 100);
                         $earnings_after_tax_usd = round($tax_deduction_usd,2) - round($withholding_tax_rate_usd,2);
-                        $earnings_after_tax_riel = $tax_deduction_riel - $withholding_tax_rate_riel;
+                        $earnings_after_tax_riel = $tax_deduction_riel - round($withholding_tax_rate_riel);
                         $datas[] = [
                             "exchange_rate"=>$item->exchange_rate,
                             "employee"=>$fri->employee,
                             "amount_usd"=>$fri->amount_usd ? $fri->amount_usd: "",
                             "amount_riel"=>$amount_riel,
                             "tax_deduction_usd"=> $tax_deduction_usd ? round($tax_deduction_usd,2) : "",
-                            "tax_deduction_riel"=> $tax_deduction_riel,
+                            "tax_deduction_riel"=> round($tax_deduction_riel,2),
                             "withholding_tax_rate_usd"=> $withholding_tax_rate_usd ? round($withholding_tax_rate_usd,2) : "",
-                            "withholding_tax_rate_riel"=> $withholding_tax_rate_riel,
+                            "withholding_tax_rate_riel"=> round($withholding_tax_rate_riel),
                             "earnings_after_tax_usd"=> $earnings_after_tax_usd ? round($earnings_after_tax_usd,2) : "",
-                            "earnings_after_tax_riel"=> $earnings_after_tax_riel ? $earnings_after_tax_riel : "",
+                            "earnings_after_tax_riel"=> round($earnings_after_tax_riel),
                         ];
                     }
                 }
