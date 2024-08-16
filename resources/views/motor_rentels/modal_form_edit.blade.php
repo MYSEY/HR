@@ -108,7 +108,7 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="">@lang('lang.total_working_days') <span class="text-danger">*</span></label>
-                                <input class="form-control e_emp_required @error('total_work_day') is-invalid @enderror" type="number" id="e_total_work_day" required name="total_work_day" value="{{old('total_work_day')}}">
+                                <input class="form-control e_emp_required @error('total_work_day') is-invalid @enderror" step="any" type="number" id="e_total_work_day" required name="total_work_day" value="{{old('total_work_day')}}">
                             </div>
                         </div>
                         <div class="col-sm-6">

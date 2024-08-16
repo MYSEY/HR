@@ -115,7 +115,7 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="">@lang('lang.total_working_days') <span class="text-danger">*</span></label>
-                                <input class="form-control emp_required m_clear" type="number" id="total_work_day" name="total_work_day" value="{{old('total_work_day')}}" required>
+                                <input class="form-control emp_required m_clear" step="any" type="number" id="total_work_day" name="total_work_day" value="{{old('total_work_day')}}" required>
                             </div>
                         </div>
                         <div class="col-sm-6">

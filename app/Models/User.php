@@ -238,6 +238,16 @@ class User extends Authenticatable
     public function permanentprovince(){
         return $this->belongsTo(Province::class,'permanent_province','code');
     }
+    public function permanentdistrict(){
+        return $this->belongsTo(District::class,'permanent_district','code');
+    }
+    public function permanentcommune(){
+        return $this->belongsTo(Conmmunes::class,'permanent_commune','code');
+    }
+    public function permanentvillage(){
+        return $this->belongsTo(Villages::class,'permanent_village','code');
+    }
+
 
     public function getMediumProfileAttribute()
     {

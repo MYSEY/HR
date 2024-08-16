@@ -987,6 +987,9 @@
                             deleted = '<a class="dropdown-item userDelete" href="#" data-toggle="modal" data-id="'+(emp.id)+'" data-target="#delete_user"><i class="fa fa-trash-o m-r-5"></i> @lang("lang.delete")</a>';
                         }
                         let dropdown_action = "";
+                        let select_role = '<a class="btn btn-white btn-sm btn-rounded" href="#">'+
+                                '<i class="fa fa-dot-circle-o text-success"></i> <span>'+(emp.role == null ? "" : emp.role.role_name )+'</span>'+
+                            '</a>';
                         if (is_delete == 1 || is_update == 1) {
                             dropdown_action = '<div class="dropdown dropdown-action">'+
                                 '<a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">'+
@@ -997,6 +1000,12 @@
                                     (deleted)+
                                 '</div>'+
                             '</div>';
+                            if (is_update == 1) {
+                                select_role = ' <a class="btn btn-white btn-sm btn-rounded btn-emp-role" data-emid="'+(emp.id)+'" data-roleid="'+(emp.role_id)+'" href="#" aria-expanded="false">'+
+                                    '<i class="fa fa-dot-circle-o text-success"></i>'+
+                                    '<span >'+(emp.role == null ? "" : emp.role.role_name )+'</span>'+
+                                '</a>'; 
+                            }
                         }
                         let basic_salary = "";
                         let salary_increas = "";
@@ -1024,7 +1033,8 @@
                                 '<td>'+(emp.position.position_type)+'</td>'+
                                 '<td>'+(emp.personal_phone_number)+'</td>'+
                                 '<td>'+
-                                    '<span class="badge bg-inverse-success">'+(emp.role == null ? "" : emp.role.role_name )+'</span>'+
+                                    (select_role)+
+                                    // '<span class="badge bg-inverse-success">'+(emp.role == null ? "" : emp.role.role_name )+'</span>'+
                                 '</td>'+
                                 (basic_salary)+
                                 (salary_increas)+
