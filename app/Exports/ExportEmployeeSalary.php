@@ -52,9 +52,12 @@ class ExportEmployeeSalary implements FromCollection, WithColumnWidths, WithHead
     {
         $Monthly = null;
         $yearLy = null;
+        $startOfLastMonth = null;
         if ($request->filter_month) {
             $Monthly = Carbon::createFromDate($request->filter_month)->format('m');
             $yearLy = Carbon::createFromDate($request->filter_month)->format('Y');
+        }else{
+            $startOfLastMonth = Carbon::now()->subMonth()->startOfMonth();
         }
         $payroll = Payroll::with("users")
         ->join('users', 'payrolls.employee_id', '=', 'users.id')
@@ -82,6 +85,9 @@ class ExportEmployeeSalary implements FromCollection, WithColumnWidths, WithHead
         })
         ->when($request->branch_id, function ($query, $branch_id) {
             $query->where('users.branch_id', $branch_id);
+        })
+        ->when($startOfLastMonth, function ($query, $startOfLastMonth) {
+            $query->whereBetween('payrolls.payment_date', [Helper::startOfLastendOfLastMonth()->startOfLastMonth, Helper::startOfLastendOfLastMonth()->endOfLastMonth]);
         })
         ->when($Monthly, function ($query, $Monthly) {
             $query->whereMonth('payment_date', $Monthly);

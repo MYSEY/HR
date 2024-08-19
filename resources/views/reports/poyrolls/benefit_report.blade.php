@@ -142,6 +142,10 @@
                                                             @lang('lang.total_allowance')</th>
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                             rowspan="1" colspan="1"
+                                                            aria-label="payment_date: activate to sort column ascending">@lang('lang.payment_date')
+                                                        </th>
+                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                            rowspan="1" colspan="1"
                                                             aria-label="Salary: activate to sort column ascending">@lang('lang.created_at')
                                                         </th>
                                                     </tr>
@@ -160,6 +164,7 @@
                                                                 <td>${{ $item->base_salary }}</td>
                                                                 <td>${{ $item->base_salary_received }}</td>
                                                                 <td>${{ $item->total_allowance }}</td>
+                                                                <td>{{ Carbon\Carbon::parse($item->payment_date)->format('d-M-Y') }}</td>
                                                                 <td>{{ Carbon\Carbon::parse($item->created_at)->format('d-M-Y') }}</td>
                                                             </tr>
                                                         @endforeach

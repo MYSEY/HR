@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Admin;
 
+use App\Helpers\Helper;
 use App\Models\Payroll;
 use App\Models\payrollPreview;
 use Illuminate\Support\Carbon;
@@ -35,8 +36,7 @@ class PayrollRepository extends BaseRepository
     }
 
     public function getAllPayroll(){
-        $Monthly= Carbon::now()->format('m');
-        $yearLy = Carbon::now()->format('Y');
+       
         if (Auth::user()->RolePermission == 'Employee') {
             return DB::table('payrolls')
             ->leftJoin('users','payrolls.employee_id','=','users.id')
@@ -91,13 +91,20 @@ class PayrollRepository extends BaseRepository
                 if ($RolePermission == 'BM') {
                     $query->where("users.branch_id", Auth::user()->branch_id);
                 }
-            })->whereMonth('payrolls.payment_date','<=',$Monthly)->whereYear('payrolls.payment_date','>=',$yearLy)->get();
+            })
+            ->whereBetween('payment_date', [Helper::startOfLastendOfLastMonth()->startOfLastMonth, Helper::startOfLastendOfLastMonth()->endOfLastMonth])
+            ->get();
         }
     }
     public function getAllPayrollPreview(){
         return payrollPreview::with("users")->orderBy('number_employee','asc')->get();
     }
     public function getAllPayrollStaffResign(){
-        return ParyllStaffResign::with("users")->get();
+        $yearLy = Carbon::now()->format('Y');
+        $datas = ParyllStaffResign::with("users")
+        ->whereYear('payment_date','=',$yearLy)
+        ->orderBy('payment_date', 'desc')
+        ->get();
+        return  $datas;
     }
 }

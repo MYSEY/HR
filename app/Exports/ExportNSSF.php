@@ -2,6 +2,7 @@
 
 namespace App\Exports;
 
+use App\Helpers\Helper;
 use Carbon\Carbon;
 use KhmerDateTime\KhmerDateTime;
 use Maatwebsite\Excel\Events\AfterSheet;
@@ -32,11 +33,14 @@ class ExportNSSF implements FromCollection, WithColumnWidths, WithHeadings, With
 
     public function __construct($request)
     {
+        $startOfLastMonth = null;
         $Monthly = null;
         $yearLy = null;
         if ($request->filter_month) {
             $Monthly = Carbon::createFromDate($request->filter_month)->format('m');
             $yearLy = Carbon::createFromDate($request->filter_month)->format('Y');
+        }else{
+            $startOfLastMonth = Carbon::now()->subMonth()->startOfMonth();
         }
         $nssf=[];
         $datas = NationalSocialSecurityFund::with("users")
@@ -65,6 +69,9 @@ class ExportNSSF implements FromCollection, WithColumnWidths, WithHeadings, With
         })
         ->when($request->employee_name, function ($query, $employee_name) {
             $query->where('users.employee_name_en', 'LIKE', '%'.$employee_name.'%');
+        })
+        ->when($startOfLastMonth, function ($query, $startOfLastMonth) {
+            $query->whereBetween('national_social_security_funds.payment_date', [Helper::startOfLastendOfLastMonth()->startOfLastMonth, Helper::startOfLastendOfLastMonth()->endOfLastMonth]);
         })
         ->when($Monthly, function ($query, $Monthly) {
             $query->whereMonth('national_social_security_funds.payment_date', $Monthly);

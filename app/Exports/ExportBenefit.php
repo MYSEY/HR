@@ -29,9 +29,12 @@ class ExportBenefit implements FromCollection, WithColumnWidths, WithHeadings, W
     {
         $Monthly = null;
         $yearLy = null;
+        $startOfLastYear = null;
         if ($request->filter_month) {
             $Monthly = Carbon::createFromDate($request->filter_month)->format('m');
             $yearLy = Carbon::createFromDate($request->filter_month)->format('Y');
+        }else{
+            $startOfLastYear = Carbon::now()->startOfYear();
         }
         $nssf=[];
         $datas = Bonus::with("users")
@@ -60,6 +63,10 @@ class ExportBenefit implements FromCollection, WithColumnWidths, WithHeadings, W
         })
         ->when($request->employee_name, function ($query, $employee_name) {
             $query->where('users.employee_name_en', 'LIKE', '%'.$employee_name.'%');
+        })
+        ->when($startOfLastYear, function ($query, $startOfLastYear) {
+            $endOfLastYear = Carbon::now()->endOfYear();
+            $query->whereBetween('payment_date', [$startOfLastYear, $endOfLastYear]);
         })
         ->when($Monthly, function ($query, $Monthly) {
             $query->whereMonth('bonuses.payment_date', $Monthly);

@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Admin;
 
+use App\Helpers\Helper;
 use App\Models\FringeBenefit;
 use App\Models\Payroll;
 use App\Repositories\BaseRepository;
@@ -35,9 +36,12 @@ class ReportRepository extends BaseRepository
     public function getEFilingSalary($request){
         $Monthly = null;
         $yearLy = null;
+        $startOfLastMonth = null;
         if ($request->filter_month) {
             $Monthly = Carbon::createFromDate($request->filter_month)->format('m');
             $yearLy = Carbon::createFromDate($request->filter_month)->format('Y');
+        }else{
+            $startOfLastMonth = Carbon::now()->subMonth()->startOfMonth();
         }
         $payroll = Payroll::with("users")
             ->join('users', 'payrolls.employee_id', '=', 'users.id')
@@ -70,6 +74,9 @@ class ReportRepository extends BaseRepository
             })
             ->when($request->position_id, function ($query, $position_id) {
                 $query->where('users.position_id', $position_id);
+            })
+            ->when($startOfLastMonth, function ($query, $startOfLastMonth) {
+                $query->whereBetween('payment_date', [Helper::startOfLastendOfLastMonth()->startOfLastMonth, Helper::startOfLastendOfLastMonth()->endOfLastMonth]);
             })
             ->when($Monthly, function ($query, $Monthly) {
                 $query->whereMonth('payment_date', $Monthly);

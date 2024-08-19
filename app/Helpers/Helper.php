@@ -127,6 +127,20 @@ class Helper
         $result = "Employee Payslip".' : '.$month;
         return $result;
     }
+    static function startOfLastendOfLastMonth(){
+        $currentDay = Carbon::now()->format('d');
+        $startOfLastMonth = Carbon::now()->subMonth()->startOfMonth();
+        $endOfLastMonth = Carbon::now()->subMonth()->endOfMonth();
+        if ($currentDay > 20 ) {
+            $startOfLastMonth = Carbon::now()->startOfMonth();
+            $endOfLastMonth = Carbon::now()->endOfMonth();
+        }
+        return (object) [
+            "startOfLastMonth" => $startOfLastMonth,
+            "endOfLastMonth" => $endOfLastMonth
+        ];
+    }
+
 
     static function getKhmerMonthsMotorRantal($data){
         $month = Carbon::now()->format('Y');

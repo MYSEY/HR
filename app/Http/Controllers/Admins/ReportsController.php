@@ -8,6 +8,7 @@ use App\Exports\ExportEForm;
 use App\Exports\ExportEmployeeReport;
 use App\Exports\ExportFringeBenefits;
 use App\Exports\ExportTraining;
+use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
 use App\Models\Branchs;
 use App\Models\FringeBenefit;
@@ -51,6 +52,9 @@ class ReportsController extends Controller
             }
             if ($RolePermission == 'BM') {
                 $query->where("branch_id", Auth::user()->branch_id);
+            }
+            if ($RolePermission == 'HR') {
+                $query->where('line_manager', Auth::user()->id);
             }
         })
         ->get();
@@ -371,8 +375,6 @@ class ReportsController extends Controller
     }
 
     public function bankTransfer() {
-        $monthly = Carbon::now()->format('m');
-        $currentYear = Carbon::now()->format('Y');
         $data = Payroll::with('users')
         ->leftJoin('users', 'payrolls.employee_id', '=', 'users.id')
         ->select(
@@ -392,15 +394,12 @@ class ReportsController extends Controller
                 $query->where("users.branch_id", Auth::user()->branch_id);
             }
         })
-        ->whereMonth('payment_date', $monthly)
-        ->whereYear('payment_date', $currentYear)
+        ->whereBetween('payrolls.payment_date', [Helper::startOfLastendOfLastMonth()->startOfLastMonth, Helper::startOfLastendOfLastMonth()->endOfLastMonth])
         ->orderBy('employee_id')->get();
         return view('reports.bank_transfer',compact('data'));
     }
 
     public function bankTransferExport(){
-        $monthly = Carbon::now()->format('m');
-        $currentYear = Carbon::now()->format('Y');
         $data = Payroll::with('users')
         ->leftJoin('users', 'payrolls.employee_id', '=', 'users.id')
         ->select(
@@ -420,8 +419,7 @@ class ReportsController extends Controller
                 $query->where("users.branch_id", Auth::user()->branch_id);
             }
         })
-        ->whereMonth('payment_date', $monthly)
-        ->whereYear('payment_date', $currentYear)
+        ->whereBetween('payrolls.payment_date', [Helper::startOfLastendOfLastMonth()->startOfLastMonth, Helper::startOfLastendOfLastMonth()->endOfLastMonth])
         ->orderBy('employee_id')->get();
         $export = new ExportBankTransfer($data);
         return Excel::download($export, 'ReportBankTransfer.xlsx');
@@ -464,6 +462,7 @@ class ReportsController extends Controller
                 $query->where("users.branch_id", Auth::user()->branch_id);
             }
         })
+        ->whereBetween('payrolls.payment_date', [Helper::startOfLastendOfLastMonth()->startOfLastMonth, Helper::startOfLastendOfLastMonth()->endOfLastMonth])
         ->orderBy('id', 'DESC')->get();
         $positions = Position::get();
         return view('reports.e_form_report',compact('payroll','positions'));

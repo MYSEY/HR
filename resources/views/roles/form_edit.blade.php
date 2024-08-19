@@ -267,6 +267,10 @@
             if (children_allowance_checkbox == $('input.children_allowance_checkbox').length) {
                 $("#children_allowance").prop("checked", true);
             };
+            let leave_type_checkbox = $('.leave_type_checkbox').filter(':checked').length;
+            if (leave_type_checkbox == $('input.leave_type_checkbox').length) {
+                $("#leave_type").prop("checked", true);
+            };
 
             // module setting
             let bank_checkbox = $('.bank_checkbox').filter(':checked').length;

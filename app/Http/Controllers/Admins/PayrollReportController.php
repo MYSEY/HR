@@ -25,6 +25,7 @@ use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\ExportGrossSalaryPay;
+use App\Helpers\Helper;
 use App\Models\PreviewGrossSalaryPay;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use App\Models\NationalSocialSecurityFund;
@@ -47,8 +48,6 @@ class PayrollReportController extends Controller
     }
     public function index()
     {
-        $Monthly= Carbon::now()->format('m');
-        $yearLy = Carbon::now()->format('Y');
         $payroll = DB::table('payrolls')
         ->leftJoin('users','payrolls.employee_id','=','users.id')
         ->leftJoin('positions','positions.id','=','users.position_id')
@@ -60,11 +59,10 @@ class PayrollReportController extends Controller
             'users.number_employee',
             'users.branch_id',
             'users.department_id',
-            'users.branch_id',
             'users.employee_name_en',
             'users.employee_name_kh',
             'users.date_of_commencement',
-            'users.branch_id',
+            'users.line_manager',
             'positions.name_khmer as position_name_khmer',
             'positions.name_english as position_name_english',
             'branchs.branch_name_kh',
@@ -81,25 +79,12 @@ class PayrollReportController extends Controller
             if ($RolePermission == 'BM') {
                 $query->where("users.branch_id", Auth::user()->branch_id);
             }
-        })->whereMonth('payrolls.payment_date','<=',$Monthly)->whereYear('payrolls.payment_date','>=',$yearLy)->get();
-        // dd($payroll);
-        // $payroll = Payroll::with('users')
-        // ->leftJoin('users', 'payrolls.employee_id', '=', 'users.id')
-        // ->select(
-        //     'payrolls.*',
-        //     'users.branch_id',
-        //     'users.department_id',
-        // )->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
-        //     if ($RolePermission == 'Employee') {
-        //         $query->where("users.id", Auth::user()->id);
-        //     }
-        //     if ($RolePermission == 'HOD') {
-        //         $query->whereIn("users.department_id", EmployeeRepository::getRoleHOD());
-        //     }
-        //     if ($RolePermission == 'BM') {
-        //         $query->where("users.branch_id", Auth::user()->branch_id);
-        //     }
-        // })->orderBy('payrolls.id', 'DESC')->get();
+            if ($RolePermission == 'HR') {
+                $query->where('users.line_manager', Auth::user()->id);
+            }
+        })
+        ->whereBetween('payrolls.payment_date', [Helper::startOfLastendOfLastMonth()->startOfLastMonth, Helper::startOfLastendOfLastMonth()->endOfLastMonth])
+        ->get();
         $branchs = Branchs::get();
         return view('reports.payroll_report',compact('payroll','branchs'));
     }
@@ -177,6 +162,7 @@ class PayrollReportController extends Controller
                 $query->where("users.branch_id", Auth::user()->branch_id);
             }
         })
+        ->whereBetween('payment_date', [Helper::startOfLastendOfLastMonth()->startOfLastMonth, Helper::startOfLastendOfLastMonth()->endOfLastMonth])
         ->orderBy('id', 'DESC')->get();
         $branchs = Branchs::get();
         return view('reports.poyrolls.snnf_report',compact('dataNSSF','branchs'));
@@ -243,6 +229,7 @@ class PayrollReportController extends Controller
         return Excel::download(new ExportNSSF($request), 'NSSF.xlsx');
     }
     public function reportBenefitKNYPCh(){
+        $yearLy = Carbon::now()->format('Y');
         $benefit = Bonus::with("users")
         ->join('users', 'bonuses.employee_id', '=', 'users.id')
         ->select(
@@ -261,7 +248,9 @@ class PayrollReportController extends Controller
                 $query->where("users.branch_id", Auth::user()->branch_id);
             }
         })
-        ->orderBy('employee_id','DESC')->get();
+        ->whereYear('bonuses.payment_date', $yearLy)
+        ->orderBy('bonuses.payment_date', 'desc')
+        ->get();
         $branchs = Branchs::get();
         return view('reports.poyrolls.benefit_report',compact('benefit','branchs'));
     }
@@ -344,6 +333,7 @@ class PayrollReportController extends Controller
                 $query->where("users.branch_id", Auth::user()->branch_id);
             }
         })
+        ->whereBetween('payment_date', [Helper::startOfLastendOfLastMonth()->startOfLastMonth, Helper::startOfLastendOfLastMonth()->endOfLastMonth])
         ->orderBy('id', 'DESC')->get();
         $branchs = Branchs::get();
         return view('reports.poyrolls.tax_report',compact('payroll','branchs'));
@@ -500,6 +490,7 @@ class PayrollReportController extends Controller
     }
     public function SeverancePay(Request $request){
         $branch = Branchs::get();
+        $yearLy = Carbon::now()->format('Y');
         if (Auth::user()->RolePermission == 'Employee') {
             $data = GrossSalaryPay::with('users')->where('employee_id',Auth::user()->id)->where('number_employee',Auth::user()->number_employee)->paginate(10);
         } else {
@@ -520,7 +511,12 @@ class PayrollReportController extends Controller
                 if ($RolePermission == 'BM') {
                     $query->where("users.branch_id", Auth::user()->branch_id);
                 }
-            })->paginate(10);
+            })
+            ->when($yearLy, function ($query, $yearLy) {
+                $query->whereYear('gross_salary_pays.payment_date', $yearLy);
+            })
+            ->orderBy('gross_salary_pays.payment_date', 'desc')
+            ->paginate(10);
         }
         return view('severance_pays.index',compact('data','branch'));
     }
@@ -574,7 +570,9 @@ class PayrollReportController extends Controller
         })
         ->when($yearLy, function ($query, $yearLy) {
             $query->whereYear('payment_date', $yearLy);
-        })->get();
+        })
+        ->orderBy('gross_salary_pays.payment_date', 'desc')
+        ->get();
         return response()->json([
             'success'=>$data,
         ]);
@@ -674,12 +672,16 @@ class PayrollReportController extends Controller
         }
     }
     public function ImportIndex(Request $request){
+
+        $startOfLastMonth = null;
         $branch = Branchs::get();
         $Monthly = null;
         $yearLy = null;
         if ($request->filter_month) {
             $Monthly = Carbon::createFromDate($request->filter_month)->format('m');
             $yearLy = Carbon::createFromDate($request->filter_month)->format('Y');
+        }else{
+            $startOfLastMonth = Carbon::now()->subMonth()->startOfMonth();
         }
         if (Auth::user()->RolePermission == 'Employee') {
             $DataNSSF = DB::table('national_social_security_funds')
@@ -707,7 +709,10 @@ class PayrollReportController extends Controller
                 'branchs.branch_name_en',
                 'departments.name_khmer as depart_name_kh',
                 'departments.name_english as depart_name_en'
-            )->where('national_social_security_funds.employee_id',Auth::user()->id)->where('national_social_security_funds.number_employee',Auth::user()->number_employee)->get();
+            )
+            ->where('national_social_security_funds.employee_id',Auth::user()->id)
+            ->where('national_social_security_funds.number_employee',Auth::user()->number_employee)
+            ->get();
         } else {
             $DataNSSF = DB::table('national_social_security_funds')
             ->leftJoin('users','national_social_security_funds.employee_id', '=', 'users.id')
@@ -741,11 +746,16 @@ class PayrollReportController extends Controller
                 if ($RolePermission == 'BM') {
                     $query->where("users.branch_id", Auth::user()->branch_id);
                 }
-            })->when($Monthly, function ($query, $Monthly) {
+            })
+            ->when($startOfLastMonth, function ($query, $startOfLastMonth) {
+                $query->whereBetween('national_social_security_funds.payment_date', [Helper::startOfLastendOfLastMonth()->startOfLastMonth, Helper::startOfLastendOfLastMonth()->endOfLastMonth]);
+            })
+            ->when($Monthly, function ($query, $Monthly) {
                 $query->whereMonth('national_social_security_funds.payment_date', $Monthly);
             })->when($yearLy, function ($query, $yearLy) {
                 $query->whereYear('national_social_security_funds.payment_date', $yearLy);
-            })->get();
+            })
+            ->get();
         }
         return view('NSSFs.index',compact('DataNSSF','branch'));
     }
