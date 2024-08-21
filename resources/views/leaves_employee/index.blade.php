@@ -88,7 +88,7 @@
                 </div>
             </div>
         </div>
-        @if (Auth::user()->RolePermission=="Employee")
+        {{-- @if (Auth::user()->RolePermission=="Employee") --}}
             <div class="page-header">
                 <div class="row align-items-center">
                     <div class="col">
@@ -101,33 +101,29 @@
                     </div>
                 </div>
             </div>
-        @endif
+        {{-- @endif --}}
         
         <div class="row">
-            <div class="col-md-3">
-                <div class="stats-info">
-                    <h6>@lang('lang.annual_leave')</h6>
-                    <h4>{{$LeaveAllocation ? $LeaveAllocation->total_annual_leave : 0}}</h4>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="stats-info">
-                    <h6>@lang('lang.sick_leave')</h6>
-                    <h4>{{$LeaveAllocation ? number_format($LeaveAllocation->total_sick_leave) : 0}}</h4>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="stats-info">
-                    <h6>@lang('lang.special_leave')</h6>
-                    <h4>{{$LeaveAllocation ? number_format($LeaveAllocation->total_special_leave) : 0}}</h4>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="stats-info">
-                    <h6>@lang('lang.unpaid_leave')</h6>
-                    <h4>{{$LeaveAllocation ? $LeaveAllocation->total_unpaid_leave : 0}}</h4>
-                </div>
-            </div>
+            @if (count($dataLeaveType) > 0)
+                @foreach ($dataLeaveType as $type)
+                    <div class="col-md-2 col-sm-4">
+                        <div class="stats-info">
+                            <h6>{{$type->name}}</h6>
+                            @if ($type->type == "annual_leave")
+                                <h4>{{$LeaveAllocation ? $LeaveAllocation->total_annual_leave : 0}}</h4>
+                            @elseif($type->type == "sick_leave")
+                                <h4>{{$LeaveAllocation ? $LeaveAllocation->total_sick_leave : 0}}</h4>
+                            @elseif($type->type == "special_leave")
+                                <h4>{{$LeaveAllocation ? $LeaveAllocation->total_special_leave : 0}}</h4>
+                            @elseif($type->type == "unpaid_leave")
+                                <h4>{{$LeaveAllocation ? $LeaveAllocation->total_unpaid_leave : 0}}</h4>
+                            @elseif($type->type == "long_sick_leave")
+                                <h4>{{$LeaveAllocation ? $LeaveAllocation->total_long_sick_leave : 0}}</h4>
+                            @endif
+                        </div>
+                    </div>
+                @endforeach
+            @endif
         </div>
         {!! Toastr::message() !!}
         <div class="row">
@@ -155,9 +151,13 @@
                                             <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
                                                 colspan="2" aria-sort="ascending" aria-label="Profle: activate to sort column descending"
                                                 style="text-align: center">@lang('lang.special_leave')</th>
-                                                <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
+                                            <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
                                                 colspan="2"  aria-sort="ascending" aria-label="unpaid_leave: activate to sort column descending"
                                                 style="text-align: center">@lang('lang.unpaid_leave')</th>
+                                            <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
+                                                colspan="2"  aria-sort="ascending" aria-label="long_sick_leave: activate to sort column descending"
+                                                style="text-align: center">@lang('lang.long_sick_leave')</th>
+
                                             <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
                                                 rowspan="2" aria-sort="ascending" aria-label="reason: activate to sort column descending">@lang('lang.reason')</th>
                                             <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
@@ -179,6 +179,8 @@
                                             <th>@lang('lang.balance')</th>
                                             <th>@lang('lang.day_taken')</th>
                                             <th>@lang('lang.balance')</th>
+                                            <th>@lang('lang.day_taken')</th>
+                                            <th>@lang('lang.balance')</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -188,6 +190,7 @@
                                                 $total_sick_leave= 0;
                                                 $total_spacial_leave= 0;
                                                 $total_unpaid_leave= 0;
+                                                $total_long_sick_leave= 0;
                                             @endphp
                                             @foreach ($dataLeaveRequest as $key=>$request)
                                                 @php
@@ -200,6 +203,8 @@
                                                             $total_spacial_leave += $request->number_of_day;
                                                         }else if ($request->leaveType->type == "unpaid_leave") {
                                                             $total_unpaid_leave += $request->number_of_day;
+                                                        }else if ($request->leaveType->type == "long_sick_leave") {
+                                                            $total_long_sick_leave += $request->number_of_day;
                                                         }
                                                     }
                                                     
@@ -216,6 +221,8 @@
                                                     <td>{{$request->status != "rejected" && $request->status != "rejected_lm" && $request->status != "rejected_hod" ? $request->leaveType->type == "special_leave" ? $LeaveAllocation->default_special_leave - $total_spacial_leave : 0 : 0}}</td>
                                                     <td>{{$request->leaveType->type == "unpaid_leave" ? $request->number_of_day : 0}}</td>
                                                     <td>{{$request->leaveType->type == "unpaid_leave"? $total_unpaid_leave : 0}}</td>
+                                                    <td>{{$request->leaveType->type == "long_sick_leave" ? $request->number_of_day : 0}}</td>
+                                                    <td>{{$request->leaveType->type == "long_sick_leave"? $total_long_sick_leave : 0}}</td>
                                                     <td>{{$request->reason}}</td>
                                                     <td>{{$request->remark}}</td>
                                                     <td>

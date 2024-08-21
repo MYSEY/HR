@@ -148,6 +148,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('/leaves/employee/delete', [LeavesEmployeeController::class,'destroy']);
     
     Route::get('/leaves/type', [LeaveTypeController::class,'index']);
+    Route::post('/leave/type/create', [LeaveTypeController::class,'store']);
     Route::get('/leave/type/edit', [LeaveTypeController::class,'edit']);
     Route::post('/leave/type/update', [LeaveTypeController::class,'update']);
 

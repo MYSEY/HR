@@ -203,6 +203,8 @@ class LeavesAdminController extends Controller
                     }else{
                         $data['default_unpaid_leave'] = 0;
                         $data['total_unpaid_leave'] = 0;
+                        $data['default_long_sick_leave'] = 0;
+                        $data['total_long_sick_leave'] = 0;
                     }
                 }
             }else{
@@ -210,10 +212,12 @@ class LeavesAdminController extends Controller
                 $data['default_sick_leave'] = 10;
                 $data['default_special_leave'] = 22;
                 $data['default_unpaid_leave'] = 0;
+                $data['default_long_sick_leave'] = 0;
                 $data['total_annual_leave'] = 18;
                 $data['total_sick_leave'] = 10;
                 $data['total_special_leave'] = 22;
                 $data['total_unpaid_leave'] = 0;
+                $data['total_long_sick_leave'] = 0;
             }
             LeaveAllocation::create($data);
             Toastr::success('Leave created successfully.','Success');
@@ -392,7 +396,21 @@ class LeavesAdminController extends Controller
                 $LeaveAllocation->total_special_leave = $current_special_leave > $LeaveAllocation->default_special_leave ? $LeaveAllocation->default_special_leave : $current_special_leave;
             }else if($data->leaveType->type == "unpaid_leave"){
                 $current_unpaid_leave = $LeaveAllocation->total_unpaid_leave + $data->number_of_day;
-                $LeaveAllocation->total_unpaid_leave = $current_unpaid_leave > $LeaveAllocation->default_unpaid_leave ? $LeaveAllocation->default_unpaid_leave : $current_unpaid_leave;
+                if ($current_unpaid_leave == 0) {
+                   $LeaveAllocation->total_unpaid_leave = 0;
+                }else{
+                    $LeaveAllocation->total_unpaid_leave = $current_unpaid_leave;
+                }
+
+                // $LeaveAllocation->total_unpaid_leave = $current_unpaid_leave > $LeaveAllocation->default_unpaid_leave ? $LeaveAllocation->default_unpaid_leave : $current_unpaid_leave;
+            }else if($data->leaveType->type == "long_sick_leave"){
+                $current_long_sick_leave = $LeaveAllocation->total_long_sick_leave + $data->number_of_day;
+                if ($current_long_sick_leave == 0) {
+                    $LeaveAllocation->total_long_sick_leave = 0;
+                }else{
+                    $LeaveAllocation->total_long_sick_leave = $current_long_sick_leave;
+                }
+                // $LeaveAllocation->total_long_sick_leave = $current_long_sick_leave > $LeaveAllocation->default_long_sick_leave ? $LeaveAllocation->default_long_sick_leave : $current_long_sick_leave;
             }
             $role = Auth::user()->RolePermission;
             $department = Auth::user()->department;
@@ -676,18 +694,20 @@ class LeavesAdminController extends Controller
                 if ($i != 1) {
                     $employee = User::where("number_employee", $item[0])->first();
                     LeaveAllocation::firstOrCreate([
-                        'employee_id'   => $employee->id,
-                        'default_annual_leave'   => $item[2],
-                        'total_annual_leave'   => $item[2],
-                        'default_sick_leave'   => $item[3],
-                        'total_sick_leave'   => $item[3],
-                        'default_special_leave'   => $item[4],
-                        'total_special_leave'   => $item[4],
-                        'default_unpaid_leave'   => $item[5],
-                        'total_unpaid_leave'   => $item[5],
-                        'year_1'   => $item[6],
-                        'year_2'   => $item[7],
-                        'year_3'   => $item[8],
+                        'employee_id'               => $employee->id,
+                        'default_annual_leave'      => $item[2],
+                        'total_annual_leave'        => $item[2],
+                        'default_sick_leave'        => $item[3],
+                        'total_sick_leave'          => $item[3],
+                        'default_special_leave'     => $item[4],
+                        'total_special_leave'       => $item[4],
+                        'default_unpaid_leave'      => $item[5],
+                        'total_unpaid_leave'        => $item[5],
+                        'default_long_sick_leave'   => 0,
+                        'total_long_sick_leave'     => 0,
+                        'year_1'                    => $item[6],
+                        'year_2'                    => $item[7],
+                        'year_3'                    => $item[8],
                         'created_by'    => Auth::user()->id,
                     ]);
 

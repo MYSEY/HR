@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use App\Helpers\Helper;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
 
 class LeaveRequest extends Model
 {
@@ -38,6 +40,7 @@ class LeaveRequest extends Model
         'updated_by',
         'deleted_at',
     ];
+    
     public function employee(){
         return $this->belongsTo(User::class,'employee_id')
         ->select([

@@ -79,6 +79,103 @@ class LeavesEmployeeController extends Controller
         return view('leaves_employee.index', compact('dataLeaveType', 'LeaveAllocation', 'employees','delegateEmployees', 'dataLeaveRequest'));
     }
 
+
+    function duplicateLeace($request)
+    {
+        $startDate = $request->start_date;
+            $endDate = $request->end_date;
+            $startHalfDay = $request->start_half_day;
+            $endHalfDay = $request->end_half_day;
+            $overlappingLeave = null;
+
+            $overlappingLeave  = LeaveRequest::where('employee_id', Auth::user()->id)
+            ->where(function ($query) use ($startDate, $endDate, $startHalfDay, $endHalfDay) {
+                $query->where(function ($query) use ($startDate, $endDate) {
+                    $query->where('start_date', '<', $endDate)
+                        ->where('end_date', '>', $startDate);
+                })
+                ->orWhere(function ($query) use ($startDate, $endDate, $startHalfDay, $endHalfDay) {
+                    // Overlap considering half days
+                    $query->where('start_date', '=', $startDate)
+                        ->where('end_date', '=', $endDate)
+                        ->where(function ($query) use ($startHalfDay, $endHalfDay) {
+                            $query->where(function ($query) use ($startHalfDay) {
+                                $query->where('start_half_day', $startHalfDay)
+                                    ->where('end_half_day', false);
+                            })
+                            ->orWhere(function ($query) use ($startHalfDay, $endHalfDay) {
+                                $query->where('start_half_day', false)
+                                    ->where('end_half_day', $endHalfDay);
+                            })
+                            ->orWhere(function ($query) use ($startHalfDay, $endHalfDay) {
+                                $query->where('start_half_day', $startHalfDay)
+                                    ->where('end_half_day', $endHalfDay);
+                            });
+                        });
+                });
+            })->exists();
+            if (!$overlappingLeave) {
+                if (!$startHalfDay && !$endHalfDay) {
+                    $overlappingLeave = LeaveRequest::where('employee_id', Auth::user()->id)
+                    ->where(function ($query) use ($startDate, $endDate) {
+                        $query->where('start_date', '>=', $startDate)
+                        ->where('end_date', '<=', $endDate);
+                    })->exists();
+                }
+                if (($startHalfDay == "am"|| $startHalfDay == "pm") || ($endHalfDay == "am" || $endHalfDay == "pm")) {
+                    if ($startHalfDay == "am"|| $startHalfDay == "pm") {
+                        $overlappingLeave1 = LeaveRequest::where('employee_id', Auth::user()->id)
+                        ->where(function ($query) use ($startDate, $startHalfDay) {
+                            $query->where('start_date', '=', $startDate)
+                            ->where('start_half_day', '=', $startHalfDay);
+                        })->exists();
+                        if ($overlappingLeave1) {
+                            return true;
+                            // return response()->json([
+                            //     'error'=>'lang.start_date_and_end_date_already_exists',
+                            //     'status'=>404,
+                            // ]);
+                        }  
+                    } 
+                    if ($endHalfDay == "am" || $endHalfDay == "pm") {
+                        $overlappingLeave2 = LeaveRequest::where('employee_id', Auth::user()->id)
+                        ->where(function ($query) use ($endDate, $endHalfDay) {
+                            $query->where('end_date', '=', $endDate)
+                            ->where('end_half_day', '=', $endHalfDay);
+                        })->exists();
+                        if ($overlappingLeave2) {
+                            return true;
+                            // return response()->json([
+                            //     'error'=>'lang.start_date_and_end_date_already_exists',
+                            //     'status'=>404,
+                            // ]);
+                        }  
+                    }
+                    $dataLeaves = LeaveRequest::where('employee_id', Auth::user()->id)
+                    ->where(function ($query) use ($startDate, $endDate) {
+                        $query->where('start_date', '<=', $startDate)
+                        ->where('end_date', '>=', $endDate);
+                    })->first();
+                    if ($dataLeaves) {
+                        if (!$dataLeaves->start_half_day && !$dataLeaves->end_half_day) {
+                            return true;
+                            // return response()->json([
+                            //     'error'=>'lang.start_date_and_end_date_already_exists',
+                            //     'status'=>404,
+                            // ]);
+                        }
+                    }
+                }
+            }
+            
+            if ($overlappingLeave) {
+                return true;
+                // return response()->json([
+                //     'error'=>'lang.start_date_and_end_date_already_exists',
+                //     'status'=>404,
+                // ]);
+            }
+    }
     
     /**
      * Store a newly created resource in storage.
@@ -89,6 +186,13 @@ class LeavesEmployeeController extends Controller
     public function store(Request $request)
     {
         try {
+            $duplicate  = self::duplicateLeace($request);
+            if ($duplicate) {
+                return response()->json([
+                    'error'=>'lang.start_date_and_end_date_already_exists',
+                    'status'=>404,
+                ]);
+            }
             $data = $request->all();
             $LeaveAllocation = LeaveAllocation::where("employee_id", Auth::user()->id)->first();
             $LeaveType = LeaveType::where("id", $request->leave_type_id)->first();
@@ -368,6 +472,7 @@ class LeavesEmployeeController extends Controller
                 $LeaveAllocation["total_sick_leave"] = $LeaveType->type == "sick_leave" ? $LeaveAllocation->total_sick_leave - $request->number_of_day : $LeaveAllocation->total_sick_leave;
                 $LeaveAllocation["total_special_leave"] = $LeaveType->type == "special_leave" ? $LeaveAllocation->total_special_leave - $request->number_of_day : $LeaveAllocation->total_special_leave;
                 $LeaveAllocation["total_unpaid_leave"] = $LeaveType->type == "unpaid_leave" ? $LeaveAllocation->total_unpaid_leave - $request->number_of_day : $LeaveAllocation->total_unpaid_leave;
+                $LeaveAllocation["total_long_sick_leave"] = $LeaveType->type == "long_sick_leave" ? $LeaveAllocation->total_long_sick_leave - $request->number_of_day : $LeaveAllocation->total_long_sick_leave;
                 $LeaveAllocation->save();
             }
 
@@ -439,6 +544,13 @@ class LeavesEmployeeController extends Controller
     public function update(Request $request)
     {
         try{
+            $duplicate  = self::duplicateLeace($request);
+            if ($duplicate) {
+                return response()->json([
+                    'error'=>'lang.start_date_and_end_date_already_exists',
+                    'status'=>404,
+                ]);
+            }
             $LeaveAllocation = LeaveAllocation::where("employee_id", Auth::user()->id)->first();
             $LeaveType = LeaveType::where("id", $request->leave_type_id)->first();
             $data = LeaveRequest::with("leaveType")->where("id", $request->id)->first();
@@ -455,6 +567,7 @@ class LeavesEmployeeController extends Controller
                 $LeaveAllocation->total_sick_leave += $LeaveType->type == "sick_leave" ? $number_day : 0;
                 $LeaveAllocation->total_special_leave += $LeaveType->type == "special_leave" ? $number_day : 0;
                 $LeaveAllocation->total_unpaid_leave += $LeaveType->type == "unpaid_leave" ? $number_day : 0;
+                $LeaveAllocation->total_long_sick_leave += $LeaveType->type == "long_sick_leave" ? $number_day : 0;
                 $LeaveAllocation->save();
                 
             }else{
@@ -470,7 +583,20 @@ class LeavesEmployeeController extends Controller
                     $LeaveAllocation->total_special_leave = $current_special_leave > $LeaveAllocation->default_special_leave ? $LeaveAllocation->default_special_leave : $current_special_leave;
                 }else if($data->leaveType->type == "unpaid_leave"){
                     $current_unpaid_leave = $LeaveAllocation->total_unpaid_leave + $request->number_of_day;
-                    $LeaveAllocation->total_unpaid_leave += $current_unpaid_leave > $LeaveAllocation->default_unpaid_leave ? $LeaveAllocation->default_unpaid_leave : $current_unpaid_leave;
+                    if ($current_unpaid_leave == 0) {
+                        $LeaveAllocation->total_unpaid_leave = 0;
+                    }else{
+                        $LeaveAllocation->total_unpaid_leave =  $current_unpaid_leave;
+                    }
+                    // $LeaveAllocation->total_unpaid_leave = $current_unpaid_leave >= $LeaveAllocation->default_unpaid_leave ? $LeaveAllocation->default_unpaid_leave : $current_unpaid_leave;
+                }else if($data->leaveType->type == "long_sick_leave"){
+                    $current_long_sick_leave = $LeaveAllocation->total_long_sick_leave + $request->number_of_day;
+                    if ($current_long_sick_leave == 0) {
+                        $LeaveAllocation->total_long_sick_leave = 0;
+                    }else {
+                        $LeaveAllocation->total_long_sick_leave = $current_long_sick_leave;
+                    }
+                    // $LeaveAllocation->total_long_sick_leave = $current_long_sick_leave >= $LeaveAllocation->default_long_sick_leave ? $LeaveAllocation->default_long_sick_leave : $current_long_sick_leave;
                 }
 
                 // When modifying the Status, subtract the number of day from the new status.
@@ -478,6 +604,8 @@ class LeavesEmployeeController extends Controller
                 $LeaveAllocation->total_sick_leave = $LeaveType->type == "sick_leave" ? $LeaveAllocation->total_sick_leave - $request->number_of_day : $LeaveAllocation->total_sick_leave;
                 $LeaveAllocation->total_special_leave = $LeaveType->type == "special_leave" ? $LeaveAllocation->total_special_leave - $request->number_of_day : $LeaveAllocation->total_special_leave;
                 $LeaveAllocation->total_unpaid_leave = $LeaveType->type == "unpaid_leave" ? $LeaveAllocation->total_unpaid_leave - $request->number_of_day : $LeaveAllocation->total_unpaid_leave;
+                $LeaveAllocation->total_long_sick_leave = $LeaveType->type == "long_sick_leave" ? $LeaveAllocation->total_long_sick_leave - $request->number_of_day : $LeaveAllocation->total_long_sick_leave;
+                
                 $LeaveAllocation->save();
             }
 
@@ -550,6 +678,9 @@ class LeavesEmployeeController extends Controller
             }else if($data->leaveType->type == "unpaid_leave"){
                 $current_unpaid_leave = $LeaveAllocation->total_unpaid_leave + $request->number_of_day;
                 $LeaveAllocation->total_unpaid_leave = $current_unpaid_leave > $LeaveAllocation->default_unpaid_leave ? $LeaveAllocation->default_unpaid_leave : $current_unpaid_leave;
+            }else if($data->leaveType->type == "long_sick_leave"){
+                $current_long_sick_leave = $LeaveAllocation->total_long_sick_leave + $request->number_of_day;
+                $LeaveAllocation->total_long_sick_leave = $current_long_sick_leave > $LeaveAllocation->default_long_sick_leave ? $LeaveAllocation->default_long_sick_leave : $current_long_sick_leave;
             }
             $LeaveAllocation->save();
 

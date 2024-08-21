@@ -399,14 +399,28 @@
                     },
                     dataType: "JSON",
                     success: function (response) {
-                        new Noty({
-                            title: "",
-                            text: '@lang("lang.leave_request_created_successfully")',
-                            type: "success",
-                            timeout: 3000,
-                            icon: true
-                        }).show();
-                        window.location.replace("{{ URL('leaves/employee') }}");
+                        if (response.status == 404) {
+                            new Noty({
+                                title: "",
+                                text: '@lang("lang.start_date_and_end_date_already_exists")!',
+                                type: "error",
+                                timeout: 3000,
+                                icon: true
+                            }).show();
+                            $(".btn-apply").attr('disabled',false);
+                            $("#btn-save-loading").css('display', 'none');
+                            $(".btn-text-save").css("display", 'block');
+                        }else{
+                            new Noty({
+                                title: "",
+                                text: '@lang("lang.leave_request_created_successfully")',
+                                type: "success",
+                                timeout: 3000,
+                                icon: true
+                            }).show();
+                            window.location.replace("{{ URL('leaves/employee') }}");
+                        }
+                        
                     }
                 });
             }

@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Spatie\Activitylog\Models\Activity;
 
 class LeaveTypeController extends Controller
 {
@@ -40,7 +42,24 @@ class LeaveTypeController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+            $duplicate = LeaveType::where("type",$request->type)->first();
+            DB::commit();
+            if ($duplicate) {
+                Toastr::error('Leave type  already exists.','Error');
+                return redirect()->back();
+            }else{
+                Activity::all()->last();
+                $data = $request->all();
+                $data['created_by'] = Auth::user()->id;
+                LeaveType::create($data);
+                Toastr::success('Leave type created successfully.','Success');
+                return redirect()->back();
+            }
+        } catch (\Throwable $exp) {
+            DB::rollback();
+            Toastr::error('Leave type created fail.','Error');
+        }
     }
 
     /**
