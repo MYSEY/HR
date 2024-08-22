@@ -754,8 +754,7 @@ class PayrollReportController extends Controller
                 $query->whereMonth('national_social_security_funds.payment_date', $Monthly);
             })->when($yearLy, function ($query, $yearLy) {
                 $query->whereYear('national_social_security_funds.payment_date', $yearLy);
-            })
-            ->get();
+            })->whereIn('users.emp_status',['Probation','1','10','2'])->get();
         }
         return view('NSSFs.index',compact('DataNSSF','branch'));
     }

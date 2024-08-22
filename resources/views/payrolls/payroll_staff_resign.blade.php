@@ -196,10 +196,7 @@
                                                             rowspan="1" colspan="1"
                                                             aria-label="Salary: activate to sort column ascending">@lang('lang.payment_date')
                                                         </th>
-                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                            rowspan="1" colspan="1"
-                                                            aria-label="Salary: activate to sort column ascending">@lang('lang.created_at')
-                                                        </th>
+                                                        <th style="text-align: center;">@lang('lang.action')</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -235,7 +232,15 @@
                                                                 <td>$<a href="#">{{ $item->loan_amount == null ? "0.00" : $item->loan_amount}}</a></td>
                                                                 <td>$<a href="#">{{ $item->total_salary }}</a></td>
                                                                 <td>{{ $item->PayrollPaymentDate }}</td>
-                                                                <td>{{ $item->Created }}</td>
+                                                                <td>
+                                                                    @if (permissionAccess("m4-s1","is_delete")->value == "1")
+                                                                        {{-- <button type="button" class="btn btn-sm btn-danger delete_all">@lang('lang.delete_all')</button> --}}
+                                                                        <button class="btn btn-danger btn-sm btnDelete" type="button" data-id="{{$item->number_employee}}">Delete</button>
+                                                                    @endif
+                                                                    @if (permissionAccess("m4-s1","is_approve")->value == "1")
+                                                                        <button type="button" class="btn btn-success btn-sm btn_approved" href="#" data-id="{{$item->number_employee}}"> @lang('lang.approve')</button> 
+                                                                    @endif
+                                                                </td>
                                                             </tr>
                                                         @endforeach
                                                     @endif
@@ -356,7 +361,6 @@
 <script src="{{asset('/admin/js/validation-field.js')}}"></script>
 <script>
     $(function(){
-
         $(".reset-btn").on("click", function() {
             $(this).prop('disabled', true);
             $(".btn-text-reset").hide();
@@ -385,8 +389,6 @@
             var url = "{{URL::to('payroll/review/export')}}?" + $.param(query)
             window.location = url;
         });
-
-       
         $("#btnPayrollStaffResign").on("click",function() {
             let num_miss = 0;
             $(".pay_required").each(function(){
@@ -468,6 +470,82 @@
                     }
                 });
             }
+        });
+        $('.btnDelete').on('click',function(){
+            var number_employee = $(this).attr('data-id');
+            $.confirm({
+                title: '@lang("lang.delete")!',
+                content: "@lang('lang.are_you_sure_want_to_delete')?",
+                type: 'red',
+                typeAnimated: true,
+                buttons: {
+                    tryAgain: {
+                        text: 'ok',
+                        btnClass: 'btn-red',
+                        action: function(){
+                            axios.post('{{ URL("payroll/staff/resign/delete") }}', {
+                                number_employee : number_employee,
+                            }).then(function(response) {
+                                new Noty({
+                                    title: "",
+                                    text: "@lang('lang.the_process_has_been_successfully').",
+                                    type: "success",
+                                    timeout: 3000,
+                                    icon: true
+                                }).show();
+                                window.location.replace("{{ URL('payroll/staff/resign') }}");
+                            }).catch(function(error) {
+                                new Noty({
+                                    title: "",
+                                    text: "@lang('lang.something_went_wrong_please_try_again_later').",
+                                    type: "error",
+                                    icon: true
+                                }).show();
+                            });
+                        }
+                    },
+                        close: function () {
+                    }
+                }
+            });
+        });
+        $('body').on('click','.btn_approved',function(){
+            var number_employee = $(this).attr('data-id');
+            $.confirm({
+                title: '@lang("lang.approve")',
+                content: "@lang('lang.are_you_sure_want_to_approve')?",
+                type: 'blue',
+                typeAnimated: true,
+                buttons: {
+                    tryAgain: {
+                        text: 'ok',
+                        btnClass: 'btn-blue',
+                        action: function(){
+                            axios.post('{{ URL('payroll/staff/resign/approved') }}',{
+                                number_employee: number_employee,
+                            }).then(function(response) {
+                                new Noty({
+                                    title: "",
+                                    text: '@lang("lang.the_process_has_been_successfully")',
+                                    type: "success",
+                                    icon: true
+                                }).show();
+                                    $('.card-footer').remove();
+                                    window.location.replace("{{ URL('payroll/staff/resign') }}");
+                                }).catch(function(error) {
+                                    new Noty({
+                                        title: "",
+                                        text: '@lang("lang.something_went_wrong_please_try_again_later")',
+                                        type: "error",
+                                        icon: true
+                                    }).show();
+                                });
+                            }
+                        },
+                        close: function () {
+                    }
+                }
+            });
         });
     });
     function showdatas(params) {

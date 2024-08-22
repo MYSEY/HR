@@ -94,7 +94,7 @@ class ExportEmployeeSalary implements FromCollection, WithColumnWidths, WithHead
         })
         ->when($yearLy, function ($query, $yearLy) {
             $query->whereYear('payment_date', $yearLy);
-        })->get();
+        })->whereIn('users.emp_status',['Probation','1','10','2'])->get();
         $dataExport = [];
         $i = 0;
         foreach ($payroll as $value) {

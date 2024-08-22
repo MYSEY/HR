@@ -91,9 +91,8 @@ class PayrollRepository extends BaseRepository
                 if ($RolePermission == 'BM') {
                     $query->where("users.branch_id", Auth::user()->branch_id);
                 }
-            })
-            ->whereBetween('payment_date', [Helper::startOfLastendOfLastMonth()->startOfLastMonth, Helper::startOfLastendOfLastMonth()->endOfLastMonth])
-            ->get();
+            })->whereBetween('payment_date', [Helper::startOfLastendOfLastMonth()->startOfLastMonth, Helper::startOfLastendOfLastMonth()->endOfLastMonth])
+            ->whereIn('users.emp_status',['Probation','1','10','2'])->get();
         }
     }
     public function getAllPayrollPreview(){

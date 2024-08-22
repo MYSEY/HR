@@ -111,7 +111,7 @@ class EmployeePayrollController extends Controller
         })
         ->when($yearLy, function ($query, $yearLy) {
             $query->whereYear('payment_date', $yearLy);
-        })->get();
+        })->whereIn('users.emp_status',['Probation','1','10','2'])->get();
         return response()->json([
             'success'=>$payroll,
         ]);
@@ -1186,7 +1186,7 @@ class EmployeePayrollController extends Controller
         return view('payrolls.payroll_staff_resign',compact('data','staffResign','branch','exChangeRateSalary','exChangeRateNSSF'));
     }
     public function payrollStaffResignCreate(Request $request){
-        // try{
+        try{
             // function import Loan
             $dadaArrayLoan = [];
             if (file_exists($request->file_loan)) {
@@ -1278,82 +1278,8 @@ class EmployeePayrollController extends Controller
                         }
                     }
 
-                    //function check staff resignation
-                    $totalSalaryStaffResign = 0;
-                    $totalSallaryAL = 0;
-                    $unpaidLeaveProbation = 0;
+                    $totalGrossSalary = $item->basic_salary + $item->phone_allowance + $totalChildAllowance +$totalBunus;
                     $totalSalaryAL = 0;
-                    //function find days in end month
-                    $endMonth = Carbon::createFromDate($item->resign_date)->format('m');
-                    $totalDayInMonth = Carbon::now()->month($endMonth)->daysInMonth;
-                    //find start date employee join date
-                    $date_of_month = Carbon::createFromDate($item->resign_date)->format('Y-m');
-                    $currentYear = $date_of_month.'-'.$totalDayInMonth;
-                    //find total working day in month
-                    $startDate = Carbon::parse($item->resign_date);
-                    $endDate = Carbon::parse($currentYear);
-                    // find total days in month
-                    $totalNewDays = $startDate->diffInDays($endDate) + 1;
-                    $totalDayStaffResign = $totalDayInMonth - $totalNewDays;
-
-                    //function calu staff resign
-                    if ($totalDayStaffResign == 0) {
-                        $totalSalaryStaffResign = $item->basic_salary;
-                    } else {
-                        $totalSalaryStaffResign = ($item->basic_salary * $totalDayStaffResign) / 22;
-                    }
-                    
-                    if ($item->emp_status == 'Probation') {
-                        $yearLy = Carbon::createFromDate($item->resign_date)->format('Y-m');
-                        $fromDate = $yearLy."-01";
-                        $staffResignDate = Carbon::createFromDate($fromDate);
-                        $startDateResign   = Carbon::parse($staffResignDate);
-                        $endDateStaffResign = Date::createFromDate($request->resign_date);
-                        $endDateResign     = Carbon::parse($endDateStaffResign);
-                        $totalDaysStaffResign   = $endDateResign->diffInWeekdays($startDateResign) + 1;
-
-                        $months = 4.5;
-                        if ($totalDaysStaffResign < 15) {
-                            $totalDay = 0;
-                            $EndMonths = $months - 1;
-                        } elseif($totalDaysStaffResign >= 15 && $totalDaysStaffResign <= 20) {
-                            $totalDay = 1;
-                            $EndMonths = $months - 1;
-                        }else{
-                            $totalDay = 1.5;
-                            $EndMonths = $months;
-                        }
-                         
-                        $numberOfDay = LeaveRequest::where('employee_id',$request->id)->sum('number_of_day');
-                        $totalDayResignProbation = $EndMonths - $numberOfDay;
-                        if ($numberOfDay) {
-                            $totalSallaryStaffResign = ($item->basic_salary * $totalDayResignProbation) / 22;
-                            $totalSalaryAL = $totalSalaryStaffResign - $totalSallaryStaffResign;
-                        }else{
-                            $totalSallaryStaffResign = ($item->basic_salary * $totalDayResignProbation) / 22;
-                            $totalSalaryAL = $totalSalaryStaffResign + $totalSallaryStaffResign;
-                        }
-                    } else {
-                        //function calu Carried forward AL
-                        $dataLeave = LeaveAllocation::where('employee_id',$item->id)->first();
-                        if ($dataLeave) {
-                            $year1 = $dataLeave->year_1;
-                            $year2 = $dataLeave->year_2;
-                            $year3 = $dataLeave->year_3;
-                            if ($dataLeave->total_annual_leave < 0) {
-                                $Carriedforward = $year1 + $year2 + $year3 - abs($dataLeave->total_annual_leave);
-                                $totalSallaryAL = ($item->basic_salary * $Carriedforward) / 22;
-                                $totalSalaryAL = $totalSalaryStaffResign + $totalSallaryAL;
-                            } else {
-                                $Carriedforward = $year1 + $year2 + $year3 + $dataLeave->total_annual_leave;
-                                $totalSallaryAL = ($item->basic_salary * $Carriedforward) / 22;
-                                $totalSalaryAL = $totalSallaryAL + $totalSalaryStaffResign;
-                            }
-                        }
-                    }
-
-                    $totalGrossSalary = $totalSalaryStaffResign + $totalSalaryAL;
-                    
                     // function get age employee <= 60 National Social Security Fund (NSSF) Formula
                     $pension_contribution = 0;
                     if($item->is_type_nssf != 1){
@@ -1840,7 +1766,7 @@ class EmployeePayrollController extends Controller
                     $data   = $request->all();
                     $data['employee_id']                    = $item->id;
                     $data['number_employee']                = $item->number_employee;
-                    $data['basic_salary']                   = $item->basic_salary;
+                    $data['basic_salary']                   = $item->pre_salary;
                     $data['spouse']                         = $item->spouse;
                     $data['children']                       = $children;
                     $data['total_gross_salary']             = $totalGrossSalary;
@@ -1874,11 +1800,11 @@ class EmployeePayrollController extends Controller
                 Toastr::error('Can not employee payroll','Error');
                 return redirect()->back();
             }
-        // }catch(\Exception $e){
-        //     DB::rollback();
-        //     Toastr::error('Payroll created fail','Error');
-        //     return redirect()->back();
-        // }
+        }catch(\Exception $e){
+            DB::rollback();
+            Toastr::error('Payroll created fail','Error');
+            return redirect()->back();
+        }
     }
     public function payrollApproved(Request $request){
         try{
@@ -2128,6 +2054,95 @@ class EmployeePayrollController extends Controller
         }catch(\Exception $e){
             DB::rollback();
             Toastr::error('Payroll delete fail','Error');
+            return redirect()->back();
+        }
+    }
+
+    //payrollStaffResignDelete
+    public function payrollStaffResignDelete(Request $request){
+        try{
+            ParyllStaffResign::whereIn('id',explode("id",$request->id))->delete();
+            Toastr::success('Payroll staff resign deleted successfully.','Success');
+            return redirect()->back();
+        }catch(\Exception $e){
+            DB::rollback();
+            Toastr::error('Payroll staff resign delete fail','Error');
+            return redirect()->back();
+        }
+    }
+    public function approvedPayrollStaffResign(Request $request){
+        try{
+            $dataPayroll = ParyllStaffResign::where('number_employee',$request->number_employee)->get();
+            $dataNssf = PreviewNationalSocialSecurityFund::where('number_employee',$request->number_employee)->get();
+            if ($dataNssf) {
+                foreach ($dataNssf as $item) {
+                    NationalSocialSecurityFund::firstOrCreate([
+                        'employee_id'               => $item->employee_id,
+                        'number_employee'           => $item->number_employee,
+                        'total_pre_tax_salary_usd'  => $item->total_pre_tax_salary_usd,
+                        'total_pre_tax_salary_riel' => $item->total_pre_tax_salary_riel,
+                        'total_average_wage'        => $item->total_average_wage,
+                        'total_occupational_risk'   => $item->total_occupational_risk,
+                        'total_health_care'         => $item->total_health_care,
+                        'pension_contribution_usd'  => $item->pension_contribution_usd,
+                        'pension_contribution_riel' => $item->pension_contribution_riel,
+                        'corporate_contribution'    => $item->corporate_contribution,
+                        'exchange_rate'             => $item->exchange_rate,
+                        'payment_date'              => $item->payment_date,
+                        'created_by'                => $item->created_by,
+                    ]);
+                    PreviewNationalSocialSecurityFund::where('number_employee',$request->number_employee)->delete();
+                }
+            }
+            if ($dataPayroll) {
+                foreach ($dataPayroll as $item) {
+                    Payroll::firstOrCreate([
+                        'employee_id'               => $item->employee_id,
+                        'number_employee'           => $item->number_employee,
+                        'basic_salary'              => $item->basic_salary,
+                        'total_gross_salary'        => $item->total_gross_salary,
+                        'payment_date'              => $item->payment_date,
+                        'total_child_allowance'     => $item->total_child_allowance,
+                        'phone_allowance'           => $item->phone_allowance,
+                        'monthly_quarterly_bonuses' => $item->monthly_quarterly_bonuses,
+                        'total_kny_phcumben'        => $item->total_kny_phcumben,
+                        'annual_incentive_bonus'    => $item->annual_incentive_bonus,
+                        'total_gross'               => $item->total_gross,
+                        'total_pension_fund'        => $item->total_pension_fund,
+                        'seniority_pay_included_tax'=> $item->seniority_pay_included_tax,
+                        'base_salary_received_usd'  => $item->base_salary_received_usd,
+                        'base_salary_received_riel' => $item->base_salary_received_riel,
+                        'spouse'                    => $item->spouse,
+                        'children'                  => $item->children,
+                        'total_charges_reduced'     => $item->total_charges_reduced,
+                        'total_tax_base_riel'       => $item->total_tax_base_riel,
+                        'total_rate'                => $item->total_rate,
+                        'total_salary_tax_usd'      => $item->total_salary_tax_usd,
+                        'total_salary_tax_riel'     => $item->total_salary_tax_riel,
+                        'total_amount_reduced'      => $item->total_amount_reduced,
+                        'seniority_pay_excluded_tax'=> $item->seniority_pay_excluded_tax,
+                        'seniority_backford'        => $item->seniority_backford,
+                        'total_severance_pay'       => $item->total_severance_pay,
+                        'loan_amount'               => $item->loan_amount,
+                        'total_staff_book'          => $item->total_staff_book,
+                        'total_amount_car'          => $item->total_amount_car,
+                        'total_salary'              => $item->total_salary,
+                        'exchange_rate'             => $item->exchange_rate,
+                        'adjustment'                => $item->adjustment,
+                        'adjustment_include_taxe'   => $item->adjustment_include_taxe,
+                        'leaves'                    => $item->leaves,
+                        'created_by'                => $item->created_by,
+                    ]);
+                    ParyllStaffResign::where('number_employee',$request->number_employee)->delete();
+                }
+            }
+            
+            Toastr::success('Approved payroll successfully.','Success');
+            return redirect()->back();
+            DB::commit();
+        }catch(\Exception $e){
+            DB::rollback();
+            Toastr::error('Approved Payroll fail','Error');
             return redirect()->back();
         }
     }

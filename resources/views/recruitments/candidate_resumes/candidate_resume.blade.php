@@ -204,12 +204,9 @@
         @include('recruitments.candidate_resumes.modal_form_create_emp')
         @include('recruitments.candidate_resumes.import')
     </div>
-    @include('components.loading-modal')
 @endsection
 @include('includs.script')
 <script src="{{asset('/admin/js/validation-field.js')}}"></script>
-<script type="text/javascript" src="{{ asset('/admin/js/printThis.js') }}"></script>
-
 <script type="text/javascript">
     $(function(){
         $("#import_new_cvs").on("click", function() {
@@ -965,84 +962,7 @@
                 }); 
             }
         });
-        $(document).on('click','.btn_print', function(){
-            $('#modal-loading').modal('show');
-            let id = $(this).data("id");
-            $.ajax({
-                type: "GET",
-                url: "{{url('users/print')}}",
-                data: {
-                    "_token": "{{ csrf_token() }}",
-                    id : id
-                },
-                dataType: "JSON",
-                success: function (response) {
-                    var data = response.success;
-                    var date_of_birth = new Date(data.date_of_birth);
-                    var date_of_commencement = new Date(data.date_of_commencement);
-                    var fdc_date = new Date(data.fdc_date);
-                    fdc_date.setDate(fdc_date.getDate() - 1);
-                    fdc_date = new Date(fdc_date);
-                    let day = formatDate( date_of_birth, 'km', format_date={day: true});
-                    let month = formatDate( date_of_birth, 'km', format_date={month: true});
-                    let year = formatDate( date_of_birth, 'km', format_date={year: true});
-                    let join_day = formatDate( date_of_commencement, 'km', format_date={day: true});
-                    let join_month = formatDate( date_of_commencement, 'km', format_date={month: true});
-                    let join_year = formatDate( date_of_commencement, 'km', format_date={year: true});
-                    let end_day = formatDate( fdc_date, 'km', format_date={day: true});
-                    let end_month = formatDate( fdc_date, 'km', format_date={month: true});
-                    let end_year = formatDate( fdc_date, 'km', format_date={year: true});
-                    if (data) {
-                        if (data.gender.name_english == "Female") {
-                            $("#pr_mr_or_mrs").text("អ្នកស្រី ");
-                            $("#pr_gender").text("ស្រី ");
-                        }else{
-                            $("#pr_mr_or_mrs").text("លោក ");
-                            $("#pr_gender").text("ប្រុស ");
-                        }
-                        $(".pr_name").text(data.employee_name_kh +" ");
-                        $("#pr_born_on").text(day+" ខែ "+month+" ឆ្នាំ "+ year);
-                        $("#pr_permanent_province").text(data.permanentprovince.name_km + " ");
-                        $("#pr_permanent_province").text(data.permanentprovince.name_km + " ");
-                        $("#pr_id_card_number").text(data.id_card_number+ "");
-
-                        let number_home = "";
-                        let number_street = "";
-                        if (data.current_house_no) {
-                            number_home = "ផ្ទះលេខ "+ data.current_house_no;
-                        }
-                        if (data.current_street_no) {
-                            number_street = " ផ្លូវលេខ "+data.current_street_no;
-                        }
-                        let location = number_home + number_street + " ភូមិ "+data.currentvillage.name_km + " ឃុំ/សង្កាត់ " + data.currentcommune.name_km + " ស្រុក/ខណ្ឌ " + data.currentdistrict.name_km+ " ខេត្ត/ក្រុង "+data.currentprovince.name_km;
-
-                        $("#pr_current_location").text(location);
-
-                        $("#pr_personal_phone_number").text(data.personal_phone_number);
-                        $(".pr_join_day").text(join_day);
-                        $(".pr_join_month").text(join_month);
-                        $(".pr_join_year").text(join_year);
-                        $("#pr_end_day").text(end_day);
-                        $("#pr_end_month").text(end_month);
-                        $("#pr_end_year").text(end_year);
-                        $("#pr_position").text(data.position.name_khmer);
-                        $("#pr_branch").text(data.branch.branch_name_kh);
-                        $("#pr_employee_id").text(data.number_employee);
-                        $("#pr_basic_salary").text(data.basic_salary);
-                        $("#pr_salary_increase").text(data.salary_increas);
-                        if (data.recruitment && data.recruitment.pro_rate == "1") {
-                            $("#pr_supporting_or_field_staff").text("ដោយធៀបនិងភាគរយការងារសម្រេចបានសម្រាប់បុគ្គលិកឥណទាន (គិតតាម Pro-Rate)");
-                        }else{
-                            $("#pr_supporting_or_field_staff").text("");
-                        }
-                        print_pdf();
-                        window.setTimeout(function() {
-                            $('#modal-loading').modal('hide');
-                        }, 2000);
-                    }
-                }
-            });
-        });
+        
         $('body').on('click', '#btn-emp-status a', function() {
             let id = $(this).attr('data-emp-id');
             let status = $(this).data('id');
@@ -1566,14 +1486,10 @@
                             let btn_delete = "";
                             let btn_edit = "";
                             let btn_preview = "";
-                            let print = "";
                             if (is_print == 1 || is_delete == 1 || is_update == 1) {
-                                if (is_print == 1 ) {
-                                    print = '<a class="dropdown-item btn_print" data-id="'+(emp.id)+'"><i class="fa fa-print fa-lg m-r-5"></i> @lang("lang.print")</a>';
-                                }
                                 if (is_update == 1) {
                                     btn_edit =  '<a class="dropdown-item userUpdate" href="{{url("/recruitment/candidate-resume/upcoming/edit")}}/'+(emp.id)+'" data-id="'+(emp.id)+'"><i class="fa fa-pencil m-r-5"></i> @lang("lang.edit")</a>';
-                                    btn_preview =  '<a class="dropdown-item" href="{{url("/recruitment/candidate-resume/preview")}}/'+(emp.id)+'"><i class="fa fa-pencil m-r-5"></i> @lang("lang.preview")</a>';
+                                    btn_preview =  '<a class="dropdown-item" href="{{url("/recruitment/candidate-resume/preview")}}/'+(emp.id)+'"><i class="fa fa-regular fa-eye"></i> @lang("lang.preview")</a>';
                                     dropdown_status ='<div class="dropdown action-label">'+
                                             '<a class="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">'+
                                                 '<i class="fa fa-dot-circle-o text-success"></i>'+
@@ -1600,7 +1516,6 @@
                                                     '<div class="dropdown-menu dropdown-menu-right">'+
                                                         (btn_edit)+
                                                         (btn_preview)+
-                                                        (print)+
                                                         (btn_delete)+
                                                     '</div>'+
                                                 '</div>';
@@ -1624,9 +1539,9 @@
                                             (tag_a)+
                                         '</h2>'+
                                     '</td>'+
-                                    '<td class="stuck-scroll-4"><a href="{{url("employee/profile")}}/'+(emp.id)+'">'+(emp.number_employee)+'</a></td>'+
-                                    '<td class="stuck-scroll-4"><a href="{{url("employee/profile")}}/'+(emp.id)+'">'+(emp.employee_name_kh)+'</a></td>'+
-                                    '<td><a href="{{url("employee/profile")}}/'+(emp.id)+'">'+(emp.employee_name_en)+'</a></td>'+
+                                    '<td class="stuck-scroll-4"><a href="{{url("/recruitment/candidate-resume/preview")}}/'+(emp.id)+'">'+(emp.number_employee)+'</a></td>'+
+                                    '<td class="stuck-scroll-4"><a href="{{url("/recruitment/candidate-resume/preview")}}/'+(emp.id)+'">'+(emp.employee_name_kh)+'</a></td>'+
+                                    '<td><a href="{{url("/recruitment/candidate-resume/preview")}}/'+(emp.id)+'">'+(emp.employee_name_en)+'</a></td>'+
                                     '<td>'+(emp.gender ? localeLanguage == 'en'?  emp.gender.name_english : emp.gender.name_khmer : "")+'</td>'+
                                     '<td>'+(DOB)+'</td>'+
                                     '<td>'+(emp.branch ? localeLanguage == 'en' ? emp.branch.branch_name_en : emp.branch.branch_name_kh : "")+'</td>'+
@@ -1722,19 +1637,6 @@
                 $(".tbl-upcoming tbody").html(tr_upcoming);
                 $(".tbl-upcoming_cancel tbody").html(tr_upcoming_cancel);
             }
-        });
-    }
-    function print_pdf() {
-        $("#print_purchase").show();
-        $("#print_purchase").printThis({
-            importCSS: false,
-            importStyle: true,
-            loadCSS: "{{asset('/admin/css/style_table.css')}}",
-            header: "",
-            printDelay: 1000,
-            formValues: false,
-            canvas: false,
-            doctypeString: "",
         });
     }
 </script>

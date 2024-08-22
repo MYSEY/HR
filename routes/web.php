@@ -221,7 +221,10 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('payroll/approved',[EmployeePayrollController::class,'payrollApproved']);
     Route::get('payroll/review/export',[EmployeePayrollController::class,'payrollPreviwExport']);
     Route::post('payroll/review/delete',[EmployeePayrollController::class,'payrollReviewDelete']);
+
     Route::get('payroll/staff/resign',[EmployeePayrollController::class,'payrollStaffResign']);
+    Route::post('payroll/staff/resign/approved',[EmployeePayrollController::class,'approvedPayrollStaffResign']);
+    Route::post('payroll/staff/resign/delete',[EmployeePayrollController::class,'payrollStaffResignDelete']);
     Route::post('payroll/staff/risign/create',[EmployeePayrollController::class,'payrollStaffResignCreate']);
     Route::post('payroll/staff/risign/search',[EmployeePayrollController::class,'payrollStaffResignSearch']);
 
