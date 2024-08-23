@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admins;
 use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Bonus;
+use App\Helpers\Helper;
 use App\Models\Branchs;
 use App\Models\Payroll;
 use App\Models\Seniority;
@@ -16,6 +17,7 @@ use Illuminate\Http\Request;
 use App\Exports\ExportBenefit;
 use App\Exports\ExportPayroll;
 use App\Models\GrossSalaryPay;
+use App\Exports\ExportNSSFReport;
 use App\Exports\ExportMotorRentel;
 use Illuminate\Support\Facades\DB;
 use App\Exports\ExportSeniorityPay;
@@ -25,7 +27,6 @@ use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\ExportGrossSalaryPay;
-use App\Helpers\Helper;
 use App\Models\PreviewGrossSalaryPay;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use App\Models\NationalSocialSecurityFund;
@@ -224,6 +225,9 @@ class PayrollReportController extends Controller
         return response()->json([
             'success'=>$nssf,
         ]);
+    }
+    public function nssfExportReport(Request $request){
+        return Excel::download(new ExportNSSFReport($request), 'NSSF.xlsx');
     }
     public function nssfExport(Request $request){
         return Excel::download(new ExportNSSF($request), 'NSSF.xlsx');

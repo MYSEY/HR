@@ -77,7 +77,7 @@ class EmployeePayrollController extends Controller
             $yearLy = Carbon::createFromDate($request->filter_month)->format('Y');
         }
         $payroll = Payroll::with("users")
-        ->join('users', 'payrolls.employee_id', '=', 'users.id')
+        ->leftJoin('users', 'payrolls.employee_id', '=', 'users.id')
         ->select(
             'payrolls.*',
             'users.number_employee',

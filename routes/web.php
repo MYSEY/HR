@@ -317,11 +317,12 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('/reports/payroll-export', [PayrollReportController::class,'payrollExport']);
 
     Route::get('/import-nssf', [PayrollReportController::class,'ImportIndex']);
+    Route::get('/nssf-export', [PayrollReportController::class,'nssfExport']);
     Route::post('/import-nssf', [PayrollReportController::class,'ImportNSSF']);
     //Report nssf
     Route::get('/reports/nssf-report', [PayrollReportController::class,'reportNssf']);
     Route::post('/reports/nssf-report', [PayrollReportController::class,'nssfFilter']);
-    Route::get('/reports/nssf-export', [PayrollReportController::class,'nssfExport']);
+    Route::get('/reports/nssf-export', [PayrollReportController::class,'nssfExportReport']);
     //Report benefit
     Route::get('/reports/benefit-report', [PayrollReportController::class,'reportBenefitKNYPCh']);
     Route::post('/reports/benefit-report', [PayrollReportController::class,'BenefitFilter']);

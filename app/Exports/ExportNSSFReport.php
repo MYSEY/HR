@@ -17,7 +17,7 @@ use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithColumnWidths;
 use Maatwebsite\Excel\Concerns\WithCustomStartCell;
 
-class ExportNSSF implements FromCollection, WithColumnWidths, WithHeadings, WithCustomStartCell, WithEvents
+class ExportNSSFReport implements FromCollection, WithColumnWidths, WithHeadings, WithCustomStartCell, WithEvents
 {
     protected $num;
     protected $export_datas;
@@ -78,7 +78,7 @@ class ExportNSSF implements FromCollection, WithColumnWidths, WithHeadings, With
         })
         ->when($yearLy, function ($query, $yearLy) {
             $query->whereYear('national_social_security_funds.payment_date', $yearLy);
-        })->whereIn('users.emp_status',['Probation','1','10','2'])->get();
+        })->get();
         $i = 0;
         foreach ($datas as $key => $value) {
             $i++;
