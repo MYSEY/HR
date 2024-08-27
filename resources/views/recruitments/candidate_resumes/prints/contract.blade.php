@@ -1,4 +1,4 @@
-<div id="print_purchase" hidden>
+<div id="print_contract" hidden>
     <div class="card-header">
         {{-- logo company --}}
         <div>
@@ -13,7 +13,7 @@
             </div>
         </div>
         <div class="font-sub-title">
-            <label class="label-sub">កិច្ចសន្យាការងារសាកល្បង</label><br>
+            <label class="label-sub">កិច្ចសន្យាការងារពេញសិទ្ធិ</label><br>
             <label class="label-subs">(កិច្ចសន្យាមានថិរវេលាកំណត់-FDC)</label><br>
             <label class="label-sub_l">រវាង</label>
         </div><br>

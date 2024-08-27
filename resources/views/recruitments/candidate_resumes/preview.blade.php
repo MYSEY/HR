@@ -20,12 +20,13 @@
                                 <i class="fa fa-print fa-lg"></i> @lang('lang.print')
                             </a>
                             <div class="dropdown-menu dropdown-menu-right" style="">
-                            <a class="dropdown-item" id="btn_print_signed_contract" href="#" data-id="{{$data->id}}">Signed Contract</a>
-                            <a class="dropdown-item" id="btn_appointed_letter" href="#" data-id="{{$data->id}}">Appointed Letter</a>
-                            <a class="dropdown-item" id="btn_complete_probation" href="#" data-id="{{$data->id}}">Complete Probation</a>
-                            <a class="dropdown-item" href="#">Contract Volunteer</a>
-                            <a class="dropdown-item" href="#">Blacklist Agreement</a>
-                            <a class="dropdown-item" href="#">Confidential Letter</a>
+                            <a class="dropdown-item" href="#" id="btn_print_signed_contract" data-signed-contract="signed contract" data-id="{{$data->id}}">Signed Contract</a>
+                            <a class="dropdown-item" href="#" id="btn_print_contract" data-signed-contract="contract" data-id="{{$data->id}}">Contract</a>
+                            <a class="dropdown-item" href="#" id="btn_appointed_letter" data-signed-contract="appointed letter" data-id="{{$data->id}}">Appointed Letter</a>
+                            <a class="dropdown-item" href="#" id="btn_complete_probation" data-signed-contract="complete probation" data-id="{{$data->id}}">Complete Probation</a>
+                            <a class="dropdown-item" href="#" id="btn_contract_volunteer" data-signed-contract="contract volunteer" data-id="{{$data->id}}">Contract Volunteer</a>
+                            <a class="dropdown-item" href="#" id="btn_blacklist_agreement" data-signed-contract="blacklist agreement" data-id="{{$data->id}}">Blacklist Agreement</a>
+                            <a class="dropdown-item" href="#" id="btn_confidential_letter" data-signed-contract="confildetail letter" data-id="{{$data->id}}">Confidential Letter</a>
                             </div>
                         </div>
                     @endif
@@ -279,9 +280,13 @@
         </div>
     </div>
     @include('components.loading-modal')
-    @include('recruitments.candidate_resumes.print_signed_contract')
-    @include('recruitments.candidate_resumes.print_oppointed_letter')
-    @include('recruitments.candidate_resumes.print_complete_probation')
+    @include('recruitments.candidate_resumes.prints.signed_contract')
+    @include('recruitments.candidate_resumes.prints.contract')
+    @include('recruitments.candidate_resumes.prints.oppointed_letter')
+    @include('recruitments.candidate_resumes.prints.complete_probation')
+    @include('recruitments.candidate_resumes.prints.contract_volunteer')
+    @include('recruitments.candidate_resumes.prints.confidential_letter')
+    @include('recruitments.candidate_resumes.prints.blacklist_agreement')
 @endsection
 @include('includs.script')
 <script src="{{asset('/admin/js/validation-field.js')}}"></script>
@@ -292,21 +297,48 @@
         $('#btn_print_signed_contract').on('click', function(){
             $('#modal-loading').modal('show');
             let id = $(this).data("id");
-            showPrint(id);
+            let signed_contract = $(this).attr('data-signed-contract');
+            printSignContract(id,signed_contract);
+        });
+        $('#btn_print_contract').on('click', function(){
+            $('#modal-loading').modal('show');
+            let id = $(this).data("id");
+            let signed_contract = $(this).attr('data-signed-contract');
+            printSignContract(id,signed_contract);
         });
         $('#btn_appointed_letter').on('click', function(){
             $('#modal-loading').modal('show');
             let id = $(this).data("id");
-            appointed_letter(id);
+            let signed_contract = $(this).attr('data-signed-contract');
+            printSignContract(id,signed_contract);
         });
         $('#btn_complete_probation').on('click', function(){
             $('#modal-loading').modal('show');
             let id = $(this).data("id");
-            completeProbation(id);
+            let signed_contract = $(this).attr('data-signed-contract');
+            printSignContract(id,signed_contract);
+        });
+        $('#btn_contract_volunteer').on('click', function(){
+            $('#modal-loading').modal('show');
+            let id = $(this).data("id");
+            let signed_contract = $(this).attr('data-signed-contract');
+            printSignContract(id,signed_contract);
+        });
+        $('#btn_confidential_letter').on('click', function(){
+            $('#modal-loading').modal('show');
+            let id = $(this).data("id");
+            let signed_contract = $(this).attr('data-signed-contract');
+            printSignContract(id,signed_contract);
+        });
+        $('#btn_blacklist_agreement').on('click', function(){
+            $('#modal-loading').modal('show');
+            let id = $(this).data("id");
+            let signed_contract = $(this).attr('data-signed-contract');
+            printSignContract(id,signed_contract);
         });
     });
 
-    function showPrint(id){
+    function printSignContract(id,signed_contract){
         $.ajax({
             type: "GET",
             url: "{{url('users/print')}}",
@@ -344,83 +376,6 @@
                     $("#pr_permanent_province").text(data.permanentprovince.name_km + " ");
                     $("#pr_permanent_province").text(data.permanentprovince.name_km + " ");
                     $("#pr_id_card_number").text(data.id_card_number+ "");
-
-                    let number_home = "";
-                    let number_street = "";
-                    if (data.current_house_no) {
-                        number_home = "ផ្ទះលេខ "+ data.current_house_no;
-                    }
-                    if (data.current_street_no) {
-                        number_street = " ផ្លូវលេខ "+data.current_street_no;
-                    }
-                    let location = number_home + number_street + " ភូមិ "+data.currentvillage.name_km + " ឃុំ/សង្កាត់ " + data.currentcommune.name_km + " ស្រុក/ខណ្ឌ " + data.currentdistrict.name_km+ " ខេត្ត/ក្រុង "+data.currentprovince.name_km;
-
-                    $("#pr_current_location").text(location);
-
-                    $("#pr_personal_phone_number").text(data.personal_phone_number);
-                    $(".pr_join_day").text(join_day);
-                    $(".pr_join_month").text(join_month);
-                    $(".pr_join_year").text(join_year);
-                    $("#pr_end_day").text(end_day);
-                    $("#pr_end_month").text(end_month);
-                    $("#pr_end_year").text(end_year);
-                    $("#pr_position").text(data.position.name_khmer);
-                    $("#pr_branch").text(data.branch.branch_name_kh);
-                    $("#pr_employee_id").text(data.number_employee);
-                    $("#pr_basic_salary").text(data.basic_salary);
-                    $("#pr_salary_increase").text(data.salary_increas);
-                    if (data.recruitment && data.recruitment.pro_rate == "1") {
-                        $("#pr_supporting_or_field_staff").text("ដោយធៀបនិងភាគរយការងារសម្រេចបានសម្រាប់បុគ្គលិកឥណទាន (គិតតាម Pro-Rate)");
-                    }else{
-                        $("#pr_supporting_or_field_staff").text("");
-                    }
-                    print_pdf_sign_contract();
-                    window.setTimeout(function() {
-                        $('#modal-loading').modal('hide');
-                    }, 2000);
-                }
-            }
-        });
-    }
-    function appointed_letter(id){
-        $.ajax({
-            type: "GET",
-            url: "{{url('users/print')}}",
-            data: {
-                "_token": "{{ csrf_token() }}",
-                id : id
-            },
-            dataType: "JSON",
-            success: function (response) {
-                var data = response.success;
-                var date_of_birth = new Date(data.date_of_birth);
-                var date_of_commencement = new Date(data.date_of_commencement);
-                var fdc_date = new Date(data.fdc_date);
-                fdc_date.setDate(fdc_date.getDate() - 1);
-                fdc_date = new Date(fdc_date);
-                let day = formatDate(date_of_birth, 'km', format_date={day: true});
-                let month = formatDate(date_of_birth, 'km', format_date={month: true});
-                let year = formatDate(date_of_birth, 'km', format_date={year: true});
-                let join_day = formatDate(date_of_commencement, 'km', format_date={day: true});
-                let join_month = formatDate(date_of_commencement, 'km', format_date={month: true});
-                let join_year = formatDate(date_of_commencement, 'km', format_date={year: true});
-                let end_day = formatDate(fdc_date, 'km', format_date={day: true});
-                let end_month = formatDate(fdc_date, 'km', format_date={month: true});
-                let end_year = formatDate(fdc_date, 'km', format_date={year: true});
-                if (data) {
-                    if (data.gender.name_english == "Female") {
-                        $("#pr_mr_or_mrs").text("អ្នកស្រី ");
-                        $("#pr_gender").text("ស្រី ");
-                    }else{
-                        $("#pr_mr_or_mrs").text("លោក ");
-                        $("#pr_gender").text("ប្រុស ");
-                    }
-                    $(".pr_name").text(data.employee_name_kh +" ");
-                    $("#pr_born_on").text(day+" ខែ "+month+" ឆ្នាំ "+ year);
-                    $("#pr_permanent_province").text(data.permanentprovince.name_km + " ");
-                    $("#pr_permanent_province").text(data.permanentprovince.name_km + " ");
-                    $("#pr_id_card_number").text(data.id_card_number+ "");
-
                     let number_home = "";
                     let number_street = "";
                     if (data.current_house_no) {
@@ -448,7 +403,22 @@
                     }else{
                         $("#pr_supporting_or_field_staff").text("");
                     }
-                    print_pdf_print_appointed_letter();
+                    if (signed_contract=='signed contract') {
+                        stylePrintSignContract();
+                    } else if(signed_contract == 'contract') {
+                        stylePrintContract();
+                    }else if(signed_contract == 'appointed letter'){
+                        stylePrintAppointedLetter();
+                    }else if(signed_contract == 'complete probation'){
+                        stylePrintCompleteProbation();
+                    }else if(signed_contract == 'contract volunteer'){
+                        styleContractVolunteer();
+                    }else if(signed_contract == 'confildetail letter'){
+                        styleConfidentialLetter();
+                    }else{
+                        styleBlicklistAgreement();
+                    }
+                    
                     window.setTimeout(function() {
                         $('#modal-loading').modal('hide');
                     }, 2000);
@@ -456,83 +426,11 @@
             }
         });
     }
-    function completeProbation(id){
-        $.ajax({
-            type: "GET",
-            url: "{{url('users/print')}}",
-            data: {
-                "_token": "{{ csrf_token() }}",
-                id : id
-            },
-            dataType: "JSON",
-            success: function (response) {
-                var data = response.success;
-                var date_of_birth = new Date(data.date_of_birth);
-                var date_of_commencement = new Date(data.date_of_commencement);
-                var fdc_date = new Date(data.fdc_date);
-                fdc_date.setDate(fdc_date.getDate() - 1);
-                fdc_date = new Date(fdc_date);
-                let day = formatDate(date_of_birth, 'km', format_date={day: true});
-                let month = formatDate(date_of_birth, 'km', format_date={month: true});
-                let year = formatDate(date_of_birth, 'km', format_date={year: true});
-                let join_day = formatDate(date_of_commencement, 'km', format_date={day: true});
-                let join_month = formatDate(date_of_commencement, 'km', format_date={month: true});
-                let join_year = formatDate(date_of_commencement, 'km', format_date={year: true});
-                let end_day = formatDate(fdc_date, 'km', format_date={day: true});
-                let end_month = formatDate(fdc_date, 'km', format_date={month: true});
-                let end_year = formatDate(fdc_date, 'km', format_date={year: true});
-                if (data) {
-                    if (data.gender.name_english == "Female") {
-                        $("#pr_mr_or_mrs").text("អ្នកស្រី ");
-                        $("#pr_gender").text("ស្រី ");
-                    }else{
-                        $("#pr_mr_or_mrs").text("លោក ");
-                        $("#pr_gender").text("ប្រុស ");
-                    }
-                    $(".pr_name").text(data.employee_name_kh +" ");
-                    $("#pr_born_on").text(day+" ខែ "+month+" ឆ្នាំ "+ year);
-                    $("#pr_permanent_province").text(data.permanentprovince.name_km + " ");
-                    $("#pr_permanent_province").text(data.permanentprovince.name_km + " ");
-                    $("#pr_id_card_number").text(data.id_card_number+ "");
-
-                    let number_home = "";
-                    let number_street = "";
-                    if (data.current_house_no) {
-                        number_home = "ផ្ទះលេខ "+ data.current_house_no;
-                    }
-                    if (data.current_street_no) {
-                        number_street = " ផ្លូវលេខ "+data.current_street_no;
-                    }
-                    let location = number_home + number_street + " ភូមិ "+data.currentvillage.name_km + " ឃុំ/សង្កាត់ " + data.currentcommune.name_km + " ស្រុក/ខណ្ឌ " + data.currentdistrict.name_km+ " ខេត្ត/ក្រុង "+data.currentprovince.name_km;
-                    $("#pr_current_location").text(location);
-                    $("#pr_personal_phone_number").text(data.personal_phone_number);
-                    $(".pr_join_day").text(join_day);
-                    $(".pr_join_month").text(join_month);
-                    $(".pr_join_year").text(join_year);
-                    $("#pr_end_day").text(end_day);
-                    $("#pr_end_month").text(end_month);
-                    $("#pr_end_year").text(end_year);
-                    $("#pr_position").text(data.position.name_khmer);
-                    $("#pr_branch").text(data.branch.branch_name_kh);
-                    $("#pr_employee_id").text(data.number_employee);
-                    $("#pr_basic_salary").text(data.basic_salary);
-                    $("#pr_salary_increase").text(data.salary_increas);
-                    if (data.recruitment && data.recruitment.pro_rate == "1") {
-                        $("#pr_supporting_or_field_staff").text("ដោយធៀបនិងភាគរយការងារសម្រេចបានសម្រាប់បុគ្គលិកឥណទាន (គិតតាម Pro-Rate)");
-                    }else{
-                        $("#pr_supporting_or_field_staff").text("");
-                    }
-                    print_pdf_print_complete_probation();
-                    window.setTimeout(function() {
-                        $('#modal-loading').modal('hide');
-                    }, 2000);
-                }
-            }
-        });
-    }
-    function print_pdf_sign_contract() {
-        $("#print_purchase").show();
-        $("#print_purchase").printThis({
+    
+    //style print
+    function stylePrintSignContract() {
+        $("#print_sign_contract").show();
+        $("#print_sign_contract").printThis({
             importCSS: false,
             importStyle: true,
             loadCSS: "{{asset('/admin/css/style_table.css')}}",
@@ -543,7 +441,20 @@
             doctypeString: "",
         });
     }
-    function print_pdf_print_appointed_letter() {
+    function stylePrintContract() {
+        $("#print_contract").show();
+        $("#print_contract").printThis({
+            importCSS: false,
+            importStyle: true,
+            loadCSS: "{{asset('/admin/css/style_table.css')}}",
+            header: "",
+            printDelay: 1000,
+            formValues: false,
+            canvas: false,
+            doctypeString: "",
+        });
+    }
+    function stylePrintAppointedLetter() {
         $("#print_appointed_letter").show();
         $("#print_appointed_letter").printThis({
             importCSS: false,
@@ -556,12 +467,51 @@
             doctypeString: "",
         });
     }
-    function print_pdf_print_complete_probation() {
+    function stylePrintCompleteProbation() {
         $("#print_complete_probation").show();
         $("#print_complete_probation").printThis({
             importCSS: false,
             importStyle: true,
             loadCSS: "{{asset('/admin/css/style_print_oppointed_letter.css')}}",
+            header: "",
+            printDelay: 1000,
+            formValues: false,
+            canvas: false,
+            doctypeString: "",
+        });
+    }
+    function styleContractVolunteer() {
+        $("#print_contract_volunteer").show();
+        $("#print_contract_volunteer").printThis({
+            importCSS: false,
+            importStyle: true,
+            loadCSS: "{{asset('/admin/css/style_contract_volunteer_table.css')}}",
+            header: "",
+            printDelay: 1000,
+            formValues: false,
+            canvas: false,
+            doctypeString: "",
+        });
+    }
+    function styleConfidentialLetter() {
+        $("#print_confidential_letter").show();
+        $("#print_confidential_letter").printThis({
+            importCSS: false,
+            importStyle: true,
+            loadCSS: "{{asset('/admin/css/style_table.css')}}",
+            header: "",
+            printDelay: 1000,
+            formValues: false,
+            canvas: false,
+            doctypeString: "",
+        });
+    }
+    function styleBlicklistAgreement() {
+        $("#print_blicklist_agreement").show();
+        $("#print_blicklist_agreement").printThis({
+            importCSS: false,
+            importStyle: true,
+            loadCSS: "{{asset('/admin/css/style_table.css')}}",
             header: "",
             printDelay: 1000,
             formValues: false,

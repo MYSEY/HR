@@ -638,7 +638,7 @@
         </div>
     </div>
 @endif
-@include('recruitments.candidate_resumes.print_signed_contract')
+@include('recruitments.candidate_resumes.prints.signed_contract')
 @include('components.loading-modal')
 <script type="text/javascript" src="{{ asset('/admin/js/printThis.js') }}"></script>
 <script src="{{asset('/admin/js/format-date-kh.js')}}"></script>

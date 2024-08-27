@@ -288,7 +288,7 @@
         </div>
     </div>
 </div>
-@include('recruitments.candidate_resumes.print_signed_contract')
+@include('recruitments.candidate_resumes.prints.signed_contract')
 
 
 <script src="{{asset('/admin/js/validation-field.js')}}"></script>
