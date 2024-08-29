@@ -20,7 +20,7 @@ class PayrollItemController extends Controller
      */
     public function index()
     {
-        $employee = User::whereIn('emp_status',['Probation','1','2','10'])->get();
+        $employee = User::all();
         $data = PayrollAdjustment::all();
         return view('payroll_item.index',compact('employee','data'));
     }
