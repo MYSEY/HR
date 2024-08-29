@@ -129,7 +129,7 @@
                                                                     <i class="fa fa-dot-circle-o text-danger"></i> Lay Off
                                                                 </a>
                                                                 <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="8" href="#">
-                                                                    <i class="fa fa-dot-circle-o text-danger"></i> No need to input
+                                                                    <i class="fa fa-dot-circle-o text-danger"></i> Suspension
                                                                 </a>
                                                                 <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="9" href="#">
                                                                     <i class="fa fa-dot-circle-o text-danger"></i> Failed Probation
@@ -311,7 +311,7 @@
                                                                     <i class="fa fa-dot-circle-o text-danger"></i> Lay Off
                                                                 </a>
                                                                 <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="8" href="#">
-                                                                    <i class="fa fa-dot-circle-o text-danger"></i> No need to input
+                                                                    <i class="fa fa-dot-circle-o text-danger"></i> Suspension
                                                                 </a>
                                                                 <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="9" href="#">
                                                                     <i class="fa fa-dot-circle-o text-danger"></i> Failed Probation
@@ -471,7 +471,7 @@
                                                                     <i class="fa fa-dot-circle-o text-danger"></i> Lay Off
                                                                 </a>
                                                                 <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="8" href="#">
-                                                                    <i class="fa fa-dot-circle-o text-danger"></i> No need to input
+                                                                    <i class="fa fa-dot-circle-o text-danger"></i> Suspension
                                                                 </a>
                                                                 <a class="dropdown-item" data-emp-id="{{$item->id}}" data-start-date="{{$item->fdc_date}}" data-end-date="{{$item->fdc_end}}" data-id="9" href="#">
                                                                     <i class="fa fa-dot-circle-o text-danger"></i> Failed Probation
@@ -606,7 +606,7 @@
                                                             @elseif ($item->emp_status=='7')
                                                                 <span style="font-size: 13px" class="badge bg-inverse-danger">Lay Off</span>
                                                             @elseif ($item->emp_status=='8')
-                                                                <span style="font-size: 13px" class="badge bg-inverse-danger">No need to input</span>
+                                                                <span style="font-size: 13px" class="badge bg-inverse-danger">Suspension</span>
                                                             @elseif ($item->emp_status=='9')
                                                                 <span style="font-size: 13px" class="badge bg-inverse-danger">Failed Probation</span>
                                                             @elseif ($item->emp_status=='Cancel')

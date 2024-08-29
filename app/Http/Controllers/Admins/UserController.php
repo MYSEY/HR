@@ -686,63 +686,63 @@ class UserController extends Controller
                     $totalDayInMonth = Carbon::now()->month($endMonth)->daysInMonth;
                     //find start date employee join date
                     $date_of_month = Carbon::createFromDate($request->resign_date)->format('Y-m');
-                    $currentYear = $date_of_month.'-'.$totalDayInMonth;
+                    $currentYear = $date_of_month.'-'.'01';
                     //find total working day in month
                     $startDate = Carbon::parse($request->resign_date);
                     $endDate = Carbon::parse($currentYear);
-                    // find total days in month
-                    $totalNewDays = $startDate->diffInDays($endDate) + 1;
-                    $totalDayStaffResign = $totalDayInMonth - $totalNewDays;
+                    $totalDayStaffResign 		    = $endDate->diffInWeekdays($startDate);
+                    
                     if ($totalDayStaffResign == 0) {
                         $totalSalaryStaffResign = $users->basic_salary;
                     } else {
                         $totalSalaryStaffResign = ($users->basic_salary * $totalDayStaffResign) / 22;
                     }
-                    if ($users->emp_status=='Probation') {
-                        $months = 4.5;
-                        if ($totalDayStaffResign < 15) {
-                            $totalDay = 0;
-                            $EndMonths = $months - 1;
-                        } elseif($totalDayStaffResign >= 15 && $totalDayStaffResign <= 20) {
-                            $totalDay = 1;
-                            $EndMonths = $months - 1;
-                        }else{
-                            $totalDay = 1.5;
-                            $EndMonths = $months;
-                        }
+
+                    // if ($users->emp_status=='Probation') {
+                    //     $months = 4.5;
+                    //     if ($totalDayStaffResign < 15) {
+                    //         $totalDay = 0;
+                    //         $EndMonths = $months - 1;
+                    //     } elseif($totalDayStaffResign >= 15 && $totalDayStaffResign <= 20) {
+                    //         $totalDay = 1;
+                    //         $EndMonths = $months - 1;
+                    //     }else{
+                    //         $totalDay = 1.5;
+                    //         $EndMonths = $months;
+                    //     }
                         
-                        $numberOfDay = LeaveRequest::where('employee_id',$request->id)->sum('number_of_day');
-                        $totalDayResignProbation = $EndMonths - $numberOfDay;
-                        if ($numberOfDay) {
-                            $totalSallaryStaffResign = ($users->basic_salary * $totalDayResignProbation) / 22;
-                            $totalSalaryAL = $totalSalaryStaffResign - $totalSallaryStaffResign;
-                        }else{
-                            $totalSallaryStaffResign = ($users->basic_salary * $totalDayResignProbation) / 22;
-                            $totalSalaryAL = $totalSalaryStaffResign + $totalSallaryStaffResign;
-                        }
-                    } else {
-                        //function calu Carried forward AL
-                        $dataLeave = LeaveAllocation::where('employee_id',$users->id)->first();
-                        if ($dataLeave) {
-                            $year1 = $dataLeave->year_1;
-                            $year2 = $dataLeave->year_2;
-                            $year3 = $dataLeave->year_3;
-                            if ($dataLeave->total_annual_leave < 0) {
-                                $Carriedforward = $year1 + $year2 + $year3 - abs($dataLeave->total_annual_leave);
-                                $totalSallaryAL = ($users->basic_salary * $Carriedforward) / 22;
-                                $totalSalaryAL = $totalSalaryStaffResign + $totalSallaryAL;
-                            } else {
-                                $Carriedforward = $year1 + $year2 + $year3 + $dataLeave->total_annual_leave;
-                                $totalSallaryAL = ($users->basic_salary * $Carriedforward) / 22;
-                                $totalSalaryAL = $totalSallaryAL + $totalSalaryStaffResign;
-                            }
-                        }
-                    }
+                    //     $numberOfDay = LeaveRequest::where('employee_id',$request->id)->sum('number_of_day');
+                    //     $totalDayResignProbation = $EndMonths - $numberOfDay;
+                    //     if ($numberOfDay) {
+                    //         $totalSallaryStaffResign = ($users->basic_salary * $totalDayResignProbation) / 22;
+                    //         $totalSalaryAL = $totalSalaryStaffResign - $totalSallaryStaffResign;
+                    //     }else{
+                    //         $totalSallaryStaffResign = ($users->basic_salary * $totalDayResignProbation) / 22;
+                    //         $totalSalaryAL = $totalSalaryStaffResign + $totalSallaryStaffResign;
+                    //     }
+                    // } else {
+                    //     //function calu Carried forward AL
+                    //     $dataLeave = LeaveAllocation::where('employee_id',$users->id)->first();
+                    //     if ($dataLeave) {
+                    //         $year1 = $dataLeave->year_1;
+                    //         $year2 = $dataLeave->year_2;
+                    //         $year3 = $dataLeave->year_3;
+                    //         if ($dataLeave->total_annual_leave < 0) {
+                    //             $Carriedforward = $year1 + $year2 + $year3 - abs($dataLeave->total_annual_leave);
+                    //             $totalSallaryAL = ($users->basic_salary * $Carriedforward) / 22;
+                    //             $totalSalaryAL = $totalSalaryStaffResign + $totalSallaryAL;
+                    //         } else {
+                    //             $Carriedforward = $year1 + $year2 + $year3 + $dataLeave->total_annual_leave;
+                    //             $totalSallaryAL = ($users->basic_salary * $Carriedforward) / 22;
+                    //             $totalSalaryAL = $totalSallaryAL + $totalSalaryStaffResign;
+                    //         }
+                    //     }
+                    // }
                     User::where('id',$request->id)->update([
                         'emp_status' => $request->emp_status,
                         'resign_date' => $request->resign_date,
                         'pre_salary' => $users->basic_salary,
-                        'basic_salary' => $totalSalaryAL,
+                        'basic_salary' => $totalSalaryStaffResign,
                         'status' => 'Unactive',
                         'resign_reason' => $request->resign_reason
                     ]);

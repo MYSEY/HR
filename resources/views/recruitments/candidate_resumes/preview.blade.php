@@ -13,7 +13,7 @@
             </div>
             <div class="col-auto float-end ms-auto">
                 <div class="btn-group btn-group-sm">
-                    @if (permissionAccess("m4-s2","is_print")->value == "1")
+                    @if (permissionAccess("m3-s1","is_print")->value == "1")
                         <a class="btn btn-white m-1" href="{{url('/recruitment/candidate-resume/list')}}">@lang('lang.back_to_list')</a>
                         <div class="dropdown action-label" style="margin-top: 3px;">
                             <a class="btn btn-white btn-sm dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">
@@ -22,11 +22,11 @@
                             <div class="dropdown-menu dropdown-menu-right" style="">
                             <a class="dropdown-item" href="#" id="btn_print_signed_contract" data-signed-contract="signed contract" data-id="{{$data->id}}">Signed Contract</a>
                             <a class="dropdown-item" href="#" id="btn_print_contract" data-signed-contract="contract" data-id="{{$data->id}}">Contract</a>
-                            <a class="dropdown-item" href="#" id="btn_appointed_letter" data-signed-contract="appointed letter" data-id="{{$data->id}}">Appointed Letter</a>
+                            {{-- <a class="dropdown-item" href="#" id="btn_appointed_letter" data-signed-contract="appointed letter" data-id="{{$data->id}}">Appointed Letter</a>
                             <a class="dropdown-item" href="#" id="btn_complete_probation" data-signed-contract="complete probation" data-id="{{$data->id}}">Complete Probation</a>
                             <a class="dropdown-item" href="#" id="btn_contract_volunteer" data-signed-contract="contract volunteer" data-id="{{$data->id}}">Contract Volunteer</a>
                             <a class="dropdown-item" href="#" id="btn_blacklist_agreement" data-signed-contract="blacklist agreement" data-id="{{$data->id}}">Blacklist Agreement</a>
-                            <a class="dropdown-item" href="#" id="btn_confidential_letter" data-signed-contract="confildetail letter" data-id="{{$data->id}}">Confidential Letter</a>
+                            <a class="dropdown-item" href="#" id="btn_confidential_letter" data-signed-contract="confildetail letter" data-id="{{$data->id}}">Confidential Letter</a> --}}
                             </div>
                         </div>
                     @endif
@@ -435,7 +435,7 @@
             importStyle: true,
             loadCSS: "{{asset('/admin/css/style_table.css')}}",
             header: "",
-            printDelay: 1000,
+            printDelay: 2000,
             formValues: false,
             canvas: false,
             doctypeString: "",
@@ -448,7 +448,7 @@
             importStyle: true,
             loadCSS: "{{asset('/admin/css/style_table.css')}}",
             header: "",
-            printDelay: 1000,
+            printDelay: 2000,
             formValues: false,
             canvas: false,
             doctypeString: "",
@@ -461,7 +461,7 @@
             importStyle: true,
             loadCSS: "{{asset('/admin/css/style_print_oppointed_letter.css')}}",
             header: "",
-            printDelay: 1000,
+            printDelay: 2000,
             formValues: false,
             canvas: false,
             doctypeString: "",
@@ -474,7 +474,7 @@
             importStyle: true,
             loadCSS: "{{asset('/admin/css/style_print_oppointed_letter.css')}}",
             header: "",
-            printDelay: 1000,
+            printDelay: 2000,
             formValues: false,
             canvas: false,
             doctypeString: "",
@@ -487,7 +487,7 @@
             importStyle: true,
             loadCSS: "{{asset('/admin/css/style_contract_volunteer_table.css')}}",
             header: "",
-            printDelay: 1000,
+            printDelay: 2000,
             formValues: false,
             canvas: false,
             doctypeString: "",
@@ -500,7 +500,7 @@
             importStyle: true,
             loadCSS: "{{asset('/admin/css/style_table.css')}}",
             header: "",
-            printDelay: 1000,
+            printDelay: 2000,
             formValues: false,
             canvas: false,
             doctypeString: "",
@@ -513,7 +513,7 @@
             importStyle: true,
             loadCSS: "{{asset('/admin/css/style_table.css')}}",
             header: "",
-            printDelay: 1000,
+            printDelay: 2000,
             formValues: false,
             canvas: false,
             doctypeString: "",
