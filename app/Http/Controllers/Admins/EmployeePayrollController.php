@@ -1176,7 +1176,6 @@ class EmployeePayrollController extends Controller
         return view('payrolls.payroll_staff_resign',compact('data','staffResign','branch','exChangeRateSalary','exChangeRateNSSF'));
     }
     public function payrollStaffResignCreate(Request $request){
-        DB::beginTransaction();
         try{
             // function import Loan
             $dadaArrayLoan = [];

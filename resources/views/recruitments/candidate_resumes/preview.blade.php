@@ -20,8 +20,8 @@
                                 <i class="fa fa-print fa-lg"></i> @lang('lang.print')
                             </a>
                             <div class="dropdown-menu dropdown-menu-right" style="">
-                            <a class="dropdown-item" href="#" id="btn_print_signed_contract" data-signed-contract="signed contract" data-id="{{$data->id}}">Signed Contract</a>
-                            <a class="dropdown-item" href="#" id="btn_print_contract" data-signed-contract="contract" data-id="{{$data->id}}">Contract</a>
+                            <a class="dropdown-item" href="#" id="btn_print_signed_contract" data-signed-contract="signed contract" data-id="{{$data->id}}">@lang('lang.probation_contract')</a>
+                            <a class="dropdown-item" href="#" id="btn_print_contract" data-signed-contract="contract" data-id="{{$data->id}}">@lang('lang.fdc_contract')</a>
                             {{-- <a class="dropdown-item" href="#" id="btn_appointed_letter" data-signed-contract="appointed letter" data-id="{{$data->id}}">Appointed Letter</a>
                             <a class="dropdown-item" href="#" id="btn_complete_probation" data-signed-contract="complete probation" data-id="{{$data->id}}">Complete Probation</a>
                             <a class="dropdown-item" href="#" id="btn_contract_volunteer" data-signed-contract="contract volunteer" data-id="{{$data->id}}">Contract Volunteer</a>
