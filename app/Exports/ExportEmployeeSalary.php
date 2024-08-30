@@ -394,7 +394,7 @@ class ExportEmployeeSalary implements FromCollection, WithColumnWidths, WithHead
                 $sheet->getDelegate()->getStyle("AD".$rows)->getFont()->setName('Khmer OS Battambang')->setSize(9)->setBold("AD".$rows);
                 $event->sheet->getDelegate()->getStyle("AD".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
                 //total setCellValue AD
-                $sheet->setCellValue("AE".$rows, number_format($this->totalLoanAmount, 2));
+                $sheet->setCellValue("AE".$rows, number_format($this->totalStaffBook, 2));
                 $sheet->getDelegate()->getStyle("AE".$rows)->getFont()->setName('Khmer OS Battambang')->setSize(9)->setBold("AE".$rows);
                 $event->sheet->getDelegate()->getStyle("AE".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
                 //total setCellValue AE
