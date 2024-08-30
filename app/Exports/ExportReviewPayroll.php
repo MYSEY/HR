@@ -386,10 +386,10 @@ class ExportReviewPayroll implements FromCollection, WithColumnWidths, WithHeadi
                 $sheet->setCellValue("AE".$rows, number_format($this->totalLoanAmount, 2));
                 $sheet->getDelegate()->getStyle("AE".$rows)->getFont()->setName('Khmer OS Battambang')->setSize(9)->setBold("AE".$rows);
                 $event->sheet->getDelegate()->getStyle("AE".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
-                 //total setCellValue AE
-                 $sheet->setCellValue("AF".$rows, number_format($this->totalLoanAmount, 2));
-                 $sheet->getDelegate()->getStyle("AF".$rows)->getFont()->setName('Khmer OS Battambang')->setSize(9)->setBold("AF".$rows);
-                 $event->sheet->getDelegate()->getStyle("AF".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+                //total setCellValue AE
+                $sheet->setCellValue("AF".$rows, number_format($this->totalStaffBook, 2));
+                $sheet->getDelegate()->getStyle("AF".$rows)->getFont()->setName('Khmer OS Battambang')->setSize(9)->setBold("AF".$rows);
+                $event->sheet->getDelegate()->getStyle("AF".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
                 //total setCellValue AF
                 $sheet->setCellValue("AG".$rows, number_format($this->totalAmountCar, 2));
                 $sheet->getDelegate()->getStyle("AG".$rows)->getFont()->setName('Khmer OS Battambang')->setSize(9)->setBold("AG".$rows);
