@@ -1200,6 +1200,7 @@ class EmployeePayrollController extends Controller
             if (!$staffResign->isEmpty()) {
                 foreach ($staffResign as $item) {
                     PreviewNationalSocialSecurityFund::where('employee_id',$item->id)->delete();
+                    ParyllStaffResign::where('employee_id',$item->id)->delete();
                     //fuction check laon amount
                     if (array_key_exists($item->number_employee, $dadaArrayLoan)) {
                         $LoanAmount = $dadaArrayLoan[$item->number_employee]['laon_amount'];
@@ -1207,6 +1208,21 @@ class EmployeePayrollController extends Controller
                        $LoanAmount = 0;
                     }
 
+                    //function ajustment
+                    $paymentDate = Carbon::createFromDate($request->payment_date)->format('m-y');
+                    $dataPayrollAdjustment = PayrollAdjustment::where('employee_id',$item->id)->get();
+                    $adjustmentIncludeTaxe = 0;
+                    $adjustmentExcludeTaxe = 0;
+                    foreach ($dataPayrollAdjustment as $valueAdjust) {
+                        $adjustmentDate = Carbon::createFromDate($valueAdjust->adjustment_date)->format('m-y');
+                        if($adjustmentDate == $paymentDate){
+                            if ($valueAdjust->adjustment_type == 'include_taxe') {
+                                $adjustmentIncludeTaxe = $valueAdjust->amount;
+                            }else{
+                                $adjustmentExcludeTaxe = $valueAdjust->amount;
+                            }
+                        }
+                    }
                     //calculated khmer_new_year and pchumBen_bonus
                     $totalBunus = 0;
                     if ($item->resign_date >= $request->payment_date) {
@@ -1267,8 +1283,9 @@ class EmployeePayrollController extends Controller
                             }
                         }
                     }
-
-                    $totalGrossSalary = $item->basic_salary + $item->phone_allowance + $totalChildAllowance +$totalBunus;
+                    
+                    $baseSalary = $item->basic_salary;
+                    $totalGrossSalary = $item->basic_salary + $adjustmentIncludeTaxe + $item->phone_allowance + $totalChildAllowance +$totalBunus;
                     $totalSalaryAL = 0;
                     // function get age employee <= 60 National Social Security Fund (NSSF) Formula
                     $pension_contribution = 0;
@@ -1375,6 +1392,7 @@ class EmployeePayrollController extends Controller
                     
                     //function ដក​ pensin fund
                     $baseSalaryReceivedUsd = $totalGrossSalary + $seniorityPayableTax - $pension_contribution;
+                    // dd($baseSalaryReceivedUsd);
                     // functin exchange riel rate gross salary after tax
                     $totalExchangeRiel = round($baseSalaryReceivedUsd, 2) * $request->exchange_rate;
                     //total that បូកបន្ថែមលើបន្ទុកកូននិងប្រពន្ធ
@@ -1752,19 +1770,20 @@ class EmployeePayrollController extends Controller
                         }
                     }
 
-                    $totalNetSalary = $totalSalaryAfterTax + $totalSeverancePay + $taxExemptionSalary - $LoanAmount;
+                    $totalNetSalary = $totalSalaryAfterTax + $totalSeverancePay + $adjustmentExcludeTaxe + $taxExemptionSalary - $LoanAmount;
                     $data   = $request->all();
                     $data['employee_id']                    = $item->id;
                     $data['number_employee']                = $item->number_employee;
                     $data['basic_salary']                   = $item->pre_salary;
                     $data['spouse']                         = $item->spouse;
                     $data['children']                       = $children;
-                    $data['total_gross_salary']             = $totalGrossSalary;
+                    $data['total_gross_salary']             = $baseSalary;
                     $data['total_child_allowance']          = $totalChildAllowance;
                     $data['phone_allowance']                = $item->phone_allowance;
                     $data['total_kny_phcumben']             = $totalBunus;
                     $data['total_severance_pay']            = round($totalSeverancePay,3);
                     $data['seniority_pay_included_tax']     = $seniorityPayableTax;
+                    $data['adjustment_include_taxe']        = $adjustmentIncludeTaxe;
                     $data['total_gross']                    = $totalGrossSalary;
                     $data['total_pension_fund']             = $pension_contribution;
                     $data['base_salary_received_usd']       = $baseSalaryReceivedUsd;
@@ -1776,8 +1795,9 @@ class EmployeePayrollController extends Controller
                     $data['total_salary_tax_riel']          = round($totalSalaryTaxRiel,3);
                     $data['total_salary_tax_usd']           = $totalSalaryTaxUsd;
                     $data['loan_amount']                    = $LoanAmount;
+                    $data['adjustment']                     = $adjustmentExcludeTaxe;
                     $data['total_salary']                   = $totalNetSalary;
-                    $data['leaves']                   = $totalSalaryAL;
+                    $data['leaves']                         = $totalSalaryAL;
                     $data['exchange_rate']                  = $request->exchange_rate;
                     $data['created_by']                     = Auth::user()->id;
                     ParyllStaffResign::create($data);

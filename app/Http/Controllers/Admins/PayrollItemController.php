@@ -21,7 +21,7 @@ class PayrollItemController extends Controller
     public function index()
     {
         $employee = User::all();
-        $data = PayrollAdjustment::all();
+        $data = PayrollAdjustment::orderBy('id','DESC')->get();
         return view('payroll_item.index',compact('employee','data'));
     }
 
