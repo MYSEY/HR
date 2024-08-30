@@ -2051,7 +2051,7 @@ class EmployeePayrollController extends Controller
     //payrollStaffResignDelete
     public function payrollStaffResignDelete(Request $request){
         try{
-            ParyllStaffResign::whereIn('id',explode("id",$request->id))->delete();
+            ParyllStaffResign::where('number_employee',$request->number_employee)->delete();
             Toastr::success('Payroll staff resign deleted successfully.','Success');
             return redirect()->back();
         }catch(\Exception $e){
