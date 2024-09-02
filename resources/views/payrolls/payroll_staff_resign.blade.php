@@ -290,6 +290,12 @@
                                         </select>
                                     </div>
                                 </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>@lang('lang.incentive')</label>
+                                        <input type="number" class="form-control" id="monthly_quarterly_incentive" name="monthly_quarterly_incentive">
+                                    </div>
+                                </div>
                             </div>
 
                             <div class="content-title">@lang('lang.exchange_rate') @lang('lang.nssf')</div>
@@ -415,11 +421,13 @@
                 let number_employee = $("#number_employee").val();
                 let exchange_rate_salary = $("#exchange_rate_preview").val();
                 let exchange_rate_nssf = $("#exchange_rate_nssf_preview").val();
+                let monthly_quarterly_incentive = $("#monthly_quarterly_incentive").val();
                 var file_loan = $('#loan').prop('files')[0];
 
                 var form_data = new FormData();
                 form_data.append('number_employee', number_employee);
                 form_data.append('exchange_rate', exchange_rate_salary);
+                form_data.append('monthly_quarterly_incentive', monthly_quarterly_incentive);
                 form_data.append('payment_date', $("#payment_date").val());
                 form_data.append('file_loan', file_loan);
                 form_data.append('_token', "{{ csrf_token() }}");

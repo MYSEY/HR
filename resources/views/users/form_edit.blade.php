@@ -249,8 +249,8 @@
                         </div>
                         <div class="col-sm-4">
                             <div class="form-group">
-                                <label>@lang('lang.contract_deadline') <span class="text-danger">*</span></label>
-                                <input class="form-control datetimepicker  @error('fdc_end') is-invalid @enderror" id="e_fdc_end" required name="fdc_end" type="text" value="{{old('fdc_end')}}">
+                                <label>@lang('lang.contract_deadline')</label>
+                                <input class="form-control datetimepicker" id="e_fdc_end" name="fdc_end" type="text" value="{{old('fdc_end')}}">
                             </div>   
                         </div>
                     </div>

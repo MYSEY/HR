@@ -1285,7 +1285,8 @@ class EmployeePayrollController extends Controller
                     }
                     
                     $baseSalary = $item->basic_salary;
-                    $totalGrossSalary = $item->basic_salary + $adjustmentIncludeTaxe + $item->phone_allowance + $totalChildAllowance +$totalBunus;
+                    $monthlyQuarterlyIncentive = $request->monthly_quarterly_incentive;
+                    $totalGrossSalary = $item->basic_salary + $adjustmentIncludeTaxe + $item->phone_allowance + $monthlyQuarterlyIncentive + $totalChildAllowance +$totalBunus;
                     $totalSalaryAL = 0;
                     // function get age employee <= 60 National Social Security Fund (NSSF) Formula
                     $pension_contribution = 0;
@@ -1781,6 +1782,7 @@ class EmployeePayrollController extends Controller
                     $data['total_child_allowance']          = $totalChildAllowance;
                     $data['phone_allowance']                = $item->phone_allowance;
                     $data['total_kny_phcumben']             = $totalBunus;
+                    $data['monthly_quarterly_bonuses']      = $monthlyQuarterlyIncentive;
                     $data['total_severance_pay']            = round($totalSeverancePay,3);
                     $data['seniority_pay_included_tax']     = $seniorityPayableTax;
                     $data['adjustment_include_taxe']        = $adjustmentIncludeTaxe;
