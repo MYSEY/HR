@@ -60,14 +60,25 @@ class ExportEmployee implements FromCollection, WithColumnWidths, WithHeadings, 
                 "identity_number" => $users->identity_number,
                 "issue_date" => $users->issue_date ? Carbon::createFromDate($users->issue_date)->format('d-m-Y') : "",
                 "issue_expired_date" => $users->issue_expired_date ? Carbon::createFromDate($users->issue_expired_date)->format('d-m-Y') : "",
-                "current_province"  =>  $users->currentprovince ? $users->currentprovince->name_en : "",
-                "current_district"  =>  $users->currentdistrict ? $users->currentdistrict->name_en : "",
-                "current_commune"   =>  $users->currentcommune ? $users->currentcommune->name_en : "",
-                "current_village"   =>  $users->currentvillage ? $users->currentvillage->name_en : "",
-                "permanent_province"=>  $users->permanentprovince ? $users->permanentprovince->name_en : "",
-                "permanent_district"=>  $users->permanent_district ? $users->permanentdistrict->name_en : "",
-                "permanent_commune" =>  $users->permanent_commune ? $users->permanentcommune->name_en : "",
-                "permanent_village" =>  $users->permanent_village ? $users->permanentvillage->name_en : "",
+
+                "current_province"  =>  $users->current_province,
+                "current_district"  =>  $users->current_district,
+                "current_commune"   =>  $users->current_commune,
+                "current_village"   =>  $users->current_village,
+                "permanent_province"=>  $users->permanent_province,
+                "permanent_district"=>  $users->permanent_district,
+                "permanent_commune" =>  $users->permanent_commune,
+                "permanent_village" =>  $users->permanent_village
+
+                // "current_province"  =>  $users->currentprovince ? $users->currentprovince->name_en : "",
+                // "current_district"  =>  $users->currentdistrict ? $users->currentdistrict->name_en : "",
+                // "current_commune"   =>  $users->currentcommune ? $users->currentcommune->name_en : "",
+                // "current_village"   =>  $users->currentvillage ? $users->currentvillage->name_en : "",
+                // "permanent_province"=>  $users->permanentprovince ? $users->permanentprovince->name_en : "",
+                // "permanent_district"=>  $users->permanent_district ? $users->permanentdistrict->name_en : "",
+                // "permanent_commune" =>  $users->permanent_commune ? $users->permanentcommune->name_en : "",
+                // "permanent_village" =>  $users->permanent_village ? $users->permanentvillage->name_en : "",
+
             ];
         }
         $this->export_datas = $dataExport;
