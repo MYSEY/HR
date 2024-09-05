@@ -493,7 +493,8 @@ class UserController extends Controller
     public function updateRole(Request $request){
         try{
             User::where('id',$request->id)->update([
-                "role_id"=> $request->role_id
+                "role_id"=> $request->role_id,
+                'updated_by'    =>  Auth::user()->id,
             ]);
             DB::commit();
             Toastr::success('Updated role successfully.','Success');
