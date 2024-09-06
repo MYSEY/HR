@@ -49,6 +49,12 @@
 
                         <div class="col-sm-6">
                             <div class="form-group">
+                                <label class="">@lang('lang.motor_color')</label>
+                                <input class="form-control emp_required m_clear" type="text" id="motor_color" name="motor_color" value="{{old('motor_color')}}">
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
                                 <label class="">@lang('lang.body_number') <span class="text-danger">*</span></label>
                                 <input class="form-control emp_required m_clear" type="text" id="body_number" name="body_number" value="{{old('body_number')}}" required>
                             </div>
@@ -143,9 +149,25 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label>@lang('lang.tablet')</label>
+                                <label>@lang('lang.model')</label>
                                 <div class="input-group">
                                     <input type="text" class="form-control m_clear" id="taplab_rentel" name="taplab_rentel" placeholder="" value="{{old('taplab_rentel')}}">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>@lang('lang.id') (IMEI)</label>
+                                <div class="input-group">
+                                    <input class="form-control m_clear" type="text" name="taplab_imei" id="taplab_imei">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="">@lang('lang.lease_start_date')</label>
+                                <div class="cal-icon">
+                                    <input class="form-control datetimepicker m_clear" type="text" id="start_date_taplab" name="start_date_taplab">
                                 </div>
                             </div>
                         </div>

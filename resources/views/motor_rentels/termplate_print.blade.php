@@ -49,7 +49,7 @@
             </div>
     
             <div style="margin-top:-100px; text-align: center">
-                <h3 class="payslip-title-center">@lang('lang.employee_payslip')</h3>
+                <h3 class="payslip-title-center">@lang('lang.motor_&tablet_payshlip')</h3>
                 <p class="payslip-title-center">{{ Helper::getLang() == 'en' ? Helper::getENMonthsMotorRantal($data->created_at) : Helper::getKhmerMonthsMotorRantal($data->created_at) }}</p>
             </div>
             <div style="width: 35%">

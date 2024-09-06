@@ -487,6 +487,9 @@ class MotorRentelController extends Controller
             $data['price_motor_rentel'] = $request->price_motor_rentel;
             $data['taplab_rentel']      = $request->taplab_rentel;
             $data['price_taplab_rentel'] = $request->price_taplab_rentel;
+            $data['motor_color']         = $request->motor_color;
+            $data['taplab_imei']        = $request->taplab_imei;
+            $data['start_date_taplab']  = $request->start_date_taplab;
             $data['updated_by']         = Auth::user()->id;
             $data->save();
             Toastr::success('Updated successfully.', 'Success');

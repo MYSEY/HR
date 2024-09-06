@@ -147,12 +147,12 @@ class Helper
         $dateTime = KhmerDateTime::parse($month);
         $monthKH = $dateTime->fullMonth();
         $yearKH = $dateTime->year();
-        $result = "ថ្លៃជួលម៉ូតូប្រចាំខែ".' : '.$monthKH.' '.$yearKH;
+        $result = "ថ្លៃជួលប្រចាំខែ".' : '.$monthKH.' '.$yearKH;
         return $result;
     }
     static function getENMonthsMotorRantal($data){
         $month = Carbon::now()->format('M Y');
-        $result = "Monthly Motor Rental Fee".' : '.$month;
+        $result = "Monthly Rental Fee".' : '.$month;
         return $result;
     }
 

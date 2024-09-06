@@ -62,7 +62,7 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="profile-info-left">
-                                    <h3 class="payslip-title-center">@lang('lang.employee_payslip')</h3>
+                                    <h3 class="payslip-title-center">@lang('lang.motor_&tablet_payshlip')</h3>
                                     <p class="payslip-title-center"><strong>{{ Helper::getLang() == 'en' ? Helper::getENMonthsMotorRantal($data->created_at) : Helper::getKhmerMonthsMotorRantal($data->created_at) }}</strong></p>
                                 </div>
                             </div>

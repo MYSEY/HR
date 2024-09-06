@@ -620,6 +620,9 @@
                         $('#e_taplab_rentel').val(response.success.taplab_rentel);
                         $('#e_price_taplab_rentel').val(response.success.price_taplab_rentel);
                         $('#e_expired_year').val(response.success.expired_year);
+                        $('#e_motor_color').val(response.success.motor_color);
+                        $('#e_taplab_imei').val(response.success.taplab_imei);
+                        $('#e_start_date_taplab').val(response.success.start_date_taplab);
                         $('#edit_motor_rentel').modal('show');
                     }
                 }
