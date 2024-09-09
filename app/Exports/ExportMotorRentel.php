@@ -4,6 +4,7 @@ namespace App\Exports;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithColumnWidths;
@@ -173,7 +174,7 @@ class ExportMotorRentel implements FromCollection, WithColumnWidths, WithHeading
                             ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
                 $sheet->mergeCells('A4:D4');
-                $sheet->setCellValue('A4', "ការិយាល័យកណ្ដាល");
+                $sheet->setCellValue('A4', Auth::user()->branch->branch_name_kh);
                 $sheet->getDelegate()->getStyle('A4:D4')->getFont()->setName('Khmer OS Muol Light')
                 ->setSize(10)->setUnderline('A4:D4');
                 $event->sheet->getDelegate()->getStyle('A4:D4')

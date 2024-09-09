@@ -101,6 +101,10 @@
                                                         style="width: 89.6px;">@lang('lang.end_date')</th>
                                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                         rowspan="1" colspan="1"
+                                                        aria-label="Start date Tablet: activate to sort column ascending"
+                                                        style="width: 125.15px;">@lang('lang.start_date_tablet')</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                        rowspan="1" colspan="1"
                                                         aria-label="Year of manufature: activate to sort column ascending"
                                                         style="width: 89.6px;">@lang('lang.year_of_manufature')</th>
                                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
@@ -194,6 +198,7 @@
                                                             <td>{{ $item->MotorEmployee->EmployeeDepartment }}</td>
                                                             <td class="start_date">{{ $item->start_date ? \Carbon\Carbon::parse($item->start_date)->format('d-M-Y') : '' }}</td>
                                                             <td class="end_date">{{ $item->end_date ? \Carbon\Carbon::parse($item->end_date)->format('d-M-Y') : '' }}</td>
+                                                            <td>{{ $item->start_date_taplab ? \Carbon\Carbon::parse($item->start_date_taplab)->format('d-M-Y') : '' }}</td>
                                                             <td class="product_year">{{ $item->product_year }}</td>
                                                             <td class="expired_year">{{ $item->expired_year }}</td>
                                                             <td class="shelt_life">{{ $item->shelt_life }}</td>
@@ -276,6 +281,7 @@
                         let created_at = moment(row.created_at).format('D-MMM-YYYY')
                         let start_date = moment(row.start_date).format('D-MMM-YYYY')
                         let end_date = moment(row.end_date).format('D-MMM-YYYY')
+                        let start_date_taplab = row.start_date_taplab ? moment(row.start_date_taplab).format('D-MMM-YYYY'): "";
                         let resigned_date = row.resigned_date ? moment(row.resigned_date).format('D-MMM-YYYY') : '';
                         let amount_usd = (row.amount_price_motor_rentel - (row.amount_price_motor_rentel * row.tax_rate) / 100 ) + (row.amount_price_taplab_rentel - (row.amount_price_taplab_rentel * row.tax_rate) / 100 );
                         let total_amount =(Number(row.amount_price_taplab_rentel) + Number(row.amount_price_motor_rentel));
@@ -295,6 +301,7 @@
                                     '<td>'+( localeLanguage == 'en' ? row.user.department.name_english : row.user.department.name_khmer )+'</td>'+
                                     '<td class="start_date">'+( start_date )+'</td>'+
                                     '<td class="end_date">'+( end_date )+'</td>'+
+                                    '<td>' +(start_date_taplab)+ '</td>'+
                                     '<td class="product_year">'+( row.product_year )+'</td>'+
                                     '<td class="expired_year">'+( row.expired_year )+'</td>'+
                                     '<td class="shelt_life">'+( row.shelt_life )+'</td>'+

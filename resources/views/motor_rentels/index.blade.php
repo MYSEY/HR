@@ -116,6 +116,10 @@
                                                         style="width: 125.15px;">@lang('lang.end_date')</th>
                                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                         rowspan="1" colspan="1"
+                                                        aria-label="Start date Tablet: activate to sort column ascending"
+                                                        style="width: 125.15px;">@lang('lang.start_date_tablet')</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                        rowspan="1" colspan="1"
                                                         aria-label="Total Gasoline: activate to sort column ascending"
                                                         style="width: 125.15px;">@lang('lang.total_gasoline') </th>
                                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
@@ -166,6 +170,7 @@
                                                             <td>{{ $item->MotorEmployee->EmployeeDepartment }}</td>
                                                             <td>{{ $item->start_date ? \Carbon\Carbon::parse($item->start_date)->format('d-M-Y') : '' }}</td>
                                                             <td>{{ $item->end_date ? \Carbon\Carbon::parse($item->end_date)->format('d-M-Y') : '' }}</td>
+                                                            <td>{{ $item->start_date_taplab ? \Carbon\Carbon::parse($item->start_date_taplab)->format('d-M-Y') : '' }}</td>
                                                             <td>{{ $item->total_gasoline }}</td>
                                                             <td>{{ $item->total_work_day }}</td>
                                                             <td>{{ round($item->price_engine_oil,2)}} $</td>
@@ -794,6 +799,7 @@
                     let resigned_date = row.resigned_date ? moment(row.resigned_date).format('D-MMM-YYYY'): "";
                     let start_date = row.start_date ? moment(row.start_date).format('D-MMM-YYYY'): "";
                     let end_date = row.end_date ? moment(row.end_date).format('D-MMM-YYYY'): "";
+                    let start_date_taplab = row.start_date_taplab ? moment(row.start_date_taplab).format('D-MMM-YYYY'): "";
                     tr += '<tr class="odd">' +
                         '<td class="ids stuck-scroll-3">' + (no) + '</td>' +
                         '<td class="number_employee_id stuck-scroll-3">' + (row.number_employee) + '</td>' +
@@ -803,6 +809,7 @@
                         '<td>' + (localeLanguage == 'en' ? row.user.department.name_english : row.user.department.name_khmer ) + '</td>' +
                         '<td>' + (start_date) + '</td>' +
                         '<td>' + (end_date) + '</td>' +
+                        '<td>' +(start_date_taplab)+ '</td>'+
                         '<td>' + (row.total_gasoline) + '</td>' +
                         '<td>' + (row.total_work_day) + '</td>' +
                         '<td>៛ ' + (Number(row.price_engine_oil)) + '</td>' +

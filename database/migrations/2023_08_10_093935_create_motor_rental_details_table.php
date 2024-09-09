@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('product_year')->nullable();
             $table->string('expired_year')->nullable();
             $table->integer('shelt_life')->nullable();
+            $table->string('motor_color')->nullable();
             $table->string('number_plate')->nullable();
             $table->string('motorcycle_brand')->nullable();
             $table->string('category')->nullable();
@@ -33,6 +34,8 @@ return new class extends Migration
             $table->decimal('price_engine_oil')->nullable();
             $table->decimal('price_motor_rentel')->nullable();
             $table->string('taplab_rentel')->nullable();
+            $table->string('taplab_imei')->nullable();
+            $table->date('start_date_taplab')->nullable();
             $table->decimal('price_taplab_rentel')->nullable();
             $table->date('resigned_date')->nullable();
             $table->decimal('gasoline_price_per_liter')->nullable();

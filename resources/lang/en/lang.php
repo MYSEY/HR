@@ -737,6 +737,7 @@ return[
     "seniority_pay"=>"Seniority Pay",
     "senior_personnel_&_recruitement_manager"=>"Senior Personnel & Recruitement Manager",
     "start_date"=>"Start Date",
+    "start_date_tablet"=>"Tablet rental start date",
     "start_date_and_end_date_already_exists"=>"Start date and end date already exists",
     "start_day"=>"Start Day",
     "street_no"=>"Street No",

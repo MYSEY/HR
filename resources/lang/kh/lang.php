@@ -751,6 +751,7 @@ return[
 	"severance_pay"=>"ប្រាក់បំណាច់កិច្ចសន្យា",
 	"senior_personnel_&_recruitement_manager"=>"បុគ្គលិកជាន់ខ្ពស់ និងអ្នកគ្រប់គ្រងជ្រើសរើសបុគ្គលិក",
 	"start_date"=>"កាលបរិច្ឆេទចាប់ផ្តើម",
+	"start_date_tablet"=>"កាលបរិច្ឆេទចាប់ផ្តើមជួលថេប្លេត",
 	"start_day"=>"ថ្ងៃចាប់ផ្តើម",
 	"street_no"=>"ផ្លូវលេខ",
 	"staff_resigned_reports"=>"របាយការណ៍បុគ្គលិកឈប់",

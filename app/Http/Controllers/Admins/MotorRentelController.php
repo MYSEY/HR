@@ -261,9 +261,22 @@ class MotorRentelController extends Controller
                             })
                             ->get();
             foreach ($motorRentals as $key => $motor) {
+
                 // logic pay by start date
                 $currentMonth1 = Carbon::create($motor->start_date)->format('Y-m');
                 $currentMonth2 = Carbon::create($year,$month)->format('Y-m');
+
+                // logic pay taplab by start date
+                $amount_price_taplab_rentel = $motor->price_taplab_rentel;
+                $currentTaplab = Carbon::create($motor->start_date_taplab)->format('Y-m');
+                if ($motor->status == 1 && $currentTaplab == $currentMonth2) {
+                    $target_start_date_taplab = Carbon::create($motor->start_date_taplab);
+                    $last_day_taplab = Carbon::create($last_day_of_month);
+                    $payStartDateTaplab = $last_day_taplab->diffInDays($target_start_date_taplab)+1;
+                    $amountTaplabRentelInDay = $motor->price_taplab_rentel / $totalLastDayofMonth;
+                    $amount_price_taplab_rentel = $amountTaplabRentelInDay * $payStartDateTaplab;
+                }
+
                 if ($motor->status == 1 && $currentMonth1 == $currentMonth2) {
                     $target_start_date = Carbon::create($motor->start_date);
                     $last_day = Carbon::create($last_day_of_month);
@@ -273,7 +286,6 @@ class MotorRentelController extends Controller
                     $amountTaplabRentelInDay = $motor->price_taplab_rentel / $totalLastDayofMonth;
                     $amount_price_motor_rentel = $amountMotorPriceInDay * $payStartDate;
                     $amount_price_engine_oil = $amountEngineOilInDay * $payStartDate;
-                    $amount_price_taplab_rentel = $amountTaplabRentelInDay * $payStartDate;
                     $data = [
                         'employee_id' => $motor->employee_id,
                         'motor_rental_id' => $motor->id,
@@ -281,6 +293,7 @@ class MotorRentelController extends Controller
                         'end_date' => $motor->end_date,
                         'product_year' => $motor->product_year,
                         'expired_year' => $motor->expired_year,
+                        'motor_color' => $motor->motor_color,
                         'shelt_life' => $motor->shelt_life,
                         'number_plate' => $motor->number_plate,
                         'motorcycle_brand' => $motor->motorcycle_brand,
@@ -292,6 +305,8 @@ class MotorRentelController extends Controller
                         'price_engine_oil' => $motor->price_engine_oil,
                         'price_motor_rentel' => $motor->price_motor_rentel,
                         'taplab_rentel' => $motor->taplab_rentel,
+                        'taplab_imei' => $motor->taplab_imei,
+                        'start_date_taplab' => $motor->start_date_taplab,
                         'price_taplab_rentel' => $motor->price_taplab_rentel,
                         'resigned_date' => $motor->resigned_date,
                         'gasoline_price_per_liter' => $request->gasoline_price_per_liter,
@@ -323,6 +338,7 @@ class MotorRentelController extends Controller
                         'end_date' => $motor->end_date,
                         'product_year' => $motor->product_year,
                         'expired_year' => $motor->expired_year,
+                        'motor_color' => $motor->motor_color,
                         'shelt_life' => $motor->shelt_life,
                         'number_plate' => $motor->number_plate,
                         'motorcycle_brand' => $motor->motorcycle_brand,
@@ -334,6 +350,8 @@ class MotorRentelController extends Controller
                         'price_engine_oil' => $motor->price_engine_oil,
                         'price_motor_rentel' => $motor->price_motor_rentel,
                         'taplab_rentel' => $motor->taplab_rentel,
+                        'taplab_imei' => $motor->taplab_imei,
+                        'start_date_taplab' => $motor->start_date_taplab,
                         'price_taplab_rentel' => $motor->price_taplab_rentel,
                         'resigned_date' => $motor->resigned_date,
                         'gasoline_price_per_liter' => $request->gasoline_price_per_liter,
@@ -354,6 +372,7 @@ class MotorRentelController extends Controller
                         'end_date' => $motor->end_date,
                         'product_year' => $motor->product_year,
                         'expired_year' => $motor->expired_year,
+                        'motor_color' => $motor->motor_color,
                         'shelt_life' => $motor->shelt_life,
                         'number_plate' => $motor->number_plate,
                         'motorcycle_brand' => $motor->motorcycle_brand,
@@ -365,12 +384,14 @@ class MotorRentelController extends Controller
                         'price_engine_oil' => $motor->price_engine_oil,
                         'price_motor_rentel' => $motor->price_motor_rentel,
                         'taplab_rentel' => $motor->taplab_rentel,
-                        'price_taplab_rentel' => $motor->price_taplab_rentel,
+                        'taplab_imei' => $motor->taplab_imei,
+                        'start_date_taplab' => $motor->start_date_taplab,
+                        'price_taplab_rentel' => $amount_price_taplab_rentel,
                         'resigned_date' => $motor->resigned_date,
                         'gasoline_price_per_liter' => $request->gasoline_price_per_liter,
                         'amount_price_motor_rentel'=> $motor->price_motor_rentel,
                         'amount_price_engine_oil' => $motor->price_engine_oil,
-                        'amount_price_taplab_rentel' => $motor->price_taplab_rentel,
+                        'amount_price_taplab_rentel' => $amount_price_taplab_rentel,
                         'tax_rate' => $request->tax_rate,
                         'created_by' => Auth::user()->id
                     ];

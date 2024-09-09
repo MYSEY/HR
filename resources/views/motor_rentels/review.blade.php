@@ -117,6 +117,10 @@
                                                             style="width: 89.6px;">@lang('lang.end_date')</th>
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                             rowspan="1" colspan="1"
+                                                            aria-label="Start date Tablet: activate to sort column ascending"
+                                                            style="width: 125.15px;">@lang('lang.start_date_tablet')</th>
+                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                            rowspan="1" colspan="1"
                                                             aria-label="Year of manufature: activate to sort column ascending"
                                                             style="width: 89.6px;">@lang('lang.year_of_manufature')</th>
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
@@ -209,6 +213,7 @@
                                                                 <td>{{ $item->MotorEmployee->EmployeeDepartment }}</td>
                                                                 <td class="start_date">{{ $item->start_date ? \Carbon\Carbon::parse($item->start_date)->format('d-M-Y') : '' }}</td>
                                                                 <td class="end_date">{{ $item->end_date ? \Carbon\Carbon::parse($item->end_date)->format('d-M-Y') : '' }}</td>
+                                                                <td>{{ $item->start_date_taplab ? \Carbon\Carbon::parse($item->start_date_taplab)->format('d-M-Y') : '' }}</td>
                                                                 <td class="product_year">{{ $item->product_year }}</td>
                                                                 <td class="expired_year">{{ $item->expired_year }}</td>
                                                                 <td class="shelt_life">{{ $item->shelt_life }}</td>
