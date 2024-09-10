@@ -278,26 +278,6 @@
                     <div class="modal-body">
                         <form class="needs-validation" novalidate>
                             @csrf
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <label>@lang('lang.employee') <span class="text-danger">*</span></label>
-                                        <select class="select form-control hr-select2-option pay_required" id="number_employee" name="number_employee">
-                                            <option value="">@lang('lang.select')</option>
-                                            @foreach ($staffResign as $item)
-                                                <option value="{{$item->number_employee}}">{{ Helper::getLang() == 'en' ? $item->employee_name_en : $item->employee_name_kh }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <label>@lang('lang.incentive')</label>
-                                        <input type="number" class="form-control" id="monthly_quarterly_incentive" name="monthly_quarterly_incentive">
-                                    </div>
-                                </div>
-                            </div>
-
                             <div class="content-title">@lang('lang.exchange_rate') @lang('lang.nssf')</div>
                             <div class="row">
                                 <div class="col-sm-6">
@@ -347,20 +327,60 @@
                             <div class="row">
                                 <div class="col-sm-6">
                                     <div class="form-group">
+                                        <label>@lang('lang.employee') <span class="text-danger">*</span></label>
+                                        <select class="select form-control hr-select2-option pay_required" id="number_employee" name="number_employee">
+                                            <option value="">@lang('lang.select')</option>
+                                            @foreach ($staffResign as $item)
+                                                <option value="{{$item->number_employee}}">{{ Helper::getLang() == 'en' ? $item->employee_name_en : $item->employee_name_kh }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
                                         <label>@lang('lang.payment_date') <span class="text-danger">*</span></label>
                                         <div class="cal-icon">
                                             <input class="form-control datetimepicker pay_required" type="text" id="payment_date" name="payment_date" required>
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+                            <div class="row">
                                 <div class="col-sm-6">
                                     <div class="form-group">
                                         <label>@lang('lang.loan')</label>
-                                        <input class="form-control" type="file" id="loan" name="loan">
+                                        <input class="form-control" type="number" id="staff_loan" name="staff_loan">
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>@lang('lang.incentive')</label>
+                                        <input type="number" class="form-control" id="monthly_quarterly_incentive" name="monthly_quarterly_incentive">
                                     </div>
                                 </div>
                             </div>
-    
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>@lang('lang.other_benefits')</label>
+                                        <input class="form-control" type="number" id="other_benefits" name="other_benefits">
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>@lang('lang.annual_bonus')</label>
+                                        <input class="form-control" type="number" id="annual_incentive_bonus" name="annual_incentive_bonus">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>@lang('lang.staff_book')</label>
+                                        <input class="form-control" type="number" id="staff_book" name="staff_book">
+                                    </div>
+                                </div>
+                            </div>
                             <div class="submit-section">
                                 <button type="button" class="btn btn-primary submit-btn" id="btnPayrollStaffResign">
                                     <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>@lang('lang.submit')
@@ -422,14 +442,21 @@
                 let exchange_rate_salary = $("#exchange_rate_preview").val();
                 let exchange_rate_nssf = $("#exchange_rate_nssf_preview").val();
                 let monthly_quarterly_incentive = $("#monthly_quarterly_incentive").val();
-                var file_loan = $('#loan').prop('files')[0];
+                let staff_loan = $("#staff_loan").val();
+                let other_benefits = $("#other_benefits").val();
+                let annual_incentive_bonus = $("#annual_incentive_bonus").val();
+                let staff_book = $("#staff_book").val();
+                // var file_loan = $('#loan').prop('files')[0];
 
                 var form_data = new FormData();
                 form_data.append('number_employee', number_employee);
                 form_data.append('exchange_rate', exchange_rate_salary);
                 form_data.append('monthly_quarterly_incentive', monthly_quarterly_incentive);
                 form_data.append('payment_date', $("#payment_date").val());
-                form_data.append('file_loan', file_loan);
+                form_data.append('staff_loan', staff_loan);
+                form_data.append('other_benefits', other_benefits);
+                form_data.append('annual_incentive_bonus', annual_incentive_bonus);
+                form_data.append('staff_book', staff_book);
                 form_data.append('_token', "{{ csrf_token() }}");
                 
                 let button_ok = {

@@ -42,7 +42,9 @@ return new class extends Migration
             $table->decimal('seniority_pay_excluded_tax',50,2)->default(0);
             $table->decimal('seniority_backford',50,2)->default(0);
             $table->decimal('total_severance_pay',50,2)->default(0);
+            $table->float('other_benefits',50,2)->nullable();
             $table->float('loan_amount',50,2)->nullable();
+            $table->float('total_staff_book',50,2)->nullable();
             $table->float('total_amount_car',50,2)->nullable();
             $table->decimal('total_salary',50,2)->default(0);
             $table->string('exchange_rate')->nullable();

@@ -47,6 +47,7 @@ class ParyllStaffResign extends Model
         'exchange_rate',
         'adjustment',
         'adjustment_include_taxe',
+        'total_staff_book',
         'leaves',
         'created_by',
         'updated_by',

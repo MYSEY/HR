@@ -1177,37 +1177,11 @@ class EmployeePayrollController extends Controller
     }
     public function payrollStaffResignCreate(Request $request){
         try{
-            // function import Loan
-            $dadaArrayLoan = [];
-            if (file_exists($request->file_loan)) {
-                $fileLoan = $request->file_loan;
-                $spreadsheet = IOFactory::load($fileLoan);
-                $staffLoan =  $spreadsheet->getSheetByName('Loan')->toArray();
-                $iIn = 0;
-                foreach ($staffLoan as $itemLoan) {
-                    $iIn++;
-                    if ($iIn != 1) {
-                        $employeeIncentive = User::where("number_employee", $itemLoan[0])->first();
-                        if($employeeIncentive){
-                            $dadaArrayLoan[$employeeIncentive->number_employee] = [
-                                'laon_amount' => $itemLoan[2]
-                            ];
-                        }
-                    }
-                }
-            }
             $staffResign = User::where('number_employee',$request->number_employee)->whereIn('emp_status',['3','4','5','6','7','8','9'])->get();
             if (!$staffResign->isEmpty()) {
                 foreach ($staffResign as $item) {
                     PreviewNationalSocialSecurityFund::where('employee_id',$item->id)->delete();
                     ParyllStaffResign::where('employee_id',$item->id)->delete();
-                    //fuction check laon amount
-                    if (array_key_exists($item->number_employee, $dadaArrayLoan)) {
-                        $LoanAmount = $dadaArrayLoan[$item->number_employee]['laon_amount'];
-                    } else {
-                       $LoanAmount = 0;
-                    }
-
                     //function ajustment
                     $paymentDate = Carbon::createFromDate($request->payment_date)->format('m-y');
                     $dataPayrollAdjustment = PayrollAdjustment::where('employee_id',$item->id)->get();
@@ -1286,7 +1260,7 @@ class EmployeePayrollController extends Controller
                     
                     $baseSalary = $item->basic_salary;
                     $monthlyQuarterlyIncentive = $request->monthly_quarterly_incentive;
-                    $totalGrossSalary = $item->basic_salary + $adjustmentIncludeTaxe + $item->phone_allowance + $monthlyQuarterlyIncentive + $totalChildAllowance +$totalBunus;
+                    $totalGrossSalary = $item->basic_salary + $adjustmentIncludeTaxe + $item->phone_allowance + $monthlyQuarterlyIncentive + $totalChildAllowance +$totalBunus + $request->other_benefits+$request->annual_incentive_bonus;
                     $totalSalaryAL = 0;
                     // function get age employee <= 60 National Social Security Fund (NSSF) Formula
                     $pension_contribution = 0;
@@ -1771,7 +1745,7 @@ class EmployeePayrollController extends Controller
                         }
                     }
 
-                    $totalNetSalary = $totalSalaryAfterTax + $totalSeverancePay + $adjustmentExcludeTaxe + $taxExemptionSalary - $LoanAmount;
+                    $totalNetSalary = $totalSalaryAfterTax + $totalSeverancePay + $adjustmentExcludeTaxe + $taxExemptionSalary - $request->staff_loan - $request->staff_book;
                     $data   = $request->all();
                     $data['employee_id']                    = $item->id;
                     $data['number_employee']                = $item->number_employee;
@@ -1783,6 +1757,8 @@ class EmployeePayrollController extends Controller
                     $data['phone_allowance']                = $item->phone_allowance;
                     $data['total_kny_phcumben']             = $totalBunus;
                     $data['monthly_quarterly_bonuses']      = $monthlyQuarterlyIncentive;
+                    $data['other_benefits']                 = $request->other_benefits;
+                    $data['annual_incentive_bonus']         = $request->annual_incentive_bonus;
                     $data['total_severance_pay']            = round($totalSeverancePay,3);
                     $data['seniority_pay_included_tax']     = $seniorityPayableTax;
                     $data['adjustment_include_taxe']        = $adjustmentIncludeTaxe;
@@ -1796,8 +1772,9 @@ class EmployeePayrollController extends Controller
                     $data['seniority_pay_excluded_tax']     = $taxExemptionSalary;
                     $data['total_salary_tax_riel']          = round($totalSalaryTaxRiel,3);
                     $data['total_salary_tax_usd']           = $totalSalaryTaxUsd;
-                    $data['loan_amount']                    = $LoanAmount;
+                    $data['loan_amount']                    = $request->staff_loan;
                     $data['adjustment']                     = $adjustmentExcludeTaxe;
+                    $data['total_staff_book']               = $request->staff_book;
                     $data['total_salary']                   = $totalNetSalary;
                     $data['leaves']                         = $totalSalaryAL;
                     $data['exchange_rate']                  = $request->exchange_rate;
