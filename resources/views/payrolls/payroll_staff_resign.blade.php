@@ -226,7 +226,7 @@
                                                                 <td>$<a href="#">{{ $item->annual_incentive_bonus}}</a></td>
                                                                 <td>$<a href="#">{{ $item->other_benefits == null ? "0.00" : $item->other_benefits}}</a></td>
                                                                 <td>$<a href="#">{{ $item->seniority_pay_included_tax}}</a></td>
-                                                                <td>$<a href="#">{{ $item->adjustment_include_taxe}}</a></td>
+                                                                <td>$<a href="#">{{ $item->adjustment_include_taxe == null ? '0.00' : $item->adjustment_include_taxe}}</a></td>
                                                                 <td>$<a href="#">{{ $item->total_gross}}</a></td>
                                                                 <td>$<a href="#">{{ $item->total_pension_fund}}</a></td>
                                                                 <td>$<a href="#">{{ $item->base_salary_received_usd}}</a></td>

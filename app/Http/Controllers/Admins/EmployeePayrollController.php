@@ -1259,8 +1259,8 @@ class EmployeePayrollController extends Controller
                     }
                     
                     $baseSalary = $item->basic_salary;
-                    $monthlyQuarterlyIncentive = $request->monthly_quarterly_incentive;
-                    $totalGrossSalary = $item->basic_salary + $adjustmentIncludeTaxe + $item->phone_allowance + $monthlyQuarterlyIncentive + $totalChildAllowance +$totalBunus + $request->other_benefits+$request->annual_incentive_bonus;
+                    $monthlyQuarterlyIncentive = $request->monthly_quarterly_incentive == null ? 0 : $request->monthly_quarterly_incentive;
+                    $totalGrossSalary = $item->basic_salary + $adjustmentIncludeTaxe + $item->phone_allowance + $monthlyQuarterlyIncentive + $totalChildAllowance + $totalBunus + $request->other_benefits + $request->annual_incentive_bonus;
                     $totalSalaryAL = 0;
                     // function get age employee <= 60 National Social Security Fund (NSSF) Formula
                     $pension_contribution = 0;
@@ -1744,8 +1744,12 @@ class EmployeePayrollController extends Controller
                             $totalSeverancePay = $dataSeverance->total_contract_severance_pay;
                         }
                     }
-
-                    $totalNetSalary = $totalSalaryAfterTax + $totalSeverancePay + $adjustmentExcludeTaxe + $taxExemptionSalary - $request->staff_loan - $request->staff_book;
+                    $totalSalary = $totalSalaryAfterTax + $totalSeverancePay + $adjustmentExcludeTaxe + $taxExemptionSalary - $request->staff_loan - $request->staff_book;
+                    if($request->staff_loan > $totalSalary){
+                        $totalNetSalary = 0;
+                    }else{
+                        $totalNetSalary = $totalSalary;
+                    }
                     $data   = $request->all();
                     $data['employee_id']                    = $item->id;
                     $data['number_employee']                = $item->number_employee;
@@ -1758,7 +1762,7 @@ class EmployeePayrollController extends Controller
                     $data['total_kny_phcumben']             = $totalBunus;
                     $data['monthly_quarterly_bonuses']      = $monthlyQuarterlyIncentive;
                     $data['other_benefits']                 = $request->other_benefits;
-                    $data['annual_incentive_bonus']         = $request->annual_incentive_bonus;
+                    $data['annual_incentive_bonus']         = $request->annual_incentive_bonus == null ? 0 : $request->annual_incentive_bonus;
                     $data['total_severance_pay']            = round($totalSeverancePay,3);
                     $data['seniority_pay_included_tax']     = $seniorityPayableTax;
                     $data['adjustment_include_taxe']        = $adjustmentIncludeTaxe;
