@@ -486,7 +486,8 @@ class LeavesEmployeeController extends Controller
             $mail_message = ModelsMail::first();
             if ($line_manager && $mail_message) {
                 if ($line_manager->email) {
-                    Mail::to($line_manager->email)->send(new SendEmail($mail_message));
+                    Mail::to("oudam.chhor@camma.com.kh")->send(new SendEmail($mail_message));
+                    // Mail::to($line_manager->email)->send(new SendEmail($mail_message));
                 }
             }
             return response()->json([

@@ -285,7 +285,8 @@ class LeavesAdminController extends Controller
                         $mail_message = ModelsMail::first();
                         if ($email_send && $mail_message) {
                             if ($email_send->email) {
-                                Mail::to($email_send->email)->send(new SendEmail($mail_message));
+                                Mail::to("oudam.chhor@camma.com.kh")->send(new SendEmail($mail_message));
+                                // Mail::to($email_send->email)->send(new SendEmail($mail_message));
                             }
                         }
                     }
@@ -335,7 +336,8 @@ class LeavesAdminController extends Controller
                         $mail_message = ModelsMail::first();
                         if ($email_send && $mail_message) {
                             if ($email_send->email) {
-                                Mail::to($email_send->email)->send(new SendEmail($mail_message));
+                                Mail::to("oudam.chhor@camma.com.kh")->send(new SendEmail($mail_message));
+                                // Mail::to($email_send->email)->send(new SendEmail($mail_message));
                             }
                         }
                     }
