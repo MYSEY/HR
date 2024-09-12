@@ -544,7 +544,7 @@
 
                                             @if ($dataUpComming)
                                                 <div class="form-group">
-                                                    <label for="" class="text-danger">Pleas change status Upcoming to probation</label>
+                                                    <label for="" class="text-danger">Please change status Upcoming to probation</label>
                                                     <div class="dash-info-list">
                                                         <div class="dash-card">
                                                             <div class="dash-card-container">
@@ -552,7 +552,7 @@
                                                                     <i class="fa fa-user-plus"></i>
                                                                 </div>
                                                                 <div class="dash-card-content">
-                                                                    <p>{{$dataUpComming}} People will be change upcoming to probation <a href="{{url('users')}}" target="_blank">link>></a></p>
+                                                                    <p>{{$dataUpComming}} People Will be changed Upcoming to Probation <a href="{{url('users')}}" target="_blank">link>></a></p>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -561,7 +561,7 @@
                                             @endif
                                             @if ($dataProbation)
                                                <div class="form-group">
-                                                    <label for="" class="text-danger">Pleas change status probation to fdc</label>
+                                                    <label for="" class="text-danger">Please change status Probation to FDC</label>
                                                     <div class="dash-info-list">
                                                         <div class="dash-card">
                                                             <div class="dash-card-container">
@@ -569,7 +569,7 @@
                                                                     <i class="fa fa-user-plus"></i>
                                                                 </div>
                                                                 <div class="dash-card-content">
-                                                                    <p>{{$dataProbation}} People will be change to employee <a href="{{url('users')}}" target="_blank">link>></a></p>
+                                                                    <p>{{$dataProbation}} People Will be changed to employee <a href="{{url('users')}}" target="_blank">link>></a></p>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -967,7 +967,7 @@
             labelsHRMS.push(br.abbreviations);
 
         });
-        labelsHRMS.push('total');
+        labelsHRMS.push('Total');
         totalHRMSData.push(totalEmployees);
         totalHRMSFemale.push(totalEmployeeFemale);
         dataHRMSdashboards.labels = labelsHRMS;
@@ -1089,7 +1089,7 @@
                 dataValuePlanPercentage.push((totalValueAchieve / totalValuePlanAchieveBybranch) * 100)
             }
         });
-        labelAchive.push('total');
+        labelAchive.push('Total');
         dataAchive.labels = labelAchive;
         dataValuePlanAchive.push(totalPlan);
         dataValueAchive.push(totalCurrentStaff)
@@ -1434,7 +1434,7 @@
         dataTypeStaff.datasets[1].data = [];
     
         if (localeLanguage == 'en') {
-            type_labels.push('total')
+            type_labels.push('Total')
         } else {
             type_labels.push('សរុប')
         }
