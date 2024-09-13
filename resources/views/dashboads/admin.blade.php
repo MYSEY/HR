@@ -1142,7 +1142,7 @@
                 },
                 title: {
                     display: true,
-                    text: '% @lang("lang.total_inactive_staff")'
+                    text: '% @lang("lang.recruitment_result")'
                 },
             },
             responsive: true,
