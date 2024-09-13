@@ -839,7 +839,7 @@ return[
     "total_cost"=>"Total Cost",
     "total_current_active_staff"=>"Total Current Active Staff",
     "total_contract_severance_pay"=>"Total Contract Severance Pay",
-    "total_inactive_staff"=>"Recruitment Result",
+    "total_inactive_staff"=>"Total Inactive Staff",
     "the_process_has_been_successfully"=>"The process has been successfully",
     "trainsferend_date"=>'Transferred Date',
     "transferred_from"=>'Transferred From',
