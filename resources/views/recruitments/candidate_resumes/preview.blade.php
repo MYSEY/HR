@@ -390,9 +390,9 @@
                     $(".pr_join_day").text(join_day);
                     $(".pr_join_month").text(join_month);
                     $(".pr_join_year").text(join_year);
-                    $("#pr_end_day").text(end_day);
-                    $("#pr_end_month").text(end_month);
-                    $("#pr_end_year").text(end_year);
+                    $(".pr_end_day").text(end_day);
+                    $(".pr_end_month").text(end_month);
+                    $(".pr_end_year").text(end_year);
                     $("#pr_position").text(data.position.name_khmer);
                     $("#pr_branch").text(data.branch.branch_name_kh);
                     $("#pr_employee_id").text(data.number_employee);

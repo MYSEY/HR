@@ -64,7 +64,7 @@
                     <div>
                         <table style="width:100%">
                             <tr><td class="table_tr">
-                                រយៈពេលនៃកិច្ចសន្យាការងារនេះមានចំនួនបី (៣) ខែ ដោយគិតចាប់ពីថ្ងៃទី <strong class="pr_join_day"></strong> ខែ <strong class="pr_join_month"></strong> ឆ្នាំ <strong class="pr_join_year"></strong> ដល់ថ្ងៃទី <strong id="pr_end_day"></strong> ខែ <strong id="pr_end_month"></strong> ឆ្នាំ <strong id="pr_end_year"></strong> ។
+                                រយៈពេលនៃកិច្ចសន្យាការងារនេះមានចំនួនបី (៣) ខែ ដោយគិតចាប់ពីថ្ងៃទី <strong class="pr_join_day"></strong> ខែ <strong class="pr_join_month"></strong> ឆ្នាំ <strong class="pr_join_year"></strong> ដល់ថ្ងៃទី <strong class="pr_end_day"></strong> ខែ <strong class="pr_end_month"></strong> ឆ្នាំ <strong class="pr_end_year"></strong> ។
                             </td></tr>
                         </table>
                     </div>

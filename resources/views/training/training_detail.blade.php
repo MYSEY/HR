@@ -159,7 +159,7 @@
             importStyle: true,
             loadCSS: "{{asset('/admin/css/style_print_training.css')}}",
             header: "",
-            printDelay: 1000,
+            printDelay: 2500,
             formValues: false,
             canvas: false,
             doctypeString: "",

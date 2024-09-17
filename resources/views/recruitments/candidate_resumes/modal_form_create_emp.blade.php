@@ -807,16 +807,16 @@
         });
     }
     function print_pdf(type) {
-        $("#print_purchase").show();
+        $("#print_sign_contract").show();
 
         window.setTimeout(function() {
-            $("#print_purchase").hide();
+            $("#print_sign_contract").hide();
             $("#btn_save_print").prop('disabled', false);
             $(".btn-text-print").show();
             $("#btn-print-loading").css('display', 'none');
             $("#add_emp").modal("hide")
         }, 2500);
-        $("#print_purchase").printThis({
+        $("#print_sign_contract").printThis({
             importCSS: false,
             importStyle: true,
             loadCSS: "{{asset('/admin/css/style_table.css')}}",
