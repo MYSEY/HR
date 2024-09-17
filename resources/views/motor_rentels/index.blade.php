@@ -15,10 +15,10 @@
         <div class="page-header">
             <div class="row align-items-center">
                 <div class="col">
-                    <h3 class="page-title">@lang('lang.motor_rentals')</h3>
+                    <h3 class="page-title">@lang('lang.m&t_information')</h3>
                     <ul class="breadcrumb">
                         <li class="breadcrumb-item"><a href="{{ url('/dashboad/employee') }}">@lang('lang.dashboard')</a></li>
-                        <li class="breadcrumb-item active">@lang('lang.motor_rentals')</li>
+                        <li class="breadcrumb-item active">@lang('lang.m&t_information')</li>
                     </ul>
                 </div>
                 <div class="col-auto float-end ms-auto">
@@ -104,16 +104,16 @@
                                                         style="width: 125.15px;">@lang('lang.position')</th>
                                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                         rowspan="1" colspan="1"
-                                                        aria-label="Department: activate to sort column ascending"
-                                                        style="width: 125.15px;">@lang('lang.department')</th>
+                                                        aria-label="location: activate to sort column ascending"
+                                                        style="width: 125.15px;">@lang('lang.location')</th>
                                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                         rowspan="1" colspan="1"
                                                         aria-label="Start Date: activate to sort column ascending"
-                                                        style="width: 125.15px;">@lang('lang.start_date')</th>
+                                                        style="width: 125.15px;">@lang('lang.m_start_date')</th>
                                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                         rowspan="1" colspan="1"
                                                         aria-label="End Date: activate to sort column ascending"
-                                                        style="width: 125.15px;">@lang('lang.end_date')</th>
+                                                        style="width: 125.15px;">@lang('lang.m_end_date')</th>
                                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                         rowspan="1" colspan="1"
                                                         aria-label="Start date Tablet: activate to sort column ascending"
@@ -121,7 +121,7 @@
                                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                         rowspan="1" colspan="1"
                                                         aria-label="Total Gasoline: activate to sort column ascending"
-                                                        style="width: 125.15px;">@lang('lang.total_gasoline') </th>
+                                                        style="width: 125.15px;">@lang('lang.gasoline') </th>
                                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                         rowspan="1" colspan="1"
                                                         aria-label="Total working days: activate to sort column ascending"
@@ -167,11 +167,11 @@
                                                             <td class="stuck-scroll-3">{{ Helper::getLang() == 'en' ? $item->MotorEmployee->employee_name_en : $item->MotorEmployee->employee_name_kh }}</td>
                                                             <td>{{ $item->MotorEmployee->EmployeeGender }}</td>
                                                             <td>{{ $item->MotorEmployee->EmployeePosition }}</td>
-                                                            <td>{{ $item->MotorEmployee->EmployeeDepartment }}</td>
+                                                            <td>{{ $item->MotorEmployee->EmployeeBranch }}</td>
                                                             <td>{{ $item->start_date ? \Carbon\Carbon::parse($item->start_date)->format('d-M-Y') : '' }}</td>
                                                             <td>{{ $item->end_date ? \Carbon\Carbon::parse($item->end_date)->format('d-M-Y') : '' }}</td>
                                                             <td>{{ $item->start_date_taplab ? \Carbon\Carbon::parse($item->start_date_taplab)->format('d-M-Y') : '' }}</td>
-                                                            <td>{{ $item->total_gasoline }}</td>
+                                                            <td>{{ $item->total_gasoline }} (L)</td>
                                                             <td>{{ $item->total_work_day }}</td>
                                                             <td>{{ round($item->price_engine_oil,2)}} $</td>
                                                             <td>{{ round($item->price_motor_rentel, 2)}} $</td>
@@ -806,7 +806,7 @@
                         '<td class="stuck-scroll-3">' + (localeLanguage == 'en' ? row.employee_name_en : row.employee_name_kh ) + '</td>' +
                         '<td>' + (row.user.gender == null ? "" : localeLanguage == 'en' ? row.user.gender.name_english : row.user.gender.name_khmer) + '</td>' +
                         '<td>' + (row.user.position ? localeLanguage == 'en' ? row.user.position.name_english : row.user.position.name_khmer : "") + '</td>' +
-                        '<td>' + (localeLanguage == 'en' ? row.user.department.name_english : row.user.department.name_khmer ) + '</td>' +
+                        '<td>' + (localeLanguage == 'en' ? row.user.branch.branch_name_en : row.user.branch.branch_name_kh ) + '</td>' +
                         '<td>' + (start_date) + '</td>' +
                         '<td>' + (end_date) + '</td>' +
                         '<td>' +(start_date_taplab)+ '</td>'+

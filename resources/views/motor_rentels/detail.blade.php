@@ -74,8 +74,8 @@
                                     <li><strong>@lang('lang.position') : </strong> {{ $data->MotorEmployee->EmployeePosition }}</li>
                                     <li><strong>@lang('lang.date_of_commencement') : </strong>{{ \Carbon\Carbon::parse($data->MotorEmployee->date_of_commencement)->format('d-M-Y') }}
                                     </li>
-                                    <li><strong>@lang('lang.total_amount_of_workday'):</strong> {{ $data->total_work_day }}</li>
-                                    <li><strong>@lang('lang.total_gasoline') (@lang('lang.month')):</strong>
+                                    <li><strong>@lang('lang.total_working_days'):</strong> {{ $data->total_work_day }}</li>
+                                    <li><strong>@lang('lang.total_gasoline_liters') (@lang('lang.month')):</strong>
                                         {{ number_format($data->total_gasoline * $data->total_work_day) }} L
                                     </li>
                                 </ul>
