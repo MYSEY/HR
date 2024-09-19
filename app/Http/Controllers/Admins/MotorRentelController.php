@@ -447,7 +447,7 @@ class MotorRentelController extends Controller
                     $employee = User::where("number_employee", $csv[0])->first();
                     $start_date = Carbon::createFromDate($csv[1])->format('Y-m-d'); // 2023-04-19
                     $end_date = Carbon::createFromDate($csv[2])->format('Y-m-d'); // 2023-04-19
-                    $start_date_taplab = $csv[18] ? Carbon::createFromDate($csv[18])->format('Y-m-d') : ""; // 2023-04-19
+                    $start_date_taplab = $csv[18] ? Carbon::createFromDate($csv[18])->format('Y-m-d') : null; // 2023-04-19
                     if ($employee) {
                         $arr = [
                             'employee_id'           => $employee->id,
