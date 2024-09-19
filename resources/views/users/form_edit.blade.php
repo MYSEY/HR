@@ -283,7 +283,7 @@
                                     <label>@lang('lang.phone_allowance')</label>
                                     <div class="input-group">
                                         <span class="input-group-text">$</span>
-                                        <input class="form-control" type="number" name="" id="e_phone_allowance" value="phone_allowance">
+                                        <input class="form-control" type="number" name="phone_allowance" id="e_phone_allowance" value="">
                                     </div>
                                 </div>
                             </div>

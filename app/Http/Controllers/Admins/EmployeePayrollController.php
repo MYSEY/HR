@@ -365,15 +365,16 @@ class EmployeePayrollController extends Controller
                     //function difinde day first working
                     if ($joinDate == $paymentDate) {
                         //total day in monthsd
-                        $startMonth = Carbon::createFromDate($item->date_of_commencement)->format('m');
-                        $startendMonth = Carbon::createFromDate($item->date_of_commencement)->endOfMonth()->format('d');
                         $start_date = Carbon::createFromDate($item->date_of_commencement);
                         $endMonth = Carbon::createFromDate($item->date_of_commencement)->endOfMonth();
                         $end_date = Date::createFromDate($endMonth);
                         $commencementDate   = Carbon::parse($start_date);
                         $resumptionDate     = Carbon::parse($end_date);
-                        $toDays 		    = $resumptionDate->diffInWeekdays($commencementDate);
+                        $isCommencementWeekday = !$commencementDate->isWeekend();
+                        $toDays 		    = $resumptionDate->diffInWeekdays($commencementDate) + ($isCommencementWeekday ? 1 : 0);
                         $joinDate = Carbon::createFromDate($item->date_of_commencement)->format('d');
+                        $startMonth = Carbon::createFromDate($item->date_of_commencement)->format('m');
+                        $startendMonth = Carbon::createFromDate($item->date_of_commencement)->endOfMonth()->format('d');
                         if ($joinDate==1) {
                             $totalBasicSalary = $item->basic_salary;
                         } else {
