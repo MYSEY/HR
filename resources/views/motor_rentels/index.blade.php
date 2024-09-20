@@ -116,6 +116,14 @@
                                                         style="width: 125.15px;">@lang('lang.m_end_date')</th>
                                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                         rowspan="1" colspan="1"
+                                                        aria-label="model: activate to sort column ascending"
+                                                        style="width: 125.15px;">@lang('lang.model')</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                        rowspan="1" colspan="1"
+                                                        aria-label="IMEI: activate to sort column ascending"
+                                                        style="width: 125.15px;">@lang('lang.id') (IMEI)</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                        rowspan="1" colspan="1"
                                                         aria-label="Start date Tablet: activate to sort column ascending"
                                                         style="width: 125.15px;">@lang('lang.start_date_tablet')</th>
                                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
@@ -170,6 +178,8 @@
                                                             <td>{{ $item->MotorEmployee->EmployeeBranch }}</td>
                                                             <td>{{ $item->start_date ? \Carbon\Carbon::parse($item->start_date)->format('d-M-Y') : '' }}</td>
                                                             <td>{{ $item->end_date ? \Carbon\Carbon::parse($item->end_date)->format('d-M-Y') : '' }}</td>
+                                                            <td>{{ $item->taplab_rentel}}</td>
+                                                            <td>{{ $item->taplab_imei}}</td>
                                                             <td>{{ $item->start_date_taplab ? \Carbon\Carbon::parse($item->start_date_taplab)->format('d-M-Y') : '' }}</td>
                                                             <td>{{ $item->total_gasoline }} (L)</td>
                                                             <td>{{ $item->total_work_day }}</td>
@@ -809,7 +819,9 @@
                         '<td>' + (localeLanguage == 'en' ? row.user.branch.branch_name_en : row.user.branch.branch_name_kh ) + '</td>' +
                         '<td>' + (start_date) + '</td>' +
                         '<td>' + (end_date) + '</td>' +
-                        '<td>' +(start_date_taplab)+ '</td>'+
+                        '<td>' + (row.taplab_rentel) +'</td>'+
+                        '<td>' + (row.taplab_imei) +'</td>'+
+                        '<td>' + (start_date_taplab)+ '</td>'+
                         '<td>' + (row.total_gasoline) + '</td>' +
                         '<td>' + (row.total_work_day) + '</td>' +
                         '<td>៛ ' + (Number(row.price_engine_oil)) + '</td>' +

@@ -114,7 +114,7 @@
                        
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="">@lang('lang.total_gasoline') <span class="text-danger">*</span></label>
+                                <label class="">@lang('lang.gasoline') <span class="text-danger">*</span></label>
                                 <input class="form-control emp_required m_clear" type="number" id="total_gasoline" name="total_gasoline" value="{{old('total_gasoline')}}" required>
                             </div>
                         </div>

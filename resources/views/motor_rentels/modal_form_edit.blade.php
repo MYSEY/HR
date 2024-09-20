@@ -106,7 +106,7 @@
                        
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="">@lang('lang.total_gasoline') <span class="text-danger">*</span></label>
+                                <label class="">@lang('lang.gasoline') <span class="text-danger">*</span></label>
                                 <input class="form-control e_emp_required @error('total_gasoline') is-invalid @enderror" type="number" id="e_total_gasoline" required name="total_gasoline" value="{{old('total_gasoline')}}">
                             </div>
                         </div>
