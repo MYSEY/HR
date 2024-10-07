@@ -19,6 +19,9 @@ class ChildrenAllowanceController extends Controller
      */
     public function index()
     {
+        if (permissionAccess("m8-s4","is_view")->value != "1") {
+            return view('upgrade.feature_not_available');
+        }
         $data = ChildrenAllowance::all();
         return view('children-allowance.index',compact('data'));
     }

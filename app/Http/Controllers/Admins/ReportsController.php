@@ -42,6 +42,9 @@ class ReportsController extends Controller
     }
 
     public function employee(){
+        if (permissionAccess("m7-s1","is_view")->value != "1") {
+            return view('upgrade.feature_not_available');
+        }
         $users = User::whereNot("emp_status", null)
         ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
             if ($RolePermission == 'Employee') {
@@ -92,6 +95,9 @@ class ReportsController extends Controller
     }
 
     public function newStaff(Request $request){
+        if (permissionAccess("m7-s13","is_view")->value != "1") {
+            return view('upgrade.feature_not_available');
+        }
         $from_date = null;
         $to_date = null;
         if ($request->from_date) {
@@ -140,6 +146,9 @@ class ReportsController extends Controller
     }
 
     public function staffResigned(Request $request){
+        if (permissionAccess("m7-s14","is_view")->value != "1") {
+            return view('upgrade.feature_not_available');
+        }
         $join_date = null;
         $leave_of_absence = null;
         if ($request->join_date) {
@@ -187,6 +196,9 @@ class ReportsController extends Controller
     }
 
     public function staffPromoted(Request $request){
+        if (permissionAccess("m7-s16","is_view")->value != "1") {
+            return view('upgrade.feature_not_available');
+        }
         $from_date = null;
         $to_date = null;
         if ($request->from_date) {
@@ -238,6 +250,9 @@ class ReportsController extends Controller
     }
 
     public function staffTransferred(Request $request){
+        if (permissionAccess("m7-s15","is_view")->value != "1") {
+            return view('upgrade.feature_not_available');
+        }
         $from_date = null;
         $to_date = null;
         if ($request->from_date) {
@@ -285,6 +300,9 @@ class ReportsController extends Controller
     }
 
     public function trainingReport(Request $request){
+        if (permissionAccess("m6-s3","is_view")->value != "1") {
+            return view('upgrade.feature_not_available');
+        }
         $start_date = null;
         $end_date = null;
         if ($request->start_date) {
@@ -375,6 +393,9 @@ class ReportsController extends Controller
     }
 
     public function bankTransfer() {
+        if (permissionAccess("m7-s9","is_view")->value != "1") {
+            return view('upgrade.feature_not_available');
+        }
         $data = Payroll::with('users')
         ->leftJoin('users', 'payrolls.employee_id', '=', 'users.id')
         ->select(
@@ -426,6 +447,9 @@ class ReportsController extends Controller
     }
 
     public function eFilingSalary(Request $request){
+        if (permissionAccess("m7-s10","is_view")->value != "1") {
+            return view('upgrade.feature_not_available');
+        }
         $dataPayrolls = $this->reportRepo->getEFilingSalary($request);
         $positions = Position::get();
         return view('reports.e_filing_salary',compact('dataPayrolls','positions'));
@@ -444,6 +468,9 @@ class ReportsController extends Controller
     }
 
     public function eFormSalary(){
+        if (permissionAccess("m7-s11","is_view")->value != "1") {
+            return view('upgrade.feature_not_available');
+        }
         $payroll = Payroll::with('users')
         ->join('users', 'payrolls.employee_id', '=', 'users.id')
         ->select(
@@ -480,6 +507,9 @@ class ReportsController extends Controller
     }
 
     public function fringeBenefit(Request $request){
+        if (permissionAccess("m7-s8","is_view")->value != "1") {
+            return view('upgrade.feature_not_available');
+        }
         $datas = $this->reportRepo->getFringeBenefits($request);
         $positions = Position::get();
         return view('reports.fringe_benefits_report',compact('datas','positions'));

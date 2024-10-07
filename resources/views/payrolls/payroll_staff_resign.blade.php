@@ -26,13 +26,13 @@
                     </ul>
                 </div>
                 <div class="col-auto float-end ms-auto">
-                    @if (permissionAccess("m4-s1","is_create")->value == "1")
+                    @if (permissionAccess("m4-s7","is_create")->value == "1")
                         <a href="#" class="btn add-btn me-2" data-bs-toggle="modal" data-bs-target="#add_payroll_staff_resign"><i class="fa fa-plus"></i> @lang('lang.add_new')</a>
                     @endif
                 </div>
             </div>
         </div>
-        @if (permissionAccess("m4-s1","is_view")->value == "1")
+        @if (permissionAccess("m4-s7","is_view")->value == "1")
             <form>
                 {{-- @csrf --}}
                 <div class="row filter-btn"> 
@@ -243,11 +243,11 @@
                                                                 <td>$<a href="#">{{ $item->total_salary }}</a></td>
                                                                 <td>{{ $item->PayrollPaymentDate }}</td>
                                                                 <td>
-                                                                    @if (permissionAccess("m4-s1","is_delete")->value == "1")
+                                                                    @if (permissionAccess("m4-s7","is_delete")->value == "1")
                                                                         {{-- <button type="button" class="btn btn-sm btn-danger delete_all">@lang('lang.delete_all')</button> --}}
                                                                         <button class="btn btn-danger btn-sm btnDelete" type="button" data-id="{{$item->number_employee}}">Delete</button>
                                                                     @endif
-                                                                    @if (permissionAccess("m4-s1","is_approve")->value == "1")
+                                                                    @if (permissionAccess("m4-s7","is_approve")->value == "1")
                                                                         <button type="button" class="btn btn-success btn-sm btn_approved" href="#" data-id="{{$item->number_employee}}"> @lang('lang.approve')</button> 
                                                                     @endif
                                                                 </td>

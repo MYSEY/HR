@@ -40,6 +40,9 @@ class LeavesAdminController extends Controller
      */
     public function index()
     {
+        if (permissionAccess("m10-s1","is_view")->value != "1") {
+            return view('upgrade.feature_not_available');
+        }
         $location = Branchs::get();
         $department = Department::get();
         $LeaveAllocation = LeaveAllocation::with("employee")
@@ -71,10 +74,11 @@ class LeavesAdminController extends Controller
             }
         })->get();
 
-        $dataLeaveRequest = LeaveRequest::with("employee")->with("handover")->whereIn("status", ["approved_lm","approved_hod","pending"])
+        $dataLeaveRequest = LeaveRequest::with("employee")->with("handover")->with("createdBy")->whereIn("status", ["approved_lm","approved_hod","pending"])
             ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
                 if($RolePermission == 'CEO' || $RolePermission == 'BOD' || $RolePermission == 'BM' || $RolePermission == 'HOD'){
                     $query->where("next_approver", Auth::user()->id);
+                    // $query->orWhere("line_manager_id", Auth::user()->id);
                 }else if($RolePermission == 'HR' || $RolePermission =="HRAdmin"){
                     $query->whereNot("status", "approved");
                 }
@@ -109,7 +113,7 @@ class LeavesAdminController extends Controller
     public function filter(Request $request)
     {
         if ($request->condiction_tab == 3) {
-            $LeaveAllocation = LeaveAllocation::with("employee")
+            $LeaveAllocation = LeaveAllocation::with("employee")->with("createdBy")
             ->leftJoin('users', 'leave_allocations.employee_id', '=', 'users.id')
             ->select(
                 'leave_allocations.*',
@@ -135,7 +139,7 @@ class LeavesAdminController extends Controller
                 'LeaveAllocations'=>$LeaveAllocation,
             ]);
         }else{
-            $dataLeaveRequest = LeaveRequest::with("employee")->with("leaveType")->with("handover")
+            $dataLeaveRequest = LeaveRequest::with("employee")->with("leaveType")->with("handover")->with("createdBy")
             ->leftJoin('users', 'leave_requests.employee_id', '=', 'users.id')
             ->select(
                 'leave_requests.*',
@@ -282,13 +286,13 @@ class LeavesAdminController extends Controller
                             }
                         $email_send = User::where("id", $data['next_approver'])->first();
                         // for send email
-                        $mail_message = ModelsMail::first();
-                        if ($email_send && $mail_message) {
-                            if ($email_send->email) {
-                                Mail::to("oudam.chhor@camma.com.kh")->send(new SendEmail($mail_message));
-                                // Mail::to($email_send->email)->send(new SendEmail($mail_message));
-                            }
-                        }
+                        // $mail_message = ModelsMail::first();
+                        // if ($email_send && $mail_message) {
+                        //     if ($email_send->email) {
+                        //         // Mail::to("oudam.chhor@camma.com.kh")->send(new SendEmail($mail_message));
+                        //         Mail::to($email_send->email)->send(new SendEmail($mail_message));
+                        //     }
+                        // }
                     }
                 }
             }else if ($role == 'BM') {
@@ -664,7 +668,9 @@ class LeavesAdminController extends Controller
     }
 
     public function Report(Request $request) {
-       
+        if (permissionAccess("m10-s3","is_view")->value != "1") {
+            return view('upgrade.feature_not_available');
+        }
         $location = Branchs::get();
         $department = Department::get();
         $leaveType = LeaveType::get();

@@ -143,6 +143,27 @@ $(function(){
             $(this).val(1)
         }
     });
+    $("#request_replacement").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(".request_replacement_checkbox").prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(".request_replacement_checkbox").prop("checked", true);
+            $(this).val(1)
+            $(".request_replacement_checkbox").val(1);
+        }
+    });
+    $(".request_replacement_checkbox").on("click", function () {
+        if (!$(this).prop("checked")) {
+            $(this).prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(this).prop("checked", true);
+            $(this).val(1)
+        }
+    });
     $("#leaves_admin").on("click", function(){
         if (!$(this).prop("checked")) {
             $(".leaves_admin_checkbox").prop("checked", false);
@@ -206,6 +227,17 @@ $(function(){
             };
             if (countleavesEmployeeCheckboxes < $('input.leaves_employee_checkbox').length) {
                 $("#leaves_employee").prop("checked", false);
+            };
+        });
+
+        let request_replacement = $('.request_replacement_checkbox');
+        request_replacement.change(function(){
+            let countrequest_replacementCheckboxes = request_replacement.filter(':checked').length;
+            if (countrequest_replacementCheckboxes == $('input.request_replacement_checkbox').length) {
+                $("#request_replacement").prop("checked", true);
+            };
+            if (countrequest_replacementCheckboxes < $('input.request_replacement_checkbox').length) {
+                $("#request_replacement").prop("checked", false);
             };
         });
 
@@ -348,6 +380,17 @@ $(function(){
             $(".payroll_staff_resign_checkbox").val(1);
         }
     });
+    $(".payroll_staff_resign_checkbox").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(this).prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(this).prop("checked", true);
+            $(this).val(1)
+        }
+    });
+
     //function check parent for payment adjustment
     $("#payroll_adjustment").on("click", function(){
         if (!$(this).prop("checked")) {

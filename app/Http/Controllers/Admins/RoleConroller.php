@@ -22,6 +22,10 @@ class RoleConroller extends Controller
      */
     public function index(Request $request)
     {
+        $permission = permissions::where('role_id',Auth::user()->role_id)->where("name", "lang.role_permission")->first();
+        if (!$permission || $permission->is_view != "1") {
+            return view('upgrade.feature_not_available');
+        }
         $role=Role::with("useruse")->get();
         return view('roles.role_index', compact('role'));
     }

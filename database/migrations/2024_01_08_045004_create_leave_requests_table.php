@@ -18,7 +18,7 @@ return new class extends Migration
             $table->integer('employee_id');
             $table->integer('leave_type_id');
             $table->integer('request_to');
-            $table->string('line_manager_name')->nullable();
+            $table->integer('line_manager_id')->nullable();
             $table->integer('handover_staff_id')->nullable();
             $table->date('start_date');
             $table->string('start_half_day')->nullable();
@@ -33,6 +33,7 @@ return new class extends Migration
             $table->string('total_sick_leave')->nullable();
             $table->string('total_special_leave')->nullable();
             $table->string('total_unpaid_leave')->nullable();
+            $table->string('total_long_sick_leave')->nullable();
             $table->string('reason')->nullable();
             $table->string('remark')->nullable();
             $table->bigInteger('created_by')->unsigned()->nullable();

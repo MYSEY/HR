@@ -23,6 +23,9 @@ use Illuminate\Support\Facades\DB;
 class DashboadController extends Controller
 {
     public function dashboadEmployee(){
+        if (permissionAccess("m1-s2","is_view")->value != "1") {
+            return view('upgrade.feature_not_available');
+        }
         $holiday = Holiday::where('from','=',Carbon::now()->addDays(2))->get(['title_kh','from']);
         $LeaveRequest = LeaveRequest::where('employee_id',Auth::user()->id)->orderBy('id', 'DESC')->first();
         $data = LeaveAllocation::where('employee_id',Auth::user()->id)->first();

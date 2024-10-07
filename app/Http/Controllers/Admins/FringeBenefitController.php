@@ -23,6 +23,9 @@ class FringeBenefitController extends Controller
      */
     public function index()
     {
+        if (permissionAccess("m4-s5","is_view")->value != "1") {
+            return view('upgrade.feature_not_available');
+        }
         $employees = User::whereIn("emp_status", ["Probation", "1", "2", "10"])
         ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
             if ($RolePermission == 'Employee') {

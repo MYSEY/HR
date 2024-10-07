@@ -113,6 +113,11 @@
                 $("#leaves_employee").prop("checked", true);
             };
 
+            let leavesReplacement = $('.request_replacement_checkbox').filter(':checked').length;
+            if (leavesReplacement == $('input.request_replacement_checkbox').length) {
+                $("#request_replacement").prop("checked", true);
+            };
+
             let leavesReport = $('.leave_report_checkbox').filter(':checked').length;
             if (leavesReport == $('input.leave_report_checkbox').length) {
                 $("#leaves_report").prop("checked", true);

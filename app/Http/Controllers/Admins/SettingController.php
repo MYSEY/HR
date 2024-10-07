@@ -12,6 +12,9 @@ use Illuminate\Support\Facades\Hash;
 class SettingController extends Controller
 {
     public function changePassword(){
+        if (permissionAccess("m9-s5","is_view")->value != "1") {
+            return view('upgrade.feature_not_available');
+        }
         return view('settins.index');
     }
     public function updatePassword(Request $request){

@@ -19,6 +19,9 @@ class TaxesController extends Controller
      */
     public function index()
     {
+        if (permissionAccess("m8-s1","is_view")->value != "1") {
+            return view('upgrade.feature_not_available');
+        }
         $data = Taxes::all();
         return view('taxes.index',compact('data'));
     }

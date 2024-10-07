@@ -25,6 +25,7 @@ class LeaveRequest extends Model
         'end_half_day',
         'approved_date',
         'request_to',
+        'line_manager_id',
         'handover_staff_id',
         'next_approver',
         'approved_by',
@@ -34,6 +35,7 @@ class LeaveRequest extends Model
         'total_sick_leave',
         'total_special_leave',
         'total_unpaid_leave',
+        'total_long_sick_leave',
         'reason',
         'remark',
         'created_by',
@@ -115,9 +117,24 @@ class LeaveRequest extends Model
         
         return $approve_name;
     }
+    public function LeaveAllocation()
+    { 
+        return $this->belongsTo(LeaveAllocation::class, 'employee_id', 'employee_id');
+    }
     public function createdBy()
     { 
-        return $this->belongsTo(User::class, 'created_by');
+        return $this->belongsTo(User::class, 'created_by')->select(
+            'id',
+            'number_employee',
+            'last_name_kh',
+            'first_name_kh',
+            'last_name_en',
+            'first_name_en',
+            'employee_name_kh',
+            'employee_name_en',
+            'email',
+            'created_by'
+        );
     }
     public function upldatedBy()
     {

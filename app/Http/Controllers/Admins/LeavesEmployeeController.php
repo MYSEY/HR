@@ -31,6 +31,9 @@ class LeavesEmployeeController extends Controller
      */
     public function index()
     {
+        if (permissionAccess("m10-s2","is_view")->value != "1") {
+            return view('upgrade.feature_not_available');
+        }
         $dataLeaveType = LeaveType::get();
         $LeaveAllocation = LeaveAllocation::where("employee_id", Auth::user()->id)->first();
         $employees= DB::table('users')->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
@@ -79,8 +82,61 @@ class LeavesEmployeeController extends Controller
         return view('leaves_employee.index', compact('dataLeaveType', 'LeaveAllocation', 'employees','delegateEmployees', 'dataLeaveRequest'));
     }
 
+    public function indexReplcement(){
+        if (permissionAccess("m10-s4","is_view")->value != "1") {
+            return view('upgrade.feature_not_available');
+        }
+        $dataLeaveType = LeaveType::get();
+        $employees= DB::table('users')->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+                if ($RolePermission == 'BM') {
+                    $query->where("id", Auth::user()->line_manager);
+                    $query->orWhere("branch_id", Auth::user()->branch_id);
+                    $query->whereNot("id", Auth::user()->id);
+                }else if($RolePermission == 'HOD'){
+                    if (Auth::user()->id == Auth::user()->department->direct_manager_id) {
+                        $query->where("department_id", Auth::user()->department_id);
+                        $query->whereNot("id", Auth::user()->id);
+                    }else{
+                        $query->where("id", Auth::user()->line_manager);
+                        $query->orWhere("line_manager", Auth::user()->id);
+                        $query->whereNot("id", Auth::user()->id);
+                    }
+                }else if($RolePermission == 'Employee'){
+                    $query->where("id", Auth::user()->line_manager);
+                    $query->orWhere("line_manager", Auth::user()->line_manager);
+                    $query->where("department_id", Auth::user()->department_id);
+                    $query->where("branch_id", Auth::user()->branch_id);
+                    $query->whereNot("id", Auth::user()->id);
+                }else if($RolePermission == 'HR' || $RolePermission =="HRAdmin"){
+                    $query->where("id", Auth::user()->line_manager);
+                    $query->orWhere("line_manager", Auth::user()->id);
+                    $query->whereNot("id", Auth::user()->id);
+                }
+            })->get();
+        $delegateEmployees= DB::table('users')
+            ->leftJoin('roles', 'users.role_id', '=', 'roles.id')
+            ->select( 'users.*', 'roles.role_type',)
+            ->whereNot("roles.role_type", "Employee")
+            ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+                if ($RolePermission == 'BM') {
+                    $query->orWhere("users.branch_id", Auth::user()->branch_id);
+                    $query->whereNot("users.id", Auth::user()->id);
+                }else if($RolePermission == 'HOD'){
+                    $query->where("users.department_id", Auth::user()->department_id);
+                    $query->whereNot("users.id", Auth::user()->id);
+                }else if($RolePermission == 'HR' || $RolePermission =="HRAdmin"){
+                    $query->orWhere("users.line_manager", Auth::user()->id);
+                    $query->whereNot("users.id", Auth::user()->id);
+                }
+            })->get();
+        $dataLeaveRequest = LeaveRequest::with("leaveType")->with("employee")->with("LeaveAllocation")->where("request_to", Auth::user()->id)->get();
+        return view('leaves_employee.leave_replacement', compact('dataLeaveType', 'employees','delegateEmployees', 'dataLeaveRequest'));
+        
+     
+    }
 
-    function duplicateLeace($request)
+
+    function duplicateLeace($request, $employee_id)
     {
         $startDate = $request->start_date;
             $endDate = $request->end_date;
@@ -88,7 +144,7 @@ class LeavesEmployeeController extends Controller
             $endHalfDay = $request->end_half_day;
             $overlappingLeave = null;
 
-            $overlappingLeave  = LeaveRequest::where('employee_id', Auth::user()->id)
+            $overlappingLeave  = LeaveRequest::where('employee_id', $employee_id)
             ->where(function ($query) use ($startDate, $endDate, $startHalfDay, $endHalfDay) {
                 $query->where(function ($query) use ($startDate, $endDate) {
                     $query->where('start_date', '<', $endDate)
@@ -116,7 +172,7 @@ class LeavesEmployeeController extends Controller
             })->exists();
             if (!$overlappingLeave) {
                 if (!$startHalfDay && !$endHalfDay) {
-                    $overlappingLeave = LeaveRequest::where('employee_id', Auth::user()->id)
+                    $overlappingLeave = LeaveRequest::where('employee_id', $employee_id)
                     ->where(function ($query) use ($startDate, $endDate) {
                         $query->where('start_date', '>=', $startDate)
                         ->where('end_date', '<=', $endDate);
@@ -124,7 +180,7 @@ class LeavesEmployeeController extends Controller
                 }
                 if (($startHalfDay == "am"|| $startHalfDay == "pm") || ($endHalfDay == "am" || $endHalfDay == "pm")) {
                     if ($startHalfDay == "am"|| $startHalfDay == "pm") {
-                        $overlappingLeave1 = LeaveRequest::where('employee_id', Auth::user()->id)
+                        $overlappingLeave1 = LeaveRequest::where('employee_id', $employee_id)
                         ->where(function ($query) use ($startDate, $startHalfDay) {
                             $query->where('start_date', '=', $startDate)
                             ->where('start_half_day', '=', $startHalfDay);
@@ -138,7 +194,7 @@ class LeavesEmployeeController extends Controller
                         }  
                     } 
                     if ($endHalfDay == "am" || $endHalfDay == "pm") {
-                        $overlappingLeave2 = LeaveRequest::where('employee_id', Auth::user()->id)
+                        $overlappingLeave2 = LeaveRequest::where('employee_id', $employee_id)
                         ->where(function ($query) use ($endDate, $endHalfDay) {
                             $query->where('end_date', '=', $endDate)
                             ->where('end_half_day', '=', $endHalfDay);
@@ -151,7 +207,7 @@ class LeavesEmployeeController extends Controller
                             // ]);
                         }  
                     }
-                    $dataLeaves = LeaveRequest::where('employee_id', Auth::user()->id)
+                    $dataLeaves = LeaveRequest::where('employee_id', $employee_id)
                     ->where(function ($query) use ($startDate, $endDate) {
                         $query->where('start_date', '<=', $startDate)
                         ->where('end_date', '>=', $endDate);
@@ -185,8 +241,9 @@ class LeavesEmployeeController extends Controller
      */
     public function store(Request $request)
     {
+        DB::beginTransaction();
         try {
-            $duplicate  = self::duplicateLeace($request);
+            $duplicate  = self::duplicateLeace($request, Auth::user()->id);
             if ($duplicate) {
                 return response()->json([
                     'error'=>'lang.start_date_and_end_date_already_exists',
@@ -197,245 +254,245 @@ class LeavesEmployeeController extends Controller
             $LeaveAllocation = LeaveAllocation::where("employee_id", Auth::user()->id)->first();
             $LeaveType = LeaveType::where("id", $request->leave_type_id)->first();
 
-            $request_date = Carbon::now()->format('Y-m-d');
-            // $request_date = "2024-07-03";
-            $delegateLeave = DelegateLeave::where("requester_id", Auth::user()->line_manager)
-            ->where('start_date', '<=', $request_date)
-            ->where('end_date', '>=', $request_date)->first();
-           
+            $data['line_manager_id'] = Auth::user()->line_manager;
+
+            // *** approve by head or branch *** //
+            $manager = User::where("id", Auth::user()->line_manager)->first();
+            $data['next_approver'] = $manager->line_manager;
+
             if(Auth::user()->RolePermission == "BOD") {
                 $data['status'] = "approved_hod";
                 $data['next_approver'] = "Null";
             }else if (Auth::user()->RolePermission == "CEO") {
+                $data['next_approver'] = Auth::user()->line_manager;
+
                 $data['status'] = "approved_lm";
             }elseif (Auth::user()->RolePermission == "HOD" && Auth::user()->id == Auth::user()->department->direct_manager_id) {
+                $data['next_approver'] = Auth::user()->line_manager;
+
                 $data['status'] = "approved_lm";
             }else if(Auth::user()->RolePermission == "BM" && Auth::user()->id == Auth::user()->branch->direct_manager_id){
+                $data['next_approver'] = Auth::user()->line_manager;
+
                 $data['status'] = "approved_lm";
             }else{
                 $data['status'] = "pending";
             }
-           
-            $data['next_approver'] = Auth::user()->line_manager;
+
+
+            $request_date = Carbon::now()->format('Y-m-d');
+            // $request_date = "2024-09-25";
+            // *** new process detegate leave *** //
+            $delegateLeave = DelegateLeave::where("requester_id", $data['next_approver'])
+            ->where('start_date', '<=', $request_date)
+            ->where('end_date', '>=', $request_date)->first();
             if ($delegateLeave) {
                 $data['next_approver'] = $delegateLeave->delegate_id;
-                if ($delegateLeave->delegate_id  == Auth::user()->id) {
-                    $line =  User::where("id", $delegateLeave->requester_id)->first();
-                    if ($line) {
-                        $data['next_approver'] = $line->line_manager;
-                        $lineLeave = DelegateLeave::where("requester_id",  $line->line_manager)->where('start_date', '<=', $request_date)->where('end_date', '>=', $request_date)->first();
-                        
-                        if ($lineLeave) {
-                            $data['next_approver'] = $lineLeave->delegate_id;
-
-                            $delegateLeave3 = LeaveRequest::where("employee_id", $lineLeave->delegate_id)
-                            ->where('start_date', '<=', $request_date)
-                            ->where('end_date', '>=', $request_date)->first();
-                            if ($delegateLeave3) {
-                                $LineNumberDelegateHead = Helper::countWeekdays($request_date,$delegateLeave3->end_date);
-
-                                $LineNumber1 = Helper::countWeekdays($request_date,$delegateLeave->end_date);
-                                $LineNumber2 = Helper::countWeekdays($request_date,$lineLeave->end_date);
-                                if ($LineNumber1 <= $LineNumber2) {
-                                    $data['next_approver'] = $line->id;
-                                    if ($LineNumberDelegateHead < $LineNumber1) {
-                                        $data['next_approver'] = $delegateLeave3->employee_id;
-                                    }
-                                }else{
-                                    $data['next_approver'] = $line->line_manager;
-                                    if ($LineNumberDelegateHead < $LineNumber2) {
-                                        $data['next_approver'] = $delegateLeave3->employee_id;
-                                    }
-                                }
-                            }
-
-                            // $lineLeave1 = DelegateLeave::where("requester_id",  $lineLeave->delegate_id)->where('start_date', '<=', $request_date)->where('end_date', '>=', $request_date)->first();
-                            // if ($lineLeave1) {
-                            //     $data['next_approver'] = $lineLeave->requester_id;
-                            //     $delegateLeave3 = LeaveRequest::where("employee_id", $delegateLeave2->delegate_id)
-                            //     ->where('start_date', '<=', $request_date)
-                            //     ->where('end_date', '>=', $request_date)->first();
-                            //     if ($delegateLeave3) {
-                            //         $LineNumber1 = Helper::countWeekdays($request_date,$delegateLeave->end_date);
-                            //         $LineNumber2 = Helper::countWeekdays($request_date,$leaveLineManager2->end_date);
-                            //         if ($LineNumber1 <= $LineNumber2) {
-                            //             $data['next_approver'] = $line_manager1->id;
-                            //         }else{
-                            //             $data['next_approver'] = $line_manager1->line_manager;
-                            //         }
-                            //     }
-                            // }
-                        }
-                    }
-                }else{
-                    $delegateLeave1 = DelegateLeave::where("requester_id", $delegateLeave->delegate_id)
-                    ->where('start_date', '<=', $request_date)
-                    ->where('end_date', '>=', $request_date)->first();
-                    if ($delegateLeave1) {
-                        $line_manager1 = User::where("id", Auth::user()->line_manager)->first();
-                        $data['next_approver'] = $line_manager1->line_manager;
-
-                        $leaveLineManager2 = LeaveRequest::where("employee_id", $line_manager1->line_manager)
-                        ->where('start_date', '<=', $request_date)
-                        ->where('end_date', '>=', $request_date)->first();
-                        $delegateLeave2 = DelegateLeave::where("requester_id", $line_manager1->line_manager)
-                        ->where('start_date', '<=', $request_date)
-                        ->where('end_date', '>=', $request_date)->first();
-
-                        if ($delegateLeave2) {
-                            $data['next_approver'] = $delegateLeave2->delegate_id;
-                            $delegateLeave3 = LeaveRequest::where("employee_id", $delegateLeave2->delegate_id)
-                            ->where('start_date', '<=', $request_date)
-                            ->where('end_date', '>=', $request_date)->first();
-                            if ($delegateLeave3) {
-                                $LineNumber1 = Helper::countWeekdays($request_date,$delegateLeave->end_date);
-                                $LineNumber2 = Helper::countWeekdays($request_date,$leaveLineManager2->end_date);
-                                if ($LineNumber1 <= $LineNumber2) {
-                                    $data['next_approver'] = $line_manager1->id;
-                                }else{
-                                    $data['next_approver'] = $line_manager1->line_manager;
-                                }
-                            }
-
-                        }else{
-                            if ($leaveLineManager2) {
-                                $LineNumber1 = Helper::countWeekdays($request_date,$delegateLeave->end_date);
-                                $LineNumber2 = Helper::countWeekdays($request_date,$leaveLineManager2->end_date);
-                                if ($LineNumber1 <= $LineNumber2) {
-                                    $data['next_approver'] = $line_manager1->id;
-                                }else{
-                                    $data['next_approver'] = $line_manager1->line_manager;
-                                }
-                            }
-                        }
-                    }else{
-                        $delegateLeaveRequest = LeaveRequest::where("employee_id", $delegateLeave->delegate_id)
-                        ->where('start_date', '<=', $request_date)
-                        ->where('end_date', '>=', $request_date)->first();
-                        if ($delegateLeaveRequest) {
-                           
-                            $line_manager1 = User::where("id", Auth::user()->line_manager)->first();
-                            $data['next_approver'] = $line_manager1->line_manager;
-                            $leaveLineManager2 = LeaveRequest::where("employee_id", $line_manager1->line_manager)
-                            ->where('start_date', '<=', $request_date)
-                            ->where('end_date', '>=', $request_date)->first();
-                            $delegateLeave2 = DelegateLeave::where("requester_id", $line_manager1->line_manager)
-                            ->where('start_date', '<=', $request_date)
-                            ->where('end_date', '>=', $request_date)->first();
-                            if ($delegateLeave2) {
-                                $data['next_approver'] = $delegateLeave2->delegate_id;
-                                $delegateLeave3 = LeaveRequest::where("employee_id", $delegateLeave2->delegate_id)
-                                ->where('start_date', '<=', $request_date)
-                                ->where('end_date', '>=', $request_date)->first();
-                                if ($delegateLeave3) {
-                                    $LineNumberDelegateHead = Helper::countWeekdays($request_date,$delegateLeave3->end_date);
-                                    
-                                    $LineNumber1 = Helper::countWeekdays($request_date,$delegateLeave->end_date);
-                                    $LineNumber2 = Helper::countWeekdays($request_date,$leaveLineManager2->end_date);
-                                    if ($LineNumber1 <= $LineNumber2) {
-                                        $data['next_approver'] = $line_manager1->id;
-                                        if ($LineNumberDelegateHead < $LineNumber1) {
-                                            $data['next_approver'] = $delegateLeave3->employee_id;
-                                        }
-                                    }else{
-                                        $data['next_approver'] = $line_manager1->line_manager;
-                                        if ($LineNumberDelegateHead < $LineNumber2) {
-                                            $data['next_approver'] = $delegateLeave3->employee_id;
-                                        }
-                                    }
-                                }
-    
-                            }else{
-                                // $line_manager1 = User::where("id", Auth::user()->line_manager)->first();
-                                // $data['next_approver'] = $line_manager1->line_manager;
-                                // $leaveLineManager2 = LeaveRequest::where("employee_id", $line_manager1->line_manager)
-                                // ->where('start_date', '<=', $request_date)
-                                // ->where('end_date', '>=', $request_date)->first();
-
-                                // dd($line_manager1);
-                                if ($leaveLineManager2) {
-                                    // dd(5555555);
-                                    $LineNumber1 = Helper::countWeekdays($request_date,$delegateLeave->end_date);
-                                    $LineNumber2 = Helper::countWeekdays($request_date,$leaveLineManager2->end_date);
-                                    if ($LineNumber1 <= $LineNumber2) {
-                                        $data['next_approver'] = $line_manager1->id;
-                                    }else{
-                                        $data['next_approver'] = $line_manager1->line_manager;
-                                    }
-                                }
-                                // dd(1123344);
-                            }
-                        }
-                    }
-                }
-            }else{
-                $leaveLineManager1 = LeaveRequest::where("employee_id", Auth::user()->line_manager)
+                $delegateLeave3 = LeaveRequest::where("employee_id", $delegateLeave->delegate_id)
                 ->where('start_date', '<=', $request_date)
                 ->where('end_date', '>=', $request_date)->first();
-                if ($leaveLineManager1) {
-                    $line_manager1 = User::where("id", Auth::user()->line_manager)->first();
-                    $data['next_approver'] = $line_manager1->line_manager;
-                    $leaveLineManager2 = LeaveRequest::where("employee_id", $line_manager1->line_manager)
-                    ->where('start_date', '<=', $request_date)
-                    ->where('end_date', '>=', $request_date)->first();
-
-                    if ($leaveLineManager2) {
-                        $DelegateLeave2 = DelegateLeave::where("requester_id", $line_manager1->line_manager)
-                        ->where('start_date', '<=', $request_date)
-                        ->where('end_date', '>=', $request_date)->first();
-                        if ($DelegateLeave2) {
-                            $delegateLeave3 = LeaveRequest::where("employee_id", $DelegateLeave2->delegate_id)
-                            ->where('start_date', '<=', $request_date)
-                            ->where('end_date', '>=', $request_date)->first();
-                            $data['next_approver'] = $DelegateLeave2->delegate_id;
-                            if ($delegateLeave3) {
-                                $LineNumberDelegateHead = Helper::countWeekdays($request_date,$delegateLeave3->end_date);
-                                $LineNumber1 = Helper::countWeekdays($request_date,$leaveLineManager1->end_date);
-                                $LineNumber2 = Helper::countWeekdays($request_date,$leaveLineManager2->end_date);
-                                if ($LineNumber1 <= $LineNumber2) {
-                                    $data['next_approver'] = $line_manager1->id;
-                                    if ($LineNumberDelegateHead < $LineNumber1) {
-                                        $data['next_approver'] = $delegateLeave3->employee_id;
-                                    }
-                                }else{
-                                    $data['next_approver'] = $line_manager1->line_manager;
-                                    if ($LineNumberDelegateHead < $LineNumber2) {
-                                        $data['next_approver'] = $delegateLeave3->employee_id;
-                                    }
-                                }
-                            }
-
-                        }else{
-
-                            $LineNumber1 = Helper::countWeekdays($request_date,$leaveLineManager1->end_date);
-                            $LineNumber2 = Helper::countWeekdays($request_date,$leaveLineManager2->end_date);
-                            if ($LineNumber1 <= $LineNumber2) {
-                                $data['next_approver'] = Auth::user()->line_manager;
-                            }else{
-                                $data['next_approver'] = $line_manager1->line_manager;
-                            }
-
-
-
-                            // $line_manager3 = User::where("id", $leaveLineManager2->employee_id)->first();
-                            // $data['next_approver'] = $line_manager3->line_manager;
-                            // $DelegateLeave3 = DelegateLeave::where("requester_id", $line_manager3->id)
-                            // ->where('start_date', '<=', $request_date)
-                            // ->where('end_date', '>=', $request_date)->first();
-                            // if ($DelegateLeave3) {
-                            //     $data['next_approver'] = $DelegateLeave3->delegate_id;
-                            // }  
-
-
-                        }
-                        // $LineNumber1 = Helper::getDays($request_date,$leaveLineManager1->end_date);
-                        // $LineNumber2 = Helper::getDays($request_date,$leaveLineManager2->end_date);
-                        // if ($LineNumber1 <= $LineNumber2) {
-                        //     $data['next_approver'] = $line_manager1->id;
-                        // }
+                if ($delegateLeave3) {
+                    $LineNumber1 = Helper::countWeekdays($request_date,$delegateLeave->end_date);
+                    $LineNumber2 = Helper::countWeekdays($request_date,$delegateLeave3->end_date);
+                    
+                    if ($LineNumber1 <= $LineNumber2) {
+                        $data['next_approver'] = $delegateLeave->requester_id;
+                    }else{
+                        $data['next_approver'] = $delegateLeave3->employee_id;
                     }
                 }
             }
+
+            // ****** old process request ****** //
+            // $delegateLeave = DelegateLeave::where("requester_id", Auth::user()->line_manager)
+            // ->where('start_date', '<=', $request_date)
+            // ->where('end_date', '>=', $request_date)->first();
+            // $data['next_approver'] = Auth::user()->line_manager;
+            // if ($delegateLeave) {
+            //     $data['next_approver'] = $delegateLeave->delegate_id;
+            //     if ($delegateLeave->delegate_id  == Auth::user()->id) {
+            //         $line =  User::where("id", $delegateLeave->requester_id)->first();
+            //         if ($line) {
+            //             $data['next_approver'] = $line->line_manager;
+            //             $lineLeave = DelegateLeave::where("requester_id",  $line->line_manager)->where('start_date', '<=', $request_date)->where('end_date', '>=', $request_date)->first();
+                        
+            //             if ($lineLeave) {
+            //                 $data['next_approver'] = $lineLeave->delegate_id;
+
+            //                 $delegateLeave3 = LeaveRequest::where("employee_id", $lineLeave->delegate_id)
+            //                 ->where('start_date', '<=', $request_date)
+            //                 ->where('end_date', '>=', $request_date)->first();
+            //                 if ($delegateLeave3) {
+            //                     $LineNumberDelegateHead = Helper::countWeekdays($request_date,$delegateLeave3->end_date);
+
+            //                     $LineNumber1 = Helper::countWeekdays($request_date,$delegateLeave->end_date);
+            //                     $LineNumber2 = Helper::countWeekdays($request_date,$lineLeave->end_date);
+            //                     if ($LineNumber1 <= $LineNumber2) {
+            //                         $data['next_approver'] = $line->id;
+            //                         if ($LineNumberDelegateHead < $LineNumber1) {
+            //                             $data['next_approver'] = $delegateLeave3->employee_id;
+            //                         }
+            //                     }else{
+            //                         $data['next_approver'] = $line->line_manager;
+            //                         if ($LineNumberDelegateHead < $LineNumber2) {
+            //                             $data['next_approver'] = $delegateLeave3->employee_id;
+            //                         }
+            //                     }
+            //                 }
+            //             }
+            //         }
+            //     }else{
+            //         $delegateLeave1 = DelegateLeave::where("requester_id", $delegateLeave->delegate_id)
+            //         ->where('start_date', '<=', $request_date)
+            //         ->where('end_date', '>=', $request_date)->first();
+            //         if ($delegateLeave1) {
+            //             $line_manager1 = User::where("id", Auth::user()->line_manager)->first();
+            //             $data['next_approver'] = $line_manager1->line_manager;
+
+            //             $leaveLineManager2 = LeaveRequest::where("employee_id", $line_manager1->line_manager)
+            //             ->where('start_date', '<=', $request_date)
+            //             ->where('end_date', '>=', $request_date)->first();
+            //             $delegateLeave2 = DelegateLeave::where("requester_id", $line_manager1->line_manager)
+            //             ->where('start_date', '<=', $request_date)
+            //             ->where('end_date', '>=', $request_date)->first();
+
+            //             if ($delegateLeave2) {
+            //                 $data['next_approver'] = $delegateLeave2->delegate_id;
+            //                 $delegateLeave3 = LeaveRequest::where("employee_id", $delegateLeave2->delegate_id)
+            //                 ->where('start_date', '<=', $request_date)
+            //                 ->where('end_date', '>=', $request_date)->first();
+            //                 if ($delegateLeave3) {
+            //                     $LineNumber1 = Helper::countWeekdays($request_date,$delegateLeave->end_date);
+            //                     $LineNumber2 = Helper::countWeekdays($request_date,$leaveLineManager2->end_date);
+            //                     if ($LineNumber1 <= $LineNumber2) {
+            //                         $data['next_approver'] = $line_manager1->id;
+            //                     }else{
+            //                         $data['next_approver'] = $line_manager1->line_manager;
+            //                     }
+            //                 }
+
+            //             }else{
+            //                 if ($leaveLineManager2) {
+            //                     $LineNumber1 = Helper::countWeekdays($request_date,$delegateLeave->end_date);
+            //                     $LineNumber2 = Helper::countWeekdays($request_date,$leaveLineManager2->end_date);
+            //                     if ($LineNumber1 <= $LineNumber2) {
+            //                         $data['next_approver'] = $line_manager1->id;
+            //                     }else{
+            //                         $data['next_approver'] = $line_manager1->line_manager;
+            //                     }
+            //                 }
+            //             }
+            //         }else{
+            //             $delegateLeaveRequest = LeaveRequest::where("employee_id", $delegateLeave->delegate_id)
+            //             ->where('start_date', '<=', $request_date)
+            //             ->where('end_date', '>=', $request_date)->first();
+            //             if ($delegateLeaveRequest) {
+                           
+            //                 $line_manager1 = User::where("id", Auth::user()->line_manager)->first();
+            //                 $data['next_approver'] = $line_manager1->line_manager;
+            //                 $leaveLineManager2 = LeaveRequest::where("employee_id", $line_manager1->line_manager)
+            //                 ->where('start_date', '<=', $request_date)
+            //                 ->where('end_date', '>=', $request_date)->first();
+            //                 $delegateLeave2 = DelegateLeave::where("requester_id", $line_manager1->line_manager)
+            //                 ->where('start_date', '<=', $request_date)
+            //                 ->where('end_date', '>=', $request_date)->first();
+            //                 if ($delegateLeave2) {
+            //                     $data['next_approver'] = $delegateLeave2->delegate_id;
+            //                     $delegateLeave3 = LeaveRequest::where("employee_id", $delegateLeave2->delegate_id)
+            //                     ->where('start_date', '<=', $request_date)
+            //                     ->where('end_date', '>=', $request_date)->first();
+            //                     if ($delegateLeave3) {
+            //                         $LineNumberDelegateHead = Helper::countWeekdays($request_date,$delegateLeave3->end_date);
+                                    
+            //                         $LineNumber1 = Helper::countWeekdays($request_date,$delegateLeave->end_date);
+            //                         $LineNumber2 = Helper::countWeekdays($request_date,$leaveLineManager2->end_date);
+            //                         if ($LineNumber1 <= $LineNumber2) {
+            //                             $data['next_approver'] = $line_manager1->id;
+            //                             if ($LineNumberDelegateHead < $LineNumber1) {
+            //                                 $data['next_approver'] = $delegateLeave3->employee_id;
+            //                             }
+            //                         }else{
+            //                             $data['next_approver'] = $line_manager1->line_manager;
+            //                             if ($LineNumberDelegateHead < $LineNumber2) {
+            //                                 $data['next_approver'] = $delegateLeave3->employee_id;
+            //                             }
+            //                         }
+            //                     }
+    
+            //                 }else{
+            //                     // $line_manager1 = User::where("id", Auth::user()->line_manager)->first();
+            //                     // $data['next_approver'] = $line_manager1->line_manager;
+            //                     // $leaveLineManager2 = LeaveRequest::where("employee_id", $line_manager1->line_manager)
+            //                     // ->where('start_date', '<=', $request_date)
+            //                     // ->where('end_date', '>=', $request_date)->first();
+
+            //                     // dd($line_manager1);
+            //                     if ($leaveLineManager2) {
+            //                         // dd(5555555);
+            //                         $LineNumber1 = Helper::countWeekdays($request_date,$delegateLeave->end_date);
+            //                         $LineNumber2 = Helper::countWeekdays($request_date,$leaveLineManager2->end_date);
+            //                         if ($LineNumber1 <= $LineNumber2) {
+            //                             $data['next_approver'] = $line_manager1->id;
+            //                         }else{
+            //                             $data['next_approver'] = $line_manager1->line_manager;
+            //                         }
+            //                     }
+            //                     // dd(1123344);
+            //                 }
+            //             }
+            //         }
+            //     }
+            // }else{
+            //     $leaveLineManager1 = LeaveRequest::where("employee_id", Auth::user()->line_manager)
+            //     ->where('start_date', '<=', $request_date)
+            //     ->where('end_date', '>=', $request_date)->first();
+            //     if ($leaveLineManager1) {
+            //         $line_manager1 = User::where("id", Auth::user()->line_manager)->first();
+            //         $data['next_approver'] = $line_manager1->line_manager;
+            //         $leaveLineManager2 = LeaveRequest::where("employee_id", $line_manager1->line_manager)
+            //         ->where('start_date', '<=', $request_date)
+            //         ->where('end_date', '>=', $request_date)->first();
+
+            //         if ($leaveLineManager2) {
+            //             $DelegateLeave2 = DelegateLeave::where("requester_id", $line_manager1->line_manager)
+            //             ->where('start_date', '<=', $request_date)
+            //             ->where('end_date', '>=', $request_date)->first();
+            //             if ($DelegateLeave2) {
+            //                 $delegateLeave3 = LeaveRequest::where("employee_id", $DelegateLeave2->delegate_id)
+            //                 ->where('start_date', '<=', $request_date)
+            //                 ->where('end_date', '>=', $request_date)->first();
+            //                 $data['next_approver'] = $DelegateLeave2->delegate_id;
+            //                 if ($delegateLeave3) {
+            //                     $LineNumberDelegateHead = Helper::countWeekdays($request_date,$delegateLeave3->end_date);
+            //                     $LineNumber1 = Helper::countWeekdays($request_date,$leaveLineManager1->end_date);
+            //                     $LineNumber2 = Helper::countWeekdays($request_date,$leaveLineManager2->end_date);
+            //                     if ($LineNumber1 <= $LineNumber2) {
+            //                         $data['next_approver'] = $line_manager1->id;
+            //                         if ($LineNumberDelegateHead < $LineNumber1) {
+            //                             $data['next_approver'] = $delegateLeave3->employee_id;
+            //                         }
+            //                     }else{
+            //                         $data['next_approver'] = $line_manager1->line_manager;
+            //                         if ($LineNumberDelegateHead < $LineNumber2) {
+            //                             $data['next_approver'] = $delegateLeave3->employee_id;
+            //                         }
+            //                     }
+            //                 }
+
+            //             }else{
+
+            //                 $LineNumber1 = Helper::countWeekdays($request_date,$leaveLineManager1->end_date);
+            //                 $LineNumber2 = Helper::countWeekdays($request_date,$leaveLineManager2->end_date);
+            //                 if ($LineNumber1 <= $LineNumber2) {
+            //                     $data['next_approver'] = Auth::user()->line_manager;
+            //                 }else{
+            //                     $data['next_approver'] = $line_manager1->line_manager;
+            //                 }
+            //             }
+            //         }
+            //     }
+            // }
+
             if ($request->delegate_id) {
                 DelegateLeave::create(
                     [
@@ -482,14 +539,14 @@ class LeavesEmployeeController extends Controller
             LeaveRequest::create($data);
             
             // for send email
-            $line_manager = User::where("id", $data['next_approver'])->first();
-            $mail_message = ModelsMail::first();
-            if ($line_manager && $mail_message) {
-                if ($line_manager->email) {
-                    Mail::to("oudam.chhor@camma.com.kh")->send(new SendEmail($mail_message));
-                    // Mail::to($line_manager->email)->send(new SendEmail($mail_message));
-                }
-            }
+            // $line_manager = User::where("id", $data['next_approver'])->first();
+            // $mail_message = ModelsMail::first();
+            // if ($line_manager && $mail_message) {
+            //     if ($line_manager->email) {
+            //         Mail::to($line_manager->email)->send(new SendEmail($mail_message));
+            //     }
+            // }
+            DB::commit();
             return response()->json([
                 'success'=>'leave_request_created_successfully',
                 'status'=>200,
@@ -500,15 +557,144 @@ class LeavesEmployeeController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
+    public function replcementCreate(Request $request){
+        DB::beginTransaction();
+        try {
+            $duplicate  = self::duplicateLeace($request, $request->employee_id);
+            if ($duplicate) {
+                return response()->json([
+                    'error'=>'lang.start_date_and_end_date_already_exists',
+                    'status'=>404,
+                ]);
+            }
+            $data = $request->all();
+            $LeaveAllocation = LeaveAllocation::where("employee_id", $request->employee_id)->first();
+            $LeaveType = LeaveType::where("id", $request->leave_type_id)->first();
+
+            $data['line_manager_id'] = Auth::user()->line_manager;
+
+            // *** approve by head or branch *** //
+            $manager = User::where("id", Auth::user()->line_manager)->first();
+            $data['next_approver'] = $manager->line_manager;
+
+            if(Auth::user()->RolePermission == "BOD") {
+                $data['status'] = "approved_hod";
+                $data['next_approver'] = "Null";
+            }else if (Auth::user()->RolePermission == "CEO") {
+                $data['next_approver'] = Auth::user()->line_manager;
+
+                $data['status'] = "approved_lm";
+            }elseif (Auth::user()->RolePermission == "HOD" && $request->employee_id == Auth::user()->department->direct_manager_id) {
+                $data['next_approver'] = Auth::user()->line_manager;
+
+                $data['status'] = "approved_lm";
+            }else if(Auth::user()->RolePermission == "BM" && $request->employee_id == Auth::user()->branch->direct_manager_id){
+                $data['next_approver'] = Auth::user()->line_manager;
+
+                $data['status'] = "approved_lm";
+            }else{
+                $data['status'] = "pending";
+            }
+
+
+            $request_date = Carbon::now()->format('Y-m-d');
+            // $request_date = "2024-09-25";
+            // *** new process detegate leave *** //
+            $delegateLeave = DelegateLeave::where("requester_id", $data['next_approver'])
+            ->where('start_date', '<=', $request_date)
+            ->where('end_date', '>=', $request_date)->first();
+            if ($delegateLeave) {
+                $data['next_approver'] = $delegateLeave->delegate_id;
+                $delegateLeave3 = LeaveRequest::where("employee_id", $delegateLeave->delegate_id)
+                ->where('start_date', '<=', $request_date)
+                ->where('end_date', '>=', $request_date)->first();
+                if ($delegateLeave3) {
+                    $LineNumber1 = Helper::countWeekdays($request_date,$delegateLeave->end_date);
+                    $LineNumber2 = Helper::countWeekdays($request_date,$delegateLeave3->end_date);
+                    
+                    if ($LineNumber1 <= $LineNumber2) {
+                        $data['next_approver'] = $delegateLeave->requester_id;
+                    }else{
+                        $data['next_approver'] = $delegateLeave3->employee_id;
+                    }
+                }
+            }
+            if ($request->delegate_id) {
+                DelegateLeave::create(
+                    [
+                        "requester_id"      => $request->employee_id,
+                        "delegate_id"       => $request->delegate_id,
+                        "number_of_day"     => $request->number_of_day,
+                        "start_date"        => $request->start_date,
+                        "end_date"          => $request->end_date,
+                    ]
+                );
+            }
+
+            if (empty($LeaveType->type)) {
+                Toastr::error('Leave type not found','Error');
+                return redirect()->back();
+                DB::commit();
+            }
+
+            if ($LeaveAllocation == null) {
+                LeaveAllocation::create([
+                    'employee_id'  => $request->employee_id,
+                    'default_annual_leave'  => 0,
+                    'default_sick_leave'  => 0,
+                    'default_special_leave'  => 0,
+                    'default_unpaid_leave'  => 0,
+                    'total_annual_leave'    => $LeaveAllocation['total_annual_leave'] = 0 - $request->number_of_day,
+                    'total_sick_leave'  => 0,
+                    'total_special_leave'  => 0,
+                    'total_unpaid_leave'  => 0,
+                    'created_by'  => $request->employee_id,
+                ]);
+            }else{
+                $total_annual_leave = $LeaveType->type == "annual_leave" ? $LeaveAllocation->total_annual_leave - $request->number_of_day : $LeaveAllocation->total_annual_leave;
+                $total_sick_leave = $LeaveType->type == "sick_leave" ? $LeaveAllocation->total_sick_leave - $request->number_of_day : $LeaveAllocation->total_sick_leave;
+                $total_special_leave = $LeaveType->type == "special_leave" ? $LeaveAllocation->total_special_leave - $request->number_of_day : $LeaveAllocation->total_special_leave;
+                $total_unpaid_leave = $LeaveType->type == "unpaid_leave" ? $LeaveAllocation->total_unpaid_leave - $request->number_of_day : $LeaveAllocation->total_unpaid_leave;
+                $total_long_sick_leave = $LeaveType->type == "long_sick_leave" ? $LeaveAllocation->total_long_sick_leave - $request->number_of_day : $LeaveAllocation->total_long_sick_leave;
+                
+                $LeaveAllocation["total_annual_leave"]      = $total_annual_leave;
+                $LeaveAllocation["total_sick_leave"]        = $total_sick_leave;
+                $LeaveAllocation["total_special_leave"]     = $total_special_leave;
+                $LeaveAllocation["total_unpaid_leave"]      = $total_unpaid_leave;
+                $LeaveAllocation["total_long_sick_leave"]   = $total_long_sick_leave;   
+                
+                $data["total_annual_leave"]      = $total_annual_leave;
+                $data["total_sick_leave"]        = $total_sick_leave;
+                $data["total_special_leave"]     = $total_special_leave;
+                $data["total_unpaid_leave"]      = $total_unpaid_leave;
+                $data["total_long_sick_leave"]   = $total_long_sick_leave;   
+
+                $LeaveAllocation->save();
+            }
+
+            $data['employee_id'] = $request->employee_id;
+            $data['created_by'] = Auth::user()->id;
+            $data['request_to'] = Auth::user()->id;
+            
+            LeaveRequest::create($data);
+            
+            // for send email
+            // $line_manager = User::where("id", $data['next_approver'])->first();
+            // $mail_message = ModelsMail::first();
+            // if ($line_manager && $mail_message) {
+            //     if ($line_manager->email) {
+            //         Mail::to($line_manager->email)->send(new SendEmail($mail_message));
+            //     }
+            // }
+            DB::commit();
+            return response()->json([
+                'success'=>'leave_request_created_successfully',
+                'status'=>200,
+            ]);
+        } catch (\Throwable $exp) {
+            DB::rollback();
+            Toastr::error('Leave request created fail.','Error');
+        }
     }
 
     /**
@@ -545,7 +731,7 @@ class LeavesEmployeeController extends Controller
     public function update(Request $request)
     {
         try{
-            $duplicate  = self::duplicateLeace($request);
+            $duplicate  = self::duplicateLeace($request, Auth::user()->id);
             if ($duplicate) {
                 return response()->json([
                     'error'=>'lang.start_date_and_end_date_already_exists',
@@ -655,6 +841,137 @@ class LeavesEmployeeController extends Controller
         }
     }
 
+    public function replcementUpdate(Request $request)
+    {
+        try{
+            $duplicate  = self::duplicateLeace($request, $request->employee_id);
+            if ($duplicate) {
+                return response()->json([
+                    'error'=>'lang.start_date_and_end_date_already_exists',
+                    'status'=>404,
+                ]);
+            }
+            $LeaveAllocation = LeaveAllocation::where("employee_id", $request->employee_id)->first();
+            $LeaveType = LeaveType::where("id", $request->leave_type_id)->first();
+            $data = LeaveRequest::with("leaveType")->where("id", $request->id)->first();
+            $delegateLeave = DelegateLeave::where("requester_id", $data->employee_id)->where("start_date", $data->start_date)->where("end_date",$data->end_date)->first();
+
+            if ($LeaveType->type == $data->leaveType->type) {
+                $number_day = 0;
+                if ( $request->number_of_day > $data->number_of_day) {
+                    $number_day = $data->number_of_day - $request->number_of_day;
+                }else if ( $request->number_of_day < $data->number_of_day) {
+                    $number_day = $data->number_of_day - $request->number_of_day;
+                }
+                $LeaveAllocation->total_annual_leave += $LeaveType->type == "annual_leave" ? $number_day : 0;
+                $LeaveAllocation->total_sick_leave += $LeaveType->type == "sick_leave" ? $number_day : 0;
+                $LeaveAllocation->total_special_leave += $LeaveType->type == "special_leave" ? $number_day : 0;
+                $LeaveAllocation->total_unpaid_leave += $LeaveType->type == "unpaid_leave" ? $number_day : 0;
+                $LeaveAllocation->total_long_sick_leave += $LeaveType->type == "long_sick_leave" ? $number_day : 0;
+                
+                $data["total_annual_leave"]      = $LeaveAllocation->total_annual_leave;
+                $data["total_sick_leave"]        = $LeaveAllocation->total_sick_leave;
+                $data["total_special_leave"]     = $LeaveAllocation->total_special_leave;
+                $data["total_unpaid_leave"]      = $LeaveAllocation->total_unpaid_leave;
+                $data["total_long_sick_leave"]   = $LeaveAllocation->total_long_sick_leave;
+
+                $LeaveAllocation->save();
+                
+            }else{
+                // When modifying the Status, sum the number of day to old status.
+                if ($data->leaveType->type == "annual_leave") {
+                    $current_annual_leave = $LeaveAllocation->total_annual_leave + $request->number_of_day;
+                    $LeaveAllocation->total_annual_leave =  $current_annual_leave > $LeaveAllocation->default_annual_leave ? $LeaveAllocation->default_annual_leave : $current_annual_leave;
+                }else if($data->leaveType->type == "sick_leave"){
+                    $current_sick_leave = $LeaveAllocation->total_sick_leave + $request->number_of_day;
+                    $LeaveAllocation->total_sick_leave = $current_sick_leave > $LeaveAllocation->default_sick_leave ? $LeaveAllocation->default_sick_leave : $current_sick_leave;
+                }else if($data->leaveType->type == "special_leave") {
+                    $current_special_leave = $LeaveAllocation->total_special_leave + $request->number_of_day;
+                    $LeaveAllocation->total_special_leave = $current_special_leave > $LeaveAllocation->default_special_leave ? $LeaveAllocation->default_special_leave : $current_special_leave;
+                }else if($data->leaveType->type == "unpaid_leave"){
+                    $current_unpaid_leave = $LeaveAllocation->total_unpaid_leave + $request->number_of_day;
+                    if ($current_unpaid_leave == 0) {
+                        $LeaveAllocation->total_unpaid_leave = 0;
+                    }else{
+                        $LeaveAllocation->total_unpaid_leave =  $current_unpaid_leave;
+                    }
+                    // $LeaveAllocation->total_unpaid_leave = $current_unpaid_leave >= $LeaveAllocation->default_unpaid_leave ? $LeaveAllocation->default_unpaid_leave : $current_unpaid_leave;
+                }else if($data->leaveType->type == "long_sick_leave"){
+                    $current_long_sick_leave = $LeaveAllocation->total_long_sick_leave + $request->number_of_day;
+                    if ($current_long_sick_leave == 0) {
+                        $LeaveAllocation->total_long_sick_leave = 0;
+                    }else {
+                        $LeaveAllocation->total_long_sick_leave = $current_long_sick_leave;
+                    }
+                    // $LeaveAllocation->total_long_sick_leave = $current_long_sick_leave >= $LeaveAllocation->default_long_sick_leave ? $LeaveAllocation->default_long_sick_leave : $current_long_sick_leave;
+                }
+
+                // When modifying the Status, subtract the number of day from the new status.
+                $total_annual_leave = $LeaveType->type == "annual_leave" ? $LeaveAllocation->total_annual_leave - $request->number_of_day : $LeaveAllocation->total_annual_leave;
+                $total_sick_leave = $LeaveType->type == "sick_leave" ? $LeaveAllocation->total_sick_leave - $request->number_of_day : $LeaveAllocation->total_sick_leave;
+                $total_special_leave = $LeaveType->type == "special_leave" ? $LeaveAllocation->total_special_leave - $request->number_of_day : $LeaveAllocation->total_special_leave;
+                $total_unpaid_leave = $LeaveType->type == "unpaid_leave" ? $LeaveAllocation->total_unpaid_leave - $request->number_of_day : $LeaveAllocation->total_unpaid_leave;
+                $total_long_sick_leave = $LeaveType->type == "long_sick_leave" ? $LeaveAllocation->total_long_sick_leave - $request->number_of_day : $LeaveAllocation->total_long_sick_leave;
+                
+                $LeaveAllocation->total_annual_leave        = $total_annual_leave;
+                $LeaveAllocation->total_sick_leave          = $total_sick_leave;
+                $LeaveAllocation->total_special_leave       = $total_special_leave;
+                $LeaveAllocation->total_unpaid_leave        = $total_unpaid_leave;
+                $LeaveAllocation->total_long_sick_leave     = $total_long_sick_leave; 
+
+                $data["total_annual_leave"]      = $total_annual_leave;
+                $data["total_sick_leave"]        = $total_sick_leave;
+                $data["total_special_leave"]     = $total_special_leave;
+                $data["total_unpaid_leave"]      = $total_unpaid_leave;
+                $data["total_long_sick_leave"]   = $total_long_sick_leave;
+
+                $LeaveAllocation->save();
+            }
+
+            if ($delegateLeave) {
+                if ($request->delegate_id) {
+                    $delegateLeave['delegate_id'] = $request->delegate_id;
+                }
+                $delegateLeave['start_date'] = $request->start_date;
+                $delegateLeave['end_date'] = $request->end_date;
+                $delegateLeave['number_of_day'] = $request->number_of_day;
+                $delegateLeave->save();
+            }else{
+                if ($request->delegate_id) {
+                    DelegateLeave::create(
+                        [
+                            "requester_id"      => $request->employee_id,
+                            "delegate_id"       => $request->delegate_id,
+                            "number_of_day"     => $request->number_of_day,
+                            "start_date"        => $request->start_date,
+                            "end_date"          => $request->end_date,
+                        ]
+                    );
+                }
+            }
+
+            $data['leave_type_id'] = $request->leave_type_id;
+            $data['start_date'] = $request->start_date;
+            $data['start_half_day'] = $request->start_half_day;
+            $data['end_date'] = $request->end_date;
+            $data['end_half_day'] = $request->end_half_day;
+            $data['number_of_day'] = $request->number_of_day;
+            $data['reason'] = $request->reason;
+            $data['updated_by'] = Auth::user()->id;
+
+            $data->save();
+            return response()->json([
+                'success'=>'leave_request_created_successfully',
+                'status'=>200,
+            ]);
+            Toastr::success('Leave requsest updated successfully.','Success');
+            return redirect()->back();
+        }catch(\Exception $e){
+            DB::rollback();
+            Toastr::error('Leave requsest updated fail.','Error');
+            return redirect()->back();
+        }
+    }
     /**
      * Remove the specified resource from storage.
      *

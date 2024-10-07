@@ -20,6 +20,9 @@ class LeaveTypeController extends Controller
      */
     public function index()
     {
+        if (permissionAccess("m8-s5","is_view")->value != "1") {
+            return view('upgrade.feature_not_available');
+        }
         $data = LeaveType::all();
         return view('leave_types.index',compact('data'));
     }

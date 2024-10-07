@@ -14,6 +14,9 @@ use Spatie\Activitylog\Models\Activity;
 class HolidayController extends Controller
 {
     public function index(){
+        if (permissionAccess("m8-s3","is_view")->value != "1") {
+            return view('upgrade.feature_not_available');
+        }
         $data = Holiday::orderBy('from', 'asc')->get();
         return view('holidays.index',compact('data'));
     }

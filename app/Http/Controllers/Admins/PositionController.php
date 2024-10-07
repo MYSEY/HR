@@ -22,6 +22,9 @@ class PositionController extends Controller
      */
     public function index()
     {
+        if (permissionAccess("m9-s2","is_view")->value != "1") {
+            return view('upgrade.feature_not_available');
+        }
         $data = Position::all();
         $positionType = Option::where('type','position_type')->get();
         $positionRange = Option::where('type','position_range')->get();

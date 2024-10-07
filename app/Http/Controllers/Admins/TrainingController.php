@@ -22,6 +22,9 @@ class TrainingController extends Controller
      */
     public function index()
     {
+        if (permissionAccess("m6-s2","is_view")->value != "1") {
+            return view('upgrade.feature_not_available');
+        }
         $dataTrainings = Training::get();
         $trainer = Trainer::where("status", 1)->get();
         $employee = User::whereIn("emp_status", ['Probation','Upcoming','1','10','2'])->get();

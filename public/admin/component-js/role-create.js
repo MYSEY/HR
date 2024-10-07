@@ -104,9 +104,10 @@ var dataPermission = function () {
     // block leave
     let leave_all = $('#leave_all').filter(':checked').length;
     let leaves_employee_checkbox = $('.leaves_employee_checkbox').filter(':checked').length;
+    let request_replacement_checkbox = $('.request_replacement_checkbox').filter(':checked').length;
     let leaves_admin_checkbox = $('.leaves_admin_checkbox').filter(':checked').length;
     let leaves_report_checkbox = $('.leave_report_checkbox').filter(':checked').length;
-    if (leave_all || leaves_admin_checkbox || leaves_employee_checkbox || leaves_report_checkbox) {
+    if (leave_all || leaves_admin_checkbox || leaves_employee_checkbox || request_replacement_checkbox || leaves_report_checkbox) {
         data.push({
             name: "employee_block",
             permission: [
@@ -148,7 +149,7 @@ var dataPermission = function () {
                 {
                     "name":"lang.leaves_employee",
                     "sub_menu_id":"10",
-                    "menu_id":"m10-s2 ",
+                    "menu_id":"m10-s2",
                     "url":"leaves/employee",
                     "is_view": $("#leaves_employee_view").val(),
                     "is_create": $("#leaves_employee_add").val(),
@@ -158,6 +159,27 @@ var dataPermission = function () {
                     "is_cancel": $("#leaves_employee_cancel").val(),
                     "is_print": $("#leaves_employee_print").val(),
                     "is_export": $("#leaves_employee_export").val(),
+                }
+            ]
+        })
+    }
+    if (request_replacement_checkbox) {
+        data.push({
+            name: "request_replacement",
+            permission: [
+                {
+                    "name":"lang.request_replacement",
+                    "sub_menu_id":"10",
+                    "menu_id":"m10-s4 ",
+                    "url":"leaves/replcement",
+                    "is_view": $("#request_replacement_view").val(),
+                    "is_create": $("#request_replacement_add").val(),
+                    "is_import": $("#request_replacement_import").val(),
+                    "is_update": $("#request_replacement_edit").val(),
+                    "is_delete": $("#request_replacement_delete").val(),
+                    "is_cancel": $("#request_replacement_cancel").val(),
+                    "is_print": $("#request_replacement_print").val(),
+                    "is_export": $("#request_replacement_export").val(),
                 }
             ]
         })
@@ -429,26 +451,6 @@ var dataPermission = function () {
             ]
         })
     }
-    if (pay_motor_rentals_checkbox) {
-        data.push({
-            name: "pay_motor_rental",
-            permission: [
-                {
-                    "name":"lang.pay_motor_rental",
-                    "sub_menu_id":"5",
-                    "menu_id":"m5-s2",
-                    "url":"motor-rentel/pay",
-                    "is_view": $("#Pay_motor_rental_view").val(),
-                    "is_create": $("#Pay_motor_rental_add").val(),
-                    "is_approve": $("#Pay_motor_rental_approve").val(),
-                    "is_update": $("#Pay_motor_rental_edit").val(),
-                    "is_delete": $("#Pay_motor_rental_delete").val(),
-                    "is_print": $("#Pay_motor_rental_print").val(),
-                    "is_export": $("#Pay_motor_rental_export").val(),
-                },
-            ]
-        })
-    }
     if (generate_pay_motor_rentals_checkbox) {
         data.push({
             name: "generate_pay_motor",
@@ -465,6 +467,26 @@ var dataPermission = function () {
                     "is_delete": $("#generate_pay_motor_rental_delete").val(),
                     "is_print": $("#generate_pay_motor_rental_print").val(),
                     "is_export": $("#generate_pay_motor_rental_export").val(),
+                },
+            ]
+        })
+    }
+    if (pay_motor_rentals_checkbox) {
+        data.push({
+            name: "pay_motor_rental",
+            permission: [
+                {
+                    "name":"lang.pay_motor_rental",
+                    "sub_menu_id":"5",
+                    "menu_id":"m5-s2",
+                    "url":"motor-rentel/pay",
+                    "is_view": $("#Pay_motor_rental_view").val(),
+                    "is_create": $("#Pay_motor_rental_add").val(),
+                    "is_approve": $("#Pay_motor_rental_approve").val(),
+                    "is_update": $("#Pay_motor_rental_edit").val(),
+                    "is_delete": $("#Pay_motor_rental_delete").val(),
+                    "is_print": $("#Pay_motor_rental_print").val(),
+                    "is_export": $("#Pay_motor_rental_export").val(),
                 },
             ]
         })

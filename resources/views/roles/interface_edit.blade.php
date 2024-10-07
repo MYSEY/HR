@@ -351,7 +351,7 @@
                             </div>
                         </div>
                     </div>
-                     {{-- block leave employee --}}
+                    {{-- block leave employee --}}
                     <div class="col-md-12">
                         <div class="form-group row">
                             <div class="col-md-2">
@@ -404,6 +404,64 @@
                                     <input type="checkbox" class="leave_checkbox leaves_employee_checkbox" id="leaves_employee_export" 
                                     {{SetCheckbox($arrayPermissions,"lang.leaves_employee","is_export")->checkbox}}
                                     value="{{SetCheckbox($arrayPermissions,"lang.leaves_employee","is_export")->value}}"
+                                    > <span class="checkmark"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    {{-- block leave request replacement --}}
+                    <div class="col-md-12">
+                        <div class="form-group row">
+                            <div class="col-md-2">
+                                <label class="container-checkbox">@lang('lang.request_replacement')
+                                    <input type="checkbox" class="leave_checkbox" id="request_replacement" name="request_replacement"> <span class="checkmark"></span>
+                                </label>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="container-checkbox">@lang('lang.view')
+                                    <input type="checkbox" class="leave_checkbox request_replacement_checkbox" id="request_replacement_view" 
+                                    {{SetCheckbox($arrayPermissions,"lang.request_replacement","is_view")->checkbox}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.request_replacement","is_view")->value}}"
+                                    > <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.add')
+                                    <input type="checkbox" class="leave_checkbox request_replacement_checkbox" id="request_replacement_add" 
+                                    {{SetCheckbox($arrayPermissions,"lang.request_replacement","is_create")->checkbox}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.request_replacement","is_create")->value}}"
+                                    > <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.edit')
+                                    <input type="checkbox" class="leave_checkbox request_replacement_checkbox" id="request_replacement_edit" 
+                                    {{SetCheckbox($arrayPermissions,"lang.request_replacement","is_update")->checkbox}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.request_replacement","is_update")->value}}"
+                                    > <span class="checkmark"></span>
+                                </label>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="container-checkbox">@lang('lang.delete')
+                                    <input type="checkbox" class="leave_checkbox request_replacement_checkbox" id="request_replacement_delete" 
+                                    {{SetCheckbox($arrayPermissions,"lang.request_replacement","is_delete")->checkbox}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.request_replacement","is_delete")->value}}"
+                                    > <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.cancel')
+                                    <input type="checkbox" class="leave_checkbox request_replacement_checkbox" id="request_replacement_cancel" 
+                                    {{SetCheckbox($arrayPermissions,"lang.request_replacement","is_cancel")->checkbox}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.request_replacement","is_cancel")->value}}"
+                                    > <span class="checkmark"></span>
+                                </label>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="container-checkbox">@lang('lang.print')
+                                    <input type="checkbox" class="leave_checkbox request_replacement_checkbox" id="request_replacement_print" 
+                                    {{SetCheckbox($arrayPermissions,"lang.request_replacement","is_print")->checkbox}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.request_replacement","is_print")->value}}"
+                                    > <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.export')
+                                    <input type="checkbox" class="leave_checkbox request_replacement_checkbox" id="request_replacement_export" 
+                                    {{SetCheckbox($arrayPermissions,"lang.request_replacement","is_export")->checkbox}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.request_replacement","is_export")->value}}"
                                     > <span class="checkmark"></span>
                                 </label>
                             </div>
@@ -642,6 +700,8 @@
                             </div>
                         </div>
                     </div>
+
+                     {{-- block payroll staff resign --}}
                     <div class="col-md-12">
                         <div class="form-group row">
                             <div class="col-md-2">

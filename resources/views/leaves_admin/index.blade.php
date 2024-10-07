@@ -124,15 +124,16 @@
                                                                 @endif
                                                                 <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" aria-sort="ascending" aria-label="Profle: activate to sort column descending">#</th>
                                                                 <th class="sorting sorting_asc stuck-scroll-3" tabindex="0" aria-controls="DataTables_Table_0" aria-sort="ascending" aria-label="Employee: activate to sort column descending" >@lang('lang.employee_name')</th>
+                                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" aria-label="handover staff: activate to sort column ascending">@lang('lang.handover_staff')</th>
+                                                                {{-- @if (Auth::user()->RolePermission == 'HRAdmin') --}}
+                                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" aria-label="approver: activate to sort column ascending">@lang('lang.approver')</th>
+                                                                {{-- @endif --}}
                                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" aria-label="Leave Type: activate to sort column ascending">@lang('lang.leave_type')</th>
                                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" aria-label="Reason: activate to sort column ascending">@lang('lang.reason')</th>
                                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" aria-label="No of Days: activate to sort column ascending">@lang('lang.number_of_days')</th>
                                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" aria-label="From: activate to sort column ascending">@lang('lang.start_date')</th>
                                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" aria-label="To: activate to sort column ascending">@lang('lang.end_date')</th>
-                                                                @if (Auth::user()->RolePermission == 'HRAdmin')
-                                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" aria-label="approver: activate to sort column ascending">@lang('lang.approver')</th>
-                                                                @endif
-                                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" aria-label="No of Days: activate to sort column ascending">@lang('lang.handover_staff')</th>
+                                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" aria-label="request by: activate to sort column ascending">@lang('lang.request_by')</th>
                                                                 <th ass="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" aria-sort="ascending" aria-label="remark: activate to sort column descending" style="text-align: center;">@lang('lang.remark')</th>     
                                                                 <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" aria-sort="ascending" aria-label="status: activate to sort column descending" style="text-align: center;">@lang('lang.status')</th>
                                                                 <th class="text-end sorting" tabindex="0" aria-controls="DataTables_Table_0" aria-label="Actions: activate to sort column ascending">@lang('lang.actions')</th>
@@ -149,15 +150,16 @@
                                                                         @endif
                                                                         <td class="ids">{{++$key ?? ""}}</td>
                                                                         <td class="stuck-scroll-3 employee_name"> {{$request->employee ? $request->employee->employee_name_en : ""}} </td>
+                                                                        <td>{{ $request->handover ? $request->handover->employee_name_en : ""}}</td>
+                                                                        {{-- @if (Auth::user()->RolePermission == "HR" || Auth::user()->RolePermission == 'HRAdmin') --}}
+                                                                        <td>{{ $request->Approve ? $request->Approve : ""}}</td>
+                                                                        {{-- @endif --}}
                                                                         <td class="">{{$request->leaveType->name}}</td>
                                                                         <td><a href="#">{{$request->reason}}</a></td>
                                                                         <td>{{$request->number_of_day}} Day</td>
                                                                         <td >{{\Carbon\Carbon::parse($request->start_date)->format('d-M-Y') ?? ''}}</td>
                                                                         <td>{{\Carbon\Carbon::parse($request->end_date)->format('d-M-Y') ?? ''}}</td>
-                                                                        @if (Auth::user()->RolePermission == "HR" || Auth::user()->RolePermission == 'HRAdmin')
-                                                                            <td>{{ $request->Approve ? $request->Approve : ""}}</td>
-                                                                        @endif
-                                                                        <td>{{ $request->handover ? $request->handover->employee_name_en : ""}}</td>
+                                                                        <td> {{$request->createdBy->employee_name_en}} </td>
                                                                         <td>{{$request->remark}}</td>
                                                                         <td>
                                                                             @if ($request->status == "rejected")
@@ -168,9 +170,9 @@
                                                                                 <span class="badge bg-inverse-danger" style="font-size: 13px;">Rejected by Line Manager</span>
                                                                             @elseif ($request->status == "rejected_hod")
                                                                                 <span class="badge bg-inverse-danger" style="font-size: 13px;">Rejected by ACEO/Head/BM</span>
-                                                                            @elseif ($request->status == "pending")
-                                                                            <span class="badge bg-inverse-info" style="font-size: 13px;">Waiting Approve by Line Manager</span>
-                                                                            @elseif ($request->status == "approved_lm")
+                                                                            {{-- @elseif ($request->status == "pending")
+                                                                                <span class="badge bg-inverse-info" style="font-size: 13px;">Waiting Approve by Line Manager</span> --}}
+                                                                            @elseif ($request->status == "approved_lm" || $request->status == "pending")
                                                                                 <span class="badge bg-inverse-info" style="font-size: 13px;">Waiting Approve by ACEO/Head/BM</span>
                                                                             @elseif ($request->status == "approved_hod")
                                                                                 <span class="badge bg-inverse-info" style="font-size: 13px;">Waiting Verify by HR</span>
@@ -609,12 +611,14 @@
                             tr += '<tr class="odd">'+
                                 '<td class="ids">'+(e+1)+'</td>'+
                                 '<td>' + (row.employee ? row.employee.employee_name_en : "") + '</td>'+
+                                '<td>' + (row.handover ? row.handover.employee_name_en : "") + '</td>'+
+                                '<td></td>'+
                                 '<td>' + (row.leave_type.name) + '</td>'+
+                                '<td>' + (row.reason ? row.reason : "") + '</td>'+
+                                '<td>' + (row.number_of_day) + ' Day</td>'+
                                 '<td>' + (start_date) + '</td>'+
                                 '<td>' + (end_date) + '</td>'+
-                                '<td>' + (row.number_of_day) + ' Day</td>'+
-                                '<td>' + (row.handover ? row.handover.employee_name_en : "") + '</td>'+
-                                '<td>' + (row.reason ? row.reason : "") + '</td>'+
+                                '<td>' +(row.created_by.employee_name_en)+ '</td>'+
                                 '<td>' + (row.remark ? row.remark : "" ) + '</td>'+
                                 '<td>' + (status) + '</td>'+
                                 '<td class="text-end">'+

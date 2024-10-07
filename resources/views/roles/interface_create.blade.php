@@ -235,7 +235,7 @@
                             </div>
                         </div>
                     </div>
-                     {{-- block leave employee --}}
+                    {{-- block leave employee --}}
                     <div class="col-md-12">
                         <div class="form-group row">
                             <div class="col-md-2">
@@ -271,6 +271,46 @@
                                 </label>
                                 <label class="container-checkbox">@lang('lang.export')
                                     <input type="checkbox" class="leave_checkbox leaves_employee_checkbox" id="leaves_employee_export" name="leaves_employee_export"> <span class="checkmark"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    {{-- block leave request replacement --}}
+                    <div class="col-md-12">
+                        <div class="form-group row">
+                            <div class="col-md-2">
+                                <label class="container-checkbox">@lang('lang.request_replacement')
+                                    <input type="checkbox" class="leave_checkbox" id="request_replacement" name="request_replacement"> <span class="checkmark"></span>
+                                </label>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="container-checkbox">@lang('lang.view')
+                                    <input value="" type="checkbox" class="leave_checkbox request_replacement_checkbox" id="request_replacement_view" name="request_replacement_view"> <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.add')
+                                    <input type="checkbox" class="leave_checkbox request_replacement_checkbox" id="request_replacement_add" name="request_replacement_add"> <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.edit')
+                                    <input type="checkbox" class="leave_checkbox request_replacement_checkbox" id="request_replacement_edit" name="request_replacement_edit"> <span class="checkmark"></span>
+                                </label>
+                                {{-- <label class="container-checkbox">@lang('lang.import')
+                                    <input type="checkbox" class="leave_checkbox request_replacement_checkbox" id="request_replacement_import" name="request_replacement_import"> <span class="checkmark"></span>
+                                </label> --}}
+                            </div>
+                            <div class="col-md-3">
+                                <label class="container-checkbox">@lang('lang.delete')
+                                    <input type="checkbox" class="leave_checkbox request_replacement_checkbox" id="request_replacement_delete" name="request_replacement_delete" > <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.cancel')
+                                    <input type="checkbox" class="leave_checkbox request_replacement_checkbox" id="request_replacement_cancel" name="request_replacement_cancel"> <span class="checkmark"></span>
+                                </label>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="container-checkbox">@lang('lang.print')
+                                    <input type="checkbox" class="leave_checkbox request_replacement_checkbox" id="request_replacement_print" name="request_replacement_print"> <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.export')
+                                    <input type="checkbox" class="leave_checkbox request_replacement_checkbox" id="request_replacement_export" name="request_replacement_export"> <span class="checkmark"></span>
                                 </label>
                             </div>
                         </div>

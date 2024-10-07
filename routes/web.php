@@ -146,6 +146,10 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('/leaves/employee/edit', [LeavesEmployeeController::class,'edit']);
     Route::post('/leaves/employee/update', [LeavesEmployeeController::class,'update']);
     Route::post('/leaves/employee/delete', [LeavesEmployeeController::class,'destroy']);
+
+    Route::get('/leaves/replcement', [LeavesEmployeeController::class,'indexReplcement']);
+    Route::post('/leaves/replacement/store', [LeavesEmployeeController::class,'replcementCreate']);
+    Route::post('/leaves/replacement/update', [LeavesEmployeeController::class,'replcementUpdate']);
     
     Route::get('/leaves/type', [LeaveTypeController::class,'index']);
     Route::post('/leave/type/create', [LeaveTypeController::class,'store']);

@@ -683,6 +683,8 @@ return[
 	"requests_cancel"=>"ស្នើសុំបោះបង់",
 	"request_date"=>"កាលបរិច្ឆេទស្នើសុំ",
 	"request_leave"=>"ស្នើសុំសម្រាក",
+	"request_by"=>"ស្នើសុំដោយ",
+	"request_replacement"=>"ស្នើសុំឈប់សម្រាក",
 	"reset_password"=>"កំណត់ពាក្យសម្ងាត់ឡើងវិញ ",
 	"reset_your_password"=>"កំណត់ពាក្យសម្ងាត់របស់អ្នក ",
 	"role_name"=>"តួនាទីចូលប្រើ",

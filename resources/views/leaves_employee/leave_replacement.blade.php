@@ -77,53 +77,16 @@
         <div class="page-header">
             <div class="row align-items-center">
                 <div class="col">
-                    <h3 class="page-title">@lang('lang.leaves_employee')</h3>
+                    <h3 class="page-title">@lang('lang.request_replacement')</h3>
                     <ul class="breadcrumb">
                         <li class="breadcrumb-item"><a href="{{ url('/dashboad/employee') }}">@lang('lang.dashboard')</a></li>
-                        <li class="breadcrumb-item active">@lang('lang.leaves_employee')</li>
+                        <li class="breadcrumb-item active">@lang('lang.request_replacement')</li>
                     </ul>
                 </div>
                 <div class="col-auto float-end ms-auto">
-                    @if (permissionAccess("m10-s2","is_create")->value == "1") <a href="#" class="btn add-btn" data-bs-toggle="modal" data-bs-target="#add_leave"><i class="fa fa-plus"></i>@lang('lang.request_leave')</a>@endif
+                    @if (permissionAccess("m10-s4","is_create")->value == "1") <a href="#" class="btn add-btn" data-bs-toggle="modal" data-bs-target="#add_leave"><i class="fa fa-plus"></i>@lang('lang.request_leave')</a>@endif
                 </div>
             </div>
-        </div>
-        {{-- @if (Auth::user()->RolePermission=="Employee") --}}
-            <div class="page-header">
-                <div class="row align-items-center">
-                    <div class="col">
-                        <h4>@lang('lang.carried_forward_leave')</h4>
-                        <ul class="breadcrumb">
-                            <li class="breadcrumb-item">@lang('lang.year_1') = <span>{{$LeaveAllocation ? $LeaveAllocation->year_1 : 0}}</span> @lang('lang.days')</li>
-                            <li class="breadcrumb-item">@lang('lang.year_2') = <span>{{$LeaveAllocation ? $LeaveAllocation->year_2 : 0}}</span> @lang('lang.days')</li>
-                            <li class="breadcrumb-item">@lang('lang.year_3') = <span>{{$LeaveAllocation ? $LeaveAllocation->year_3 : 0}}</span> @lang('lang.days')</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        {{-- @endif --}}
-        
-        <div class="row">
-            @if (count($dataLeaveType) > 0)
-                @foreach ($dataLeaveType as $type)
-                    <div class="col-md-2 col-sm-4">
-                        <div class="stats-info">
-                            <h6>{{$type->name}}</h6>
-                            @if ($type->type == "annual_leave")
-                                <h4>{{$LeaveAllocation ? $LeaveAllocation->total_annual_leave : 0}}</h4>
-                            @elseif($type->type == "sick_leave")
-                                <h4>{{$LeaveAllocation ? $LeaveAllocation->total_sick_leave : 0}}</h4>
-                            @elseif($type->type == "special_leave")
-                                <h4>{{$LeaveAllocation ? $LeaveAllocation->total_special_leave : 0}}</h4>
-                            @elseif($type->type == "unpaid_leave")
-                                <h4>{{$LeaveAllocation ? $LeaveAllocation->total_unpaid_leave : 0}}</h4>
-                            @elseif($type->type == "long_sick_leave")
-                                <h4>{{$LeaveAllocation ? $LeaveAllocation->total_long_sick_leave : 0}}</h4>
-                            @endif
-                        </div>
-                    </div>
-                @endforeach
-            @endif
         </div>
         {!! Toastr::message() !!}
         <div class="row">
@@ -139,6 +102,9 @@
                                             <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
                                                 rowspan="2" aria-sort="ascending"
                                                 aria-label="#: activate to sort column descending">#</th>
+                                            <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
+                                                rowspan="2" aria-label="name: activate to sort column descending"
+                                                style="text-align: center">@lang('lang.name')</th>
                                             <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
                                                 colspan="2" aria-label="Period of Leave: activate to sort column descending"
                                                 style="text-align: center">@lang('lang.period_of_leave')</th>
@@ -185,40 +151,18 @@
                                     </thead>
                                     <tbody>
                                         @if (count($dataLeaveRequest) > 0)
-                                            @php
-                                                $total_annual_leave= 0;
-                                                $total_sick_leave= 0;
-                                                $total_spacial_leave= 0;
-                                                $total_unpaid_leave= 0;
-                                                $total_long_sick_leave= 0;
-                                            @endphp
                                             @foreach ($dataLeaveRequest as $key=>$request)
-                                                @php
-                                                    if ($request->status != "rejected" && $request->status != "rejected_lm" && $request->status != "rejected_hod") {
-                                                        if ($request->leaveType->type == "annual_leave") {
-                                                            $total_annual_leave += $request->number_of_day;
-                                                        }else if ($request->leaveType->type == "sick_leave") {
-                                                            $total_sick_leave += $request->number_of_day;
-                                                        }else if ($request->leaveType->type == "special_leave") {
-                                                            $total_spacial_leave += $request->number_of_day;
-                                                        }else if ($request->leaveType->type == "unpaid_leave") {
-                                                            $total_unpaid_leave += $request->number_of_day;
-                                                        }else if ($request->leaveType->type == "long_sick_leave") {
-                                                            $total_long_sick_leave += $request->number_of_day;
-                                                        }
-                                                    }
-                                                    
-                                                @endphp
                                                 <tr class="odd">
                                                     <td>{{$key+1}}</td>
+                                                    <td>{{$request->employee->employee_name_en}}</td>
                                                     <td>{{\Carbon\Carbon::parse($request->start_date)->format('d-M-Y') ?? ''}}</td>
                                                     <td>{{\Carbon\Carbon::parse($request->end_date)->format('d-M-Y') ?? ''}}</td>
                                                     <td>{{$request->leaveType->type == "annual_leave"? $request->number_of_day : 0}}</td>
-                                                    <td>{{$request->status != "rejected" && $request->status != "rejected_lm" && $request->status != "rejected_hod" ? $request->leaveType->type == "annual_leave" ? $LeaveAllocation->default_annual_leave - $total_annual_leave : 0 : 0}}</td>
+                                                    <td>{{$request->leaveType->type == "annual_leave"? $request->total_annual_leave : 0}}</td>
                                                     <td>{{$request->leaveType->type == "sick_leave"? $request->number_of_day : 0}}</td>
-                                                    <td>{{$request->status != "rejected" && $request->status != "rejected_lm" && $request->status != "rejected_hod" ? $request->leaveType->type == "sick_leave" ? $LeaveAllocation->default_sick_leave - $total_sick_leave : 0 : 0}}</td>
+                                                    <td>{{$request->leaveType->type == "sick_leave"? $request->total_sick_leave : 0}}</td>
                                                     <td>{{$request->leaveType->type == "special_leave"? $request->number_of_day : 0}}</td>
-                                                    <td>{{$request->status != "rejected" && $request->status != "rejected_lm" && $request->status != "rejected_hod" ? $request->leaveType->type == "special_leave" ? $LeaveAllocation->default_special_leave - $total_spacial_leave : 0 : 0}}</td>
+                                                    <td>{{$request->leaveType->type == "special_leave"? $request->total_special_leave : 0}}</td>
                                                     <td>{{$request->leaveType->type == "unpaid_leave" ? $request->number_of_day : 0}}</td>
                                                     <td>{{$request->leaveType->type == "unpaid_leave"? $total_unpaid_leave : 0}}</td>
                                                     <td>{{$request->leaveType->type == "long_sick_leave" ? $request->number_of_day : 0}}</td>
@@ -245,15 +189,15 @@
                                                         @endif
                                                     </td>
                                                     <td class="text-end">
-                                                        @if (permissionAccess("m10-s2","is_update")->value == "1" || permissionAccess("m10-s2","is_delete")->value == "1")
+                                                        @if (permissionAccess("m10-s4","is_update")->value == "1" || permissionAccess("m10-s4","is_delete")->value == "1")
                                                             @if (isset($request->StatusApprve["pending"]))
                                                                 <div class="dropdown dropdown-action">
                                                                     <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i  class="material-icons">more_vert</i></a>
                                                                     <div class="dropdown-menu dropdown-menu-right">
-                                                                        @if (permissionAccess("m10-s2","is_update")->value == "1")
+                                                                        @if (permissionAccess("m10-s4","is_update")->value == "1")
                                                                             <a class="dropdown-item update" data-toggle="modal" data-id="{{$request->id}}"><i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')</a>
                                                                         @endif
-                                                                        @if (permissionAccess("m10-s2","is_delete")->value == "1")
+                                                                        @if (permissionAccess("m10-s4","is_delete")->value == "1")
                                                                             <a class="dropdown-item leaveDelete" href="#" data-toggle="modal" data-id="{{$request->id}}" data-numberday="{{$request->number_of_day}}" data-target="#delete_leave"><i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
                                                                         @endif
                                                                     </div>
@@ -273,8 +217,8 @@
             </div>
         </div>
     </div>
-    @include('leaves_employee.modal_form_create')
-    @include('leaves_employee.modal_form_edit')
+    @include('leaves_employee.modal_replacement_form_create')
+    @include('leaves_employee.modal_replacement_form_edit')
 
     <!-- Delete leave request Modal -->
     <div class="modal custom-modal fade" id="delete_leave" role="dialog">
