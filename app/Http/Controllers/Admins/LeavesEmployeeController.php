@@ -89,27 +89,19 @@ class LeavesEmployeeController extends Controller
         $dataLeaveType = LeaveType::get();
         $employees= DB::table('users')->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
                 if ($RolePermission == 'BM') {
-                    $query->where("id", Auth::user()->line_manager);
-                    $query->orWhere("branch_id", Auth::user()->branch_id);
+                    // $query->where("id", Auth::user()->line_manager);
+                    $query->where("branch_id", Auth::user()->branch_id);
                     $query->whereNot("id", Auth::user()->id);
                 }else if($RolePermission == 'HOD'){
-                    if (Auth::user()->id == Auth::user()->department->direct_manager_id) {
-                        $query->where("department_id", Auth::user()->department_id);
-                        $query->whereNot("id", Auth::user()->id);
-                    }else{
-                        $query->where("id", Auth::user()->line_manager);
-                        $query->orWhere("line_manager", Auth::user()->id);
-                        $query->whereNot("id", Auth::user()->id);
-                    }
+                    $query->where("department_id", Auth::user()->department_id);
+                    $query->whereNot("id", Auth::user()->id);
                 }else if($RolePermission == 'Employee'){
                     $query->where("id", Auth::user()->line_manager);
-                    $query->orWhere("line_manager", Auth::user()->line_manager);
                     $query->where("department_id", Auth::user()->department_id);
                     $query->where("branch_id", Auth::user()->branch_id);
                     $query->whereNot("id", Auth::user()->id);
                 }else if($RolePermission == 'HR' || $RolePermission =="HRAdmin"){
-                    $query->where("id", Auth::user()->line_manager);
-                    $query->orWhere("line_manager", Auth::user()->id);
+                    $query->where("department_id", Auth::user()->department_id);
                     $query->whereNot("id", Auth::user()->id);
                 }
             })->get();
