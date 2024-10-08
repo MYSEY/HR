@@ -242,8 +242,13 @@ class LeavesEmployeeController extends Controller
             $data['line_manager_id'] = Auth::user()->line_manager;
 
             // *** approve by head or branch *** //
-            $manager = User::where("id", Auth::user()->line_manager)->first();
-            $data['next_approver'] = $manager->line_manager;
+            // $manager = User::where("id", Auth::user()->line_manager)->first();
+            $dataBranch = Branchs::where("id", Auth::user()->branch->id)->first();
+            if($dataBranch->abbreviations == "HQ"){
+                $data['next_approver'] = Auth::user()->department->direct_manager_id;
+            }else{
+                $data['next_approver'] = Auth::user()->branch->direct_manager_id;
+            }
 
             if(Auth::user()->RolePermission == "BOD") {
                 $data['status'] = "approved_hod";

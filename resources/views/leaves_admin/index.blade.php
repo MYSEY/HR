@@ -187,6 +187,7 @@
                                                                                         data-id="{{$request->id}}"
                                                                                         data-condition="{{Auth::user()}}"
                                                                                         data-linemanager="{{$request->employee->line_manager}}"
+                                                                                        data-approveby="{{$request->next_approver}}"
                                                                                         data-status="{{$request->status}}"
                                                                                         data-employeename="{{$request->employee->employee_name_en}}"
                                                                                         data-startdate="{{$request->start_date}}"
@@ -464,65 +465,6 @@
                 });
             }
         });
-        // $('.reject_all').on('click', function(e) {
-        //     var allVals = [];  
-        //     $(".sub_chk:checked").each(function() {  
-        //         if ($(this).data('status') == "approved_hod") {
-        //             allVals.push($(this).attr('data-id'));
-        //         }
-        //     });
-        //     var ids = allVals.join(",");
-        //     if(allVals.length <=0)  
-        //     {
-        //         new Noty({
-        //             title: "",
-        //             text: '@lang("lang.please_select_item_befor_reject")',
-        //             timeout: 3000,
-        //             type: "error",
-        //             icon: true
-        //         }).show();
-        //     }  else {
-        //         $.confirm({
-        //             title: '@lang("lang.reject")!',
-        //             content: ""+
-        //                     "<p>There are "+allVals.length+" reject leave.</p>"+
-        //                     "<label>@lang('lang.are_you_sure_want_to_reject')?</label>",
-        //             type: 'red',
-        //             typeAnimated: true,
-        //             buttons: {
-        //                 tryAgain: {
-        //                     text: 'ok',
-        //                     btnClass: 'btn-red',
-        //                     action: function(){
-        //                         var id = this.$content.find('.id').val();
-        //                         axios.post('{{ URL("leaves/reject") }}', {
-        //                             ids : ids
-        //                         }).then(function(response) {
-        //                             new Noty({
-        //                                 title: "",
-        //                                 text: "@lang('lang.the_process_has_been_successfully').",
-        //                                 type: "success",
-        //                                 timeout: 3000,
-        //                                 icon: true
-        //                             }).show();
-        //                             window.location.replace("{{ URL('leaves/admin') }}");
-        //                         }).catch(function(error) {
-        //                             new Noty({
-        //                                 title: "",
-        //                                 text: "@lang('lang.something_went_wrong_please_try_again_later').",
-        //                                 type: "error",
-        //                                 icon: true
-        //                             }).show();
-        //                         });
-        //                     }
-        //                 },
-        //                     close: function () {
-        //                 }
-        //             }
-        //         }); 
-        //     } 
-        // });
-
         $(".btn-search").on("click", function() {
             $(this).prop('disabled', true);
             var condistion = $(this).data('condiction');
@@ -579,6 +521,7 @@
                             if (row.status == "pending" || row.status == "approved_lm" || row.status == "approved_hod") {
                                 candistion = '<button class="btn btn-outline-secondary btn-sm btn-approved" data-id="'+(row.id)+'" data-condition="'+(condistion)+'"'+
                                     'data-status="'+(row.status)+'"'+
+                                    'data-approveby="'+(row.next_approver)+'"'+
                                     'data-employeename="'+(row.employee.employee_name_en)+'"'+
                                     'data-startdate="'+(row.start_date)+'"'+
                                     'data-enddate="'+(row.end_date)+'"'+
@@ -641,6 +584,7 @@
                 $(".btn-search").prop("disabled",false);
             })
         });
+        let approve_by = "";
         $(document).on('click','.btn-approved', function(){
             let is_approve = "{{ Helper::permissionAccess('m10-s1','is_approve') }}";
             let is_reject = "{{ Helper::permissionAccess('m10-s1','is_reject') }}";
@@ -648,22 +592,36 @@
             let status = $(this).data("status");
             let condition = $(this).data("condition");
             let linemanager = $(this).data("linemanager");
-            if (((condition.role.role_type == "HR" || condition.role.role_type == "HRAdmin") && linemanager != condition.id ) && (status != "approved_hod" || status == "approved_lm")) {
-                let text_message = "";
-                if (status == "approved_lm") {
-                    text_message = "Pending manager head department approve";
-                }else{
-                    text_message = "Pending line manager approve";
+            approve_by = $(this).data("approveby");
+            if (condition.role.role_type == "HRAdmin") {
+                if (approve_by !="Null" || !approve_by) {
+                    if (condition.id != approve_by) {
+                        let text_message = "Pending manager head department or BM approve";
+                        new Noty({
+                            title: "",
+                            text: text_message,
+                            type: "error",
+                            timeout: 3000,
+                            icon: true
+                        }).show();
+                        return false;
+                    }
                 }
-                new Noty({
-                    title: "",
-                    text: text_message,
-                    type: "error",
-                    timeout: 3000,
-                    icon: true
-                }).show();
-                return false;
+            }else{
+                if (condition.id != approve_by) {
+                    let text_message = "Pending manager head department or BM approve";
+                    new Noty({
+                        title: "",
+                        text: text_message,
+                        type: "error",
+                        timeout: 3000,
+                        icon: true
+                    }).show();
+                    return false;
+                }
             }
+
+            
             let employeename = $(this).data("employeename");
             let startdate  = moment($(this).data("startdate")).format('D-MMM-YYYY');
             let enddate = moment($(this).data("enddate")).format('D-MMM-YYYY');

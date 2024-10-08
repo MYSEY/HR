@@ -337,13 +337,13 @@ class LeavesAdminController extends Controller
 
                         $email_send = User::where("id", $data['next_approver'])->first();
                         // for send email
-                        $mail_message = ModelsMail::first();
-                        if ($email_send && $mail_message) {
-                            if ($email_send->email) {
-                                Mail::to("oudam.chhor@camma.com.kh")->send(new SendEmail($mail_message));
-                                // Mail::to($email_send->email)->send(new SendEmail($mail_message));
-                            }
-                        }
+                        // $mail_message = ModelsMail::first();
+                        // if ($email_send && $mail_message) {
+                        //     if ($email_send->email) {
+                        //         // Mail::to("oudam.chhor@camma.com.kh")->send(new SendEmail($mail_message));
+                        //         Mail::to($email_send->email)->send(new SendEmail($mail_message));
+                        //     }
+                        // }
                     }
                 }
             }else if($role == 'HR' || $role =="HRAdmin") {
