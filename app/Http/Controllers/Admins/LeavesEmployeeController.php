@@ -265,6 +265,10 @@ class LeavesEmployeeController extends Controller
                 $data['next_approver'] = Auth::user()->line_manager;
 
                 $data['status'] = "approved_lm";
+            }elseif(Auth::user()->RolePermission == "HRAdmin" && Auth::user()->id == Auth::user()->department->direct_manager_id){
+                $data['next_approver'] = Auth::user()->line_manager;
+
+                $data['status'] = "approved_lm";
             }else{
                 $data['status'] = "pending";
             }
