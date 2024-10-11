@@ -249,29 +249,30 @@ class LeavesEmployeeController extends Controller
             }else{
                 $data['next_approver'] = Auth::user()->branch->direct_manager_id;
             }
-
+            $data['status'] = "pending";
             if(Auth::user()->RolePermission == "BOD") {
                 $data['status'] = "approved_hod";
                 $data['next_approver'] = "Null";
             }else if (Auth::user()->RolePermission == "CEO") {
                 $data['next_approver'] = Auth::user()->line_manager;
 
-                $data['status'] = "approved_lm";
+                // $data['status'] = "approved_lm";
             }elseif (Auth::user()->RolePermission == "HOD" && Auth::user()->id == Auth::user()->department->direct_manager_id) {
                 $data['next_approver'] = Auth::user()->line_manager;
 
-                $data['status'] = "approved_lm";
+                // $data['status'] = "approved_lm";
             }else if(Auth::user()->RolePermission == "BM" && Auth::user()->id == Auth::user()->branch->direct_manager_id){
                 $data['next_approver'] = Auth::user()->line_manager;
 
-                $data['status'] = "approved_lm";
+                // $data['status'] = "approved_lm";
             }elseif(Auth::user()->RolePermission == "HRAdmin" && Auth::user()->id == Auth::user()->department->direct_manager_id){
                 $data['next_approver'] = Auth::user()->line_manager;
 
-                $data['status'] = "approved_lm";
-            }else{
-                $data['status'] = "pending";
+                // $data['status'] = "approved_lm";
             }
+            // else{
+            //     $data['status'] = "pending";
+            // }
 
 
             $request_date = Carbon::now()->format('Y-m-d');
