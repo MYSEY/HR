@@ -67,7 +67,7 @@
             </div>
             <div class="col-sm-6 col-md-3 col-lg-3 col-xl-3 col-12">
                 <div style="display: flex" class="float-end">
-                    <button class="btn btn-sm btn-outline-secondary btn-search me-2" data-dismiss="modal" data-condiction="{{Auth::user()}}" id="icon-search-download-reload">
+                    <button class="btn btn-sm btn-outline-secondary btn-search me-2" data-dismiss="modal" data-condiction="{{Auth::user()->RolePermission}}" id="icon-search-download-reload">
                         <span class="btn-text-search"><i class="fa fa-search"></i></span>
                         <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
                     </button>
@@ -473,7 +473,7 @@
             $(this).prop('disabled', true);
             $(".btn-text-search").hide();
             $("#btn-text-loading").css('display', 'block');
-
+            var condistion = $(this).data("condiction"); 
             axios.post('{{ URL('leaves/admin/filter') }}', {
                 'condiction_tab': condiction_tab,
                 'employee_name': $("#employee_name").val(),
@@ -485,6 +485,7 @@
                     if (Leave_allocations.length > 0) {
                         var tr_allocation = "";
                         var td_allocation = "";
+                    
                         $(Leave_allocations).each(function (e, row) {
                             if (condistion == "HR" || condistion == "HRAdmin") {
                                 td_allocation = '<td>'+(row.employee.department.name_english)+'</td><td>'+(row.employee.branch.branch_name_en)+'</td>';             
@@ -578,7 +579,7 @@
                             '</tr>';
                         });
                     } else {
-                        var tr = '<tr><td colspan=10 align="center">ពុំមានទិន្នន័យសម្រាប់បង្ហាញ</td></tr>';
+                        var tr = '<tr><td colspan=15 align="center">ពុំមានទិន្នន័យសម្រាប់បង្ហាញ</td></tr>';
                     }
                     
                     if (condiction_tab == 1) {
