@@ -86,6 +86,14 @@ class LeaveRequest extends Model
         ->with('gender')
         ->with('branch');
     }
+    public function getDelegatedAttribute(){
+        $data = DelegateLeave::where("requester_id", $this->employee_id)->where("start_date",$this->start_date)->where("end_date",$this->end_date)->with("userDelegeted")->first();
+        $delegated = "";
+        if ($data) {
+            $delegated =  Helper::getLang() == 'en' ? $data->userDelegeted->employee_name_en : $data->userDelegeted->employee_name_kh;
+        }
+        return $delegated;
+    }
     public function leaveType(){
         return $this->belongsTo(LeaveType::class,'leave_type_id');
     }
@@ -98,7 +106,15 @@ class LeaveRequest extends Model
         }
         return $datas;
     }
-
+    public function approve(){
+        return $this->belongsTo(User::class,'next_approver')
+        ->select([
+            'id', 
+            'employee_name_en',
+            'employee_name_kh',
+            'number_employee',
+        ]);
+    }
     public function getApproveAttribute(){
         $approved_by = explode(',',$this->next_approver);
         $approve_name = '';

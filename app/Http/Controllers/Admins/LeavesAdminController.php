@@ -89,6 +89,7 @@ class LeavesAdminController extends Controller
                     $query->where("status", "cancel_hod");
                 }
             })->orderBy('id', 'DESC')->get();
+        // dd($dataLeaveRequest);
         return view('leaves_admin.index', compact('location', 'department', 'LeaveAllocation', 'dataLeaveRequest', 'requestCancels'));
     }
 
@@ -139,7 +140,7 @@ class LeavesAdminController extends Controller
                 'LeaveAllocations'=>$LeaveAllocation,
             ]);
         }else{
-            $dataLeaveRequest = LeaveRequest::with("employee")->with("leaveType")->with("handover")->with("createdBy")
+            $dataLeaveRequest = LeaveRequest::with("employee")->with("leaveType")->with("handover")->with("createdBy")->with("approve")
             ->leftJoin('users', 'leave_requests.employee_id', '=', 'users.id')
             ->select(
                 'leave_requests.*',
@@ -161,6 +162,9 @@ class LeavesAdminController extends Controller
             ->when($request->employee_name, function ($query, $employee_name) {
                 $query->where('users.employee_name_en', 'LIKE', '%'.$employee_name.'%');
             })->orderBy('id', 'DESC')->get();
+            foreach ($dataLeaveRequest as $leaveRequest) {
+                $leaveRequest->delegated_employee = $leaveRequest->getDelegatedAttribute();
+            }
             return response()->json([
                 'success'=>$dataLeaveRequest,
             ]);

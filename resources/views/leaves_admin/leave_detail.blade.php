@@ -38,6 +38,10 @@
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                 aria-label="Handover Staff: activate to sort column ascending">@lang('lang.handover_staff')</th>
                                             <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                aria-label="delegated: activate to sort column ascending">@lang('lang.delegated')</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                aria-label="request_by: activate to sort column ascending">@lang('lang.request_by')</th>
+                                            <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                 aria-label="Reason: activate to sort column ascending">@lang('lang.reason')</th>
                                             <th ass="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
                                                     aria-sort="ascending" aria-label="remark: activate to sort column descending" style="text-align: center;">@lang('lang.remark')</th>     
@@ -61,6 +65,8 @@
                                                     <td>{{\Carbon\Carbon::parse($request->end_date)->format('d-M-Y') ?? ''}}</td>
                                                     <td>{{$request->number_of_day}} Day</td>
                                                     <td>{{$request->handover ? $request->handover->employee_name_en : ""}}</td>
+                                                    <td>{{$request->Delegated}}</td>
+                                                    <td>{{$request->createdBy->employee_name_en}}</td>
                                                     <td>{{$request->reason}}</td>
                                                     <td>{{$request->remark}}</td>
                                                     <td>

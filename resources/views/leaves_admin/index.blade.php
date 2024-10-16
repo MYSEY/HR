@@ -67,7 +67,7 @@
             </div>
             <div class="col-sm-6 col-md-3 col-lg-3 col-xl-3 col-12">
                 <div style="display: flex" class="float-end">
-                    <button class="btn btn-sm btn-outline-secondary btn-search me-2" data-dismiss="modal" data-condiction="{{Auth::user()->RolePermission}}" id="icon-search-download-reload">
+                    <button class="btn btn-sm btn-outline-secondary btn-search me-2" data-dismiss="modal" data-condiction="{{Auth::user()}}" id="icon-search-download-reload">
                         <span class="btn-text-search"><i class="fa fa-search"></i></span>
                         <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
                     </button>
@@ -125,16 +125,17 @@
                                                                 <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" aria-sort="ascending" aria-label="Profle: activate to sort column descending">#</th>
                                                                 <th class="sorting sorting_asc stuck-scroll-3" tabindex="0" aria-controls="DataTables_Table_0" aria-sort="ascending" aria-label="Employee: activate to sort column descending" >@lang('lang.employee_name')</th>
                                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" aria-label="handover staff: activate to sort column ascending">@lang('lang.handover_staff')</th>
-                                                                {{-- @if (Auth::user()->RolePermission == 'HRAdmin') --}}
-                                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" aria-label="approver: activate to sort column ascending">@lang('lang.approver')</th>
-                                                                {{-- @endif --}}
+                                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" aria-label="delegated: activate to sort column ascending">@lang('lang.delegated')</th>
                                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" aria-label="Leave Type: activate to sort column ascending">@lang('lang.leave_type')</th>
                                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" aria-label="Reason: activate to sort column ascending">@lang('lang.reason')</th>
                                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" aria-label="No of Days: activate to sort column ascending">@lang('lang.number_of_days')</th>
                                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" aria-label="From: activate to sort column ascending">@lang('lang.start_date')</th>
                                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" aria-label="To: activate to sort column ascending">@lang('lang.end_date')</th>
                                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" aria-label="request by: activate to sort column ascending">@lang('lang.request_by')</th>
-                                                                <th ass="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" aria-sort="ascending" aria-label="remark: activate to sort column descending" style="text-align: center;">@lang('lang.remark')</th>     
+                                                                <th ass="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" aria-sort="ascending" aria-label="remark: activate to sort column descending" style="text-align: center;">@lang('lang.remark')</th>  
+                                                                {{-- @if (Auth::user()->RolePermission == 'HRAdmin') --}}
+                                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" aria-label="approver: activate to sort column ascending">@lang('lang.approver')</th>
+                                                                {{-- @endif --}}   
                                                                 <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" aria-sort="ascending" aria-label="status: activate to sort column descending" style="text-align: center;">@lang('lang.status')</th>
                                                                 <th class="text-end sorting" tabindex="0" aria-controls="DataTables_Table_0" aria-label="Actions: activate to sort column ascending">@lang('lang.actions')</th>
                                                             </tr>
@@ -151,9 +152,9 @@
                                                                         <td class="ids">{{++$key ?? ""}}</td>
                                                                         <td class="stuck-scroll-3 employee_name"> {{$request->employee ? $request->employee->employee_name_en : ""}} </td>
                                                                         <td>{{ $request->handover ? $request->handover->employee_name_en : ""}}</td>
-                                                                        {{-- @if (Auth::user()->RolePermission == "HR" || Auth::user()->RolePermission == 'HRAdmin') --}}
-                                                                        <td>{{ $request->Approve ? $request->Approve : ""}}</td>
-                                                                        {{-- @endif --}}
+
+                                                                        <td>{{$request->Delegated}}</td>
+                                                                        
                                                                         <td class="">{{$request->leaveType->name}}</td>
                                                                         <td><a href="#">{{$request->reason}}</a></td>
                                                                         <td>{{$request->number_of_day}} Day</td>
@@ -161,6 +162,9 @@
                                                                         <td>{{\Carbon\Carbon::parse($request->end_date)->format('d-M-Y') ?? ''}}</td>
                                                                         <td> {{$request->createdBy->employee_name_en}} </td>
                                                                         <td>{{$request->remark}}</td>
+                                                                        {{-- @if (Auth::user()->RolePermission == "HR" || Auth::user()->RolePermission == 'HRAdmin') --}}
+                                                                        <td>{{ $request->Approve ? $request->Approve : ""}}</td>
+                                                                        {{-- @endif --}}
                                                                         <td>
                                                                             @if ($request->status == "rejected")
                                                                                 <span class="badge bg-inverse-danger" style="font-size: 13px;">Rejected by HR</span>
@@ -185,7 +189,6 @@
                                                                                 @if ($request->status == "pending" || $request->status == "approved_lm" || $request->status == "approved_hod")
                                                                                     <button class="btn btn-outline-secondary btn-sm btn-approved" 
                                                                                         data-id="{{$request->id}}"
-                                                                                        data-condition="{{Auth::user()}}"
                                                                                         data-linemanager="{{$request->employee->line_manager}}"
                                                                                         data-approveby="{{$request->next_approver}}"
                                                                                         data-status="{{$request->status}}"
@@ -372,6 +375,7 @@
         </div>
     </div>
     @include('leaves_admin.import_leaves')
+    <input type="hidden" id="leaveAuth" value="{{Auth::user()}}">
 @endsection
 @include('includs.script')
 <script>
@@ -467,7 +471,6 @@
         });
         $(".btn-search").on("click", function() {
             $(this).prop('disabled', true);
-            var condistion = $(this).data('condiction');
             $(".btn-text-search").hide();
             $("#btn-text-loading").css('display', 'block');
 
@@ -519,7 +522,8 @@
                             let start_date = moment(row.start_date).format('D-MMM-YYYY');
                             let end_date = moment(row.end_date).format('D-MMM-YYYY');
                             if (row.status == "pending" || row.status == "approved_lm" || row.status == "approved_hod") {
-                                candistion = '<button class="btn btn-outline-secondary btn-sm btn-approved" data-id="'+(row.id)+'" data-condition="'+(condistion)+'"'+
+                                candistion = '<button class="btn btn-outline-secondary btn-sm btn-approved" data-id="'+(row.id)+'"'+  
+                                    'data-linemanager="'+(row.employee.line_manager)+'"'+
                                     'data-status="'+(row.status)+'"'+
                                     'data-approveby="'+(row.next_approver)+'"'+
                                     'data-employeename="'+(row.employee.employee_name_en)+'"'+
@@ -532,7 +536,7 @@
                             };
                             if (condiction_tab == 2) {
                                 status = '<span class="badge bg-inverse-danger" style="font-size: 13px;">Heard department cancel</span>';
-                                candistion = '<button class="btn btn-outline-danger btn-sm btn-cancel" data-id="'+(row.id)+'" data-condiction="'+(condistion)+'">@lang("lang.cancel")</button>';
+                                candistion = '<button class="btn btn-outline-danger btn-sm btn-cancel" data-id="'+(row.id)+'">@lang("lang.cancel")</button>';
                             }
                             if (row.status == "rejected"){
                                 status = '<span class="badge bg-inverse-danger" style="font-size: 13px;">HR rejecte</span>';
@@ -552,10 +556,13 @@
                                 status = '<span class="badge bg-inverse-success" style="font-size: 13px;">Approved</span>';
                             };
                             tr += '<tr class="odd">'+
+                                '<td class="stuck-scroll-3">'+
+                                    '<input type="checkbox" class="sub_chk" data-id="'+(row.id)+'" data-status="'+(row.status)+'">'+
+                                '</td>'+
                                 '<td class="ids">'+(e+1)+'</td>'+
                                 '<td>' + (row.employee ? row.employee.employee_name_en : "") + '</td>'+
                                 '<td>' + (row.handover ? row.handover.employee_name_en : "") + '</td>'+
-                                '<td></td>'+
+                                '<td>' +(row.delegated_employee)+'</td>'+
                                 '<td>' + (row.leave_type.name) + '</td>'+
                                 '<td>' + (row.reason ? row.reason : "") + '</td>'+
                                 '<td>' + (row.number_of_day) + ' Day</td>'+
@@ -563,6 +570,7 @@
                                 '<td>' + (end_date) + '</td>'+
                                 '<td>' +(row.created_by.employee_name_en)+ '</td>'+
                                 '<td>' + (row.remark ? row.remark : "" ) + '</td>'+
+                                '<td>' +(row.approve ? row.approve.employee_name_en : "") +'</td>'+
                                 '<td>' + (status) + '</td>'+
                                 '<td class="text-end">'+
                                 (candistion)+
@@ -590,7 +598,7 @@
             let is_reject = "{{ Helper::permissionAccess('m10-s1','is_reject') }}";
             let id = $(this).data("id");
             let status = $(this).data("status");
-            let condition = $(this).data("condition");
+            let condition = @json(Auth::user());
             let linemanager = $(this).data("linemanager");
             approve_by = $(this).data("approveby");
             if (condition.role.role_type == "HRAdmin") {

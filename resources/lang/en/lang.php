@@ -209,6 +209,7 @@ return[
     "delete"=>"Delete",
     "deleted"=>"Deleted",
     "delegate"=>"Delegate",
+    "delegated"=>"Delegated",
     "delete_all"=>"Delete All",
     "delete_details"=>"Delete Details",
     "delete_success"=>"Delete success",

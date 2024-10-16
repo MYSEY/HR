@@ -222,6 +222,7 @@ return[
 	"delete"=>"លុបទិន្នន័យ",
 	"deleted"=>"លុបទិន្នន័យ",
 	"delegate"=>"ផ្ទេរសិទ្ធិ",
+	"delegated"=>"ផ្ទេរសិទ្ធិ",
     "delete_all"=>"លុបទាំងអស់",
 	"delete_details"=>"លុបទិន្នន័យ",
 	"delete_it"=>"លុប",
