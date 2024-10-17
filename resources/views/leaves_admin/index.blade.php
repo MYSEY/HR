@@ -156,7 +156,7 @@
                                                                         <td>{{$request->Delegated}}</td>
                                                                         
                                                                         <td class="">{{$request->leaveType->name}}</td>
-                                                                        <td><a href="#">{{$request->reason}}</a></td>
+                                                                        <td>{{$request->reason}}</td>
                                                                         <td>{{$request->number_of_day}} Day</td>
                                                                         <td >{{\Carbon\Carbon::parse($request->start_date)->format('d-M-Y') ?? ''}}</td>
                                                                         <td>{{\Carbon\Carbon::parse($request->end_date)->format('d-M-Y') ?? ''}}</td>
@@ -394,11 +394,17 @@
         });
         $("#tab_leave_allocations").on("click", function () {
             $(".leave-disply-search").css("display","block");
+            $(".btn_approved_all").css("display","none");
             condiction_tab = $(this).data('tab-id');
         });
         $(".tab_leave_none").on("click", function () {
             $(".leave-disply-search").css("display","none");
             condiction_tab = $(this).data('tab-id');
+            if (condiction_tab == 1) {
+                $(".btn_approved_all").css("display","block");
+            }else{
+                $(".btn_approved_all").css("display","none");
+            }
         });
 
         $('#checkAll').on('click', function(e) {
@@ -516,9 +522,11 @@
                 }else{
                     var rows = response.data.success;
                     if (rows.length > 0) {
+                       
                         var tr = "";
                         let candistion = "";
                         let status = "";
+                        let ckeckbox = "";
                         $(rows).each(function(e, row) {
                             let start_date = moment(row.start_date).format('D-MMM-YYYY');
                             let end_date = moment(row.end_date).format('D-MMM-YYYY');
@@ -533,35 +541,38 @@
                                     'data-starthalfday="'+(row.start_half_day)+'"'+
                                     'data-endhalfday="'+(row.end_half_day)+'"'+
                                     'data-reason="'+(row.reason)+'"'+
-                                '>@lang("lang.approved") / @lang("lang.reject")</button>';
+                                '>@lang("lang.approve") / @lang("lang.reject")</button>';
                             };
                             if (condiction_tab == 2) {
                                 status = '<span class="badge bg-inverse-danger" style="font-size: 13px;">Heard department cancel</span>';
                                 candistion = '<button class="btn btn-outline-danger btn-sm btn-cancel" data-id="'+(row.id)+'">@lang("lang.cancel")</button>';
                             }
                             if (row.status == "rejected"){
-                                status = '<span class="badge bg-inverse-danger" style="font-size: 13px;">HR rejecte</span>';
+                                status = '<span class="badge bg-inverse-danger" style="font-size: 13px;">Rejected by HR</span>';
                             }else if(row.status == "cancel"){
                                 status = '<span class="badge bg-inverse-danger" style="font-size: 13px;">Cancel</span>';
                             }else if (row.status == "rejected_lm"){
-                                status = '<span class="badge bg-inverse-danger" style="font-size: 13px;">Line manager rejecte</span>';
+                                status = '<span class="badge bg-inverse-danger" style="font-size: 13px;">Rejected by Line Manager</span>';
                             }else if (row.status == "rejected_hod"){
-                                status = '<span class="badge bg-inverse-danger" style="font-size: 13px;">Head department rejecte</span>';
-                            }else if (row.status == "pending"){
-                                status = '<span class="badge bg-inverse-info" style="font-size: 13px;">Pending line manager approve</span>';
-                            }else if (row.status == "approved_lm"){
-                                status = '<span class="badge bg-inverse-info" style="font-size: 13px;">Pending head department approve</span>';
+                                status = '<span class="badge bg-inverse-danger" style="font-size: 13px;">Rejected by ACEO/Head/BM</span>';
+                            // }else if (row.status == "pending"){
+                            //     status = '<span class="badge bg-inverse-info" style="font-size: 13px;">Waiting Approve by Line Manager</span>';
+                            }else if (row.status == "approved_lm" || row.status == "pending"){
+                                status = '<span class="badge bg-inverse-info" style="font-size: 13px;">Waiting Approve by ACEO/Head/BM</span>';
                             }else if (row.status == "approved_hod"){
-                                status = '<span class="badge bg-inverse-info" style="font-size: 13px;">Pending HR Approve</span>';
+                                status = '<span class="badge bg-inverse-info" style="font-size: 13px;">Waiting Verify by HR</span>';
                             }else if(row.status == "approved"){
                                 status = '<span class="badge bg-inverse-success" style="font-size: 13px;">Approved</span>';
                             };
-                            tr += '<tr class="odd">'+
-                                '<td class="stuck-scroll-3">'+
+                            if (condistion == "HR" || condistion == "HRAdmin") {
+                                ckeckbox = '<td class="stuck-scroll-3">'+
                                     '<input type="checkbox" class="sub_chk" data-id="'+(row.id)+'" data-status="'+(row.status)+'">'+
-                                '</td>'+
+                                '</td>';
+                            }
+                            tr += '<tr class="odd">'+
+                                (ckeckbox)+
                                 '<td class="ids">'+(e+1)+'</td>'+
-                                '<td>' + (row.employee ? row.employee.employee_name_en : "") + '</td>'+
+                                '<td class="stuck-scroll-3">' + (row.employee ? row.employee.employee_name_en : "") + '</td>'+
                                 '<td>' + (row.handover ? row.handover.employee_name_en : "") + '</td>'+
                                 '<td>' +(row.delegated_employee)+'</td>'+
                                 '<td>' + (row.leave_type.name) + '</td>'+

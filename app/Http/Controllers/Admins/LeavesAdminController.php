@@ -124,6 +124,26 @@ class LeavesAdminController extends Controller
                 'users.department_id',
                 'users.branch_id',
             )
+            ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+                if($RolePermission == 'CEO' || $RolePermission == 'BOD'){
+                    $query->where("users.id", Auth::user()->id);
+                    $query->orWhere("users.line_manager", Auth::user()->id);
+                }else if ($RolePermission == 'BM') {
+                    $query->where("users.id", Auth::user()->line_manager);
+                    $query->orWhere("users.branch_id", Auth::user()->branch_id);
+                }else if($RolePermission == 'HOD'){
+                    if (Auth::user()->id == Auth::user()->department->direct_manager_id) {
+                        $query->where("users.department_id", Auth::user()->department_id);
+                        $query->whereNot("users.id", Auth::user()->id);
+                    }else{
+                        $query->where("users.id", Auth::user()->id);
+                        $query->orWhere("users.line_manager", Auth::user()->id);
+                    }
+                }else if($RolePermission == 'Employee'){
+                    $query->where("users.id", Auth::user()->line_manager);
+                    $query->orWhere("users.line_manager", Auth::user()->line_manager);
+                }
+            })
             ->when($request->employee_id, function ($query, $employee_id) {
                 $query->where('users.number_employee', 'LIKE', '%'.$employee_id.'%');
             })
@@ -149,6 +169,14 @@ class LeavesAdminController extends Controller
                 'users.employee_name_kh',
                 'users.profile',
             )
+            ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+                if($RolePermission == 'CEO' || $RolePermission == 'BOD' || $RolePermission == 'BM' || $RolePermission == 'HOD'){
+                    $query->where("leave_requests.next_approver", Auth::user()->id);
+                    // $query->orWhere("line_manager_id", Auth::user()->id);
+                }else if($RolePermission == 'HR' || $RolePermission =="HRAdmin"){
+                    $query->whereNot("leave_requests.status", "approved");
+                }
+            })
             ->when($request->condiction_tab, function ($query, $condiction_tab) {
                 if ($condiction_tab == 1) {
                     $query->whereIn("leave_requests.status", ["approved_lm","approved_hod","pending"]);
