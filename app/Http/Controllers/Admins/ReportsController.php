@@ -10,7 +10,9 @@ use App\Exports\ExportFringeBenefits;
 use App\Exports\ExportTraining;
 use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
+use App\Models\Bank;
 use App\Models\Branchs;
+use App\Models\Department;
 use App\Models\FringeBenefit;
 use App\Models\Payroll;
 use App\Models\Position;
@@ -392,10 +394,13 @@ class ReportsController extends Controller
         return Excel::download($export, 'ReportTraining.xlsx');
     }
 
-    public function bankTransfer() {
+    public function bankTransfer(Request $request) {
         if (permissionAccess("m7-s9","is_view")->value != "1") {
             return view('upgrade.feature_not_available');
         }
+        $banks = Bank::get();
+        $departments = Department::get();
+        $branchs = Branchs::get();
         $data = Payroll::with('users')
         ->leftJoin('users', 'payrolls.employee_id', '=', 'users.id')
         ->select(
@@ -403,6 +408,7 @@ class ReportsController extends Controller
             'users.number_employee',
             'users.branch_id',
             'users.department_id',
+            'users.bank_name',
         )
         ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
             if ($RolePermission == 'Employee') {
@@ -415,12 +421,31 @@ class ReportsController extends Controller
                 $query->where("users.branch_id", Auth::user()->branch_id);
             }
         })
+        ->when($request, function ($query, $request) {
+            if ($request->bank_id) {
+                $query->where("users.bank_name", $request->bank_id);
+            }
+            if ($request->department_id) {
+                $query->where("users.department_id", $request->department_id);
+            }
+            if ($request->branch_id) {
+                $query->where("users.branch_id", $request->branch_id);
+            }
+        })
+        // ->where("payrolls.payment_date", "2024-08-19")
         ->whereBetween('payrolls.payment_date', [Helper::startOfLastendOfLastMonth()->startOfLastMonth, Helper::startOfLastendOfLastMonth()->endOfLastMonth])
         ->orderBy('employee_id')->get();
-        return view('reports.bank_transfer',compact('data'));
+        if ($request->bank_id || $request->department_id || $request->branch_id ) {
+            return response()->json([
+                'success'=>$data,
+            ]);
+        }else{
+            return view('reports.bank_transfer',compact(['data','banks','departments','branchs']));
+        }
+        
     }
 
-    public function bankTransferExport(){
+    public function bankTransferExport(Request $request){
         $data = Payroll::with('users')
         ->leftJoin('users', 'payrolls.employee_id', '=', 'users.id')
         ->select(
@@ -428,6 +453,7 @@ class ReportsController extends Controller
             'users.number_employee',
             'users.branch_id',
             'users.department_id',
+            'users.bank_name',
         )
         ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
             if ($RolePermission == 'Employee') {
@@ -438,6 +464,17 @@ class ReportsController extends Controller
             }
             if ($RolePermission == 'BM') {
                 $query->where("users.branch_id", Auth::user()->branch_id);
+            }
+        })
+        ->when($request, function ($query, $request) {
+            if ($request->bank_id) {
+                $query->where("users.bank_name", $request->bank_id);
+            }
+            if ($request->department_id) {
+                $query->where("users.department_id", $request->department_id);
+            }
+            if ($request->branch_id) {
+                $query->where("users.branch_id", $request->branch_id);
             }
         })
         ->whereBetween('payrolls.payment_date', [Helper::startOfLastendOfLastMonth()->startOfLastMonth, Helper::startOfLastendOfLastMonth()->endOfLastMonth])

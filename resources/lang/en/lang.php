@@ -73,6 +73,7 @@ return[
     "agency_phone"=>"Emergancy Contact",
     "account_number"=>"Account Number",
     "account_name"=>"Account Name",
+    "account_bank"=>"Account Bank",
     "annual_leave"=>"Annual Leave",
     "annual/PB/KNY"=>"Khmer New Year / Pechum Ben",
     "average_unit_price"=>"Average Unit Price",

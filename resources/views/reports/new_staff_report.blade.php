@@ -188,7 +188,6 @@
                 if (rows.length > 0) {
                     var tr = "";
                     $(rows).each(function(e, row) {
-                        console.log(row);
                         let date_of_commencement = moment(row.date_of_commencement).format('D-MMM-YYYY');
                         if (localeLanguage == 'en') {
                             var gender = row.employeeGender == null ? "" : row.employeeGender.name_english;

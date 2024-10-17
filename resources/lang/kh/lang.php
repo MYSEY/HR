@@ -82,6 +82,7 @@ return[
 	"agency_phone"=>"ទូរស័ព្ទភ្នាក់ងារ",
 	"account_number"=>"លេខ​គណនី",
 	"account_name"=>"ឈ្មោះ​គណនី",
+	"account_bank"=>"ធនាគារគណនី",
 	"annual_leave"=>"ការឈប់សម្រាកប្រចាំឆ្នាំ",
 	"annual/PB/KNY"=>"ចូលឆ្នាំ​ / ភ្ជុំបិណ្ឌ",
 	"average_unit_price"=>"តម្លៃឯកតាជាមធ្យម",

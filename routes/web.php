@@ -372,6 +372,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('/reports/training-export', [ReportsController::class,'trainingExport']);
 
     Route::get('/reports/bank-transfer', [ReportsController::class,'bankTransfer']);
+    Route::post('/reports/bank-transfer', [ReportsController::class,'bankTransfer']);
     Route::get('/reports/bank-transfer-export', [ReportsController::class,'bankTransferExport']);
 
     Route::get('/reports/e-filing', [ReportsController::class,'eFilingSalary']);
