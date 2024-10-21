@@ -94,6 +94,7 @@ return[
 	"adjustment_type"=>"Adjustment Type",
 	"adjustment_include_taxe"=>"Adjustment (Include Tax)",
 	"adjustment_excluded_tax"=>"Adjustment (Exclued Tax)",
+	"adjustment"=>"Adjustment",
     "bank"=>"Bank",
     "banks"=>"Banks",
     "balance"=>"Balance",

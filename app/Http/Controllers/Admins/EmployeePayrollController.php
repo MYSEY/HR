@@ -54,7 +54,7 @@ class EmployeePayrollController extends Controller
     public function index(Request $request)
     {
         if (permissionAccess("m4-s2","is_view")->value != "1") {
-            return view('upgrade.feature_not_available');
+            return view('upgrade.access_page');
         }
         $data = $this->payrollRepo->getAllPayroll($request);
         $branch = Branchs::all();
@@ -66,7 +66,7 @@ class EmployeePayrollController extends Controller
     }
     public function payrollReview(Request $request){
         if (permissionAccess("m4-s1","is_view")->value != "1") {
-            return view('upgrade.feature_not_available');
+            return view('upgrade.access_page');
         }
         $data = $this->payrollRepo->getAllPayrollPreview($request);
         $branch = Branchs::all();
@@ -1176,7 +1176,7 @@ class EmployeePayrollController extends Controller
     }
     public function payrollStaffResign(Request $request){
         if (permissionAccess("m4-s7","is_view")->value != "1") {
-            return view('upgrade.feature_not_available');
+            return view('upgrade.access_page');
         }
         $data = $this->payrollRepo->getAllPayrollStaffResign($request);
         $staffResign = User::whereIn('emp_status',['3','4','5','6','7','8','9'])->get();

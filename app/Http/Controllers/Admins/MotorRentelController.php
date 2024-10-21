@@ -35,7 +35,7 @@ class MotorRentelController extends Controller
     public function index(Request $request)
     {
         if (permissionAccess("m5-s1","is_view")->value != "1") {
-            return view('upgrade.feature_not_available');
+            return view('upgrade.access_page');
         }
         $from_date = null;
         $to_date = null;
@@ -105,7 +105,7 @@ class MotorRentelController extends Controller
     public function indexReviewPay(Request $request)
     {
         if (permissionAccess("m5-s3","is_view")->value != "1") {
-            return view('upgrade.feature_not_available');
+            return view('upgrade.access_page');
         }
         $monthly = Carbon::now()->format('m');
         $currentYear = Carbon::now()->format('Y');
@@ -141,7 +141,7 @@ class MotorRentelController extends Controller
     public function indexPay(Request $request)
     {
         if (permissionAccess("m5-s2","is_view")->value != "1") {
-            return view('upgrade.feature_not_available');
+            return view('upgrade.access_page');
         }
         $monthly = Carbon::now()->format('m');
         $currentYear = Carbon::now()->format('Y');

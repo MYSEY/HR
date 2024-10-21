@@ -1049,6 +1049,57 @@
                             </div>
                         </div>
                     </div>
+                    {{-- block adjustment --}}
+                    <div class="col-md-12">
+                        <div class="form-group row">
+                            <div class="col-md-2">
+                                <label class="container-checkbox">@lang('lang.adjustment')
+                                    <input type="checkbox" class="motor_rental_checkbox" id="adjustment_mt"> <span class="checkmark"></span>
+                                </label>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="container-checkbox">@lang('lang.view')
+                                    <input type="checkbox" class="motor_rental_checkbox adjustment_mt_checkbox" id="adjustment_mt_view"
+                                    {{SetCheckbox($arrayPermissions,"lang.adjustment","is_view")->checkbox}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.adjustment","is_view")->value}}"> <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.add')
+                                    <input type="checkbox" class="motor_rental_checkbox adjustment_mt_checkbox" id="adjustment_mt_add"
+                                    {{SetCheckbox($arrayPermissions,"lang.adjustment","is_create")->checkbox}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.adjustment","is_create")->value}}"> <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.approve')
+                                    <input type="checkbox" class="motor_rental_checkbox adjustment_mt_checkbox" id="adjustment_mt_approve"
+                                    {{SetCheckbox($arrayPermissions,"lang.adjustment","is_approve")->checkbox}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.adjustment","is_approve")->value}}"> <span class="checkmark"></span>
+                                </label>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="container-checkbox">@lang('lang.edit')
+                                    <input type="checkbox" class="motor_rental_checkbox adjustment_mt_checkbox" id="adjustment_mt_edit"
+                                    {{SetCheckbox($arrayPermissions,"lang.adjustment","is_update")->checkbox}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.adjustment","is_update")->value}}"> <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.delete')
+                                    <input type="checkbox" class="motor_rental_checkbox adjustment_mt_checkbox" id="adjustment_mt_delete" 
+                                    {{SetCheckbox($arrayPermissions,"lang.adjustment","is_delete")->checkbox}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.adjustment","is_delete")->value}}"> <span class="checkmark"></span>
+                                </label>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="container-checkbox">@lang('lang.print')
+                                    <input type="checkbox" class="motor_rental_checkbox adjustment_mt_checkbox" id="adjustment_mt_print"
+                                    {{SetCheckbox($arrayPermissions,"lang.adjustment","is_print")->checkbox}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.adjustment","is_print")->value}}"> <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.export')
+                                    <input type="checkbox" class="motor_rental_checkbox adjustment_mt_checkbox" id="adjustment_mt_export"
+                                    {{SetCheckbox($arrayPermissions,"lang.adjustment","is_export")->checkbox}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.adjustment","is_export")->value}}"> <span class="checkmark"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
                     {{-- block generate pay motor rental --}}
                     <div class="col-md-12">
                         <div class="form-group row">

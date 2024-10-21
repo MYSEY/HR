@@ -25,7 +25,7 @@ class RecruitmentPlanController extends Controller
     public function index()
     {
         if (permissionAccess("m3-s2","is_view")->value != "1") {
-            return view('upgrade.feature_not_available');
+            return view('upgrade.access_page');
         }
         $data = RecruitmentPlan::with('position')->with('branch')
         ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {

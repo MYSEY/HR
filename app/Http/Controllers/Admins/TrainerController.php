@@ -22,7 +22,7 @@ class TrainerController extends Controller
     public function index()
     {
         if (permissionAccess("m6-s1","is_view")->value != "1") {
-            return view('upgrade.feature_not_available');
+            return view('upgrade.access_page');
         }
         $data = Trainer::with("employee")->get();
         $employee = User::whereIn("emp_status", ['1','2', '10'])->orWhereIn("p_status", ['1','2', '10'])->get();

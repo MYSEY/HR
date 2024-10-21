@@ -22,7 +22,7 @@ class DepartmentController extends Controller
     public function index()
     {
         if (permissionAccess("m9-s4","is_view")->value != "1") {
-            return view('upgrade.feature_not_available');
+            return view('upgrade.access_page');
         }
         $employee = User::whereIn("emp_status", ["1", "2", "10"])->get();
         $data = Department::where("parent_id", 0)->orWhere("parent_id", null)->with("headDepartment")->with('child')->orderBy('id','DESC')->get();

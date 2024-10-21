@@ -670,6 +670,7 @@ return[
 	"adjustment_to"=>"Adjustment To",
 	"adjustment_type"=>"Adjustment Type",
 	"adjustment_include_taxe"=>"Adjustment(Include Tax)",
+	"adjustment"=>"Adjustment",
 	"qty"=>"បរិមាណ",
 	"quantity"=>"បរិមាណ",
 	"retired"=>"ចូលនិវត្តន៍",

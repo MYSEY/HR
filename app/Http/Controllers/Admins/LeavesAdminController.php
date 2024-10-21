@@ -41,7 +41,7 @@ class LeavesAdminController extends Controller
     public function index()
     {
         if (permissionAccess("m10-s1","is_view")->value != "1") {
-            return view('upgrade.feature_not_available');
+            return view('upgrade.access_page');
         }
         $location = Branchs::get();
         $department = Department::get();
@@ -701,7 +701,7 @@ class LeavesAdminController extends Controller
 
     public function Report(Request $request) {
         if (permissionAccess("m10-s3","is_view")->value != "1") {
-            return view('upgrade.feature_not_available');
+            return view('upgrade.access_page');
         }
         $location = Branchs::get();
         $department = Department::get();

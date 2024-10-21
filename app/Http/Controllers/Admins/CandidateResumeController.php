@@ -38,7 +38,7 @@ class CandidateResumeController extends Controller
     public function index()
     {
         if (permissionAccess("m3-s1","is_view")->value != "1") {
-            return view('upgrade.feature_not_available');
+            return view('upgrade.access_page');
         }
         $role = Role::all();
         $autoEmpId   = $this->generate_EmployeeId(Carbon::today())['number_employee'];

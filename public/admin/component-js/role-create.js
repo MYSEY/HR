@@ -414,10 +414,11 @@ var dataPermission = function () {
    
     //block motor rentals 
     let motor_rentals_checkbox = $('.motor_rentals_checkbox').filter(':checked').length;
+    let adjustment_mt_checkbox = $('.adjustment_mt_checkbox').filter(':checked').length;
     let generate_pay_motor_rentals_checkbox = $('.generate_pay_motor_rentals_checkbox').filter(':checked').length;
     let pay_motor_rentals_checkbox = $('.pay_motor_rentals_checkbox').filter(':checked').length;
     let motor_rental_check_all = $('#motor_rental_check_all').filter(':checked').length;
-    if (motor_rental_check_all || motor_rentals_checkbox || pay_motor_rentals_checkbox || generate_pay_motor_rentals_checkbox) {
+    if (motor_rental_check_all || motor_rentals_checkbox || pay_motor_rentals_checkbox || adjustment_mt_checkbox || generate_pay_motor_rentals_checkbox) {
         data.push({
             name: "Motor Rentals",
             permission: [
@@ -447,6 +448,26 @@ var dataPermission = function () {
                     "is_delete": $("#motor_rental_delete").val(),
                     "is_print": $("#motor_rental_print").val(),
                     "is_export": $("#motor_rental_export").val(),
+                },
+            ]
+        })
+    }
+    if (adjustment_mt_checkbox) {
+        data.push({
+            name: "adjustment",
+            permission: [
+                {
+                    "name":"lang.adjustment",
+                    "sub_menu_id":"5",
+                    "menu_id":"m5-s4",
+                    "url":"motor-rentel/adjustment",
+                    "is_view": $("#adjustment_mt_view").val(),
+                    "is_create": $("#adjustment_mt_add").val(),
+                    "is_approve": $("#adjustment_mt_approve").val(),
+                    "is_update": $("#adjustment_mt_edit").val(),
+                    "is_delete": $("#adjustment_mt_delete").val(),
+                    "is_print": $("#adjustment_mt_print").val(),
+                    "is_export": $("#adjustment_mt_export").val(),
                 },
             ]
         })

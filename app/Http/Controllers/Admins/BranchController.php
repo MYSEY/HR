@@ -22,7 +22,7 @@ class BranchController extends Controller
     public function index()
     {
         if (permissionAccess("m9-s3","is_view")->value != "1") {
-            return view('upgrade.feature_not_available');
+            return view('upgrade.access_page');
         }
         $employee = User::whereIn("emp_status", ["1", "2", "10"])->get();
         $data = Branchs::with("branchholder")->get();

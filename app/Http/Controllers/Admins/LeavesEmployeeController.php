@@ -32,7 +32,7 @@ class LeavesEmployeeController extends Controller
     public function index()
     {
         if (permissionAccess("m10-s2","is_view")->value != "1") {
-            return view('upgrade.feature_not_available');
+            return view('upgrade.access_page');
         }
         $dataLeaveType = LeaveType::get();
         $LeaveAllocation = LeaveAllocation::where("employee_id", Auth::user()->id)->first();
@@ -77,7 +77,7 @@ class LeavesEmployeeController extends Controller
 
     public function indexReplcement(){
         if (permissionAccess("m10-s4","is_view")->value != "1") {
-            return view('upgrade.feature_not_available');
+            return view('upgrade.access_page');
         }
         $dataLeaveType = LeaveType::get();
         $employees= DB::table('users')->when(Auth::user()->RolePermission, function ($query, $RolePermission) {

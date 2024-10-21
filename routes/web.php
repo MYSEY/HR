@@ -41,6 +41,7 @@ use App\Http\Controllers\Admins\ProvinceAddressController;
 use App\Http\Controllers\Admins\RecruitmentPlanController;
 use App\Http\Controllers\Admins\DistrictsAddressController;
 use App\Http\Controllers\Admins\ChildrenAllowanceController;
+use App\Http\Controllers\Admins\MotorAdjustmentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -249,6 +250,13 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('motor-rentel/pay-review',[MotorRentelController::class,'indexReviewPay']);
     Route::post('motor-rentel/approved',[MotorRentelController::class,'payApproved']);
     Route::post('motor-rentel/review/delete',[MotorRentelController::class,'deletePay']);
+
+     // Motor Rental adjustment
+    Route::get('motor-rentel/adjustment',[MotorAdjustmentController::class,'index']);
+    Route::get('motor-rentel/adjustment/edit',[MotorAdjustmentController::class,'edit']);
+    Route::post('motor-rentel/adjustment/store',[MotorAdjustmentController::class,'store']);
+    Route::post('motor-rentel/adjustment/update',[MotorAdjustmentController::class,'update']);
+    Route::post('motor-rentel/adjustment/delete',[MotorAdjustmentController::class,'destroy']);
 
     //Payroll Item
     Route::get('payroll/adjustment',[PayrollItemController::class,'index']);

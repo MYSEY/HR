@@ -50,7 +50,7 @@ class PayrollReportController extends Controller
     public function index()
     {
         if (permissionAccess("m7-s2","is_view")->value != "1") {
-            return view('upgrade.feature_not_available');
+            return view('upgrade.access_page');
         }
         $payroll = DB::table('payrolls')
         ->leftJoin('users','payrolls.employee_id','=','users.id')
@@ -149,7 +149,7 @@ class PayrollReportController extends Controller
     }
     public function reportNssf(){
         if (permissionAccess("m7-s4","is_view")->value != "1") {
-            return view('upgrade.feature_not_available');
+            return view('upgrade.access_page');
         }
         $dataNSSF = NationalSocialSecurityFund::with('users')
         ->join('users', 'national_social_security_funds.employee_id', '=', 'users.id')
@@ -240,7 +240,7 @@ class PayrollReportController extends Controller
     }
     public function reportBenefitKNYPCh(){
         if (permissionAccess("m7-s5","is_view")->value != "1") {
-            return view('upgrade.feature_not_available');
+            return view('upgrade.access_page');
         }
         $yearLy = Carbon::now()->format('Y');
         $benefit = Bonus::with("users")
@@ -329,7 +329,7 @@ class PayrollReportController extends Controller
     }
     public function TaxReport(){
         if (permissionAccess("m7-s3","is_view")->value != "1") {
-            return view('upgrade.feature_not_available');
+            return view('upgrade.access_page');
         }
         $payroll = Payroll::with('users')
         ->leftJoin('users', 'payrolls.employee_id', '=', 'users.id')
@@ -417,7 +417,7 @@ class PayrollReportController extends Controller
     }
     public function reportSenorityPay(){
         if (permissionAccess("m7-s7","is_view")->value != "1") {
-            return view('upgrade.feature_not_available');
+            return view('upgrade.access_page');
         }
         $totalDates = Seniority::
             leftJoin('users', 'seniorities.employee_id', '=', 'users.id')
@@ -454,7 +454,7 @@ class PayrollReportController extends Controller
     public function motorrentel(Request $request)
     {
         if (permissionAccess("m7-s12","is_view")->value != "1") {
-            return view('upgrade.feature_not_available');
+            return view('upgrade.access_page');
         }
         $data = $this->dataMotor->getDatas($request);
         $branchs = Branchs::get();
@@ -476,7 +476,7 @@ class PayrollReportController extends Controller
     }
     public function reportSeverancePay(){
         if (permissionAccess("m7-s6","is_view")->value != "1") {
-            return view('upgrade.feature_not_available');
+            return view('upgrade.access_page');
         }
         $totalSeverancePay = SeverancePay::
         leftJoin('users', 'severance_pays.employee_id', '=', 'users.id')
@@ -515,7 +515,7 @@ class PayrollReportController extends Controller
     }
     public function SeverancePay(Request $request){
         if (permissionAccess("m4-s4","is_view")->value != "1") {
-            return view('upgrade.feature_not_available');
+            return view('upgrade.access_page');
         }
         $branch = Branchs::get();
         $yearLy = Carbon::now()->format('Y');
@@ -701,7 +701,7 @@ class PayrollReportController extends Controller
     }
     public function ImportIndex(Request $request){
         if (permissionAccess("m4-s3","is_view")->value != "1") {
-            return view('upgrade.feature_not_available');
+            return view('upgrade.access_page');
         }
         $startOfLastMonth = null;
         $branch = Branchs::get();

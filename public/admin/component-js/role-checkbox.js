@@ -645,6 +645,29 @@ $(function(){
             $(this).val(1)
         }
     });
+
+    $("#adjustment_mt").on("click", function() {
+        if (!$(this).prop("checked")) {
+            $(".adjustment_mt_checkbox").prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(".adjustment_mt_checkbox").prop("checked", true);
+            $(this).val(1)
+            $(".adjustment_mt_checkbox").val(1);
+        }
+    });
+    $(".adjustment_mt_checkbox").on("click", function(){
+        if (!$(this).prop("checked")) {
+            $(this).prop("checked", false);
+            $(this).val(0)
+        }
+        if ($(this).prop("checked")) {
+            $(this).prop("checked", true);
+            $(this).val(1)
+        }
+    });
+
     $("#generate_pay_motor_rentals").on("click", function() {
         if (!$(this).prop("checked")) {
             $(".generate_pay_motor_rentals_checkbox").prop("checked", false);
@@ -697,6 +720,17 @@ $(function(){
             };
             if (countAllCheckboxes < $('input.motor_rentals_checkbox').length) {
                 $("#motor_rentals").prop("checked", false);
+            };
+        });
+
+        let adjustment_mt_checkbox = $('.adjustment_mt_checkbox');
+        adjustment_mt_checkbox.change(function(){
+            let countAllCheckboxes = adjustment_mt_checkbox.filter(':checked').length;
+            if (countAllCheckboxes == $('input.adjustment_mt_checkbox').length) {
+                $("#adjustment_mt").prop("checked", true);
+            };
+            if (countAllCheckboxes < $('input.adjustment_mt_checkbox').length) {
+                $("#adjustment_mt").prop("checked", false);
             };
         });
 

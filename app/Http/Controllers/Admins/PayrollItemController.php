@@ -21,7 +21,7 @@ class PayrollItemController extends Controller
     public function index()
     {
         if (permissionAccess("m4-s6","is_view")->value != "1") {
-            return view('upgrade.feature_not_available');
+            return view('upgrade.access_page');
         }
         $employee = User::all();
         $data = PayrollAdjustment::orderBy('id','DESC')->get();

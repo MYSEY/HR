@@ -20,7 +20,7 @@ class ExchangeRateController extends Controller
     public function index()
     {
         if (permissionAccess("m8-s2","is_view")->value != "1") {
-            return view('upgrade.feature_not_available');
+            return view('upgrade.access_page');
         }
         $data = ExchangeRate::orderBy('change_date','desc')->get();
         return view('exchange_rates.index',  compact('data'));

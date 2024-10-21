@@ -20,7 +20,7 @@ class BankController extends Controller
     public function index()
     {
         if (permissionAccess("m9-s1","is_view")->value != "1") {
-            return view('upgrade.feature_not_available');
+            return view('upgrade.access_page');
         }
         $data = Bank::all();
         return view('banks.index',compact('data'));

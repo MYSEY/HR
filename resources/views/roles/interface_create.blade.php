@@ -705,6 +705,44 @@
                             </div>
                         </div>
                     </div>
+
+                    {{-- adjustment M&T--}}
+                    <div class="col-md-12">
+                        <div class="form-group row">
+                            <div class="col-md-2">
+                                <label class="container-checkbox">@lang('lang.adjustment')
+                                    <input type="checkbox" class="motor_rental_checkbox" id="adjustment_mt"> <span class="checkmark"></span>
+                                </label>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="container-checkbox">@lang('lang.view')
+                                    <input value="" type="checkbox" class="motor_rental_checkbox adjustment_mt_checkbox" id="adjustment_mt_view"> <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.add')
+                                    <input type="checkbox" class="motor_rental_checkbox adjustment_mt_checkbox" id="adjustment_mt_add"> <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.approve')
+                                    <input type="checkbox" class="motor_rental_checkbox adjustment_mt_checkbox" id="adjustment_mt_approve"> <span class="checkmark"></span>
+                                </label>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="container-checkbox">@lang('lang.edit')
+                                    <input type="checkbox" class="motor_rental_checkbox adjustment_mt_checkbox" id="adjustment_mt_edit"> <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.delete')
+                                    <input type="checkbox" class="motor_rental_checkbox adjustment_mt_checkbox" id="adjustment_mt_delete" > <span class="checkmark"></span>
+                                </label>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="container-checkbox">@lang('lang.print')
+                                    <input type="checkbox" class="motor_rental_checkbox adjustment_mt_checkbox" id="adjustment_mt_print"> <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.export')
+                                    <input type="checkbox" class="motor_rental_checkbox adjustment_mt_checkbox" id="adjustment_mt_export"> <span class="checkmark"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
                     
                     {{-- block generate pay motor rental --}}
                     <div class="col-md-12">

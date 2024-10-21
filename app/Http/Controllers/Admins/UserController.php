@@ -64,7 +64,7 @@ class UserController extends Controller
     public function index(Request $request)
     {
         if (permissionAccess("m2-s1","is_view")->value != "1") {
-            return view('upgrade.feature_not_available');
+            return view('upgrade.access_page');
         }
         // $data = $this->employeeRepo->getAllUsers($request);
         // dd($data);
