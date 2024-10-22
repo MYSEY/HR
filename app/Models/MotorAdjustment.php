@@ -16,6 +16,7 @@ class MotorAdjustment extends Model
         'employee_id',
         'amount_usd',
         'amount_kh',
+        'amount_engine_oil',
         'adjustment_date',
         'adjustment_type',
         'tax_rate',

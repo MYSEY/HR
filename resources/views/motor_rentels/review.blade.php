@@ -149,6 +149,10 @@
                                                             style="width: 89.6px;">@lang('lang.total_gasoline_liters')</th>
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                             rowspan="1" colspan="1"
+                                                            aria-label="adjustment: activate to sort column ascending"
+                                                            style="width: 89.6px;">@lang('lang.adjustment') @lang('lang.amount')</th>
+                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                            rowspan="1" colspan="1"
                                                             aria-label="Total price gasoline: activate to sort column ascending"
                                                             style="width: 89.6px;">@lang('lang.total_price_gasoline')</th>
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
@@ -161,12 +165,20 @@
                                                             style="width: 89.6px;">@lang('lang.tablet_price')</th>
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                             rowspan="1" colspan="1"
+                                                            aria-label="Taplab Price: activate to sort column ascending"
+                                                            style="width: 89.6px;">@lang('lang.adjustment') @lang('lang.total_(motor_&_tablets)')</th>
+                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                            rowspan="1" colspan="1"
                                                             aria-label="Amount: activate to sort column ascending"
                                                             style="width: 51.475px;">@lang('lang.total_(motor_&_tablets)') (@lang('lang.usd'))</th>
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                             rowspan="1" colspan="1"
                                                             aria-label="Tax rate: activate to sort column ascending"
                                                             style="width: 89.6px;">@lang('lang.tax_rate')</th>
+                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                            rowspan="1" colspan="1"
+                                                            aria-label="Tax rate: activate to sort column ascending"
+                                                            style="width: 89.6px;">@lang('lang.adjustment') @lang('lang.fee_tax')</th>
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                             rowspan="1" colspan="1"
                                                             aria-label="Amount: activate to sort column ascending"
@@ -178,7 +190,15 @@
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                             rowspan="1" colspan="1"
                                                             aria-label="Price engine oil: activate to sort column ascending"
+                                                            style="width: 89.6px;">@lang('lang.adjustment') @lang('lang.engine_oil')</th>
+                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                            rowspan="1" colspan="1"
+                                                            aria-label="Price engine oil: activate to sort column ascending"
                                                             style="width: 89.6px;">@lang('lang.price_engine_oil')</th>
+                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                            rowspan="1" colspan="1"
+                                                            aria-label="Price engine oil: activate to sort column ascending"
+                                                            style="width: 89.6px;">@lang('lang.adjustment') @lang('lang.net_amount')</th>
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                             rowspan="1" colspan="1"
                                                             aria-label="Price engine oil: activate to sort column ascending"
@@ -226,19 +246,24 @@
                                                                 <td class="total_work_day">{{ $item->total_work_day }}</td>
                                                                 @php
                                                                     $total_riels = ($item->total_gasoline * $item->total_work_day * $item->gasoline_price_per_liter);
-                                                                    $amount_riels = round($total_riels,-2);
+                                                                    $amount_riels = round($total_riels,-2) + $item->adjust_amount_kh;
                                                                     $totalAmount = (($item->amount_price_motor_rentel - ($item->amount_price_motor_rentel * $item->tax_rate) / 100) + ($item->amount_price_taplab_rentel - ($item->amount_price_taplab_rentel * $item->tax_rate) / 100 ));
                                                                 @endphp
                                                                 <td>{{ $item->total_gasoline * $item->total_work_day }} (L)</td>
+                                                                <td class="adjustment">{{number_format($item->adjust_amount_kh)}} ៛</td>
                                                                 <td>{{ number_format($amount_riels) }} ៛</td>
                                                                 <td class="price_motor_rentel">{{ round($item->amount_price_motor_rentel,2) }} $</td>
                                                                 <td >{{ $item->amount_price_taplab_rentel ? round($item->amount_price_taplab_rentel,2) : "0" }} $</td>
+                                                                <td class="adjustment_m&t">{{$item->adjust_amount_usd + $item->adjust_fee_tax}} $</td>
                                                                 <td class="tax_rate">{{$item->amount_price_taplab_rentel + $item->amount_price_motor_rentel}} $</td>
                                                                 <td class="tax_rate">{{ $item->tax_rate }}%</td>
-                                                                <td>{{ (($item->amount_price_motor_rentel * $item->tax_rate) / 100) + (($item->amount_price_taplab_rentel * $item->tax_rate) / 100 )}} $</td>
+                                                                <td class="adjustment_fee_tax">{{$item->adjust_fee_tax}} $</td>
+                                                                <td>{{ (($item->amount_price_motor_rentel * $item->tax_rate) / 100) + (($item->amount_price_taplab_rentel * $item->tax_rate) / 100 )+$item->adjust_fee_tax}} $</td>
                                                                 <td>{{ round($totalAmount,2)}} $</td>
+                                                                <td class="adjustment_engine_oil">{{$item->adjust_amount_engine_oil}} $</td>
                                                                 <td class="price_engine_oil">{{ round($item->amount_price_engine_oil,2) }} $</td>
-                                                                <td class="price_engine_oil">{{ round($item->amount_price_engine_oil,2) + round($totalAmount,2) }} $</td>
+                                                                <td class="adjustment_net_amount">{{$item->adjust_amount_usd}} $</td>
+                                                                <td class="price_engine_oil">{{ round($item->amount_price_engine_oil,2) + round($totalAmount,2) + $item->adjust_amount_usd + $item->adjust_amount_engine_oil }} $</td>
                                                                 <td><span style="font-size: 13px" class="badge bg-inverse-danger">{{ $item->resigned_date ? \Carbon\Carbon::parse($item->resigned_date)->format('d-M-Y') :'' }}</span></td>
                                                                 <td>{{ $item->created_at ? \Carbon\Carbon::parse($item->created_at)->format('d-M-Y') : '' }}</td>
                                                             </tr>

@@ -18,6 +18,7 @@ return new class extends Migration
             $table->integer('employee_id');
             $table->decimal('amount_usd',50,2)->default(0)->nullable();
             $table->decimal('amount_kh',50,2)->default(0)->nullable();
+            $table->decimal('amount_engine_oil',50,2)->default(0)->nullable();
             $table->date('adjustment_date');
             $table->string('adjustment_type')->nullable();
             $table->integer('tax_rate')->nullable();

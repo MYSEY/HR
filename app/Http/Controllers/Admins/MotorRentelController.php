@@ -10,6 +10,7 @@ use App\Models\MotorRentalDetail;
 use App\Exports\ExportMotorRentel;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Models\MotorAdjustment;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
@@ -236,6 +237,7 @@ class MotorRentelController extends Controller
 
     public function storePay(Request $request)
     {
+        DB::beginTransaction();
         try {
 
             $month = Carbon::now()->month;
@@ -270,12 +272,33 @@ class MotorRentelController extends Controller
                             })
                             ->get();
             foreach ($motorRentals as $key => $motor) {
+                $adjust_amount_kh = 0;
+                $adjust_amount_usd = 0;
+                $adjust_amount_engine_oil = 0;
+                $adjust_fee_tax = 0;
+                // **** logic pay adjustment by month and year
+                $adjusts = MotorAdjustment::where('employee_id',$motor->employee_id)
+                ->whereMonth('adjustment_date', $month)
+                ->whereYear('adjustment_date', $year)
+                ->get();
+                if (count($adjusts) > 0 ) {
+                    foreach ($adjusts as $key => $adj) {
+                        $adjust_amount_kh += $adj->amount_kh;
+                        $adjust_amount_engine_oil += $adj->amount_engine_oil;
+                        if ($adj->adjustment_type == "include_taxe") {
+                            $adjust_amount_usd += ($adj->amount_usd  - ($adj->amount_usd * $adj->tax_rate / 100));
+                            $adjust_fee_tax += ($adj->amount_usd * $adj->tax_rate / 100);
+                        }else{
+                            $adjust_amount_usd += $adj->amount_usd;
+                        }
+                    }
+                }
 
-                // logic pay by start date
+                // **** logic pay by start date
                 $currentMonth1 = Carbon::create($motor->start_date)->format('Y-m');
                 $currentMonth2 = Carbon::create($year,$month)->format('Y-m');
 
-                // logic pay taplab by start date
+                // **** logic pay taplab by start date
                 $amount_price_taplab_rentel = $motor->price_taplab_rentel;
                 $currentTaplab = Carbon::create($motor->start_date_taplab)->format('Y-m');
                 if ($motor->status == 1 && $currentTaplab == $currentMonth2) {
@@ -322,12 +345,16 @@ class MotorRentelController extends Controller
                         'amount_price_motor_rentel'=> $amount_price_motor_rentel,
                         'amount_price_engine_oil' => $amount_price_engine_oil,
                         'amount_price_taplab_rentel' => $amount_price_taplab_rentel,
+                        'adjust_amount_usd' => $adjust_amount_usd,
+                        'adjust_amount_kh' => $adjust_amount_kh,
+                        'adjust_amount_engine_oil' => $adjust_amount_engine_oil,
+                        'adjust_fee_tax' => $adjust_fee_tax,
                         'tax_rate' => $request->tax_rate,
                         'created_by' => Auth::user()->id
                     ];
                     MotorRentalDetail::create($data);
                 }
-                // Logic pay resigned date
+                // **** Logic pay resigned date
                 $resignedMonth1 = Carbon::create($motor->resigned_date)->format('Y-m');
                 $resignedMonth2 = Carbon::create($year,$month)->format('Y-m');
                 if ($motor->status == 0 &&  $resignedMonth1 == $resignedMonth2) {
@@ -367,12 +394,16 @@ class MotorRentelController extends Controller
                         'amount_price_motor_rentel'=> $resignedAmount_price_motor_rentel,
                         'amount_price_engine_oil' => $resignedAmount_price_engine_oil,
                         'amount_price_taplab_rentel' => $resignedAmount_price_taplab_rentel,
+                        'adjust_amount_usd' => $adjust_amount_usd,
+                        'adjust_amount_kh' => $adjust_amount_kh,
+                        'adjust_amount_engine_oil' => $adjust_amount_engine_oil,
+                        'adjust_fee_tax' => $adjust_fee_tax,
                         'tax_rate' => $request->tax_rate,
                         'created_by' => Auth::user()->id
                     ];
                     MotorRentalDetail::create($data);
                 }
-                //Logic pay old motor start_date < current month
+                //**** Logic pay old motor start_date < current month
                 if ($motor->status == 1 && $currentMonth1 < $currentMonth2) {
                     $data = [
                         'employee_id' => $motor->employee_id,
@@ -401,15 +432,19 @@ class MotorRentelController extends Controller
                         'amount_price_motor_rentel'=> $motor->price_motor_rentel,
                         'amount_price_engine_oil' => $motor->price_engine_oil,
                         'amount_price_taplab_rentel' => $amount_price_taplab_rentel,
+                        'adjust_amount_usd' => $adjust_amount_usd,
+                        'adjust_amount_kh' => $adjust_amount_kh,
+                        'adjust_amount_engine_oil' => $adjust_amount_engine_oil,
+                        'adjust_fee_tax' => $adjust_fee_tax,
                         'tax_rate' => $request->tax_rate,
                         'created_by' => Auth::user()->id
                     ];
                     MotorRentalDetail::create($data);
                 }
             }
+            DB::commit();
             Toastr::success('Created successfully.', 'Success');
             return redirect()->back();
-            DB::commit();
         } catch (\Throwable $exp) {
             DB::rollback();
             Toastr::error('Created fail.', 'Error');

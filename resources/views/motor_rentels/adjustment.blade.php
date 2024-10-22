@@ -30,10 +30,13 @@
                                         <tr>
                                             <th>#</th>
                                             <th>@lang('lang.name')</th>
-                                            <th>@lang('lang.amount') @lang('lang.usd')</th>
-                                            <th>@lang('lang.amount') @lang('lang.kh')</th>
                                             <th>@lang('lang.adjustment_type')</th>
-                                            <th>@lang('lang.tax_rate')</th>
+                                            <th>@lang('lang.amount') @lang('lang.usd')</th>
+                                            <th>@lang('lang.tax_rate')(%)</th>
+                                            <th>@lang('lang.fee_tax') (@lang('lang.usd'))</th>
+                                            <th>@lang('lang.net_amount') (@lang('lang.kh'))</th>
+                                            <th>@lang('lang.amount') @lang('lang.engine_oil') @lang('lang.usd')</th>
+                                            <th>@lang('lang.net_amount') (@lang('lang.usd'))</th>
                                             <th>@lang('lang.adjustment_date')</th>
                                             <th>@lang('lang.remark')</th>
                                             <th>@lang('lang.created_at')</th>
@@ -45,11 +48,14 @@
                                             @foreach ($data as $key=>$item)
                                                 <tr>
                                                     <td class="sorting_1 ids">{{$item->id}}</td>
-                                                    <td class="name_khmer">{{$item->EmployeeName}}</td>
-                                                    <td class="name_english">{{$item->amount_usd}}</td>
-                                                    <td class="name_english">{{$item->amount_kh}}</td>
-                                                    <td class="name_english">{{$item->adjustment_type == 'include_taxe' ? 'Include Taxe' : 'Exclude Taxe'}}</td>
-                                                    <td class="name_english">{{$item->tax_rate}}</td>
+                                                    <td>{{$item->EmployeeName}}</td>
+                                                    <td>{{$item->adjustment_type == 'include_taxe' ? 'Include Taxe' : 'Exclude Taxe'}}</td>
+                                                    <td>{{$item->amount_usd}} $</td>
+                                                    <td>{{$item->tax_rate}} %</td>
+                                                    <td>{{$item->adjustment_type == 'include_taxe' ? ($item->amount_usd * $item->tax_rate) / 100 : "0.00" }} $</td>
+                                                    <td>{{$item->amount_kh}} ៛</td>
+                                                    <td>{{$item->amount_engine_oil}} $</td>
+                                                    <td>{{$item->adjustment_type == 'include_taxe' ? (($item->amount_usd - (($item->amount_usd * $item->tax_rate) / 100)) + $item->amount_engine_oil): ($item->amount_usd + $item->amount_engine_oil)}} $</td>
                                                     <td class="position_type">{{ \Carbon\Carbon::parse($item->adjustment_date)->format('d-M-Y') ?? '' }}</td>
                                                     <td class="position_range">{{$item->description}}</td>
                                                     <td>{{ \Carbon\Carbon::parse($item->created_at)->format('d-M-Y') ?? '' }}</td>
@@ -116,6 +122,13 @@
                                 </div>
                             </div>
                             <div class="form-group">
+                                <label>@lang('lang.amount') @lang('lang.engine_oil') @lang('lang.usd')<span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <span class="input-group-text">$</span>
+                                    <input type="text" class="form-control adjust_require_amount" name="amount_engine_oil" id="amount_engine_oil" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
                                 <label>@lang('lang.adjustment_date')<span class="text-danger">*</span></label>
                                 <div class="cal-icon">
                                     <input class="form-control datetimepicker adjust_require" type="text" required id="adjustment_date" name="adjustment_date" value="">
@@ -177,7 +190,14 @@
                                 <label>@lang('lang.amount') @lang('lang.kh')<span class="text-danger">*</span></label>
                                 <div class="input-group">
                                     <span class="input-group-text">$</span>
-                                    <input type="text" class="form-control e_adjust_require_amount" name="amount_usd" id="e_amount_kh" required>
+                                    <input type="text" class="form-control e_adjust_require_amount" name="amount_kh" id="e_amount_kh" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>@lang('lang.amount') @lang('lang.engine_oil') @lang('lang.usd')<span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <span class="input-group-text">$</span>
+                                    <input type="text" class="form-control e_adjust_require_amount" name="amount_engine_oil" id="e_amount_engine_oil" required>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -326,12 +346,13 @@
                     data: {
                         "_token":           "{{ csrf_token() }}",
                         employee_id:        $("#employee_id").val(),
-                        amount_usd:         $("#amount_usd").val(),
-                        amount_kh:          $("#amount_kh").val(),
+                        amount_usd:         ($("#amount_usd").val() ? $("#amount_usd").val() : 0),
+                        amount_kh:          ($("#amount_kh").val() ? $("#amount_kh").val() : 0),
+                        amount_engine_oil:  ($("#amount_engine_oil").val() ? $("#amount_engine_oil").val() : 0),
                         adjustment_date:    $("#adjustment_date").val(),
                         adjustment_type:    $("#adjustment_type").val(),
-                        tax_rate:           $("#tax_rate").val(),
-                        description:        $("#description").text()
+                        tax_rate:           ($("#tax_rate").val() ? $("#tax_rate").val() : 0),
+                        description:        $("#description").val()
                     },
                     dataType: "JSON",
                     success: function (response) {
@@ -383,6 +404,7 @@
                         $('#e_id').val(response.success.id);
                         $('#e_amount_usd').val(response.success.amount_usd);
                         $('#e_amount_kh').val(response.success.amount_kh);
+                        $('#e_amount_engine_oil').val(response.success.amount_engine_oil);
                         $('#e_tax_rate').val(response.success.tax_rate);
                         $('#e_adjustment_date').val(response.success.adjustment_date);
                         $('#e_description').val(response.success.description);
@@ -444,10 +466,11 @@
                         employee_id:        $("#e_employee_id").val(),
                         amount_usd:         $("#e_amount_usd").val(),
                         amount_kh:          $("#e_amount_kh").val(),
+                        amount_engine_oil:  $("#e_amount_engine_oil").val(),
                         adjustment_date:    $("#e_adjustment_date").val(),
                         adjustment_type:    $("#e_adjustment_type").val(),
                         tax_rate:           $("#e_tax_rate").val(),
-                        description:        $("#e_description").text()
+                        description:        $("#e_description").val()
                     },
                     dataType: "JSON",
                     success: function (response) {

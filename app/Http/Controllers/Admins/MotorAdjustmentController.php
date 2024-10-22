@@ -133,11 +133,12 @@ class MotorAdjustmentController extends Controller
         try {
             $data = MotorAdjustment::find($request->id);
             $data['employee_id']        = $request->employee_id;
-            $data['amount_usd']         = $request->amount_usd;
-            $data['amount_kh']          = $request->amount_kh;
+            $data['amount_usd']         = $request->amount_usd ? $request->amount_usd : 0;
+            $data['amount_kh']          = $request->amount_kh ? $request->amount_kh : 0;
+            $data['amount_engine_oil']  = $request->amount_engine_oil ? $request->amount_engine_oil : 0;
             $data['adjustment_date']    = $request->adjustment_date;
             $data['adjustment_type']    = $request->adjustment_type;
-            $data['tax_rate']           = $request->tax_rate;
+            $data['tax_rate']           = $request->tax_rate ? $request->tax_rate : 0;
             $data['description']        = $request->description;
             $data['updated_by']         = Auth::user()->id;
             $data->save();
