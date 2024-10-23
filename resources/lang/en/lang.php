@@ -488,6 +488,7 @@ return[
     "mr_pheng_putmetrey"=>"Mr Pheng Putmetrey",
     "mr._chhor_oudam"=>"Mr. Chhor Oudam",
     "motorcycle_brand"=>"Motorcycle Brand",
+    "motor"=>"Motor",
     "motor_color"=>"Motor Color",
     "motor_rental_fee_tax"=>"Motor Rental Fee Tax",
     "motor_rentals"=>"Motor & Tablet",

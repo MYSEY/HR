@@ -31,12 +31,10 @@
                                             <th>#</th>
                                             <th>@lang('lang.name')</th>
                                             <th>@lang('lang.adjustment_type')</th>
-                                            <th>@lang('lang.amount') @lang('lang.usd')</th>
-                                            <th>@lang('lang.tax_rate')(%)</th>
-                                            <th>@lang('lang.fee_tax') (@lang('lang.usd'))</th>
-                                            <th>@lang('lang.net_amount') (@lang('lang.kh'))</th>
-                                            <th>@lang('lang.amount') @lang('lang.engine_oil') @lang('lang.usd')</th>
-                                            <th>@lang('lang.net_amount') (@lang('lang.usd'))</th>
+                                            <th>@lang('lang.amount') @lang('lang.motor') (@lang('lang.usd'))</th>
+                                            <th>@lang('lang.amount') @lang('lang.tablet') (@lang('lang.usd'))</th>
+                                            <th>@lang('lang.amount') (@lang('lang.kh'))</th>
+                                            <th>@lang('lang.amount') @lang('lang.engine_oil') (@lang('lang.usd'))</th>
                                             <th>@lang('lang.adjustment_date')</th>
                                             <th>@lang('lang.remark')</th>
                                             <th>@lang('lang.created_at')</th>
@@ -51,11 +49,9 @@
                                                     <td>{{$item->EmployeeName}}</td>
                                                     <td>{{$item->adjustment_type == 'include_taxe' ? 'Include Taxe' : 'Exclude Taxe'}}</td>
                                                     <td>{{$item->amount_usd}} $</td>
-                                                    <td>{{$item->tax_rate}} %</td>
-                                                    <td>{{$item->adjustment_type == 'include_taxe' ? ($item->amount_usd * $item->tax_rate) / 100 : "0.00" }} $</td>
+                                                    <td>{{$item->amount_table_usd}} $</td>
                                                     <td>{{$item->amount_kh}} ៛</td>
                                                     <td>{{$item->amount_engine_oil}} $</td>
-                                                    <td>{{$item->adjustment_type == 'include_taxe' ? (($item->amount_usd - (($item->amount_usd * $item->tax_rate) / 100)) + $item->amount_engine_oil): ($item->amount_usd + $item->amount_engine_oil)}} $</td>
                                                     <td class="position_type">{{ \Carbon\Carbon::parse($item->adjustment_date)->format('d-M-Y') ?? '' }}</td>
                                                     <td class="position_range">{{$item->description}}</td>
                                                     <td>{{ \Carbon\Carbon::parse($item->created_at)->format('d-M-Y') ?? '' }}</td>
@@ -108,10 +104,17 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label>@lang('lang.amount') @lang('lang.usd')<span class="text-danger">*</span></label>
+                                <label>@lang('lang.amount') @lang('lang.motor') @lang('lang.usd')<span class="text-danger">*</span></label>
                                 <div class="input-group">
                                     <span class="input-group-text">$</span>
                                     <input type="text" class="form-control adjust_require_amount" name="amount_usd" id="amount_usd" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>@lang('lang.amount') @lang('lang.tablet') @lang('lang.usd')<span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <span class="input-group-text">$</span>
+                                    <input type="text" class="form-control adjust_require_amount" name="amount_table_usd" id="amount_table_usd" required>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -141,10 +144,10 @@
                                     <option value="include_taxe">Include Taxe</option>
                                 </select>
                             </div>
-                            <div class="form-group include_tax_rate" style="display: none">
+                            {{-- <div class="form-group include_tax_rate" style="display: none">
                                 <label class="">@lang('lang.tax_rate') (%)<span class="text-danger">*</span></label>
                                 <input class="form-control @error('tax_rate') is-invalid @enderror" type="number" id="tax_rate" required name="tax_rate" value="{{old('tax_rate')}}">
-                            </div>
+                            </div> --}}
                             <div class="form-group">
                                 <label>@lang('lang.remark')</label>
                                 <textarea class="form-control" type="text" name="description" id="description"></textarea>
@@ -187,6 +190,13 @@
                                 </div>
                             </div>
                             <div class="form-group">
+                                <label>@lang('lang.amount') @lang('lang.tablet') @lang('lang.usd')<span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <span class="input-group-text">$</span>
+                                    <input type="text" class="form-control e_adjust_require_amount" name="amount_table_usd" id="e_amount_table_usd" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
                                 <label>@lang('lang.amount') @lang('lang.kh')<span class="text-danger">*</span></label>
                                 <div class="input-group">
                                     <span class="input-group-text">$</span>
@@ -211,10 +221,10 @@
                                 <select class="form-control select floating" name="adjustment_type" id="e_adjustment_type" required>
                                 </select>
                             </div>
-                            <div class="form-group e_include_tax_rate" style="display: none">
+                            {{-- <div class="form-group e_include_tax_rate" style="display: none">
                                 <label class="">@lang('lang.tax_rate') (%)<span class="text-danger">*</span></label>
                                 <input class="form-control" type="number" id="e_tax_rate" required name="tax_rate" value="{{old('tax_rate')}}">
-                            </div>
+                            </div> --}}
                             <div class="form-group">
                                 <label>@lang('lang.remark')</label>
                                 <textarea class="form-control" type="text" name="description" id="e_description"></textarea>
@@ -264,24 +274,6 @@
 <script src="{{asset('/admin/js/validation-field.js')}}"></script>
 <script>
     $(function(){
-        $("#adjustment_type").on("change", function(){
-            let value_type = $(this).val();
-            if (value_type == "include_taxe") {
-                $(".include_tax_rate").css('display', 'block');
-            }else{
-                $(".include_tax_rate").css('display', 'none');
-                $("#tax_rate").css("border-color","#198754")
-            }
-        });
-        $("#e_adjustment_type").on("change", function(){
-            let value_type = $(this).val();
-            if (value_type == "include_taxe") {
-                $(".e_include_tax_rate").css('display', 'block');
-            }else{
-                $(".e_include_tax_rate").css('display', 'none');
-                $("#e_tax_rate").css("border-color","#198754")
-            }
-        });
         $('#save_adjustment').on('click',function(){
             $("#save_adjustment").attr('disabled',true);
             $(".loading-icon").css('display', 'block');
@@ -313,16 +305,6 @@
                 $(".adjust_require_amount").css("border-color","#198754")
             }
 
-            // ****** include_taxe *****
-            if ($("#adjustment_type").val() == "include_taxe" && $("#tax_rate").val() == "") {
-                num_miss = 1;
-                $("#tax_rate").css("border-color","#dc3545")
-            }
-            if ($("#tax_rate").val() && $("#adjustment_type").val() == "exclude_taxe" ) {
-                $("#tax_rate").val("");
-                num_miss = -1;
-            }
-
             $(".adjust_require").each(function(){
                 if($(this).val()==""){ 
                     num_miss++;
@@ -347,11 +329,11 @@
                         "_token":           "{{ csrf_token() }}",
                         employee_id:        $("#employee_id").val(),
                         amount_usd:         ($("#amount_usd").val() ? $("#amount_usd").val() : 0),
+                        amount_table_usd:   ($("#amount_table_usd").val() ? $("#amount_table_usd").val() : 0),
                         amount_kh:          ($("#amount_kh").val() ? $("#amount_kh").val() : 0),
                         amount_engine_oil:  ($("#amount_engine_oil").val() ? $("#amount_engine_oil").val() : 0),
                         adjustment_date:    $("#adjustment_date").val(),
                         adjustment_type:    $("#adjustment_type").val(),
-                        tax_rate:           ($("#tax_rate").val() ? $("#tax_rate").val() : 0),
                         description:        $("#description").val()
                     },
                     dataType: "JSON",
@@ -403,6 +385,7 @@
                         
                         $('#e_id').val(response.success.id);
                         $('#e_amount_usd').val(response.success.amount_usd);
+                        $('#e_amount_table_usd').val(response.success.amount_table_usd);
                         $('#e_amount_kh').val(response.success.amount_kh);
                         $('#e_amount_engine_oil').val(response.success.amount_engine_oil);
                         $('#e_tax_rate').val(response.success.tax_rate);
@@ -430,16 +413,6 @@
             }else{
                 $(".e_adjust_require_amount").css("border-color","#198754")
             }
-
-            // ****** include_taxe *****
-            if ($("#e_adjustment_type").val() == "include_taxe" && $("#e_tax_rate").val() == "") {
-                e_num_miss = 1;
-                $("#e_tax_rate").css("border-color","#dc3545")
-            }
-            if ($("#e_tax_rate").val() && $("#e_adjustment_type").val() == "exclude_taxe" ) {
-                $("#e_tax_rate").val("");
-                e_num_miss = -1;
-            }
             $(".e_adjust_require").each(function(){
                 if($(this).val()==""){ 
                     e_num_miss++;
@@ -465,6 +438,7 @@
                         id:                 $("#e_id").val(),
                         employee_id:        $("#e_employee_id").val(),
                         amount_usd:         $("#e_amount_usd").val(),
+                        amount_table_usd:   $("#e_amount_table_usd").val(),
                         amount_kh:          $("#e_amount_kh").val(),
                         amount_engine_oil:  $("#e_amount_engine_oil").val(),
                         adjustment_date:    $("#e_adjustment_date").val(),

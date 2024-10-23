@@ -272,25 +272,27 @@ class MotorRentelController extends Controller
                             })
                             ->get();
             foreach ($motorRentals as $key => $motor) {
-                $adjust_amount_kh = 0;
-                $adjust_amount_usd = 0;
-                $adjust_amount_engine_oil = 0;
-                $adjust_fee_tax = 0;
+
                 // **** logic pay adjustment by month and year
+                $adjust_amount_exclude = 0;
+                $adjust_amount_tabple_exclude = 0;
+                $adjust_amount_include = 0;
+                $adjust_amount_tabple_include = 0;
+                $adjust_amount_kh = 0;
+                $adjust_amount_engine_oil = 0;
                 $adjusts = MotorAdjustment::where('employee_id',$motor->employee_id)
                 ->whereMonth('adjustment_date', $month)
                 ->whereYear('adjustment_date', $year)
-                ->get();
-                if (count($adjusts) > 0 ) {
-                    foreach ($adjusts as $key => $adj) {
-                        $adjust_amount_kh += $adj->amount_kh;
-                        $adjust_amount_engine_oil += $adj->amount_engine_oil;
-                        if ($adj->adjustment_type == "include_taxe") {
-                            $adjust_amount_usd += ($adj->amount_usd  - ($adj->amount_usd * $adj->tax_rate / 100));
-                            $adjust_fee_tax += ($adj->amount_usd * $adj->tax_rate / 100);
-                        }else{
-                            $adjust_amount_usd += $adj->amount_usd;
-                        }
+                ->first();
+                if ($adjusts) {
+                    $adjust_amount_kh =  $adjusts->amount_kh;
+                    $adjust_amount_engine_oil = $adjusts->amount_engine_oil;
+                    if ($adjusts->adjustment_type == "include_taxe") {
+                        $adjust_amount_include =  $adjusts->amount_usd;
+                        $adjust_amount_tabple_include = $adjusts->amount_table_usd;
+                    }else{
+                        $adjust_amount_exclude = $adjusts->amount_usd;
+                        $adjust_amount_tabple_exclude = $adjusts->amount_table_usd;
                     }
                 }
 
@@ -345,10 +347,12 @@ class MotorRentelController extends Controller
                         'amount_price_motor_rentel'=> $amount_price_motor_rentel,
                         'amount_price_engine_oil' => $amount_price_engine_oil,
                         'amount_price_taplab_rentel' => $amount_price_taplab_rentel,
-                        'adjust_amount_usd' => $adjust_amount_usd,
-                        'adjust_amount_kh' => $adjust_amount_kh,
-                        'adjust_amount_engine_oil' => $adjust_amount_engine_oil,
-                        'adjust_fee_tax' => $adjust_fee_tax,
+                        'adjust_amount_exclude'         => $adjust_amount_exclude,
+                        'adjust_amount_tabple_exclude'  => $adjust_amount_tabple_exclude,   
+                        'adjust_amount_include'         => $adjust_amount_include,
+                        'adjust_amount_tabple_include'  => $adjust_amount_tabple_include,
+                        'adjust_amount_kh'              => $adjust_amount_kh,
+                        'adjust_amount_engine_oil'      => $adjust_amount_engine_oil,
                         'tax_rate' => $request->tax_rate,
                         'created_by' => Auth::user()->id
                     ];
@@ -394,10 +398,12 @@ class MotorRentelController extends Controller
                         'amount_price_motor_rentel'=> $resignedAmount_price_motor_rentel,
                         'amount_price_engine_oil' => $resignedAmount_price_engine_oil,
                         'amount_price_taplab_rentel' => $resignedAmount_price_taplab_rentel,
-                        'adjust_amount_usd' => $adjust_amount_usd,
-                        'adjust_amount_kh' => $adjust_amount_kh,
-                        'adjust_amount_engine_oil' => $adjust_amount_engine_oil,
-                        'adjust_fee_tax' => $adjust_fee_tax,
+                        'adjust_amount_exclude'         => $adjust_amount_exclude,
+                        'adjust_amount_tabple_exclude'  => $adjust_amount_tabple_exclude,   
+                        'adjust_amount_include'         => $adjust_amount_include,
+                        'adjust_amount_tabple_include'  => $adjust_amount_tabple_include,
+                        'adjust_amount_kh'              => $adjust_amount_kh,
+                        'adjust_amount_engine_oil'      => $adjust_amount_engine_oil,
                         'tax_rate' => $request->tax_rate,
                         'created_by' => Auth::user()->id
                     ];
@@ -432,10 +438,12 @@ class MotorRentelController extends Controller
                         'amount_price_motor_rentel'=> $motor->price_motor_rentel,
                         'amount_price_engine_oil' => $motor->price_engine_oil,
                         'amount_price_taplab_rentel' => $amount_price_taplab_rentel,
-                        'adjust_amount_usd' => $adjust_amount_usd,
-                        'adjust_amount_kh' => $adjust_amount_kh,
-                        'adjust_amount_engine_oil' => $adjust_amount_engine_oil,
-                        'adjust_fee_tax' => $adjust_fee_tax,
+                        'adjust_amount_exclude'         => $adjust_amount_exclude,
+                        'adjust_amount_tabple_exclude'  => $adjust_amount_tabple_exclude,   
+                        'adjust_amount_include'         => $adjust_amount_include,
+                        'adjust_amount_tabple_include'  => $adjust_amount_tabple_include,
+                        'adjust_amount_kh'              => $adjust_amount_kh,
+                        'adjust_amount_engine_oil'      => $adjust_amount_engine_oil,
                         'tax_rate' => $request->tax_rate,
                         'created_by' => Auth::user()->id
                     ];

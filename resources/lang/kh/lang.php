@@ -501,6 +501,7 @@ return[
 	"names_and_surnames"=>"នាម និង គោត្តនាម",
 	"marital_status"=>"ស្ថានភាពគ្រួសារ​",
 	"married"=>"រៀបការហើយ",
+	"motor"=>"ម៉ូតូ",
 	"motor_rentals"=>"ម៉ូតូ និងថេប្លេត",
 	"motor_rental"=>"ព័ត៌មាន M&T",
 	"mrs_nuth_seila"=>"អ្នកស្រី នុត សីលា",

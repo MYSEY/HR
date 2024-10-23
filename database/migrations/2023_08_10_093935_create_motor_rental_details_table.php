@@ -42,7 +42,10 @@ return new class extends Migration
             $table->decimal('amount_price_motor_rentel')->nullable();
             $table->decimal('amount_price_engine_oil')->nullable();
             $table->decimal('amount_price_taplab_rentel')->nullable();
-            $table->decimal('adjust_amount_usd')->nullable();
+            $table->decimal('adjust_amount_exclude')->nullable();
+            $table->decimal('adjust_amount_tabple_exclude')->nullable();
+            $table->decimal('adjust_amount_include')->nullable();
+            $table->decimal('adjust_amount_tabple_include')->nullable();
             $table->decimal('adjust_amount_kh')->nullable();
             $table->decimal('adjust_amount_engine_oil')->nullable();
             $table->decimal('adjust_fee_tax')->nullable();

@@ -78,19 +78,9 @@
                                                         rowspan="1" colspan="1" aria-sort="ascending"
                                                         aria-label="Employee name: activate to sort column descending"
                                                         style="width: 178px;">@lang('lang.employee_name')</th>
-                                                    {{-- <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1"
-                                                        colspan="1" aria-label="Gender: activate to sort column ascending"
-                                                        style="width: 125.15px;">@lang('lang.gender')</th> --}}
-                                                    {{-- <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1"
-                                                        colspan="1" aria-label="Branch name: activate to sort column ascending"
-                                                        style="width: 125.15px;">@lang('lang.location')</th> --}}
                                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1"
                                                         colspan="1" aria-label="Position: activate to sort column ascending"
                                                         style="width: 125.15px;">@lang('lang.position')</th>
-                                                    {{-- <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                        rowspan="1" colspan="1"
-                                                        aria-label="Department: activate to sort column ascending"
-                                                        style="width: 125.15px;">@lang('lang.department')</th> --}}
                                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                         rowspan="1" colspan="1"
                                                         aria-label="Start Date: activate to sort column ascending"
@@ -99,14 +89,7 @@
                                                         rowspan="1" colspan="1"
                                                         aria-label="End Date: activate to sort column ascending"
                                                         style="width: 89.6px;">@lang('lang.m_end_date')</th>
-                                                    {{-- <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                        rowspan="1" colspan="1"
-                                                        aria-label="Year of manufature: activate to sort column ascending"
-                                                        style="width: 89.6px;">@lang('lang.year_of_manufature')</th> --}}
-                                                    {{-- <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                        rowspan="1" colspan="1"
-                                                        aria-label="Expiretion year: activate to sort column ascending"
-                                                        style="width: 89.6px;">@lang('lang.expiretion_year')</th> --}}
+
                                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                         rowspan="1" colspan="1"
                                                         aria-label="Shelt life: activate to sort column ascending"
@@ -115,10 +98,6 @@
                                                         rowspan="1" colspan="1"
                                                         aria-label="Start date Tablet: activate to sort column ascending"
                                                         style="width: 125.15px;">@lang('lang.start_date_tablet')</th>
-                                                    {{-- <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                        rowspan="1" colspan="1"
-                                                        aria-label="Number plate: activate to sort column ascending"
-                                                        style="width: 125.15px;">@lang('lang.number_plate')</th> --}}
                                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                         rowspan="1" colspan="1"
                                                         aria-label="Total gasoline: activate to sort column ascending"
@@ -131,14 +110,28 @@
                                                         rowspan="1" colspan="1"
                                                         aria-label="Total gasoline liters: activate to sort column ascending"
                                                         style="width: 89.6px;">@lang('lang.total_gasoline_liters')</th>
+                                                        
+                                                    
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                        rowspan="1" colspan="1"
+                                                        aria-label="adjustment: activate to sort column ascending"
+                                                        style="width: 89.6px;">@lang('lang.adjustment') @lang('lang.amount')</th>
                                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                         rowspan="1" colspan="1"
                                                         aria-label="Total price gasoline: activate to sort column ascending"
                                                         style="width: 89.6px;">@lang('lang.total_price_gasoline')</th>
                                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                         rowspan="1" colspan="1"
+                                                        aria-label="Taplab Price: activate to sort column ascending"
+                                                        style="width: 89.6px;">@lang('lang.adjustment') @lang('lang.motor') (@lang('lang.included_tax'))</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                        rowspan="1" colspan="1"
                                                         aria-label="Price motor rentel: activate to sort column ascending"
                                                         style="width: 89.6px;">@lang('lang.price_motor_rentel')</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                        rowspan="1" colspan="1"
+                                                        aria-label="Taplab Price: activate to sort column ascending"
+                                                        style="width: 89.6px;">@lang('lang.adjustment') @lang('lang.tablet') (@lang('lang.included_tax'))</th>
                                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                         rowspan="1" colspan="1"
                                                         aria-label="Taplab Price: activate to sort column ascending"
@@ -166,6 +159,18 @@
                                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                         rowspan="1" colspan="1"
                                                         aria-label="Price engine oil: activate to sort column ascending"
+                                                        style="width: 89.6px;">@lang('lang.adjustment') @lang('lang.engine_oil')</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                        rowspan="1" colspan="1"
+                                                        aria-label="Taplab Price: activate to sort column ascending"
+                                                        style="width: 89.6px;">@lang('lang.adjustment') @lang('lang.motor') (@lang('lang.excluded_tax'))</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                        rowspan="1" colspan="1"
+                                                        aria-label="Taplab Price: activate to sort column ascending"
+                                                        style="width: 89.6px;">@lang('lang.adjustment') @lang('lang.tablet') (@lang('lang.excluded_tax'))</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                        rowspan="1" colspan="1"
+                                                        aria-label="Price engine oil: activate to sort column ascending"
                                                         style="width: 89.6px;">@lang('lang.net_amount') (@lang('lang.usd'))</th>
                                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                         rowspan="1" colspan="1"
@@ -175,6 +180,7 @@
                                                         rowspan="1" colspan="1"
                                                         aria-label="Payment Date: activate to sort column ascending"
                                                         style="width: 51.475px;">@lang('lang.payment_date')</th>
+
                                                     <th class="text-center sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                         rowspan="1" colspan="1"
                                                         aria-label="Status: activate to sort column ascending"
@@ -196,36 +202,40 @@
                                                                 <a href="{{ url('/motor-rentel/detail', $item->id) }}">{{ $item->MotorEmployee->number_employee }}</a>
                                                             </td>
                                                             <td class="stuck-scroll-3">{{ Helper::getLang() == 'en' ?  $item->MotorEmployee->employee_name_en : $item->MotorEmployee->employee_name_kh }}</td>
-                                                            {{-- <td>{{ $item->MotorEmployee->EmployeeGender }}</td>
-                                                            <td>{{ $item->MotorEmployee->EmployeeBranch }}</td> --}}
                                                             <td>{{ $item->MotorEmployee->EmployeePosition }}</td>
-                                                            {{-- <td>{{ $item->MotorEmployee->EmployeeDepartment }}</td> --}}
                                                             <td class="start_date">{{ $item->start_date ? \Carbon\Carbon::parse($item->start_date)->format('d-M-Y') : '' }}</td>
                                                             <td class="end_date">{{ $item->end_date ? \Carbon\Carbon::parse($item->end_date)->format('d-M-Y') : '' }}</td>
-                                                            {{-- <td class="product_year">{{ $item->product_year }}</td>
-                                                            <td class="expired_year">{{ $item->expired_year }}</td> --}}
                                                             <td class="shelt_life">{{ $item->shelt_life }}</td>
                                                             <td>{{ $item->start_date_taplab ? \Carbon\Carbon::parse($item->start_date_taplab)->format('d-M-Y') : '' }}</td>
 
-                                                            {{-- <td class="number_plate">{{ $item->number_plate }}</td> --}}
                                                             <td class="total_gasoline">{{ $item->total_gasoline }} (L)</td>
                                                             <td class="total_work_day">{{ $item->total_work_day }}</td>
                                                             @php
                                                                 $total_riels = ($item->total_gasoline * $item->total_work_day * $item->gasoline_price_per_liter);
-                                                                $amount_riels = round($total_riels,-2);
-                                                                $totalAmount = (($item->amount_price_motor_rentel - ($item->amount_price_motor_rentel * $item->tax_rate) / 100) + ($item->amount_price_taplab_rentel - ($item->amount_price_taplab_rentel * $item->tax_rate) / 100 ));
-                                                            @endphp
+                                                                $amount_riels = round($total_riels,-2) + $item->adjust_amount_kh;
+                                                                
+                                                                $total_m_t = $item->amount_price_taplab_rentel + $item->amount_price_motor_rentel + $item->adjust_amount_include + $item->adjust_amount_tabple_include;
+                                                                $total_fee_tax =((($item->amount_price_motor_rentel+$item->adjust_amount_include) * $item->tax_rate) / 100) + ((($item->amount_price_taplab_rentel+$item->adjust_amount_tabple_include) * $item->tax_rate) / 100 )+$item->adjust_fee_tax;
+                                                                $totalAmount = $total_m_t - $total_fee_tax;
 
+                                                                $total_net = (round($totalAmount,2) + round($item->amount_price_engine_oil,2) + $item->adjust_amount_engine_oil)+$item->adjust_amount_exclude+$item->adjust_amount_tabple_exclude;
+                                                            @endphp
                                                             <td>{{ $item->total_gasoline * $item->total_work_day }} (L)</td>
+                                                            <td class="adjustment">{{number_format($item->adjust_amount_kh)}} ៛</td>
                                                             <td>{{ number_format($amount_riels) }} ៛</td>
+                                                            <td>{{ $item->adjust_amount_include}} $</td>
                                                             <td class="price_motor_rentel">{{ round($item->amount_price_motor_rentel,2) }} $</td>
+                                                            <td class="adjustment_t">{{ $item->adjust_amount_tabple_include}} $</td>
                                                             <td >{{ $item->amount_price_taplab_rentel ? round($item->amount_price_taplab_rentel,2) : "0" }} $</td>
-                                                            <td class="tax_rate">{{$item->amount_price_taplab_rentel + $item->amount_price_motor_rentel}} $</td>
+                                                            <td class="tax_rate">{{$total_m_t}} $</td>
                                                             <td class="tax_rate">{{ $item->tax_rate }}%</td>
-                                                            <td>{{ (($item->amount_price_motor_rentel * $item->tax_rate) / 100) + (($item->amount_price_taplab_rentel * $item->tax_rate) / 100 )}} $</td>
+                                                            <td>{{ $total_fee_tax}} $</td>
                                                             <td>{{ round($totalAmount,2)}} $</td>
                                                             <td class="price_engine_oil">{{ round($item->amount_price_engine_oil,2) }} $</td>
-                                                            <td >{{ round($item->amount_price_engine_oil,2) + round($totalAmount,2) }} $</td>
+                                                            <td class="adjustment_engine_oil">{{$item->adjust_amount_engine_oil}} $</td>
+                                                            <td>{{$item->adjust_amount_exclude}}</td>
+                                                            <td>{{$item->adjust_amount_tabple_exclude}}</td>
+                                                            <td class="price_engine_oil">{{ $total_net }} $</td>
                                                             <td><span style="font-size: 13px" class="badge bg-inverse-danger">{{ $item->resigned_date ? \Carbon\Carbon::parse($item->resigned_date)->format('d-M-Y') :'' }}</span></td>
                                                             <td>{{ $item->created_at ? \Carbon\Carbon::parse($item->created_at)->format('d-M-Y') : '' }}</td>
                                                             <td><a class="btn btn-sm btn-primary" href="{{ url('/motor-rentel/detail', $item->id) }}">@lang('lang.generate_payslip')</a></td>
