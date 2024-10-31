@@ -27,6 +27,7 @@ use App\Http\Controllers\Admins\ActivityLogController;
 use App\Http\Controllers\Admins\LeavesAdminController;
 use App\Http\Controllers\Admins\MotorRentelController;
 use App\Http\Controllers\Admins\PayrollItemController;
+use App\Http\Controllers\Admins\PerformanceController;
 use App\Http\Controllers\Admins\ExchangeRateController;
 use App\Http\Controllers\Admins\TrainingTypeController;
 use App\Http\Controllers\Admins\FringeBenefitController;
@@ -37,11 +38,11 @@ use App\Http\Controllers\Admins\CandidateResumeController;
 use App\Http\Controllers\Admins\ConmmuneAddressController;
 use App\Http\Controllers\Admins\EmployeePayrollController;
 use App\Http\Controllers\Admins\EmployeeProfileController;
+use App\Http\Controllers\Admins\MotorAdjustmentController;
 use App\Http\Controllers\Admins\ProvinceAddressController;
 use App\Http\Controllers\Admins\RecruitmentPlanController;
 use App\Http\Controllers\Admins\DistrictsAddressController;
 use App\Http\Controllers\Admins\ChildrenAllowanceController;
-use App\Http\Controllers\Admins\MotorAdjustmentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -233,6 +234,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('payroll/staff/risign/create',[EmployeePayrollController::class,'payrollStaffResignCreate']);
     Route::post('payroll/staff/risign/search',[EmployeePayrollController::class,'payrollStaffResignSearch']);
 
+    Route::resource('performance', PerformanceController::class);
 
     // Motor Rental
     Route::get('motor-rentel/list',[MotorRentelController::class,'index']);

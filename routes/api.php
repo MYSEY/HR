@@ -19,4 +19,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('address', [AddressController::class,'index'])->name('address');
+// Route::get('address', [AddressController::class,'index'])->name('address');
