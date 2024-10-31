@@ -141,9 +141,10 @@
 
         // Event delegation for dynamically added Remove buttons in purposes
         $(document).on('click', '.btnRemovePurpose', function() {
-           // Remove the current tr and all subsequent tr elements
-            $(this).closest('tr').next().addBack().remove();
-            // $(this).closest('tr').nextAll().remove();
+            // Find all rows with the class 'section-purpose' starting from the clicked button's row
+            let currentRow = $(this).closest('tr');
+            // Remove the current row and the next row(s) associated with the purpose section
+            currentRow.nextUntil('tr:not(.section-purpose)').addBack().remove();
         });
         $(document).on('click', '.btnRemoveMore', function() {
            // Remove the current tr and all subsequent tr elements
@@ -176,7 +177,7 @@
 
     // Function to create a new purpose row
     function addPurposeRow() {
-        return `<tr class='' style='text-align: center'>
+        return `<tr class='section-purpose' style='text-align: center'>
             <td colspan="2" class="text-center">
                 <input type="text" class="form-control" placeholder="គោលបំណង" required>
             </td>
@@ -186,7 +187,7 @@
                 <button type="button" class="btn btn-danger btn-sm btnRemovePurpose">Remove Purpose</button>
             </td>
         </tr>
-        <tr class='section-row' style='text-align: center'>
+        <tr class='section-purpose' style='text-align: center'>
             <td class="text-center">
                 <textarea rows="3" class="form-control" placeholder="Enter text here" spellcheck="false" required></textarea>
             </td>
@@ -204,7 +205,7 @@
     }
     // Function to create a new record row
     function addNewRecord() {
-        return `<tr class='section-row' style='text-align: center'>
+        return `<tr class='section-purpose' style='text-align: center'>
             <td class="text-center">
                 <textarea rows="3" class="form-control" placeholder="Enter text here" spellcheck="false" required></textarea>
             </td>
