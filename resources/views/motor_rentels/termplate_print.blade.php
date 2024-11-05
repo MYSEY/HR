@@ -95,6 +95,30 @@
                                 <span class="float-end">{{ round((($data->amount_price_motor_rentel * $data->tax_rate) / 100),2) }} $</span>
                             </td>
                         </tr>
+
+                        <tr>
+                            <td>@lang('lang.adjustment') @lang('lang.motor') (@lang('lang.included_tax')) ($):</td>
+                            <td>
+                                <span class="float-end">​{{ round($data->adjust_amount_include,2) }} $</span>
+                            </td>
+                            <td>
+                                @lang('lang.adjustment') @lang('lang.motor') (@lang('lang.included_tax')) ({{$data->tax_rate}}%)
+                            </td>
+                            <td>
+                                <span class="float-end">{{ round((($data->adjust_amount_include * $data->tax_rate) / 100),2) }} $</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>@lang('lang.adjustment') @lang('lang.motor') (@lang('lang.excluded_tax')) ($):</td>
+                            <td>
+                                <span class="float-end">​{{ round($data->adjust_amount_exclude,2) }} $</span>
+                            </td>
+                            <td></td>
+                            <td>
+                                
+                            </td>
+                        </tr>
+
                         <tr>
                             <td>@lang('lang.gross_taplab_fee') ($): </td>
                             <td><span class="float-end">{{ round($data->amount_price_taplab_rentel,2) }} $</span></td>
@@ -104,42 +128,85 @@
                             </td>
                         </tr>
                         <tr>
+                            <td>@lang('lang.adjustment') @lang('lang.tablet') (@lang('lang.included_tax')) ($):</td>
+                            <td>
+                                <span class="float-end">​{{ round($data->adjust_amount_tabple_include,2) }} $</span>
+                            </td>
+                            <td>
+                                @lang('lang.adjustment') @lang('lang.tablet') (@lang('lang.included_tax')) ({{$data->tax_rate}}%):
+                            </td>
+                            <td>
+                                <span class="float-end">{{ round((($data->adjust_amount_tabple_include * $data->tax_rate) / 100),2) }} $
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>@lang('lang.adjustment') @lang('lang.tablet') (@lang('lang.excluded_tax')) ($):</td>
+                            <td>
+                                <span class="float-end">​{{ round($data->adjust_amount_tabple_exclude,2) }} $</span>
+                            </td>
+                            <td></td>
+                            <td>
+                                
+                            </td>
+                        </tr>
+                        <tr>
                             <td>@lang('lang.engine_oil') ($):</td>
                             <td><span class="float-end">{{ round($data->amount_price_engine_oil,2) }} $</span></td>
                             <td></td>
                             <td></td>
                         </tr>
-                        @php
-                            $totalAmount = (($data->total_gasoline * $data->total_work_day) * $data->gasoline_price_per_liter);
-                            $total = round($totalAmount,-2)
-                        @endphp
+                        <tr>
+                            <td>@lang('lang.adjustment') @lang('lang.engine_oil') ($):</td>
+                            <td><span class="float-end">{{ round($data->adjust_amount_engine_oil,2) }} $</span></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
                         <tr class="tr-background-83">
                             <td>@lang('lang.total_earnings') ($): </td>
+                            @php
+                                $totalearnings = (($data->amount_price_motor_rentel + $data->adjust_amount_include +$data->adjust_amount_exclude) + ($data->amount_price_taplab_rentel + $data->adjust_amount_tabple_include +$data->adjust_amount_tabple_exclude) + ($data->amount_price_engine_oil+$data->adjust_amount_engine_oil));
+                            @endphp
                             <td>
-                                <span class="float-end">{{ round(($data->amount_price_motor_rentel + $data->amount_price_taplab_rentel + $data->amount_price_engine_oil),2) }} $</span>
+                                <span class="float-end">{{ $totalearnings }} $</span>    
                             </td>
-                            <td>@lang('lang.total_deductions') ($): </td>
+                            <td>@lang('lang.total_deductions') $: </td>
+                            @php
+                                $totalDeductions = (((($data->amount_price_taplab_rentel + $data->adjust_amount_include) * $data->tax_rate) + (($data->amount_price_motor_rentel + $data->adjust_amount_tabple_include) * $data->tax_rate)) / 100);
+                            @endphp
                             <td>
-                                <span class="float-end">{{ round(((($data->amount_price_taplab_rentel * $data->tax_rate) + ($data->amount_price_motor_rentel * $data->tax_rate)) / 100),2) }} $</span>
+                                <span class="float-end">{{ round($totalDeductions,2) }} $</span>
                             </td>
                         </tr>
+                        @php
+                            $totalAmountRail = (($data->total_gasoline * $data->total_work_day) * $data->gasoline_price_per_liter);
+                            $total = round(($totalAmountRail + $data->adjust_amount_kh),-2)
+                        @endphp
                         <tr class="tr-background-83">
                             <td>@lang('lang.gasoline') (៛)</td>
                             <td>
-                                <span class="float-end">{{ number_format($total) }} ៛</span>
-                                {{-- <span class="float-end">{{ number_format($data->gasoline_price_per_liter) }} ៛</span> --}}
+                                <span class="float-end">{{ number_format($totalAmountRail) }} ៛</span>
                             </td>
                             <td>@lang('lang.other_deduction'): </td>
                             <td>
-    
+
+                            </td>
+                        </tr>
+                        <tr class="tr-background-83">
+                            <td>@lang('lang.adjustment') @lang('lang.amount') (៛)</td>
+                            <td>
+                                <span class="float-end">{{ number_format($data->adjust_amount_kh) }} ៛</span>
+                            </td>
+                            <td></td>
+                            <td>
+
                             </td>
                         </tr>
                         <tr>
-                            <td class="td-border"></td>
+                            <td class="td-border"> </td>
                             <td class="td-border"></td>
                             <td class="td-background-cc">@lang('lang.total_net_pay') ($):</td>
                             <td class="td-background-cc">
-                                <span class="float-end">{{round(($data->amount_price_engine_oil + ($data->amount_price_motor_rentel - ($data->amount_price_motor_rentel * $data->tax_rate) / 100) + ($data->amount_price_taplab_rentel - ($data->amount_price_taplab_rentel * $data->tax_rate) / 100 )),2) }} $</span>
+                                <span class="float-end">{{ round(($totalearnings - $totalDeductions),2) }} $</span>
                             </td>
                         </tr>
                         <tr>

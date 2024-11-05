@@ -41,7 +41,27 @@ class MotorAdjustmentController extends Controller
             }
         })
         ->get();
-        $data = MotorAdjustment::orderBy('id','DESC')->get();
+        $data = MotorAdjustment::leftJoin('users', 'motor_adjustments.employee_id', '=', 'users.id')
+        ->select(
+            'motor_adjustments.*',
+            'users.employee_name_en',
+            'users.employee_name_kh',
+            'users.number_employee',
+            'users.branch_id',
+            'users.department_id',
+        )
+        ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+            if ($RolePermission == 'Employee') {
+                $query->where('users.id',Auth::user()->id);
+            }
+            if ($RolePermission == 'HOD') {
+                $query->whereIn("users.department_id", EmployeeRepository::getRoleHOD());
+            }
+            if ($RolePermission == 'BM' || $RolePermission == 'HR') {
+                $query->where("users.branch_id", Auth::user()->branch_id);
+            }
+        })
+        ->orderBy('id','DESC')->get();
         return view('motor_rentels.adjustment', compact('data', 'employees'));
     }
 
