@@ -220,6 +220,7 @@
 
                                                                 $total_net = (round($totalAmount,2) + round($item->amount_price_engine_oil,2) + $item->adjust_amount_engine_oil)+$item->adjust_amount_exclude+$item->adjust_amount_tabple_exclude;
                                                             @endphp
+
                                                             <td>{{ $item->total_gasoline * $item->total_work_day }} (L)</td>
                                                             <td class="adjustment">{{number_format($item->adjust_amount_kh)}} ៛</td>
                                                             <td>{{ number_format($amount_riels) }} ៛</td>
@@ -299,9 +300,14 @@
                         let end_date = moment(row.end_date).format('D-MMM-YYYY')
                         let start_date_taplab = row.start_date_taplab ? moment(row.start_date_taplab).format('D-MMM-YYYY'): "";
                         let resigned_date = row.resigned_date ? moment(row.resigned_date).format('D-MMM-YYYY') : '';
-                        let amount_usd = (row.amount_price_motor_rentel - (row.amount_price_motor_rentel * row.tax_rate) / 100 ) + (row.amount_price_taplab_rentel - (row.amount_price_taplab_rentel * row.tax_rate) / 100 );
-                        let total_amount =(Number(row.amount_price_taplab_rentel) + Number(row.amount_price_motor_rentel));
-                        let total_tax = ((row.amount_price_motor_rentel * row.tax_rate) / 100) + ((row.amount_price_taplab_rentel * row.tax_rate) / 100 );
+
+                        let total_riels = (row.total_gasoline * row.total_work_day * row.gasoline_price_per_liter);
+                        let amount_riels = (Number(total_riels) + Number(row.adjust_amount_kh));
+                        
+                        let total_m_t = Number(row.amount_price_motor_rentel) + Number(row.adjust_amount_include) + Number(row.amount_price_taplab_rentel) + Number(row.adjust_amount_tabple_include);
+                        let total_fee_tax =(((Number(row.amount_price_motor_rentel) + Number(row.adjust_amount_include)) * row.tax_rate) / 100) + (((Number(row.amount_price_taplab_rentel) + Number(row.adjust_amount_tabple_include)) * row.tax_rate) / 100 )+row.adjust_fee_tax;
+                        let totalAmount = total_m_t - total_fee_tax;
+                        let total_net = totalAmount+ Number(row.amount_price_engine_oil) + Number(row.adjust_amount_engine_oil) + Number(row.adjust_amount_exclude) + Number(row.adjust_amount_tabple_exclude);
                         let resigned ="";
                         if (row.resigned_date) {
                             resigned = "bg-inverse-danger"
@@ -311,48 +317,36 @@
                                     '<td class="ids stuck-scroll-3">'+(e+1)+'</td>'+
                                     '<td class="number_employee_id stuck-scroll-3"><a href="{{url("motor-rentel/detail")}}/'+row.id+'">' + (row.number_employee) + '</a></td>'+
                                     '<td class="stuck-scroll-3">'+( localeLanguage == 'en' ? row.employee_name_en : row.employee_name_kh )+'</td>'+
-                                    '<td>'+( row.user.gender == null ? "" : localeLanguage == 'en' ? row.user.gender.name_english : row.user.gender.name_khmer )+'</td>'+
-                                    '<td>'+( localeLanguage == 'en' ? row.user.branch.branch_name_en : row.user.branch.branch_name_kh )+'</td>'+
                                     '<td>'+( row.user.position ? localeLanguage == 'en' ? row.user.position.name_english : row.user.position.name_khmer : "" )+'</td>'+
-                                    '<td>'+( localeLanguage == 'en' ? row.user.department.name_english : row.user.department.name_khmer )+'</td>'+
                                     '<td class="start_date">'+( start_date )+'</td>'+
                                     '<td class="end_date">'+( end_date )+'</td>'+
-                                    '<td>' +(start_date_taplab)+ '</td>'+
-                                    '<td class="product_year">'+( row.product_year )+'</td>'+
-                                    '<td class="expired_year">'+( row.expired_year )+'</td>'+
                                     '<td class="shelt_life">'+( row.shelt_life )+'</td>'+
-                                    '<td class="number_plate">'+( row.number_plate )+'</td>'+
+                                    '<td>' +(start_date_taplab)+ '</td>'+
                                     '<td class="total_gasoline">'+( row.total_gasoline )+' (L)</td>'+
                                     '<td class="total_work_day">'+( row.total_work_day )+'</td>'+
                                     '<td>'+( row.total_gasoline * row.total_work_day )+'</td>'+
-                                    '<td>'+((row.total_gasoline * row.total_work_day * row.gasoline_price_per_liter))+' ៛</td>'+
+                                    '<td class="adjustment">'+(Number(row.adjust_amount_kh))+'៛</td>'+
+                                    '<td>'+(amount_riels)+' ៛</td>'+
+                                    '<td>'+row.adjust_amount_include+' $</td>'+
                                     '<td class="price_motor_rentel">'+ ( Number(row.amount_price_motor_rentel) )+' $</td>'+
+                                    '<td class="adjustment_t">'+row.adjust_amount_tabple_include+' $</td>'+
                                     '<td >'+ ( row.amount_price_taplab_rentel ? Number(row.amount_price_taplab_rentel) : "0" )+' $</td>'+
-                                    '<td >'+(total_amount)+' $</td>'+
+                                    '<td >'+(total_m_t)+' $</td>'+
                                     '<td class="tax_rate">'+( row.tax_rate )+'%</td>'+
-                                    '<td>'+ (total_tax) +' $</td>'+
-                                    '<td>'+(parseFloat(amount_usd.toFixed(2)))+' $</td>'+
-                                    '<td class="price_engine_oil">'+ ( Number(row.amount_price_engine_oil) + parseFloat(amount_usd.toFixed(2)))+' $</td>'+
-                                    '<td >'+ ( Number(row.amount_price_engine_oil) )+' $</td>'+
+                                    '<td>'+ (total_fee_tax) +' $</td>'+
+                                    '<td>'+(parseFloat(totalAmount.toFixed(2)))+' $</td>'+
+                                    '<td class="price_engine_oil">'+row.amount_price_engine_oil+' $</td>'+
+                                    '<td class="adjustment_engine_oil">'+row.adjust_amount_engine_oil+' $</td>'+
+                                    '<td>'+row.adjust_amount_exclude+' $</td>'+
+                                    '<td>'+row.adjust_amount_tabple_exclude+' $</td>'+
+                                    '<td class="price_engine_oil">'+(total_net)+' $</td>'+
                                     '<td><span style="font-size: 13px" class="badge bg-inverse-danger">'+(resigned_date)+'</span></td>'+
                                     '<td>'+(created_at)+'</td>'+
                                     '<td><a class="btn btn-sm btn-primary" href="{{url("motor-rentel/detail")}}/'+row.id+'">@lang('lang.generate_payslip')</a></td>'+
-                                    // '<td>'+
-                                    //     '<div class="dropdown dropdown-action">' +
-                                    //     '<a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">' +
-                                    //     '<i class="material-icons">more_vert</i>' +
-                                    //     '</a>' +
-                                    //     '<div class="dropdown-menu dropdown-menu-right">' +
-                                    //     '<a class="dropdown-item motor_detail" data-id="{{'(row.id)'}}" href="{{url("motor-rentel/detail")}}/'+row.id+'">' +
-                                    //     '<i class="fa fa-eye m-r-5"></i> View' +
-                                    //     '</a>' +
-                                    //     '</div>' +
-                                    //     '</div>' +
-                                    // '</td>'+
                                 '</tr>';
                     });
                 } else {
-                    var tr = '<tr><td colspan=25 align="center">ពុំមានទិន្នន័យសម្រាប់បង្ហាញ</td></tr>';
+                    var tr = '<tr><td colspan=29 align="center">ពុំមានទិន្នន័យសម្រាប់បង្ហាញ</td></tr>';
                 }
                 $(".tbl-pay-motor tbody").html(tr);
                 $("#btn-text-loading").hide();
