@@ -534,11 +534,22 @@ class LeavesEmployeeController extends Controller
             LeaveRequest::create($data);
             
             // for send email
-            // $line_manager = User::where("id", $data['next_approver'])->first();
+           
+            // $manager1 = User::where("id", Auth::user()->line_manager)->first();
+            // $line_manager2 = User::where("id", $data['next_approver'])->first();
+
             // $mail_message = ModelsMail::first();
-            // if ($line_manager && $mail_message) {
-            //     if ($line_manager->email) {
-            //         Mail::to($line_manager->email)->send(new SendEmail($mail_message));
+            // if ($line_manager2 && $mail_message) {
+            //     if ($line_manager2->email) {
+            //         $recipients = [$manager1->email, $line_manager2->email];
+            //         // $recipients = ["mysey1994@gmail.com", "hshong9666@gmail.com"];
+            //         if ($manager1->email != $line_manager2->email) {
+            //             foreach ($recipients as $email) {
+            //                 Mail::to($email)->send(new SendEmail($mail_message));
+            //             }
+            //         }else{
+            //             Mail::to($line_manager2->email)->send(new SendEmail($mail_message));
+            //         }
             //     }
             // }
             DB::commit();
