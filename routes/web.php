@@ -234,7 +234,9 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('payroll/staff/risign/create',[EmployeePayrollController::class,'payrollStaffResignCreate']);
     Route::post('payroll/staff/risign/search',[EmployeePayrollController::class,'payrollStaffResignSearch']);
 
-    Route::resource('performance', PerformanceController::class);
+    Route::get('performance', [PerformanceController::class,'index']);
+    Route::get('performance/create', [PerformanceController::class,'create']);
+    Route::post('performance/store', [PerformanceController::class,'store']);
 
     // Motor Rental
     Route::get('motor-rentel/list',[MotorRentelController::class,'index']);

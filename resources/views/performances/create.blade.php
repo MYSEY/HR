@@ -3,24 +3,24 @@
     <div class="page-header">
         <div class="row">
             <div class="col">
-                <h3 class="page-title">@lang('lang.add_new_performance')</h3>
+                <h3 class="page-title">@lang('lang.add_performance')</h3>
                 <ul class="breadcrumb">
                     <li class="breadcrumb-item"><a href="{{ url('/dashboad/employee') }}">@lang('lang.dashboard')</a></li>
-                    <li class="breadcrumb-item active">@lang('lang.add_new_performance')</li>
+                    <li class="breadcrumb-item active">@lang('lang.add_performance')</li>
                 </ul>
             </div>
         </div>
     </div>
+    {!! Toastr::message() !!}
     <div class="card">
         <div class="card-body">
-            <form action="{{ url('users/create') }}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
+            <form action="" id="performanceForm" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
                 @csrf
                 <div class="row">
                     <div class="col-md-4 hr-form-group-select2">
                         <div class="form-group">
                             <label>@lang('lang.employee')</label>
-                            <select class="form-control hr-select2-option" id="employee" name="employee"
-                                value="{{ old('employee') }}">
+                            <select class="form-control hr-select2-option" id="employee_id" name="employee_id" value="{{ old('employee_id') }}">
                                 <option selected value=""> -- @lang('lang.select')--</option>
                                 @foreach ($employee as $item)
                                     <option data-id="{{ $item->id }}" value="{{ $item->id }}">
@@ -28,6 +28,22 @@
                                     </option>
                                 @endforeach
                             </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>@lang('lang.from_date')</label>
+                            <div class="cal-icon">
+                                <input class="form-control datetimepicker" type="text" id="from_date" name="from_date" value="{{old('from_date')}}" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>@lang('lang.to_date')</label>
+                            <div class="cal-icon">
+                                <input class="form-control datetimepicker" type="text" id="to_date" name="to_date" value="{{old('to_date')}}" required>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -48,7 +64,7 @@
                                     <div>
                                         <tr>
                                             <td colspan="2" class="text-center">
-                                                <input type="text" class="form-control" placeholder="ក. កត្តាប្រតិបត្តិការ (%)" value="" required>
+                                                <input type="text" class="form-control" id="title" name="title[]" placeholder="ក. កត្តាប្រតិបត្តិការ (%)" value="{{old('title')}}" required>
                                             </td>
                                             <td colspan="1" class="text-center"></td>
                                             <td colspan="1" class="text-center"></td>
@@ -57,7 +73,7 @@
                                         <div>
                                             <tr>
                                                 <td colspan="2" class="text-center">
-                                                    <input type="text" class="form-control" placeholder="គោលបំណង" value="" required>
+                                                    <input type="text" class="form-control" id="purpose" name="purpose[]" placeholder="គោលបំណង" value="{{old('purpose')}}" required>
                                                 </td>
                                                 <td colspan="1" class="text-center"></td>
                                                 <td colspan="1" class="text-center"></td>
@@ -68,16 +84,16 @@
                                             <div>
                                                 <tr>
                                                     <td class="text-center">
-                                                        <textarea rows="3" class="form-control" placeholder="Enter text here" spellcheck="false" required></textarea>
+                                                        <textarea rows="3" class="form-control" name="key_kpi[]" placeholder="Enter text here" spellcheck="false" required>{{ old('key_kpi') }}</textarea>
                                                     </td>
                                                     <td class="text-center">
-                                                        <textarea rows="3" class="form-control" placeholder="Enter text here" spellcheck="false" required></textarea>
+                                                        <textarea rows="3" class="form-control" name="action_plan[]" placeholder="Enter text here" spellcheck="false" required>{{ old('action_plan') }}</textarea>
                                                     </td>
                                                     <td class="text-center">
-                                                        <textarea rows="3" class="form-control" placeholder="Enter text here" spellcheck="false" required></textarea>
+                                                        <textarea rows="3" class="form-control" name="goal[]" placeholder="Enter text here" spellcheck="false" required>{{ old('goal') }}</textarea>
                                                     </td>
                                                     <td class="text-center">
-                                                        <input type="number" step="any" class="form-control weight" id="weight" placeholder="%" required>
+                                                        <input type="number" step="any" class="form-control weight" name="weight[]" id="weight" placeholder="%" value="{{old('weight')}}" required>
                                                     </td>
                                                     <td class="text-center">
                                                         <button type="button" class="btn btn-success btn-sm addRecord"><i class="fa fa-plus"></i></button>
@@ -122,8 +138,8 @@
     $(function() {
         // Event to add a new purpose
         $(document).on('click',".addNewPurpose",function() {
-            // $("#tbody1").append(addPurposeRow());
-            $(this).closest('tr').before(addPurposeRow());
+            $("#tbody1").append(addPurposeRow());
+            // $(this).closest('tr').before(addPurposeRow());
         });
         $(document).on('click',".addMore", function() {
             $("#tbody1").append(addMoreRow());
@@ -132,7 +148,8 @@
         // Event to add a new record
         $(document).on('click', '.addRecord', function() {
             // Append a new record row to the last purpose section
-            $(this).closest('tr').before(addNewRecord());
+            // $(this).closest('tr').before(addNewRecord());
+            $("#tbody1").append(addNewRecord());
         });
         // Event delegation for dynamically added Remove buttons in records
         $(document).on('click', '.removeRecord', function() {
@@ -173,13 +190,31 @@
         $(".weight").on('focusout',function(){
             $(this).css("border-color","#d8d2d2");
         });
+        $(document).on('submit', '#performanceForm', function(e) {
+            e.preventDefault(); // Prevent the form from submitting the traditional way
+
+            $.ajax({
+                type: "POST",
+                url: "{{ url('performance/store') }}",
+                data: $(this).serialize(),
+                dataType: "JSON",
+                success: function (response) {
+                    alert('Form submitted successfully!');
+                    $('#performanceForm').trigger("reset");
+                },
+                error: function(xhr, status, error) {
+                    // Handle errors
+                    alert('An error occurred. Please try again.');
+                }
+            });
+        });
     });
 
     // Function to create a new purpose row
     function addPurposeRow() {
         return `<tr class='section-purpose' style='text-align: center'>
             <td colspan="2" class="text-center">
-                <input type="text" class="form-control" placeholder="គោលបំណង" required>
+                <input type="text" class="form-control" name="purpose[]" placeholder="គោលបំណង" value="{{old('purpose')}}" required>
             </td>
             <td colspan="1" class="text-center"></td>
             <td colspan="1" class="text-center"></td>
@@ -189,15 +224,15 @@
         </tr>
         <tr class='section-purpose' style='text-align: center'>
             <td class="text-center">
-                <textarea rows="3" class="form-control" placeholder="Enter text here" spellcheck="false" required></textarea>
+                <textarea rows="3" class="form-control" name="key_kpi[]" placeholder="Enter text here" spellcheck="false" required></textarea>
             </td>
             <td class="text-center">
-                <textarea rows="3" class="form-control" placeholder="Enter text here" spellcheck="false" required></textarea>
+                <textarea rows="3" class="form-control" name="action_plan[]" placeholder="Enter text here" spellcheck="false" required></textarea>
             </td>
             <td class="text-center">
-                <textarea rows="3" class="form-control" placeholder="Enter text here" spellcheck="false" required></textarea>
+                <textarea rows="3" class="form-control" name="goal[]" placeholder="Enter text here" spellcheck="false" required></textarea>
             </td>
-            <td class="text-center"><input type="number" step="any" class="form-control weight" id="weight" placeholder="%" required></td>
+            <td class="text-center"><input type="number" name="weight[]" step="any" class="form-control weight" id="weight" placeholder="%" required></td>
             <td class="text-center">
                 <button type="button" class="btn btn-success btn-sm addRecord"><i class="fa fa-plus"></i></button>
             </td>
@@ -207,15 +242,15 @@
     function addNewRecord() {
         return `<tr class='section-purpose' style='text-align: center'>
             <td class="text-center">
-                <textarea rows="3" class="form-control" placeholder="Enter text here" spellcheck="false" required></textarea>
+                <textarea rows="3" class="form-control" name="key_kpi[]" placeholder="Enter text here" spellcheck="false" required>{{ old('key_kpi') }}</textarea>
             </td>
             <td class="text-center">
-                <textarea rows="3" class="form-control" placeholder="Enter text here" spellcheck="false" required></textarea>
+                <textarea rows="3" class="form-control" name="action_plan[]" placeholder="Enter text here" spellcheck="false" required>{{ old('action_plan') }}</textarea>
             </td>
             <td class="text-center">
-                <textarea rows="3" class="form-control" placeholder="Enter text here" spellcheck="false" required></textarea>
+                <textarea rows="3" class="form-control" name="goal[]" placeholder="Enter text here" spellcheck="false" required>{{ old('goal') }}</textarea>
             </td>
-            <td class="text-center"><input type="number" step="any" class="form-control" placeholder="%" min="0" required></td>
+            <td class="text-center"><input type="number" name="weight[]" step="any" class="form-control" placeholder="%" min="0" value="{{old('weight')}}" required></td>
             <td class="text-center">
                 <button type="button" class="btn btn-danger me-1 btn-sm removeRecord"><i class="fa fa-trash-o"></i></button>
             </td>
@@ -224,7 +259,7 @@
     function addMoreRow() {
         return `<tr class=''>
             <td colspan="2" class="text-center">
-                <input type="text" class="form-control" placeholder="ក. កត្តាប្រតិបត្តិការ (%)" value="" required>
+                <input type="text" class="form-control" name="title[]" placeholder="ក. កត្តាប្រតិបត្តិការ (%)" value="{{old('title')}}" required>
             </td>
             <td colspan="1" class="text-center"></td>
             <td colspan="1" class="text-center"></td>
@@ -234,7 +269,7 @@
         </tr>
         <tr class='' style='text-align: center'>
             <td colspan="2" class="text-center">
-                <input type="text" class="form-control" placeholder="គោលបំណង" required>
+                <input type="text" class="form-control" name="purpose[]" placeholder="គោលបំណង" value="{{old('purpose')}}" required>
             </td>
             <td colspan="1" class="text-center"></td>
             <td colspan="1" class="text-center"></td>
@@ -244,15 +279,15 @@
         </tr>
         <tr class='' style='text-align: center'>
             <td class="text-center">
-                <textarea rows="3" class="form-control" placeholder="Enter text here" spellcheck="false" required></textarea>
+                <textarea rows="3" class="form-control" name="key_kpi[]" placeholder="Enter text here" spellcheck="false" required>{{ old('key_kpi') }}</textarea>
             </td>
             <td class="text-center">
-                <textarea rows="3" class="form-control" placeholder="Enter text here" spellcheck="false" required></textarea>
+                <textarea rows="3" class="form-control" name="action_plan[]" placeholder="Enter text here" spellcheck="false" required>{{ old('action_plan') }}</textarea>
             </td>
             <td class="text-center">
-                <textarea rows="3" class="form-control" placeholder="Enter text here" spellcheck="false" required></textarea>
+                <textarea rows="3" class="form-control" name="goal[]" placeholder="Enter text here" spellcheck="false" required>{{ old('goal') }}</textarea>
             </td>
-            <td class="text-center"><input type="number" step="any" class="form-control" placeholder="%" min="0" required></td>
+            <td class="text-center"><input type="number" name="weight[]" step="any" class="form-control" placeholder="%" min="0" value="{{old('weight')}}" required></td>
             <td class="text-center">
                 <button type="button" class="btn btn-success btn-sm addRecord"><i class="fa fa-plus"></i></button>
             </td>

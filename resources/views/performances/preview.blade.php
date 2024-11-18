@@ -71,10 +71,10 @@
                                     </tr>
                                 </thead>
                                 <tbody id="tbl_performance">
-                                    @for($i = 0; $i < 3; $i++)
+                                    @foreach ($data as $item)
                                         <tr>
                                             <td colspan="2" class="text-center">
-                                                <input type="text" class="form-control" placeholder="ក. កត្តាប្រតិបត្តិការ (%)" value="" required>
+                                                <input type="text" class="form-control" value="" required>
                                             </td>
                                             <td colspan="1" class="text-center"></td>
                                             <td colspan="1" class="text-center"></td>
@@ -87,7 +87,7 @@
                                         </tr>
                                         <tr>
                                             <td colspan="2" class="text-center">
-                                                <input type="text" class="form-control" placeholder="គោលបំណង" value="" required>
+                                                <input type="text" class="form-control" value="" required>
                                             </td>
                                             <td colspan="1" class="text-center"></td>
                                             <td colspan="1" class="text-center"></td>
@@ -98,18 +98,19 @@
                                             <td colspan="1" class="text-center"></td>
                                             <td colspan="1" class="text-center"></td>
                                         </tr>
+                                    
                                         <tr>
                                             <td class="text-center">
-                                                <textarea rows="3" class="form-control" placeholder="Enter text here" spellcheck="false" required></textarea>
+                                                <textarea rows="3" class="form-control" placeholder="Enter text here" spellcheck="false" required>{{$item->key_kpi}}</textarea>
                                             </td>
                                             <td class="text-center">
-                                                <textarea rows="3" class="form-control" placeholder="Enter text here" spellcheck="false" required></textarea>
+                                                <textarea rows="3" class="form-control" placeholder="Enter text here" spellcheck="false" required>{{$item->action_plan}}</textarea>
                                             </td>
                                             <td class="text-center">
-                                                <textarea rows="3" class="form-control" placeholder="Enter text here" spellcheck="false" required></textarea>
+                                                <textarea rows="3" class="form-control" placeholder="Enter text here" spellcheck="false" required>{{$item->goal}}</textarea>
                                             </td>
                                             <td class="text-center">
-                                                <input type="number" step="any" class="form-control weight" placeholder="10%" min="0" value="10" id="weight" required>
+                                                <input type="number" step="any" class="form-control weight" placeholder="%" min="0" value="{{$item->weight}}" id="weight" required>
                                             </td>
                                             <td class="text-center">
                                                 <input type="number" step="any" class="form-control score_achieved" placeholder="0" id="score_achieved">
@@ -145,7 +146,7 @@
                                             <td colspan="1" class="text-center"></td>
                                             <td colspan="1" class="text-center"></td>
                                         </tr>
-                                    @endfor
+                                    @endforeach
                                 </tbody>
                                 <tbody>
                                     <tr>

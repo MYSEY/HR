@@ -22,7 +22,7 @@
                     <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                         <div class="row">
                             <div class="col-sm-12">
-                                <table class="table table-striped  no-footer">
+                                <table class="table table-striped custom-table mb-0 datatable dataTable no-footer" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
                                     <thead>
                                         <tr>
                                             <th class="sorting sorting_asc stuck-scroll-4">#</th>
@@ -38,27 +38,29 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr class="odd">
-                                            <td class="ids stuck-scroll-4">1</td>
-                                            <td class="stuck-scroll-4"><a href="">220-413</a></td>
-                                            <td class="stuck-scroll-4"><a href="">មី សី</a></td>
-                                            <td>Head Quarter</td>
-                                            <td>IT Department</td>
-                                            <td>Senior Software & App Officer</td>
-                                            <td><span class="badge bg-inverse-success">40%</span></td>
-                                            <td>3.4</td>
-                                            <td>3</td>
-                                            <td class="text-end">
-                                                <div class="dropdown dropdown-action">
-                                                    <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i  class="material-icons">more_vert</i></a>
-                                                    <div class="dropdown-menu dropdown-menu-right">
-                                                        <a class="dropdown-item" href="{{url("performance",1)}}"><i class="fa fa-regular fa-eye"></i> @lang("lang.preview")</a>
-                                                        <a href="{{url("performance/1/edit")}}" class="dropdown-item userUpdate" data-id=""><i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')</a>
-                                                        <a class="dropdown-item" href="#" data-toggle="modal" data-id="" data-target="#delete_user"><i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
+                                        @foreach ($data as $item)
+                                            <tr class="odd">
+                                                <td class="ids stuck-scroll-4">{{$item->id}}</td>
+                                                <td class="stuck-scroll-4"><a href="">{{$item->number_employee}}</a></td>
+                                                <td class="stuck-scroll-4"><a href="">{{$item->employee_name_en}}</a></td>
+                                                <td>{{$item->branch_name_en}}</td>
+                                                <td>{{$item->dep_name}}</td>
+                                                <td>{{$item->positions_name}}</td>
+                                                <td><span class="badge bg-inverse-success">40%</span></td>
+                                                <td>3.4</td>
+                                                <td>3</td>
+                                                <td class="text-end">
+                                                    <div class="dropdown dropdown-action">
+                                                        <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i  class="material-icons">more_vert</i></a>
+                                                        <div class="dropdown-menu dropdown-menu-right">
+                                                            <a class="dropdown-item" href="{{url("performance",$item->employee_id)}}"><i class="fa fa-regular fa-eye"></i> @lang("lang.preview")</a>
+                                                            <a href="{{url("performance/1/edit")}}" class="dropdown-item userUpdate" data-id=""><i class="fa fa-pencil m-r-5"></i> @lang('lang.edit')</a>
+                                                            <a class="dropdown-item" href="#" data-toggle="modal" data-id="" data-target="#delete_user"><i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            </td>
-                                        </tr>
+                                                </td>
+                                            </tr>
+                                        @endforeach
                                     </tbody>
                                 </table>
                             </div>
