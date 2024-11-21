@@ -100,7 +100,7 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="">@lang('lang.shelt_life') <span class="text-danger">*</span></label>
-                                <input class="form-control e_emp_required @error('shelt_life') is-invalid @enderror" type="Number" id="e_shelt_life" required name="shelt_life" value="{{old('shelt_life')}}">
+                                <input disabled class="form-control e_emp_required @error('shelt_life') is-invalid @enderror" type="Number" id="e_shelt_life" required name="shelt_life" value="{{old('shelt_life')}}">
                             </div>
                         </div>
                        
@@ -110,10 +110,19 @@
                                 <input class="form-control e_emp_required @error('total_gasoline') is-invalid @enderror" type="number" id="e_total_gasoline" required name="total_gasoline" value="{{old('total_gasoline')}}">
                             </div>
                         </div>
-                        <div class="col-sm-6">
+                        {{-- <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="">@lang('lang.total_working_days') <span class="text-danger">*</span></label>
                                 <input class="form-control e_emp_required @error('total_work_day') is-invalid @enderror" step="any" type="number" id="e_total_work_day" required name="total_work_day" value="{{old('total_work_day')}}">
+                            </div>
+                        </div> --}}
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="">@lang('lang.price_motor_rentel')<span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <span class="input-group-text">$</span>
+                                    <input disabled class="form-control e_emp_required @error('price_motor_rentel') is-invalid @enderror" type="number" id="e_price_motor_rentel" required name="price_motor_rentel" value="{{old('price_motor_rentel')}}">
+                                </div>
                             </div>
                         </div>
                         <div class="col-sm-6">
@@ -125,15 +134,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label class="">@lang('lang.price_motor_rentel')<span class="text-danger">*</span></label>
-                                <div class="input-group">
-                                    <span class="input-group-text">$</span>
-                                    <input class="form-control e_emp_required @error('price_motor_rentel') is-invalid @enderror" type="number" id="e_price_motor_rentel" required name="price_motor_rentel" value="{{old('price_motor_rentel')}}">
-                                </div>
-                            </div>
-                        </div>
+                        
                     </div>
 
                     <div class="form-group col-md-12 col-12" element="div" bp-field-wrapper="true" bp-field-name="Identity" bp-field-type="custom_html">

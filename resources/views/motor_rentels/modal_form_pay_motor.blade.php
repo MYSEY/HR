@@ -11,6 +11,22 @@
                 <form action="{{url('motor-rentel/create-pay')}}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
                     @csrf
                     <div class="row">
+                        <div class="col-sm-6">
+                            <div class="">
+                                <label class="">@lang('lang.from_date') <span class="text-danger">*</span></label>
+                                <div class="cal-icon">
+                                    <input class="form-control datetimepicker" type="text" id="from_date" name="from_date" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="">@lang('lang.to_date') <span class="text-danger">*</span></label>
+                                <div class="cal-icon">
+                                    <input class="form-control datetimepicker" type="text" id="to_date" name="to_date" required>
+                                </div>
+                            </div>
+                        </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="">@lang('lang.gasoline_price_per_liter')<span class="text-danger">*</span></label>

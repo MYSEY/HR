@@ -53,6 +53,8 @@ class MotorRentalDetail extends Model
         'adjust_amount_engine_oil',
         'tax_rate',
         'status',
+        'from_date',
+        'to_date',
         'created_by',
         'updated_by',
     ];

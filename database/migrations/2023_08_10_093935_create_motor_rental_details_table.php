@@ -51,6 +51,8 @@ return new class extends Migration
             $table->decimal('adjust_fee_tax')->nullable();
             $table->integer('tax_rate')->nullable();
             $table->string('status')->nullable();
+            $table->date('from_date')->nullable();
+            $table->date('to_date')->nullable();
             $table->bigInteger('created_by')->unsigned()->nullable();
             $table->bigInteger('updated_by')->unsigned()->nullable();
             $table->dateTime('deleted_at')->nullable();

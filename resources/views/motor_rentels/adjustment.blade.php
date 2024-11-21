@@ -204,7 +204,7 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label>@lang('lang.amount') @lang('lang.engine_oil') @lang('lang.usd')<span class="text-danger">*</span></label>
+                                <label>@lang('lang.amount') @lang('lang.engine_oil') @lang('lang.gasoline') @lang('lang.usd')<span class="text-danger">*</span></label>
                                 <div class="input-group">
                                     <span class="input-group-text">$</span>
                                     <input type="text" class="form-control e_adjust_require_amount" name="amount_engine_oil" id="e_amount_engine_oil" required>

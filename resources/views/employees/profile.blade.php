@@ -19,7 +19,8 @@
         </div>
         
         <div class="row">
-            <div class="{{ permissionAccess("m2-s1","is_create")->value == "1" ? 'col-md-8' : 'col-md-12' }} ">
+            {{-- <div class="{{ permissionAccess("m2-s1","is_create")->value == "1" ? 'col-md-8' : 'col-md-12' }} "> --}}
+            <div class="col-md-8">
                 <div class="card tab-box">
                     <div class="row card-body user-tabs">
                         <div class="col-10 col-md-12">
@@ -482,21 +483,27 @@
                     </div>
                 </div>
             </div>
-            <div class="{{ permissionAccess("m2-s1","is_create")->value == "1" ? 'col-md-4' : '' }}">
-                @if (permissionAccess("m2-s1","is_create")->value == "1")
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-md-4">
-                                    @if ($data->profile != null)
-                                        <img alt="profile" src="{{ asset('/uploads/images/' . $data->profile) }}">
-                                    @else
-                                        <img alt="profile" src="{{ asset('admin/img/defuals/default-user-icon.png') }}">
-                                    @endif
-                                </div>
+            {{-- <div class="{{ permissionAccess("m2-s1","is_create")->value == "1" ? 'col-md-4' : '' }}"> --}}
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                @if ($data->profile != null)
+                                    <img alt="profile" src="{{ asset('/uploads/images/' . $data->profile) }}">
+                                @else
+                                    <img alt="profile" src="{{ asset('admin/img/defuals/default-user-icon.png') }}">
+                                @endif
                             </div>
                         </div>
-                    </div>  
+                    </div>
+                </div> 
+                <div class="card">
+                    <div class="card-body">
+                        <a href="#" class="btn btn-success" style="background-color: #99000a" id="btn-change-password">@lang('lang.change_password')</a>
+                    </div>
+                </div> 
+                @if (permissionAccess("m2-s1","is_create")->value == "1") 
                     <div class="card">
                         <div class="card-body">
                             <a href="#" class="btn btn-success" style="background-color: #99000a" data-bs-toggle="modal" data-bs-target="#emergency_contact_modal">@lang('lang.emergency_contact')</a>
@@ -520,11 +527,6 @@
 
                         </div>
                     </div>
-                    <div class="card">
-                        <div class="card-body">
-                            <a href="#" class="btn btn-success" style="background-color: #99000a" id="btn-change-password">@lang('lang.change_password')</a>
-                        </div>
-                    </div> 
                 @endif
             </div>
         </div>

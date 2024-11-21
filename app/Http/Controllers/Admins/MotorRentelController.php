@@ -8,8 +8,11 @@ use App\Models\MotorRentel;
 use Illuminate\Http\Request;
 use App\Models\MotorRentalDetail;
 use App\Exports\ExportMotorRentel;
+use App\Helpers\Helper;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Models\Holiday;
+use App\Models\LeaveRequest;
 use App\Models\MotorAdjustment;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Auth;
@@ -242,14 +245,23 @@ class MotorRentelController extends Controller
 
             $month = Carbon::now()->month;
             $year = Carbon::now()->year;
-            // Get the first day of the month
-            $first_day_of_month = Carbon::create($year, $month, 1)->startOfMonth();
-            $last_day_of_month = Carbon::now()->lastOfMonth()->format('Y-m-d');
 
             MotorRentalDetail::where('status',null)->delete();
 
+            // **** Logic Public Holiday
+            $holidays = Holiday::where('from', '<=', $request->to_date)
+            ->where('to', '>=', $request->from_date)
+            ->get();
+
+            $totaHolidays = 0;
+            if (count($holidays) > 0){
+                foreach ($holidays as $key => $hl) {
+                    $totaHolidays += Helper::countWorkingDays($hl->from, $hl->to);
+                }
+            }
+            // **** end
+
             // count current last day of the month
-            $totalLastDayofMonth = Carbon::now()->daysInMonth;
             $motorRentals = MotorRentel::leftJoin('users', 'motor_rentels.employee_id', '=', 'users.id')
                             ->select(
                                 'motor_rentels.*',
@@ -270,8 +282,41 @@ class MotorRentelController extends Controller
                                     $query->where("users.branch_id", Auth::user()->branch_id);
                                 }
                             })
+                            ->where('start_date', '<=', $request->to_date)
+                            ->where(function ($query) use ($request) {
+                                $query->where('motor_rentels.resigned_date', '>=', $request->from_date)
+                                      ->orWhereNull('motor_rentels.resigned_date');
+                            })
                             ->get();
+            
             foreach ($motorRentals as $key => $motor) {
+
+                // **** Logic count total request leave
+                $dataLeaveRequest = LeaveRequest::where('employee_id', $motor->employee_id)
+                ->whereIn('status', ["approved_hod", "approved_hod", "approved"])
+                ->where('start_date', '<=', $request->to_date)
+                ->where('end_date', '>=', $request->from_date)
+                ->get();
+                $totalLeave = 0;
+                if (count($dataLeaveRequest) > 0){
+                    foreach ($dataLeaveRequest as $key => $lr) {
+                        $totalLeave += $lr->number_of_day;
+                    }
+                }
+                // **** end
+            
+
+                $totalWorkDay = (Helper::countWorkingDays($request->from_date, $request->to_date) - $totaHolidays - $totalLeave);
+                // **** price motor by year
+                $ageMotorrentel = Helper::calculateAgeMotor($motor->product_year);
+                $priceMotorRentel = 0;
+                if ($ageMotorrentel >= 0 && $ageMotorrentel <= 5) {
+                    $priceMotorRentel = 30;
+                } elseif ($ageMotorrentel > 5 && $ageMotorrentel <= 7) {
+                    $priceMotorRentel = 25;
+                } elseif ($ageMotorrentel > 7 && $ageMotorrentel <= 10) {
+                    $priceMotorRentel = 20;
+                }
 
                 // **** logic pay adjustment by month and year
                 $adjust_amount_exclude = 0;
@@ -296,159 +341,129 @@ class MotorRentelController extends Controller
                     }
                 }
 
-                // **** logic pay by start date
-                $currentMonth1 = Carbon::create($motor->start_date)->format('Y-m');
-                $currentMonth2 = Carbon::create($year,$month)->format('Y-m');
-
-                // **** logic pay taplab by start date
+                // **** login pay by start date on tablet
                 $amount_price_taplab_rentel = $motor->price_taplab_rentel;
-                $currentTaplab = Carbon::create($motor->start_date_taplab)->format('Y-m');
-                if ($motor->status == 1 && $currentTaplab == $currentMonth2) {
-                    $target_start_date_taplab = Carbon::create($motor->start_date_taplab);
-                    $last_day_taplab = Carbon::create($last_day_of_month);
-                    $payStartDateTaplab = $last_day_taplab->diffInDays($target_start_date_taplab)+1;
-                    $amountTaplabRentelInDay = $motor->price_taplab_rentel / $totalLastDayofMonth;
-                    $amount_price_taplab_rentel = $amountTaplabRentelInDay * $payStartDateTaplab;
+                if ($motor->status == 1 && ($motor->start_date_taplab >= $request->from_date && $motor->start_date_taplab <= $request->to_date)) {
+                    if ($motor->start_date_taplab == $request->from_date) {
+                       $amount_price_taplab_rentel = $motor->price_taplab_rentel;
+                    }else{
+                        $totalWorkingStartTablet = Helper::countWorkingDays($motor->start_date_taplab, $request->to_date);
+                        $totalDay = Helper::countWorkingDays($request->from_date, $request->to_date);
+                        $amountTaplabRentelInDayStartTablet = ($motor->price_taplab_rentel / $totalDay);
+                        $amount_price_taplab_rentel = ($amountTaplabRentelInDayStartTablet * ($totalWorkingStartTablet - $totalLeave));
+                    }
                 }
 
-                if ($motor->status == 1 && $currentMonth1 == $currentMonth2) {
-                    $target_start_date = Carbon::create($motor->start_date);
-                    $last_day = Carbon::create($last_day_of_month);
-                    $payStartDate = $last_day->diffInDays($target_start_date)+1;
-                    $amountMotorPriceInDay = $motor->price_motor_rentel / $totalLastDayofMonth;
-                    $amountEngineOilInDay = $motor->price_engine_oil / $totalLastDayofMonth;
-                    $amountTaplabRentelInDay = $motor->price_taplab_rentel / $totalLastDayofMonth;
-                    $amount_price_motor_rentel = $amountMotorPriceInDay * $payStartDate;
-                    $amount_price_engine_oil = $amountEngineOilInDay * $payStartDate;
-                    $data = [
-                        'employee_id' => $motor->employee_id,
-                        'motor_rental_id' => $motor->id,
-                        'start_date' => $motor->start_date,
-                        'end_date' => $motor->end_date,
-                        'product_year' => $motor->product_year,
-                        'expired_year' => $motor->expired_year,
-                        'motor_color' => $motor->motor_color,
-                        'shelt_life' => $motor->shelt_life,
-                        'number_plate' => $motor->number_plate,
-                        'motorcycle_brand' => $motor->motorcycle_brand,
-                        'category' => $motor->category,
-                        'body_number' => $motor->body_number,
-                        'engine_number' => $motor->engine_number,
-                        'total_gasoline' => $motor->total_gasoline,
-                        'total_work_day' => $motor->total_work_day,
-                        'price_engine_oil' => $motor->price_engine_oil,
-                        'price_motor_rentel' => $motor->price_motor_rentel,
-                        'taplab_rentel' => $motor->taplab_rentel,
-                        'taplab_imei' => $motor->taplab_imei,
-                        'start_date_taplab' => $motor->start_date_taplab,
-                        'price_taplab_rentel' => $motor->price_taplab_rentel,
-                        'resigned_date' => $motor->resigned_date,
-                        'gasoline_price_per_liter' => $request->gasoline_price_per_liter,
-                        'amount_price_motor_rentel'=> $amount_price_motor_rentel,
-                        'amount_price_engine_oil' => $amount_price_engine_oil,
-                        'amount_price_taplab_rentel' => $amount_price_taplab_rentel,
-                        'adjust_amount_exclude'         => $adjust_amount_exclude,
-                        'adjust_amount_tabple_exclude'  => $adjust_amount_tabple_exclude,   
-                        'adjust_amount_include'         => $adjust_amount_include,
-                        'adjust_amount_tabple_include'  => $adjust_amount_tabple_include,
-                        'adjust_amount_kh'              => $adjust_amount_kh,
-                        'adjust_amount_engine_oil'      => $adjust_amount_engine_oil,
-                        'tax_rate' => $request->tax_rate,
-                        'created_by' => Auth::user()->id
-                    ];
-                    MotorRentalDetail::create($data);
+                // **** login pay by start date on motor
+                $amount_price_motor_rentel = $priceMotorRentel;
+                $amount_price_engine_oil = $motor->price_engine_oil;
+                
+                if ($motor->status == 1 && ($motor->start_date >= $request->from_date && $motor->start_date <= $request->to_date)) {
+
+                    // **** Logic Public Holiday
+                    $holidays = Holiday::where('from', '<=', $request->to_date)
+                    ->where('to', '>=', $motor->start_date)
+                    ->get();
+
+                    $totaHolidayStart = 0;
+                    if (count($holidays) > 0){
+                        foreach ($holidays as $key => $hl) {
+                            $totaHolidayStart += Helper::countWorkingDays($hl->from, $hl->to);
+                        }
+                    }
+                    // **** end
+
+                    if ($motor->start_date == $request->from_date) {
+                        $amount_price_motor_rentel = $priceMotorRentel;
+                        $amount_price_engine_oil = $motor->price_engine_oil;
+                        $totalWorkDay = (Helper::countWorkingDays($request->from_date, $request->to_date) - $totaHolidayStart - $totalLeave);
+                    }else{
+
+                        $totalWorkingStart = Helper::countWorkingDays($motor->start_date, $request->to_date);
+                        $totalDay = Helper::countWorkingDays($request->from_date, $request->to_date);
+                        $amountMotorPriceInDayStart = $priceMotorRentel / $totalDay;
+                        $totalWorkDay = ($totalWorkingStart - $totaHolidayStart - $totalLeave);
+                        $amountEngineOilInDayStart = ($motor->price_engine_oil / $totalDay);
+                        $amount_price_motor_rentel = ($amountMotorPriceInDayStart * ($totalWorkingStart - $totalLeave));
+                        $amount_price_engine_oil = ($amountEngineOilInDayStart * ($totalWorkingStart - $totalLeave));
+                    }
                 }
+
                 // **** Logic pay resigned date
-                $resignedMonth1 = Carbon::create($motor->resigned_date)->format('Y-m');
-                $resignedMonth2 = Carbon::create($year,$month)->format('Y-m');
-                if ($motor->status == 0 &&  $resignedMonth1 == $resignedMonth2) {
-                    $target_date = Carbon::create($first_day_of_month);
-                    $today = Carbon::create($motor->resigned_date);
-                    $number_of_days = $today->diffInDays($target_date)+1;
-                    $resignedAmountMotorPriceInDay = $motor->price_motor_rentel / $totalLastDayofMonth;
-                    $resignedAmountEngineOilInDay = $motor->price_engine_oil / $totalLastDayofMonth;
-                    $resignedAmountTaplabRentelInDay = $motor->price_taplab_rentel / $totalLastDayofMonth;
-                    $resignedAmount_price_motor_rentel = $resignedAmountMotorPriceInDay * $number_of_days;
-                    $resignedAmount_price_engine_oil = $resignedAmountEngineOilInDay * $number_of_days;
-                    $resignedAmount_price_taplab_rentel = $resignedAmountTaplabRentelInDay * $number_of_days;
-                    $data = [
-                        'employee_id' => $motor->employee_id,
-                        'motor_rental_id' => $motor->id,
-                        'start_date' => $motor->start_date,
-                        'end_date' => $motor->end_date,
-                        'product_year' => $motor->product_year,
-                        'expired_year' => $motor->expired_year,
-                        'motor_color' => $motor->motor_color,
-                        'shelt_life' => $motor->shelt_life,
-                        'number_plate' => $motor->number_plate,
-                        'motorcycle_brand' => $motor->motorcycle_brand,
-                        'category' => $motor->category,
-                        'body_number' => $motor->body_number,
-                        'engine_number' => $motor->engine_number,
-                        'total_gasoline' => $motor->total_gasoline,
-                        'total_work_day' => $motor->total_work_day,
-                        'price_engine_oil' => $motor->price_engine_oil,
-                        'price_motor_rentel' => $motor->price_motor_rentel,
-                        'taplab_rentel' => $motor->taplab_rentel,
-                        'taplab_imei' => $motor->taplab_imei,
-                        'start_date_taplab' => $motor->start_date_taplab,
-                        'price_taplab_rentel' => $motor->price_taplab_rentel,
-                        'resigned_date' => $motor->resigned_date,
-                        'gasoline_price_per_liter' => $request->gasoline_price_per_liter,
-                        'amount_price_motor_rentel'=> $resignedAmount_price_motor_rentel,
-                        'amount_price_engine_oil' => $resignedAmount_price_engine_oil,
-                        'amount_price_taplab_rentel' => $resignedAmount_price_taplab_rentel,
-                        'adjust_amount_exclude'         => $adjust_amount_exclude,
-                        'adjust_amount_tabple_exclude'  => $adjust_amount_tabple_exclude,   
-                        'adjust_amount_include'         => $adjust_amount_include,
-                        'adjust_amount_tabple_include'  => $adjust_amount_tabple_include,
-                        'adjust_amount_kh'              => $adjust_amount_kh,
-                        'adjust_amount_engine_oil'      => $adjust_amount_engine_oil,
-                        'tax_rate' => $request->tax_rate,
-                        'created_by' => Auth::user()->id
-                    ];
-                    MotorRentalDetail::create($data);
+                if ($motor->status == 0 && ($motor->resigned_date >= $request->from_date && $motor->resigned_date <= $request->to_date)) {
+                    
+                    // **** Logic Public Holiday
+                    $holidays = Holiday::where('from', '<=', $motor->resigned_date)
+                    ->where('to', '>=', $request->from_date)
+                    ->get();
+
+                    $totaHolidaysResign = 0;
+                    if (count($holidays) > 0){
+                        foreach ($holidays as $key => $hl) {
+                            $totaHolidaysResign += Helper::countWorkingDays($hl->from, $hl->to);
+                        }
+                    }
+                    // **** end
+
+                    if ($motor->resigned_date == $request->to_date) {
+                        $amount_price_motor_rentel = $priceMotorRentel;
+                        $amount_price_engine_oil = $motor->price_engine_oil;
+                        $amount_price_taplab_rentel = $motor->price_taplab_rentel;
+                        $totalDay = Helper::countWorkingDays($request->from_date, $request->to_date);
+                        $totalWorkDay = ($totalDay - $totaHolidaysResign - $totalLeave);
+                    }else{
+                        $totalWorkingResign = Helper::countWorkingDays($request->from_date, $motor->resigned_date);
+                        $totalDay = Helper::countWorkingDays($request->from_date, $request->to_date);
+                        $totalWorkDay = ($totalWorkingResign - $totaHolidaysResign - $totalLeave);
+                        
+                        $amountMotorPriceInDayResign = $priceMotorRentel / $totalDay;
+                        $amountEngineOilInDayResign = $motor->price_engine_oil / $totalDay;
+                        $amount_price_motor_rentel = ($amountMotorPriceInDayResign * ($totalWorkingResign - $totalLeave));
+                        $amount_price_engine_oil = ($amountEngineOilInDayResign * ($totalWorkingResign - $totalLeave));
+
+                        $amountTaplabRentelInDayResign = $motor->price_taplab_rentel / $totalDay;
+                        $amount_price_taplab_rentel = ($amountTaplabRentelInDayResign * ($totalWorkingResign - $totalLeave));
+                    }
                 }
-                //**** Logic pay old motor start_date < current month
-                if ($motor->status == 1 && $currentMonth1 < $currentMonth2) {
-                    $data = [
-                        'employee_id' => $motor->employee_id,
-                        'motor_rental_id' => $motor->id,
-                        'start_date' => $motor->start_date,
-                        'end_date' => $motor->end_date,
-                        'product_year' => $motor->product_year,
-                        'expired_year' => $motor->expired_year,
-                        'motor_color' => $motor->motor_color,
-                        'shelt_life' => $motor->shelt_life,
-                        'number_plate' => $motor->number_plate,
-                        'motorcycle_brand' => $motor->motorcycle_brand,
-                        'category' => $motor->category,
-                        'body_number' => $motor->body_number,
-                        'engine_number' => $motor->engine_number,
-                        'total_gasoline' => $motor->total_gasoline,
-                        'total_work_day' => $motor->total_work_day,
-                        'price_engine_oil' => $motor->price_engine_oil,
-                        'price_motor_rentel' => $motor->price_motor_rentel,
-                        'taplab_rentel' => $motor->taplab_rentel,
-                        'taplab_imei' => $motor->taplab_imei,
-                        'start_date_taplab' => $motor->start_date_taplab,
-                        'price_taplab_rentel' => $amount_price_taplab_rentel,
-                        'resigned_date' => $motor->resigned_date,
-                        'gasoline_price_per_liter' => $request->gasoline_price_per_liter,
-                        'amount_price_motor_rentel'=> $motor->price_motor_rentel,
-                        'amount_price_engine_oil' => $motor->price_engine_oil,
-                        'amount_price_taplab_rentel' => $amount_price_taplab_rentel,
-                        'adjust_amount_exclude'         => $adjust_amount_exclude,
-                        'adjust_amount_tabple_exclude'  => $adjust_amount_tabple_exclude,   
-                        'adjust_amount_include'         => $adjust_amount_include,
-                        'adjust_amount_tabple_include'  => $adjust_amount_tabple_include,
-                        'adjust_amount_kh'              => $adjust_amount_kh,
-                        'adjust_amount_engine_oil'      => $adjust_amount_engine_oil,
-                        'tax_rate' => $request->tax_rate,
-                        'created_by' => Auth::user()->id
-                    ];
-                    MotorRentalDetail::create($data);
-                }
+                $data = [
+                    'employee_id' => $motor->employee_id,
+                    'motor_rental_id' => $motor->id,
+                    'start_date' => $motor->start_date,
+                    'end_date' => $motor->end_date,
+                    'product_year' => $motor->product_year,
+                    'expired_year' => $motor->expired_year,
+                    'motor_color' => $motor->motor_color,
+                    'shelt_life' => $motor->shelt_life,
+                    'number_plate' => $motor->number_plate,
+                    'motorcycle_brand' => $motor->motorcycle_brand,
+                    'category' => $motor->category,
+                    'body_number' => $motor->body_number,
+                    'engine_number' => $motor->engine_number,
+                    'total_gasoline' => $motor->total_gasoline,
+                    'total_work_day' => $totalWorkDay,
+                    'price_engine_oil' => $motor->price_engine_oil,
+                    'price_motor_rentel' => $priceMotorRentel,
+                    'taplab_rentel' => $motor->taplab_rentel,
+                    'taplab_imei' => $motor->taplab_imei,
+                    'start_date_taplab' => $motor->start_date_taplab,
+                    'price_taplab_rentel' => $motor->price_taplab_rentel,
+                    'resigned_date' => $motor->resigned_date,
+                    'gasoline_price_per_liter' => $request->gasoline_price_per_liter,
+                    'amount_price_motor_rentel'=> $amount_price_motor_rentel,
+                    'amount_price_engine_oil' => $amount_price_engine_oil,
+                    'amount_price_taplab_rentel' => $amount_price_taplab_rentel,
+                    'adjust_amount_exclude'         => $adjust_amount_exclude,
+                    'adjust_amount_tabple_exclude'  => $adjust_amount_tabple_exclude,   
+                    'adjust_amount_include'         => $adjust_amount_include,
+                    'adjust_amount_tabple_include'  => $adjust_amount_tabple_include,
+                    'adjust_amount_kh'              => $adjust_amount_kh,
+                    'adjust_amount_engine_oil'      => $adjust_amount_engine_oil,
+                    'from_date'                     => $request->from_date,
+                    'to_date'                       => $request->to_date,
+                    'tax_rate' => $request->tax_rate,
+                    'created_by' => Auth::user()->id
+                ];
+                MotorRentalDetail::create($data);
             }
             DB::commit();
             Toastr::success('Created successfully.', 'Success');
