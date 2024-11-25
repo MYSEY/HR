@@ -7,6 +7,7 @@ use \Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use App\Models\User;
 use App\Models\Setting;
+use DateTime;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Date;
 use KhmerDateTime\KhmerDateTime;
@@ -197,5 +198,30 @@ class Helper
 
         // Return the count of weekdays
         return $weekdays->count();
+    }
+
+    static public function calculateAgeMotor($year){
+        $now = new DateTime();
+        $past = new DateTime($year . '-01-01');
+        $nowYear = (int)$now->format('Y');
+        $pastYear = (int)$past->format('Y');
+        $age = $nowYear - $pastYear;
+        return $age;
+    }
+
+    static public function countWorkingDays($fromDate, $toDate) {
+        $start = Carbon::parse($fromDate);
+        $end = Carbon::parse($toDate);
+    
+        $workingDays = 0;
+    
+        while ($start->lte($end)) {
+            if (!$start->isWeekend()) { // Check if the day is not a weekend
+                $workingDays++;
+            }
+            $start->addDay(); // Move to the next day
+        }
+    
+        return $workingDays;
     }
 }

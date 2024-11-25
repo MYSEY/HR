@@ -115,6 +115,18 @@
                                                         aria-label="End Date: activate to sort column ascending"
                                                         style="width: 125.15px;">@lang('lang.m_end_date')</th>
                                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                            rowspan="1" colspan="1"
+                                                            aria-label="Year of manufature: activate to sort column ascending"
+                                                            style="width: 89.6px;">@lang('lang.year_of_manufature')</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                            rowspan="1" colspan="1"
+                                                            aria-label="Expiretion year: activate to sort column ascending"
+                                                            style="width: 89.6px;">@lang('lang.expiretion_year')</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                            rowspan="1" colspan="1"
+                                                            aria-label="Shelt life: activate to sort column ascending"
+                                                            style="width: 89.6px;">@lang('lang.shelt_life')</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                         rowspan="1" colspan="1"
                                                         aria-label="model: activate to sort column ascending"
                                                         style="width: 125.15px;">@lang('lang.model')</th>
@@ -130,10 +142,10 @@
                                                         rowspan="1" colspan="1"
                                                         aria-label="Total Gasoline: activate to sort column ascending"
                                                         style="width: 125.15px;">@lang('lang.gasoline') </th>
-                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                    {{-- <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                         rowspan="1" colspan="1"
                                                         aria-label="Total working days: activate to sort column ascending"
-                                                        style="width: 125.15px;">@lang('lang.total_working_days')</th>
+                                                        style="width: 125.15px;">@lang('lang.total_working_days')</th> --}}
                                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                         rowspan="1" colspan="1"
                                                         aria-label="Price engine oil: activate to sort column ascending"
@@ -146,6 +158,10 @@
                                                         rowspan="1" colspan="1"
                                                         aria-label="Taplab Price: activate to sort column ascending"
                                                         style="width: 51.475px;">@lang('lang.tablet_price')</th>
+                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                        rowspan="1" colspan="1"
+                                                        aria-label="Resign Date: activate to sort column ascending"
+                                                        style="width: 51.475px;">@lang('lang.resign_date')</th>
                                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                         rowspan="1" colspan="1"
                                                         aria-label="status: activate to sort column ascending"
@@ -167,6 +183,27 @@
                                             <tbody>
                                                 @if (count($data) > 0)
                                                     @foreach ($data as $key=>$item)
+                                                        @php
+                                                            $ageMotorrentel = Helper::calculateAgeMotor($item->product_year);
+                                                            $newYearExpireted = 0;
+                                                            $priceMotorRentel = 0;
+
+                                                            if ($ageMotorrentel >= 0 && $ageMotorrentel <= 5) {
+                                                                $newYearExpireted = 5;
+                                                                $priceMotorRentel = 30;
+                                                            } elseif ($ageMotorrentel > 5 && $ageMotorrentel <= 7) {
+                                                                $newYearExpireted = 7;
+                                                                $priceMotorRentel = 25;
+                                                            } elseif ($ageMotorrentel > 7 && $ageMotorrentel <= 10) {
+                                                                $newYearExpireted = 10;
+                                                                $priceMotorRentel = 20;
+                                                            }
+
+                                                            $aYearFromNow = new DateTime($item->product_year . '-01-01');
+                                                            $aYearFromNow->modify('+' . $newYearExpireted . ' years');
+                                                            $YearExpireted = $aYearFromNow->format('Y');
+
+                                                        @endphp
                                                         <tr class="odd">
                                                             <td class="ids stuck-scroll-3">{{ ++$key }}</td>
                                                             <td class="number_employee_id stuck-scroll-3">
@@ -178,14 +215,18 @@
                                                             <td>{{ $item->MotorEmployee->EmployeeBranch }}</td>
                                                             <td>{{ $item->start_date ? \Carbon\Carbon::parse($item->start_date)->format('d-M-Y') : '' }}</td>
                                                             <td>{{ $item->end_date ? \Carbon\Carbon::parse($item->end_date)->format('d-M-Y') : '' }}</td>
+                                                            <td>{{ $item->product_year }}</td>
+                                                            <td>{{ $item->expired_year }}</td>
+                                                            <td>{{ $ageMotorrentel }}</td>
                                                             <td>{{ $item->taplab_rentel}}</td>
                                                             <td>{{ $item->taplab_imei}}</td>
                                                             <td>{{ $item->start_date_taplab ? \Carbon\Carbon::parse($item->start_date_taplab)->format('d-M-Y') : '' }}</td>
                                                             <td>{{ $item->total_gasoline }} (L)</td>
-                                                            <td>{{ $item->total_work_day }}</td>
+                                                            {{-- <td>{{ $item->total_work_day }}</td> --}}
                                                             <td>{{ round($item->price_engine_oil,2)}} $</td>
-                                                            <td>{{ round($item->price_motor_rentel, 2)}} $</td>
+                                                            <td>{{ round($priceMotorRentel,2)}} $</td>
                                                             <td>{{ $item->price_taplab_rentel ? round($item->price_taplab_rentel,2) : "0.00"}} $</td>
+                                                            <td><span style="font-size: 13px" class="badge bg-inverse-danger">{{ $item->MotorEmployee->resign_date ? \Carbon\Carbon::parse($item->MotorEmployee->resign_date)->format('d-M-Y') : '' }}</span></td>
                                                             <td>
                                                                 <div class="dropdown action-label">
                                                                     @if (permissionAccess("m5-s1","is_update")->value == "1")
@@ -336,6 +377,7 @@
             const aYearFromNow = new Date(dateYear);
             aYearFromNow.setFullYear(aYearFromNow.getFullYear() + newYearExpireted);
             let YearExpireted = moment(aYearFromNow).format('YYYY');
+            
             $('#expired_year').val(YearExpireted);
             $('#e_expired_year').val(YearExpireted);
 
@@ -622,16 +664,32 @@
                             }
                             $('#e_product_year').append($('<option>', option));
                         });
-                        $('#e_shelt_life').val(response.success.shelt_life);
+
+                        let dateYear = moment(new Date(`01/01/${response.success.product_year}`)).format('YYYY-MM-DD');
+                        let ageMotorrentel = calculateAge(dateYear);
+                        $('#e_shelt_life').val(ageMotorrentel);
+
+                        // block Price motor rentel
+                        if (ageMotorrentel >= 0 && ageMotorrentel <= 5) {
+                            $('#e_price_motor_rentel').val(30);
+                        } else if (ageMotorrentel > 5 && ageMotorrentel <= 7) {
+                            $('#e_price_motor_rentel').val(25);
+                        } else if (ageMotorrentel > 7 && ageMotorrentel <= 10) {
+                            $('#e_price_motor_rentel').val(20);
+                        } else {
+                            $('#e_price_motor_rentel').val(0);
+                        }
+
+                        // $('#e_shelt_life').val(response.success.shelt_life);
                         $('#e_number_plate').val(response.success.number_plate);
                         $("#e_motorcycle_brand").val(response.success.motorcycle_brand);
                         $("#e_category").val(response.success.category);
                         $("#e_body_number").val(response.success.body_number);
                         $("#e_engine_number").val(response.success.engine_number);
                         $('#e_total_gasoline').val(response.success.total_gasoline);
-                        $('#e_total_work_day').val(response.success.total_work_day);
+                        // $('#e_total_work_day').val(response.success.total_work_day);
                         $('#e_price_engine_oil').val(response.success.price_engine_oil);
-                        $('#e_price_motor_rentel').val(response.success.price_motor_rentel);
+                        // $('#e_price_motor_rentel').val(response.success.price_motor_rentel);
                         $('#e_taplab_rentel').val(response.success.taplab_rentel);
                         $('#e_price_taplab_rentel').val(response.success.price_taplab_rentel);
                         $('#e_expired_year').val(response.success.expired_year);
@@ -810,6 +868,23 @@
                     let start_date = row.start_date ? moment(row.start_date).format('D-MMM-YYYY'): "";
                     let end_date = row.end_date ? moment(row.end_date).format('D-MMM-YYYY'): "";
                     let start_date_taplab = row.start_date_taplab ? moment(row.start_date_taplab).format('D-MMM-YYYY'): "";
+
+                    let dateYear = moment(new Date(`01/01/${row.product_year}`)).format('YYYY-MM-DD');
+                    let ageMotorrentel = calculateAge(dateYear);
+                    $('#e_shelt_life').val(ageMotorrentel);
+
+                    // block Price motor rentel
+                    let priceMotor = 0;
+                    if (ageMotorrentel >= 0 && ageMotorrentel <= 5) {
+                        priceMotor = 30
+                    } else if (ageMotorrentel > 5 && ageMotorrentel <= 7) {
+                        priceMotor = 25
+                    } else if (ageMotorrentel > 7 && ageMotorrentel <= 10) {
+                        priceMotor = 20;
+                    } else {
+                        priceMotor = 0
+                    }
+
                     tr += '<tr class="odd">' +
                         '<td class="ids stuck-scroll-3">' + (no) + '</td>' +
                         '<td class="number_employee_id stuck-scroll-3">' + (row.number_employee) + '</td>' +
@@ -819,14 +894,17 @@
                         '<td>' + (localeLanguage == 'en' ? row.user.branch.branch_name_en : row.user.branch.branch_name_kh ) + '</td>' +
                         '<td>' + (start_date) + '</td>' +
                         '<td>' + (end_date) + '</td>' +
-                        '<td>' + (row.taplab_rentel) +'</td>'+
-                        '<td>' + (row.taplab_imei) +'</td>'+
+                        '<td>' + (row.product_year) + '</td>' +
+                        '<td>' + (row.expired_year) + '</td>' +
+                        '<td>' + (ageMotorrentel) + '</td>' +
+                        '<td>' + (row.taplab_rentel == null ? "" : row.taplab_rentel) +'</td>'+
+                        '<td>' + (row.taplab_imei == null ? "" : row.taplab_imei) +'</td>'+
                         '<td>' + (start_date_taplab)+ '</td>'+
                         '<td>' + (row.total_gasoline) + '</td>' +
-                        '<td>' + (row.total_work_day) + '</td>' +
-                        '<td>៛ ' + (Number(row.price_engine_oil)) + '</td>' +
-                        '<td>៛ ' + (Number(row.price_motor_rentel)) + '</td>' +
-                        '<td>៛ ' + (row.price_taplab_rentel ? Number(row.price_taplab_rentel) : "0000") + '</td>' +
+                        // '<td>' + (row.total_work_day) + '</td>' +
+                        '<td>$ ' + (Number(row.price_engine_oil)) + '</td>' +
+                        '<td>$ ' + (Number(priceMotor)) + '</td>' +
+                        '<td>$ ' + (row.price_taplab_rentel ? Number(row.price_taplab_rentel) : "0.00") + '</td>' +
                         '<td>'+
                             '<div class="dropdown action-label">'+
                                 (status)+
