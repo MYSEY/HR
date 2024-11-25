@@ -238,8 +238,12 @@
                                                     style="width: 51.475px;">@lang('lang.last_working_day')</th>
                                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                     rowspan="1" colspan="1"
-                                                    aria-label="Payment Date: activate to sort column ascending"
-                                                    style="width: 51.475px;">@lang('lang.payment_date')</th>
+                                                    aria-label="From Date: activate to sort column ascending"
+                                                    style="width: 51.475px;">@lang('lang.from_date')</th>
+                                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
+                                                    rowspan="1" colspan="1"
+                                                    aria-label="To Date: activate to sort column ascending"
+                                                    style="width: 51.475px;">@lang('lang.to_date')</th>
                                                 <th class="text-center sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                     rowspan="1" colspan="1"
                                                     aria-label="Status: activate to sort column ascending"
@@ -296,7 +300,8 @@
                                                         <td>{{$item->adjust_amount_tabple_exclude}}</td>
                                                         <td class="price_engine_oil">{{ $total_net }} $</td>
                                                         <td><span style="font-size: 13px" class="badge bg-inverse-danger">{{ $item->resigned_date ? \Carbon\Carbon::parse($item->resigned_date)->format('d-M-Y') :'' }}</span></td>
-                                                        <td>{{ $item->created_at ? \Carbon\Carbon::parse($item->created_at)->format('d-M-Y') : '' }}</td>
+                                                        <td>{{ $item->from_date ? \Carbon\Carbon::parse($item->from_date)->format('d-M-Y') : '' }}</td>
+                                                        <td>{{ $item->to_date ? \Carbon\Carbon::parse($item->to_date)->format('d-M-Y') : '' }}</td>
                                                         <td>
                                                             <div class="dropdown dropdown-action">
                                                                 <a href="#" class="action-icon dropdown-toggle"
@@ -368,7 +373,8 @@
                 if (rows.length > 0) {
                     var tr = "";
                     $(rows).each(function(e, row) {
-                        let created_at = moment(row.created_at).format('D-MMM-YYYY')
+                        let from_date = moment(row.from_date).format('D-MMM-YYYY')
+                        let to_date = moment(row.to_date).format('D-MMM-YYYY')
                         let start_date = moment(row.start_date).format('D-MMM-YYYY')
                         let end_date = moment(row.end_date).format('D-MMM-YYYY')
                         let start_date_taplab = row.start_date_taplab ? moment(row.start_date_taplab).format('D-MMM-YYYY'): "";
@@ -412,7 +418,8 @@
                                     '<td>'+row.adjust_amount_tabple_exclude+' $</td>'+
                                     '<td class="price_engine_oil">'+(total_net)+' $</td>'+
                                     '<td><span style="font-size: 13px" class="badge bg-inverse-danger">'+(resigned_date)+'</span></td>'+
-                                    '<td>'+(created_at)+'</td>'+
+                                    '<td>'+(from_date)+'</td>'+
+                                    '<td>'+(to_date)+'</td>'+
                                     '<td>'+
                                         '<div class="dropdown dropdown-action">' +
                                         '<a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">' +
