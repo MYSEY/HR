@@ -666,6 +666,7 @@ return[
 	"phum_name_km"=> "Phum Name KM",
 	"phum_name_latin"=> "Phum Name Latin",
 	"phum_name_en"=> "Phum Name EN",
+	"parking_allowance"=> "ប្រាក់ឧបត្ថម្ភកន្លែងចតរថយន្ត",
 	"adjustment_date"=>"កាលបរិច្ឆេទ",
 	"add_adjustment"=>"Add Adjustment",
 	"adjustment_to"=>"Adjustment To",

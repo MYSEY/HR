@@ -337,6 +337,28 @@ class EmployeePayrollController extends Controller
                     }
                 }
             }
+            //function upload parking allowance
+            $dadaArrayParkingAllowance = [];
+            if (file_exists($request->parking_allowance)) {
+                $fileParkingAllowance = $request->parking_allowance;
+                $extension = $request->parking_allowance->extension();
+                $spreadsheet_parking_allowance = IOFactory::load($fileParkingAllowance);
+                $parkingAllowance =  $spreadsheet_parking_allowance->getSheetByName('parking allowance')->toArray();
+                if ($extension == "xlsx" || $extension == "xls" || $extension == "csv") {
+                    $index = 0;
+                    foreach ($parkingAllowance as $itemPar) {
+                        $index++;
+                        if ($index != 1) {
+                            $dataParkAll = User::where("number_employee", $itemPar[0])->first();
+                            if($dataParkAll){
+                                $dadaArrayParkingAllowance[$dataParkAll->number_employee] = [
+                                    'totalParkingAllowance' => $itemPar[2]
+                                ];
+                            }
+                        }
+                    }
+                }
+            }
 
             $employee = User::where('date_of_commencement','<=',$request->payment_date)->whereIn('emp_status',['Probation','1','10','2'])->get();
             if (!$employee->isEmpty()) {
@@ -466,6 +488,12 @@ class EmployeePayrollController extends Controller
                         $totalStaffBook = $dadaArrayStaffBook[$item->number_employee]['total_staff_book'];
                     } else {
                        $totalStaffBook = 0;
+                    }
+                    //fuction check staff book
+                    if (array_key_exists($item->number_employee, $dadaArrayParkingAllowance)) {
+                        $totalParkAllowance = $dadaArrayParkingAllowance[$item->number_employee]['totalParkingAllowance'];
+                    } else {
+                       $totalParkAllowance = 0;
                     }
                     
                     //calculated khmer_new_year and pchumBen_bonus
@@ -1125,7 +1153,7 @@ class EmployeePayrollController extends Controller
                             $totalSeverancePay = $dataSeverance->total_contract_severance_pay;
                         }
                     }
-                    $totalSalaryBeforPension = $totalSalaryAfterTax + $totalSeverancePay + $adjustmentExcludeTaxe + $taxExemptionSalary;
+                    $totalSalaryBeforPension = $totalSalaryAfterTax + $totalSeverancePay + $adjustmentExcludeTaxe + $taxExemptionSalary + $totalParkAllowance;
                     $totalNetSalary = $totalSalaryBeforPension - $LoanAmount - $totalStaffBook;
                     $data   = $request->all();
                     $data['employee_id']                    = $item->id;
@@ -1155,6 +1183,7 @@ class EmployeePayrollController extends Controller
                     $data['total_staff_book']               = $totalStaffBook;
                     $data['adjustment']                     = $adjustmentExcludeTaxe;
                     $data['adjustment_include_taxe']        = $adjustmentIncludeTaxe;
+                    $data['total_amount_car']               = $totalParkAllowance;
                     $data['total_salary']                   = $totalNetSalary;
                     $data['exchange_rate']                  = $request->exchange_rate;
                     $data['created_by']                     = Auth::user()->id;
@@ -1754,7 +1783,7 @@ class EmployeePayrollController extends Controller
                             $totalSeverancePay = $dataSeverance->total_contract_severance_pay;
                         }
                     }
-                    $totalSalary = $totalSalaryAfterTax + $totalSeverancePay + $adjustmentExcludeTaxe + $taxExemptionSalary - $request->staff_loan - $request->staff_book;
+                    $totalSalary = $totalSalaryAfterTax + $totalSeverancePay + $adjustmentExcludeTaxe + $taxExemptionSalary + $request->parking_allowance - $request->staff_loan - $request->staff_book;
                     if($request->staff_loan > $totalSalary){
                         $totalNetSalary = 0;
                     }else{
@@ -1789,6 +1818,7 @@ class EmployeePayrollController extends Controller
                     $data['loan_amount']                    = $request->staff_loan;
                     $data['adjustment']                     = $adjustmentExcludeTaxe;
                     $data['total_staff_book']               = $request->staff_book;
+                    $data['total_amount_car']               = $request->parking_allowance;
                     $data['total_salary']                   = $totalNetSalary;
                     $data['leaves']                         = $totalSalaryAL;
                     $data['exchange_rate']                  = $request->exchange_rate;

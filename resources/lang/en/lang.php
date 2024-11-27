@@ -654,6 +654,7 @@ return[
 	"phum_name_km"=> "Phum Name KM",
 	"phum_name_latin"=> "Phum Name Latin",
 	"phum_name_en"=> "Phum Name EN",
+	"parking_allowance"=> "Parking Allowance",
     "qty"=>"Qty",
     "quantity"=>"Quantity",
     "rile"=>"Riel",
