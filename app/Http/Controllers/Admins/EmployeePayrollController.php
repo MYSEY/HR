@@ -1792,7 +1792,7 @@ class EmployeePayrollController extends Controller
                     $data   = $request->all();
                     $data['employee_id']                    = $item->id;
                     $data['number_employee']                = $item->number_employee;
-                    $data['basic_salary']                   = $item->pre_salary;
+                    $data['basic_salary']                   = $item->basic_salary;
                     $data['spouse']                         = $item->spouse;
                     $data['children']                       = $children;
                     $data['total_gross_salary']             = $baseSalary;
