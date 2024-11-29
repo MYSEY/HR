@@ -29,6 +29,7 @@ class ExportReviewPayroll implements FromCollection, WithColumnWidths, WithHeadi
     protected $totalAnnualIncentiveBonus;
     protected $totalOtherBenefits;
     protected $totalSeniorityPayIncludedTax;
+    protected $totalAdjustmentIncludeTaxe;
     protected $totalGrossIncludeTax;
     protected $totalPensionFund;
     protected $TotalBaseSalaryReceivedUsd;
@@ -42,6 +43,7 @@ class ExportReviewPayroll implements FromCollection, WithColumnWidths, WithHeadi
     protected $totalSalaryTaxRiel;
     protected $totalSeniorityPayExcludedTax;
     protected $totalSeniorityBackford;
+    protected $totalAdjustmentExclude;
     protected $totalSeverancePay;
     protected $totalLoanAmount;
     protected $totalStaffBook;
@@ -93,6 +95,7 @@ class ExportReviewPayroll implements FromCollection, WithColumnWidths, WithHeadi
             $this->totalAnnualIncentiveBonus += $value->annual_incentive_bonus;
             $this->totalOtherBenefits += $value->other_benefits;
             $this->totalSeniorityPayIncludedTax += $value->seniority_pay_included_tax;
+            $this->totalAdjustmentIncludeTaxe += $value->adjustment_include_taxe;
             $this->totalGrossIncludeTax += $value->total_gross;
             $this->totalPensionFund += $value->total_pension_fund;
             $this->TotalBaseSalaryReceivedUsd += $value->base_salary_received_usd;
@@ -106,6 +109,7 @@ class ExportReviewPayroll implements FromCollection, WithColumnWidths, WithHeadi
             $this->totalSalaryTaxRiel += $value->total_salary_tax_riel;
             $this->totalSeniorityPayExcludedTax += $value->seniority_pay_excluded_tax;
             $this->totalSeniorityBackford += $value->seniority_backford;
+            $this->totalAdjustmentExclude += $value->adjustment;
             $this->totalSeverancePay += $value->total_severance_pay;
             $this->totalLoanAmount += $value->loan_amount;
             $this->totalStaffBook += $value->total_staff_book;
@@ -137,6 +141,7 @@ class ExportReviewPayroll implements FromCollection, WithColumnWidths, WithHeadi
                 "Annual Incentive Bonus"        => $value->annual_incentive_bonus,
                 "other benefits"               => $value->other_benefits,
                 "Seniority Pay Included Tax"    => $value->seniority_pay_included_tax,
+                "Adjustment Included Tax"       => $value->adjustment_include_taxe,
                 "Total Gross"                   => $value->total_gross,
                 "Pension Fund"                  => $value->total_pension_fund,
                 "Base Salary Received USD"      => $value->base_salary_received_usd,
@@ -149,6 +154,7 @@ class ExportReviewPayroll implements FromCollection, WithColumnWidths, WithHeadi
                 "Personal Tax(USD)"             => $value->total_salary_tax_usd,
                 "Personal Tax(Riels)"           => $totalSalaryTaxRiel,
                 "Seniority Pay Excluded Tax"    => $value->seniority_pay_excluded_tax,
+                "Adjustment Excluded Tax"       => $value->adjustment,
                 "Seniority Backford"            => $value->seniority_backford,
                 "Severance Pay"                 => $value->total_severance_pay,
                 "Loan Amount"                   => $value->loan_amount,
@@ -210,6 +216,8 @@ class ExportReviewPayroll implements FromCollection, WithColumnWidths, WithHeadi
             'AF' => 18,
             'AG' => 20,
             'AH' => 15,
+            'AI' => 15,
+            'AJ' => 15,
         ];
     }
     public function registerEvents(): array {
@@ -223,7 +231,7 @@ class ExportReviewPayroll implements FromCollection, WithColumnWidths, WithHeadi
                 $event->sheet->getDelegate()->getStyle('A3')->getFont()->getColor()->setARGB('0000CC');
                 $event->sheet->getDelegate()->getStyle('A4')->getFont()->getColor()->setARGB('3923A9');
                 
-                $event->sheet->getStyle('A5:AH5')->applyFromArray([
+                $event->sheet->getStyle('A5:AJ5')->applyFromArray([
                     'borders' => [
                         'allBorders' => [
                             'borderStyle' => Border::BORDER_THIN,
@@ -235,7 +243,7 @@ class ExportReviewPayroll implements FromCollection, WithColumnWidths, WithHeadi
                 if ($this->num > 0) {
                     foreach ($this->export_datas as $key=>$value) {
                         $n++;
-                        $event->sheet->getStyle('A'.$n.':AH'.$n)->applyFromArray([
+                        $event->sheet->getStyle('A'.$n.':AJ'.$n)->applyFromArray([
                             'borders' => [
                                 'allBorders' => [
                                     'borderStyle' => Border::BORDER_THIN,
@@ -246,7 +254,7 @@ class ExportReviewPayroll implements FromCollection, WithColumnWidths, WithHeadi
                     }
                 }
 
-                $event->sheet->getStyle('A'.$rows.':AH'.$rows)->applyFromArray([
+                $event->sheet->getStyle('A'.$rows.':AJ'.$rows)->applyFromArray([
                     'borders' => [
                         'allBorders' => [
                             'borderStyle' => Border::BORDER_THIN,
@@ -254,9 +262,9 @@ class ExportReviewPayroll implements FromCollection, WithColumnWidths, WithHeadi
                         ],
                     ],
                 ]);
-                $sheet->getDelegate()->getStyle('A5:AH5')->getFont()->getColor()->setARGB('3923A9');
-                $sheet->getDelegate()->getStyle('A5:AH5')->getFont()->setSize(9)->setName('Khmer OS Battambang')->setSize(9);
-                $event->sheet->getDelegate()->getStyle('A5:AH5')->getAlignment()
+                $sheet->getDelegate()->getStyle('A5:AJ5')->getFont()->getColor()->setARGB('3923A9');
+                $sheet->getDelegate()->getStyle('A5:AJ5')->getFont()->setSize(9)->setName('Khmer OS Battambang')->setSize(9);
+                $event->sheet->getDelegate()->getStyle('A5:AJ5')->getAlignment()
                 ->setWrapText(true)
                 ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
@@ -326,6 +334,10 @@ class ExportReviewPayroll implements FromCollection, WithColumnWidths, WithHeadi
                 $sheet->setCellValue("P".$rows, number_format($this->totalSeniorityPayIncludedTax, 2));
                 $sheet->getDelegate()->getStyle("P".$rows)->getFont()->setName('Khmer OS Battambang')->setSize(9)->setBold("P".$rows);
                 $event->sheet->getDelegate()->getStyle("P".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+                //total setCellValue P
+                $sheet->setCellValue("P".$rows, number_format($this->totalAdjustmentIncludeTaxe, 2));
+                $sheet->getDelegate()->getStyle("P".$rows)->getFont()->setName('Khmer OS Battambang')->setSize(9)->setBold("P".$rows);
+                $event->sheet->getDelegate()->getStyle("P".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
                 //total setCellValue Q
                 $sheet->setCellValue("Q".$rows, number_format($this->totalGrossIncludeTax, 2));
                 $sheet->getDelegate()->getStyle("Q".$rows)->getFont()->setName('Khmer OS Battambang')->setSize(9)->setBold("Q".$rows);
@@ -376,6 +388,10 @@ class ExportReviewPayroll implements FromCollection, WithColumnWidths, WithHeadi
                 $event->sheet->getDelegate()->getStyle("AB".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
                 //total setCellValue AC
                 $sheet->setCellValue("AC".$rows, number_format($this->totalSeniorityBackford, 2));
+                $sheet->getDelegate()->getStyle("AC".$rows)->getFont()->setName('Khmer OS Battambang')->setSize(9)->setBold("AC".$rows);
+                $event->sheet->getDelegate()->getStyle("AC".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+                //total setCellValue AC
+                $sheet->setCellValue("AC".$rows, number_format($this->totalAdjustmentExclude, 2));
                 $sheet->getDelegate()->getStyle("AC".$rows)->getFont()->setName('Khmer OS Battambang')->setSize(9)->setBold("AC".$rows);
                 $event->sheet->getDelegate()->getStyle("AC".$rows)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
                 //total setCellValue AD
@@ -430,6 +446,7 @@ class ExportReviewPayroll implements FromCollection, WithColumnWidths, WithHeadi
             "ប្រាក់រង្វាន់លើកទឹកចិត្តប្រចាំឆ្នាំ",
             "អត្ថប្រយោជន៍ផ្សេងៗ",
             "ប្រាក់ជាប់ពន្ធលើប្រាក់បំណាច់អតីតភាពការងារ",
+            "Adjustment includes tax",
             "បៀវត្ស​គោលទទួលបាន($)",
             "ភាគទានសោធនពីបុគ្គលិក2%",
             "បៀវត្ស​គោលទទួលបានដុល្លារ",
@@ -442,6 +459,7 @@ class ExportReviewPayroll implements FromCollection, WithColumnWidths, WithHeadi
             "ពន្ធលើប្រាក់បៀវត្សដុល្លារ",
             "ពន្ធលើប្រាក់បៀវត្សរៀល",
             "ប្រាក់បំណាច់អតីតភាពការងារអត់ជាប់ពន្ធ",
+            "Adjustment exclude tax",
             "ប្រាក់រំលឹកអតីតភាពការងារ",
             "ប្រាក់បំណាច់កិច្ចសន្យា",
             "ចំនួនប្រាក់កម្ចី",
