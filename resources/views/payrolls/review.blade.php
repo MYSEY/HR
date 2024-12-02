@@ -395,6 +395,14 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>@lang('lang.parking_allowance')</label>
+                                        <input class="form-control" type="file" id="parking_allowance" name="parking_allowance">
+                                    </div>
+                                </div>
+                            </div>
     
                             <div class="submit-section">
                                 <button type="button" class="btn btn-primary submit-btn" id="btn-payroll">
@@ -669,6 +677,7 @@
                 var annual_bonus = $('#annual_bonus').prop('files')[0];
                 var file_loan = $('#loan').prop('files')[0];
                 var staff_book = $('#staff_book').prop('files')[0];
+                var parking_allowance = $('#parking_allowance').prop('files')[0];
                 var form_data = new FormData();
 
                 form_data.append('file_incentive', file_incentive);
@@ -676,6 +685,7 @@
                 form_data.append('annual_bonus', annual_bonus);
                 form_data.append('file_loan', file_loan);
                 form_data.append('staff_book', staff_book);
+                form_data.append('parking_allowance', parking_allowance);
                 form_data.append('exchange_rate', exchange_rate_salary);
                 form_data.append('payment_date', $("#payment_date").val());
                 form_data.append('_token', "{{ csrf_token() }}");
