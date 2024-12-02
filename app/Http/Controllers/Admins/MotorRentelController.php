@@ -350,7 +350,7 @@ class MotorRentelController extends Controller
                         $totalWorkingStartTablet = Helper::countWorkingDays($motor->start_date_taplab, $request->to_date);
                         $totalDay = Helper::countWorkingDays($request->from_date, $request->to_date);
                         $amountTaplabRentelInDayStartTablet = ($motor->price_taplab_rentel / $totalDay);
-                        $amount_price_taplab_rentel = ($amountTaplabRentelInDayStartTablet * ($totalWorkingStartTablet - $totalLeave));
+                        $amount_price_taplab_rentel = ($amountTaplabRentelInDayStartTablet * $totalWorkingStartTablet);
                     }
                 }
 
@@ -384,8 +384,8 @@ class MotorRentelController extends Controller
                         $amountMotorPriceInDayStart = $priceMotorRentel / $totalDay;
                         $totalWorkDay = ($totalWorkingStart - $totaHolidayStart - $totalLeave);
                         $amountEngineOilInDayStart = ($motor->price_engine_oil / $totalDay);
-                        $amount_price_motor_rentel = ($amountMotorPriceInDayStart * ($totalWorkingStart - $totalLeave));
-                        $amount_price_engine_oil = ($amountEngineOilInDayStart * ($totalWorkingStart - $totalLeave));
+                        $amount_price_motor_rentel = ($amountMotorPriceInDayStart * $totalWorkingStart);
+                        $amount_price_engine_oil = ($amountEngineOilInDayStart * $totalWorkingStart);
                     }
                 }
 
@@ -418,11 +418,11 @@ class MotorRentelController extends Controller
                         
                         $amountMotorPriceInDayResign = $priceMotorRentel / $totalDay;
                         $amountEngineOilInDayResign = $motor->price_engine_oil / $totalDay;
-                        $amount_price_motor_rentel = ($amountMotorPriceInDayResign * ($totalWorkingResign - $totalLeave));
-                        $amount_price_engine_oil = ($amountEngineOilInDayResign * ($totalWorkingResign - $totalLeave));
+                        $amount_price_motor_rentel = ($amountMotorPriceInDayResign * $totalWorkingResign);
+                        $amount_price_engine_oil = ($amountEngineOilInDayResign * $totalWorkingResign);
 
                         $amountTaplabRentelInDayResign = $motor->price_taplab_rentel / $totalDay;
-                        $amount_price_taplab_rentel = ($amountTaplabRentelInDayResign * ($totalWorkingResign - $totalLeave));
+                        $amount_price_taplab_rentel = ($amountTaplabRentelInDayResign * $totalWorkingResign);
                     }
                 }
                 $data = [
