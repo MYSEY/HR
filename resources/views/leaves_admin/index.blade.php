@@ -540,7 +540,7 @@
                             text: 'ok',
                             btnClass: 'btn-blue',
                             action: function(){
-                            axios.post('{{ URL('leaves/admin/cancel') }}',{
+                            axios.post('{{ URL('leaves/admin/cancel/all') }}',{
                                 'ids': allValCancels,
                             }).then(function(response) {
                                 new Noty({
