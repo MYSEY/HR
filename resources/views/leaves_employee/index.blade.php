@@ -274,12 +274,10 @@
                                                             @endif
                                                         @endif
                                                         @php
-                                                            $currentLy = \Carbon\Carbon::now();
-                                                            $currentDate = \Carbon\Carbon::parse($currentLy)->format('d-M-Y');
-                                                            $daysToAdd = 5; // Number of days to add
-                                                            $end = \Carbon\Carbon::parse($request->end_date)->addDays($daysToAdd)->format('d-M-Y');
+                                                           $currentDate = \Carbon\Carbon::now();
+                                                           $end = \Carbon\Carbon::parse($request->end_date)->addDays(5);
                                                         @endphp
-                                                        @if ($currentDate <= $end)
+                                                        @if ($currentDate->lte($end))
                                                             @if($request->status == "approved_hod" || $request->status == "approved")
                                                                 <div class="dropdown dropdown-action">
                                                                     <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i  class="material-icons">more_vert</i></a>
