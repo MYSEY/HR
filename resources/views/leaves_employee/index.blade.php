@@ -84,6 +84,7 @@
                     </ul>
                 </div>
                 <div class="col-auto float-end ms-auto">
+                    {{-- <a href="#" class="btn btn-print-delegate"><i class="fa fa-plus"></i>@lang('lang.print')</a> --}}
                     @if (permissionAccess("m10-s2","is_create")->value == "1") <a href="#" class="btn add-btn" data-bs-toggle="modal" data-bs-target="#add_leave"><i class="fa fa-plus"></i>@lang('lang.request_leave')</a>@endif
                 </div>
             </div>
@@ -194,7 +195,7 @@
                                             @endphp
                                             @foreach ($dataLeaveRequest as $key=>$request)
                                                 @php
-                                                    if ($request->status != "rejected" && $request->status != "rejected_lm" && $request->status != "rejected_hod") {
+                                                    if ($request->status != "rejected" && $request->status != "rejected_lm" && $request->status != "rejected_hod" && $request->status != "cancel_hod" && $request->status != "cancel" ) {
                                                         if ($request->leaveType->type == "annual_leave") {
                                                             $total_annual_leave += $request->number_of_day;
                                                         }else if ($request->leaveType->type == "sick_leave") {
@@ -214,11 +215,11 @@
                                                     <td>{{\Carbon\Carbon::parse($request->start_date)->format('d-M-Y') ?? ''}}</td>
                                                     <td>{{\Carbon\Carbon::parse($request->end_date)->format('d-M-Y') ?? ''}}</td>
                                                     <td>{{$request->leaveType->type == "annual_leave"? $request->number_of_day : 0}}</td>
-                                                    <td>{{$request->status != "rejected" && $request->status != "rejected_lm" && $request->status != "rejected_hod" ? $request->leaveType->type == "annual_leave" ? $LeaveAllocation->default_annual_leave - $total_annual_leave : 0 : 0}}</td>
+                                                    <td>{{$request->status != "rejected" && $request->status != "rejected_lm" && $request->status != "rejected_hod" && $request->status != "cancel_hod" && $request->status != "cancel" ? $request->leaveType->type == "annual_leave" ? $LeaveAllocation->default_annual_leave - $total_annual_leave : 0 : 0}}</td>
                                                     <td>{{$request->leaveType->type == "sick_leave"? $request->number_of_day : 0}}</td>
-                                                    <td>{{$request->status != "rejected" && $request->status != "rejected_lm" && $request->status != "rejected_hod" ? $request->leaveType->type == "sick_leave" ? $LeaveAllocation->default_sick_leave - $total_sick_leave : 0 : 0}}</td>
+                                                    <td>{{$request->status != "rejected" && $request->status != "rejected_lm" && $request->status != "rejected_hod" && $request->status != "cancel_hod" && $request->status != "cancel" ? $request->leaveType->type == "sick_leave" ? $LeaveAllocation->default_sick_leave - $total_sick_leave : 0 : 0}}</td>
                                                     <td>{{$request->leaveType->type == "special_leave"? $request->number_of_day : 0}}</td>
-                                                    <td>{{$request->status != "rejected" && $request->status != "rejected_lm" && $request->status != "rejected_hod" ? $request->leaveType->type == "special_leave" ? $LeaveAllocation->default_special_leave - $total_spacial_leave : 0 : 0}}</td>
+                                                    <td>{{$request->status != "rejected" && $request->status != "rejected_lm" && $request->status != "rejected_hod" && $request->status != "cancel_hod" && $request->status != "cancel"? $request->leaveType->type == "special_leave" ? $LeaveAllocation->default_special_leave - $total_spacial_leave : 0 : 0}}</td>
                                                     <td>{{$request->leaveType->type == "unpaid_leave" ? $request->number_of_day : 0}}</td>
                                                     <td>{{$request->leaveType->type == "unpaid_leave"? $total_unpaid_leave : 0}}</td>
                                                     <td>{{$request->leaveType->type == "long_sick_leave" ? $request->number_of_day : 0}}</td>
@@ -227,8 +228,10 @@
                                                     <td>{{$request->remark}}</td>
                                                     <td>
                                                         @if ($request->status == "rejected")
-                                                            <span class="badge bg-inverse-danger" style="font-size: 13px;">Rejected by HR</span>
-                                                        @elseif($request->status == "cancel")
+                                                            <span class="badge bg-inverse-danger" style="font-size: 13px;">Rejected</span>
+                                                        @elseif($request->status == "pending_cancel")
+                                                            <span class="badge bg-inverse-danger" style="font-size: 13px;">Pending Cancel</span>
+                                                        @elseif($request->status == "cancel_hod" || $request->status == "cancel")
                                                             <span class="badge bg-inverse-danger" style="font-size: 13px;">Cancel</span>
                                                         @elseif ($request->status == "rejected_lm")
                                                             <span class="badge bg-inverse-danger" style="font-size: 13px;">Rejected by Line Manager</span>
@@ -239,7 +242,8 @@
                                                         @elseif ($request->status == "approved_lm" || $request->status == "pending")
                                                             <span class="badge bg-inverse-info" style="font-size: 13px;">Waiting Approve by ACEO/Head/BM</span>
                                                         @elseif ($request->status == "approved_hod")
-                                                            <span class="badge bg-inverse-info" style="font-size: 13px;">Waiting Verify by HR</span>
+                                                            {{-- <span class="badge bg-inverse-info" style="font-size: 13px;">Waiting Verify by HR</span> --}}
+                                                            <span class="badge bg-inverse-success" style="font-size: 13px;">Approved</span>
                                                         @elseif($request->status == "approved")
                                                             <span class="badge bg-inverse-success" style="font-size: 13px;">Approved</span>
                                                         @endif
@@ -256,6 +260,34 @@
                                                                         @if (permissionAccess("m10-s2","is_delete")->value == "1")
                                                                             <a class="dropdown-item leaveDelete" href="#" data-toggle="modal" data-id="{{$request->id}}" data-numberday="{{$request->number_of_day}}" data-target="#delete_leave"><i class="fa fa-trash-o m-r-5"></i> @lang('lang.delete')</a>
                                                                         @endif
+
+                                                                        @if($request->status == "approved_hod")
+                                                                        {{-- @if (permissionAccess("m10-s1","is_cancel")->value == "1") --}}
+                                                                            <button class="btn btn-outline-danger btn-sm btn-cancel" 
+                                                                                data-id="{{$request->id}}"
+                                                                                data-condiction="{{Auth::user()->RolePermission}}"
+                                                                            >@lang('lang.cancel')</button>
+                                                                        {{-- @endif --}}
+                                                                        @endif
+                                                                    </div>
+                                                                </div>
+                                                            @endif
+                                                        @endif
+                                                        @php
+                                                            $currentLy = \Carbon\Carbon::now();
+                                                            $currentDate = \Carbon\Carbon::parse($currentLy)->format('d-M-Y');
+                                                            $start = \Carbon\Carbon::parse($request->start_date)->format('d-M-Y');
+                                                            $end = \Carbon\Carbon::parse($request->end_date)->format('d-M-Y');
+                                                        @endphp
+                                                        @if ($currentDate <= $end)
+                                                            @if($request->status == "approved_hod" || $request->status == "approved")
+                                                                <div class="dropdown dropdown-action">
+                                                                    <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i  class="material-icons">more_vert</i></a>
+                                                                    <div class="dropdown-menu dropdown-menu-right">
+                                                                        <a class="dropdown-item btn-cancel" href="#" data-id="{{$request->id}}">
+                                                                            <i class="fa fa-close m-r-5"></i> @lang('lang.cancel')
+                                                                        </a>
+                                                                    
                                                                     </div>
                                                                 </div>
                                                             @endif
@@ -303,6 +335,9 @@
         </div>
     </div>
 @endsection
+@include('leaves_employee.templet_print_delegate')
+@include('leaves_employee.template_print_delegate_CEO')
+@include('motor_rentels.print_signed_contract')
 @include('includs.script')
 <script>
     $(function(){
@@ -312,5 +347,110 @@
             $('.e_id').val(id);
             $('.number_of_day').val(numberday);
         });
+        $('.btn-print-delegate').on('click',function(){
+            print_pdf();
+        });
+
+        $(".btn-cancel").on("click", function() {
+            let id = $(this).data("id");
+            let condiction = $(this).data("condiction");
+            let description = "@lang('lang.are_you_sure_want_to_cancel')?";
+            let button_cancel = {
+                text: '@lang("lang.cancel")',
+                btnClass: 'btn-red btn-sm',
+                action: function () {
+                    var id = this.$content.find('.id').val();
+                    let remark = this.$content.find('.remark').val();
+                    if (remark == ""){
+                        $(".remark").css("border","solid 1px red");
+                        new Noty({
+                            title: "",
+                            text: "Please enter infomation in the remark.",
+                            type: "error",
+                            timeout: 3000,
+                            icon: true
+                        }).show();
+                        return false;
+                    }
+                    axios.post('{{ URL('leaves/employee/cancel') }}', {
+                        'id': id,
+                        'remark': remark,
+                        'status': "pending_cancel",
+                    }).then(function(response) {
+                        new Noty({
+                            title: "",
+                            text: "@lang('lang.the_process_has_been_successfully').",
+                            type: "success",
+                            timeout: 3000,
+                            icon: true
+                        }).show();
+                        window.location.replace("{{ URL('/leaves/employee') }}"); 
+                    }).catch(function(error) {
+                        new Noty({
+                            title: "",
+                            text: "@lang('lang.something_went_wrong_please_try_again_later').",
+                            type: "error",
+                            icon: true
+                        }).show();
+                    });
+                }
+            };
+            $.confirm({
+                icon: 'fa fa-warning',
+                title: 'Cancel request leave',
+                titleClass: 'text-center',
+                type: 'blue',
+                content: '' +
+                '<form action="" class="formName">' +
+                    '<div class="form-group" style="text-align: center">' +
+                        '<label>'+(description)+'</label>' +
+                        '<input type="hidden" class="form-control id" id="" name="" value="'+id+'">'+
+                    '</div>' +
+                    '<div class="form-group">'+
+                        '<label>Remark <span class="text-danger">*</span></label>'+
+                        '<textarea class="form-control remark"></textarea>'+
+                    '</div>'+
+                '</form>',
+                buttons: {
+                    button_cancel,
+                    cancel: {
+                        text: '@lang("lang.close")',
+                        btnClass: 'btn-secondary btn-sm',
+                    },
+                },
+                onContentReady: function () {
+                    var jc = this;
+                    this.$content.find('form').on('submit', function (e) {
+                        e.preventDefault();
+                        jc.$$formSubmit.trigger('click');
+                    });
+                }
+            });
+        });
     });
+    function print_pdf() {
+        $("#print_delegate_ceo").show();
+        // window.setTimeout(function() {
+        //     $("#print_purchase").hide();
+        //     $("#save-print").prop('disabled', false);
+        //     $(".btn-text-print").show();
+        //     $("#btn-print-loading").css('display', 'none');
+        //     $("#add_motor_rentel").modal("hide")
+
+        //     $("#btn-e-save-print").prop('disabled', false);
+        //     $(".btn-e-text-print").show();
+        //     $("#btn-e-print-loading").css('display', 'none');
+        //     $("#edit_motor_rentel").modal("hide")
+        // }, 2000);
+        $("#print_delegate_ceo").printThis({
+            importCSS: false,
+            importStyle: true,
+            loadCSS: "{{asset('/admin/css/style-delegate-staff.css')}}",
+            header: "",
+            printDelay: 1500,
+            formValues: false,
+            canvas: false,
+            doctypeString: "",
+        });
+    }
 </script>

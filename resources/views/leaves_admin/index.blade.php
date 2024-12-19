@@ -67,7 +67,7 @@
             </div>
             <div class="col-sm-6 col-md-3 col-lg-3 col-xl-3 col-12">
                 <div style="display: flex" class="float-end">
-                    <button class="btn btn-sm btn-outline-secondary btn-search me-2" data-dismiss="modal" data-condiction="{{Auth::user()->RolePermission}}" id="icon-search-download-reload">
+                    <button class="btn btn-sm btn-outline-secondary btn-search me-2" data-dismiss="modal" data-userid="{{Auth::user()->id}}" data-condiction="{{Auth::user()->RolePermission}}" id="icon-search-download-reload">
                         <span class="btn-text-search"><i class="fa fa-search"></i></span>
                         <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
                     </button>
@@ -88,13 +88,13 @@
                                 <span id="dataShortList" class="badge bg-secondary ms-1 rounded-pill">{{count($dataLeaveRequest)}}</span> 
                             </a>
                         </li>
-                        @if (Auth::user()->RolePermission == "HR" || Auth::user()->RolePermission == 'HRAdmin')
+                        {{-- @if (Auth::user()->RolePermission == "HR" || Auth::user()->RolePermission == 'HRAdmin') --}}
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link tab_leave_none" data-bs-toggle="tab" href="#leave_request_cancel" aria-selected="false" data-tab-id="2" role="tab">@lang('lang.requests_cancel') 
                                     <span id="dataShortList" class="badge bg-secondary ms-1 rounded-pill">{{count($requestCancels)}}</span>
                                 </a>
                             </li>
-                        @endif
+                        {{-- @endif --}}
                         <li class="nav-item" role="presentation">
                             <a class="nav-link" data-bs-toggle="tab" id="tab_leave_allocations" href="#leave_allocations" aria-selected="false" data-tab-id="3" role="tab" tabindex="-1">@lang('lang.leave_allocation')</a>
                         </li>
@@ -105,7 +105,8 @@
                     {{-- @endif --}}
                     
                         @if (permissionAccess("m10-s1","is_approve")->value == "1")
-                            <button type="button" class="btn btn-sm btn-success btn_approved_all mt-3" href="#" data-id=""> @lang('lang.approve')</button> 
+                            <button type="button" class="btn btn-sm btn-success btn_approved_all mt-3" href="#" data-id=""> @lang('lang.approve')</button>
+                            <button style="display: none" type="button" class="btn btn-sm btn-success btn_approved_cancel_all mt-3" href="#" data-id=""> @lang('lang.approve')</button>
                         @endif
                     @endif
                     <div class="tab-content">
@@ -146,7 +147,8 @@
                                                                     <tr class="odd">
                                                                         @if (Auth::user()->RolePermission == 'HRAdmin')
                                                                             <td class="stuck-scroll-3">
-                                                                                <input type="checkbox" class="sub_chk" data-id="{{$request->id}}" data-status="{{$request->status}}">
+                                                                                <input type="checkbox" class="sub_chk" data-id="{{$request->id}}" data-status="{{$request->status}}"
+                                                                                @if($request->status == 'pending' && $request->next_approver != Auth::user()->id) disabled @endif>
                                                                             </td>
                                                                         @endif
                                                                         <td class="ids">{{++$key ?? ""}}</td>
@@ -179,7 +181,8 @@
                                                                             @elseif ($request->status == "approved_lm" || $request->status == "pending")
                                                                                 <span class="badge bg-inverse-info" style="font-size: 13px;">Waiting Approve by ACEO/Head/BM</span>
                                                                             @elseif ($request->status == "approved_hod")
-                                                                                <span class="badge bg-inverse-info" style="font-size: 13px;">Waiting Verify by HR</span>
+                                                                                <span class="badge bg-inverse-success" style="font-size: 13px;">Approved</span>
+                                                                                {{-- <span class="badge bg-inverse-info" style="font-size: 13px;">Waiting Verify by HR</span> --}}
                                                                             @elseif($request->status == "approved")
                                                                                 <span class="badge bg-inverse-success" style="font-size: 13px;">Approved</span>
                                                                             @endif
@@ -215,7 +218,7 @@
                                 </div>
                             </div>
                         </div>
-                        @if (Auth::user()->RolePermission == "HR" || Auth::user()->RolePermission == 'HRAdmin')
+                        {{-- @if (Auth::user()->RolePermission == "HR" || Auth::user()->RolePermission == 'HRAdmin') --}}
                             <div class="tab-pane show" id="leave_request_cancel" role="tabpanel">
                                 <div class="row">
                                     <div class="col-md-12">
@@ -226,51 +229,65 @@
                                                         <table class="table table-striped custom-table mb-0 datatable dataTable no-footer tbl-leave-cancel" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
                                                             <thead>
                                                                 <tr>
-                                                                    <th class="sorting sorting_asc stuck-scroll-3" tabindex="0" aria-controls="DataTables_Table_0" aria-sort="ascending" aria-label="Profle: activate to sort column descending">#</th>
+                                                                    @if (Auth::user()->RolePermission == 'HRAdmin')
+                                                                        <th class="stuck-scroll-3"><input type="checkbox" id="checkAllCancel"></th>
+                                                                    @endif
+                                                                    <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" aria-sort="ascending" aria-label="Profle: activate to sort column descending">#</th>
                                                                     <th class="sorting sorting_asc stuck-scroll-3" tabindex="0" aria-controls="DataTables_Table_0" aria-sort="ascending" aria-label="Employee: activate to sort column descending" >@lang('lang.employee_name')</th>
-                                                                    <th class="sorting stuck-scroll-3" tabindex="0" aria-controls="DataTables_Table_0"
-                                                                        aria-label="Leave Type: activate to sort column ascending">@lang('lang.leave_type')</th>
-                                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                                        aria-label="From: activate to sort column ascending">@lang('lang.start_date')</th>
-                                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                                        aria-label="To: activate to sort column ascending">@lang('lang.end_date')</th>
-                                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                                        aria-label="No of Days: activate to sort column ascending">@lang('lang.number_of_days')</th>
-                                                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                                        aria-label="Handover Staff: activate to sort column ascending">@lang('lang.handover_staff')</th>
-                                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
-                                                                        aria-label="Reason: activate to sort column ascending">@lang('lang.reason')</th>
-                                                                    <th ass="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
-                                                                            aria-sort="ascending" aria-label="remark: activate to sort column descending" style="text-align: center;">@lang('lang.remark')</th>     
-                                                                    <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
-                                                                        aria-sort="ascending" aria-label="status: activate to sort column descending" style="text-align: center;">@lang('lang.status')</th>
-                                                                    <th class="text-end sorting" tabindex="0"
-                                                                        aria-controls="DataTables_Table_0"
-                                                                        aria-label="Actions: activate to sort column ascending">@lang('lang.actions')</th>
+                                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" aria-label="handover staff: activate to sort column ascending">@lang('lang.handover_staff')</th>
+                                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" aria-label="delegated: activate to sort column ascending">@lang('lang.delegated')</th>
+                                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" aria-label="Leave Type: activate to sort column ascending">@lang('lang.leave_type')</th>
+                                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" aria-label="Reason: activate to sort column ascending">@lang('lang.reason')</th>
+                                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" aria-label="No of Days: activate to sort column ascending">@lang('lang.number_of_days')</th>
+                                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" aria-label="From: activate to sort column ascending">@lang('lang.start_date')</th>
+                                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" aria-label="To: activate to sort column ascending">@lang('lang.end_date')</th>
+                                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" aria-label="request by: activate to sort column ascending">@lang('lang.request_by')</th>
+                                                                    <th ass="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" aria-sort="ascending" aria-label="remark: activate to sort column descending" style="text-align: center;">@lang('lang.remark')</th>
+                                                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" aria-label="approver: activate to sort column ascending">@lang('lang.approver')</th>
+                                                                    <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" aria-sort="ascending" aria-label="status: activate to sort column descending" style="text-align: center;">@lang('lang.status')</th>
+                                                                    <th class="text-end sorting" tabindex="0" aria-controls="DataTables_Table_0" aria-label="Actions: activate to sort column ascending">@lang('lang.actions')</th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
                                                                 @if (count($requestCancels) > 0)
                                                                     @foreach ($requestCancels as $key=>$request)
                                                                         <tr class="odd">
-                                                                            <td class="ids stuck-scroll-3">{{++$key ?? ""}}</td>
-                                                                            <td class="stuck-scroll-3 employee_name"> {{$request->employee->employee_name_en}} </td>
-                                                                            <td class="stuck-scroll-3">{{$request->leaveType->name}}</td>
+                                                                            @if (Auth::user()->RolePermission == 'HRAdmin')
+                                                                                <td class="stuck-scroll-3">
+                                                                                    <input type="checkbox" class="sub_chk_cancel" data-id="{{$request->id}}" data-status="{{$request->status}}"
+                                                                                    @if($request->status != 'cancel_hod') disabled @endif>
+                                                                                </td>
+                                                                            @endif
+                                                                            <td class="ids">{{++$key ?? ""}}</td>
+                                                                            <td class="stuck-scroll-3 employee_name"> {{$request->employee ? $request->employee->employee_name_en : ""}} </td>
+                                                                            <td>{{ $request->handover ? $request->handover->employee_name_en : ""}}</td>
+
+                                                                            <td>{{$request->Delegated}}</td>
+                                                                            
+                                                                            <td class="">{{$request->leaveType->name}}</td>
+                                                                            <td>{{$request->reason}}</td>
+                                                                            <td>{{$request->number_of_day}} Day</td>
                                                                             <td >{{\Carbon\Carbon::parse($request->start_date)->format('d-M-Y') ?? ''}}</td>
                                                                             <td>{{\Carbon\Carbon::parse($request->end_date)->format('d-M-Y') ?? ''}}</td>
-                                                                            <td>{{$request->number_of_day}} Day</td>
-                                                                            <td>{{ $request->handover ? $request->handover->employee_name_en : ""}}</td>
-                                                                            <td>{{$request->reason}}</td>
+                                                                            <td> {{$request->createdBy->employee_name_en}} </td>
                                                                             <td>{{$request->remark}}</td>
+                                                                            {{-- @if (Auth::user()->RolePermission == "HR" || Auth::user()->RolePermission == 'HRAdmin') --}}
+                                                                            <td>{{ $request->Approve ? $request->Approve : ""}}</td>
                                                                             <td>
-                                                                                <span class="badge bg-inverse-danger" style="font-size: 13px;">Heard department cancel</span>
+                                                                                @if($request->status == "pending_cancel")
+                                                                                    <span class="badge bg-inverse-danger" style="font-size: 13px;">Waiting Approve by ACEO/Head/BM</span>
+                                                                                @elseif($request->status == "cancel_hod" || $request->status == "cancel")
+                                                                                    <span class="badge bg-inverse-danger" style="font-size: 13px;">Cancel</span>
+                                                                                @endif
                                                                             </td>
                                                                             <td class="text-end">
-                                                                                @if (permissionAccess("m10-s1","is_cancel")->value == "1")
-                                                                                    <button class="btn btn-outline-danger btn-sm btn-cancel" 
-                                                                                        data-id="{{$request->id}}"
-                                                                                        data-condiction="{{Auth::user()->RolePermission}}"
-                                                                                    >@lang('lang.cancel')</button>
+                                                                                @if($request->next_approver == Auth::user()->id)
+                                                                                    @if (permissionAccess("m10-s1","is_cancel")->value == "1")
+                                                                                        <button class="btn btn-outline-danger btn-sm btn-cancel" 
+                                                                                            data-id="{{$request->id}}"
+                                                                                            data-condiction="{{Auth::user()->RolePermission}}"
+                                                                                        >@lang('lang.approve') @lang('lang.cancel')</button>
+                                                                                    @endif
                                                                                 @endif
                                                                             </td>
                                                                         </tr>
@@ -285,7 +302,7 @@
                                     </div>
                                 </div>
                             </div>
-                        @endif
+                        {{-- @endif --}}
                         <div class="tab-pane show" id="leave_allocations" role="tabpanel">
                             <div class="row">
                                 <div class="col-md-12">
@@ -405,6 +422,11 @@
             }else{
                 $(".btn_approved_all").css("display","none");
             }
+            if ($(this).data('tab-id') == 2) {
+                $(".btn_approved_cancel_all").css("display","block");
+            }else{
+                $(".btn_approved_cancel_all").css("display","none");
+            }
         });
 
         $('#checkAll').on('click', function(e) {
@@ -418,6 +440,7 @@
                 $(".sub_chk").prop('checked',false);
             }  
         });
+       
         $('body').on('click','.btn_approved_all',function(){
             var allVals = [];  
             $(".sub_chk:checked").each(function() {
@@ -475,11 +498,80 @@
                 });
             }
         });
+        $('#checkAllCancel').on('click', function(e) {
+            if($(this).is(':checked',true)){
+                $(".sub_chk_cancel").each(function() {
+                    if ($(this).data('status') == "cancel_hod") {
+                        $(this).prop('checked', true);
+                    }
+                });
+            } else {  
+                $(".sub_chk_cancel").prop('checked',false);
+            }  
+        });
+        $('body').on('click','.btn_approved_cancel_all',function(){
+            var allValCancels = [];  
+            $(".sub_chk_cancel:checked").each(function() {
+                if ($(this).data('status') == "cancel_hod") {
+                    allValCancels.push($(this).attr('data-id'));
+                }
+            });
+            // var ids = allValCancels.join(",");
+            if(allValCancels.length <=0)  
+            {
+                new Noty({
+                    title: "",
+                    text: '@lang("lang.please_select_item_befor_approve")',
+                    timeout: 3000,
+                    type: "error",
+                    icon: true
+                }).show();
+            }  else {
+                $(".loading-icon").css('display', 'block')
+                $.confirm({
+                    title: '@lang("lang.approve")',
+                    content: ""+
+                                "<p>There are "+allValCancels.length+" approachable leave.</p>"+
+                                "<label>@lang('lang.are_you_sure_want_to_approve')?</label>",
+                    type: 'blue',
+                    typeAnimated: true,
+                    buttons: {
+                        tryAgain: {
+                            text: 'ok',
+                            btnClass: 'btn-blue',
+                            action: function(){
+                            axios.post('{{ URL('leaves/admin/cancel') }}',{
+                                'ids': allValCancels,
+                            }).then(function(response) {
+                                new Noty({
+                                    title: "",
+                                    text: '@lang("lang.the_process_has_been_successfully")',
+                                    type: "success",
+                                    icon: true
+                                }).show();
+                                window.location.replace("{{ URL('leaves/admin') }}");
+                                }).catch(function(error) {
+                                    new Noty({
+                                        title: "",
+                                        text: '@lang("lang.something_went_wrong_please_try_again_later")',
+                                        type: "error",
+                                        icon: true
+                                    }).show();
+                                });
+                            }
+                        },
+                            close: function () {
+                        }
+                    }
+                });
+            }
+        });
         $(".btn-search").on("click", function() {
             $(this).prop('disabled', true);
             $(".btn-text-search").hide();
             $("#btn-text-loading").css('display', 'block');
             var condistion = $(this).data("condiction"); 
+            var userId = $(this).data("userid");
             axios.post('{{ URL('leaves/admin/filter') }}', {
                 'condiction_tab': condiction_tab,
                 'employee_name': $("#employee_name").val(),
@@ -544,8 +636,19 @@
                                 '>@lang("lang.approve") / @lang("lang.reject")</button>';
                             };
                             if (condiction_tab == 2) {
-                                status = '<span class="badge bg-inverse-danger" style="font-size: 13px;">Heard department cancel</span>';
-                                candistion = '<button class="btn btn-outline-danger btn-sm btn-cancel" data-id="'+(row.id)+'">@lang("lang.cancel")</button>';
+                                
+                                if(row.next_approver == userId){
+                                    candistion = '<button class="btn btn-outline-danger btn-sm btn-cancel" data-id="'+(row.id)+'">@lang("lang.approve") @lang("lang.cancel")</button>';
+                                }else{
+                                    candistion = "";
+                                }
+                                if (row.status == "cancel_hod") {
+                                    status = '<span class="badge bg-inverse-danger" style="font-size: 13px;">Cancel</span>'; 
+                                }
+                                if (row.status == "pending_cancel") {
+                                    status = '<span class="badge bg-inverse-danger" style="font-size: 13px;">Waiting Approve by ACEO/Head/BM</span>'; 
+                                }
+                               
                             }
                             if (row.status == "rejected"){
                                 status = '<span class="badge bg-inverse-danger" style="font-size: 13px;">Rejected by HR</span>';

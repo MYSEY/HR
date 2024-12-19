@@ -47,11 +47,11 @@
                                                     aria-sort="ascending" aria-label="remark: activate to sort column descending" style="text-align: center;">@lang('lang.remark')</th>     
                                             <th class="sorting sorting_asc" tabindex="0" aria-controls="DataTables_Table_0"
                                                 aria-sort="ascending" aria-label="status: activate to sort column descending" style="text-align: center;">@lang('lang.status')</th>
-                                            @if (Auth::user()->RolePermission != "HR" || Auth::user()->RolePermission != "HRAdmin" && (Auth::user()->department->direct_manager_id == Auth::user()->id || Auth::user()->branch->direct_manager_id == Auth::user()->id ))
+                                            {{-- @if (Auth::user()->RolePermission != "HR" || Auth::user()->RolePermission != "HRAdmin" && (Auth::user()->department->direct_manager_id == Auth::user()->id || Auth::user()->branch->direct_manager_id == Auth::user()->id ))
                                                 <th class="text-end sorting" tabindex="0"
                                                 aria-controls="DataTables_Table_0"
                                                 aria-label="Actions: activate to sort column ascending">@lang('lang.actions')</th>
-                                            @endif
+                                            @endif --}}
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -71,26 +71,24 @@
                                                     <td>{{$request->remark}}</td>
                                                     <td>
                                                         @if ($request->status == "rejected")
-                                                            <span class="badge bg-inverse-danger" style="font-size: 13px;">HR rejecte</span>
-                                                        @elseif ($request->status == "cancel_hod")
-                                                            <span class="badge bg-inverse-danger" style="font-size: 13px;">Pending HR approve cancel</span>
-                                                        @elseif($request->status == "cancel")
+                                                            <span class="badge bg-inverse-danger" style="font-size: 13px;">Rejected</span>
+                                                        @elseif($request->status == "pending_cancel")
+                                                            <span class="badge bg-inverse-danger" style="font-size: 13px;">Pending Cancel</span>
+                                                        @elseif($request->status == "cancel_hod" || $request->status == "cancel")
                                                             <span class="badge bg-inverse-danger" style="font-size: 13px;">Cancel</span>
                                                         @elseif ($request->status == "rejected_lm")
-                                                            <span class="badge bg-inverse-danger" style="font-size: 13px;">Line manager rejecte</span>
+                                                            <span class="badge bg-inverse-danger" style="font-size: 13px;">Rejected by Line Manager</span>
                                                         @elseif ($request->status == "rejected_hod")
-                                                            <span class="badge bg-inverse-danger" style="font-size: 13px;">Head department rejecte</span>
-                                                        @elseif ($request->status == "pending")
-                                                        <span class="badge bg-inverse-info" style="font-size: 13px;">Pending line manager approve</span>
-                                                        @elseif ($request->status == "approved_lm")
-                                                            <span class="badge bg-inverse-info" style="font-size: 13px;">Pending head department approve</span>
+                                                            <span class="badge bg-inverse-danger" style="font-size: 13px;">Rejected by ACEO/Head/BM</span>
+                                                        @elseif ($request->status == "approved_lm" || $request->status == "pending")
+                                                            <span class="badge bg-inverse-info" style="font-size: 13px;">Waiting Approve by ACEO/Head/BM</span>
                                                         @elseif ($request->status == "approved_hod")
-                                                            <span class="badge bg-inverse-info" style="font-size: 13px;">Pending HR Approve</span>
+                                                            <span class="badge bg-inverse-success" style="font-size: 13px;">Approved</span>
                                                         @elseif($request->status == "approved")
                                                             <span class="badge bg-inverse-success" style="font-size: 13px;">Approved</span>
                                                         @endif
                                                     </td>
-                                                    @if (Auth::user()->RolePermission != "HR"  || Auth::user()->RolePermission != "HRAdmin"&& (Auth::user()->department->direct_manager_id == Auth::user()->id || Auth::user()->branch->direct_manager_id == Auth::user()->id ))
+                                                    {{-- @if (Auth::user()->RolePermission != "HR"  || Auth::user()->RolePermission != "HRAdmin"&& (Auth::user()->department->direct_manager_id == Auth::user()->id || Auth::user()->branch->direct_manager_id == Auth::user()->id ))
                                                         <td class="text-end">
                                                             @if (permissionAccess("m10-s1","is_cancel")->value == "1" || permissionAccess("m10-s1","is_reject")->value == "1")
                                                                 @if ($request->end_date >= \Carbon\Carbon::now()->format('Y-m-d'))
@@ -118,7 +116,7 @@
                                                                 @endif
                                                             @endif
                                                         </td>
-                                                    @endif
+                                                    @endif --}}
                                                 </tr>
                                             @endforeach
                                         @endif
