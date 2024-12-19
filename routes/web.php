@@ -141,6 +141,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('/leaves/filter-report', [LeavesAdminController::class,'FilterReport']);
     Route::get('/leaves/export-report', [LeavesAdminController::class,'Export']);
     Route::post('/leaves/import', [LeavesAdminController::class,'ImportLeave']);
+    Route::post('/leaves/admin/cancel', [LeavesAdminController::class,'cancels']);
 
     // Leave for employees
     Route::get('/leaves/employee', [LeavesEmployeeController::class,'index']);
@@ -148,6 +149,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('/leaves/employee/edit', [LeavesEmployeeController::class,'edit']);
     Route::post('/leaves/employee/update', [LeavesEmployeeController::class,'update']);
     Route::post('/leaves/employee/delete', [LeavesEmployeeController::class,'destroy']);
+    Route::post('/leaves/employee/cancel', [LeavesEmployeeController::class,'cancel']);
 
     Route::get('/leaves/replcement', [LeavesEmployeeController::class,'indexReplcement']);
     Route::post('/leaves/replacement/store', [LeavesEmployeeController::class,'replcementCreate']);

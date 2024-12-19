@@ -130,6 +130,7 @@ class LeavesEmployeeController extends Controller
             $overlappingLeave = null;
 
             $overlappingLeave  = LeaveRequest::where('employee_id', $employee_id)
+            ->whereIn("status", ["approved_lm","approved_hod", "pending"])
             ->where(function ($query) use ($startDate, $endDate, $startHalfDay, $endHalfDay) {
                 $query->where(function ($query) use ($startDate, $endDate) {
                     $query->where('start_date', '<', $endDate)
@@ -158,6 +159,7 @@ class LeavesEmployeeController extends Controller
             if (!$overlappingLeave) {
                 if (!$startHalfDay && !$endHalfDay) {
                     $overlappingLeave = LeaveRequest::where('employee_id', $employee_id)
+                    ->whereIn("status", ["approved_lm","approved_hod", "pending"])
                     ->where(function ($query) use ($startDate, $endDate) {
                         $query->where('start_date', '>=', $startDate)
                         ->where('end_date', '<=', $endDate);
@@ -166,6 +168,7 @@ class LeavesEmployeeController extends Controller
                 if (($startHalfDay == "am"|| $startHalfDay == "pm") || ($endHalfDay == "am" || $endHalfDay == "pm")) {
                     if ($startHalfDay == "am"|| $startHalfDay == "pm") {
                         $overlappingLeave1 = LeaveRequest::where('employee_id', $employee_id)
+                        ->whereIn("status", ["approved_lm","approved_hod", "pending"])
                         ->where(function ($query) use ($startDate, $startHalfDay) {
                             $query->where('start_date', '=', $startDate)
                             ->where('start_half_day', '=', $startHalfDay);
@@ -180,6 +183,7 @@ class LeavesEmployeeController extends Controller
                     } 
                     if ($endHalfDay == "am" || $endHalfDay == "pm") {
                         $overlappingLeave2 = LeaveRequest::where('employee_id', $employee_id)
+                        ->whereIn("status", ["approved_lm","approved_hod", "pending"])
                         ->where(function ($query) use ($endDate, $endHalfDay) {
                             $query->where('end_date', '=', $endDate)
                             ->where('end_half_day', '=', $endHalfDay);
@@ -193,6 +197,7 @@ class LeavesEmployeeController extends Controller
                         }  
                     }
                     $dataLeaves = LeaveRequest::where('employee_id', $employee_id)
+                    ->whereIn("status", ["approved_lm","approved_hod", "pending"])
                     ->where(function ($query) use ($startDate, $endDate) {
                         $query->where('start_date', '<=', $startDate)
                         ->where('end_date', '>=', $endDate);
@@ -1017,6 +1022,47 @@ class LeavesEmployeeController extends Controller
         }catch(\Exception $e){
             DB::rollback();
             Toastr::error('Leave requsest delete fail.','Error');
+            return redirect()->back();
+        }
+    }
+    public function cancel(Request $request)
+    {
+        try{
+            $data = LeaveRequest::with("leaveType")->where("id", $request->id)->first();
+            // $LeaveAllocation = LeaveAllocation::where("employee_id", $data->employee_id)->first();
+            
+            // if ($data->leaveType->type == "annual_leave") {
+            //     $current_annual_leave = $LeaveAllocation->total_annual_leave + $request->number_of_day;
+            //     $LeaveAllocation->total_annual_leave =  $current_annual_leave > $LeaveAllocation->default_annual_leave ? $LeaveAllocation->default_annual_leave : $current_annual_leave;
+            // }else if($data->leaveType->type == "sick_leave"){
+            //     $current_sick_leave = $LeaveAllocation->total_sick_leave + $request->number_of_day;
+            //     $LeaveAllocation->total_sick_leave = $current_sick_leave > $LeaveAllocation->default_sick_leave ? $LeaveAllocation->default_sick_leave : $current_sick_leave;
+            // }else if($data->leaveType->type == "special_leave") {
+            //     $current_special_leave = $LeaveAllocation->total_special_leave + $request->number_of_day;
+            //     $LeaveAllocation->total_special_leave = $current_special_leave > $LeaveAllocation->default_special_leave ? $LeaveAllocation->default_special_leave : $current_special_leave;
+            // }else if($data->leaveType->type == "unpaid_leave"){
+            //     $current_unpaid_leave = $LeaveAllocation->total_unpaid_leave + $request->number_of_day;
+            //     $LeaveAllocation->total_unpaid_leave = $current_unpaid_leave > $LeaveAllocation->default_unpaid_leave ? $LeaveAllocation->default_unpaid_leave : $current_unpaid_leave;
+            // }else if($data->leaveType->type == "long_sick_leave"){
+            //     $current_long_sick_leave = $LeaveAllocation->total_long_sick_leave + $request->number_of_day;
+            //     $LeaveAllocation->total_long_sick_leave = $current_long_sick_leave > $LeaveAllocation->default_long_sick_leave ? $LeaveAllocation->default_long_sick_leave : $current_long_sick_leave;
+            // }
+            // $LeaveAllocation->save();
+
+            // DelegateLeave::where('requester_id', $data->employee_id)->where("start_date",$data->start_date)->where("end_date",$data->end_date)->delete();
+
+            $data['status'] = "pending_cancel";
+            $data['remark'] = $request->remark;
+            $data['next_approver'] = $data->approved_by;
+            $data['updated_by'] = Auth::user()->id;
+
+            $data->save();
+           
+            Toastr::success('Cancel successfully.','Success');
+            return redirect()->back();
+        }catch(\Exception $e){
+            DB::rollback();
+            Toastr::error('Cancel fail.','Error');
             return redirect()->back();
         }
     }

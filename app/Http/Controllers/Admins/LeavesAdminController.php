@@ -85,8 +85,11 @@ class LeavesAdminController extends Controller
             })->orderBy('id', 'DESC')->get();
         $requestCancels = LeaveRequest::with("employee")->with("handover")
             ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
-                if($RolePermission == 'HR' || $RolePermission =="HRAdmin"){
-                    $query->where("status", "cancel_hod");
+                if($RolePermission == 'CEO' || $RolePermission == 'BOD' || $RolePermission == 'BM' || $RolePermission == 'HOD'){
+                    $query->where("status", "pending_cancel");
+                    $query->where("next_approver", Auth::user()->id);
+                }else if($RolePermission == 'HR' || $RolePermission =="HRAdmin"){
+                    $query->whereIn("status", ["cancel_hod", "pending_cancel"]);
                 }
             })->orderBy('id', 'DESC')->get();
         // dd($dataLeaveRequest);
@@ -181,7 +184,14 @@ class LeavesAdminController extends Controller
                 if ($condiction_tab == 1) {
                     $query->whereIn("leave_requests.status", ["approved_lm","approved_hod","pending"]);
                 }else{
-                    $query->where('leave_requests.status', 'cancel_hod');
+                   
+                    if (Auth::user()->RolePermission  =="HRAdmin") {
+                        $query->whereIn('leave_requests.status', ["cancel_hod", "pending_cancel"]);
+                    }else{
+                        $query->where('leave_requests.status', "pending_cancel");
+                        $query->where("leave_requests.next_approver", Auth::user()->id);
+                    }
+                    
                 }
             })
             ->when($request->employee_id, function ($query, $employee_id) {
@@ -407,6 +417,24 @@ class LeavesAdminController extends Controller
                 ->whereIn('id', $request->ids)
                 ->update([
                     'status'        => "approved",
+                    'approved_date' => Carbon::now(),
+                    'approved_by'   => Auth::user()->id,
+            ]);
+            DB::commit();
+            return response()->json([
+                'message' => 'The process has been successfully.'
+            ]);
+        } catch (\Exception $exp) {
+            DB::rollBack();
+            return response()->json(['message' => $exp->getMessage()], 500);
+        }
+    }
+    public function cancels(Request $request){
+        try {
+            $updated = DB::table('leave_requests')
+                ->whereIn('id', $request->ids)
+                ->update([
+                    'status'        => "cancel",
                     'approved_date' => Carbon::now(),
                     'approved_by'   => Auth::user()->id,
             ]);
