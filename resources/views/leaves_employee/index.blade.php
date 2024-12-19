@@ -276,8 +276,8 @@
                                                         @php
                                                             $currentLy = \Carbon\Carbon::now();
                                                             $currentDate = \Carbon\Carbon::parse($currentLy)->format('d-M-Y');
-                                                            $start = \Carbon\Carbon::parse($request->start_date)->format('d-M-Y');
-                                                            $end = \Carbon\Carbon::parse($request->end_date)->format('d-M-Y');
+                                                            $daysToAdd = 5; // Number of days to add
+                                                            $end = \Carbon\Carbon::parse($request->end_date)->addDays($daysToAdd)->format('d-M-Y');
                                                         @endphp
                                                         @if ($currentDate <= $end)
                                                             @if($request->status == "approved_hod" || $request->status == "approved")
