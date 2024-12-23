@@ -498,9 +498,6 @@
             <div id="showNotyfication" class="modal custom-modal fade" style="display: none;" aria-hidden="true" data-bs-backdrop="static">
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-bs-dismiss="modal">×</button>
-                        </div>
                         <div class="modal-body">
                             <div class="row">
                                 <div class="col-md-12 col-sm-12 col-lg-12 col-xl-12">
