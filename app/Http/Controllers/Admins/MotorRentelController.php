@@ -433,7 +433,7 @@ class MotorRentelController extends Controller
                     'product_year' => $motor->product_year,
                     'expired_year' => $motor->expired_year,
                     'motor_color' => $motor->motor_color,
-                    'shelt_life' => $motor->shelt_life,
+                    'shelt_life' => $ageMotorrentel,
                     'number_plate' => $motor->number_plate,
                     'motorcycle_brand' => $motor->motorcycle_brand,
                     'category' => $motor->category,

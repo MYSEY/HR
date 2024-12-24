@@ -355,24 +355,29 @@
             let ageMotorrentel = calculateAge(dateYear);
             $("#shelt_life").val(ageMotorrentel);
             $('#e_shelt_life').val(ageMotorrentel);
+            $('#e_shelt_life_hide').val(ageMotorrentel);
 
             // block Price motor rentel
             let newYearExpireted = 0;
             if (ageMotorrentel >= 0 && ageMotorrentel <= 5) {
                 $("#price_motor_rentel").val(30);
                 $('#e_price_motor_rentel').val(30);
+                $('#e_price_motor_rentel_hide').val(30);
                 newYearExpireted = 5
             } else if (ageMotorrentel > 5 && ageMotorrentel <= 7) {
                 $("#price_motor_rentel").val(25);
                 $('#e_price_motor_rentel').val(25);
+                $('#e_price_motor_rentel_hide').val(25);
                 newYearExpireted = 7
             } else if (ageMotorrentel > 7 && ageMotorrentel <= 10) {
                 $("#price_motor_rentel").val(20);
                 $('#e_price_motor_rentel').val(20);
+                $('#e_price_motor_rentel_hide').val(20);
                 newYearExpireted = 10;
             } else {
                 $("#price_motor_rentel").val(0);
                 $('#e_price_motor_rentel').val(0);
+                $('#e_price_motor_rentel_hide').val(0);
             }
             const aYearFromNow = new Date(dateYear);
             aYearFromNow.setFullYear(aYearFromNow.getFullYear() + newYearExpireted);
@@ -668,16 +673,21 @@
                         let dateYear = moment(new Date(`01/01/${response.success.product_year}`)).format('YYYY-MM-DD');
                         let ageMotorrentel = calculateAge(dateYear);
                         $('#e_shelt_life').val(ageMotorrentel);
+                        $('#e_shelt_life_hide').val(ageMotorrentel);
 
                         // block Price motor rentel
                         if (ageMotorrentel >= 0 && ageMotorrentel <= 5) {
                             $('#e_price_motor_rentel').val(30);
+                            $('#e_price_motor_rentel_hide').val(30);
                         } else if (ageMotorrentel > 5 && ageMotorrentel <= 7) {
                             $('#e_price_motor_rentel').val(25);
+                            $('#e_price_motor_rentel_hide').val(25);
                         } else if (ageMotorrentel > 7 && ageMotorrentel <= 10) {
                             $('#e_price_motor_rentel').val(20);
+                            $('#e_price_motor_rentel_hide').val(20);
                         } else {
                             $('#e_price_motor_rentel').val(0);
+                            $('#e_price_motor_rentel_hide').val(0);
                         }
 
                         // $('#e_shelt_life').val(response.success.shelt_life);
@@ -872,6 +882,7 @@
                     let dateYear = moment(new Date(`01/01/${row.product_year}`)).format('YYYY-MM-DD');
                     let ageMotorrentel = calculateAge(dateYear);
                     $('#e_shelt_life').val(ageMotorrentel);
+                    $('#e_shelt_life_hide').val(ageMotorrentel);
 
                     // block Price motor rentel
                     let priceMotor = 0;
