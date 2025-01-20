@@ -8,6 +8,75 @@
     .ui-datepicker-calendar {
         display: none;
     }
+     /* The container checkbox */
+     .container-checkbox {
+        /* display: block; */
+        position: relative;
+        padding-left: 35px;
+        /* margin-bottom: 5px; */
+        cursor: pointer;
+        font-size: 15px;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        margin-top: 10%;
+    }
+
+    /* Hide the browser's default checkbox */
+    .container-checkbox input {
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+        height: 0;
+        width: 0;
+    }
+
+    /* Create a custom checkbox */
+    .checkmark {
+        position: absolute;
+        top: 1;
+        left: 0;
+        height: 20px;
+        width: 20px;
+        border: solid 1px #ccc;
+        background-color: #fff;
+    }
+
+    /* On mouse-over, add a grey background color */
+    .container-checkbox:hover input ~ .checkmark {
+        background-color: #ccc;
+    }
+
+    /* When the checkbox is checked, add a blue background */
+    .container-checkbox input:checked ~ .checkmark {
+        background-color: #2196F3;
+    }
+
+    /* Create the checkmark/indicator (hidden when not checked) */
+    .checkmark:after {
+        content: "";
+        position: absolute;
+        display: none;
+    }
+
+    /* Show the checkmark when checked */
+    .container-checkbox input:checked ~ .checkmark:after {
+        display: block;
+    }
+
+    /* Style the checkmark/indicator */
+    .container-checkbox .checkmark:after {
+        left: 7px;
+        top: 4px;
+        width: 5px;
+        height: 10px;
+        border: solid white;
+        border-width: 0 3px 3px 0;
+        -webkit-transform: rotate(45deg);
+        -ms-transform: rotate(45deg);
+        transform: rotate(45deg);
+    }
 </style>
 <link rel="stylesheet" href="{{ asset('admin/css/loarding-table.css') }}">
 @section('content')
@@ -190,13 +259,22 @@
 
                                                             if ($ageMotorrentel >= 0 && $ageMotorrentel <= 5) {
                                                                 $newYearExpireted = 5;
-                                                                $priceMotorRentel = 30;
+                                                                if($item->is_motor_fee !=1){
+                                                                    $priceMotorRentel = 30;
+                                                                }
+                                                               
                                                             } elseif ($ageMotorrentel > 5 && $ageMotorrentel <= 7) {
                                                                 $newYearExpireted = 7;
-                                                                $priceMotorRentel = 25;
+                                                                if($item->is_motor_fee !=1){
+                                                                    $priceMotorRentel = 25;
+                                                                }
+                                                                
                                                             } elseif ($ageMotorrentel > 7 && $ageMotorrentel <= 10) {
                                                                 $newYearExpireted = 10;
-                                                                $priceMotorRentel = 20;
+                                                                if($item->is_motor_fee !=1){
+                                                                    $priceMotorRentel = 20;
+                                                                }
+                                                                
                                                             }
 
                                                             $aYearFromNow = new DateTime($item->product_year . '-01-01');
@@ -360,19 +438,49 @@
             // block Price motor rentel
             let newYearExpireted = 0;
             if (ageMotorrentel >= 0 && ageMotorrentel <= 5) {
-                $("#price_motor_rentel").val(30);
-                $('#e_price_motor_rentel').val(30);
-                $('#e_price_motor_rentel_hide').val(30);
+                if ($("#is_motor_fee").val() == 1) {
+                    $("#price_motor_rentel").val(0);
+                }else{
+                    $("#price_motor_rentel").val(30);
+                }
+                if ($("#e_is_motor_fee").val() == 1) {
+                    $('#e_price_motor_rentel').val(0);
+                    $('#e_price_motor_rentel_hide').val(0);
+                }else{
+                    $('#e_price_motor_rentel').val(30);
+                    $('#e_price_motor_rentel_hide').val(30);
+                }
                 newYearExpireted = 5
             } else if (ageMotorrentel > 5 && ageMotorrentel <= 7) {
-                $("#price_motor_rentel").val(25);
-                $('#e_price_motor_rentel').val(25);
-                $('#e_price_motor_rentel_hide').val(25);
+                if ($("#is_motor_fee").val() == 1) {
+                    $("#price_motor_rentel").val(0);
+                }else{
+                    $("#price_motor_rentel").val(25);
+                }
+                if ($("#e_is_motor_fee").val() == 1) {
+                    $('#e_price_motor_rentel').val(0);
+                    $('#e_price_motor_rentel_hide').val(0);
+                }else{
+                    $('#e_price_motor_rentel').val(25);
+                    $('#e_price_motor_rentel_hide').val(25);
+                }
+              
                 newYearExpireted = 7
             } else if (ageMotorrentel > 7 && ageMotorrentel <= 10) {
-                $("#price_motor_rentel").val(20);
-                $('#e_price_motor_rentel').val(20);
-                $('#e_price_motor_rentel_hide').val(20);
+                if ($("#is_motor_fee").val() == 1) {
+                    $("#price_motor_rentel").val(0);
+                }else{
+                    $("#price_motor_rentel").val(20);
+                }
+
+                if ($("#e_is_motor_fee").val() == 1) {
+                    $('#e_price_motor_rentel').val(0);
+                    $('#e_price_motor_rentel_hide').val(0);
+                }else{
+                    $('#e_price_motor_rentel').val(20);
+                    $('#e_price_motor_rentel_hide').val(20);
+                }
+                
                 newYearExpireted = 10;
             } else {
                 $("#price_motor_rentel").val(0);
@@ -390,6 +498,61 @@
                 let lastDay = new Date(YearExpireted, 12, 0).getDate();
                 $("#end_date").val(YearExpireted+'-'+12+'-'+lastDay);
                 $("#e_end_date").val(YearExpireted+'-'+12+'-'+lastDay);
+            }
+        });
+        $("#is_motor_fee").on("click", function () {
+            if (!$(this).prop("checked")) {
+                $(this).prop("checked", false);
+                $(this).val(0);
+                let product_year = $("#product_year").val();
+                let dateYear = moment(new Date(`01/01/${product_year}`)).format('YYYY-MM-DD');
+                let ageMotorrentel = calculateAge(dateYear);
+
+                if (ageMotorrentel >= 0 && ageMotorrentel <= 5) {
+                    $("#price_motor_rentel").val(30);
+                } else if (ageMotorrentel > 5 && ageMotorrentel <= 7) {
+                    $("#price_motor_rentel").val(25);
+                } else if (ageMotorrentel > 7 && ageMotorrentel <= 10) {
+                    $("#price_motor_rentel").val(20);
+                } else {
+                    $("#price_motor_rentel").val(0);
+                }
+
+            }
+            if ($(this).prop("checked")) {
+                $(this).prop("checked", true);
+                $(this).val(1)
+                $("#price_motor_rentel").val(0);
+            }
+        });
+        $("#e_is_motor_fee").on("click", function () {
+            if (!$(this).prop("checked")) {
+                $(this).prop("checked", false);
+                $(this).val(0);
+                let product_year = $("#e_product_year").val();
+                let dateYear = moment(new Date(`01/01/${product_year}`)).format('YYYY-MM-DD');
+                let ageMotorrentel = calculateAge(dateYear);
+
+                if (ageMotorrentel >= 0 && ageMotorrentel <= 5) {
+                    $("#e_price_motor_rentel").val(30);
+                    $('#e_price_motor_rentel_hide').val(30);
+                } else if (ageMotorrentel > 5 && ageMotorrentel <= 7) {
+                    $("#e_price_motor_rentel").val(25);
+                    $('#e_price_motor_rentel_hide').val(25);
+                } else if (ageMotorrentel > 7 && ageMotorrentel <= 10) {
+                    $("#e_price_motor_rentel").val(20);
+                    $('#e_price_motor_rentel_hide').val(20);
+                } else {
+                    $("#e_price_motor_rentel").val(0);
+                    $('#e_price_motor_rentel_hide').val(0);
+                }
+                
+            }
+            if ($(this).prop("checked")) {
+                $(this).prop("checked", true);
+                $(this).val(1)
+                $("#e_price_motor_rentel").val(0);
+                $('#e_price_motor_rentel_hide').val(0);
             }
         });
 
@@ -472,6 +635,7 @@
                     total_gasoline: $("#total_gasoline").val(),
                     total_work_day: $("#total_work_day").val(),
                     price_engine_oil: $("#price_engine_oil").val(),
+                    is_motor_fee: $("#is_motor_fee").val(),
                     price_motor_rentel: $("#price_motor_rentel").val(),
                     taplab_rentel: $("#taplab_rentel").val(),
                     price_taplab_rentel: $("#price_taplab_rentel").val(),
@@ -572,6 +736,7 @@
                     total_gasoline: $("#e_total_gasoline").val(),
                     total_work_day: $("#e_total_work_day").val(),
                     price_engine_oil: $("#e_price_engine_oil").val(),
+                    is_motor_fee: $("#e_is_motor_fee").val(),
                     price_motor_rentel: $("#e_price_motor_rentel").val(),
                     taplab_rentel: $("#e_taplab_rentel").val(),
                     price_taplab_rentel: $("#e_price_taplab_rentel").val(),
@@ -676,19 +841,26 @@
                         $('#e_shelt_life_hide').val(ageMotorrentel);
 
                         // block Price motor rentel
-                        if (ageMotorrentel >= 0 && ageMotorrentel <= 5) {
-                            $('#e_price_motor_rentel').val(30);
-                            $('#e_price_motor_rentel_hide').val(30);
-                        } else if (ageMotorrentel > 5 && ageMotorrentel <= 7) {
-                            $('#e_price_motor_rentel').val(25);
-                            $('#e_price_motor_rentel_hide').val(25);
-                        } else if (ageMotorrentel > 7 && ageMotorrentel <= 10) {
-                            $('#e_price_motor_rentel').val(20);
-                            $('#e_price_motor_rentel_hide').val(20);
-                        } else {
-                            $('#e_price_motor_rentel').val(0);
-                            $('#e_price_motor_rentel_hide').val(0);
+                        $('#e_price_motor_rentel').val(0);
+                        $('#e_price_motor_rentel_hide').val(0);
+                        if (response.success.is_motor_fee !=1) {
+                            if (ageMotorrentel >= 0 && ageMotorrentel <= 5) {
+                                $('#e_price_motor_rentel').val(30);
+                                $('#e_price_motor_rentel_hide').val(30);
+                            } else if (ageMotorrentel > 5 && ageMotorrentel <= 7) {
+                                $('#e_price_motor_rentel').val(25);
+                                $('#e_price_motor_rentel_hide').val(25);
+                            } else if (ageMotorrentel > 7 && ageMotorrentel <= 10) {
+                                $('#e_price_motor_rentel').val(20);
+                                $('#e_price_motor_rentel_hide').val(20);
+                            } else {
+                                $('#e_price_motor_rentel').val(0);
+                                $('#e_price_motor_rentel_hide').val(0);
+                            }
+                        }else{
+                            $('#e_is_motor_fee').prop("checked", true);
                         }
+                       
 
                         // $('#e_shelt_life').val(response.success.shelt_life);
                         $('#e_number_plate').val(response.success.number_plate);
@@ -706,6 +878,7 @@
                         $('#e_motor_color').val(response.success.motor_color);
                         $('#e_taplab_imei').val(response.success.taplab_imei);
                         $('#e_start_date_taplab').val(response.success.start_date_taplab);
+                        $('#e_is_motor_fee').val(response.success.is_motor_fee);
                         $('#edit_motor_rentel').modal('show');
                     }
                 }
@@ -879,6 +1052,8 @@
                     let end_date = row.end_date ? moment(row.end_date).format('D-MMM-YYYY'): "";
                     let start_date_taplab = row.start_date_taplab ? moment(row.start_date_taplab).format('D-MMM-YYYY'): "";
 
+                    let resign_date = row.user.resign_date ? row.user.resign_date : "";
+
                     let dateYear = moment(new Date(`01/01/${row.product_year}`)).format('YYYY-MM-DD');
                     let ageMotorrentel = calculateAge(dateYear);
                     $('#e_shelt_life').val(ageMotorrentel);
@@ -886,15 +1061,18 @@
 
                     // block Price motor rentel
                     let priceMotor = 0;
-                    if (ageMotorrentel >= 0 && ageMotorrentel <= 5) {
-                        priceMotor = 30
-                    } else if (ageMotorrentel > 5 && ageMotorrentel <= 7) {
-                        priceMotor = 25
-                    } else if (ageMotorrentel > 7 && ageMotorrentel <= 10) {
-                        priceMotor = 20;
-                    } else {
-                        priceMotor = 0
+                    if (row.is_motor_fee !=1) {
+                        if (ageMotorrentel >= 0 && ageMotorrentel <= 5) {
+                            priceMotor = 30
+                        } else if (ageMotorrentel > 5 && ageMotorrentel <= 7) {
+                            priceMotor = 25
+                        } else if (ageMotorrentel > 7 && ageMotorrentel <= 10) {
+                            priceMotor = 20;
+                        } else {
+                            priceMotor = 0
+                        }
                     }
+                    
 
                     tr += '<tr class="odd">' +
                         '<td class="ids stuck-scroll-3">' + (no) + '</td>' +
@@ -916,6 +1094,7 @@
                         '<td>$ ' + (Number(row.price_engine_oil)) + '</td>' +
                         '<td>$ ' + (Number(priceMotor)) + '</td>' +
                         '<td>$ ' + (row.price_taplab_rentel ? Number(row.price_taplab_rentel) : "0.00") + '</td>' +
+                        '<td><span style="font-size: 13px" class="badge bg-inverse-danger">'+(resign_date)+'</span></td>'+
                         '<td>'+
                             '<div class="dropdown action-label">'+
                                 (status)+
