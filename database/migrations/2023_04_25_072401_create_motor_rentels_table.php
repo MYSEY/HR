@@ -32,6 +32,7 @@ return new class extends Migration
             $table->integer('total_gasoline')->nullable();
             $table->decimal('total_work_day',50,1)->nullable();
             $table->decimal('price_engine_oil')->nullable();
+            $table->boolean('is_motor_fee')->nullable();
             $table->decimal('price_motor_rentel')->nullable();
             $table->string('taplab_rentel')->nullable();
             $table->string('taplab_imei')->nullable();

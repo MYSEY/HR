@@ -69,6 +69,8 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('/dashboad/employee', [DashboadController::class, 'dashboadEmployee']);
     Route::get('/dashboad/admin', [DashboadController::class, 'dashboadAdmin']);
     Route::get('/dashboad/show', [DashboadController::class, 'show']);
+    Route::get('/dashboad/view-leave', [DashboadController::class, 'viewLeave']);
+    Route::post('/dashboad/view-leave/search', [DashboadController::class, 'searchLeaveRequest']);
 
     Route::get('/employee/profile/{id}', [EmployeeProfileController::class, 'employeeProfile'])->name('employee.profile');
     Route::post('employee/contact', [EmployeeProfileController::class, 'employeeContact'])->name('employee.contact');
@@ -116,6 +118,9 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('/holidays/create', [HolidayController::class, 'store']);
     Route::get('/holidays/edit', [HolidayController::class, 'edit']);
     Route::post('/holidays/update', [HolidayController::class, 'update']);
+
+    // test create data to connection database 2
+    // Route::post('/holidays/test-create', [HolidayController::class, 'mysqlSuppotForm']);
     // Route::get('/attendance/admin', [AttendanceAdminController::class, 'index']);
     // Route::get('/attendance/employee', [AttendanceEmployeeController::class, 'index']);
 

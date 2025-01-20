@@ -336,7 +336,12 @@
                             </div>
                             <div class="view-attendance">
                                 <a href="{{ url('/leaves/admin') }}">
-                                    @lang('lang.apply_leave') <i class="fe fe-arrow-right-circle"></i>
+                                    <i class="fa fa-arrow-right"></i> @lang('lang.apply_leave')
+                                </a>
+                            </div><br>
+                            <div class="view-attendance">
+                                <a href="{{ url('/dashboad/view-leave') }}">
+                                    <i class="fa fa-arrow-right"></i> @lang('lang.view_all_leave_request')
                                 </a>
                             </div>
                         </div>

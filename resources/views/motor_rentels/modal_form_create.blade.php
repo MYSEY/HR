@@ -118,21 +118,19 @@
                                 <input class="form-control emp_required m_clear" type="number" id="total_gasoline" name="total_gasoline" value="{{old('total_gasoline')}}" required>
                             </div>
                         </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="container-checkbox">@lang('lang.not_motor_rental_fee')?
+                                    <input type="checkbox" class="is_motor_fee" id="is_motor_fee" name="is_motor_fee"> <span class="checkmark"></span>
+                                </label>
+                            </div>
+                        </div>
                         {{-- <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="">@lang('lang.total_working_days') <span class="text-danger">*</span></label>
                                 <input class="form-control emp_required m_clear" step="any" type="number" id="total_work_day" name="total_work_day" value="{{old('total_work_day')}}" required>
                             </div>
                         </div> --}}
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label class="">@lang('lang.price_motor_rentel')<span class="text-danger">*</span></label>
-                                <div class="input-group">
-                                    <span class="input-group-text">$</span>
-                                    <input disabled class="form-control emp_required m_clear" type="number" id="price_motor_rentel" name="price_motor_rentel" value="{{old('price_motor_rentel')}}" required>
-                                </div> 
-                            </div>
-                        </div>
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="">@lang('lang.price_engine_oil')<span class="text-danger">*</span></label>
@@ -142,6 +140,16 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="">@lang('lang.price_motor_rentel')<span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <span class="input-group-text">$</span>
+                                    <input disabled class="form-control emp_required m_clear" type="number" id="price_motor_rentel" name="price_motor_rentel" value="{{old('price_motor_rentel')}}" required>
+                                </div> 
+                            </div>
+                        </div>
+                       
                        
                     </div>
                     <div class="form-group col-md-12 col-12" element="div" bp-field-wrapper="true" bp-field-name="Identity" bp-field-type="custom_html">

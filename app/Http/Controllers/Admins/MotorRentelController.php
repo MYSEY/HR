@@ -55,6 +55,7 @@ class MotorRentelController extends Controller
                 'users.number_employee',
                 'users.branch_id',
                 'users.department_id',
+                'users.resign_date',
             )
             ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
                 if ($RolePermission == 'Employee') {
@@ -442,14 +443,14 @@ class MotorRentelController extends Controller
                     'total_gasoline' => $motor->total_gasoline,
                     'total_work_day' => $totalWorkDay,
                     'price_engine_oil' => $motor->price_engine_oil,
-                    'price_motor_rentel' => $priceMotorRentel,
+                    'price_motor_rentel' => ($motor->is_motor_fee !=1 ? $priceMotorRentel: 0),
                     'taplab_rentel' => $motor->taplab_rentel,
                     'taplab_imei' => $motor->taplab_imei,
                     'start_date_taplab' => $motor->start_date_taplab,
                     'price_taplab_rentel' => $motor->price_taplab_rentel,
                     'resigned_date' => $motor->resigned_date,
                     'gasoline_price_per_liter' => $request->gasoline_price_per_liter,
-                    'amount_price_motor_rentel'=> $amount_price_motor_rentel,
+                    'amount_price_motor_rentel'=> ($motor->is_motor_fee !=1 ? $amount_price_motor_rentel : 0),
                     'amount_price_engine_oil' => $amount_price_engine_oil,
                     'amount_price_taplab_rentel' => $amount_price_taplab_rentel,
                     'adjust_amount_exclude'         => $adjust_amount_exclude,
@@ -576,6 +577,7 @@ class MotorRentelController extends Controller
             $data['total_gasoline']     = $request->total_gasoline;
             $data['total_work_day']     = $request->total_work_day;
             $data['price_engine_oil']   = $request->price_engine_oil;
+            $data['is_motor_fee']   = $request->is_motor_fee;
             $data['price_motor_rentel'] = $request->price_motor_rentel;
             $data['taplab_rentel']      = $request->taplab_rentel;
             $data['price_taplab_rentel'] = $request->price_taplab_rentel;
