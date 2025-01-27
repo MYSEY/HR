@@ -877,7 +877,7 @@
             let condiction = $(this).data("condiction");
             let description = "@lang('lang.are_you_sure_want_to_cancel')?";
             let button_cancel = {
-                text: '@lang("lang.cancel")',
+                text: '@lang("lang.submit")',
                 btnClass: 'btn-red btn-sm',
                 action: function () {
                     var id = this.$content.find('.id').val();
