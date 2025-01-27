@@ -12,6 +12,7 @@ use App\Models\LeaveAllocation;
 use App\Models\LeaveRequest;
 use App\Models\LeaveType;
 use App\Models\mail as ModelsMail;
+use App\Models\Role;
 use App\Models\User;
 use App\Repositories\Admin\EmployeeRepository;
 use Brian2694\Toastr\Facades\Toastr;
@@ -89,7 +90,7 @@ class LeavesEmployeeController extends Controller
                     $query->where("department_id", Auth::user()->department_id);
                     $query->whereNot("id", Auth::user()->id);
                 }else if($RolePermission == 'Employee'){
-                    $query->where("id", Auth::user()->line_manager);
+                    // $query->where("id", Auth::user()->line_manager);
                     $query->where("department_id", Auth::user()->department_id);
                     $query->where("branch_id", Auth::user()->branch_id);
                     $query->whereNot("id", Auth::user()->id);
@@ -302,197 +303,6 @@ class LeavesEmployeeController extends Controller
                     }
                 }
             }
-
-            // ****** old process request ****** //
-            // $delegateLeave = DelegateLeave::where("requester_id", Auth::user()->line_manager)
-            // ->where('start_date', '<=', $request_date)
-            // ->where('end_date', '>=', $request_date)->first();
-            // $data['next_approver'] = Auth::user()->line_manager;
-            // if ($delegateLeave) {
-            //     $data['next_approver'] = $delegateLeave->delegate_id;
-            //     if ($delegateLeave->delegate_id  == Auth::user()->id) {
-            //         $line =  User::where("id", $delegateLeave->requester_id)->first();
-            //         if ($line) {
-            //             $data['next_approver'] = $line->line_manager;
-            //             $lineLeave = DelegateLeave::where("requester_id",  $line->line_manager)->where('start_date', '<=', $request_date)->where('end_date', '>=', $request_date)->first();
-                        
-            //             if ($lineLeave) {
-            //                 $data['next_approver'] = $lineLeave->delegate_id;
-
-            //                 $delegateLeave3 = LeaveRequest::where("employee_id", $lineLeave->delegate_id)
-            //                 ->where('start_date', '<=', $request_date)
-            //                 ->where('end_date', '>=', $request_date)->first();
-            //                 if ($delegateLeave3) {
-            //                     $LineNumberDelegateHead = Helper::countWeekdays($request_date,$delegateLeave3->end_date);
-
-            //                     $LineNumber1 = Helper::countWeekdays($request_date,$delegateLeave->end_date);
-            //                     $LineNumber2 = Helper::countWeekdays($request_date,$lineLeave->end_date);
-            //                     if ($LineNumber1 <= $LineNumber2) {
-            //                         $data['next_approver'] = $line->id;
-            //                         if ($LineNumberDelegateHead < $LineNumber1) {
-            //                             $data['next_approver'] = $delegateLeave3->employee_id;
-            //                         }
-            //                     }else{
-            //                         $data['next_approver'] = $line->line_manager;
-            //                         if ($LineNumberDelegateHead < $LineNumber2) {
-            //                             $data['next_approver'] = $delegateLeave3->employee_id;
-            //                         }
-            //                     }
-            //                 }
-            //             }
-            //         }
-            //     }else{
-            //         $delegateLeave1 = DelegateLeave::where("requester_id", $delegateLeave->delegate_id)
-            //         ->where('start_date', '<=', $request_date)
-            //         ->where('end_date', '>=', $request_date)->first();
-            //         if ($delegateLeave1) {
-            //             $line_manager1 = User::where("id", Auth::user()->line_manager)->first();
-            //             $data['next_approver'] = $line_manager1->line_manager;
-
-            //             $leaveLineManager2 = LeaveRequest::where("employee_id", $line_manager1->line_manager)
-            //             ->where('start_date', '<=', $request_date)
-            //             ->where('end_date', '>=', $request_date)->first();
-            //             $delegateLeave2 = DelegateLeave::where("requester_id", $line_manager1->line_manager)
-            //             ->where('start_date', '<=', $request_date)
-            //             ->where('end_date', '>=', $request_date)->first();
-
-            //             if ($delegateLeave2) {
-            //                 $data['next_approver'] = $delegateLeave2->delegate_id;
-            //                 $delegateLeave3 = LeaveRequest::where("employee_id", $delegateLeave2->delegate_id)
-            //                 ->where('start_date', '<=', $request_date)
-            //                 ->where('end_date', '>=', $request_date)->first();
-            //                 if ($delegateLeave3) {
-            //                     $LineNumber1 = Helper::countWeekdays($request_date,$delegateLeave->end_date);
-            //                     $LineNumber2 = Helper::countWeekdays($request_date,$leaveLineManager2->end_date);
-            //                     if ($LineNumber1 <= $LineNumber2) {
-            //                         $data['next_approver'] = $line_manager1->id;
-            //                     }else{
-            //                         $data['next_approver'] = $line_manager1->line_manager;
-            //                     }
-            //                 }
-
-            //             }else{
-            //                 if ($leaveLineManager2) {
-            //                     $LineNumber1 = Helper::countWeekdays($request_date,$delegateLeave->end_date);
-            //                     $LineNumber2 = Helper::countWeekdays($request_date,$leaveLineManager2->end_date);
-            //                     if ($LineNumber1 <= $LineNumber2) {
-            //                         $data['next_approver'] = $line_manager1->id;
-            //                     }else{
-            //                         $data['next_approver'] = $line_manager1->line_manager;
-            //                     }
-            //                 }
-            //             }
-            //         }else{
-            //             $delegateLeaveRequest = LeaveRequest::where("employee_id", $delegateLeave->delegate_id)
-            //             ->where('start_date', '<=', $request_date)
-            //             ->where('end_date', '>=', $request_date)->first();
-            //             if ($delegateLeaveRequest) {
-                           
-            //                 $line_manager1 = User::where("id", Auth::user()->line_manager)->first();
-            //                 $data['next_approver'] = $line_manager1->line_manager;
-            //                 $leaveLineManager2 = LeaveRequest::where("employee_id", $line_manager1->line_manager)
-            //                 ->where('start_date', '<=', $request_date)
-            //                 ->where('end_date', '>=', $request_date)->first();
-            //                 $delegateLeave2 = DelegateLeave::where("requester_id", $line_manager1->line_manager)
-            //                 ->where('start_date', '<=', $request_date)
-            //                 ->where('end_date', '>=', $request_date)->first();
-            //                 if ($delegateLeave2) {
-            //                     $data['next_approver'] = $delegateLeave2->delegate_id;
-            //                     $delegateLeave3 = LeaveRequest::where("employee_id", $delegateLeave2->delegate_id)
-            //                     ->where('start_date', '<=', $request_date)
-            //                     ->where('end_date', '>=', $request_date)->first();
-            //                     if ($delegateLeave3) {
-            //                         $LineNumberDelegateHead = Helper::countWeekdays($request_date,$delegateLeave3->end_date);
-                                    
-            //                         $LineNumber1 = Helper::countWeekdays($request_date,$delegateLeave->end_date);
-            //                         $LineNumber2 = Helper::countWeekdays($request_date,$leaveLineManager2->end_date);
-            //                         if ($LineNumber1 <= $LineNumber2) {
-            //                             $data['next_approver'] = $line_manager1->id;
-            //                             if ($LineNumberDelegateHead < $LineNumber1) {
-            //                                 $data['next_approver'] = $delegateLeave3->employee_id;
-            //                             }
-            //                         }else{
-            //                             $data['next_approver'] = $line_manager1->line_manager;
-            //                             if ($LineNumberDelegateHead < $LineNumber2) {
-            //                                 $data['next_approver'] = $delegateLeave3->employee_id;
-            //                             }
-            //                         }
-            //                     }
-    
-            //                 }else{
-            //                     // $line_manager1 = User::where("id", Auth::user()->line_manager)->first();
-            //                     // $data['next_approver'] = $line_manager1->line_manager;
-            //                     // $leaveLineManager2 = LeaveRequest::where("employee_id", $line_manager1->line_manager)
-            //                     // ->where('start_date', '<=', $request_date)
-            //                     // ->where('end_date', '>=', $request_date)->first();
-
-            //                     // dd($line_manager1);
-            //                     if ($leaveLineManager2) {
-            //                         // dd(5555555);
-            //                         $LineNumber1 = Helper::countWeekdays($request_date,$delegateLeave->end_date);
-            //                         $LineNumber2 = Helper::countWeekdays($request_date,$leaveLineManager2->end_date);
-            //                         if ($LineNumber1 <= $LineNumber2) {
-            //                             $data['next_approver'] = $line_manager1->id;
-            //                         }else{
-            //                             $data['next_approver'] = $line_manager1->line_manager;
-            //                         }
-            //                     }
-            //                     // dd(1123344);
-            //                 }
-            //             }
-            //         }
-            //     }
-            // }else{
-            //     $leaveLineManager1 = LeaveRequest::where("employee_id", Auth::user()->line_manager)
-            //     ->where('start_date', '<=', $request_date)
-            //     ->where('end_date', '>=', $request_date)->first();
-            //     if ($leaveLineManager1) {
-            //         $line_manager1 = User::where("id", Auth::user()->line_manager)->first();
-            //         $data['next_approver'] = $line_manager1->line_manager;
-            //         $leaveLineManager2 = LeaveRequest::where("employee_id", $line_manager1->line_manager)
-            //         ->where('start_date', '<=', $request_date)
-            //         ->where('end_date', '>=', $request_date)->first();
-
-            //         if ($leaveLineManager2) {
-            //             $DelegateLeave2 = DelegateLeave::where("requester_id", $line_manager1->line_manager)
-            //             ->where('start_date', '<=', $request_date)
-            //             ->where('end_date', '>=', $request_date)->first();
-            //             if ($DelegateLeave2) {
-            //                 $delegateLeave3 = LeaveRequest::where("employee_id", $DelegateLeave2->delegate_id)
-            //                 ->where('start_date', '<=', $request_date)
-            //                 ->where('end_date', '>=', $request_date)->first();
-            //                 $data['next_approver'] = $DelegateLeave2->delegate_id;
-            //                 if ($delegateLeave3) {
-            //                     $LineNumberDelegateHead = Helper::countWeekdays($request_date,$delegateLeave3->end_date);
-            //                     $LineNumber1 = Helper::countWeekdays($request_date,$leaveLineManager1->end_date);
-            //                     $LineNumber2 = Helper::countWeekdays($request_date,$leaveLineManager2->end_date);
-            //                     if ($LineNumber1 <= $LineNumber2) {
-            //                         $data['next_approver'] = $line_manager1->id;
-            //                         if ($LineNumberDelegateHead < $LineNumber1) {
-            //                             $data['next_approver'] = $delegateLeave3->employee_id;
-            //                         }
-            //                     }else{
-            //                         $data['next_approver'] = $line_manager1->line_manager;
-            //                         if ($LineNumberDelegateHead < $LineNumber2) {
-            //                             $data['next_approver'] = $delegateLeave3->employee_id;
-            //                         }
-            //                     }
-            //                 }
-
-            //             }else{
-
-            //                 $LineNumber1 = Helper::countWeekdays($request_date,$leaveLineManager1->end_date);
-            //                 $LineNumber2 = Helper::countWeekdays($request_date,$leaveLineManager2->end_date);
-            //                 if ($LineNumber1 <= $LineNumber2) {
-            //                     $data['next_approver'] = Auth::user()->line_manager;
-            //                 }else{
-            //                     $data['next_approver'] = $line_manager1->line_manager;
-            //                 }
-            //             }
-            //         }
-            //     }
-            // }
-
             if ($request->delegate_id) {
                 DelegateLeave::create(
                     [
@@ -581,27 +391,30 @@ class LeavesEmployeeController extends Controller
             $data = $request->all();
             $LeaveAllocation = LeaveAllocation::where("employee_id", $request->employee_id)->first();
             $LeaveType = LeaveType::where("id", $request->leave_type_id)->first();
-
-            $data['line_manager_id'] = Auth::user()->line_manager;
+            $userRequest = User::where("id", $request->employee_id)->with("department")->with("branch")->with("role")->first();
+            $data['line_manager_id'] = $userRequest->line_manager;
+            if($userRequest->branch->abbreviations == "HQ"){
+                $data['next_approver'] = $userRequest->department->direct_manager_id;
+            }else{
+                $data['next_approver'] = $userRequest->branch->direct_manager_id;
+            }
 
             // *** approve by head or branch *** //
-            $manager = User::where("id", Auth::user()->line_manager)->first();
-            $data['next_approver'] = $manager->line_manager;
+            // $manager = User::where("id", Auth::user()->line_manager)->first();
+            // $data['next_approver'] = $userRequest->line_manager;
 
-            if(Auth::user()->RolePermission == "BOD") {
+            if($userRequest->role->role_type == "BOD") {
                 $data['status'] = "approved_hod";
                 $data['next_approver'] = "Null";
-            }else if (Auth::user()->RolePermission == "CEO") {
-                $data['next_approver'] = Auth::user()->line_manager;
-
+            }else if ($userRequest->role->role_type == "CEO") {
+                $data['next_approver'] = $userRequest->line_manager;
                 $data['status'] = "approved_lm";
-            }elseif (Auth::user()->RolePermission == "HOD" && $request->employee_id == Auth::user()->department->direct_manager_id) {
-                $data['next_approver'] = Auth::user()->line_manager;
 
+            }elseif ($userRequest->role->role_type == "HOD" && $request->employee_id == $userRequest->department->direct_manager_id) {
+                $data['next_approver'] = $userRequest->line_manager;
                 $data['status'] = "approved_lm";
-            }else if(Auth::user()->RolePermission == "BM" && $request->employee_id == Auth::user()->branch->direct_manager_id){
-                $data['next_approver'] = Auth::user()->line_manager;
-
+            }else if($userRequest->role->role_type == "BM" && $request->employee_id == $userRequest->branch->direct_manager_id){
+                $data['next_approver'] = $userRequest->department->direct_manager_id;
                 $data['status'] = "approved_lm";
             }else{
                 $data['status'] = "pending";
