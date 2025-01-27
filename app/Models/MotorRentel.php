@@ -35,6 +35,7 @@ class MotorRentel extends Model
         'total_gasoline',
         'total_work_day',
         'price_engine_oil',
+        'is_motor_fee',
         'price_motor_rentel',
         'taplab_rentel',
         'taplab_imei',

@@ -16,6 +16,7 @@ use App\Models\CandidateResume;
 use App\Models\LeaveAllocation;
 use App\Models\RecruitmentPlan;
 use App\Http\Controllers\Controller;
+use App\Models\Department;
 use App\Repositories\Admin\EmployeeRepository;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -234,6 +235,66 @@ class DashboadController extends Controller
             'leaveApproval'     => $leaveApproval,
             'leaveReject'       => $leaveReject,
             'leaveCancel'       => $leaveCancel,
+        ]);
+    }
+
+    public function viewLeave(Request $request){
+        $location = Branchs::get();
+        $department = Department::get();
+        $start_date = Carbon::createFromDate()->format('Y-m-d');
+        $dataLeaveRequest = LeaveRequest::with("employee")->with("handover")->with("createdBy")
+        ->whereIn("leave_requests.status", ["approved_lm","approved_hod","pending"])
+        ->leftJoin('users', 'leave_requests.employee_id', '=', 'users.id')
+            ->select(
+                'leave_requests.*',
+                'users.number_employee',
+                'users.employee_name_en',
+                'users.employee_name_kh',
+                'users.department_id',
+                'users.branch_id',
+            )
+        ->when($start_date, function ($query, $start_date) {
+            $query->where('leave_requests.start_date', '>=', $start_date);
+        })
+        ->orderBy('leave_requests.id', 'DESC')->get();
+        foreach ($dataLeaveRequest as $leaveRequest) {
+            $leaveRequest->delegated_employee = $leaveRequest->getDelegatedAttribute();
+        }
+        return view('dashboads.view_leave_request',compact('dataLeaveRequest','department', 'location'));
+    }
+    public function searchLeaveRequest(Request $request){
+        $start_date = Carbon::createFromDate()->format('Y-m-d');
+        $dataLeaveRequest = LeaveRequest::with("employee")->with("leaveType")->with("handover")->with("createdBy")->with("approve")
+        ->leftJoin('users', 'leave_requests.employee_id', '=', 'users.id')
+        ->select(
+            'leave_requests.*',
+            'users.number_employee',
+            'users.employee_name_en',
+            'users.employee_name_kh',
+            'users.profile',
+        )
+        ->when($start_date, function ($query, $start_date) {
+            $query->where('leave_requests.start_date', '>=', $start_date);
+        })
+        ->when($request->employee_id, function ($query, $employee_id) {
+            $query->where('users.number_employee', 'LIKE', '%'.$employee_id.'%');
+        })
+        ->when($request->employee_name, function ($query, $employee_name) {
+            $query->where('users.employee_name_en', 'LIKE', '%'.$employee_name.'%');
+        })
+        ->when($request->department_id, function ($query, $department) {
+            $query->where('users.department_id', $department);
+        })
+        ->when($request->branch_id, function ($query, $branch) {
+            $query->where('users.branch_id', $branch);
+        })
+        ->orderBy('id', 'DESC')->get();
+
+        foreach ($dataLeaveRequest as $leaveRequest) {
+            $leaveRequest->delegated_employee = $leaveRequest->getDelegatedAttribute();
+        }
+        return response()->json([
+            'success'=>$dataLeaveRequest,
         ]);
     }
 }

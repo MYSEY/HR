@@ -100,7 +100,8 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="">@lang('lang.shelt_life') <span class="text-danger">*</span></label>
-                                <input disabled class="form-control e_emp_required @error('shelt_life') is-invalid @enderror" type="Number" id="e_shelt_life" required name="shelt_life" value="{{old('shelt_life')}}">
+                                <input class="form-control" type="hidden" id="e_shelt_life_hide" name="shelt_life">
+                                <input disabled class="form-control e_emp_required @error('shelt_life') is-invalid @enderror" type="Number" id="e_shelt_life" required value="{{old('shelt_life')}}">
                             </div>
                         </div>
                        
@@ -118,11 +119,9 @@
                         </div> --}}
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="">@lang('lang.price_motor_rentel')<span class="text-danger">*</span></label>
-                                <div class="input-group">
-                                    <span class="input-group-text">$</span>
-                                    <input disabled class="form-control e_emp_required @error('price_motor_rentel') is-invalid @enderror" type="number" id="e_price_motor_rentel" required name="price_motor_rentel" value="{{old('price_motor_rentel')}}">
-                                </div>
+                                <label class="container-checkbox">@lang('lang.not_motor_rental_fee')?
+                                    <input type="checkbox" class="e_is_motor_fee" id="e_is_motor_fee" name="is_motor_fee"> <span class="checkmark"></span>
+                                </label>
                             </div>
                         </div>
                         <div class="col-sm-6">
@@ -134,7 +133,16 @@
                                 </div>
                             </div>
                         </div>
-                        
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="">@lang('lang.price_motor_rentel')<span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <span class="input-group-text">$</span>
+                                    <input class="form-control" type="hidden" id="e_price_motor_rentel_hide" name="price_motor_rentel">
+                                    <input disabled class="form-control e_emp_required @error('price_motor_rentel') is-invalid @enderror" type="number" id="e_price_motor_rentel" required value="{{old('price_motor_rentel')}}">
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="form-group col-md-12 col-12" element="div" bp-field-wrapper="true" bp-field-name="Identity" bp-field-type="custom_html">
