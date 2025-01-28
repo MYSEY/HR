@@ -150,6 +150,7 @@ return[
     "configuration"=>"ការកំណត់​រចនាសម្ព័ន្ធ",
 	"change_password"=>"ផ្លាស់ប្តូរពាក្យសម្ងាត់",
 	"change_line_manager"=>"ផ្លាស់ប្តូរអ្នកគ្រប់គ្រង",
+	"change_role_permission"=>"ផ្លាស់ប្តូរសិទ្ធិ",
 	"change_date"=>"ផ្លាស់ប្តូរកាលបរិច្ឆេទ",
 	"contact"=>"Contact ទំនាក់ទំនង",
 	"contact_list"=>"បញ្ជីទំនាក់ទំនង",

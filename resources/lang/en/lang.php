@@ -144,6 +144,7 @@ return[
     "configuration"=>"Configuration",
     "change_password"=>"Change Password",
     "change_line_manager"=>"Change line manager",
+    "change_role_permission"=>"Change role permission",
     "change_date"=>"Change Date",
     "contact"=>"Contact",
     "copy"=>"Copy",
