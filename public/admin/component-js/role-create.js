@@ -1150,7 +1150,7 @@ var dataPermission = function () {
                 {
                     "name":"lang.commune",
                     "sub_menu_id":"11",
-                    "menu_id":"m11-s2",
+                    "menu_id":"m11-s3",
                     "url":"address/commune",
                     "is_view": $("#commune_check_view").val(),
                     "is_create": $("#commune_check_add").val(),
@@ -1167,7 +1167,7 @@ var dataPermission = function () {
                 {
                     "name":"lang.village",
                     "sub_menu_id":"11",
-                    "menu_id":"m11-s2",
+                    "menu_id":"m11-s4",
                     "url":"address/village",
                     "is_view": $("#village_check_view").val(),
                     "is_create": $("#village_check_add").val(),

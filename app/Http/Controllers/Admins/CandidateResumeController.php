@@ -319,6 +319,7 @@ class CandidateResumeController extends Controller
         $position = Position::all();
         $branch = Branchs::all();
         $gender = Option::where('type','gender')->get();
+        $maritalStatus = Option::where('type','marital_status')->get();
         $optionPositionType = Option::where('type','position_type')->get();
         if ($request->status =='4') {
             $autoEmpId   = $this->generate_EmployeeId(Carbon::today())['number_employee'];
@@ -340,6 +341,7 @@ class CandidateResumeController extends Controller
                 'autoEmpId'=>$autoEmpId,
                 'success'=>$data,
                 'gender'=>$gender,
+                'maritalStatus'=>$maritalStatus,
                 'position'=>$position,
                 'branch'=>$branch,
                 'optionPositionType' => $optionPositionType,
@@ -355,6 +357,7 @@ class CandidateResumeController extends Controller
             return response()->json([
                 'success'=>$data,
                 'gender'=>$gender,
+                'maritalStatus'=>$maritalStatus,
                 'position'=>$position,
                 'optionPositionType' => $optionPositionType,
                 'branch'=>$branch,
@@ -399,6 +402,7 @@ class CandidateResumeController extends Controller
             $data['recruitment_channel']   = $request->recruitment_channel;
             $data['contact_number']        = $request->contact_number;
             $data['status']                = $request->status;
+            $data['marital_status']        = $request->marital_status;
             $data['cv']                    = $filenameGuarant;
             $data['updated_by']            = Auth::user()->id;
             $data->save();
@@ -612,6 +616,7 @@ class CandidateResumeController extends Controller
                     'permanent_house_no' => $candidate->permanent_house_no,
                     'permanent_street_no' => $candidate->permanent_street_no,
                     'emp_status' => $request->status,
+                    'marital_status'=> $request->marital_status,
                     'remark' => $request->remark,
                     'spouse' => 0,
                     'is_loan' => 0,
@@ -668,9 +673,10 @@ class CandidateResumeController extends Controller
                     'permanent_house_no' => $request->permanent_house_no,
                     'permanent_street_no' => $request->permanent_street_no,
                     'status' => 4,
+                    'marital_status'=> $request->marital_status,
                 ]);
                 $datas = CandidateResume::where("id", $request->candidate_id)
-                    ->with("branch")->with("position")->with("option")
+                    ->with("branch")->with("position")->with("option")->with("maritalStatus")
                     ->with("positiontype")
                     ->with("permanentprovince")
                     ->with("currentprovince")
@@ -705,6 +711,7 @@ class CandidateResumeController extends Controller
                     'first_name_en',
                     'date_of_birth',
                     'status',
+                    'marital_status',
                     'interviewed_result',
                 ])->whereNot("status",5)->first();
             $employee = User::where([
@@ -722,6 +729,7 @@ class CandidateResumeController extends Controller
                         'last_name_en',
                         'first_name_en',
                         'emp_status',
+                        'marital_status',
                         'date_of_birth',
                 ])->first();
             DB::commit();

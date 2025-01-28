@@ -38,6 +38,7 @@ class CandidateResume extends Model
         'recruitment_channel',
         'contact_number',
         'status',
+        'marital_status',
         'cv',
         'interviewed_date',
         'committee_interview',
@@ -82,6 +83,9 @@ class CandidateResume extends Model
     
     public function option(){
         return $this->belongsTo(Option::class,'gender');
+    }
+    public function maritalStatus(){
+        return $this->belongsTo(Option::class,'marital_status');
     }
     public function position(){
         return $this->belongsTo(Position::class,'position_applied');
