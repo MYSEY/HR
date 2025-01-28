@@ -275,7 +275,7 @@
                                                         @endif
                                                         @php
                                                            $currentDate = \Carbon\Carbon::now();
-                                                           $end = \Carbon\Carbon::parse($request->end_date)->addDays(5);
+                                                           $end = \Carbon\Carbon::parse($request->end_date)->addDays(7);
                                                         @endphp
                                                         @if ($currentDate->lte($end))
                                                             @if($request->status == "approved_hod" || $request->status == "approved")
