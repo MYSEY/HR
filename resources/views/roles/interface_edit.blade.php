@@ -23,7 +23,9 @@
                                 <option value="HRAdmin" {{ $role->role_type == "HRAdmin" ? "selected":""}}>HR Admin</option>
                                 <option value="HR" {{ $role->role_type == "HR" ? "selected":""}}>HR</option>
                                 <option value="HOD" {{ $role->role_type == "HOD" ? "selected":""}}>Head of Department</option>
+                                <option value="DHOD" {{ $role->role_type == "DHOD" ? "selected":""}}>D-Head of Department</option>
                                 <option value="BM" {{ $role->role_type == "BM" ? "selected":""}}>Branch Manager</option>
+                                <option value="DBM" {{ $role->role_type == "DBM" ? "selected":""}}>Deputy Branch Manager</option>
                                 <option value="Employee" {{ $role->role_type == "Employee" ? "selected":""}}>Employee</option>
 
                             </select>
@@ -259,6 +261,12 @@
                                     <input type="checkbox" class="employee_checkbox all_employee_checkbox" id="employee_view_salary"
                                     {{SetCheckbox($arrayPermissions,"lang.all_employee","is_view_salary")->checkbox}}
                                     value="{{SetCheckbox($arrayPermissions,"lang.all_employee","is_view_salary")->value}}"
+                                    > <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.view_salary_staff')
+                                    <input type="checkbox" class="employee_checkbox all_employee_checkbox" id="employee_view_salary_staff"
+                                    {{SetCheckbox($arrayPermissions,"lang.all_employee","is_view_salary_staff")->checkbox}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.all_employee","is_view_salary_staff")->value}}"
                                     > <span class="checkmark"></span>
                                 </label>
                             </div>

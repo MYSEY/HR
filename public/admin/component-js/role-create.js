@@ -95,6 +95,7 @@ var dataPermission = function () {
                     "is_print": $("#employee_print").val(),
                     "is_export": $("#employee_export").val(),
                     "is_view_salary": $("#employee_view_salary").val(),
+                    "is_view_salary_staff": $("#employee_view_salary_staff").val(),
                 }
             ]
         })
