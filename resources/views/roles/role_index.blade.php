@@ -43,7 +43,9 @@
                                 <option value="HRAdmin">HR Admin</option>
                                 <option value="HR">Head of HR</option>
                                 <option value="HOD">Head of Department</option>
+                                <option value="DHOD">D-Head of Department</option>
                                 <option value="BM">Branch Manager</option>
+                                <option value="DBM">Deputy Branch Manager</option>
                                 <option value="employee">Employee</option>
                             </select>
                         </div>

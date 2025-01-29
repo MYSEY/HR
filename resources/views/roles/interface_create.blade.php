@@ -24,7 +24,9 @@
                                 <option value="HRAdmin">HR Admin</option>
                                 <option value="HR">HR</option>
                                 <option value="HOD">Head of Department</option>
+                                <option value="DHOD">D-Head of Department</option>
                                 <option value="BM">Branch Manager</option>
+                                <option value="DBM">Deputy Branch Manager</option>
                                 <option value="Employee">Employee</option>
                             </select>
                         </div>
@@ -175,6 +177,9 @@
                                 </label>
                                 <label class="container-checkbox">@lang('lang.view_salary')
                                     <input type="checkbox" class="employee_checkbox all_employee_checkbox" id="employee_view_salary" name="employee_view_salary"> <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.view_salary_staff')
+                                    <input type="checkbox" class="employee_checkbox all_employee_checkbox" id="employee_view_salary_staff" name="employee_view_salary_staff"> <span class="checkmark"></span>
                                 </label>
                             </div>
                         </div>
