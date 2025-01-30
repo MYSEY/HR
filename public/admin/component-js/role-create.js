@@ -297,6 +297,7 @@ var dataPermission = function () {
                     "is_approve": $("#g_approve").val(),
                     "is_delete": $("#g_delete").val(),
                     "is_export": $("#g_export").val(),
+                    "is_view_salary_staff": $("#g_view_salary_staff").val(),
                 }
             ]
         })
@@ -319,6 +320,7 @@ var dataPermission = function () {
                     "is_delete": $("#c_and_b_delete").val(),
                     "is_print": $("#c_and_b_print").val(),
                     "is_export": $("#c_and_b_export").val(),
+                    "is_view_salary_staff": $("#c_and_b_view_salary_staff").val(),
                 }
             ]
         })
@@ -337,6 +339,7 @@ var dataPermission = function () {
                     "is_import": $("#cb_nssf_import").val(),
                     "is_print": $("#cb_nssf_print").val(),
                     "is_export": $("#cb_nssf_export").val(),
+                    "is_view_salary_staff": $("#cb_nssf_view_salary_staff").val(),
                 }
             ]
         })
@@ -354,6 +357,7 @@ var dataPermission = function () {
                     "is_import": $("#severance_pay_import").val(),
                     "is_print": $("#severance_pay_print").val(),
                     "is_export": $("#severance_pay_export").val(),
+                    "is_view_salary_staff": $("#severance_pay_view_salary_staff").val(),
                 }
             ]
         })
@@ -374,6 +378,7 @@ var dataPermission = function () {
                     "is_delete": $("#fringe_benefits_delete").val(),
                     "is_print": $("#fringe_benefits_print").val(),
                     "is_export": $("#fringe_benefits_export").val(),
+                    "is_view_salary_staff": $("#fringe_benefits_view_salary_staff").val(),
                 }
             ]
         })
@@ -391,6 +396,7 @@ var dataPermission = function () {
                     "is_create": $("#payroll_adjustment_add").val(),
                     "is_update": $("#payroll_adjustment_edit").val(),
                     "is_delete": $("#payroll_adjustment_delete").val(),
+                    "is_view_salary_staff": $("#payroll_adjustment_view_salary_staff").val(),
                 }
             ]
         })
@@ -408,6 +414,7 @@ var dataPermission = function () {
                     "is_create": $("#staff_resign_add").val(),
                     "is_update": $("#staff_resign_edit").val(),
                     "is_delete": $("#staff_resign_delete").val(),
+                    "is_view_salary_staff": $("#staff_view_salary_staff").val(),
                 }
             ]
         })
@@ -633,6 +640,7 @@ var dataPermission = function () {
                     "is_view": $("#report_employee_check_view").val(),
                     "is_print": $("#report_employee_check_print").val(),
                     "is_export": $("#report_employee_check_export").val(),
+                    "is_view_salary_staff": $("#report_employee_salary_staff").val(),
                 },
             ]
         })
@@ -649,6 +657,7 @@ var dataPermission = function () {
                     "is_view": $("#payroll_report_check_view").val(),
                     "is_print": $("#payroll_report_check_print").val(),
                     "is_export": $("#payroll_report_check_export").val(),
+                    "is_view_salary_staff": $("#payroll_report_salary_staff").val(),
             },
             ]
         })
@@ -665,6 +674,7 @@ var dataPermission = function () {
                     "is_view": $("#tax_report_check_view").val(),
                     "is_print": $("#tax_report_check_print").val(),
                     "is_export": $("#tax_report_check_export").val(),
+                    "is_view_salary_staff": $("#tax_report_salary_staff").val(),
             },
             ]
         })
@@ -681,6 +691,7 @@ var dataPermission = function () {
                     "is_view": $("#nssf_report_check_view").val(),
                     "is_print": $("#nssf_report_check_print").val(),
                     "is_export": $("#nssf_report_check_export").val(),
+                    "is_view_salary_staff": $("#nssf_report_salary_staff").val(),
             },
             ]
         })
@@ -697,6 +708,7 @@ var dataPermission = function () {
                     "is_view": $("#kmh_pchum_report_check_view").val(),
                     "is_print": $("#kmh_pchum_report_check_print").val(),
                     "is_export": $("#kmh_pchum_report_check_export").val(),
+                    "is_view_salary_staff": $("#kmh_pchum_report_salary_staff").val(),
             },
             ]
         })
@@ -713,6 +725,7 @@ var dataPermission = function () {
                     "is_view": $("#severance_pay_report_check_view").val(),
                     "is_print": $("#severance_pay_report_check_print").val(),
                     "is_export": $("#severance_pay_report_check_export").val(),
+                    "is_view_salary_staff": $("#severance_pay_report_salary_staff").val(),
             },
             ]
         })
@@ -729,6 +742,7 @@ var dataPermission = function () {
                     "is_view": $("#seniorities_pay_report_check_view").val(),
                     "is_print": $("#seniorities_pay_report_check_print").val(),
                     "is_export": $("#seniorities_pay_report_check_export").val(),
+                    "is_view_salary_staff": $("#seniorities_pay_report_salary_staff").val(),
                 },
             ]
         })
@@ -745,6 +759,7 @@ var dataPermission = function () {
                     "is_view": $("#fringe_benefits_report_check_view").val(),
                     "is_print": $("#fringe_benefits_report_check_print").val(),
                     "is_export": $("#fringe_benefits_report_check_export").val(),
+                    "is_view_salary_staff": $("#fringe_benefits_report_salary_staff").val(),
                 },
             ]
         })
@@ -761,6 +776,7 @@ var dataPermission = function () {
                     "is_view": $("#bank_transfer_report_check_view").val(),
                     "is_print": $("#bank_transfer_report_check_print").val(),
                     "is_export": $("#bank_transfer_report_check_export").val(),
+                    "is_view_salary_staff": $("#bank_transfer_report_salary_staff").val(),
                 },
             ]
         })
@@ -777,6 +793,7 @@ var dataPermission = function () {
                     "is_view": $("#e_filing_report_check_view").val(),
                     "is_print": $("#e_filing_report_check_print").val(),
                     "is_export": $("#e_filing_report_check_export").val(),
+                    "is_view_salary_staff": $("#e_filing_report_salary_staff").val(),
                 },
             ]
         })
@@ -793,6 +810,7 @@ var dataPermission = function () {
                     "is_view": $("#e_form_report_check_view").val(),
                     "is_print": $("#e_form_report_check_print").val(),
                     "is_export": $("#e_form_report_check_export").val(),
+                    "is_view_salary_staff": $("#e_form_report_salary_staff").val(),
                 },
             ]
         })
@@ -809,6 +827,7 @@ var dataPermission = function () {
                     "is_view": $("#motor_rental_reports_check_view").val(),
                     "is_print": $("#motor_rental_reports_check_print").val(),
                     "is_export": $("#motor_rental_reports_check_export").val(),
+                    "is_view_salary_staff": $("#motor_rental_reports_salary_staff").val(),
                 },
             ]
         })
@@ -825,6 +844,7 @@ var dataPermission = function () {
                     "is_view": $("#new_staff_reports_check_view").val(),
                     "is_print": $("#new_staff_reports_check_print").val(),
                     "is_export": $("#new_staff_reports_check_export").val(),
+                    "is_view_salary_staff": $("#new_staff_reports_salary_staff").val(),
                 },
             ]
         })
@@ -841,6 +861,7 @@ var dataPermission = function () {
                     "is_view": $("#staff_resigned_reports_check_view").val(),
                     "is_print": $("#staff_resigned_reports_check_print").val(),
                     "is_export": $("#staff_resigned_reports_check_export").val(),
+                    "is_view_salary_staff": $("#staff_resigned_reports_salary_staff").val(),
                 },
             ]
         })
@@ -857,6 +878,7 @@ var dataPermission = function () {
                     "is_view": $("#transferred_staff_report_check_view").val(),
                     "is_print": $("#transferred_staff_report_check_print").val(),
                     "is_export": $("#transferred_staff_report_check_export").val(),
+                    "is_view_salary_staff": $("#transferred_staff_report_salary_staff").val(),
                 },
             ]
         })
@@ -873,6 +895,7 @@ var dataPermission = function () {
                     "is_view": $("#promoted_staff_report_check_view").val(),
                     "is_print": $("#promoted_staff_report_check_print").val(),
                     "is_export": $("#promoted_staff_report_check_export").val(),
+                    "is_view_salary_staff": $("#promoted_staff_report_salary_staff").val(),
                 },
             ]
         })

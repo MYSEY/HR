@@ -70,8 +70,8 @@ class UserController extends Controller
         // dd($data);
         $dataResign =[];
         $dataEmployees = [];
-        
-        if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'HRAdmin' || Auth::user()->RolePermission == 'developer' || Auth::user()->RolePermission == 'BOD' || Auth::user()->RolePermission == 'CEO') {
+        if (in_array(Auth::user()->RolePermission, ['admin','HRAdmin','developer','BOD','CEO'])){
+        // if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'HRAdmin' || Auth::user()->RolePermission == 'developer' || Auth::user()->RolePermission == 'BOD' || Auth::user()->RolePermission == 'CEO') {
             $dataProbationCount = User::where('emp_status','Probation')->count();
             $dataFDCCount = User::whereIn('emp_status',['1','10'])->count();
             $dataUDCCount = User::where('emp_status','2')->count();
@@ -82,7 +82,8 @@ class UserController extends Controller
             $dataResign = User::with('role')->with('department')->with('position')->whereIn('emp_status', ['3','4','5','6','7','8','9'])->orderBy('resign_date', 'desc')->paginate(10);
             $dataEmployees = User::whereIn('emp_status', ['Probation','1','2','10',])->orderBy('id', 'DESC')->get();
         }
-        if (Auth::user()->RolePermission == 'HR' || Auth::user()->RolePermission == 'DHOD' || Auth::user()->RolePermission == 'DBM') {
+        if (in_array(Auth::user()->RolePermission, ['HR','DHOD','DBM'])){
+        // if (Auth::user()->RolePermission == 'HR' || Auth::user()->RolePermission == 'DHOD' || Auth::user()->RolePermission == 'DBM') {
             $dataProbationCount = User::where('emp_status','Probation')->where("line_manager", Auth::user()->id)->when(Auth::user()->emp_status, function ($query, $emp_status) {
                 if ($emp_status == "Probation") {
                     $query->orWhere("id", Auth::user()->id);

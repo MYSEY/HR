@@ -73,6 +73,10 @@ class ExportEmployeeSalary implements FromCollection, WithColumnWidths, WithHead
             if ($RolePermission == 'HOD') {
                 $query->whereIn("users.department_id", EmployeeRepository::getRoleHOD());
             }
+            if($RolePermission == 'HR' ||  $RolePermission == 'DHOD' || $RolePermission == 'DBM'){
+                $query->where("users.id", Auth::user()->id);
+                $query->orWhere("users.line_manager", Auth::user()->id);
+            }
             if ($RolePermission == 'BM') {
                 $query->where("users.branch_id", Auth::user()->branch_id);
             }

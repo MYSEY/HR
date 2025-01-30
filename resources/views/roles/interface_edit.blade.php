@@ -705,6 +705,12 @@
                                     value="{{SetCheckbox($arrayPermissions,"lang.generate_payroll","is_export")->value}}"
                                     > <span class="checkmark"></span>
                                 </label>
+                                <label class="container-checkbox">@lang('lang.view_salary_staff')
+                                    <input type="checkbox" class="c_and_b_checkbox g_checkbox" id="g_view_salary_staff"
+                                    {{SetCheckbox($arrayPermissions,"lang.generate_payroll","is_view_salary_staff")->checkbox}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.generate_payroll","is_view_salary_staff")->value}}"
+                                    > <span class="checkmark"></span>
+                                </label>
                             </div>
                         </div>
                     </div>
@@ -742,6 +748,14 @@
                                     <input type="checkbox" class="c_and_b_checkbox payroll_staff_resign_checkbox" id="staff_resign_delete"
                                     {{SetCheckbox($arrayPermissions,"lang.payroll_staff_resign","is_delete")->checkbox}} 
                                     value="{{SetCheckbox($arrayPermissions,"lang.payroll_staff_resign","is_delete")->value}}"
+                                    > <span class="checkmark"></span>
+                                </label>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="container-checkbox">@lang('lang.view_salary_staff')
+                                    <input type="checkbox" class="c_and_b_checkbox payroll_staff_resign_checkbox" id="staff_view_salary_staff" 
+                                    {{SetCheckbox($arrayPermissions,"lang.payroll_staff_resign","is_view_salary_staff")->checkbox}} 
+                                    value="{{SetCheckbox($arrayPermissions,"lang.payroll_staff_resign","is_view_salary_staff")->value}}"
                                     > <span class="checkmark"></span>
                                 </label>
                             </div>
@@ -808,6 +822,12 @@
                                     value="{{SetCheckbox($arrayPermissions,"lang.employee_salary","is_export")->value}}"
                                     > <span class="checkmark"></span>
                                 </label>
+                                <label class="container-checkbox">@lang('lang.view_salary_staff')
+                                    <input type="checkbox" class="c_and_b_checkbox employee_salary_checkbox" id="c_and_b_view_salary_staff"
+                                    {{SetCheckbox($arrayPermissions,"lang.employee_salary","is_view_salary_staff")->checkbox}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.employee_salary","is_view_salary_staff")->value}}"
+                                    > <span class="checkmark"></span>
+                                </label>
                             </div>
                         </div>
                     </div>
@@ -847,6 +867,14 @@
                                     > <span class="checkmark"></span>
                                 </label>
                             </div>
+                            <div class="col-md-3">
+                                <label class="container-checkbox">@lang('lang.view_salary_staff')
+                                    <input type="checkbox" class="c_and_b_checkbox cb_nssf_checkbox" id="cb_nssf_view_salary_staff"
+                                    {{array_key_exists("lang.nssf",$arrayPermissions) ? $arrayPermissions["lang.nssf"]["is_view_salary_staff"] ? 'checked' :'': '' }}
+                                    value="{{array_key_exists("lang.nssf",$arrayPermissions) ? $arrayPermissions["lang.nssf"]["is_view_salary_staff"] ? '1' :'0': '0' }}"
+                                    > <span class="checkmark"></span>
+                                </label>
+                            </div>
                         </div>
                     </div>
                     {{-- block Severance Pay --}}
@@ -882,6 +910,14 @@
                                     <input type="checkbox" class="c_and_b_checkbox severance_pay_checkbox" id="severance_pay_export"
                                     {{array_key_exists("lang.severance_pay",$arrayPermissions) ? $arrayPermissions["lang.severance_pay"]["is_export"] ? 'checked' :'': '' }}
                                     value="{{array_key_exists("lang.severance_pay",$arrayPermissions) ? $arrayPermissions["lang.severance_pay"]["is_export"] ? '1' :'0': '0' }}"
+                                    > <span class="checkmark"></span>
+                                </label>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="container-checkbox">@lang('lang.view_salary_staff')
+                                    <input type="checkbox" class="c_and_b_checkbox severance_pay_checkbox" id="severance_pay_view_salary_staff"
+                                    {{array_key_exists("lang.severance_pay",$arrayPermissions) ? $arrayPermissions["lang.severance_pay"]["is_view_salary_staff"] ? 'checked' :'': '' }}
+                                    value="{{array_key_exists("lang.severance_pay",$arrayPermissions) ? $arrayPermissions["lang.severance_pay"]["is_view_salary_staff"] ? '1' :'0': '0' }}"
                                     > <span class="checkmark"></span>
                                 </label>
                             </div>
@@ -942,6 +978,12 @@
                                     value="{{array_key_exists("lang.fringe_benefits",$arrayPermissions) ? $arrayPermissions["lang.fringe_benefits"]["is_export"] ? '1' :'0': '0' }}"
                                     > <span class="checkmark"></span>
                                 </label>
+                                <label class="container-checkbox">@lang('lang.view_salary_staff')
+                                    <input type="checkbox" class="c_and_b_checkbox fringe_benefits_checkbox" id="fringe_benefits_view_salary_staff"
+                                    {{array_key_exists("lang.fringe_benefits",$arrayPermissions) ? $arrayPermissions["lang.fringe_benefits"]["is_view_salary_staff"] ? 'checked' :'': '' }}
+                                    value="{{array_key_exists("lang.fringe_benefits",$arrayPermissions) ? $arrayPermissions["lang.fringe_benefits"]["is_view_salary_staff"] ? '1' :'0': '0' }}"
+                                    > <span class="checkmark"></span>
+                                </label>
                             </div>
                         </div>
                     </div>
@@ -979,6 +1021,14 @@
                                     <input type="checkbox" class="c_and_b_checkbox payroll_adjustment_checkbox" id="payroll_adjustment_delete" 
                                     {{SetCheckbox($arrayPermissions,"lang.payroll_adjustment","is_delete")->checkbox}}
                                     value="{{SetCheckbox($arrayPermissions,"lang.payroll_adjustment","is_delete")->value}}"
+                                    > <span class="checkmark"></span>
+                                </label>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="container-checkbox">@lang('lang.view_salary_staff')
+                                    <input type="checkbox" class="c_and_b_checkbox payroll_adjustment_checkbox" id="payroll_adjustment_view_salary_staff"
+                                    {{SetCheckbox($arrayPermissions,"lang.payroll_adjustment","is_view_salary_staff")->checkbox}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.payroll_adjustment","is_view_salary_staff")->value}}"
                                     > <span class="checkmark"></span>
                                 </label>
                             </div>
@@ -1413,6 +1463,12 @@
                                     value="{{SetCheckbox($arrayPermissions,"lang.employee_reports","is_export")->value}}"
                                     > <span class="checkmark"></span>
                                 </label>
+                                <label class="container-checkbox">@lang('lang.view_salary_staff')
+                                    <input type="checkbox" class="reports_checkbox employee_reports_checkbox" id="report_employee_salary_staff"
+                                    {{SetCheckbox($arrayPermissions,"lang.employee_reports","is_view_salary_staff")->checkbox}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.employee_reports","is_view_salary_staff")->value}}"
+                                    > <span class="checkmark"></span>
+                                </label>
                             </div>
                             {{-- block Paylroll report --}}
                             <div class="col-md-2">
@@ -1439,6 +1495,12 @@
                                     value="{{SetCheckbox($arrayPermissions,"lang.payroll_reports","is_export")->value}}"
                                     > <span class="checkmark"></span>
                                 </label>
+                                <label class="container-checkbox">@lang('lang.view_salary_staff')
+                                    <input type="checkbox" class="reports_checkbox payroll_report_checkbox" id="payroll_report_salary_staff"
+                                    {{SetCheckbox($arrayPermissions,"lang.payroll_reports","is_view_salary_staff")->checkbox}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.payroll_reports","is_view_salary_staff")->value}}"
+                                    > <span class="checkmark"></span>
+                                </label>
                             </div>
                             {{-- block tax report --}}
                             <div class="col-md-2">
@@ -1463,6 +1525,12 @@
                                     <input type="checkbox" class="reports_checkbox tax_report_checkbox" id="tax_report_check_export"
                                     {{SetCheckbox($arrayPermissions,"lang.tax_reports","is_export")->checkbox}}
                                     value="{{SetCheckbox($arrayPermissions,"lang.tax_reports","is_export")->value}}"
+                                    > <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.view_salary_staff')
+                                    <input type="checkbox" class="reports_checkbox tax_report_checkbox" id="tax_report_salary_staff"
+                                    {{SetCheckbox($arrayPermissions,"lang.tax_reports","is_view_salary_staff")->checkbox}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.tax_reports","is_view_salary_staff")->value}}"
                                     > <span class="checkmark"></span>
                                 </label>
                             </div>
@@ -1495,6 +1563,12 @@
                                     value="{{SetCheckbox($arrayPermissions,"lang.nssf_reports","is_export")->value}}"
                                     > <span class="checkmark"></span>
                                 </label>
+                                <label class="container-checkbox">@lang('lang.view_salary_staff')
+                                    <input type="checkbox" class="reports_checkbox nssf_report_checkbox" id="nssf_report_salary_staff"
+                                    {{SetCheckbox($arrayPermissions,"lang.nssf_reports","is_view_salary_staff")->checkbox}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.nssf_reports","is_view_salary_staff")->value}}"
+                                    > <span class="checkmark"></span>
+                                </label>
                             </div>
                             {{-- block Khmer New Year and Pchum Ben Allowance report --}}
                             <div class="col-md-2">
@@ -1521,6 +1595,12 @@
                                     value="{{SetCheckbox($arrayPermissions,"lang.khm_pchum_reports","is_export")->value}}"
                                     > <span class="checkmark"></span>
                                 </label>
+                                <label class="container-checkbox">@lang('lang.view_salary_staff')
+                                    <input type="checkbox" class="reports_checkbox kmh_pchum_report_checkbox" id="kmh_pchum_report_salary_staff"
+                                    {{SetCheckbox($arrayPermissions,"lang.khm_pchum_reports","is_view_salary_staff")->checkbox}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.khm_pchum_reports","is_view_salary_staff")->value}}"
+                                    > <span class="checkmark"></span>
+                                </label>
                             </div>
                             {{-- block Severance Pay Report report --}}
                             <div class="col-md-2">
@@ -1545,6 +1625,12 @@
                                     <input type="checkbox" class="reports_checkbox severance_pay_report_checkbox" id="severance_pay_report_check_export"
                                     {{SetCheckbox($arrayPermissions,"lang.severance_pay_reports","is_export")->checkbox}}
                                     value="{{SetCheckbox($arrayPermissions,"lang.severance_pay_reports","is_export")->value}}"
+                                    > <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.view_salary_staff')
+                                    <input type="checkbox" class="reports_checkbox severance_pay_report_checkbox" id="severance_pay_report_salary_staff"
+                                    {{SetCheckbox($arrayPermissions,"lang.severance_pay_reports","is_view_salary_staff")->checkbox}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.severance_pay_reports","is_view_salary_staff")->value}}"
                                     > <span class="checkmark"></span>
                                 </label>
                             </div>
@@ -1577,6 +1663,12 @@
                                     value="{{SetCheckbox($arrayPermissions,"lang.seniorities_pay_reports","is_export")->value}}"
                                     > <span class="checkmark"></span>
                                 </label>
+                                <label class="container-checkbox">@lang('lang.view_salary_staff')
+                                    <input type="checkbox" class="reports_checkbox seniorities_pay_report_checkbox" id="seniorities_pay_report_salary_staff"
+                                    {{SetCheckbox($arrayPermissions,"lang.seniorities_pay_reports","is_view_salary_staff")->checkbox}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.seniorities_pay_reports","is_view_salary_staff")->value}}"
+                                    > <span class="checkmark"></span>
+                                </label>
                             </div>
                             {{-- block bank transfer report --}}
                             <div class="col-md-2">
@@ -1603,6 +1695,12 @@
                                     value="{{SetCheckbox($arrayPermissions,"lang.bank_transfer_reports","is_export")->value}}"
                                     > <span class="checkmark"></span>
                                 </label>
+                                <label class="container-checkbox">@lang('lang.view_salary_staff')
+                                    <input type="checkbox" class="reports_checkbox bank_transfer_report_checkbox" id="bank_transfer_report_salary_staff"
+                                    {{SetCheckbox($arrayPermissions,"lang.bank_transfer_reports","is_view_salary_staff")->checkbox}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.bank_transfer_reports","is_view_salary_staff")->value}}"
+                                    > <span class="checkmark"></span>
+                                </label>
                             </div>
                              {{-- block Fringe Benefits report --}}
                              <div class="col-md-2">
@@ -1627,6 +1725,12 @@
                                     <input type="checkbox" class="reports_checkbox fringe_benefits_report_checkbox" id="fringe_benefits_report_check_export" 
                                     {{SetCheckbox($arrayPermissions,"lang.fringe_benefits_reports","is_export")->checkbox}}
                                     value="{{SetCheckbox($arrayPermissions,"lang.fringe_benefits_reports","is_export")->value}}"
+                                    > <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.view_salary_staff')
+                                    <input type="checkbox" class="reports_checkbox fringe_benefits_report_checkbox" id="fringe_benefits_report_salary_staff"
+                                    {{SetCheckbox($arrayPermissions,"lang.fringe_benefits_reports","is_view_salary_staff")->checkbox}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.fringe_benefits_reports","is_view_salary_staff")->value}}"
                                     > <span class="checkmark"></span>
                                 </label>
                             </div>
@@ -1659,6 +1763,12 @@
                                     value="{{SetCheckbox($arrayPermissions,"lang.e_filing_reports","is_export")->value}}"
                                     > <span class="checkmark"></span>
                                 </label>
+                                <label class="container-checkbox">@lang('lang.view_salary_staff')
+                                    <input type="checkbox" class="reports_checkbox e_filing_report_checkbox" id="e_filing_report_salary_staff" 
+                                    {{SetCheckbox($arrayPermissions,"lang.e_filing_reports","is_view_salary_staff")->checkbox}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.e_filing_reports","is_view_salary_staff")->value}}"
+                                    > <span class="checkmark"></span>
+                                </label>
                             </div>
                             {{-- block E-form report --}}
                             <div class="col-md-2">
@@ -1685,6 +1795,12 @@
                                     value="{{SetCheckbox($arrayPermissions,"lang.e_form_reports","is_export")->value}}"
                                     > <span class="checkmark"></span>
                                 </label>
+                                <label class="container-checkbox">@lang('lang.view_salary_staff')
+                                    <input type="checkbox" class="reports_checkbox e_form_report_checkbox" id="e_form_report_salary_staff"
+                                    {{SetCheckbox($arrayPermissions,"lang.e_form_reports","is_view_salary_staff")->checkbox}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.e_form_reports","is_view_salary_staff")->value}}"
+                                    > <span class="checkmark"></span>
+                                </label>
                             </div>
                              {{-- block Motor Rantel report --}}
                              <div class="col-md-2">
@@ -1709,6 +1825,12 @@
                                     <input type="checkbox" class="reports_checkbox motor_rental_reports_checkbox" id="motor_rental_reports_check_export" 
                                     {{SetCheckbox($arrayPermissions,"lang.motor_rental_reports","is_export")->checkbox}}
                                     value="{{SetCheckbox($arrayPermissions,"lang.motor_rental_reports","is_export")->value}}"
+                                    > <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.view_salary_staff')
+                                    <input type="checkbox" class="reports_checkbox motor_rental_reports_checkbox" id="motor_rental_reports_salary_staff"
+                                    {{SetCheckbox($arrayPermissions,"lang.motor_rental_reports","is_view_salary_staff")->checkbox}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.motor_rental_reports","is_view_salary_staff")->value}}"
                                     > <span class="checkmark"></span>
                                 </label>
                             </div>
@@ -1742,6 +1864,12 @@
                                     value="{{SetCheckbox($arrayPermissions,"lang.new_staff_reports","is_export")->value}}"
                                     > <span class="checkmark"></span>
                                 </label>
+                                <label class="container-checkbox">@lang('lang.view_salary_staff')
+                                    <input type="checkbox" class="reports_checkbox new_staff_reports_checkbox" id="new_staff_reports_salary_staff"
+                                    {{SetCheckbox($arrayPermissions,"lang.new_staff_reports","is_view_salary_staff")->checkbox}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.new_staff_reports","is_view_salary_staff")->value}}"
+                                    > <span class="checkmark"></span>
+                                </label>
                             </div>
                               {{-- block Staff Resinged report --}}
                               <div class="col-md-2">
@@ -1768,6 +1896,12 @@
                                     value="{{SetCheckbox($arrayPermissions,"lang.staff_resigned_reports","is_export")->value}}"
                                     > <span class="checkmark"></span>
                                 </label>
+                                <label class="container-checkbox">@lang('lang.view_salary_staff')
+                                    <input type="checkbox" class="reports_checkbox staff_resigned_reports_checkbox" id="staff_resigned_reports_salary_staff"
+                                    {{SetCheckbox($arrayPermissions,"lang.staff_resigned_reports","is_view_salary_staff")->checkbox}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.staff_resigned_reports","is_view_salary_staff")->value}}"
+                                    > <span class="checkmark"></span>
+                                </label>
                             </div>
                             {{-- block Promoted report --}}
                             <div class="col-md-2">
@@ -1792,6 +1926,12 @@
                                     <input type="checkbox" class="reports_checkbox promoted_staff_report_checkbox" id="promoted_staff_report_check_export" 
                                     {{SetCheckbox($arrayPermissions,"lang.promoted_staff_reports","is_export")->checkbox}}
                                     value="{{SetCheckbox($arrayPermissions,"lang.promoted_staff_reports","is_export")->value}}"
+                                    > <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.view_salary_staff')
+                                    <input type="checkbox" class="reports_checkbox promoted_staff_report_checkbox" id="promoted_staff_report_salary_staff"
+                                    {{SetCheckbox($arrayPermissions,"lang.promoted_staff_reports","is_view_salary_staff")->checkbox}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.promoted_staff_reports","is_view_salary_staff")->value}}"
                                     > <span class="checkmark"></span>
                                 </label>
                             </div>
@@ -1823,6 +1963,12 @@
                                     <input type="checkbox" class="reports_checkbox transferred_staff_report_checkbox" id="transferred_staff_report_check_export" 
                                     {{SetCheckbox($arrayPermissions,"lang.transferred_staff_reports","is_export")->checkbox}}
                                     value="{{SetCheckbox($arrayPermissions,"lang.transferred_staff_reports","is_export")->value}}"
+                                    > <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.view_salary_staff')
+                                    <input type="checkbox" class="reports_checkbox transferred_staff_report_checkbox" id="transferred_staff_report_salary_staff"
+                                    {{SetCheckbox($arrayPermissions,"lang.transferred_staff_reports","is_view_salary_staff")->checkbox}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.transferred_staff_reports","is_view_salary_staff")->value}}"
                                     > <span class="checkmark"></span>
                                 </label>
                             </div>

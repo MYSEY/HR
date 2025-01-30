@@ -897,6 +897,7 @@ return[
     "view"=>"View",
     "view_profile"=>"View Profile",
     "view_salary"=>"View Salary",
+    "view_salary_staff"=>"View Salary Staff",
     "valid_date"=>"Valid Date",
     "valid_time"=>"Valid Time",
     "view_details"=>"View Details",

@@ -54,18 +54,20 @@
                     </div>
                     <div class="col-sm-6 col-md-2 col-lg-2 col-xl-2">
                         <div class="form-group">
-                            <select class="select form-control" id="branch_id" data-select2-id="select2-data-2-c0n2" name="branch_id">
-                                <option value="" data-select2-id="select2-data-2-c0n2">@lang('lang.all_location')</option>
-                                @foreach ($branch as $item)
-                                    <option value="{{$item->id}}">{{ Helper::getLang() == 'en' ? $item->branch_name_en : $item->branch_name_kh }}</option>
-                                @endforeach
-                            </select>
+                            <input class="form-control" type="month" id="filter_month">
                         </div>
                     </div>
                     <div class="col-sm-6 col-md-2 col-lg-2 col-xl-2">
-                        <div class="form-group">
-                            <input class="form-control" type="month" id="filter_month">
-                        </div>
+                        @if (in_array(Auth::user()->RolePermission, ['admin','HRAdmin','developer','BOD','CEO']))
+                            <div class="form-group">
+                                <select class="select form-control" id="branch_id" data-select2-id="select2-data-2-c0n2" name="branch_id">
+                                    <option value="" data-select2-id="select2-data-2-c0n2">@lang('lang.all_location')</option>
+                                    @foreach ($branch as $item)
+                                        <option value="{{$item->id}}">{{ Helper::getLang() == 'en' ? $item->branch_name_en : $item->branch_name_kh }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        @endif
                     </div>
                     <div class="col-sm-6 col-md-4">
                         <div style="display: flex" class="float-end">
