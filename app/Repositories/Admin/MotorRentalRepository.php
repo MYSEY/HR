@@ -125,6 +125,7 @@ class MotorRentalRepository extends BaseRepository
             'users.employee_name_kh',
             'users.branch_id',
             'users.department_id',
+            'users.line_manager',
             'options.name_khmer',
             'options.name_english',
             'options.type',
@@ -138,10 +139,26 @@ class MotorRentalRepository extends BaseRepository
                 $query->where("users.id", Auth::user()->id);
             }
             if ($RolePermission == 'HOD') {
-                $query->whereIn("users.department_id", EmployeeRepository::getRoleHOD());
+                if (permissionAccess("m4-s4", "is_view_salary_staff")->value == 1) {
+                    $query->whereIn("users.department_id", EmployeeRepository::getRoleHOD());
+                }else{
+                    $query->where("users.id", Auth::user()->id);
+                }
+            }
+            if (in_array($RolePermission, ['HR', 'DHOD', 'DBM'])) {
+                $query->where("users.id", Auth::user()->id);
+                if (optional(permissionAccess("m4-s4", "is_view_salary_staff"))->value == 1) {
+                    $query->orWhere(function ($q) {
+                        $q->where("users.line_manager", Auth::user()->id);
+                    });
+                }
             }
             if ($RolePermission == 'BM') {
-                $query->where("users.branch_id", Auth::user()->branch_id);
+                if (permissionAccess("m4-s4", "is_view_salary_staff")->value == 1) {
+                    $query->where("users.branch_id", Auth::user()->branch_id);
+                }else{
+                    $query->where("users.id", Auth::user()->id);
+                }
             }
         })
         ->when($request->employee_id, function ($query, $employee_id) {
