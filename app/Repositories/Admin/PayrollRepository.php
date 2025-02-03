@@ -73,11 +73,10 @@ class PayrollRepository extends BaseRepository
                 'users.number_employee',
                 'users.branch_id',
                 'users.department_id',
-                'users.branch_id',
                 'users.employee_name_en',
                 'users.employee_name_kh',
                 'users.date_of_commencement',
-                'users.branch_id',
+                'users.line_manager',
                 'positions.name_khmer as position_name_khmer',
                 'positions.name_english as position_name_english',
                 'branchs.branch_name_kh',
@@ -86,10 +85,26 @@ class PayrollRepository extends BaseRepository
                 'departments.name_english as depart_name_en',
             )->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
                 if ($RolePermission == 'HOD') {
-                    $query->whereIn("users.department_id", EmployeeRepository::getRoleHOD());
+                    if (permissionAccess("m4-s2", "is_view_salary_staff")->value == 1) {
+                        $query->whereIn("users.department_id", EmployeeRepository::getRoleHOD());
+                    }else{
+                        $query->where("users.id", Auth::user()->id);
+                    }
+                }
+                if (in_array($RolePermission, ['HR', 'DHOD', 'DBM'])) {
+                    $query->where("users.id", Auth::user()->id);
+                    if (optional(permissionAccess("m4-s2", "is_view_salary_staff"))->value == 1) {
+                        $query->orWhere(function ($q) {
+                            $q->where("users.line_manager", Auth::user()->id);
+                        });
+                    }
                 }
                 if ($RolePermission == 'BM') {
-                    $query->where("users.branch_id", Auth::user()->branch_id);
+                    if (permissionAccess("m4-s2", "is_view_salary_staff")->value == 1) {
+                        $query->where("users.branch_id", Auth::user()->branch_id);
+                    }else{
+                        $query->where("users.id", Auth::user()->id);
+                    }
                 }
             })->whereBetween('payment_date', [Helper::startOfLastendOfLastMonth()->startOfLastMonth, Helper::startOfLastendOfLastMonth()->endOfLastMonth])
             ->whereIn('users.emp_status',['Probation','1','10','2'])->get();

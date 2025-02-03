@@ -98,13 +98,15 @@ class EmployeeRepository extends BaseRepository
                             $query->where('emp_status', $emp_status);
                         }
                     }
-                    if (Auth::user()->RolePermission == 'HR') {
+                    if (in_array(Auth::user()->RolePermission, ['HR','DHOD','DBM'])){
+                    // if (Auth::user()->RolePermission == 'HR' || Auth::user()->RolePermission == 'DHOD' || Auth::user()->RolePermission == 'DBM') {
                         if ($emp_status == "resign_reason") {
                             $query->where("line_manager", Auth::user()->id);
                             $query->with("resignStatus");
                             $query->whereNotIn('emp_status',['1','2','10','Probation','Upcoming','Cancel']); 
                         }else if($emp_status == "FDC"){
                             $query->where("line_manager", Auth::user()->id);
+                            $query->whereIn('emp_status',['1','10']);
                             if (Auth::user()->emp_status == "1" || Auth::user()->emp_status == "10") {
                                 $query->orWhere("id", Auth::user()->id);
                             }
@@ -118,11 +120,10 @@ class EmployeeRepository extends BaseRepository
                                 $query->where("line_manager", Auth::user()->id);
                                 $query->where('emp_status', $emp_status);
                             }
-                            
-                            
                         }
                     }
-                    if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'HRAdmin' || Auth::user()->RolePermission == 'developer' || Auth::user()->RolePermission == 'BOD' || Auth::user()->RolePermission == 'CEO') {
+                    if (in_array(Auth::user()->RolePermission, ['admin','HRAdmin','developer','BOD','CEO'])){
+                    // if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'HRAdmin' || Auth::user()->RolePermission == 'developer' || Auth::user()->RolePermission == 'BOD' || Auth::user()->RolePermission == 'CEO') {
                         if ($emp_status == "resign_reason") {
                             $query->with("resignStatus");
                             $query->whereNotIn('emp_status',['1','2','10','Probation','Upcoming','Cancel']); 

@@ -24,7 +24,9 @@
                                 <option value="HRAdmin">HR Admin</option>
                                 <option value="HR">HR</option>
                                 <option value="HOD">Head of Department</option>
+                                <option value="DHOD">D-Head of Department</option>
                                 <option value="BM">Branch Manager</option>
+                                <option value="DBM">Deputy Branch Manager</option>
                                 <option value="Employee">Employee</option>
                             </select>
                         </div>
@@ -175,6 +177,9 @@
                                 </label>
                                 <label class="container-checkbox">@lang('lang.view_salary')
                                     <input type="checkbox" class="employee_checkbox all_employee_checkbox" id="employee_view_salary" name="employee_view_salary"> <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.view_salary_staff')
+                                    <input type="checkbox" class="employee_checkbox all_employee_checkbox" id="employee_view_salary_staff" name="employee_view_salary_staff"> <span class="checkmark"></span>
                                 </label>
                             </div>
                         </div>
@@ -470,6 +475,9 @@
                                 <label class="container-checkbox">@lang('lang.export')
                                     <input type="checkbox" class="c_and_b_checkbox g_checkbox" id="g_export"> <span class="checkmark"></span>
                                 </label>
+                                <label class="container-checkbox">@lang('lang.view_salary_staff')
+                                    <input type="checkbox" class="c_and_b_checkbox g_checkbox" id="g_view_salary_staff"> <span class="checkmark"></span>
+                                </label>
                             </div>
                         </div>
                     </div>
@@ -497,9 +505,15 @@
                                     <input type="checkbox" class="c_and_b_checkbox payroll_staff_resign_checkbox" id="staff_resign_delete" > <span class="checkmark"></span>
                                 </label>
                             </div>
+                            <div class="col-md-3">
+                                <label class="container-checkbox">@lang('lang.view_salary_staff')
+                                    <input type="checkbox" class="c_and_b_checkbox payroll_staff_resign_checkbox" id="staff_view_salary_staff" > <span class="checkmark"></span>
+                                </label>
+                            </div>
                         </div>
                     </div>
 
+                     {{-- employee​ salary --}}
                     <div class="col-md-12">
                         <div class="form-group row">
                             <div class="col-md-2">
@@ -537,6 +551,9 @@
                                 <label class="container-checkbox">@lang('lang.export')
                                     <input type="checkbox" class="c_and_b_checkbox employee_salary_checkbox" id="c_and_b_export"> <span class="checkmark"></span>
                                 </label>
+                                <label class="container-checkbox">@lang('lang.view_salary_staff')
+                                    <input type="checkbox" class="c_and_b_checkbox employee_salary_checkbox" id="c_and_b_view_salary_staff"> <span class="checkmark"></span>
+                                </label>
                             </div>
                         </div>
                     </div>
@@ -564,6 +581,11 @@
                                     <input type="checkbox" class="c_and_b_checkbox cb_nssf_checkbox" id="cb_nssf_export"> <span class="checkmark"></span>
                                 </label>
                             </div>
+                            <div class="col-md-3">
+                                <label class="container-checkbox">@lang('lang.view_salary_staff')
+                                    <input type="checkbox" class="c_and_b_checkbox cb_nssf_checkbox" id="cb_nssf_view_salary_staff"> <span class="checkmark"></span>
+                                </label>
+                            </div>
                         </div>
                     </div>
                     {{-- block Severance Pay --}}
@@ -588,6 +610,11 @@
                                 </label>
                                 <label class="container-checkbox">@lang('lang.export')
                                     <input type="checkbox" class="c_and_b_checkbox severance_pay_checkbox" id="severance_pay_export"> <span class="checkmark"></span>
+                                </label>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="container-checkbox">@lang('lang.view_salary_staff')
+                                    <input type="checkbox" class="c_and_b_checkbox severance_pay_checkbox" id="severance_pay_view_salary_staff"> <span class="checkmark"></span>
                                 </label>
                             </div>
                         </div>
@@ -626,6 +653,9 @@
                                 <label class="container-checkbox">@lang('lang.export')
                                     <input type="checkbox" class="c_and_b_checkbox fringe_benefits_checkbox" id="fringe_benefits_export"> <span class="checkmark"></span>
                                 </label>
+                                <label class="container-checkbox">@lang('lang.view_salary_staff')
+                                    <input type="checkbox" class="c_and_b_checkbox fringe_benefits_checkbox" id="fringe_benefits_view_salary_staff"> <span class="checkmark"></span>
+                                </label>
                             </div>
                         </div>
                     </div>
@@ -651,6 +681,11 @@
                                 </label>
                                 <label class="container-checkbox">@lang('lang.delete')
                                     <input type="checkbox" class="c_and_b_checkbox payroll_adjustment_checkbox" id="payroll_adjustment_delete"> <span class="checkmark"></span>
+                                </label>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="container-checkbox">@lang('lang.view_salary_staff')
+                                    <input type="checkbox" class="c_and_b_checkbox payroll_adjustment_checkbox" id="payroll_adjustment_view_salary_staff"> <span class="checkmark"></span>
                                 </label>
                             </div>
                         </div>
@@ -956,6 +991,9 @@
                                 <label class="container-checkbox">@lang('lang.export')
                                     <input type="checkbox" class="reports_checkbox employee_reports_checkbox" id="report_employee_check_export" name="report_employee_check_export"> <span class="checkmark"></span>
                                 </label>
+                                <label class="container-checkbox">@lang('lang.view_salary_staff')
+                                    <input type="checkbox" class="reports_checkbox employee_reports_checkbox" id="report_employee_salary_staff"> <span class="checkmark"></span>
+                                </label>
                             </div>
                             {{-- block Paylroll report --}}
                             <div class="col-md-2">
@@ -973,6 +1011,9 @@
                                 <label class="container-checkbox">@lang('lang.export')
                                     <input type="checkbox" class="reports_checkbox payroll_report_checkbox" id="payroll_report_check_export" name="payroll_report_check_export"> <span class="checkmark"></span>
                                 </label>
+                                <label class="container-checkbox">@lang('lang.view_salary_staff')
+                                    <input type="checkbox" class="reports_checkbox payroll_report_checkbox" id="payroll_report_salary_staff"> <span class="checkmark"></span>
+                                </label>
                             </div>
                             {{-- block tax report --}}
                             <div class="col-md-2">
@@ -989,6 +1030,9 @@
                                 </label>
                                 <label class="container-checkbox">@lang('lang.export')
                                     <input type="checkbox" class="reports_checkbox tax_report_checkbox" id="tax_report_check_export"> <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.view_salary_staff')
+                                    <input type="checkbox" class="reports_checkbox tax_report_checkbox" id="tax_report_salary_staff"> <span class="checkmark"></span>
                                 </label>
                             </div>
                         </div>
@@ -1011,6 +1055,9 @@
                                 <label class="container-checkbox">@lang('lang.export')
                                     <input type="checkbox" class="reports_checkbox nssf_report_checkbox" id="nssf_report_check_export"> <span class="checkmark"></span>
                                 </label>
+                                <label class="container-checkbox">@lang('lang.view_salary_staff')
+                                    <input type="checkbox" class="reports_checkbox nssf_report_checkbox" id="nssf_report_salary_staff"> <span class="checkmark"></span>
+                                </label>
                             </div>
                             {{-- block Khmer New Year and Pchum Ben Allowance report --}}
                             <div class="col-md-2">
@@ -1028,6 +1075,9 @@
                                 <label class="container-checkbox">@lang('lang.export')
                                     <input type="checkbox" class="reports_checkbox kmh_pchum_report_checkbox" id="kmh_pchum_report_check_export"> <span class="checkmark"></span>
                                 </label>
+                                <label class="container-checkbox">@lang('lang.view_salary_staff')
+                                    <input type="checkbox" class="reports_checkbox kmh_pchum_report_checkbox" id="kmh_pchum_report_salary_staff"> <span class="checkmark"></span>
+                                </label>
                             </div>
                             {{-- block Severance Pay Report report --}}
                             <div class="col-md-2">
@@ -1044,6 +1094,9 @@
                                 </label>
                                 <label class="container-checkbox">@lang('lang.export')
                                     <input type="checkbox" class="reports_checkbox severance_pay_report_checkbox" id="severance_pay_report_check_export"> <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.view_salary_staff')
+                                    <input type="checkbox" class="reports_checkbox severance_pay_report_checkbox" id="severance_pay_report_salary_staff"> <span class="checkmark"></span>
                                 </label>
                             </div>
                         </div>
@@ -1066,6 +1119,9 @@
                                 <label class="container-checkbox">@lang('lang.export')
                                     <input type="checkbox" class="reports_checkbox seniorities_pay_report_checkbox" id="seniorities_pay_report_check_export"> <span class="checkmark"></span>
                                 </label>
+                                <label class="container-checkbox">@lang('lang.view_salary_staff')
+                                    <input type="checkbox" class="reports_checkbox seniorities_pay_report_checkbox" id="seniorities_pay_report_salary_staff"> <span class="checkmark"></span>
+                                </label>
                             </div>
                             {{-- block bank transfer report --}}
                             <div class="col-md-2">
@@ -1083,6 +1139,9 @@
                                 <label class="container-checkbox">@lang('lang.export')
                                     <input type="checkbox" class="reports_checkbox bank_transfer_report_checkbox" id="bank_transfer_report_check_export" name="bank_transfer_report_check_export"> <span class="checkmark"></span>
                                 </label>
+                                <label class="container-checkbox">@lang('lang.view_salary_staff')
+                                    <input type="checkbox" class="reports_checkbox bank_transfer_report_checkbox" id="bank_transfer_report_salary_staff"> <span class="checkmark"></span>
+                                </label>
                             </div>
                              {{-- block Fringe Benefits report --}}
                              <div class="col-md-2">
@@ -1099,6 +1158,9 @@
                                 </label>
                                 <label class="container-checkbox">@lang('lang.export')
                                     <input type="checkbox" class="reports_checkbox fringe_benefits_report_checkbox" id="fringe_benefits_report_check_export" name="fringe_benefits_report_check_export"> <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.view_salary_staff')
+                                    <input type="checkbox" class="reports_checkbox fringe_benefits_report_checkbox" id="fringe_benefits_report_salary_staff"> <span class="checkmark"></span>
                                 </label>
                             </div>
                         </div>
@@ -1121,6 +1183,9 @@
                                 <label class="container-checkbox">@lang('lang.export')
                                     <input type="checkbox" class="reports_checkbox e_filing_report_checkbox" id="e_filing_report_check_export" name="e_filing_report_check_export"> <span class="checkmark"></span>
                                 </label>
+                                <label class="container-checkbox">@lang('lang.view_salary_staff')
+                                    <input type="checkbox" class="reports_checkbox e_filing_report_checkbox" id="e_filing_report_salary_staff" > <span class="checkmark"></span>
+                                </label>
                             </div>
                             {{-- block E-form report --}}
                             <div class="col-md-2">
@@ -1138,6 +1203,9 @@
                                 <label class="container-checkbox">@lang('lang.export')
                                     <input type="checkbox" class="reports_checkbox e_form_report_checkbox" id="e_form_report_check_export" name="e_form_report_check_export"> <span class="checkmark"></span>
                                 </label>
+                                <label class="container-checkbox">@lang('lang.view_salary_staff')
+                                    <input type="checkbox" class="reports_checkbox e_form_report_checkbox" id="e_form_report_salary_staff"> <span class="checkmark"></span>
+                                </label>
                             </div>
                              {{-- block Motor Rantel report --}}
                              <div class="col-md-2">
@@ -1154,6 +1222,9 @@
                                 </label>
                                 <label class="container-checkbox">@lang('lang.export')
                                     <input type="checkbox" class="reports_checkbox motor_rental_reports_checkbox" id="motor_rental_reports_check_export" name="motor_rental_reports_check_export"> <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.view_salary_staff')
+                                    <input type="checkbox" class="reports_checkbox motor_rental_reports_checkbox" id="motor_rental_reports_salary_staff"> <span class="checkmark"></span>
                                 </label>
                             </div>
                            
@@ -1177,6 +1248,9 @@
                                 <label class="container-checkbox">@lang('lang.export')
                                     <input type="checkbox" class="reports_checkbox new_staff_reports_checkbox" id="new_staff_reports_check_export" name="new_staff_reports_check_export"> <span class="checkmark"></span>
                                 </label>
+                                <label class="container-checkbox">@lang('lang.view_salary_staff')
+                                    <input type="checkbox" class="reports_checkbox new_staff_reports_checkbox" id="new_staff_reports_salary_staff"> <span class="checkmark"></span>
+                                </label>
                             </div>
                               {{-- block Staff Resinged report --}}
                               <div class="col-md-2">
@@ -1194,6 +1268,9 @@
                                 <label class="container-checkbox">@lang('lang.export')
                                     <input type="checkbox" class="reports_checkbox staff_resigned_reports_checkbox" id="staff_resigned_reports_check_export" name="staff_resigned_reports_check_export"> <span class="checkmark"></span>
                                 </label>
+                                <label class="container-checkbox">@lang('lang.view_salary_staff')
+                                    <input type="checkbox" class="reports_checkbox staff_resigned_reports_checkbox" id="staff_resigned_reports_salary_staff"> <span class="checkmark"></span>
+                                </label>
                             </div>
                             {{-- block Promoted report --}}
                             <div class="col-md-2">
@@ -1210,6 +1287,9 @@
                                 </label>
                                 <label class="container-checkbox">@lang('lang.export')
                                     <input type="checkbox" class="reports_checkbox promoted_staff_report_checkbox" id="promoted_staff_report_check_export" name="promoted_staff_report_check_export"> <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.view_salary_staff')
+                                    <input type="checkbox" class="reports_checkbox promoted_staff_report_checkbox" id="promoted_staff_report_salary_staff"> <span class="checkmark"></span>
                                 </label>
                             </div>
                             
@@ -1232,6 +1312,9 @@
                                 </label>
                                 <label class="container-checkbox">@lang('lang.export')
                                     <input type="checkbox" class="reports_checkbox transferred_staff_report_checkbox" id="transferred_staff_report_check_export" name="transferred_staff_report_check_export"> <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.view_salary_staff')
+                                    <input type="checkbox" class="reports_checkbox transferred_staff_report_checkbox" id="transferred_staff_report_salary_staff"> <span class="checkmark"></span>
                                 </label>
                             </div>
                         </div>

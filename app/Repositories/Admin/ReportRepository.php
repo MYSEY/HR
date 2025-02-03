@@ -126,16 +126,33 @@ class ReportRepository extends BaseRepository
                     'users.position_id',
                     'users.branch_id',
                     'users.department_id',
+                    'users.line_manager',
                 )
                 ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
                     if ($RolePermission == 'Employee') {
                         $query->where("users.id", Auth::user()->id);
                     }
                     if ($RolePermission == 'HOD') {
-                        $query->whereIn("users.department_id", EmployeeRepository::getRoleHOD());
+                        if (permissionAccess("m7-s8", "is_view_salary_staff")->value == 1) {
+                            $query->whereIn("users.department_id", EmployeeRepository::getRoleHOD());
+                        }else{
+                            $query->where("users.id", Auth::user()->id);
+                        }
+                    }
+                    if (in_array($RolePermission, ['HR', 'DHOD', 'DBM'])) {
+                        $query->where("users.id", Auth::user()->id);
+                        if (optional(permissionAccess("m7-s8", "is_view_salary_staff"))->value == 1) {
+                            $query->orWhere(function ($q) {
+                                $q->where("users.line_manager", Auth::user()->id);
+                            });
+                        }
                     }
                     if ($RolePermission == 'BM') {
-                        $query->where("users.branch_id", Auth::user()->branch_id);
+                        if (permissionAccess("m7-s8", "is_view_salary_staff")->value == 1) {
+                            $query->where("users.branch_id", Auth::user()->branch_id);
+                        }else{
+                            $query->where("users.id", Auth::user()->id);
+                        }
                     }
                 })
                 ->when($request->employee_id, function ($query, $employee_id) {

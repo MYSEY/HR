@@ -68,9 +68,12 @@ class LeavesAdminController extends Controller
                     $query->where("users.id", Auth::user()->id);
                     $query->orWhere("users.line_manager", Auth::user()->id);
                 }
+            }else if($RolePermission == 'HR' ||  $RolePermission == 'DHOD' || $RolePermission == 'DBM'){
+                $query->where("users.id", Auth::user()->id);
+                $query->orWhere("users.line_manager", Auth::user()->id);
             }else if($RolePermission == 'Employee'){
                 $query->where("users.id", Auth::user()->line_manager);
-                $query->orWhere("users.line_manager", Auth::user()->line_manager);
+                // $query->orWhere("users.line_manager", Auth::user()->line_manager);
             }
         })->get();
 
@@ -79,7 +82,9 @@ class LeavesAdminController extends Controller
                 if($RolePermission == 'CEO' || $RolePermission == 'BOD' || $RolePermission == 'BM' || $RolePermission == 'HOD'){
                     $query->where("next_approver", Auth::user()->id);
                     // $query->orWhere("line_manager_id", Auth::user()->id);
-                }else if($RolePermission == 'HR' || $RolePermission =="HRAdmin"){
+                }else if ($RolePermission == 'HR' ||  $RolePermission == 'DHOD' || $RolePermission == 'DBM' || $RolePermission == 'Employee') {
+                    $query->where("next_approver", Auth::user()->id);
+                }else if($RolePermission =="HRAdmin"){
                     $query->whereNot("status", "approved");
                 }
             })->orderBy('id', 'DESC')->get();
@@ -88,7 +93,10 @@ class LeavesAdminController extends Controller
                 if($RolePermission == 'CEO' || $RolePermission == 'BOD' || $RolePermission == 'BM' || $RolePermission == 'HOD'){
                     $query->where("status", "pending_cancel");
                     $query->where("next_approver", Auth::user()->id);
-                }else if($RolePermission == 'HR' || $RolePermission =="HRAdmin"){
+                }else if ($RolePermission == 'HR' ||  $RolePermission == 'DHOD' || $RolePermission == 'DBM' || $RolePermission == 'Employee') {
+                    $query->where("status", "pending_cancel");
+                    $query->where("next_approver", Auth::user()->id);
+                }else if($RolePermission =="HRAdmin"){
                     $query->whereIn("status", ["cancel_hod", "pending_cancel"]);
                 }
             })->orderBy('id', 'DESC')->get();
@@ -142,9 +150,12 @@ class LeavesAdminController extends Controller
                         $query->where("users.id", Auth::user()->id);
                         $query->orWhere("users.line_manager", Auth::user()->id);
                     }
+                }else if($RolePermission == 'HR' ||  $RolePermission == 'DHOD' || $RolePermission == 'DBM'){
+                    $query->where("users.id", Auth::user()->id);
+                    $query->orWhere("users.line_manager", Auth::user()->id);
                 }else if($RolePermission == 'Employee'){
                     $query->where("users.id", Auth::user()->line_manager);
-                    $query->orWhere("users.line_manager", Auth::user()->line_manager);
+                    // $query->orWhere("users.line_manager", Auth::user()->line_manager);
                 }
             })
             ->when($request->employee_id, function ($query, $employee_id) {

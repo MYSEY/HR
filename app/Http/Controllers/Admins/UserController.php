@@ -70,8 +70,8 @@ class UserController extends Controller
         // dd($data);
         $dataResign =[];
         $dataEmployees = [];
-        
-        if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'HRAdmin' || Auth::user()->RolePermission == 'developer' || Auth::user()->RolePermission == 'BOD' || Auth::user()->RolePermission == 'CEO') {
+        if (in_array(Auth::user()->RolePermission, ['admin','HRAdmin','developer','BOD','CEO'])){
+        // if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'HRAdmin' || Auth::user()->RolePermission == 'developer' || Auth::user()->RolePermission == 'BOD' || Auth::user()->RolePermission == 'CEO') {
             $dataProbationCount = User::where('emp_status','Probation')->count();
             $dataFDCCount = User::whereIn('emp_status',['1','10'])->count();
             $dataUDCCount = User::where('emp_status','2')->count();
@@ -82,8 +82,9 @@ class UserController extends Controller
             $dataResign = User::with('role')->with('department')->with('position')->whereIn('emp_status', ['3','4','5','6','7','8','9'])->orderBy('resign_date', 'desc')->paginate(10);
             $dataEmployees = User::whereIn('emp_status', ['Probation','1','2','10',])->orderBy('id', 'DESC')->get();
         }
-        if (Auth::user()->RolePermission == 'HR') {
-            $dataProbationCount = User::where('emp_status','Probation')->where("line_manager", Auth::user()->id) ->when(Auth::user()->emp_status, function ($query, $emp_status) {
+        if (in_array(Auth::user()->RolePermission, ['HR','DHOD','DBM'])){
+        // if (Auth::user()->RolePermission == 'HR' || Auth::user()->RolePermission == 'DHOD' || Auth::user()->RolePermission == 'DBM') {
+            $dataProbationCount = User::where('emp_status','Probation')->where("line_manager", Auth::user()->id)->when(Auth::user()->emp_status, function ($query, $emp_status) {
                 if ($emp_status == "Probation") {
                     $query->orWhere("id", Auth::user()->id);
                 }
@@ -110,8 +111,7 @@ class UserController extends Controller
                 }
             })->where('emp_status','Probation')->orderBy('date_of_commencement', 'desc')->paginate(10);
 
-            $dataFDC = User::with('role')->with('department')->with('position')->where("line_manager", Auth::user()->id)
-            ->when(Auth::user()->emp_status, function ($query, $emp_status) {
+            $dataFDC = User::with('role')->with('department')->with('position')->whereIn('emp_status',['1','10'])->where("line_manager", Auth::user()->id)->when(Auth::user()->emp_status, function ($query, $emp_status) {
                 if ($emp_status == "1" || $emp_status == "10") {
                     $query->orWhere("id", Auth::user()->id);
                 }
@@ -140,16 +140,17 @@ class UserController extends Controller
             $dataResign = User::with('role')->with('department')->with('position')->whereIn("department_id",  $department_ids)->whereIn('emp_status', ['3','4','5','6','7','8','9'])->orderBy('resign_date', 'desc')->paginate(10);
         }
         if (Auth::user()->RolePermission == 'BM') {
-            $dataProbationCount = User::where('emp_status','Probation')->count();
-            $dataFDCCount = User::whereIn('emp_status',['1','10'])->count();
-            $dataUDCCount = User::where('emp_status','2')->count();
-            $dataResignCount = User::whereIn('emp_status', ['3','4','5','6','7','8','9'])->count();
+            $dataProbationCount = User::where('emp_status','Probation')->where("branch_id", Auth::user()->branch_id)->count();
+            $dataFDCCount = User::whereIn('emp_status',['1','10'])->where("branch_id", Auth::user()->branch_id)->count();
+            $dataUDCCount = User::where('emp_status','2')->where("branch_id", Auth::user()->branch_id)->count();
+            $dataResignCount = User::whereIn('emp_status', ['3','4','5','6','7','8','9'])->where("branch_id", Auth::user()->branch_id)->count();
 
             $dataProbation = User::with('role')->with('department')->with('position')->where("branch_id", Auth::user()->branch_id)->where('emp_status','Probation')->orderBy('date_of_commencement', 'desc')->paginate(10);
             $dataFDC = User::with('role')->with('department')->with('position')->where("branch_id", Auth::user()->branch_id)->whereIn('emp_status',['1','10'])->paginate(10);
             $dataUDC = User::with('role')->with('department')->with('position')->where("branch_id", Auth::user()->branch_id)->where('emp_status','2')->paginate(10);
             $dataResign = User::with('role')->with('department')->with('position')->where("branch_id", Auth::user()->branch_id)->whereIn('emp_status', ['3','4','5','6','7','8','9'])->orderBy('resign_date', 'desc')->paginate(10);
         }
+
         if(Auth::user()->RolePermission == 'Employee'){
 
             $dataProbationCount = User::where('emp_status','Probation')->where('id',Auth::user()->id)->count();
@@ -819,7 +820,6 @@ class UserController extends Controller
         }
     }
 
-
     public function str_replace($text)
     {
         $shortlist = Str::lower($text);
@@ -981,6 +981,23 @@ class UserController extends Controller
                                     'location'              => $item[6],
                                     'updated_by'            => Auth::user()->id
                                 ]);
+                            }
+                        }
+                    }
+                }
+                // change password
+                if ($sheetName == "Employee_change_password") {
+                    $i = 0;
+                    $employees_password =  $spreadsheet->getSheetByName($sheetName)->toArray();
+                    foreach ($employees_password as $item) {
+                        $i++;
+                        if ($i > 2) {
+                            $dataUpdateEmployee = user::where('number_employee',$item[0])->first();
+                            if ($dataUpdateEmployee) {
+                                    /** block Bank Infor */
+                                    $dataUpdateEmployee['password']              = Hash::make($item[2]);
+                                    $dataUpdateEmployee['updated_by']            = Auth::user()->id;
+                                    $dataUpdateEmployee->save();
                             }
                         }
                     }

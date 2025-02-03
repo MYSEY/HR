@@ -76,9 +76,15 @@
                                                         @endif
                                                     </td>
                                                     @if (permissionAccess("m2-s1","is_view_salary")->value == "1")
-                                                        <td>$<a href="#">{{$item->basic_salary}}</a></td>
-                                                        <td>$<a href="#">{{$item->salary_increas == null ? '0.00' : $item->salary_increas}}</a></td>
-                                                        <td>$<a href="#">{{$item->phone_allowance == null ? '0.00' : $item->phone_allowance}}</a></td>
+                                                        <td>$<a href="#"> {{
+                                                            Auth::user()->id == $item->id ? $item->basic_salary : (permissionAccess("m2-s1", "is_view_salary_staff")->value == "1" ?  $item->basic_salary : '0.00')
+                                                        }}</a></td>
+                                                        <td>$<a href="#">{{
+                                                            Auth::user()->id == $item->id ? $item->salary_increas : (permissionAccess("m2-s1", "is_view_salary_staff")->value == "1" ?  $item->salary_increas : '0.00')
+                                                        }}</a></td>
+                                                        <td>$<a href="#">{{
+                                                            Auth::user()->id == $item->id ? $item->phone_allowance : (permissionAccess("m2-s1", "is_view_salary_staff")->value == "1" ?  $item->phone_allowance : '0.00')
+                                                        }}</a></td>
                                                     @endif
                                                     <td>{{$item->joinOfDate}}</td>
                                                     <td>{{$item->PassDate}}</td>
@@ -244,9 +250,15 @@
                                                         {{-- <span class="badge bg-inverse-success">{{ $item->role == null ? "" : $item->role->role_name }}</span> --}}
                                                     </td>
                                                     @if (permissionAccess("m2-s1","is_view_salary")->value == "1")
-                                                        <td>$<a href="#">{{$item->basic_salary}}</a></td>
-                                                        <td>$<a href="#">{{$item->salary_increas == null ? '0.00' : $item->salary_increas}}</a></td>
-                                                        <td>$<a href="#">{{$item->phone_allowance == null ? '0.00' : $item->phone_allowance}}</a></td>
+                                                        <td>$<a href="#"> {{
+                                                            Auth::user()->id == $item->id ? $item->basic_salary : (permissionAccess("m2-s1", "is_view_salary_staff")->value == "1" ?  $item->basic_salary : '0.00')
+                                                        }}</a></td>
+                                                        <td>$<a href="#">{{
+                                                            Auth::user()->id == $item->id ? $item->salary_increas : (permissionAccess("m2-s1", "is_view_salary_staff")->value == "1" ?  $item->salary_increas : '0.00')
+                                                        }}</a></td>
+                                                        <td>$<a href="#">{{
+                                                            Auth::user()->id == $item->id ? $item->phone_allowance : (permissionAccess("m2-s1", "is_view_salary_staff")->value == "1" ?  $item->phone_allowance : '0.00')
+                                                        }}</a></td>
                                                     @endif
                                                     <td>{{$item->joinOfDate}}</td>
                                                     <td>{{$item->FDCStartDate}}</td>
@@ -425,9 +437,15 @@
                                                         {{-- <span class="badge bg-inverse-success">{{ $item->role == null ? "" : $item->role->role_name }}</span> --}}
                                                     </td>
                                                     @if (permissionAccess("m2-s1","is_view_salary")->value == "1")
-                                                        <td>$<a href="#">{{$item->basic_salary}}</a></td>
-                                                        <td>$<a href="#">{{$item->salary_increas == null ? '0.00' : $item->salary_increas}}</a></td>
-                                                        <td>$<a href="#">{{$item->phone_allowance == null ? '0.00' : $item->phone_allowance}}</a></td>
+                                                        <td>$<a href="#"> {{
+                                                            Auth::user()->id == $item->id ? $item->basic_salary : (permissionAccess("m2-s1", "is_view_salary_staff")->value == "1" ?  $item->basic_salary : '0.00')
+                                                        }}</a></td>
+                                                        <td>$<a href="#">{{
+                                                            Auth::user()->id == $item->id ? $item->salary_increas : (permissionAccess("m2-s1", "is_view_salary_staff")->value == "1" ?  $item->salary_increas : '0.00')
+                                                        }}</a></td>
+                                                        <td>$<a href="#">{{
+                                                            Auth::user()->id == $item->id ? $item->phone_allowance : (permissionAccess("m2-s1", "is_view_salary_staff")->value == "1" ?  $item->phone_allowance : '0.00')
+                                                        }}</a></td>
                                                     @endif
                                                     <td>{{$item->joinOfDate}}</td>
                                                     <td>{{$item->FDCStartDate}}</td>
@@ -507,7 +525,7 @@
         </div>
     </div>
 </div>
-@if (Auth::user()->RolePermission == 'BOD' || Auth::user()->RolePermission == 'CEO' || Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'HR' || Auth::user()->RolePermission == 'HRAdmin' || Auth::user()->RolePermission == 'developer')
+@if (Auth::user()->RolePermission == 'BOD' || Auth::user()->RolePermission == 'CEO' || Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'HR' || Auth::user()->RolePermission == 'DHOD' || Auth::user()->RolePermission == 'HRAdmin' || Auth::user()->RolePermission == 'developer')
     <div class="tab-pane show" id="tbl_reject" role="tabpanel">
         <div class="row">
             <div class="col-md-12">
@@ -577,9 +595,15 @@
                                                         <span class="badge bg-inverse-success">{{ $item->role == null ? "" : $item->role->role_name }}</span>
                                                     </td>
                                                     @if (permissionAccess("m2-s1","is_view_salary")->value == "1")
-                                                        <td>$<a href="#">{{$item->basic_salary}}</a></td>
-                                                        <td>$<a href="#">{{$item->salary_increas == null ? '0.00' : $item->salary_increas}}</a></td>
-                                                        <td>$<a href="#">{{$item->phone_allowance == null ? '0.00' : $item->phone_allowance}}</a></td>
+                                                        <td>$<a href="#"> {{
+                                                            Auth::user()->id == $item->id ? $item->basic_salary : (permissionAccess("m2-s1", "is_view_salary_staff")->value == "1" ?  $item->basic_salary : '0.00')
+                                                        }}</a></td>
+                                                        <td>$<a href="#">{{
+                                                            Auth::user()->id == $item->id ? $item->salary_increas : (permissionAccess("m2-s1", "is_view_salary_staff")->value == "1" ?  $item->salary_increas : '0.00')
+                                                        }}</a></td>
+                                                        <td>$<a href="#">{{
+                                                            Auth::user()->id == $item->id ? $item->phone_allowance : (permissionAccess("m2-s1", "is_view_salary_staff")->value == "1" ?  $item->phone_allowance : '0.00')
+                                                        }}</a></td>
                                                     @endif
                                                     <td>{{$item->joinOfDate}}</td>
                                                     <td>{{$item->ResignDates}}</td>
@@ -636,6 +660,7 @@
                 </div>
             </div>
         </div>
+        <input type="hidden" id="user-id-login" value="{{Auth::user()->id}}">
     </div>
 @endif
 @include('recruitments.candidate_resumes.prints.signed_contract')
@@ -759,6 +784,7 @@
         let is_update = "{{ Helper::permissionAccess('m2-s1','is_update') }}";
         let is_delete = "{{ Helper::permissionAccess('m2-s1','is_delete') }}";
         let is_view_salary = "{{ Helper::permissionAccess('m2-s1','is_view_salary') }}";
+        let is_view_salary_staff = "{{ Helper::permissionAccess('m2-s1','is_view_salary_staff') }}";
         var localeLanguage = '{{ config('app.locale') }}';
         let data = {
             "_token": "{{ csrf_token() }}",
@@ -1010,10 +1036,29 @@
                         let basic_salary = "";
                         let salary_increas = "";
                         let phone_allowance = "";
+
+                        // Auth::user()->id == $item->id ? $item->basic_salary : (permissionAccess("m2-s1", "is_view_salary_staff")->value == "1" ?  $item->basic_salary : '0.00')
+                        
                         if (is_view_salary == 1) {
-                            basic_salary =    '<td>$ <a href="#">'+(emp.basic_salary)+'</a></td>';
-                            salary_increas =  '<td>$ <a href="#">'+(emp.salary_increas == null ? '0.00' : emp.salary_increas)+'</a></td>';
-                            phone_allowance = '<td>$ <a href="#">'+(emp.phone_allowance == null ? '0.00' : emp.phone_allowance)+'</a></td>';
+                            if ($("#user-id-login").val() == emp.id) {
+                                basic_salary =    '<td>$ <a href="#">'+(emp.basic_salary)+'</a></td>';
+                                salary_increas =  '<td>$ <a href="#">'+(emp.salary_increas == null ? '0.00' : emp.salary_increas)+'</a></td>';
+                                phone_allowance = '<td>$ <a href="#">'+(emp.phone_allowance == null ? '0.00' : emp.phone_allowance)+'</a></td>';
+                            }else{
+                                if (is_view_salary_staff == 1) {
+                                    basic_salary =    '<td>$ <a href="#">'+(emp.basic_salary)+'</a></td>';
+                                    salary_increas =  '<td>$ <a href="#">'+(emp.salary_increas == null ? '0.00' : emp.salary_increas)+'</a></td>';
+                                    phone_allowance = '<td>$ <a href="#">'+(emp.phone_allowance == null ? '0.00' : emp.phone_allowance)+'</a></td>';
+                                }else{
+                                    basic_salary =    '<td>$ <a href="#">0.00</a></td>';
+                                    salary_increas =  '<td>$ <a href="#">0.00</a></td>';
+                                    phone_allowance = '<td>$ <a href="#">0.00</a></td>';
+                                }
+                            }
+                           
+                            // basic_salary =    '<td>$ <a href="#">'+(emp.basic_salary)+'</a></td>';
+                            // salary_increas =  '<td>$ <a href="#">'+(emp.salary_increas == null ? '0.00' : emp.salary_increas)+'</a></td>';
+                            // phone_allowance = '<td>$ <a href="#">'+(emp.phone_allowance == null ? '0.00' : emp.phone_allowance)+'</a></td>';
                         }
                         tr +='<tr class="odd">'+
                                 '<td class="ids stuck-scroll-4">'+(index)+'</td>'+

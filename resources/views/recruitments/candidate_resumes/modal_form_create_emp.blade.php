@@ -50,6 +50,18 @@
                                 </select>
                             </div>
                         </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="">@lang('lang.marital_status')</label>
+                                <select class="form-control select floating" id="marital_status" name="marital_status">
+                                    {{-- @foreach ($maritalStatus as $item)
+                                        <option value="{{$item->id}}" {{$dataUpcomings->marital_status == $item->id ? "selected" : ""}}>{{$item->name_english}}</option>
+                                    @endforeach --}}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
                         <div class="col-md-6">
                             <div class="form-group hr-form-group-select2">
                                 <label>@lang('lang.location') <span class="text-danger">*</span></label>
@@ -57,8 +69,6 @@
                                 </select>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
                         <div class="col-md-6">
                             <div class="form-group hr-form-group-select2">
                                 <label>@lang('lang.department') <span class="text-danger">*</span></label>
@@ -426,6 +436,16 @@
                                 }));
                             });
                         }
+                        if (response.maritalStatus != '') {
+                            $('#marital_status').html('');
+                            $.each(response.maritalStatus, function(i, item) {
+                                $("#marital_status").append($('<option>', {
+                                    value: item.id,
+                                    text: localeLanguage == 'en' ? item.name_english : item.name_khmer,
+                                    selected: item.id == response.success.marital_status
+                                }));
+                            });
+                        }
                         if (response.optionPositionType !='') {
                             // $("#position_type").html('');
                             $.each(response.optionPositionType, function(i, item) {
@@ -628,6 +648,7 @@
                                 position_id: $("#emp_position").val(),
                                 date_of_birth: $("#date_of_birth").val(),
                                 gender: $("#emp_gender").val(),
+                                marital_status: $('#marital_status').val(),
                                 department_id: $("#department_id").val(),
                                 line_manager: $("#line_manager").val(),
                                 branch_id: $("#emp_branch").val(),
@@ -670,6 +691,9 @@
                                 if (data) {
                                     if (data.option.name_english == "Female") {
                                         $("#pr_mr_or_mrs").text("អ្នកស្រី ");
+                                        if (data.marital_status.name_english == "Single") {
+                                            $("#pr_mr_or_mrs").text("កញ្ញា ");
+                                        }
                                         $("#pr_gender").text("ស្រី ");
                                     }else{
                                         $("#pr_mr_or_mrs").text("លោក ");

@@ -35,6 +35,7 @@ return new class extends Migration
             $table->string('recruitment_channel')->nullable();
             $table->string('contact_number')->nullable();
             $table->string('status')->nullable();
+            $table->string('marital_status')->nullable();
             $table->longText('cv')->nullable();
             $table->dateTime('interviewed_date')->nullable();
             $table->string('committee_interview')->nullable();

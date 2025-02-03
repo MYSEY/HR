@@ -27,9 +27,9 @@
                     @if (permissionAccess("m2-s1","is_import")->value == "1")
                         <a href="#" class="btn add-btn" data-toggle="modal" id="import_employee"><i class="fa fa-arrow-circle-up"  data-bs-toggle="tooltip" aria-label="fa fa-arrow-circle-up" data-bs-original-title="fa fa-arrow-circle-up"></i>@lang('lang.import')</a>
                     @endif
-                    {{-- @if (Auth::user()->RolePermission == "Developer" || Auth::user()->RolePermission == "admin" || Auth::user()->RolePermission == 'HRAdmin')
+                    @if (Auth::user()->RolePermission == "Developer" || Auth::user()->RolePermission == "admin" || Auth::user()->RolePermission == 'HRAdmin')
                         <a href="#" class="btn add-btn me-2" data-toggle="modal" id="import_update_employee"><i class="fa fa-arrow-circle-up"  data-bs-toggle="tooltip" aria-label="fa fa-arrow-circle-up" data-bs-original-title="fa fa-arrow-circle-up"></i>Import Update Employee</a>
-                    @endif --}}
+                    @endif
                     @if (Auth::user()->RolePermission == "HR" || Auth::user()->RolePermission == 'HRAdmin' || Auth::user()->RolePermission == "Developer" || Auth::user()->RolePermission == "admin")
                         @if (permissionAccess("m2-s1","is_update")->value == "1")
                             <a href="#" class="btn add-btn me-2" data-bs-toggle="modal" data-bs-target="#change_line_manager"><i class="fa fa-plus"></i> @lang('lang.line_manager')</a>
