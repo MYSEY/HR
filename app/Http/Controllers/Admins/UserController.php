@@ -994,10 +994,28 @@ class UserController extends Controller
                         if ($i > 2) {
                             $dataUpdateEmployee = user::where('number_employee',$item[0])->first();
                             if ($dataUpdateEmployee) {
-                                    /** block Bank Infor */
                                     $dataUpdateEmployee['password']              = Hash::make($item[2]);
                                     $dataUpdateEmployee['updated_by']            = Auth::user()->id;
                                     $dataUpdateEmployee->save();
+                            }
+                        }
+                    }
+                }
+                // Update information banks
+                if ($sheetName == "Employee_information_banks") {
+                    $i = 0;
+                    $employees_password =  $spreadsheet->getSheetByName($sheetName)->toArray();
+                    foreach ($employees_password as $item) {
+                        $i++;
+                        if ($i > 2) {
+                            $dataUpdateBank = user::where('number_employee',$item[0])->first();
+                            if ($dataUpdateBank) {
+                                    /** block Bank Infor */
+                                    $dataUpdateBank['bank_name']             = $item[2];
+                                    $dataUpdateBank['account_name']          = $item[3];
+                                    $dataUpdateBank['account_number']        = $item[4];
+                                    $dataUpdateBank['updated_by']            = Auth::user()->id;
+                                    $dataUpdateBank->save();
                             }
                         }
                     }
