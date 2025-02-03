@@ -37,39 +37,51 @@ class LeavesEmployeeController extends Controller
         }
         $dataLeaveType = LeaveType::get();
         $LeaveAllocation = LeaveAllocation::where("employee_id", Auth::user()->id)->first();
-        $employees= DB::table('users')->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
-                if ($RolePermission == 'BM') {
-                    $query->where("branch_id", Auth::user()->branch_id);
-                    $query->whereNot("id", Auth::user()->id);
-                }else if($RolePermission == 'HOD'){
-                        $query->where("department_id", Auth::user()->department_id);
-                        $query->whereNot("id", Auth::user()->id);
-                }else if($RolePermission == 'Employee'){
-                    $query->where("id", Auth::user()->line_manager);
-                    $query->orWhere("line_manager", Auth::user()->line_manager);
-                    $query->where("department_id", Auth::user()->department_id);
-                    $query->where("branch_id", Auth::user()->branch_id);
-                    $query->whereNot("id", Auth::user()->id);
-                }else if($RolePermission == 'HR' || $RolePermission =="HRAdmin"){
-                    $query->where("department_id", Auth::user()->department_id);
-                    $query->whereNot("id", Auth::user()->id);
-                }
+        $employees= DB::table('users')
+        ->leftJoin('roles', 'users.role_id', '=', 'roles.id')
+        ->select( 'users.*', 'roles.role_type',)
+        ->whereIn('users.emp_status', ['Probation','1','2','10',])
+        ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+            if($RolePermission == 'Employee'){
+                $query->where("users.department_id", Auth::user()->department_id);
+                $query->where("users.branch_id", Auth::user()->branch_id);
+                $query->whereNot("users.id", Auth::user()->id);
+            }
+            if (in_array($RolePermission, ['BM','DBM'])){
+                $query->where("users.branch_id", Auth::user()->branch_id);
+                $query->whereNot("users.id", Auth::user()->id);
+            }
+            if (in_array($RolePermission, ['HR','HRAdmin','DHOD','HOD'])){
+                $query->where("users.department_id", Auth::user()->department_id);
+                $query->where("users.branch_id", Auth::user()->branch_id);
+                $query->whereNot("users.id", Auth::user()->id);
+            }
+            if (in_array($RolePermission, ['BOD','CEO'])){
+                $query->whereNot("users.id", Auth::user()->id);
+                $query->whereNot("roles.role_type", "Employee");
+            }
             })->get();
         $delegateEmployees= DB::table('users')
             ->leftJoin('roles', 'users.role_id', '=', 'roles.id')
             ->select( 'users.*', 'roles.role_type',)
+            ->whereIn('users.emp_status', ['Probation','1','2','10',])
             ->whereNot("roles.role_type", "Employee")
             ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
-                if ($RolePermission == 'BM') {
+                if (in_array($RolePermission, ['BM','DBM'])){
                     $query->where("users.branch_id", Auth::user()->branch_id);
                     $query->whereNot("users.id", Auth::user()->id);
-                }else if($RolePermission == 'HOD'){
+                }else if (in_array($RolePermission, ['HR','DHOD', 'HRAdmin', 'HOD'])){
                     $query->where("users.department_id", Auth::user()->department_id);
+                    $query->where("users.branch_id", Auth::user()->branch_id);
                     $query->whereNot("users.id", Auth::user()->id);
-                }else if($RolePermission == 'HR' || $RolePermission =="HRAdmin"){
-                    // $query->orWhere("users.line_manager", Auth::user()->id);
+                }else if($RolePermission == 'Employee'){
                     $query->where("users.department_id", Auth::user()->department_id);
+                    $query->where("users.branch_id", Auth::user()->branch_id);
                     $query->whereNot("users.id", Auth::user()->id);
+                }
+                if (in_array($RolePermission, ['BOD','CEO'])){
+                    $query->whereNot("users.id", Auth::user()->id);
+                    $query->whereNot("roles.role_type", "Employee");
                 }
             })->get();
         $dataLeaveRequest = LeaveRequest::with("leaveType")->where("employee_id", Auth::user()->id)->get();
@@ -81,44 +93,53 @@ class LeavesEmployeeController extends Controller
             return view('upgrade.access_page');
         }
         $dataLeaveType = LeaveType::get();
-        $employees= DB::table('users')->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
-                if ($RolePermission == 'BM') {
-                    // $query->where("id", Auth::user()->line_manager);
-                    $query->where("branch_id", Auth::user()->branch_id);
-                    $query->whereNot("id", Auth::user()->id);
-                }else if($RolePermission == 'HOD'){
-                    $query->where("department_id", Auth::user()->department_id);
-                    $query->whereNot("id", Auth::user()->id);
-                }else if($RolePermission == 'Employee'){
-                    // $query->where("id", Auth::user()->line_manager);
-                    $query->where("department_id", Auth::user()->department_id);
-                    $query->where("branch_id", Auth::user()->branch_id);
-                    $query->whereNot("id", Auth::user()->id);
-                }else if($RolePermission == 'HR' || $RolePermission =="HRAdmin"){
-                    $query->where("department_id", Auth::user()->department_id);
-                    $query->whereNot("id", Auth::user()->id);
-                }
-            })->get();
+        $employees= DB::table('users')
+        ->leftJoin('roles', 'users.role_id', '=', 'roles.id')
+        ->select( 'users.*', 'roles.role_type',)
+        ->whereIn('users.emp_status', ['Probation','1','2','10',])
+        ->whereNot("roles.role_type", "Employee")
+        ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+            if (in_array($RolePermission, ['BM','DBM'])){
+                $query->where("users.branch_id", Auth::user()->branch_id);
+            }
+            if($RolePermission == 'Employee'){
+                $query->where("users.department_id", Auth::user()->department_id);
+                $query->where("users.branch_id", Auth::user()->branch_id);
+            }
+            if (in_array($RolePermission, ['HR','DHOD', 'HRAdmin', 'HOD'])){
+                $query->where("users.department_id", Auth::user()->department_id);
+                $query->where("users.branch_id", Auth::user()->branch_id);
+            }
+            if (in_array($RolePermission, ['BOD','CEO'])){
+                $query->whereNot("users.id", Auth::user()->id);
+                $query->whereNot("roles.role_type", "Employee");
+            }
+        })->get();
         $delegateEmployees= DB::table('users')
             ->leftJoin('roles', 'users.role_id', '=', 'roles.id')
             ->select( 'users.*', 'roles.role_type',)
+            ->whereIn('users.emp_status', ['Probation','1','2','10',])
             ->whereNot("roles.role_type", "Employee")
             ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
-                if ($RolePermission == 'BM') {
+                if (in_array($RolePermission, ['BM','DBM'])){
                     $query->where("users.branch_id", Auth::user()->branch_id);
-                    $query->whereNot("users.id", Auth::user()->id);
-                }else if($RolePermission == 'HOD'){
+                    // $query->whereNot("users.id", Auth::user()->id);
+                }else if (in_array($RolePermission, ['HR','DHOD', 'HRAdmin', 'HOD'])){
                     $query->where("users.department_id", Auth::user()->department_id);
-                    $query->whereNot("users.id", Auth::user()->id);
-                }else if($RolePermission == 'HR' || $RolePermission =="HRAdmin"){
+                    $query->where("users.branch_id", Auth::user()->branch_id);
+                    // $query->whereNot("users.id", Auth::user()->id);
+                }else if($RolePermission == 'Employee'){
                     $query->where("users.department_id", Auth::user()->department_id);
+                    $query->where("users.branch_id", Auth::user()->branch_id);
+                    // $query->whereNot("users.id", Auth::user()->id);
+                }
+                if (in_array($RolePermission, ['BOD','CEO'])){
                     $query->whereNot("users.id", Auth::user()->id);
+                    $query->whereNot("roles.role_type", "Employee");
                 }
             })->get();
         $dataLeaveRequest = LeaveRequest::with("leaveType")->with("employee")->with("LeaveAllocation")->where("request_to", Auth::user()->id)->get();
         return view('leaves_employee.leave_replacement', compact('dataLeaveType', 'employees','delegateEmployees', 'dataLeaveRequest'));
-        
-     
     }
 
 
