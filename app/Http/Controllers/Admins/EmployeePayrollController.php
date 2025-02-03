@@ -135,7 +135,7 @@ class EmployeePayrollController extends Controller
         })
         ->when($yearLy, function ($query, $yearLy) {
             $query->whereYear('payment_date', $yearLy);
-        })->whereIn('users.emp_status',['Probation','1','10','2'])->get();
+        })->whereIn('users.emp_status',['Probation','1','10','2'])->orderBy('id','desc')->get();
         return response()->json([
             'success'=>$payroll,
         ]);
@@ -695,7 +695,8 @@ class EmployeePayrollController extends Controller
                         $currentDate = Carbon::createFromDate($request->payment_date)->format('m');
                         $PaymentOfMonth = Carbon::parse($request->payment_date)->format('M-Y');
                         if ($currentDate == 6 || $currentDate == 12) {
-                            $nextYear = Carbon::parse()->format('Y');
+                            // $nextYear = Carbon::parse()->format('Y');
+                            $nextYear = Carbon::createFromDate($request->payment_date)->format('Y');
                             $currentYear = null;
                             $currentMonth = null;
                             if($currentDate == 6){  
@@ -773,7 +774,7 @@ class EmployeePayrollController extends Controller
                             $age = Carbon::createFromDate($item->date_of_birth)->format('Y-m-d');
                             $yearsOfEmployee = Carbon::parse($age)->age;
                             if($yearsOfEmployee < 60){
-                                $workerContributionRiel = $workerContributionUsd / $exchangNSSF->amount_riel;
+                                $workerContributionRiel = round($workerContributionUsd,0) / $exchangNSSF->amount_riel;
                             }
                             $dataNSSF = PreviewNationalSocialSecurityFund::create([
                                 'employee_id'                   => $item->id,
@@ -781,11 +782,11 @@ class EmployeePayrollController extends Controller
                                 'total_pre_tax_salary_usd'      => round($totalGrossSalary,2),
                                 'total_pre_tax_salary_riel'     => $totalExchangeRielPreTax,
                                 'total_average_wage'            => $averageWage,
-                                'total_occupational_risk'       => round($occupationalRisk,-2),
-                                'total_health_care'             => $healthCare,
-                                'pension_contribution_usd'      => round($workerContributionUsd, -2),
+                                'total_occupational_risk'       => round($occupationalRisk,0),
+                                'total_health_care'             => round($healthCare,0),
+                                'pension_contribution_usd'      => round($workerContributionUsd,0),
                                 'pension_contribution_riel'     => $workerContributionRiel,
-                                'corporate_contribution'        => round($workerContributionUsd, -2),
+                                'corporate_contribution'        => round($workerContributionUsd,0),
                                 'exchange_rate'                 => $exchangNSSF->amount_riel,
                                 'payment_date'                  => $request->payment_date,
                                 'created_by'                    => Auth::user()->id,
