@@ -994,8 +994,9 @@ class UserController extends Controller
                         if ($i > 2) {
                             $dataUpdateEmployee = user::where('number_employee',$item[0])->first();
                             if ($dataUpdateEmployee) {
-                                    $dataUpdateEmployee['password']              = Hash::make($item[2]);
-                                    $dataUpdateEmployee['updated_by']            = Auth::user()->id;
+                                    $dataUpdateEmployee['password']             = Hash::make($item[2]);
+                                    $dataUpdateEmployee['p_status']             = 0;
+                                    $dataUpdateEmployee['updated_by']           = Auth::user()->id;
                                     $dataUpdateEmployee->save();
                             }
                         }
