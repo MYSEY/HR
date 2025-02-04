@@ -14,15 +14,17 @@ class SendEmail extends Mailable
     use Queueable, SerializesModels;
     
     public $mailData;
+    public $btn_approve;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($mailData)
+    public function __construct($mailData, $btn_approve)
     {
         $this->mailData = $mailData;
+        $this->btn_approve = $btn_approve;
     }
 
     /**
@@ -44,7 +46,8 @@ class SendEmail extends Mailable
     public function build()
     {
         $data = $this->mailData;
-        return $this->view('mail.mail-text',['data'=>$data]);
+        $btn_approve = $this->btn_approve;
+        return $this->view('mail.mail-text',['data'=>$data, 'btn_approve'=>$btn_approve]);
     }
 
     // /**
