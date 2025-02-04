@@ -41,7 +41,7 @@
                                         <td>{{$item->department ? $item->department->name_english : ""}}</td>
                                         <td>{{$item->branch ? $item->branch->branch_name_en : ""}}</td>
                                         <td>{{$item->subject}}</td>
-                                        <td>{{$item->message}}</td>
+                                        <td>{!! nl2br(e($item->message)) !!}</td>
                                         <td style="text-align: center;">
                                             <a class="btn btn-success update" data-toggle="modal" data-target="#edit_taxes"><i class="fa fa-edit"></i></a>
                                             {{-- <a class="btn btn-danger delete" href="#" data-toggle="modal" data-id="{{$item->id}}" data-target="#delete_taxes"><i class="fa fa-trash-o m-r-5"></i></a> --}}
