@@ -139,12 +139,12 @@
                                                     <td>{{\Carbon\Carbon::parse($leave->employee->date_of_commencement)->format('d-M-Y') ?? ''}}</td>
                                                     <td>{{$leave->default_annual_leave - $leave->total_annual_leave}}</td>
                                                     <td>{{$leave->total_annual_leave}}</td>
-                                                    <td>{{number_format($leave->default_sick_leave - $leave->total_sick_leave)}}</td>
-                                                    <td>{{number_format($leave->total_sick_leave)}}</td>
-                                                    <td>{{number_format($leave->default_special_leave -$leave->total_special_leave)}}</td>
-                                                    <td>{{number_format($leave->total_special_leave)}}</td>
-                                                    <td>{{number_format($leave->default_unpaid_leave - $leave->total_unpaid_leave)}}</td>
-                                                    <td>{{number_format($leave->total_unpaid_leave)}}</td>
+                                                    <td>{{$leave->default_sick_leave - $leave->total_sick_leave}}</td>
+                                                    <td>{{$leave->total_sick_leave}}</td>
+                                                    <td>{{$leave->default_special_leave -$leave->total_special_leave}}</td>
+                                                    <td>{{$leave->total_special_leave}}</td>
+                                                    <td>{{$leave->default_unpaid_leave - $leave->total_unpaid_leave}}</td>
+                                                    <td>{{$leave->total_unpaid_leave}}</td>
                                                     <td>{{$leave->year_1 ? $leave->year_1 : 0}}</td>
                                                     <td>{{$leave->year_2 ? $leave->year_2 : 0}}</td>
                                                     <td>{{$leave->year_3 ? $leave->year_3 : 0}}</td>
