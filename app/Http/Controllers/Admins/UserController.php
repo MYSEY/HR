@@ -1020,6 +1020,24 @@ class UserController extends Controller
                         }
                     }
                 }
+                // Update information salary
+                if ($sheetName == "Employee_information_salaries") {
+                    $i = 0;
+                    $employees_salaries =  $spreadsheet->getSheetByName($sheetName)->toArray();
+                    foreach ($employees_salaries as $item) {
+                        $i++;
+                        if ($i > 2) {
+                            $dataUpdateSalary = user::where('number_employee',$item[0])->first();
+                            if ($dataUpdateSalary) {
+                                    /** block Salary */
+                                    $dataUpdateSalary['basic_salary']          = ($item[2] ? $item[2] : $dataUpdateSalary->basic_salary);
+                                    $dataUpdateSalary['salary_increas']        = ($item[3] ? $item[3] : $dataUpdateSalary->salary_increas);
+                                    $dataUpdateSalary['updated_by']            = Auth::user()->id;
+                                    $dataUpdateSalary->save();
+                            }
+                        }
+                    }
+                }
             }
             return 1;
         } else {

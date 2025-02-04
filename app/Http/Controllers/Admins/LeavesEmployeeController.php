@@ -375,24 +375,46 @@ class LeavesEmployeeController extends Controller
             LeaveRequest::create($data);
             
             // for send email
-           
-            // $manager1 = User::where("id", Auth::user()->line_manager)->first();
-            // $line_manager2 = User::where("id", $data['next_approver'])->first();
+            $manager1 = User::where("id", Auth::user()->line_manager)->first();
+            $line_manager2 = User::where("id", $data['next_approver'])->first();
+            $staff_request = User::where("id", Auth::user()->id)->with("position")->with("branch")->first();
 
-            // $mail_message = ModelsMail::first();
-            // if ($line_manager2 && $mail_message) {
-            //     if ($line_manager2->email) {
-            //         $recipients = [$manager1->email, $line_manager2->email];
-            //         // $recipients = ["mysey1994@gmail.com", "hshong9666@gmail.com"];
-            //         if ($manager1->email != $line_manager2->email) {
-            //             foreach ($recipients as $email) {
-            //                 Mail::to($email)->send(new SendEmail($mail_message));
-            //             }
-            //         }else{
-            //             Mail::to($line_manager2->email)->send(new SendEmail($mail_message));
-            //         }
-            //     }
-            // }
+            $mail_message = ModelsMail::first();
+            if ($line_manager2 && $mail_message) {
+                if ($line_manager2->email) {
+                    $datasSendEmail['mail_message'] = $mail_message;
+                    $datasSendEmail['staff_request'] = $staff_request;
+                    // $datasSendEmail = [
+                    //     "mail_message"=> $mail_message,
+                    //     "staff_request"=> $staff_request
+                    // ];
+                    if ($manager1) {
+                        $recipients = [$manager1->email, $line_manager2->email];
+                        if ($manager1->email != $line_manager2->email) {
+                            foreach ($recipients as $email) {
+                                $btn_approve = false;
+                                if($email != $manager1->email){
+                                    $btn_approve = true;
+                                }
+                                Mail::to($email)->send(new SendEmail($datasSendEmail, $btn_approve));
+                            }
+                        }else{
+                            Mail::to($line_manager2->email)->send(new SendEmail($datasSendEmail, true));
+                        }
+                    }else{
+                        Mail::to($line_manager2->email)->send(new SendEmail($datasSendEmail,true));
+                    }
+
+                    // if ($manager1->email != $line_manager2->email) {
+                    //     foreach ($recipients as $email) {
+                    //         Mail::to($email)->send(new SendEmail($datasSendEmail));
+                    //     }
+                    // }else{
+                    //     Mail::to($line_manager2->email)->send(new SendEmail($datasSendEmail));
+                    // }
+
+                }
+            }
             DB::commit();
             return response()->json([
                 'success'=>'leave_request_created_successfully',
@@ -533,15 +555,34 @@ class LeavesEmployeeController extends Controller
             $data['request_to'] = Auth::user()->id;
             
             LeaveRequest::create($data);
+
+            $staff_request = User::where("id", $request->employee_id)->with("position")->with("branch")->first();
+            $manager1 = User::where("id", $staff_request->line_manager)->first();
+            $line_manager2 = User::where("id", $data['next_approver'])->first();
             
-            // for send email
-            // $line_manager = User::where("id", $data['next_approver'])->first();
-            // $mail_message = ModelsMail::first();
-            // if ($line_manager && $mail_message) {
-            //     if ($line_manager->email) {
-            //         Mail::to($line_manager->email)->send(new SendEmail($mail_message));
-            //     }
-            // }
+            $mail_message = ModelsMail::first();
+            if ($line_manager2 && $mail_message) {
+                if ($line_manager2->email) {
+                    $datasSendEmail['mail_message'] = $mail_message;
+                    $datasSendEmail['staff_request'] = $staff_request;
+                    if ($manager1) {
+                        $recipients = [$manager1->email, $line_manager2->email];
+                        if ($manager1->email != $line_manager2->email) {
+                            foreach ($recipients as $email) {
+                                $btn_approve = false;
+                                if($email != $manager1->email){
+                                    $btn_approve = true;
+                                }
+                                Mail::to($email)->send(new SendEmail($datasSendEmail, $btn_approve));
+                            }
+                        }else{
+                            Mail::to($line_manager2->email)->send(new SendEmail($datasSendEmail, true));
+                        }
+                    }else{
+                        Mail::to($line_manager2->email)->send(new SendEmail($datasSendEmail,true));
+                    }
+                }
+            }
             DB::commit();
             return response()->json([
                 'success'=>'leave_request_created_successfully',

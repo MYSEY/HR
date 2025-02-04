@@ -15,7 +15,8 @@
                 <p class="text-danger">4, Experience Informations</p>
                 <p class="text-danger">5, Children Informations</p>
                 <p class="text-danger">6, Change Password</p>
-                <p class="text-danger">6, Update information Banks</p>
+                <p class="text-danger">7, Update information Banks</p>
+                <p class="text-danger">8, Update information salary</p>
                 <h4 class="card-title mb-0">@lang('lang.import_excel_/_XLS_XLSX_or_CSV')</h4>
                 <div class="card">
                     <div class="card-body">
