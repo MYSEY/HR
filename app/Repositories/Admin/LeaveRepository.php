@@ -44,7 +44,7 @@ class LeaveRepository extends BaseRepository
             'users.employee_name_en',
             'users.employee_name_kh',
         )
-        ->where("leave_requests.status", "approved")
+        ->whereIn("leave_requests.status", ["approved", "approved_hod"])
         ->when($request->employee_id, function ($query, $employee_id) {
             $query->where('users.number_employee', 'LIKE', '%'.$employee_id.'%');
         })
