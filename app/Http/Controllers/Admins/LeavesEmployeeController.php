@@ -54,6 +54,7 @@ class LeavesEmployeeController extends Controller
             if (in_array($RolePermission, ['HR','HRAdmin','DHOD','HOD'])){
                 $query->where("users.department_id", Auth::user()->department_id);
                 $query->where("users.branch_id", Auth::user()->branch_id);
+                $query->orWhere("users.line_manager", Auth::user()->id);
                 $query->whereNot("users.id", Auth::user()->id);
             }
             if (in_array($RolePermission, ['BOD','CEO'])){
@@ -73,6 +74,7 @@ class LeavesEmployeeController extends Controller
                 }else if (in_array($RolePermission, ['HR','DHOD', 'HRAdmin', 'HOD'])){
                     $query->where("users.department_id", Auth::user()->department_id);
                     $query->where("users.branch_id", Auth::user()->branch_id);
+                    $query->orWhere("users.line_manager", Auth::user()->id);
                     $query->whereNot("users.id", Auth::user()->id);
                 }else if($RolePermission == 'Employee'){
                     $query->where("users.department_id", Auth::user()->department_id);
@@ -109,6 +111,7 @@ class LeavesEmployeeController extends Controller
             if (in_array($RolePermission, ['HR','DHOD', 'HRAdmin', 'HOD'])){
                 $query->where("users.department_id", Auth::user()->department_id);
                 $query->where("users.branch_id", Auth::user()->branch_id);
+                $query->orWhere("users.line_manager", Auth::user()->id);
             }
             if (in_array($RolePermission, ['BOD','CEO'])){
                 $query->whereNot("users.id", Auth::user()->id);
@@ -127,7 +130,7 @@ class LeavesEmployeeController extends Controller
                 }else if (in_array($RolePermission, ['HR','DHOD', 'HRAdmin', 'HOD'])){
                     $query->where("users.department_id", Auth::user()->department_id);
                     $query->where("users.branch_id", Auth::user()->branch_id);
-                    // $query->whereNot("users.id", Auth::user()->id);
+                    $query->orWhere("users.line_manager", Auth::user()->id);
                 }else if($RolePermission == 'Employee'){
                     $query->where("users.department_id", Auth::user()->department_id);
                     $query->where("users.branch_id", Auth::user()->branch_id);
