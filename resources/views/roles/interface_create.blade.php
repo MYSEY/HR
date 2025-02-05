@@ -167,11 +167,11 @@
                                 <label class="container-checkbox">@lang('lang.cancel')
                                     <input type="checkbox" class="employee_checkbox all_employee_checkbox" id="employee_cancel" name="employee_cancel"> <span class="checkmark"></span>
                                 </label>
-                            </div>
-                            <div class="col-md-3">
                                 <label class="container-checkbox">@lang('lang.print')
                                     <input type="checkbox" class="employee_checkbox all_employee_checkbox" id="employee_print" name="employee_print"> <span class="checkmark"></span>
                                 </label>
+                            </div>
+                            <div class="col-md-3">
                                 <label class="container-checkbox">@lang('lang.export')
                                     <input type="checkbox" class="employee_checkbox all_employee_checkbox" id="employee_export" name="employee_export"> <span class="checkmark"></span>
                                 </label>
@@ -180,6 +180,9 @@
                                 </label>
                                 <label class="container-checkbox">@lang('lang.view_salary_staff')
                                     <input type="checkbox" class="employee_checkbox all_employee_checkbox" id="employee_view_salary_staff" name="employee_view_salary_staff"> <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.HR_review_all_staff')
+                                    <input type="checkbox" class="employee_checkbox all_employee_checkbox" id="employee_view_access" > <span class="checkmark"></span>
                                 </label>
                             </div>
                         </div>
@@ -236,6 +239,9 @@
                                 </label>
                                 <label class="container-checkbox">@lang('lang.export')
                                     <input type="checkbox" class="leave_checkbox leaves_admin_checkbox" id="leaves_admin_export" name="leaves_admin_export"> <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.HR_review_all_leave')
+                                    <input type="checkbox" class="leave_checkbox leaves_admin_checkbox" id="leaves_admin_access" name="leaves_admin_export"> <span class="checkmark"></span>
                                 </label>
                             </div>
                         </div>
@@ -337,6 +343,10 @@
                                 </label>
                                 <label class="container-checkbox">@lang('lang.export')
                                     <input type="checkbox" class="leave_checkbox leave_report_checkbox" id="leave_report_export" name="report_leave_check_export"> <span class="checkmark"></span>
+                                </label>
+
+                                <label class="container-checkbox">@lang('lang.HR_review_all_leave')
+                                    <input type="checkbox" class="leave_checkbox leave_report_checkbox" id="leave_report_access"> <span class="checkmark"></span>
                                 </label>
                             </div>
                         </div>

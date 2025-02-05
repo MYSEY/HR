@@ -572,6 +572,10 @@
             $("#btn-text-loading").css('display', 'block');
             var condistion = $(this).data("condiction"); 
             var userId = $(this).data("userid");
+
+            let is_approve = "{{ Helper::permissionAccess('m10-s1','is_approve') }}";
+            let is_reject = "{{ Helper::permissionAccess('m10-s1','is_reject') }}";
+
             axios.post('{{ URL('leaves/admin/filter') }}', {
                 'condiction_tab': condiction_tab,
                 'employee_name': $("#employee_name").val(),
@@ -585,7 +589,7 @@
                         var td_allocation = "";
                     
                         $(Leave_allocations).each(function (e, row) {
-                            if (condistion == "HR" || condistion == "HRAdmin") {
+                            if (condistion == "HRAdmin") {
                                 td_allocation = '<td>'+(row.employee.department.name_english)+'</td><td>'+(row.employee.branch.branch_name_en)+'</td>';             
                             }
                             tr_allocation += '<tr class="odd">'+
@@ -608,7 +612,7 @@
                         });
 
                     }else{
-                        var tr_allocation = '<tr><td colspan=10 align="center">ពុំមានទិន្នន័យសម្រាប់បង្ហាញ</td></tr>';
+                        var tr_allocation = '<tr><td colspan=14 align="center">ពុំមានទិន្នន័យសម្រាប់បង្ហាញ</td></tr>';
                     }
                     $("#leave_allocations tbody").html(tr_allocation);
                 }else{
@@ -622,26 +626,32 @@
                         $(rows).each(function(e, row) {
                             let start_date = moment(row.start_date).format('D-MMM-YYYY');
                             let end_date = moment(row.end_date).format('D-MMM-YYYY');
-                            if (row.status == "pending" || row.status == "approved_lm" || row.status == "approved_hod") {
-                                candistion = '<button class="btn btn-outline-secondary btn-sm btn-approved" data-id="'+(row.id)+'"'+  
-                                    'data-linemanager="'+(row.employee.line_manager)+'"'+
-                                    'data-status="'+(row.status)+'"'+
-                                    'data-approveby="'+(row.next_approver)+'"'+
-                                    'data-employeename="'+(row.employee.employee_name_en)+'"'+
-                                    'data-startdate="'+(row.start_date)+'"'+
-                                    'data-enddate="'+(row.end_date)+'"'+
-                                    'data-starthalfday="'+(row.start_half_day)+'"'+
-                                    'data-endhalfday="'+(row.end_half_day)+'"'+
-                                    'data-reason="'+(row.reason)+'"'+
-                                '>@lang("lang.approve") / @lang("lang.reject")</button>';
-                            };
+                            if (is_approve == 1 || is_reject == 1) {
+                                if (row.status == "pending" || row.status == "approved_lm" || row.status == "approved_hod") {
+                                    candistion = '<button class="btn btn-outline-secondary btn-sm btn-approved" data-id="'+(row.id)+'"'+  
+                                        'data-linemanager="'+(row.employee.line_manager)+'"'+
+                                        'data-status="'+(row.status)+'"'+
+                                        'data-approveby="'+(row.next_approver)+'"'+
+                                        'data-employeename="'+(row.employee.employee_name_en)+'"'+
+                                        'data-startdate="'+(row.start_date)+'"'+
+                                        'data-enddate="'+(row.end_date)+'"'+
+                                        'data-starthalfday="'+(row.start_half_day)+'"'+
+                                        'data-endhalfday="'+(row.end_half_day)+'"'+
+                                        'data-reason="'+(row.reason)+'"'+
+                                    '>@lang("lang.approve") / @lang("lang.reject")</button>';
+                                };
+                            }
                             if (condiction_tab == 2) {
-                                
-                                if(row.next_approver == userId){
-                                    candistion = '<button class="btn btn-outline-danger btn-sm btn-cancel" data-id="'+(row.id)+'">@lang("lang.approve") @lang("lang.cancel")</button>';
+                                if (is_approve == 1 || is_reject == 1) {
+                                    if(row.next_approver == userId){
+                                        candistion = '<button class="btn btn-outline-danger btn-sm btn-cancel" data-id="'+(row.id)+'">@lang("lang.approve") @lang("lang.cancel")</button>';
+                                    }else{
+                                        candistion = "";
+                                    }
                                 }else{
                                     candistion = "";
                                 }
+                                
                                 if (row.status == "cancel_hod") {
                                     status = '<span class="badge bg-inverse-danger" style="font-size: 13px;">Cancel</span>'; 
                                 }
@@ -663,11 +673,12 @@
                             }else if (row.status == "approved_lm" || row.status == "pending"){
                                 status = '<span class="badge bg-inverse-info" style="font-size: 13px;">Waiting Approve by ACEO/Head/BM</span>';
                             }else if (row.status == "approved_hod"){
-                                status = '<span class="badge bg-inverse-info" style="font-size: 13px;">Waiting Verify by HR</span>';
+                                status = '<span class="badge bg-inverse-success" style="font-size: 13px;">Approved</span>';
+                                // status = '<span class="badge bg-inverse-info" style="font-size: 13px;">Waiting Verify by HR</span>';
                             }else if(row.status == "approved"){
                                 status = '<span class="badge bg-inverse-success" style="font-size: 13px;">Approved</span>';
                             };
-                            if (condistion == "HR" || condistion == "HRAdmin") {
+                            if (condistion == "HRAdmin") {
                                 ckeckbox = '<td class="stuck-scroll-3">'+
                                     '<input type="checkbox" class="sub_chk" data-id="'+(row.id)+'" data-status="'+(row.status)+'">'+
                                 '</td>';

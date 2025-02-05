@@ -43,8 +43,34 @@ class LeaveRepository extends BaseRepository
             'users.number_employee',
             'users.employee_name_en',
             'users.employee_name_kh',
+            'users.department_id',
+            'users.branch_id',
+            'users.line_manager',
         )
         ->whereIn("leave_requests.status", ["approved", "approved_hod"])
+        ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+            if($RolePermission == 'Employee'){
+                $query->whereNot("users.id", Auth::user()->id);
+            }
+            if (in_array($RolePermission, ['BM'])){
+                $query->where("users.branch_id", Auth::user()->branch_id);
+            }
+            if (in_array($RolePermission, ['HR'])){
+                if(permissionAccess("m10-s3","is_access")->value == "1"){
+                    $query->whereIn("leave_requests.status", ["approved", "approved_hod"]);
+                }else{
+                    $query->where("users.line_manager", Auth::user()->id);
+                }
+            }
+            if (in_array($RolePermission, ['DHOD','DBM'])){
+                $query->where("users.line_manager", Auth::user()->id);
+            }
+            if (in_array($RolePermission, ['HOD'])){
+                $query->where("users.department_id", Auth::user()->department_id);
+                $query->orWhere("users.line_manager", Auth::user()->id);
+            }
+        }) 
+
         ->when($request->employee_id, function ($query, $employee_id) {
             $query->where('users.number_employee', 'LIKE', '%'.$employee_id.'%');
         })
