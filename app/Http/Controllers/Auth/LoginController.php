@@ -72,63 +72,69 @@ class LoginController extends Controller
             Activity::all()->last();
             $user = User::where("number_employee",$request->number_employee)->first();
             if ($user) {
-            if($user->status == "Active"){
-                if ($user->p_status == 0) {
-                    if (!Hash::check($request->password, $user->password)) {
-                        return response()->json([
-                            'message' => "Wrong employee ID or password",
-                            'status'=>"error"
-                        ]);
-                    }else{
-                        return response()->json([
-                            'message' => "Login successfully",
-                            'status'=>"success",
-                            'role' => null
-                        ]);
-                    }
-                }else{
-                    Activity::all()->last();
-                    $number_employee    = $request->number_employee;
-                    $password           = $request->password;
-                    if (Auth::attempt(['number_employee' => $number_employee, 'password' => $password])) {
-                        if (Auth::user()->status == 'Active') {
+                if ($user->role_id == "" || $user->role_id == null) {
+                    return response()->json([
+                        'message' => "You don't have permission to view this page",
+                        'status'=>"error"
+                    ]);
+                }
+                if($user->status == "Active"){
+                    if ($user->p_status == 0) {
+                        if (!Hash::check($request->password, $user->password)) {
+                            return response()->json([
+                                'message' => "Wrong employee ID or password",
+                                'status'=>"error"
+                            ]);
+                        }else{
                             return response()->json([
                                 'message' => "Login successfully",
                                 'status'=>"success",
-                                'role' => Auth::user()->RolePermission
+                                'role' => null
                             ]);
-                        } else {
-                            // User status is not active
-                            Auth::logout();
+                        }
+                    }else{
+                        Activity::all()->last();
+                        $number_employee    = $request->number_employee;
+                        $password           = $request->password;
+                        if (Auth::attempt(['number_employee' => $number_employee, 'password' => $password])) {
+                            if (Auth::user()->status == 'Active') {
+                                return response()->json([
+                                    'message' => "Login successfully",
+                                    'status'=>"success",
+                                    'role' => Auth::user()->RolePermission
+                                ]);
+                            } else {
+                                // User status is not active
+                                Auth::logout();
+                                return response()->json([
+                                    'message' => "Your account is not active. Please contact support",
+                                    'status'=>"error"
+                                ]);
+                            }
+                        }else {
                             return response()->json([
-                                'message' => "Your account is not active. Please contact support",
+                                'message' => "Wrong Employee ID Or Password",
                                 'status'=>"error"
                             ]);
                         }
-                    }else {
-                        return response()->json([
-                            'message' => "Wrong Employee ID Or Password",
-                            'status'=>"error"
-                        ]);
                     }
+                }else{
+                    return response()->json([
+                        'message' => "Your account is not active. Please contact support",
+                        'status'=>"error"
+                    ]);
                 }
-            }else{
+            }else {
                 return response()->json([
-                    'message' => "Your account is not active. Please contact support",
+                    'message' => "Wrong employee ID or password. Please contact support",
                     'status'=>"error"
                 ]);
             }
-        }else {
-            return response()->json([
-                'message' => "Wrong employee ID or password. Please contact support",
-                'status'=>"error"
-            ]);
-        }
-    }catch(\Exception $e){
-        DB::rollback();
-        Toastr::error('Login fail','Error');
-        return redirect()->back();
-    } 
+        }catch(\Exception $e){
+            DB::rollback();
+            Toastr::error('Login fail','Error');
+            return redirect()->back();
+        } 
     }
 
     public function changePassword(Request $request)

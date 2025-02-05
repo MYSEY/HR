@@ -35,26 +35,35 @@
                         <input type="text" class="form-control" name="employee_name" id="employee_name" placeholder="@lang('lang.employee_name')" value="{{old('employee_name')}}">
                     </div>
                 </div>
-                <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
-                    <div class="form-group leave-disply-search">
-                        <select class="select form-control" id="department_id" data-select2-id="select2-data-2-c0n3" name="department_id">
-                            <option value="" data-select2-id="select2-data-2-c0n3">@lang('lang.all_department')</option>
-                            @foreach ($department as $item)
-                                <option value="{{$item->id}}">{{$item->name_english}}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
-                <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
-                    <div class="form-group leave-disply-search">
-                        <select class="select form-control" id="branch_id" data-select2-id="select2-data-2-c0n2" name="branch_id">
-                            <option value="" data-select2-id="select2-data-2-c0n2">@lang('lang.all_location')</option>
-                            @foreach ($location as $item)
-                                <option value="{{$item->id}}">{{$item->branch_name_en}}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
+                @if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'HR' || Auth::user()->RolePermission == 'HRAdmin' || Auth::user()->RolePermission == 'developer')
+                   @if (permissionAccess("m10-s3","is_access")->value == "1")
+                        <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                            <div class="form-group leave-disply-search">
+                                <select class="select form-control" id="department_id" data-select2-id="select2-data-2-c0n3" name="department_id">
+                                    <option value="" data-select2-id="select2-data-2-c0n3">@lang('lang.all_department')</option>
+                                    @foreach ($department as $item)
+                                        <option value="{{$item->id}}">{{$item->name_english}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                            <div class="form-group leave-disply-search">
+                                <select class="select form-control" id="branch_id" data-select2-id="select2-data-2-c0n2" name="branch_id">
+                                    <option value="" data-select2-id="select2-data-2-c0n2">@lang('lang.all_location')</option>
+                                    @foreach ($location as $item)
+                                        <option value="{{$item->id}}">{{$item->branch_name_en}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    @else
+                        <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6"></div>
+                   @endif 
+                @else
+                        <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6"></div>
+                @endif
+                
                 <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3 filter-btn">
                     <div style="display: flex" class="float-end">
                         <button class="btn btn-sm btn-outline-secondary btn-search me-2" data-dismiss="modal" id="icon-search-download-reload">

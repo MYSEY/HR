@@ -98,8 +98,7 @@ class EmployeeRepository extends BaseRepository
                             $query->where('emp_status', $emp_status);
                         }
                     }
-                    if (in_array(Auth::user()->RolePermission, ['HR','DHOD','DBM'])){
-                    // if (Auth::user()->RolePermission == 'HR' || Auth::user()->RolePermission == 'DHOD' || Auth::user()->RolePermission == 'DBM') {
+                    if (in_array(Auth::user()->RolePermission, ['HR','DHOD','DBM']) && permissionAccess("m2-s1","is_access")->value != "1"){
                         if ($emp_status == "resign_reason") {
                             $query->where("line_manager", Auth::user()->id);
                             $query->with("resignStatus");
@@ -122,8 +121,17 @@ class EmployeeRepository extends BaseRepository
                             }
                         }
                     }
+                    if (Auth::user()->RolePermission == 'HR' && permissionAccess("m2-s1","is_access")->value == "1"){
+                        if ($emp_status == "resign_reason") {
+                            $query->with("resignStatus");
+                            $query->whereNotIn('emp_status',['1','2','10','Probation','Upcoming','Cancel']); 
+                        }else if($emp_status == "FDC"){
+                            $query->whereIn('emp_status', ['1','10']);
+                        }else{
+                            $query->where('emp_status', $emp_status);
+                        }
+                    }
                     if (in_array(Auth::user()->RolePermission, ['admin','HRAdmin','developer','BOD','CEO'])){
-                    // if (Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'HRAdmin' || Auth::user()->RolePermission == 'developer' || Auth::user()->RolePermission == 'BOD' || Auth::user()->RolePermission == 'CEO') {
                         if ($emp_status == "resign_reason") {
                             $query->with("resignStatus");
                             $query->whereNotIn('emp_status',['1','2','10','Probation','Upcoming','Cancel']); 

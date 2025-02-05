@@ -79,28 +79,34 @@ class LeavesAdminController extends Controller
 
         $dataLeaveRequest = LeaveRequest::with("employee")->with("handover")->with("createdBy")->whereIn("status", ["approved_lm","approved_hod","pending"])
             ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
-                if($RolePermission == 'CEO' || $RolePermission == 'BOD' || $RolePermission == 'BM' || $RolePermission == 'HOD'){
+                if(in_array($RolePermission, ['BOD', 'CEO','HOD', 'DHOD', 'BM', 'DBM', 'Employee'])){
                     $query->where("next_approver", Auth::user()->id);
-                    // $query->orWhere("line_manager_id", Auth::user()->id);
-                }else if ($RolePermission == 'HR' ||  $RolePermission == 'DHOD' || $RolePermission == 'DBM' || $RolePermission == 'Employee') {
-                    $query->where("next_approver", Auth::user()->id);
-                }else if($RolePermission =="HRAdmin"){
+                }else if ($RolePermission == 'HR') {
+                    if(permissionAccess("m10-s1","is_access")->value == "1"){
+                        $query->whereNot("status", "approved");
+                    }else{
+                        $query->where("next_approver", Auth::user()->id);
+                    }
+                }else if(in_array($RolePermission, ['HRAdmin', 'admin','developer'])){
                     $query->whereNot("status", "approved");
                 }
             })->orderBy('id', 'DESC')->get();
         $requestCancels = LeaveRequest::with("employee")->with("handover")
             ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
-                if($RolePermission == 'CEO' || $RolePermission == 'BOD' || $RolePermission == 'BM' || $RolePermission == 'HOD'){
+                if(in_array($RolePermission, ['BOD', 'CEO','HOD', 'DHOD', 'BM', 'DBM', 'Employee'])){
                     $query->where("status", "pending_cancel");
                     $query->where("next_approver", Auth::user()->id);
-                }else if ($RolePermission == 'HR' ||  $RolePermission == 'DHOD' || $RolePermission == 'DBM' || $RolePermission == 'Employee') {
-                    $query->where("status", "pending_cancel");
-                    $query->where("next_approver", Auth::user()->id);
-                }else if($RolePermission =="HRAdmin"){
-                    $query->whereIn("status", ["cancel_hod", "pending_cancel"]);
+                }else if ($RolePermission == 'HR') {
+                    if(permissionAccess("m10-s1","is_access")->value == "1"){
+                        $query->where("status", "pending_cancel");
+                    }else{
+                        $query->where("status", "pending_cancel");
+                        $query->where("next_approver", Auth::user()->id);
+                    }
+                }else if(in_array($RolePermission, ['HRAdmin', 'admin','developer'])){
+                    $query->whereIn("status", ["cancel_hod","cancel","pending_cancel"]);
                 }
             })->orderBy('id', 'DESC')->get();
-        // dd($dataLeaveRequest);
         return view('leaves_admin.index', compact('location', 'department', 'LeaveAllocation', 'dataLeaveRequest', 'requestCancels'));
     }
 
@@ -184,25 +190,30 @@ class LeavesAdminController extends Controller
                 'users.profile',
             )
             ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
-                if($RolePermission == 'CEO' || $RolePermission == 'BOD' || $RolePermission == 'BM' || $RolePermission == 'HOD'){
+                if(in_array($RolePermission, ['BOD', 'CEO','HOD', 'DHOD', 'BM', 'DBM', 'Employee'])){
                     $query->where("leave_requests.next_approver", Auth::user()->id);
-                    // $query->orWhere("line_manager_id", Auth::user()->id);
-                }else if($RolePermission == 'HR' || $RolePermission =="HRAdmin"){
-                    $query->whereNot("leave_requests.status", "approved");
+                }else if(in_array($RolePermission, ['HR', 'HRAdmin'])){
+                    if ($RolePermission == "HR") {
+                        if(permissionAccess("m10-s1","is_access")->value == "1"){
+                            $query->whereNot("leave_requests.status", "approved");
+                        }else{
+                            $query->where("leave_requests.next_approver", Auth::user()->id);
+                        }
+                    }else{
+                        $query->whereNot("leave_requests.status", "approved");
+                    }
                 }
             })
             ->when($request->condiction_tab, function ($query, $condiction_tab) {
                 if ($condiction_tab == 1) {
                     $query->whereIn("leave_requests.status", ["approved_lm","approved_hod","pending"]);
                 }else{
-                   
-                    if (Auth::user()->RolePermission  =="HRAdmin") {
-                        $query->whereIn('leave_requests.status', ["cancel_hod", "pending_cancel"]);
+                    if(in_array(Auth::user()->RolePermission, ['HRAdmin', 'HR', 'admin','developer'])){
+                        $query->whereIn('leave_requests.status', ["cancel_hod", "cancel", "pending_cancel"]);
                     }else{
                         $query->where('leave_requests.status', "pending_cancel");
                         $query->where("leave_requests.next_approver", Auth::user()->id);
                     }
-                    
                 }
             })
             ->when($request->employee_id, function ($query, $employee_id) {

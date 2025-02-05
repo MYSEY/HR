@@ -96,6 +96,7 @@ var dataPermission = function () {
                     "is_export": $("#employee_export").val(),
                     "is_view_salary": $("#employee_view_salary").val(),
                     "is_view_salary_staff": $("#employee_view_salary_staff").val(),
+                    "is_access": $("#employee_view_access").val(),
                 }
             ]
         })
@@ -139,6 +140,7 @@ var dataPermission = function () {
                     "is_cancel": $("#leaves_admin_cancel").val(),
                     "is_print": $("#leaves_admin_print").val(),
                     "is_export": $("#leaves_admin_export").val(),
+                    "is_access": $("#leaves_admin_access").val(),
                 }
             ]
         })
@@ -197,6 +199,7 @@ var dataPermission = function () {
                     "is_view": $("#leave_report_view").val(),
                     "is_print": $("#leave_report_print").val(),
                     "is_export": $("#leave_report_export").val(),
+                    "is_access": $("#leave_report_access").val(),
                 }
             ]
         })
