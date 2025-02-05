@@ -381,13 +381,9 @@ class LeavesEmployeeController extends Controller
 
             $mail_message = ModelsMail::first();
             if ($line_manager2 && $mail_message) {
-                if ($line_manager2->email) {
+                if ($line_manager2) {
                     $datasSendEmail['mail_message'] = $mail_message;
                     $datasSendEmail['staff_request'] = $staff_request;
-                    // $datasSendEmail = [
-                    //     "mail_message"=> $mail_message,
-                    //     "staff_request"=> $staff_request
-                    // ];
                     if ($manager1) {
                         $recipients = [$manager1->email, $line_manager2->email];
                         if ($manager1->email != $line_manager2->email) {
@@ -404,14 +400,6 @@ class LeavesEmployeeController extends Controller
                     }else{
                         Mail::to($line_manager2->email)->send(new SendEmail($datasSendEmail,true));
                     }
-
-                    // if ($manager1->email != $line_manager2->email) {
-                    //     foreach ($recipients as $email) {
-                    //         Mail::to($email)->send(new SendEmail($datasSendEmail));
-                    //     }
-                    // }else{
-                    //     Mail::to($line_manager2->email)->send(new SendEmail($datasSendEmail));
-                    // }
 
                 }
             }
@@ -562,7 +550,7 @@ class LeavesEmployeeController extends Controller
             
             $mail_message = ModelsMail::first();
             if ($line_manager2 && $mail_message) {
-                if ($line_manager2->email) {
+                if ($line_manager2) {
                     $datasSendEmail['mail_message'] = $mail_message;
                     $datasSendEmail['staff_request'] = $staff_request;
                     if ($manager1) {
