@@ -320,7 +320,13 @@
                 { data: 'id', name: 'id' },
                 { data: 'employee_name_en', name: 'employee_name_en' },
                 { data: 'amount', name: 'amount' },
-                { data: 'adjustment_type', name: 'adjustment_type' },
+                { 
+                    data: 'adjustment_type', 
+                    name: 'adjustment_type',
+                    render: function(data, type, row) {
+                    return data === 'include_taxe' ? "Include Tax" : "Exclude Tax";
+                }
+                },
                 { data: 'adjustment_date', name: 'adjustment_date' },
                 { data: 'description', name: 'description' },
                 {
