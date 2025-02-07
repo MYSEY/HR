@@ -14,7 +14,7 @@
     {!! Toastr::message() !!}
     <div class="card">
         <div class="card-body">
-            <form action="" id="performanceForm" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
+            <form action="" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
                 @csrf
                 <div class="row">
                     <div class="col-md-4 hr-form-group-select2">
@@ -60,7 +60,7 @@
                                         <th>@lang('lang.action')</th>
                                     </tr>
                                 </thead>
-                                <tbody id="tbody1">
+                                <tbody>
                                     <div>
                                         <tr>
                                             <td colspan="2" class="text-center">
@@ -121,7 +121,7 @@
                 </div>
 
                 <div class="submit-section mb-2">
-                    <button type="submit" class="btn btn-primary submit-btn">
+                    <button type="submit" class="btn btn-primary" id="btnCreatePerformance">
                         <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i>
                             @lang('lang.loading') </span>
                         <span class="btn-txt">@lang('lang.submit')</span>
@@ -136,20 +136,22 @@
 <script src="{{ asset('/admin/js/validation-field.js') }}"></script>
 <script>
     $(function() {
+        let dataKeyKpi = [];
+
         // Event to add a new purpose
         $(document).on('click',".addNewPurpose",function() {
-            $("#tbody1").append(addPurposeRow());
+            $("#tbl_performance").append(addPurposeRow());
             // $(this).closest('tr').before(addPurposeRow());
         });
         $(document).on('click',".addMore", function() {
-            $("#tbody1").append(addMoreRow());
+            $("#tbl_performance").append(addMoreRow());
         });
 
         // Event to add a new record
         $(document).on('click', '.addRecord', function() {
             // Append a new record row to the last purpose section
             // $(this).closest('tr').before(addNewRecord());
-            $("#tbody1").append(addNewRecord());
+            $("#tbl_performance").append(addNewRecord());
         });
         // Event delegation for dynamically added Remove buttons in records
         $(document).on('click', '.removeRecord', function() {
@@ -190,13 +192,65 @@
         $(".weight").on('focusout',function(){
             $(this).css("border-color","#d8d2d2");
         });
-        $(document).on('submit', '#performanceForm', function(e) {
+        $(document).on('click', '#btnCreatePerformance', function(e) {
             e.preventDefault(); // Prevent the form from submitting the traditional way
 
+            // $('#tbl_performance tbody tr').each(function() {
+            //     let data = {
+            //         title: $(this).find('[name="title[]"]').val(),
+            //         purpose: $(this).find('[name="purpose[]"]').val(),
+            //         key_kpi: $(this).find('[name="key_kpi[]"]').val(),
+            //         action_plan: $(this).find('[name="action_plan[]"]').val(),
+            //         goal: $(this).find('[name="goal[]"]').val(),
+            //         weight: $(this).find('[name="weight[]"]').val(),
+            //     }
+            //     dataKeyKpi.push(data);
+            // });
+
+
+            let formData = {
+                employee_id: $("#employee_id").val(),
+                from_date: $("#from_date").val(),
+                to_date: $("#to_date").val(),
+                performanceDetail: []
+            };
+
+            // Iterate over each row (Each row represents a Title)
+            $('#tbl_performance tbody tr').each(function() {
+                let $row = $(this); // The current row
+                let title = $row.find('[name="title[]"]').val();
+                
+                let dataTitle = {
+                    title: title,
+                    dataPurpose: []
+                };
+
+                // Iterate over purpose[] inside this row
+                $row.find('[name="purpose[]"]').each(function() {
+                    let $purpose = $(this); // The current purpose input
+                    let $purposeRow = $purpose.closest('tr'); // Find the closest row (if nested)
+
+                    let purposeData = {
+                        purpose: $purpose.val(),
+                        key_kpi: $purposeRow.find('[name="key_kpi[]"]').val(),
+                        action_plan: $purposeRow.find('[name="action_plan[]"]').val(),
+                        goal: $purposeRow.find('[name="goal[]"]').val(),
+                        weight: $purposeRow.find('[name="weight[]"]').val()
+                    };
+                    dataTitle.dataPurpose.push(purposeData);
+                });
+
+                // Push to performanceDetail
+                formData.performanceDetail.push(dataTitle);
+            });
+
+            console.log(formData);
             $.ajax({
                 type: "POST",
                 url: "{{ url('performance/store') }}",
-                data: $(this).serialize(),
+                data: {
+                    data: JSON.stringify(formData),
+                },
                 dataType: "JSON",
                 success: function (response) {
                     alert('Form submitted successfully!');

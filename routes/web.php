@@ -244,6 +244,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('performance', [PerformanceController::class,'index']);
     Route::get('performance/create', [PerformanceController::class,'create']);
     Route::post('performance/store', [PerformanceController::class,'store']);
+    Route::get('performance/{id}', [PerformanceController::class,'show']);
 
     // Motor Rental
     Route::get('motor-rentel/list',[MotorRentelController::class,'index']);
@@ -272,9 +273,10 @@ Route::middleware(['auth:sanctum'])->group(function(){
     //Payroll Item
     Route::get('payroll/adjustment',[PayrollItemController::class,'index']);
     Route::post('payroll/adjustment/store',[PayrollItemController::class,'store']);
-    Route::get('payroll/adjustment/edit',[PayrollItemController::class,'edit']);
+    Route::get('payroll/adjustment/{id}/edit', [PayrollItemController::class, 'edit']);
     Route::post('payroll/adjustment/update',[PayrollItemController::class,'update']);
-    Route::post('payroll/adjustment/delete',[PayrollItemController::class,'destroy']);
+    Route::delete('payroll/adjustment/{id}',[PayrollItemController::class,'destroy']);
+    Route::post('payroll/adjustment/import',[PayrollItemController::class,'adjustmentImport']);
     // route province
     Route::get('province', [ProvinceController::class,'index']);
     Route::post('district', [ProvinceController::class,'showDistrict']);

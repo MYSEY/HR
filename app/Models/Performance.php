@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Title;
 use App\Models\Purpose;
+use App\Models\PerformanceDetail;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -15,21 +16,8 @@ class Performance extends Model
 
     protected $fillable = [
         'employee_id',
-        'number_employee',
-        'title_id',
-        'purpose_id',
-        'key_kpi',
-        'action_plan',
-        'goal',
-        'weight',
-        'score_achieved',
-        'score',
         'from_date',
         'to_date',
-        'score_live_staff',
-        'score_direct_chairman',
-        'easy_difficult_factors',
-        'comment',
         'total_weight',
         'total_score_achieved',
         'total_score',
@@ -46,5 +34,8 @@ class Performance extends Model
     }
     public function purpose(){
         return $this->belongsTo(Purpose::class,'purpose_id');
+    }
+    public function performanceDetail(){
+        return $this->hasMany(PerformanceDetail::class,'performance_id','id');
     }
 }

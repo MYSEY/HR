@@ -4,11 +4,13 @@ namespace App\Http\Controllers\Admins;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use App\Models\PayrollAdjustment;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Auth;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 use App\Http\Requests\AdjustmentRequest;
 
 class PayrollItemController extends Controller
@@ -18,16 +20,52 @@ class PayrollItemController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         if (permissionAccess("m4-s6","is_view")->value != "1") {
             return view('upgrade.access_page');
         }
-        $employee = User::all();
-        $data = PayrollAdjustment::orderBy('id','DESC')->get();
-        return view('payroll_item.index',compact('employee','data'));
-    }
+        $Monthly = null;
+        $yearLy = null;
+        if ($request->filter_month) {
+            $Monthly = Carbon::createFromDate($request->filter_month)->format('m');
+            $yearLy = Carbon::createFromDate($request->filter_month)->format('Y');
+        }
+        if (request()->ajax()) {
+            // Define the base query
+            $query = PayrollAdjustment::leftJoin('users', 'payroll_adjustments.employee_id', '=', 'users.id')
+            ->select(
+                'payroll_adjustments.*',
+                'users.employee_name_en',
+            )->where('payroll_adjustments.deleted_at', null);
+            $query->when($request->employee_name, function ($query, $employee_name) {
+                return $query->where('users.employee_name_en', $employee_name);
+            })
+            ->when($Monthly, function ($query, $Monthly) {
+                return $query->whereMonth('payroll_adjustments.adjustment_date', '=',$Monthly); 
+            })->when($yearLy, function ($query, $yearLy) {
+                return $query->whereYear('payroll_adjustments.adjustment_date', '=',$yearLy); 
+            });
 
+            // Fetch paginated data
+            $recordsTotal = PayrollAdjustment::where('id', $request->id)->count();
+            $recordsFiltered = $query->count();
+            // Apply pagination for the actual data retrieval
+            $start = intval($request->input('start', 0));
+            $limit = intval($request->input('length', 10));
+            $data = $query->orderBy('id', 'DESC')->offset($start)->limit($limit)->get();
+            // dd($data);
+            // Return JSON response
+            return response()->json([
+                'draw' => intval($request->input('draw')),  // Optional: for client-side tracking
+                'recordsTotal' => $recordsTotal,
+                'recordsFiltered' => $recordsFiltered,
+                'data' => $data
+            ]);
+        }
+        $employee = User::where('status','Active')->get();
+        return view('payroll_item.index',compact('employee'));
+    }
     /**
      * Show the form for creating a new resource.
      *
@@ -76,14 +114,18 @@ class PayrollItemController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Request $request)
+    public function edit($id)
     {
         $employee = User::whereIn('emp_status',['Probation','1','2','10'])->get();
-        $data = PayrollAdjustment::where('id',$request->id)->first();
+        $adjustment = PayrollAdjustment::find($id);
+        if (!$adjustment) {
+            return response()->json(['error' => 'Record not found'], 404);
+        }
         return response()->json([
-            'success'=>$data,
+            'success'=>$adjustment,
             'employee'=>$employee
         ]);
+        return response()->json($adjustment);
     }
 
     /**
@@ -119,16 +161,53 @@ class PayrollItemController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request)
+    public function destroy($id)
     {
         try{
-            PayrollAdjustment::destroy($request->id);
-            Toastr::success('Payroll Adjustments deleted successfully.','Success');
-            return redirect()->back();
+            $adjustment = PayrollAdjustment::find($id);
+            if (!$adjustment) {
+                return response()->json(['mg' => 'error', 'message' => 'Record not found'], 404);
+            }
+            $adjustment->delete();
+            return response()->json(['mg' => 'success']);
         }catch(\Exception $e){
-            DB::rollback();
-            Toastr::error('Payroll Adjustments delete fail.','Error');
-            return redirect()->back();
+            return response()->json(['error'=>$e->getMessage()]);
+        }
+    }
+
+    public function adjustmentImport(Request $request){
+        $file = $request->file;
+        $extension = $request->file->extension();
+        $spreadsheet = IOFactory::load($file);
+        $adjustmentFile =  $spreadsheet->getSheetByName('adjustment')->toArray();
+        if ($extension == "xlsx" || $extension == "xls" || $extension == "csv") {
+            $i = 0;
+            $dataArray = [];
+            $dataAdjustment = [];
+            foreach ($adjustmentFile as $item) {
+                $i++;
+                if ($i != 1) {
+                    $employee = User::where("number_employee", $item[0])->select('id','number_employee')->first();
+                    if($employee){
+                        PayrollAdjustment::firstOrCreate([
+                            'employee_id'   => $employee->id,
+                            'amount'    => $item[2] == null ? 0 : $item[2],
+                            'adjustment_date'   => Carbon::parse($item[3])->format('Y-m-d'),
+                            'adjustment_type'   => $item[4],
+                            'description'   => $item[5],
+                            'created_by'    => Auth::user()->id,
+                        ]);
+                    }else{
+                        $dataAdjustment[] = [$item[0]];
+                    }
+                }
+            }
+            if($dataArray){
+                return response()->json(['error'=>$dataArray]);
+            }
+            return 1;
+        } else {
+            return 0;
         }
     }
 }

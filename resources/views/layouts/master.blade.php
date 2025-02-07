@@ -95,6 +95,7 @@
     <meta name="keywords" content="admin, estimates, bootstrap, business, corporate, creative, management, minimal, modern, accounts, invoice, html5, responsive, CRM, Projects">
     <meta name="author" content="Dreamguys - Bootstrap Admin Template">
     <meta name="robots" content="noindex, nofollow">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Camma Microfinance Limited</title>
 
     <link rel="shortcut icon" type="image/x-icon" href="{{ asset('/admin/img/logo/favicon.ico') }}">
@@ -328,6 +329,13 @@
     {{-- <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script> --}}
     {{-- <script src="{{asset('/admin/js/MSelectDBox.min.js')}}"></script> --}}
     <div class="sidebar-overlay"></div>
+    <script>
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+    </script>
 </body>
 
 </html>

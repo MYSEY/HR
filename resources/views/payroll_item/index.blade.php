@@ -14,10 +14,34 @@
                     <div class="col-auto float-end ms-auto">
                         <a href="#" class="btn add-btn" data-bs-toggle="modal" data-bs-target="#Add_Adjustment"><i class="fa fa-plus"></i> @lang('lang.add_new')</a>
                     </div>
+                    <div class="col-auto float-end ms-auto">
+                        <a href="#" class="btn add-btn" data-toggle="modal" id="btnUpload"><i class="fa fa-plus"></i>@lang('lang.import')</a>
+                    </div>
                 @endif
             </div>
         </div>
         {!! Toastr::message() !!}
+
+        <div class="row filter-btn"> 
+            <div class="col-md-3">
+                <div class="form-group ">
+                    <input type="text" class="form-control" name="employee_name" id="employee_name" placeholder="@lang('lang.employee_name')" value="{{old('employee_name')}}">
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <input class="form-control" type="month" id="filter_month" name="filter_month">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div style="display: flex" class="float-end">
+                    <button type="button" class="btn btn-sm btn-outline-secondary btn-search me-2" data-dismiss="modal" id="icon-search-download-reload">
+                        <span class="btn-txt"><i class="fa fa-search"></i></span>
+                        <span class="loading-icon" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
+                    </button>
+                </div>
+            </div>
+        </div>
 
         <div class="row">
             <div class="col-md-12">
@@ -25,7 +49,7 @@
                     <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                         <div class="row">
                             <div class="col-sm-12">
-                                <table class="table table-striped custom-table mb-0 dataTable no-footer" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
+                                <table class="table table-striped" id="tbl_adjustment">
                                     <thead>
                                         <tr>
                                             <th>#</th>
@@ -39,7 +63,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @if (count($data)>0)
+                                        {{-- @if (count($data)>0)
                                             @foreach ($data as $key=>$item)
                                                 <tr>
                                                     <td class="sorting_1 ids">{{$item->id}}</td>
@@ -66,7 +90,7 @@
                                                     </td>
                                                 </tr>
                                             @endforeach
-                                        @endif
+                                        @endif --}}
                                     </tbody>
                                 </table>
                             </div>
@@ -193,77 +217,138 @@
             </div>
         </div>
     </div>
-    <!-- Delete -->
-    <div class="modal custom-modal fade" id="delete_payroll_adjustment" role="dialog">
-        <div class="modal-dialog modal-sm modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-body">
-                    <div class="form-header">
-                        <h3>@lang('lang.delete')</h3>
-                        <p>@lang('lang.are_you_sure_want_to_delete')?</p>
-                    </div>
-                    <div class="modal-btn delete-action">
-                        <form action="{{url('payroll/adjustment/delete')}}" method="POST">
-                            @csrf
-                            <input type="hidden" name="id" id="e_id" class="e_id" value="">
-                            <div class="row">
-                                <div class="submit-section" style="text-align: center">
-                                    <button type="submit" class="btn btn-primary submit-btn me-2">@lang('lang.delete')</button>
-                                    <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-secondary">@lang('lang.cancel')</a>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- /Delete -->
+    @include('payroll_item.import')
 @endsection
 
 @include('includs.script')
 <script src="{{ asset('/admin/js/validation-field.js') }}"></script>
 <script>
+    var employee_name = null;
+    var filter_month = null;
+    var canUpdate = @json(permissionAccess("m9-s2", "is_update")->value == "1");
+    var canDelete = @json(permissionAccess("m9-s2", "is_delete")->value == "1");
     $(function(){
-        $('.update').on('click',function(){
-            var localeLanguage = '{{ config('app.locale') }}';
+        $('.btn-search').on('click', function() {
+            employee_name = $('#employee_name').val();
+            filter_month = $('#filter_month').val();
+            // Reload DataTable with the filter values
+            $('#tbl_adjustment').DataTable().ajax.reload();
+        });
+        
+        dataTables();
+        $("#btnUpload").on("click", function() {
+            $(".thanLess").hide();
+            $("#thanLess").text("");
+            $('#adjuestmentModal').modal('show');
+        });
+        $(document).on("click", ".edit-btn", function() {
             let id = $(this).data("id");
+            // Open modal
+            $("#edit_payroll_adjustment").modal("show");
             $.ajax({
+                url: `{{ url('payroll/adjustment') }}/${id}/edit`,
                 type: "GET",
-                url: "{{url('payroll/adjustment/edit')}}",
-                data: {
-                    id : id
-                },
-                dataType: "JSON",
-                success: function (response) {
-                    if (response.success) {
-                        if (response.employee != '') {
-                            $.each(response.employee, function(i, item) {
-                                $('#e_employee_id').append($('<option>', {
-                                    value: item.id,
-                                    text: localeLanguage == 'en' ? item.employee_name_en : item.employee_name_kh,
-                                    selected: item.id == response.success.employee_id
-                                }));
-                            });
-                        }
-                        
-                        if (response.success.adjustment_type == 'include_taxe') {
-                            $("#e_adjustment_type").append('<option selected value="include_taxe">Include Taxe</option> <option value="exclued_taxe">Exclued Taxe</option>');
-                        } else {
-                            $("#e_adjustment_type").append('<option selected value="exclued_taxe">Exclued Taxe</option> <option value="include_taxe">Include Taxe</option>');   
-                        }
-                        
-                        $('#e_id').val(response.success.id);
-                        $('#e_amount').val(response.success.amount);
-                        $('#e_adjustment_date').val(response.success.adjustment_date);
-                        $('#e_description').val(response.success.description);
+                success: function(response) {
+                    if (response.employee != '') {
+                        $.each(response.employee, function(i, item) {
+                            $('#e_employee_id').append($('<option>', {
+                                value: item.id,
+                                text: localeLanguage == 'en' ? item.employee_name_en : item.employee_name_kh,
+                                selected: item.id == response.success.employee_id
+                            }));
+                        });
                     }
+                    
+                    if (response.success.adjustment_type == 'include_taxe') {
+                        $("#e_adjustment_type").append('<option selected value="include_taxe">Include Taxe</option> <option value="exclued_taxe">Exclued Taxe</option>');
+                    } else {
+                        $("#e_adjustment_type").append('<option selected value="exclued_taxe">Exclued Taxe</option> <option value="include_taxe">Include Taxe</option>');   
+                    }
+                    
+                    $('#e_id').val(response.success.id);
+                    $('#e_amount').val(response.success.amount);
+                    $('#e_adjustment_date').val(response.success.adjustment_date);
+                    $('#e_description').val(response.success.description);
                 }
             });
         });
-        $('.delete').on('click',function(){
-            let id = $(this).data("id");
-            $('.e_id').val(id);
-        });
     });
+
+    const deleteData = (id)=>{
+        Swal.fire({
+            title: "@lang('lang.are_you_sure')",
+            text: "@lang('lang.are_you_sure_want_to_delete')",
+            type: "warning",
+            showCancelButton: `@lang('lang.cancel')`,
+            confirmButtonText: `@lang('lang.deleted')`,
+        }).then(function(result)
+        {
+            if (result.value)
+            {
+                $.ajax({
+                    type: "POST",
+                    url: `{{url('payroll/adjustment/${id}')}}`,
+                    data: { _method: "DELETE", _token: "{{ csrf_token() }}" },
+                    success: function (data) {
+                        if (data.mg == "success") {
+                            Swal.fire("Deleted!", "Your file has been deleted.","success");
+                            window.location.reload();
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    function dataTables() {
+        $('#tbl_adjustment').DataTable({
+            pageLength: 10,
+            destroy: true,
+            processing: true,
+            serverSide: true,
+            order: [[0, 'desc']],
+            lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]],
+            ajax: {
+                url: '{{ URL("payroll/adjustment") }}',
+                type: 'GET',
+                data: function(d) {
+                    d.employee_name = $('input[name="employee_name"]').val();
+                    d.filter_month = $('input[name="filter_month"]').val();
+                }
+            },
+            columns: [
+                { data: 'id', name: 'id' },
+                { data: 'employee_name_en', name: 'employee_name_en' },
+                { data: 'amount', name: 'amount' },
+                { data: 'adjustment_type', name: 'adjustment_type' },
+                { data: 'adjustment_date', name: 'adjustment_date' },
+                { data: 'description', name: 'description' },
+                {
+                    data: 'created_at',
+                    name: 'created_at',
+                    render: function(data, type, row) {
+                        return moment(data).format('YYYY-MM-DD HH:mm:ss'); // Customize the format as needed
+                    }
+                },
+                {
+                    data: '',
+                    name: 'action',
+                    render: function(data, type, row) {
+                        let buttons = '';
+                        if (row.id) {
+                            if (canUpdate) {
+                                buttons += `<a href="#" data-id="${row.id}" class="btn btn-sm btn-outline-success btn-icon btn-inline-block mr-1 edit-btn" title="Edit"><i class="fa fa-pencil m-r-5"></i></a>`;
+                            }
+                            if (canDelete) {
+                                buttons += `<a href="javascript:void(0);" class="btn btn-sm btn-outline-danger btn-icon btn-inline-block mr-1" data-toggle="modal" onclick="deleteData(${row.id})" title="Delete Record"><i class="fa fa-trash-o m-r-5"></i></a>`;
+                            }
+                        }
+                        return buttons || '';
+                    },
+                    orderable: false,
+                    searchable: false
+                }
+            ]
+        });
+    }
 </script>
