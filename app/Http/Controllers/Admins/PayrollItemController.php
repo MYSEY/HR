@@ -148,7 +148,7 @@ class PayrollItemController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request)
+    public function update(AdjustmentRequest $request)
     {
         try {
             PayrollAdjustment::where('id',$request->id)->update([
