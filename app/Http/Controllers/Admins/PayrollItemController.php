@@ -47,6 +47,19 @@ class PayrollItemController extends Controller
                 return $query->whereYear('payroll_adjustments.adjustment_date', '=',$yearLy); 
             });
 
+            // **Search Handling**
+            $searchValue = request()->input('search.value');
+            if (!empty($searchValue)) {
+                $query->where(function ($q) use ($searchValue) {
+                    $q->where('payroll_adjustments.id', 'like', "%{$searchValue}%")
+                    ->orWhere('payroll_adjustments.amount', 'like', "%{$searchValue}%")
+                    ->orWhere('payroll_adjustments.adjustment_date', 'like', "%{$searchValue}%")
+                    ->orWhere('payroll_adjustments.adjustment_type', 'like', "%{$searchValue}%")
+                    ->orWhere('payroll_adjustments.description', 'like', "%{$searchValue}%")
+                    ->orWhere('users.employee_name_en', 'like', "%{$searchValue}%");
+                });
+            }
+
             // Fetch paginated data
             $recordsTotal = PayrollAdjustment::where('id', $request->id)->count();
             $recordsFiltered = $query->count();
@@ -63,7 +76,7 @@ class PayrollItemController extends Controller
                 'data' => $data
             ]);
         }
-        $employee = User::where('status','Active')->get();
+        $employee = User::where('status','Active')->where('number_employee','!=','000-0000')->where('number_employee','!=','230-0000')->get();
         return view('payroll_item.index',compact('employee'));
     }
     /**

@@ -163,7 +163,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">@lang('lang.edit_adjustment')</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">×</span>
                         </button>
                     </div>
@@ -216,145 +216,173 @@
                 </div>
             </div>
         </div>
+
+        <div id="loading-overlay" style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.8); z-index: 9999; text-align: center;">
+            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
+                <p>Loading Data...</p>
+            </div>
+        </div>
     </div>
     @include('payroll_item.import')
 @endsection
 
 @include('includs.script')
 <script src="{{ asset('/admin/js/validation-field.js') }}"></script>
-<script>
-    var employee_name = null;
-    var filter_month = null;
-    var canUpdate = @json(permissionAccess("m9-s2", "is_update")->value == "1");
-    var canDelete = @json(permissionAccess("m9-s2", "is_delete")->value == "1");
-    $(function(){
-        $('.btn-search').on('click', function() {
-            employee_name = $('#employee_name').val();
-            filter_month = $('#filter_month').val();
-            // Reload DataTable with the filter values
-            $('#tbl_adjustment').DataTable().ajax.reload();
-        });
-        
-        dataTables();
-        $("#btnUpload").on("click", function() {
-            $(".thanLess").hide();
-            $("#thanLess").text("");
-            $('#adjuestmentModal').modal('show');
-        });
-        $(document).on("click", ".edit-btn", function() {
-            let id = $(this).data("id");
-            // Open modal
-            $("#edit_payroll_adjustment").modal("show");
-            $.ajax({
-                url: `{{ url('payroll/adjustment') }}/${id}/edit`,
-                type: "GET",
-                success: function(response) {
-                    if (response.employee != '') {
-                        $.each(response.employee, function(i, item) {
-                            $('#e_employee_id').append($('<option>', {
-                                value: item.id,
-                                text: localeLanguage == 'en' ? item.employee_name_en : item.employee_name_kh,
-                                selected: item.id == response.success.employee_id
-                            }));
-                        });
-                    }
-                    
-                    if (response.success.adjustment_type == 'include_taxe') {
-                        $("#e_adjustment_type").append('<option selected value="include_taxe">Include Taxe</option> <option value="exclued_taxe">Exclued Taxe</option>');
-                    } else {
-                        $("#e_adjustment_type").append('<option selected value="exclued_taxe">Exclued Taxe</option> <option value="include_taxe">Include Taxe</option>');   
-                    }
-                    
-                    $('#e_id').val(response.success.id);
-                    $('#e_amount').val(response.success.amount);
-                    $('#e_adjustment_date').val(response.success.adjustment_date);
-                    $('#e_description').val(response.success.description);
-                }
+@section('script')
+    <script>
+        var employee_name = null;
+        var filter_month = null;
+        var canUpdate = @json(permissionAccess("m9-s2", "is_update")->value == "1");
+        var canDelete = @json(permissionAccess("m9-s2", "is_delete")->value == "1");
+        $(function(){
+            $('.btn-search').on('click', function() {
+                employee_name = $('#employee_name').val();
+                filter_month = $('#filter_month').val();
+                // Reload DataTable with the filter values
+                $('#tbl_adjustment').DataTable().ajax.reload(null, false); 
             });
-        });
-    });
-
-    const deleteData = (id)=>{
-        Swal.fire({
-            title: "@lang('lang.are_you_sure')",
-            text: "@lang('lang.are_you_sure_want_to_delete')",
-            type: "warning",
-            showCancelButton: `@lang('lang.cancel')`,
-            confirmButtonText: `@lang('lang.deleted')`,
-        }).then(function(result)
-        {
-            if (result.value)
-            {
+            
+            dataTables();
+            $("#btnUpload").on("click", function() {
+                $(".thanLess").hide();
+                $("#thanLess").text("");
+                $('#adjuestmentModal').modal('show');
+            });
+            $(document).on("click", ".edit-btn", function() {
+                let id = $(this).data("id");
+                // Open modal
+                $("#edit_payroll_adjustment").modal("show");
                 $.ajax({
-                    type: "POST",
-                    url: `{{url('payroll/adjustment/${id}')}}`,
-                    data: { _method: "DELETE", _token: "{{ csrf_token() }}" },
-                    success: function (data) {
-                        if (data.mg == "success") {
-                            Swal.fire("Deleted!", "Your file has been deleted.","success");
-                            window.location.reload();
+                    url: `{{ url('payroll/adjustment') }}/${id}/edit`,
+                    type: "GET",
+                    success: function(response) {
+                        if (response.employee != '') {
+                            $.each(response.employee, function(i, item) {
+                                $('#e_employee_id').append($('<option>', {
+                                    value: item.id,
+                                    text: localeLanguage == 'en' ? item.employee_name_en : item.employee_name_kh,
+                                    selected: item.id == response.success.employee_id
+                                }));
+                            });
                         }
+                        
+                        if (response.success.adjustment_type == 'include_taxe') {
+                            $("#e_adjustment_type").append('<option selected value="include_taxe">Include Taxe</option> <option value="exclued_taxe">Exclued Taxe</option>');
+                        } else {
+                            $("#e_adjustment_type").append('<option selected value="exclued_taxe">Exclued Taxe</option> <option value="include_taxe">Include Taxe</option>');   
+                        }
+                        
+                        $('#e_id').val(response.success.id);
+                        $('#e_amount').val(response.success.amount);
+                        $('#e_adjustment_date').val(response.success.adjustment_date);
+                        $('#e_description').val(response.success.description);
                     }
                 });
-            }
+            });
         });
-    }
 
-    function dataTables() {
-        $('#tbl_adjustment').DataTable({
-            pageLength: 10,
-            destroy: true,
-            processing: true,
-            serverSide: true,
-            order: [[0, 'desc']],
-            lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]],
-            ajax: {
-                url: '{{ URL("payroll/adjustment") }}',
-                type: 'GET',
-                data: function(d) {
-                    d.employee_name = $('input[name="employee_name"]').val();
-                    d.filter_month = $('input[name="filter_month"]').val();
-                }
-            },
-            columns: [
-                { data: 'id', name: 'id' },
-                { data: 'employee_name_en', name: 'employee_name_en' },
-                { data: 'amount', name: 'amount' },
-                { 
-                    data: 'adjustment_type', 
-                    name: 'adjustment_type',
-                    render: function(data, type, row) {
-                    return data === 'include_taxe' ? "Include Tax" : "Exclude Tax";
-                }
-                },
-                { data: 'adjustment_date', name: 'adjustment_date' },
-                { data: 'description', name: 'description' },
+        const deleteData = (id)=>{
+            Swal.fire({
+                title: "@lang('lang.are_you_sure')",
+                text: "@lang('lang.are_you_sure_want_to_delete')",
+                type: "warning",
+                showCancelButton: `@lang('lang.cancel')`,
+                confirmButtonText: `@lang('lang.deleted')`,
+            }).then(function(result)
+            {
+                if (result.value)
                 {
-                    data: 'created_at',
-                    name: 'created_at',
-                    render: function(data, type, row) {
-                        return moment(data).format('YYYY-MM-DD HH:mm:ss'); // Customize the format as needed
-                    }
-                },
-                {
-                    data: '',
-                    name: 'action',
-                    render: function(data, type, row) {
-                        let buttons = '';
-                        if (row.id) {
-                            if (canUpdate) {
-                                buttons += `<a href="#" data-id="${row.id}" class="btn btn-sm btn-outline-success btn-icon btn-inline-block mr-1 edit-btn" title="Edit"><i class="fa fa-pencil m-r-5"></i></a>`;
-                            }
-                            if (canDelete) {
-                                buttons += `<a href="javascript:void(0);" class="btn btn-sm btn-outline-danger btn-icon btn-inline-block mr-1" data-toggle="modal" onclick="deleteData(${row.id})" title="Delete Record"><i class="fa fa-trash-o m-r-5"></i></a>`;
+                    $.ajax({
+                        type: "POST",
+                        url: `{{url('payroll/adjustment/${id}')}}`,
+                        data: { _method: "DELETE", _token: "{{ csrf_token() }}" },
+                        success: function (data) {
+                            if (data.mg == "success") {
+                                Swal.fire("Deleted!", "Your file has been deleted.","success");
+                                window.location.reload();
                             }
                         }
-                        return buttons || '';
-                    },
-                    orderable: false,
-                    searchable: false
+                    });
                 }
-            ]
-        });
-    }
-</script>
+            });
+        }
+
+        function dataTables() {
+            $('#loading-overlay').show();
+            // Check if DataTable instance exists, then destroy it
+            if ($.fn.DataTable.isDataTable('#tbl_adjustment')) {
+                $('#tbl_adjustment').DataTable().clear().destroy();
+            }
+            
+            $('#tbl_adjustment').DataTable({
+                pageLength: 10,
+                processing: true,
+                serverSide: true,
+                order: [[0, 'desc']],
+                lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]],
+                ajax: {
+                    url: '{{ URL("payroll/adjustment") }}',
+                    type: 'GET',
+                    data: function(d) {
+                        d.employee_name = $('input[name="employee_name"]').val();
+                        d.filter_month = $('input[name="filter_month"]').val();
+                    }
+                },
+                columns: [
+                    { data: 'id', name: 'id' },
+                    { data: 'employee_name_en', name: 'employee_name_en' },
+                    { data: 'amount', name: 'amount' },
+                    { 
+                        data: 'adjustment_type', 
+                        name: 'adjustment_type',
+                        render: function(data, type, row) {
+                        return data === 'include_taxe' ? "Include Tax" : "Exclude Tax";
+                    }
+                    },
+                    { data: 'adjustment_date', name: 'adjustment_date' },
+                    { data: 'description', name: 'description' },
+                    {
+                        data: 'created_at',
+                        name: 'created_at',
+                        render: function(data, type, row) {
+                            return moment(data).format('YYYY-MM-DD HH:mm:ss'); // Customize the format as needed
+                        }
+                    },
+                    {
+                        data: '',
+                        name: 'action',
+                        render: function(data, type, row) {
+                            let buttons = '';
+                            if (row.id) {
+                                if (canUpdate) {
+                                    buttons += `<a href="#" data-id="${row.id}" class="btn btn-sm btn-outline-success btn-inline-block mr-2 edit-btn" title="Edit"><i class="fa fa-pencil m-r-5"></i></a>`;
+                                }
+                                if (canDelete) {
+                                    buttons += `<a href="javascript:void(0);" class="btn btn-sm btn-outline-danger btn-inline-block mr-2" data-toggle="modal" onclick="deleteData(${row.id})" title="Delete Record"><i class="fa fa-trash-o m-r-5"></i></a>`;
+                                }
+                            }
+                            return buttons || '';
+                        },
+                        orderable: false,
+                        searchable: false
+                    }
+                ],
+                order: [[0, 'desc']],
+                initComplete: function() {
+                    $('#loading-overlay').hide(); // Hide spinner when data is fully loaded
+                }
+            });
+            $('#tbl_adjustment').on('processing.dt', function (e, settings, processing) {
+                if (processing) {
+                    $('#loading-overlay').show();
+                } else {
+                    $('#loading-overlay').hide();
+                }
+            });
+        }
+    </script>
+@endsection
+
