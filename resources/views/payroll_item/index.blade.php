@@ -112,9 +112,9 @@
                     <div class="modal-body">
                         <form action="{{ url('payroll/adjustment/store') }}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
                             @csrf
-                            <div class="form-group">
+                            <div class="form-group hr-form-group-select2">
                                 <label>@lang('lang.adjustment_to')<span class="text-danger">*</span></label>
-                                <select class="form-control hr-select2-option" name="employee_id" id="employee_id" required>
+                                <select class="form-control hr-select2-option requered @error('employee_id') is-invalid @enderror" name="employee_id" id="employee_id" required>
                                     <option selected disabled> -- @lang('lang.select') --</option>
                                     @foreach ($employee as $item)
                                         <option value="{{$item->id}}">{{$item->employee_name_en}}</option>
@@ -170,9 +170,9 @@
                     <div class="modal-body">
                         <form action="{{ url('payroll/adjustment/update') }}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
                             @csrf
-                            <div class="form-group">
+                            <div class="form-group hr-form-group-select2">
                                 <label>@lang('lang.adjustment_to')<span class="text-danger">*</span></label>
-                                <select class="form-control hr-select2-option" name="employee_id" id="e_employee_id" required>
+                                <select class="form-control hr-select2-option requered @error('employee_id') is-invalid @enderror" name="employee_id" id="e_employee_id" required>
                                     <option selected disabled> -- @lang('lang.select') --</option>
                                     @foreach ($employee as $item)
                                         <option value="{{$item->id}}">{{$item->employee_name_en}}</option>
