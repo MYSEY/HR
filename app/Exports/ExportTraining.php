@@ -26,7 +26,7 @@ class ExportTraining implements FromCollection, WithColumnWidths, WithHeadings, 
             $trainer = null;
             if($item->training){
                 $price =  ($item->training->cost_price / $item->training->training_detail_staffs_count);
-                $discount = ($price * $item->training->discount) / 100;
+                $discount = ($item->training->discount / $item->training->training_detail_staffs_count);
                 $total = $price - $discount;
 
                 if (count($item->training->trainingDetailTrainer) == 1) {
@@ -160,7 +160,7 @@ class ExportTraining implements FromCollection, WithColumnWidths, WithHeadings, 
                 "Duration Term",
                 "Price/Unit",
                 "Discount Fee",
-                "Total",
+                "Total Price After Discounted",
                 "Trainer",
                 "Type of Training",
                 "Remarks",
