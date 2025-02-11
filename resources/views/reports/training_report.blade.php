@@ -215,7 +215,7 @@
                                                             $trainer = null;
                                                             if($item->training){
                                                                 $price =  ($item->training->cost_price / $item->training->training_detail_staffs_count);
-                                                                $discount = ($price * $item->training->discount) / 100;
+                                                                $discount = ($item->training->discount/ $item->training->training_detail_staffs_count);
                                                                 $total = $price - $discount;
 
                                                                 if (count($item->training->trainingDetailTrainer) == 1) {
@@ -353,7 +353,7 @@
                         let trainer = '';
                         if(item.training){
                             price =  (item.training.cost_price / item.training.training_detail_staffs_count);
-                            discount = (price * item.training.discount) / 100;
+                            discount = (item.training.discount / item.training.training_detail_staffs_count);
                             total = price - discount;
 
                             if (item.training.training_detail_trainer.length == 1) {

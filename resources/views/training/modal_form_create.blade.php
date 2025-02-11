@@ -78,7 +78,7 @@
                         <div class="col-sm-6 hidden" id="inp_discount">
                             <div class="form-group">
                                 <label>@lang('lang.discount')</label>
-                                <input class="form-control " type="number"  name="discount" id="discount" value="{{old('discount')}}">
+                                <input class="form-control " type="number" step="any"  name="discount" id="discount" value="{{old('discount')}}">
                             </div>
                         </div>
 

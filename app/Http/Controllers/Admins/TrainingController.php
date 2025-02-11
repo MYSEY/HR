@@ -32,7 +32,7 @@ class TrainingController extends Controller
         if (permissionAccess("m6-s2","is_view")->value != "1") {
             return view('upgrade.access_page');
         }
-        $filteredTrainings = Training::withCount('trainingDetailStaffs')->withCount("trainingDetailTrainer")->get();
+        $filteredTrainings = Training::withCount('trainingDetailStaffs')->withCount("trainingDetailTrainer")->orderBy('created_by', 'DESC')->get();
         $dataTrainings = $filteredTrainings->filter(function ($training) {
             return $training->isStaff();
         });
@@ -189,6 +189,7 @@ class TrainingController extends Controller
             $data['trainer_id'] = $request->trainer_id;
             $data['employee_id'] = $request->employee_id;
             $data['cost_price'] = $request->cost_price;
+            $data['discount'] = $request->discount;
             $data['start_date'] = $request->start_date;
             $data['end_date'] = $request->end_date;
             $data['duration_month'] = $request->duration_month;

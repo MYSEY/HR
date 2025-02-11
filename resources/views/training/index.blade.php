@@ -25,16 +25,18 @@
                 </div>
                 @if (Auth::user()->RolePermission == "Developer" || Auth::user()->RolePermission == "HR" || Auth::user()->RolePermission == 'admin')
                     @if (permissionAccess("m6-s2","is_export")->value == "1")
-                        <div class="col-auto float-end ms-auto">
-                            <a href="#" class="btn add-btn" id="btn_export_training" >@lang('lang.export') @lang('lang.staff')</a>
-                        </div>
-                        <div class="col-auto float-end ms-auto">
-                            <a href="#" class="btn add-btn" id="btn_export_trainer" >@lang('lang.export') @lang("lang.trainer")</a>
-                        </div>
+                        @if (Auth::user()->RolePermission == "Developer" || Auth::user()->RolePermission == 'admin')
+                            <div class="col-auto float-end ms-auto">
+                                <a href="#" class="btn add-btn" id="btn_export_training" >@lang('lang.export') @lang('lang.staff')</a>
+                            </div>
+                            <div class="col-auto float-end ms-auto">
+                                <a href="#" class="btn add-btn" id="btn_export_trainer" >@lang('lang.export') @lang("lang.trainer")</a>
+                            </div>
+                        @endif
                     {{-- @endif
                     @if (permissionAccess("m6-s2","is_import")->value == "1") --}}
                         <div class="col-auto float-end ms-auto">
-                            <a href="#" class="btn add-btn me-2" data-toggle="modal" id="import_update_employee"><i class="fa fa-arrow-circle-up"  data-bs-toggle="tooltip" aria-label="fa fa-arrow-circle-up" data-bs-original-title="fa fa-arrow-circle-up"></i>Import Update Employee</a>
+                            <a href="#" class="btn add-btn me-2" data-toggle="modal" id="import_update_employee"><i class="fa fa-arrow-circle-up"  data-bs-toggle="tooltip" aria-label="fa fa-arrow-circle-up" data-bs-original-title="fa fa-arrow-circle-up"></i>Upload Employee Trainings</a>
                         </div>
                     @endif
                 @endif
@@ -110,7 +112,7 @@
                                                 <tr>
                                                     <th style="width: 30px;" class="sorting" tabindex="0"
                                                         aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
-                                                        aria-label="#: activate to sort column ascending">#</th>
+                                                        aria-label="#: activate to sort column ascending">Training ID</th>
                                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0"
                                                         rowspan="1" colspan="1"
                                                         aria-label="Training Type: activate to sort column ascending"
@@ -153,7 +155,7 @@
                                                 @if (count($dataTrainings) > 0)
                                                     @foreach ($dataTrainings as $key=>$item)
                                                         <tr class="odd">
-                                                            <td class="sorting_1 ids">{{ ++$key }}</td>
+                                                            <td class="sorting_1 ids">{{ $item->id }}</td>
                                                             <td class="training_type_name">{{ $item->training_type == 1 ? "Internal" : "External" }}</td>
                                                             <td class="course_name">{{ $item->course_name }}</td>
                                                             <td>
@@ -525,7 +527,7 @@
                         let start_date = moment(row.start_date).format('D-MMM-YYYY')
                         let end_date = moment(row.end_date).format('D-MMM-YYYY')
                         tr += '<tr class="odd">'+
-                                '<td class="sorting_1 ids">'+(index+1)+'</td>'+
+                                '<td class="sorting_1 ids">'+(row.id)+'</td>'+
                                 '<td class="training_type_name">'+(row.training_type == 1 ? "@lang('lang.internal')" : "@lang('lang.external')")+'</td>'+
                                 '<td class="course_name">'+(row.course_name)+'</td>'+
                                 '<td>'+
