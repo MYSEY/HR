@@ -102,11 +102,11 @@ class PayrollItemController extends Controller
             $data['created_by']    = Auth::user()->id;
             PayrollAdjustment::create($data);
             DB::commit();
-            Toastr::success('Payroll Adjustments created successfully.','Success');
+            Toastr::success('Adjustments created successfully.','Success');
             return redirect()->back();
         } catch (\Throwable $exp) {
             DB::rollback();
-            Toastr::error('Payroll Adjustments created fail.','Error');
+            Toastr::error('Adjustments created fail.','Error');
         }
     }
 
@@ -160,11 +160,11 @@ class PayrollItemController extends Controller
                 'updated_by'    => Auth::user()->id,
             ]);
             DB::commit();
-            Toastr::success('Payroll Adjustments updated successfully.','Success');
+            Toastr::success('Adjustments updated successfully.','Success');
             return redirect()->back();
         } catch (\Throwable $exp) {
             DB::rollback();
-            Toastr::error('Payroll Adjustments updated fail.','Error');
+            Toastr::error('Adjustments updated fail.','Error');
         }
     }
 
