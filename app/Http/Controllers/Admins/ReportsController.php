@@ -19,6 +19,7 @@ use App\Models\Position;
 use App\Models\StaffPromoted;
 use App\Models\Trainer;
 use App\Models\Training;
+use App\Models\TrainingDetailStaff;
 use App\Models\Transferred;
 use App\Models\User;
 use App\Repositories\Admin\EmployeeRepository;
@@ -305,91 +306,69 @@ class ReportsController extends Controller
         if (permissionAccess("m6-s3","is_view")->value != "1") {
             return view('upgrade.access_page');
         }
-        $start_date = null;
-        $end_date = null;
-        if ($request->start_date) {
-            $start_date = Carbon::createFromDate($request->start_date)->format('Y-m-d H:i:s');
-        }
-        if ($request->end_date) {
-            $end_date = Carbon::createFromDate($request->end_date)->format('Y-m-d H:i:s');
-        }
-        $data = Training::
-        when($request->traing_type, function ($query, $traing_type) {
-            $query->where('training_type', $traing_type);
-        })
-        ->when($request->course_name, function ($query, $course_name) {
-            $query->where('course_name', $course_name);
-        })
-        ->when($start_date, function ($query, $start_date) {
-            $query->where('start_date', '>=', $start_date);
-        })
-        ->when($end_date, function ($query, $end_date) {
-            $query->where('end_date','<=', $end_date);
-        })
-        ->get();
-        $dataTrainings = [];
-        foreach ($data as $key => $item) {
-            $dataTrainer = Trainer::whereIn('id', $item->trainer_id)->with("employee")->get();
-            $em =  User::whereIn('id', $item->employee_id)
-            ->when($request->employee_id, function ($query, $employee_id) {
-                $query->where('number_employee', 'LIKE', '%'.$employee_id.'%');
-            })
-            ->when($request->employee_name, function ($query, $employee_name) {
-                $query->where('employee_name_en', 'LIKE', '%'.$employee_name.'%');
-                $query->orWhere('employee_name_kh', 'LIKE', '%'.$employee_name.'%');
-            })
-            ->with("gender")->with("position")->with("branch")
-            ->get();
-            $item["trainers"] = $dataTrainer;
-            $item["employees"] = $em;
-            $dataTrainings[] = $item;
-        }
+        //******** process old  ***********/ 
+        // $data = Training::
+        // when($request->traing_type, function ($query, $traing_type) {
+        //     $query->where('training_type', $traing_type);
+        // })
+        // ->when($request->course_name, function ($query, $course_name) {
+        //     $query->where('course_name', $course_name);
+        // })
+        // ->when($start_date, function ($query, $start_date) {
+        //     $query->where('start_date', '>=', $start_date);
+        // })
+        // ->when($end_date, function ($query, $end_date) {
+        //     $query->where('end_date','<=', $end_date);
+        // })
+        // ->get();
+        // $dataTrainings = [];
+        // foreach ($data as $key => $item) {
+        //     $dataTrainer = Trainer::whereIn('id', $item->trainer_id)->with("employee")->get();
+        //     $em =  User::whereIn('id', $item->employee_id)
+        //     ->when($request->employee_id, function ($query, $employee_id) {
+        //         $query->where('number_employee', 'LIKE', '%'.$employee_id.'%');
+        //     })
+        //     ->when($request->employee_name, function ($query, $employee_name) {
+        //         $query->where('employee_name_en', 'LIKE', '%'.$employee_name.'%');
+        //         $query->orWhere('employee_name_kh', 'LIKE', '%'.$employee_name.'%');
+        //     })
+        //     ->with("gender")->with("position")->with("branch")
+        //     ->get();
+        //     $item["trainers"] = $dataTrainer;
+        //     $item["employees"] = $em;
+        //     $dataTrainings[] = $item;
+        // }
+        $dataTrainings = $this->reportRepo->getTrainingReport($request);
         if ($request->ajax()) {
             return response()->json($dataTrainings);
         }
         return view('reports.training_report', compact("dataTrainings"), );
     }
 
+    public function filterTraining(Request $request){
+        $dataTrainings = $this->reportRepo->getTrainingReport($request);
+         // Check if it's a paginated response
+        if ($dataTrainings instanceof \Illuminate\Pagination\LengthAwarePaginator) {
+            // If it's paginated, return the necessary pagination metadata
+            return response()->json([
+                'data' => $dataTrainings->items(), // Only send the data items
+                'pagination' => [
+                    'current_page' => $dataTrainings->currentPage(),
+                    'last_page' => $dataTrainings->lastPage(),
+                    'total' => $dataTrainings->total(),
+                    'per_page' => $dataTrainings->perPage(),
+                ],
+            ]);
+        }
+
+        // If it's not paginated (e.g., 'all' was requested), just return the data
+        return response()->json([
+            'data' => $dataTrainings,
+        ]);
+    }
+
     public function trainingExport(Request $request){
-        $start_date = null;
-        $end_date = null;
-        if ($request->start_date) {
-            $start_date = Carbon::createFromDate($request->start_date)->format('Y-m-d H:i:s');
-        }
-        if ($request->end_date) {
-            $end_date = Carbon::createFromDate($request->end_date)->format('Y-m-d H:i:s');
-        }
-        $data = Training::
-        when($request->traing_type, function ($query, $traing_type) {
-            $query->where('training_type', $traing_type);
-        })
-        ->when($request->course_name, function ($query, $course_name) {
-            $query->where('course_name', $course_name);
-        })
-        ->when($start_date, function ($query, $start_date) {
-            $query->where('start_date', '>=', $start_date);
-        })
-        ->when($end_date, function ($query, $end_date) {
-            $query->where('end_date','<=', $end_date);
-        })
-        ->get();
-        $dataTrainings = [];
-        foreach ($data as $key => $item) {
-            $dataTrainer = Trainer::whereIn('id', $item->trainer_id)->with("employee")->get();
-            $em =  User::whereIn('id', $item->employee_id)
-            ->with("gender")->with("position")->with("branch")
-            ->when($request->employee_id, function ($query, $employee_id) {
-                $query->where('number_employee', 'LIKE', '%'.$employee_id.'%');
-            })
-            ->when($request->employee_name, function ($query, $employee_name) {
-                $query->where('employee_name_en', 'LIKE', '%'.$employee_name.'%');
-                $query->orWhere('employee_name_kh', 'LIKE', '%'.$employee_name.'%');
-            })
-            ->get();
-            $item["trainers"] = $dataTrainer;
-            $item["employees"] = $em;
-            $dataTrainings[] = $item;
-        }
+        $dataTrainings = $this->reportRepo->getTrainingReport($request);
         $export = new ExportTraining($dataTrainings);
         return Excel::download($export, 'ReportTraining.xlsx');
     }

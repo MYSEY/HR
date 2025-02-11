@@ -5,6 +5,7 @@ namespace App\Repositories\Admin;
 use App\Helpers\Helper;
 use App\Models\FringeBenefit;
 use App\Models\Payroll;
+use App\Models\TrainingDetailStaff;
 use App\Repositories\BaseRepository;
 use App\Traits\UploadFiles\UploadFIle;
 use Carbon\Carbon;
@@ -196,5 +197,84 @@ class ReportRepository extends BaseRepository
             }
         }
         return $datas;
+    }
+
+    public function getTrainingReport($request){
+        $start_date = null;
+        $end_date = null;
+        if ($request->start_date) {
+            $start_date = Carbon::createFromDate($request->start_date)->format('Y-m-d H:i:s');
+        }
+        if ($request->end_date) {
+            $end_date = Carbon::createFromDate($request->end_date)->format('Y-m-d H:i:s');
+        }
+        // $perPage = $request->get('per_page', 10); // Default is 10
+        $dataTrainings = TrainingDetailStaff::with(["training","employee"])
+        ->leftJoin('users', 'training_detail_staff.employee_id', '=', 'users.id')
+        ->leftJoin('trainings', 'training_detail_staff.training_id', '=', 'trainings.id')
+        ->select(
+            'training_detail_staff.*',
+            'users.department_id',
+            'users.branch_id',
+            'users.line_manager',
+            'trainings.training_type',
+            'trainings.course_name',
+            'trainings.cost_price',
+            'trainings.discount',
+            'trainings.start_date',
+            'trainings.end_date',
+            'trainings.duration_month',
+            'trainings.remark',
+            'trainings.status'
+        )
+        ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+            if (in_array($RolePermission, ['HOD', 'BM'])) {
+                $query->where("users.department_id", Auth::user()->department_id)
+                    ->where("users.branch_id", Auth::user()->branch_id);
+            } elseif (in_array($RolePermission, ['DHOD', 'DBM'])) {
+                $query->where("training_detail_staff.employee_id", Auth::user()->id);
+                $query->orWhere("users.line_manager", Auth::user()->id);
+            } elseif ($RolePermission == "Employee") {
+                $query->where("users.id", Auth::user()->id);
+            } elseif ($RolePermission == 'HR' && permissionAccess("m6-s3","is_access")->value != 1) {
+                $query->where("training_detail_staff.employee_id", Auth::user()->id);
+                $query->orWhere("users.line_manager", Auth::user()->id);
+            }
+        })
+        ->when($request->traing_type, function ($query, $traing_type) {
+            $query->where('trainings.training_type', $traing_type);
+        })
+        ->when($request->course_name, function ($query, $course_name) {
+            $query->where('trainings.course_name', $course_name);
+        })
+        ->when($start_date, function ($query, $start_date) {
+            $query->where('trainings.start_date', '>=', $start_date);
+        })
+        ->when($end_date, function ($query, $end_date) {
+            $query->where('trainings.end_date','<=', $end_date);
+        })
+        ->when($request->employee_id, function ($query, $employee_id) {
+            $query->where('users.number_employee', 'LIKE', '%'.$employee_id.'%');
+        })
+        ->when($request->employee_name, function ($query, $employee_name) {
+            $query->where('users.employee_name_en', 'LIKE', '%'.$employee_name.'%');
+            $query->orWhere('users.employee_name_kh', 'LIKE', '%'.$employee_name.'%');
+        });
+        $perPage = $request->get('per_page', 10);
+
+        if ($perPage === 'all') {
+            $dataTrainings = $dataTrainings->get();
+            $dataTrainings = new \Illuminate\Pagination\LengthAwarePaginator(
+                $dataTrainings,
+                $dataTrainings->count(),
+                $dataTrainings->count(),
+                1,
+                ['path' => $request->url(), 'query' => $request->query()]
+            );
+        } else {
+            $dataTrainings = $dataTrainings->paginate($perPage)->withQueryString();
+        }
+
+        return $dataTrainings;
     }
 }

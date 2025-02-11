@@ -31,18 +31,21 @@
                 {{-- @csrf --}}
                 
                 <div class="row">
-                    <div class="col-sm-2 col-md-2">
-                        <div class="form-group">
-                            <input type="text" class="form-control" name="employee_id" placeholder="@lang('lang.employee_id')" id="employee_id"
-                                value="{{ old('employee_id') }}">
+                    @if (Auth::user()->RolePermission != 'Employee')
+                        <div class="col-sm-2 col-md-2">
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="employee_id" placeholder="@lang('lang.employee_id')" id="employee_id"
+                                    value="{{ old('employee_id') }}">
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-sm-2 col-md-2">
-                        <div class="form-group">
-                            <input class="form-control floating" type="text" id="employee_name" name="employee_name"
-                                placeholder="@lang('lang.employee_name')">
+                        <div class="col-sm-2 col-md-2">
+                            <div class="form-group">
+                                <input class="form-control floating" type="text" id="employee_name" name="employee_name"
+                                    placeholder="@lang('lang.employee_name')">
+                            </div>
                         </div>
-                    </div>
+                    @endif
+                    
                     <div class="col-sm-2 col-md-2">
                         <div class="form-group">
                             <input class="form-control floating" type="text" id="course_name" name="course_name" placeholder="@lang('lang.course_name')">
@@ -73,9 +76,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="row filter-btn">
-                    <div class="col-sm-2 col-md-12">
+                    <div class="<?php echo Auth::user()->RolePermission == 'Employee' ? 'col-sm-4 col-md-4' : 'col-sm-12 col-md-12'; ?>">
                         <div style="display: flex" class="float-end">
                             <button type="button" class="btn btn-sm btn-outline-secondary submit-btn btn-research me-2" data-dismiss="modal" id="icon-search-download-reload">
                                 <span class="btn-txt"><i class="fa fa-search"></i></span>
@@ -108,9 +109,20 @@
                             <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                                 <div class="row">
                                     <div class="col-sm-12">
+                                        <form method="GET" class="mb-3">
+                                            <label>Show 
+                                                <select name="per_page" onchange="this.form.submit()" class="per_page">
+                                                    <option value="10" {{ request('per_page') == 10 ? 'selected' : '' }}>10</option>
+                                                    <option value="25" {{ request('per_page') == 25 ? 'selected' : '' }}>25</option>
+                                                    <option value="50" {{ request('per_page') == 50 ? 'selected' : '' }}>50</option>
+                                                    <option value="100" {{ request('per_page') == 100 ? 'selected' : '' }}>100</option>
+                                                    <option value="200" {{ request('per_page') == 200 ? 'selected' : '' }}>200</option>
+                                                    <option value="all" {{ request('per_page') == 'all' ? 'selected' : '' }}>All</option>
+                                                </select> entries
+                                            </label>
+                                        </form>
                                         <table
-                                            class="table table-striped custom-table mb-0 datatable dataTable no-footer tbl-traingin-report"
-                                            id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
+                                            class="table table-striped custom-table mb-0  no-footer tbl-traingin-report">
                                             <thead>
                                                 <tr>
                                                     <th class="sorting sorting_asc stuck-scroll-3" tabindex="0" aria-controls="DataTables_Table_0"
@@ -191,54 +203,58 @@
                                             </thead>
                                             <tbody>
                                                 @if (count($dataTrainings) > 0)
+                                                    @php
+                                                        $num = 0;
+                                                    @endphp
                                                     @foreach ($dataTrainings as $key=>$item)
                                                         @php
+                                                         $num++;
                                                             $price = 0;
                                                             $discount = 0;
                                                             $total = 0;
-                                                            if (count($item->employee_id) > 0) {
-                                                                $price =  $item->cost_price / count($item->employee_id);
-                                                                $discount = ($price * $item->discount) / 100;
-                                                                $total = $price - $discount;
-                                                            }
                                                             $trainer = null;
-                                                            if (count($item->trainers) == 1) {
-                                                                $trainer = $item->trainers[0]->type == 2 ? $item->trainers[0]->name_en : $item->trainers[0]->employee->employee_name_en;
-                                                            }else{
-                                                                foreach ($item->trainers as $key => $trai) {
-                                                                    $trainer .= $trai->type == 2 ? $trai->name_en : $trai->employee->employee_name_en.', ';
+                                                            if($item->training){
+                                                                $price =  ($item->training->cost_price / $item->training->training_detail_staffs_count);
+                                                                $discount = ($price * $item->training->discount) / 100;
+                                                                $total = $price - $discount;
+
+                                                                if (count($item->training->trainingDetailTrainer) == 1) {
+                                                                    $trainer = $item->training->trainingDetailTrainer[0]->trainer->type == 2 ? $item->training->trainingDetailTrainer[0]->trainer->name_en : $item->training->trainingDetailTrainer[0]->trainer->employee->employee_name_en;
+                                                                }else{
+                                                                    foreach ($item->training->trainingDetailTrainer as $key => $trai) {
+                                                                        $trainer .= $trai->trainer->type == 2 ? $trai->trainer->name_en : $trai->trainer->employee->employee_name_en.', ';
+                                                                    }
                                                                 }
                                                             }
                                                         @endphp
-                                                        @foreach ($item->employees as $emp)
                                                             <tr class="odd">
-                                                                <td class="ids stuck-scroll-3">{{ ++$key }}</td>
-                                                                <td class="stuck-scroll-3">{{ $emp->number_employee }}</td>
-                                                                <td class="stuck-scroll-3">{{ $emp->employee_name_kh }}</td>
-                                                                <td>{{$emp->employee_name_en}}</td>
-                                                                <td>{{$emp->EmployeeGender}}</td>
-                                                                <td>{{$emp->EmployeePosition}}</td>
-                                                                <td>{{ \Carbon\Carbon::parse($emp->date_of_commencement)->format('d-M-Y') ?? '' }}</td>
-                                                                <td>{{$emp->SeniorityYearsOfEmployee}}</td>
-                                                                <td>{{$item->course_name}}</td>
-                                                                <td>{{$emp->EmployeeBranch}}</td>
-                                                                <td>{{ \Carbon\Carbon::parse($item->start_date)->format('d-M-Y') ?? '' }}</td>
-                                                                <td>{{ \Carbon\Carbon::parse($item->end_date)->format('d-M-Y') ?? '' }}</td>
+                                                                <td class="ids stuck-scroll-3">{{ $num }}</td>
+                                                                <td class="stuck-scroll-3">{{ $item->employee->number_employee }}</td>
+                                                                <td class="stuck-scroll-3">{{ $item->employee->employee_name_kh }}</td>
+                                                                <td>{{$item->employee->employee_name_en}}</td>
+                                                                <td>{{$item->employee->EmployeeGender}}</td>
+                                                                <td>{{$item->employee->EmployeePosition}}</td>
+                                                                <td>{{ \Carbon\Carbon::parse($item->employee->date_of_commencement)->format('d-M-Y') ?? '' }}</td>
+                                                                <td>{{$item->employee->SeniorityYearsOfEmployee}}</td>
+                                                                <td>{{$item->training->course_name}}</td>
+                                                                <td>{{$item->employee->EmployeeBranch}}</td>
+                                                                <td>{{ $item->training ? \Carbon\Carbon::parse($item->training->start_date)->format('d-M-Y') : ''}}</td>
+                                                                <td>{{ $item->training ? \Carbon\Carbon::parse($item->training->end_date)->format('d-M-Y') : '' }}</td>
                                                                 <td>
-                                                                    <span style="font-size: 13px" class="badge bg-inverse-danger">{{ $item->duration_month ? \Carbon\Carbon::parse($item->end_date)->addMonth($item->duration_month)->format('d-M-Y'): 0}}</span>
+                                                                    <span style="font-size: 13px" class="badge bg-inverse-danger">{{ $item->training ? ($item->training->duration_month ? \Carbon\Carbon::parse($item->training->end_date)->addMonth($item->training->duration_month)->format('d-M-Y') : 0): 0}}</span>
                                                                 </td>
                                                                 <td>$ {{round($price, 2)}}</td>
                                                                 <td>$ {{round($discount, 2)}}</td>
                                                                 <td>$ {{round($total, 2)}}</td>
                                                                 <td> {{$trainer}}</td>
-                                                                <td>{{ $item->training_type == 1 ? "Internal" : "External"}}</td>
-                                                                <td>{{$item->remark ? $item->remark : ""}}</td>
+                                                                <td>{{ $item->training ? ($item->training->training_type == 1 ? "Internal" : "External") : ""}}</td>
+                                                                <td>{{$item->training ? ($item->training->remark ? $item->training->remark : ""): ""}}</td>
                                                             </tr>
-                                                        @endforeach
                                                     @endforeach
                                                 @endif
                                             </tbody>
                                         </table>
+                                        {!! $dataTrainings->withQueryString()->links('pagination::bootstrap-5') !!}
                                     </div>
                                 </div>
                             </div>
@@ -248,7 +264,6 @@
             </div>
         @endif
     </div>
-    
     @include('training.templete_print_report')
 @endsection
 
@@ -261,6 +276,7 @@
             $(this).prop('disabled', true);
             $(".btn-txt").hide();
             $(".loading-icon").css('display', 'block');
+            let currentPage = $(".per_page").val();
             let param = {
                 "_token": "{{ csrf_token() }}",
                 employee_id: $("#employee_id").val(),
@@ -269,6 +285,7 @@
                 start_date: $("#start_date").val(),
                 end_date: $("#end_date").val(),
                 traing_type: $("#training_type").val(),
+                per_page: currentPage,
             };
             showdatas(param);
         });
@@ -282,6 +299,7 @@
             $("#btn-text-loading-print").css('display', 'block');
             $(".btn_print").prop('disabled', true);
             $(".btn-text-print").css("display", "none");
+            let currentPage = $(".per_page").val();
             let param = {
                 "_token": "{{ csrf_token() }}",
                 employee_id: $("#employee_id").val(),
@@ -290,12 +308,14 @@
                 start_date: $("#start_date").val(),
                 end_date: $("#end_date").val(),
                 traing_type: $("#training_type").val(),
-                btn_print: true
+                btn_print: true,
+                per_page: currentPage,
             };
             showdatas(param)
             print_pdf();
         });
         $(".btn_excel").on("click", function () {
+            let currentPage = $(".per_page").val();
             var query = {
                 employee_id: $("#employee_id").val(),
                 employee_name: $("#employee_name").val(),
@@ -303,6 +323,7 @@
                 start_date: $("#start_date").val(),
                 end_date: $("#end_date").val(),
                 traing_type: $("#training_type").val(),
+                per_page: currentPage,
             }
             var url = "{{URL::to('reports/training-export')}}?" + $.param(query)
             window.location = url;
@@ -310,67 +331,65 @@
     });
     function showdatas(param) {  
         $.ajax({
-            url: "{{ url('reports/training-report') }}",
+            url: "{{ url('reports/training-report-filter') }}",
             type: 'POST',
             data:param,
             dataType: 'JSON',
-            success: function(data){
-                dataPrint = data;
+            success: function(response){
+                dataPrint = response.data;
+                let datas = response.data;
                 var tr = "";
                 var tr_print = "";
                 let num = 0;
-                if (data.length > 0) {
-                    data.map((item) =>{
-                        let start_date = moment(item.start_date).format('DD-MMM-YYYY');
-                        let end_date = moment(item.end_date).format('DD-MMM-YYYY');
-                        let month = item.duration_month ? moment(item.end_date).add(item.duration_month, 'M').format('DD-MMM-YYYY') : 0;
+                if (datas.length > 0) {
+                    datas.forEach(item => {
+                        let start_date = moment(item.training.start_date).format('DD-MMM-YYYY');
+                        let end_date = moment(item.training.end_date).format('DD-MMM-YYYY');
+                        let month = item.training.duration_month ? moment(item.training.end_date).add(item.training.duration_month, 'M').format('DD-MMM-YYYY') : 0;
                         let duration_month = '<span style="font-size: 13px" class="badge bg-inverse-danger">'+(month)+'</span>';
                         let price = 0;
                         let discount = 0;
                         let total = 0;
-                        if (item.employees.length > 0) {
-                            price =  item.cost_price / item.employees.length;
-                            discount = (price * item.discount) / 100;
-                            total = price - discount;
-                        }
                         let trainer = '';
-                        if (item.trainers.length == 1) {
-                            trainer = item.trainers[0].type == 2 ? item.trainers[0].name_en : item.trainers[0].employee.employee_name_en;
-                        }else{
-                            item.trainers.map((trai) => {
-                                trainer += trai.type == 2 ? trai.name_en : trai.employee.employee_name_en +', ';
-                            });
-                        }
-                        
-                        item.employees.map((emp, index) => {
-                            num ++;
-                            let date_ofcommencement = moment(emp.date_of_commencement).format('DD-MMM-YYYY');
-                            let currentDate = new Date();
-                            let join_date = new Date(emp.date_of_commencement);
-                            const empl_period = diffDates(join_date, currentDate);
+                        if(item.training){
+                            price =  (item.training.cost_price / item.training.training_detail_staffs_count);
+                            discount = (price * item.training.discount) / 100;
+                            total = price - discount;
 
-                            tr +='<tr class="odd">'+
-                                '<td class="ids stuck-scroll-3">'+(num)+'</td>'+
-                                '<td class="stuck-scroll-3">'+(emp.number_employee )+'</td>'+
-                                '<td class="stuck-scroll-3">'+(emp.employee_name_kh )+'</td>'+
-                                '<td>'+(emp.employee_name_en)+'</td>'+
-                                '<td>'+(emp.gender.name_english)+'</td>'+
-                                '<td>'+(emp.position.name_english)+'</td>'+
-                                '<td>'+(date_ofcommencement)+'</td>'+
-                                '<td>'+(empl_period)+'</td>'+
-                                '<td>'+(item.course_name)+'</td>'+
-                                '<td>'+(emp.branch.branch_name_en)+'</td>'+
-                                '<td>'+(start_date)+'</td>'+
-                                '<td>'+(end_date)+'</td>'+
-                                '<td>'+(duration_month)+'</td>'+
-                                '<td>$ '+(parseFloat(price).toFixed(2))+'</td>'+
-                                '<td>$ '+(parseFloat(discount).toFixed(2))+'</td>'+
-                                '<td>$ '+(parseFloat(total).toFixed(2))+'</td>'+
-                                '<td>'+(trainer)+'</td>'+
-                                '<td>'+(item.training_type == 1 ? "Internal" : "External")+'</td>'+
-                                '<td>'+(item.remark ? item.remark : "")+'</td>'+
-                            '</tr>';
-                        });
+                            if (item.training.training_detail_trainer.length == 1) {
+                                trainer = item.training.training_detail_trainer[0].trainer.type == 2 ? item.training.training_detail_trainer[0].trainer.name_en : item.training.training_detail_trainer[0].trainer.employee.employee_name_en;
+                            }else{
+                                item.training.training_detail_trainer.map((trai) =>{
+                                    trainer += trai.trainer.type == 2 ? trai.trainer.name_en : trai.trainer.employee.employee_name_en +', ';
+                                })
+                            }
+                        }
+                        num ++;
+                        let date_ofcommencement = moment(item.employee.date_of_commencement).format('DD-MMM-YYYY');
+                        let currentDate = new Date();
+                        let join_date = new Date(item.employee.date_of_commencement);
+                        const empl_period = diffDates(join_date, currentDate);
+                        tr +='<tr class="odd">'+
+                            '<td class="ids stuck-scroll-3">'+(num)+'</td>'+
+                            '<td class="stuck-scroll-3">'+ item.employee.number_employee  +'</td>'+
+                            '<td class="stuck-scroll-3">'+ item.employee.employee_name_kh  +'</td>'+
+                            '<td>'+ item.employee.employee_name_en +'</td>'+
+                            '<td>'+ item.employee.gender.name_english +'</td>'+
+                            '<td>'+ item.employee.position.name_english +'</td>'+
+                            '<td>'+(date_ofcommencement)+'</td>'+
+                            '<td>'+(empl_period)+'</td>'+
+                            '<td>'+ item.training.course_name +'</td>'+
+                            '<td>'+ item.employee.branch.branch_name_en +'</td>'+
+                            '<td>'+(start_date)+'</td>'+
+                            '<td>'+(end_date)+'</td>'+
+                            '<td>'+(duration_month)+'</td>'+
+                            '<td>$ '+(parseFloat(price).toFixed(2))+'</td>'+
+                            '<td>$ '+(parseFloat(discount).toFixed(2))+'</td>'+
+                            '<td>$ '+(parseFloat(total).toFixed(2))+'</td>'+
+                            '<td>'+ trainer +'</td>'+
+                            '<td>'+ (item.training.training_type == 1 ? "Internal" : "External") +'</td>'+
+                            '<td>'+ (item.training.remark ? item.training.remark : "")+'</td>'+
+                        '</tr>';
                     });
                 }
                 if (param.btn_print) {

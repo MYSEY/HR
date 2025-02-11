@@ -24,61 +24,72 @@
             </div>
         </div>
         @if (permissionAccess("m6-s1","is_view")->value == "1")
-            <form class="needs-validation" novalidate>
-                @csrf
-                
-                <div class="row filter-btn">
-                    <div class="col-sm-2 col-md-2">
-                        <div class="form-group">
-                            <input class="form-control floating" type="text" id="trainer_name" placeholder="@lang('lang.name')">
-                        </div>
-                    </div>
-                    <div class="col-sm-2 col-md-2">
-                        <div class="form-group">
-                            <input class="form-control floating" type="text" id="company_name" placeholder="@lang('lang.company_name')">
-                        </div>
-                    </div>
-                    <div class="col-sm-2 col-md-2">
-                        <div class="form-group">
-                            <select class="select form-control" data-select2-id="select2-data-2-c0n2" id="filter_trainer_type">
-                                <option value="" data-select2-id="select2-data-2-c0n2">@lang('lang.all_type')</option>
-                                <option value="1">@lang('lang.internal')</option>
-                                <option value="2">@lang('lang.external')</option>
-                            </select>
-                        </div>
-                    </div>
+            @if (Auth::user()->RolePermission != 'Employee')
+                <form class="needs-validation" novalidate>
+                    @csrf
                     
-                    <div class="col-sm-2 col-md-2">
-                        <div class="form-group">
-                            <div class="cal-icon">
-                                <input class="form-control floating datetimepicker" type="text" id="from_date"
-                                    placeholder="@lang('lang.from_date')">
+                    <div class="row filter-btn">
+                        <div class="col-sm-2 col-md-2">
+                            <div class="form-group">
+                                <input class="form-control floating" type="text" id="trainer_name" placeholder="@lang('lang.name')">
+                            </div>
+                        </div>
+                        @if (in_array(Auth::user()->RolePermission, ['BOD', 'CEO', 'admin', 'HR', 'HRAdmin', 'developer']))
+                            @if ( Auth::user()->RolePermission == 'HR' && permissionAccess("m6-s1","is_access")->value != "1")
+                                <div class="col-sm-8 col-md-8"> </div>
+                            @else
+                                <div class="col-sm-2 col-md-2">
+                                    <div class="form-group">
+                                        <input class="form-control floating" type="text" id="company_name" placeholder="@lang('lang.company_name')">
+                                    </div>
+                                </div>
+                                <div class="col-sm-2 col-md-2">
+                                    <div class="form-group">
+                                        <select class="select form-control" data-select2-id="select2-data-2-c0n2" id="filter_trainer_type">
+                                            <option value="" data-select2-id="select2-data-2-c0n2">@lang('lang.all_type')</option>
+                                            <option value="1">@lang('lang.internal')</option>
+                                            <option value="2">@lang('lang.external')</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-sm-2 col-md-2">
+                                    <div class="form-group">
+                                        <div class="cal-icon">
+                                            <input class="form-control floating datetimepicker" type="text" id="from_date"
+                                                placeholder="@lang('lang.from_date')">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-2 col-md-2">
+                                    <div class="form-group">
+                                        <div class="cal-icon">
+                                            <input class="form-control floating datetimepicker" type="text" id="to_date"
+                                                placeholder="@lang('lang.to_date')">
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
+                        @else
+                            <div class="col-sm-8 col-md-8"> </div>
+                        @endif
+                        
+                        <div class="col-sm-2 col-md-2">
+                            <div style="display: flex" class="float-end">
+                                <button type="button" class="btn btn-sm btn-outline-secondary btn_research me-2" id="icon-search-download-reload">
+                                    <span class="btn-txt-research"><i class="fa fa-search"></i></span>
+                                    <span class="loading-icon-research" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
+                                </button>
+                                <button type="button" class="btn btn-sm btn-outline-secondary reset-btn" id="icon-search-download-reload">
+                                    <span class="btn-text-reset"><i class="fa fa-undo"></i></span>
+                                    <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
+                                </button>
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-2 col-md-2">
-                        <div class="form-group">
-                            <div class="cal-icon">
-                                <input class="form-control floating datetimepicker" type="text" id="to_date"
-                                    placeholder="@lang('lang.to_date')">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-2 col-md-2">
-                        <div style="display: flex" class="float-end">
-                            <button type="button" class="btn btn-sm btn-outline-secondary btn_research me-2" id="icon-search-download-reload">
-                                <span class="btn-txt-research"><i class="fa fa-search"></i></span>
-                                <span class="loading-icon-research" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
-                            </button>
-                            <button type="button" class="btn btn-sm btn-outline-secondary reset-btn" id="icon-search-download-reload">
-                                <span class="btn-text-reset"><i class="fa fa-undo"></i></span>
-                                <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </form>
-       
+                </form>
+            @endif
+            
             {!! Toastr::message() !!}
             <div class="content">
                 <div class="row">

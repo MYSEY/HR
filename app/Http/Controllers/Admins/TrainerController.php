@@ -24,8 +24,34 @@ class TrainerController extends Controller
         if (permissionAccess("m6-s1","is_view")->value != "1") {
             return view('upgrade.access_page');
         }
-        $data = Trainer::with("employee")->get();
+
+        $data = Trainer::with("employee")
+        ->leftJoin('users', 'trainers.employee_id', '=', 'users.id')
+        ->select(
+            'trainers.*',
+            'users.line_manager',
+            'users.department_id',
+            'users.branch_id',
+        )
+        ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+            if(in_array($RolePermission, ['HOD', 'BM'])){
+                $query->where("users.department_id", Auth::user()->department_id);
+                $query->where("users.branch_id", Auth::user()->branch_id);
+
+            }else if(in_array($RolePermission, ['DHOD', 'DBM'])){
+                $query->where("users.line_manager", Auth::user()->id);
+                $query->orWhere("users.id", Auth::user()->id);
+
+            }else if($RolePermission == "Employee") {
+                $query->where("users.id", Auth::user()->id);
+
+            }else if ($RolePermission == 'HR' && permissionAccess("m6-s1","is_access")->value != "1") {
+                $query->where("users.line_manager", Auth::user()->id);
+                $query->orWhere("users.id", Auth::user()->id);
+            }
+        })->get();
         $employee = User::whereIn("emp_status", ['1','2', '10'])->orWhereIn("p_status", ['1','2', '10'])->get();
+
         return view('trainers.index', compact('data', 'employee'));
     }
     public function filter(Request $request)
@@ -48,7 +74,26 @@ class TrainerController extends Controller
                 'users.personal_phone_number',
                 'users.email as  user_email',
                 'users.remark as user_remark',
+                'users.line_manager',
+                'users.department_id',
+                'users.branch_id',
             )
+            ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+                if(in_array($RolePermission, ['HOD', 'BM'])){
+                    $query->where("users.department_id", Auth::user()->department_id);
+                    $query->where("users.branch_id", Auth::user()->branch_id);
+    
+                }else if(in_array($RolePermission, ['DHOD', 'DBM'])){
+                    $query->where("users.line_manager", Auth::user()->id);
+                    $query->orWhere("users.id", Auth::user()->id);
+    
+                }else if($RolePermission == "Employee") {
+                    $query->where("users.id", Auth::user()->id);
+    
+                }else if ($RolePermission == 'HR' && permissionAccess("m6-s1","is_access")->value != "1") {
+                    $query->where("users.line_manager", Auth::user()->id);
+                }
+            })
             ->when($from_date, function ($query, $from_date) {
                 $query->where('trainers.created_at', '>=', $from_date);
             })
@@ -56,16 +101,16 @@ class TrainerController extends Controller
                 $query->where('trainers.created_at','<=', $to_date);
             })
             ->when($request->trainer_type, function ($query, $trainer_type) {
-                $query->where('type', $trainer_type);
+                $query->where('trainers.type', $trainer_type);
             })
             ->when($request->company_name, function ($query, $company_name) {
-                $query->where('company_name', 'LIKE', '%'.$company_name.'%');
+                $query->where('trainers.company_name', 'LIKE', '%'.$company_name.'%');
             })
             ->when($request->trainer_name, function ($query, $trainer_name) {
-                $query->where('name_en', 'LIKE', '%'.$trainer_name.'%');
-                $query->orWhere('name_kh', 'LIKE', '%'.$trainer_name.'%');
-                $query->orWhere('employee_name_en', 'LIKE', '%'.$trainer_name.'%');
-                $query->orWhere('employee_name_kh', 'LIKE', '%'.$trainer_name.'%');
+                $query->where('users.name_en', 'LIKE', '%'.$trainer_name.'%');
+                $query->orWhere('users.name_kh', 'LIKE', '%'.$trainer_name.'%');
+                $query->orWhere('users.employee_name_en', 'LIKE', '%'.$trainer_name.'%');
+                $query->orWhere('users.employee_name_kh', 'LIKE', '%'.$trainer_name.'%');
             })
             ->get();
             

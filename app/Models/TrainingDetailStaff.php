@@ -3,32 +3,26 @@
 namespace App\Models;
 
 use Spatie\Activitylog\LogOptions;
-use Illuminate\Database\Eloquent\Model;
-use Spatie\Activitylog\Traits\LogsActivity;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Activitylog\Traits\LogsActivity;
 
-class Trainer extends Model
+class TrainingDetailStaff extends Model
 {
     use HasFactory;
     use SoftDeletes;
     use LogsActivity;
 
-    protected $table = 'trainers';
+    protected $table = 'training_detail_staff';
     protected $guarded = ['id'];
+
     protected $fillable = [
-        'company_name',
-        'employee_id',
-        'type',
-        'name_en',
-        'name_kh',
-        'number_phone',
-        'email',
-        'remark',
-        'status',
-        'created_by',
-        'updated_by',
-        'deleted_at',
+       'training_id',
+       'employee_id',
+       'created_by',
+       'updated_by',
+       'deleted_at',
     ];
     public function getActivitylogOptions(): LogOptions
     {
@@ -37,8 +31,9 @@ class Trainer extends Model
         ->logOnlyDirty()
         ->dontSubmitEmptyLogs();
     }
-    public function employee(){
-        return $this->belongsTo(User::class,'employee_id')->select(
+    public function employee()
+    {
+        return $this->belongsTo(User::class, 'employee_id','id')->with(['position', 'department', 'gender','branch'])->select(
             'id',
             'number_employee',
             'last_name_kh',
@@ -53,8 +48,11 @@ class Trainer extends Model
             'department_id',
             'gender',
             'date_of_commencement',
-            'personal_phone_number',
         );
+    }
+    public function training()
+    {
+        return $this->belongsTo(Training::class, 'training_id')->withCount("trainingDetailStaffs")->with("trainingDetailTrainer");
     }
 
     public function createdBy()
@@ -65,9 +63,4 @@ class Trainer extends Model
     {
         return $this->belongsTo(User::class ,'updated_by');
     }
-
-    public function getEmployeeInAttribute(){
-        return optional($this->employee);
-    }
-
 }
