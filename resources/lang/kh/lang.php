@@ -324,6 +324,7 @@ return[
 	"edit_children_informations"=>"កែសម្រួលព័ត៌មានកូន",
 	"edit_children_allowance"=>"កែសម្រួលប្រាក់ឧបត្ថម្ភកុមារ",
 	"edit_trainer"=>"កែសម្រួលគ្រូបង្វឹក",
+	"edit_training_list"=>"កែសម្រួលវគ្គណ្តុះបណ្តាល",
 	"edit_transferrend"=>"កែសម្រួលការផ្ទេរប្រាក់",
 	"edit_promoted"=> "កែសម្រួលការតំឡើង",
     "employee_status"=> "ស្ថានភាពបុគ្គលិក",

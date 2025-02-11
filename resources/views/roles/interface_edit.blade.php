@@ -1351,6 +1351,12 @@
                                     value="{{SetCheckbox($arrayPermissions,"lang.trainer","is_export")->value}}"
                                     > <span class="checkmark"></span>
                                 </label>
+                                <label class="container-checkbox">@lang('lang.HR_review_all_staff')
+                                    <input type="checkbox" class="training_checkbox trainer_checkbox" id="trainer_check_access"
+                                    {{SetCheckbox($arrayPermissions,"lang.trainer","is_access")->checkbox}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.trainer","is_access")->value}}"
+                                    > <span class="checkmark"></span>
+                                </label>
                             </div>
                         </div>
                     </div>
@@ -1404,6 +1410,12 @@
                                     value="{{SetCheckbox($arrayPermissions,"lang.training","is_export")->value}}"
                                     > <span class="checkmark"></span>
                                 </label>
+                                <label class="container-checkbox">@lang('lang.HR_review_all_staff')
+                                    <input type="checkbox" class="training_checkbox training_checkbox_block" id="training_check_access" 
+                                    {{SetCheckbox($arrayPermissions,"lang.training","is_access")->checkbox}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.training","is_access")->value}}"
+                                    > <span class="checkmark"></span>
+                                </label>
                             </div>
                         </div>
                     </div>
@@ -1433,6 +1445,12 @@
                                     <input type="checkbox" class="training_checkbox training_reports_checkbox" id="report_training_check_export"
                                     {{SetCheckbox($arrayPermissions,"lang.training_report","is_export")->checkbox}}
                                     value="{{SetCheckbox($arrayPermissions,"lang.training_report","is_export")->value}}"
+                                    > <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.HR_review_all_staff')
+                                    <input type="checkbox" class="training_checkbox training_reports_checkbox" id="report_training_check_access"
+                                    {{SetCheckbox($arrayPermissions,"lang.training_report","is_access")->checkbox}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.training_report","is_access")->value}}"
                                     > <span class="checkmark"></span>
                                 </label>
                             </div>

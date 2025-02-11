@@ -910,6 +910,9 @@
                                 <label class="container-checkbox">@lang('lang.export')
                                     <input type="checkbox" class="training_checkbox trainer_checkbox" id="trainer_check_export" name="trainer_check_export"> <span class="checkmark"></span>
                                 </label>
+                                <label class="container-checkbox">@lang('lang.HR_review_all_staff')
+                                    <input type="checkbox" class="training_checkbox trainer_checkbox" id="trainer_check_access"> <span class="checkmark"></span>
+                                </label>
                             </div>
                         </div>
                     </div>
@@ -945,6 +948,9 @@
                                 <label class="container-checkbox">@lang('lang.export')
                                     <input type="checkbox" class="training_checkbox training_checkbox_block" id="training_check_export" name="training_check_export"> <span class="checkmark"></span>
                                 </label>
+                                <label class="container-checkbox">@lang('lang.HR_review_all_staff')
+                                    <input type="checkbox" class="training_checkbox training_checkbox_block" id="training_check_access"> <span class="checkmark"></span>
+                                </label>
                             </div>
                         </div>
                     </div>
@@ -966,6 +972,9 @@
                                 </label>
                                 <label class="container-checkbox">@lang('lang.export')
                                     <input type="checkbox" class="training_checkbox training_reports_checkbox" id="report_training_check_export" name="report_training_check_export"> <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.HR_review_all_staff')
+                                    <input type="checkbox" class="training_checkbox training_reports_checkbox" id="report_training_check_access"> <span class="checkmark"></span>
                                 </label>
                             </div>
                         </div>

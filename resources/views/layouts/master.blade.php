@@ -326,6 +326,50 @@
     <script type="text/javascript" src="{{ asset('/admin/js/noty.min.js') }}"></script>
     <script src="{{asset('/admin/js/bootstrap3-typeahead.min.js')}}"></script>
 
+    {{-- <script>
+        let idleTime = 0;
+        const maxIdleTime = 2 * 60 * 1000; // 10 minutes (in milliseconds)
+    
+        function resetIdleTimer() {
+            clearTimeout(idleTime);
+            idleTime = setTimeout(() => {
+                logoutAndRedirect();
+            }, maxIdleTime);
+        }
+    
+        function logoutAndRedirect() {
+            fetch('{{ route("logout") }}', {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Accept': 'application/json'
+                }
+            }).then(response => {
+                if (response.ok) {
+                    window.location.href = "{{ route('login') }}";
+                } else {
+                    alert('Failed to log out. Please try again.');
+                }
+            }).catch(error => {
+                console.error('Logout failed:', error);
+            });
+        }
+        window.onload = resetIdleTimer;
+        window.onmousemove = resetIdleTimer;
+        window.onkeypress = resetIdleTimer;
+        window.onclick = resetIdleTimer;
+        window.onscroll = resetIdleTimer;
+    
+        function warnUserBeforeLogout() {
+            setTimeout(() => {
+                // alert("You have been inactive for too long. You will be logged out soon.");
+            }, maxIdleTime - 60000); // Warn 1 minute before logout
+        }
+    
+        warnUserBeforeLogout();
+    </script> --}}
+    
+
     {{-- <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script> --}}
     {{-- <script src="{{asset('/admin/js/MSelectDBox.min.js')}}"></script> --}}
     <div class="sidebar-overlay"></div>

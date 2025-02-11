@@ -558,6 +558,7 @@ var dataPermission = function () {
                     "is_delete": $("#trainer_check_delete").val(),
                     "is_print": $("#trainer_check_print").val(),
                     "is_export": $("#trainer_check_export").val(),
+                    "is_access": $("#trainer_check_access").val(),
                 },
             ]
         })
@@ -577,6 +578,7 @@ var dataPermission = function () {
                     "is_delete": $("#training_check_delete").val(),
                     "is_print": $("#training_check_print").val(),
                     "is_export": $("#training_check_export").val(),
+                    "is_access": $("#training_check_access").val(),
                 },
             ]
         })
@@ -593,6 +595,7 @@ var dataPermission = function () {
                     "is_view": $("#report_training_check_view").val(),
                     "is_print": $("#report_training_check_print").val(),
                     "is_export": $("#report_training_check_export").val(),
+                    "is_access": $("#report_training_check_access").val(),
                 },
             ]
         })

@@ -23,6 +23,21 @@
                         <li class="breadcrumb-item active">@lang('lang.trainings')</li>
                     </ul>
                 </div>
+                @if (Auth::user()->RolePermission == "Developer" || Auth::user()->RolePermission == "HR" || Auth::user()->RolePermission == 'admin')
+                    @if (permissionAccess("m6-s2","is_export")->value == "1")
+                        <div class="col-auto float-end ms-auto">
+                            <a href="#" class="btn add-btn" id="btn_export_training" >@lang('lang.export') @lang('lang.staff')</a>
+                        </div>
+                        <div class="col-auto float-end ms-auto">
+                            <a href="#" class="btn add-btn" id="btn_export_trainer" >@lang('lang.export') @lang("lang.trainer")</a>
+                        </div>
+                    {{-- @endif
+                    @if (permissionAccess("m6-s2","is_import")->value == "1") --}}
+                        <div class="col-auto float-end ms-auto">
+                            <a href="#" class="btn add-btn me-2" data-toggle="modal" id="import_update_employee"><i class="fa fa-arrow-circle-up"  data-bs-toggle="tooltip" aria-label="fa fa-arrow-circle-up" data-bs-original-title="fa fa-arrow-circle-up"></i>Import Update Employee</a>
+                        </div>
+                    @endif
+                @endif
                 <div class="col-auto float-end ms-auto">
                     @if (permissionAccess("m6-s2","is_create")->value == "1")
                     <a href="#" class="btn add-btn" id="btn_add_training" ><i class="fa fa-plus"></i> @lang('lang.add_new')</a>
@@ -146,7 +161,8 @@
                                                                     <li class="dropdown avatar-dropdown">
                                                                         <a href="#" class="all-users dropdown-toggle"
                                                                             data-bs-toggle="dropdown"
-                                                                            aria-expanded="false">{{count($item->trainer_id)}}</a>
+                                                                            aria-expanded="false">{{$item->training_detail_trainer_count}}</a>
+                                                                            {{-- aria-expanded="false">{{count($item->trainer_id)}}</a> --}}
                                                                     </li>
                                                                 </ul>
                                                             </td>
@@ -155,7 +171,8 @@
                                                                     <li class="dropdown avatar-dropdown">
                                                                         <a href="#" class="all-users dropdown-toggle"
                                                                             data-bs-toggle="dropdown"
-                                                                            aria-expanded="false">{{ count($item->employee_id) }}</a>
+                                                                            aria-expanded="false">{{ $item->training_detail_staffs_count }}</a>
+                                                                            {{-- aria-expanded="false">{{ count($item->employee_id) }}</a> --}}
                                                                     </li>
                                                                 </ul>
                                                             </td>
@@ -204,6 +221,7 @@
         @endif
         @include('training.modal_form_create')
         @include('training.modal_form_edit')
+        @include('training.upload')
 
         <!-- Delete Training Modal -->
         <div class="modal custom-modal fade" id="delete_training" role="dialog">
@@ -242,6 +260,19 @@
             $(".btn-text-reset").hide();
             $("#btn-text-loading").css('display', 'block');
             window.location.replace("{{ URL('/training/list') }}"); 
+        });
+        $("#btn_export_training").on("click", function () {
+            var url = "{{URL::to('training/export-staff')}}?"
+            window.location = url;
+        });
+        $("#btn_export_trainer").on("click", function () {
+            var url = "{{URL::to('training/export-trainer')}}?"
+            window.location = url;
+        });
+        $("#import_update_employee").on("click", function() {
+            $(".thanLess-e").hide();
+            $("#thanLess-e").text("");
+            $('#importModal').modal('show');
         });
         $(".btn_research").on("click", function (){
             $(this).prop('disabled', true);
@@ -500,14 +531,14 @@
                                 '<td>'+
                                     '<ul class="team-members">'+
                                         '<li class="dropdown avatar-dropdown">'+
-                                            '<a href="#" class="all-users dropdown-toggle" aria-expanded="false">'+(row.trainer_id.length)+'</a>'+
+                                            '<a href="#" class="all-users dropdown-toggle" aria-expanded="false">'+(row.training_detail_trainer_count)+'</a>'+
                                         '</li>'+
                                     '</ul>'+
                                 '</td>'+
                                 '<td>'+
                                     '<ul class="team-members">'+
                                         '<li class="dropdown avatar-dropdown">'+
-                                            '<a href="#" class="all-users dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">'+(row.employee_id.length)+'</a>'+
+                                            '<a href="#" class="all-users dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">'+(row.training_detail_staffs_count)+'</a>'+
                                         '</li>'+
                                     '</ul>'+
                                 '</td>'+

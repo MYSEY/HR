@@ -51,11 +51,11 @@
                             @foreach ($trainer as $key=>$item)
                                 <tr>
                                     <td style="width: 5%">{{++$key}}</td>
-                                    <td >{{$item->type == 1 ? "Internal" : "External"}}</td>
-                                    <td >{{$item->type == 1 ? $item->EmployeeIn->employee_name_kh : $item->name_kh}}</td>
-                                    <td >{{$item->type == 1 ? $item->EmployeeIn->employee_name_en : $item->name_en}}</td>
-                                    <td >{{$item->type == 1 ? $item->EmployeeIn->personal_phone_number : $item->number_phone}}</td>
-                                    <td >{{$item->type == 1 ? $item->EmployeeIn->email : $item->email}}</td>
+                                    <td >{{$item->trainer->type == 1 ? "Internal" : "External"}}</td>
+                                    <td >{{$item->trainer->type == 1 ? $item->trainer->EmployeeIn->employee_name_kh : $item->trainer->name_kh}}</td>
+                                    <td >{{$item->trainer->type == 1 ? $item->trainer->EmployeeIn->employee_name_en : $item->trainer->name_en}}</td>
+                                    <td >{{$item->trainer->type == 1 ? $item->trainer->EmployeeIn->personal_phone_number : $item->trainer->number_phone}}</td>
+                                    <td >{{$item->trainer->type == 1 ? $item->trainer->EmployeeIn->email : $item->trainer->email}}</td>
                                     <td >{{ \Carbon\Carbon::parse($item->created_at)->format('d-M-Y') ?? '' }}</td>
                                 </tr>
                             @endforeach
@@ -64,10 +64,10 @@
                 </table>
             @else
                 <br>
-                <span><strong>@lang('lang.trainer_name'):</strong> {{count($trainer) > 0 ? $trainer[0]->name_en : ""}}</span><br>
-                <span><strong>@lang('lang.company_name'):</strong> {{count($trainer) > 0 ? $trainer[0]->company_name : ""}} </span><br>
-                <span><strong>@lang('lang.contact_number'):</strong> {{count($trainer) > 0 ? $trainer[0]->number_phone : ""}} </span><br>
-                <span><strong>@lang('lang.email'):</strong> {{count($trainer) > 0 ? $trainer[0]->email : ""}}</span>
+                <span><strong>@lang('lang.trainer_name'):</strong> {{count($trainer) > 0 ? $trainer[0]->trainer->name_en : ""}}</span><br>
+                <span><strong>@lang('lang.company_name'):</strong> {{count($trainer) > 0 ? $trainer[0]->trainer->company_name : ""}} </span><br>
+                <span><strong>@lang('lang.contact_number'):</strong> {{count($trainer) > 0 ? $trainer[0]->trainer->number_phone : ""}} </span><br>
+                <span><strong>@lang('lang.email'):</strong> {{count($trainer) > 0 ? $trainer[0]->trainer->email : ""}}</span>
             @endif
         </span>
         <h4> @lang('lang.employees_information')</h4>
@@ -89,13 +89,13 @@
                     @foreach ($employees as $key=>$item)
                         <tr>
                             <td style="width: 5%">{{++$key}}</td>
-                            <td >{{$item->number_employee}}</td>
-                            <td >{{$item->employee_name_kh}}</td>
-                            <td >{{$item->employee_name_en}}</td>
-                            <td >{{$item->EmployeeGender}}</td>
-                            <td >{{$item->EmployeePosition}}</td>
-                            <td >{{$item->EmployeeBranch}}</td>
-                            <td >{{ \Carbon\Carbon::parse($item->date_of_commencement)->format('d-M-Y') ?? '' }}</td>
+                            <td >{{$item->employee->number_employee}}</td>
+                            <td >{{$item->employee->employee_name_kh}}</td>
+                            <td >{{$item->employee->employee_name_en}}</td>
+                            <td >{{$item->employee->EmployeeGender}}</td>
+                            <td >{{$item->employee->EmployeePosition}}</td>
+                            <td >{{$item->employee->EmployeeBranch}}</td>
+                            <td >{{ \Carbon\Carbon::parse($item->employee->date_of_commencement)->format('d-M-Y') ?? '' }}</td>
                         </tr>
                     @endforeach
                 @endif

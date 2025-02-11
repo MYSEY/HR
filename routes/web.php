@@ -120,7 +120,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('/holidays/update', [HolidayController::class, 'update']);
 
     // test create data to connection database 2
-    // Route::post('/holidays/test-create', [HolidayController::class, 'mysqlSuppotForm']);
+    Route::post('/holidays/test-create', [HolidayController::class, 'mysqlSuppotForm']);
     // Route::get('/attendance/admin', [AttendanceAdminController::class, 'index']);
     // Route::get('/attendance/employee', [AttendanceEmployeeController::class, 'index']);
 
@@ -307,6 +307,10 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('/training/status', [TrainingController::class,'processing']);
     Route::get('/training/detail/{id}', [TrainingController::class,'detail']);
 
+    Route::get('/training/export-staff', [TrainingController::class,'staffTrainingExport']);
+    Route::get('/training/export-trainer', [TrainingController::class,'trainerTrainingExport']);
+    Route::post('/training/uploads', [TrainingController::class,'uploads']);
+
     // route trainer
     Route::get('/trainer/list', [TrainerController::class,'index']);
     Route::post('/trainer/list', [TrainerController::class,'filter']);
@@ -389,6 +393,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('/reports/transferred-staff-report', [ReportsController::class,'staffTransferred']);
 
     Route::get('/reports/training-report', [ReportsController::class,'trainingReport']);
+    Route::post('/reports/training-report-filter', [ReportsController::class,'filterTraining']);
     Route::post('/reports/training-report', [ReportsController::class,'trainingReport']);
     Route::get('/reports/training-export', [ReportsController::class,'trainingExport']);
 

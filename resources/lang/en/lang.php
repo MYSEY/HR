@@ -311,6 +311,7 @@ return[
     "edit_children_informations"=>"Edit Children Informations",
     "edit_children_allowance"=>"Edit Children Allowance",
     "edit_trainer"=>"Edit Trainer",
+    "edit_training_list"=>"Edit training list",
     "edit_transferrend"=>"Edit Transferrend",
     "edit_promoted"=> "Edit Promoted",
     "employee_status"=> "Employee Status",
