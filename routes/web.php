@@ -141,12 +141,13 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('/leaves/export-report', [LeavesAdminController::class,'Export']);
     Route::post('/generat/leaves/create', [LeavesAdminController::class,'CreateGenerateLeave']);
     Route::get('/generat/leaves', [LeavesAdminController::class,'GenerateLeave']);
-    Route::get('admin/generat/leaves', [LeavesAdminController::class,'GenerateLeave']);
-    Route::get('/leaves/report', [LeavesAdminController::class,'Report']);
-    Route::post('/leaves/filter-report', [LeavesAdminController::class,'FilterReport']);
-    Route::get('/leaves/export-report', [LeavesAdminController::class,'Export']);
+    // Route::get('admin/generat/leaves', [LeavesAdminController::class,'GenerateLeave']);
+    // Route::get('/leaves/report', [LeavesAdminController::class,'Report']);
+    // Route::post('/leaves/filter-report', [LeavesAdminController::class,'FilterReport']);
+    // Route::get('/leaves/export-report', [LeavesAdminController::class,'Export']);
     Route::post('/leaves/import', [LeavesAdminController::class,'ImportLeave']);
     Route::post('/leaves/admin/cancel/all', [LeavesAdminController::class,'cancels']);
+    Route::get('/leaves/admin/export-allocation', [LeavesAdminController::class,'ExportLeaveAllocation']);
 
     // Leave for employees
     Route::get('/leaves/employee', [LeavesEmployeeController::class,'index']);

@@ -90,4 +90,61 @@ class LeaveRepository extends BaseRepository
         $LeaveAllocation = LeaveAllocation::with("employee")->whereIn("employee_id", $employee_ids)->orderBy('id', 'DESC')->get();
         return $LeaveAllocation;
     }
+
+    public function getLeaveAllocation($request){
+        $LeaveAllocation = LeaveAllocation::with("employee")->with("createdBy")
+        ->leftJoin('users', 'leave_allocations.employee_id', '=', 'users.id')
+        ->select(
+            'leave_allocations.*',
+            'users.number_employee',
+            'users.employee_name_en',
+            'users.employee_name_kh',
+            'users.department_id',
+            'users.branch_id',
+            'users.line_manager',
+        )
+        ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+            if($RolePermission == 'CEO' || $RolePermission == 'BOD'){
+                $query->where("users.id", Auth::user()->id);
+                $query->orWhere("users.line_manager", Auth::user()->id);
+            }else if ($RolePermission == 'BM') {
+                $query->where("users.id", Auth::user()->line_manager);
+                $query->orWhere("users.branch_id", Auth::user()->branch_id);
+            }else if($RolePermission == 'HOD'){
+                if (Auth::user()->id == Auth::user()->department->direct_manager_id) {
+                    $query->where("users.department_id", Auth::user()->department_id);
+                    $query->whereNot("users.id", Auth::user()->id);
+                }else{
+                    $query->where("users.id", Auth::user()->id);
+                    $query->orWhere("users.line_manager", Auth::user()->id);
+                }
+            }else if ($RolePermission == 'HR' && permissionAccess("m10-s1","is_access")->value != "1") {
+                $query->where("users.id", Auth::user()->id);
+                $query->orWhere("users.line_manager", Auth::user()->id);
+            }else if($RolePermission == 'DHOD' || $RolePermission == 'DBM'){
+                $query->where("users.id", Auth::user()->id);
+                $query->orWhere("users.line_manager", Auth::user()->id);
+            }else if($RolePermission == 'Employee'){
+                if(permissionAccess("m10-s1","is_access")->value == "1"){
+                    $query->where("users.department_id", Auth::user()->department_id);
+                    $query->where("users.branch_id", Auth::user()->branch_id);
+                }else{
+                    $query->where("users.id", Auth::user()->line_manager);
+                }
+            }
+        })
+        ->when($request->employee_id, function ($query, $employee_id) {
+            $query->where('users.number_employee', 'LIKE', '%'.$employee_id.'%');
+        })
+        ->when($request->employee_name, function ($query, $employee_name) {
+            $query->where('users.employee_name_en', 'LIKE', '%'.$employee_name.'%');
+        })
+        ->when($request->department_id, function ($query, $department) {
+            $query->where('users.department_id', $department);
+        })
+        ->when($request->branch_id, function ($query, $branch) {
+            $query->where('users.branch_id', $branch);
+        })->orderBy('id', 'DESC')->get();
+        return $LeaveAllocation;
+    }
 }

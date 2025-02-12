@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admins;
 
+use App\Exports\ExporLeaveAllocation;
 use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Branchs;
@@ -38,44 +39,45 @@ class LeavesAdminController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         if (permissionAccess("m10-s1","is_view")->value != "1") {
             return view('upgrade.access_page');
         }
         $location = Branchs::get();
         $department = Department::get();
-        $LeaveAllocation = LeaveAllocation::with("employee")
-        ->leftJoin('users', 'leave_allocations.employee_id', '=', 'users.id')
-        ->select(
-            'leave_allocations.*',
-            'users.line_manager',
-            'users.department_id',
-            'users.branch_id',
-        )
-        ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
-            if($RolePermission == 'CEO' || $RolePermission == 'BOD'){
-                $query->where("users.id", Auth::user()->id);
-                $query->orWhere("users.line_manager", Auth::user()->id);
-            }else if ($RolePermission == 'BM') {
-                $query->where("users.id", Auth::user()->line_manager);
-                $query->orWhere("users.branch_id", Auth::user()->branch_id);
-            }else if($RolePermission == 'HOD'){
-                if (Auth::user()->id == Auth::user()->department->direct_manager_id) {
-                    $query->where("users.department_id", Auth::user()->department_id);
-                    $query->whereNot("users.id", Auth::user()->id);
-                }else{
-                    $query->where("users.id", Auth::user()->id);
-                    $query->orWhere("users.line_manager", Auth::user()->id);
-                }
-            }else if($RolePermission == 'HR' ||  $RolePermission == 'DHOD' || $RolePermission == 'DBM'){
-                $query->where("users.id", Auth::user()->id);
-                $query->orWhere("users.line_manager", Auth::user()->id);
-            }else if($RolePermission == 'Employee'){
-                $query->where("users.id", Auth::user()->line_manager);
-                // $query->orWhere("users.line_manager", Auth::user()->line_manager);
-            }
-        })->get();
+        $LeaveAllocation = $this->dataRequests->getLeaveAllocation($request);
+        // $LeaveAllocation = LeaveAllocation::with("employee")
+        // ->leftJoin('users', 'leave_allocations.employee_id', '=', 'users.id')
+        // ->select(
+        //     'leave_allocations.*',
+        //     'users.line_manager',
+        //     'users.department_id',
+        //     'users.branch_id',
+        // )
+        // ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+        //     if($RolePermission == 'CEO' || $RolePermission == 'BOD'){
+        //         $query->where("users.id", Auth::user()->id);
+        //         $query->orWhere("users.line_manager", Auth::user()->id);
+        //     }else if ($RolePermission == 'BM') {
+        //         $query->where("users.id", Auth::user()->line_manager);
+        //         $query->orWhere("users.branch_id", Auth::user()->branch_id);
+        //     }else if($RolePermission == 'HOD'){
+        //         if (Auth::user()->id == Auth::user()->department->direct_manager_id) {
+        //             $query->where("users.department_id", Auth::user()->department_id);
+        //             $query->whereNot("users.id", Auth::user()->id);
+        //         }else{
+        //             $query->where("users.id", Auth::user()->id);
+        //             $query->orWhere("users.line_manager", Auth::user()->id);
+        //         }
+        //     }else if($RolePermission == 'HR' ||  $RolePermission == 'DHOD' || $RolePermission == 'DBM'){
+        //         $query->where("users.id", Auth::user()->id);
+        //         $query->orWhere("users.line_manager", Auth::user()->id);
+        //     }else if($RolePermission == 'Employee'){
+        //         $query->where("users.id", Auth::user()->line_manager);
+        //         // $query->orWhere("users.line_manager", Auth::user()->line_manager);
+        //     }
+        // })->get();
 
         $dataLeaveRequest = LeaveRequest::with("employee")->with("handover")->with("createdBy")->whereIn("status", ["approved_lm","approved_hod","pending"])
             ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
@@ -98,7 +100,7 @@ class LeavesAdminController extends Controller
                     $query->where("next_approver", Auth::user()->id);
                 }else if ($RolePermission == 'HR') {
                     if(permissionAccess("m10-s1","is_access")->value == "1"){
-                        $query->where("status", "pending_cancel");
+                        $query->whereIn("status", ["cancel_hod","cancel","pending_cancel"]);
                     }else{
                         $query->where("status", "pending_cancel");
                         $query->where("next_approver", Auth::user()->id);
@@ -131,51 +133,52 @@ class LeavesAdminController extends Controller
     public function filter(Request $request)
     {
         if ($request->condiction_tab == 3) {
-            $LeaveAllocation = LeaveAllocation::with("employee")->with("createdBy")
-            ->leftJoin('users', 'leave_allocations.employee_id', '=', 'users.id')
-            ->select(
-                'leave_allocations.*',
-                'users.number_employee',
-                'users.employee_name_en',
-                'users.employee_name_kh',
-                'users.department_id',
-                'users.branch_id',
-            )
-            ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
-                if($RolePermission == 'CEO' || $RolePermission == 'BOD'){
-                    $query->where("users.id", Auth::user()->id);
-                    $query->orWhere("users.line_manager", Auth::user()->id);
-                }else if ($RolePermission == 'BM') {
-                    $query->where("users.id", Auth::user()->line_manager);
-                    $query->orWhere("users.branch_id", Auth::user()->branch_id);
-                }else if($RolePermission == 'HOD'){
-                    if (Auth::user()->id == Auth::user()->department->direct_manager_id) {
-                        $query->where("users.department_id", Auth::user()->department_id);
-                        $query->whereNot("users.id", Auth::user()->id);
-                    }else{
-                        $query->where("users.id", Auth::user()->id);
-                        $query->orWhere("users.line_manager", Auth::user()->id);
-                    }
-                }else if($RolePermission == 'HR' ||  $RolePermission == 'DHOD' || $RolePermission == 'DBM'){
-                    $query->where("users.id", Auth::user()->id);
-                    $query->orWhere("users.line_manager", Auth::user()->id);
-                }else if($RolePermission == 'Employee'){
-                    $query->where("users.id", Auth::user()->line_manager);
-                    // $query->orWhere("users.line_manager", Auth::user()->line_manager);
-                }
-            })
-            ->when($request->employee_id, function ($query, $employee_id) {
-                $query->where('users.number_employee', 'LIKE', '%'.$employee_id.'%');
-            })
-            ->when($request->employee_name, function ($query, $employee_name) {
-                $query->where('users.employee_name_en', 'LIKE', '%'.$employee_name.'%');
-            })
-            ->when($request->department_id, function ($query, $department) {
-                $query->where('users.department_id', $department);
-            })
-            ->when($request->branch_id, function ($query, $branch) {
-                $query->where('users.branch_id', $branch);
-            })->orderBy('id', 'DESC')->get();
+            // $LeaveAllocation = LeaveAllocation::with("employee")->with("createdBy")
+            // ->leftJoin('users', 'leave_allocations.employee_id', '=', 'users.id')
+            // ->select(
+            //     'leave_allocations.*',
+            //     'users.number_employee',
+            //     'users.employee_name_en',
+            //     'users.employee_name_kh',
+            //     'users.department_id',
+            //     'users.branch_id',
+            // )
+            // ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+            //     if($RolePermission == 'CEO' || $RolePermission == 'BOD'){
+            //         $query->where("users.id", Auth::user()->id);
+            //         $query->orWhere("users.line_manager", Auth::user()->id);
+            //     }else if ($RolePermission == 'BM') {
+            //         $query->where("users.id", Auth::user()->line_manager);
+            //         $query->orWhere("users.branch_id", Auth::user()->branch_id);
+            //     }else if($RolePermission == 'HOD'){
+            //         if (Auth::user()->id == Auth::user()->department->direct_manager_id) {
+            //             $query->where("users.department_id", Auth::user()->department_id);
+            //             $query->whereNot("users.id", Auth::user()->id);
+            //         }else{
+            //             $query->where("users.id", Auth::user()->id);
+            //             $query->orWhere("users.line_manager", Auth::user()->id);
+            //         }
+            //     }else if($RolePermission == 'HR' ||  $RolePermission == 'DHOD' || $RolePermission == 'DBM'){
+            //         $query->where("users.id", Auth::user()->id);
+            //         $query->orWhere("users.line_manager", Auth::user()->id);
+            //     }else if($RolePermission == 'Employee'){
+            //         $query->where("users.id", Auth::user()->line_manager);
+            //         // $query->orWhere("users.line_manager", Auth::user()->line_manager);
+            //     }
+            // })
+            // ->when($request->employee_id, function ($query, $employee_id) {
+            //     $query->where('users.number_employee', 'LIKE', '%'.$employee_id.'%');
+            // })
+            // ->when($request->employee_name, function ($query, $employee_name) {
+            //     $query->where('users.employee_name_en', 'LIKE', '%'.$employee_name.'%');
+            // })
+            // ->when($request->department_id, function ($query, $department) {
+            //     $query->where('users.department_id', $department);
+            // })
+            // ->when($request->branch_id, function ($query, $branch) {
+            //     $query->where('users.branch_id', $branch);
+            // })->orderBy('id', 'DESC')->get();
+            $LeaveAllocation = $this->dataRequests->getLeaveAllocation($request);
             return response()->json([
                 'LeaveAllocations'=>$LeaveAllocation,
             ]);
@@ -208,7 +211,9 @@ class LeavesAdminController extends Controller
                 if ($condiction_tab == 1) {
                     $query->whereIn("leave_requests.status", ["approved_lm","approved_hod","pending"]);
                 }else{
-                    if(in_array(Auth::user()->RolePermission, ['HRAdmin', 'HR', 'admin','developer'])){
+                    if (Auth::user()->RolePermission == 'HR' && permissionAccess("m10-s1","is_access")->value == "1") {
+                        $query->whereIn('leave_requests.status', ["cancel_hod", "cancel", "pending_cancel"]);
+                    }else if(in_array(Auth::user()->RolePermission, ['HRAdmin','admin','developer'])){
                         $query->whereIn('leave_requests.status', ["cancel_hod", "cancel", "pending_cancel"]);
                     }else{
                         $query->where('leave_requests.status', "pending_cancel");
@@ -311,7 +316,7 @@ class LeavesAdminController extends Controller
             $delegateLeave_branch = (clone $delegateLeave)->where('requester_id',  $dataBranch->direct_manager_id)->first();
             $delegateLeave_department = (clone $delegateLeave)->where('requester_id',  $dataDepartment->direct_manager_id)->first();
 
-            if($role == "HOD" || $role == "CEO" || $role == 'BOD'){
+            if($role == "HOD" || $role == "CEO" || $role == 'BOD' || $role == 'DHOD'){
                 $department = Auth::user()->department;
                 if ($delegateLeave_department) {
                     $data['next_approver'] = "Null";
@@ -359,7 +364,7 @@ class LeavesAdminController extends Controller
                         // }
                     }
                 }
-            }else if ($role == 'BM') {
+            }else if ($role == 'BM' || $role == 'DBM') {
                 $branch = Auth::user()->branch;
                 if ($delegateLeave_branch) {
                     $data['next_approver'] = "Null";
@@ -502,13 +507,13 @@ class LeavesAdminController extends Controller
             }
             $role = Auth::user()->RolePermission;
             $department = Auth::user()->department;
-            if($role == "HOD" || $role == "CEO" || $role == 'BOD'){
+            if($role == "HOD" || $role == "CEO" || $role == 'BOD' || $role == 'DHOD'){
                 if (Auth::user()->id == $department->direct_manager_id || $role == "CEO" || $role == 'BOD') {
                     $data['status'] = $request->status == "cancel_hod" ? "cancel_hod" : "rejected_hod" ;
                 }else{
                     $data['status'] = "rejected_lm";
                 }
-            }else if ($role == 'BM') {
+            }else if ($role == 'BM' || $role == 'DBM') {
                 $branch = Auth::user()->branch;
                 if ($branch->direct_manager_id == Auth::user()->id ) {
                     $data['status'] = $request->status == "cancel_hod" ? "cancel_hod" : "rejected_hod" ;
@@ -834,5 +839,11 @@ class LeavesAdminController extends Controller
         } else {
             return 0;
         }
+    }
+
+    public function ExportLeaveAllocation(Request $request){
+        $data = $this->dataRequests->getLeaveAllocation($request);;
+        $export = new ExporLeaveAllocation($data);
+        return Excel::download($export, 'Leave Records.xlsx');
     }
 }
