@@ -115,16 +115,10 @@ class EmployeePayrollController extends Controller
                 $query->where(function ($q) use ($searchValue) {
                     $q->where('payroll_previews.id', 'like', "%{$searchValue}%")
                     ->orWhere('payroll_previews.number_employee', 'like', "%{$searchValue}%")
-                    ->orWhere('payroll_previews.basic_salary', 'like', "%{$searchValue}%")
-                    ->orWhere('payroll_previews.total_gross_salary', 'like', "%{$searchValue}%")
-                    ->orWhere('payroll_previews.payment_date', 'like', "%{$searchValue}%")
                     ->orWhere('users.employee_name_kh', 'like', "%{$searchValue}%")
                     ->orWhere('users.employee_name_en', 'like', "%{$searchValue}%")
-                    ->orWhere('positions.name_khmer', 'like', "%{$searchValue}%")
                     ->orWhere('positions.name_english', 'like', "%{$searchValue}%")
-                    ->orWhere('departments.name_khmer', 'like', "%{$searchValue}%")
                     ->orWhere('departments.name_english', 'like', "%{$searchValue}%")
-                    ->orWhere('branchs.branch_name_kh', 'like', "%{$searchValue}%")
                     ->orWhere('branchs.branch_name_en', 'like', "%{$searchValue}%");
                 });
             }
