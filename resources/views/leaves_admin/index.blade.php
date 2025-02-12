@@ -71,6 +71,14 @@
                         <span class="btn-text-search"><i class="fa fa-search"></i></span>
                         <span id="btn-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
                     </button>
+                    @if (permissionAccess("m10-s1","is_export")->value == "1") 
+                        <div style="display: none" class="btn_excel">
+                            <button type="button" class="btn btn-sm btn-outline-secondary btn_excel me-2" id="icon-search-download-reload">
+                                <span class="btn-text-excel"><i class="fa fa-arrow-circle-down" aria-hidden="true"></i></span>
+                                <span id="btn-text-loading-excel" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
+                            </button>
+                        </div>
+                    @endif
                     <button type="button" class="btn btn-sm btn-outline-secondary reset-btn" id="icon-search-download-reload">
                         <span class="btn-text-reset"><i class="fa fa-undo"></i></span>
                         <span id="btn-reset-text-loading" style="display: none"><i class="fa fa-spinner fa-spin"></i></span>
@@ -412,9 +420,11 @@
         $("#tab_leave_allocations").on("click", function () {
             $(".leave-disply-search").css("display","block");
             $(".btn_approved_all").css("display","none");
+            $(".btn_excel").css("display","block");
             condiction_tab = $(this).data('tab-id');
         });
         $(".tab_leave_none").on("click", function () {
+            $(".btn_excel").css("display","none");
             $(".leave-disply-search").css("display","none");
             condiction_tab = $(this).data('tab-id');
             if (condiction_tab == 1) {
@@ -427,6 +437,19 @@
             }else{
                 $(".btn_approved_cancel_all").css("display","none");
             }
+        });
+
+        $(".btn_excel").on("click", function () {
+            var query = {
+                'employee_name': $("#employee_name").val(),
+                'status': null,
+                'department_id': $("#department_id").val(),
+                'branch_id': $("#branch_id").val(),
+                'start_date': null,
+                'end_date': null,
+            }
+            var url = "{{URL::to('leaves/admin/export-allocation')}}?" + $.param(query)
+            window.location = url;
         });
 
         $('#checkAll').on('click', function(e) {

@@ -99,7 +99,7 @@ class LeavesEmployeeController extends Controller
         ->leftJoin('roles', 'users.role_id', '=', 'roles.id')
         ->select( 'users.*', 'roles.role_type',)
         ->whereIn('users.emp_status', ['Probation','1','2','10',])
-        ->whereNot("roles.role_type", "Employee")
+        // ->whereNot("roles.role_type", "Employee")
         ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
             if (in_array($RolePermission, ['BM','DBM'])){
                 $query->where("users.branch_id", Auth::user()->branch_id);
@@ -289,12 +289,12 @@ class LeavesEmployeeController extends Controller
                 // $data['status'] = "approved_lm";
             }elseif (Auth::user()->RolePermission == "HOD" && Auth::user()->id == Auth::user()->department->direct_manager_id) {
                 $data['next_approver'] = Auth::user()->line_manager;
-
-                // $data['status'] = "approved_lm";
+            }elseif(Auth::user()->RolePermission == "DHOD" && Auth::user()->id == Auth::user()->department->direct_manager_id){
+                $data['next_approver'] = Auth::user()->line_manager;
             }else if(Auth::user()->RolePermission == "BM" && Auth::user()->id == Auth::user()->branch->direct_manager_id){
                 $data['next_approver'] = Auth::user()->line_manager;
-
-                // $data['status'] = "approved_lm";
+            }elseif(Auth::user()->RolePermission == "DBM" && Auth::user()->id == Auth::user()->branch->direct_manager_id){
+                $data['next_approver'] = Auth::user()->line_manager;
             }elseif(Auth::user()->RolePermission == "HRAdmin" && Auth::user()->id == Auth::user()->department->direct_manager_id){
                 $data['next_approver'] = Auth::user()->line_manager;
 
@@ -395,13 +395,19 @@ class LeavesEmployeeController extends Controller
                                 if($email != $manager1->email){
                                     $btn_approve = true;
                                 }
-                                Mail::to($email)->send(new SendEmail($datasSendEmail, $btn_approve));
+                                if($email){
+                                    Mail::to($email)->send(new SendEmail($datasSendEmail, $btn_approve));
+                                }
                             }
                         }else{
-                            Mail::to($line_manager2->email)->send(new SendEmail($datasSendEmail, true));
+                            if($line_manager2->email){
+                                Mail::to($line_manager2->email)->send(new SendEmail($datasSendEmail, true));
+                            }
                         }
                     }else{
-                        Mail::to($line_manager2->email)->send(new SendEmail($datasSendEmail,true));
+                        if($line_manager2->email){
+                            Mail::to($line_manager2->email)->send(new SendEmail($datasSendEmail,true));
+                        }
                     }
 
                 }
@@ -452,7 +458,13 @@ class LeavesEmployeeController extends Controller
             }elseif ($userRequest->role->role_type == "HOD" && $request->employee_id == $userRequest->department->direct_manager_id) {
                 $data['next_approver'] = $userRequest->line_manager;
                 $data['status'] = "approved_lm";
+            }elseif($userRequest->role->role_type == "DHOD" && $request->employee_id == $userRequest->department->direct_manager_id){
+                $data['next_approver'] = $userRequest->line_manager;
+                $data['status'] = "approved_lm";
             }else if($userRequest->role->role_type == "BM" && $request->employee_id == $userRequest->branch->direct_manager_id){
+                $data['next_approver'] = $userRequest->department->direct_manager_id;
+                $data['status'] = "approved_lm";
+            }elseif($userRequest->role->role_type == "DBM" && $request->employee_id == $userRequest->branch->direct_manager_id){
                 $data['next_approver'] = $userRequest->department->direct_manager_id;
                 $data['status'] = "approved_lm";
             }else{
@@ -564,13 +576,19 @@ class LeavesEmployeeController extends Controller
                                 if($email != $manager1->email){
                                     $btn_approve = true;
                                 }
-                                Mail::to($email)->send(new SendEmail($datasSendEmail, $btn_approve));
+                                if($email){
+                                    Mail::to($email)->send(new SendEmail($datasSendEmail, $btn_approve));
+                                }
                             }
                         }else{
-                            Mail::to($line_manager2->email)->send(new SendEmail($datasSendEmail, true));
+                            if($line_manager2->email){
+                                Mail::to($line_manager2->email)->send(new SendEmail($datasSendEmail, true));
+                            }
                         }
                     }else{
-                        Mail::to($line_manager2->email)->send(new SendEmail($datasSendEmail,true));
+                        if($line_manager2->email){
+                            Mail::to($line_manager2->email)->send(new SendEmail($datasSendEmail,true));
+                        }
                     }
                 }
             }
