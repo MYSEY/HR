@@ -68,78 +68,152 @@ class EmployeePayrollController extends Controller
         if (permissionAccess("m4-s1","is_view")->value != "1") {
             return view('upgrade.access_page');
         }
-        $data = $this->payrollRepo->getAllPayrollPreview($request);
+        $Monthly = null;
+        if ($request->filter_month) {
+            $Monthly = Carbon::createFromDate($request->filter_month)->format('m');
+        }
+        // dd($request->employee_id);
+        if (request()->ajax()) {
+            // Define the base query
+            $query = payrollPreview::leftJoin('users', 'payroll_previews.employee_id', '=', 'users.id')
+            ->leftJoin('positions','users.position_id','=','positions.id')
+            ->leftJoin('departments','users.department_id','=','departments.id')
+            ->leftJoin('branchs','users.branch_id','=','branchs.id')
+            ->select(
+                'payroll_previews.*',
+                'users.position_id',
+                'users.department_id',
+                'users.branch_id',
+                'users.number_employee',
+                'users.employee_name_en',
+                'users.employee_name_kh',
+                'users.date_of_commencement',
+                'users.basic_salary',
+                'positions.name_khmer as post_name_kh',
+                'positions.name_english as post_name_en',
+                'departments.name_khmer as depart_name_kh',
+                'departments.name_english as depart_name_en',
+                'branchs.branch_name_kh',
+                'branchs.branch_name_en',
+            );
+            $query ->when($request->employee_name, function ($query, $employee_name) {
+                return $query->where('users.employee_name_en', 'LIKE', "%$employee_name%");
+            })
+            ->when($request->number_employee, function ($query, $number_employee) {
+                return $query->where('users.number_employee', $number_employee);
+            })
+            ->when($request->branch_id, function ($query, $branch_id) {
+                return $query->where('users.branch_id', $branch_id);
+            })
+            ->when($request->filter_month, function ($query, $filter_month) {
+                return $query->whereMonth('payroll_previews.payment_date', date('m', strtotime($filter_month)));
+            })->orderBy('users.number_employee', 'ASC');
+
+            // **Search Handling**
+            $searchValue = request()->input('search.value');
+            if (!empty($searchValue)) {
+                $query->where(function ($q) use ($searchValue) {
+                    $q->where('payroll_previews.id', 'like', "%{$searchValue}%")
+                    ->orWhere('payroll_previews.number_employee', 'like', "%{$searchValue}%")
+                    ->orWhere('payroll_previews.basic_salary', 'like', "%{$searchValue}%")
+                    ->orWhere('payroll_previews.total_gross_salary', 'like', "%{$searchValue}%")
+                    ->orWhere('payroll_previews.payment_date', 'like', "%{$searchValue}%")
+                    ->orWhere('users.employee_name_kh', 'like', "%{$searchValue}%")
+                    ->orWhere('users.employee_name_en', 'like', "%{$searchValue}%")
+                    ->orWhere('positions.name_khmer', 'like', "%{$searchValue}%")
+                    ->orWhere('positions.name_english', 'like', "%{$searchValue}%")
+                    ->orWhere('departments.name_khmer', 'like', "%{$searchValue}%")
+                    ->orWhere('departments.name_english', 'like', "%{$searchValue}%")
+                    ->orWhere('branchs.branch_name_kh', 'like', "%{$searchValue}%")
+                    ->orWhere('branchs.branch_name_en', 'like', "%{$searchValue}%");
+                });
+            }
+
+            // Fetch paginated data
+            $recordsTotal = payrollPreview::where('id', $request->id)->count();
+            $recordsFiltered = $query->count();
+            // Apply pagination for the actual data retrieval
+            $start = intval($request->input('start', 0));
+            $limit = intval($request->input('length', 10));
+            $data = $query->offset($start)->limit($limit)->get();
+            // Return JSON response
+            return response()->json([
+                'draw' => intval($request->input('draw')),  // Optional: for client-side tracking
+                'recordsTotal' => $recordsTotal,
+                'recordsFiltered' => $recordsFiltered,
+                'data' => $data
+            ]);
+        }
         $branch = Branchs::all();
         $exChangeRateSalary= ExchangeRate::where('type','Salary')->orderBy('id','desc')->first();
         $exChangeRateNSSF= ExchangeRate::where('type','NSSF')->orderBy('id','desc')->first();
-
-        return view('payrolls.review',compact('data','branch','exChangeRateSalary', 'exChangeRateNSSF'));
+        return view('payrolls.review',compact('branch','exChangeRateSalary', 'exChangeRateNSSF'));
     }
-    public function search(Request $request) {
-        $Monthly = null;
-        $yearLy = null;
-        if ($request->filter_month) {
-            $Monthly = Carbon::createFromDate($request->filter_month)->format('m');
-            $yearLy = Carbon::createFromDate($request->filter_month)->format('Y');
-        }
-        $payroll = Payroll::with("users")
-        ->leftJoin('users', 'payrolls.employee_id', '=', 'users.id')
-        ->select(
-            'payrolls.*',
-            'users.number_employee',
-            'users.employee_name_en',
-            'users.employee_name_kh',
-            'users.branch_id',
-            'users.department_id',
-            'users.line_manager',
-        )
-        ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
-            if ($RolePermission == 'Employee') {
-                $query->where('users.id',Auth::user()->id);
-            }
-            if ($RolePermission == 'HOD') {
-                if (permissionAccess("m4-s2", "is_view_salary_staff")->value == 1) {
-                    $query->whereIn("users.department_id", EmployeeRepository::getRoleHOD());
-                }else{
-                    $query->where("users.id", Auth::user()->id);
-                }
-            }
-            if (in_array($RolePermission, ['HR', 'DHOD', 'DBM'])) {
-            // if($RolePermission == 'HR' ||  $RolePermission == 'DHOD' || $RolePermission == 'DBM'){
-                $query->where("users.id", Auth::user()->id);
-                if (optional(permissionAccess("m4-s2", "is_view_salary_staff"))->value == 1) {
-                    $query->orWhere(function ($q) {
-                        $q->where("users.line_manager", Auth::user()->id);
-                    });
-                }
-            }
-            if ($RolePermission == 'BM') {
-                if (permissionAccess("m4-s2", "is_view_salary_staff")->value == 1) {
-                    $query->where("users.branch_id", Auth::user()->branch_id);
-                }else{
-                    $query->where("users.id", Auth::user()->id);
-                }
-            }
-        })
-        ->when($request->employee_id, function ($query, $employee_id) {
-            $query->where('users.number_employee', 'LIKE', '%'.$employee_id.'%');
-        })
-        ->when($request->employee_name, function ($query, $employee_name) {
-            $query->where('users.employee_name_en', 'LIKE', '%'.$employee_name.'%');
-        })
-        ->when($request->branch_id, function ($query, $branch_id) {
-            $query->where('users.branch_id', $branch_id);
-        })
-        ->when($Monthly, function ($query, $Monthly) {
-            $query->whereMonth('payment_date', $Monthly);
-        })
-        ->when($yearLy, function ($query, $yearLy) {
-            $query->whereYear('payment_date', $yearLy);
-        })->whereIn('users.emp_status',['Probation','1','10','2'])->orderBy('id','desc')->get();
-        return response()->json([
-            'success'=>$payroll,
-        ]);
-    }
+    // public function search(Request $request) {
+    //     $Monthly = null;
+    //     $yearLy = null;
+    //     if ($request->filter_month) {
+    //         $Monthly = Carbon::createFromDate($request->filter_month)->format('m');
+    //         $yearLy = Carbon::createFromDate($request->filter_month)->format('Y');
+    //     }
+    //     $payroll = Payroll::with("users")
+    //     ->leftJoin('users', 'payrolls.employee_id', '=', 'users.id')
+    //     ->select(
+    //         'payrolls.*',
+    //         'users.number_employee',
+    //         'users.employee_name_en',
+    //         'users.employee_name_kh',
+    //         'users.branch_id',
+    //         'users.department_id',
+    //         'users.line_manager',
+    //     )
+    //     ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+    //         if ($RolePermission == 'Employee') {
+    //             $query->where('users.id',Auth::user()->id);
+    //         }
+    //         if ($RolePermission == 'HOD') {
+    //             if (permissionAccess("m4-s2", "is_view_salary_staff")->value == 1) {
+    //                 $query->whereIn("users.department_id", EmployeeRepository::getRoleHOD());
+    //             }else{
+    //                 $query->where("users.id", Auth::user()->id);
+    //             }
+    //         }
+    //         if (in_array($RolePermission, ['HR', 'DHOD', 'DBM'])) {
+    //         // if($RolePermission == 'HR' ||  $RolePermission == 'DHOD' || $RolePermission == 'DBM'){
+    //             $query->where("users.id", Auth::user()->id);
+    //             if (optional(permissionAccess("m4-s2", "is_view_salary_staff"))->value == 1) {
+    //                 $query->orWhere(function ($q) {
+    //                     $q->where("users.line_manager", Auth::user()->id);
+    //                 });
+    //             }
+    //         }
+    //         if ($RolePermission == 'BM') {
+    //             if (permissionAccess("m4-s2", "is_view_salary_staff")->value == 1) {
+    //                 $query->where("users.branch_id", Auth::user()->branch_id);
+    //             }else{
+    //                 $query->where("users.id", Auth::user()->id);
+    //             }
+    //         }
+    //     })
+    //     ->when($request->employee_id, function ($query, $employee_id) {
+    //         $query->where('users.number_employee', 'LIKE', '%'.$employee_id.'%');
+    //     })
+    //     ->when($request->employee_name, function ($query, $employee_name) {
+    //         $query->where('users.employee_name_en', 'LIKE', '%'.$employee_name.'%');
+    //     })
+    //     ->when($request->branch_id, function ($query, $branch_id) {
+    //         $query->where('users.branch_id', $branch_id);
+    //     })
+    //     ->when($Monthly, function ($query, $Monthly) {
+    //         $query->whereMonth('payment_date', $Monthly);
+    //     })
+    //     ->when($yearLy, function ($query, $yearLy) {
+    //         $query->whereYear('payment_date', $yearLy);
+    //     })->whereIn('users.emp_status',['Probation','1','10','2'])->orderBy('id','desc')->get();
+    //     return response()->json([
+    //         'success'=>$payroll,
+    //     ]);
+    // }
 
     public function payrollStaffResignSearch(Request $request){
         $Monthly = null;

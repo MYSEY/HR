@@ -13,6 +13,10 @@
         font-weight: bold;
         margin-bottom: 10px;
     }
+    .form-check-md .form-check-input {
+        width: 1.15rem;
+        height: 1.15rem;
+    }
 </style>
 @section('content')
     <div class="">
@@ -38,10 +42,7 @@
                 <div class="row filter-btn"> 
                     <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2"> 
                         <div class="form-group">
-                            <div class="search">
-                                <i class="uil uil-search"></i>
-                                <input spellcheck="false" id="employee_id" class="form-control" type="text" placeholder="@lang('lang.employee_id')">
-                            </div>
+                            <input spellcheck="false" id="employee_id" name="employee_id" class="form-control" type="text" placeholder="@lang('lang.employee_id')">
                             {{-- <input type="text" class="form-control" name="employee_id" id="employee_id" placeholder="@lang('lang.employee_id')" value="{{old('number_employee')}}"> --}}
                         </div>
                     </div>
@@ -62,7 +63,7 @@
                     </div>
                     <div class="col-sm-6 col-md-2 col-lg-2 col-xl-2">
                         <div class="form-group ">
-                            <input class="form-control" type="month" id="filter_month">
+                            <input class="form-control" type="month" id="filter_month" name="filter_month">
                         </div>
                     </div>
                     <div class="col-sm-6 col-md-4 ">
@@ -102,11 +103,14 @@
                                 <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                                     <div class="row">
                                         <div class="col-sm-12">
-                                            <table class="table table-striped custom-table datatable dataTable no-footer display tbl_payment_salary"
-                                                id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info"  cellspacing="0">
+                                            <table class="table table-striped custom-table datatable dataTable no-footer" id="tbl_payroll_review" aria-describedby="DataTables_Table_0_info"  cellspacing="0">
                                                 <thead>
                                                     <tr>
-                                                        <th><input type="checkbox" id="checkAll"></th>
+                                                        <th class="tuck-scroll-3">
+                                                            <div class="form-check form-check-md">
+                                                                <input class="form-check-input" type="checkbox" data-has-listeners="true" id="checkAll">
+                                                            </div>
+                                                        </th>
                                                         <th class="sorting stuck-scroll-3" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1">@lang('lang.employee_id')</th>
                                                         <th class=" stuck-scroll-3" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending">@lang('lang.employee_name')</th>
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
@@ -231,11 +235,13 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    @if (count($data) > 0)
+                                                    {{-- @if (count($data) > 0)
                                                         @foreach ($data as $item)
                                                             <tr class="odd">
                                                                 <td>
-                                                                    <input type="checkbox" class="sub_chk" data-id="{{$item->number_employee}}" data-date="{{$item->payment_date}}">
+                                                                    <div class="form-check form-check-md">
+                                                                        <input class="form-check-input sub_chk" type="checkbox" data-has-listeners="true" data-id="{{$item->number_employee}}" data-date="{{$item->payment_date}}">
+                                                                    </div>
                                                                 </td>
                                                                 <td class="stuck-scroll-3"><a href="#">{{ $item->users == null ? '' : $item->users->number_employee }}</a></td>
                                                                 <td class="stuck-scroll-3"><a href="#">{{ $item->users == null ? '' : $item->users->EmployeeName }}</span></a></td>
@@ -271,7 +277,7 @@
                                                                 <td>{{ $item->Created }}</td>
                                                             </tr>
                                                         @endforeach
-                                                    @endif
+                                                    @endif --}}
                                                 </tbody>
                                             </table>
                                         </div>
@@ -414,12 +420,44 @@
                 </div>
             </div>
         </div>
+        <div id="loading-overlay" style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.8); z-index: 9999; text-align: center;">
+            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
+                <p>Loading Data...</p>
+            </div>
+        </div>
     </div>
 @endsection
 @include('includs.script')
 <script src="{{asset('/admin/js/validation-field.js')}}"></script>
+@section('script')
 <script>
+    var lang = @json(Helper::getLang());
+    var number_employee = null;
     $(function(){
+        $(".btn-search").on("click", function(){
+            number_employee = $('#employee_id').val();
+            employee_name = $('#employee_name').val();
+            branch_id = $('#branch_id').val();
+            filter_month = $('#filter_month').val();
+            // Reload DataTable with the filter values
+            $('#tbl_payroll_review').DataTable().ajax.reload(null, false); 
+            
+            // $(".btn-search").prop('disabled', true);
+            // $(".btn-txt").hide();
+            // $(".loading-icon").css('display', 'block')
+            // let params = {
+            //     branch_id: $("#branch_id").val(),
+            //     employee_id: $("#employee_id").val(),
+            //     employee_name: $("#employee_name").val(),
+            //     filter_month: $("#filter_month").val(),
+            // };
+            // showdatas(params);
+        });
+        dataTables();
+
         var path = "{{ url('admins/user/autocomplet') }}";
         $('#employee_id').typeahead({
             source: function (query, process) {
@@ -582,18 +620,7 @@
             $("#btn-text-loading").css('display', 'block');
             window.location.replace("{{ URL('payroll/review') }}");
         });
-        $(".btn-search").on("click", function(){
-            $(".btn-search").prop('disabled', true);
-                $(".btn-txt").hide();
-                $(".loading-icon").css('display', 'block')
-            let params = {
-                branch_id: $("#branch_id").val(),
-                employee_id: $("#employee_id").val(),
-                employee_name: $("#employee_name").val(),
-                filter_month: $("#filter_month").val(),
-            };
-            showdatas(params);
-        });
+
         $(".btn_excel").on("click", function() {
             let query = {
                 branch_id: $("#branch_id").val(),
@@ -749,75 +776,254 @@
             }
         });
     });
-    function showdatas(params) {
-        var localeLanguage = '{{ config('app.locale') }}';
-        $.ajax({
-            type: "post",
-            url: "{{ url('payroll/review/search') }}",
-            data: {
-                "_token": "{{ csrf_token() }}",
-                branch_id: params.branch_id ? params.branch_id : null,
-                employee_id: params.employee_id ? params.employee_id : null,
-                employee_name: params.employee_name ? params.employee_name : null,
-                filter_month: params.filter_month ? params.filter_month : null,
-            },
-            dataType: "JSON",
-            success: function(response) {
-                let data =  response.success;
-                $(".btn-search").prop('disabled', false);
-                $(".btn-txt").show();
-                $(".loading-icon").css('display', 'none')
-                var tr = "";
-                if (data.length > 0) {
-                    data.map((row) => {
-                        let join_date = moment(row.users.date_of_commencement).format('D-MMM-YYYY');
-                        let payment_date = moment(row.payment_date).format('D-MMM-YYYY');
-                        let created_at = moment(row.created_at).format('D-MMM-YYYY');
-                        tr +='<tr class="odd">'+
-                            '<td class="stuck-scroll-3"><input type="checkbox" class="sub_chk"></a></td>'+
-                            '<td class="stuck-scroll-3"><a href="#">'+(row.users == null ? '' : row.users.number_employee )+'</a></td>'+
-                            '<td class="stuck-scroll-3"><a href="#">'+(row.users == null ? '' : localeLanguage == 'en' ? row.users.employee_name_en : row.users.employee_name_kh )+'</span></a></td>'+
-                            '<td><a href="#">'+(row.users == null ? '' : localeLanguage == 'en' ? row.users.position.name_english :row.users.position.name_khmer )+'</a></td>'+
-                            '<td><a href="#">'+(row.users == null ? '' : localeLanguage == 'en' ? row.users.department.name_english : row.users.department.name_khmer )+'</a></td>'+
-                            '<td><a href="#">'+(row.users == null ? '' : localeLanguage == 'en' ? row.users.branch.branch_name_en : row.users.branch.branch_name_kh)+'</a></td>'+
-                            '<td>'+(join_date)+'</td>'+
-                            '<td>$<a href="#">'+(row.basic_salary )+'</a></td>'+
-                            '<td>$<a href="#">'+(row.adjustment_include_taxe)+'</a></td>'+
-                            '<td>$<a href="#">'+(row.total_gross_salary )+'</a></td>'+
-                            '<td>$<a href="#">'+(row.total_child_allowance )+'</a></td>'+
-                            '<td>$<a href="#">'+(row.phone_allowance == null ? '0.00' : row.phone_allowance)+'</a></td>'+
-                            '<td>$<a href="#">'+(row.monthly_quarterly_bonuses)+'</a></td>'+
-                            '<td>$<a href="#">'+(row.total_kny_phcumben)+'</a></td>'+
-                            '<td>$<a href="#">'+(row.annual_incentive_bonus)+'</a></td>'+
-                            '<td>$<a href="#">'+(row.other_benefits)+'</a></td>'+
-                            '<td>$<a href="#">'+(row.seniority_pay_included_tax)+'</a></td>'+
-                            '<td>$<a href="#">'+(row.total_gross)+'</a></td>'+
-                            '<td>$<a href="#">'+(row.total_pension_fund)+'</a></td>'+
-                            '<td>$<a href="#">'+(row.base_salary_received_usd)+'</a></td>'+
-                            '<td><span>៛</span><a href="#">'+(formatCurrencyKH(row.base_salary_received_riel))+'</a></td>'+
-                            '<td><span>៛</span><a href="#">'+(formatCurrencyKH(row.total_charges_reduced))+'</a></td>'+
-                            '<td><span>៛</span><a href="#">'+(formatCurrencyKH(row.total_tax_base_riel))+'</a></td>'+
-                            '<td><a href="#">'+(row.total_rate)+'%</a></td>'+
-                            '<td>$<a href="#">'+(row.total_salary_tax_usd)+'</a></td>'+
-                            '<td><span>៛</span><a href="#">'+(formatCurrencyKH(row.total_salary_tax_riel))+'</a></td>'+
-                            '<td>$<a href="#">'+(row.seniority_pay_excluded_tax)+'</a></td>'+
-                            '<td>$<a href="#">'+(row.adjustment)+'</a></td>'+
-                            '<td>$<a href="#">'+(row.total_severance_pay)+'</a></td>'+
-                            '<td>$<a href="#">'+(row.loan_amount == null ? "0.00" : row.loan_amount)+'</a></td>'+
-                            '<td>$<a href="#">'+(row.total_salary )+'</a></td>'+
-                            '<td>'+(payment_date)+'</td>'+
-                            '<td>'+(created_at)+'</td>'+
-                        '</tr>';
-                    });
-                }else{
-                    var tr = '<tr><td colspan=35 align="center">@lang("lang.no_record_to_display")</td></tr>';
+
+    function dataTables() {
+        $('#loading-overlay').show();
+        // Check if DataTable instance exists, then destroy it
+        if ($.fn.DataTable.isDataTable('#tbl_payroll_review')) {
+            $('#tbl_payroll_review').DataTable().clear().destroy();
+        }
+        
+        $('#tbl_payroll_review').DataTable({
+            pageLength: 10,
+            processing: true,
+            serverSide: true,
+            order: [[0, 'desc']],
+            lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]],
+            ajax: {
+                url: '{{ URL("payroll/review") }}',
+                type: 'GET',
+                data: function(d) {
+                    d.number_employee = $('input[name="employee_id"]').val();
+                    d.branch_id = $('select[name="branch_id"]').val();
+                    d.employee_name = $('input[name="employee_name"]').val();
+                    d.filter_month = $('input[name="filter_month"]').val();
                 }
-                $(".tbl_payment_salary tbody").html(tr);
+            },
+            columns: [
+                {
+                    data: 'id',
+                    name: 'id',
+                    className: 'stuck-scroll-3',
+                    render: function(data, type, row) {
+                        return `<div class="form-check form-check-md">
+                            <input class="form-check-input sub_chk" type="checkbox" data-has-listeners="true" data-id="${row.number_employee}"  data-date="${row.payment_date}">
+                        </div>`;
+                    },
+                    orderable: false,
+                    searchable: false
+                },
+                { 
+                    data: 'number_employee', 
+                    name: 'number_employee',
+                    className: 'stuck-scroll-3'
+                },
+                { 
+                    data: 'employee_name_en', 
+                    name: 'employee_name_en' ,
+                    className: 'stuck-scroll-3',
+                    render: function(data, type, row) {
+                        return lang == 'en' ? row.employee_name_en : row.employee_name_kh
+                    },
+                    orderable: false,
+                    searchable: false
+                },
+                { 
+                    data: 'post_name_en', 
+                    name: 'post_name_en',
+                    render: function(data, type, row) {
+                        return lang == 'en' ? row.post_name_en : row.post_name_kh
+                    },
+                    orderable: false,
+                    searchable: false
+                },
+                { 
+                    data: 'depart_name_en', 
+                    name: 'depart_name_en',
+                    render: function(data, type, row) {
+                        return lang == 'en' ? row.depart_name_en : row.depart_name_kh
+                    },
+                    orderable: false,
+                    searchable: false
+                },
+                { 
+                    data: 'branch_name_en', 
+                    name: 'branch_name_en',
+                    render: function(data, type, row) {
+                        return lang == 'en' ? row.branch_name_en : row.branch_name_kh
+                    },
+                    orderable: false,
+                    searchable: false
+                },
+                { data: 'date_of_commencement', name: 'date_of_commencement' },
+                { data: 'basic_salary', name: 'basic_salary' },
+                { data: 'adjustment_include_taxe', name: 'adjustment_include_taxe' },
+                { data: 'total_gross_salary', name: 'total_gross_salary' },
+                { data: 'total_child_allowance', name: 'total_child_allowance' },
+                { data: 'phone_allowance', name: 'phone_allowance' },
+                { data: 'monthly_quarterly_bonuses', name: 'monthly_quarterly_bonuses' },
+                { data: 'total_kny_phcumben', name: 'total_kny_phcumben' },
+                { data: 'annual_incentive_bonus', name: 'annual_incentive_bonus' },
+                { data: 'other_benefits', name: 'other_benefits' },
+                { data: 'seniority_pay_included_tax', name: 'seniority_pay_included_tax' },
+                { data: 'total_gross', name: 'total_gross' },
+                { data: 'total_pension_fund', name: 'total_pension_fund' },
+                { data: 'base_salary_received_usd', name: 'base_salary_received_usd' },
+                { 
+                    data: 'base_salary_received_riel', 
+                    name: 'base_salary_received_riel',
+                    render: function(data, type, row) {
+                        return formatCurrencyKH(row.base_salary_received_riel)
+                    }
+                },
+                { 
+                    data: 'total_charges_reduced', 
+                    name: 'total_charges_reduced',
+                    render: function(data, type, row) {
+                        return formatCurrencyKH(row.total_charges_reduced)
+                    }
+                },
+                { 
+                    data: 'total_tax_base_riel', 
+                    name: 'total_tax_base_riel',
+                    render: function(data, type, row) {
+                        return formatCurrencyKH(row.total_tax_base_riel)
+                    }
+                },
+                { 
+                    data: 'total_rate', 
+                    name: 'total_rate',
+                },
+                { 
+                    data: 'total_salary_tax_usd', 
+                    name: 'total_salary_tax_usd',
+                },
+                { 
+                    data: 'total_salary_tax_riel', 
+                    name: 'total_salary_tax_riel',
+                    render: function(data, type, row) {
+                        return formatCurrencyKH(row.total_salary_tax_riel)
+                    }
+                },
+                { 
+                    data: 'seniority_pay_excluded_tax', 
+                    name: 'seniority_pay_excluded_tax'
+                },
+                { 
+                    data: 'adjustment', 
+                    name: 'adjustment'
+                },
+                { 
+                    data: 'total_severance_pay', 
+                    name: 'total_severance_pay'
+                },
+                { 
+                    data: 'loan_amount', 
+                    name: 'loan_amount',
+                    render: function(data, type, row) {
+                        return data == null ? "0.00" : data
+                    }
+                },
+                { 
+                    data: 'total_salary', 
+                    name: 'total_salary',
+                },
+                { 
+                    data: 'payment_date', 
+                    name: 'payment_date',
+                },
+                {
+                    data: 'created_at',
+                    name: 'created_at',
+                    render: function(data, type, row) {
+                        return moment(data).format('YYYY-MM-DD HH:mm:ss'); // Customize the format as needed
+                    }
+                }
+            ],
+            order: [[0, 'desc']],
+            initComplete: function() {
+                $('#loading-overlay').hide(); // Hide spinner when data is fully loaded
+            }
+        });
+        $('#tbl_payroll_review').on('processing.dt', function (e, settings, processing) {
+            if (processing) {
+                $('#loading-overlay').show();
+            } else {
+                $('#loading-overlay').hide();
             }
         });
     }
+    
+    // function showdatas(params) {
+    //     var localeLanguage = '{{ config('app.locale') }}';
+    //     $.ajax({
+    //         type: "post",
+    //         url: "{{ url('payroll/review/search') }}",
+    //         data: {
+    //             "_token": "{{ csrf_token() }}",
+    //             branch_id: params.branch_id ? params.branch_id : null,
+    //             employee_id: params.employee_id ? params.employee_id : null,
+    //             employee_name: params.employee_name ? params.employee_name : null,
+    //             filter_month: params.filter_month ? params.filter_month : null,
+    //         },
+    //         dataType: "JSON",
+    //         success: function(response) {
+    //             let data =  response.success;
+    //             $(".btn-search").prop('disabled', false);
+    //             $(".btn-txt").show();
+    //             $(".loading-icon").css('display', 'none')
+    //             var tr = "";
+    //             if (data.length > 0) {
+    //                 data.map((row) => {
+    //                     let join_date = moment(row.users.date_of_commencement).format('D-MMM-YYYY');
+    //                     let payment_date = moment(row.payment_date).format('D-MMM-YYYY');
+    //                     let created_at = moment(row.created_at).format('D-MMM-YYYY');
+    //                     tr +='<tr class="odd">'+
+    //                         '<td class="stuck-scroll-3"><input type="checkbox" class="sub_chk"></a></td>'+
+    //                         '<td class="stuck-scroll-3"><a href="#">'+(row.users == null ? '' : row.users.number_employee )+'</a></td>'+
+    //                         '<td class="stuck-scroll-3"><a href="#">'+(row.users == null ? '' : localeLanguage == 'en' ? row.users.employee_name_en : row.users.employee_name_kh )+'</span></a></td>'+
+    //                         '<td><a href="#">'+(row.users == null ? '' : localeLanguage == 'en' ? row.users.position.name_english :row.users.position.name_khmer )+'</a></td>'+
+    //                         '<td><a href="#">'+(row.users == null ? '' : localeLanguage == 'en' ? row.users.department.name_english : row.users.department.name_khmer )+'</a></td>'+
+    //                         '<td><a href="#">'+(row.users == null ? '' : localeLanguage == 'en' ? row.users.branch.branch_name_en : row.users.branch.branch_name_kh)+'</a></td>'+
+    //                         '<td>'+(join_date)+'</td>'+
+    //                         '<td>$<a href="#">'+(row.basic_salary )+'</a></td>'+
+    //                         '<td>$<a href="#">'+(row.adjustment_include_taxe)+'</a></td>'+
+    //                         '<td>$<a href="#">'+(row.total_gross_salary )+'</a></td>'+
+    //                         '<td>$<a href="#">'+(row.total_child_allowance )+'</a></td>'+
+    //                         '<td>$<a href="#">'+(row.phone_allowance == null ? '0.00' : row.phone_allowance)+'</a></td>'+
+    //                         '<td>$<a href="#">'+(row.monthly_quarterly_bonuses)+'</a></td>'+
+    //                         '<td>$<a href="#">'+(row.total_kny_phcumben)+'</a></td>'+
+    //                         '<td>$<a href="#">'+(row.annual_incentive_bonus)+'</a></td>'+
+    //                         '<td>$<a href="#">'+(row.other_benefits)+'</a></td>'+
+    //                         '<td>$<a href="#">'+(row.seniority_pay_included_tax)+'</a></td>'+
+    //                         '<td>$<a href="#">'+(row.total_gross)+'</a></td>'+
+    //                         '<td>$<a href="#">'+(row.total_pension_fund)+'</a></td>'+
+    //                         '<td>$<a href="#">'+(row.base_salary_received_usd)+'</a></td>'+
+    //                         '<td><span>៛</span><a href="#">'+(formatCurrencyKH(row.base_salary_received_riel))+'</a></td>'+
+    //                         '<td><span>៛</span><a href="#">'+(formatCurrencyKH(row.total_charges_reduced))+'</a></td>'+
+    //                         '<td><span>៛</span><a href="#">'+(formatCurrencyKH(row.total_tax_base_riel))+'</a></td>'+
+    //                         '<td><a href="#">'+(row.total_rate)+'%</a></td>'+
+    //                         '<td>$<a href="#">'+(row.total_salary_tax_usd)+'</a></td>'+
+    //                         '<td><span>៛</span><a href="#">'+(formatCurrencyKH(row.total_salary_tax_riel))+'</a></td>'+
+    //                         '<td>$<a href="#">'+(row.seniority_pay_excluded_tax)+'</a></td>'+
+    //                         '<td>$<a href="#">'+(row.adjustment)+'</a></td>'+
+    //                         '<td>$<a href="#">'+(row.total_severance_pay)+'</a></td>'+
+    //                         '<td>$<a href="#">'+(row.loan_amount == null ? "0.00" : row.loan_amount)+'</a></td>'+
+    //                         '<td>$<a href="#">'+(row.total_salary )+'</a></td>'+
+    //                         '<td>'+(payment_date)+'</td>'+
+    //                         '<td>'+(created_at)+'</td>'+
+    //                     '</tr>';
+    //                 });
+    //             }else{
+    //                 var tr = '<tr><td colspan=35 align="center">@lang("lang.no_record_to_display")</td></tr>';
+    //             }
+    //             $(".tbl_payment_salary tbody").html(tr);
+    //         }
+    //     });
+    // }
    
     function formatCurrencyKH(currency) {
         return parseInt(currency).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
 </script>
+@endsection
