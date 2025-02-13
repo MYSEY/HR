@@ -30,10 +30,10 @@ class ExporLeaveAllocation implements FromCollection,WithColumnWidths, WithHeadi
             $join_date = Carbon::createFromDate($leave->employee->date_of_commencement)->format('d-m-Y');
             $default_annual_leave = ($leave->default_annual_leave - $leave->total_annual_leave);
             $total_annual_leave = $leave->total_annual_leave;
-            $default_sick_leave = number_format($leave->default_sick_leave - $leave->total_sick_leave);
-            $total_sick_leave = number_format($leave->total_sick_leave);;
-            $default_special_leave = number_format($leave->default_special_leave -$leave->total_special_leave);
-            $total_special_leave = number_format($leave->total_special_leave);
+            $default_sick_leave = ($leave->default_sick_leave - $leave->total_sick_leave);
+            $total_sick_leave = $leave->total_sick_leave;
+            $default_special_leave = ($leave->default_special_leave -$leave->total_special_leave);
+            $total_special_leave = $leave->total_special_leave;
             $default_unpaid_leave = $leave->default_unpaid_leave - $leave->total_unpaid_leave;
             $total_unpaid_leave =  $leave->total_unpaid_leave ;
 
