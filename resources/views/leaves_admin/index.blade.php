@@ -372,10 +372,10 @@
                                                                         @endif
                                                                         <td>{{$leave->default_annual_leave - $leave->total_annual_leave}}</td>
                                                                         <td>{{$leave->total_annual_leave}}</td>
-                                                                        <td>{{number_format($leave->default_sick_leave - $leave->total_sick_leave)}}</td>
-                                                                        <td>{{number_format($leave->total_sick_leave)}}</td>
-                                                                        <td>{{number_format($leave->default_special_leave -$leave->total_special_leave)}}</td>
-                                                                        <td>{{number_format($leave->total_special_leave)}}</td>
+                                                                        <td>{{$leave->default_sick_leave - $leave->total_sick_leave}}</td>
+                                                                        <td>{{$leave->total_sick_leave}}</td>
+                                                                        <td>{{$leave->default_special_leave -$leave->total_special_leave}}</td>
+                                                                        <td>{{$leave->total_special_leave}}</td>
                                                                         <td>{{$leave->year_1}}</td>
                                                                         <td>{{$leave->year_2}}</td>
                                                                         <td>{{$leave->year_3}}</td>

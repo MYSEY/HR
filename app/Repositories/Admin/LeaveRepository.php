@@ -112,8 +112,9 @@ class LeaveRepository extends BaseRepository
                 $query->orWhere("users.branch_id", Auth::user()->branch_id);
             }else if($RolePermission == 'HOD'){
                 if (Auth::user()->id == Auth::user()->department->direct_manager_id) {
-                    $query->where("users.department_id", Auth::user()->department_id);
-                    $query->whereNot("users.id", Auth::user()->id);
+                    $query->where("users.id", Auth::user()->id);
+                    $query->orWhere("users.department_id", Auth::user()->department_id);
+                    
                 }else{
                     $query->where("users.id", Auth::user()->id);
                     $query->orWhere("users.line_manager", Auth::user()->id);
