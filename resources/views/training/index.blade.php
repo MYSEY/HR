@@ -106,7 +106,7 @@
                             <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                                 <div class="row">
                                     <div class="col-sm-12">
-                                        <table class="table table-striped custom-table mb-0 datatable dataTable no-footer btl_training"
+                                        <table class="table table-striped custom-table mb-0 no-footer btl_training"
                                             id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
                                             <thead>
                                                 <tr>

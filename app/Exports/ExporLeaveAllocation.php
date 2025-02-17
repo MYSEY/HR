@@ -137,7 +137,7 @@ class ExporLeaveAllocation implements FromCollection,WithColumnWidths, WithHeadi
                 $date = Carbon::now()->format('d-M-Y');
 
                 $sheet->mergeCells('A3:P3');
-                $sheet->setCellValue('A3', "For ".$date);
+                $sheet->setCellValue('A3', "Expot as of on: ".$date);
                 $sheet->getDelegate()->getStyle('A3:P3')->getFont()->setName('Khmer OS Freehand')
                 ->setSize(10)->setBold('A3:P3');
                 $event->sheet->getDelegate()->getStyle('A3:P3')

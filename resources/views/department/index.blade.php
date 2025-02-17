@@ -80,7 +80,7 @@
                                                                 <td ></td>
                                                                 <td class="name_khmer">{{$sub->name_khmer}}</td>
                                                                 <td class="name_english">{{$sub->name_english}}</td>
-                                                                <td ></td>
+                                                                <td> {{$sub->headDepartment ? $sub->headDepartment->employee_name_en : ""}}</td>
                                                                 <td>{{ \Carbon\Carbon::parse($sub->created_at)->format('d-M-Y') ?? '' }}</td>
                                                                 <td class="text-end">
                                                                     @if (permissionAccess("m9-s4","is_update")->value == "1" || permissionAccess("m9-s4","is_delete")->value == "1")

@@ -44,7 +44,7 @@ class Department extends Model
         return $this->belongsTo(User::class, 'direct_manager_id','id');
     }
     public function child(){
-        return $this->hasMany(Department::class, 'parent_id','id');
+        return $this->hasMany(Department::class, 'parent_id','id')->with("headDepartment");
     }
 
     /*
