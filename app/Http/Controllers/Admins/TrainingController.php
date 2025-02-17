@@ -32,7 +32,7 @@ class TrainingController extends Controller
         if (permissionAccess("m6-s2","is_view")->value != "1") {
             return view('upgrade.access_page');
         }
-        $filteredTrainings = Training::withCount('trainingDetailStaffs')->withCount("trainingDetailTrainer")->orderBy('created_by', 'DESC')->get();
+        $filteredTrainings = Training::withCount('trainingDetailStaffs')->withCount("trainingDetailTrainer")->orderBy('id', 'DESC')->get();
         $dataTrainings = $filteredTrainings->filter(function ($training) {
             return $training->isStaff();
         });

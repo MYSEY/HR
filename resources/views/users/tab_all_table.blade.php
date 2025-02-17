@@ -1,12 +1,28 @@
-
-<div class="tab-pane active show" id="tbl_probations" role="tabpanel">
+<div class="tab-pane active show clearTabs" id="tbl_probations" role="tabpanel">
     <div class="row">
         <div class="col-md-12">
             <div class="table-responsive">
                 <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                     <div class="row">
                         <div class="col-sm-12">
-                            <table class="table table-striped no-footer tbl_probation"
+                            @if ($dataProbationCount > 9)
+                                <form method="GET" class="mb-3">
+                                    <label>Show 
+                                        <select name="per_page1" onchange="this.form.submit()" class="per_page1">
+                                            <?php
+                                                for ($i = 10; $i <= $dataProbationCount; $i *= 2) {
+                                                    echo '<option value="'.$i.'" '.(request('per_page1') == $i ? 'selected' : '').'>'.$i.'</option>';
+                                                }
+                                                if ($dataProbationCount > $i / 2) {
+                                                    echo '<option value="'.$dataProbationCount.'" '.(request('per_page1') == $dataProbationCount ? 'selected' : '').'>'.$dataProbationCount.'</option>';
+                                                }
+                                            ?>
+                                            <option value="all" {{ request('per_page1') == 'all' ? 'selected' : '' }}>All</option>
+                                        </select> entries
+                                    </label>
+                                </form>
+                            @endif
+                            <table class="table custom-table table-striped no-footer tbl_probation"
                                 id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
                                 <thead>
                                     <tr>
@@ -163,7 +179,8 @@
                                         @endif
                                 </tbody>
                             </table>
-                            {!! $dataProbation->withQueryString()->links('pagination::bootstrap-5') !!}
+                            {{-- {!! $dataProbation->appends(['per_page1' => request('per_page1')])->links('pagination::bootstrap-5') !!} --}}
+                            {{-- {!! $dataProbation->withQueryString()->links('pagination::bootstrap-5') !!} --}}
                         </div>
                     </div>
                 </div>
@@ -171,14 +188,31 @@
         </div>
     </div>
 </div>
-<div class="tab-pane show" id="tbl_fdc" role="tabpanel">
+<div class="tab-pane show clearTabs" id="tbl_fdc" role="tabpanel">
     <div class="row">
         <div class="col-md-12">
             <div class="table-responsive">
                 <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                     <div class="row">
                         <div class="col-sm-12">
-                            <table class="table table-striped no-footer tbl_fdc"
+                            @if ($dataFDCCount > 9)
+                                <form method="GET" class="mb-3">
+                                    <label>Show 
+                                        <select name="per_page2" onchange="this.form.submit()" class="per_page2">
+                                            <?php
+                                                for ($i = 10; $i <= $dataFDCCount; $i *= 2) {
+                                                    echo '<option value="'.$i.'" '.(request('per_page2') == $i ? 'selected' : '').'>'.$i.'</option>';
+                                                }
+                                                if ($dataFDCCount > $i / 2) {
+                                                    echo '<option value="'.$dataFDCCount.'" '.(request('per_page2') == $dataFDCCount ? 'selected' : '').'>'.$dataFDCCount.'</option>';
+                                                }
+                                            ?>
+                                            <option value="all" {{ request('per_page2') == 'all' ? 'selected' : '' }}>All</option>
+                                        </select> entries
+                                    </label>
+                                </form>
+                            @endif
+                            <table class="table custom-table table-striped no-footer tbl_fdc"
                                 id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
                                 <thead>
                                     <tr>
@@ -351,7 +385,9 @@
                                         @endif
                                 </tbody>
                             </table>
-                            {!! $dataFDC->withQueryString()->links('pagination::bootstrap-5') !!}
+                            {{-- <div class="pagination-dataFDC" style="display: none">
+                                {!! $dataFDC->withQueryString()->links('pagination::bootstrap-5') !!}
+                            </div> --}}
                         </div>
                     </div>
                 </div>
@@ -359,14 +395,31 @@
         </div>
     </div>
 </div>
-<div class="tab-pane show" id="tbl_udc" role="tabpanel">
+<div class="tab-pane show clearTabs" id="tbl_udc" role="tabpanel">
     <div class="row">
         <div class="col-md-12">
             <div class="table-responsive">
                 <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                     <div class="row">
                         <div class="col-sm-12">
-                            <table class="table table-striped no-footer tbl-udc "
+                            @if ($dataUDCCount > 9)
+                                <form method="GET" class="mb-3">
+                                    <label>Show 
+                                        <select name="per_page3" onchange="this.form.submit()" class="per_page3">
+                                            <?php
+                                                for ($i = 10; $i <= $dataUDCCount; $i *= 2) {
+                                                    echo '<option value="'.$i.'" '.(request('per_page3') == $i ? 'selected' : '').'>'.$i.'</option>';
+                                                }
+                                                if ($dataUDCCount > $i / 2) {
+                                                    echo '<option value="'.$dataUDCCount.'" '.(request('per_page3') == $dataUDCCount ? 'selected' : '').'>'.$dataUDCCount.'</option>';
+                                                }
+                                            ?>
+                                            <option value="all" {{ request('per_page3') == 'all' ? 'selected' : '' }}>All</option>
+                                        </select> entries
+                                    </label>
+                                </form>
+                            @endif
+                            <table class="table custom-table table-striped no-footer tbl-udc "
                                 id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
                                 <thead>
                                     <tr>
@@ -517,7 +570,10 @@
                                         @endif
                                 </tbody>
                             </table>
-                            {!! $dataUDC->withQueryString()->links('pagination::bootstrap-5') !!}
+                            {{-- <div class="pagination-dataUDC" style="display: none">
+                                {!! $dataUDC->appends(['per_page3' => request('per_page3')])->links('pagination::bootstrap-5') !!}
+                            </div> --}}
+                            
                         </div>
                     </div>
                 </div>
@@ -526,14 +582,44 @@
     </div>
 </div>
 @if (Auth::user()->RolePermission == 'BOD' || Auth::user()->RolePermission == 'CEO' || Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'HR' || Auth::user()->RolePermission == 'DHOD' || Auth::user()->RolePermission == 'HRAdmin' || Auth::user()->RolePermission == 'developer')
-    <div class="tab-pane show" id="tbl_reject" role="tabpanel">
+    <div class="tab-pane show clearTabs" id="tbl_reject" role="tabpanel">
         <div class="row">
             <div class="col-md-12">
                 <div class="table-responsive">
                     <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                         <div class="row">
                             <div class="col-sm-12">
-                                <table class="table table-striped no-footer tbl_reason"
+                                @if ($dataResignCount > 9)
+                                    <form method="GET" class="mb-3">
+                                        <label>Show 
+                                            <select name="per_page4" onchange="this.form.submit()" class="per_page4">
+                                                <?php
+                                                    for ($i = 10; $i <= $dataResignCount; $i *= 2) {
+                                                        echo '<option value="'.$i.'" '.(request('per_page4') == $i ? 'selected' : '').'>'.$i.'</option>';
+                                                    }
+                                                    if ($dataResignCount > $i / 2) {
+                                                        echo '<option value="'.$dataResignCount.'" '.(request('per_page4') == $dataResignCount ? 'selected' : '').'>'.$dataResignCount.'</option>';
+                                                    }
+                                                ?>
+                                                <option value="all" {{ request('per_page4') == 'all' ? 'selected' : '' }}>All</option>
+                                            </select> entries
+                                        </label>
+                                    </form>
+                                @endif
+
+                                {{-- <form method="GET" class="mb-3">
+                                    <label>Show 
+                                        <select name="per_page4" onchange="this.form.submit()" class="per_page4">
+                                            <option value="10" {{ request('per_page4') == 10 ? 'selected' : '' }}>10</option>
+                                            <option value="25" {{ request('per_page4') == 25 ? 'selected' : '' }}>25</option>
+                                            <option value="50" {{ request('per_page4') == 50 ? 'selected' : '' }}>50</option>
+                                            <option value="100" {{ request('per_page4') == 100 ? 'selected' : '' }}>100</option>
+                                            <option value="200" {{ request('per_page4') == 200 ? 'selected' : '' }}>200</option>
+                                            <option value="all" {{ request('per_page4') == 'all' ? 'selected' : '' }}>All</option>
+                                        </select> entries
+                                    </label>
+                                </form> --}}
+                                <table class="table custom-table table-striped no-footer tbl_reason"
                                     id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
                                     <thead>
                                         <tr>
@@ -653,7 +739,8 @@
                                         @endif
                                     </tbody>
                                 </table>
-                                {!! $dataResign->withQueryString()->links('pagination::bootstrap-5') !!}
+                                {{-- {!! $dataResign->withQueryString()->links('pagination::bootstrap-5') !!} --}}
+                                {{-- {!! $dataResign->appends(['per_page4' => request('per_page4')])->links('pagination::bootstrap-5') !!} --}}
                             </div>
                         </div>
                     </div>
@@ -668,6 +755,7 @@
 <script type="text/javascript" src="{{ asset('/admin/js/printThis.js') }}"></script>
 <script src="{{asset('/admin/js/format-date-kh.js')}}"></script>
 <script type="text/javascript">
+
     $(function(){
         // showDatabytab(2, {})
         var ref_this = $("ul.nav-tabs li a.active");

@@ -94,7 +94,7 @@
                 <div class="page-menu">
                     <div class="row">
                         <div class="col-md-12 col-ms-12 p-0">
-                            <ul class="nav nav-tabs nav-tabs-bottom" role="tablist">
+                            <ul class="nav nav-tabs nav-tabs-bottom" role="tablist" id="show-tabs-user">
                                 {{-- <li class="nav-item" role="presentation">
                                     <a class="nav-link active" data-bs-toggle="tab" id="tab_candidate_resume" href="#tbl_candidate_resume" aria-selected="true" role="tab" data-tab-id="1">@lang('lang.upcoming_staff')({{count($data)}})</a>
                                 </li> --}}
@@ -102,23 +102,23 @@
                                     <a class="nav-link active" data-bs-toggle="tab" id="tab_cancel" href="#tbl_cancel" aria-selected="true" data-tab-id="6" role="tab" tabindex="1">@lang('lang.canceled_contract')({{count($dataCanContract)}})</a>
                                 </li> --}}
                                 <li class="nav-item" role="presentation">
-                                    <a class="nav-link active" data-bs-toggle="tab" id="tab_probation" href="#tbl_probations" aria-selected="false" role="tab" data-tab-id="2" tabindex="1">@lang('lang.probation')
+                                    <a class="nav-link active clearTabs" data-bs-toggle="tab" id="tab_probation" href="#tbl_probations" aria-selected="false" role="tab" data-tab-id="2" tabindex="1">@lang('lang.probation')
                                         <span id="dataShortList" class="badge bg-secondary ms-1 rounded-pill">{{$dataProbationCount}}</span>
                                     </a>
                                 </li>
                                 <li class="nav-item" role="presentation">
-                                    <a class="nav-link" data-bs-toggle="tab" id="tab_fdc" href="#tbl_fdc" aria-selected="false" role="tab" data-tab-id="3" tabindex="-1">@lang('lang.fdc')
+                                    <a class="nav-link clearTabs" data-bs-toggle="tab" id="tab_fdc" href="#tbl_fdc" aria-selected="false" role="tab" data-tab-id="3" tabindex="-1">@lang('lang.fdc')
                                         <span id="dataShortList" class="badge bg-secondary ms-1 rounded-pill">{{$dataFDCCount}}</span>
                                     </a>
                                 </li>
                                 <li class="nav-item" role="presentation">
-                                    <a class="nav-link" data-bs-toggle="tab" id="tab_udc" href="#tbl_udc" aria-selected="false" data-tab-id="4" role="tab" tabindex="-1">@lang('lang.udc')
+                                    <a class="nav-link clearTabs" data-bs-toggle="tab" id="tab_udc" href="#tbl_udc" aria-selected="false" data-tab-id="4" role="tab" tabindex="-1">@lang('lang.udc')
                                         <span id="dataShortList" class="badge bg-secondary ms-1 rounded-pill">{{$dataUDCCount}}</span>
                                     </a>
                                 </li>
                                 @if (Auth::user()->RolePermission == 'BOD' || Auth::user()->RolePermission == 'CEO' || Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'HR' || Auth::user()->RolePermission == 'HRAdmin' || Auth::user()->RolePermission == 'developer')
                                     <li class="nav-item" role="presentation">
-                                        <a class="nav-link" data-bs-toggle="tab" id="tab_reason" href="#tbl_reject" aria-selected="false" data-tab-id="5" role="tab" tabindex="-1">@lang('lang.resigned_staff')
+                                        <a class="nav-link clearTabs" data-bs-toggle="tab" id="tab_reason" href="#tbl_reject" aria-selected="false" data-tab-id="5" role="tab" tabindex="-1">@lang('lang.resigned_staff')
                                             <span id="dataShortList" class="badge bg-secondary ms-1 rounded-pill">{{$dataResignCount}}</span>
                                         </a>
                                     </li>
@@ -222,6 +222,33 @@
 
 <script>
     $(function(){
+        $(document).ready(function() {
+            var urlParams = new URLSearchParams(window.location.search);
+            if (Array.from(urlParams).length > 0) {
+                $(".clearTabs").removeClass("active"); // Corrected method name
+                urlParams.forEach(function(value, name) {
+                    switch (name) {
+                        case "per_page1":
+                            $("#tab_probation").addClass("active");
+                            $("#tbl_probations").addClass("active");
+                            break;
+                        case "per_page2":
+                            $("#tab_fdc").addClass("active");
+                            $("#tbl_fdc").addClass("active");
+                            break;
+                        case "per_page3":
+                            $("#tab_udc").addClass("active");
+                            $("#tbl_udc").addClass("active");
+                            break;
+                        case "per_page4":
+                            $("#tab_reason").addClass("active");
+                            $("#tbl_reject").addClass("active");
+                            break;
+                    }
+                });
+            }
+            
+        });
         var path = "{{ url('admins/user/autocomplet') }}";
         $('#number_employee').typeahead({
             source: function (query, process) {
