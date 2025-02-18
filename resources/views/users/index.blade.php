@@ -215,6 +215,7 @@
         <!-- /Delete User Modal -->
     </div>
 @endsection
+@include('components.loading-modal')
 @include('includs.script')
 <script src="{{asset('/admin/js/validation-field.js')}}"></script>
 <link rel="stylesheet" href="{{ asset('admin/css/noty.css') }}">
@@ -312,19 +313,21 @@
                                 });
                                 return false;
                             }
-                            
+                            $('#modal-loading').modal('show');
                             axios.post('{{ URL('users/update/role') }}', {
                                 'id': em_id,
                                 'role_id': role_id
                             }).then(function(response) {
-                            new Noty({
-                                title: "",
-                                text: '@lang("lang.the_process_has_been_successfully")',
-                                type: "success",
-                                icon: true
-                            }).show();
+                                $('#modal-loading').modal('hide');
+                                new Noty({
+                                    title: "",
+                                    text: '@lang("lang.the_process_has_been_successfully")',
+                                    type: "success",
+                                    icon: true
+                                }).show();
                             window.location.replace("{{ URL('users') }}");
                             }).catch(function(error) {
+                                $('#modal-loading').modal('hide');
                                 new Noty({
                                     title: "",
                                     text: '@lang("lang.something_went_wrong_please_try_again_later")',

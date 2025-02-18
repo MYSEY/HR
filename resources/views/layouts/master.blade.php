@@ -230,13 +230,13 @@
                             <li class="menu-title"><span style="border-bottom: 3px solid #dc0000; font-weight: bold; font-size: 17px;">@lang('lang.hr_management_system')</span></li>
                             @foreach (RolePermission()->menu as $menu)
                                 @if ($menu["menu_id"] == null && $menu["sub_menu_id"] == null)
-                                    <li class="">
-                                        <a style="border-bottom: 3px solid #f0f0f0;" href="{{url($menu['url'])}}"><i class="{{$menu["icon"]}}"></i><span>@lang($menu["name"])</span></a>
+                                    <li style="@if (Request::path() == $menu['url']) background-color: #9F2E32 @endif">
+                                        <a class="@if (Request::path() == $menu['url']) active @endif" style="border-bottom: 3px solid #f0f0f0; @if (Request::path() == $menu['url']) color: white @endif" href="{{url($menu['url'])}}"><i class="{{$menu["icon"]}}"></i><span>@lang($menu["name"])</span></a>
                                     </li>
                                 @else
                                     {{-- @if ($menu["name"] !="lang.employee" || Auth::user()->RolePermission !="Employee") --}}
                                         <li class="submenu">
-                                            <a href="javascript:void(0);" style="border-bottom: 3px solid #f0f0f0;">
+                                            <a class="@if (Request::path() == $menu['url']) active @endif"  href="javascript:void(0);" style="border-bottom: 3px solid #f0f0f0;">
                                                 <i class="{{$menu["icon"]}}"></i><span>@lang($menu["name"])</span><span class="menu-arrow"></span>
                                             </a>
                                             <ul>
@@ -244,9 +244,9 @@
                                                     @if ($sub_menu["sub_menu_id"] == $menu["menu_id"])
                                                         <li>
                                                             @if (Auth::user()->RolePermission =="Employee" && $sub_menu["name"] =="lang.all_employee")
-                                                                <a class="" href="{{url($sub_menu['url'])}}">@lang("lang.profile_employee")</a>
+                                                                <a style="@if (Request::path() == $sub_menu['url']) background-color: #9F2E32; color:white @endif" class="@if (Request::path() == $sub_menu['url']) active @endif"  href="{{url($sub_menu['url'])}}">@lang("lang.profile_employee")</a>
                                                             @else
-                                                                <a class="" href="{{url($sub_menu['url'])}}">@lang($sub_menu["name"])</a>
+                                                                <a style="@if (Request::path() == $sub_menu['url']) background-color: #9F2E32; color:white @endif" class="@if (Request::path() == $sub_menu['url']) active @endif"  href="{{url($sub_menu['url'])}}">@lang($sub_menu["name"])</a>
                                                             @endif
                                                         </li>
                                                     @endif
