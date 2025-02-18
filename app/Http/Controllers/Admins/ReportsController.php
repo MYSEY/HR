@@ -306,38 +306,6 @@ class ReportsController extends Controller
         if (permissionAccess("m6-s3","is_view")->value != "1") {
             return view('upgrade.access_page');
         }
-        //******** process old  ***********/ 
-        // $data = Training::
-        // when($request->traing_type, function ($query, $traing_type) {
-        //     $query->where('training_type', $traing_type);
-        // })
-        // ->when($request->course_name, function ($query, $course_name) {
-        //     $query->where('course_name', $course_name);
-        // })
-        // ->when($start_date, function ($query, $start_date) {
-        //     $query->where('start_date', '>=', $start_date);
-        // })
-        // ->when($end_date, function ($query, $end_date) {
-        //     $query->where('end_date','<=', $end_date);
-        // })
-        // ->get();
-        // $dataTrainings = [];
-        // foreach ($data as $key => $item) {
-        //     $dataTrainer = Trainer::whereIn('id', $item->trainer_id)->with("employee")->get();
-        //     $em =  User::whereIn('id', $item->employee_id)
-        //     ->when($request->employee_id, function ($query, $employee_id) {
-        //         $query->where('number_employee', 'LIKE', '%'.$employee_id.'%');
-        //     })
-        //     ->when($request->employee_name, function ($query, $employee_name) {
-        //         $query->where('employee_name_en', 'LIKE', '%'.$employee_name.'%');
-        //         $query->orWhere('employee_name_kh', 'LIKE', '%'.$employee_name.'%');
-        //     })
-        //     ->with("gender")->with("position")->with("branch")
-        //     ->get();
-        //     $item["trainers"] = $dataTrainer;
-        //     $item["employees"] = $em;
-        //     $dataTrainings[] = $item;
-        // }
         $dataTrainings = $this->reportRepo->getTrainingReport($request);
         if ($request->ajax()) {
             return response()->json($dataTrainings);

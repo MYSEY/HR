@@ -103,23 +103,23 @@
                                 </li> --}}
                                 <li class="nav-item" role="presentation">
                                     <a class="nav-link active clearTabs" data-bs-toggle="tab" id="tab_probation" href="#tbl_probations" aria-selected="false" role="tab" data-tab-id="2" tabindex="1">@lang('lang.probation')
-                                        <span id="dataShortList" class="badge bg-secondary ms-1 rounded-pill">{{$dataProbationCount}}</span>
+                                        <span id="dataShortList" class="badge bg-secondary ms-1 rounded-pill">{{$dataProbation->total()}}</span>
                                     </a>
                                 </li>
                                 <li class="nav-item" role="presentation">
                                     <a class="nav-link clearTabs" data-bs-toggle="tab" id="tab_fdc" href="#tbl_fdc" aria-selected="false" role="tab" data-tab-id="3" tabindex="-1">@lang('lang.fdc')
-                                        <span id="dataShortList" class="badge bg-secondary ms-1 rounded-pill">{{$dataFDCCount}}</span>
+                                        <span id="dataShortList" class="badge bg-secondary ms-1 rounded-pill">{{$dataFDC->total()}}</span>
                                     </a>
                                 </li>
                                 <li class="nav-item" role="presentation">
                                     <a class="nav-link clearTabs" data-bs-toggle="tab" id="tab_udc" href="#tbl_udc" aria-selected="false" data-tab-id="4" role="tab" tabindex="-1">@lang('lang.udc')
-                                        <span id="dataShortList" class="badge bg-secondary ms-1 rounded-pill">{{$dataUDCCount}}</span>
+                                        <span id="dataShortList" class="badge bg-secondary ms-1 rounded-pill">{{$dataUDC->total()}}</span>
                                     </a>
                                 </li>
                                 @if (Auth::user()->RolePermission == 'BOD' || Auth::user()->RolePermission == 'CEO' || Auth::user()->RolePermission == 'admin' || Auth::user()->RolePermission == 'HR' || Auth::user()->RolePermission == 'HRAdmin' || Auth::user()->RolePermission == 'developer')
                                     <li class="nav-item" role="presentation">
                                         <a class="nav-link clearTabs" data-bs-toggle="tab" id="tab_reason" href="#tbl_reject" aria-selected="false" data-tab-id="5" role="tab" tabindex="-1">@lang('lang.resigned_staff')
-                                            <span id="dataShortList" class="badge bg-secondary ms-1 rounded-pill">{{$dataResignCount}}</span>
+                                            <span id="dataShortList" class="badge bg-secondary ms-1 rounded-pill">{{$dataResign->total()}}</span>
                                         </a>
                                     </li>
                                 @endif

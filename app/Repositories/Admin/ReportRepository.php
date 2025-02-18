@@ -259,7 +259,7 @@ class ReportRepository extends BaseRepository
         ->when($request->employee_name, function ($query, $employee_name) {
             $query->where('users.employee_name_en', 'LIKE', '%'.$employee_name.'%');
             $query->orWhere('users.employee_name_kh', 'LIKE', '%'.$employee_name.'%');
-        });
+        })->orderBy('trainings.id', 'desc');
         $perPage = $request->get('per_page', 10);
 
         if ($perPage === 'all') {

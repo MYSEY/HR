@@ -5,16 +5,16 @@
                 <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                     <div class="row">
                         <div class="col-sm-12">
-                            @if ($dataProbationCount > 9)
+                            @if ($dataProbation->total() > 9)
                                 <form method="GET" class="mb-3">
                                     <label>Show 
                                         <select name="per_page1" onchange="this.form.submit()" class="per_page1">
                                             <?php
-                                                for ($i = 10; $i <= $dataProbationCount; $i *= 2) {
+                                                for ($i = 10; $i <= $dataProbation->total(); $i *= 2) {
                                                     echo '<option value="'.$i.'" '.(request('per_page1') == $i ? 'selected' : '').'>'.$i.'</option>';
                                                 }
-                                                if ($dataProbationCount > $i / 2) {
-                                                    echo '<option value="'.$dataProbationCount.'" '.(request('per_page1') == $dataProbationCount ? 'selected' : '').'>'.$dataProbationCount.'</option>';
+                                                if ($dataProbation->total() > $i / 2) {
+                                                    echo '<option value="'.$dataProbation->total().'" '.(request('per_page1') == $dataProbation->total() ? 'selected' : '').'>'.$dataProbation->total().'</option>';
                                                 }
                                             ?>
                                             <option value="all" {{ request('per_page1') == 'all' ? 'selected' : '' }}>All</option>
@@ -195,16 +195,16 @@
                 <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                     <div class="row">
                         <div class="col-sm-12">
-                            @if ($dataFDCCount > 9)
+                            @if ($dataFDC->total() > 9)
                                 <form method="GET" class="mb-3">
                                     <label>Show 
                                         <select name="per_page2" onchange="this.form.submit()" class="per_page2">
                                             <?php
-                                                for ($i = 10; $i <= $dataFDCCount; $i *= 2) {
+                                                for ($i = 10; $i <= $dataFDC->total(); $i *= 2) {
                                                     echo '<option value="'.$i.'" '.(request('per_page2') == $i ? 'selected' : '').'>'.$i.'</option>';
                                                 }
-                                                if ($dataFDCCount > $i / 2) {
-                                                    echo '<option value="'.$dataFDCCount.'" '.(request('per_page2') == $dataFDCCount ? 'selected' : '').'>'.$dataFDCCount.'</option>';
+                                                if ($dataFDC->total() > $i / 2) {
+                                                    echo '<option value="'.$dataFDC->total().'" '.(request('per_page2') == $dataFDC->total() ? 'selected' : '').'>'.$dataFDC->total().'</option>';
                                                 }
                                             ?>
                                             <option value="all" {{ request('per_page2') == 'all' ? 'selected' : '' }}>All</option>
@@ -402,16 +402,16 @@
                 <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                     <div class="row">
                         <div class="col-sm-12">
-                            @if ($dataUDCCount > 9)
+                            @if ($dataUDC->total() > 9)
                                 <form method="GET" class="mb-3">
                                     <label>Show 
                                         <select name="per_page3" onchange="this.form.submit()" class="per_page3">
                                             <?php
-                                                for ($i = 10; $i <= $dataUDCCount; $i *= 2) {
+                                                for ($i = 10; $i <= $dataUDC->total(); $i *= 2) {
                                                     echo '<option value="'.$i.'" '.(request('per_page3') == $i ? 'selected' : '').'>'.$i.'</option>';
                                                 }
-                                                if ($dataUDCCount > $i / 2) {
-                                                    echo '<option value="'.$dataUDCCount.'" '.(request('per_page3') == $dataUDCCount ? 'selected' : '').'>'.$dataUDCCount.'</option>';
+                                                if ($dataUDC->total() > $i / 2) {
+                                                    echo '<option value="'.$dataUDC->total().'" '.(request('per_page3') == $dataUDC->total() ? 'selected' : '').'>'.$dataUDC->total().'</option>';
                                                 }
                                             ?>
                                             <option value="all" {{ request('per_page3') == 'all' ? 'selected' : '' }}>All</option>
@@ -589,16 +589,16 @@
                     <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                         <div class="row">
                             <div class="col-sm-12">
-                                @if ($dataResignCount > 9)
+                                @if ($dataResign->total() > 9)
                                     <form method="GET" class="mb-3">
                                         <label>Show 
                                             <select name="per_page4" onchange="this.form.submit()" class="per_page4">
                                                 <?php
-                                                    for ($i = 10; $i <= $dataResignCount; $i *= 2) {
+                                                    for ($i = 10; $i <= $dataResign->total(); $i *= 2) {
                                                         echo '<option value="'.$i.'" '.(request('per_page4') == $i ? 'selected' : '').'>'.$i.'</option>';
                                                     }
-                                                    if ($dataResignCount > $i / 2) {
-                                                        echo '<option value="'.$dataResignCount.'" '.(request('per_page4') == $dataResignCount ? 'selected' : '').'>'.$dataResignCount.'</option>';
+                                                    if ($dataResign->total() > $i / 2) {
+                                                        echo '<option value="'.$dataResign->total().'" '.(request('per_page4') == $dataResign->total() ? 'selected' : '').'>'.$dataResign->total().'</option>';
                                                     }
                                                 ?>
                                                 <option value="all" {{ request('per_page4') == 'all' ? 'selected' : '' }}>All</option>
