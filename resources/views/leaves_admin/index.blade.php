@@ -612,7 +612,7 @@
                         var td_allocation = "";
                     
                         $(Leave_allocations).each(function (e, row) {
-                            if (condistion == "HRAdmin") {
+                            if (condistion == "HRAdmin" || condistion == "HR" ) {
                                 td_allocation = '<td>'+(row.employee.department.name_english)+'</td><td>'+(row.employee.branch.branch_name_en)+'</td>';             
                             }
                             tr_allocation += '<tr class="odd">'+

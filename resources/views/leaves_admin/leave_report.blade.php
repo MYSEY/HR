@@ -210,7 +210,7 @@
                     var tr = "";
                     let status = "";
                     $(rows).each(function(e, row) {
-                        let join_date = moment(row.date_of_commencement).format('D-MMM-YYYY');
+                        let join_date = moment(row.employee.date_of_commencement).format('D-MMM-YYYY');
                         tr += '<tr class="odd">'+
                             '<td>'+(row.employee.employee_name_en)+'</td>'+
                             '<td>'+(row.employee.department.name_english)+'</td>'+
