@@ -103,7 +103,7 @@
                                 <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                                     <div class="row">
                                         <div class="col-sm-12">
-                                            <table class="table table-striped custom-table datatable dataTable no-footer" id="tbl_payroll_review" aria-describedby="DataTables_Table_0_info"  cellspacing="0">
+                                            <table class="table table-striped custom-table datatable dataTable no-footer" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info"  cellspacing="0">
                                                 <thead>
                                                     <tr>
                                                         <th class="tuck-scroll-3">
@@ -111,7 +111,7 @@
                                                                 <input class="form-check-input" type="checkbox" data-has-listeners="true" id="checkAll">
                                                             </div>
                                                         </th>
-                                                        <th class="sorting stuck-scroll-3" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1">@lang('lang.employee_id')</th>
+                                                        <th class="sorting stuck-scroll-3" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending">@lang('lang.employee_id')</th>
                                                         <th class=" stuck-scroll-3" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending">@lang('lang.employee_name')</th>
                                                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
                                                             aria-label="Email: activate to sort column ascending">@lang('lang.position')
@@ -235,49 +235,6 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    {{-- @if (count($data) > 0)
-                                                        @foreach ($data as $item)
-                                                            <tr class="odd">
-                                                                <td>
-                                                                    <div class="form-check form-check-md">
-                                                                        <input class="form-check-input sub_chk" type="checkbox" data-has-listeners="true" data-id="{{$item->number_employee}}" data-date="{{$item->payment_date}}">
-                                                                    </div>
-                                                                </td>
-                                                                <td class="stuck-scroll-3"><a href="#">{{ $item->users == null ? '' : $item->users->number_employee }}</a></td>
-                                                                <td class="stuck-scroll-3"><a href="#">{{ $item->users == null ? '' : $item->users->EmployeeName }}</span></a></td>
-                                                                <td><a href="#">{{ $item->users == null ? '' : $item->users->EmployeePosition }}</a></td>
-                                                                <td><a href="#">{{ $item->users == null ? '' : $item->users->EmployeeDepartment }}</a></td>
-                                                                <td><a href="#">{{ $item->users == null ? '' : $item->users->EmployeeBranch }}</a></td>
-                                                                <td>{{ $item->users == null ? '' : $item->users->joinOfDate }}</td>
-                                                                <td>$<a href="#">{{ $item->basic_salary }}</a></td>
-                                                                <td>$<a href="#">{{ $item->adjustment_include_taxe}}</a></td>
-                                                                <td>$<a href="#">{{ $item->total_gross_salary }}</a></td>
-                                                                <td>$<a href="#">{{ $item->total_child_allowance }}</a></td>
-                                                                <td>$<a href="#">{{ $item->phone_allowance == null ? '0.00' : $item->phone_allowance}}</a></td>
-                                                                <td>$<a href="#">{{ $item->monthly_quarterly_bonuses}}</a></td>
-                                                                <td>$<a href="#">{{ $item->total_kny_phcumben}}</a></td>
-                                                                <td>$<a href="#">{{ $item->annual_incentive_bonus}}</a></td>
-                                                                <td>$<a href="#">{{ $item->other_benefits}}</a></td>
-                                                                <td>$<a href="#">{{ $item->seniority_pay_included_tax}}</a></td>
-                                                                <td>$<a href="#">{{ $item->total_gross}}</a></td>
-                                                                <td>$<a href="#">{{ $item->total_pension_fund}}</a></td>
-                                                                <td>$<a href="#">{{ $item->base_salary_received_usd}}</a></td>
-                                                                <td><span>៛</span><a href="#">{{ number_format($item->base_salary_received_riel) }}</a></td>
-                                                                <td><span>៛</span><a href="#">{{ number_format((int)$item->total_charges_reduced) }}</a></td>
-                                                                <td><span>៛</span><a href="#">{{ number_format($item->total_tax_base_riel) }}</a></td>
-                                                                <td><a href="#">{{ $item->total_rate}}%</a></td>
-                                                                <td>$<a href="#">{{ $item->total_salary_tax_usd}}</a></td>
-                                                                <td><span>៛</span><a href="#">{{ number_format($item->total_salary_tax_riel)}}</a></td>
-                                                                <td>$<a href="#">{{ $item->seniority_pay_excluded_tax}}</a></td>
-                                                                <td>$<a href="#">{{ $item->adjustment}}</a></td>
-                                                                <td>$<a href="#">{{ $item->total_severance_pay}}</a></td>
-                                                                <td>$<a href="#">{{ $item->loan_amount == null ? "0.00" : $item->loan_amount}}</a></td>
-                                                                <td>$<a href="#">{{ $item->total_salary }}</a></td>
-                                                                <td>{{ $item->PayrollPaymentDate }}</td>
-                                                                <td>{{ $item->Created }}</td>
-                                                            </tr>
-                                                        @endforeach
-                                                    @endif --}}
                                                 </tbody>
                                             </table>
                                         </div>
@@ -432,6 +389,7 @@
 @endsection
 @include('includs.script')
 <script src="{{asset('/admin/js/validation-field.js')}}"></script>
+
 @section('script')
 <script>
     var lang = @json(Helper::getLang());
@@ -443,18 +401,7 @@
             branch_id = $('#branch_id').val();
             filter_month = $('#filter_month').val();
             // Reload DataTable with the filter values
-            $('#tbl_payroll_review').DataTable().ajax.reload(null, false); 
-            
-            // $(".btn-search").prop('disabled', true);
-            // $(".btn-txt").hide();
-            // $(".loading-icon").css('display', 'block')
-            // let params = {
-            //     branch_id: $("#branch_id").val(),
-            //     employee_id: $("#employee_id").val(),
-            //     employee_name: $("#employee_name").val(),
-            //     filter_month: $("#filter_month").val(),
-            // };
-            // showdatas(params);
+            $('#DataTables_Table_0').DataTable().ajax.reload(null, false); 
         });
         dataTables();
 
@@ -780,11 +727,11 @@
     function dataTables() {
         $('#loading-overlay').show();
         // Check if DataTable instance exists, then destroy it
-        if ($.fn.DataTable.isDataTable('#tbl_payroll_review')) {
-            $('#tbl_payroll_review').DataTable().clear().destroy();
+        if ($.fn.DataTable.isDataTable('#DataTables_Table_0')) {
+            $('#DataTables_Table_0').DataTable().clear().destroy();
         }
         
-        $('#tbl_payroll_review').DataTable({
+        $('#DataTables_Table_0').DataTable({
             pageLength: 10,
             processing: true,
             serverSide: true,
@@ -945,7 +892,7 @@
                 $('#loading-overlay').hide(); // Hide spinner when data is fully loaded
             }
         });
-        $('#tbl_payroll_review').on('processing.dt', function (e, settings, processing) {
+        $('#DataTables_Table_0').on('processing.dt', function (e, settings, processing) {
             if (processing) {
                 $('#loading-overlay').show();
             } else {
@@ -953,75 +900,6 @@
             }
         });
     }
-    
-    // function showdatas(params) {
-    //     var localeLanguage = '{{ config('app.locale') }}';
-    //     $.ajax({
-    //         type: "post",
-    //         url: "{{ url('payroll/review/search') }}",
-    //         data: {
-    //             "_token": "{{ csrf_token() }}",
-    //             branch_id: params.branch_id ? params.branch_id : null,
-    //             employee_id: params.employee_id ? params.employee_id : null,
-    //             employee_name: params.employee_name ? params.employee_name : null,
-    //             filter_month: params.filter_month ? params.filter_month : null,
-    //         },
-    //         dataType: "JSON",
-    //         success: function(response) {
-    //             let data =  response.success;
-    //             $(".btn-search").prop('disabled', false);
-    //             $(".btn-txt").show();
-    //             $(".loading-icon").css('display', 'none')
-    //             var tr = "";
-    //             if (data.length > 0) {
-    //                 data.map((row) => {
-    //                     let join_date = moment(row.users.date_of_commencement).format('D-MMM-YYYY');
-    //                     let payment_date = moment(row.payment_date).format('D-MMM-YYYY');
-    //                     let created_at = moment(row.created_at).format('D-MMM-YYYY');
-    //                     tr +='<tr class="odd">'+
-    //                         '<td class="stuck-scroll-3"><input type="checkbox" class="sub_chk"></a></td>'+
-    //                         '<td class="stuck-scroll-3"><a href="#">'+(row.users == null ? '' : row.users.number_employee )+'</a></td>'+
-    //                         '<td class="stuck-scroll-3"><a href="#">'+(row.users == null ? '' : localeLanguage == 'en' ? row.users.employee_name_en : row.users.employee_name_kh )+'</span></a></td>'+
-    //                         '<td><a href="#">'+(row.users == null ? '' : localeLanguage == 'en' ? row.users.position.name_english :row.users.position.name_khmer )+'</a></td>'+
-    //                         '<td><a href="#">'+(row.users == null ? '' : localeLanguage == 'en' ? row.users.department.name_english : row.users.department.name_khmer )+'</a></td>'+
-    //                         '<td><a href="#">'+(row.users == null ? '' : localeLanguage == 'en' ? row.users.branch.branch_name_en : row.users.branch.branch_name_kh)+'</a></td>'+
-    //                         '<td>'+(join_date)+'</td>'+
-    //                         '<td>$<a href="#">'+(row.basic_salary )+'</a></td>'+
-    //                         '<td>$<a href="#">'+(row.adjustment_include_taxe)+'</a></td>'+
-    //                         '<td>$<a href="#">'+(row.total_gross_salary )+'</a></td>'+
-    //                         '<td>$<a href="#">'+(row.total_child_allowance )+'</a></td>'+
-    //                         '<td>$<a href="#">'+(row.phone_allowance == null ? '0.00' : row.phone_allowance)+'</a></td>'+
-    //                         '<td>$<a href="#">'+(row.monthly_quarterly_bonuses)+'</a></td>'+
-    //                         '<td>$<a href="#">'+(row.total_kny_phcumben)+'</a></td>'+
-    //                         '<td>$<a href="#">'+(row.annual_incentive_bonus)+'</a></td>'+
-    //                         '<td>$<a href="#">'+(row.other_benefits)+'</a></td>'+
-    //                         '<td>$<a href="#">'+(row.seniority_pay_included_tax)+'</a></td>'+
-    //                         '<td>$<a href="#">'+(row.total_gross)+'</a></td>'+
-    //                         '<td>$<a href="#">'+(row.total_pension_fund)+'</a></td>'+
-    //                         '<td>$<a href="#">'+(row.base_salary_received_usd)+'</a></td>'+
-    //                         '<td><span>៛</span><a href="#">'+(formatCurrencyKH(row.base_salary_received_riel))+'</a></td>'+
-    //                         '<td><span>៛</span><a href="#">'+(formatCurrencyKH(row.total_charges_reduced))+'</a></td>'+
-    //                         '<td><span>៛</span><a href="#">'+(formatCurrencyKH(row.total_tax_base_riel))+'</a></td>'+
-    //                         '<td><a href="#">'+(row.total_rate)+'%</a></td>'+
-    //                         '<td>$<a href="#">'+(row.total_salary_tax_usd)+'</a></td>'+
-    //                         '<td><span>៛</span><a href="#">'+(formatCurrencyKH(row.total_salary_tax_riel))+'</a></td>'+
-    //                         '<td>$<a href="#">'+(row.seniority_pay_excluded_tax)+'</a></td>'+
-    //                         '<td>$<a href="#">'+(row.adjustment)+'</a></td>'+
-    //                         '<td>$<a href="#">'+(row.total_severance_pay)+'</a></td>'+
-    //                         '<td>$<a href="#">'+(row.loan_amount == null ? "0.00" : row.loan_amount)+'</a></td>'+
-    //                         '<td>$<a href="#">'+(row.total_salary )+'</a></td>'+
-    //                         '<td>'+(payment_date)+'</td>'+
-    //                         '<td>'+(created_at)+'</td>'+
-    //                     '</tr>';
-    //                 });
-    //             }else{
-    //                 var tr = '<tr><td colspan=35 align="center">@lang("lang.no_record_to_display")</td></tr>';
-    //             }
-    //             $(".tbl_payment_salary tbody").html(tr);
-    //         }
-    //     });
-    // }
-   
     function formatCurrencyKH(currency) {
         return parseInt(currency).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }

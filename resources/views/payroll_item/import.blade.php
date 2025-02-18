@@ -1,4 +1,4 @@
-<div id="adjuestmentModal" class="modal custom-modal fade" role="dialog">
+<div id="adjuestmentModal" class="modal custom-modal fade" role="dialog" data-bs-backdrop="static">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
