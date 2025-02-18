@@ -75,6 +75,13 @@ class EmployeeRepository extends BaseRepository
                 ->with("permanentdistrict")
                 ->with("permanentcommune")
                 ->with("permanentvillage")
+                ->when($request->employee_id, function ($query, $employee_id) {
+                    $query->where('number_employee', 'LIKE', '%'.$employee_id.'%');
+                })
+                ->when($request->employee_name, function ($query, $employee_name) {
+                    $query->where('employee_name_en', 'LIKE', '%'.$employee_name.'%');
+                    $query->orWhere('employee_name_kh', 'LIKE', '%'.$employee_name.'%');
+                })
                 ->when($request->emp_status, function ($query, $emp_status) {
                     if (Auth::user()->RolePermission == 'HOD') {
                         $query->whereIn("department_id", $this->department_ids);
@@ -142,14 +149,8 @@ class EmployeeRepository extends BaseRepository
                         }
                     }
                     
-                })
-                ->when($request->employee_id, function ($query, $employee_id) {
-                    $query->where('number_employee', 'LIKE', '%'.$employee_id.'%');
-                })
-                ->when($request->employee_name, function ($query, $employee_name) {
-                    $query->where('employee_name_en', 'LIKE', '%'.$employee_name.'%');
-                    // $query->orWhere('employee_name_kh', 'LIKE', '%'.$employee_name.'%');
                 });
+               
                 return $dataUser->get();
             }else{
                 return User::with('role')->with('department')->where('emp_status','Upcoming')->get();

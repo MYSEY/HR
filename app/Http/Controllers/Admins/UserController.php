@@ -70,10 +70,10 @@ class UserController extends Controller
         $dataResign =[];
         $dataEmployees = [];
         if (in_array(Auth::user()->RolePermission, ['admin','HRAdmin','developer','BOD','CEO'])){
-            $dataProbationCount = User::where('emp_status','Probation')->count();
-            $dataFDCCount = User::whereIn('emp_status',['1','10'])->count();
-            $dataUDCCount = User::where('emp_status','2')->count();
-            $dataResignCount = User::whereIn('emp_status', ['3','4','5','6','7','8','9'])->count();
+            // $dataProbationCount = User::where('emp_status','Probation')->count();
+            // $dataFDCCount = User::whereIn('emp_status',['1','10'])->count();
+            // $dataUDCCount = User::where('emp_status','2')->count();
+            // $dataResignCount = User::whereIn('emp_status', ['3','4','5','6','7','8','9'])->count();
 
 
 
@@ -85,10 +85,11 @@ class UserController extends Controller
         
         }
         if (Auth::user()->RolePermission == 'HR' && permissionAccess("m2-s1","is_access")->value == "1") {
-            $dataProbationCount = User::where('emp_status','Probation')->count();
-            $dataFDCCount = User::whereIn('emp_status',['1','10'])->count();
-            $dataUDCCount = User::where('emp_status','2')->count();
-            $dataResignCount = User::whereIn('emp_status', ['3','4','5','6','7','8','9'])->count();
+            // $dataProbationCount = User::where('emp_status','Probation')->count();
+            // $dataFDCCount = User::whereIn('emp_status',['1','10'])->count();
+            // $dataUDCCount = User::where('emp_status','2')->count();
+            // $dataResignCount = User::whereIn('emp_status', ['3','4','5','6','7','8','9'])->count();
+
             $dataProbation = User::with('role')->with('department')->with('position')->where('emp_status','Probation')->orderBy('date_of_commencement', 'desc');
             $dataFDC = User::with('role')->with('department')->with('position')->whereIn('emp_status',['1','10']);
             $dataUDC = User::with('role')->with('department')->with('position')->where('emp_status','2');
@@ -96,24 +97,24 @@ class UserController extends Controller
             $dataEmployees = User::whereIn('emp_status', ['Probation','1','2','10',])->orderBy('id', 'DESC')->get();
         }
         if (in_array(Auth::user()->RolePermission, ['HR','DHOD','DBM']) && permissionAccess("m2-s1","is_access")->value != "1"){
-            $dataProbationCount = User::where('emp_status','Probation')->where("line_manager", Auth::user()->id)->when(Auth::user()->emp_status, function ($query, $emp_status) {
-                if ($emp_status == "Probation") {
-                    $query->orWhere("id", Auth::user()->id);
-                }
-            })->count();
-            $dataFDCCount = User::whereIn('emp_status',['1','10'])->where("line_manager", Auth::user()->id)
-            ->when(Auth::user()->emp_status, function ($query, $emp_status) {
-                if ($emp_status == "1" || $emp_status == "10") {
-                    $query->orWhere("id", Auth::user()->id);
-                }
-            })->count();
-            $dataUDCCount = User::where('emp_status','2')->where("line_manager", Auth::user()->id)
-            ->when(Auth::user()->emp_status, function ($query, $emp_status) {
-                if ($emp_status == "2") {
-                    $query->orWhere("id", Auth::user()->id);
-                }
-            })->count();
-            $dataResignCount = User::whereIn('emp_status', ['3','4','5','6','7','8','9'])->where("line_manager", Auth::user()->id)->count();
+            // $dataProbationCount = User::where('emp_status','Probation')->where("line_manager", Auth::user()->id)->when(Auth::user()->emp_status, function ($query, $emp_status) {
+            //     if ($emp_status == "Probation") {
+            //         $query->orWhere("id", Auth::user()->id);
+            //     }
+            // })->count();
+            // $dataFDCCount = User::whereIn('emp_status',['1','10'])->where("line_manager", Auth::user()->id)
+            // ->when(Auth::user()->emp_status, function ($query, $emp_status) {
+            //     if ($emp_status == "1" || $emp_status == "10") {
+            //         $query->orWhere("id", Auth::user()->id);
+            //     }
+            // })->count();
+            // $dataUDCCount = User::where('emp_status','2')->where("line_manager", Auth::user()->id)
+            // ->when(Auth::user()->emp_status, function ($query, $emp_status) {
+            //     if ($emp_status == "2") {
+            //         $query->orWhere("id", Auth::user()->id);
+            //     }
+            // })->count();
+            // $dataResignCount = User::whereIn('emp_status', ['3','4','5','6','7','8','9'])->where("line_manager", Auth::user()->id)->count();
 
             $department_ids = $this->employeeRepo->getRoleHOD();
             $dataProbation = User::with('role')->with('department')->with('position')->where("line_manager", Auth::user()->id)
@@ -141,10 +142,10 @@ class UserController extends Controller
         }
         if (Auth::user()->RolePermission == 'HOD') {
             $department_ids = $this->employeeRepo->getRoleHOD();
-            $dataProbationCount = User::where('emp_status','Probation')->whereIn("department_id", $department_ids)->count();
-            $dataFDCCount = User::whereIn('emp_status',['1','10'])->whereIn("department_id", $department_ids)->count();
-            $dataUDCCount = User::where('emp_status','2')->whereIn("department_id", $department_ids)->count();
-            $dataResignCount = User::whereIn('emp_status', ['3','4','5','6','7','8','9'])->whereIn("department_id", $department_ids)->count();
+            // $dataProbationCount = User::where('emp_status','Probation')->whereIn("department_id", $department_ids)->count();
+            // $dataFDCCount = User::whereIn('emp_status',['1','10'])->whereIn("department_id", $department_ids)->count();
+            // $dataUDCCount = User::where('emp_status','2')->whereIn("department_id", $department_ids)->count();
+            // $dataResignCount = User::whereIn('emp_status', ['3','4','5','6','7','8','9'])->whereIn("department_id", $department_ids)->count();
 
             $dataProbation = User::with('role')->with('department')->with('position')->whereIn("department_id", $department_ids)->where('emp_status','Probation')->orderBy('date_of_commencement', 'desc');
             $dataFDC = User::with('role')->with('department')->with('position')->whereIn("department_id",  $department_ids)->whereIn('emp_status',['1','10']);
@@ -152,10 +153,10 @@ class UserController extends Controller
             $dataResign = User::with('role')->with('department')->with('position')->whereIn("department_id",  $department_ids)->whereIn('emp_status', ['3','4','5','6','7','8','9'])->orderBy('resign_date', 'desc');
         }
         if (Auth::user()->RolePermission == 'BM') {
-            $dataProbationCount = User::where('emp_status','Probation')->where("branch_id", Auth::user()->branch_id)->count();
-            $dataFDCCount = User::whereIn('emp_status',['1','10'])->where("branch_id", Auth::user()->branch_id)->count();
-            $dataUDCCount = User::where('emp_status','2')->where("branch_id", Auth::user()->branch_id)->count();
-            $dataResignCount = User::whereIn('emp_status', ['3','4','5','6','7','8','9'])->where("branch_id", Auth::user()->branch_id)->count();
+            // $dataProbationCount = User::where('emp_status','Probation')->where("branch_id", Auth::user()->branch_id)->count();
+            // $dataFDCCount = User::whereIn('emp_status',['1','10'])->where("branch_id", Auth::user()->branch_id)->count();
+            // $dataUDCCount = User::where('emp_status','2')->where("branch_id", Auth::user()->branch_id)->count();
+            // $dataResignCount = User::whereIn('emp_status', ['3','4','5','6','7','8','9'])->where("branch_id", Auth::user()->branch_id)->count();
 
             $dataProbation = User::with('role')->with('department')->with('position')->where("branch_id", Auth::user()->branch_id)->where('emp_status','Probation')->orderBy('date_of_commencement', 'desc');
             $dataFDC = User::with('role')->with('department')->with('position')->where("branch_id", Auth::user()->branch_id)->whereIn('emp_status',['1','10']);
@@ -165,15 +166,15 @@ class UserController extends Controller
 
         if(Auth::user()->RolePermission == 'Employee'){
 
-            $dataProbationCount = User::where('emp_status','Probation')->where('id',Auth::user()->id)->count();
-            $dataFDCCount = User::whereIn('emp_status',['1','10'])->where('id',Auth::user()->id)->count();
-            $dataUDCCount = User::where('emp_status','2')->where('id',Auth::user()->id)->count();
-            $dataResignCount = User::whereIn('emp_status', ['3','4','5','6','7','8','9'])->where('id',Auth::user()->id)->count();
+            // $dataProbationCount = User::where('emp_status','Probation')->where('id',Auth::user()->id)->count();
+            // $dataFDCCount = User::whereIn('emp_status',['1','10'])->where('id',Auth::user()->id)->count();
+            // $dataUDCCount = User::where('emp_status','2')->where('id',Auth::user()->id)->count();
+            // $dataResignCount = User::whereIn('emp_status', ['3','4','5','6','7','8','9'])->where('id',Auth::user()->id)->count();
 
-            $dataProbation = User::with('role')->with('department')->with('position')->where('emp_status','Probation')->where('id',Auth::user()->id)->orderBy('date_of_commencement', 'desc')->get();
-            $dataFDC = User::with('role')->with('department')->with('position')->whereIn('emp_status',['1','10'])->where('id',Auth::user()->id)->get();
-            $dataUDC = User::with('role')->with('department')->with('position')->where('emp_status','2')->where('id',Auth::user()->id)->get();
-            $dataResign = User::with('role')->with('department')->with('position')->whereIn('emp_status', ['3','4','5','6','7','8','9'])->where('id',Auth::user()->id)->get();
+            $dataProbation = User::with('role')->with('department')->with('position')->where('emp_status','Probation')->where('id',Auth::user()->id)->orderBy('date_of_commencement', 'desc');
+            $dataFDC = User::with('role')->with('department')->with('position')->whereIn('emp_status',['1','10'])->where('id',Auth::user()->id);
+            $dataUDC = User::with('role')->with('department')->with('position')->where('emp_status','2')->where('id',Auth::user()->id);
+            $dataResign = User::with('role')->with('department')->with('position')->whereIn('emp_status', ['3','4','5','6','7','8','9'])->where('id',Auth::user()->id);
 
             // $data = User::with(['educations','experiences','banks','staffPromoted'])->where('id',Auth::user()->id)->first();
             // $optionOfStudy = Option::where('type','field_of_study')->get();
@@ -213,7 +214,7 @@ class UserController extends Controller
             // ));
         }
 
-        if (Auth::user()->RolePermission != 'Employee') {
+        // if (Auth::user()->RolePermission != 'Employee') {
             $perPageSettings = [
                 'per_page1' => ['data' => $dataProbation, 'result' => null],
                 'per_page2' => ['data' => $dataFDC, 'result' => null],
@@ -254,17 +255,17 @@ class UserController extends Controller
             $dataFDC = $perPageSettings['per_page2']['result'];
             $dataUDC = $perPageSettings['per_page3']['result'];
             $dataResign = $perPageSettings['per_page4']['result'];
-        }
+        // }
         
         return view('users.index',compact(
-            'dataProbationCount',
+            // 'dataProbationCount',
+            // 'dataFDCCount',
+            // 'dataUDCCount',
+            // 'dataResignCount',
             'dataProbation',
-            'dataFDCCount',
             'dataFDC',
             'dataUDC',
-            'dataUDCCount',
             'dataResign',
-            'dataResignCount',
             'dataEmployees',
         ));
     }

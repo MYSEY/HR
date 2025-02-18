@@ -106,6 +106,23 @@
                             <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                                 <div class="row">
                                     <div class="col-sm-12">
+                                        @if ($dataTrainings->total() > 9)
+                                            <form method="GET" class="mb-3">
+                                                <label>Show 
+                                                    <select name="per_page" onchange="this.form.submit()" class="per_page">
+                                                        <?php
+                                                            for ($i = 10; $i <= $dataTrainings->total(); $i *= 2) {
+                                                                echo '<option value="'.$i.'" '.(request('per_page') == $i ? 'selected' : '').'>'.$i.'</option>';
+                                                            }
+                                                            if ($dataTrainings->total() > $i / 2) {
+                                                                echo '<option value="'.$dataTrainings->total().'" '.(request('per_page') == $dataTrainings->total() ? 'selected' : '').'>'.$dataTrainings->total().'</option>';
+                                                            }
+                                                        ?>
+                                                        <option value="all" {{ request('per_page') == 'all' ? 'selected' : '' }}>All</option>
+                                                    </select> entries
+                                                </label>
+                                            </form>
+                                        @endif
                                         <table class="table table-striped custom-table mb-0 no-footer btl_training"
                                             id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
                                             <thead>
@@ -213,6 +230,7 @@
                                                 @endif
                                             </tbody>
                                         </table>
+                                        {!! $dataTrainings->withQueryString()->links('pagination::bootstrap-5') !!}
                                     </div>
                                 </div>
                             </div>
