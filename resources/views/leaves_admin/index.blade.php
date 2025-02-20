@@ -322,8 +322,8 @@
                                                         id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
                                                         <thead>
                                                             <tr>
-                                                                <th class="sorting sorting_asc vertical-center" tabindex="0" aria-controls="DataTables_Table_0" rowspan="2" aria-sort="ascending" aria-label="#: activate to sort column descending">@lang('lang.employee_id')</th>
-                                                                <th class="sorting sorting_asc vertical-center" tabindex="0" aria-controls="DataTables_Table_0" rowspan="2" aria-sort="ascending" aria-label="#: activate to sort column descending">@lang('lang.employee_name')</th>
+                                                                <th class="sorting sorting_asc vertical-center stuck-scroll-3" tabindex="0" aria-controls="DataTables_Table_0" rowspan="2" aria-sort="ascending" aria-label="#: activate to sort column descending">@lang('lang.employee_id')</th>
+                                                                <th class="sorting sorting_asc vertical-center stuck-scroll-3" tabindex="0" aria-controls="DataTables_Table_0" rowspan="2" aria-sort="ascending" aria-label="#: activate to sort column descending">@lang('lang.employee_name')</th>
                                                                 @if (Auth::user()->RolePermission == "HR" || Auth::user()->RolePermission == 'HRAdmin')
                                                                     <th class="sorting sorting_asc vertical-center" tabindex="0" aria-controls="DataTables_Table_0"
                                                                         rowspan="2" aria-sort="ascending"
@@ -364,8 +364,8 @@
                                                             @if (count($LeaveAllocation) > 0)
                                                                 @foreach ($LeaveAllocation as $key=>$leave)
                                                                     <tr class="odd">
-                                                                        <td>{{$leave->employee->number_employee ?? ""}}</td>
-                                                                        <td>{{$leave->employee->employee_name_en ?? ""}}</td>
+                                                                        <td class="stuck-scroll-3">{{$leave->employee->number_employee ?? ""}}</td>
+                                                                        <td class="stuck-scroll-3">{{$leave->employee->employee_name_en ?? ""}}</td>
                                                                         @if (Auth::user()->RolePermission == "HR" || Auth::user()->RolePermission == 'HRAdmin')
                                                                             <td>{{$leave->employee->department->name_english}}</td>
                                                                             <td>{{$leave->employee->branch->branch_name_en}}</td>
@@ -616,8 +616,8 @@
                                 td_allocation = '<td>'+(row.employee.department.name_english)+'</td><td>'+(row.employee.branch.branch_name_en)+'</td>';             
                             }
                             tr_allocation += '<tr class="odd">'+
-                                '<td>'+(row.employee.number_employee)+'</td>'+
-                                '<td>'+(row.employee.employee_name_en)+'</td>'+
+                                '<td class="stuck-scroll-3">'+(row.employee.number_employee)+'</td>'+
+                                '<td class="stuck-scroll-3">'+(row.employee.employee_name_en)+'</td>'+
                                 (td_allocation)+
                                 '<td>'+(row.default_annual_leave - row.total_annual_leave)+'</td>'+
                                 '<td>'+(row.total_annual_leave)+'</td>'+
