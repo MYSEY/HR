@@ -95,7 +95,7 @@
                                     id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info">
                                     <thead>
                                         <tr>
-                                            <th class="sorting sorting_asc vertical-center" tabindex="0" aria-controls="DataTables_Table_0"
+                                            <th class="sorting sorting_asc vertical-center stuck-scroll-3" tabindex="0" aria-controls="DataTables_Table_0"
                                                 rowspan="2" aria-sort="ascending"
                                                 aria-label="#: activate to sort column descending">@lang('lang.employee_name')</th>
                                             <th class="sorting sorting_asc vertical-center" tabindex="0" aria-controls="DataTables_Table_0"
@@ -142,8 +142,8 @@
                                         @if (count($LeaveAllocation) > 0)
                                             @foreach ($LeaveAllocation as $key=>$leave)
                                                 <tr class="odd">
-                                                    <td>{{$leave->employee->employee_name_en}}</td>
-                                                    <td>{{$leave->employee->department->name_english}}</td>
+                                                    <td class="stuck-scroll-3">{{$leave->employee->employee_name_en}}</td>
+                                                    <td >{{$leave->employee->department->name_english}}</td>
                                                     <td>{{$leave->employee->branch->branch_name_en}}</td>
                                                     <td>{{\Carbon\Carbon::parse($leave->employee->date_of_commencement)->format('d-M-Y') ?? ''}}</td>
                                                     <td>{{$leave->default_annual_leave - $leave->total_annual_leave}}</td>
@@ -212,7 +212,7 @@
                     $(rows).each(function(e, row) {
                         let join_date = moment(row.employee.date_of_commencement).format('D-MMM-YYYY');
                         tr += '<tr class="odd">'+
-                            '<td>'+(row.employee.employee_name_en)+'</td>'+
+                            '<td class="stuck-scroll-3">'+(row.employee.employee_name_en)+'</td>'+
                             '<td>'+(row.employee.department.name_english)+'</td>'+
                             '<td>'+(row.employee.branch.branch_name_en)+'</td>'+
                             '<td>'+(join_date)+'</td>'+
