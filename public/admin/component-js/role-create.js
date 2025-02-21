@@ -459,6 +459,7 @@ var dataPermission = function () {
                     "is_delete": $("#motor_rental_delete").val(),
                     "is_print": $("#motor_rental_print").val(),
                     "is_export": $("#motor_rental_export").val(),
+                    "is_access": $("#motor_rental_access").val(),
                 },
             ]
         })
@@ -479,6 +480,7 @@ var dataPermission = function () {
                     "is_delete": $("#adjustment_mt_delete").val(),
                     "is_print": $("#adjustment_mt_print").val(),
                     "is_export": $("#adjustment_mt_export").val(),
+                    "is_access": $("#adjustment_mt_access").val(),
                 },
             ]
         })
@@ -499,6 +501,7 @@ var dataPermission = function () {
                     "is_delete": $("#generate_pay_motor_rental_delete").val(),
                     "is_print": $("#generate_pay_motor_rental_print").val(),
                     "is_export": $("#generate_pay_motor_rental_export").val(),
+                    "is_access": $("#generate_pay_motor_rental_access").val(),
                 },
             ]
         })
@@ -519,6 +522,7 @@ var dataPermission = function () {
                     "is_delete": $("#Pay_motor_rental_delete").val(),
                     "is_print": $("#Pay_motor_rental_print").val(),
                     "is_export": $("#Pay_motor_rental_export").val(),
+                    "is_access": $("#Pay_motor_rental_access").val(),
                 },
             ]
         })
@@ -834,6 +838,7 @@ var dataPermission = function () {
                     "is_print": $("#motor_rental_reports_check_print").val(),
                     "is_export": $("#motor_rental_reports_check_export").val(),
                     "is_view_salary_staff": $("#motor_rental_reports_salary_staff").val(),
+                    "is_access": $("#motor_rental_reports_access").val(),
                 },
             ]
         })

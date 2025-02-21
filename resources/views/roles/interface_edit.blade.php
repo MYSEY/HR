@@ -1122,6 +1122,13 @@
                                     value="{{SetCheckbox($arrayPermissions,"lang.motor_rental","is_export")->value}}"
                                     > <span class="checkmark"></span>
                                 </label>
+
+                                <label class="container-checkbox">@lang('lang.HR_review_all_leave')
+                                    <input type="checkbox" class="motor_rental_checkbox motor_rentals_checkbox" id="motor_rental_access"
+                                    {{SetCheckbox($arrayPermissions,"lang.motor_rental","is_access")->checkbox}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.motor_rental","is_access")->value}}"
+                                    > <span class="checkmark"></span>
+                                </label>
                             </div>
                         </div>
                     </div>
@@ -1173,6 +1180,12 @@
                                     {{SetCheckbox($arrayPermissions,"lang.adjustment","is_export")->checkbox}}
                                     value="{{SetCheckbox($arrayPermissions,"lang.adjustment","is_export")->value}}"> <span class="checkmark"></span>
                                 </label>
+                                <label class="container-checkbox">@lang('lang.HR_review_all_leave')
+                                    <input type="checkbox" class="motor_rental_checkbox adjustment_mt_checkbox" id="adjustment_mt_access"
+                                    {{SetCheckbox($arrayPermissions,"lang.adjustment","is_access")->checkbox}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.adjustment","is_access")->value}}"
+                                    > <span class="checkmark"></span>
+                                </label>
                             </div>
                         </div>
                     </div>
@@ -1223,6 +1236,12 @@
                                     <input type="checkbox" class="motor_rental_checkbox generate_pay_motor_rentals_checkbox" id="generate_pay_motor_rental_export"
                                     {{SetCheckbox($arrayPermissions,"lang.generate_pay_motor","is_export")->checkbox}}
                                     value="{{SetCheckbox($arrayPermissions,"lang.generate_pay_motor","is_export")->value}}"> <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.HR_review_all_leave')
+                                    <input type="checkbox" class="motor_rental_checkbox generate_pay_motor_rentals_checkbox" id="generate_pay_motor_rental_access"
+                                    {{SetCheckbox($arrayPermissions,"lang.generate_pay_motor","is_access")->checkbox}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.generate_pay_motor","is_access")->value}}"
+                                    > <span class="checkmark"></span>
                                 </label>
                             </div>
                         </div>
@@ -1281,6 +1300,12 @@
                                     <input type="checkbox" class="motor_rental_checkbox pay_motor_rentals_checkbox" id="Pay_motor_rental_export"
                                     {{SetCheckbox($arrayPermissions,"lang.pay_motor_rental","is_export")->checkbox}}
                                     value="{{SetCheckbox($arrayPermissions,"lang.pay_motor_rental","is_export")->value}}"
+                                    > <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.HR_review_all_leave')
+                                    <input type="checkbox" class="motor_rental_checkbox pay_motor_rentals_checkbox" id="Pay_motor_rental_access"
+                                    {{SetCheckbox($arrayPermissions,"lang.pay_motor_rental","is_access")->checkbox}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.pay_motor_rental","is_access")->value}}"
                                     > <span class="checkmark"></span>
                                 </label>
                             </div>
@@ -1867,6 +1892,13 @@
                                     <input type="checkbox" class="reports_checkbox motor_rental_reports_checkbox" id="motor_rental_reports_salary_staff"
                                     {{SetCheckbox($arrayPermissions,"lang.motor_rental_reports","is_view_salary_staff")->checkbox}}
                                     value="{{SetCheckbox($arrayPermissions,"lang.motor_rental_reports","is_view_salary_staff")->value}}"
+                                    > <span class="checkmark"></span>
+                                </label>
+
+                                <label class="container-checkbox">@lang('lang.HR_review_all_leave')
+                                    <input type="checkbox" class="reports_checkbox motor_rental_reports_checkbox" id="motor_rental_reports_access"
+                                    {{SetCheckbox($arrayPermissions,"lang.motor_rental_reports","is_access")->checkbox}}
+                                    value="{{SetCheckbox($arrayPermissions,"lang.motor_rental_reports","is_access")->value}}"
                                     > <span class="checkmark"></span>
                                 </label>
                             </div>
