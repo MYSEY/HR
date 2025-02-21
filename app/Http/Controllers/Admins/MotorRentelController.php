@@ -59,7 +59,12 @@ class MotorRentelController extends Controller
             )
             ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
                 if ($RolePermission == 'Employee') {
-                    $query->where('users.id',Auth::user()->id);
+                    if(permissionAccess("m5-s1","is_access")->value == "1"){
+                        $query->where("users.department_id", Auth::user()->department_id);
+                        $query->where("users.branch_id", Auth::user()->branch_id);
+                    }else{
+                        $query->where('users.id',Auth::user()->id);
+                    }
                 }
                 if ($RolePermission == 'HOD') {
                     $query->whereIn("users.department_id", EmployeeRepository::getRoleHOD());
@@ -87,7 +92,12 @@ class MotorRentelController extends Controller
         $employees = User::whereIn("emp_status", ["Probation", "1", "2", "10"])
             ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
                 if ($RolePermission == 'Employee') {
-                    $query->where('id',Auth::user()->id);
+                    if(permissionAccess("m5-s1","is_access")->value == "1"){
+                        $query->where("users.department_id", Auth::user()->department_id);
+                        $query->where("users.branch_id", Auth::user()->branch_id);
+                    }else{
+                        $query->where('users.id',Auth::user()->id);
+                    }
                 }
                 if ($RolePermission == 'HOD') {
                     $query->whereIn("department_id", EmployeeRepository::getRoleHOD());
@@ -126,7 +136,12 @@ class MotorRentelController extends Controller
             )
             ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
                 if ($RolePermission == 'Employee') {
-                    $query->where('users.id',Auth::user()->id);
+                    if(permissionAccess("m5-s3","is_access")->value == "1"){
+                        $query->where("users.department_id", Auth::user()->department_id);
+                        $query->where("users.branch_id", Auth::user()->branch_id);
+                    }else{
+                        $query->where('users.id',Auth::user()->id);
+                    }
                 }
                 if ($RolePermission == 'HOD') {
                     $query->whereIn("users.department_id", EmployeeRepository::getRoleHOD());
@@ -162,7 +177,12 @@ class MotorRentelController extends Controller
             )
             ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
                 if ($RolePermission == 'Employee') {
-                    $query->where('users.id',Auth::user()->id);
+                    if(permissionAccess("m5-s2","is_access")->value == "1"){
+                        $query->where("users.department_id", Auth::user()->department_id);
+                        $query->where("users.branch_id", Auth::user()->branch_id);
+                    }else{
+                        $query->where('users.id',Auth::user()->id);
+                    }
                 }
                 if ($RolePermission == 'HOD') {
                     $query->whereIn("users.department_id", EmployeeRepository::getRoleHOD());
@@ -244,8 +264,10 @@ class MotorRentelController extends Controller
         DB::beginTransaction();
         try {
 
-            $month = Carbon::now()->month;
-            $year = Carbon::now()->year;
+            // $month = Carbon::now()->month;
+            // $year = Carbon::now()->year;
+            $month = Carbon::createFromDate($request->from_date)->format('m');
+            $year = Carbon::createFromDate($request->from_date)->format('Y');
 
             MotorRentalDetail::where('status',null)->delete();
 
@@ -274,7 +296,12 @@ class MotorRentelController extends Controller
                             )
                             ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
                                 if ($RolePermission == 'Employee') {
-                                    $query->where('users.id',Auth::user()->id);
+                                    if(permissionAccess("m5-s3","is_access")->value == "1"){
+                                        $query->where("users.department_id", Auth::user()->department_id);
+                                        $query->where("users.branch_id", Auth::user()->branch_id);
+                                    }else{
+                                        $query->where('users.id',Auth::user()->id);
+                                    }
                                 }
                                 if ($RolePermission == 'HOD') {
                                     $query->whereIn("users.department_id", EmployeeRepository::getRoleHOD());
@@ -493,7 +520,33 @@ class MotorRentelController extends Controller
 
     public function export()
     {
-        $dataMotorrentels = MotorRentel::orderBy('id', 'desc')->get();
+        $dataMotorrentels = MotorRentel::leftJoin('users', 'motor_rentels.employee_id', '=', 'users.id')->orderBy('id', 'desc')
+        ->select(
+            'motor_rentels.*',
+            'users.employee_name_en',
+            'users.employee_name_kh',
+            'users.number_employee',
+            'users.branch_id',
+            'users.department_id',
+            'users.resign_date',
+        )
+        ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
+            if ($RolePermission == 'Employee') {
+                if(permissionAccess("m5-s1","is_access")->value == "1"){
+                    $query->where("users.department_id", Auth::user()->department_id);
+                    $query->where("users.branch_id", Auth::user()->branch_id);
+                }else{
+                    $query->where('users.id',Auth::user()->id);
+                }
+            }
+            if ($RolePermission == 'HOD') {
+                $query->whereIn("users.department_id", EmployeeRepository::getRoleHOD());
+            }
+            if ($RolePermission == 'BM' || $RolePermission == 'HR') {
+                $query->where("users.branch_id", Auth::user()->branch_id);
+            }
+        })
+        ->get();
         $export = new ExportMotorRentel($dataMotorrentels);
         return Excel::download($export, 'MotorRentel.xlsx');
     }

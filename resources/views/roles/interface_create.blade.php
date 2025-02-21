@@ -747,6 +747,9 @@
                                 <label class="container-checkbox">@lang('lang.export')
                                     <input type="checkbox" class="motor_rental_checkbox motor_rentals_checkbox" id="motor_rental_export" name="motor_rental_export"> <span class="checkmark"></span>
                                 </label>
+                                <label class="container-checkbox">@lang('lang.HR_review_all_leave')
+                                    <input type="checkbox" class="motor_rental_checkbox motor_rentals_checkbox" id="motor_rental_access"> <span class="checkmark"></span>
+                                </label>
                             </div>
                         </div>
                     </div>
@@ -784,6 +787,9 @@
                                 </label>
                                 <label class="container-checkbox">@lang('lang.export')
                                     <input type="checkbox" class="motor_rental_checkbox adjustment_mt_checkbox" id="adjustment_mt_export"> <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.HR_review_all_leave')
+                                    <input type="checkbox" class="motor_rental_checkbox adjustment_mt_checkbox" id="adjustment_mt_access"> <span class="checkmark"></span>
                                 </label>
                             </div>
                         </div>
@@ -824,6 +830,9 @@
                                 <label class="container-checkbox">@lang('lang.export')
                                     <input type="checkbox" class="motor_rental_checkbox generate_pay_motor_rentals_checkbox" id="generate_pay_motor_rental_export"> <span class="checkmark"></span>
                                 </label>
+                                <label class="container-checkbox">@lang('lang.HR_review_all_leave')
+                                    <input type="checkbox" class="motor_rental_checkbox generate_pay_motor_rentals_checkbox" id="generate_pay_motor_rental_access"> <span class="checkmark"></span>
+                                </label>
                             </div>
                         </div>
                     </div>
@@ -862,6 +871,9 @@
                                 </label>
                                 <label class="container-checkbox">@lang('lang.export')
                                     <input type="checkbox" class="motor_rental_checkbox pay_motor_rentals_checkbox" id="Pay_motor_rental_export" name="Pay_motor_rental_export"> <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.HR_review_all_leave')
+                                    <input type="checkbox" class="motor_rental_checkbox pay_motor_rentals_checkbox" id="Pay_motor_rental_access"> <span class="checkmark"></span>
                                 </label>
                             </div>
                         </div>
@@ -1244,6 +1256,9 @@
                                 </label>
                                 <label class="container-checkbox">@lang('lang.view_salary_staff')
                                     <input type="checkbox" class="reports_checkbox motor_rental_reports_checkbox" id="motor_rental_reports_salary_staff"> <span class="checkmark"></span>
+                                </label>
+                                <label class="container-checkbox">@lang('lang.HR_review_all_leave')
+                                    <input type="checkbox" class="reports_checkbox motor_rental_reports_checkbox" id="motor_rental_reports_access"> <span class="checkmark"></span>
                                 </label>
                             </div>
                            

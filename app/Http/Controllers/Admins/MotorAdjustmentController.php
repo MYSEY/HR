@@ -28,7 +28,12 @@ class MotorAdjustmentController extends Controller
         $employees = User::whereIn("emp_status", ["Probation", "1", "2", "10"])
         ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
             if ($RolePermission == 'Employee') {
-                $query->where('id',Auth::user()->id);
+                if(permissionAccess("m5-s4","is_access")->value == "1"){
+                    $query->where("department_id", Auth::user()->department_id);
+                    $query->where("branch_id", Auth::user()->branch_id);
+                }else{
+                    $query->where('id',Auth::user()->id);
+                }
             }
             if ($RolePermission == 'HOD') {
                 $query->whereIn("department_id", EmployeeRepository::getRoleHOD());
@@ -52,7 +57,13 @@ class MotorAdjustmentController extends Controller
         )
         ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
             if ($RolePermission == 'Employee') {
-                $query->where('users.id',Auth::user()->id);
+                if(permissionAccess("m5-s4","is_access")->value == "1"){
+                    $query->where("users..department_id", Auth::user()->department_id);
+                    $query->where("users..branch_id", Auth::user()->branch_id);
+                }else{
+                    $query->where('users..id',Auth::user()->id);
+                }
+                // $query->where('users.id',Auth::user()->id);
             }
             if ($RolePermission == 'HOD') {
                 $query->whereIn("users.department_id", EmployeeRepository::getRoleHOD());
@@ -121,7 +132,12 @@ class MotorAdjustmentController extends Controller
         $employee = User::whereIn("emp_status", ["Probation", "1", "2", "10"])
         ->when(Auth::user()->RolePermission, function ($query, $RolePermission) {
             if ($RolePermission == 'Employee') {
-                $query->where('id',Auth::user()->id);
+                if(permissionAccess("m5-s4","is_access")->value == "1"){
+                    $query->where("department_id", Auth::user()->department_id);
+                    $query->where("branch_id", Auth::user()->branch_id);
+                }else{
+                    $query->where('id',Auth::user()->id);
+                }
             }
             if ($RolePermission == 'HOD') {
                 $query->whereIn("department_id", EmployeeRepository::getRoleHOD());
